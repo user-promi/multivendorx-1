@@ -71,7 +71,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Order purchase limits', 'multivendorx'),
+			hint: __('Order Purchase Limits', 'multivendorx'),
 			desc: __(
 				'Set limits on the total quantity or total value of an order to control bulk purchases or enforce minimum order requirements.',
 				'multivendorx'

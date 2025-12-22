@@ -52,7 +52,7 @@ export default {
 	name: __('Commissions', 'multivendorx'),
 	tabTitle: 'Commission share from the seller’s product/service:',
 	desc: __(
-		'Decide how your marketplace takes commission from sales.',
+		'Decide How Your Marketplace Takes Commission From Sales.',
 		'multivendorx'
 	),
 	icon: 'adminlib-commission',
@@ -239,7 +239,7 @@ export default {
 			key: 'separator_content',
 			type: 'section',
 			hint: __(
-				'How shipping and tax be calculated with store earnings',
+				'How Shipping And Tax Be Calculated With Store Earnings',
 				'multivendorx'
 			),
 			desc: __(
@@ -312,7 +312,7 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			hint: __('Fees deducted from store earnings', 'multivendorx'),
+			hint: __('Fees Deducted From Store Earnings', 'multivendorx'),
 			desc: __(
 				'Determine which fees to deduct from the store earning.',
 				'multivendorx'

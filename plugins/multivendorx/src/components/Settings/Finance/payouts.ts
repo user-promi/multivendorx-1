@@ -402,7 +402,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Withdrawal rules & limits', 'multivendorx'),
+			hint: __('Withdrawal Rules & Limits', 'multivendorx'),
 		},
 		{
 			key: 'withdraw_type',
