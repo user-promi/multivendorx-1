@@ -599,10 +599,10 @@ const SupportTickets: React.FC = () => {
 							</button>
 							<button
 								onClick={handleSaveReply}
-								className="admin-btn btn-purple"
+								className="admin-btn btn-purple-bg"
 							>
 								<i className="adminlib-active"></i>
-								Save
+								{__('Save', 'multivendorx')}
 							</button>
 						</>
 					}
@@ -611,7 +611,7 @@ const SupportTickets: React.FC = () => {
 						<div className="form-group-wrapper">
 							<div className="review-popup-wrapper">
 								<div className="customer-wrapper">
-									<div className="avater">
+									<div className="avatar">
 										<i className="item-icon adminlib-person"></i>
 									</div>
 									{selectedReview && (

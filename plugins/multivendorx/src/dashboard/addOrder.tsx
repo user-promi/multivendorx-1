@@ -935,7 +935,7 @@ const AddOrder = () => {
 							{selectedCustomer && (
 								<div className="store-owner-details">
 									<div className="profile">
-										<div className="avater">
+										<div className="avatar">
 											<span>
 												{selectedCustomer
 													? selectedCustomer

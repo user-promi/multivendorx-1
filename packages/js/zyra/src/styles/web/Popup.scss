@@ -152,17 +152,11 @@
         display: flex;
         gap: 0.5rem;
 
-        .avater {
-            i {
-                color: #fff;
-                font-size: 1.5rem;
-            }
-        }
-
         .name {
             font-size: 1.125rem;
             font-weight: 500;
             padding-bottom: 0.45rem;
+            color: $text-color;
         }
 
     }
@@ -171,7 +165,7 @@
         padding-top: 0.95rem;
         font-size: 0.95rem;
         line-height: 1.45rem;
-        color: #000000c7;
+        color: $sub-text-color;
     }
 }
 

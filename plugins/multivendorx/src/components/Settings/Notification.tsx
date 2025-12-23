@@ -815,7 +815,7 @@ const Notification: React.FC = () => {
 									addRecipient(editingNotification)
 								}
 							>
-								<i className="adminlib-plus-circle"></i>
+								<i className="adminlib-plus"></i>
 								Add
 							</button>
 						</div>

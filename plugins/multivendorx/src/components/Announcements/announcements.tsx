@@ -668,7 +668,7 @@ export const Announcements: React.FC = () => {
 							setAddAnnouncements(true);
 						}}
 					>
-						<i className="adminlib-plus-circle"></i>
+						<i className="adminlib-plus"></i>
 						{__('Add New', 'multivendorx')}
 					</div>,
 				]}
@@ -707,19 +707,17 @@ export const Announcements: React.FC = () => {
 							onClick={handleCloseForm}
 							className="admin-btn btn-red"
 						>
+							<i className="adminlib-close"></i>
 							{__('Cancel', 'multivendorx')}
 						</div>
 
-						<button
-							type="button"
+						<div
 							onClick={() => handleSubmit()}
-							className="admin-btn btn-purple"
-							disabled={submitting}
+							className="admin-btn btn-purple-bg"
 						>
-							{submitting
-								? __('Saving...', 'multivendorx')
-								: __('Save', 'multivendorx')}
-						</button>
+							<i className="adminlib-active"></i>
+							{__('Save', 'multivendorx')}
+						</div>
 					</>
 				}
 			>

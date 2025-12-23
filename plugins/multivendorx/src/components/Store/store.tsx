@@ -250,7 +250,7 @@ const Store = () => {
 									setaddStore(true);
 								}}
 							>
-								<i className="adminlib-plus-circle"></i>
+								<i className="adminlib-plus"></i>
 								Add Store
 							</div>,
 						]}
@@ -343,7 +343,7 @@ const Store = () => {
 											msg={error.slug}
 										/>
 										{error?.slug?.message && (
-											<div className="invalid-massage">
+											<div className={error?.slug?.type}>
 												{error?.slug?.message}
 											</div>
 										)}

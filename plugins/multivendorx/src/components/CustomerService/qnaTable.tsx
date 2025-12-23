@@ -595,12 +595,10 @@ const Qna: React.FC = () => {
 							<button
 								onClick={handleSaveAnswer}
 								disabled={saving}
-								className="admin-btn btn-purple"
+								className="admin-btn btn-purple-bg"
 							>
 								<i className="adminlib-active"></i>
-								{saving
-									? __('Saving...', 'multivendorx')
-									: __('Save Answer', 'multivendorx')}
+								{__('Save Answer', 'multivendorx')}
 							</button>
 						</>
 					}

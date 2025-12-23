@@ -504,7 +504,7 @@ const StoreReview: React.FC = () => {
 						<div className="form-group-wrapper">
 							<div className="review-popup-wrapper">
 								<div className="customer-wrapper">
-									<div className="avater">
+									<div className="avatar">
 										<i className="item-icon adminlib-person"></i>
 									</div>
 									{selectedReview && (

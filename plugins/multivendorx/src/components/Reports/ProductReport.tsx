@@ -294,7 +294,7 @@ const ProductReport: React.FC = () => {
 								alt={row.original.store_name}
 							/>
 						) : (
-							<i className="adminlib-store-inventory"></i>
+							<i className="item-icon adminlib-store-inventory"></i>
 						)}
 						<div className="details">
 							<span className="title">{row.original.title}</span>

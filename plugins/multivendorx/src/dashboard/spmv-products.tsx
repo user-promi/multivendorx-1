@@ -127,7 +127,7 @@ const SpmvProducts: React.FC = () => {
 											duplicateProduct(product)
 										}
 									>
-										<i className="adminlib-plus-circle-o"></i>{' '}
+										<i className="adminlib-vendor-form-copy"></i>{' '}
 										Copy
 									</div>
 								</div>

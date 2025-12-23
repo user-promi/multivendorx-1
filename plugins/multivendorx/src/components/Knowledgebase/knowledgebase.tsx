@@ -527,7 +527,7 @@ export const KnowledgeBase: React.FC = () => {
 							setAddEntry(true);
 						}}
 					>
-						<i className="adminlib-plus-circle"></i>
+						<i className="adminlib-plus"></i>
 						{__('Add New', 'multivendorx')}
 					</div>,
 				]}
@@ -565,6 +565,7 @@ export const KnowledgeBase: React.FC = () => {
 								onClick={handleCloseForm}
 								className="admin-btn btn-red"
 							>
+								<i className="adminlib-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</div>
 							<button
@@ -572,12 +573,11 @@ export const KnowledgeBase: React.FC = () => {
 								onClick={() =>
 									handleSubmit(formData.status || 'draft')
 								}
-								className="admin-btn btn-purple"
+								className="admin-btn btn-purple-bg"
 								disabled={submitting}
 							>
-								{submitting
-									? __('Saving...', 'multivendorx')
-									: __('Save', 'multivendorx')}
+								<i className="adminlib-active"></i>
+								{ __('Save', 'multivendorx')}
 							</button>
 						</>
 					}

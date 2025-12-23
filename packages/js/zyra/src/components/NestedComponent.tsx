@@ -556,7 +556,7 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                                     onClick={ addRow }
                                     disabled={ ! isLastRowComplete() }
                                 >
-                                    <i className="adminlib-plus-circle"></i>{ ' ' }
+                                    <i className="adminlib-plus"></i>{ ' ' }
                                     { addButtonLabel }
                                 </button>
                             ) }

@@ -605,7 +605,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 															});
 														}}
 													>
-														<i className="adminlib-plus-circle"></i>{' '}
+														<i className="adminlib-plus"></i>{' '}
 														{__(
 															'Add Rule',
 															'multivendorx'
