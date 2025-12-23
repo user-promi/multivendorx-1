@@ -3,28 +3,16 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'notification-configuration',
 	priority: 5,
-	name: __('Notification Delivery', 'multivendorx'),
+	name: __('Notifications', 'multivendorx'),
+	tabTitle: 'Email delivery setup',	
 	desc: __(
-		'Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
+		'Configure how marketplace emails are sent. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
 		'multivendorx'
 	),
 	icon: 'adminlib-notification',
 	submitUrl: 'settings',
 	modal: [
-		{
-			key: 'registration page',
-			type: 'blocktext',
-			label: __('no_label', 'multivendorx'),
-			blocktext: __(
-				'Only store owners can apply for store registration. Applicants must log in or create an account before proceeding. So, Make sure <a href="/wp-admin/admin.php?page=wc-settings&tab=account" target="_blank">WooCommerce’s Account & Privacy settings are configured to allow user registration.',
-				'multivendorx'
-			),
-		},
-		{
-			key: 'email_section',
-			type: 'section',
-			hint: __('Email Provider', 'multivendorx'),
-		},
+		
 		{
 			key: 'email_provider',
 			type: 'setting-toggle',
@@ -86,7 +74,7 @@ export default {
 		{
 			key: 'sms_section',
 			type: 'section',
-			hint: __('SMS Configuration', 'multivendorx'),
+			hint: __('SMS configuration', 'multivendorx'),
 		},
 		{
 			key: 'sms_gateway_selector',
@@ -123,6 +111,42 @@ export default {
 					value: 'plivo',
 				},
 			],
+		},
+		{
+			key: 'email_section',
+			type: 'section',
+			hint: __('Order confirmation email for main and sub-orders', 'multivendorx'),
+		},
+		{
+			key: 'sms_gateway_selector',
+			type: 'setting-toggle',
+			label: __('Order emails customers receives', 'multivendorx'),
+			settingDescription: __(
+				'Choose how order confirmation emails should be sent. ',
+				'multivendorx'
+			),
+			desc: __(
+				'You can send a single email combining the main order and all sub-orders, or send emails individually for the main order and each sub-order.</a></b>',
+				'multivendorx'
+			),
+			options: [
+				{
+					key: 'mainnsub',
+					label: __('Main & Sub order together', 'multivendorx'),
+					value: '',
+				},
+				{
+					key: 'mainorder',
+					label: __('Main order', 'multivendorx'),
+					value: 'mainorder',
+				},
+				{
+					key: 'suborder',
+					label: __('Sub-orders Only', 'multivendorx'),
+					value: 'suborder',
+				},
+			],
+
 		},
 	],
 };
