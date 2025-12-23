@@ -1,5 +1,6 @@
+import React from 'react';
 import FileInput from '../src/components/FileInput';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof FileInput> = {
     title: 'Zyra/Components/FileInput',

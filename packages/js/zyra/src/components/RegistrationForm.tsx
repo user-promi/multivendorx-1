@@ -13,26 +13,17 @@ import Elements from './Elements';
 import SettingMetaBox from './SettingMetaBox';
 import SimpleInput from './SimpleInput';
 import MultipleOptions from './MultipleOption';
-import TemplateTextArea from './TemplateTextArea';
 import Attachment from './Attachment';
 import Recaptcha from './Recaptcha';
 import Datepicker from './DatePicker';
 import TimePicker from './TimePicker';
-import TemplateSection from './TemplateSection';
-import BlockLayout from './BlockLayout';
-import ImageGallery from './ImageGallery';
+import TemplateSection from './EmailTemplate/TemplateSection';
+import BlockLayout from './EmailTemplate/BlockLayout';
+import ImageGallery from './EmailTemplate/ImageGallery';
 import AddressField, { AddressFormField } from './AddressField';
+import TemplateTextArea from './EmailTemplate/TemplateTextArea';
 
 // Types
-type FieldTypes =
-    | 'text'
-    | 'email'
-    | 'number'
-    | 'radio'
-    | 'dropdown'
-    | 'multiselect'
-    | 'checkboxes';
-
 type FieldValue =
     | string
     | number
@@ -789,7 +780,11 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                                 )
                                             }
                                             type={
-                                                formField.type as 'radio' | 'checkboxes' | 'dropdown' | 'multiselect'
+                                                formField.type as
+                                                    | 'radio'
+                                                    | 'checkboxes'
+                                                    | 'dropdown'
+                                                    | 'multiselect'
                                             }
                                             selected={ false }
                                         />
@@ -819,7 +814,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                         />
                                     ) }
                                     { formField.type === 'attachment' && (
-                                        <Attachment/>
+                                        <Attachment />
                                     ) }
                                     { formField.type === 'section' && (
                                         <TemplateSection
@@ -834,7 +829,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                         />
                                     ) }
                                     { formField.type === 'block-layout' && (
-                                        <BlockLayout/>
+                                        <BlockLayout />
                                     ) }
                                     { formField.type === 'image-gallery' && (
                                         <ImageGalleryField
@@ -874,7 +869,9 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                                     ) }
                                     { formField.type === 'address' && (
                                         <AddressField
-                                            formField={ formField as AddressFormField}
+                                            formField={
+                                                formField as AddressFormField
+                                            }
                                             onChange={ ( key, value ) =>
                                                 handleFormFieldChange(
                                                     index,
@@ -912,7 +909,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
                         settingHasChanged.current = true;
                         const previousSetting = buttonSetting || {};
                         if ( isRestoreDefaults ) {
-                            setButtonSetting( value as ButtonSetting);
+                            setButtonSetting( value as ButtonSetting );
                         } else {
                             setButtonSetting( {
                                 ...previousSetting,

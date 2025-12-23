@@ -1,5 +1,5 @@
 import HoverInputRender from '../src/components/HoverInputRender';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof HoverInputRender> = {
     title: 'Zyra/Components/Form/HoverInputRender',

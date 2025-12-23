@@ -217,11 +217,6 @@ export default {
 				'Choose which version of co-listed products will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
 				'multivendorx'
 			),
-			dependent: {
-				key: 'store_selling_mode',
-				set: true,
-				value: 'single_product_multiple_vendor',
-			},
 			options: [
 				{
 					key: 'min-price',
@@ -331,9 +326,9 @@ export default {
 				'multivendorx'
 			),
 			dependent: {
-				key: 'store_selling_mode',
+				key: 'store_assignment_method',
 				set: true,
-				value: 'franchise',
+				value: 'nearest_store',
 			},
 			options: [
 				{

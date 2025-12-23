@@ -1,8 +1,16 @@
+/**
+ * External dependencies
+ */
+import React, { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
+/**
+ * Internal dependencies
+ */
 import TimePicker from '../src/components/TimePicker';
-import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof TimePicker> = {
-    title: 'Zyra/Components/Form/TimePicker',
+    title: 'Zyra/Components/TimePicker',
     component: TimePicker,
     tags: ['autodocs'],
 };
@@ -11,16 +19,28 @@ export default meta;
 
 type Story = StoryObj<typeof TimePicker>;
 
-export const TestTimePicker: Story = {
-    args: {
-        formField: {
+/**
+ * Basic TimePicker with controlled label
+ */
+export const Basic: Story = {
+    render: () => {
+        const [formField, setFormField] = useState({
             label: 'Select Time',
-        },
-        onChange: (field, value) => {
-            console.log(`Field: ${field}, Value: ${value}`);
-        },
-    },
-    render: (args) => {
-        return <TimePicker {...args} />;
+        });
+
+        const handleChange = (field: string, value: string) => {
+            console.log('Changed:', field, value);
+            setFormField((prev) => ({
+                ...prev,
+                [field]: value,
+            }));
+        };
+
+        return (
+            <TimePicker
+                formField={formField}
+                onChange={handleChange}
+            />
+        );
     },
 };

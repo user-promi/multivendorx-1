@@ -110,7 +110,7 @@ const SystemInfo: React.FC< SystemInfoProps > = ( {
                     ) }
                 </div>
             </div>
-            
+
             { Object.entries( data ).map( ( [ key, section ] ) => (
                 <div key={ key } className="system-item">
                     <div

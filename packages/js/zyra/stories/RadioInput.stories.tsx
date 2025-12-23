@@ -1,5 +1,5 @@
 import RadioInput from '../src/components/RadioInput';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof RadioInput> = {
     title: 'Zyra/Components/RadioInput',
@@ -11,91 +11,76 @@ export default meta;
 
 type Story = StoryObj<typeof RadioInput>;
 
+// Common props shared across all stories
 const commonProps = {
     wrapperClass: 'radio-group',
     inputClass: '',
     descClass: 'settings-metabox-description',
     activeClass: 'radio-select-active',
-    onChange: (e) => {
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log('Radio changed:', e.target.value);
     },
 };
 
-export const TestRadioInput: Story = {
+// Default radio input story
+export const DefaultRadioInput: Story = {
     args: {
         description: 'Choose your preferred theme color.',
         inputWrapperClass: 'basic-radio',
         value: 'dark',
         name: 'themeColor',
-        type: 'default' as 'default',
+        type: 'default',
         keyName: 'themeColorOption',
         options: [
-            {
-                key: 'light',
-                name: 'themeColor',
-                value: 'light',
-                label: 'Light Mode',
-            },
-            {
-                key: 'dark',
-                name: 'themeColor',
-                value: 'dark',
-                label: 'Dark Mode',
-            },
-            {
-                key: 'custom',
-                name: 'themeColor',
-                value: 'custom',
-                label: 'Custom Theme',
-            },
+            { key: 'light', name: 'themeColor', value: 'light', label: 'Light Mode' },
+            { key: 'dark', name: 'themeColor', value: 'dark', label: 'Dark Mode' },
+            { key: 'custom', name: 'themeColor', value: 'custom', label: 'Custom Theme' },
         ],
         proSetting: false,
         ...commonProps,
     },
-    render: (args) => {
-        return <RadioInput {...args} />;
-    },
+    render: (args) => <RadioInput {...args} />,
 };
 
-export const TestRadioSelectInput: Story = {
+// Radio select (image-based) story
+export const RadioSelectInput: Story = {
     args: {
         description: 'Select store banner style',
         inputWrapperClass: 'image-radio',
-        name: 'Banaer',
-        type: 'radio-select' as 'radio-select',
+        name: 'Banner',
+        type: 'radio-select',
         keyName: 'sample_radio_select',
         labelOverlayClass: 'image-radio-overlay',
         labelOverlayText: 'Select your Store',
         options: [
             {
                 key: 'option1',
-                name: 'Banaer',
+                name: 'Banner',
                 label: 'Outer Space',
                 value: 'template1',
-                color: 'http://localhost/wordpress/wp-content/plugins/plugin-elements/src/assets/images/template1.jpg',
+                color: 'http://localhost/.../template1.jpg',
             },
             {
                 key: 'option2',
                 name: 'Banner',
                 label: 'Green Lagoon',
                 value: 'template2',
-                color: 'http://localhost/wordpress/wp-content/plugins/plugin-elements/src/assets/images/template1.jpg',
+                color: 'http://localhost/.../template2.jpg',
             },
         ],
         proSetting: false,
         ...commonProps,
     },
-    render: (args) => {
-        return <RadioInput key={'sample_radio_select'} {...args} />;
-    },
+    render: (args) => <RadioInput key="sample_radio_select" {...args} />,
 };
 
-export const TestRadioColorInput: Story = {
+// Radio color input story
+export const RadioColorInput: Story = {
     args: {
         description: 'This is a simple radio color input',
         inputWrapperClass: 'color-radio',
         name: 'Radio Color',
-        type: 'radio-color' as 'radio-color',
+        type: 'radio-color',
         keyName: 'sample_radio_color',
         options: [
             {
@@ -116,7 +101,5 @@ export const TestRadioColorInput: Story = {
         proSetting: false,
         ...commonProps,
     },
-    render: (args) => {
-        return <RadioInput key={'sample_radio_color'} {...args} />;
-    },
+    render: (args) => <RadioInput key="sample_radio_color" {...args} />,
 };

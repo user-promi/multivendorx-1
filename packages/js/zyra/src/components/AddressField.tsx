@@ -16,7 +16,7 @@ interface SubField {
 }
 
 export interface AddressFormField {
-    id: number ;
+    id: number;
     type: string;
     label: string;
     fields?: SubField[];
