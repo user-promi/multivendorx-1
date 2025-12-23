@@ -55,32 +55,6 @@ const Withdrawls: React.FC = () => {
 			.catch(() => setData([]));
 	}, []);
 
-	const analyticsData = [
-		data.wallet_balance != null && {
-			icon: 'adminlib-tools theme-color1',
-			number: formatCurrency(data.wallet_balance),
-			text: 'Wallet Balance',
-		},
-		data.reserve_balance != null && {
-			icon: 'adminlib-book theme-color2',
-			number: formatCurrency(data.reserve_balance),
-			text: 'Reserve Balance',
-		},
-	].filter(Boolean); // removes null/undefined entries
-
-	const analyticsData2 = [
-		data.locking_balance != null && {
-			icon: 'adminlib-global-community theme-color3',
-			number: formatCurrency(data.locking_balance),
-			text: 'Locked',
-		},
-		data.locking_day != null && {
-			icon: 'adminlib-global-community theme-color4',
-			number: `${data.locking_day} Days`,
-			text: 'Locking Period',
-		},
-	].filter(Boolean);
-
 	const handleAmountChange = (value: number) => {
 		if (value > data.available_balance) {
 			setError(
