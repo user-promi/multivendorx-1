@@ -17,6 +17,8 @@ import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 import AddProductCom from './add-products';
 import SpmvProducts from './spmv-products';
+import { ReactNode } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 
 type ProductRow = {
 	id: number;
@@ -54,7 +56,7 @@ const formatWooDate = (dateString: string) => {
 		day: 'numeric',
 	});
 };
-// Add these status options inside AllProduct component
+
 const stockStatusOptions = [
 	{ key: '', name: 'Stock Status' },
 	{ key: 'instock', name: 'In Stock' },
@@ -459,7 +461,7 @@ const AllProduct: React.FC = () => {
 				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
-				<div className="   group-field">
+				<div className="group-field">
 					<select
 						name="category"
 						onChange={(e) =>
@@ -484,7 +486,7 @@ const AllProduct: React.FC = () => {
 				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
-				<div className="   group-field">
+				<div className="group-field">
 					<select
 						name="productType"
 						onChange={(e) =>
@@ -586,7 +588,6 @@ const AllProduct: React.FC = () => {
 	) {
 		setData([]);
 
-		// Build the base parameters object
 		const params: any = {
 			page: currentPage,
 			row: rowsPerPage,
@@ -629,8 +630,6 @@ const AllProduct: React.FC = () => {
 
 				const total = parseInt(response.headers['x-wp-total']);
 				setTotalRows(total);
-
-				// Calculate pageCount AFTER totalRows is available
 				setPageCount(Math.ceil(total / rowsPerPage));
 			})
 			.catch(() => {
@@ -683,7 +682,6 @@ const AllProduct: React.FC = () => {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				})
 				.then((res) => {
-					console.log('Auto-draft created:', res.data);
 					setNewProductId(res.data.id);
 				});
 		} catch (err) {
@@ -716,30 +714,23 @@ const AllProduct: React.FC = () => {
 				<>
 					<div className="page-title-wrapper">
 						<div className="page-title">
-							<div className="title">All Product</div>
+							<div className="title">{__('All Products', 'multivendorx')}</div>
 							<div className="des">
-								Manage your store information and preferences
+								{__('Manage your store products', 'multivendorx')}
 							</div>
 						</div>
 						<div className="buttons-wrapper">
-							{modules.includes('import-export') && (
-								<>
-									<div
-										className="admin-btn btn-purple-bg"
-										onClick={() => setAddProduct(true)}
-									>
-										<i className="adminlib-import"></i>
-										import
-									</div>
-									<div
-										className="admin-btn btn-purple-bg"
-										onClick={() => setAddProduct(true)}
-									>
-										<i className="adminlib-export"></i>
-										Export
-									</div>
-								</>
-							)}
+							{modules.includes('import-export') && 
+								applyFilters(
+									'product_import_export',
+									null,
+									{
+										requestData,
+										rowSelection,
+										data,
+									}
+								)								
+							}
 							<div
 								className="admin-btn btn-purple-bg"
 								onClick={() => {
@@ -758,7 +749,7 @@ const AllProduct: React.FC = () => {
 									}
 								}}
 							>
-								<i className="adminlib-plus"></i> Add New
+								<i className="adminlib-plus"></i> {__('Add New', 'multivendorx')}
 							</div>
 						</div>
 					</div>
