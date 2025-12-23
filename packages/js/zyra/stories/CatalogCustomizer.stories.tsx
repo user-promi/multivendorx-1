@@ -1,5 +1,5 @@
 import CatalogCustomizer from '../src/components/CatalogCustomizer';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof CatalogCustomizer> = {
     title: 'Zyra/Components/CatalogCustomizer',

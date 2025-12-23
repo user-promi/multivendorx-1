@@ -9,9 +9,10 @@ import '../styles/web/DynamicRowSetting.scss';
  * Internal dependencies
  */
 import '../styles/web/ToggleSetting.scss';
+import SelectInput from './SelectInput';
 
 // Types
-type FieldType = 'text' | 'number' | 'file' | 'select';
+type FieldType = 'text' | 'number' | 'file' | 'select' | 'button';
 
 type RowValue = Record< string, string | number | File | RowValue[] | null >;
 
@@ -22,13 +23,18 @@ interface FieldConfig {
     placeholder?: string;
     options?: { label: string; value: string; children?: RowValue[] }[];
     width?: string;
+    onClick?: ( params: {
+        row: RowValue;
+        rowIndex: number;
+        updateRow: ( patch: Partial< RowValue > ) => void;
+    } ) => void;
 }
 
 interface RowConfig {
     fields: FieldConfig[];
 }
 
-interface DynamicRowSettingProps {
+export interface DynamicRowSettingProps {
     description?: string;
     wrapperClass?: string;
     descClass?: string;
@@ -90,7 +96,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                         type={ field.type }
                         placeholder={ field.placeholder }
                         className="basic-input"
-                        value={ val }
+                        value={ val as string | number }
                         onChange={ ( e ) =>
                             handleChange( rowIndex, field.key, e.target.value )
                         }
@@ -111,35 +117,71 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                     />
                 );
 
+            // Inside renderField:
             case 'select':
+                const selectedOption =
+                    field.options?.find( ( opt ) => opt.value === val ) || null;
+
+                // Transform options to SelectInput format
+                const selectOptions: SelectOptions[] = (
+                    field.options || []
+                ).map( ( opt ) => ( { value: opt.value, label: opt.label } ) );
+
                 return (
                     <div className="select-wrapper">
-                        <Select
-                            placeholder={ field.placeholder }
-                            className={ `react-select` }
-                            value={
-                                field.options?.find(
-                                    ( opt ) => opt.value === val
-                                ) || null
-                            }
-                            options={ field.options || [] }
-                            onChange={ ( selected ) => {
+                        <SelectInput
+                            name={ field.key }
+                            type="single-select"
+                            value={ val as string }
+                            options={ selectOptions }
+                            inputClass="react-select"
+                            onChange={ ( newValue ) => {
+                                // react-select SingleValue type
+                                const selected = newValue as any;
                                 handleChange(
                                     rowIndex,
                                     field.key,
                                     selected?.value || ''
                                 );
 
-                                if ( selected?.children ) {
+                                const children = field.options?.find(
+                                    ( opt ) => opt.value === selected?.value
+                                )?.children;
+
+                                if ( children ) {
                                     handleChange(
                                         rowIndex,
                                         field.key + '_children',
-                                        selected.children
+                                        children
                                     );
                                 }
                             } }
                         />
                     </div>
+                );
+
+            case 'button':
+                return (
+                    <button
+                        type="button"
+                        className="admin-btn btn-purple"
+                        onClick={ () =>
+                            field.onClick?.( {
+                                row,
+                                rowIndex,
+                                updateRow: ( patch ) => {
+                                    const updatedRows = [ ...value ];
+                                    updatedRows[ rowIndex ] = {
+                                        ...updatedRows[ rowIndex ],
+                                        ...patch,
+                                    };
+                                    onChange( updatedRows );
+                                },
+                            } )
+                        }
+                    >
+                        { field.label }
+                    </button>
                 );
 
             default:

@@ -14,7 +14,17 @@ import {
 } from '@tanstack/react-table';
 
 type TableRow = Record< string, unknown >;
-type InputType = "number" | "text" | "button" | "color" | "password" | "email" | "file" | "range" | "time" | "url";
+type InputType =
+    | 'number'
+    | 'text'
+    | 'button'
+    | 'color'
+    | 'password'
+    | 'email'
+    | 'file'
+    | 'range'
+    | 'time'
+    | 'url';
 interface ProductWithVariations extends TableRow {
     id: string | number;
     variation?: Record< string, TableRow >;
@@ -58,14 +68,14 @@ interface ColumnHeader {
     editable?: boolean;
     dependent?: boolean;
     options?: UnknownRecord;
-    actions?: Array<{
+    actions?: Array< {
         label: string;
         icon: string;
         className?: string;
         hover?: boolean;
-        onClick: (rowData: UnknownRecord) => void;
-    }>;
-    onClick?: (rowData: UnknownRecord) => void;
+        onClick: ( rowData: UnknownRecord ) => void;
+    } >;
+    onClick?: ( rowData: UnknownRecord ) => void;
 }
 
 interface TableCellProps {
@@ -116,7 +126,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
     const toggleDropdown = ( id: number ) => {
         setShowDropdown( ( prev ) => ( prev === id ? null : id ) );
     };
-    const statusGroups: Record<string, readonly string[]> = {
+    const statusGroups: Record< string, readonly string[] > = {
         green: [
             'completed',
             'active',
@@ -134,7 +144,6 @@ export const TableCell: React.FC< TableCellProps > = ( {
         indigo: [ 'deactivated' ],
         pink: [ 'permanently_rejected', 'inactive' ],
     };
-    
 
     const getStatusColor = ( status: string = '' ) => {
         const key = status.toLowerCase();

@@ -30,6 +30,8 @@
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
+    "@storybook/addon-docs": "^10.1.10",
+    "@storybook/react-vite": "^10.1.10",
     "@types/node": "22.x.x",
     "@wordpress/babel-preset-default": "^8.23.0",
     "@wordpress/eslint-plugin": "22.9.x",

@@ -1,5 +1,5 @@
 import FreeProFormCustomizer from '../src/components/FreeProFormCustomizer';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof FreeProFormCustomizer> = {
     title: 'Zyra/Components/FreeProFormCustomizer',

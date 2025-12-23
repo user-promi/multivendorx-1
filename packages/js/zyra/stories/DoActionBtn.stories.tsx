@@ -1,5 +1,5 @@
 import DoActionBtn from '../src/components/DoActionBtn';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof DoActionBtn> = {
     title: 'Zyra/Components/DoActionBtn',

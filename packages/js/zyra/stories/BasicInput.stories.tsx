@@ -1,128 +1,109 @@
+// BasicInputProProps.stories.tsx
+import React, { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import BasicInput from '../src/components/BasicInput';
-import { ChangeEvent, FocusEvent, MouseEvent } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof BasicInput> = {
-    title: 'Zyra/Components/BasicInput',
+    title: 'Zyra/Components/BasicInput/ProExamples',
     component: BasicInput,
     tags: ['autodocs'],
 };
 
 export default meta;
-
 type Story = StoryObj<typeof BasicInput>;
 
-const commonArgs = {
-    wrapperClass: 'setting-form-input',
-    descClass: 'settings-metabox-description',
-    onChange: (e: ChangeEvent<HTMLInputElement>) => {
-        console.log('Changed:', e.target.value);
-    },
-    onClick: (e: MouseEvent<HTMLInputElement>) => {
-        console.log('Clicked:', e.target);
-    },
-    onMouseOver: (e: MouseEvent<HTMLInputElement>) => {
-        console.log('Mouse over:', e.target);
-    },
-    onMouseOut: (e: MouseEvent<HTMLInputElement>) => {
-        console.log('Mouse out:', e.target);
-    },
-    onFocus: (e: FocusEvent<HTMLInputElement>) => {
-        console.log('Focused:', e.target);
-    },
-};
+export const AllInteractiveProps: Story = {
+    render: () => {
+        const [textValue, setTextValue] = useState('');
+        const [passwordValue, setPasswordValue] = useState('');
+        const [rangeValue, setRangeValue] = useState(50);
 
-export const TestBasicInputTextFree: Story = {
-    args: {
-        type: 'text' as 'text',
-        description:
-            'This is a simple text box (text, url, email, password, number)',
-        placeholder: 'write something',
-        ...commonArgs,
-    },
-    render: (args) => {
-        return <BasicInput key={'sample_text'} {...args} />;
-    },
-};
+        return (
+            <div style={{ display: 'grid', gap: '24px', maxWidth: '600px' }}>
+                {/* Text Input with pre/post text */}
+                <BasicInput
+                    wrapperClass="input-wrapper"
+                    inputLabel="Text Input"
+                    value={textValue}
+                    placeholder="Enter text"
+                    preText="<b>PreText:</b>"
+                    postText="<i>:PostText</i>"
+                    preInsideText="@"
+                    postInsideText=".com"
+                    size="100%"
+                    onChange={(e) => setTextValue(e.target.value)}
+                    description="Text input demonstrating preText, postText, and inside text"
+                    proSetting
+                />
 
-export const TestBasicInputTextPro: Story = {
-    args: {
-        type: 'text' as const,
-        description: 'This is a simple text box with parameter',
-        parameter: 'days',
-        proSetting: true,
-        ...commonArgs,
-    },
-    render: (args) => {
-        return <BasicInput key={'sample_parameter_text'} {...args} />;
-    },
-};
+                {/* Password with Generate / Copy / Clear */}
+                <BasicInput
+                    wrapperClass="input-wrapper"
+                    inputLabel="Password Input"
+                    type="text"
+                    value={passwordValue}
+                    generate="true"
+                    size="100%"
+                    onChange={(e) => setPasswordValue(e.target.value)}
+                    description="Generate a random key and copy/clear functionality"
+                    proSetting
+                />
 
-export const TestBasicInputNormalFile: Story = {
-    args: {
-        type: 'file' as const,
-        inputClass: 'setting-form-input',
-        description: 'This is a simple file input',
-        ...commonArgs,
-    },
-    render: (args) => {
-        return <BasicInput key={'sample_normal_file'} {...args} />;
-    },
-};
+                {/* Range input with unit */}
+                <BasicInput
+                    wrapperClass="input-wrapper"
+                    inputLabel="Range Input"
+                    type="range"
+                    value={rangeValue}
+                    min={0}
+                    max={100}
+                    rangeUnit="%"
+                    size="100%"
+                    onChange={(e) => setRangeValue(Number(e.target.value))}
+                    description="Range input with unit and live output"
+                    proSetting
+                />
 
-export const TestBasicInputColor: Story = {
-    args: {
-        wrapperClass: 'setting-form-input',
-        inputClass: 'basic-input',
-        descClass: 'settings-metabox-description',
-        type: 'color' as 'color',
-        description: 'This is a simple color',
-        onChange: (e: ChangeEvent<HTMLInputElement>) => {
-            console.log('Changed:', e.target.value);
-        },
-        onClick: (e: MouseEvent<HTMLInputElement>) => {
-            console.log('Clicked:', e.target);
-        },
-        onMouseOver: (e: MouseEvent<HTMLInputElement>) => {
-            console.log('Mouse over:', e.target);
-        },
-        onMouseOut: (e: MouseEvent<HTMLInputElement>) => {
-            console.log('Mouse out:', e.target);
-        },
-        onFocus: (e: FocusEvent<HTMLInputElement>) => {
-            console.log('Focused:', e.target);
-        },
-    },
-    render: (args) => {
-        return <BasicInput key={'sample_color'} {...args} />;
-    },
-};
+                {/* Button Input */}
+                <BasicInput
+                    wrapperClass="input-wrapper"
+                    inputLabel="Custom Button Input"
+                    type="button"
+                    clickBtnName="Click Me"
+                    onclickCallback={() =>
+                        alert(`Button clicked with current value: ${textValue}`)
+                    }
+                    description="Button input with click callback"
+                    proSetting
+                />
 
-export const TestBasicInputRange: Story = {
-    args: {
-        type: 'range' as 'range',
-        inputLabel: 'Range Input',
-        rangeUnit: 'px',
-        ...commonArgs,
-    },
-    render: (args) => {
-        return <BasicInput key={'sample_range'} {...args} />;
-    },
-};
+                {/* Disabled / ReadOnly */}
+                <BasicInput
+                    wrapperClass="input-wrapper"
+                    inputLabel="Disabled Input"
+                    value="Disabled"
+                    disabled
+                    description="Disabled input field"
+                />
+                <BasicInput
+                    wrapperClass="input-wrapper"
+                    inputLabel="ReadOnly Input"
+                    value="Read Only"
+                    readOnly
+                    description="Read-only input field"
+                />
 
-export const TestBasicInputButton: Story = {
-    args: {
-        wrapperClass: 'setting-form-input',
-        inputClass: 'btn default-btn',
-        descClass: 'settings-metabox-description',
-        type: 'button' as 'button',
-        description: 'This is a simple button',
-        placeholder: 'write something',
-        onClick: (e: MouseEvent<HTMLInputElement>) => {
-            console.log('Button clicked:', e.target);
-        },
-    },
-    render: (args) => {
-        return <BasicInput key={'sample_button'} {...args} />;
+                {/* Feedback Example */}
+                <BasicInput
+                    wrapperClass="input-wrapper"
+                    inputLabel="Input with Feedback"
+                    value={textValue}
+                    onChange={(e) => setTextValue(e.target.value)}
+                    feedback={{ type: 'error', message: 'Invalid input' }}
+                    description="Shows feedback message below input"
+                    proSetting
+                />
+            </div>
+        );
     },
 };

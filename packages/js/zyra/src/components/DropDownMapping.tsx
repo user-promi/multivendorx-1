@@ -108,8 +108,6 @@ const DropDownMapping: React.FC< DropDownMappingProps > = ( {
                     availableFields[ systems[ 1 ] ].length === 0
             );
             settingChanged.current = true;
-        } else {
-            console.log( 'Unable to add sync fields' );
         }
     };
 

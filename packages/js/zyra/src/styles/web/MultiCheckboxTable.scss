@@ -32,7 +32,7 @@
                     max-width: 9.375rem;
                 }
 
-                .admin-pro-tag {
+                .admin-pro-tag{
                     position: relative;
                     top: 0;
                     right: 0;
@@ -45,20 +45,9 @@
         width: 100%;
         border: $border-light-small;
 
-        .toggle-header {
-            max-width: 100%;
-            margin: 0.625rem 0;
-            cursor: pointer;
-            background: $background-color;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1rem;
-            padding: 0.5rem;
-
-            h1 {
-                font-size: 1rem;
-            }
+        h1 {
+            font-size: 1.25rem;
+            padding: 0.625rem 0;
         }
 
         tr {
@@ -245,6 +234,21 @@
 
         tr:nth-child(odd) {
             background: #f0e4e4b8;
+        }
+    }
+
+    .toggle-header {
+        max-width: 100%;
+        margin: 0.625rem 0;
+        cursor: pointer;
+
+        h1 {
+            background: $background-color;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            padding: 0.5rem;
         }
     }
 }

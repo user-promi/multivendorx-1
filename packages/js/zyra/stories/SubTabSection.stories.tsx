@@ -1,5 +1,5 @@
 import SubTabSection from '../src/components/SubTabSection';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof SubTabSection> = {
     title: 'Zyra/Components/SubTabSection',

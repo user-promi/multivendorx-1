@@ -1,64 +1,117 @@
-import Popup from '../src/components/Popup';
-import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-const meta: Meta<typeof Popup> = {
-    title: 'Zyra/Components/Popup',
-    component: Popup,
+// Dummy types matching your ProPopup component
+interface PopupMessage {
+    text: string;
+    des?: string;
+    icon?: string;
+}
+
+interface BtnLink {
+    site: string;
+    price: string;
+    link: string;
+}
+
+interface PopupProps {
+    proUrl?: string;
+    title?: string;
+    messages?: PopupMessage[];
+    moreText?: string;
+    moduleName?: string;
+    settings?: string;
+    plugin?: string;
+    message?: string;
+    moduleButton?: string;
+    pluginDescription?: string;
+    pluginButton?: string;
+    SettingDescription?: string;
+    pluginUrl?: string;
+    modulePageUrl?: string;
+    btnLink?: BtnLink[];
+    upgradeBtnText?: string;
+}
+
+// Dummy ProPopup component for Storybook
+const ProPopup: React.FC<PopupProps> = (props) => {
+    return (
+        <div style={{ padding: 20, border: '1px solid #ccc', borderRadius: 8 }}>
+            <h2>{props.title || props.moduleName || 'Popup Title'}</h2>
+            {props.messages && (
+                <ul>
+                    {props.messages.map((msg, idx) => (
+                        <li key={idx}>
+                            {msg.icon && <i className={msg.icon}></i>} {msg.text} - {msg.des}
+                        </li>
+                    ))}
+                </ul>
+            )}
+            {props.btnLink && props.btnLink.length > 0 && (
+                <select>
+                    {props.btnLink.map((btn, idx) => (
+                        <option key={idx} value={btn.link}>
+                            {btn.site} - {btn.price}
+                        </option>
+                    ))}
+                </select>
+            )}
+            {props.message && <p>{props.message}</p>}
+        </div>
+    );
+};
+
+// Storybook setup
+const meta: Meta<typeof ProPopup> = {
+    title: 'Zyra/Components/ProPopup',
+    component: ProPopup,
     tags: ['autodocs'],
 };
 
 export default meta;
+type Story = StoryObj<typeof ProPopup>;
 
-type Story = StoryObj<typeof Popup>;
+// Dummy button links
+const sampleBtnLinks: BtnLink[] = [
+    { site: '1 Site', price: '$29', link: '#' },
+    { site: '5 Sites', price: '$79', link: '#' },
+];
 
-export const TestProPopup: Story = {
+// Dummy messages
+const sampleMessages: PopupMessage[] = [
+    { text: 'Unlock premium features', des: 'Access advanced tools.', icon: 'adminlib-star' },
+    { text: 'Priority Support', des: 'Get faster assistance.', icon: 'adminlib-support' },
+];
+
+// Pro Upgrade Popup
+export const ProUpgradePopup: Story = {
     args: {
-        proUrl: 'https://example.com/upgrade-to-pro',
         title: 'Upgrade to Pro',
-        messages: [
-            'Unlock all advanced features.',
-            'Get priority support.',
-            'Access to premium modules and integrations.',
-        ],
+        moreText: 'Choose a license to unlock premium features:',
+        btnLink: sampleBtnLinks,
+        messages: sampleMessages,
+        upgradeBtnText: 'Upgrade Now',
     },
-    render: (args) => {
-        return <Popup {...args} />;
-    },
+    render: (args) => <ProPopup {...args} />,
 };
 
-export const TestModulePopup: Story = {
+// Module Activation Popup
+export const ModuleActivationPopup: Story = {
     args: {
-        moduleName: 'SEO Optimizer',
-        moduleMessage: "This module helps optimize your site's SEO.",
-        moduleButton: 'Enable Module',
-        modulePageUrl: '/modules/seo-optimizer',
+        moduleName: 'Custom Module',
+        message: 'Activate this module to enable custom functionality.',
+        moduleButton: 'Go to Module',
+        modulePageUrl: '#',
     },
-    render: (args) => {
-        return <Popup {...args} />;
-    },
+    render: (args) => <ProPopup {...args} />,
 };
 
-export const TestSettingPopup: Story = {
+// Settings Popup
+export const SettingsPopup: Story = {
     args: {
-        settings: 'Advanced Settings',
-        SettingDescription:
-            'Configure title tags, meta descriptions, and more.',
-        SettingMessage: 'Customize how your site appears in search results.',
+        settings: 'settings',
+        message: 'Enable advanced settings for better control.',
+        SettingDescription: 'Advanced settings allow detailed configuration.',
     },
-    render: (args) => {
-        return <Popup {...args} />;
-    },
-};
-export const TestPluginPopup: Story = {
-    args: {
-        plugin: 'Yoast SEO',
-        pluginDescription:
-            'Yoast SEO is a comprehensive tool for search engine optimization.',
-        pluginMessage: 'Activate the plugin to unlock all SEO features.',
-        pluginButton: 'Install Plugin',
-        pluginUrl: 'https://wordpress.org/plugins/yoast-seo/',
-    },
-    render: (args) => {
-        return <Popup {...args} />;
-    },
+    render: (args) => <ProPopup {...args} />,
 };

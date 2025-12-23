@@ -216,6 +216,7 @@
                 flex: 1 0 0;
                 width: 100%;
                 border: none;
+                color: $text-color;
 
                 &.select {
                     max-width: 2rem;
@@ -600,7 +601,7 @@
 
     .pagination-number-wrapper {
         font-size: 1.063rem;
-        color: #00000094;
+        color: $sub-text-color;
         display: flex;
         align-items: center;
         gap: 1rem;
@@ -620,18 +621,15 @@
 .load-table {
     border-collapse: collapse;
     border-spacing: 0;
-    border-color: rgb(0 0 0 / 20%);
+    border-color: $border-light-small;
     width: 100%;
 
     td {
         padding: 0.4rem;
-        border-style: solid;
-        border-width: 0;
         overflow: hidden;
         word-break: normal;
-        border-color: rgb(0 0 0 / 20%);
-        color: #333;
-        background-color: #fff;
+        color: $sub-text-color;
+        background-color: $background-white;
         flex-grow: 1;
 
         &:first-child {
@@ -666,6 +664,8 @@
     animation: shine-lines 2s infinite ease-out;
 }
 
+
+// action btn style start
 .action-section {
     display: flex;
     flex-direction: column;
@@ -743,14 +743,9 @@
         }
     }
 }
+// action btn style end
 
-.no-data {
-    padding: 3rem;
-    background: $background-white;
-    text-align: center;
-    color: $sub-text-color;
-}
-
+// pro tag
 .table-action-column {
     position: relative;
 }

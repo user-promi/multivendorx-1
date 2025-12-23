@@ -261,6 +261,7 @@ const Withdrawls: React.FC = () => {
 									className="admin-btn btn-purple-bg"
 									onClick={() => setRequestWithdrawal(true)}
 								>
+									<i className="adminlib-withdraw"></i>
 									{__('Request Withdrawal', 'multivendorx')}
 								</div>
 							</div>
