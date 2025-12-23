@@ -1,5 +1,5 @@
 import Section from '../src/components/Section';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Section> = {
     title: 'Zyra/Components/Section',
@@ -11,13 +11,12 @@ export default meta;
 
 type Story = StoryObj<typeof Section>;
 
-export const TestSection: Story = {
+export const DefaultSection: Story = {
     args: {
         wrapperClass: 'setting-section-divider',
         hint: 'Fill in all required fields carefully.',
         value: 'User Registration',
+        description: 'This section contains user registration settings.',
     },
-    render: (args) => {
-        return <Section {...args} />;
-    },
+    render: (args) => <Section {...args} />,
 };

@@ -2,11 +2,11 @@
  * External dependencies
  */
 import React from 'react';
+import HoverInputRender from '../HoverInputRender';
 
 /**
  * Internal dependencies
  */
-import HoverInputRender from './HoverInputRender';
 
 // Types
 interface TextareaProps {

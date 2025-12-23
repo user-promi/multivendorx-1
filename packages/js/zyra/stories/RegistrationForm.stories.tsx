@@ -1,5 +1,5 @@
 import CustomFrom from '../src/components/RegistrationForm';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof CustomFrom> = {
     title: 'Zyra/Components/Form/RegistrationForm',

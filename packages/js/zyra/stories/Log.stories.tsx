@@ -1,5 +1,5 @@
 import Log from '../src/components/Log';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Log> = {
     title: 'Zyra/Components/Log',

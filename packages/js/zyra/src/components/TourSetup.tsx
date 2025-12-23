@@ -20,6 +20,7 @@ export interface AppLocalizer {
 interface TourSetupProps extends Omit< ProviderProps, 'steps' > {
     appLocalizer: AppLocalizer;
     steps: StepType[];
+    forceOpen: boolean;
 }
 
 /**
@@ -28,11 +29,16 @@ interface TourSetupProps extends Omit< ProviderProps, 'steps' > {
 const TourSetup: FC< TourSetupProps > = ( {
     appLocalizer,
     steps,
+    forceOpen = false,
     ...rest
 } ) => {
     return (
         <TourProvider steps={ [] } { ...rest }>
-            <Tour appLocalizer={ appLocalizer } steps={ steps } />
+            <Tour
+                appLocalizer={ appLocalizer }
+                steps={ steps }
+                forceOpen={ forceOpen }
+            />
         </TourProvider>
     );
 };
