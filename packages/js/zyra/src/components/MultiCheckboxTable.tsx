@@ -374,7 +374,6 @@ interface MultiCheckboxTableProps {
     moduleChange: ( module: string ) => void;
     proChanged?: () => void;
     khali_dabba: boolean;
-    enable?: boolean;
 }
 
 const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {

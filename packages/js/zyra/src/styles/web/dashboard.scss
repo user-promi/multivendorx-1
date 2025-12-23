@@ -48,7 +48,7 @@
             border-radius: 50%;
             transition: all 0.4s ease;
             cursor: pointer;
-            margin-top: -0.313rem;
+            margin-top: -0.5rem;
             color: $sub-text-color;
 
             &:hover {
@@ -91,6 +91,13 @@
                 }
             }
         }
+
+        // add product page
+        .arrow-icon {
+            font-size: 1.313rem;
+            transform: rotate(-90deg);
+            padding: 0.125rem;
+        }
     }
 
     .card-content {
@@ -112,7 +119,6 @@
         .card-body {
             padding: 1.5rem;
             transition: all 0.5s ease;
-            border-top: $border-light-small;
 
             .settings-metabox-note {
                 padding: 0 0 1rem;
@@ -137,6 +143,12 @@
         &:has(.hide-body) {
             .card-content {
                 border: none;
+            }
+        }
+
+        &:has(.card-header) {
+            .card-body {
+                border-top: $border-light-small;
             }
         }
     }
@@ -175,6 +187,11 @@
                 line-height: 0.9;
                 font-weight: 600;
                 color: $text-color;
+            }
+
+            .text {
+                color: $sub-text-color;
+                line-height: 1.713;
             }
         }
     }
@@ -280,6 +297,8 @@
         flex-direction: column;
         width: 100%;
         margin-bottom: 1rem;
+        justify-content: end;
+        /* add product form style*/
 
         .button-wrapper {
             display: flex;
@@ -299,15 +318,6 @@
 
         .toggle-setting-container label {
             margin: 0;
-        }
-
-        i {
-            font-size: 1.125rem;
-
-            &.remove-btn {
-                color: $accent-color;
-                cursor: pointer;
-            }
         }
 
         .date-field-wrapper {
@@ -640,7 +650,7 @@
 
     .review {
         padding-top: 0.313rem;
-        color: #00000085;
+        color: $sub-text-color;
     }
 }
 
@@ -696,6 +706,13 @@
         margin-top: 1rem;
         padding-bottom: 0.75rem;
     }
+}
+
+.no-data {
+    padding: 3rem;
+    background: $background-white;
+    text-align: center;
+    color: $sub-text-color;
 }
 
 // no data found end

@@ -1220,7 +1220,6 @@ const Membership = ({ id }: { id: string }) => {
 													wrapperClass="setting-form-input"
 													descClass="settings-metabox-description"
 													value={formData.name}
-													size={"12rem"}
 													onChange={handleChange}
 													description={__(
 														'Activate Stripe Marketplace or PayPal Marketplace module to use recurring subscriptions.',

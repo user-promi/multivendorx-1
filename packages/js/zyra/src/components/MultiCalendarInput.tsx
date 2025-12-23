@@ -5,7 +5,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { DateRangePicker, Range, RangeKeyDict } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-
 import '../styles/web/CalendarInput.scss';
 
 interface CalendarInputProps {
@@ -228,6 +227,7 @@ const MultiCalendarInput: React.FC< CalendarInputProps > = ( props ) => {
                             scroll={ { enabled: true } }
                             maxDate={ new Date() }
                             onChange={ handleDateChange }
+                            rangeColors={['var(--colorPrimary)']}
                         />
                     </div>
                 ) }

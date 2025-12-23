@@ -192,11 +192,13 @@
   span {
     font-size: 1rem;
     font-weight: 500;
+    color: $sub-text-color;
   }
 
   .title {
     font-size: 1.313rem;
     margin-bottom: 0.4rem;
+    line-height: 1;
     text-align: center;
   }
 

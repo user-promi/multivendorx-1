@@ -220,16 +220,6 @@ const Settings: React.FC<SettingsProps> = () => {
 		}, [setting, settingName, currentTab]);
 
 		// Special component
-		if (currentTab === 'faq') {
-			return (
-				<Support
-					title="Thank you for using Notifima"
-					subTitle="We want to help you enjoy a wonderful experience with all of our products."
-					url="https://www.youtube.com/embed/cgfeZH5z2dM?si=3zjG13RDOSiX2m1b"
-					faqData={faqs}
-				/>
-			);
-		}
 		if (currentTab === 'notifications') {
 			return <Notifications />;
 		}
