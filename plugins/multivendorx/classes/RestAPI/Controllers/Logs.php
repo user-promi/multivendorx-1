@@ -37,39 +37,7 @@ class Logs extends \WP_REST_Controller {
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'create_item' ),
-					'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				),
-			)
-        );
-
-        register_rest_route(
-            MultiVendorX()->rest_namespace,
-            '/' . $this->rest_base . '/(?P<id>[\d]+)',
-            array(
-				array(
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_item' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::DELETABLE,
-					'callback'            => array( $this, 'delete_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				),
+                )
 			)
         );
     }
@@ -80,24 +48,6 @@ class Logs extends \WP_REST_Controller {
      * @param mixed $request all requests params from api.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' );
-    }
-
-    /**
-     * Create_item_permissions_check creates the item permissions check.
-     *
-     * @param mixed $request all requests params from api.
-     */
-    public function create_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' );
-    }
-
-    /**
-     * Update_item_permissions_check updates the item permissions check.
-     *
-     * @param mixed $request all requests params from api.
-     */
-    public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 

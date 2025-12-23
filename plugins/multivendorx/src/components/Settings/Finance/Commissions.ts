@@ -52,7 +52,7 @@ export default {
 	name: __('Commissions', 'multivendorx'),
 	tabTitle: 'Commission share from the seller’s product/service:',
 	desc: __(
-		'Decide how your marketplace takes commission from sales.',
+		'Decide How Your Marketplace Takes Commission From Sales.',
 		'multivendorx'
 	),
 	icon: 'adminlib-commission',

@@ -4,7 +4,7 @@ export default {
 	id: 'marketplace',
 	priority: 1,
 	name: __('Overview', 'multivendorx'),
-	tabTitle: 'Marketplace Pages Configuration',
+	tabTitle: 'Marketplace pages configuration',
 	desc: __(
 		'Configure the essential system pages required for your marketplace - including store registration, store dashboard.',
 		'multivendorx'
@@ -64,7 +64,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Enable Content Styling Tools For stores', 'multivendorx'),
+			hint: __('Enable content styling tools for stores', 'multivendorx'),
 		},
 		{
 			key: 'tinymce_api_section',
@@ -78,7 +78,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Shortcode Library', 'multivendorx'),
+			hint: __('Shortcode library', 'multivendorx'),
 		},
 		{
 			key: 'available_shortcodes',
@@ -88,18 +88,6 @@ export default {
 			optionLabel: ['Shortcodes', 'Description', 'Arguments'],
 			icon: 'adminlib-general-tab',
 			options: [
-				
-				{
-					key: 'marketplace_products',
-					label: '[marketplace_products]',
-					name: 'Show store products',
-					desc: __(
-						'Displays all products added by a store. Use this to create store-specific product listing pages.',
-						'multivendorx'
-					),
-					arguments:
-						'<ul> <li><b>store</b> - Store ID, slug, email, or username (optional)</li> <li><b>perpage</b> - Number of products to display (default: 12)</li> <li><b>columns</b> - Number of products per row (default: 4)</li> <li><b>filter</b> - Type of products to show: all, recent, featured, sale, top_rated, best_selling (default: all)</li> <li><b>sort</b> - Predefined sorting: latest, oldest, rating, popularity, title (optional)</li> <li><b>orderby</b> - Sort products by a specific field, used when sort is not set (default: title)</li> <li><b>order</b> - Display order: ASC or DESC (default: ASC)</li> <li><b>category</b> - Product category slugs, comma separated (optional)</li> <li><b>operator</b> - Category filter operator: IN, NOT IN, AND (default: IN)</li> </ul>',},
-				
 				{
 					key: 'marketplace_dashboard',
 					label: '[marketplace_dashboard]',
@@ -108,8 +96,6 @@ export default {
 						'Displays the store dashboard where stores manage products, orders, earnings, and store settings.',
 						'multivendorx'
 					),
-					arguments:
-						'<ul><li>No arguments required</li></ul>',
 				},
 				{
 					key: 'marketplace_registration',
@@ -119,10 +105,78 @@ export default {
 						'Displays the store registration form. Use this to allow new users to sign up as stores.',
 						'multivendorx'
 					),
-					arguments:
-						'<ul><li>No arguments required</li></ul>',
 				},
-
+				{
+					key: 'marketplace_products',
+					label: '[marketplace_products]',
+					name: 'Show store products',
+					desc: __(
+						'Displays all products added by a store. Use this to create store-specific product listing pages.',
+						'multivendorx'
+					),
+					arguments: [
+						{
+							attribute: 'store',
+							description:
+								'Displays products from a specific store. Accepts Store ID, store slug, email, or username.',
+							accepted: 'string',
+							default: 'All stores',
+						},
+						{
+							attribute: 'perpage',
+							description: 'Number of products displayed per page.',
+							accepted: 'number',
+							default: '12',
+						},
+						{
+							attribute: 'columns',
+							description: 'Number of products displayed per row.',
+							accepted: 'number',
+							default: '4',
+						},
+						{
+							attribute: 'filter',
+							description: 'Type of products to display.',
+							accepted:
+								'all, recent, featured, sale, top_rated, best_selling',
+							default: 'all',
+						},
+						{
+							attribute: 'sort',
+							description: 'Predefined sorting order for products.',
+							accepted:
+								'latest, oldest, rating, popularity, title',
+							default: '—',
+						},
+						{
+							attribute: 'orderby',
+							description:
+								'Sort products by a specific field when sort is not set.',
+							accepted: 'string',
+							default: 'title',
+						},
+						{
+							attribute: 'order',
+							description: 'Sorting direction for products.',
+							accepted: 'ASC, DESC',
+							default: 'ASC',
+						},
+						{
+							attribute: 'category',
+							description:
+								'Filter products by category slugs (comma separated).',
+							accepted: 'string',
+							default: '—',
+						},
+						{
+							attribute: 'operator',
+							description:
+								'Category filter logic when multiple categories are selected.',
+							accepted: 'IN, NOT IN, AND',
+							default: 'IN',
+						},
+					],
+				},
 				{
 					key: 'marketplace_stores',
 					label: '[marketplace_stores]',
@@ -131,8 +185,21 @@ export default {
 						'Displays a list of all registered stores with ratings. Use this to help customers discover stores.',
 						'multivendorx'
 					),
-					arguments:
-						'<ul><li><b>orderby</b> - Sort stores by name, category, or registration date (default: registered)</li><li><b>order</b> - Display order: ASC or DESC (default: ASC)</li></ul>',
+					arguments: [
+						{
+							attribute: 'orderby',
+							description:
+								'Sort stores by name, category, or registration date',
+							accepted: 'string',
+							default: 'registered',
+						},
+						{
+							attribute: 'order',
+							description: 'Display order: ASC or DESC',
+							accepted: 'number',
+							default: 'ASC',
+						},
+					],
 				},
 				{
 					key: 'store_coupons',
@@ -142,8 +209,6 @@ export default {
 						'Displays coupons created by a store along with their usage details. Useful for stores to track coupon performance.',
 						'multivendorx'
 					),
-					arguments:
-						'<ul><li>No arguments required</li></ul>',
 				},
 			],
 		},

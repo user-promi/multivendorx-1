@@ -13,7 +13,7 @@ use MultiVendorX\store\store;
 
 $store_id = $args['store_id'];
 
-$store = Store::get_store_by_id( $store_id );
+$store = Store::get_store( $store_id );
 
 if ( ! $store ) {
     return;

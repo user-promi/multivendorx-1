@@ -205,7 +205,7 @@ const Dashboard: React.FC = () => {
 			.then((response) => {
 				setAnnouncement(response.data.items || []);
 			})
-			.catch(() => {});
+			.catch(() => { });
 
 		axios({
 			method: 'GET',
@@ -274,7 +274,7 @@ const Dashboard: React.FC = () => {
 
 				setRecentOrders(orders);
 			})
-			.catch(() => {});
+			.catch(() => { });
 
 		axios({
 			method: 'GET',
@@ -319,7 +319,7 @@ const Dashboard: React.FC = () => {
 					parseInt(response.headers['x-wp-total']) || 0;
 				setTotalOrder(totalOrders);
 			})
-			.catch(() => {});
+			.catch(() => { });
 
 		axios({
 			method: 'GET',
@@ -725,83 +725,84 @@ const Dashboard: React.FC = () => {
 								</div>
 							</div>
 						</div>
-
-						<div className="top-customer-wrapper">
-							{lastWithdraws && lastWithdraws.length > 0 ? (
-								lastWithdraws.map((item) => (
-									<div key={item.id} className="info-item">
-										<div className="details-wrapper">
-											<div className="details">
-												<div className="name">
-													{item.payment_method ===
-														'stripe-connect' &&
-														__(
-															'Stripe',
-															'multivendorx'
-														)}
-													{item.payment_method ===
-														'bank-transfer' &&
-														__(
-															'Direct to Local Bank (INR)',
-															'multivendorx'
-														)}
-													{item.payment_method ===
-														'paypal-payout' &&
-														__(
-															'PayPal',
-															'multivendorx'
-														)}
-													{item.payment_method ===
-													'bank-transfer'
-														? __(
+						<div className="card-body">
+							<div className="top-customer-wrapper">
+								{lastWithdraws && lastWithdraws.length > 0 ? (
+									lastWithdraws.map((item) => (
+										<div key={item.id} className="info-item">
+											<div className="details-wrapper">
+												<div className="details">
+													<div className="name">
+														{item.payment_method ===
+															'stripe-connect' &&
+															__(
+																'Stripe',
+																'multivendorx'
+															)}
+														{item.payment_method ===
+															'bank-transfer' &&
+															__(
+																'Direct to Local Bank (INR)',
+																'multivendorx'
+															)}
+														{item.payment_method ===
+															'paypal-payout' &&
+															__(
+																'PayPal',
+																'multivendorx'
+															)}
+														{item.payment_method ===
+															'bank-transfer'
+															? __(
 																'Bank Transfer',
 																'multivendorx'
 															)
-														: ''}
-												</div>
+															: ''}
+													</div>
 
-												<div className="des">
-													{formatWcShortDate(
-														item.date
-													)}
+													<div className="des">
+														{formatWcShortDate(
+															item.date
+														)}
+													</div>
+												</div>
+											</div>
+
+											<div className="right-details">
+												<div className="price">
+													{formatCurrency(item.amount)}
 												</div>
 											</div>
 										</div>
-
-										<div className="right-details">
-											<div className="price">
-												{formatCurrency(item.amount)}
-											</div>
-										</div>
+									))
+								) : (
+									<div className="no-data">
+										{__(
+											'No withdrawals found.',
+											'multivendorx'
+										)}
 									</div>
-								))
-							) : (
-								<div className="no-data">
-									{__(
-										'No withdrawals found.',
-										'multivendorx'
-									)}
+								)}
+							</div>
+
+							{lastWithdraws && lastWithdraws.length > 0 && (
+								<div className="buttons-wrapper">
+									<div
+										className="admin-btn btn-purple"
+										onClick={() => {
+											window.location.href =
+												'/dashboard/wallet/transactions/';
+										}}
+									>
+										<i className="adminlib-preview"></i>
+										{__(
+											'View transaction history',
+											'multivendorx'
+										)}
+									</div>
 								</div>
 							)}
 						</div>
-
-						{lastWithdraws && lastWithdraws.length > 0 && (
-							<div className="buttons-wrapper">
-								<div
-									className="admin-btn btn-purple"
-									onClick={() => {
-										window.location.href =
-											'/dashboard/wallet/transactions/';
-									}}
-								>
-									<i className="adminlib-preview"></i>
-									{__(
-										'View transaction history',
-										'multivendorx'
-									)}
-								</div>
-							</div>
-						)}
 					</div>
 				</div>
 
@@ -1115,7 +1116,7 @@ const Dashboard: React.FC = () => {
 								<div className="card-body">
 									<div className="notification-wrapper">
 										{announcement &&
-										announcement.length > 0 ? (
+											announcement.length > 0 ? (
 											<ul>
 												{announcement.map(
 													(item, index) => (
@@ -1169,8 +1170,8 @@ const Dashboard: React.FC = () => {
 								<div
 									className="right"
 									onClick={() =>
-										(window.location.href =
-											'/dashboard/sales/orders/#refund-requested')
+									(window.location.href =
+										'/dashboard/sales/orders/#refund-requested')
 									}
 									style={{ cursor: 'pointer' }}
 								>
@@ -1181,7 +1182,7 @@ const Dashboard: React.FC = () => {
 							<div className="card-body">
 								<div className="top-customer-wrapper">
 									{pendingRefund &&
-									pendingRefund.length > 0 ? (
+										pendingRefund.length > 0 ? (
 										pendingRefund.map((customer) => (
 											<div
 												key={customer.id}
@@ -1331,14 +1332,13 @@ const Dashboard: React.FC = () => {
 															(_, index) => (
 																<i
 																	key={index}
-																	className={`star-icon adminlib-star ${
-																		index <
-																		Math.round(
-																			reviewItem.overall_rating
-																		)
+																	className={`star-icon adminlib-star ${index <
+																			Math.round(
+																				reviewItem.overall_rating
+																			)
 																			? 'active'
 																			: ''
-																	}`}
+																		}`}
 																></i>
 															)
 														)}

@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MultiVendorX REST API tour controller.
  *
- * @class       Module class
+ * @class       Tour class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
@@ -43,34 +43,7 @@ class Tour extends \WP_REST_Controller {
 					'methods'             => \WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'create_item' ),
 					'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				),
-			)
-        );
-
-        register_rest_route(
-            MultiVendorX()->rest_namespace,
-            '/' . $this->rest_base . '/(?P<id>[\d]+)',
-            array(
-				array(
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_item' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::DELETABLE,
-					'callback'            => array( $this, 'delete_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ), // Only admins can delete.
-				),
+				)
 			)
         );
     }
@@ -90,15 +63,6 @@ class Tour extends \WP_REST_Controller {
      * @param mixed $request Request data.
      */
     public function create_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' );
-    }
-
-    /**
-     * Update tour status
-     *
-     * @param mixed $request Request data.
-     */
-    public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' );
     }
 
@@ -122,10 +86,7 @@ class Tour extends \WP_REST_Controller {
         }
         try {
             // Directly fetch stored value.
-            $status = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], false );
-
-            // Force boolean.
-            $status = filter_var( $status, FILTER_VALIDATE_BOOLEAN );
+            $status = filter_var(get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], false ), FILTER_VALIDATE_BOOLEAN);
 
             return array(
                 'active' => $status,

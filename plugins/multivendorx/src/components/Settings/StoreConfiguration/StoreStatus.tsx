@@ -96,7 +96,7 @@ const StoreStatus: React.FC = () => {
 			type: 'file',
 			content: {
 				id: 'deactivated',
-				name: 'Permanently deactivated',
+				name: 'Permanently Deactivated',
 				desc: 'The store has been permanently deactivated. Stores have read-only access to historical data, but the storefront and its product is removed from public view and no changes can be made.',
 				// hideTabHeader: true,
 				icon: 'close-delete',

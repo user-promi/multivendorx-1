@@ -23,7 +23,7 @@ export default {
 		{
 			key: 'email_section',
 			type: 'section',
-			hint: __('Email provider', 'multivendorx'),
+			hint: __('Email Provider', 'multivendorx'),
 		},
 		{
 			key: 'email_provider',
@@ -86,7 +86,7 @@ export default {
 		{
 			key: 'sms_section',
 			type: 'section',
-			hint: __('SMS configuration', 'multivendorx'),
+			hint: __('SMS Configuration', 'multivendorx'),
 		},
 		{
 			key: 'sms_gateway_selector',

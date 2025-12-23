@@ -7,7 +7,7 @@ export default {
 	id: 'store-appearance',
 	priority: 5,
 	name: __('Appearance', 'multivendorx'),
-	tabTitle: 'Marketplace branding',
+	tabTitle: 'Marketplace Branding',
 	desc: __(
 		'Set a marketplace logo to strengthen brand identity across all connected stores.',
 		'multivendorx'
@@ -28,7 +28,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Store customizer', 'multivendorx'),
+			hint: __('Store Customizer', 'multivendorx'),
 			desc: __(
 				'Control how your store looks and feels. Set the banner style, logo placement, and customize the dashboard color scheme to match your brand identity.',
 				'multivendorx'

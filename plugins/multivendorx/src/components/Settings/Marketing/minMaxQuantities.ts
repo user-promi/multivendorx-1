@@ -22,9 +22,10 @@ export default {
 				'multivendorx'
 			),
 			desc: __(
-    '<strong>Example:</strong> You set <em>Min = 1</em> and <em>Max = 5</em> for a T-shirt.<br> If a customer tries to buy 6 units, it will be blocked.<br> Buying 3 units is allowed.',
+    '<strong>Example:</strong> You set <em>Min = 1</em> and <em>Max = 5</em> for a T-shirt.<br> If a customer tries to buy 6 units, it will be blocked.<br> However, buying 3 units is allowed.',
     'multivendorx'
 ),
+
 			moduleEnabled: 'min-max',
 			nestedFields: [
 				{
@@ -49,10 +50,10 @@ export default {
 				'multivendorx'
 			),
 			desc: __(
-    '<strong>Example:</strong> You set <em>Min = $20</em> and <em>Max = $100</em> for a Backpack.<br> If a customer tries to buy 1 backpack costing $10, it is blocked.<br> Buying 2 backpacks at $30 each (total $60) is allowed.',
+    '<strong>Example:</strong> You set <em>Min = $20</em> and <em>Max = $100</em> for a Backpack.<br> If a customer tries to buy 1 backpack priced at $10, the purchase is blocked.<br> However, buying 2 backpacks at $30 each (total $60) is allowed.',
     'multivendorx'
 ),
-			moduleEnabled: 'min-max',
+moduleEnabled: 'min-max',
 			nestedFields: [
 				{
 					key: 'product_min_amount',
@@ -71,7 +72,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Order purchase limits', 'multivendorx'),
+			hint: __('Order Purchase Limits', 'multivendorx'),
 			desc: __(
 				'Set limits on the total quantity or total value of an order to control bulk purchases or enforce minimum order requirements.',
 				'multivendorx'
@@ -87,7 +88,7 @@ export default {
 				'multivendorx'
 			),
 			desc: __(
-    '<strong>Example:</strong> You set <em>Min items = 2</em> and <em>Max items = 20</em> per order.<br> If a customer adds only 1 item, checkout is blocked.<br> Adding 5 items is allowed.',
+    '<strong>Example:</strong> You set <em>Min = $20</em> and <em>Max = $100</em> for a Backpack.<br> If a customer tries to buy 1 backpack priced at $10, the purchase is blocked.<br> However, buying 2 backpacks at $10 each (total $20) is allowed.',
     'multivendorx'
 ),
 			moduleEnabled: 'min-max',
@@ -114,9 +115,11 @@ export default {
 				'multivendorx'
 			),
 			desc: __(
-    '<strong>Example:</strong> You set <em>Min order value = $50</em> and <em>Max order value = $500</em>.<br> If a customer tries to checkout with $30, it is blocked.<br> Checkout with $120 is allowed.',
+    '<strong>Example:</strong> You set the <em>minimum order value to $50</em> and the <em>maximum order value to $500</em>.<br> If a customer tries to checkout with an order total of $30, the checkout will be blocked.<br> However, checkout with an order total of $120 is allowed.',
     'multivendorx'
 ),
+
+
 			moduleEnabled: 'min-max',
 			nestedFields: [
 				{

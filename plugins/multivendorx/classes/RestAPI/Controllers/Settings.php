@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MultiVendorX REST API Settings controller.
  *
- * @class       Module class
+ * @class       Settings class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */

@@ -13,9 +13,7 @@ use MultiVendorX\RestAPI\Controllers\Stores;
 use MultiVendorX\RestAPI\Controllers\Commissions;
 use MultiVendorX\RestAPI\Controllers\Status;
 use MultiVendorX\RestAPI\Controllers\Notifications;
-use MultiVendorX\RestAPI\Controllers\Payouts;
 use MultiVendorX\RestAPI\Controllers\Transactions;
-use MultiVendorX\RestAPI\Controllers\Reports;
 use MultiVendorX\RestAPI\Controllers\Tour;
 use MultiVendorX\RestAPI\Controllers\Logs;
 use MultiVendorX\RestAPI\Controllers\AI;
@@ -52,7 +50,7 @@ class Rest {
         add_filter( 'woocommerce_rest_shop_order_object_query', array( $this, 'query_shop_order_modify' ), 10, 2 );
         add_filter( 'woocommerce_rest_product_object_query', array( $this, 'query_product_modify' ), 10, 2 );
         add_filter( 'woocommerce_rest_shop_coupon_object_query', array( $this, 'query_shop_coupon_filter_meta' ), 10, 2 );
-        add_filter( 'woocommerce_rest_prepare_product_object', array( $this, 'prepare_product_add_store_data' ), 10, 3 );
+        add_filter( 'woocommerce_rest_prepare_product_object', array( $this, 'prepare_product_add_store_data' ), 10, 2 );
         add_filter( 'woocommerce_rest_prepare_shop_order_object', array( $this, 'prepare_shop_order_filter_meta' ), 10, 3 );
         add_filter( 'woocommerce_rest_prepare_shop_coupon_object', array( $this, 'prepare_shop_coupon_filter_meta' ), 10, 3 );
         add_filter( 'woocommerce_rest_pre_insert_shop_coupon_object', array( $this, 'pre_insert_shop_coupon_fix_status' ), 10, 3 );
@@ -65,45 +63,29 @@ class Rest {
      *
      * @param object $response API response.
      * @param object $product  Product object.
-     * @param object $request  REST API request object.
      */
-    public function prepare_product_add_store_data( $response, $product, $request ) {
+    public function prepare_product_add_store_data( $response, $product ) {
         $product_id = $product->get_id();
+        $store_id   = (int) get_post_meta(
+            $product_id,
+            Utill::POST_META_SETTINGS['store_id'],
+            true
+        );
 
-        // Get store ID from product meta.
-        $store_id = get_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], true );
+        // Default response values
+        $response->data['store_id']   = '';
+        $response->data['store_name'] = '';
+        $response->data['store_slug'] = '';
 
-        if ( $store_id ) {
-            // Get store information.
-            $store      = new Store( $store_id );
-            $store_name = $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
-            $store_slug = $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
+        if ( $store_id > 0 ) {
+            $store = new Store( $store_id );
 
-            // Add store data to API response.
-            $response->data['store_name'] = $store_name ? $store_name : '';
-            $response->data['store_slug'] = $store_slug ? $store_slug : '';
             $response->data['store_id']   = $store_id;
-        } else {
-            $response->data['store_name'] = '';
-            $response->data['store_slug'] = '';
-            $response->data['store_id']   = '';
+            $response->data['store_name'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
+            $response->data['store_slug'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
         }
 
         return $response;
-    }
-
-    /**
-     * Ensure store meta is included in API queries
-     *
-     * @param array  $args WP_Query arguments.
-     * @param object $request REST API request object.
-     */
-    public function add_store_meta_to_api_query( $args, $request ) {
-        if ( ! isset( $args['meta_query'] ) ) {
-            $args['meta_query'] = array();
-        }
-
-        return $args;
     }
 
     /**
@@ -112,17 +94,16 @@ class Rest {
      * @param array $args WP_Query arguments.
      */
     public function analytics_products_filter_low_stock_meta( $args ) {
-        if ( isset( $request['meta_key'] ) && Utill::POST_META_SETTINGS['store_id'] === $request['meta_key'] ) {
+        $meta_key  = $args['meta_key'] ?? '';
 
-            // Build the meta query to check for the existence of the MultiVendorX key.
+        if ( Utill::POST_META_SETTINGS['store_id'] === $meta_key ) {
+
             $meta_query = array(
                 'key'     => Utill::POST_META_SETTINGS['store_id'],
                 'compare' => 'EXISTS',
             );
 
-            if ( ! isset( $args['meta_query'] ) ) {
-                $args['meta_query'] = array();
-            }
+            $args['meta_query'] = $args['meta_query'] ?? array();
             $args['meta_query'][] = $meta_query;
         }
 
@@ -136,45 +117,43 @@ class Rest {
      * @param object $request REST API request object.
      */
     public function query_shop_order_modify( $args, $request ) {
-        $meta_key      = $request->get_param( 'meta_key' );
-        $meta_value    = $request->get_param( 'value' );
-        $refund_status = $request->get_param( 'refund_status' );
+        $meta_key      = $request->get_param( 'meta_key' ) ?? '';
+        $meta_value    = $request->get_param( 'value' ) ?? '';
+        $refund_status = $request->get_param( 'refund_status' ) ?? '';
 
         if ( empty( $meta_key ) && empty( $refund_status ) ) {
             return $args;
         }
 
-        $meta_query = array();
+        $args['meta_query'] = $args['meta_query'] ?? array();
 
-        // Original store meta query (unchanged).
+        // Store meta filter
         if ( ! empty( $meta_key ) ) {
-            $store_meta_query = array(
+
+            $condition = array(
                 'key'     => sanitize_key( $meta_key ),
-                'compare' => $meta_value ? '=' : 'EXISTS',
+                'compare' => ! empty( $meta_value ) ? '=' : 'EXISTS',
             );
 
-            if ( $meta_value ) {
-                $store_meta_query['value'] = sanitize_text_field( $meta_value );
+            if ( ! empty( $meta_value ) ) {
+                $condition['value'] = sanitize_text_field( $meta_value );
             }
 
-            $meta_query[] = $store_meta_query;
+            $args['meta_query'][] = $condition;
         }
 
-        // New refund status meta query.
+        // Refund status filter
         if ( ! empty( $refund_status ) ) {
-            $meta_query[] = array(
+            $args['meta_query'][] = array(
                 'key'     => '_customer_refund_order',
                 'value'   => sanitize_text_field( $refund_status ),
                 'compare' => '=',
             );
         }
 
-        // Merge all meta queries.
-        if ( isset( $args['meta_query'] ) ) {
+        // Ensure relation when multiple meta queries exist
+        if ( count( $args['meta_query'] ) > 1 && empty( $args['meta_query']['relation'] ) ) {
             $args['meta_query']['relation'] = 'AND';
-            $args['meta_query']             = array_merge( $args['meta_query'], $meta_query );
-        } else {
-            $args['meta_query'] = $meta_query;
         }
 
         return $args;
@@ -188,37 +167,36 @@ class Rest {
      * @return array Modified WP_Query arguments.
      */
     public function query_product_modify( $args, $request ) {
-        if ( isset( $request['meta_key'] ) && Utill::POST_META_SETTINGS['store_id'] === $request['meta_key'] ) {
+        $meta_key = $request['meta_key'] ?? '';
 
-            // Check if a value (store_id) was passed.
-            $meta_query = array();
+        if ( Utill::POST_META_SETTINGS['store_id'] !== $meta_key ) {
+            return $args;
+        }
 
-            if ( isset( $request['value'] ) && ! empty( $request['value'] ) ) {
-                // Filter for exact match.
-                $meta_query[] = array(
-                    'key'     => Utill::POST_META_SETTINGS['store_id'],
-                    'value'   => sanitize_text_field( $request['value'] ),
-                    'compare' => '=',
-                );
-            } else {
-                // If no value, just check that the key exists.
-                $meta_query[] = array(
-                    'key'     => Utill::POST_META_SETTINGS['store_id'],
-                    'compare' => 'EXISTS',
-                );
-            }
+        $value = $request['value'] ?? '';
 
-            // Merge with existing meta_query if present.
-            if ( isset( $args['meta_query'] ) ) {
-                $args['meta_query']['relation'] = 'AND';
-                $args['meta_query'][]           = $meta_query;
-            } else {
-                $args['meta_query'] = $meta_query;
-            }
+        $meta_condition = array(
+            'key' => Utill::POST_META_SETTINGS['store_id'],
+        );
+
+        if ( !empty($value) ) {
+            $meta_condition['value']   = sanitize_text_field( $value );
+            $meta_condition['compare'] = '=';
+        } else {
+            $meta_condition['compare'] = 'EXISTS';
+        }
+
+        $args['meta_query'] = $args['meta_query'] ?? array();
+        $args['meta_query'][] = $meta_condition;
+
+        // Ensure relation is set when multiple meta queries exist
+        if ( count( $args['meta_query'] ) > 1 && empty( $args['meta_query']['relation'] ) ) {
+            $args['meta_query']['relation'] = 'AND';
         }
 
         return $args;
     }
+
 
     /**
      * Filter WooCommerce coupons by meta key existence.
@@ -227,41 +205,49 @@ class Rest {
      * @param array $request REST API request object.
      */
     public function query_shop_coupon_filter_meta( $args, $request ) {
-
         $meta_query = array();
+        $meta_key = $request['meta_key'] ?? '';
+        $value    = $request['value'] ?? '';
 
-        // Handle filtering by store ID (existing logic).
-        if ( isset( $request['meta_key'] ) && Utill::POST_META_SETTINGS['store_id'] === $request['meta_key'] ) {
-            if ( isset( $request['value'] ) && '' !== $request['value'] ) {
-                $meta_query[] = array(
-                    'key'     => Utill::POST_META_SETTINGS['store_id'],
-                    'value'   => sanitize_text_field( $request['value'] ),
-                    'compare' => '=',
-                );
+        // Filter by store ID
+        if ( Utill::POST_META_SETTINGS['store_id'] === $meta_key ) {
+
+            $condition = array(
+                'key' => Utill::POST_META_SETTINGS['store_id'],
+            );
+
+            if ( ! empty( $value ) ) {
+                $condition['value']   = sanitize_text_field( $value );
+                $condition['compare'] = '=';
             } else {
-                $meta_query[] = array(
-                    'key'     => Utill::POST_META_SETTINGS['store_id'],
-                    'compare' => 'EXISTS',
-                );
+                $condition['compare'] = 'EXISTS';
             }
+
+            $meta_query[] = $condition;
         }
 
-        // Handle filtering by discount_type (new addition).
-        if ( isset( $request['discount_type'] ) && ! empty( $request['discount_type'] ) ) {
+        // Filter by discount type
+        $discount_type = $request['discount_type'] ?? '';
+
+        if ( ! empty( $discount_type ) ) {
             $meta_query[] = array(
                 'key'     => 'discount_type',
-                'value'   => sanitize_text_field( $request['discount_type'] ),
+                'value'   => sanitize_text_field( $discount_type ),
                 'compare' => '=',
             );
         }
 
-        // Merge with existing meta_query if present.
+        // Merge with existing meta_query
         if ( ! empty( $meta_query ) ) {
-            if ( isset( $args['meta_query'] ) ) {
+
+            $args['meta_query'] = $args['meta_query'] ?? array();
+
+            foreach ( $meta_query as $condition ) {
+                $args['meta_query'][] = $condition;
+            }
+
+            if ( count( $args['meta_query'] ) > 1 && empty( $args['meta_query']['relation'] ) ) {
                 $args['meta_query']['relation'] = 'AND';
-                $args['meta_query']             = array_merge( $args['meta_query'], $meta_query );
-            } else {
-                $args['meta_query'] = $meta_query;
             }
         }
 
@@ -300,40 +286,39 @@ class Rest {
      * @param object $request  REST API request object.
      */
     public function prepare_shop_order_filter_meta( $response, $object, $request ) {
-        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
 
-        if ( $store_id ) {
-            // Get store information.
-            $store      = new Store( $store_id );
-            $store_name = $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
-            $store_slug = $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
+        $store_id = (int) $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
 
-            // Add store data to API response.
-            $response->data['store_name'] = $store_name ? $store_name : '';
-            $response->data['store_slug'] = $store_slug ? $store_slug : '';
+        if ( $store_id > 0 ) {
+            $store = new Store( $store_id );
+
             $response->data['store_id']   = $store_id;
+            $response->data['store_name'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
+            $response->data['store_slug'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
         }
 
-        $commission_id = $object->get_meta( Utill::ORDER_META_SETTINGS['commission_id'] );
+        $commission_id = (int) $object->get_meta( Utill::ORDER_META_SETTINGS['commission_id'] );
 
-        if ( $commission_id ) {
+        if ( $commission_id > 0 ) {
             $commission = CommissionUtil::get_commission_db( $commission_id );
 
-            if ( $commission && ! empty( $commission->ID ) ) {
-                // Add only commission amounts to API response.
+            if ( ! empty( $commission->ID ) ) {
                 $response->data['commission_amount'] = (float) $commission->store_earning;
                 $response->data['commission_total']  = (float) $commission->store_payable;
             }
         }
 
+        $refunds      = $object->get_refunds();
         $refund_items = array();
 
+        // Product refunds
         foreach ( $object->get_items() as $item_id => $item ) {
-            $refunded_line_total = -1 * $object->get_total_refunded_for_item( $item_id );
-            $refunded_tax        = 0;
-            foreach ( $object->get_refunds() as $refund ) {
+
+            $refunded_tax = 0.0;
+
+            foreach ( $refunds as $refund ) {
                 foreach ( $refund->get_items() as $refund_item ) {
-                    if ( $refund_item->get_meta( '_refunded_item_id' ) === $item_id ) {
+                    if ( (int) $refund_item->get_meta( '_refunded_item_id' ) === $item_id ) {
                         $refunded_tax += array_sum( $refund_item->get_taxes()['total'] ?? array() );
                     }
                 }
@@ -343,19 +328,20 @@ class Rest {
                 'item_id'             => $item_id,
                 'type'                => 'product',
                 'name'                => $item->get_name(),
-                'refunded_line_total' => (float) $refunded_line_total,
+                'refunded_line_total' => (float) -1 * $object->get_total_refunded_for_item( $item_id ),
                 'refunded_tax'        => (float) $refunded_tax,
             );
         }
 
+        // Shipping refunds
         foreach ( $object->get_items( 'shipping' ) as $item_id => $item ) {
-            $refunded_shipping = -1 * $object->get_total_refunded_for_item( $item_id, 'shipping' );
 
-            $refunded_shipping_tax = 0;
-            foreach ( $object->get_refunds() as $refund ) {
+            $refunded_tax = 0.0;
+
+            foreach ( $refunds as $refund ) {
                 foreach ( $refund->get_items( 'shipping' ) as $refund_item ) {
-                    if ( $refund_item->get_meta( '_refunded_item_id' ) === $item_id ) {
-                        $refunded_shipping_tax += array_sum( $refund_item->get_taxes()['total'] ?? array() );
+                    if ( (int) $refund_item->get_meta( '_refunded_item_id' ) === $item_id ) {
+                        $refunded_tax += array_sum( $refund_item->get_taxes()['total'] ?? array() );
                     }
                 }
             }
@@ -364,15 +350,17 @@ class Rest {
                 'item_id'               => $item_id,
                 'type'                  => 'shipping',
                 'name'                  => $item->get_name(),
-                'refunded_shipping'     => (float) $refunded_shipping,
-                'refunded_shipping_tax' => (float) $refunded_shipping_tax,
+                'refunded_shipping'     => (float) -1 * $object->get_total_refunded_for_item( $item_id, 'shipping' ),
+                'refunded_shipping_tax' => (float) $refunded_tax,
             );
         }
 
         $response->data['refund_items'] = $refund_items;
 
-        $order_notes                   = wc_get_order_notes( array( 'order_id' => $object->get_id() ) );
-        $response->data['order_notes'] = $order_notes;
+        // Order notes
+        $response->data['order_notes'] = wc_get_order_notes(
+            array( 'order_id' => $object->get_id() )
+        );
 
         return $response;
     }
@@ -411,14 +399,12 @@ class Rest {
      */
     public function pre_insert_shop_coupon_fix_status( $coupon, $request, $creating ) {
 
-        if ( isset( $request['status'] ) ) {
-            $status = sanitize_text_field( $request['status'] );
+        $status = sanitize_text_field( $request['status'] ) ?? '';
 
+	    if ( ! empty( $status ) ) {
             $allowed = array( 'publish', 'draft', 'pending', 'private' );
 
             if ( in_array( $status, $allowed, true ) ) {
-
-                // Save to the post directly (WORKS 100%).
                 wp_update_post(
                     array(
 						'ID'          => $coupon->get_id(),
@@ -584,9 +570,7 @@ class Rest {
             'store'         => new Stores(),
             'commission'    => new Commissions(),
             'status'        => new Status(),
-            'payouts'       => new Payouts(),
             'transaction'   => new Transactions(),
-            'report'        => new Reports(),
             'notifications' => new Notifications(),
             'tour'          => new Tour(),
             'logs'          => new Logs(),
