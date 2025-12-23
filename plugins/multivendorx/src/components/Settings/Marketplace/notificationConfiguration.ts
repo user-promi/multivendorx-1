@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'notification-configuration',
 	priority: 5,
-	name: __('Notification Delivery', 'multivendorx'),
+	name: __('Notifications', 'multivendorx'),
 	desc: __(
 		'Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
 		'multivendorx'
@@ -124,5 +124,37 @@ export default {
 				},
 			],
 		},
+		{
+			key: 'email_section',
+			type: 'section',
+			hint: __('Order confirmation email for main and sub-orders', 'multivendorx'),
+		},
+		{
+					key: 'sms_gateway_selector',
+					type: 'setting-toggle',
+					label: __('Order confirmation delivery', 'multivendorx'),
+					settingDescription: __(
+						'Choose how order confirmation emails should be sent. You can send a single email combining the main order and all sub-orders, or send emails individually for the main order and each sub-order.',
+						'multivendorx'
+					),
+					options: [
+						{
+							key: 'none',
+							label: __('Main + Sub Together', 'multivendorx'),
+							value: '',
+						},
+						{
+							key: 'twilio',
+							label: __('Main Only', 'multivendorx'),
+							value: 'twilio',
+						},
+						{
+							key: 'vonage',
+							label: __('Sub-orders Only', 'multivendorx'),
+							value: 'vonage',
+						},
+					],
+		
+				},
 	],
 };
