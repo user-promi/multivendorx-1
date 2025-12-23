@@ -724,11 +724,9 @@ const AllProduct: React.FC = () => {
 								applyFilters(
 									'product_import_export',
 									null,
-									{
-										requestData,
-										rowSelection,
-										data,
-									}
+									requestData,
+									rowSelection,
+									data,
 								)								
 							}
 							<div
