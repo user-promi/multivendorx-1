@@ -589,6 +589,7 @@ const Qna: React.FC = () => {
 								onClick={() => setSelectedQna(null)}
 								className="admin-btn btn-red"
 							>
+								<i className="adminlib-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
@@ -596,6 +597,7 @@ const Qna: React.FC = () => {
 								disabled={saving}
 								className="admin-btn btn-purple"
 							>
+								<i className="adminlib-active"></i>
 								{saving
 									? __('Saving...', 'multivendorx')
 									: __('Save Answer', 'multivendorx')}

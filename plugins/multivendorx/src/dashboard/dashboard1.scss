@@ -640,11 +640,11 @@ a {
 
                     .heading {
                         font-size: 0.95rem;
-                        color: #000;
+                        color: $text-color
                     }
 
                     .message {
-                        color: #00000082;
+                        color: $sub-text-color;
                         padding: 0.313rem 0;
                     }
 

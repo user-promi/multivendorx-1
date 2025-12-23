@@ -964,7 +964,7 @@ const AllCoupon: React.FC = () => {
 							setAddCoupon(true); // open popup
 						}}
 					>
-						<i className="adminlib-plus-circle"></i>
+						<i className="adminlib-plus"></i>
 						{__('Add New', 'multivendorx')}
 					</div>
 				</div>
@@ -1000,6 +1000,7 @@ const AllCoupon: React.FC = () => {
 								className="admin-btn btn-red"
 								onClick={() => handleSave('draft')}
 							>
+								<i className="adminlib-contact-form"></i>
 								{__('Draft', 'multivendorx')}
 							</div>
 
@@ -1007,6 +1008,7 @@ const AllCoupon: React.FC = () => {
 								className="admin-btn btn-purple-bg"
 								onClick={() => handleSave('publish')}
 							>
+								<i className="adminlib-publish"></i>
 								{__('Publish', 'multivendorx')}
 							</div>
 						</>

@@ -67,6 +67,8 @@ const Dashboard = () => {
 
 	// dark mode
 	useEffect(() => {
+		document.body.classList.add(appLocalizer.settings_databases_value['store-appearance']
+            ?.store_color_settings?.selectedPalette);
 		document.body.classList.toggle('dark', isDarkMode);
 
 		return () => {

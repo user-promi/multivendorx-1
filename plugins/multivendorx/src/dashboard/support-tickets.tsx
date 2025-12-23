@@ -594,12 +594,14 @@ const SupportTickets: React.FC = () => {
 								onClick={() => setSelectedReview(null)}
 								className="admin-btn btn-red"
 							>
+								<i className="adminlib-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
 								onClick={handleSaveReply}
 								className="admin-btn btn-purple"
 							>
+								<i className="adminlib-active"></i>
 								Save
 							</button>
 						</>

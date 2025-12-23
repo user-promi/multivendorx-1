@@ -581,7 +581,7 @@ const StoreReviews: React.FC = () => {
 						<>
 							<div className="title">
 								<i className="adminlib-store-review"></i>
-								{__('Reply to Review', 'multivendorx')} -{' '}
+								{__('Reply to Review', 'multivendorx')} -
 								{selectedReview.store_name}
 							</div>
 							<i
@@ -597,12 +597,14 @@ const StoreReviews: React.FC = () => {
 								onClick={() => setSelectedReview(null)}
 								className="admin-btn btn-red"
 							>
+								<i className="adminlib-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
 								onClick={handleSaveReply}
 								className="admin-btn btn-purple"
 							>
+								<i className="adminlib-active"></i>
 								{__('Save', 'multivendorx')}
 							</button>
 						</>

@@ -1,6 +1,7 @@
 @use '../../global.scss' as *;
 
 .repeater-field-wrapper {
+    margin-bottom: 0.813rem;
     .repeater-field {
         padding: 1rem;
         background: $background-color;
@@ -40,7 +41,9 @@
             background: $background-white !important;
             /* overwrite common style */
         }
-
+        .admin-btn{
+            width: 19rem;
+        }
         &.state {
             margin-bottom: 0.625rem;
         }
