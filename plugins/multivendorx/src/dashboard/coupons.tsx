@@ -840,7 +840,7 @@ const AllCoupon: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-vendor-form-delete',
+								icon: 'adminlib-delete delete',
 								onClick: async (rowData: any) => {
 									if (
 										confirm(
