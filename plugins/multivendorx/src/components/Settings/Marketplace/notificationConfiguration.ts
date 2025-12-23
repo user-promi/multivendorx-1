@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'notification-configuration',
 	priority: 5,
-	name: __('Notification Delivery', 'multivendorx'),
+	name: __('Notifications', 'multivendorx'),
 	desc: __(
 		'Define what each store role can access and manage within the marketplace. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
 		'multivendorx'
@@ -124,5 +124,47 @@ export default {
 				},
 			],
 		},
+		{
+			key: 'email_section',
+			type: 'section',
+			hint: __('Order Confirmation Delivery', 'multivendorx'),
+		},
+		{
+					key: 'sms_gateway_selector',
+					type: 'setting-toggle',
+					label: __('Select SMS gateway', 'multivendorx'),
+					settingDescription: __(
+						'Pick the SMS service your marketplace will use to send text alerts.',
+						'multivendorx'
+					),
+					options: [
+						{
+							key: 'none',
+							label: __('None', 'multivendorx'),
+							value: '',
+						},
+						{
+							key: 'twilio',
+							label: __('Twilio', 'multivendorx'),
+							value: 'twilio',
+						},
+						{
+							key: 'vonage',
+							label: __('Vonage', 'multivendorx'),
+							value: 'vonage',
+						},
+						{
+							key: 'clickatell',
+							label: __('Clickatell', 'multivendorx'),
+							value: 'clickatell',
+						},
+						{
+							key: 'plivo',
+							label: __('Plivo', 'multivendorx'),
+							value: 'plivo',
+						},
+					],
+		
+				},
 	],
 };
