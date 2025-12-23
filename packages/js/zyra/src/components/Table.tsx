@@ -327,8 +327,8 @@ export const TableCell: React.FC<TableCellProps> = ({
                                 ></i>
                                 <div
                                     className={`action-dropdown ${showDropdown === rowId
-                                            ? 'show'
-                                            : 'hover'
+                                        ? 'show'
+                                        : 'hover'
                                         }`}
                                 >
                                     <ul>
@@ -803,8 +803,8 @@ const Table: React.FC<TableProps> = ({
                                             <tr
                                                 key={productId as number}
                                                 className={`admin-row ${isVariation
-                                                        ? 'variation-row'
-                                                        : ''
+                                                    ? 'variation-row'
+                                                    : ''
                                                     } ${product.type === 'Variable'
                                                         ? 'variable'
                                                         : 'simple'
@@ -965,8 +965,8 @@ const Table: React.FC<TableProps> = ({
                                                 <span
                                                     tabIndex={0}
                                                     className={`${!table.getCanPreviousPage()
-                                                            ? 'pagination-button-disabled'
-                                                            : ''
+                                                        ? 'pagination-button-disabled'
+                                                        : ''
                                                         }`}
                                                     onClick={() => {
                                                         if (
@@ -982,8 +982,8 @@ const Table: React.FC<TableProps> = ({
                                                 <span
                                                     tabIndex={0}
                                                     className={`${!table.getCanPreviousPage()
-                                                            ? 'pagination-button-disabled'
-                                                            : ''
+                                                        ? 'pagination-button-disabled'
+                                                        : ''
                                                         }`}
                                                     onClick={() => {
                                                         if (
@@ -1009,11 +1009,11 @@ const Table: React.FC<TableProps> = ({
                                                             <button
                                                                 key={i}
                                                                 className={`number-btn ${table.getState()
-                                                                        .pagination
-                                                                        .pageIndex ===
-                                                                        i
-                                                                        ? 'active'
-                                                                        : ''
+                                                                    .pagination
+                                                                    .pageIndex ===
+                                                                    i
+                                                                    ? 'active'
+                                                                    : ''
                                                                     }`}
                                                                 onClick={() =>
                                                                     table.setPageIndex(
@@ -1030,8 +1030,8 @@ const Table: React.FC<TableProps> = ({
                                                 <span
                                                     tabIndex={0}
                                                     className={`${!table.getCanNextPage()
-                                                            ? 'pagination-button-disabled'
-                                                            : ''
+                                                        ? 'pagination-button-disabled'
+                                                        : ''
                                                         }`}
                                                     onClick={() => {
                                                         if (
@@ -1047,8 +1047,8 @@ const Table: React.FC<TableProps> = ({
                                                 <span
                                                     tabIndex={0}
                                                     className={`${!table.getCanNextPage()
-                                                            ? 'pagination-button-disabled'
-                                                            : ''
+                                                        ? 'pagination-button-disabled'
+                                                        : ''
                                                         }`}
                                                     onClick={() => {
                                                         if (
@@ -1096,14 +1096,19 @@ const Table: React.FC<TableProps> = ({
                                             <button
                                                 className="admin-btn"
                                                 onClick={() =>
-                                                    table.toggleAllRowsSelected(
-                                                        true
-                                                    )
+                                                    table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
                                                 }
                                             >
-                                                <i className="adminlib-active"></i>
-                                                Select all
+                                                <i
+                                                    className={
+                                                        table.getIsAllRowsSelected()
+                                                            ? 'adminlib-close'
+                                                            : 'adminlib-active'
+                                                    }
+                                                ></i>
+                                                {table.getIsAllRowsSelected() ? 'Deselect all' : 'Select all'}
                                             </button>
+
                                         </div>
                                         {bulkActionComp && bulkActionComp()}
                                     </div>
