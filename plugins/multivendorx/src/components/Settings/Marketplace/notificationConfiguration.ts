@@ -4,7 +4,7 @@ export default {
 	id: 'notification-configuration',
 	priority: 5,
 	name: __('Notifications', 'multivendorx'),
-	tabTitle: 'Email delivery setup',	
+	tabTitle: 'Email delivery setup',
 	desc: __(
 		'Configure how marketplace emails are sent. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
 		'multivendorx'
@@ -12,7 +12,7 @@ export default {
 	icon: 'adminlib-notification',
 	submitUrl: 'settings',
 	modal: [
-		
+
 		{
 			key: 'email_provider',
 			type: 'setting-toggle',
@@ -126,15 +126,13 @@ export default {
 				'multivendorx'
 			),
 			desc: __(
-				'You can send a single email combining the main order and all sub-orders, or send emails individually for the main order and each sub-order.</a></b>',
+				'In a multivendor setup, a <b>Main Order</b> is the parent order placed by the customer, while <b>Sub-orders</b> are created for each store.<br/><br/><b>Enabling the Main Order is recommended</b>, as it allows you to send a single email that includes the Main Order and all related Sub-orders. Alternatively, you can send separate emails for the Main Order and each Sub-order.',
 				'multivendorx'
 			),
+
+
+
 			options: [
-				{
-					key: 'mainnsub',
-					label: __('Main & Sub order together', 'multivendorx'),
-					value: '',
-				},
 				{
 					key: 'mainorder',
 					label: __('Main order', 'multivendorx'),
@@ -144,6 +142,11 @@ export default {
 					key: 'suborder',
 					label: __('Sub-orders Only', 'multivendorx'),
 					value: 'suborder',
+				},
+				{
+					key: 'mainnsub',
+					label: __('Main & Sub order together', 'multivendorx'),
+					value: '',
 				},
 			],
 

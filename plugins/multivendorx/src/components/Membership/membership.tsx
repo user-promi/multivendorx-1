@@ -615,6 +615,83 @@ const Membership = ({ id }: { id: string }) => {
 		},
 	];
 
+	const gracePeriod = [
+		{
+			key: 'facilitator_fixed',
+			type: 'number',
+			postInsideText: __('days', 'multivendorx'),
+			size: '8rem',
+			preText: 'Apply a',
+			postText: 'grace period. Control product visibility',
+		},
+		{
+			key: 'facilitator_fixed',
+			type: 'dropdown',
+			size: '8rem',
+			options: [
+				{
+					key: 'monday',
+					label: __('Keep Products Visible', 'multivendorx'),
+					value: 'monday',
+				},
+				{
+					key: 'tuesday',
+					label: __('After 2 cycles', 'multivendorx'),
+					value: 'tuesday',
+				},
+				{
+					key: 'wednesday',
+					label: __('Hide Products', 'multivendorx'),
+					value: 'wednesday',
+				},
+				{
+					key: 'thursday',
+					label: __('Set to Draft', 'multivendorx'),
+					value: 'thursday',
+				},
+			],
+			// preText: ' ',
+			postText: 'product creation',
+		},
+		{
+			key: 'rule_type',
+			type: 'select',
+			options: [
+				{ value: 'price', label: 'Yes' },
+				{ value: 'quantity', label: 'No' }
+			],
+		},
+		{
+			key: 'facilitator_fixed',
+			type: 'dropdown',
+			size: '5rem',
+			options: [
+				{
+					key: 'monday',
+					label: __('Keep Products Visible', 'multivendorx'),
+					value: 'monday',
+				},
+				{
+					key: 'tuesday',
+					label: __('After 2 cycles', 'multivendorx'),
+					value: 'tuesday',
+				},
+				{
+					key: 'wednesday',
+					label: __('Hide Products', 'multivendorx'),
+					value: 'wednesday',
+				},
+				{
+					key: 'thursday',
+					label: __('Set to Draft', 'multivendorx'),
+					value: 'thursday',
+				},
+			],
+			preText: 'and store role',
+			postText: 'during this time.',
+		},
+	];
+
 
 	return (
 		<>
@@ -670,7 +747,7 @@ const Membership = ({ id }: { id: string }) => {
 											<i
 												className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}
 											></i>
-											Mark as recommended plan
+											{/* Mark as recommended plan */}Recommended
 										</div>
 									</div>
 								</div>
@@ -714,77 +791,6 @@ const Membership = ({ id }: { id: string }) => {
 								</div>
 							</div>
 							<div className="card-body">
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Maximum products upload allowed
-										</label>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-										/>
-									</div>
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Featured products
-										</label>
-										<MultiCheckBox
-											wrapperClass="toggle-btn"
-											inputWrapperClass="toggle-checkbox-header"
-											inputInnerWrapperClass="toggle-checkbox"
-											idPrefix="toggle-switch-sold-individually"
-											type="checkbox"
-											// value={
-											// 	product.sold_individually
-											// 		? ['sold_individually']
-											// 		: []
-											// }
-											// onChange={(e) =>
-											// 	handleChange(
-											// 		'sold_individually',
-											// 		(
-											// 			e as React.ChangeEvent<HTMLInputElement>
-											// 		).target.checked
-											// 	)
-											// }
-											options={[
-												{
-													key: 'sold_individually',
-													value: 'sold_individually',
-												},
-											]}
-										/>
-									</div>
-								</div>
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Images allowed per product
-										</label>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-										/>
-									</div>
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Maximum featured Products Allowed
-										</label>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-										/>
-									</div>
-								</div>
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="product-name">
@@ -919,7 +925,6 @@ const Membership = ({ id }: { id: string }) => {
 								</div>
 							</div>
 						</div>
-
 
 						<div className="card-content">
 							<div className="card-header">
@@ -1208,7 +1213,7 @@ const Membership = ({ id }: { id: string }) => {
 								{pricingType === 'paid' && (
 									<>
 										<div className="form-group-wrapper">
-											<div className="form-group align-top">
+											<div className="form-group">
 												<label htmlFor="product-name">Sign up fee</label>
 												<BasicInput
 													name="name"
@@ -1240,13 +1245,14 @@ const Membership = ({ id }: { id: string }) => {
 										<div className="form-group-wrapper">
 											<div className="form-group">
 												<label htmlFor="product-name">
-													Stop recurring subscription after
+													Stop subscription after
 												</label>
 												<SelectInput
 													name="stock_status"
 													options={billingCycleStop}
 													type="single-select"
 													value={billingStop}
+													size="8rem"
 													onChange={(selected: { value: string }) => {
 														setBillingStop(selected.value);
 													}}
@@ -1274,7 +1280,7 @@ const Membership = ({ id }: { id: string }) => {
 														options={billingCycle}
 														type="single-select"
 														value={BillingCycle}
-														size={"12rem"}
+														size={"6rem"}
 														onChange={(selected: { value: string }) => {
 															setBillingCycle(selected.value);
 														}}
@@ -1316,7 +1322,7 @@ const Membership = ({ id }: { id: string }) => {
 																options={billingCycle}
 																type="single-select"
 																value={BillingCycle}
-																size={"12rem"}
+																size={"6rem"}
 																onChange={(selected: { value: string }) => {
 																	setBillingCycle(selected.value);
 																}}
@@ -1326,75 +1332,84 @@ const Membership = ({ id }: { id: string }) => {
 												)}
 											</div>
 										</div>
+
+										{/* <div className="form-group-wrapper">
+											<div className="form-group">
+												<label htmlFor="product-name">
+													Grace period duration
+												</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													postInsideText="Days"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													size="6rem"
+												/>
+											</div>
+											<div className="form-group">
+												<label htmlFor="product-name">
+													Product status after grace period
+												</label>
+												<SelectInput
+													name="stock_status"
+													options={productStatus}
+													type="single-select"
+													value={ProductStatus}
+													size="9rem"
+													onChange={(selected: { value: string }) => {
+														setProductStatus(selected.value);
+													}}
+												/>
+											</div>
+										</div>
+
+										<div className="form-group-wrapper">
+											<div className="form-group">
+												<label htmlFor="product-name">
+													Store role when grace period ends
+												</label>
+												<SelectInput
+													name="stock_status"
+													options={productStatus}
+													type="single-select"
+													value={VendorRole}
+													size="10rem"
+													onChange={(selected: { value: string }) => {
+														setVendorRole(selected.value);
+													}}
+												/>
+											</div>
+
+											<div className="form-group">
+												<label>
+													<input
+														type="checkbox"
+														checked={allowTrial}
+														onChange={(e) => setAllowTrial(e.target.checked)}
+													/>
+													Allow adding products during grace period
+												</label>
+											</div>
+										</div> */}
+
+										<div className="form-group-wrapper">
+											<div className="form-group">
+												<label htmlFor="">After expiry</label>
+												<NestedComponent
+													id="role_rules"
+													fields={gracePeriod}
+													value={rules}
+													single={true}
+													addButtonLabel="Add Rule"
+													deleteButtonLabel="Remove"
+													onChange={(val) => setRules(val)}
+												/>
+											</div>
+										</div>
 									</>
 								)}
-							</div>
-						</div>
-
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">Grace Period Settings</div>
-								</div>
-							</div>
-							<div className="card-body">
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Grace period duration
-										</label>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											postInsideText="Days"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-										/>
-									</div>
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Product status after grace period
-										</label>
-										<SelectInput
-											name="stock_status"
-											options={productStatus}
-											type="single-select"
-											value={ProductStatus}
-											onChange={(selected: { value: string }) => {
-												setProductStatus(selected.value);
-											}}
-										/>
-									</div>
-								</div>
-
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Store role when grace period ends
-										</label>
-										<SelectInput
-											name="stock_status"
-											options={productStatus}
-											type="single-select"
-											value={VendorRole}
-											onChange={(selected: { value: string }) => {
-												setVendorRole(selected.value);
-											}}
-										/>
-									</div>
-
-									<div className="form-group">
-										<label>
-											<input
-												type="checkbox"
-												checked={allowTrial}
-												onChange={(e) => setAllowTrial(e.target.checked)}
-											/>
-											Allow adding products during grace period
-										</label>
-									</div>
-								</div>
 							</div>
 						</div>
 						<div className="card-content">
@@ -1465,6 +1480,87 @@ const Membership = ({ id }: { id: string }) => {
 												/>
 											</div>
 										))}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div className="card-content">
+							<div className="card-header">
+								<div className="left">
+									<div className="title">Membership Perks</div>
+								</div>
+							</div>
+							<div className="card-body">
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Maximum products upload allowed
+										</label>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+										/>
+									</div>
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Featured products
+										</label>
+										<MultiCheckBox
+											wrapperClass="toggle-btn"
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="toggle-checkbox"
+											idPrefix="toggle-switch-sold-individually"
+											type="checkbox"
+											// value={
+											// 	product.sold_individually
+											// 		? ['sold_individually']
+											// 		: []
+											// }
+											// onChange={(e) =>
+											// 	handleChange(
+											// 		'sold_individually',
+											// 		(
+											// 			e as React.ChangeEvent<HTMLInputElement>
+											// 		).target.checked
+											// 	)
+											// }
+											options={[
+												{
+													key: 'sold_individually',
+													value: 'sold_individually',
+												},
+											]}
+										/>
+									</div>
+								</div>
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Images allowed per product
+										</label>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+										/>
+									</div>
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Maximum featured Products Allowed
+										</label>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+										/>
 									</div>
 								</div>
 							</div>
