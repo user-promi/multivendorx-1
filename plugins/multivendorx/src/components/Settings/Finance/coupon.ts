@@ -16,9 +16,12 @@ export default {
 			label: __('Who will bear the coupon cost', 'multivendorx'),
 			type: 'setting-toggle',
 			desc: __(
-				'<strong>Example setup:</strong><br>Product price = $100<br>Coupon = 20% / $20 (Fixed)  <br>Configured store commission = 80%<ul><li>Stores - If Store bears the coupon cost, coupon amount will be deducted from the store commission.<br>Store commission = 80% of $100 = $80<br>Final store earning = $80 - $20 (Coupon value) = $60</li><li>Admin - Commission is based on original price. Admin bears full coupon discount. <br>Store commission = 80% of $100 = $80</li><li>His His Whose Whose - Discount is split according to commission rates.<br>Store commission = 80% of $100 = $80<br>Store share of coupon = 80% of $20 = $16<br>Final store earning = $80 - $16 = $64</li></ul>',
-				'multivendorx'
-			),
+	'<strong>Example setup:</strong><br>Product price = $100<br>Coupon applied = 20% / $20 (Fixed)<br>Marketplace commission rate = 20%<ul><li>Stores - Marketplace passes coupon cost to the store.<br>Customer pays = $100<br>Marketplace commission = 20% of $100 = $20<br>Store payout before coupon = $80<br>Coupon amount deducted from store = $20<br>Final store payout = $60<br>Marketplace final earning = $20 (commission only, store bears coupon)</li><li>Admin - Marketplace absorbs full coupon cost.<br>Customer pays = $80 (after coupon)<br>Marketplace commission = 20% of $100 = $20<br>Store payout = $60 (Customer payment − commission)<br>Coupon absorbed by marketplace = $20<br>Marketplace final earning = $0 (commission − absorbed coupon)</li><li>His His Whose Whose - Coupon cost split between marketplace and store according to commission rate.<br>Customer pays = $80 (after coupon)<br>Marketplace commission = 20% of $100 = $20<br>Store payout before coupon = $80<br>Store share of coupon = 80% of $20 = $16<br>Final store payout = $64<br>Marketplace absorbs remaining coupon = $4<br>Marketplace final earning = $16 (commission − absorbed coupon)</li></ul>',
+	'multivendorx'
+),
+
+
+
 			options: [
 				{
 					key: 'store',
