@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MultiVendorX REST API Store Controller.
  *
- * @class       Module class
+ * @class       Store class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
@@ -140,7 +140,7 @@ class Stores extends \WP_REST_Controller {
 
                 foreach ( $rejected_stores as $store ) {
                     $store_id     = (int) $store['ID'];
-                    $store_object = new \MultiVendorX\Store\Store( $store_id );
+                    $store_object = new Store( $store_id );
 
                     $all_stores[] = array(
                         'key'   => $store_id,
@@ -451,12 +451,12 @@ class Stores extends \WP_REST_Controller {
             $store_data['status']      = 'active';
 
             if ( ! empty( $store_data['id'] ) ) {
-                $store = new \MultiVendorX\Store\Store( (int) $store_data['id'] );
+                $store = new Store( (int) $store_data['id'] );
                 unset( $store_data['id'], $store_data['status'] );
 
                 $store_data['status'] = 'pending';
             } else {
-                $store = new \MultiVendorX\Store\Store();
+                $store = new Store();
 
                 if (
                     ! current_user_can( 'manage_options' ) &&
@@ -647,7 +647,7 @@ class Stores extends \WP_REST_Controller {
                 );
             }
 
-            $store = new \MultiVendorX\Store\Store( $id );
+            $store = new Store( $id );
 
             if ( $registrations ) {
                 return rest_ensure_response(
@@ -724,7 +724,7 @@ class Stores extends \WP_REST_Controller {
             $id   = absint( $request->get_param( 'id' ) );
             $data = (array) $request->get_json_params();
 
-            $store = new \MultiVendorX\Store\Store( $id );
+            $store = new Store( $id );
 
             // Deactivation handling.
             if ( ! empty( $data['deactivate'] ) ) {
@@ -1072,7 +1072,7 @@ class Stores extends \WP_REST_Controller {
         $count = $request->get_param( 'count' );
 
         // Get store object.
-        $store = new \MultiVendorX\Store\Store( $store_id );
+        $store = new Store( $store_id );
 
         // Fetch followers from meta_data.
         $followers_raw = $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] ?? '[]';

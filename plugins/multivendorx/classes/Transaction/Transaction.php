@@ -285,11 +285,24 @@ class Transaction {
      * Get balances for a given store ID.
      *
      * @param int $store_id The store ID.
-     * @return array An associative array containing 'balance' and 'locking_balance'.
+     * @return array|float An associative array containing 'balance' and 'locking_balance' or the total lifetime earnings.
      */
-    public static function get_balances_for_store( $store_id ) {
+    public static function get_balances_for_store( $store_id, $total = false ) {
         global $wpdb;
         $table_name = $wpdb->prefix . Utill::TABLES['transaction'];
+
+        if ($total) {
+            $total_earning = $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT SUM(amount) 
+                    FROM $table_name 
+                    WHERE store_id = %d",
+                    $store_id
+                )
+            );
+
+            return $total_earning;
+        }
 
         $query = $wpdb->prepare(
             "
