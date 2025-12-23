@@ -4,7 +4,7 @@ export default {
 	id: 'general',
 	priority: 1,
 	name: __('Onboarding', 'multivendorx'),
-	tabTitle: 'Approval Process For New Stores',
+	tabTitle: 'Approval process for new stores',
 	desc: __(
 		'Choose how new stores enter your marketplace, review them manually or allow instant access.',
 		'multivendorx'
@@ -36,7 +36,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Setup Wizard For Stores', 'multivendorx'),
+			hint: __('Setup wizard for stores', 'multivendorx'),
 		},
 		{
 			key: 'disable_setup_wizard',
@@ -151,7 +151,7 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('How Stores Sell Products', 'multivendorx'),
+			hint: __('How stores sell products', 'multivendorx'),
 		},
 		{
 			key: 'store_selling_mode',
