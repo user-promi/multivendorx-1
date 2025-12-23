@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MultiVendorX REST API Transaction Controller
  *
- * @class       Module class
+ * @class       Transaction class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
@@ -41,12 +41,7 @@ class Transactions extends \WP_REST_Controller {
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				),
-				array(
-					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'create_item' ),
-					'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				),
+				)
 			)
         );
 
@@ -81,15 +76,6 @@ class Transactions extends \WP_REST_Controller {
     }
 
     /**
-     * Create item permissions check.
-     *
-     * @param object $request Full details about the request.
-     */
-    public function create_item_permissions_check( $request ) {
-        return true;
-    }
-
-    /**
      * Update item endpoint handler.
      *
      * @param object $request Full details about the request.
@@ -106,92 +92,69 @@ class Transactions extends \WP_REST_Controller {
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
-
-            // Log the error.
-            if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log( $error );
-            }
-
+            $error = new \WP_Error(
+                'invalid_nonce',
+                __( 'Invalid nonce', 'multivendorx' ),
+                array( 'status' => 403 )
+            );
+            MultiVendorX()->util->log( $error );
             return $error;
         }
+
         try {
-            // Check if CSV download is requested.
-            $format = $request->get_param( 'format' );
-            if ( 'csv' === $format ) {
+            // CSV download
+            if ( 'csv' === $request->get_param( 'format' ) ) {
                 return $this->download_transaction_csv( $request );
             }
 
-            $limit         = intval( $request->get_param( 'row' ) ) ? intval( $request->get_param( 'row' ) ) : 10;
-            $page          = intval( $request->get_param( 'page' ) ) ? intval( $request->get_param( 'page' ) ) : 1;
-            $offset        = ( $page - 1 ) * $limit;
-            $count         = $request->get_param( 'count' );
-            $store_id      = intval( $request->get_param( 'store_id' ) );
-            $status        = $request->get_param( 'status' );
-            $filter_status = $request->get_param( 'filter_status' );
+            // Pagination & basic params
+            $limit    = max( 1, (int) $request->get_param( 'row' ) ?: 10 );
+            $page     = max( 1, (int) $request->get_param( 'page' ) ?: 1 );
+            $offset   = ( $page - 1 ) * $limit;
+            $count    = $request->get_param( 'count' );
+            $store_id = (int) $request->get_param( 'store_id' );
+            $status              = $request->get_param( 'status' );
+            $filter_status       = $request->get_param( 'filter_status' );
+            $transaction_type    = $request->get_param( 'transaction_type' );
+            $transaction_status  = $request->get_param( 'transaction_status' );
+            $order_by            = sanitize_text_field( $request->get_param( 'orderBy' ) );
+            $order               = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
 
-            // 🔹 Handle date range from request.
-            $start_date         = $request->get_param( 'start_date' );
-            $end_date           = $request->get_param( 'end_date' );
-            $transaction_type   = $request->get_param( 'transaction_type' );
-            $transaction_status = $request->get_param( 'transaction_status' );
-            $order_by           = sanitize_text_field( $request->get_param( 'orderBy' ) );
-            $order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
+            $start_date = $request->get_param( 'start_date' );
+            $end_date   = $request->get_param( 'end_date' );
+            $start_date = $start_date ? gmdate( 'Y-m-d H:i:s', strtotime( $start_date ) ) : '';
+            $end_date   = $end_date ? gmdate( 'Y-m-d H:i:s', strtotime( $end_date ) ) : '';
 
-            if ( $start_date ) {
-                $start_date = gmdate( 'Y-m-d H:i:s', strtotime( $start_date ) );
-            }
-            if ( $end_date ) {
-                $end_date = gmdate( 'Y-m-d H:i:s', strtotime( $end_date ) );
-            }
+            $args = array_filter( array(
+                'store_id'         => $store_id ?: null,
+                'status'           => $status ?: null,
+                'start_date'       => $start_date ?: null,
+                'end_date'         => $end_date ?: null,
+                'entry_type'       => $filter_status ?: null,
+                'transaction_type' => $transaction_type ?: null,
+                'limit'            => $limit,
+                'offset'           => $offset,
+                'orderBy'          => $order_by ?: null,
+                'order'            => in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : null,
+            ) );
 
-            $args = array();
+            // Count only
             if ( $count ) {
                 $args['count'] = true;
-            }
-            if ( $status ) {
-                $args['status'] = $status;
-            }
-            if ( $store_id ) {
-                $args['store_id'] = $store_id;
+                return rest_ensure_response(
+                    (int) Transaction::get_transaction_information( $args )
+                );
             }
 
-            // Add date filters.
-            if ( $start_date ) {
-                $args['start_date'] = $start_date;
-            }
-            if ( $end_date ) {
-                $args['end_date'] = $end_date;
-            }
-            if ( $filter_status ) {
-                $args['entry_type'] = $filter_status;
-            }
-
-            if ( $count ) {
-                $transactions = Transaction::get_transaction_information( $args );
-                return rest_ensure_response( (int) $transactions );
-            }
             if ( $transaction_status ) {
                 $args['entry_type'] = $transaction_status;
-            }
-            if ( $transaction_type ) {
-                $args['transaction_type'] = $transaction_type;
-            }
-            $args['limit']  = $limit;
-            $args['offset'] = $offset;
-
-            if ( ! empty( $order_by ) ) {
-                $args['orderBy'] = $order_by;
-            }
-            if ( in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
-                $args['order'] = $order;
             }
 
             $transactions = Transaction::get_transaction_information( $args );
 
             $formatted = array_map(
                 function ( $row ) {
-                    $store = new \MultiVendorX\Store\Store( $row['store_id'] );
+                    $store = new Store( $row['store_id'] );
                     return array(
                         'id'               => $row['id'],
                         'commission_id'    => $row['commission_id'],
@@ -211,33 +174,43 @@ class Transactions extends \WP_REST_Controller {
                 $transactions
             );
 
-            $count_args = array(
-                'count' => true,
+            $count_args = array_filter( array(
+                'count'    => true,
+                'store_id' => $store_id ?: null,
+            ) );
+
+            $counts = array(
+                'all' => Transaction::get_transaction_information( $count_args ),
             );
 
-            if ( $store_id ) {
-                $count_args['store_id'] = $store_id;
+            $statuses = array(
+                'completed' => 'Completed',
+                'processed' => 'Processed',
+                'upcoming'  => 'Upcoming',
+                'failed'    => 'Failed',
+            );
+
+            foreach ( $statuses as $key => $status ) {
+                $counts[ $key ] = Transaction::get_transaction_information(
+                    array_merge( $count_args, array( 'status' => $status ) )
+                );
             }
 
-            $all       = Transaction::get_transaction_information( $count_args );
-            $completed = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => 'Completed' ) ) );
-            $processed = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => 'Processed' ) ) );
-            $upcoming  = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => 'Upcoming' ) ) );
-            $failed    = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => 'Failed' ) ) );
-
-            $response = array(
-                'transaction' => $formatted,
-                'all'         => $all,
-                'completed'   => $completed,
-                'processed'   => $processed,
-                'upcoming'    => $upcoming,
-                'failed'      => $failed,
+            return rest_ensure_response(
+                array_merge(
+                    array( 'transaction' => $formatted ),
+                    $counts
+                )
             );
-            return rest_ensure_response( $response );
+
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 
-            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
+            return new \WP_Error(
+                'server_error',
+                __( 'Unexpected server error', 'multivendorx' ),
+                array( 'status' => 500 )
+            );
         }
     }
 
@@ -247,50 +220,45 @@ class Transactions extends \WP_REST_Controller {
      * @param object $request Request object.
      */
     private function download_transaction_csv( $request ) {
-        $store_id           = intval( $request->get_param( 'store_id' ) );
+        $store_id           = (int) $request->get_param( 'store_id' );
         $filter_status      = $request->get_param( 'filter_status' );
         $transaction_type   = $request->get_param( 'transaction_type' );
         $transaction_status = $request->get_param( 'transaction_status' );
         $ids                = $request->get_param( 'ids' );
-        $start_date         = sanitize_text_field( $request->get_param( 'start_date' ) );
-        $end_date           = sanitize_text_field( $request->get_param( 'end_date' ) );
-        $page               = $request->get_param( 'page' );
-        $per_page           = $request->get_param( 'row' );
+        $page               = (int) $request->get_param( 'page' );
+        $per_page           = (int) $request->get_param( 'row' );
 
-        // Prepare filter for Transaction - NO pagination by default.
-        $args = array();
-        if ( ! empty( $store_id ) ) {
-            $args['store_id'] = $store_id;
-        }
-        if ( ! empty( $filter_status ) ) {
-            $args['entry_type'] = $filter_status;
-        }
-        if ( ! empty( $transaction_type ) ) {
-            $args['transaction_type'] = $transaction_type;
-        }
-        if ( ! empty( $transaction_status ) ) {
-            $args['entry_type'] = $transaction_status;
-        }
-        if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
+        $start_date = sanitize_text_field( $request->get_param( 'start_date' ) );
+        $end_date   = sanitize_text_field( $request->get_param( 'end_date' ) );
+
+        $args = array_filter( array(
+            'store_id'         => $store_id ?: null,
+            'transaction_type' => $transaction_type ?: null,
+            'entry_type'       => $transaction_status ?: $filter_status ?: null,
+        ) );
+
+        if ( $start_date && $end_date ) {
             $args['start_date'] = gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) );
             $args['end_date']   = gmdate( 'Y-m-d 23:59:59', strtotime( $end_date ) );
         }
 
         // If specific IDs are requested (selected rows from bulk action).
-        if ( ! empty( $ids ) ) {
-			$args['id__in'] = array_map( 'intval', explode( ',', $ids ) ); }
-
-        // If pagination parameters are provided (current page export from bulk action).
-        elseif ( ! empty( $page ) && ! empty( $per_page ) ) {
-            $args['limit']  = intval( $per_page );
-            $args['offset'] = ( intval( $page ) - 1 ) * intval( $per_page );
+        if ( $ids ) {
+            $args['id__in'] = array_map( 'intval', explode( ',', $ids ) );
+        } elseif ( $page && $per_page ) {
+            $args['limit']  = $per_page;
+            $args['offset'] = ( $page - 1 ) * $per_page;
         }
 
-        // Fetch transactions.
+        // Fetch transactions
         $transactions = Transaction::get_transaction_information( $args );
 
         if ( empty( $transactions ) ) {
-            return new \WP_Error( 'no_data', __( 'No transaction data found.', 'multivendorx' ), array( 'status' => 404 ) );
+            return new \WP_Error(
+                'no_data',
+                __( 'No transaction data found.', 'multivendorx' ),
+                array( 'status' => 404 )
+            );
         }
 
         // CSV headers.
@@ -318,7 +286,7 @@ class Transactions extends \WP_REST_Controller {
         fputcsv( $csv_output, $headers );
 
         foreach ( $transactions as $transaction ) {
-            $store      = new \MultiVendorX\Store\Store( $transaction['store_id'] );
+            $store      = new Store( $transaction['store_id'] );
             $store_name = $store ? $store->get( 'name' ) : '';
 
             // Format date.
@@ -373,18 +341,6 @@ class Transactions extends \WP_REST_Controller {
     }
 
     /**
-     * Create transaction
-     *
-     * @param object $request Request object.
-     */
-    public function create_item( $request ) {
-        $nonce = $request->get_header( 'X-WP-Nonce' );
-        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
-        }
-    }
-
-    /**
      * Get store balance
      *
      * @param object $request Request object.
@@ -410,49 +366,18 @@ class Transactions extends \WP_REST_Controller {
                 )
             );
         }
+        $last_transaction = Transaction::get_balances_for_store($store_id);
 
-        global $wpdb;
-        $table_name = "{$wpdb->prefix}" . Utill::TABLES['transaction'];
-
-        // Fetch last transaction row for the store.
-        $last_transaction = $wpdb->get_row(
-            $wpdb->prepare(
-                "SELECT balance, locking_balance 
-                 FROM $table_name 
-                 WHERE store_id = %d 
-                 ORDER BY created_at DESC 
-                 LIMIT 1",
-                $store_id
-            ),
-            ARRAY_A
-        );
-
-        $balance         = isset( $last_transaction['balance'] ) ? $last_transaction['balance'] : 0;
-        $locking_balance = isset( $last_transaction['locking_balance'] ) ? $last_transaction['locking_balance'] : 0;
+        $balance         = $last_transaction['balance'];
+        $locking_balance = $last_transaction['locking_balance'];
 
         // Calculate total lifetime earnings (sum of all amounts).
-        $total_earning = $wpdb->get_var(
-            $wpdb->prepare(
-                "SELECT SUM(amount) 
-                 FROM $table_name 
-                 WHERE store_id = %d",
-                $store_id
-            )
-        );
-
-        $total_earning = $total_earning ? $total_earning : 0;
+        $total_earning = (float) Transaction::get_balances_for_store( $store_id, true );
 
         // Lifetime earning minus locking balance.
-        $lifetime_earning = $total_earning - $locking_balance;
+        $lifetime_earning = $total_earning - (float) $locking_balance;
 
-        $payout_threshold = MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 );
-
-        // If it's an array, take first value, else use as is.
-        if ( is_array( $payout_threshold ) ) {
-            $payout_threshold = reset( $payout_threshold ) ? reset( $payout_threshold ) : 0;
-        }
-
-        $payout_threshold      = floatval( $payout_threshold );
+        $payout_threshold = floatval(MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 ));
         $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
         $locking_day           = MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
         $payment_schedules     = MultiVendorX()->setting->get_setting( 'payment_schedules', '' );
@@ -461,10 +386,9 @@ class Transactions extends \WP_REST_Controller {
 
         return rest_ensure_response(
             array(
-				'wallet_balance'     => $balance,
 				'reserve_balance'    => $minimum_wallet_amount,
 				'thresold'           => $payout_threshold,
-				'available_balance'  => max( 0, $balance - $minimum_wallet_amount ),
+				'available_balance'  => $balance,
 				'balance'            => $balance,
 				'locking_day'        => $locking_day,
 				'locking_balance'    => $locking_balance,
@@ -495,11 +419,11 @@ class Transactions extends \WP_REST_Controller {
         $amount   = (float) $request->get_param( 'amount' );
         $withdraw = $request->get_param( 'withdraw' );
         $action   = $request->get_param( 'action' );
-
-        $store        = new \MultiVendorX\Store\Store( $store_id );
         $disbursement = $request->get_param( 'disbursement' );
 
+        $store        = new Store( $store_id );
         $threshold_amount = MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 );
+    
         if ( $disbursement ) {
             $method = $request->get_param( 'method' );
             $note   = $request->get_param( 'note' );
