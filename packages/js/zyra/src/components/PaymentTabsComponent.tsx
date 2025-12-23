@@ -703,7 +703,6 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                 { methods.map( ( method, index ) => {
                     const isEnabled = value?.[ method.id ]?.enable ?? false;
                     const isActive = activeTabs.includes( method.id );
-                    console.log( 'method', method );
                     if ( isWizardMode && index > wizardIndex ) {
                         return null;
                     }

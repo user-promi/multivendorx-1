@@ -292,7 +292,7 @@ final class MultiVendorX {
         return $links;
     }
 
-     /**
+    /**
      * Get multivendorx log file name.
      */
     public function initialize_multivendorx_log() {
@@ -350,7 +350,6 @@ final class MultiVendorX {
 
         return self::$instance;
     }
-
 }
 
 

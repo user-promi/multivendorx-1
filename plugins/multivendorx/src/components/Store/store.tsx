@@ -354,7 +354,7 @@ const Store = () => {
 											{__('Store Email', 'multivendorx')}
 										</label>
 										<EmailsInput
-											value={emails}
+											value={formData.emails || []}
 											enablePrimary={true}
 											onChange={(list, primary) => {
 												saveEmails(list, primary);
@@ -380,7 +380,7 @@ const Store = () => {
 											tinymceApiKey={
 												appLocalizer
 													.settings_databases_value[
-													'marketplace'
+												'marketplace'
 												]['tinymce_api_section'] ?? ''
 											}
 										/>
