@@ -42,7 +42,7 @@ const ShippingCard = ({ product, handleChange }) => {
 
 				<div className="right">
 					<i
-						className="adminlib-pagination-right-arrow arrow-icon"
+						className="adminlib-pagination-right-arrow icon"
 						onClick={() => toggleCard('card-shipping')}
 					></i>
 				</div>

@@ -322,24 +322,22 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 							</div>
 						</div>
 						<div className="card-body">
-							<div className="top-items">
-								{earningSummary.map((product) => (
-									<div className="items" key={product.id}>
-										<div className="left-side">
-											<div className="details">
-												<div className="item-title">
-													{product.title}
-												</div>
-											</div>
-										</div>
-										<div className="right-side">
-											<div className="price">
-												{product.price}
+							{earningSummary.map((product) => (
+								<div className="info-item" key={product.id}>
+									<div className="details-wrapper">
+										<div className="details">
+											<div className="name">
+												{product.title}
 											</div>
 										</div>
 									</div>
-								))}
-							</div>
+									<div className="right-details">
+										<div className="price">
+											{product.price}
+										</div>
+									</div>
+								</div>
+							))}
 						</div>
 					</div>
 

@@ -232,11 +232,10 @@ $index: 1;
   // dark background color btn
   .btn-#{$name}-bg {
     background: map-get($style, color);
-    color: $color-white;
+    color: #fff;
 
     &:hover {
       background: map-get($style, color);
-      color: $color-white;
     }
   }
 }
@@ -625,6 +624,11 @@ $index: 1;
 .settings-calender {
   position: relative;
   width: fit-content;
+}
+.rdrDefinedRangesWrapper,
+.rdrCalendarWrapper,
+.rdrStaticRange{
+  background: $background-white;
 }
 
 // Commone loader style

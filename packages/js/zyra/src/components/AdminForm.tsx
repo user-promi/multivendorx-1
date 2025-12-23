@@ -88,6 +88,14 @@ interface DependentCondition {
     set?: boolean;
     value?: string | number | boolean;
 }
+
+interface ShortcodeArgument {
+    attribute: string;
+    description: string;
+    accepted: string;
+    default: string;
+}
+
 interface MultiNumOption {
     key: string;
     value: string | number;
@@ -96,6 +104,7 @@ interface MultiNumOption {
     type?: string;
     desc?: string;
     labelAfterInput?: boolean;
+    arguments?: ShortcodeArgument[];
 }
 interface Field {
     name: string;

@@ -386,15 +386,15 @@ const ProductReport: React.FC = () => {
 					// Calculate UTC equivalent of the server's 00:00:00 boundary.
 					const afterDate = new Date(
 						startLocal.getTime() -
-							(startLocal.getTimezoneOffset() + offsetMinutes) *
-								60000
+						(startLocal.getTimezoneOffset() + offsetMinutes) *
+						60000
 					);
 
 					// Calculate UTC equivalent of the server's 23:59:59 boundary.
 					const beforeDate = new Date(
 						endLocal.getTime() -
-							(endLocal.getTimezoneOffset() + offsetMinutes) *
-								60000
+						(endLocal.getTimezoneOffset() + offsetMinutes) *
+						60000
 					);
 
 					// 4. Convert to ISO String (UTC/Z-time)
@@ -437,13 +437,13 @@ const ProductReport: React.FC = () => {
 							.join(', ') || '-',
 					dateCreated: product.date_created
 						? new Date(product.date_created).toLocaleDateString(
-								undefined,
-								{
-									year: 'numeric',
-									month: 'short',
-									day: '2-digit',
-								}
-							)
+							undefined,
+							{
+								year: 'numeric',
+								month: 'short',
+								day: '2-digit',
+							}
+						)
 						: '-',
 				})
 			);
@@ -669,19 +669,18 @@ const ProductReport: React.FC = () => {
 														)}
 													</b>{' '}
 													{product.average_rating ||
-														'0'}{' '}
-													⭐
+														'0'}
+													<i className="adminlib-card"></i>
 												</div>
 											</div>
 											<div className="right">
 												<i
-													className={`adminlib-pagination-right-arrow ${
-														openReviewedCards[
+													className={`adminlib-pagination-right-arrow ${openReviewedCards[
 															product.id
 														]
 															? 'rotate-90 transition-transform'
 															: ''
-													}`}
+														}`}
 												></i>
 											</div>
 										</div>
@@ -714,12 +713,10 @@ const ProductReport: React.FC = () => {
 
 														<div className="details text-sm leading-6">
 															<div>
-																<b>
-																	{__(
-																		'Price:',
-																		'multivendorx'
-																	)}
-																</b>{' '}
+																{__(
+																	'Price:',
+																	'multivendorx'
+																)}
 																<span
 																	dangerouslySetInnerHTML={{
 																		__html:
@@ -730,22 +727,18 @@ const ProductReport: React.FC = () => {
 																/>
 															</div>
 															<div>
-																<b>
-																	{__(
-																		'Total Sales:',
-																		'multivendorx'
-																	)}
-																</b>{' '}
+																{__(
+																	'Total Sales:',
+																	'multivendorx'
+																)}
 																{product.total_sales ||
 																	0}
 															</div>
 															<div>
-																<b>
-																	{__(
-																		'Category:',
-																		'multivendorx'
-																	)}
-																</b>{' '}
+																{__(
+																	'Category:',
+																	'multivendorx'
+																)}
 																{product.categories
 																	?.map(
 																		(
