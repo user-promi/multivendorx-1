@@ -127,41 +127,31 @@ export default {
 		{
 			key: 'email_section',
 			type: 'section',
-			hint: __('Order Confirmation Delivery', 'multivendorx'),
+			hint: __('Order confirmation email for main and sub-orders', 'multivendorx'),
 		},
 		{
 					key: 'sms_gateway_selector',
 					type: 'setting-toggle',
-					label: __('Select SMS gateway', 'multivendorx'),
+					label: __('Order confirmation delivery', 'multivendorx'),
 					settingDescription: __(
-						'Pick the SMS service your marketplace will use to send text alerts.',
+						'Choose how order confirmation emails should be sent. You can send a single email combining the main order and all sub-orders, or send emails individually for the main order and each sub-order.',
 						'multivendorx'
 					),
 					options: [
 						{
 							key: 'none',
-							label: __('None', 'multivendorx'),
+							label: __('Main + Sub Together', 'multivendorx'),
 							value: '',
 						},
 						{
 							key: 'twilio',
-							label: __('Twilio', 'multivendorx'),
+							label: __('Main Only', 'multivendorx'),
 							value: 'twilio',
 						},
 						{
 							key: 'vonage',
-							label: __('Vonage', 'multivendorx'),
+							label: __('Sub-orders Only', 'multivendorx'),
 							value: 'vonage',
-						},
-						{
-							key: 'clickatell',
-							label: __('Clickatell', 'multivendorx'),
-							value: 'clickatell',
-						},
-						{
-							key: 'plivo',
-							label: __('Plivo', 'multivendorx'),
-							value: 'plivo',
 						},
 					],
 		
