@@ -52,7 +52,6 @@ const ProPopup: React.FC< PopupProps > = ( props ) => {
                 : { site: '', price: '', link: proUrl }
         );
     }, [ btnLink, proUrl ] );
-    console.log( props );
 
     return (
         <DialogContent

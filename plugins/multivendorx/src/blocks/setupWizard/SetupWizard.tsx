@@ -70,6 +70,7 @@ const SetupWizard: React.FC = () => {
 			desc: 'Configure basic settings for vendor stores.',
 			countBtn: true,
 			isWizardMode: true,
+			openForm:true,
 			formFields: [
 				{
 					key: 'store_url',
@@ -109,6 +110,7 @@ const SetupWizard: React.FC = () => {
 			desc: 'Choose how earnings are split between Admin and Vendors.',
 			countBtn: true,
 			isWizardMode: true,
+			openForm:true,
 			formFields: [
 				{
 					key: 'approve_store',

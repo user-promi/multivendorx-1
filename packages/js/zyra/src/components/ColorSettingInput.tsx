@@ -94,13 +94,21 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
         const value = e.target.value;
         setSelectedPalette( value );
 
+        // Set mode based on selection
+        if ( value === 'custom' ) {
+            setMode( 'custom' );
+        } else {
+            setMode( 'predefined' );
+        }
+
         const option = props.predefinedOptions.find(
             ( opt ) => opt.value === value
         );
-        const colors = option?.colors || {};
+        const colors = value === 'custom' ? customColors : option?.colors || {};
 
         setSelectedColors( colors );
 
+        // Use the actual field name from props instead of hardcoded string
         props.onChange?.( {
             target: {
                 name: 'store_color_settings',
@@ -117,6 +125,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
         setCustomColors( updated );
         setSelectedColors( updated );
         setSelectedPalette( 'custom' );
+        setMode( 'custom' ); // Ensure mode is set to custom
 
         props.onChange?.( {
             target: {
@@ -129,6 +138,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
         } );
     };
 
+    console.log( 'mode', mode );
     return (
         <>
             <div className={ props.wrapperClass }>
@@ -137,15 +147,53 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                     <>
                         <button
                             type="button"
-                            onClick={ () => setMode( 'predefined' ) }
-                            className="admin-btn btn-purple"
+                            onClick={ () => {
+                                setMode( 'predefined' );
+                                if ( props.predefinedOptions[ 0 ]?.value ) {
+                                    const value =
+                                        props.predefinedOptions[ 0 ].value;
+                                    setSelectedPalette( value );
+                                    const option = props.predefinedOptions.find(
+                                        ( opt ) => opt.value === value
+                                    );
+                                    const colors = option?.colors || {};
+
+                                    props.onChange?.( {
+                                        target: {
+                                            name: 'store_color_settings',
+                                            value: {
+                                                selectedPalette: value,
+                                                colors,
+                                            },
+                                        },
+                                    } );
+                                }
+                            } }
+                            className={ `admin-btn ${
+                                mode === 'predefined' ? 'btn-purple' : ''
+                            }` }
                         >
                             Pre-defined Palette
                         </button>
                         <button
                             type="button"
-                            onClick={ () => setMode( 'custom' ) }
-                            className="admin-btn btn-purple"
+                            onClick={ () => {
+                                setMode( 'custom' );
+                                setSelectedPalette( 'custom' );
+
+                                props.onChange?.( {
+                                    target: {
+                                        name: 'store_color_settings',
+                                        value: {
+                                            selectedPalette: 'custom',
+                                            colors: customColors,
+                                        },
+                                    },
+                                } );
+                            } }
+                            className={ `admin-btn ${
+                                mode === 'custom' ? 'btn-purple' : ''
+                            }` }
                         >
                             Custom Palette
                         </button>
@@ -526,15 +574,23 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                         : ''
                                 }` }
                                 onClick={ () => {
-                                    setSelectedPalette( imgOption.value || '' );
+                                    const value = imgOption.value || '';
+                                    setSelectedPalette( value );
                                     setSelectedImage( imgOption.img || null );
+                                    setMode( 'predefined' ); // Set mode to predefined when selecting an image
+
+                                    // You need to get the corresponding predefined option
+                                    const option = props.predefinedOptions.find(
+                                        ( opt ) => opt.value === value
+                                    );
+                                    const colors = option?.colors || {};
+
                                     props.onChange?.( {
                                         target: {
-                                            name: imgOption.key as string,
+                                            name: 'store_color_settings', // Use the correct field name
                                             value: {
-                                                selectedPalette:
-                                                    imgOption.value,
-                                                colors: {},
+                                                selectedPalette: value,
+                                                colors,
                                             },
                                         },
                                     } );

@@ -278,7 +278,8 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                         }` }
                                         onClick={ () => {
                                             if ( item.url ) {
-                                                window.location.href = item.url;
+                                                let url = item.url;
+                                                window.open( url, '_self' );
                                             }
                                         } }
                                     >
@@ -585,7 +586,8 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                 setWizardIndex(
                                                     methods.length
                                                 );
-                                                window.location.href = `${ appLocalizer.site_url }`;
+                                                let url = `${ appLocalizer.site_url }`;
+                                                window.open( url, '_self' );
                                             } }
                                         >
                                             { item.label }
@@ -629,7 +631,8 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                         ] );
                                                     }
                                                 } else {
-                                                    window.location.href = `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=modules`;
+                                                    let url = `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=modules`;
+                                                    window.open( url, '_self' );
                                                 }
                                             } }
                                         >
@@ -700,7 +703,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                 { methods.map( ( method, index ) => {
                     const isEnabled = value?.[ method.id ]?.enable ?? false;
                     const isActive = activeTabs.includes( method.id );
-
+                    console.log( 'method', method );
                     if ( isWizardMode && index > wizardIndex ) {
                         return null;
                     }
@@ -712,7 +715,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                 method.disableBtn && ! isEnabled
                                     ? 'disable'
                                     : ''
-                            } ${ method.openForm ? 'open-form' : '' } ` }
+                            } ${ method.openForm ? 'open' : '' } ` }
                         >
                             { /* Header */ }
                             <div className="payment-method">
@@ -930,14 +933,17 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                             { method.formFields &&
                                 method.formFields.length > 0 && (
                                     <div
-                                        className={ `${
-                                            method.wrapperClass || ''
-                                        } payment-method-form ${
+                                        className={ `
+                                        ${ method.wrapperClass || '' } 
+                                        payment-method-form
+                                        ${
                                             isEnabled &&
                                             ( isActive || method.openForm )
                                                 ? 'open'
                                                 : ''
-                                        }` }
+                                        }
+                                        ${ method.openForm ? 'open' : '' }
+                                      ` }
                                     >
                                         { method.formFields.map( ( field ) => {
                                             if (

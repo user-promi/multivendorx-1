@@ -1,5 +1,5 @@
 import FormCustomizer from '../src/components/NotifimaFormCustomizer';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof FormCustomizer> = {
     title: 'Zyra/Components/Notifima/FormCustomizer',

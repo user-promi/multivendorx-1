@@ -1,8 +1,16 @@
+/**
+ * External dependencies
+ */
+import React, { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
+/**
+ * Internal dependencies
+ */
 import TemplateSection from '../src/components/TemplateSection';
-import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof TemplateSection> = {
-    title: 'Zyra/Components/Form/TemplateSection',
+    title: 'Zyra/Components/TemplateSection',
     component: TemplateSection,
     tags: ['autodocs'],
 };
@@ -11,16 +19,28 @@ export default meta;
 
 type Story = StoryObj<typeof TemplateSection>;
 
-export const TestTemplateSection: Story = {
-    args: {
-        formField: {
+/**
+ * Basic TemplateSection (controlled label)
+ */
+export const Basic: Story = {
+    render: () => {
+        const [formField, setFormField] = useState({
             label: 'Email Template',
-        },
-        onChange: (key, value) => {
-            console.log(`Field: ${key}, New Value: ${value}`);
-        },
-    },
-    render: (args) => {
-        return <TemplateSection {...args} />;
+        });
+
+        const handleChange = (key: string, value: string) => {
+            console.log('Changed:', key, value);
+            setFormField((prev) => ({
+                ...prev,
+                [key]: value,
+            }));
+        };
+
+        return (
+            <TemplateSection
+                formField={formField}
+                onChange={handleChange}
+            />
+        );
     },
 };

@@ -1,8 +1,8 @@
-import SelectInput from '../src/components/SelectInput';
-import type { Meta, StoryObj } from '@storybook/react';
+import SelectInput, { type SelectOptions } from '../src/components/SelectInput';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof SelectInput> = {
-    title: 'Zyra/Components/SelectInput',
+    title: 'Zyra/Components/Form/SelectInput',
     component: SelectInput,
     tags: ['autodocs'],
 };
@@ -11,65 +11,54 @@ export default meta;
 
 type Story = StoryObj<typeof SelectInput>;
 
-const commonProps = {
-    descClass: 'settings-metabox-description',
-    onChange: (value) => console.log('Selected:', value),
-};
+// Sample options for the stories
+const sampleOptions: SelectOptions[] = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+];
 
-export const TestSingleSelectInput: Story = {
+export const SingleSelect: Story = {
     args: {
-        wrapperClass: 'form-select-field-wrapper',
-        name: 'test_select',
-        type: 'single-select' as 'single-select',
-        description: '',
-        inputClass: 'test_select',
-        options: [
-            {
-                label: 'Test 1',
-                value: '1',
-            },
-            {
-                label: 'Test 2',
-                value: '2',
-            },
-        ],
-        value: '2',
-        proSetting: false,
-        ...commonProps,
-    },
-    render: (args) => {
-        return <SelectInput {...args} />;
+        wrapperClass: 'select-wrapper-container',
+        name: 'single-select',
+        options: sampleOptions,
+        value: 'option2',
+        type: 'single-select',
+        description: 'Select one option from the dropdown.',
+        descClass: 'description-text',
+        preText: 'Before select:',
+        postText: 'After select',
     },
 };
 
-export const TestMultiSelectInput: Story = {
+export const MultiSelect: Story = {
     args: {
-        wrapperClass: 'settings-from-multi-select',
-        selectDeselectClass: 'admin-btn btn-purple select-deselect-trigger',
-        selectDeselectValue: 'Select / Deselect All',
+        wrapperClass: 'select-wrapper-container',
+        name: 'multi-select',
+        options: sampleOptions,
+        value: ['option1', 'option3'],
+        type: 'multi-select',
+        description: 'You can select multiple options.',
+        descClass: 'description-text',
+        preText: 'Start:',
+        postText: 'End',
         selectDeselect: true,
-        name: 'Sample Multi Select',
-        type: 'multi-select' as 'multi-select',
-        description:
-            'This is a multi-select input example. You can select multiple options.',
-        options: [
-            {
-                label: 'Cart',
-                value: 'option1',
-            },
-            {
-                label: 'Checkout',
-                value: 'option2',
-            },
-            {
-                label: 'Shop',
-                value: 'option3',
-            },
-        ],
-        proSetting: false,
-        ...commonProps,
+        selectDeselectClass: 'btn-deselect',
+        selectDeselectValue: 'Deselect All',
+        onMultiSelectDeselectChange: (e) => {
+            console.log('Deselect clicked', e);
+        },
     },
-    render: (args) => {
-        return <SelectInput {...args} />;
+};
+
+export const WithNoDefaultValue: Story = {
+    args: {
+        wrapperClass: 'select-wrapper-container',
+        name: 'no-default',
+        options: sampleOptions,
+        type: 'single-select',
+        description: 'No default value is selected.',
+        descClass: 'description-text',
     },
 };

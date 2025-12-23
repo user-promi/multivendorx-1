@@ -1,5 +1,5 @@
 import InputMailchimpList from '../src/components/InputMailchimpList';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof InputMailchimpList> = {
     title: 'Zyra/Components/InputMailchimpList',
