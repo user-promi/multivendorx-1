@@ -1496,6 +1496,20 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     ) {
                         normalizedValue = [ value ];
                     }
+
+                    const normalizedOptions =
+                        Array.isArray(setting[`${inputField.key}_options`])
+                            ? setting[`${inputField.key}_options`].map((opt) => ({
+                                ...opt,
+                                value: String(opt.value),
+                            }))
+                            : Array.isArray(inputField.options)
+                            ? inputField.options.map((opt) => ({
+                                ...opt,
+                                value: String(opt.value),
+                            }))
+                            : [];
+
                     input = (
                         <MultiCheckBox
                             khali_dabba={ appLocalizer?.khali_dabba }
@@ -1532,9 +1546,8 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             rightContentClass="settings-metabox-description"
                             rightContent={ inputField.rightContent } // for place checkbox right
                             addNewBtn={ inputField.addNewBtn }
-                            options={setting[`${inputField.key}_options`] ?? inputField.options}
+                            options={normalizedOptions}
                             value={ normalizedValue }
-
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
