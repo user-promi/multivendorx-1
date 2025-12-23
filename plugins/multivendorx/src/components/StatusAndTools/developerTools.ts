@@ -73,7 +73,25 @@ export default {
 			type: 'section',
 			hint: __('Version Control', 'multivendorx'),
 			desc: __('', 'multivendorx'),
-		},		
+		},
+		{
+			key: 'store_registration_page',
+			type: 'select',
+			label: __('Rollback version', 'multivendorx'),
+			desc: __(
+				'Choose the previous MultiVendorX version you want to switch to.<br>Use this option if you are facing issues after an update and need to restore an earlier version.',
+				'multivendorx'
+			),
+			className: 'select-class',
+			size: '30rem',
+			options: [
+				{
+					key: 'kilometers',
+					label: __('5.0.0', 'multivendorx'),
+					value: 'kilometers',
+				},
+			],
+		},
 		{
 			key: 'separator_content',
 			type: 'section',
@@ -92,7 +110,7 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			wrapperClass: 'divider-wrapper color-red',
+			wrapperClass: 'divider-wrapper red',
 			hint: __('Danger Zone', 'multivendorx'),
 			desc: __('', 'multivendorx'),
 		},
@@ -103,4 +121,4 @@ export default {
 			label: __('Clear notifications', 'multivendorx'),
 		},
 	],
-};
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
