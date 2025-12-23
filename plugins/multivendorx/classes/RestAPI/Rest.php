@@ -94,16 +94,15 @@ class Rest {
      * @param array $args WP_Query arguments.
      */
     public function analytics_products_filter_low_stock_meta( $args ) {
-        $meta_key  = $args['meta_key'] ?? '';
+        $meta_key = $args['meta_key'] ?? '';
 
         if ( Utill::POST_META_SETTINGS['store_id'] === $meta_key ) {
-
             $meta_query = array(
                 'key'     => Utill::POST_META_SETTINGS['store_id'],
                 'compare' => 'EXISTS',
             );
 
-            $args['meta_query'] = $args['meta_query'] ?? array();
+            $args['meta_query']   = $args['meta_query'] ?? array();
             $args['meta_query'][] = $meta_query;
         }
 
@@ -129,7 +128,6 @@ class Rest {
 
         // Store meta filter
         if ( ! empty( $meta_key ) ) {
-
             $condition = array(
                 'key'     => sanitize_key( $meta_key ),
                 'compare' => ! empty( $meta_value ) ? '=' : 'EXISTS',
@@ -179,14 +177,14 @@ class Rest {
             'key' => Utill::POST_META_SETTINGS['store_id'],
         );
 
-        if ( !empty($value) ) {
+        if ( ! empty( $value ) ) {
             $meta_condition['value']   = sanitize_text_field( $value );
             $meta_condition['compare'] = '=';
         } else {
             $meta_condition['compare'] = 'EXISTS';
         }
 
-        $args['meta_query'] = $args['meta_query'] ?? array();
+        $args['meta_query']   = $args['meta_query'] ?? array();
         $args['meta_query'][] = $meta_condition;
 
         // Ensure relation is set when multiple meta queries exist
@@ -206,12 +204,11 @@ class Rest {
      */
     public function query_shop_coupon_filter_meta( $args, $request ) {
         $meta_query = array();
-        $meta_key = $request['meta_key'] ?? '';
-        $value    = $request['value'] ?? '';
+        $meta_key   = $request['meta_key'] ?? '';
+        $value      = $request['value'] ?? '';
 
         // Filter by store ID
         if ( Utill::POST_META_SETTINGS['store_id'] === $meta_key ) {
-
             $condition = array(
                 'key' => Utill::POST_META_SETTINGS['store_id'],
             );
@@ -239,7 +236,6 @@ class Rest {
 
         // Merge with existing meta_query
         if ( ! empty( $meta_query ) ) {
-
             $args['meta_query'] = $args['meta_query'] ?? array();
 
             foreach ( $meta_query as $condition ) {
@@ -313,7 +309,6 @@ class Rest {
 
         // Product refunds
         foreach ( $object->get_items() as $item_id => $item ) {
-
             $refunded_tax = 0.0;
 
             foreach ( $refunds as $refund ) {
@@ -335,7 +330,6 @@ class Rest {
 
         // Shipping refunds
         foreach ( $object->get_items( 'shipping' ) as $item_id => $item ) {
-
             $refunded_tax = 0.0;
 
             foreach ( $refunds as $refund ) {
@@ -490,7 +484,7 @@ class Rest {
      * @param string|null $parent_sku      Optional parent SKU to use instead of the product's SKU.
      */
     protected function multivendorx_save_variation_sku( $variation_id, $parent_product, $parent_sku = null ) {
-        $variation  = wc_get_product( $variation_id );
+        $variation = wc_get_product( $variation_id );
 
         if ( ! $variation || ! $variation->is_type( 'variation' ) ) {
             return;
