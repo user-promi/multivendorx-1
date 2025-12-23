@@ -1532,15 +1532,17 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             rightContentClass="settings-metabox-description"
                             rightContent={ inputField.rightContent } // for place checkbox right
                             addNewBtn={ inputField.addNewBtn }
-                            options={
-                                Array.isArray( inputField.options )
-                                    ? inputField.options.map( ( opt ) => ( {
-                                          ...opt,
-                                          value: String( opt.value ),
-                                      } ) )
-                                    : []
-                            }
+                            options={[
+                                ...(Array.isArray(setting[`${inputField.key}_options`])
+                                    ? setting[`${inputField.key}_options`]
+                                    : inputField.options),
+                            ].map((opt) => ({
+                                ...opt,
+                                value: String(opt.value),
+                                edit: true,
+                            }))}
                             value={ normalizedValue }
+
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
@@ -1584,6 +1586,12 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                     String( moduleEnabled ?? '' )
                                 );
                             } }
+                            onOptionsChange={(options) => {
+                                updateSetting(
+                                    `${inputField.key}_options`,
+                                    options
+                                );
+                            }}
                         />
                     );
                     break;

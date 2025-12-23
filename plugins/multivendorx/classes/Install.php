@@ -576,6 +576,67 @@ By signing and submitting, the Seller accepts all terms above.
 
         update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
 
+        $shipping_provider_settings = array (
+            'shipping_providers_options' => [
+                array (
+                    'key' => 'australia_post',
+                    'label' => 'Australia post',
+                    'value' => 'australia_post',
+                    'edit' => true,
+                ),
+                array (
+                    'key' => 'canada_post',
+                    'label' => 'Canada post',
+                    'value' => 'canada_post',
+                    'edit' => true,
+                ),
+            
+                array (
+                'key' => 'city_link',
+                'label' => 'City link',
+                'value' => 'city_link',
+                'edit' => true,
+                ),
+                
+                array (
+                'key' => 'dhl',
+                'label' => 'DHL',
+                'value' => 'dhl',
+                'edit' => true,
+                ),
+                
+                array (
+                'key' => 'fastway_south_africa',
+                'label' => 'Fastway South Africa',
+                'value' => 'fastway_south_africa',
+                'edit' => true,
+                ),
+                
+                array (
+                'key' => 'fedex',
+                'label' => 'FedEx',
+                'value' => 'fedex',
+                'edit' => true,
+                ),
+                
+                array (
+                'key' => 'ontrac',
+                'label' => 'OnTrac',
+                'value' => 'ontrac',
+                'edit' => true,
+                ),
+                
+                array (
+                'key' => 'polish_shipping',
+                'label' => 'Polish shipping providers',
+                'value' => 'polish_shipping',
+                'edit' => true,
+                ),
+            ]
+        );
+
+        update_option( Utill::MULTIVENDORX_SETTINGS['shipping'], $shipping_provider_settings );
+
         $payment_settings = array(
             'payment_methods' => array(
                 'bank-transfer' => array(
