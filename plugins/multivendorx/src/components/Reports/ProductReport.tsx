@@ -549,6 +549,16 @@ const ProductReport: React.FC = () => {
 			),
 		},
 	];
+	const actionButton: RealtimeFilter[] = [
+		{
+			name: 'actionButton',
+			render: () => (
+				<>
+					<div className="admin-btn btn-purple-bg"><i className="adminlib-download"></i> Download CSV</div>
+				</>
+			),
+		},
+	];
 	return (
 		<>
 			<div className="container-wrapper column">
@@ -676,10 +686,10 @@ const ProductReport: React.FC = () => {
 											<div className="right">
 												<i
 													className={`adminlib-pagination-right-arrow ${openReviewedCards[
-															product.id
-														]
-															? 'rotate-90 transition-transform'
-															: ''
+														product.id
+													]
+														? 'rotate-90 transition-transform'
+														: ''
 														}`}
 												></i>
 											</div>
@@ -859,6 +869,7 @@ const ProductReport: React.FC = () => {
 				realtimeFilter={realtimeFilter}
 				searchFilter={searchFilter}
 				totalCounts={totalRows}
+				actionButton={actionButton}
 			/>
 		</>
 	);

@@ -12,27 +12,23 @@
 
         .shortcode-title {
             padding-bottom: 0.625rem;
+            font-size: 1.125rem;
 
             code {
+                font-weight: 500;
+                color: $theme-color;
+                background: $theme-background-color;
+                padding: 0.313rem;
                 margin-right: 0.625rem;
-                font-size: 1rem;
             }
 
             i {
-                font-size: 1.25rem;
+                font-size: 1rem;
             }
         }
     }
 
-    code {
-        font-weight: 500;
-        color: $theme-color;
-        background: $theme-background-color;
-        padding: 0.313rem;
-    }
-
     .shortcode-table {
-
         table {
             border-collapse: collapse;
             width: 100%;

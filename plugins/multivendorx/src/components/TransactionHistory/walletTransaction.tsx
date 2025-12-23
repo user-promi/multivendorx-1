@@ -285,8 +285,8 @@ const ExportAllTransactionCSVButton: React.FC<{
 			disabled={isDownloading || !storeId}
 			className="admin-btn btn-purple-bg"
 		>
-			<span className="adminlib-import"></span>
-			Export All CSV
+			<span className="adminlib-download"></span>
+			Download CSV
 		</button>
 	);
 };
