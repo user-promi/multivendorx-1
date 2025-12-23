@@ -112,5 +112,41 @@ export default {
 				},
 			],
 		},
+		{
+			key: 'email_section',
+			type: 'section',
+			hint: __('Order confirmation email for main and sub-orders', 'multivendorx'),
+		},
+		{
+			key: 'sms_gateway_selector',
+			type: 'setting-toggle',
+			label: __('Order emails customers receives', 'multivendorx'),
+			settingDescription: __(
+				'Choose how order confirmation emails should be sent. ',
+				'multivendorx'
+			),
+			desc: __(
+				'You can send a single email combining the main order and all sub-orders, or send emails individually for the main order and each sub-order.</a></b>',
+				'multivendorx'
+			),
+			options: [
+				{
+					key: 'mainnsub',
+					label: __('Main & Sub order together', 'multivendorx'),
+					value: '',
+				},
+				{
+					key: 'mainorder',
+					label: __('Main order', 'multivendorx'),
+					value: 'mainorder',
+				},
+				{
+					key: 'suborder',
+					label: __('Sub-orders Only', 'multivendorx'),
+					value: 'suborder',
+				},
+			],
+
+		},
 	],
 };
