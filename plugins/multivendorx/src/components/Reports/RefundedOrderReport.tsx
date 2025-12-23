@@ -120,9 +120,9 @@ const RefundedOrderReport: React.FC = () => {
 				const orderId = row.original.order_id;
 				const url = orderId
 					? `${appLocalizer.site_url.replace(
-							/\/$/,
-							''
-						)}/wp-admin/post.php?post=${orderId}&action=edit`
+						/\/$/,
+						''
+					)}/wp-admin/post.php?post=${orderId}&action=edit`
 					: '#';
 
 				return (
@@ -376,7 +376,16 @@ const RefundedOrderReport: React.FC = () => {
 			),
 		},
 	];
-
+	const actionButton: RealtimeFilter[] = [
+		{
+			name: 'actionButton',
+			render: () => (
+				<>
+					<div className="admin-btn btn-purple-bg"><i className="adminlib-download"></i> Download CSV</div>
+				</>
+			),
+		},
+	];
 	const realtimeFilter: RealtimeFilter[] = [
 		{
 			name: 'store_id',
@@ -431,6 +440,7 @@ const RefundedOrderReport: React.FC = () => {
 				pageCount={pageCount}
 				pagination={pagination}
 				searchFilter={searchFilter}
+				actionButton={actionButton}
 				onPaginationChange={setPagination}
 				realtimeFilter={realtimeFilter}
 				handlePagination={requestApiForData}

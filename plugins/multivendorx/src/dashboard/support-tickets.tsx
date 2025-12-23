@@ -594,13 +594,15 @@ const SupportTickets: React.FC = () => {
 								onClick={() => setSelectedReview(null)}
 								className="admin-btn btn-red"
 							>
+								<i className="adminlib-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
 								onClick={handleSaveReply}
-								className="admin-btn btn-purple"
+								className="admin-btn btn-purple-bg"
 							>
-								Save
+								<i className="adminlib-active"></i>
+								{__('Save', 'multivendorx')}
 							</button>
 						</>
 					}
@@ -609,7 +611,7 @@ const SupportTickets: React.FC = () => {
 						<div className="form-group-wrapper">
 							<div className="review-popup-wrapper">
 								<div className="customer-wrapper">
-									<div className="avater">
+									<div className="avatar">
 										<i className="item-icon adminlib-person"></i>
 									</div>
 									{selectedReview && (

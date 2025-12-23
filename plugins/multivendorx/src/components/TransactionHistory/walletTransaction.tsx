@@ -188,7 +188,7 @@ const DownloadTransactionCSVButton: React.FC<{
 				}
 				className="admin-btn"
 			>
-				<i className="adminlib-import"></i>
+				<i className="adminlib-download"></i>
 				{__('Download CSV', 'multivendorx')}
 			</button>
 		</div>
@@ -285,8 +285,8 @@ const ExportAllTransactionCSVButton: React.FC<{
 			disabled={isDownloading || !storeId}
 			className="admin-btn btn-purple-bg"
 		>
-			<span className="adminlib-import"></span>
-			Export All CSV
+			<span className="adminlib-download"></span>
+			Download CSV
 		</button>
 	);
 };
@@ -1035,6 +1035,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 									className="admin-btn btn-purple-bg"
 									onClick={() => setRequestWithdrawal(true)}
 								>
+									<i className="adminlib-wallet"></i>
 									{__('Disburse Payment', 'multivendorx')}
 								</div>
 							</div>

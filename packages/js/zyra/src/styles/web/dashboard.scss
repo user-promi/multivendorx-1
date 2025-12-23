@@ -300,6 +300,9 @@
         justify-content: end;
         /* add product form style*/
 
+        &.align-top{
+            align-items: start;
+        }
         .button-wrapper {
             display: flex;
             justify-content: start;
@@ -461,26 +464,6 @@
     .details-wrapper {
         display: flex;
         gap: 0.75rem;
-
-        .avatar {
-            img {
-                width: 3rem;
-                border-radius: 0.313rem;
-            }
-
-            i,
-            span {
-                padding: 0.5rem;
-                border-radius: 50%;
-                width: 1.5rem;
-                height: 1.5rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 1.625rem;
-                color: #fff;
-            }
-        }
 
         .details {
             display: flex;

@@ -225,7 +225,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                     className="admin-btn btn-purple-bg"
                     onClick={ handleAdd }
                 >
-                    <i className="adminlib-plus-circle"></i> { addLabel }
+                    <i className="adminlib-plus"></i> { addLabel }
                 </button>
             </div>
 

@@ -330,7 +330,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								className="admin-btn btn-purple"
 								onClick={() => handleAdd(row.original)}
 							>
-								<i className="adminlib-plus-circle"></i>{' '}
+								<i className="adminlib-plus"></i>{' '}
 								{__('Add Shipping Method', 'multivendorx')}
 							</button>
 						</TableCell>
@@ -370,7 +370,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								className="admin-btn btn-purple"
 								onClick={() => handleAdd(row.original)}
 							>
-								<i className="adminlib-plus-circle"></i>{' '}
+								<i className="adminlib-plus"></i>{' '}
 								{__('Add New Method', 'multivendorx')}
 							</button>
 						</div>

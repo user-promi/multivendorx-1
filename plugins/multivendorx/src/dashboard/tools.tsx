@@ -36,6 +36,7 @@ const Tools: React.FC = () => {
 
 					<div className="card-body">
 						<div className="admin-btn btn-purple">
+							<i className="adminlib-delete"></i>
 							{__('Clear Transients', 'multivendorx')}
 						</div>
 					</div>

@@ -662,7 +662,7 @@ const AddOrder = () => {
 										className="admin-btn btn-purple-bg"
 										onClick={() => setShowAddProduct(true)}
 									>
-										<i className="adminlib-plus-circle"></i>
+										<i className="adminlib-plus"></i>
 										{__('Add Product', 'multivendorx')}
 									</button>
 
@@ -681,7 +681,7 @@ const AddOrder = () => {
 											]);
 										}}
 									>
-										<i className="adminlib-plus-circle"></i>
+										<i className="adminlib-plus"></i>
 										{__('Add Shipping', 'multivendorx')}
 									</button>
 
@@ -689,7 +689,7 @@ const AddOrder = () => {
 										className="admin-btn btn-purple-bg"
 										onClick={() => setShowAddTax(true)}
 									>
-										<i className="adminlib-plus-circle"></i>
+										<i className="adminlib-plus"></i>
 										{__('Add Tax', 'multivendorx')}
 									</button>
 								</div>
@@ -926,6 +926,7 @@ const AddOrder = () => {
 											)
 										}
 									>
+										<i className="adminlib-plus"></i>
 										{__('Add New Customer', 'multivendorx')}
 									</div>
 								</>
@@ -934,7 +935,7 @@ const AddOrder = () => {
 							{selectedCustomer && (
 								<div className="store-owner-details">
 									<div className="profile">
-										<div className="avater">
+										<div className="avatar">
 											<span>
 												{selectedCustomer
 													? selectedCustomer

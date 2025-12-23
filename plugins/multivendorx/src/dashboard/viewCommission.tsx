@@ -66,12 +66,12 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<i className="adminlib-commission"></i>
 						{__('Commission Details', 'multivendorx')}
 					</div>
-					<p>
+					<div className="des">
 						{__(
 							'Details of this commission, including the order breakdown and notes.',
 							'multivendorx'
 						)}
-					</p>
+					</div>
 					<i className="icon adminlib-close" onClick={onClose}></i>
 				</>
 			}

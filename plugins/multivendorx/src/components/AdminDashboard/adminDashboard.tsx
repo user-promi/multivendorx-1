@@ -619,7 +619,7 @@ const AdminDashboard = () => {
 												(window.location.href = `?page=multivendorx#&tab=modules`)
 											}
 										>
-											<i className="adminlib-preview"></i>
+											<i className="adminlib-eye"></i>
 											{__('View All', 'multivendorx')}
 										</div>
 									</div>

@@ -110,11 +110,6 @@ const advancedFeaturesField = {
 	desc: 'Enable advanced features for vendors',
 	options: [
 		{
-			key: 'include-all-addons',
-			value: 'include-all-addons',
-			label: 'Include All Add-ons',
-		},
-		{
 			key: 'vendor-vacation',
 			value: 'vendor-vacation',
 			label: 'Vendor Vacation',
@@ -662,8 +657,8 @@ const Membership = ({ id }: { id: string }) => {
 													),
 												},
 											]}
-											// value={formData.status}
-											// onChange={handleToggleChange}
+										// value={formData.status}
+										// onChange={handleToggleChange}
 										/>
 										<div
 											className="des"
@@ -734,32 +729,6 @@ const Membership = ({ id }: { id: string }) => {
 									</div>
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Maximum featured Products Allowed
-										</label>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-										/>
-									</div>
-								</div>
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											Images allowed per product
-										</label>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-										/>
-									</div>
-									<div className="form-group">
-										<label htmlFor="product-name">
 											Featured products
 										</label>
 										<MultiCheckBox
@@ -787,6 +756,32 @@ const Membership = ({ id }: { id: string }) => {
 													value: 'sold_individually',
 												},
 											]}
+										/>
+									</div>
+								</div>
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Images allowed per product
+										</label>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+										/>
+									</div>
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Maximum featured Products Allowed
+										</label>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
 										/>
 									</div>
 								</div>
@@ -1170,7 +1165,7 @@ const Membership = ({ id }: { id: string }) => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										Pricing &Billing
+										Pricing
 									</div>
 								</div>
 							</div>
@@ -1213,6 +1208,16 @@ const Membership = ({ id }: { id: string }) => {
 								{pricingType === 'paid' && (
 									<>
 										<div className="form-group-wrapper">
+											<div className="form-group align-top">
+												<label htmlFor="product-name">Sign up fee</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+												/>
+											</div>
 											<div className="form-group">
 												<label htmlFor="product-name">Recurring price</label>
 												<BasicInput
@@ -1221,26 +1226,17 @@ const Membership = ({ id }: { id: string }) => {
 													descClass="settings-metabox-description"
 													value={formData.name}
 													onChange={handleChange}
-													description={__(
-														'Activate Stripe Marketplace or PayPal Marketplace module to use recurring subscriptions.',
-														'multivendorx'
-													)}
 												/>
 											</div>
-											{pricingType === 'paid' && (
-												<div className="form-group">
-													<label htmlFor="product-name">Sign up fee</label>
-													<BasicInput
-														name="name"
-														wrapperClass="setting-form-input"
-														descClass="settings-metabox-description"
-														value={formData.name}
-														onChange={handleChange}
-													/>
-												</div>
-											)}
 										</div>
-
+										<div className="settings-metabox-note">
+											<div className="metabox-note-wrapper">
+												<i className="adminlib-info"></i>
+												<div className="details">
+													<p>Activate Stripe Marketplace or PayPal Marketplace module to use recurring subscriptions.</p>
+												</div>
+											</div>
+										</div>
 										<div className="form-group-wrapper">
 											<div className="form-group">
 												<label htmlFor="product-name">
@@ -1350,7 +1346,7 @@ const Membership = ({ id }: { id: string }) => {
 										<BasicInput
 											name="name"
 											wrapperClass="setting-form-input"
-											postInsideText= "Days"
+											postInsideText="Days"
 											descClass="settings-metabox-description"
 											value={formData.name}
 											onChange={handleChange}

@@ -90,12 +90,12 @@ const EditQna: React.FC<EditQnaProps> = ({
 						{__('Edit Question', 'multivendorx')}{' '}
 						{qna ? `#${qna.id}` : ''}
 					</div>
-					<p>
+					<div className="des">
 						{__(
 							'Update the answer or change visibility of this question.',
 							'multivendorx'
 						)}
-					</p>
+					</div>
 					<i onClick={onClose} className="icon adminlib-close"></i>
 				</>
 			}

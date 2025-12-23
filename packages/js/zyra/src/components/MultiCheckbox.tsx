@@ -386,7 +386,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                             className="admin-btn btn-green"
                             onClick={ handleSaveNewOption }
                         >
-                            <i className="adminlib-plus-circle"></i> Save
+                            <i className="adminlib-active"></i> Save
                         </button>
                     </div>
                 ) : (
@@ -395,7 +395,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                             className="admin-btn btn-purple"
                             onClick={ handleAddNewClick }
                         >
-                            <i className="adminlib-plus-circle"></i>{ ' ' }
+                            <i className="adminlib-plus"></i>{ ' ' }
                             { props.addNewBtn }
                         </div>
                     </div>

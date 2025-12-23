@@ -321,10 +321,10 @@ const StoreReviews: React.FC = () => {
 				prev.map((r) =>
 					r.review_id === selectedReview.review_id
 						? {
-								...r,
-								reply: replyText,
-								status: selectedReview.status,
-							}
+							...r,
+							reply: replyText,
+							status: selectedReview.status,
+						}
 						: r
 				)
 			);
@@ -476,10 +476,10 @@ const StoreReviews: React.FC = () => {
 				const rawDate = row.original.date_created;
 				const formattedDate = rawDate
 					? new Intl.DateTimeFormat('en-US', {
-							month: 'short',
-							day: 'numeric',
-							year: 'numeric',
-						}).format(new Date(rawDate))
+						month: 'short',
+						day: 'numeric',
+						year: 'numeric',
+					}).format(new Date(rawDate))
 					: '-';
 				return (
 					<TableCell title={formattedDate}>{formattedDate}</TableCell>
@@ -581,7 +581,7 @@ const StoreReviews: React.FC = () => {
 						<>
 							<div className="title">
 								<i className="adminlib-store-review"></i>
-								{__('Reply to Review', 'multivendorx')} -{' '}
+								{__('Reply to Review', 'multivendorx')} -
 								{selectedReview.store_name}
 							</div>
 							<i
@@ -597,12 +597,14 @@ const StoreReviews: React.FC = () => {
 								onClick={() => setSelectedReview(null)}
 								className="admin-btn btn-red"
 							>
+								<i className="adminlib-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
 								onClick={handleSaveReply}
-								className="admin-btn btn-purple"
+								className="admin-btn btn-purple-bg"
 							>
+								<i className="adminlib-active"></i>
 								{__('Save', 'multivendorx')}
 							</button>
 						</>
@@ -611,14 +613,16 @@ const StoreReviews: React.FC = () => {
 					<div className="content">
 						<div className="review-popup-wrapper">
 							<div className="customer-wrapper">
-								<div className="avater">
-									<i className="item-icon adminlib-person"></i>
-								</div>
-								{selectedReview && (
-									<div className="name-wrapper">
+								<div className="avatar">
+									{/* <i className="item-icon adminlib-person "></i> */}
+									<span className="purple-bg">
 										{selectedReview.customer_name
 											.charAt(0)
 											.toUpperCase()}
+									</span>
+								</div>
+								{selectedReview && (
+									<div className="name-wrapper">
 										<div
 											className="name"
 											dangerouslySetInnerHTML={{
@@ -630,14 +634,13 @@ const StoreReviews: React.FC = () => {
 											{[...Array(5)].map((_, i) => (
 												<i
 													key={i}
-													className={`star-icon adminlib-star ${
-														i <
+													className={`star-icon adminlib-star ${i <
 														Math.round(
 															selectedReview.overall_rating
 														)
-															? 'filled'
-															: ''
-													}`}
+														? 'filled'
+														: ''
+														}`}
 												></i>
 											))}
 

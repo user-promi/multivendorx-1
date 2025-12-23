@@ -256,7 +256,7 @@ const MultipleOptions: React.FC< MultipleOptionsProps > = ( {
                         >
                             Add new options{ ' ' }
                             <span>
-                                <i className="admin-font adminlib-plus-circle"></i>
+                                <i className="admin-font adminlib-plus"></i>
                             </span>
                         </div>
                     </ReactSortable>
