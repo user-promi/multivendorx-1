@@ -703,7 +703,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                 { methods.map( ( method, index ) => {
                     const isEnabled = value?.[ method.id ]?.enable ?? false;
                     const isActive = activeTabs.includes( method.id );
-                    console.log('method',method);
+                    console.log( 'method', method );
                     if ( isWizardMode && index > wizardIndex ) {
                         return null;
                     }
@@ -933,12 +933,17 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                             { method.formFields &&
                                 method.formFields.length > 0 && (
                                     <div
-                                    className={`
-                                        ${method.wrapperClass || ''} 
+                                        className={ `
+                                        ${ method.wrapperClass || '' } 
                                         payment-method-form
-                                        ${isEnabled && (isActive || method.openForm) ? 'open' : ''}
-                                        ${method.openForm ? 'open' : ''}
-                                      `}
+                                        ${
+                                            isEnabled &&
+                                            ( isActive || method.openForm )
+                                                ? 'open'
+                                                : ''
+                                        }
+                                        ${ method.openForm ? 'open' : '' }
+                                      ` }
                                     >
                                         { method.formFields.map( ( field ) => {
                                             if (
