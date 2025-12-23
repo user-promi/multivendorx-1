@@ -52,7 +52,7 @@ export default {
 	name: __('Commissions', 'multivendorx'),
 	tabTitle: 'Commission share from the seller’s product/service:',
 	desc: __(
-		'Decide How Your Marketplace Takes Commission From Sales.',
+		'Decide how your marketplace takes commission from sales.',
 		'multivendorx'
 	),
 	icon: 'adminlib-commission',
@@ -377,20 +377,8 @@ export default {
 			desc: __(
 				'<strong>Global facilitator:</strong> Assign a single facilitator for the entire marketplace from <a href="' +
 				appLocalizer.site_url +
-				'/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=facilitator">here</a>.<br>' +
-				'<strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br>' +
-				'<strong>Example setup:</strong><br>' +
-				'Total product price = $1,000<br>' +
-				'Marketplace commission = 20%<br>' +
-				'Facilitator fee = $50 + 5%<br>' +
-				'<em>(Facilitator fee is calculated on the total product price)</em>' +
-				'<ul>' +
-				'<li><strong>Marketplace commission :</strong> = 20% of $1,000 = $200</li>' +
-				'<li><strong>Facilitator fee :</strong> $50 + 5% of $1,000 = $100</li>' +
-				'<li><strong>Final store payout:</strong> = $1,000 − ($200 + $100) = $700</li>' +
-				'</ul>',
+				'/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=facilitator">here</a>.<br><strong>Individual facilitators:</strong> Set facilitators for specific stores from the <em>Facilitator Settings</em> section or the <em>Store Edit</em> page.<br>	Marketplace commission = 20%<br>Facilitator fee = $50 + 5%<br><em>(Facilitator fee is calculated on the total product price)</em><ul><li><strong>Marketplace commission :</strong> = 20% of $1,000 = $200</li><li><strong>Facilitator fee :</strong> $50 + 5% of $1,000 = $100</li><li><strong>Final store payout:</strong> = $1,000 − ($200 + $100) = $700</li></ul>',
 				'multivendorx',
-				'multivendorx'
 			),
 			nestedFields: [
 				{
@@ -422,7 +410,7 @@ export default {
 			moduleEnabled: 'marketplace-gateway',
 			single: true,
 			desc: __(
-				'<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><br><strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><br><strong>Example setup:</strong><br> Total order price = $100<br> Marketplace commission rate = 20%<br> Gateway fees = $10 + 5% <ul> <li>Customer pays = $100</li> <li>Marketplace commission = 20% of $100 = $20</li> <li>Gateway fees = $10 + 5% of $100 = $15</li> <li>Total marketplace earning = $20 + $15 = $35</li> <li>Store receives = $100 - $35 = $65</li> </ul>',			
+				'<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><strong>Example setup:</strong><br> Total order price = $100<br> Marketplace commission rate = 20%<br> Gateway fees = $10 + 5% <ul> <li>Customer pays = $100</li> <li>Marketplace commission = 20% of $100 = $20</li> <li>Gateway fees = $10 + 5% of $100 = $15</li> <li>Total marketplace earning = $20 + $15 = $35</li> <li>Store receives = $100 - $35 = $65</li> </ul>',			
 				'multivendorx'
 			),
 			nestedFields,
