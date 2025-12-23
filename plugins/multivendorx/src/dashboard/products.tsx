@@ -6,10 +6,6 @@ import {
 	Table,
 	TableCell,
 	MultiCalendarInput,
-	CommonPopup,
-	SelectInput,
-	MultiCheckBox,
-	getApiLink,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -21,8 +17,6 @@ import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 import AddProductCom from './add-products';
 import SpmvProducts from './spmv-products';
-import { ReactNode } from 'react';
-import { applyFilters } from '@wordpress/hooks';
 
 type ProductRow = {
 	id: number;
@@ -60,7 +54,7 @@ const formatWooDate = (dateString: string) => {
 		day: 'numeric',
 	});
 };
-
+// Add these status options inside AllProduct component
 const stockStatusOptions = [
 	{ key: '', name: 'Stock Status' },
 	{ key: 'instock', name: 'In Stock' },
@@ -74,7 +68,6 @@ const productTypeOptions = [
 	{ key: 'grouped', name: 'Grouped Product' },
 	{ key: 'external', name: 'External/Affiliate Product' },
 ];
-
 const AllProduct: React.FC = () => {
 	const [data, setData] = useState<ProductRow[]>([]);
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -271,40 +264,6 @@ const AllProduct: React.FC = () => {
 		},
 	];
 
-	// Import/Export states
-	const [showImportPopup, setShowImportPopup] = useState(false);
-	const [showExportPopup, setShowExportPopup] = useState(false);
-	const [importFile, setImportFile] = useState<File | null>(null);
-	const [importMode, setImportMode] = useState('both');
-	const [importSettings, setImportSettings] = useState({
-		skipErrors: true,
-		updateStock: true,
-		updatePrice: true,
-		updateCategories: true,
-	});
-	const [isImporting, setIsImporting] = useState(false);
-	const [importProgress, setImportProgress] = useState<any>(null);
-	const [importId, setImportId] = useState<string>('');
-	const [exportFormat, setExportFormat] = useState('csv');
-	const [exportFields, setExportFields] = useState([
-		'id',
-		'name',
-		'sku',
-		'price',
-		'stock_quantity',
-		'stock_status',
-		'categories',
-		'description',
-	]);
-	const [isExporting, setIsExporting] = useState(false);
-
-	if (!element) {
-		const parts = location.pathname.split('/').filter(Boolean);
-		if (parts.length >= 3) {
-			element = element || parts[2];
-		}
-	}
-
 	const fetchCategories = async () => {
 		try {
 			const response = await axios.get(
@@ -500,7 +459,7 @@ const AllProduct: React.FC = () => {
 				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
-				<div className="group-field">
+				<div className="   group-field">
 					<select
 						name="category"
 						onChange={(e) =>
@@ -525,7 +484,7 @@ const AllProduct: React.FC = () => {
 				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
-				<div className="group-field">
+				<div className="   group-field">
 					<select
 						name="productType"
 						onChange={(e) =>
@@ -585,7 +544,6 @@ const AllProduct: React.FC = () => {
 			),
 		},
 	];
-
 	const searchFilter: RealtimeFilter[] = [
 		{
 			name: 'searchField',
@@ -615,19 +573,20 @@ const AllProduct: React.FC = () => {
 		requestData(rowsPerPage, currentPage);
 	}, [pagination]);
 
-	// Fetch data from backend
+	// Fetch data from backend.
 	function requestData(
 		rowsPerPage = 10,
 		currentPage = 1,
 		category = '',
-		stockStatus = '',
-		searchField = '',
-		productType = '',
+		stockStatus = '', // <-- Positional Argument 4
+		searchField = '', // <-- Positional Argument 5
+		productType = '', // <-- Positional Argument 6
 		startDate = new Date(0),
 		endDate = new Date()
 	) {
 		setData([]);
 
+		// Build the base parameters object
 		const params: any = {
 			page: currentPage,
 			row: rowsPerPage,
@@ -652,7 +611,7 @@ const AllProduct: React.FC = () => {
 			method: 'GET',
 			url: `${appLocalizer.apiUrl}/wc/v3/products`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: params,
+			params: params, // Use the dynamically built params object
 		})
 			.then((response) => {
 				const formattedProducts = response.data.map((p: any) => ({
@@ -670,6 +629,8 @@ const AllProduct: React.FC = () => {
 
 				const total = parseInt(response.headers['x-wp-total']);
 				setTotalRows(total);
+
+				// Calculate pageCount AFTER totalRows is available
 				setPageCount(Math.ceil(total / rowsPerPage));
 			})
 			.catch(() => {
@@ -679,21 +640,23 @@ const AllProduct: React.FC = () => {
 			});
 	}
 
+	// Handle pagination and filter changes
 	const requestApiForData = (
 		rowsPerPage: number,
 		currentPage: number,
 		filterData: FilterData
 	) => {
 		setData([]);
+		// Arguments must be passed in the exact order requestData expects them.
 		requestData(
-			rowsPerPage,
-			currentPage,
-			filterData?.category,
-			filterData?.stock_status,
-			filterData?.searchField,
-			filterData?.productType,
-			filterData?.date?.start_date,
-			filterData?.date?.end_date
+			rowsPerPage, // 1: rowsPerPage
+			currentPage, // 2: currentPage
+			filterData?.category, // 3: category
+			filterData?.stock_status, // 4: stockStatus
+			filterData?.searchField, // 5: searchField (Assuming filterData uses searchField for the search box value)
+			filterData?.productType, // 6: productType
+			filterData?.date?.start_date, // 7: startDate
+			filterData?.date?.end_date // 8: endDate
 		);
 	};
 
@@ -720,6 +683,7 @@ const AllProduct: React.FC = () => {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				})
 				.then((res) => {
+					console.log('Auto-draft created:', res.data);
 					setNewProductId(res.data.id);
 				});
 		} catch (err) {
@@ -752,23 +716,30 @@ const AllProduct: React.FC = () => {
 				<>
 					<div className="page-title-wrapper">
 						<div className="page-title">
-							<div className="title">{__('All Products', 'multivendorx')}</div>
+							<div className="title">All Product</div>
 							<div className="des">
-								{__('Manage your store products', 'multivendorx')}
+								Manage your store information and preferences
 							</div>
 						</div>
 						<div className="buttons-wrapper">
-							{modules.includes('import-export') && 
-								applyFilters(
-									'product_import_export',
-									null,
-									{
-										requestData,
-										rowSelection,
-										data,
-									}
-								)								
-							}
+							{modules.includes('import-export') && (
+								<>
+									<div
+										className="admin-btn btn-purple-bg"
+										onClick={() => setAddProduct(true)}
+									>
+										<i className="adminlib-import"></i>
+										import
+									</div>
+									<div
+										className="admin-btn btn-purple-bg"
+										onClick={() => setAddProduct(true)}
+									>
+										<i className="adminlib-export"></i>
+										Export
+									</div>
+								</>
+							)}
 							<div
 								className="admin-btn btn-purple-bg"
 								onClick={() => {
@@ -787,7 +758,7 @@ const AllProduct: React.FC = () => {
 									}
 								}}
 							>
-								<i className="adminlib-plus"></i> {__('Add New', 'multivendorx')}
+								<i className="adminlib-plus"></i> Add New
 							</div>
 						</div>
 					</div>
