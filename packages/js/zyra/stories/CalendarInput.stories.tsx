@@ -1,5 +1,8 @@
+// CalendarInput.stories.tsx
+import React, { useState } from 'react';
 import CalendarInput from '../src/components/CalendarInput';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { DateObject } from 'react-multi-date-picker';
 
 const meta: Meta<typeof CalendarInput> = {
     title: 'Zyra/Components/CalendarInput',
@@ -8,55 +11,115 @@ const meta: Meta<typeof CalendarInput> = {
 };
 
 export default meta;
-
 type Story = StoryObj<typeof CalendarInput>;
 
-export const TestMultipleCalendarRange: Story = {
-    args: {
-        wrapperClass: 'settings-calender',
-        inputClass: 'teal',
-        format: 'YYYY-MM-DD',
-        multiple: true,
-        range: true,
-        value: '',
-        onChange: (date) => {
-            console.log('Date selected:', date);
-        },
-    },
-    render: (args) => {
+export const DefaultDate: Story = {
+    render: () => {
+        const [value, setValue] = useState('2025-12-19');
+
         return (
-            <CalendarInput key={'sample_multiple_calender_range'} {...args} />
+            <CalendarInput
+                wrapperClass="calendar-input-wrapper"
+                inputClass="calendar-input"
+                value={value}
+                onChange={(date) => {
+                    if (Array.isArray(date)) {
+                        const formatted = date
+                            .map((d) =>
+                                Array.isArray(d)
+                                    ? `${d[0].format('YYYY-MM-DD')} - ${d[1].format('YYYY-MM-DD')}`
+                                    : d.format('YYYY-MM-DD')
+                            )
+                            .join(', ');
+                        setValue(formatted);
+                    } else {
+                        setValue((date as DateObject).format('YYYY-MM-DD'));
+                    }
+                }}
+            />
         );
     },
 };
 
-export const TestMultipleCalendar: Story = {
-    args: {
-        wrapperClass: 'settings-calender',
-        inputClass: 'teal',
-        format: 'YYYY-MM-DD',
-        multiple: true,
-        value: '',
-        onChange: (date) => {
-            console.log('Date selected:', date);
-        },
-    },
-    render: (args) => {
-        return <CalendarInput key={'sample_multiple_calender'} {...args} />;
+export const MultipleDates: Story = {
+    render: () => {
+        const [value, setValue] = useState('2025-12-19, 2025-12-20');
+
+        return (
+            <CalendarInput
+                wrapperClass="calendar-input-wrapper"
+                inputClass="calendar-input"
+                value={value}
+                multiple
+                onChange={(date) => {
+                    if (Array.isArray(date)) {
+                        const formatted = date
+                            .map((d) =>
+                                Array.isArray(d)
+                                    ? `${d[0].format('YYYY-MM-DD')} - ${d[1].format('YYYY-MM-DD')}`
+                                    : d.format('YYYY-MM-DD')
+                            )
+                            .join(', ');
+                        setValue(formatted);
+                    }
+                }}
+            />
+        );
     },
 };
 
-export const TestSingleCalendar: Story = {
-    args: {
-        wrapperClass: 'settings-calender',
-        inputClass: 'teal',
-        format: 'YYYY-MM-DD',
-        value: '',
-        onChange: (date) => {
-            console.log('Date selected:', date);
-        },
+export const RangeDates: Story = {
+    render: () => {
+        const [value, setValue] = useState('2025-12-19 - 2025-12-25');
+
+        return (
+            <CalendarInput
+                wrapperClass="calendar-input-wrapper"
+                inputClass="calendar-input"
+                value={value}
+                range
+                onChange={(date) => {
+                    if (Array.isArray(date)) {
+                        const formatted = date
+                            .map((d) =>
+                                Array.isArray(d)
+                                    ? `${d[0].format('YYYY-MM-DD')} - ${d[1].format('YYYY-MM-DD')}`
+                                    : d.format('YYYY-MM-DD')
+                            )
+                            .join(', ');
+                        setValue(formatted);
+                    }
+                }}
+            />
+        );
     },
-    render: (args) => {
-        return <CalendarInput key={'sample_single_calender'} {...args} />;
+};
+
+export const WithProTag: Story = {
+    render: () => {
+        const [value, setValue] = useState('2025-12-19');
+
+        return (
+            <CalendarInput
+                wrapperClass="calendar-input-wrapper"
+                inputClass="calendar-input"
+                value={value}
+                proSetting
+                onChange={(date) => {
+                    if (Array.isArray(date)) {
+                        const formatted = date
+                            .map((d) =>
+                                Array.isArray(d)
+                                    ? `${d[0].format('YYYY-MM-DD')} - ${d[1].format('YYYY-MM-DD')}`
+                                    : d.format('YYYY-MM-DD')
+                            )
+                            .join(', ');
+                        setValue(formatted);
+                    } else {
+                        setValue((date as DateObject).format('YYYY-MM-DD'));
+                    }
+                }}
+            />
+        );
     },
 };

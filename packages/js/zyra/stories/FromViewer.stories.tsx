@@ -1,5 +1,5 @@
 import FormViewer from '../src/components/FormViewer';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof FormViewer> = {
     title: 'Zyra/Components/FormViewer',

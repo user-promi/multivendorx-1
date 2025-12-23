@@ -22,6 +22,7 @@ interface Setting {
 
 interface AppLocalizer {
     nonce: string;
+    restUrl: string;
     [ key: string ]: string | number | boolean;
 }
 

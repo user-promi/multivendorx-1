@@ -17,8 +17,8 @@ const gatewayFields = gatewayList.flatMap((gateway) => [
 		size: '8rem',
 	},
 	{
-		key: 'devider',
-		type: 'devider',
+		key: 'divider',
+		type: 'divider',
 	},
 ]);
 
@@ -40,8 +40,8 @@ const nestedFields = [
 		size: '8rem',
 	},
 	{
-		key: 'devider',
-		type: 'devider',
+		key: 'divider',
+		type: 'divider',
 	},
 	...gatewayFields,
 ];
