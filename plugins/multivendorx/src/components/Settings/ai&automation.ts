@@ -41,18 +41,18 @@ export default {
 			),
 		},
 		{
-			key: 'openrouter_api_image_enhancement_key',
+			key: 'openrouter_api_key',
 			type: 'text',
-			label: __('OpenRouter', 'multivendorx'),
+			label: __('OpenRouter (Text AI)', 'multivendorx'),
 			settingDescription: __(
-				'Free and open AI models can be enabled for product content and image enhancement.',
+				'API key used for text-based AI features such as product name and description generation.',
 				'multivendorx'
 			),
 			desc: __(
-				'<a href="https://openrouter.ai/settings/keys" target="_blank">Generate an OpenRouter Key</a>',
+				'<a href="https://openrouter.ai/settings/keys" target="_blank">Generate an OpenRouter API key</a>',
 				'multivendorx'
 			),
-		},
+		},		
 		// --- AI Provider Choice ---
 		{
 			key: 'section',
@@ -195,7 +195,7 @@ export default {
 			dependent: {
 				key: 'image_enhancement_provider',
 				set: true,
-				value: 'gemini_api',
+				value: 'openrouter_api',
 			},
 			className: 'select-class',
 			options: [
