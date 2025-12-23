@@ -117,8 +117,6 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
             return;
         }
 
-        // const value = editValue.trim().toLowerCase().replace(/\s+/g, '-');
-       
         const updatedOptions = [...localOptions];
         updatedOptions[index] = {
             ...updatedOptions[index],
@@ -304,6 +302,12 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                         e.target.value
                                                     )
                                                 }
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        e.preventDefault();
+                                                        saveEditedOption( index );
+                                                    }
+                                                }}
                                                 className="basic-input"
                                             />
                                             <span

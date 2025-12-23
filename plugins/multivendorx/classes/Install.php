@@ -592,45 +592,45 @@ By signing and submitting, the Seller accepts all terms above.
                 ),
             
                 array (
-                'key' => 'city_link',
-                'label' => 'City link',
-                'value' => 'city_link',
-                'edit' => true,
+                    'key' => 'city_link',
+                    'label' => 'City link',
+                    'value' => 'city_link',
+                    'edit' => true,
                 ),
                 
                 array (
-                'key' => 'dhl',
-                'label' => 'DHL',
-                'value' => 'dhl',
-                'edit' => true,
+                    'key' => 'dhl',
+                    'label' => 'DHL',
+                    'value' => 'dhl',
+                    'edit' => true,
                 ),
                 
                 array (
-                'key' => 'fastway_south_africa',
-                'label' => 'Fastway South Africa',
-                'value' => 'fastway_south_africa',
-                'edit' => true,
+                    'key' => 'fastway_south_africa',
+                    'label' => 'Fastway South Africa',
+                    'value' => 'fastway_south_africa',
+                    'edit' => true,
                 ),
                 
                 array (
-                'key' => 'fedex',
-                'label' => 'FedEx',
-                'value' => 'fedex',
-                'edit' => true,
+                    'key' => 'fedex',
+                    'label' => 'FedEx',
+                    'value' => 'fedex',
+                    'edit' => true,
                 ),
                 
                 array (
-                'key' => 'ontrac',
-                'label' => 'OnTrac',
-                'value' => 'ontrac',
-                'edit' => true,
+                    'key' => 'ontrac',
+                    'label' => 'OnTrac',
+                    'value' => 'ontrac',
+                    'edit' => true,
                 ),
                 
                 array (
-                'key' => 'polish_shipping',
-                'label' => 'Polish shipping providers',
-                'value' => 'polish_shipping',
-                'edit' => true,
+                    'key' => 'polish_shipping',
+                    'label' => 'Polish shipping providers',
+                    'value' => 'polish_shipping',
+                    'edit' => true,
                 ),
             ]
         );
