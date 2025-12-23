@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import {
@@ -1682,7 +1682,7 @@ const AddProduct = () => {
 												null,
 												{
 												currentImage: featuredImage,
-												onImageEnhanced: (enhancedImage) => {
+												onImageEnhanced: (enhancedImage: SetStateAction<null>) => {
 													setFeaturedImage(enhancedImage);
 												}
 												}
@@ -1737,7 +1737,7 @@ const AddProduct = () => {
 														null,
 														{
 														currentImage: img,
-														onImageEnhanced: (enhancedImage) => {
+														onImageEnhanced: (enhancedImage: any) => {
 															setGalleryImages((prev) => [...prev, enhancedImage]);
 														}
 														}
