@@ -547,12 +547,12 @@ export const KnowledgeBase: React.FC = () => {
 									? __('Edit Knowledgebase', 'multivendorx')
 									: __('Add Knowledgebase', 'multivendorx')}
 							</div>
-							<p>
+							<div className="des">
 								{__(
 									'Write and publish a new knowledge base article to help stores navigate their dashboard.',
 									'multivendorx'
 								)}
-							</p>
+							</div>
 							<i
 								onClick={handleCloseForm}
 								className="icon adminlib-close"

@@ -570,12 +570,12 @@ const Qna: React.FC = () => {
 								<i className="adminlib-question"></i>
 								{__('Answer Question', 'multivendorx')}
 							</div>
-							<p>
+							<div className="des">
 								{__(
 									'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
 									'multivendorx'
 								)}
-							</p>
+							</div>
 							<i
 								onClick={() => setSelectedQna(null)}
 								className="icon adminlib-close"

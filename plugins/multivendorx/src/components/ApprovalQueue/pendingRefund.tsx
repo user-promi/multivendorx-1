@@ -495,12 +495,12 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 								<i className="adminlib-announcement"></i>
 								{__('Reject Order', 'multivendorx')}
 							</div>
-							<p>
+							<div className="des">
 								{__(
 									'Provide a rejection message for this order.',
 									'multivendorx'
 								)}
-							</p>
+							</div>
 							<i
 								onClick={handleCloseForm}
 								className="icon adminlib-close"

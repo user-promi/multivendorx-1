@@ -266,12 +266,12 @@ const Store = () => {
 										<i className="adminlib-storefront"></i>
 										{__('Add Store', 'multivendorx')}
 									</div>
-									<p>
+									<div className="des">
 										{__(
 											'Create a new store and set it up with essential details.',
 											'multivendorx'
 										)}
-									</p>
+									</div>
 									<i
 										onClick={() => {
 											setFormData({});

@@ -982,12 +982,12 @@ const AllCoupon: React.FC = () => {
 								<i className="adminlib-coupon"></i>
 								{__('Add Coupon', 'multivendorx')}
 							</div>
-							<p>
+							<div className="des">
 								{__(
 									'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
 									'multivendorx'
 								)}
-							</p>
+							</div>
 							<i
 								className="icon adminlib-close"
 								onClick={() => setAddCoupon(false)}
