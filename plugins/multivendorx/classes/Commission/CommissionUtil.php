@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Modules Commission Util
  *
@@ -9,7 +10,8 @@ namespace MultiVendorX\Commission;
 
 use MultiVendorX\Utill;
 use MultiVendorX\Store\Store;
-defined( 'ABSPATH' ) || exit;
+
+defined('ABSPATH') || exit;
 
 /**
  * MultiVendorX Commission Util.
@@ -18,7 +20,8 @@ defined( 'ABSPATH' ) || exit;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-class CommissionUtil {
+class CommissionUtil
+{
 
     /**
      * Get a single commission row from databse by using commission id.
@@ -27,14 +30,15 @@ class CommissionUtil {
      * @param   mixed $id Commission ID.
      * @return  array | object | \stdClass
      */
-    public static function get_commission_db( $id ) {
+    public static function get_commission_db($id)
+    {
         global $wpdb;
         $commission = $wpdb->get_row(
-            $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE ID = %d', $id )
+            $wpdb->prepare('SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE ID = %d', $id)
         );
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
         return $commission ?? new \stdClass();
@@ -46,8 +50,9 @@ class CommissionUtil {
      * @param   int $id Commission ID.
      * @return  Commission Commission Object.
      */
-    public static function get_commission( $id ) {
-        return new Commission( $id );
+    public static function get_commission($id)
+    {
+        return new Commission($id);
     }
 
     /**
@@ -56,117 +61,107 @@ class CommissionUtil {
      * @param   int $store_id Store ID.
      * @param   int $order_id Order ID.
      */
-    public static function get_commission_by_store_and_order_id( $store_id, $order_id ) {
+    public static function get_commission_by_store_and_order_id($store_id, $order_id)
+    {
         global $wpdb;
         $commission = $wpdb->get_row(
-            $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE store_id = %d AND order_id = %d', $store_id, $order_id )
+            $wpdb->prepare('SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE store_id = %d AND order_id = %d', $store_id, $order_id)
         );
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
         return $commission ?? new \stdClass();
     }
 
     /**
-     * Get array of commission object or count based on filter.
+     * Fetch commission records or return total count based on filters.
      *
-     * @param   array $filter  Filter array.
-     * @param   bool  $object  Default true. If false function returns raw DB rows or IDs.
-     * @param   bool  $count   Default false. If true function returns total count instead of records.
+     * Supports filtering by IDs, order, store, customer, status, date range,
+     * sorting, pagination, and count-only queries.
      *
-     * @return  array|int  Array of Commission objects, raw results, or integer count.
+     * @param array $args Query arguments.
+     * @return array|int Commission records array or total count.
      */
-    public static function get_commissions( $filter = array(), $object = true, $count = false ) {
+    public static function get_commission_information($args = array())
+    {
         global $wpdb;
 
-        // Remove 'fields' if object requested.
-        if ( $object && isset( $filter['fields'] ) ) {
-            unset( $filter['fields'] );
+        $where = array();
+
+        if (isset($args['ID'])) {
+            $ids     = is_array($args['ID']) ? $args['ID'] : array($args['ID']);
+            $ids     = implode(',', array_map('intval', $ids));
+            $where[] = "ID IN ($ids)";
         }
 
-        // Handle fields separately.
-        if ( isset( $filter['fields'] ) && is_array( $filter['fields'] ) && ! $count ) {
-            $fields = implode( ', ', $filter['fields'] );
+        if (isset($args['order_id'])) {
+            $ids     = is_array($args['order_id']) ? $args['order_id'] : array($args['order_id']);
+            $ids     = implode(',', array_map('intval', $ids));
+            $where[] = "order_id IN ($ids)";
+        }
+
+        if (isset($args['store_id'])) {
+            $ids     = is_array($args['store_id']) ? $args['store_id'] : array($args['store_id']);
+            $ids     = implode(',', array_map('intval', $ids));
+            $where[] = "store_id IN ($ids)";
+        }
+
+        if (isset($args['customer_id'])) {
+            $ids     = is_array($args['customer_id']) ? $args['customer_id'] : array($args['customer_id']);
+            $ids     = implode(',', array_map('intval', $ids));
+            $where[] = "customer_id IN ($ids)";
+        }
+
+        if (isset($args['status'])) {
+            $where[] = "status = '" . esc_sql($args['status']) . "'";
+        }
+
+        if (isset($args['start_date'], $args['end_date'])) {
+            $where[] = "create_time BETWEEN '" . esc_sql($args['start_date']) . "' AND '" . esc_sql($args['end_date']) . "'";
+        }
+
+        $table = $wpdb->prefix . Utill::TABLES['commission'];
+
+        $is_count = ! empty($args['count']);
+
+        if ($is_count) {
+            $query = "SELECT COUNT(*) FROM {$table}";
         } else {
-            $fields = $count ? 'COUNT(*) as total' : '*';
+            $query = "SELECT * FROM {$table}";
         }
 
-        // Extract pagination.
-        $page    = $filter['page'] ?? 0;
-        $perpage = $filter['perpage'] ?? 0;
-
-        // Extract sorting.
-        $orderBy = $filter['orderBy'] ?? '';
-        $order   = strtoupper( $filter['order'] ?? 'ASC' );
-
-        // Remove non-column keys so they don’t appear in WHERE clause.
-        unset( $filter['page'], $filter['perpage'], $filter['orderBy'], $filter['order'] );
-
-        // Build WHERE conditions.
-        $predicate = array();
-        foreach ( $filter as $column => $value ) {
-            if ( is_array( $value ) ) {
-                if ( 'BETWEEN' === isset( $value['compare'] ) && $value['compare'] ) {
-                    $start_value = Utill::add_single_quotes( $value['value'][0] );
-                    $end_value   = Utill::add_single_quotes( $value['value'][1] );
-                    $predicate[] = "{$column} BETWEEN {$start_value} AND {$end_value}";
-                } elseif ( isset( $value['compare'] ) && in_array( $value['compare'], array( 'IN', 'NOT IN' ), true ) ) {
-                    $compare     = $value['compare'];
-                    $in_tuple    = '(' . implode( ', ', array_map( array( Utill::class, 'add_single_quotes' ), $value['value'] ) ) . ')';
-                    $predicate[] = "{$column} {$compare} {$in_tuple}";
-                }
-            } else {
-                $value       = Utill::add_single_quotes( $value );
-                $predicate[] = "{$column} = {$value}";
-            }
+        if (! empty($where)) {
+            $condition = (isset($args['condition']) && strtoupper($args['condition']) === 'OR') ? ' OR ' : ' AND ';
+            $query    .= ' WHERE ' . implode($condition, $where);
         }
 
-        // Start query.
-        $query = "SELECT {$fields} FROM `" . $wpdb->prefix . Utill::TABLES['commission'] . '`';
-
-        if ( ! empty( $predicate ) ) {
-            $query .= ' WHERE ' . implode( ' AND ', $predicate );
+        // Sorting
+        if (! empty($args['orderBy']) && ! $is_count) {
+            $allowed_columns = array('ID', 'order_id', 'status', 'store_id', 'create_time');
+            $orderBy         = in_array($args['orderBy'], $allowed_columns, true) ? $args['orderBy'] : 'ID';
+            $order           = (isset($args['order']) && strtolower($args['order']) === 'desc') ? 'DESC' : 'ASC';
+            $query          .= " ORDER BY {$orderBy} {$order}";
         }
 
-        // Sorting (safe & only if not count).
-        if ( ! $count && ! empty( $orderBy ) ) {
-            $orderBy = esc_sql( $orderBy );
-            if ( ! in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
-                $order = 'ASC';
-            }
-            $query .= " ORDER BY {$orderBy} {$order}";
-        }
-
-        // Pagination.
-        if ( -1 !== ! $count && $page && $perpage ) {
-            $limit  = intval( $perpage );
-            $offset = ( $page - 1 ) * $limit;
+        // Pagination (logic fixed)
+        if (isset($args['limit'], $args['offset']) && ! $is_count) {
+            $limit  = intval($args['limit']);
+            $offset = intval($args['offset']);
             $query .= " LIMIT {$limit} OFFSET {$offset}";
         }
 
-        // If only count requested.
-        if ( $count ) {
-            return (int) $wpdb->get_var( $query ) ?? 0;
+        if ($is_count) {
+            $results = (int) $wpdb->get_var($query);
+        } else {
+            $results = $wpdb->get_results($query, ARRAY_A);
         }
 
-        // Execute query.
-        $commissions = $wpdb->get_results( $query );
-
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        /** Centralized error logging */
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
-        // Return object or raw array.
-        if ( ! $object ) {
-            return $commissions;
-        }
-
-        return array_map(
-            function ( $commission ) {
-                return new Commission( $commission );
-            },
-            $commissions
-        );
+        return $results ?? ($is_count ? 0 : array());
     }
 
     /**
@@ -178,13 +173,14 @@ class CommissionUtil {
      *
      * @return  array  Array of commission summary.
      */
-    public static function get_commission_summary_for_store( $store_id = null, $top_stores = false, $limit = 3 ) {
+    public static function get_commission_summary_for_store($store_id = null, $top_stores = false, $limit = 3)
+    {
         global $wpdb;
 
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];
 
         // If $top_stores = true, fetch top N stores by total order value.
-        if ( $top_stores ) {
+        if ($top_stores) {
             $query = $wpdb->prepare(
                 "
                 SELECT 
@@ -205,28 +201,28 @@ class CommissionUtil {
                 $limit
             );
 
-            $results = $wpdb->get_results( $query );
+            $results = $wpdb->get_results($query);
 
-            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+            if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+                MultiVendorX()->util->log('Database operation failed', 'ERROR');
             }
 
             return array_map(
-                function ( $row ) {
-                    $store      = new Store( $row->store_id );
-                    $store_name = $store ? $store->get( 'name' ) : '';
+                function ($row) {
+                    $store      = new Store($row->store_id);
+                    $store_name = $store ? $store->get('name') : '';
 
                     return array(
-						'store_id'            => intval( $row->store_id ),
-						'store_name'          => $store_name,
-						'total_order_amount'  => floatval( $row->total_order_amount ),
-						'facilitator_fee'     => floatval( $row->facilitator_fee ),
-						'gateway_fee'         => floatval( $row->gateway_fee ),
-						'shipping_amount'     => floatval( $row->shipping_amount ),
-						'tax_amount'          => floatval( $row->tax_amount ),
-						'shipping_tax_amount' => floatval( $row->shipping_tax_amount ),
-						'commission_total'    => floatval( $row->commission_total ),
-						'commission_refunded' => floatval( $row->commission_refunded ),
+                        'store_id'            => intval($row->store_id),
+                        'store_name'          => $store_name,
+                        'total_order_amount'  => floatval($row->total_order_amount),
+                        'facilitator_fee'     => floatval($row->facilitator_fee),
+                        'gateway_fee'         => floatval($row->gateway_fee),
+                        'shipping_amount'     => floatval($row->shipping_amount),
+                        'tax_amount'          => floatval($row->tax_amount),
+                        'shipping_tax_amount' => floatval($row->shipping_tax_amount),
+                        'commission_total'    => floatval($row->commission_total),
+                        'commission_refunded' => floatval($row->commission_refunded),
                     );
                 },
                 $results
@@ -247,26 +243,26 @@ class CommissionUtil {
             FROM {$table_name}
         ";
 
-        if ( ! empty( $store_id ) ) {
-            $query .= $wpdb->prepare( ' WHERE store_id = %d', $store_id );
+        if (! empty($store_id)) {
+            $query .= $wpdb->prepare(' WHERE store_id = %d', $store_id);
         }
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-        $result = $wpdb->get_row( $query );
+        $result = $wpdb->get_row($query);
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        if (! empty($wpdb->last_error) && MultivendorX()->show_advanced_log) {
+            MultiVendorX()->util->log('Database operation failed', 'ERROR');
         }
 
         return array(
-            'total_order_amount'  => floatval( $result->total_order_amount ),
-            'facilitator_fee'     => floatval( $result->facilitator_fee ),
-            'gateway_fee'         => floatval( $result->gateway_fee ),
-            'shipping_amount'     => floatval( $result->shipping_amount ),
-            'tax_amount'          => floatval( $result->tax_amount ),
-            'shipping_tax_amount' => floatval( $result->shipping_tax_amount ),
-            'commission_total'    => floatval( $result->commission_total ),
-            'commission_refunded' => floatval( $result->commission_refunded ),
+            'total_order_amount'  => floatval($result->total_order_amount),
+            'facilitator_fee'     => floatval($result->facilitator_fee),
+            'gateway_fee'         => floatval($result->gateway_fee),
+            'shipping_amount'     => floatval($result->shipping_amount),
+            'tax_amount'          => floatval($result->tax_amount),
+            'shipping_tax_amount' => floatval($result->shipping_tax_amount),
+            'commission_total'    => floatval($result->commission_total),
+            'commission_refunded' => floatval($result->commission_refunded),
         );
     }
 }
