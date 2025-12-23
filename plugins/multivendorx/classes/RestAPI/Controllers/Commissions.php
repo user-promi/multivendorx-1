@@ -43,7 +43,7 @@ class Commissions extends \WP_REST_Controller {
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				)
+				),
 			)
         );
 
@@ -156,10 +156,8 @@ class Commissions extends \WP_REST_Controller {
             }
 
             if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
-                $filter['created_at'] = array(
-                    'compare' => 'BETWEEN',
-                    'value'   => array( $start_date, $end_date ),
-                );
+                $filter['start_date'] = $start_date;
+                $filter['end_date']   = $end_date;
             }
 
             if ( ! empty( $order_by ) && ! empty( $order ) ) {
@@ -169,47 +167,57 @@ class Commissions extends \WP_REST_Controller {
 
             // Handle count only.
             if ( $count ) {
+                $filter['count'] = true;
+
                 return rest_ensure_response(
-                    CommissionUtil::get_commissions( $filter, true, true )
+                    CommissionUtil::get_commission_information( $filter )
                 );
             }
 
             // Fetch commissions.
-            $commissions = CommissionUtil::get_commissions( $filter, false );
+            $commissions = CommissionUtil::get_commission_information(
+                array_merge(
+                    $filter,
+                    array(
+                        'limit'  => $limit,
+                        'offset' => ( $page - 1 ) * $limit,
+                    )
+                )
+            );
 
             $formatted_commissions = array();
 
             foreach ( $commissions as $commission ) {
-                $store      = new Store( $commission->store_id );
+                $store      = new Store( $commission['store_id'] );
                 $store_name = $store ? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) : '';
 
                 $formatted_commissions[] = apply_filters(
                     'multivendorx_commission_table',
                     array(
-                        'id'                    => (int) $commission->ID,
-                        'orderId'               => (int) $commission->order_id,
-                        'storeId'               => (int) $commission->store_id,
+                        'id'                    => (int) $commission['ID'],
+                        'orderId'               => (int) $commission['order_id'],
+                        'storeId'               => (int) $commission['store_id'],
                         'storeName'             => $store_name,
-                        'totalOrderAmount'      => $commission->total_order_value,
-                        'netItemsCost'          => $commission->net_items_cost,
-                        'marketplaceCommission' => $commission->marketplace_commission,
-                        'storeEarning'          => $commission->store_earning,
-                        'gatewayFee'            => $commission->gateway_fee,
-                        'shippingAmount'        => $commission->store_shipping,
-                        'taxAmount'             => $commission->store_tax,
-                        'shippingTaxAmount'     => $commission->store_shipping_tax,
-                        'storeDiscount'         => $commission->store_discount,
-                        'adminDiscount'         => $commission->admin_discount,
-                        'storePayable'          => $commission->store_payable,
-                        'marketplacePayable'    => $commission->marketplace_payable,
-                        'storeRefunded'         => $commission->store_refunded,
-                        'currency'              => $commission->currency,
-                        'status'                => $commission->status,
-                        'commissionNote'        => $commission->commission_note,
-                        'createdAt'             => $commission->created_at,
-                        'updatedAt'             => $commission->updated_at,
+                        'totalOrderAmount'      => $commission['total_order_value'],
+                        'netItemsCost'          => $commission['net_items_cost'],
+                        'marketplaceCommission' => $commission['marketplace_commission'],
+                        'storeEarning'          => $commission['store_earning'],
+                        'gatewayFee'            => $commission['gateway_fee'],
+                        'shippingAmount'        => $commission['store_shipping'],
+                        'taxAmount'             => $commission['store_tax'],
+                        'shippingTaxAmount'     => $commission['store_shipping_tax'],
+                        'storeDiscount'         => $commission['store_discount'],
+                        'adminDiscount'         => $commission['admin_discount'],
+                        'storePayable'          => $commission['store_payable'],
+                        'marketplacePayable'    => $commission['marketplace_payable'],
+                        'storeRefunded'         => $commission['store_refunded'],
+                        'currency'              => $commission['currency'],
+                        'status'                => $commission['status'],
+                        'commissionNote'        => $commission['commission_note'],
+                        'createdAt'             => $commission['created_at'],
+                        'updatedAt'             => $commission['updated_at'],
                     ),
-                    $commission
+                    (object) $commission
                 );
             }
 
@@ -242,17 +250,19 @@ class Commissions extends \WP_REST_Controller {
                     $filter['status'] = $status;
                 }
 
-                $response[ $key ] = CommissionUtil::get_commissions( $filter, true, true );
+                $filter['count'] = true;
+
+                $response[ $key ] = CommissionUtil::get_commission_information( $filter );
             }
 
             return rest_ensure_response( $response );
-
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
+
 
     /**
      * Download CSV for commission data.
@@ -281,24 +291,19 @@ class Commissions extends \WP_REST_Controller {
         }
 
         if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
-            $filter['created_at'] = array(
-                'compare' => 'BETWEEN',
-                'value'   => array(
-                    gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) ),
-                    gmdate( 'Y-m-d 23:59:59', strtotime( $end_date ) ),
-                ),
-            );
+            $filter['start_date'] = gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) );
+            $filter['end_date']   = gmdate( 'Y-m-d 23:59:59', strtotime( $end_date ) );
         }
 
         // Bulk selection OR pagination
         if ( ! empty( $ids ) ) {
-            $filter['id__in'] = array_map( 'intval', explode( ',', $ids ) );
+            $filter['ID'] = array_map( 'intval', explode( ',', $ids ) );
         } elseif ( $page && $per_page ) {
-            $filter['page']    = $page;
-            $filter['perpage'] = $per_page;
+            $filter['limit']  = $per_page;
+            $filter['offset'] = ( $page - 1 ) * $per_page;
         }
 
-        $commissions = CommissionUtil::get_commissions( $filter, false );
+        $commissions = CommissionUtil::get_commission_information( $filter );
 
         if ( empty( $commissions ) ) {
             return new \WP_Error(
@@ -341,28 +346,28 @@ class Commissions extends \WP_REST_Controller {
         foreach ( $commissions as $commission ) {
             $store_name = '';
 
-            if ( ! empty( $commission->store_id ) ) {
-                $store      = new Store( (int) $commission->store_id );
+            if ( ! empty( $commission['store_id'] ) ) {
+                $store      = new Store( (int) $commission['store_id'] );
                 $store_name = (string) $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
             }
 
             fputcsv(
                 $csv_output,
                 array(
-                    $commission->ID,
-                    $commission->order_id,
+                    $commission['ID'],
+                    $commission['order_id'],
                     $store_name,
-                    $commission->total_order_amount,
-                    $commission->commission_amount,
-                    $commission->facilitator_fee,
-                    $commission->gateway_fee,
-                    $commission->shipping_amount,
-                    $commission->tax_amount,
-                    $commission->commission_total,
-                    $commission->status,
-                    $commission->created_at,
-                    $commission->commission_refunded,
-                    $commission->currency,
+                    $commission['total_order_amount'],
+                    $commission['commission_amount'],
+                    $commission['facilitator_fee'],
+                    $commission['gateway_fee'],
+                    $commission['shipping_amount'],
+                    $commission['tax_amount'],
+                    $commission['commission_total'],
+                    $commission['status'],
+                    $commission['created_at'],
+                    $commission['commission_refunded'],
+                    $commission['currency'],
                 )
             );
         }

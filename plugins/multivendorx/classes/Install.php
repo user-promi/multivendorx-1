@@ -694,7 +694,7 @@ By signing and submitting, the Seller accepts all terms above.
                 'slug'      => 'store-registration',
                 'title'     => 'Store Registration',
                 'shortcode' => '[multivendorx_store_registration]',
-            )
+            ),
         );
 
         $this->plugin_create_pages_dynamic( $pages_to_create );

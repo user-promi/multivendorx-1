@@ -138,7 +138,6 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
         } );
     };
 
-    console.log( 'mode', mode );
     return (
         <>
             <div className={ props.wrapperClass }>
