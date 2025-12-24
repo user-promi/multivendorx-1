@@ -341,12 +341,21 @@ interface AppLocalizer {
     [ key: string ]: string | number | boolean;
 }
 
-type Primitive = string | number | boolean;
-type ArrayValue = string[] | number[];
-type ObjectValue = Record< string, Primitive | ArrayValue >;
 type CalendarValue = string | number | [ string | number, string | number ];
 
-type SettingValue = Primitive | ArrayValue | ObjectValue | null | undefined;
+type SettingValue =
+    | string
+    | number
+    | boolean
+    | string[]
+    | number[]
+    | Record<
+          string,
+          string | number | boolean | string[] | number[]
+      >
+    | [ string | number, string | number ]
+    | null
+    | undefined;
 
 type Settings = Record< string, SettingValue >;
 
@@ -641,7 +650,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
         existingUrls: string[] = []
     ): void => {
         settingChanged.current = true;
-        console.log( 'replaceIndex', replaceIndex );
 
         const frame = wp.media( {
             title: 'Select Media',
