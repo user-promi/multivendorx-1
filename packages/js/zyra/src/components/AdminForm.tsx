@@ -646,7 +646,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
         }
     };
 
-    const runUploader = (key: string, multiple = false, replaceIndex?: number): void => {
+    const runUploader = (key: string, multiple = false, replaceIndex?: number,existingUrls: string[] = []): void => {
         settingChanged.current = true;
         console.log('replaceIndex',replaceIndex)
 
@@ -658,15 +658,23 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
         frame.on('select', () => {
             const selection = frame.state().get('selection').toJSON();
-
+            const selectedUrl = selection[0]?.url;
+        
+            if (multiple && replaceIndex !== undefined) {
+                const next = [...existingUrls];
+                next[replaceIndex] = selectedUrl;
+                updateSetting(key, next);
+                return;
+            }
+        
             if (multiple) {
                 const urls = selection.map((item: any) => item.url);
-                console.log('urls',urls)
                 updateSetting(key, urls);
             } else {
-                updateSetting(key, selection[0]?.url || '');
+                updateSetting(key, selectedUrl || '');
             }
         });
+        
 
         frame.open();
     };
@@ -988,9 +996,9 @@ const AdminForm: React.FC<AdminFormProps> = ({
                                 );
                             }}
                             // Function triggered when the "Replace" action is performed
-                            onReplace={(index) => {
-                                runUploader(inputField.key, inputField.multiple, index);
-                            }}                            
+                            onReplace={(index, images) => {
+                                runUploader(inputField.key, inputField.multiple, index, images);
+                            }}                                                        
                         />
                     );
                     break;

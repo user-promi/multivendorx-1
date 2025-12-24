@@ -24,7 +24,7 @@ interface FileInputProps {
     descClass?: string;
     description?: string;
     onRemove?: () => void;
-    onReplace?: (index: number) => void;
+    onReplace?: (index: number,images: string[] ) => void;
     size?: string;
     multiple?: boolean;
 }
@@ -111,7 +111,7 @@ const FileInput: React.FC<FileInputProps> = (props) => {
     // Replace file — reset input and open file selector
     const handleReplaceClick = () => {
         setIsReplacing(true);
-        props.onReplace?.(activeIndex);
+        props.onReplace?.(activeIndex,localImages);
     };
 
     const handleRemoveSingleImage = (index: number) => {
