@@ -814,9 +814,9 @@ body.dark {
 
 
 // checklist start
-.column:has(.checklist-wrapper) {
+.card-wrapper:has(.checklist-wrapper) {
     height: fit-content;
-    position: sticky;
+    position: sticky !important;
     top: 5rem;
 }
 
