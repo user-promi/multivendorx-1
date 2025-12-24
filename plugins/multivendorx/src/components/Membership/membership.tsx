@@ -614,7 +614,24 @@ const Membership = ({ id }: { id: string }) => {
 			size: '8rem',
 		},
 	];
-
+const subscription = [
+	   {
+			key: 'rule_type',
+			type: 'select',
+			label: 'Offer a trial period',
+			options: [
+				{ value: 'price', label: 'Yes' },
+				{ value: 'quantity', label: 'No' }
+			],
+		},
+		{
+			key: 'facilitator_fixed',
+			type: 'number',
+			postInsideText: __('days', 'multivendorx'),
+			size: '8rem',
+			preText: 'If enabled, run the trial for',
+		},		 
+    ];
 	const gracePeriod = [
 		{
 			key: 'facilitator_fixed',
@@ -1221,6 +1238,7 @@ const Membership = ({ id }: { id: string }) => {
 													descClass="settings-metabox-description"
 													value={formData.name}
 													onChange={handleChange}
+													pInsideText = {"$"}
 												/>
 											</div>
 											<div className="form-group">
@@ -1242,7 +1260,15 @@ const Membership = ({ id }: { id: string }) => {
 												</div>
 											</div>
 										</div>
-										<div className="form-group-wrapper">
+										<div className="settings-metabox-note">
+											<div className="metabox-note-wrapper">
+												<i className="adminlib-info"></i>
+												<div className="details">
+													<p>Sign-up fee 0.05 or more is required to create subscriptions in Stripe/PayPal</p>
+												</div>
+											</div>
+										</div>
+										{/* <div className="form-group-wrapper">
 											<div className="form-group">
 												<label htmlFor="product-name">
 													Stop subscription after
@@ -1287,18 +1313,23 @@ const Membership = ({ id }: { id: string }) => {
 													/>
 												</div>
 											</div>
-										</div>
-										<div className="form-group-wrapper">
+										</div> */}
+										{/* <div className="form-group-wrapper">
 											<div className="form-group">
-												<label>
-													<input
-														type="checkbox"
-														checked={pleaseCheck}
-														onChange={(e) => setpleaseCheck(e.target.checked)}
-													/>
-													Enable trial period
-												</label>
+												<label htmlFor="">After expiry</label>
+												<NestedComponent
+													id="role_rules"
+													fields={subscription}
+													value={rules}
+													single={true}
+													addButtonLabel="Add Rule"
+													deleteButtonLabel="Remove"
+													onChange={(val) => setRules(val)}
+												/>
 											</div>
+										</div> */}
+										<div className="form-group-wrapper">
+											
 											<div className="form-group">
 												{pleaseCheck && (
 													<>
@@ -1396,7 +1427,19 @@ const Membership = ({ id }: { id: string }) => {
 
 										<div className="form-group-wrapper">
 											<div className="form-group">
-												<label htmlFor="">After expiry</label>
+												<NestedComponent
+													id="role_rules"
+													fields={subscription}
+													value={rules}
+													single={true}
+													addButtonLabel="Add Rule"
+													deleteButtonLabel="Remove"
+													onChange={(val) => setRules(val)}
+												/>
+											</div>
+										</div>
+										<div className="form-group-wrapper">
+											<div className="form-group">
 												<NestedComponent
 													id="role_rules"
 													fields={gracePeriod}
