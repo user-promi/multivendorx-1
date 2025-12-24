@@ -38,7 +38,7 @@ interface MultiCheckBoxProps {
     type?: 'checkbox' | 'radio' | 'checkbox-custom-img';
     onChange?: ( e: ChangeEvent< HTMLInputElement > | string[] ) => void;
     proChanged?: () => void;
-    onOptionsChange?: (option: any) => void;
+    onOptionsChange?: ( option: any ) => void;
     moduleChange: ( module: string ) => void;
     modules: string[];
     proSetting?: boolean;
@@ -89,27 +89,30 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
             return;
         }
 
-        const value = newOptionValue.trim().toLowerCase().replace(/\s+/g, '_');
+        const value = newOptionValue
+            .trim()
+            .toLowerCase()
+            .replace( /\s+/g, '_' );
         const newOption: Option = {
             key: value,
             value: value,
             label: newOptionValue.trim(),
-            edit: true
+            edit: true,
         };
 
         const updatedOptions = [ ...localOptions, newOption ];
-        props.onOptionsChange?.(updatedOptions);
-        
+        props.onOptionsChange?.( updatedOptions );
+
         setLocalOptions( updatedOptions );
         setNewOptionValue( '' );
         setShowNewInput( false );
 
-        props.onChange?.({
+        props.onChange?.( {
             target: {
                 value,
                 checked: true,
             },
-        } as React.ChangeEvent<HTMLInputElement>);
+        } as React.ChangeEvent< HTMLInputElement > );
     };
 
     const saveEditedOption = ( index: number ) => {
@@ -117,36 +120,34 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
             return;
         }
 
-        const updatedOptions = [...localOptions];
-        updatedOptions[index] = {
-            ...updatedOptions[index],
-            label: editValue.trim()
+        const updatedOptions = [ ...localOptions ];
+        updatedOptions[ index ] = {
+            ...updatedOptions[ index ],
+            label: editValue.trim(),
         };
 
-        setLocalOptions(updatedOptions);
-        setEditIndex(null);
-        setEditValue('');
+        setLocalOptions( updatedOptions );
+        setEditIndex( null );
+        setEditValue( '' );
 
-        props.onOptionsChange?.(updatedOptions);
-
+        props.onOptionsChange?.( updatedOptions );
     };
 
     const deleteOption = ( index: number ) => {
-        const option = localOptions[index];
+        const option = localOptions[ index ];
 
-        const updatedOptions = localOptions.filter((_, i) => i !== index);
-        setLocalOptions(updatedOptions);
+        const updatedOptions = localOptions.filter( ( _, i ) => i !== index );
+        setLocalOptions( updatedOptions );
 
-        props.onChange?.({
+        props.onChange?.( {
             target: {
                 value: option.value,
                 checked: false,
             },
-        } as React.ChangeEvent<HTMLInputElement>);
+        } as React.ChangeEvent< HTMLInputElement > );
 
-        props.onOptionsChange?.(updatedOptions);
+        props.onOptionsChange?.( updatedOptions );
     };
-
 
     return (
         <>
@@ -234,7 +235,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                             value: option.value,
                                             checked: ! checked,
                                         },
-                                    } as unknown as ChangeEvent< HTMLInputElement >;
+                                    } as ChangeEvent< HTMLInputElement >;
                                     props.onChange?.( syntheticEvent );
                                 }
                             } }
@@ -302,12 +303,14 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                         e.target.value
                                                     )
                                                 }
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter') {
+                                                onKeyDown={ ( e ) => {
+                                                    if ( e.key === 'Enter' ) {
                                                         e.preventDefault();
-                                                        saveEditedOption( index );
+                                                        saveEditedOption(
+                                                            index
+                                                        );
                                                     }
-                                                }}
+                                                } }
                                                 className="basic-input"
                                             />
                                             <span
@@ -391,13 +394,11 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                         e.stopPropagation();
                                                         deleteOption( index );
                                                     } }
-                                                    
                                                 >
                                                     <span className="admin-badge yellow adminlib-delete"></span>
                                                 </span>
                                             </>
                                         ) }
-                                       
                                     </>
                                 ) }
                             </div>
@@ -425,12 +426,12 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                             onChange={ ( e ) =>
                                 setNewOptionValue( e.target.value )
                             }
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
+                            onKeyDown={ ( e ) => {
+                                if ( e.key === 'Enter' ) {
                                     e.preventDefault();
                                     handleSaveNewOption();
                                 }
-                            }}
+                            } }
                             placeholder="Enter new option"
                             className="basic-input"
                         />

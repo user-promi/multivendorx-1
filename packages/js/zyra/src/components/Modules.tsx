@@ -40,7 +40,6 @@ interface AppLocalizer {
     nonce: string;
     apiUrl: string;
     restUrl: string;
-    [ key: string ]: unknown; // Allow other properties
 }
 
 interface ModuleProps {
@@ -49,7 +48,7 @@ interface ModuleProps {
     pluginName: string;
     brandImg: string;
     appLocalizer: AppLocalizer;
-    proPopupContent?: React.FC< unknown >;
+    proPopupContent?: React.FC;
 }
 
 const Modules: React.FC< ModuleProps > = ( {

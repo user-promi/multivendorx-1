@@ -5,6 +5,13 @@ import ToggleSetting from './ToggleSetting';
 import MultiCheckBox from './MultiCheckbox';
 import NestedComponent from './NestedComponent';
 
+type PrimitiveValue = string | number | boolean | undefined;
+
+type PaymentFieldValue =
+    | PrimitiveValue
+    | PrimitiveValue[]
+    | Record< string, PrimitiveValue | PrimitiveValue[] >;
+
 interface ClickableItem {
     name: string;
     url?: string;
@@ -105,8 +112,10 @@ interface PaymentTabsComponentProps {
     apilink?: string;
     appLocalizer?: AppLocalizer;
     methods: PaymentMethod[];
-    value: Record< string, Record< string, unknown > >;
-    onChange: ( data: Record< string, Record< string, unknown > > ) => void;
+    value: Record< string, Record< string, PaymentFieldValue > >;
+    onChange: (
+        data: Record< string, Record< string, PaymentFieldValue > >
+    ) => void;
     buttonEnable?: boolean;
     isWizardMode?: boolean;
     setWizardIndex?: ( index: number ) => void;
@@ -153,7 +162,10 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
         const updated = {
             ...value,
             [ methodKey ]: {
-                ...( value[ methodKey ] as Record< string, unknown > ),
+                ...( value[ methodKey ] as Record<
+                    string,
+                    PaymentFieldValue
+                > ),
                 [ fieldKey ]: fieldValue,
             },
         };

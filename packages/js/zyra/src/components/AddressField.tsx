@@ -15,6 +15,11 @@ interface SubField {
     readonly?: boolean;
 }
 
+interface EditableSubField extends SubField {
+    parentId: number;
+    readonly?: boolean;
+}
+
 export interface AddressFormField {
     id: number;
     type: string;
@@ -27,8 +32,10 @@ export interface AddressFormField {
 interface AddressFieldProps {
     formField: AddressFormField;
     onChange: ( key: 'fields', value: SubField[] ) => void;
-    opendInput: FormField | null;
-    setOpendInput: React.Dispatch< React.SetStateAction< FormField | null > >;
+    opendInput: EditableSubField | null;
+    setOpendInput: React.Dispatch<
+        React.SetStateAction< EditableSubField | null >
+    >;
 }
 
 const AddressField: React.FC< AddressFieldProps > = ( {
@@ -71,7 +78,7 @@ const AddressField: React.FC< AddressFieldProps > = ( {
                                 ...f,
                                 readonly: formField.readonly,
                                 parentId: formField.id,
-                            } as unknown as FormField );
+                            } );
                         } }
                     >
                         <div className="meta-menu">

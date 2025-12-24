@@ -34,7 +34,6 @@ type SupportItem = {
 type AppLocalizer = {
     khali_dabba?: boolean;
     shop_url?: string;
-    [ key: string ]: unknown;
 };
 
 type TabsProps = {

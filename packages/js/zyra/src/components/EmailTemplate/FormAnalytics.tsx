@@ -3,7 +3,7 @@ import React from 'react';
 interface FormField {
     type: string;
     required?: boolean;
-    [ key: string ]: unknown;
+    [ key: string ]: string | boolean | number | undefined;
 }
 
 interface FormAnalyticsProps {

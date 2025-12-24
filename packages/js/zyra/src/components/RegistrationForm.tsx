@@ -24,14 +24,12 @@ import AddressField, { AddressFormField } from './AddressField';
 import TemplateTextArea from './EmailTemplate/TemplateTextArea';
 
 // Types
-type FieldValue =
-    | string
-    | number
-    | boolean
-    | Record< string, unknown >
-    | Array< unknown >
-    | undefined
-    | null;
+type Primitive = string | number | boolean | null | undefined;
+
+export type FieldValue =
+    | Primitive
+    | FieldValue[]
+    | { [ key: string ]: FieldValue };
 
 export interface Option {
     id: string;
@@ -65,7 +63,7 @@ export interface FormField {
     sitekey?: string;
     readonly?: boolean;
     images?: ImageItem[];
-    layout?: { blocks?: Array< Record< string, unknown > > };
+    layout?: { blocks?: FieldValue[] };
     charlimit?: number;
     row?: number;
     column?: number;
@@ -82,7 +80,7 @@ export interface FormField {
         options?: string[];
         required?: boolean;
     } >;
-    value?: Record< string, unknown >;
+    value?: Record< string, FieldValue >;
 }
 
 interface ButtonSetting {
