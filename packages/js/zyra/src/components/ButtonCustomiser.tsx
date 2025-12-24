@@ -25,7 +25,7 @@ export interface ButtonSettings {
     button_text?: string;
 }
 
-type ButtonSettingValue = string | number | ButtonSettings | undefined;
+type ButtonSettingValue = string | number | ButtonSettings;
 
 interface ButtonCustomizerProps {
     onChange: (
