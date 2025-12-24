@@ -38,6 +38,7 @@ interface MultiCheckBoxProps {
     type?: 'checkbox' | 'radio' | 'checkbox-custom-img';
     onChange?: ( e: ChangeEvent< HTMLInputElement > | string[] ) => void;
     proChanged?: () => void;
+    onOptionsChange?: (option: any) => void;
     moduleChange: ( module: string ) => void;
     modules: string[];
     proSetting?: boolean;
@@ -88,16 +89,27 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
             return;
         }
 
+        const value = newOptionValue.trim().toLowerCase().replace(/\s+/g, '_');
         const newOption: Option = {
-            key: `${ Date.now() }`,
-            value: newOptionValue.trim().toLowerCase().replace( /\s+/g, '-' ),
+            key: value,
+            value: value,
             label: newOptionValue.trim(),
+            edit: true
         };
 
         const updatedOptions = [ ...localOptions, newOption ];
+        props.onOptionsChange?.(updatedOptions);
+        
         setLocalOptions( updatedOptions );
         setNewOptionValue( '' );
         setShowNewInput( false );
+
+        props.onChange?.({
+            target: {
+                value,
+                checked: true,
+            },
+        } as React.ChangeEvent<HTMLInputElement>);
     };
 
     const saveEditedOption = ( index: number ) => {
@@ -105,20 +117,36 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
             return;
         }
 
-        const updatedOptions = [ ...localOptions ];
-        updatedOptions[ index ] = {
-            ...updatedOptions[ index ],
-            label: editValue.trim(),
-            value: editValue.trim().toLowerCase().replace( /\s+/g, '-' ),
+        const updatedOptions = [...localOptions];
+        updatedOptions[index] = {
+            ...updatedOptions[index],
+            label: editValue.trim()
         };
 
-        setLocalOptions( updatedOptions );
-        setEditIndex( null );
-        setEditValue( '' );
+        setLocalOptions(updatedOptions);
+        setEditIndex(null);
+        setEditValue('');
 
-        // optionally, call onChange with current selected values
-        props.onChange?.( props.value ?? [] );
+        props.onOptionsChange?.(updatedOptions);
+
     };
+
+    const deleteOption = ( index: number ) => {
+        const option = localOptions[index];
+
+        const updatedOptions = localOptions.filter((_, i) => i !== index);
+        setLocalOptions(updatedOptions);
+
+        props.onChange?.({
+            target: {
+                value: option.value,
+                checked: false,
+            },
+        } as React.ChangeEvent<HTMLInputElement>);
+
+        props.onOptionsChange?.(updatedOptions);
+    };
+
 
     return (
         <>
@@ -274,6 +302,12 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                         e.target.value
                                                     )
                                                 }
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        e.preventDefault();
+                                                        saveEditedOption( index );
+                                                    }
+                                                }}
                                                 className="basic-input"
                                             />
                                             <span
@@ -338,20 +372,32 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                             </div>
                                         </label>
                                         { option.edit && (
-                                            <span
-                                                onClick={ ( e ) => {
-                                                    e.stopPropagation();
-                                                    setEditIndex( index );
-                                                    setEditValue(
-                                                        option.label ||
-                                                            option.value
-                                                    );
-                                                } }
-                                                className="edit-icon "
-                                            >
-                                                <span className="admin-badge yellow adminlib-edit"></span>
-                                            </span>
+                                            <>
+                                                <span
+                                                    onClick={ ( e ) => {
+                                                        e.stopPropagation();
+                                                        setEditIndex( index );
+                                                        setEditValue(
+                                                            option.label ||
+                                                                option.value
+                                                        );
+                                                    } }
+                                                    className="edit-icon "
+                                                >
+                                                    <span className="admin-badge yellow adminlib-edit"></span>
+                                                </span>
+                                                <span
+                                                    onClick={ ( e ) => {
+                                                        e.stopPropagation();
+                                                        deleteOption( index );
+                                                    } }
+                                                    
+                                                >
+                                                    <span className="admin-badge yellow adminlib-delete"></span>
+                                                </span>
+                                            </>
                                         ) }
+                                       
                                     </>
                                 ) }
                             </div>
@@ -379,6 +425,12 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                             onChange={ ( e ) =>
                                 setNewOptionValue( e.target.value )
                             }
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    handleSaveNewOption();
+                                }
+                            }}
                             placeholder="Enter new option"
                             className="basic-input"
                         />
