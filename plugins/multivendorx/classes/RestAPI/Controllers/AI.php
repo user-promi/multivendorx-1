@@ -95,7 +95,6 @@ class AI extends \WP_REST_Controller {
             $user_prompt = sanitize_textarea_field( $request->get_param( 'user_prompt' ) );
 
             if ( empty( $user_prompt ) ) {
-                // );
                 return new \WP_REST_Response(
                     array(
                         'success' => false,
@@ -148,9 +147,9 @@ class AI extends \WP_REST_Controller {
 
             return rest_ensure_response(
                 array(
-					'productName'        => array_slice( (array) $suggestions['productName'], 0, 2 ),
-					'shortDescription'   => array_slice( (array) $suggestions['shortDescription'], 0, 2 ),
-					'productDescription' => array_slice( (array) $suggestions['productDescription'], 0, 2 ),
+                    'productName'        => array_slice( (array) $suggestions['productName'], 0, 2 ),
+                    'shortDescription'   => array_slice( (array) $suggestions['shortDescription'], 0, 2 ),
+                    'productDescription' => array_slice( (array) $suggestions['productDescription'], 0, 2 ),
                 )
             );
         } catch ( \Exception $e ) {
@@ -166,6 +165,7 @@ class AI extends \WP_REST_Controller {
     private function generate_image($request) {
         try {
             $user_prompt = sanitize_textarea_field($request->get_param('user_prompt'));
+            $num_images = absint($request->get_param('num_images')) ?: 1;
             
             if (empty($user_prompt)) {
                 return new \WP_REST_Response(
@@ -190,7 +190,8 @@ class AI extends \WP_REST_Controller {
                         MultiVendorX()->setting->get_setting('gemini_api_key'),
                         $user_prompt,
                         null, // No image URL
-                        null  // No image data
+                        null, // No image data
+                        $num_images
                     );
                     break;
                     
@@ -200,7 +201,8 @@ class AI extends \WP_REST_Controller {
                         MultiVendorX()->setting->get_setting('openrouter_api_key'),
                         $user_prompt,
                         null, // No image URL
-                        null  // No image data
+                        null, // No image data
+                        $num_images
                     );
                     break;
                     
@@ -229,7 +231,7 @@ class AI extends \WP_REST_Controller {
             return rest_ensure_response(
                 array(
                     'success'         => true,
-                    'image_data'      => $response['image_data'],
+                    'images'          => $response['images'],
                     'image_mime_type' => $response['mime_type'],
                     'message'         => __('Image generation successful.', 'multivendorx'),
                 )
@@ -255,6 +257,7 @@ class AI extends \WP_REST_Controller {
             $user_prompt = sanitize_textarea_field($request->get_param('user_prompt'));
             $image_url   = esc_url_raw($request->get_param('image_url'));
             $image_data  = $request->get_param('image_data');
+            $num_images  = absint($request->get_param('num_images')) ?: 1;
             
             // If no image provided, switch to generation mode
             if (empty($image_url) && empty($image_data)) {
@@ -280,7 +283,8 @@ class AI extends \WP_REST_Controller {
                         MultiVendorX()->setting->get_setting('gemini_api_key'),
                         $user_prompt,
                         $image_url,
-                        $image_data
+                        $image_data,
+                        $num_images
                     );
                     break;                
 
@@ -290,7 +294,8 @@ class AI extends \WP_REST_Controller {
                         MultiVendorX()->setting->get_setting('openrouter_api_key'),
                         $user_prompt,
                         $image_url,
-                        $image_data
+                        $image_data,
+                        $num_images
                     );
                     break;
             }
@@ -309,7 +314,7 @@ class AI extends \WP_REST_Controller {
             return rest_ensure_response(
                 array(
                     'success'         => true,
-                    'image_data'      => $response['image_data'],
+                    'images'          => $response['images'],
                     'image_mime_type' => $response['mime_type'],
                     'message'         => __('Image enhancement successful.', 'multivendorx'),
                 )
@@ -343,11 +348,11 @@ class AI extends \WP_REST_Controller {
         $response = wp_remote_post(
             $url . '?key=' . $key,
             array(
-				'headers' => array(
-					'Content-Type' => 'application/json',
-				),
-				'body'    => wp_json_encode( $body ),
-				'timeout' => 20,
+                'headers' => array(
+                    'Content-Type' => 'application/json',
+                ),
+                'body'    => wp_json_encode( $body ),
+                'timeout' => 20,
             )
         );
 
@@ -385,12 +390,12 @@ class AI extends \WP_REST_Controller {
         $response = wp_remote_post(
             $url,
             array(
-				'headers' => array(
-					'Content-Type'  => 'application/json',
-					'Authorization' => "Bearer $key",
-				),
-				'body'    => wp_json_encode( $body ),
-				'timeout' => 45,
+                'headers' => array(
+                    'Content-Type'  => 'application/json',
+                    'Authorization' => "Bearer $key",
+                ),
+                'body'    => wp_json_encode( $body ),
+                'timeout' => 45,
             )
         );
 
@@ -426,7 +431,7 @@ class AI extends \WP_REST_Controller {
 
         $model = MultiVendorX()->setting->get_setting( 'openrouter_api_model' );
         if ( ! $model ) {
-			$model = 'openai/gpt-4o-mini';
+            $model = 'openai/gpt-4o-mini';
         }
 
         $body = array(
@@ -447,14 +452,14 @@ class AI extends \WP_REST_Controller {
         $response = wp_remote_post(
             $url,
             array(
-				'headers' => array(
-					'Authorization' => "Bearer $key",
-					'HTTP-Referer'  => site_url(),
-					'X-Title'       => get_bloginfo( 'name' ),
-					'Content-Type'  => 'application/json',
-				),
-				'body'    => wp_json_encode( $body ),
-				'timeout' => 30,
+                'headers' => array(
+                    'Authorization' => "Bearer $key",
+                    'HTTP-Referer'  => site_url(),
+                    'X-Title'       => get_bloginfo( 'name' ),
+                    'Content-Type'  => 'application/json',
+                ),
+                'body'    => wp_json_encode( $body ),
+                'timeout' => 30,
             )
         );
 
@@ -483,8 +488,9 @@ class AI extends \WP_REST_Controller {
      * @param string $prompt The prompt to use.
      * @param string $image_url The image URL to use.
      * @param string $image_data The image data to use.
+     * @param int $num_images Number of images to generate
      */
-    private function call_gemini_image_generation_api( $api_key, $prompt, $image_url, $image_data ) {
+    private function call_gemini_image_generation_api( $api_key, $prompt, $image_url, $image_data, $num_images = 1 ) {
 
         $request_body = array(
             'contents' => array(
@@ -506,48 +512,57 @@ class AI extends \WP_REST_Controller {
             );
         }
 
-        $response = wp_remote_post(
-            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=' . $api_key,
-            array(
-                'method'  => 'POST',
-                'headers' => array(
-                    'Content-Type' => 'application/json',
-                ),
-                'body'    => wp_json_encode( $request_body ),
-                'timeout' => 30,
-            )
-        );
+        // For multiple images, we need to make multiple requests
+        $all_images = array();
+        for ($i = 0; $i < $num_images; $i++) {
+            $response = wp_remote_post(
+                'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=' . $api_key,
+                array(
+                    'method'  => 'POST',
+                    'headers' => array(
+                        'Content-Type' => 'application/json',
+                    ),
+                    'body'    => wp_json_encode( $request_body ),
+                    'timeout' => 30,
+                )
+            );
 
-        if ( is_wp_error( $response ) ) {
-            return array( 'error' => $response->get_error_message() );
-        }
+            if ( is_wp_error( $response ) ) {
+                return array( 'error' => $response->get_error_message() );
+            }
 
-        $body = json_decode( wp_remote_retrieve_body( $response ), true );
+            $body = json_decode( wp_remote_retrieve_body( $response ), true );
 
-        /** Extract the returned image */
-        $candidate = $body['candidates'][0] ?? null;
+            /** Extract the returned image */
+            $candidate = $body['candidates'][0] ?? null;
 
-        if ( ! $candidate ) {
-            return array( 'error' => 'No candidates returned.' );
-        }
+            if ( ! $candidate ) {
+                return array( 'error' => 'No candidates returned.' );
+            }
 
-        $parts = $candidate['content']['parts'] ?? array();
+            $parts = $candidate['content']['parts'] ?? array();
 
-        foreach ( $parts as $p ) {
-            if ( ! empty( $p['inlineData']['data'] ) ) {
-                return array(
-                    'image_data'    => $p['inlineData']['data'], // BASE64 IMAGE
-                    'mime_type'     => $p['inlineData']['mimeType'],
-                    'text_response' => null,
-                );
+            foreach ( $parts as $p ) {
+                if ( ! empty( $p['inlineData']['data'] ) ) {
+                    $all_images[] = $p['inlineData']['data'];
+                    break;
+                }
             }
         }
 
-        // If no image, return text (fallback).
+        if ( empty( $all_images ) ) {
+            // If no image, return text (fallback).
+            return array(
+                'images'        => null,
+                'mime_type'     => null,
+                'text_response' => wp_json_encode( $body ),
+            );
+        }
+
         return array(
-            'image_data'    => null,
-            'mime_type'     => null,
-            'text_response' => wp_json_encode( $body ),
+            'images'        => $all_images,
+            'mime_type'     => 'image/png',
+            'text_response' => null,
         );
     }
 
@@ -559,8 +574,9 @@ class AI extends \WP_REST_Controller {
      * @param string $prompt The prompt to use.
      * @param string $image_url The image URL to use.
      * @param string $image_data The image data to use.
+     * @param int $num_images Number of images to generate
      */
-    private function call_openrouter_image_generation_api( $key, $model, $prompt, $image_url, $image_data = null ) {
+    private function call_openrouter_image_generation_api( $key, $model, $prompt, $image_url, $image_data = null, $num_images = 1 ) {
         $url = 'https://openrouter.ai/api/v1/chat/completions';
 
         // Prepare messages array
@@ -570,7 +586,7 @@ class AI extends \WP_REST_Controller {
                 'content' => array(
                     array(
                         'type' => 'text',
-                        'text' => $prompt,
+                        'text' => $prompt . ($num_images > 1 ? " Generate {$num_images} different variations." : ""),
                     ),
                 ),
             ),
@@ -598,19 +614,20 @@ class AI extends \WP_REST_Controller {
             'messages'    => $messages,
             'temperature' => 0.7,
             'max_tokens'  => 1024,
+            'n'           => $num_images, // Request multiple completions
         );
 
         $response = wp_remote_post(
             $url,
             array(
-				'headers' => array(
-					'Authorization' => "Bearer $key",
-					'HTTP-Referer'  => site_url(),
-					'X-Title'       => get_bloginfo( 'name' ),
-					'Content-Type'  => 'application/json',
-				),
-				'body'    => wp_json_encode( $body ),
-				'timeout' => 60,
+                'headers' => array(
+                    'Authorization' => "Bearer $key",
+                    'HTTP-Referer'  => site_url(),
+                    'X-Title'       => get_bloginfo( 'name' ),
+                    'Content-Type'  => 'application/json',
+                ),
+                'body'    => wp_json_encode( $body ),
+                'timeout' => 60,
             )
         );
 
@@ -632,53 +649,52 @@ class AI extends \WP_REST_Controller {
             return array( 'error' => $data['error']['message'] );
         }
 
-        // Check if response has images array
-        if ( ! empty( $data['choices'][0]['message']['images'] ) &&
-            is_array( $data['choices'][0]['message']['images'] ) ) {
-            foreach ( $data['choices'][0]['message']['images'] as $image ) {
-                if ( ! empty( $image['type'] ) && $image['type'] === 'image_url' &&
-                    ! empty( $image['image_url']['url'] ) ) {
-                    $image_url = $image['image_url']['url'];
+        $all_images = array();
+        
+        // Process all choices (multiple images)
+        foreach ($data['choices'] as $choice) {
+            // Check if response has images array
+            if ( ! empty( $choice['message']['images'] ) &&
+                is_array( $choice['message']['images'] ) ) {
+                foreach ( $choice['message']['images'] as $image ) {
+                    if ( ! empty( $image['type'] ) && $image['type'] === 'image_url' &&
+                        ! empty( $image['image_url']['url'] ) ) {
+                        $image_url = $image['image_url']['url'];
 
-                    // Extract base64 data from data URL
-                    if ( preg_match( '/data:image\/(png|jpeg|jpg);base64,([^\"]+)/', $image_url, $matches ) ) {
-                        return array(
-                            'image_data'    => $matches[2],
-                            'mime_type'     => 'image/' . $matches[1],
-                            'text_response' => $data['choices'][0]['message']['content'] ?? '',
-                        );
+                        // Extract base64 data from data URL
+                        if ( preg_match( '/data:image\/(png|jpeg|jpg);base64,([^\"]+)/', $image_url, $matches ) ) {
+                            $all_images[] = $matches[2];
+                            break;
+                        }
                     }
+                }
+            }
+            
+            // Fallback: Check if there's text content with base64 image
+            elseif ( ! empty( $choice['message']['content'] ) ) {
+                $text_response = $choice['message']['content'];
+
+                // Check if response contains base64 image data
+                if ( preg_match( '/data:image\/(png|jpeg|jpg);base64,([^\"]+)/', $text_response, $matches ) ) {
+                    $all_images[] = $matches[2];
                 }
             }
         }
 
-        // Fallback: Check if there's text content with base64 image
-        if ( ! empty( $data['choices'][0]['message']['content'] ) ) {
-            $text_response = $data['choices'][0]['message']['content'];
-
-            // Check if response contains base64 image data
-            if ( preg_match( '/data:image\/(png|jpeg|jpg);base64,([^\"]+)/', $text_response, $matches ) ) {
-                return array(
-                    'image_data'    => $matches[2],
-                    'mime_type'     => 'image/' . $matches[1],
-                    'text_response' => $text_response,
-                );
-            }
-
-            // Return text response if no image found
+        if ( empty( $all_images ) ) {
+            // If no image found
             return array(
-                'text_response' => $text_response,
-                'image_data'    => null,
+                'error'         => 'No image generated in OpenRouter response',
+                'text_response' => 'Image generation completed but no image data returned.',
+                'images'        => null,
                 'mime_type'     => null,
             );
         }
 
-        // If no image found
         return array(
-            'error'         => 'No image generated in OpenRouter response',
-            'text_response' => 'Image generation completed but no image data returned.',
-            'image_data'    => null,
-            'mime_type'     => null,
+            'images'        => $all_images,
+            'mime_type'     => 'image/png',
+            'text_response' => isset($data['choices'][0]['message']['content']) ? $data['choices'][0]['message']['content'] : '',
         );
     }
 }
