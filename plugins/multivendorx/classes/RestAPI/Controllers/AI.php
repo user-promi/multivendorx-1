@@ -159,43 +159,125 @@ class AI extends \WP_REST_Controller {
     }
 
     /**
-     * Enhance Image with AI
-     * * @param mixed $request
+     * Generate AI Image (without existing image)
+     *
+     * @param mixed $request
      */
-    private function enhance_image( $request ) {
+    private function generate_image($request) {
         try {
-            $user_prompt = sanitize_textarea_field( $request->get_param( 'user_prompt' ) );
-            $image_url   = esc_url_raw( $request->get_param( 'image_url' ) );
-            $image_data  = $request->get_param( 'image_data' );
-
-            if ( empty( $user_prompt ) ) {
+            $user_prompt = sanitize_textarea_field($request->get_param('user_prompt'));
+            
+            if (empty($user_prompt)) {
                 return new \WP_REST_Response(
                     array(
                         'success' => false,
                         'code'    => 'prompt_missing',
-                        'message' => __( 'Prompt is required.', 'multivendorx' ),
+                        'message' => __('Prompt is required.', 'multivendorx'),
                     ),
                     400
                 );
             }
 
-            if ( empty( $image_url ) && empty( $image_data ) ) {
+            $provider = MultiVendorX()->setting->get_setting('image_generation_provider');
+            if (!$provider) {
+                // Fallback to enhancement provider if specific generation provider not set
+                $provider = MultiVendorX()->setting->get_setting('image_enhancement_provider');
+            }
+
+            switch ($provider) {
+                case 'gemini_api':
+                    $response = $this->call_gemini_image_generation_api(
+                        MultiVendorX()->setting->get_setting('gemini_api_key'),
+                        $user_prompt,
+                        null, // No image URL
+                        null  // No image data
+                    );
+                    break;
+                    
+                case 'openrouter_api':
+                    $response = $this->call_openrouter_image_generation_api(
+                        MultiVendorX()->setting->get_setting('openrouter_api_image_generation_key'),
+                        MultiVendorX()->setting->get_setting('openrouter_api_key'),
+                        $user_prompt,
+                        null, // No image URL
+                        null  // No image data
+                    );
+                    break;
+                    
+                default:
+                    return new \WP_REST_Response(
+                        array(
+                            'success' => false,
+                            'code'    => 'provider_not_set',
+                            'message' => __('Image generation provider not configured.', 'multivendorx'),
+                        ),
+                        400
+                    );
+            }
+
+            if (!empty($response['error'])) {
                 return new \WP_REST_Response(
                     array(
                         'success' => false,
-                        'code'    => 'image_missing',
-                        'message' => __( 'Image is required.', 'multivendorx' ),
+                        'code'    => 'image_generation_failed',
+                        'message' => $response['error'],
+                    ),
+                    500
+                );
+            }
+
+            return rest_ensure_response(
+                array(
+                    'success'         => true,
+                    'image_data'      => $response['image_data'],
+                    'image_mime_type' => $response['mime_type'],
+                    'message'         => __('Image generation successful.', 'multivendorx'),
+                )
+            );
+        } catch (\Exception $e) {
+            MultiVendorX()->util->log($e);
+            return new \WP_REST_Response(
+                array(
+                    'success' => false,
+                    'code'    => 'image_generation_error',
+                    'message' => __('Image generation failed.', 'multivendorx'),
+                ),
+                500
+            );
+        }
+    }
+
+    /**
+     * Update the enhance_image method to handle both enhancement and generation
+     */
+    private function enhance_image($request) {
+        try {
+            $user_prompt = sanitize_textarea_field($request->get_param('user_prompt'));
+            $image_url   = esc_url_raw($request->get_param('image_url'));
+            $image_data  = $request->get_param('image_data');
+            
+            // If no image provided, switch to generation mode
+            if (empty($image_url) && empty($image_data)) {
+                return $this->generate_image($request);
+            }
+
+            if (empty($user_prompt)) {
+                return new \WP_REST_Response(
+                    array(
+                        'success' => false,
+                        'code'    => 'prompt_missing',
+                        'message' => __('Prompt is required.', 'multivendorx'),
                     ),
                     400
                 );
             }
 
-            $provider = MultiVendorX()->setting->get_setting( 'image_enhancement_provider' );
+            $provider = MultiVendorX()->setting->get_setting('image_enhancement_provider');
 
-            switch ( $provider ) {
+            switch ($provider) {
                 case 'gemini_api':
                     $response = $this->call_gemini_image_generation_api(
-                        MultiVendorX()->setting->get_setting( 'gemini_api_key' ),
+                        MultiVendorX()->setting->get_setting('gemini_api_key'),
                         $user_prompt,
                         $image_url,
                         $image_data
@@ -204,8 +286,8 @@ class AI extends \WP_REST_Controller {
 
                 case 'openrouter_api':
                     $response = $this->call_openrouter_image_generation_api(
-                        MultiVendorX()->setting->get_setting( 'openrouter_api_image_enhancement_key' ),
-                        MultiVendorX()->setting->get_setting( 'openrouter_api_key' ),
+                        MultiVendorX()->setting->get_setting('openrouter_api_image_enhancement_key'),
+                        MultiVendorX()->setting->get_setting('openrouter_api_key'),
                         $user_prompt,
                         $image_url,
                         $image_data
@@ -213,7 +295,7 @@ class AI extends \WP_REST_Controller {
                     break;
             }
 
-            if ( ! empty( $response['error'] ) ) {
+            if (!empty($response['error'])) {
                 return new \WP_REST_Response(
                     array(
                         'success' => false,
@@ -226,14 +308,14 @@ class AI extends \WP_REST_Controller {
 
             return rest_ensure_response(
                 array(
-					'success'         => true,
-					'image_data'      => $response['image_data'],
-					'image_mime_type' => $response['mime_type'],
-					'message'         => __( 'Image enhancement successful.', 'multivendorx' ),
+                    'success'         => true,
+                    'image_data'      => $response['image_data'],
+                    'image_mime_type' => $response['mime_type'],
+                    'message'         => __('Image enhancement successful.', 'multivendorx'),
                 )
             );
-        } catch ( \Exception $e ) {
-            MultiVendorX()->util->log( $e );
+        } catch (\Exception $e) {
+            MultiVendorX()->util->log($e);
         }
     }
 

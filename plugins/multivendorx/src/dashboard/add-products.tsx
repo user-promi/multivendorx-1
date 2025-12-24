@@ -1676,15 +1676,27 @@ const AddProduct = () => {
 											/>
 										</div>
 										<div className="buttons-wrapper">
+										{!featuredImage && (
+											applyFilters(
+												'product_image_enhancement',
+												null,
+												{
+												currentImage: null,
+												isFeaturedImage: true,
+												image: featuredImage,
+												setImage: setFeaturedImage,
+												}
+											)
+										)}
 										{featuredImage &&
 											applyFilters(
 												'product_image_enhancement',
 												null,
 												{
 												currentImage: featuredImage,
-												onImageEnhanced: (enhancedImage: SetStateAction<null>) => {
-													setFeaturedImage(enhancedImage);
-												}
+												isFeaturedImage: true,
+												image: featuredImage,
+												setImage: setFeaturedImage,
 												}
 											)
 										}
@@ -1737,15 +1749,29 @@ const AddProduct = () => {
 														null,
 														{
 														currentImage: img,
-														onImageEnhanced: (enhancedImage: any) => {
-															setGalleryImages((prev) => [...prev, enhancedImage]);
-														}
+														isFeaturedImage: false,
+														image: galleryImages,
+														setImage: setGalleryImages,
 														}
 													)
 												}
 												</div>
 											</div>
 										))}
+										<div className="buttons-wrapper">
+										{!galleryImages.length &&
+											applyFilters(
+												'product_image_enhancement',
+												null,
+												{
+												currentImage: null,
+												isFeaturedImage: false,
+												image: galleryImages,
+												setImage: setGalleryImages,
+												}
+											)
+										}
+										</div>
 									</div>
 								</div>
 							</div>
