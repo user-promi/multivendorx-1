@@ -128,6 +128,12 @@
                 display: none;
                 /*for hide toggle hide body */
             }
+
+            .card-header {
+                margin: 0;
+                border-bottom: $border-light-small;
+                margin-bottom: 1rem;
+            }
         }
 
         &.transparent {
@@ -299,9 +305,10 @@
         margin-bottom: 1rem;
         /* add product form style*/
 
-        &.align-bottom{
+        &.align-bottom {
             align-items: end;
         }
+
         .button-wrapper {
             display: flex;
             justify-content: start;
@@ -333,8 +340,14 @@
         }
 
         // add membership page 
-        .checkbox-list-side-by-side{
+        .checkbox-list-side-by-side {
             margin-top: 0.625rem;
+        }
+
+        .nasted-wrapper {
+            padding: 0.5rem;
+            border-radius: 0.313rem;
+            border: $border-light-small;
         }
     }
 

@@ -535,6 +535,7 @@ $index: 1;
 
     .default-checkbox {
       position: relative;
+      width: 100%;
 
       label {
         padding: 0 0 0.313rem 0.313rem;
@@ -559,15 +560,18 @@ $index: 1;
       .edit-icon {
         padding-left: 0.45rem;
         position: absolute;
-        right: -2.313rem;
+        right: 0;
         top: 0;
         opacity: 0;
         transition: all 0.4s ease;
+        display: flex;
+        gap: 0.313rem;
       }
     }
 
     .edit-option-wrapper {
       display: inline-block;
+
 
       .edit-option {
         display: flex;
@@ -1592,7 +1596,7 @@ $index: 1;
           align-items: end;
           color: #526484;
           font-size: 0.95rem;
-          line-height: 1.25;
+          line-height: 0.813;
           font-weight: 500;
           padding: .813rem 1.313rem;
           position: relative;
@@ -1607,6 +1611,18 @@ $index: 1;
           &:hover {
             color: #854fff;
             background: $theme-background-color;
+          }
+        }
+
+        &.delete {
+
+          .item {
+            color: $accent-color;
+            border-top: 0.063rem solid;
+
+            &:hover {
+              background: transparent;
+            }
           }
         }
       }
