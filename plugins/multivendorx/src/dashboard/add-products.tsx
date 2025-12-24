@@ -1683,7 +1683,6 @@ const AddProduct = () => {
 												{
 												currentImage: null,
 												isFeaturedImage: true,
-												image: featuredImage,
 												setImage: setFeaturedImage,
 												}
 											)
@@ -1695,7 +1694,6 @@ const AddProduct = () => {
 												{
 												currentImage: featuredImage,
 												isFeaturedImage: true,
-												image: featuredImage,
 												setImage: setFeaturedImage,
 												}
 											)
@@ -1750,7 +1748,6 @@ const AddProduct = () => {
 														{
 														currentImage: img,
 														isFeaturedImage: false,
-														image: galleryImages,
 														setImage: setGalleryImages,
 														}
 													)
@@ -1766,8 +1763,8 @@ const AddProduct = () => {
 												{
 												currentImage: null,
 												isFeaturedImage: false,
-												image: galleryImages,
 												setImage: setGalleryImages,
+												featuredImage: featuredImage,
 												}
 											)
 										}
