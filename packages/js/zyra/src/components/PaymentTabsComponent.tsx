@@ -33,22 +33,22 @@ interface FieldOption {
 interface PaymentFormField {
     key: string;
     type:
-        | 'text'
-        | 'password'
-        | 'number'
-        | 'checkbox'
-        | 'verification-methods'
-        | 'textarea'
-        | 'payment-tabs'
-        | 'multi-checkbox'
-        | 'check-list'
-        | 'description'
-        | 'setup'
-        | 'setting-toggle'
-        | 'buttons'
-        | 'nested'
-        | 'clickable-list'
-        | 'copy-text';
+    | 'text'
+    | 'password'
+    | 'number'
+    | 'checkbox'
+    | 'verification-methods'
+    | 'textarea'
+    | 'payment-tabs'
+    | 'multi-checkbox'
+    | 'check-list'
+    | 'description'
+    | 'setup'
+    | 'setting-toggle'
+    | 'buttons'
+    | 'nested'
+    | 'clickable-list'
+    | 'copy-text';
 
     label: string;
     placeholder?: string;
@@ -77,6 +77,7 @@ interface PaymentFormField {
     btnClass?: string;
     items?: ClickableItem[];
     button?: ButtonItem;
+    edit?: boolean;
 }
 
 interface PaymentMethod {
@@ -96,6 +97,7 @@ interface PaymentMethod {
     nestedFields?: PaymentFormField[];
     proSetting?: boolean;
     moduleEnabled?: string;
+    edit?: boolean;
 }
 
 interface PaymentTabsComponentProps {
@@ -105,18 +107,18 @@ interface PaymentTabsComponentProps {
     apilink?: string;
     appLocalizer?: AppLocalizer;
     methods: PaymentMethod[];
-    value: Record< string, Record< string, unknown > >;
-    onChange: ( data: Record< string, Record< string, unknown > > ) => void;
+    value: Record<string, Record<string, unknown>>;
+    onChange: (data: Record<string, Record<string, unknown>>) => void;
     buttonEnable?: boolean;
     isWizardMode?: boolean;
-    setWizardIndex?: ( index: number ) => void;
+    setWizardIndex?: (index: number) => void;
     moduleEnabled?: boolean;
     proChanged?: () => void;
-    moduleChange: ( module: string ) => void;
+    moduleChange: (module: string) => void;
     modules: string[];
 }
 
-const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
+const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     methods,
     value,
     onChange,
@@ -127,18 +129,73 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
     proChanged,
     moduleChange,
     modules,
-} ) => {
-    const [ activeTabs, setActiveTabs ] = useState< string[] >( [] );
-    const menuRef = useRef< HTMLDivElement >( null );
-    const [ wizardIndex, setWizardIndex ] = useState( 0 );
+}) => {
+    const [activeTabs, setActiveTabs] = useState<string[]>([]);
+    const menuRef = useRef<HTMLDivElement>(null);
+    const [wizardIndex, setWizardIndex] = useState(0);
+    const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(methods);
+    // const isEnabled = value?.[method.id]?.enable ?? false;
+
+
+    // add new
+    const createNewPaymentMethod = (): PaymentMethod => {
+        const id = `custom_${Date.now()}`;
+
+        return {
+            id,
+            icon: 'adminlib-credit-card',
+            label: 'New Payment Method',
+            desc: 'Configure your custom payment method.',
+            connected: false,
+            // disableBtn: true,
+            // openForm: true,
+            formFields: [
+                {
+                    key: 'title',
+                    type: 'text',
+                    label: 'Title',
+                    placeholder: 'Payment title',
+                    edit: true,
+                },
+                {
+                    key: 'description',
+                    type: 'textarea',
+                    label: 'Payment Description',   // updated label
+                    placeholder: 'Enter payment details',  // updated placeholder
+                    desc: 'Add a short description of the payment method', // description
+                    edit: true,
+                },
+                {
+                    key: 'enable',
+                    type: 'checkbox',
+                    label: 'Enable',
+                    edit: true,
+                },
+            ],
+        };
+    };
+
+    const handleAddNewMethod = () => {
+        const newMethod = createNewPaymentMethod();
+        setPaymentMethods((prev) => [...prev, newMethod]);
+        onChange({
+            ...value,
+            [newMethod.id]: {
+                enable: true,
+                title: '',
+                description: '',
+            },
+        });
+        setActiveTabs((prev) => [...prev, newMethod.id]);
+    };
 
     const canEdit = () => {
         // You cannot edit if Pro is enabled (locked) OR if module is disabled
-        return ! proSetting && moduleEnabled;
+        return !proSetting && moduleEnabled;
     };
 
-    const handleCopy = ( text: string ) => {
-        navigator.clipboard.writeText( text );
+    const handleCopy = (text: string) => {
+        navigator.clipboard.writeText(text);
     };
 
     const handleInputChange = (
@@ -146,101 +203,104 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
         fieldKey: string,
         fieldValue: string | string[] | number | boolean | undefined
     ) => {
-        if ( ! canEdit() ) {
+        if (!canEdit()) {
             return;
         }
 
         const updated = {
             ...value,
-            [ methodKey ]: {
-                ...( value[ methodKey ] as Record< string, unknown > ),
-                [ fieldKey ]: fieldValue,
+            [methodKey]: {
+                ...(value[methodKey] as Record<string, unknown>),
+                [fieldKey]: fieldValue,
             },
         };
 
-        onChange( updated );
+        onChange(updated);
     };
 
-    const toggleEnable = ( methodId: string, enable: boolean ) => {
-        if ( ! canEdit() ) {
+    const toggleEnable = (methodId: string, enable: boolean) => {
+        if (!canEdit()) {
             return;
         }
-        handleInputChange( methodId, 'enable', enable );
-        if ( enable ) {
-            setActiveTabs( ( prev ) =>
-                prev.filter( ( id ) => id !== methodId )
+        handleInputChange(methodId, 'enable', enable);
+        if (enable) {
+            setActiveTabs((prev) =>
+                prev.filter((id) => id !== methodId)
             );
         }
     };
 
-    const toggleActiveTab = ( methodId: string ) => {
-        if ( ! canEdit() ) {
+    const toggleActiveTab = (methodId: string) => {
+        if (!canEdit()) {
             return;
         }
         setActiveTabs(
-            ( prev ) =>
-                prev.includes( methodId )
-                    ? prev.filter( ( id ) => id !== methodId ) // close
-                    : [ ...prev, methodId ] // open
+            (prev) =>
+                prev.includes(methodId)
+                    ? prev.filter((id) => id !== methodId) // close
+                    : [...prev, methodId] // open
         );
     };
 
-    const isProSetting = ( val: boolean ) => val;
+    const isProSetting = (val: boolean) => val;
 
     const handleMultiSelectDeselect = (
         methodId: string,
         field: PaymentFormField
     ) => {
-        const allValues = Array.isArray( field.options )
-            ? field.options.map( ( opt ) => String( opt.value ) )
+        const allValues = Array.isArray(field.options)
+            ? field.options.map((opt) => String(opt.value))
             : [];
 
-        const current = value?.[ methodId ]?.[ field.key ] || [];
+        const current = value?.[methodId]?.[field.key] || [];
 
-        const currentArray = Array.isArray( current )
+        const currentArray = Array.isArray(current)
             ? current
             : typeof current === 'string' && current.trim() !== ''
-            ? [ current ]
-            : [];
+                ? [current]
+                : [];
 
         const isAllSelected = currentArray.length === allValues.length;
 
         const result = isAllSelected ? [] : allValues;
 
-        handleInputChange( methodId, field.key, result );
+        handleInputChange(methodId, field.key, result);
+    };
+    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        handleInputChange(methodId, field.key, e.target.value);
     };
 
     const renderWizardButtons = () => {
-        const step = methods[ wizardIndex ];
+        const step = paymentMethods[wizardIndex];
         const buttonField = step?.formFields?.find(
-            ( f ) => f.type === 'buttons'
+            (f) => f.type === 'buttons'
         );
-        if ( ! buttonField ) {
+        if (!buttonField) {
             return null;
         }
 
-        return renderField( step.id, buttonField );
+        return renderField(step.id, buttonField);
     };
-    const renderField = ( methodId: string, field: PaymentFormField ) => {
-        const fieldValue = value[ methodId ]?.[ field.key ];
+    const renderField = (methodId: string, field: PaymentFormField) => {
+        const fieldValue = value[methodId]?.[field.key];
 
-        switch ( field.type ) {
+        switch (field.type) {
             case 'setting-toggle':
                 return (
                     <ToggleSetting
-                        key={ field.key }
-                        description={ field.desc }
+                        key={field.key}
+                        description={field.desc}
                         options={
-                            Array.isArray( field.options )
-                                ? field.options.map( ( opt ) => ( {
-                                      ...opt,
-                                      value: String( opt.value ),
-                                  } ) )
+                            Array.isArray(field.options)
+                                ? field.options.map((opt) => ({
+                                    ...opt,
+                                    value: String(opt.value),
+                                }))
                                 : []
                         }
-                        value={ fieldValue || '' }
-                        onChange={ ( val ) =>
-                            handleInputChange( methodId, field.key, val )
+                        value={fieldValue || ''}
+                        onChange={(val) =>
+                            handleInputChange(methodId, field.key, val)
                         }
                     />
                 );
@@ -250,8 +310,8 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                     <>
                         <input
                             type="checkbox"
-                            checked={ !! fieldValue }
-                            onChange={ ( e ) =>
+                            checked={!!fieldValue}
+                            onChange={(e) =>
                                 handleInputChange(
                                     methodId,
                                     field.key,
@@ -260,57 +320,56 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                             }
                         />
                         <div className="settings-metabox-description">
-                            { field.desc }
+                            {field.desc}
                         </div>
                     </>
                 );
             case 'clickable-list':
                 return (
                     <div className="clickable-list-wrapper">
-                        { /* Render items */ }
+                        { /* Render items */}
                         <ul className="clickable-items">
-                            { Array.isArray( field.items ) &&
-                                field.items.map( ( item, idx ) => (
+                            {Array.isArray(field.items) &&
+                                field.items.map((item, idx) => (
                                     <li
-                                        key={ idx }
-                                        className={ `clickable-item ${
-                                            item.url ? 'has-link' : ''
-                                        }` }
-                                        onClick={ () => {
-                                            if ( item.url ) {
+                                        key={idx}
+                                        className={`clickable-item ${item.url ? 'has-link' : ''
+                                            }`}
+                                        onClick={() => {
+                                            if (item.url) {
                                                 let url = item.url;
-                                                window.open( url, '_self' );
+                                                window.open(url, '_self');
                                             }
-                                        } }
+                                        }}
                                     >
-                                        { item.name }
+                                        {item.name}
                                     </li>
-                                ) ) }
+                                ))}
                         </ul>
 
-                        { /* Render bottom button */ }
-                        { field.button?.label && (
+                        { /* Render bottom button */}
+                        {field.button?.label && (
                             <button
                                 className="admin-btn btn-purple"
-                                onClick={ ( e ) => {
-                                    if ( field.button.url ) {
+                                onClick={(e) => {
+                                    if (field.button.url) {
                                         e.preventDefault();
                                         window.open(
                                             field.button.url,
                                             '_blank'
                                         );
                                     }
-                                } }
+                                }}
                             >
-                                { field.button.label }
+                                {field.button.label}
                             </button>
-                        ) }
+                        )}
 
-                        { field.desc && (
+                        {field.desc && (
                             <div className="settings-metabox-description">
-                                { field.desc }
+                                {field.desc}
                             </div>
-                        ) }
+                        )}
                     </div>
                 );
 
@@ -318,45 +377,48 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                 return (
                     <TextArea
                         wrapperClass="setting-from-textarea"
-                        inputClass={ `${ field.class || '' } textarea-input` }
+                        inputClass={`${field.class || ''} textarea-input`}
                         descClass="settings-metabox-description"
-                        description={ field.desc || '' }
-                        key={ field.key }
-                        id={ field.key }
-                        name={ field.key }
-                        placeholder={ field.placeholder }
-                        rowNumber={ field.rowNumber }
-                        colNumber={ field.colNumber }
-                        value={ fieldValue || '' }
-                        proSetting={ false }
+                        description={field.desc || ''}
+                        key={field.key}
+                        id={field.key}
+                        name={field.key}
+                        placeholder={field.placeholder}
+                        rowNumber={field.rowNumber}
+                        colNumber={field.colNumber}
+                        value={fieldValue || ''}
+                        proSetting={false}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                            handleInputChange(methodId, field.key, e.target.value)
+                        }
                     />
                 );
             case 'multi-checkbox': {
                 let normalizedValue: string[] = [];
 
-                if ( Array.isArray( fieldValue ) ) {
+                if (Array.isArray(fieldValue)) {
                     normalizedValue = fieldValue.filter(
-                        ( v ) => v && v.trim() !== ''
+                        (v) => v && v.trim() !== ''
                     );
                 } else if (
                     typeof fieldValue === 'string' &&
                     fieldValue.trim() !== ''
                 ) {
-                    normalizedValue = [ fieldValue ];
+                    normalizedValue = [fieldValue];
                 }
 
                 return (
                     <MultiCheckBox
-                        khali_dabba={ appLocalizer?.khali_dabba ?? false }
+                        khali_dabba={appLocalizer?.khali_dabba ?? false}
                         wrapperClass={
                             field.look === 'toggle'
                                 ? 'toggle-btn'
                                 : field.selectDeselect === true
-                                ? 'checkbox-list-side-by-side'
-                                : 'simple-checkbox'
+                                    ? 'checkbox-list-side-by-side'
+                                    : 'simple-checkbox'
                         }
                         descClass="settings-metabox-description"
-                        description={ field.desc }
+                        description={field.desc}
                         selectDeselectClass="admin-btn btn-purple select-deselect-trigger"
                         inputWrapperClass="toggle-checkbox-header"
                         inputInnerWrapperClass={
@@ -364,25 +426,25 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                 ? 'toggle-checkbox'
                                 : 'default-checkbox'
                         }
-                        inputClass={ field.class }
+                        inputClass={field.class}
                         idPrefix="toggle-switch"
-                        selectDeselect={ field.selectDeselect }
+                        selectDeselect={field.selectDeselect}
                         selectDeselectValue="Select / Deselect All"
                         rightContentClass="settings-metabox-description"
                         options={
-                            Array.isArray( field.options )
-                                ? field.options.map( ( opt ) => ( {
-                                      ...opt,
-                                      value: String( opt.value ),
-                                  } ) )
+                            Array.isArray(field.options)
+                                ? field.options.map((opt) => ({
+                                    ...opt,
+                                    value: String(opt.value),
+                                }))
                                 : []
                         }
                         /* THIS IS THE FIX */
-                        value={ normalizedValue }
-                        onChange={ ( e: any ) => {
+                        value={normalizedValue}
+                        onChange={(e: any) => {
                             // Case 1: MultiCheckBox gives an array of selected values (preferred)
-                            if ( Array.isArray( e ) ) {
-                                handleInputChange( methodId, field.key, e );
+                            if (Array.isArray(e)) {
+                                handleInputChange(methodId, field.key, e);
                                 return;
                             }
 
@@ -392,35 +454,35 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                 e.target &&
                                 typeof e.target.value !== 'undefined'
                             ) {
-                                const val = String( e.target.value );
-                                const checked = !! e.target.checked;
+                                const val = String(e.target.value);
+                                const checked = !!e.target.checked;
 
                                 // Current stored value for this field
                                 let current =
-                                    value?.[ methodId ]?.[ field.key ];
+                                    value?.[methodId]?.[field.key];
 
                                 // Normalize to array
-                                if ( ! Array.isArray( current ) ) {
+                                if (!Array.isArray(current)) {
                                     if (
                                         typeof current === 'string' &&
                                         current.trim() !== ''
                                     ) {
-                                        current = [ current ];
+                                        current = [current];
                                     } else {
                                         current = [];
                                     }
                                 } else {
                                     // clone to avoid mutating props/state directly
-                                    current = [ ...current ];
+                                    current = [...current];
                                 }
 
-                                if ( checked ) {
-                                    if ( ! current.includes( val ) ) {
-                                        current.push( val );
+                                if (checked) {
+                                    if (!current.includes(val)) {
+                                        current.push(val);
                                     }
                                 } else {
                                     current = current.filter(
-                                        ( v: string ) => v !== val
+                                        (v: string) => v !== val
                                     );
                                 }
 
@@ -433,44 +495,44 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                             }
 
                             // Fallback: pass simple values only
-                            handleInputChange( methodId, field.key, e );
-                        } }
-                        proSetting={ isProSetting( field.proSetting ?? false ) }
-                        onMultiSelectDeselectChange={ () => {
-                            handleMultiSelectDeselect( methodId, field );
-                        } }
+                            handleInputChange(methodId, field.key, e);
+                        }}
+                        proSetting={isProSetting(field.proSetting ?? false)}
+                        onMultiSelectDeselectChange={() => {
+                            handleMultiSelectDeselect(methodId, field);
+                        }}
                     />
                 );
             }
             case 'description':
                 return (
                     <>
-                        { field.title ? (
+                        {field.title ? (
                             <div className="description-wrapper">
                                 <div className="title">
                                     <i className="adminlib-error"></i>
-                                    { field.title }
+                                    {field.title}
                                 </div>
 
-                                { field.des && (
+                                {field.des && (
                                     <p
                                         className="payment-description"
-                                        dangerouslySetInnerHTML={ {
+                                        dangerouslySetInnerHTML={{
                                             __html: field.des,
-                                        } }
+                                        }}
                                     />
-                                ) }
+                                )}
                             </div>
                         ) : (
                             field.des && (
                                 <p
                                     className="payment-description"
-                                    dangerouslySetInnerHTML={ {
+                                    dangerouslySetInnerHTML={{
                                         __html: field.des,
-                                    } }
+                                    }}
                                 />
                             )
-                        ) }
+                        )}
                     </>
                 );
             case 'setup':
@@ -479,20 +541,20 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                         <div className="wizard-step">
                             <div
                                 className="step-info"
-                                onClick={ () =>
+                                onClick={() =>
                                     handleInputChange(
                                         methodId,
                                         field.key,
-                                        ! fieldValue
+                                        !fieldValue
                                     )
                                 }
                             >
-                                { ! field.hideCheckbox && (
+                                {!field.hideCheckbox && (
                                     <div className="default-checkbox">
                                         <input
                                             type="checkbox"
-                                            checked={ !! fieldValue }
-                                            onChange={ ( e ) =>
+                                            checked={!!fieldValue}
+                                            onChange={(e) =>
                                                 handleInputChange(
                                                     methodId,
                                                     field.key,
@@ -501,28 +563,28 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                             }
                                         />
                                         <label
-                                            htmlFor={ `step-checkbox-${ methodId }-${ field.key }` }
+                                            htmlFor={`step-checkbox-${methodId}-${field.key}`}
                                         ></label>
                                     </div>
-                                ) }
+                                )}
                                 <div className="step-text">
                                     <span className="step-title">
-                                        { field.title }
+                                        {field.title}
                                     </span>
                                     <span className="step-desc">
-                                        { field.des }
+                                        {field.des}
                                     </span>
                                 </div>
                             </div>
-                            { field.link && (
+                            {field.link && (
                                 <a
-                                    href={ field.link }
+                                    href={field.link}
                                     className="admin-btn btn-purple"
                                 >
-                                    Set Up{ ' ' }
-                                    <i className="adminlib-arrow-right"></i>{ ' ' }
+                                    Set Up{' '}
+                                    <i className="adminlib-arrow-right"></i>{' '}
                                 </a>
-                            ) }
+                            )}
                         </div>
                     </>
                 );
@@ -530,19 +592,19 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                 return (
                     <>
                         <ul className="check-list">
-                            { Array.isArray( field.options ) &&
+                            {Array.isArray(field.options) &&
                                 field.options.map(
-                                    ( item: FieldOption, index: number ) => (
-                                        <li key={ index }>
-                                            { item.check ? (
+                                    (item: FieldOption, index: number) => (
+                                        <li key={index}>
+                                            {item.check ? (
                                                 <i className="check adminlib-icon-yes"></i>
                                             ) : (
                                                 <i className="close adminlib-cross"></i>
-                                            ) }
-                                            { item.desc }
+                                            )}
+                                            {item.desc}
                                         </li>
                                     )
-                                ) }
+                                )}
                         </ul>
                     </>
                 );
@@ -551,16 +613,16 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                 return (
                     <>
                         <div className="copy-text-wrapper">
-                            <code>{ field.title }</code>
+                            <code>{field.title}</code>
                             <i
                                 className="adminlib-vendor-form-copy"
-                                onClick={ () => handleCopy( field.title ) }
+                                onClick={() => handleCopy(field.title)}
                             ></i>
 
-                            { /* {copied && <span className="copied-msg">Copied!</span>} */ }
+                            { /* {copied && <span className="copied-msg">Copied!</span>} */}
                         </div>
                         <div className="settings-metabox-description">
-                            { field.desc }
+                            {field.desc}
                         </div>
                     </>
                 );
@@ -568,120 +630,120 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
             case 'buttons':
                 return (
                     <>
-                        { Array.isArray( field.options ) &&
-                            field.options.map( ( item, index ) => {
-                                const wizardSteps = methods.filter(
-                                    ( m ) => m.isWizardMode === true
+                        {Array.isArray(field.options) &&
+                            field.options.map((item, index) => {
+                                const wizardSteps = paymentMethods.filter(
+                                    (m) => m.isWizardMode === true
                                 );
                                 const isLastStep =
                                     wizardIndex === wizardSteps.length - 1;
 
                                 // Skip Button
-                                if ( item.action === 'skip' ) {
+                                if (item.action === 'skip') {
                                     return (
                                         <button
-                                            key={ index }
-                                            className={ item.btnClass }
-                                            onClick={ () => {
+                                            key={index}
+                                            className={item.btnClass}
+                                            onClick={() => {
                                                 setWizardIndex(
                                                     methods.length
                                                 );
-                                                let url = `${ appLocalizer.site_url }`;
-                                                window.open( url, '_self' );
-                                            } }
+                                                let url = `${appLocalizer.site_url}`;
+                                                window.open(url, '_self');
+                                            }}
                                         >
-                                            { item.label }
+                                            {item.label}
                                         </button>
                                     );
                                 }
 
                                 // Next / Finish Button
-                                if ( item.action === 'next' ) {
+                                if (item.action === 'next') {
                                     return (
                                         <button
-                                            key={ index }
-                                            className={ item.btnClass }
-                                            onClick={ () => {
-                                                if ( ! isLastStep ) {
+                                            key={index}
+                                            className={item.btnClass}
+                                            onClick={() => {
+                                                if (!isLastStep) {
                                                     const allWizardSteps =
                                                         methods
                                                             .map(
-                                                                ( m, i ) => ( {
+                                                                (m, i) => ({
                                                                     ...m,
                                                                     index: i,
-                                                                } )
+                                                                })
                                                             )
                                                             .filter(
-                                                                ( m ) =>
+                                                                (m) =>
                                                                     m.isWizardMode ===
                                                                     true
                                                             );
 
                                                     const nextWizardStep =
                                                         allWizardSteps[
-                                                            wizardIndex + 1
+                                                        wizardIndex + 1
                                                         ];
 
-                                                    if ( nextWizardStep ) {
+                                                    if (nextWizardStep) {
                                                         setWizardIndex(
                                                             nextWizardStep.index
                                                         );
-                                                        setActiveTabs( [
+                                                        setActiveTabs([
                                                             nextWizardStep.id,
-                                                        ] );
+                                                        ]);
                                                     }
                                                 } else {
-                                                    let url = `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=modules`;
-                                                    window.open( url, '_self' );
+                                                    let url = `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`;
+                                                    window.open(url, '_self');
                                                 }
-                                            } }
+                                            }}
                                         >
-                                            { isLastStep
+                                            {isLastStep
                                                 ? 'Finish'
-                                                : item.label }
+                                                : item.label}
                                         </button>
                                     );
                                 }
 
                                 return (
                                     <div
-                                        key={ index }
-                                        className={ item.btnClass }
+                                        key={index}
+                                        className={item.btnClass}
                                     >
-                                        { item.label }
+                                        {item.label}
                                     </div>
                                 );
-                            } ) }
+                            })}
                     </>
                 );
 
             case 'nested':
                 return (
                     <NestedComponent
-                        key={ field.key }
-                        id={ field.key }
-                        label={ field.label }
-                        description={ field.desc }
-                        fields={ field.nestedFields ?? [] }
-                        value={ fieldValue }
-                        wrapperClass={ field.rowClass }
-                        addButtonLabel={ field.addButtonLabel }
-                        deleteButtonLabel={ field.deleteButtonLabel }
-                        single={ field.single }
-                        onChange={ ( val: any ) => {
-                            handleInputChange( methodId, field.key, val );
-                        } }
+                        key={field.key}
+                        id={field.key}
+                        label={field.label}
+                        description={field.desc}
+                        fields={field.nestedFields ?? []}
+                        value={fieldValue}
+                        wrapperClass={field.rowClass}
+                        addButtonLabel={field.addButtonLabel}
+                        deleteButtonLabel={field.deleteButtonLabel}
+                        single={field.single}
+                        onChange={(val: any) => {
+                            handleInputChange(methodId, field.key, val);
+                        }}
                     />
                 );
             default:
                 return (
                     <>
                         <input
-                            type={ field.type }
-                            placeholder={ field.placeholder }
-                            value={ fieldValue || '' }
+                            type={field.type}
+                            placeholder={field.placeholder}
+                            value={fieldValue || ''}
                             className="basic-input"
-                            onChange={ ( e ) =>
+                            onChange={(e) =>
                                 handleInputChange(
                                     methodId,
                                     field.key,
@@ -690,7 +752,7 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                             }
                         />
                         <div className="settings-metabox-description">
-                            { field.desc }
+                            {field.desc}
                         </div>
                     </>
                 );
@@ -700,44 +762,42 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
     return (
         <>
             <div className="payment-tabs-component">
-                { methods.map( ( method, index ) => {
-                    const isEnabled = value?.[ method.id ]?.enable ?? false;
-                    const isActive = activeTabs.includes( method.id );
-                    if ( isWizardMode && index > wizardIndex ) {
+                {paymentMethods.map((method, index) => {
+                    const isEnabled = value?.[method.id]?.enable ?? false;
+                    const isActive = activeTabs.includes(method.id);
+                    if (isWizardMode && index > wizardIndex) {
                         return null;
                     }
 
                     return (
                         <div
-                            key={ method.id }
-                            className={ `payment-method-card ${
-                                method.disableBtn && ! isEnabled
-                                    ? 'disable'
-                                    : ''
-                            } ${ method.openForm ? 'open' : '' } ` }
+                            key={method.id}
+                            className={`payment-method-card ${method.disableBtn && !isEnabled
+                                ? 'disable'
+                                : ''
+                                } ${method.openForm ? 'open' : ''} `}
                         >
-                            { /* Header */ }
+                            { /* Header */}
                             <div className="payment-method">
                                 <div className="toggle-icon">
-                                    { method.formFields &&
+                                    {method.formFields &&
                                         method.formFields.length > 0 &&
-                                        ! method.openForm && (
+                                        !method.openForm && (
                                             <i
-                                                className={ `adminlib-${
-                                                    isEnabled && isActive
-                                                        ? 'keyboard-arrow-down'
-                                                        : 'pagination-right-arrow'
-                                                }` }
-                                                onClick={ () => {
+                                                className={`adminlib-${isEnabled && isActive
+                                                    ? 'keyboard-arrow-down'
+                                                    : 'pagination-right-arrow'
+                                                    }`}
+                                                onClick={() => {
                                                     if (
                                                         method.proSetting &&
-                                                        ! appLocalizer?.khali_dabba
+                                                        !appLocalizer?.khali_dabba
                                                     ) {
                                                         proChanged?.();
                                                         return;
                                                     } else if (
                                                         method.moduleEnabled &&
-                                                        ! modules.includes(
+                                                        !modules.includes(
                                                             method.moduleEnabled
                                                         )
                                                     ) {
@@ -750,23 +810,23 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                             method.id
                                                         );
                                                     }
-                                                } }
+                                                }}
                                             />
-                                        ) }
+                                        )}
                                 </div>
 
                                 <div
                                     className="details"
-                                    onClick={ () => {
+                                    onClick={() => {
                                         if (
                                             method.proSetting &&
-                                            ! appLocalizer?.khali_dabba
+                                            !appLocalizer?.khali_dabba
                                         ) {
                                             proChanged?.();
                                             return;
                                         } else if (
                                             method.moduleEnabled &&
-                                            ! modules.includes(
+                                            !modules.includes(
                                                 method.moduleEnabled
                                             )
                                         ) {
@@ -775,70 +835,69 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                             );
                                             return;
                                         } else {
-                                            toggleActiveTab( method.id );
+                                            toggleActiveTab(method.id);
                                         }
-                                    } }
+                                    }}
                                 >
                                     <div className="details-wrapper">
                                         <div className="payment-method-icon">
-                                            <i className={ method.icon }></i>
+                                            <i className={method.icon}></i>
                                         </div>
                                         <div className="payment-method-info">
                                             <div className="title-wrapper">
                                                 <span className="title">
-                                                    { method.label }
+                                                    {(value?.[method.id]?.title as string) || method.label}
                                                 </span>
 
-                                                { method.disableBtn ? (
-                                                    <>
+                                                {method.disableBtn && (
+                                                    <div className="badge-group">
                                                         <div
-                                                            className={ `admin-badge ${
-                                                                isEnabled
-                                                                    ? 'green'
-                                                                    : 'red'
-                                                            }` }
+                                                            className={`admin-badge ${isEnabled ? 'green' : 'red'}`}
                                                         >
-                                                            { isEnabled
-                                                                ? 'Active'
-                                                                : 'Inactive' }
+                                                            {isEnabled ? 'Active' : 'Inactive'}
                                                         </div>
-                                                    </>
-                                                ) : null }
 
-                                                { /* {method.countBtn && (
-                        <div className="admin-badge red">1/3</div>
-                      )} */ }
+                                                        {isEnabled && (
+                                                            <div className="admin-badge purple required-badge">
+                                                                Required
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+
                                             </div>
                                             <div className="method-desc">
                                                 <p
-                                                    dangerouslySetInnerHTML={ {
-                                                        __html: method.desc,
-                                                    } }
+                                                    dangerouslySetInnerHTML={{
+                                                        __html:
+                                                            (value?.[method.id]?.description as string) ||
+                                                            method.desc,
+                                                    }}
                                                 />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="right-section" ref={ menuRef }>
-                                    { method.disableBtn ? (
+                                <div className="right-section" ref={menuRef}>
+                                    {method.disableBtn ? (
                                         <ul>
-                                            { isEnabled ? (
+                                            {isEnabled ? (
                                                 <>
-                                                    { method.formFields &&
+                                                    {method.formFields &&
                                                         method.formFields
                                                             .length > 0 && (
                                                             <li
-                                                                onClick={ () => {
+                                                                onClick={() => {
                                                                     if (
                                                                         method.proSetting &&
-                                                                        ! appLocalizer?.khali_dabba
+                                                                        !appLocalizer?.khali_dabba
                                                                     ) {
                                                                         proChanged?.();
                                                                         return;
                                                                     } else if (
                                                                         method.moduleEnabled &&
-                                                                        ! modules.includes(
+                                                                        !modules.includes(
                                                                             method.moduleEnabled
                                                                         )
                                                                     ) {
@@ -851,25 +910,25 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                                             method.id
                                                                         );
                                                                     }
-                                                                } }
+                                                                }}
                                                             >
                                                                 {/* <i className="settings-icon adminlib-setting"></i> */}
-                                                                <span className="yellow-color">
+                                                                <span>
                                                                     Settings
                                                                 </span>
                                                             </li>
-                                                        ) }
+                                                        )}
                                                     <li
-                                                        onClick={ () => {
+                                                        onClick={() => {
                                                             if (
                                                                 method.proSetting &&
-                                                                ! appLocalizer?.khali_dabba
+                                                                !appLocalizer?.khali_dabba
                                                             ) {
                                                                 proChanged?.();
                                                                 return;
                                                             } else if (
                                                                 method.moduleEnabled &&
-                                                                ! modules.includes(
+                                                                !modules.includes(
                                                                     method.moduleEnabled
                                                                 )
                                                             ) {
@@ -883,24 +942,24 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                                     false
                                                                 );
                                                             }
-                                                        } }
+                                                        }}
                                                     >
                                                         {/* <i className="disable-icon adminlib-eye-blocked"></i> */}
-                                                        <span className="red-color">Disable</span>
+                                                        <span>Disable</span>
                                                     </li>
                                                 </>
                                             ) : (
                                                 <li
-                                                    onClick={ () => {
+                                                    onClick={() => {
                                                         if (
                                                             method.proSetting &&
-                                                            ! appLocalizer?.khali_dabba
+                                                            !appLocalizer?.khali_dabba
                                                         ) {
                                                             proChanged?.();
                                                             return;
                                                         } else if (
                                                             method.moduleEnabled &&
-                                                            ! modules.includes(
+                                                            !modules.includes(
                                                                 method.moduleEnabled
                                                             )
                                                         ) {
@@ -914,37 +973,36 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                                 true
                                                             );
                                                         }
-                                                    } }
+                                                    }}
                                                 >
                                                     {/* <i className="eye-icon adminlib-eye"></i> */}
-                                                    <span className="green-color">Enable</span>
+                                                    <span>Enable</span>
                                                 </li>
-                                            ) }
+                                            )}
                                         </ul>
                                     ) : method.countBtn ? (
                                         <div className="admin-badge red">
                                             1/3
                                         </div>
-                                    ) : null }
+                                    ) : null}
                                 </div>
                             </div>
 
-                            { method.formFields &&
+                            {method.formFields &&
                                 method.formFields.length > 0 && (
                                     <div
-                                        className={ `
-                                        ${ method.wrapperClass || '' } 
+                                        className={`
+                                        ${method.wrapperClass || ''} 
                                         payment-method-form
-                                        ${
-                                            isEnabled &&
-                                            ( isActive || method.openForm )
+                                        ${isEnabled &&
+                                                (isActive || method.openForm)
                                                 ? 'open'
                                                 : ''
-                                        }
-                                        ${ method.openForm ? 'open' : '' }
+                                            }
+                                        ${method.openForm ? 'open' : ''}
                                       ` }
                                     >
-                                        { method.formFields.map( ( field ) => {
+                                        {method.formFields.map((field) => {
                                             if (
                                                 isWizardMode &&
                                                 field.type === 'buttons'
@@ -954,34 +1012,43 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
 
                                             return (
                                                 <div
-                                                    key={ field.key }
+                                                    key={field.key}
                                                     className="form-group"
                                                 >
-                                                    { field.label && (
+                                                    {field.label && (
                                                         <label>
-                                                            { field.label }
+                                                            {field.label}
                                                         </label>
-                                                    ) }
+                                                    )}
                                                     <div className="input-content">
-                                                        { renderField(
+                                                        {renderField(
                                                             method.id,
                                                             field
-                                                        ) }
+                                                        )}
                                                     </div>
                                                 </div>
                                             );
-                                        } ) }
+                                        })}
                                     </div>
-                                ) }
+                                )}
                         </div>
                     );
-                } ) }
+                })}
             </div>
-            { isWizardMode && (
+            {/* <div className="admin-btn btn-purple">Add new</div> */}
+
+            <div
+                className="admin-btn btn-purple"
+                onClick={handleAddNewMethod}
+            >
+                Add new
+            </div>
+
+            {isWizardMode && (
                 <div className="button-wrapper wizard-footer-buttons">
-                    { renderWizardButtons() }
+                    {renderWizardButtons()}
                 </div>
-            ) }
+            )}
         </>
     );
 };

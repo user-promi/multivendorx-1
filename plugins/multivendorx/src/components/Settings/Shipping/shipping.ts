@@ -21,6 +21,7 @@ export default {
 				'multivendorx'
 			),
 			buttonEnable: true,
+			addNewBtn: true,
 			toggleType: 'icon',
 			modal: [
 				{

@@ -21,29 +21,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.adminlib-verification10:before {
-  content: "\e94e";
-}
-.adminlib-verification11:before {
-  content: "\e94f";
-}
-.adminlib-in-progress:before {
-  content: "\e950";
-}
-.adminlib-suspended:before {
-  content: "\e951";
-}
-.adminlib-rejected:before {
-  content: "\e952";
-}
-.adminlib-under-review:before {
-  content: "\e954";
-}
-.adminlib-download:before {
+.adminlib-permanently-rejected:before {
   content: "\e900";
-}
-.adminlib-publish:before {
-  content: "\e901";
 }
 .adminlib-cart:before {
   content: "\8907";
@@ -117,62 +96,68 @@
 .adminlib-plus-circle:before {
   content: "\e8f7";
 }
-.adminlib-withdraw:before {
+.adminlib-download:before {
+  content: "\e901";
+}
+.adminlib-publish:before {
   content: "\e902";
 }
-.adminlib-pdf:before {
+.adminlib-withdraw:before {
   content: "\e903";
 }
-.adminlib-moon:before {
+.adminlib-pdf:before {
   content: "\e904";
 }
-.adminlib-light:before {
+.adminlib-moon:before {
   content: "\e905";
 }
-.adminlib-gemini:before {
+.adminlib-light:before {
   content: "\e906";
 }
-.adminlib-openrouter:before {
+.adminlib-gemini:before {
   content: "\e907";
 }
-.adminlib-chatgpt:before {
+.adminlib-openrouter:before {
   content: "\e908";
 }
-.adminlib-ai:before {
+.adminlib-chatgpt:before {
   content: "\e909";
 }
-.adminlib-plus:before {
+.adminlib-ai:before {
   content: "\e90a";
 }
-.adminlib-thumb-up:before {
+.adminlib-plus:before {
   content: "\e90b";
 }
-.adminlib-coding:before {
+.adminlib-thumb-up:before {
   content: "\e90c";
 }
-.adminlib-twitter:before {
+.adminlib-coding:before {
   content: "\e90d";
 }
-.adminlib-instagram:before {
+.adminlib-twitter:before {
   content: "\e90e";
 }
-.adminlib-wallet-open:before {
+.adminlib-instagram:before {
   content: "\e90f";
 }
-.adminlib-wallet-in:before {
+.adminlib-wallet-open:before {
   content: "\e910";
 }
-.adminlib-wallet:before {
+.adminlib-wallet-in:before {
   content: "\e911";
 }
-.adminlib-mapbox:before {
+.adminlib-wallet:before {
   content: "\e912";
 }
-.adminlib-google:before {
+.adminlib-mapbox:before {
   content: "\e913";
 }
-.adminlib-close-delete:before {
+.adminlib-google:before {
   content: "\e914";
+}
+.adminlib-close-delete:before {
+  content: "\e915";
 }
 .adminlib-rejecte:before {
   content: "\e917";
@@ -338,6 +323,24 @@
 }
 .adminlib-moon-fill:before {
   content: "\e94d";
+}
+.adminlib-verification10:before {
+  content: "\e94e";
+}
+.adminlib-verification11:before {
+  content: "\e94f";
+}
+.adminlib-in-progress:before {
+  content: "\e950";
+}
+.adminlib-suspended:before {
+  content: "\e951";
+}
+.adminlib-rejected:before {
+  content: "\e952";
+}
+.adminlib-under-review:before {
+  content: "\e954";
 }
 .adminlib-accommodation:before {
   content: "\ef35";
