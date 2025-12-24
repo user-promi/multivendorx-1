@@ -535,6 +535,7 @@ $index: 1;
 
     .default-checkbox {
       position: relative;
+      width: 100%;
 
       label {
         padding: 0 0 0.313rem 0.313rem;
@@ -559,16 +560,19 @@ $index: 1;
       .edit-icon {
         padding-left: 0.45rem;
         position: absolute;
-        right: -2.313rem;
+        right: 0;
         top: 0;
         opacity: 0;
         transition: all 0.4s ease;
+        display: flex;
+        gap: 0.313rem;
       }
     }
 
     .edit-option-wrapper {
       display: inline-block;
 
+      
       .edit-option {
         display: flex;
         align-items: center;

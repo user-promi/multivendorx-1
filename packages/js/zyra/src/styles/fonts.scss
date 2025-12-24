@@ -21,6 +21,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.adminlib-verification10:before {
+  content: "\e94e";
+}
+.adminlib-verification11:before {
+  content: "\e94f";
+}
+.adminlib-in-progress:before {
+  content: "\e950";
+}
+.adminlib-suspended:before {
+  content: "\e951";
+}
+.adminlib-rejected:before {
+  content: "\e952";
+}
+.adminlib-under-review:before {
+  content: "\e954";
+}
 .adminlib-download:before {
   content: "\e900";
 }
@@ -155,12 +173,6 @@
 }
 .adminlib-close-delete:before {
   content: "\e914";
-}
-.adminlib-under-review:before {
-  content: "\e915";
-}
-.adminlib-rejected:before {
-  content: "\e916";
 }
 .adminlib-rejecte:before {
   content: "\e917";

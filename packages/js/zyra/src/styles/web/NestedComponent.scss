@@ -6,13 +6,16 @@
         flex-wrap: wrap;
         justify-content: start;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.625rem;
         min-height: 2.25rem;
 
         .divider{
             width: 100%;
         }
-
+        .before,
+        .after{
+            color: $sub-text-color;
+        }
         &.single-line{
             .before{
                 width: 10rem;
@@ -37,6 +40,7 @@
         label {
             font-size: 0.95rem;
             display: inline-block;
+            color: $sub-text-color;
         }
 
         .settings-input-content:has(.toggle-setting-container){
