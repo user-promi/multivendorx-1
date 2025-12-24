@@ -47,10 +47,6 @@ import axios from 'axios';
 import MultiCalendarInput from './MultiCalendarInput';
 import CalendarInput from './CalendarInput';
 
-interface MediaItem {
-    url: string;
-}
-
 interface WPMediaAttachment {
     url: string;
 }
@@ -665,7 +661,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
             }
 
             if ( multiple ) {
-                const urls = ( selection as MediaItem[] ).map(
+                const urls = ( selection as WPMediaAttachment[] ).map(
                     ( item ) => item.url
                 );
                 updateSetting( key, urls );
