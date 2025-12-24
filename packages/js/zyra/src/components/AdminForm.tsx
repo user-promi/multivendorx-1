@@ -646,7 +646,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
     const runUploader = (
         key: string,
         multiple = false,
-        replaceIndex?: number,
+        replaceIndex = -1,
         existingUrls: string[] = []
     ): void => {
         settingChanged.current = true;
@@ -661,7 +661,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
             const selection = frame.state().get( 'selection' ).toJSON();
             const selectedUrl = selection[ 0 ]?.url;
 
-            if ( multiple && replaceIndex !== undefined ) {
+            if ( multiple && replaceIndex !== -1 ) {
                 const next = [ ...existingUrls ];
                 next[ replaceIndex ] = selectedUrl;
                 updateSetting( key, next );
@@ -948,11 +948,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             descClass="settings-metabox-description"
                             description={ inputField.desc }
                             inputClass={ `${ inputField.key } basic-input` }
-                            imageSrc={
-                                value !== undefined
-                                    ? value
-                                    : appLocalizer?.default_logo
-                            }
+                            imageSrc={ value ?? appLocalizer?.default_logo }
                             imageWidth={ inputField.width } // Width of the displayed image
                             imageHeight={ inputField.height } // Height of the displayed image
                             buttonClass="admin-btn btn-purple" // CSS class for the file upload button
@@ -960,7 +956,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             type="hidden" // Input type; in this case, hidden because the FileInput manages its own display
                             key={ inputField.key }
                             name={ inputField.name }
-                            value={ value !== undefined ? value : [] }
+                            value={ value ?? [] }
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
