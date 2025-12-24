@@ -76,6 +76,12 @@
         .settings-input-content {
             width: fit-content !important;
         }
+
+        .toggle-btn{
+            label{
+                margin: 0;
+            }
+        }
     }
 
     .nested-row.multiple:first-child {

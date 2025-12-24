@@ -572,7 +572,7 @@ $index: 1;
     .edit-option-wrapper {
       display: inline-block;
 
-      
+
       .edit-option {
         display: flex;
         align-items: center;
@@ -1596,7 +1596,7 @@ $index: 1;
           align-items: end;
           color: #526484;
           font-size: 0.95rem;
-          line-height: 1.25;
+          line-height: 0.813;
           font-weight: 500;
           padding: .813rem 1.313rem;
           position: relative;
@@ -1611,6 +1611,18 @@ $index: 1;
           &:hover {
             color: #854fff;
             background: $theme-background-color;
+          }
+        }
+
+        &.delete {
+
+          .item {
+            color: $accent-color;
+            border-top: 0.063rem solid;
+
+            &:hover {
+              background: transparent;
+            }
           }
         }
       }

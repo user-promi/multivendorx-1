@@ -247,7 +247,7 @@ const Membership = ({ id }: { id: string }) => {
 	const [BillingCycle, setBillingCycle] = useState<string>('');
 	const [ProductStatus, setProductStatus] = useState<string>('');
 	const [VendorRole, setVendorRole] = useState<string>('');
-
+	const [showTrialRules, setShowTrialRules] = useState(false);
 
 	const [imagePreviews, setImagePreviews] = useState<{
 		[key: string]: string;
@@ -614,15 +614,23 @@ const Membership = ({ id }: { id: string }) => {
 			size: '8rem',
 		},
 	];
-const subscription = [
-	   {
-			key: 'rule_type',
-			type: 'select',
-			label: 'Offer a trial period',
+	const subscription = [
+		{
+			key: 'disable_coupon_for_wholesale',
+			type: 'checkbox',
+			// label: __( 'Coupon restriction for wholesalers', 'catalogx' ),
+			// desc: __(
+			//     'Prevent wholesale users from applying any coupon and get addional discount on their orders.',
+			//     'catalogx'
+			// ),
 			options: [
-				{ value: 'price', label: 'Yes' },
-				{ value: 'quantity', label: 'No' }
+				{
+					key: 'disable_coupon_for_wholesale',
+					label: __('', 'catalogx'),
+					value: 'disable_coupon_for_wholesale',
+				},
 			],
+			look: 'toggle',
 		},
 		{
 			key: 'facilitator_fixed',
@@ -630,8 +638,13 @@ const subscription = [
 			postInsideText: __('days', 'multivendorx'),
 			size: '8rem',
 			preText: 'If enabled, run the trial for',
-		},		 
-    ];
+			dependent: {
+				key: 'disable_coupon_for_wholesale',
+				set: true,
+				value: 'disable_coupon_for_wholesale',
+			},
+		},
+	];
 	const gracePeriod = [
 		{
 			key: 'facilitator_fixed',
@@ -755,16 +768,15 @@ const subscription = [
 										// onChange={handleToggleChange}
 										/>
 										<div
-											className="des"
+											className="recommended-wrapper"
 											onClick={() =>
 												setstarFill((prev) => !prev)
 											}
-											style={{ cursor: 'pointer' }}
 										>
 											<i
 												className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}
 											></i>
-											{/* Mark as recommended plan */}Recommended
+											<div className="hover-text"> Mark as recommended plan </div>
 										</div>
 									</div>
 								</div>
@@ -1238,7 +1250,7 @@ const subscription = [
 													descClass="settings-metabox-description"
 													value={formData.name}
 													onChange={handleChange}
-													pInsideText = {"$"}
+													pInsideText={"$"}
 												/>
 											</div>
 											<div className="form-group">
@@ -1268,187 +1280,49 @@ const subscription = [
 												</div>
 											</div>
 										</div>
-										{/* <div className="form-group-wrapper">
+										<div className="card-header">
+											<div className="left">
+												<div className="title">
+													Trial Period
+												</div>
+												<div className="des">Configure optional trial period for new members</div>
+											</div>
+										</div>
+										<div className="form-group-wrapper">
 											<div className="form-group">
-												<label htmlFor="product-name">
-													Stop subscription after
-												</label>
-												<SelectInput
-													name="stock_status"
-													options={billingCycleStop}
-													type="single-select"
-													value={billingStop}
-													size="8rem"
-													onChange={(selected: { value: string }) => {
-														setBillingStop(selected.value);
-													}}
+												<label htmlFor="">Offer a trial period</label>
+												<NestedComponent
+													id="role_rules"
+													fields={subscription}
+													value={rules}
+													single={true}
+													addButtonLabel="Add Rule"
+													deleteButtonLabel="Remove"
+													onChange={(val) => setRules(val)}
 												/>
 											</div>
-
+										</div>
+										<div className="card-header">
+											<div className="left">
+												<div className="title">
+													After Expiry
+												</div>
+												<div className="des">Define what happens when subscription expires</div>
+											</div>
+										</div>
+										<div className="form-group-wrapper">
 											<div className="form-group">
-												<label htmlFor="product-name">
-													Recurring cycle interval
-												</label>
-
-												<div className="multi-field">
-													<SelectInput
-														name="stock_status"
-														options={billingCycleNumber}
-														type="single-select"
-														size={"4rem"}
-														value={billingStopNumber}
-														onChange={(selected: { value: string }) => {
-															setBillingStopNumber(selected.value);
-														}}
-													/>
-													<SelectInput
-														name="stock_status"
-														options={billingCycle}
-														type="single-select"
-														value={BillingCycle}
-														size={"6rem"}
-														onChange={(selected: { value: string }) => {
-															setBillingCycle(selected.value);
-														}}
+												<div className="nasted-wrapper">
+													<NestedComponent
+														id="role_rules"
+														fields={gracePeriod}
+														value={rules}
+														single={true}
+														addButtonLabel="Add Rule"
+														deleteButtonLabel="Remove"
+														onChange={(val) => setRules(val)}
 													/>
 												</div>
-											</div>
-										</div> */}
-										{/* <div className="form-group-wrapper">
-											<div className="form-group">
-												<label htmlFor="">After expiry</label>
-												<NestedComponent
-													id="role_rules"
-													fields={subscription}
-													value={rules}
-													single={true}
-													addButtonLabel="Add Rule"
-													deleteButtonLabel="Remove"
-													onChange={(val) => setRules(val)}
-												/>
-											</div>
-										</div> */}
-										<div className="form-group-wrapper">
-											
-											<div className="form-group">
-												{pleaseCheck && (
-													<>
-														<label htmlFor="product-name">
-															Trial period duration
-														</label>
-
-														<div className="multi-field">
-															<SelectInput
-																name="stock_status"
-																options={billingCycleNumber}
-																type="single-select"
-																size={"4rem"}
-																value={billingStopNumber}
-																onChange={(selected: { value: string }) => {
-																	setBillingStopNumber(selected.value);
-																}}
-															/>
-															<SelectInput
-																name="stock_status"
-																options={billingCycle}
-																type="single-select"
-																value={BillingCycle}
-																size={"6rem"}
-																onChange={(selected: { value: string }) => {
-																	setBillingCycle(selected.value);
-																}}
-															/>
-														</div>
-													</>
-												)}
-											</div>
-										</div>
-
-										{/* <div className="form-group-wrapper">
-											<div className="form-group">
-												<label htmlFor="product-name">
-													Grace period duration
-												</label>
-												<BasicInput
-													name="name"
-													wrapperClass="setting-form-input"
-													postInsideText="Days"
-													descClass="settings-metabox-description"
-													value={formData.name}
-													onChange={handleChange}
-													size="6rem"
-												/>
-											</div>
-											<div className="form-group">
-												<label htmlFor="product-name">
-													Product status after grace period
-												</label>
-												<SelectInput
-													name="stock_status"
-													options={productStatus}
-													type="single-select"
-													value={ProductStatus}
-													size="9rem"
-													onChange={(selected: { value: string }) => {
-														setProductStatus(selected.value);
-													}}
-												/>
-											</div>
-										</div>
-
-										<div className="form-group-wrapper">
-											<div className="form-group">
-												<label htmlFor="product-name">
-													Store role when grace period ends
-												</label>
-												<SelectInput
-													name="stock_status"
-													options={productStatus}
-													type="single-select"
-													value={VendorRole}
-													size="10rem"
-													onChange={(selected: { value: string }) => {
-														setVendorRole(selected.value);
-													}}
-												/>
-											</div>
-
-											<div className="form-group">
-												<label>
-													<input
-														type="checkbox"
-														checked={allowTrial}
-														onChange={(e) => setAllowTrial(e.target.checked)}
-													/>
-													Allow adding products during grace period
-												</label>
-											</div>
-										</div> */}
-
-										<div className="form-group-wrapper">
-											<div className="form-group">
-												<NestedComponent
-													id="role_rules"
-													fields={subscription}
-													value={rules}
-													single={true}
-													addButtonLabel="Add Rule"
-													deleteButtonLabel="Remove"
-													onChange={(val) => setRules(val)}
-												/>
-											</div>
-										</div>
-										<div className="form-group-wrapper">
-											<div className="form-group">
-												<NestedComponent
-													id="role_rules"
-													fields={gracePeriod}
-													value={rules}
-													single={true}
-													addButtonLabel="Add Rule"
-													deleteButtonLabel="Remove"
-													onChange={(val) => setRules(val)}
-												/>
 											</div>
 										</div>
 									</>
