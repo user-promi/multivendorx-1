@@ -372,7 +372,7 @@ const Orders: React.FC = () => {
 						className="admin-btn"
 						onClick={downloadSelectedCSV}
 					>
-						<i className="adminlib-import"></i>
+						<i className="adminlib-download"></i>
 						{__('Download CSV', 'multivendorx')}
 					</button>
 				</div>
@@ -517,7 +517,7 @@ const Orders: React.FC = () => {
 								: []),
 							{
 								label: __('Download', 'multivendorx'),
-								icon: 'adminlib-import',
+								icon: 'adminlib-download',
 								onClick: (rowData) => {
 									window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
 								},

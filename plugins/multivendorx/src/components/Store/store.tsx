@@ -250,7 +250,7 @@ const Store = () => {
 									setaddStore(true);
 								}}
 							>
-								<i className="adminlib-plus-circle"></i>
+								<i className="adminlib-plus"></i>
 								Add Store
 							</div>,
 						]}
@@ -266,12 +266,12 @@ const Store = () => {
 										<i className="adminlib-storefront"></i>
 										{__('Add Store', 'multivendorx')}
 									</div>
-									<p>
+									<div className="des">
 										{__(
 											'Create a new store and set it up with essential details.',
 											'multivendorx'
 										)}
-									</p>
+									</div>
 									<i
 										onClick={() => {
 											setFormData({});
@@ -343,7 +343,7 @@ const Store = () => {
 											msg={error.slug}
 										/>
 										{error?.slug?.message && (
-											<div className="invalid-massage">
+											<div className={error?.slug?.type}>
 												{error?.slug?.message}
 											</div>
 										)}
@@ -354,7 +354,7 @@ const Store = () => {
 											{__('Store Email', 'multivendorx')}
 										</label>
 										<EmailsInput
-											value={emails}
+											value={formData.emails || []}
 											enablePrimary={true}
 											onChange={(list, primary) => {
 												saveEmails(list, primary);
@@ -380,7 +380,7 @@ const Store = () => {
 											tinymceApiKey={
 												appLocalizer
 													.settings_databases_value[
-													'marketplace'
+												'marketplace'
 												]['tinymce_api_section'] ?? ''
 											}
 										/>

@@ -184,7 +184,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 											onClick={() => handleDownloadPDF()}
 											className="admin-btn btn-purple"
 										>
-											<i className="adminlib-import"></i>{' '}
+											<i className="adminlib-download"></i>{' '}
 											{__('Download', 'multivendorx')}
 										</div>
 									)}

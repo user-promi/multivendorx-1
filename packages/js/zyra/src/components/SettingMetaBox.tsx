@@ -323,7 +323,7 @@ const SettingMetaBox: React.FC< SettingMetaBoxProps > = ( {
                             >
                                 Add new{ ' ' }
                                 <span>
-                                    <i className="admin-font adminlib-plus-circle"></i>
+                                    <i className="admin-font adminlib-plus"></i>
                                 </span>
                             </div>
                         </div>

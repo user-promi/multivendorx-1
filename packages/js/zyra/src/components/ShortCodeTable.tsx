@@ -65,9 +65,9 @@ const ShortCodeTable: React.FC<ShortCodeTableProps> = (props) => {
                                 <thead>
                                     <tr>
                                         <th>Attribute</th>
-                                        <th>Description</th>
-                                        <th>Accepted values</th>
-                                        <th>Default</th>
+                                        <th>What it controls</th>
+                                        <th>Available options</th>
+                                        <th>Example</th>
                                     </tr>
                                 </thead>
                             )}

@@ -32,16 +32,6 @@ export default {
 			),
 		},
 		{
-			key: 'migrate_order',
-			type: 'button',
-			name: __('Order migrate', 'multivendorx'),
-			label: __('Regenerate suborders', 'multivendorx'),
-			desc: __(
-				'With this tool, you can re-create missing sub orders.',
-				'multivendorx'
-			),
-		},
-		{
 			key: 'default_pages',
 			type: 'button',
 			name: __('Create default MultiVendorX Page', 'multivendorx'),

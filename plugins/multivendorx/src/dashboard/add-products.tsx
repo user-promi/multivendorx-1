@@ -1605,7 +1605,7 @@ const AddProduct = () => {
 											className="admin-btn btn-green"
 											onClick={() => addTag(tagInput)}
 										>
-											Add
+										<i className="adminlib-plus"></i>	Add
 										</button>
 
 										{suggestions.length > 0 && (

@@ -316,12 +316,11 @@ class Store {
             return $value ? new self( (int) $value ) : null;
         }
 
-        $table = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
+        $table       = esc_sql( $wpdb->prefix . Utill::TABLES['store'] );
         $store_users = esc_sql( $wpdb->prefix . Utill::TABLES['store_users'] );
 
         try {
             switch ( $type ) {
-
                 case 'slug':
                     $query = $wpdb->prepare(
                         "SELECT ID FROM {$table} WHERE slug = %s LIMIT 1",
@@ -344,7 +343,7 @@ class Store {
                     );
 
                     if ( empty( $results ) ) {
-                        return [];
+                        return array();
                     }
 
                     return array_map(
@@ -354,7 +353,7 @@ class Store {
 
                 case 'product':
                     $product_id = (int) $value;
-                    $store_id = (int) get_post_meta(
+                    $store_id   = (int) get_post_meta(
                         $product_id,
                         Utill::POST_META_SETTINGS['store_id'],
                         true
@@ -363,9 +362,9 @@ class Store {
                     return $store_id ? new self( $store_id ) : null;
 
                 case 'primary_owner':
-                    $status  = sanitize_text_field( $value );
+                    $status = sanitize_text_field( $value );
                     $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status ), ARRAY_A );
-                    return $stores ? $stores : [];
+                    return $stores ? $stores : array();
 
                 case 'user':
                     $user_id = (int) $value;
@@ -385,7 +384,7 @@ class Store {
                     ";
                     $result = $wpdb->get_results( $wpdb->prepare( $sql, $params ), ARRAY_A );
 
-                    return $result ? $result : [];
+                    return $result ? $result : array();
 
                 default:
                     return null;

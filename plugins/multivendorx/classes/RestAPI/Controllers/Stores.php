@@ -353,7 +353,7 @@ class Stores extends \WP_REST_Controller {
         $limit  = max( (int) $request->get_param( 'row' ), 10 );
         $page   = max( (int) $request->get_param( 'page' ), 1 );
         $offset = ( $page - 1 ) * $limit;
-        $args = array(
+        $args   = array(
             'status' => 'pending',
         );
 
@@ -466,13 +466,13 @@ class Stores extends \WP_REST_Controller {
                 }
             }
 
-            if ($registrations) {
+            if ( $registrations ) {
                 $raw_slug = $store_data['slug']
-               ?? sanitize_title( $store_data['name'] ?? '' );
-   
-               $store_data['slug'] = Store::generate_unique_store_slug( $raw_slug );
+				?? sanitize_title( $store_data['name'] ?? '' );
+
+				$store_data['slug'] = Store::generate_unique_store_slug( $raw_slug );
             }
-            
+
             foreach ( $core_fields as $field ) {
                 if ( array_key_exists( $field, $store_data ) ) {
                     $store->set( $field, $store_data[ $field ] );

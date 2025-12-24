@@ -570,12 +570,12 @@ const Qna: React.FC = () => {
 								<i className="adminlib-question"></i>
 								{__('Answer Question', 'multivendorx')}
 							</div>
-							<p>
+							<div className="des">
 								{__(
 									'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
 									'multivendorx'
 								)}
-							</p>
+							</div>
 							<i
 								onClick={() => setSelectedQna(null)}
 								className="icon adminlib-close"
@@ -589,16 +589,16 @@ const Qna: React.FC = () => {
 								onClick={() => setSelectedQna(null)}
 								className="admin-btn btn-red"
 							>
+								<i className="adminlib-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
 								onClick={handleSaveAnswer}
 								disabled={saving}
-								className="admin-btn btn-purple"
+								className="admin-btn btn-purple-bg"
 							>
-								{saving
-									? __('Saving...', 'multivendorx')
-									: __('Save Answer', 'multivendorx')}
+								<i className="adminlib-active"></i>
+								{__('Save Answer', 'multivendorx')}
 							</button>
 						</>
 					}

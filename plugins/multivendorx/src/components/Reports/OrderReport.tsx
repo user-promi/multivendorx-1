@@ -236,7 +236,16 @@ const OrderReport: React.FC = () => {
 			),
 		},
 	];
-
+	const actionButton: RealtimeFilter[] = [
+		{
+			name: 'actionButton',
+			render: () => (
+				<>
+					<div className="admin-btn btn-purple-bg"><i className="adminlib-download"></i> Download CSV</div>
+				</>
+			),
+		},
+	];
 	/**
 	 * Table Columns
 	 */
@@ -326,6 +335,7 @@ const OrderReport: React.FC = () => {
 				perPageOption={[10, 25, 50]}
 				realtimeFilter={realtimeFilter}
 				searchFilter={searchFilter}
+				actionButton={actionButton}
 				totalCounts={totalRows}
 			/>
 		</>

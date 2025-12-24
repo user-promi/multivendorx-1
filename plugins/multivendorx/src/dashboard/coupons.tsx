@@ -840,7 +840,7 @@ const AllCoupon: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-vendor-form-delete',
+								icon: 'adminlib-delete delete',
 								onClick: async (rowData: any) => {
 									if (
 										confirm(
@@ -964,7 +964,7 @@ const AllCoupon: React.FC = () => {
 							setAddCoupon(true); // open popup
 						}}
 					>
-						<i className="adminlib-plus-circle"></i>
+						<i className="adminlib-plus"></i>
 						{__('Add New', 'multivendorx')}
 					</div>
 				</div>
@@ -982,12 +982,12 @@ const AllCoupon: React.FC = () => {
 								<i className="adminlib-coupon"></i>
 								{__('Add Coupon', 'multivendorx')}
 							</div>
-							<p>
+							<div className="des">
 								{__(
 									'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
 									'multivendorx'
 								)}
-							</p>
+							</div>
 							<i
 								className="icon adminlib-close"
 								onClick={() => setAddCoupon(false)}
@@ -1000,6 +1000,7 @@ const AllCoupon: React.FC = () => {
 								className="admin-btn btn-red"
 								onClick={() => handleSave('draft')}
 							>
+								<i className="adminlib-contact-form"></i>
 								{__('Draft', 'multivendorx')}
 							</div>
 
@@ -1007,6 +1008,7 @@ const AllCoupon: React.FC = () => {
 								className="admin-btn btn-purple-bg"
 								onClick={() => handleSave('publish')}
 							>
+								<i className="adminlib-publish"></i>
 								{__('Publish', 'multivendorx')}
 							</div>
 						</>

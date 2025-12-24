@@ -166,7 +166,7 @@ const DownloadCSVButton: React.FC<{
 				}
 				className="admin-btn"
 			>
-				<i className="adminlib-import"></i>
+				<i className="adminlib-download"></i>
 				{__('Download CSV', 'multivendorx')}
 			</button>
 		</div>
@@ -404,8 +404,8 @@ const Commission: React.FC = () => {
 				disabled={isDownloading}
 				className="admin-btn btn-purple-bg"
 			>
-				<span className="adminlib-import"></span>
-				{__('Export Commissions', 'multivendorx')}
+				<span className="adminlib-download"></span>
+				{__('Download CSV', 'multivendorx')}
 			</button>
 		);
 	};
@@ -744,7 +744,7 @@ const Commission: React.FC = () => {
 									'Regenerate Commission',
 									'multivendorx'
 								),
-								icon: 'adminlib-refresh',
+								icon: 'adminlib-refresh refresh-icon',
 								onClick: (rowData: any) => {
 									handleSingleAction('regenerate', rowData);
 								},

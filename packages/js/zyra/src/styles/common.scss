@@ -625,9 +625,10 @@ $index: 1;
   position: relative;
   width: fit-content;
 }
+
 .rdrDefinedRangesWrapper,
 .rdrCalendarWrapper,
-.rdrStaticRange{
+.rdrStaticRange {
   background: $background-white;
 }
 
@@ -999,6 +1000,7 @@ $index: 1;
   .before,
   .after {
     font-size: 0.95rem;
+    width: 13rem;
   }
 }
 
@@ -1744,7 +1746,7 @@ $index: 1;
 
     .des {
       b {
-        color: #000;
+        color: $text-color;
       }
     }
   }
@@ -1765,3 +1767,26 @@ $index: 1;
 }
 
 // page title end
+
+// avatar style start
+.avatar {
+  img {
+    width: 2.5rem;
+    border-radius: 50%;
+  }
+
+  i,
+  span {
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.625rem;
+    color: #fff;
+  }
+}
+
+// avatar style start

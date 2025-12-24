@@ -138,7 +138,7 @@ class Frontend {
         if ( in_array( 'show_store_name', $store_details, true ) ) {
             $store = Store::get_store( $product_id, 'product' );
             if ( ! $store ) {
-				return [];
+				return array();
             }
 
             $store_user_ids   = StoreUtil::get_store_users( $store->get_id() );
@@ -277,7 +277,7 @@ class Frontend {
         $related = MultiVendorX()->setting->get_setting( 'recommendation_source', '' );
 
         if ( 'none' === $related ) {
-            return [];
+            return array();
         }
 
         if ( 'all_stores' === $related ) {
@@ -342,10 +342,10 @@ class Frontend {
     public function get_stores_in_cart() {
 
         if ( ! is_object( WC()->cart ) ) {
-            return [];
+            return array();
         }
 
-        $stores = [];
+        $stores = array();
 
         foreach ( WC()->cart->get_cart() as $cart_item ) {
             $store = Store::get_store( $cart_item['product_id'] ?? 0, 'product' );
@@ -405,5 +405,4 @@ class Frontend {
         }
         return $template;
     }
-
 }

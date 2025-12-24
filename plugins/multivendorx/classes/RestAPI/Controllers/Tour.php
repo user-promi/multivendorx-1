@@ -43,7 +43,7 @@ class Tour extends \WP_REST_Controller {
 					'methods'             => \WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'create_item' ),
 					'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				)
+				),
 			)
         );
     }
@@ -86,7 +86,7 @@ class Tour extends \WP_REST_Controller {
         }
         try {
             // Directly fetch stored value.
-            $status = filter_var(get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], false ), FILTER_VALIDATE_BOOLEAN);
+            $status = filter_var( get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], false ), FILTER_VALIDATE_BOOLEAN );
 
             return array(
                 'active' => $status,

@@ -116,7 +116,7 @@ class Ajax {
                 $user_info     = get_userdata( $review->customer_id );
                 $reviewer_name = $user_info ? $user_info->display_name : __( 'Anonymous', 'multivendorx' );
                 echo '<div class="header"> <div class="details-wrapper">';
-                echo '<div class="avater">B</div> <div class="name">' . esc_html( $reviewer_name ) . '</div> <span class="time">1 day ago</span></div> ';
+                echo '<div class="avatar">B</div> <div class="name">' . esc_html( $reviewer_name ) . '</div> <span class="time">1 day ago</span></div> ';
                 echo '</div>';
                 echo '<div class="body">';
                 $overall_rating = round( floatval( $review->overall_rating ) ); // Assuming your review object has overall_rating.

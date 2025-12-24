@@ -362,12 +362,12 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						{__('View Commission', 'multivendorx')}{' '}
 						{commissionId ? `#${commissionId}` : ''}
 					</div>
-					<p>
+					<div className="des">
 						{__(
 							'Details of this commission including stores, order breakdown, and notes.',
 							'multivendorx'
 						)}
-					</p>
+					</div>
 					<i onClick={onClose} className="icon adminlib-close"></i>
 				</>
 			}

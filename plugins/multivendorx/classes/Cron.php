@@ -149,8 +149,8 @@ class Cron {
      * @param array  $settings Cron settings.
      */
     public function get_first_run( $schedule, $settings ) {
-        $hour   = !empty( $settings['time'] ) ? (int) gmdate( 'H', strtotime( $settings['time'] ) ) : 9;
-        $minute = !empty( $settings['time'] ) ? (int) gmdate( 'i', strtotime( $settings['time'] ) ) : 0;
+        $hour   = ! empty( $settings['time'] ) ? (int) gmdate( 'H', strtotime( $settings['time'] ) ) : 9;
+        $minute = ! empty( $settings['time'] ) ? (int) gmdate( 'i', strtotime( $settings['time'] ) ) : 0;
 
         switch ( $schedule ) {
             case 'daily':

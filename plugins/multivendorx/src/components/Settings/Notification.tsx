@@ -660,10 +660,10 @@ const Notification: React.FC = () => {
 								<i className="adminlib-notification"></i>
 								Notification preferences
 							</div>
-							<p>
+							<div className="des">
 								Edit and control notification method and
 								recipients for this event.
-							</p>
+							</div>
 							<i
 								className="icon adminlib-close"
 								onClick={() => setEditingNotification(null)}
@@ -815,7 +815,7 @@ const Notification: React.FC = () => {
 									addRecipient(editingNotification)
 								}
 							>
-								<i className="adminlib-plus-circle"></i>
+								<i className="adminlib-plus"></i>
 								Add
 							</button>
 						</div>
