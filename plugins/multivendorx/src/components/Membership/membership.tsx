@@ -637,7 +637,7 @@ const Membership = ({ id }: { id: string }) => {
 			type: 'number',
 			postInsideText: __('days', 'multivendorx'),
 			size: '8rem',
-			preText: 'If enabled, run the trial for',
+			preText: 'for a duration of',
 			dependent: {
 				key: 'disable_coupon_for_wholesale',
 				set: true,
@@ -647,26 +647,48 @@ const Membership = ({ id }: { id: string }) => {
 	];
 	const gracePeriod = [
 		{
-			key: 'facilitator_fixed',
+			key: 'disable_coupon',
+			type: 'checkbox',
+			// label: __( 'Coupon restriction for wholesalers', 'catalogx' ),
+			// desc: __(
+			//     'Prevent wholesale users from applying any coupon and get addional discount on their orders.',
+			//     'catalogx'
+			// ),
+			options: [
+				{
+					key: 'disable_coupon',
+					label: __('', 'catalogx'),
+					value: 'disable_coupon',
+				},
+			],
+			look: 'toggle',
+		},
+		{
+			key: 'facilita',
 			type: 'number',
 			postInsideText: __('days', 'multivendorx'),
 			size: '8rem',
-			preText: 'Apply a',
-			postText: 'grace period. Control product visibility',
+			preText: 'for a duration of',
+			postText: 'During this period, products are',
+			dependent: {
+				key: 'disable_coupon',
+				set: true,
+				value: 'disable_coupon',
+			},
 		},
 		{
-			key: 'facilitator_fixed',
+			key: 'facilitator',
 			type: 'dropdown',
 			size: '8rem',
 			options: [
 				{
 					key: 'monday',
-					label: __('Keep Products Visible', 'multivendorx'),
+					label: __('Visible', 'multivendorx'),
 					value: 'monday',
 				},
 				{
 					key: 'tuesday',
-					label: __('After 2 cycles', 'multivendorx'),
+					label: __('Hidden', 'multivendorx'),
 					value: 'tuesday',
 				},
 				{
@@ -681,14 +703,14 @@ const Membership = ({ id }: { id: string }) => {
 				},
 			],
 			// preText: ' ',
-			postText: 'product creation',
+			postText: 'and product creation is',
 		},
 		{
 			key: 'rule_type',
 			type: 'select',
 			options: [
-				{ value: 'price', label: 'Yes' },
-				{ value: 'quantity', label: 'No' }
+				{ value: 'price', label: 'allowed' },
+				{ value: 'quantity', label: 'Not allowed' }
 			],
 		},
 		{
@@ -717,8 +739,8 @@ const Membership = ({ id }: { id: string }) => {
 					value: 'thursday',
 				},
 			],
-			preText: 'and store role',
-			postText: 'during this time.',
+			preText: 'Change the store role to',
+			//postText: 'during this time.',
 		},
 	];
 
@@ -1313,6 +1335,7 @@ const Membership = ({ id }: { id: string }) => {
 										<div className="form-group-wrapper">
 											<div className="form-group">
 												<div className="nasted-wrapper">
+													<label htmlFor="">Offer grace period</label>
 													<NestedComponent
 														id="role_rules"
 														fields={gracePeriod}
