@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import SimpleInput from './SimpleInput';
 import MultipleOptions from './MultipleOption';
-import { FormField } from './RegistrationForm';
 
 interface SubField {
-    id: number; // Use number for ReactSortable
+    id: number;
     key: string;
     label: string;
     type: 'text' | 'select';
@@ -13,11 +12,7 @@ interface SubField {
     options?: string[];
     required?: boolean;
     readonly?: boolean;
-}
-
-interface EditableSubField extends SubField {
-    parentId: number;
-    readonly?: boolean;
+    parentId?: number;
 }
 
 export interface AddressFormField {
@@ -32,9 +27,9 @@ export interface AddressFormField {
 interface AddressFieldProps {
     formField: AddressFormField;
     onChange: ( key: 'fields', value: SubField[] ) => void;
-    opendInput: EditableSubField | null;
+    opendInput: SubField | null;
     setOpendInput: React.Dispatch<
-        React.SetStateAction< EditableSubField | null >
+        React.SetStateAction< SubField | null >
     >;
 }
 
