@@ -147,9 +147,9 @@ export default {
 					},
 				},
 				{
-					key: 'dark',
-					label: 'Dark',
-					value: 'dark',
+					key: 'black',
+					label: 'black',
+					value: 'black',
 					colors: {
 						colorPrimary: '#2c3e50',
 						colorSecondary: '#2c3e50',

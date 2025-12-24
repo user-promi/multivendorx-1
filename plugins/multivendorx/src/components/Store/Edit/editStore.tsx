@@ -1075,12 +1075,12 @@ const EditStore = () => {
 							<i className="adminlib-storefront"></i>
 							{__('Manage store deletion', 'multivendorx')}
 						</div>
-						<p>
+						<div className="des">
 							{__(
 								'Choose the appropriate action to take when deleting this store.',
 								'multivendorx'
 							)}
-						</p>
+						</div>
 						<i
 							onClick={() => setDeleteModal(false)}
 							className="icon adminlib-close"

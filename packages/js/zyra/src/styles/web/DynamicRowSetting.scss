@@ -1,9 +1,10 @@
 @use '../../global.scss' as *;
 
 .repeater-field-wrapper {
+    margin-bottom: 0.813rem;
     .repeater-field {
         padding: 1rem;
-        background: #f7f6f69c;
+        background: $background-color;
         border-radius: 0.313rem;
         margin-bottom: 1rem;
         border: $border-light-small;
@@ -23,7 +24,7 @@
         align-items: center;
 
         .location-icon {
-            background: #d9f5f0;
+            background: $background-color;
             color: #06be9f;
             padding: 0.45rem;
             font-size: 1.313rem;
@@ -32,16 +33,17 @@
 
         .delete-icon {
             font-size: 1.125rem;
-            color: #f06b4f;
+            color: $accent-color;
             cursor: pointer;
         }
 
         .basic-input {
-            background: #fff !important;
-
+            background: $background-white !important;
             /* overwrite common style */
         }
-
+        .admin-btn{
+            width: 19rem;
+        }
         &.state {
             margin-bottom: 0.625rem;
         }
@@ -49,7 +51,7 @@
 
     .repeater-field-nested {
         padding: 0.813rem;
-        background: #fff;
+        background: $background-white;
         margin-top: 0.813rem;
 
         .state-title {
@@ -68,7 +70,7 @@
         padding: 1rem;
         border-radius: 0.313rem;
         font-size: 1rem;
-        background: #c9c9c954;
+        background: $background-color;
         margin: 1rem 0;
     }
 }

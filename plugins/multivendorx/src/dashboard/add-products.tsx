@@ -1249,12 +1249,12 @@ const AddProduct = () => {
 											'multivendorx'
 										)}
 									</div>
-									<p>
+									<div className="des">
 										{__(
 											'Upload an image and describe enhancements. AI will generate a new enhanced image.',
 											'multivendorx'
 										)}
-									</p>
+									</div>
 									<i
 										className="icon adminlib-close"
 										onClick={() => setAddInhance(false)}
@@ -2016,7 +2016,7 @@ const AddProduct = () => {
 											className="admin-btn btn-green"
 											onClick={() => addTag(tagInput)}
 										>
-											Add
+										<i className="adminlib-plus"></i>	Add
 										</button>
 
 										{suggestions.length > 0 && (

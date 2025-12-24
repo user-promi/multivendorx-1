@@ -548,12 +548,12 @@ const CustomerQuestions: React.FC = () => {
 								{__('Answer Question', 'multivendorx')}
 							</div>
 
-							<p>
+							<div className="des">
 								{__(
 									'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
 									'multivendorx'
 								)}
-							</p>
+							</div>
 
 							<i
 								onClick={() => setSelectedQna(null)}

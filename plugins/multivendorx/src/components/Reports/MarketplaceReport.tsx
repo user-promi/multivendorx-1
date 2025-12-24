@@ -32,7 +32,7 @@ type MarketplaceReportProps = {
 	COLORS?: string[];
 };
 
-const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
+const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 	const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
 	const [earningSummary, setEarningSummary] = useState<any[]>([]);
 	const [pieData, setPieData] = useState<any>([]);
@@ -477,8 +477,8 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 															'percent'
 															? `${coupon.amount}%`
 															: formatCurrency(
-																	coupon.amount
-																)
+																coupon.amount
+															)
 														: '—'}
 												</span>
 											</div>
@@ -512,26 +512,24 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 											key={`customer-${customer.user_id}`}
 										>
 											<div className="details-wrapper">
-												<div className="avater">
+												<div className="avatar">
 													<a
 														href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
 														target="_blank"
 														rel="noopener noreferrer"
 													>
-														<div className="avatar">
-															<span
-																className={`admin-color${index + 1}`}
-															>
-																{(
-																	(
-																		customer.name?.trim() ||
-																		customer.username
-																	)?.charAt(
-																		0
-																	) || ''
-																).toUpperCase()}
-															</span>
-														</div>
+														<span
+															className={`admin-color${index + 1}`}
+														>
+															{(
+																(
+																	customer.name?.trim() ||
+																	customer.username
+																)?.charAt(
+																	0
+																) || ''
+															).toUpperCase()}
+														</span>
 													</a>
 												</div>
 
@@ -570,7 +568,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 													<span>
 														{formatCurrency(
 															customer.total_spend ||
-																0
+															0
 														)}
 													</span>
 												</div>
@@ -604,27 +602,25 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 										key={`store-${store.store_id}`}
 									>
 										<div className="details-wrapper">
-											<div className="avater">
-												<a
-													href={`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`}
-													target="_blank"
-													rel="noopener noreferrer"
-												>
-													<div className="avatar">
-														<span
-															className={`admin-color${index + 1}`}
-														>
-															{(
-																store.store_name
-																	?.trim()
-																	?.charAt(
-																		0
-																	) || ''
-															).toUpperCase()}
-														</span>
-													</div>
-												</a>
-											</div>
+											<a
+												href={`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`}
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												<div className="avatar">
+													<span
+														className={`admin-color${index + 1}`}
+													>
+														{(
+															store.store_name
+																?.trim()
+																?.charAt(
+																	0
+																) || ''
+														).toUpperCase()}
+													</span>
+												</div>
+											</a>
 
 											<div className="details">
 												<div className="name">
@@ -644,7 +640,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 													:{' '}
 													{formatCurrency(
 														store.commission_total ||
-															0
+														0
 													)}
 												</div>
 												<div className="des">
@@ -655,7 +651,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 													:{' '}
 													{formatCurrency(
 														store.commission_refunded ||
-															0
+														0
 													)}
 												</div>
 											</div>
@@ -666,7 +662,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 												<span>
 													{formatCurrency(
 														store.total_order_amount ||
-															0
+														0
 													)}
 												</span>
 											</div>

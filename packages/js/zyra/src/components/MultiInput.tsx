@@ -438,7 +438,7 @@ const MultiInput: React.FC< MultiInputProps > = ( props ) => {
                             handleAddNew();
                         } }
                     >
-                        <i className="adminlib-plus-circle"></i> Add New
+                        <i className="adminlib-plus"></i> Add New
                     </span>
                 </li>
             </ul>

@@ -858,7 +858,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 								</div>
 								<div className="store-owner-details">
 									<div className="profile">
-										<div className="avater">
+										<div className="avatar">
 											<img
 												src={customerData?.avatar_url}
 												alt={`${

@@ -17,6 +17,7 @@
     --borderColor: #dbdbdb;
 
     --box-shadow: #dfdee16e;
+    --box-shadow-theme: var(--colorPrimary) 15%, white;
   }
 
   $theme-color: var(--colorPrimary);
@@ -42,7 +43,7 @@
   $accent-color: #e35047;
   
   $box-shadow: 0 0.125rem 0.5rem 0 var(--box-shadow);
-  $box-shadow-theme: 0 0.125rem 0.5rem 0 #65438fae;
+  $box-shadow-theme: 0 0.125rem 0.5rem 0 var(--box-shadow-theme);
 
   $color-palette: (
     primary:(light-color: color-mix(in srgb, var(--colorPrimary) 15%, white),
