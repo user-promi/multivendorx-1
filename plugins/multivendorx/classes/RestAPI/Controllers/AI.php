@@ -83,7 +83,7 @@ class AI extends \WP_REST_Controller {
                         $request
                     );
 
-                    if ( null !== $response ) {
+                    if ( $response ) {
                         return $response;
                     }
 
