@@ -216,7 +216,7 @@ class StripeConnect {
         // Store store ID in option for verification.
         $store = new Store( $store_id );
         $store->update_meta(
-            'stripe_oauth_state',
+            Utill::STORE_SETTINGS_KEYS['stripe_oauth_state'],
             wp_json_encode(
                 array(
                     'state' => $state,
@@ -260,12 +260,8 @@ class StripeConnect {
 
         $raw_state = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_oauth_state'] );
 
-        $state_data = json_decode( $raw_state, true );
+        $state_data = json_decode( $raw_state, true ) ?? array();
 
-        // Ensure valid array even if meta is empty or corrupted.
-        if ( ! is_array( $state_data ) ) {
-            $state_data = array();
-        }
         if (
             empty( $state_data['state'] ) ||
             $state_data['state'] !== $state ||
