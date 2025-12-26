@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import {
@@ -1676,23 +1676,12 @@ const AddProduct = () => {
 											/>
 										</div>
 										<div className="buttons-wrapper">
-										{!featuredImage && (
-											applyFilters(
-												'product_image_enhancement',
-												null,
-												{
-												currentImage: null,
-												isFeaturedImage: true,
-												setImage: setFeaturedImage,
-												}
-											)
-										)}
 										{featuredImage &&
 											applyFilters(
 												'product_image_enhancement',
 												null,
 												{
-												currentImage: featuredImage,
+												currentImage: featuredImage? featuredImage : null,
 												isFeaturedImage: true,
 												setImage: setFeaturedImage,
 												}
@@ -1746,29 +1735,16 @@ const AddProduct = () => {
 														'product_image_enhancement',
 														null,
 														{
-														currentImage: img,
+														currentImage: galleryImages.length > 0 ? img : null,
 														isFeaturedImage: false,
 														setImage: setGalleryImages,
+														featuredImage: galleryImages.length > 0 && featuredImage ? featuredImage : null,
 														}
 													)
 												}
 												</div>
 											</div>
 										))}
-										<div className="buttons-wrapper">
-										{!galleryImages.length &&
-											applyFilters(
-												'product_image_enhancement',
-												null,
-												{
-												currentImage: null,
-												isFeaturedImage: false,
-												setImage: setGalleryImages,
-												featuredImage: featuredImage,
-												}
-											)
-										}
-										</div>
 									</div>
 								</div>
 							</div>
