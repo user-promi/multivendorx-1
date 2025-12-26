@@ -148,26 +148,28 @@ class AI extends \WP_REST_Controller {
 
             MultiVendorX()->util->log( 'AI Raw Response: ' . $json_response );
 
-            $suggestions = json_decode( $json_response, true );         
+            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($json_response, true) . "\n", FILE_APPEND);
+
+            $suggestions = json_decode( $json_response, true );
 
             if ( ! is_array( $suggestions ) ) {
                 return new \WP_REST_Response(
-                    array(
+                    [
                         'success' => false,
                         'code'    => 'invalid_response',
-                        'message' => __( 'Invalid response from AI.', 'multivendorx' ),
-                    ),
+                        'message' => 'Invalid response from AI provider.',
+                    ],
                     500
                 );
             }
 
-            return rest_ensure_response(
-                array(
-                    'productName'        => array_slice( (array) $suggestions['productName'], 0, 2 ),
-                    'shortDescription'   => array_slice( (array) $suggestions['shortDescription'], 0, 2 ),
-                    'productDescription' => array_slice( (array) $suggestions['productDescription'], 0, 2 ),
-                )
-            );
+            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($json_response, true) . "\n", FILE_APPEND);
+
+            return rest_ensure_response([
+                'productName'        => array_slice((array) $suggestions['productName'], 0, 2),
+                'shortDescription'   => array_slice((array) $suggestions['shortDescription'], 0, 2),
+                'productDescription' => array_slice((array) $suggestions['productDescription'], 0, 2),
+            ]);
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
         }
@@ -183,16 +185,21 @@ class AI extends \WP_REST_Controller {
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
         $body = array(
-            'contents'         => array(
-                array( 'parts' => array( array( 'text' => $prompt ) ) ),
+            'contents' => array(
+                array(
+                    'parts' => array(
+                        array('text' => $prompt)
+                    )
+                )
             ),
             'generationConfig' => array(
-                'temperature'     => 0.7,
-                'topK'            => 40,
-                'topP'            => 0.95,
+                'temperature' => 0.7,
+                'topK' => 40,
+                'topP' => 0.95,
                 'maxOutputTokens' => 1024,
+                'response_mime_type' => 'application/json',
             ),
-        );
+        );        
 
         $response = wp_remote_post(
             $url . '?key=' . $key,
@@ -200,26 +207,24 @@ class AI extends \WP_REST_Controller {
                 'headers' => array(
                     'Content-Type' => 'application/json',
                 ),
-                'body'    => wp_json_encode( $body ),
+                'body'    => wp_json_encode($body),
                 'timeout' => 20,
             )
         );
 
-        if ( is_wp_error( $response ) ) {
-            return array( 'error' => $response->get_error_message() );
+        if (is_wp_error($response)) {
+            return array('error' => $response->get_error_message());
         }
-
-        $data = json_decode( wp_remote_retrieve_body( $response ), true );
-
-        $raw = $data['candidates'][0]['content']['parts'][0]['text'] ?? '';
-
-        $clean = trim( str_replace( array( '```json', '```' ), '', $raw ) );
-
-        if ( preg_match( '/\{.*\}/s', $clean, $match ) ) {
-            return $match[0];
+        
+        $data = json_decode(wp_remote_retrieve_body($response), true);
+        
+        // Directly access parsed JSON (NO regex, NO trimming)
+        $result = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+        
+        if (!$result) {
+            return array('error' => 'Invalid Gemini response');
         }
-
-        return array( 'error' => 'No valid JSON found in Gemini response' );
+        return $result;
     }
 
     /**

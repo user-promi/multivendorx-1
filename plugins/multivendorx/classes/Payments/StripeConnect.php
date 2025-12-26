@@ -78,28 +78,28 @@ class StripeConnect {
                     ),
                 ),
                 array(
-                    'key'         => 'client_id_test',
+                    'key'         => 'test_client_id',
                     'type'        => 'text',
-                    'label'       => __( 'Stripe client ID For Test', 'multivendorx' ),
-                    'placeholder' => __( 'Enter Stripe Client ID For Test', 'multivendorx' ),
+                    'label'       => __( 'Stripe client ID', 'multivendorx' ),
+                    'placeholder' => __( 'Enter Stripe Client ID', 'multivendorx' ),
                 ),
                 array(
-                    'key'         => 'client_id_live',
+                    'key'         => 'live_client_id',
                     'type'        => 'text',
-                    'label'       => __( 'Stripe client ID For Live', 'multivendorx' ),
-                    'placeholder' => __( 'Enter Stripe Client ID For Live', 'multivendorx' ),
+                    'label'       => __( 'Stripe client ID', 'multivendorx' ),
+                    'placeholder' => __( 'Enter Stripe Client ID', 'multivendorx' ),
                 ),
                 array(
-                    'key'         => 'secret_key_test',
+                    'key'         => 'test_secret_key',
                     'type'        => 'text',
-                    'label'       => __( 'Secret key For Test', 'multivendorx' ),
-                    'placeholder' => __( 'Enter secret key For Test', 'multivendorx' ),
+                    'label'       => __( 'Secret key', 'multivendorx' ),
+                    'placeholder' => __( 'Enter secret key ', 'multivendorx' ),
                 ),
                 array(
-                    'key'         => 'secret_key_live',
+                    'key'         => 'live_secret_key',
                     'type'        => 'text',
-                    'label'       => __( 'Secret key For Live', 'multivendorx' ),
-                    'placeholder' => __( 'Enter secret key For Live', 'multivendorx' ),
+                    'label'       => __( 'Secret key', 'multivendorx' ),
+                    'placeholder' => __( 'Enter secret key', 'multivendorx' ),
                 ),
                 array(
                     'key'   => 'redirect_url',
@@ -203,7 +203,7 @@ class StripeConnect {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
         $mode                   = $stripe_settings['payment_mode'] ?? 'test';
-        $client_id              = $mode === 'test' ? $stripe_settings['client_id_test'] ?? '' : $stripe_settings['client_id_live'] ?? '';
+        $client_id              = $mode === 'test' ? $stripe_settings['test_client_id'] ?? '' : $stripe_settings['live_client_id'] ?? '';
 
         if ( empty( $client_id ) ) {
             wp_send_json_error( array( 'message' => __( 'Stripe Client ID not configured.', 'multivendorx' ) ) );
@@ -283,8 +283,8 @@ class StripeConnect {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
         $mode                   = $stripe_settings['payment_mode'] ?? 'test';
-        $secret_key             = $mode === 'test' ? $stripe_settings['secret_key_test'] ?? '' : $stripe_settings['secret_key_live'] ?? '';
-        $client_id              = $mode === 'test' ? $stripe_settings['client_id_test'] ?? '': $stripe_settings['client_id_live'] ?? '';
+        $secret_key             = $mode === 'test' ? $stripe_settings['test_secret_key'] ?? '' : $stripe_settings['live_secret_key'] ?? '';
+        $client_id              = $mode === 'test' ? $stripe_settings['test_client_id'] ?? '': $stripe_settings['live_client_id'] ?? '';
 
         // Stripe OAuth Token Request.
         $response = $this->make_stripe_api_call(
@@ -331,8 +331,8 @@ class StripeConnect {
         $stripe_settings = $payment_admin_settings['stripe-connect'] ?? array();
     
         $mode       = $stripe_settings['payment_mode'] ?? 'test';
-        $client_id  = $mode === 'test' ? $stripe_settings['client_id_test'] : $stripe_settings['client_id_live'];
-        $secret_key = $mode === 'test' ? $stripe_settings['secret_key_test'] : $stripe_settings['secret_key_live'];
+        $client_id  = $mode === 'test' ? $stripe_settings['test_client_id'] : $stripe_settings['live_client_id'];
+        $secret_key = $mode === 'test' ? $stripe_settings['test_secret_key'] : $stripe_settings['live_secret_key'];
     
         $stripe_account_id = $store->get_meta('_stripe_connect_account_id');
     
@@ -453,7 +453,7 @@ class StripeConnect {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
         $mode                   = $stripe_settings['payment_mode'] ?? 'test';
-        $secret_key             = $mode === 'test' ? $stripe_settings['secret_key_test'] ?? '' : $stripe_settings['secret_key_live'] ?? '';
+        $secret_key             = $mode === 'test' ? $stripe_settings['test_secret_key'] ?? '' : $stripe_settings['live_secret_key'] ?? '';
 
         if ( empty( $secret_key ) ) {
             return false;
