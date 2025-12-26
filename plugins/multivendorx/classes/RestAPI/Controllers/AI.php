@@ -255,16 +255,10 @@ class AI extends \WP_REST_Controller {
 
         $data = json_decode( wp_remote_retrieve_body( $response ), true );
 
-        if ( ! empty( $data['error'] ) ) {
-            return array( 'error' => $data['error']['message'] );
-        }
+        $result = $data['output'][0]['content'][0]['text'] ?? '';
 
-        $content = $data['output'][0]['content'][0]['text'] ?? '';
-
-        $clean = trim( str_replace( array( '```json', '```' ), '', $content ) );
-
-        if ( preg_match( '/\{.*\}/s', $clean, $match ) ) {
-            return $match[0];
+        if (!$result) {
+            return array('error' => 'Invalid Gemini response');
         }
 
         return array( 'error' => 'No valid JSON in OpenAI response' );
@@ -318,10 +312,6 @@ class AI extends \WP_REST_Controller {
         }
 
         $data = json_decode( wp_remote_retrieve_body( $response ), true );
-
-        if ( ! empty( $data['error'] ) ) {
-            return array( 'error' => $data['error']['message'] );
-        }
 
         if ( empty( $data['choices'][0]['message']['content'] ) ) {
             throw new \Exception( 'Empty content from OpenRouter' );
