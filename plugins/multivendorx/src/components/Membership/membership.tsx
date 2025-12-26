@@ -649,11 +649,6 @@ const Membership = ({ id }: { id: string }) => {
 		{
 			key: 'disable_coupon',
 			type: 'checkbox',
-			// label: __( 'Coupon restriction for wholesalers', 'catalogx' ),
-			// desc: __(
-			//     'Prevent wholesale users from applying any coupon and get addional discount on their orders.',
-			//     'catalogx'
-			// ),
 			options: [
 				{
 					key: 'disable_coupon',
@@ -669,7 +664,6 @@ const Membership = ({ id }: { id: string }) => {
 			postInsideText: __('days', 'multivendorx'),
 			size: '8rem',
 			preText: 'for a duration of',
-			postText: 'During this period, products are',
 			dependent: {
 				key: 'disable_coupon',
 				set: true,
@@ -679,7 +673,7 @@ const Membership = ({ id }: { id: string }) => {
 		{
 			key: 'facilitator',
 			type: 'dropdown',
-			size: '8rem',
+			size: '4rem',
 			options: [
 				{
 					key: 'monday',
@@ -702,8 +696,12 @@ const Membership = ({ id }: { id: string }) => {
 					value: 'thursday',
 				},
 			],
-			// preText: ' ',
-			postText: 'and product creation is',
+			preText: 'During this period, products are',
+			dependent: {
+				key: 'disable_coupon',
+				set: true,
+				value: 'disable_coupon',
+			},
 		},
 		{
 			key: 'rule_type',
@@ -712,6 +710,12 @@ const Membership = ({ id }: { id: string }) => {
 				{ value: 'price', label: 'allowed' },
 				{ value: 'quantity', label: 'Not allowed' }
 			],
+			dependent: {
+				key: 'disable_coupon',
+				set: true,
+				value: 'disable_coupon',
+			},
+			preText: 'and product creation is',
 		},
 		{
 			key: 'facilitator_fixed',
@@ -740,7 +744,11 @@ const Membership = ({ id }: { id: string }) => {
 				},
 			],
 			preText: 'Change the store role to',
-			//postText: 'during this time.',
+			dependent: {
+				key: 'disable_coupon',
+				set: true,
+				value: 'disable_coupon',
+			},
 		},
 	];
 
@@ -1291,13 +1299,6 @@ const Membership = ({ id }: { id: string }) => {
 												<i className="adminlib-info"></i>
 												<div className="details">
 													<p>Activate Stripe Marketplace or PayPal Marketplace module to use recurring subscriptions.</p>
-												</div>
-											</div>
-										</div>
-										<div className="settings-metabox-note">
-											<div className="metabox-note-wrapper">
-												<i className="adminlib-info"></i>
-												<div className="details">
 													<p>Sign-up fee 0.05 or more is required to create subscriptions in Stripe/PayPal</p>
 												</div>
 											</div>
@@ -1334,18 +1335,16 @@ const Membership = ({ id }: { id: string }) => {
 										</div>
 										<div className="form-group-wrapper">
 											<div className="form-group">
-												<div className="nasted-wrapper">
-													<label htmlFor="">Offer grace period</label>
-													<NestedComponent
-														id="role_rules"
-														fields={gracePeriod}
-														value={rules}
-														single={true}
-														addButtonLabel="Add Rule"
-														deleteButtonLabel="Remove"
-														onChange={(val) => setRules(val)}
-													/>
-												</div>
+												<label htmlFor="">Offer grace period</label>
+												<NestedComponent
+													id="role_rules"
+													fields={gracePeriod}
+													value={rules}
+													single={true}
+													addButtonLabel="Add Rule"
+													deleteButtonLabel="Remove"
+													onChange={(val) => setRules(val)}
+												/>
 											</div>
 										</div>
 									</>

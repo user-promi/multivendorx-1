@@ -9,15 +9,18 @@
         gap: 0.625rem;
         min-height: 2.25rem;
 
-        .divider{
+        .divider {
             width: 100%;
         }
+
         .before,
-        .after{
+        .after {
             color: $sub-text-color;
+            font-size: 0.95rem;
         }
-        &.single-line{
-            .before{
+
+        &.single-line {
+            .before {
                 width: 10rem;
             }
         }
@@ -28,7 +31,7 @@
             background: #ece2f92e;
         }
 
-        &:first-child{
+        &:first-child {
             margin-top: 0;
         }
 
@@ -43,15 +46,10 @@
             color: $sub-text-color;
         }
 
-        .settings-input-content:has(.toggle-setting-container){
-            label{
+        .settings-input-content:has(.toggle-setting-container) {
+            label {
                 padding-right: 0.5rem;
             }
-        }
-
-        .toggle-setting-container,
-        .form-select-field-wrapper {
-            display: inline-block;
         }
 
         .toggle-setting-wrapper {
@@ -77,9 +75,15 @@
             width: fit-content !important;
         }
 
-        .toggle-btn{
-            label{
+        .toggle-btn {
+            label,
+            .toggle-checkbox-header {
                 margin: 0;
+            }
+        }
+        .select-wrapper {
+            .react-select{
+                width: 8rem;
             }
         }
     }
