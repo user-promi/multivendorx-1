@@ -596,6 +596,7 @@ class FrontendScripts {
                         'apiUrl'  => untrailingslashit( get_rest_url() ),
                         'restUrl' => MultiVendorX()->rest_namespace,
                         'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'settings_databases_value' => $settings_databases_value,
                     ),
                 ),
 			)

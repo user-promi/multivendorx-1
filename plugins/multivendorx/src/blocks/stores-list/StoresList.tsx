@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getApiLink, GoogleMap, Mapbox } from 'zyra';
+import { getApiLink, GoogleMap, Mapbox, useModules } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 interface StoreRow {
@@ -32,10 +32,13 @@ const StoresList: React.FC<StoresListProps> = ({
 	order = '',
 	category = '',
 }) => {
-
+	const { modules } = useModules();
 	const [data, setData] = useState<StoreRow[] | []>([]);
 	const [categoryList, setCategoryList] = useState<Category[]>([]);
 	const [product, setProduct] = useState<[]>([]);
+	const [apiKey, setApiKey] = useState('');
+	const storesList = (window as any).storesList;
+	const settings = storesList.settings_databases_value;
 
 	const [addressData, setAddressData] = useState({
 		location_address: '',
@@ -58,6 +61,18 @@ const StoresList: React.FC<StoresListProps> = ({
 		category: category,
 		product: '',
 	});
+
+	useEffect(() => {
+		if (!settings?.geolocation) return;
+
+		const provider = settings.geolocation.choose_map_api;
+
+		if (provider === 'google_map_set') {
+			setApiKey(settings.geolocation.google_api_key || '');
+		} else if (provider === 'mapbox_api_set') {
+			setApiKey(settings.geolocation.mapbox_api_key || '');
+		}
+	}, [settings]);
 
 	useEffect(() => {
 		axios
@@ -112,7 +127,7 @@ const StoresList: React.FC<StoresListProps> = ({
 	};
 
 	const handleLocationUpdate = (locationData: any) => {
-		console.log("location",locationData)
+		console.log("location", locationData)
 
 	};
 
@@ -120,7 +135,7 @@ const StoresList: React.FC<StoresListProps> = ({
 		if (!modules.includes('geo-location') || !apiKey) {
 			return null;
 		}
-	
+
 		const commonProps = {
 			apiKey,
 			locationAddress: addressData.location_address,
@@ -132,14 +147,14 @@ const StoresList: React.FC<StoresListProps> = ({
 			instructionText: __('Enter a search term or drag/drop a pin on the map.'),
 			placeholderSearch: __('Search for a location...'),
 		};
-	
+
 		switch (settings.geolocation.choose_map_api) {
 			case 'google_map_set':
 				return <GoogleMap {...commonProps} />;
-	
+
 			case 'mapbox_api_set':
 				return <Mapbox {...commonProps} />;
-	
+
 			default:
 				return null;
 		}
@@ -147,6 +162,7 @@ const StoresList: React.FC<StoresListProps> = ({
 
 	return (
 		<>
+			{renderMapComponent()}
 			<div className="">
 				{/* Filter Bar */}
 				<input
