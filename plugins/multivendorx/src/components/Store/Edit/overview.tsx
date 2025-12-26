@@ -216,15 +216,14 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									recentProducts.map((product, idx) => {
 										const productImage =
 											product.images &&
-											product.images.length > 0
+												product.images.length > 0
 												? product.images[0].src
 												: null;
 										const editUrl = `${appLocalizer.site_url.replace(
 											/\/$/,
 											''
-										)}/wp-admin/post.php?post=${
-											product.id
-										}&action=edit`;
+										)}/wp-admin/post.php?post=${product.id
+											}&action=edit`;
 
 										return (
 											<div
@@ -335,8 +334,10 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									></i>
 								</div>
 							</div>
-							<div className="store-owner-details owner">
-								<LatestRefundRequest store_id={id} />
+							<div className="card-body">
+								<div className="store-owner-details owner">
+									<LatestRefundRequest store_id={id} />
+								</div>
 							</div>
 						</div>
 					)}
@@ -500,11 +501,11 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 										<div className="name">
 											{storeData.primary_owner_info?.data
 												?.display_name ?? (
-												<Skeleton
-													variant="text"
-													width={150}
-												/>
-											)}
+													<Skeleton
+														variant="text"
+														width={150}
+													/>
+												)}
 											<div className="admin-badge green">
 												{__(
 													'Primary Owner',
@@ -540,11 +541,11 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 											{__('Email', 'multivendorx')}:{' '}
 											{storeData.primary_owner_info?.data
 												?.user_email ?? (
-												<Skeleton
-													variant="text"
-													width={150}
-												/>
-											)}
+													<Skeleton
+														variant="text"
+														width={150}
+													/>
+												)}
 										</div>
 									</div>
 								</div>
