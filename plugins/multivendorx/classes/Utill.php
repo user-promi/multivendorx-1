@@ -55,7 +55,7 @@ class Utill {
         'store-capability'              => 'multivendorx_store_capability_settings',
         'identity-verification'         => 'multivendorx_identity_verification_settings',
         'commission-rule'               => 'multivendorx_commission_rule_settings',
-        'panel-integration'           => 'multivendorx_payment_integration_settings',
+        'payment-integration'           => 'multivendorx_payment_integration_settings',
         'store-appearance'              => 'multivendorx_store_appearance_settings',
         'product-report-abuse'          => 'multivendorx_product_report_abuse_settings',
         'store-commissions'             => 'multivendorx_store_commissions_settings',
@@ -79,7 +79,6 @@ class Utill {
         'ai-automation'                 => 'multivendorx_ai_automation_settings',
         'log'                           => 'multivendorx_log_settings',
         'min-max'                       => 'multivendorx_min_max_settings',
-        'development-tools'             => 'multivendorx_development_tools_settings',
     );
 
     const MULTIVENDORX_OTHER_SETTINGS = array(
@@ -322,8 +321,7 @@ class Utill {
      * @return bool
      */
     public static function is_khali_dabba() {
-        // return apply_filters( 'kothay_dabba', false );
-        return true;
+        return apply_filters( 'kothay_dabba', false );
     }
 
     /**
