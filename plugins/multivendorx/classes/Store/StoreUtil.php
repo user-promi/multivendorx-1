@@ -504,7 +504,7 @@ class StoreUtil {
             // Only allow safe columns to sort by (avoid SQL injection).
             $allowed_columns = array( 'ID', 'name', 'status', 'slug', 'create_time' );
             $orderBy         = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
-            $order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
+            $order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'asc' ) ? 'ASC' : 'DESC';
             $query          .= " ORDER BY {$orderBy} {$order}";
         }
 

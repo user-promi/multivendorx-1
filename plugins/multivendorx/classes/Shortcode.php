@@ -61,6 +61,9 @@ class Shortcode {
             FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
             FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
         }
+
+        FrontendScripts::enqueue_script( 'multivendorx-stores-list-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-stores-list-script' );
     }
 
     /**
@@ -120,12 +123,14 @@ class Shortcode {
     /**
      * Display stores list
      */
-    public function display_stores_list() {
-        ob_start();
-        ?>
-        <div id="multivendorx-stores-list">
-        </div>
-        <?php
-        return ob_get_clean();
-    }
+    public function display_stores_list( $attributes ) {
+        if ( isset($attributes['orderby']) && $attributes['orderby'] === 'registered' ) {
+            $attributes['orderby'] = 'create_time';
+        }
+    
+        $json_attrs = esc_attr( wp_json_encode( $attributes ) );
+    
+        // Use id instead of class
+        return '<div id="multivendorx-stores-list" data-attributes="' . $json_attrs . '"></div>';
+    } 
 }

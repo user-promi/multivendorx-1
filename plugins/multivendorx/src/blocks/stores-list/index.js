@@ -8,10 +8,12 @@ const EditBlock = () => {
 	const blockProps = useBlockProps();
 	return (
 		<div {...blockProps} id="multivendorx-stores-list">
-			{StoresList()}
+			{/* {StoresList()} */}
+			<StoresList />
 		</div>
 	);
 };
+
 
 registerBlockType('multivendorx/stores-list', {
 	apiVersion: 2,
@@ -24,17 +26,19 @@ registerBlockType('multivendorx/stores-list', {
 	edit: EditBlock,
 	save() {
 		return <div id="multivendorx-stores-list"></div>;
-	},
+	},	
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-	const element = document.getElementById('multivendorx-stores-list');
-	if (element) {
-		render(
-			<BrowserRouter>
-				<StoresList />
-			</BrowserRouter>,
-			element
-		);
-	}
+    const element = document.getElementById('multivendorx-stores-list');
+    if (element) {
+        const attributes = JSON.parse(element.getAttribute('data-attributes') || '{}');
+
+        render(
+            <BrowserRouter>
+                <StoresList {...attributes} />
+            </BrowserRouter>,
+            element
+        );
+    }
 });
