@@ -254,6 +254,7 @@ interface InputField {
         { heading: string; fields: Record< string, string > }
     >;
     apiLink?: string;
+    method?: string;
     tasks?: Task[];
     fileName?: string;
     syncDirections?: {
@@ -1202,7 +1203,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                                               inputField.apilink
                                                           )
                                                       ),
-                                                      method: 'GET',
+                                                      method: inputField.method,
                                                       headers: {
                                                           'X-WP-Nonce':
                                                               appLocalizer.nonce,
