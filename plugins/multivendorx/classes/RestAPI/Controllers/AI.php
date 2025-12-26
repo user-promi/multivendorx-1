@@ -148,8 +148,6 @@ class AI extends \WP_REST_Controller {
 
             MultiVendorX()->util->log( 'AI Raw Response: ' . $json_response );
 
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($json_response, true) . "\n", FILE_APPEND);
-
             $suggestions = json_decode( $json_response, true );
 
             if ( ! is_array( $suggestions ) ) {
@@ -162,8 +160,6 @@ class AI extends \WP_REST_Controller {
                     500
                 );
             }
-
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($json_response, true) . "\n", FILE_APPEND);
 
             return rest_ensure_response([
                 'productName'        => array_slice((array) $suggestions['productName'], 0, 2),
