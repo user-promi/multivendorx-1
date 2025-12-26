@@ -62,35 +62,102 @@ export default {
 		},
 		{
 			key: 'refund_reasons',
-			type: 'multi-string',
+			type: 'panel-tabs',
 			label: __('Refund reasons', 'multivendorx'),
 			placeholder: __('Enter refund reasons here…', 'multivendorx'),
 			settingDescription: __(
 				'Add one or more reasons that stores can select when handling refund requests.',
 				'multivendorx'
 			),
-			requiredEnable: true,
-			defaultValues: [
+			addNewBtn: true,
+			addNewTemplate: {
+				label: 'New Reasons',
+				formFields: [
+					{
+						key: 'title',
+						type: 'text',
+						label: 'Reason',
+						placeholder: 'Enter title',
+					},
+					{
+						key: 'required',
+						type: 'checkbox',
+						label: 'Required',
+					},
+				],
+			},
+			modal: [
 				{
-					value: 'Damaged or defective product',
+					id: 'damaged-or-defective-product',
+					label: 'Damaged or defective product',
 					required: true,
-					deleteDisabled: true,
 				},
 				{
-					value: 'Wrong item delivered',
+					id: 'wrong-item',
+					label: 'Wrong item delivered',
 					required: true,
-					deleteDisabled: true,
 				},
 				{
-					value: 'Product not as described',
+					id: 'product-not-as-described',
+					label: 'Product not as described',
 					required: true,
-					deleteDisabled: true,
 				},
-				{ value: 'Late delivery' },
-				{ value: 'Changed mind' },
+				{
+					id: 'late-delivery',
+					label: 'Late delivery',
+					formFields: [
+						{
+							key: 'title',
+							type: 'text',
+							label: 'Reason',
+							placeholder: 'Enter title',
+						},
+						{
+							key: 'required',
+							type: 'checkbox',
+							label: 'Required',
+						},
+					],
+				},
+				{
+					id: 'changed-mind',
+					label: 'Changed mind',
+					formFields: [
+						{
+							key: 'title',
+							type: 'text',
+							label: 'Reason',
+							placeholder: 'Enter title',
+						},
+						{
+							key: 'required',
+							type: 'checkbox',
+							label: 'Required',
+						},
+					],
+				},
 			],
+			// requiredEnable: true,
+			// defaultValues: [
+			// 	{
+			// 		value: 'Damaged or defective product',
+			// 		required: true,
+			// 		deleteDisabled: true,
+			// 	},
+			// 	{
+			// 		value: 'Wrong item delivered',
+			// 		required: true,
+			// 		deleteDisabled: true,
+			// 	},
+			// 	{
+			// 		value: 'Product not as described',
+			// 		required: true,
+			// 		deleteDisabled: true,
+			// 	},
+			// 	{ value: 'Late delivery' },
+			// 	{ value: 'Changed mind' },
+			// ],
 			moduleEnabled: 'marketplace-refund',
-			name: 'abuse_report_reasons',
 		},
 	],
 };

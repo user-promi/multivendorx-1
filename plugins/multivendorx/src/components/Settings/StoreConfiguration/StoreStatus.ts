@@ -32,7 +32,7 @@ export default {
 					icon: 'adminlib-store-analytics',
 					label: 'Pending approval',
 					connected: true,
-					enableOption: true,
+					 
 					desc: ' The store is awaiting approval. Sellers can log in to their dashboard but cannot configure settings, add products, or begin selling until approved.',
 					formFields: [
 						{
@@ -87,7 +87,7 @@ export default {
 					icon: 'adminlib-like',
 					label: 'Rejected',
 					connected: true,
-					enableOption: true,
+					 
 					desc: 'The application was rejected during onboarding. Sellers can log in to view the rejection reason and reapply with updated information but cannot sell or modify store details.',
 					formFields: [
 						{
@@ -148,7 +148,7 @@ export default {
 					icon: 'adminlib-store-review',
 					label: 'Under review',
 					connected: true,
-					enableOption: true,
+					 
 					desc: 'The store is temporarily restricted while the platform reviews compliance or documentation. Selling and payouts may be paused until the review is complete.',
 					formFields: [
 						{
@@ -186,7 +186,7 @@ export default {
 					icon: 'adminlib-error',
 					label: 'Suspended',
 					connected: true,
-					enableOption: true,
+					 
 					desc: 'The store’s selling privileges are revoked due to policy or compliance violations. Listings are hidden or disabled, and payments are held until reactivation or successful appeal.',
 					formFields: [
 						{
@@ -218,7 +218,7 @@ export default {
 					icon: 'adminlib-store-support',
 					label: 'Active',
 					connected: true,
-					enableOption: true,
+					 
 					desc: 'Stores are fully approved and operational. They can manage products, orders, and payouts without restrictions.',
 					formFields: [
 						{
@@ -246,7 +246,7 @@ export default {
 					icon: 'adminlib-identity-verification',
 					label: 'Deactivated',
 					connected: true,
-					enableOption: true,
+					 
 					desc: 'Stores that are permanently closed, either by admin action or upon store owner’s request.Once deactivated, the store loses all access to dashboard, storefront, and selling privileges.',
 					formFields: [
 						{
