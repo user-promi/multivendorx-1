@@ -645,15 +645,152 @@ const Membership = ({ id }: { id: string }) => {
 			},
 		},
 	];
+	const aiUsageLimits = [
+		{
+			key: 'enable_ai',
+			type: 'checkbox',
+			options: [
+				{
+					key: 'enable_ai',
+					label: __('', 'multivendorx'),
+					value: 'enable_ai',
+				},
+			],
+			look: 'toggle',
+		},
+		{
+			key: 'ai_product_content',
+			type: 'select',
+			size: '10rem',
+			options: [
+				{ value: 'enabled', label: __('Enabled', 'multivendorx') },
+				{ value: 'disabled', label: __('Disabled', 'multivendorx') },
+			],
+			preText: 'for product creation.',
+			dependent: {
+				key: 'enable_ai',
+				set: true,
+				value: 'enable_ai',
+			},
+		},
+		{
+			key: 'ai_product_images',
+			type: 'select',
+			size: '10rem',
+			options: [
+				{ value: 'enabled', label: __('Enabled', 'multivendorx') },
+				{ value: 'disabled', label: __('Disabled', 'multivendorx') },
+			],
+			preText: 'Product image generation',
+			dependent: {
+				key: 'enable_ai',
+				set: true,
+				value: 'enable_ai',
+			},
+		},
+		{
+			key: 'max_ai_images',
+			type: 'number',
+			size: '6rem',
+			postInsideText: __('images', 'multivendorx'),
+			preText: 'and alllow up to',
+			postText: 'per product',
+			dependent: {
+				key: 'enable_ai',
+				set: true,
+				value: 'enable_ai',
+			},
+		},
+	];
+	const productUploadSettings = [
+		{
+			key: 'enable_product_limits',
+			type: 'checkbox',
+			options: [
+				{
+					key: 'enable_product_limits',
+					label: __('', 'multivendorx'),
+					value: 'enable_product_limits',
+				},
+			],
+			look: 'toggle',
+		},
+
+		{
+			key: 'max_products',
+			type: 'number',
+			size: '8rem',
+			preText: 'with a maximum of',
+			postInsideText: __('products', 'multivendorx'),
+			dependent: {
+				key: 'enable_product_limits',
+				set: true,
+				value: 'enable_product_limits',
+			},
+		},
+
+		{
+			key: 'extra_product_charge',
+			type: 'number',
+			size: '8rem',
+			preText: 'Beyond this limit,charge',
+			//postText: __('per product', 'multivendorx'),
+			postInsideText: __('/products', 'multivendorx'),
+			preInsideText: __('$', 'multivendorx'),
+			dependent: {
+				key: 'enable_product_limits',
+				set: true,
+				value: 'enable_product_limits',
+			},
+		},
+		{
+			key: 'images_per_product',
+			type: 'number',
+			size: '6rem',
+			preText: 'Stores can also upload images',
+			//postText: __('images per product', 'multivendorx'),
+			postInsideText: __('/products', 'multivendorx'),
+			dependent: {
+				key: 'enable_product_limits',
+				set: true,
+				value: 'enable_product_limits',
+			},
+		},
+		{
+			key: 'max_featured_products',
+			type: 'number',
+			size: '6rem',
+			preText: 'allowed upto',
+			dependent: {
+				key: 'enable_product_limits',
+				set: true,
+				value: 'enable_product_limits',
+			},
+		},
+
+		{
+			key: 'product_images',
+			type: 'checkbox',
+			options: [
+				{
+					key: 'product_images',
+					value: 'product_images',
+				},
+			],
+			look: 'toggle',
+			dependent: {
+				key: 'enable_product_limits',
+				set: true,
+				value: 'enable_product_limits',
+			},
+		},
+	];
+
+
 	const gracePeriod = [
 		{
 			key: 'disable_coupon',
 			type: 'checkbox',
-			// label: __( 'Coupon restriction for wholesalers', 'catalogx' ),
-			// desc: __(
-			//     'Prevent wholesale users from applying any coupon and get addional discount on their orders.',
-			//     'catalogx'
-			// ),
 			options: [
 				{
 					key: 'disable_coupon',
@@ -669,7 +806,6 @@ const Membership = ({ id }: { id: string }) => {
 			postInsideText: __('days', 'multivendorx'),
 			size: '8rem',
 			preText: 'for a duration of',
-			postText: 'During this period, products are',
 			dependent: {
 				key: 'disable_coupon',
 				set: true,
@@ -679,7 +815,7 @@ const Membership = ({ id }: { id: string }) => {
 		{
 			key: 'facilitator',
 			type: 'dropdown',
-			size: '8rem',
+			size: '4rem',
 			options: [
 				{
 					key: 'monday',
@@ -702,8 +838,12 @@ const Membership = ({ id }: { id: string }) => {
 					value: 'thursday',
 				},
 			],
-			// preText: ' ',
-			postText: 'and product creation is',
+			preText: 'During this period, products are',
+			dependent: {
+				key: 'disable_coupon',
+				set: true,
+				value: 'disable_coupon',
+			},
 		},
 		{
 			key: 'rule_type',
@@ -712,6 +852,12 @@ const Membership = ({ id }: { id: string }) => {
 				{ value: 'price', label: 'allowed' },
 				{ value: 'quantity', label: 'Not allowed' }
 			],
+			dependent: {
+				key: 'disable_coupon',
+				set: true,
+				value: 'disable_coupon',
+			},
+			preText: 'and product creation is',
 		},
 		{
 			key: 'facilitator_fixed',
@@ -740,7 +886,11 @@ const Membership = ({ id }: { id: string }) => {
 				},
 			],
 			preText: 'Change the store role to',
-			//postText: 'during this time.',
+			dependent: {
+				key: 'disable_coupon',
+				set: true,
+				value: 'disable_coupon',
+			},
 		},
 	];
 
@@ -1291,13 +1441,6 @@ const Membership = ({ id }: { id: string }) => {
 												<i className="adminlib-info"></i>
 												<div className="details">
 													<p>Activate Stripe Marketplace or PayPal Marketplace module to use recurring subscriptions.</p>
-												</div>
-											</div>
-										</div>
-										<div className="settings-metabox-note">
-											<div className="metabox-note-wrapper">
-												<i className="adminlib-info"></i>
-												<div className="details">
 													<p>Sign-up fee 0.05 or more is required to create subscriptions in Stripe/PayPal</p>
 												</div>
 											</div>
@@ -1334,18 +1477,16 @@ const Membership = ({ id }: { id: string }) => {
 										</div>
 										<div className="form-group-wrapper">
 											<div className="form-group">
-												<div className="nasted-wrapper">
-													<label htmlFor="">Offer grace period</label>
-													<NestedComponent
-														id="role_rules"
-														fields={gracePeriod}
-														value={rules}
-														single={true}
-														addButtonLabel="Add Rule"
-														deleteButtonLabel="Remove"
-														onChange={(val) => setRules(val)}
-													/>
-												</div>
+												<label htmlFor="">Offer grace period</label>
+												<NestedComponent
+													id="role_rules"
+													fields={gracePeriod}
+													value={rules}
+													single={true}
+													addButtonLabel="Add Rule"
+													deleteButtonLabel="Remove"
+													onChange={(val) => setRules(val)}
+												/>
 											</div>
 										</div>
 									</>
@@ -1377,6 +1518,32 @@ const Membership = ({ id }: { id: string }) => {
 								</div>
 							</div>
 						</div>
+						<div className="card-content">
+							<div className="card-header">
+								<div className="left">
+									<div className="title">AI usage & limits</div>
+								</div>
+							</div>
+							<div className="card-body">
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="">
+											Allow AI features
+										</label>
+										<NestedComponent
+											id="ai_usage_rules"
+											fields={aiUsageLimits}
+											value={rules}
+											single={true}
+											addButtonLabel="Add Rule"
+											deleteButtonLabel="Remove"
+											onChange={(val) => setRules(val)}
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<div className="card-content">
 							<div className="card-header">
 								<div className="left">
@@ -1424,6 +1591,34 @@ const Membership = ({ id }: { id: string }) => {
 								</div>
 							</div>
 						</div>
+						<div className="card-content">
+							<div className="card-header">
+								<div className="left">
+									<div className="title">
+										Product benefits
+									</div>
+								</div>
+							</div>
+							<div className="card-body">
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="">
+											Control whether stores can add products,
+										</label>
+
+										<NestedComponent
+											id="product_upload_settings"
+											fields={productUploadSettings}
+											value={rules}
+											single={true}
+											addButtonLabel="Add Rule"
+											deleteButtonLabel="Remove"
+											onChange={(val) => setRules(val)}
+										/>
+									</div>
+								</div>
+							</div>
+						</div>	
 
 						<div className="card-content">
 							<div className="card-header">
