@@ -21,7 +21,7 @@ export default {
 					label: 'Seller verification',
 					connected: true,
 					disableBtn: true,
-					enableOption: true,
+					 
 					desc: 'Verify store identity and business legitimacy',
 					moduleEnabled: 'marketplace-compliance',
 					proSetting: true,
