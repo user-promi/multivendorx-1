@@ -658,36 +658,38 @@ const Membership = ({ id }: { id: string }) => {
 			],
 			look: 'toggle',
 		},
+		// {
+		// 	key: 'ai_product_images',
+		// 	type: 'select',
+		// 	size: '10rem',
+		// 	options: [
+		// 		{ value: 'enabled', label: __('Enabled', 'multivendorx') },
+		// 		{ value: 'disabled', label: __('Disabled', 'multivendorx') },
+		// 	],
+		// 	dependent: {
+		// 		key: 'enable_ai',
+		// 		set: true,
+		// 		value: 'enable_ai',
+		// 	},
+		// },
 		{
-			key: 'ai_product_content',
-			type: 'select',
-			size: '10rem',
+			key: 'enable',
+			type: 'checkbox',
+			label: 'for product creation. Product image generation',
 			options: [
-				{ value: 'enabled', label: __('Enabled', 'multivendorx') },
-				{ value: 'disabled', label: __('Disabled', 'multivendorx') },
+				{
+					key: 'enable_ai',
+					label: __('', 'multivendorx'),
+					value: 'enable_ai',
+				},
 			],
-			preText: 'for product creation.',
+			look: 'toggle',
 			dependent: {
 				key: 'enable_ai',
 				set: true,
 				value: 'enable_ai',
 			},
-		},
-		{
-			key: 'ai_product_images',
-			type: 'select',
-			size: '10rem',
-			options: [
-				{ value: 'enabled', label: __('Enabled', 'multivendorx') },
-				{ value: 'disabled', label: __('Disabled', 'multivendorx') },
-			],
-			preText: 'Product image generation',
-			dependent: {
-				key: 'enable_ai',
-				set: true,
-				value: 'enable_ai',
-			},
-		},
+		},	
 		{
 			key: 'max_ai_images',
 			type: 'number',
@@ -756,21 +758,12 @@ const Membership = ({ id }: { id: string }) => {
 				value: 'enable_product_limits',
 			},
 		},
-		{
-			key: 'max_featured_products',
-			type: 'number',
-			size: '6rem',
-			preText: 'allowed upto',
-			dependent: {
-				key: 'enable_product_limits',
-				set: true,
-				value: 'enable_product_limits',
-			},
-		},
+		
 
 		{
 			key: 'product_images',
 			type: 'checkbox',
+			label: 'Allow stores to add featured products',
 			options: [
 				{
 					key: 'product_images',
@@ -782,6 +775,17 @@ const Membership = ({ id }: { id: string }) => {
 				key: 'enable_product_limits',
 				set: true,
 				value: 'enable_product_limits',
+			},
+		},
+		{
+			key: 'max_featured_products',
+			type: 'number',
+			size: '6rem',
+			preText: 'maximum upto',
+			dependent: {
+				key: 'product_images',
+				set: true,
+				value: 'product_images',
 			},
 		},
 	];

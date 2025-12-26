@@ -164,7 +164,7 @@ export default {
 			options: [
 				{
 					key: 'default',
-					label: __('Independent', 'multivendorx'),
+					label: __('Independent seller', 'multivendorx'),
 					value: 'default',
 					desc: __(
 						'Stores can sell only their own products unless other modes are enabled.',
