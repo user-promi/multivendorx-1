@@ -320,6 +320,5 @@ class AI extends \WP_REST_Controller {
         }
         
         return (string) $result;
-        
     }
 }

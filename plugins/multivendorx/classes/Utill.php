@@ -150,7 +150,6 @@ class Utill {
         'payment_method'             => 'payment_method',
         'paypal_email'               => 'paypal_email',
         'stripe_account_id'          => 'stripe_connect_account_id',
-        'store_connected'            => 'store_connected',
         'stripe_oauth_state'         => 'stripe_oauth_state',
         'registration_data'          => 'multivendorx_registration_data',
         'request_withdrawal_amount'  => 'request_withdrawal_amount',

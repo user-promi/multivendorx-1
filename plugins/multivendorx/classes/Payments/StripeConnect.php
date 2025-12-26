@@ -8,7 +8,6 @@
 namespace MultiVendorX\Payments;
 
 use MultiVendorX\Store\Store;
-use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -124,14 +123,8 @@ class StripeConnect {
 
             $store             = new Store( $store_id );
             $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
-            $onboarding_status = 'Not Connected';
-            $is_onboarded      = false;
-
-            if ( $stripe_account_id ) {
-                $onboarding_status = 'Connected';
-                $is_onboarded      = true;
-            }
-            $badge_class = ( 'Connected' === $onboarding_status ) ? 'green' : 'red';
+            $onboarding_status = $stripe_account_id ? 'Connected' : 'Not Connected';
+            $badge_class = ( $stripe_account_id ) ? 'green' : 'red';
             $fields      = array(
                 array(
                     'type' => 'html',
@@ -140,7 +133,7 @@ class StripeConnect {
             );
 
             if ( ! is_admin() ) {
-                if ( $is_onboarded ) {
+                if ( $stripe_account_id ) {
                     $fields[] = array(
                         'type'   => 'button',
                         'key'    => 'disconnect_account',
@@ -179,18 +172,10 @@ class StripeConnect {
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
         $store             = new Store( $store_id );
         $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
-        $status            = 'failed';
-        if ( ! $stripe_account_id ) {
-            $status = 'failed';
-        }
 
         $transfer = $this->create_transfer( $amount, $stripe_account_id, $order_id );
 
-        if ( $transfer ) {
-            $status = 'success';
-        } else {
-            $status = 'failed';
-        }
+        $status = $transfer ? 'success' : 'failed';
 
         do_action( 'multivendorx_after_payment_complete', $store_id, 'Stripe Connect', $status, $order_id, $transaction_id, $note, $amount );
     }
@@ -300,7 +285,6 @@ class StripeConnect {
         // Update store meta.
         $meta_updates = array(
             Utill::STORE_SETTINGS_KEYS['stripe_account_id'] => $response['stripe_user_id'],
-            Utill::STORE_SETTINGS_KEYS ['store_connected']  => 1,
         );
         foreach ( $meta_updates as $key => $value ) {
             $store->update_meta( $key, sanitize_text_field( $value ) );
@@ -347,7 +331,6 @@ class StripeConnect {
         // Remove all Stripe-related metadata
         $meta_keys = [
             Utill::STORE_SETTINGS_KEYS['stripe_account_id'],
-            Utill::STORE_SETTINGS_KEYS ['store_connected'],
         ];
     
         foreach ( $meta_keys as $key ) {

@@ -1676,7 +1676,7 @@ const AddProduct = () => {
 											/>
 										</div>
 										<div className="buttons-wrapper">
-										{featuredImage &&
+										{
 											applyFilters(
 												'product_image_enhancement',
 												null,
@@ -1730,21 +1730,34 @@ const AddProduct = () => {
 													/> */}
 												<img src={img.thumbnail} alt="" />
 												<div className="buttons-wrapper">
-												{img &&
-													applyFilters(
-														'product_image_enhancement',
-														null,
-														{
-														currentImage: galleryImages.length > 0 ? img : null,
-														isFeaturedImage: false,
-														setImage: setGalleryImages,
-														featuredImage: galleryImages.length > 0 && featuredImage ? featuredImage : null,
-														}
-													)
-												}
+													{galleryImages.length > 0 &&
+														applyFilters(
+															'product_image_enhancement',
+															null,
+															{
+															currentImage: img,
+															isFeaturedImage: false,
+															setImage: setGalleryImages,
+															}
+														)
+													}
 												</div>
 											</div>
 										))}
+										<div className="buttons-wrapper">
+											{galleryImages.length == 0 &&
+												applyFilters(
+													'product_image_enhancement',
+													null,
+													{
+													currentImage: null,
+													isFeaturedImage: false,
+													setImage: setGalleryImages,
+													featuredImage: featuredImage ? featuredImage : null,
+													}
+												)
+											}
+										</div>
 									</div>
 								</div>
 							</div>
