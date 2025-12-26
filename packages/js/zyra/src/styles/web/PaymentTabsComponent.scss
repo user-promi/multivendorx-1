@@ -82,7 +82,10 @@
                             display: flex;
                             gap: 1rem;
                         }
-
+                        .badge-group{
+                            display: flex;
+                            gap: 0.5rem;
+                        }
                         .admin-badge {
                             padding: 0.313rem;
                         }
@@ -462,14 +465,6 @@
     //     padding-bottom: 1rem;
     //     margin: 0;
     // }
-
-    .button-wrapper {
-        width: 100%;
-        display: flex;
-        justify-content: end;
-        gap: 0.5rem;
-    }
-
 }
 
 .wizard-header {

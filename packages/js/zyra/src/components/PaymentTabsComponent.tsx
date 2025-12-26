@@ -89,7 +89,6 @@ interface PaymentMethod {
     countBtn?: boolean;
     desc: string;
     formFields?: PaymentFormField[];
-    toggleType?: 'icon' | 'checkbox';
     wrapperClass?: string;
     openForm?: boolean;
     single?: boolean;
@@ -109,8 +108,8 @@ interface PaymentTabsComponentProps {
     methods: PaymentMethod[];
     value: Record<string, Record<string, unknown>>;
     onChange: (data: Record<string, Record<string, unknown>>) => void;
-    buttonEnable?: boolean;
     isWizardMode?: boolean;
+    addNewBtn?: boolean;
     setWizardIndex?: (index: number) => void;
     moduleEnabled?: boolean;
     proChanged?: () => void;
@@ -124,6 +123,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     onChange,
     appLocalizer,
     isWizardMode = false,
+    addNewBtn,
     proSetting,
     moduleEnabled,
     proChanged,
@@ -147,8 +147,6 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             label: 'New Payment Method',
             desc: 'Configure your custom payment method.',
             connected: false,
-            // disableBtn: true,
-            // openForm: true,
             formFields: [
                 {
                     key: 'title',
@@ -168,7 +166,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                 {
                     key: 'enable',
                     type: 'checkbox',
-                    label: 'Enable',
+                    label: 'Required',
                     edit: true,
                 },
             ],
@@ -848,23 +846,20 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                                 <span className="title">
                                                     {(value?.[method.id]?.title as string) || method.label}
                                                 </span>
-
-                                                {method.disableBtn && (
-                                                    <div className="badge-group">
+                                                <div className="badge-group">
+                                                    {method.disableBtn && (
                                                         <div
                                                             className={`admin-badge ${isEnabled ? 'green' : 'red'}`}
                                                         >
                                                             {isEnabled ? 'Active' : 'Inactive'}
                                                         </div>
-
-                                                        {isEnabled && (
-                                                            <div className="admin-badge purple required-badge">
-                                                                Required
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
-
+                                                    )}
+                                                    {isEnabled && (
+                                                        <div className="admin-badge red">
+                                                            Required
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                             <div className="method-desc">
                                                 <p
@@ -1035,17 +1030,16 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     );
                 })}
             </div>
-            {/* <div className="admin-btn btn-purple">Add new</div> */}
-
-            <div
-                className="admin-btn btn-purple"
-                onClick={handleAddNewMethod}
-            >
-                Add new
-            </div>
-
+            {addNewBtn && (
+                <div
+                    className="admin-btn btn-purple"
+                    onClick={handleAddNewMethod}
+                >
+                    Add new
+                </div>
+            )}
             {isWizardMode && (
-                <div className="button-wrapper wizard-footer-buttons">
+                <div className="buttons-wrapper">
                     {renderWizardButtons()}
                 </div>
             )}

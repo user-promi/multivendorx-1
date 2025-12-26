@@ -22,7 +22,6 @@ export default {
 			),
 			buttonEnable: true,
 			addNewBtn: true,
-			toggleType: 'icon',
 			modal: [
 				{
 					id: 'zone-wise-shipping',
@@ -80,6 +79,36 @@ export default {
 						},
 					],
 				},
+				{
+					id: 'distance-based-shipping',
+					icon: 'adminlib-credit-card',
+					label: 'New Payment Method',
+					desc: 'Configure your custom payment method.',
+					formFields: [
+						{
+							key: 'title',
+							type: 'text',
+							label: 'Title',
+							placeholder: 'Payment title',
+							edit: true,
+						},
+						{
+							key: 'description',
+							type: 'textarea',
+							label: 'Payment Description',   // updated label
+							placeholder: 'Enter payment details',  // updated placeholder
+							desc: 'Add a short description of the payment method', // description
+							edit: true,
+						},
+						{
+							key: 'enable',
+							type: 'checkbox',
+							label: 'Required',
+							edit: true,
+						},
+					],
+				},
+
 			],
 		},
 		{
