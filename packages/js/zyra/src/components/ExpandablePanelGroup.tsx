@@ -39,7 +39,7 @@ interface PanelFormField {
     | 'checkbox'
     | 'verification-methods'
     | 'textarea'
-    | 'panel-tabs'
+    | 'expandable-panel'
     | 'multi-checkbox'
     | 'check-list'
     | 'description'
@@ -793,17 +793,18 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                     return (
                         <div
                             key={method.id}
-                            className={`panel-item ${method.disableBtn && !isEnabled
+                            className={`expandable-item ${method.disableBtn && !isEnabled
                                 ? 'disable'
                                 : ''
                                 } ${method.openForm ? 'open' : ''} `}
                         >
                             { /* Header */}
-                            <div className="panel-header">
-                                <div className="toggle-icon">
-                                    {method.formFields &&
-                                        method.formFields.length > 0 &&
-                                        !method.openForm && (
+                            <div className="expandable-header">
+
+                                {method.formFields &&
+                                    method.formFields.length > 0 &&
+                                    !method.openForm && (
+                                        <div className="toggle-icon">
                                             <i
                                                 className={`adminlib-${isEnabled && isActive
                                                     ? 'keyboard-arrow-down'
@@ -833,8 +834,8 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                     }
                                                 }}
                                             />
-                                        )}
-                                </div>
+                                        </div>
+                                    )}
 
                                 <div
                                     className="details"
@@ -862,11 +863,11 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                 >
                                     <div className="details-wrapper">
                                         {method.icon && (
-                                            <div className="panel-header-icon">
+                                            <div className="expandable-header-icon">
                                                 <i className={method.icon}></i>
                                             </div>
                                         )}
-                                        <div className="panel-header-info">
+                                        <div className="expandable-header-info">
                                             <div className="title-wrapper">
                                                 <span className="title">
                                                     {(value?.[method.id]?.title as string) || method.label}
@@ -933,8 +934,8 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                                     }
                                                                 }}
                                                             >
-                                                                {/* <i className="settings-icon adminlib-setting"></i> */}
                                                                 <span className="admin-btn btn-blue">
+                                                                    <i className="adminlib-setting"></i>
                                                                     Settings
                                                                 </span>
                                                             </li>
@@ -967,8 +968,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                         }
                                                     }}
                                                 >
-                                                    {/* <i className="eye-icon adminlib-eye"></i> */}
-                                                    <span className="admin-btn btn-green">Enable</span>
+                                                    <span className="admin-btn btn-green"><i className="adminlib-eye"></i> Enable</span>
                                                 </li>
                                             )}
                                         </ul>
@@ -977,6 +977,16 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                             1/3
                                         </div>
                                     ) : null}
+                                    {method.isCustom && (
+                                        <>
+                                            <div onClick={() => { toggleActiveTab(method.id) }} className="admin-btn btn-blue">
+                                                <div className="item">
+                                                    <i className="adminlib-edit"></i>
+                                                    Edit
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
                                     {/* show dropdown */}
                                     {(isEnabled || method.isCustom) && (
                                         <div className="icon-wrapper" ref={wrapperRef}>
@@ -993,12 +1003,92 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                 <div className="dropdown" onClick={(e) => e.stopPropagation()}>
                                                     <div className="dropdown-body">
                                                         <ul>
+                                                            {method.disableBtn ? (
+                                                                <>
+                                                                    {isEnabled ? (
+                                                                        <>
+                                                                            {method.formFields &&
+                                                                                method.formFields
+                                                                                    .length > 0 && (
+                                                                                    <li
+                                                                                        onClick={() => {
+                                                                                            if (
+                                                                                                method.proSetting &&
+                                                                                                !appLocalizer?.khali_dabba
+                                                                                            ) {
+                                                                                                proChanged?.();
+                                                                                                return;
+                                                                                            } else if (
+                                                                                                method.moduleEnabled &&
+                                                                                                !modules.includes(
+                                                                                                    method.moduleEnabled
+                                                                                                )
+                                                                                            ) {
+                                                                                                moduleChange?.(
+                                                                                                    method.moduleEnabled
+                                                                                                );
+                                                                                                return;
+                                                                                            } else {
+                                                                                                toggleActiveTab(
+                                                                                                    method.id
+                                                                                                );
+                                                                                            }
+                                                                                        }}
+                                                                                    >
+                                                                                        <span className="item">
+                                                                                            <i className="adminlib-setting"></i>
+                                                                                            Settings
+                                                                                        </span>
+                                                                                    </li>
+                                                                                )}
+                                                                        </>
+                                                                    ) : (
+                                                                        <li
+                                                                            onClick={() => {
+                                                                                if (
+                                                                                    method.proSetting &&
+                                                                                    !appLocalizer?.khali_dabba
+                                                                                ) {
+                                                                                    proChanged?.();
+                                                                                    return;
+                                                                                } else if (
+                                                                                    method.moduleEnabled &&
+                                                                                    !modules.includes(
+                                                                                        method.moduleEnabled
+                                                                                    )
+                                                                                ) {
+                                                                                    moduleChange?.(
+                                                                                        method.moduleEnabled
+                                                                                    );
+                                                                                    return;
+                                                                                } else {
+                                                                                    toggleEnable(
+                                                                                        method.id,
+                                                                                        true
+                                                                                    );
+                                                                                }
+                                                                            }}
+                                                                        >
+                                                                            <span className="item"><i className="adminlib-eye"></i> Enable</span>
+                                                                        </li>
+                                                                    )}
+                                                                </>
+                                                            ) : null}
                                                             {method.isCustom && (
-                                                                <li onClick={() => handleDeleteMethod(method.id)} className="delete">
-                                                                    <div className="item">
-                                                                        Delete
-                                                                    </div>
-                                                                </li>
+                                                                <>
+                                                                    <li onClick={() => { toggleActiveTab(method.id) }}>
+                                                                        <div className="item">
+                                                                            <i className="adminlib-edit"></i>
+                                                                            Edit
+                                                                        </div>
+                                                                    </li>
+                                                                    <li onClick={() => handleDeleteMethod(method.id)} className="delete">
+                                                                        <div className="item">
+                                                                            <i className="adminlib-delete"></i>
+                                                                            Delete
+                                                                        </div>
+                                                                    </li>
+                                                                </>
                                                             )}
                                                             {isEnabled && !method.isCustom && (
                                                                 <li
@@ -1028,6 +1118,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                                         }
                                                                     }}>
                                                                     <div className="item">
+                                                                        <i className="adminlib-eye-blocked"></i>
                                                                         Disable
                                                                     </div>
                                                                 </li>

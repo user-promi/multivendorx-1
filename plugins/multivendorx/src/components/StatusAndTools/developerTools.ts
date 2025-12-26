@@ -125,12 +125,17 @@ export default {
 			options: [
 				{
 					key: 'sync_only_new_entry',
-					label: __('New Entry', 'multivendorx'),
+					label: __('All (Predefined + Custom)', 'multivendorx'),
 					value: 'sync_only_new_entry',
 				},
 				{
+					key: 'sync_custom_only',
+					label: __('Sync Custom Only', 'multivendorx'),
+					value: 'sync_custom_only',
+				},
+				{
 					key: 'sync_existing_entry',
-					label: __('Existing + New Entry', 'multivendorx'),
+					label: __('Sync Selected Fields', 'multivendorx'),
 					value: 'sync_existing_entry',
 				},
 			],
@@ -143,28 +148,33 @@ export default {
 			options: [
 				{
 					key: 'override_notifiers',
-					label: __('Notifiers', 'multivendorx'),
+					label: __('Recipients', 'multivendorx'),
 					value: 'override_notifiers',
+					desc: __( 'Sync the assigned recipients for the notification.', 'multivendorx'),
 				},
 				{
 					key: 'override_custom',
-					label: __('Custom Emails', 'multivendorx'),
+					label: __('Additional Emails', 'multivendorx'),
 					value: 'override_custom',
+					desc: __( 'Sync the assigned recipients for the notification.', 'multivendorx'),
 				},
 				{
 					key: 'override_email_content',
 					label: __('Email Content', 'multivendorx'),
 					value: 'override_email_content',
+					desc: __( 'Sync the assigned recipients for the notification.', 'multivendorx'),
 				},
 				{
 					key: 'override_sms_content',
 					label: __('SMS Content', 'multivendorx'),
 					value: 'override_sms_content',
+					desc: __( 'Sync the assigned recipients for the notification.', 'multivendorx'),
 				},
 				{
 					key: 'override_system_content',
 					label: __('System Content', 'multivendorx'),
 					value: 'override_system_content',
+					desc: __( 'Sync the assigned recipients for the notification.', 'multivendorx'),
 				},
 			],
 			selectDeselect: true,
@@ -177,8 +187,8 @@ export default {
 		{
 			key: 'sync_table',
 			type: 'button',
-			name: __('Sync Table', 'multivendorx'),
-			label: __('Sync Table', 'multivendorx'),
+			label: ' ',
+			name: __('Sync Now', 'multivendorx'),
 			apilink: 'notifications',
 			method: 'POST',
 			dependent: {
