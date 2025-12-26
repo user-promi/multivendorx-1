@@ -303,13 +303,8 @@ class StripeConnect {
         }
         // Update store meta.
         $meta_updates = array(
-            '_stripe_connect_account_id' => $response['stripe_user_id'],
-            '_store_payment_mode'        => 'stripe-connect',
-            'store_connected'            => 1,
-            'admin_client_id'            => $client_id,
-            'access_token'               => $response['access_token'] ?? '',
-            'refresh_token'              => $response['refresh_token'] ?? '',
-            'stripe_publishable_key'     => $response['stripe_publishable_key'] ?? '',
+            Utill::STORE_SETTINGS_KEYS['stripe_account_id'] => $response['stripe_user_id'],
+            Utill::STORE_SETTINGS_KEYS ['store_connected']  => 1,
         );
         foreach ( $meta_updates as $key => $value ) {
             $store->update_meta( $key, sanitize_text_field( $value ) );
@@ -334,7 +329,7 @@ class StripeConnect {
         $client_id  = $mode === 'test' ? $stripe_settings['test_client_id'] : $stripe_settings['live_client_id'] ?? '';
         $secret_key = $mode === 'test' ? $stripe_settings['test_secret_key'] : $stripe_settings['live_secret_key'] ?? '';
     
-        $stripe_account_id = $store->get_meta('_stripe_connect_account_id');
+        $stripe_account_id = $store->get_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_id']);
     
         // Deauthorize Stripe account
         if ( $stripe_account_id && $client_id && $secret_key ) {
@@ -355,13 +350,8 @@ class StripeConnect {
     
         // Remove all Stripe-related metadata
         $meta_keys = [
-            '_stripe_connect_account_id',
-            '_store_payment_mode',
-            'store_connected',
-            'admin_client_id',
-            'access_token',
-            'refresh_token',
-            'stripe_publishable_key',
+            Utill::STORE_SETTINGS_KEYS['stripe_account_id'],
+            Utill::STORE_SETTINGS_KEYS ['store_connected'],
         ];
     
         foreach ( $meta_keys as $key ) {
