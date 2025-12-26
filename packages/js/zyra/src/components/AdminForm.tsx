@@ -232,7 +232,8 @@ interface InputField {
     requiredEnable?: boolean;
     iconOptions?: string[];
     hint?: string;
-    addNewBtn?: string;
+    addNewBtnText?: string;
+    addNewBtn?: boolean;
     blocktext?: string;
     defaultValues?: MultiStringItem[];
     title?: string;
@@ -1545,7 +1546,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             selectDeselectValue="Select / Deselect All" // text for select/deselect all
                             rightContentClass="settings-metabox-description"
                             rightContent={ inputField.rightContent } // for place checkbox right
-                            addNewBtn={ inputField.addNewBtn }
+                            addNewBtn={ inputField.addNewBtnText }
                             options={normalizedOptions}
                             value={ normalizedValue }
                             proSetting={ isProSetting(
@@ -2231,6 +2232,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             appLocalizer={ appLocalizer }
                             methods={ inputField.modal ?? [] } //Array of available payment methods/options.
                             buttonEnable={ inputField.buttonEnable } //Flag to enable/disable action buttons in the UI.
+                            addNewBtn={inputField.addNewBtn}
                             value={ value || {} }
                             onChange={ ( data ) => {
                                 if (

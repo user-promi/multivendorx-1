@@ -65,7 +65,6 @@ interface PaymentFormField {
     look?: string;
     selectDeselect?: boolean;
     rightContent?: string;
-    addNewBtn?: boolean;
     proSetting?: boolean;
     moduleEnabled?: string;
     dependentSetting?: string;
@@ -109,12 +108,12 @@ interface PaymentTabsComponentProps {
     value: Record<string, Record<string, unknown>>;
     onChange: (data: Record<string, Record<string, unknown>>) => void;
     isWizardMode?: boolean;
-    addNewBtn?: boolean;
     setWizardIndex?: (index: number) => void;
     moduleEnabled?: boolean;
     proChanged?: () => void;
     moduleChange: (module: string) => void;
     modules: string[];
+    addNewBtn?: boolean;
 }
 
 const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
@@ -123,12 +122,12 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     onChange,
     appLocalizer,
     isWizardMode = false,
-    addNewBtn,
     proSetting,
     moduleEnabled,
     proChanged,
     moduleChange,
     modules,
+    addNewBtn,
 }) => {
     const [activeTabs, setActiveTabs] = useState<string[]>([]);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -1030,6 +1029,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     );
                 })}
             </div>
+            {/* {addNewBtn && ( */}
             {addNewBtn && (
                 <div
                     className="admin-btn btn-purple"
@@ -1038,6 +1038,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     Add new
                 </div>
             )}
+
             {isWizardMode && (
                 <div className="buttons-wrapper">
                     {renderWizardButtons()}
