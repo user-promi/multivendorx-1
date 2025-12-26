@@ -39,7 +39,7 @@ import '../styles/web/AdminForm.scss';
 import NestedComponent from './NestedComponent';
 import ColorSettingInput from './ColorSettingInput';
 import EndpointEditor from './EndpointEditor';
-import PaymentTabsComponent from './PaymentTabsComponent';
+import ExpandablePanelGroup from './ExpandablePanelGroup';
 import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
 import { useModules } from '../contexts/ModuleContext';
@@ -176,7 +176,7 @@ interface InputField {
         | 'checkbox-custom-img'
         | 'api-connect'
         | 'nested'
-        | 'payment-tabs'
+        | 'panel-tabs'
         | 'multi-string'
         | 'verification-methods'
         | 'description'
@@ -1249,7 +1249,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                 inputType="multi-string"
                                 wrapperClass="setting-form-multi-input"
                                 inputClass="basic-input"
-                                listClass="payment-tabs-component"
+                                listClass="expandable-panel-group"
                                 itemClass="multi-item"
                                 placeholder={ inputField.placeholder }
                                 values={
@@ -2220,9 +2220,9 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                case 'payment-tabs':
+                case 'panel-tabs':
                     input = (
-                        <PaymentTabsComponent
+                        <ExpandablePanelGroup
                             key={ inputField.key }
                             name={ inputField.key }
                             proSetting={ isProSetting(

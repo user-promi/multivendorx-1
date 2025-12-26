@@ -62,7 +62,7 @@ export default {
 		},
 		{
 			key: 'refund_reasons',
-			type: 'payment-tabs',
+			type: 'panel-tabs',
 			label: __('Refund reasons', 'multivendorx'),
 			placeholder: __('Enter refund reasons here…', 'multivendorx'),
 			settingDescription: __(
@@ -90,14 +90,17 @@ export default {
 				{
 					id: 'damaged-or-defective-product',
 					label: 'Damaged or defective product',
+					required: true,
 				},
 				{
 					id: 'wrong-item',
 					label: 'Wrong item delivered',
+					required: true,
 				},
 				{
 					id: 'product-not-as-described',
 					label: 'Product not as described',
+					required: true,
 				},
 				{
 					id: 'late-delivery',
@@ -134,6 +137,26 @@ export default {
 					],
 				},
 			],
+			// requiredEnable: true,
+			// defaultValues: [
+			// 	{
+			// 		value: 'Damaged or defective product',
+			// 		required: true,
+			// 		deleteDisabled: true,
+			// 	},
+			// 	{
+			// 		value: 'Wrong item delivered',
+			// 		required: true,
+			// 		deleteDisabled: true,
+			// 	},
+			// 	{
+			// 		value: 'Product not as described',
+			// 		required: true,
+			// 		deleteDisabled: true,
+			// 	},
+			// 	{ value: 'Late delivery' },
+			// 	{ value: 'Changed mind' },
+			// ],
 			moduleEnabled: 'marketplace-refund',
 		},
 	],

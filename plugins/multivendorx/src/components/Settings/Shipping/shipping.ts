@@ -13,7 +13,7 @@ export default {
 	modal: [
 		{
 			key: 'shipping_modules',
-			type: 'payment-tabs',
+			type: 'panel-tabs',
 			moduleEnabled: 'store-shipping',
 			label: __('Shipping methods available to stores ', 'multivendorx'),
 			desc: __(
@@ -52,7 +52,6 @@ export default {
 					label: 'Zone based shipping',
 					disableBtn: true,
 					moduleEnabled: 'store-shipping',
-					required: true,
 					desc: 'Stores can configure multiple shipping zones.',
 					formFields: [
 						{
@@ -74,7 +73,6 @@ export default {
 					label: 'Country-wise shipping',
 					moduleEnabled: 'store-shipping',
 					disableBtn: true,
-					required: true,
 					desc: 'Let store set specific shipping rates based on destination countries.',
 					formFields: [
 						{

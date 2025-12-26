@@ -1,13 +1,13 @@
 @use '../../global.scss' as *;
 
-.payment-tabs-component {
+.expandable-panel-group {
     margin: 0;
 
-    .payment-method-card {
+    .panel-item {
         margin-bottom: 1rem;
         cursor: pointer;
 
-        .payment-method {
+        .panel-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -49,7 +49,7 @@
 
 
 
-                .payment-method-icon {
+                .panel-header-icon {
                     padding: 0.313rem;
                     background: $theme-background-color;
                     border-radius: 0.5rem;
@@ -69,7 +69,7 @@
                     }
                 }
 
-                .payment-method-info {
+                .panel-header-info {
                     .title-wrapper {
                         display: flex;
                         gap: 0.5rem;
@@ -82,7 +82,7 @@
                             display: flex;
                             gap: 1rem;
                         }
-                        .badge-group{
+                        .panel-badges{
                             display: flex;
                             gap: 0.5rem;
                         }
@@ -91,7 +91,7 @@
                         }
                     }
 
-                    .method-desc {
+                    .panel-description {
                         font-size: 0.75rem;
 
                         p {
@@ -140,14 +140,14 @@
                 // }
             }
 
-            .payment-method-arrow {
+            .panel-header-arrow {
                 i {
                     font-size: 2rem;
                 }
             }
         }
 
-        .payment-method-form {
+        .expandable-panel {
             display: flex;
             flex-wrap: wrap;
             border: $border-light-small;
@@ -188,8 +188,8 @@
                     background: #fff;
                 }
 
-                .payment-tabs-component {
-                    .payment-method-card {
+                .expandable-panel-group {
+                    .panel-item {
                         background: #fff;
                     }
 
@@ -211,31 +211,24 @@
             &.social-verification {
                 padding-top: 0.5rem;
 
-                .payment-method {
+                .panel-header {
                     background: transparent;
                     border: $border-light-small;
                     padding: 0.625rem;
 
-                    .payment-method-icon {
+                    .panel-header-icon {
                         width: 2rem;
                         height: 2rem;
                     }
                 }
             }
 
-            .payment-description {
+            .panel-description {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 0.625rem;
                 margin: 0;
                 font-size: 0.95rem;
-            }
-
-            .payments-tab-notice {
-                padding: 0.625rem;
-                background: #ece2f8a6;
-                color: #000000cf;
-                border-radius: 0.313rem;
             }
 
             .copy-text-wrapper {
@@ -277,7 +270,7 @@
         &.open-form {
             cursor: default;
 
-            .payment-method {
+            .panel-header {
                 cursor: default;
             }
         }

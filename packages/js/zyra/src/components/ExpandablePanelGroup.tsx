@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../styles/web/PaymentTabsComponent.scss';
+import '../styles/web/ExpandablePanelGroup.scss';
 import TextArea from './TextArea';
 import ToggleSetting from './ToggleSetting';
 import MultiCheckBox from './MultiCheckbox';
@@ -30,7 +30,7 @@ interface FieldOption {
     url?: string;
 }
 
-interface PaymentFormField {
+interface PanelFormField {
     key: string;
     type:
     | 'text'
@@ -39,7 +39,7 @@ interface PaymentFormField {
     | 'checkbox'
     | 'verification-methods'
     | 'textarea'
-    | 'payment-tabs'
+    | 'panel-tabs'
     | 'multi-checkbox'
     | 'check-list'
     | 'description'
@@ -52,7 +52,7 @@ interface PaymentFormField {
 
     label: string;
     placeholder?: string;
-    nestedFields?: PaymentFormField[];
+    nestedFields?: PanelFormField[];
     des?: string;
     addButtonLabel?: string;
     deleteButtonLabel?: string;
@@ -61,7 +61,7 @@ interface PaymentFormField {
     rowNumber?: number;
     colNumber?: number;
     options?: FieldOption[];
-    modal?: PaymentMethod[];
+    modal?: ExpandablePanelMethod[];
     look?: string;
     selectDeselect?: boolean;
     rightContent?: string;
@@ -79,7 +79,7 @@ interface PaymentFormField {
     edit?: boolean;
 }
 
-interface PaymentMethod {
+interface ExpandablePanelMethod {
     icon: string;
     id: string;
     label: string;
@@ -87,30 +87,31 @@ interface PaymentMethod {
     disableBtn?: boolean;
     countBtn?: boolean;
     desc: string;
-    formFields?: PaymentFormField[];
+    formFields?: PanelFormField[];
     wrapperClass?: string;
     openForm?: boolean;
     single?: boolean;
     rowClass?: string;
-    nestedFields?: PaymentFormField[];
+    nestedFields?: PanelFormField[];
     proSetting?: boolean;
     moduleEnabled?: string;
     edit?: boolean;
     isCustom?: boolean;
+    required?: boolean;
 }
 interface AddNewTemplate {
     icon?: string;
     label?: string;
     desc?: string;
-    formFields: PaymentFormField[];
+    formFields: PanelFormField[];
 }
-interface PaymentTabsComponentProps {
+interface ExpandablePanelGroupProps {
     name: string;
     proSetting?: boolean;
     proSettingChanged?: () => void;
     apilink?: string;
     appLocalizer?: AppLocalizer;
-    methods: PaymentMethod[];
+    methods: ExpandablePanelMethod[];
     value: Record<string, Record<string, unknown>>;
     onChange: (data: Record<string, Record<string, unknown>>) => void;
     isWizardMode?: boolean;
@@ -124,7 +125,7 @@ interface PaymentTabsComponentProps {
     requiredEnable?: boolean;
 }
 
-const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
+const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
     methods,
     value,
     onChange,
@@ -141,7 +142,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     const [activeTabs, setActiveTabs] = useState<string[]>([]);
     const menuRef = useRef<HTMLDivElement>(null);
     const [wizardIndex, setWizardIndex] = useState(0);
-    const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(methods);
+    const [ExpandablePanelMethods, setExpandablePanelMethods] = useState<ExpandablePanelMethod[]>(methods);
     const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -164,7 +165,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
 
     // add new
-    const createNewPaymentMethod = (): PaymentMethod => {
+    const createNewExpandablePanelMethod = (): ExpandablePanelMethod => {
         if (!addNewTemplate) {
             throw new Error('addNewTemplate is required when addNewBtn is true');
         }
@@ -175,15 +176,14 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             label: addNewTemplate.label || 'New Item',
             desc: addNewTemplate.desc || '',
             connected: false,
-            // disableBtn: true,
             isCustom: true,
             formFields: addNewTemplate.formFields,
         };
     };
 
     const handleAddNewMethod = () => {
-        const newMethod = createNewPaymentMethod();
-        setPaymentMethods((prev) => [...prev, newMethod]);
+        const newMethod = createNewExpandablePanelMethod();
+        setExpandablePanelMethods((prev) => [...prev, newMethod]);
         onChange({
             ...value,
             [newMethod.id]: {
@@ -196,7 +196,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
         setActiveTabs((prev) => [...prev, newMethod.id]);
     };
     const handleDeleteMethod = (methodId: string) => {
-        setPaymentMethods((prev) =>
+        setExpandablePanelMethods((prev) =>
             prev.filter((m) => m.id !== methodId)
         );
 
@@ -267,7 +267,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
     const handleMultiSelectDeselect = (
         methodId: string,
-        field: PaymentFormField
+        field: PanelFormField
     ) => {
         const allValues = Array.isArray(field.options)
             ? field.options.map((opt) => String(opt.value))
@@ -292,7 +292,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     };
 
     const renderWizardButtons = () => {
-        const step = paymentMethods[wizardIndex];
+        const step = ExpandablePanelMethods[wizardIndex];
         const buttonField = step?.formFields?.find(
             (f) => f.type === 'buttons'
         );
@@ -302,7 +302,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
         return renderField(step.id, buttonField);
     };
-    const renderField = (methodId: string, field: PaymentFormField) => {
+    const renderField = (methodId: string, field: PanelFormField) => {
         const fieldValue = value[methodId]?.[field.key];
 
         switch (field.type) {
@@ -537,7 +537,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
                                 {field.des && (
                                     <p
-                                        className="payment-description"
+                                        className="panel-description"
                                         dangerouslySetInnerHTML={{
                                             __html: field.des,
                                         }}
@@ -547,7 +547,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                         ) : (
                             field.des && (
                                 <p
-                                    className="payment-description"
+                                    className="panel-description"
                                     dangerouslySetInnerHTML={{
                                         __html: field.des,
                                     }}
@@ -653,7 +653,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     <>
                         {Array.isArray(field.options) &&
                             field.options.map((item, index) => {
-                                const wizardSteps = paymentMethods.filter(
+                                const wizardSteps = ExpandablePanelMethods.filter(
                                     (m) => m.isWizardMode === true
                                 );
                                 const isLastStep =
@@ -782,8 +782,8 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
 
     return (
         <>
-            <div className="payment-tabs-component">
-                {paymentMethods.map((method, index) => {
+            <div className="expandable-panel-group">
+                {ExpandablePanelMethods.map((method, index) => {
                     const isEnabled = value?.[method.id]?.enable ?? false;
                     const isActive = activeTabs.includes(method.id);
                     if (isWizardMode && index > wizardIndex) {
@@ -793,13 +793,13 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                     return (
                         <div
                             key={method.id}
-                            className={`payment-method-card ${method.disableBtn && !isEnabled
+                            className={`panel-item ${method.disableBtn && !isEnabled
                                 ? 'disable'
                                 : ''
                                 } ${method.openForm ? 'open' : ''} `}
                         >
                             { /* Header */}
-                            <div className="payment-method">
+                            <div className="panel-header">
                                 <div className="toggle-icon">
                                     {method.formFields &&
                                         method.formFields.length > 0 &&
@@ -862,16 +862,16 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                 >
                                     <div className="details-wrapper">
                                         {method.icon && (
-                                            <div className="payment-method-icon">
+                                            <div className="panel-header-icon">
                                                 <i className={method.icon}></i>
                                             </div>
                                         )}
-                                        <div className="payment-method-info">
+                                        <div className="panel-header-info">
                                             <div className="title-wrapper">
                                                 <span className="title">
                                                     {(value?.[method.id]?.title as string) || method.label}
                                                 </span>
-                                                <div className="badge-group">
+                                                <div className="panel-badges">
                                                     {method.disableBtn && (
                                                         <div
                                                             className={`admin-badge ${isEnabled ? 'green' : 'red'}`}
@@ -879,13 +879,15 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                                             {isEnabled ? 'Active' : 'Inactive'}
                                                         </div>
                                                     )}
+                                                    {!!(method.required || value?.[method.id]?.required) && (
+                                                        <div className="admin-badge red">
+                                                            Required
+                                                        </div>
+                                                    )}
 
-                                                    <div className="admin-badge red">
-                                                        Required
-                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="method-desc">
+                                            <div className="panel-description">
                                                 <p
                                                     dangerouslySetInnerHTML={{
                                                         __html:
@@ -999,32 +1001,32 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                                                 </li>
                                                             )}
                                                             {isEnabled && !method.isCustom && (
-                                                                <li 
-                                                                className="delete"
-                                                                onClick={() => {
-                                                                    if (
-                                                                        method.proSetting &&
-                                                                        !appLocalizer?.khali_dabba
-                                                                    ) {
-                                                                        proChanged?.();
-                                                                        return;
-                                                                    } else if (
-                                                                        method.moduleEnabled &&
-                                                                        !modules.includes(
-                                                                            method.moduleEnabled
-                                                                        )
-                                                                    ) {
-                                                                        moduleChange?.(
-                                                                            method.moduleEnabled
-                                                                        );
-                                                                        return;
-                                                                    } else {
-                                                                        toggleEnable(
-                                                                            method.id,
-                                                                            false
-                                                                        );
-                                                                    }
-                                                                }}>
+                                                                <li
+                                                                    className="delete"
+                                                                    onClick={() => {
+                                                                        if (
+                                                                            method.proSetting &&
+                                                                            !appLocalizer?.khali_dabba
+                                                                        ) {
+                                                                            proChanged?.();
+                                                                            return;
+                                                                        } else if (
+                                                                            method.moduleEnabled &&
+                                                                            !modules.includes(
+                                                                                method.moduleEnabled
+                                                                            )
+                                                                        ) {
+                                                                            moduleChange?.(
+                                                                                method.moduleEnabled
+                                                                            );
+                                                                            return;
+                                                                        } else {
+                                                                            toggleEnable(
+                                                                                method.id,
+                                                                                false
+                                                                            );
+                                                                        }
+                                                                    }}>
                                                                     <div className="item">
                                                                         Disable
                                                                     </div>
@@ -1042,7 +1044,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                             {method.formFields &&
                                 method.formFields.length > 0 && (
                                     <div
-                                        className={`${method.wrapperClass || ''} payment-method-form ${(isActive || method.openForm) && (!isEnabled || isEnabled) ? 'open' : ''} ${method.openForm ? 'open' : ''}` }
+                                        className={`${method.wrapperClass || ''} expandable-panel ${(isActive || method.openForm) && (!isEnabled || isEnabled) ? 'open' : ''} ${method.openForm ? 'open' : ''}`}
                                     >
                                         {method.formFields.map((field) => {
                                             if (
@@ -1098,4 +1100,4 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     );
 };
 
-export default PaymentTabsComponent;
+export default ExpandablePanelGroup;

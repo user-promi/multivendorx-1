@@ -55,7 +55,7 @@ class Utill {
         'store-capability'              => 'multivendorx_store_capability_settings',
         'identity-verification'         => 'multivendorx_identity_verification_settings',
         'commission-rule'               => 'multivendorx_commission_rule_settings',
-        'payment-integration'           => 'multivendorx_payment_integration_settings',
+        'panel-integration'           => 'multivendorx_payment_integration_settings',
         'store-appearance'              => 'multivendorx_store_appearance_settings',
         'product-report-abuse'          => 'multivendorx_product_report_abuse_settings',
         'store-commissions'             => 'multivendorx_store_commissions_settings',

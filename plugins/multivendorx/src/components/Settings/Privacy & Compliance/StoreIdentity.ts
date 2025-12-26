@@ -64,47 +64,8 @@ export default {
 			),
 		},
 		{
-			key: 'verification_method',
-			type: 'multi-string',
-			label: __('Verification methods', 'multivendorx'),
-			moduleEnabled: 'marketplace-compliance',
-			proSetting: true,
-			requiredEnable: true,
-			defaultValues: [
-				{
-					value: 'Business registration certificate',
-					iconClass: 'adminlib-check',
-					description:
-						'Confirms the store is legally registered as a business entity.',
-					required: true,
-				},
-				{
-					value: 'Trade license or permit',
-					iconClass: 'adminlib-clock',
-					description:
-						'Validates that the store is authorized to operate and conduct business legally.',
-					required: true,
-				},
-				{
-					value: 'Address proof of business location',
-					iconClass: 'adminlib-clock',
-					description:
-						'Confirms the store’s physical or operational business address.',
-					required: true,
-				},
-			],
-			iconOptions: [
-				'adminlib-check',
-				'adminlib-clock',
-				'adminlib-cart',
-				'adminlib-store',
-			],
-			maxItems: 10,
-			allowDuplicates: false,
-		},
-		{
 			key: 'verification_methods',
-			type: 'payment-tabs',
+			type: 'panel-tabs',
 			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,
 			label: __('Verification methods', 'multivendorx'),
@@ -219,7 +180,7 @@ export default {
 		},
 		{
 			key: 'all_verification_methods',
-			type: 'payment-tabs',
+			type: 'panel-tabs',
 			label: 'Social verification',
 			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,
