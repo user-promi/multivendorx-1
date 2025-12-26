@@ -62,35 +62,79 @@ export default {
 		},
 		{
 			key: 'refund_reasons',
-			type: 'multi-string',
+			type: 'payment-tabs',
 			label: __('Refund reasons', 'multivendorx'),
 			placeholder: __('Enter refund reasons here…', 'multivendorx'),
 			settingDescription: __(
 				'Add one or more reasons that stores can select when handling refund requests.',
 				'multivendorx'
 			),
-			requiredEnable: true,
-			defaultValues: [
+			addNewBtn: true,
+			addNewTemplate: {
+				label: 'New Reasons',
+				formFields: [
+					{
+						key: 'title',
+						type: 'text',
+						label: 'Reason',
+						placeholder: 'Enter title',
+					},
+					{
+						key: 'required',
+						type: 'checkbox',
+						label: 'Required',
+					},
+				],
+			},
+			modal: [
 				{
-					value: 'Damaged or defective product',
-					required: true,
-					deleteDisabled: true,
+					id: 'damaged-or-defective-product',
+					label: 'Damaged or defective product',
 				},
 				{
-					value: 'Wrong item delivered',
-					required: true,
-					deleteDisabled: true,
+					id: 'wrong-item',
+					label: 'Wrong item delivered',
 				},
 				{
-					value: 'Product not as described',
-					required: true,
-					deleteDisabled: true,
+					id: 'product-not-as-described',
+					label: 'Product not as described',
 				},
-				{ value: 'Late delivery' },
-				{ value: 'Changed mind' },
+				{
+					id: 'late-delivery',
+					label: 'Late delivery',
+					formFields: [
+						{
+							key: 'title',
+							type: 'text',
+							label: 'Reason',
+							placeholder: 'Enter title',
+						},
+						{
+							key: 'required',
+							type: 'checkbox',
+							label: 'Required',
+						},
+					],
+				},
+				{
+					id: 'changed-mind',
+					label: 'Changed mind',
+					formFields: [
+						{
+							key: 'title',
+							type: 'text',
+							label: 'Reason',
+							placeholder: 'Enter title',
+						},
+						{
+							key: 'required',
+							type: 'checkbox',
+							label: 'Required',
+						},
+					],
+				},
 			],
 			moduleEnabled: 'marketplace-refund',
-			name: 'abuse_report_reasons',
 		},
 	],
 };

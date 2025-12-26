@@ -21,7 +21,30 @@ export default {
 				'multivendorx'
 			),
 			buttonEnable: true,
-			addNewBtn: true,
+			// addNewBtn: true,
+			// addNewTemplate: {
+			// 	icon: 'adminlib-credit-card',
+			// 	label: 'New Shipping Method',
+			// 	desc: 'Configure your custom shipping method.',
+			// 	formFields: [
+			// 		{
+			// 			key: 'title',
+			// 			type: 'text',
+			// 			label: 'Method title',
+			// 			placeholder: 'Enter title',
+			// 		},
+			// 		{
+			// 			key: 'description',
+			// 			type: 'textarea',
+			// 			label: 'Description',
+			// 		},
+			// 		{
+			// 			key: 'required',
+			// 			type: 'checkbox',
+			// 			label: 'Required',
+			// 		},
+			// 	],
+			// },
 			modal: [
 				{
 					id: 'zone-wise-shipping',
@@ -29,7 +52,7 @@ export default {
 					label: 'Zone based shipping',
 					disableBtn: true,
 					moduleEnabled: 'store-shipping',
-					enableOption: true,
+					required: true,
 					desc: 'Stores can configure multiple shipping zones.',
 					formFields: [
 						{
@@ -51,7 +74,7 @@ export default {
 					label: 'Country-wise shipping',
 					moduleEnabled: 'store-shipping',
 					disableBtn: true,
-					enableOption: true,
+					required: true,
 					desc: 'Let store set specific shipping rates based on destination countries.',
 					formFields: [
 						{
@@ -67,7 +90,6 @@ export default {
 					icon: 'adminlib-distance-shipping',
 					label: 'Distance-based shipping',
 					disableBtn: true,
-					enableOption: true,
 					moduleEnabled: 'store-shipping',
 					desc: 'Calculate shipping costs based on actual distance between locations.',
 					formFields: [

@@ -319,6 +319,17 @@ interface InputField {
             placeholder?: string;
         }[];
     }[];
+    addNewTemplate?: {
+        icon: string;
+        label: string;
+        desc: string;
+        formFields: {
+            key: string;
+            type: 'text' | 'password' | 'number' | 'checkbox';
+            label: string;
+            placeholder?: string;
+        }[];
+    }
     link?: string;
 }
 
@@ -2233,6 +2244,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             methods={ inputField.modal ?? [] } //Array of available payment methods/options.
                             buttonEnable={ inputField.buttonEnable } //Flag to enable/disable action buttons in the UI.
                             addNewBtn={inputField.addNewBtn}
+                            addNewTemplate={inputField.addNewTemplate ?? []}
                             value={ value || {} }
                             onChange={ ( data ) => {
                                 if (

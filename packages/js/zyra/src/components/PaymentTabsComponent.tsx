@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/web/PaymentTabsComponent.scss';
 import TextArea from './TextArea';
 import ToggleSetting from './ToggleSetting';
@@ -96,8 +96,14 @@ interface PaymentMethod {
     proSetting?: boolean;
     moduleEnabled?: string;
     edit?: boolean;
+    isCustom?: boolean;
 }
-
+interface AddNewTemplate {
+    icon?: string;
+    label?: string;
+    desc?: string;
+    formFields: PaymentFormField[];
+}
 interface PaymentTabsComponentProps {
     name: string;
     proSetting?: boolean;
@@ -114,6 +120,8 @@ interface PaymentTabsComponentProps {
     moduleChange: (module: string) => void;
     modules: string[];
     addNewBtn?: boolean;
+    addNewTemplate?: AddNewTemplate;
+    requiredEnable?: boolean;
 }
 
 const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
@@ -128,47 +136,48 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
     moduleChange,
     modules,
     addNewBtn,
+    addNewTemplate
 }) => {
     const [activeTabs, setActiveTabs] = useState<string[]>([]);
     const menuRef = useRef<HTMLDivElement>(null);
     const [wizardIndex, setWizardIndex] = useState(0);
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(methods);
-    // const isEnabled = value?.[method.id]?.enable ?? false;
+    const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                wrapperRef.current &&
+                !wrapperRef.current.contains(event.target as Node)
+            ) {
+                setOpenDropdownId(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
 
     // add new
     const createNewPaymentMethod = (): PaymentMethod => {
+        if (!addNewTemplate) {
+            throw new Error('addNewTemplate is required when addNewBtn is true');
+        }
         const id = `custom_${Date.now()}`;
-
         return {
             id,
-            icon: 'adminlib-credit-card',
-            label: 'New Payment Method',
-            desc: 'Configure your custom payment method.',
+            icon: addNewTemplate.icon || '',
+            label: addNewTemplate.label || 'New Item',
+            desc: addNewTemplate.desc || '',
             connected: false,
-            formFields: [
-                {
-                    key: 'title',
-                    type: 'text',
-                    label: 'Title',
-                    placeholder: 'Payment title',
-                    edit: true,
-                },
-                {
-                    key: 'description',
-                    type: 'textarea',
-                    label: 'Payment Description',   // updated label
-                    placeholder: 'Enter payment details',  // updated placeholder
-                    desc: 'Add a short description of the payment method', // description
-                    edit: true,
-                },
-                {
-                    key: 'enable',
-                    type: 'checkbox',
-                    label: 'Required',
-                    edit: true,
-                },
-            ],
+            // disableBtn: true,
+            isCustom: true,
+            formFields: addNewTemplate.formFields,
         };
     };
 
@@ -181,9 +190,24 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                 enable: true,
                 title: '',
                 description: '',
+                required: false,
             },
         });
         setActiveTabs((prev) => [...prev, newMethod.id]);
+    };
+    const handleDeleteMethod = (methodId: string) => {
+        setPaymentMethods((prev) =>
+            prev.filter((m) => m.id !== methodId)
+        );
+
+        const updatedValue = { ...value };
+        delete updatedValue[methodId];
+
+        onChange(updatedValue);
+
+        setActiveTabs((prev) =>
+            prev.filter((id) => id !== methodId)
+        );
     };
 
     const canEdit = () => {
@@ -837,9 +861,11 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                     }}
                                 >
                                     <div className="details-wrapper">
-                                        <div className="payment-method-icon">
-                                            <i className={method.icon}></i>
-                                        </div>
+                                        {method.icon && (
+                                            <div className="payment-method-icon">
+                                                <i className={method.icon}></i>
+                                            </div>
+                                        )}
                                         <div className="payment-method-info">
                                             <div className="title-wrapper">
                                                 <span className="title">
@@ -853,11 +879,10 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                                             {isEnabled ? 'Active' : 'Inactive'}
                                                         </div>
                                                     )}
-                                                    {isEnabled && (
-                                                        <div className="admin-badge red">
-                                                            Required
-                                                        </div>
-                                                    )}
+
+                                                    <div className="admin-badge red">
+                                                        Required
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="method-desc">
@@ -907,40 +932,11 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                                                 }}
                                                             >
                                                                 {/* <i className="settings-icon adminlib-setting"></i> */}
-                                                                <span>
+                                                                <span className="admin-btn btn-blue">
                                                                     Settings
                                                                 </span>
                                                             </li>
                                                         )}
-                                                    <li
-                                                        onClick={() => {
-                                                            if (
-                                                                method.proSetting &&
-                                                                !appLocalizer?.khali_dabba
-                                                            ) {
-                                                                proChanged?.();
-                                                                return;
-                                                            } else if (
-                                                                method.moduleEnabled &&
-                                                                !modules.includes(
-                                                                    method.moduleEnabled
-                                                                )
-                                                            ) {
-                                                                moduleChange?.(
-                                                                    method.moduleEnabled
-                                                                );
-                                                                return;
-                                                            } else {
-                                                                toggleEnable(
-                                                                    method.id,
-                                                                    false
-                                                                );
-                                                            }
-                                                        }}
-                                                    >
-                                                        {/* <i className="disable-icon adminlib-eye-blocked"></i> */}
-                                                        <span>Disable</span>
-                                                    </li>
                                                 </>
                                             ) : (
                                                 <li
@@ -970,7 +966,7 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                                     }}
                                                 >
                                                     {/* <i className="eye-icon adminlib-eye"></i> */}
-                                                    <span>Enable</span>
+                                                    <span className="admin-btn btn-green">Enable</span>
                                                 </li>
                                             )}
                                         </ul>
@@ -979,22 +975,74 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
                                             1/3
                                         </div>
                                     ) : null}
+                                    {/* show dropdown */}
+                                    {(isEnabled || method.isCustom) && (
+                                        <div className="icon-wrapper" ref={wrapperRef}>
+                                            <i
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setOpenDropdownId((prev) =>
+                                                        prev === method.id ? null : method.id
+                                                    );
+                                                }}
+                                                className="admin-icon adminlib-more-vertical">
+                                            </i>
+                                            {openDropdownId === method.id && (
+                                                <div className="dropdown" onClick={(e) => e.stopPropagation()}>
+                                                    <div className="dropdown-body">
+                                                        <ul>
+                                                            {method.isCustom && (
+                                                                <li onClick={() => handleDeleteMethod(method.id)} className="delete">
+                                                                    <div className="item">
+                                                                        Delete
+                                                                    </div>
+                                                                </li>
+                                                            )}
+                                                            {isEnabled && !method.isCustom && (
+                                                                <li 
+                                                                className="delete"
+                                                                onClick={() => {
+                                                                    if (
+                                                                        method.proSetting &&
+                                                                        !appLocalizer?.khali_dabba
+                                                                    ) {
+                                                                        proChanged?.();
+                                                                        return;
+                                                                    } else if (
+                                                                        method.moduleEnabled &&
+                                                                        !modules.includes(
+                                                                            method.moduleEnabled
+                                                                        )
+                                                                    ) {
+                                                                        moduleChange?.(
+                                                                            method.moduleEnabled
+                                                                        );
+                                                                        return;
+                                                                    } else {
+                                                                        toggleEnable(
+                                                                            method.id,
+                                                                            false
+                                                                        );
+                                                                    }
+                                                                }}>
+                                                                    <div className="item">
+                                                                        Disable
+                                                                    </div>
+                                                                </li>
+                                                            )}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
                             {method.formFields &&
                                 method.formFields.length > 0 && (
                                     <div
-                                        className={`
-                                        ${method.wrapperClass || ''} 
-                                        payment-method-form
-                                        ${isEnabled &&
-                                                (isActive || method.openForm)
-                                                ? 'open'
-                                                : ''
-                                            }
-                                        ${method.openForm ? 'open' : ''}
-                                      ` }
+                                        className={`${method.wrapperClass || ''} payment-method-form ${(isActive || method.openForm) && (!isEnabled || isEnabled) ? 'open' : ''} ${method.openForm ? 'open' : ''}` }
                                     >
                                         {method.formFields.map((field) => {
                                             if (
@@ -1031,11 +1079,13 @@ const PaymentTabsComponent: React.FC<PaymentTabsComponentProps> = ({
             </div>
             {/* {addNewBtn && ( */}
             {addNewBtn && (
-                <div
-                    className="admin-btn btn-purple"
-                    onClick={handleAddNewMethod}
-                >
-                    Add new
+                <div className="buttons-wrapper">
+                    <div
+                        className="admin-btn btn-purple"
+                        onClick={handleAddNewMethod}
+                    >
+                        <i className="adminlib-plus"></i> Add New
+                    </div>
                 </div>
             )}
 
