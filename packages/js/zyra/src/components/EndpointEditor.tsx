@@ -265,43 +265,44 @@ const EndpointManager: React.FC< EndpointEditorProps > = ( {
                                 ) }
                             </div>
                         </div>
-
-                        <div className="edit-icon">
-                            { endpoint.visible !== false && (
-                                <i
-                                    onClick={ () => startEdit( key, endpoint ) }
-                                    className="adminlib-edit"
-                                ></i>
-                            ) }
-                            <div>
-                                <i
-                                    className={ `adminlib-eye${
-                                        endpoint.visible === false
-                                            ? '-blocked'
-                                            : ''
-                                    }` }
-                                    onClick={ () => {
-                                        const updated = endpoints.map(
-                                            ( [ k, item ] ) =>
-                                                k === key
-                                                    ? [
-                                                          k,
-                                                          {
-                                                              ...item,
-                                                              visible:
-                                                                  item.visible ===
-                                                                  false
-                                                                      ? true
-                                                                      : false,
-                                                          },
-                                                      ]
-                                                    : [ k, item ]
-                                        ) as [ string, Endpoint ][];
-                                        autoSave( updated );
-                                    } }
-                                ></i>
+                        { key !== 'dashboard' && (
+                            <div className="edit-icon">
+                                { endpoint.visible !== false && (
+                                    <i
+                                        onClick={ () => startEdit( key, endpoint ) }
+                                        className="adminlib-edit"
+                                    ></i>
+                                ) }
+                                <div>
+                                    <i
+                                        className={ `adminlib-eye${
+                                            endpoint.visible === false
+                                                ? '-blocked'
+                                                : ''
+                                        }` }
+                                        onClick={ () => {
+                                            const updated = endpoints.map(
+                                                ( [ k, item ] ) =>
+                                                    k === key
+                                                        ? [
+                                                            k,
+                                                            {
+                                                                ...item,
+                                                                visible:
+                                                                    item.visible ===
+                                                                    false
+                                                                        ? true
+                                                                        : false,
+                                                            },
+                                                        ]
+                                                        : [ k, item ]
+                                            ) as [ string, Endpoint ][];
+                                            autoSave( updated );
+                                        } }
+                                    ></i>
+                                </div>
                             </div>
-                        </div>
+                        ) }
                     </div>
                 ) }
 

@@ -65,7 +65,7 @@ export default {
 		},
 		{
 			key: 'verification_methods',
-			type: 'panel-tabs',
+			type: 'expandable-panel',
 			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,
 			label: __('Verification methods', 'multivendorx'),
@@ -180,7 +180,7 @@ export default {
 		},
 		{
 			key: 'all_verification_methods',
-			type: 'panel-tabs',
+			type: 'expandable-panel',
 			label: 'Social verification',
 			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,

@@ -62,7 +62,7 @@ export default {
 		},
 		{
 			key: 'refund_reasons',
-			type: 'panel-tabs',
+			type: 'expandable-panel',
 			label: __('Refund reasons', 'multivendorx'),
 			placeholder: __('Enter refund reasons here…', 'multivendorx'),
 			settingDescription: __(
@@ -105,6 +105,7 @@ export default {
 				{
 					id: 'late-delivery',
 					label: 'Late delivery',
+					isCustom: true,
 					formFields: [
 						{
 							key: 'title',
@@ -122,6 +123,7 @@ export default {
 				{
 					id: 'changed-mind',
 					label: 'Changed mind',
+					isCustom: true,
 					formFields: [
 						{
 							key: 'title',
