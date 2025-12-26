@@ -745,87 +745,94 @@ const AddOrder = () => {
 									<div className="tax-modal">
 										<h2>{__('Add tax', 'multivendorx')}</h2>
 
-										<table className="admin-table">
-											<thead>
-												<tr>
-													<td></td>
-													<td>
-														{__(
-															'Rate name',
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Tax class',
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Rate code',
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Rate %',
-															'multivendorx'
-														)}
-													</td>
-												</tr>
-											</thead>
-
-											<tbody>
-												{taxRates.map((rate) => (
-													<tr
-														key={rate.id}
-														className="admin-row"
-													>
-														<td className="admin-column">
-															<input
-																type="radio"
-																name="tax"
-																onChange={() =>
-																	setSelectedTaxRate(
-																		rate
-																	)
-																}
-																checked={
-																	selectedTaxRate?.id ===
-																	rate.id
-																}
-															/>
-														</td>
-
-														<td className="admin-column">
-															{rate.name}
-														</td>
-														<td className="admin-column">
-															{rate.class ||
-																__(
-																	'Standard',
+										{taxRates.length > 0 ? (
+											<>
+												<table className="admin-table">
+													<thead>
+														<tr>
+															<td></td>
+															<td>
+																{__(
+																	'Rate name',
 																	'multivendorx'
 																)}
-														</td>
-														<td className="admin-column">{`${rate.country}-${rate.state}-${rate.name}`}</td>
-														<td className="admin-column">
-															{rate.rate}%
-														</td>
-													</tr>
-												))}
-											</tbody>
-										</table>
+															</td>
+															<td>
+																{__(
+																	'Tax class',
+																	'multivendorx'
+																)}
+															</td>
+															<td>
+																{__(
+																	'Rate code',
+																	'multivendorx'
+																)}
+															</td>
+															<td>
+																{__(
+																	'Rate %',
+																	'multivendorx'
+																)}
+															</td>
+														</tr>
+													</thead>
 
-										<button
-											className="admin-btn btn-purple-bg"
-											onClick={() => {
-												applyTaxToOrder();
-												setShowAddTax(false);
-											}}
-										>
-											{__('Add', 'multivendorx')}
-										</button>
+													<tbody>
+														{taxRates.map((rate) => (
+															<tr
+																key={rate.id}
+																className="admin-row"
+															>
+																<td className="admin-column">
+																	<input
+																		type="radio"
+																		name="tax"
+																		onChange={() =>
+																			setSelectedTaxRate(
+																				rate
+																			)
+																		}
+																		checked={
+																			selectedTaxRate?.id ===
+																			rate.id
+																		}
+																	/>
+																</td>
+
+																<td className="admin-column">
+																	{rate.name}
+																</td>
+																<td className="admin-column">
+																	{rate.class ||
+																		__(
+																			'Standard',
+																			'multivendorx'
+																		)}
+																</td>
+																<td className="admin-column">{`${rate.country}-${rate.state}-${rate.name}`}</td>
+																<td className="admin-column">
+																	{rate.rate}%
+																</td>
+															</tr>
+														))}
+													</tbody>
+												</table>
+
+												<button
+													className="admin-btn btn-purple-bg"
+													onClick={() => {
+														applyTaxToOrder();
+														setShowAddTax(false);
+													}}
+												>
+													{__('Add', 'multivendorx')}
+												</button>
+											</>
+										) : (
+											<div> No tax rates set contact admin
+											</div>
+										)}
 									</div>
 								)}
 							</div>

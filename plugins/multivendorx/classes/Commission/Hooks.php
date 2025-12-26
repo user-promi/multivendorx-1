@@ -35,12 +35,12 @@ class Hooks {
      * @return  void
      */
     public function create_commission( $store_order, $main_order ) {
-        $processed = $store_order->get_meta( Utill::POST_META_SETTINGS['commissions_processed'], true );
+        $processed = $store_order->get_meta( Utill::ORDER_META_SETTINGS['commissions_processed'], true );
 
         if ( ! $processed ) {
             $commission_id = MultiVendorX()->commission->calculate_commission( $store_order );
             $store_order->update_meta_data( Utill::ORDER_META_SETTINGS['commission_id'], $commission_id );
-            $store_order->update_meta_data( Utill::POST_META_SETTINGS['commissions_processed'], 'yes' );
+            $store_order->update_meta_data( Utill::ORDER_META_SETTINGS['commissions_processed'], 'yes' );
 
             // Action hook after commission processed.
             do_action( 'multivendorx_after_calculate_commission', $commission_id, $store_order, $main_order );
