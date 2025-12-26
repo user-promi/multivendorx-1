@@ -1045,6 +1045,7 @@ const EditStore = () => {
 													setActionMenu(false);
 													handleStoreDelete();
 												}}
+												className="delete"
 											>
 												<span className="item">
 													{' '}

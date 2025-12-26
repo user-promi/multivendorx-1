@@ -865,8 +865,8 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                                     }
                                                                 } }
                                                             >
-                                                                <i className="settings-icon adminlib-setting"></i>
-                                                                <span>
+                                                                {/* <i className="settings-icon adminlib-setting"></i> */}
+                                                                <span className="yellow-color">
                                                                     Settings
                                                                 </span>
                                                             </li>
@@ -897,8 +897,8 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                             }
                                                         } }
                                                     >
-                                                        <i className="disable-icon adminlib-eye-blocked"></i>
-                                                        <span>Disable</span>
+                                                        {/* <i className="disable-icon adminlib-eye-blocked"></i> */}
+                                                        <span className="red-color">Disable</span>
                                                     </li>
                                                 </>
                                             ) : (
@@ -928,8 +928,8 @@ const PaymentTabsComponent: React.FC< PaymentTabsComponentProps > = ( {
                                                         }
                                                     } }
                                                 >
-                                                    <i className="eye-icon adminlib-eye"></i>
-                                                    <span>Enable</span>
+                                                    {/* <i className="eye-icon adminlib-eye"></i> */}
+                                                    <span className="green-color">Enable</span>
                                                 </li>
                                             ) }
                                         </ul>

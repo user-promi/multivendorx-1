@@ -118,7 +118,7 @@ export default {
 						{
 							attribute: 'store',
 							description:
-								'Choose which store’s products to display.',
+								'Display products from a specific store. You can use Store ID, store slug, vendor email, or username. Leave empty to show products from all stores.',
 							accepted: 'store_id, store name, email, or username (Default = store name)',
 							default: '[marketplace_products store="john-store"]',
 						},
@@ -136,14 +136,14 @@ export default {
 						},
 						{
 							attribute: 'filter',
-							description: 'Show specific product types only.',
+							description: 'Choose which type of products to display. Options: all, recent (new arrivals), featured, sale (discounted), top_rated, best_selling.',
 							accepted:
 								'all, recent, featured, sale, top_rated, best_selling (Default = featured)',
 							default: '[marketplace_products filter="featured"]',
 						},
 						{
 							attribute: 'sort',
-							description: 'Control the overall product order.',
+							description: 'Quick preset sorting for common scenarios. Options: latest, oldest, rating (highest rated), popularity (most sold), title (alphabetical). Overrides orderby and order if set.',
 							accepted:
 								'latest, oldest, rating, popularity, title (Default = latest)',
 							default: '[marketplace_products sort="latest"]',
@@ -164,14 +164,14 @@ export default {
 						{
 							attribute: 'category',
 							description:
-								'Limit products to specific categories',
+								'Show products from specific categories. Enter category slugs separated by commas. Leave empty to include all categories.',
 							accepted: 'Category short names, separated by commas',
 							default: '[marketplace_products category="clothing,shoes"]',
 						},
 						{
 							attribute: 'operator',
 							description:
-								'Define how selected categories should be matched',
+								'Define how selected categories should be matched.',
 							accepted: 'IN (Any of the), NOT IN (All of the), AND (None of the)',
 							default: '[marketplace_products category="clothing,accessories" operator="AND"]',
 						},
