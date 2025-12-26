@@ -282,13 +282,7 @@ class StripeConnect {
             wp_safe_redirect( $this->get_redirect_url( 'error', 'stripe_connection_failed' ) );
             exit;
         }
-        // Update store meta.
-        $meta_updates = array(
-            Utill::STORE_SETTINGS_KEYS['stripe_account_id'] => $response['stripe_user_id'],
-        );
-        foreach ( $meta_updates as $key => $value ) {
-            $store->update_meta( $key, sanitize_text_field( $value ) );
-        }
+        $store->update_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'], sanitize_text_field( $response['stripe_user_id'] ) );
         // Success.
         wp_safe_redirect( $this->get_redirect_url( '', '' ) );
         exit;
@@ -333,9 +327,7 @@ class StripeConnect {
             Utill::STORE_SETTINGS_KEYS['stripe_account_id'],
         ];
     
-        foreach ( $meta_keys as $key ) {
-            $store->delete_meta( $key );
-        }
+        $store->delete_meta( $key );
     
         wp_send_json_success([
             'message' => __( 'Stripe account disconnected successfully.', 'multivendorx' ),
