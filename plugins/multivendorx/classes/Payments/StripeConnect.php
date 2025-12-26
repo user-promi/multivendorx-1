@@ -322,12 +322,7 @@ class StripeConnect {
             );
         }
     
-        // Remove all Stripe-related metadata
-        $meta_keys = [
-            Utill::STORE_SETTINGS_KEYS['stripe_account_id'],
-        ];
-    
-        $store->delete_meta( $key );
+        $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
     
         wp_send_json_success([
             'message' => __( 'Stripe account disconnected successfully.', 'multivendorx' ),
