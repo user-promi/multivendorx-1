@@ -19,7 +19,7 @@ interface StoresListProps {
 	category?: string;
 }
 
-const StoresList: React.FC<StoresListProps> = ({
+const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	orderby = '',
 	order = '',
 	category = '',
@@ -217,4 +217,4 @@ const StoresList: React.FC<StoresListProps> = ({
 	);
 };
 
-export default StoresList;
+export default MarketplaceStoreList;

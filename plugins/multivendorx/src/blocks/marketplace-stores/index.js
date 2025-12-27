@@ -2,7 +2,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { render } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
-import StoresList from './StoresList';
+import MarketplaceStoreList from './marketplaceStoreList';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
 
 const EditBlock = (props) => {
@@ -42,7 +42,7 @@ const EditBlock = (props) => {
 
 
 			{/* Pass attributes to StoresList */}
-			<StoresList
+			<MarketplaceStoreList
 				orderby={attributes.orderby}
 				order={attributes.order}
 				category={attributes.category}
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const attributes = JSON.parse(element.getAttribute('data-attributes') || '{}');
         render(
             <BrowserRouter>
-                <StoresList {...attributes} />
+                <MarketplaceStoreList {...attributes} />
             </BrowserRouter>,
             element
         );
