@@ -22,7 +22,7 @@ interface NestedFieldOption {
 }
 
 interface NestedField {
-    lock: string | undefined;
+    lock: string ;
     treeData: never[];
     multiple: boolean;
     key: string;
@@ -62,7 +62,7 @@ interface NestedField {
     // for checkbox fields
     selectDeselect?: boolean;
     tour?: string;
-    rightContent?: boolean | undefined;
+    rightContent?: boolean ;
     moduleEnabled?: string;
     dependentSetting?: string;
     dependentPlugin?: string;
