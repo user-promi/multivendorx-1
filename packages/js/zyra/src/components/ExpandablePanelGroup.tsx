@@ -980,10 +980,8 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                     {method.isCustom && (
                                         <>
                                             <div onClick={() => { toggleActiveTab(method.id) }} className="admin-btn btn-blue">
-                                                <div className="item">
                                                     <i className="adminlib-edit"></i>
                                                     Edit
-                                                </div>
                                             </div>
                                         </>
                                     )}
