@@ -71,7 +71,7 @@ export default {
 			type: 'text',
 			label: __('Tinymce API', 'multivendorx'),
 			desc: __(
-				'Get your <a href="https://www.tiny.cloud/blog/how-to-get-tinymce-cloud-up-in-less-than-5-minutes/" target="_blank">TinyMCE API key</a> and paste it here, to unlock visual editing tools across the marketplace. Admin and stores can easily format text, add links, lists, and other styling to their store descriptions, announcements, knowledge base posts, and product details-no coding needed.',
+				'Get your <a href= "https://www.tiny.cloud/blog/how-to-get-tinymce-cloud-up-in-less-than-5-minutes/" target= "_blank">TinyMCE API key</a> and paste it here, to unlock visual editing tools across the marketplace. Admin and stores can easily format text, add links, lists, and other styling to their store descriptions, announcements, knowledge base posts, and product details-no coding needed.',
 				'multivendorx'
 			),
 		},
@@ -119,14 +119,14 @@ export default {
 							attribute: 'orderby',
 							description:
 								'Decide how the store list is sorted',
-							accepted: 'name, category, registered (Default =registered)',
-							default: '[marketplace_stores orderby="registered"]',
+							accepted: 'name, category, registered (Default = registered)',
+							default: '[marketplace_stores orderby = "registered"]',
 						},
 						{
 							attribute: 'order',
 							description: 'Decide the sorting direction (Default = DESC)',
 							accepted: 'number',
-							default: '[marketplace_stores order="DESC"]',
+							default: '[marketplace_stores order = "DESC"]',
 						},
 					],
 				},
@@ -144,60 +144,60 @@ export default {
 							description:
 								'Display products from a specific store. You can use Store ID, store slug, vendor email, or username. Leave empty to show products from all stores.',
 							accepted: 'store_id, store name, email, or username (Default = store name)',
-							default: '[marketplace_products store="john-store"]',
+							default: '[marketplace_products store = "john-store"]',
 						},
 						{
 							attribute: 'perpage',
 							description: 'Set how many products appear per page.',
 							accepted: 'Any number (Default = 12)',
-							default: '[marketplace_products perpage="12"]',
+							default: '[marketplace_products perpage = "12"]',
 						},
 						{
 							attribute: 'columns',
 							description: 'Decide how many products appear in one row.',
 							accepted: 'Any number (Default = 12)',
-							default: '[marketplace_products columns="4"]',
-						},
+							default: '[marketplace_products columns = "4"]',
+						}, 
 						{
 							attribute: 'filter',
 							description: 'Choose which type of products to display. Options: all, recent (new arrivals), featured, sale (discounted), top_rated, best_selling.',
 							accepted:
 								'all, recent, featured, sale, top_rated, best_selling (Default = featured)',
-							default: '[marketplace_products filter="featured"]',
+							default: '[marketplace_products filter = "featured"]',
 						},
 						{
 							attribute: 'sort',
 							description: 'Quick preset sorting for common scenarios. Options: latest, oldest, rating (highest rated), popularity (most sold), title (alphabetical). Overrides orderby and order if set.',
 							accepted:
 								'latest, oldest, rating, popularity, title (Default = latest)',
-							default: '[marketplace_products sort="latest"]',
+							default: '[marketplace_products sort = "latest"]',
 						},
 						{
 							attribute: 'orderby',
 							description:
 								'Choose the field used for sorting when no preset order is selected.',
 							accepted: 'title, date, rating (Default = title)',
-							default: '[marketplace_products orderby="title"]',
+							default: '[marketplace_products orderby= "title"]',
 						},
 						{
 							attribute: 'order',
 							description: 'Set sorting direction',
 							accepted: 'ASC, DESC (Default = ASC)',
-							default: '[marketplace_products order="ASC"]',
+							default: '[marketplace_products order= "ASC"]',
 						},
 						{
 							attribute: 'category',
 							description:
 								'Show products from specific categories. Enter category slugs separated by commas. Leave empty to include all categories.',
 							accepted: 'Category short names, separated by commas',
-							default: '[marketplace_products category="clothing,shoes"]',
+							default: '[marketplace_products category= "clothing,shoes"]',
 						},
 						{
 							attribute: 'operator',
 							description:
 								'Define how selected categories should be matched.',
 							accepted: 'IN (Any of the), NOT IN (All of the), AND (None of the)',
-							default: '[marketplace_products category="clothing,accessories" operator="AND"]',
+							default: '[marketplace_products category= "clothing,accessories" operator = "AND"]',
 						},
 					],
 				},
