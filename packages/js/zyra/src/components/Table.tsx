@@ -943,36 +943,40 @@ const Table: React.FC< TableProps > = ( {
                                                     totalCounts
                                                 ) } of ${ totalCounts } entries. ` }
                                             </div>
-                                            {totalCounts > 10 && (
+                                            { totalCounts > 10 && (
                                                 <div className="showing-number">
                                                     Show
                                                     <select
                                                         value={
                                                             table.getState()
-                                                                .pagination.pageSize
+                                                                .pagination
+                                                                .pageSize
                                                         }
-                                                        onChange={(e) =>
+                                                        onChange={ ( e ) =>
                                                             table.setPageSize(
                                                                 Number(
-                                                                    e.target.value
+                                                                    e.target
+                                                                        .value
                                                                 )
                                                             )
                                                         }
                                                     >
-                                                        {perPageOption.map(
-                                                            (size) => (
+                                                        { perPageOption.map(
+                                                            ( size ) => (
                                                                 <option
-                                                                    key={size}
-                                                                    value={size}
+                                                                    key={ size }
+                                                                    value={
+                                                                        size
+                                                                    }
                                                                 >
-                                                                    {size}
+                                                                    { size }
                                                                 </option>
                                                             )
-                                                        )}
+                                                        ) }
                                                     </select>
                                                     entries
                                                 </div>
-                                            )}
+                                            ) }
                                         </div>
                                         { totalCounts > pagination.pageSize && (
                                             <div className="pagination-arrow">
@@ -1087,27 +1091,23 @@ const Table: React.FC< TableProps > = ( {
                                     </div>
                                 </>
                             ) }
-
                         </div>
-                    )}
-                    {Object.keys(rowSelection || {}).length >= 2 ? (
+                    ) }
+                    { Object.keys( rowSelection || {} ).length >= 2 ? (
                         <div className="admin-filter-wrapper ">
                             <div className="wrap-bulk-all-date bulk">
                                 <div className="action-item count">
                                     <button className="admin-btn">
                                         <span>
                                             {
-                                                Object.keys(
-                                                    rowSelection
-                                                ).length
+                                                Object.keys( rowSelection )
+                                                    .length
                                             }
                                         </span>
                                         Rows selected
                                         <i
-                                            onClick={() =>
-                                                onRowSelectionChange?.(
-                                                    {}
-                                                )
+                                            onClick={ () =>
+                                                onRowSelectionChange?.( {} )
                                             }
                                             className="adminlib-close"
                                         ></i>
@@ -1116,8 +1116,10 @@ const Table: React.FC< TableProps > = ( {
                                 <div className="action-item">
                                     <button
                                         className="admin-btn"
-                                        onClick={() =>
-                                            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+                                        onClick={ () =>
+                                            table.toggleAllRowsSelected(
+                                                ! table.getIsAllRowsSelected()
+                                            )
                                         }
                                     >
                                         <i
@@ -1127,60 +1129,54 @@ const Table: React.FC< TableProps > = ( {
                                                     : 'adminlib-active'
                                             }
                                         ></i>
-                                        {table.getIsAllRowsSelected() ? 'Deselect all' : 'Select all'}
+                                        { table.getIsAllRowsSelected()
+                                            ? 'Deselect all'
+                                            : 'Select all' }
                                     </button>
-
                                 </div>
-                                {bulkActionComp && bulkActionComp()}
+                                { bulkActionComp && bulkActionComp() }
                             </div>
                         </div>
                     ) : (
                         <div className="admin-filter-wrapper ">
-                            {(data?.length !== 0 || counter.current < 0) &&
+                            { ( data?.length !== 0 || counter.current < 0 ) &&
                                 realtimeFilter &&
                                 realtimeFilter.length > 0 && (
                                     <div className="wrap-bulk-all-date filter">
                                         <span className="title">
-                                            <i className="adminlib-filter"></i>{' '}
+                                            <i className="adminlib-filter"></i>{ ' ' }
                                             Filter
                                         </span>
-                                        {realtimeFilter?.map(
-                                            (filter) => (
-                                                <React.Fragment
-                                                    key={filter.name}
-                                                >
-                                                    {filter.render(
-                                                        handleFilterChange,
-                                                        filterData[
-                                                        filter.name
-                                                        ]
-                                                    )}
-                                                </React.Fragment>
-                                            )
-                                        )}
+                                        { realtimeFilter?.map( ( filter ) => (
+                                            <React.Fragment key={ filter.name }>
+                                                { filter.render(
+                                                    handleFilterChange,
+                                                    filterData[ filter.name ]
+                                                ) }
+                                            </React.Fragment>
+                                        ) ) }
                                     </div>
-                                )}
+                                ) }
 
-                            { /* Show Reset button only if filters are applied */}
-                            {(Object.keys(filterData).length > 0 || counter.current < 0) && (
+                            { /* Show Reset button only if filters are applied */ }
+                            { ( Object.keys( filterData ).length > 0 ||
+                                counter.current < 0 ) && (
                                 <div className="reset-btn">
                                     <span
-                                        onClick={() => {
-                                            setFilterData({}); // clear all filters
-                                            onRowSelectionChange?.(
-                                                {}
-                                            ); // clear row selection if any
-                                            if (handlePagination) {
+                                        onClick={ () => {
+                                            setFilterData( {} ); // clear all filters
+                                            onRowSelectionChange?.( {} ); // clear row selection if any
+                                            if ( handlePagination ) {
                                                 handlePagination(
                                                     defaultRowsPerPage,
                                                     1,
                                                     {}
                                                 );
                                             }
-                                        }}
+                                        } }
                                         className="admin-badge red"
                                     >
-                                        <i className="adminlib-refresh"></i>{' '}
+                                        <i className="adminlib-refresh"></i>{ ' ' }
                                         Reset
                                     </span>
                                 </div>

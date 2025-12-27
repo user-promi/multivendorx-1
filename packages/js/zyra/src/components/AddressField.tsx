@@ -28,9 +28,7 @@ interface AddressFieldProps {
     formField: AddressFormField;
     onChange: ( key: 'fields', value: SubField[] ) => void;
     opendInput: SubField | null;
-    setOpendInput: React.Dispatch<
-        React.SetStateAction< SubField | null >
-    >;
+    setOpendInput: React.Dispatch< React.SetStateAction< SubField | null > >;
 }
 
 const AddressField: React.FC< AddressFieldProps > = ( {

@@ -47,8 +47,8 @@ const ShortCodeTable: React.FC< ShortCodeTableProps > = ( props ) => {
                 >
                     <div className="shortcode-details">
                         <div className="shortcode-title">
-                            {option.name} - <code>{option.label}</code>
-                            {icon && option.label && (
+                            { option.name } - <code>{ option.label }</code>
+                            { icon && option.label && (
                                 <i
                                     className="adminlib-vendor-form-copy"
                                     onClick={ () =>
