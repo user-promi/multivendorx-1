@@ -24,7 +24,7 @@ class Shortcode {
     public function __construct() {
         add_shortcode( 'multivendorx_store_dashboard', array( $this, 'display_store_dashboard' ) );
         add_shortcode( 'multivendorx_store_registration', array( $this, 'display_store_registration' ) );
-        add_shortcode( 'marketplace_stores', array( $this, 'display_stores_list' ) );
+        add_shortcode( 'marketplace_stores', array( $this, 'marketplace_stores_list' ) );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
         add_action( 'wp_print_styles', array( $this, 'dequeue_all_styles_on_page' ), 99 );
@@ -122,7 +122,7 @@ class Shortcode {
     /**
      * Display stores list
      */
-    public function display_stores_list( $attributes ) {
+    public function marketplace_stores_list( $attributes ) {
         if ( ($attributes['orderby'] ?? null) === 'registered' ) {
             $attributes['orderby'] = 'create_time';
         }        
