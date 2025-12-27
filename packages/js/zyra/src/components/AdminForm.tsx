@@ -359,9 +359,7 @@ type SettingValue =
     | boolean
     | string[]
     | number[]
-    | Record< string, unknown >
-    | null
-    | undefined;
+    | Record< string, unknown >;
 
 type Settings = Record< string, SettingValue >;
 
@@ -473,10 +471,10 @@ const AdminForm: React.FC< AdminFormProps > = ( {
     };
 
     const moduleEnabledChanged = (
-        moduleEnabled: string | undefined,
+        moduleEnabled: string ,
         dependentSetting: string = '',
         dependentPlugin: boolean = false,
-        dependentPluginName: string | undefined = ''
+        dependentPluginName: string  = ''
     ): boolean => {
         const popupData: PopupProps = {
             moduleName: '',

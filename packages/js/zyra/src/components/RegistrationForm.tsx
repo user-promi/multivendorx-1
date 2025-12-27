@@ -24,7 +24,7 @@ import AddressField, { AddressFormField } from './AddressField';
 import TemplateTextArea from './EmailTemplate/TemplateTextArea';
 
 // Types
-type Primitive = string | number | boolean | null | undefined;
+type Primitive = string | number | boolean ;
 
 export type FieldValue =
     | Primitive
@@ -441,7 +441,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
         index: number,
         key: string,
         value: FieldValue,
-        parentId?: number
+        parentId: number = -1
     ) => {
         if ( proSettingChange() ) {
             return;
@@ -449,7 +449,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
 
         const newFormFieldList = [ ...formFieldList ];
 
-        if ( parentId !== undefined ) {
+        if (parentId !== -1) {
             // Handle subfield
             const parentIndex = newFormFieldList.findIndex(
                 ( f ) => f.id === parentId

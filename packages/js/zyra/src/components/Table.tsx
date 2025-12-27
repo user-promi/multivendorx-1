@@ -111,12 +111,12 @@ interface actionButton {
 export const TableCell: React.FC< TableCellProps > = ( {
     title,
     fieldValue = '',
-    children = undefined,
+    children = <></>,
     type = '',
     header = {},
     status = '',
     onChange = () => {},
-    rowId,
+    rowId = '',
     onToggleRow = () => {},
     rowData = {},
 } ) => {
@@ -232,7 +232,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
                 <div
                     onClick={ ( e ) => {
                         e.stopPropagation();
-                        if ( rowId !== undefined ) {
+                        if (rowId !== '') {
                             onToggleRow?.( rowId );
                         }
                     } }
@@ -746,11 +746,14 @@ const Table: React.FC< TableProps > = ( {
                                                     .map( ( header ) => (
                                                         <th
                                                             key={ header.id }
-                                                            onClick={
-                                                                header.column.getCanSort()
-                                                                    ? header.column.getToggleSortingHandler()
-                                                                    : undefined
-                                                            }
+                                                            onClick={(e) => {
+                                                                if (!header.column.getCanSort()) return;
+                                                            
+                                                                const handler = header.column.getToggleSortingHandler();
+                                                                if (!handler) return;
+                                                            
+                                                                handler(e);
+                                                            }}                                                                                                                        
                                                             className={ [
                                                                 'header-col',
                                                                 header.column.getCanSort()

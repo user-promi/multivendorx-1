@@ -143,7 +143,7 @@ const FileInput: React.FC< FileInputProps > = ( props ) => {
                 style={ {
                     backgroundImage: localImages[ activeIndex ]
                         ? `url(${ localImages[ activeIndex ] })`
-                        : undefined,
+                        : '',
                 } }
             >
                 { localImages.length === 0 && (

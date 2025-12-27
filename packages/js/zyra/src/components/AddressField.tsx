@@ -20,7 +20,7 @@ export interface AddressFormField {
     type: string;
     label: string;
     fields?: SubField[];
-    value?: Record< string, string | undefined >;
+    value?: Record< string, string  >;
     readonly?: boolean;
 }
 
