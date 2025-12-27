@@ -14,14 +14,10 @@ interface Recipient {
 
 interface RecipientBadgeProps {
 	recipient: Recipient;
-	onToggle: () => void;
-	onDelete?: () => void;
 }
 
 const RecipientBadge: React.FC<RecipientBadgeProps> = ({
-	recipient,
-	// onToggle,
-	// onDelete,
+	recipient
 }) => {
 	let iconClass = 'adminlib-mail';
 	let badgeClass = 'red';
@@ -48,10 +44,6 @@ const RecipientBadge: React.FC<RecipientBadgeProps> = ({
 			{recipient.enabled && (
 				<div
 					className={`admin-badge ${badgeClass}`}
-					// onClick={(e) => {
-					// 	e.stopPropagation();
-					// 	onToggle();
-					// }}
 					role="button"
 					tabIndex={0}
 				>
@@ -720,11 +712,7 @@ const Notification: React.FC = () => {
 										<span
 											key={idx}
 											className="tag-item"
-											onClick={() => insertAtCursor(tag)
-												// navigator.clipboard.writeText(
-												// 	tag
-												// )
-											}
+											onClick={() => insertAtCursor(tag)}
 										>
 											{tag}
 										</span>
