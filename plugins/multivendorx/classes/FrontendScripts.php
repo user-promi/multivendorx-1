@@ -196,7 +196,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
                 'multivendorx-stores-list-script'          => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/stores-list/index.js',
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/marketplaceStores/index.js',
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version' => $version,
 				),
@@ -596,7 +596,6 @@ class FrontendScripts {
                         'apiUrl'  => untrailingslashit( get_rest_url() ),
                         'restUrl' => MultiVendorX()->rest_namespace,
                         'nonce'   => wp_create_nonce( 'wp_rest' ),
-                        'settings_databases_value' => $settings_databases_value,
                     ),
                 ),
 			)

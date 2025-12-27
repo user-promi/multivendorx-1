@@ -19,7 +19,7 @@ const EditBlock = (props) => {
 						options={[
 							{ label: 'Name', value: 'name' },
 							{ label: 'Category', value: 'category' },
-							{ label: 'Shipping', value: 'shipping' },
+							{ label: 'Registered', value: 'create-time' },
 						]}
 						onChange={(value) => setAttributes({ orderby: value })}
 					/>
@@ -33,7 +33,7 @@ const EditBlock = (props) => {
 						onChange={(value) => setAttributes({ order: value })}
 					/>
 					<TextControl
-						label="Category ID"
+						label="Category"
 						value={attributes.category}
 						onChange={(value) => setAttributes({ category: value })}
 					/>
@@ -51,7 +51,7 @@ const EditBlock = (props) => {
 	);
 };
 
-registerBlockType('multivendorx/stores-list', {
+registerBlockType('multivendorx/marketplace-stores', {
 	apiVersion: 2,
 	title: 'Stores List',
 	icon: 'cart',
@@ -66,16 +66,15 @@ registerBlockType('multivendorx/stores-list', {
 
 	edit: EditBlock,
 
-	save() {
-		return <div id="multivendorx-stores-list"></div>;
-	},
+	save({ attributes }) {
+		return <div id="marketplace-stores" data-attributes={JSON.stringify(attributes)}></div>;
+	},	
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const element = document.getElementById('multivendorx-stores-list');
+    const element = document.getElementById('marketplace-stores');
     if (element) {
         const attributes = JSON.parse(element.getAttribute('data-attributes') || '{}');
-        console.log('att',attributes);
         render(
             <BrowserRouter>
                 <StoresList {...attributes} />

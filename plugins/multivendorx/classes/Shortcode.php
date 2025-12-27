@@ -24,7 +24,7 @@ class Shortcode {
     public function __construct() {
         add_shortcode( 'multivendorx_store_dashboard', array( $this, 'display_store_dashboard' ) );
         add_shortcode( 'multivendorx_store_registration', array( $this, 'display_store_registration' ) );
-        add_shortcode( 'multivendorx_stores_list', array( $this, 'display_stores_list' ) );
+        add_shortcode( 'marketplace_stores', array( $this, 'display_stores_list' ) );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
         add_action( 'wp_print_styles', array( $this, 'dequeue_all_styles_on_page' ), 99 );
@@ -62,8 +62,7 @@ class Shortcode {
             FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
         }
 
-        FrontendScripts::enqueue_script( 'multivendorx-stores-list-script' );
-        FrontendScripts::localize_scripts( 'multivendorx-stores-list-script' );
+
     }
 
     /**
@@ -129,8 +128,12 @@ class Shortcode {
         }
     
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
-    
+        FrontendScripts::load_scripts();
+
+        FrontendScripts::enqueue_script( 'multivendorx-stores-list-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-stores-list-script' );
+
         // Use id instead of class
-        return '<div id="multivendorx-stores-list" data-attributes="' . $json_attrs . '"></div>';
+        return '<div id="marketplace-stores" data-attributes="' . $json_attrs . '"></div>';
     } 
 }
