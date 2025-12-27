@@ -55,7 +55,7 @@ const StoreStatus: React.FC = () => {
 				name: 'Permanently Rejected',
 				desc: 'The store application has been permanently rejected. Sellers can view their dashboard in read-only mode but cannot make changes or reapply without admin intervention.',
 				// hideTabHeader: true,
-				icon: 'rejecte',
+				icon: 'permanently-rejected',
 			},
 		},
 		{
@@ -99,7 +99,7 @@ const StoreStatus: React.FC = () => {
 				name: 'Permanently Deactivated',
 				desc: 'The store has been permanently deactivated. Stores have read-only access to historical data, but the storefront and its product is removed from public view and no changes can be made.',
 				// hideTabHeader: true,
-				icon: 'close-delete',
+				icon: 'rejecte',
 			},
 		},
 	];

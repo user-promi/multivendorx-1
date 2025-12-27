@@ -13,47 +13,95 @@ export default {
 	modal: [
 		{
 			key: 'prohibited_product_categories',
-			type: 'multi-string',
+			type: 'expandable-panel',
 			label: __('Prohibited product categories', 'multivendorx'),
 			placeholder: __('Add prohibited product category', 'multivendorx'),
 			settingDescription: __(
 				'Define one or more product categories that are not allowed to be listed on your marketplace.',
 				'multivendorx'
 			),
-			requiredEnable: true,
-			moduleEnabled: 'marketplace-compliance',
-			proSetting: true,
-
-			defaultValues: [
-				{
-					value: 'Weapons & ammunition',
-					iconClass: 'adminlib-check',
-					description: '',
-					required: true,
-					deleteDisabled: true,
-				},
-				{
-					value: 'Illegal drugs & substances',
-					iconClass: 'adminlib-clock',
-					description: '',
-					required: true,
-					deleteDisabled: true,
-				},
-				{
-					value: 'Counterfeit products',
-					iconClass: 'adminlib-clock',
-					description: '',
-					required: true,
-					deleteDisabled: true,
-				},
-				{ value: 'Stolen goods' },
-			],
 			desc: __(
 				'<b>Note:</b> Ensure sellers are informed about disallowed items before publishing. Violations may result in product removal or account penalties.',
 				'multivendorx'
 			),
-			name: 'prohibited_product_categories',
+			moduleEnabled: 'marketplace-compliance',
+			proSetting: true,
+			addNewBtn: true,
+			addNewTemplate: {
+				label: 'New Product Categories',
+				formFields: [
+					{
+						key: 'title',
+						type: 'text',
+						label: 'Categories Name',
+						placeholder: 'Enter title',
+					},
+					{
+						key: 'required',
+						type: 'checkbox',
+						label: 'Required',
+					},
+				],
+			},
+			modal: [
+				{
+					id: 'weapons-&-ammunition',
+					label: 'Weapons & ammunition',
+					required: true,
+				},
+				{
+					id: 'drugs-&-substances',
+					label: 'Illegal drugs & substances',
+					required: true,
+				},
+				{
+					id: 'counterfeit-products',
+					label: 'Counterfeit products',
+					required: true,
+				},
+			],
 		},
+		// {
+		// 	key: 'prohibited_product_categories',
+		// 	type: 'multi-string',
+		// 	label: __('Prohibited product categories', 'multivendorx'),
+		// 	placeholder: __('Add prohibited product category', 'multivendorx'),
+		// 	settingDescription: __(
+		// 		'Define one or more product categories that are not allowed to be listed on your marketplace.',
+		// 		'multivendorx'
+		// 	),
+		// 	requiredEnable: true,
+
+
+		// 	defaultValues: [
+		// 		{
+		// 			value: 'Weapons & ammunition',
+		// 			iconClass: 'adminlib-check',
+		// 			description: '',
+		// 			required: true,
+		// 			deleteDisabled: true,
+		// 		},
+		// 		{
+		// 			value: 'Illegal drugs & substances',
+		// 			iconClass: 'adminlib-clock',
+		// 			description: '',
+		// 			required: true,
+		// 			deleteDisabled: true,
+		// 		},
+		// 		{
+		// 			value: 'Counterfeit products',
+		// 			iconClass: 'adminlib-clock',
+		// 			description: '',
+		// 			required: true,
+		// 			deleteDisabled: true,
+		// 		},
+		// 		{ value: 'Stolen goods' },
+		// 	],
+		// 	desc: __(
+		// 		'<b>Note:</b> Ensure sellers are informed about disallowed items before publishing. Violations may result in product removal or account penalties.',
+		// 		'multivendorx'
+		// 	),
+		// },
 		{
 			key: 'required_store_uploads',
 			type: 'checkbox',
