@@ -91,52 +91,29 @@ export default {
 					id: 'damaged-or-defective-product',
 					label: 'Damaged or defective product',
 					required: true,
+					isCustom: true,
 				},
 				{
 					id: 'wrong-item',
 					label: 'Wrong item delivered',
 					required: true,
+					isCustom: true,
 				},
 				{
 					id: 'product-not-as-described',
 					label: 'Product not as described',
 					required: true,
+					isCustom: true,
 				},
 				{
 					id: 'late-delivery',
 					label: 'Late delivery',
 					isCustom: true,
-					formFields: [
-						{
-							key: 'title',
-							type: 'text',
-							label: 'Reason',
-							placeholder: 'Enter title',
-						},
-						{
-							key: 'required',
-							type: 'checkbox',
-							label: 'Required',
-						},
-					],
 				},
 				{
 					id: 'changed-mind',
 					label: 'Changed mind',
 					isCustom: true,
-					formFields: [
-						{
-							key: 'title',
-							type: 'text',
-							label: 'Reason',
-							placeholder: 'Enter title',
-						},
-						{
-							key: 'required',
-							type: 'checkbox',
-							label: 'Required',
-						},
-					],
 				},
 			],
 			// requiredEnable: true,

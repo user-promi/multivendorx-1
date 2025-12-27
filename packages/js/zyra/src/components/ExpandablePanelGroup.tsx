@@ -48,6 +48,7 @@ interface PanelFormField {
     | 'buttons'
     | 'nested'
     | 'clickable-list'
+    | 'iconlibrary'
     | 'copy-text';
 
     label: string;
@@ -77,6 +78,8 @@ interface PanelFormField {
     items?: ClickableItem[];
     button?: ButtonItem;
     edit?: boolean;
+    iconEnable?: boolean;
+    iconOptions?: string[];
 }
 
 interface ExpandablePanelMethod {
@@ -124,6 +127,23 @@ interface ExpandablePanelGroupProps {
     addNewTemplate?: AddNewTemplate;
     requiredEnable?: boolean;
 }
+const BASIC_RATING_FIELDS: PanelFormField[] = [
+    {
+        key: 'title',
+        type: 'text',
+        label: 'Parameters',
+        placeholder: 'Enter parameters',
+    },
+];
+
+const REQUIRED_RATING_FIELDS: PanelFormField[] = [
+    ...BASIC_RATING_FIELDS,
+    {
+        key: 'required',
+        type: 'checkbox',
+        label: 'Required',
+    },
+];
 
 const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
     methods,
@@ -142,9 +162,31 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
     const [activeTabs, setActiveTabs] = useState<string[]>([]);
     const menuRef = useRef<HTMLDivElement>(null);
     const [wizardIndex, setWizardIndex] = useState(0);
-    const [ExpandablePanelMethods, setExpandablePanelMethods] = useState<ExpandablePanelMethod[]>(methods);
     const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const [iconDropdownOpen, setIconDropdownOpen] = useState<string | null>(null);
+
+    const [ExpandablePanelMethods, setExpandablePanelMethods] = useState<
+        ExpandablePanelMethod[]
+    >(() =>
+        methods.map((method) => {
+            if (!method.isCustom) return method;
+
+            const templateFields = addNewTemplate?.formFields ?? [];
+            const methodFields = method.formFields ?? [];
+
+            const existingKeys = new Set(methodFields.map(f => f.key));
+
+            return {
+                ...method,
+                formFields: [
+                    ...methodFields,
+                    ...templateFields.filter(f => !existingKeys.has(f.key)),
+                ],
+            };
+        })
+    );
+
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -162,6 +204,24 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+    useEffect(() => {
+        const updated: Record<string, Record<string, unknown>> = { ...value };
+
+        methods.forEach((method) => {
+            if (!updated[method.id]) {
+                updated[method.id] = {
+                    enable: true,
+                    title: method.label ?? '',
+                    description: method.desc ?? '',
+                    icon: method.icon ?? '',
+                    required: method.required ?? false,
+                };
+            }
+        });
+
+        onChange(updated);
+    }, []);
+
 
 
     // add new
@@ -169,7 +229,9 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         if (!addNewTemplate) {
             throw new Error('addNewTemplate is required when addNewBtn is true');
         }
+
         const id = `custom_${Date.now()}`;
+
         return {
             id,
             icon: addNewTemplate.icon || '',
@@ -177,24 +239,36 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
             desc: addNewTemplate.desc || '',
             connected: false,
             isCustom: true,
-            formFields: addNewTemplate.formFields,
+            formFields: addNewTemplate.formFields.map(field => ({ ...field })),
         };
     };
 
     const handleAddNewMethod = () => {
         const newMethod = createNewExpandablePanelMethod();
-        setExpandablePanelMethods((prev) => [...prev, newMethod]);
+
+        setExpandablePanelMethods(prev => [...prev, newMethod]);
+
+        const initialValues: Record<string, unknown> = {
+            enable: true,
+            title: newMethod.label,
+            description: '',
+            required: false,
+        };
+
+        newMethod.formFields?.forEach(field => {
+            if (field.type === 'iconlibrary') {
+                initialValues[field.key] = '';
+            }
+        });
+
         onChange({
             ...value,
-            [newMethod.id]: {
-                enable: true,
-                title: '',
-                description: '',
-                required: false,
-            },
+            [newMethod.id]: initialValues,
         });
-        setActiveTabs((prev) => [...prev, newMethod.id]);
+
+        setActiveTabs(prev => [...prev, newMethod.id]);
     };
+
     const handleDeleteMethod = (methodId: string) => {
         setExpandablePanelMethods((prev) =>
             prev.filter((m) => m.id !== methodId)
@@ -286,9 +360,6 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         const result = isAllSelected ? [] : allValues;
 
         handleInputChange(methodId, field.key, result);
-    };
-    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        handleInputChange(methodId, field.key, e.target.value);
     };
 
     const renderWizardButtons = () => {
@@ -639,8 +710,6 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                 className="adminlib-vendor-form-copy"
                                 onClick={() => handleCopy(field.title)}
                             ></i>
-
-                            { /* {copied && <span className="copied-msg">Copied!</span>} */}
                         </div>
                         <div className="settings-metabox-description">
                             {field.desc}
@@ -756,6 +825,68 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                         }}
                     />
                 );
+
+            case 'iconlibrary': {
+                const iconEnable = field.iconEnable ?? true;
+                const iconOptions = field.iconOptions ?? [];
+                const selectedIcon = fieldValue as string;
+
+                const dropdownKey = `${methodId}_${field.key}`;
+                const isOpen = iconDropdownOpen === dropdownKey;
+
+                if (!iconEnable || iconOptions.length === 0) {
+                    return null;
+                }
+
+                return (
+                    <div className="icon-library-wrapper">
+                        <div
+                            className="selected-icon"
+                            onClick={() =>
+                                setIconDropdownOpen(
+                                    isOpen ? null : dropdownKey
+                                )
+                            }
+                        >
+                            {selectedIcon ? (
+                                <i className={selectedIcon}></i>
+                            ) : (
+                                <span>Select Icon</span>
+                            )}
+                            <span className="dropdown-arrow">▾</span>
+                        </div>
+
+                        {isOpen && (
+                            <ul className="icon-options-list">
+                                {iconOptions.map((icon) => (
+                                    <li
+                                        key={icon}
+                                        className={`icon-option ${selectedIcon === icon ? 'selected' : ''
+                                            }`}
+                                        onClick={() => {
+                                            handleInputChange(
+                                                methodId,
+                                                field.key,
+                                                icon
+                                            );
+                                            setIconDropdownOpen(null);
+                                        }}
+                                    >
+                                        <i className={icon}></i>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+
+                        {field.desc && (
+                            <div className="settings-metabox-description">
+                                {field.desc}
+                            </div>
+                        )}
+                    </div>
+                );
+            }
+
             default:
                 return (
                     <>
@@ -786,6 +917,8 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                 {ExpandablePanelMethods.map((method, index) => {
                     const isEnabled = value?.[method.id]?.enable ?? false;
                     const isActive = activeTabs.includes(method.id);
+                    const headerIcon = (value?.[method.id]?.icon as string) || method.icon;
+
                     if (isWizardMode && index > wizardIndex) {
                         return null;
                     }
@@ -862,9 +995,9 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                     }}
                                 >
                                     <div className="details-wrapper">
-                                        {method.icon && (
+                                        {headerIcon && (
                                             <div className="expandable-header-icon">
-                                                <i className={method.icon}></i>
+                                                <i className={headerIcon}></i>
                                             </div>
                                         )}
                                         <div className="expandable-header-info">
@@ -980,8 +1113,8 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                     {method.isCustom && (
                                         <>
                                             <div onClick={() => { toggleActiveTab(method.id) }} className="admin-btn btn-blue">
-                                                    <i className="adminlib-edit"></i>
-                                                    Edit
+                                                <i className="adminlib-edit"></i>
+                                                Edit
                                             </div>
                                         </>
                                     )}
@@ -1072,7 +1205,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                                     )}
                                                                 </>
                                                             ) : null}
-                                                            {method.isCustom && (
+                                                            {(method.isCustom && method.required) && (
                                                                 <>
                                                                     <li onClick={() => { toggleActiveTab(method.id) }}>
                                                                         <div className="item">
@@ -1136,10 +1269,10 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                         className={`${method.wrapperClass || ''} expandable-panel ${(isActive || method.openForm) && (!isEnabled || isEnabled) ? 'open' : ''} ${method.openForm ? 'open' : ''}`}
                                     >
                                         {method.formFields.map((field) => {
-                                            if (
-                                                isWizardMode &&
-                                                field.type === 'buttons'
-                                            ) {
+                                            if (field.key === 'required' && method.required === true) {
+                                                return null;
+                                            }
+                                            if (isWizardMode && field.type === 'buttons') {
                                                 return null;
                                             }
 
