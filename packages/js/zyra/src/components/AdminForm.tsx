@@ -39,7 +39,7 @@ import '../styles/web/AdminForm.scss';
 import NestedComponent from './NestedComponent';
 import ColorSettingInput from './ColorSettingInput';
 import EndpointEditor from './EndpointEditor';
-import PaymentTabsComponent from './PaymentTabsComponent';
+import ExpandablePanelGroup from './ExpandablePanelGroup';
 import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
 import { useModules } from '../contexts/ModuleContext';
@@ -176,7 +176,7 @@ interface InputField {
         | 'checkbox-custom-img'
         | 'api-connect'
         | 'nested'
-        | 'payment-tabs'
+        | 'expandable-panel'
         | 'multi-string'
         | 'verification-methods'
         | 'description'
@@ -232,7 +232,8 @@ interface InputField {
     requiredEnable?: boolean;
     iconOptions?: string[];
     hint?: string;
-    addNewBtn?: string;
+    addNewBtnText?: string;
+    addNewBtn?: boolean;
     blocktext?: string;
     defaultValues?: MultiStringItem[];
     title?: string;
@@ -253,6 +254,7 @@ interface InputField {
         { heading: string; fields: Record< string, string > }
     >;
     apiLink?: string;
+    method?: string;
     tasks?: Task[];
     fileName?: string;
     syncDirections?: {
@@ -318,6 +320,17 @@ interface InputField {
             placeholder?: string;
         }[];
     }[];
+    addNewTemplate?: {
+        icon: string;
+        label: string;
+        desc: string;
+        formFields: {
+            key: string;
+            type: 'text' | 'password' | 'number' | 'checkbox';
+            label: string;
+            placeholder?: string;
+        }[];
+    }
     link?: string;
 }
 
@@ -340,20 +353,13 @@ interface AppLocalizer {
     tab_name: string;
     [ key: string ]: string | number | boolean;
 }
-
-type CalendarValue = string | number | [ string | number, string | number ];
-
 type SettingValue =
     | string
     | number
     | boolean
     | string[]
     | number[]
-    | Record<
-          string,
-          string | number | boolean | string[] | number[]
-      >
-    | [ string | number, string | number ]
+    | Record< string, unknown >
     | null
     | undefined;
 
@@ -422,7 +428,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             setting,
                             settingName: id,
                         }
-                    ).then( ( response ) => {
+                    ).then( ( response: unknown ) => {
                         const apiResponse = response as ApiResponse;
                         setSuccessMsg( apiResponse.error || '' );
                         setTimeout( () => setSuccessMsg( '' ), 2000 );
@@ -583,19 +589,29 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                      )?.target?.value ?? event;
                 updateSetting( key, val );
             } else if ( fromType === 'calender' ) {
+                let formattedDate: string;
                 if ( Array.isArray( event ) ) {
-                    const formattedDate = event
-                        .map( ( item: CalendarValue ) => {
-                            if ( Array.isArray( item ) ) {
-                                return `${ item[ 0 ] } - ${ item[ 1 ] }`;
-                            }
-                            return String( item );
-                        } )
-                        .join( ', ' );
-                    updateSetting( key, formattedDate );
+                    if (
+                        ( event as unknown[] ).every(
+                            ( item: unknown ) =>
+                                Array.isArray( item ) && item.length === 2
+                        )
+                    ) {
+                        formattedDate = ( event as unknown as unknown[][] )
+                            .map(
+                                ( range: unknown[] ) =>
+                                    `${ range[ 0 ]?.toString() } - ${ range[ 1 ]?.toString() }`
+                            )
+                            .join( ', ' );
+                    } else {
+                        formattedDate = ( event as unknown[] )
+                            .map( ( item: unknown ) => item.toString() )
+                            .join( ',' );
+                    }
                 } else {
-                    updateSetting( key, String( event ) );
+                    formattedDate = event.toString();
                 }
+                updateSetting( key, formattedDate );
             } else if ( fromType === 'select' ) {
                 const selectEvent = event as { index: number };
                 updateSetting( key, arrayValue[ selectEvent.index ] );
@@ -643,41 +659,29 @@ const AdminForm: React.FC< AdminFormProps > = ( {
         }
     };
 
-    const runUploader = (
-        key: string,
-        multiple = false,
-        replaceIndex = -1,
-        existingUrls: string[] = []
-    ): void => {
+    const runUploader = ( key: string ): void => {
         settingChanged.current = true;
 
-        const frame = wp.media( {
-            title: 'Select Media',
-            button: { text: 'Use media' },
-            multiple,
+        // Create a new media frame
+        const frame: WPMediaFrame = wp.media( {
+            title: 'Select or Upload Media Of Your Chosen Persuasion',
+            button: {
+                text: 'Use this media',
+            },
+            multiple: false, // Set to true to allow multiple files to be selected
         } );
 
-        frame.on( 'select', () => {
-            const selection = frame.state().get( 'selection' ).toJSON();
-            const selectedUrl = selection[ 0 ]?.url;
-
-            if ( multiple && replaceIndex !== -1 ) {
-                const next = [ ...existingUrls ];
-                next[ replaceIndex ] = selectedUrl;
-                updateSetting( key, next );
-                return;
-            }
-
-            if ( multiple ) {
-                const urls = ( selection as WPMediaAttachment[] ).map(
-                    ( item ) => item.url
-                );
-                updateSetting( key, urls );
-            } else {
-                updateSetting( key, selectedUrl || '' );
-            }
+        frame.on( 'select', function () {
+            // Get media attachment details from the frame state
+            const attachment = frame
+                .state()
+                .get( 'selection' )
+                .first()
+                .toJSON();
+            updateSetting( key, attachment.url );
         } );
 
+        // Finally, open the modal on click
         frame.open();
     };
 
@@ -783,7 +787,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
     };
     const renderForm = () => {
         return modal.map( ( inputField: InputField ) => {
-            const value: SettingValue = setting[ inputField.key ] ?? '';
+            const value: unknown = setting[ inputField.key ] ?? '';
             let input: JSX.Element | null = null;
             // Filter dependent conditions
             if ( Array.isArray( inputField.dependent ) ) {
@@ -948,7 +952,11 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             descClass="settings-metabox-description"
                             description={ inputField.desc }
                             inputClass={ `${ inputField.key } basic-input` }
-                            imageSrc={ value ?? appLocalizer?.default_logo }
+                            imageSrc={
+                                value !== undefined
+                                    ? String( value )
+                                    : appLocalizer?.default_logo
+                            }
                             imageWidth={ inputField.width } // Width of the displayed image
                             imageHeight={ inputField.height } // Height of the displayed image
                             buttonClass="admin-btn btn-purple" // CSS class for the file upload button
@@ -956,13 +964,12 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             type="hidden" // Input type; in this case, hidden because the FileInput manages its own display
                             key={ inputField.key }
                             name={ inputField.name }
-                            value={ value ?? [] }
+                            value={ value !== undefined ? String( value ) : '' }
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
                             ) }
-                            multiple={ inputField.multiple } //to add multiple image pass true or false
                             size={ inputField.size } // Size of the input (if used by FileInput for styling)
-                            onChange={ ( value ) => {
+                            onChange={ ( e ) => {
                                 if (
                                     hasAccess(
                                         inputField.proSetting ?? false,
@@ -977,33 +984,22 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                         )
                                     )
                                 ) {
-                                    settingChanged.current = true;
-                                    updateSetting( inputField.key, value );
+                                    handleChange( e, inputField.key );
                                 }
                             } }
                             // Function triggered when the "Upload" button is clicked
                             onButtonClick={ () => {
-                                runUploader(
-                                    inputField.key,
-                                    inputField.multiple
-                                );
+                                runUploader( inputField.key );
                             } }
                             // Function triggered when the "Remove" action is performed
                             onRemove={ () => {
-                                settingChanged.current = true;
-                                updateSetting(
-                                    inputField.key,
-                                    inputField.multiple ? [] : ''
-                                );
+                                // Clear value in parent state so FileInput sees no image
+                                handleChange( '', inputField.key );
                             } }
                             // Function triggered when the "Replace" action is performed
-                            onReplace={ ( index, images ) => {
-                                runUploader(
-                                    inputField.key,
-                                    inputField.multiple,
-                                    index,
-                                    images
-                                );
+                            onReplace={ () => {
+                                // Call uploader to allow selecting a new file
+                                runUploader( inputField.key );
                             } }
                         />
                     );
@@ -1207,7 +1203,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                                               inputField.apilink
                                                           )
                                                       ),
-                                                      method: 'GET',
+                                                      method: inputField.method,
                                                       headers: {
                                                           'X-WP-Nonce':
                                                               appLocalizer.nonce,
@@ -1253,7 +1249,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                 inputType="multi-string"
                                 wrapperClass="setting-form-multi-input"
                                 inputClass="basic-input"
-                                listClass="payment-tabs-component"
+                                listClass="expandable-panel-group"
                                 itemClass="multi-item"
                                 placeholder={ inputField.placeholder }
                                 values={
@@ -1514,21 +1510,18 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         normalizedValue = [ value ];
                     }
 
-                    const normalizedOptions = Array.isArray(
-                        setting[ `${ inputField.key }_options` ]
-                    )
-                        ? setting[ `${ inputField.key }_options` ].map(
-                              ( opt ) => ( {
-                                  ...opt,
-                                  value: String( opt.value ),
-                              } )
-                          )
-                        : Array.isArray( inputField.options )
-                        ? inputField.options.map( ( opt ) => ( {
-                              ...opt,
-                              value: String( opt.value ),
-                          } ) )
-                        : [];
+                    const normalizedOptions =
+                        Array.isArray(setting[`${inputField.key}_options`])
+                            ? setting[`${inputField.key}_options`].map((opt) => ({
+                                ...opt,
+                                value: String(opt.value),
+                            }))
+                            : Array.isArray(inputField.options)
+                            ? inputField.options.map((opt) => ({
+                                ...opt,
+                                value: String(opt.value),
+                            }))
+                            : [];
 
                     input = (
                         <MultiCheckBox
@@ -1565,8 +1558,8 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             selectDeselectValue="Select / Deselect All" // text for select/deselect all
                             rightContentClass="settings-metabox-description"
                             rightContent={ inputField.rightContent } // for place checkbox right
-                            addNewBtn={ inputField.addNewBtn }
-                            options={ normalizedOptions }
+                            addNewBtn={ inputField.addNewBtnText }
+                            options={normalizedOptions}
                             value={ normalizedValue }
                             proSetting={ isProSetting(
                                 inputField.proSetting ?? false
@@ -1611,13 +1604,13 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                     String( moduleEnabled ?? '' )
                                 );
                             } }
-                            onOptionsChange={ ( options ) => {
+                            onOptionsChange={(options) => {
                                 settingChanged.current = true;
                                 updateSetting(
-                                    `${ inputField.key }_options`,
+                                    `${inputField.key}_options`,
                                     options
                                 );
-                            } }
+                            }}
                         />
                     );
                     break;
@@ -2227,9 +2220,9 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                case 'payment-tabs':
+                case 'expandable-panel':
                     input = (
-                        <PaymentTabsComponent
+                        <ExpandablePanelGroup
                             key={ inputField.key }
                             name={ inputField.key }
                             proSetting={ isProSetting(
@@ -2251,6 +2244,8 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             appLocalizer={ appLocalizer }
                             methods={ inputField.modal ?? [] } //Array of available payment methods/options.
                             buttonEnable={ inputField.buttonEnable } //Flag to enable/disable action buttons in the UI.
+                            addNewBtn={inputField.addNewBtn}
+                            addNewTemplate={inputField.addNewTemplate ?? []}
                             value={ value || {} }
                             onChange={ ( data ) => {
                                 if (
