@@ -2246,6 +2246,8 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             buttonEnable={ inputField.buttonEnable } //Flag to enable/disable action buttons in the UI.
                             addNewBtn={inputField.addNewBtn}
                             addNewTemplate={inputField.addNewTemplate ?? []}
+                            iconEnable={ inputField.iconEnable }
+                            iconOptions={ inputField.iconOptions || [] }
                             value={ value || {} }
                             onChange={ ( data ) => {
                                 if (

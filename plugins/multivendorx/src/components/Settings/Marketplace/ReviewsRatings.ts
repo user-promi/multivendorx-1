@@ -39,10 +39,8 @@ export default {
 		},
 		{
 			key: 'ratings_parameters',
-			type: 'multi-string',
+			type: 'expandable-panel',
 			label: __('Rating parameters', 'multivendorx'),
-			iconEnable: false,
-			moduleEnabled: 'store-review',
 			settingDescription: __(
 				'Define the key factors customers will use to evaluate each store.',
 				'multivendorx'
@@ -51,29 +49,45 @@ export default {
 				'Give customers a fair way to share feedback! Define what they rate, like product quality, delivery, or service. You’ll start with five default parameters that can be edited or removed, but make sure at least three stay active for balanced, detailed reviews.',
 				'multivendorx'
 			),
-			requiredEnable: true,
-			defaultValues: [
+			addNewBtn: true,
+			addNewTemplate: {
+				label: 'New Rating Parameters',
+				formFields: [
+					{
+						key: 'title',
+						type: 'text',
+						label: 'Parameters',
+						placeholder: 'Enter parameters',
+					},
+					{
+						key: 'required',
+						type: 'checkbox',
+						label: 'Required',
+					},
+				],
+			},
+			modal: [
 				{
-					value: 'Quality of product',
+					id: 'quality-of-product',
+					label: 'Quality of product',
 					required: true,
-					deleteDisabled: true,
+					isCustom: true,
 				},
 				{
-					value: 'Communication & support',
+					id: 'communication-support',
+					label: 'Communication Support',
 					required: true,
-					deleteDisabled: true,
+					isCustom: true,
 				},
 				{
-					value: 'Delivery experience',
+					id: 'delivery-experience',
+					label: 'Delivery experience',
 					required: true,
-					deleteDisabled: true,
+					isCustom: true,
 				},
-				{ value: 'Accuracy of description' },
-				{ value: 'Value for money' },
 			],
 			proSetting: false,
-			maxItems: 10,
-			allowDuplicates: false,
+			moduleEnabled: 'store-review',
 		},
 	],
 };

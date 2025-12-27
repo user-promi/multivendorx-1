@@ -95,47 +95,6 @@ const products: Products[] = [
 	},
 ];
 
-const faqs = [
-	{
-		question: __(
-			'Why am I not receiving any emails when a customer subscribes for an out-of-stock product?',
-			'notifima'
-		),
-		answer: __(
-			'Please install a plugin like Email Log and perform a test subscription.',
-			'notifima'
-		),
-		open: true,
-	},
-	{
-		question: __('Why is the out-of-stock form not appearing?', 'notifima'),
-		answer: __(
-			'There might be a theme conflict issue. To troubleshoot, switch to a default theme like Twenty Twenty-Four and check if the form appears.',
-			'notifima'
-		),
-		open: false,
-	},
-	{
-		question: __('Does Notifima support product variations?', 'notifima'),
-		answer: __(
-			'Yes, product variations are fully supported and editable from the Inventory Manager. Notifima handles variable products with ease and uses an expandable feature to make managing variations clear and straightforward.',
-			'notifima'
-		),
-		open: false,
-	},
-	{
-		question: __(
-			'Do you support Google reCaptcha for the out-of-stock form?',
-			'notifima'
-		),
-		answer: __(
-			'Yes, <a href="https://notifima.com/pricing/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" target="_blank">Notifima Pro</a> has support for reCaptcha.',
-			'notifima'
-		),
-		open: false,
-	},
-];
-
 const Settings: React.FC<SettingsProps> = () => {
 	const settingsArray: SettingItem[] = getAvailableSettings(
 		getTemplateData('settings'),
