@@ -65,42 +65,110 @@ export default {
 		},
 		{
 			key: 'verification_methods',
-			type: 'multi-string',
-			label: __('Verification methods', 'multivendorx'),
+			type: 'expandable-panel',
 			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,
-			requiredEnable: true,
-			defaultValues: [
+			label: __('Verification methods', 'multivendorx'),
+			buttonEnable: true,
+			addNewBtn: true,
+			addNewTemplate: {
+				// icon: 'adminlib-credit-card',
+				label: 'New Verification Method',
+				desc: 'Configure your custom verification methods',
+
+				formFields: [
+					{
+						key: 'title',
+						type: 'text',
+						label: 'Method title',
+						placeholder: 'Enter title',
+					},
+					{
+						key: 'description',
+						type: 'textarea',
+						label: 'Description',
+					},
+					{
+						key: 'required',
+						type: 'checkbox',
+						label: 'Required',
+					},
+				],
+			},
+			modal: [
 				{
-					value: 'Business registration certificate',
-					iconClass: 'adminlib-check',
-					description:
-						'Confirms the store is legally registered as a business entity.',
+					id: 'business-registration',
+					label: 'Business registration certificate',
 					required: true,
+					desc: 'Confirms the store is legally registered as a business entity.',
+					formFields: [
+					{
+						key: 'title',
+						type: 'text',
+						label: 'Method title',
+						placeholder: 'Enter title',
+					},
+					{
+						key: 'description',
+						type: 'textarea',
+						label: 'Description',
+					},
+					{
+						key: 'required',
+						type: 'checkbox',
+						label: 'Required',
+					},
+				],
+				},
+				{	
+					id: 'trade-license',
+					label: 'Trade license or permit',
+					required: true,
+					desc: 'Validates that the store is authorized to operate and conduct business legally.',
+					formFields: [
+					{
+						key: 'title',
+						type: 'text',
+						label: 'Method title',
+						placeholder: 'Enter title',
+					},
+					{
+						key: 'description',
+						type: 'textarea',
+						label: 'Description',
+					},
+					{
+						key: 'required',
+						type: 'checkbox',
+						label: 'Required',
+					},
+				]
 				},
 				{
-					value: 'Trade license or permit',
-					iconClass: 'adminlib-clock',
-					description:
-						'Validates that the store is authorized to operate and conduct business legally.',
+					id: 'address-proof',
+					label: 'Address proof of business location',
 					required: true,
-				},
-				{
-					value: 'Address proof of business location',
-					iconClass: 'adminlib-clock',
-					description:
-						'Confirms the store’s physical or operational business address.',
-					required: true,
+					desc: 'Confirms the store’s physical or operational business address.',
+					formFields: [
+					{
+						key: 'title',
+						type: 'text',
+						label: 'Method title',
+						placeholder: 'Enter title',
+					},
+					{
+						key: 'description',
+						type: 'textarea',
+						label: 'Description',
+					},
+					{
+						key: 'required',
+						type: 'checkbox',
+						label: 'Required',
+					},
+				]
 				},
 			],
-			iconOptions: [
-				'adminlib-check',
-				'adminlib-clock',
-				'adminlib-cart',
-				'adminlib-store',
-			],
-			maxItems: 10,
-			allowDuplicates: false,
 		},
 		{
 			key: 'separator_content',
@@ -112,7 +180,7 @@ export default {
 		},
 		{
 			key: 'all_verification_methods',
-			type: 'payment-tabs',
+			type: 'expandable-panel',
 			label: 'Social verification',
 			moduleEnabled: 'marketplace-compliance',
 			proSetting: true,

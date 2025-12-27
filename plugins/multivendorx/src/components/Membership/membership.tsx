@@ -763,7 +763,7 @@ const Membership = ({ id }: { id: string }) => {
 		{
 			key: 'product_images',
 			type: 'checkbox',
-			label: 'Allow stores to add featured products',
+			label: 'lflkksjsjajaaj',
 			options: [
 				{
 					key: 'product_images',
@@ -781,7 +781,7 @@ const Membership = ({ id }: { id: string }) => {
 			key: 'max_featured_products',
 			type: 'number',
 			size: '6rem',
-			preText: 'maximum upto',
+			preText: 'allowed upto',
 			dependent: {
 				key: 'product_images',
 				set: true,

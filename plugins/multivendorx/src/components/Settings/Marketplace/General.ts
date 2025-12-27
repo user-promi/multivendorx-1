@@ -89,6 +89,15 @@ export default {
 			icon: 'adminlib-general-tab',
 			options: [
 				{
+					key: 'marketplace_registration',
+					label: '[marketplace_registration]',
+					name: 'Marketplace registration',
+					desc: __(
+						'Displays the store registration form. Use this to allow new users to sign up as stores.',
+						'multivendorx'
+					),
+				},
+				{
 					key: 'marketplace_dashboard',
 					label: '[marketplace_dashboard]',
 					name: 'Marketplace dashboard',
@@ -98,13 +107,28 @@ export default {
 					),
 				},
 				{
-					key: 'marketplace_registration',
-					label: '[marketplace_registration]',
-					name: 'Marketplace registration',
+					key: 'marketplace_stores',
+					label: '[marketplace_stores]',
+					name: 'Show store lists',
 					desc: __(
-						'Displays the store registration form. Use this to allow new users to sign up as stores.',
+						'Displays a list of all registered stores with ratings. Use this to help customers discover stores.',
 						'multivendorx'
 					),
+					arguments: [
+						{
+							attribute: 'orderby',
+							description:
+								'Decide how the store list is sorted',
+							accepted: 'name, category, registered (Default =registered)',
+							default: '[marketplace_stores orderby="registered"]',
+						},
+						{
+							attribute: 'order',
+							description: 'Decide the sorting direction (Default = DESC)',
+							accepted: 'number',
+							default: '[marketplace_stores order="DESC"]',
+						},
+					],
 				},
 				{
 					key: 'marketplace_products',
@@ -174,30 +198,6 @@ export default {
 								'Define how selected categories should be matched.',
 							accepted: 'IN (Any of the), NOT IN (All of the), AND (None of the)',
 							default: '[marketplace_products category="clothing,accessories" operator="AND"]',
-						},
-					],
-				},
-				{
-					key: 'marketplace_stores',
-					label: '[marketplace_stores]',
-					name: 'Show store lists',
-					desc: __(
-						'Displays a list of all registered stores with ratings. Use this to help customers discover stores.',
-						'multivendorx'
-					),
-					arguments: [
-						{
-							attribute: 'orderby',
-							description:
-								'Decide how the store list is sorted',
-							accepted: 'name, category, registered (Default =registered)',
-							default: '[marketplace_stores orderby="registered"]',
-						},
-						{
-							attribute: 'order',
-							description: 'Decide the sorting direction (Default = DESC)',
-							accepted: 'number',
-							default: '[marketplace_stores order="DESC"]',
 						},
 					],
 				},

@@ -39,7 +39,7 @@ import '../styles/web/AdminForm.scss';
 import NestedComponent from './NestedComponent';
 import ColorSettingInput from './ColorSettingInput';
 import EndpointEditor from './EndpointEditor';
-import PaymentTabsComponent from './PaymentTabsComponent';
+import ExpandablePanelGroup from './ExpandablePanelGroup';
 import SystemInfo from './SystemInfo';
 import MultiInput from './MultiInput';
 import { useModules } from '../contexts/ModuleContext';
@@ -176,7 +176,7 @@ interface InputField {
         | 'checkbox-custom-img'
         | 'api-connect'
         | 'nested'
-        | 'payment-tabs'
+        | 'expandable-panel'
         | 'multi-string'
         | 'verification-methods'
         | 'description'
@@ -232,7 +232,8 @@ interface InputField {
     requiredEnable?: boolean;
     iconOptions?: string[];
     hint?: string;
-    addNewBtn?: string;
+    addNewBtnText?: string;
+    addNewBtn?: boolean;
     blocktext?: string;
     defaultValues?: MultiStringItem[];
     title?: string;
@@ -253,6 +254,7 @@ interface InputField {
         { heading: string; fields: Record< string, string > }
     >;
     apiLink?: string;
+    method?: string;
     tasks?: Task[];
     fileName?: string;
     syncDirections?: {
@@ -318,6 +320,17 @@ interface InputField {
             placeholder?: string;
         }[];
     }[];
+    addNewTemplate?: {
+        icon: string;
+        label: string;
+        desc: string;
+        formFields: {
+            key: string;
+            type: 'text' | 'password' | 'number' | 'checkbox';
+            label: string;
+            placeholder?: string;
+        }[];
+    }
     link?: string;
 }
 
@@ -1190,7 +1203,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                                               inputField.apilink
                                                           )
                                                       ),
-                                                      method: 'GET',
+                                                      method: inputField.method,
                                                       headers: {
                                                           'X-WP-Nonce':
                                                               appLocalizer.nonce,
@@ -1236,7 +1249,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                 inputType="multi-string"
                                 wrapperClass="setting-form-multi-input"
                                 inputClass="basic-input"
-                                listClass="payment-tabs-component"
+                                listClass="expandable-panel-group"
                                 itemClass="multi-item"
                                 placeholder={ inputField.placeholder }
                                 values={
@@ -1545,7 +1558,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             selectDeselectValue="Select / Deselect All" // text for select/deselect all
                             rightContentClass="settings-metabox-description"
                             rightContent={ inputField.rightContent } // for place checkbox right
-                            addNewBtn={ inputField.addNewBtn }
+                            addNewBtn={ inputField.addNewBtnText }
                             options={normalizedOptions}
                             value={ normalizedValue }
                             proSetting={ isProSetting(
@@ -2207,9 +2220,9 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                case 'payment-tabs':
+                case 'expandable-panel':
                     input = (
-                        <PaymentTabsComponent
+                        <ExpandablePanelGroup
                             key={ inputField.key }
                             name={ inputField.key }
                             proSetting={ isProSetting(
@@ -2231,6 +2244,8 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             appLocalizer={ appLocalizer }
                             methods={ inputField.modal ?? [] } //Array of available payment methods/options.
                             buttonEnable={ inputField.buttonEnable } //Flag to enable/disable action buttons in the UI.
+                            addNewBtn={inputField.addNewBtn}
+                            addNewTemplate={inputField.addNewTemplate ?? []}
                             value={ value || {} }
                             onChange={ ( data ) => {
                                 if (
