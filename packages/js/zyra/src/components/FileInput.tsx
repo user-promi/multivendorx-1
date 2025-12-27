@@ -211,13 +211,6 @@ const FileInput: React.FC< FileInputProps > = ( props ) => {
                                 width={ props.imageWidth || 80 }
                                 height={ props.imageHeight || 80 }
                                 onClick={ () => setAsMainImage( index ) }
-                                style={ {
-                                    cursor: 'pointer',
-                                    border:
-                                        index === activeIndex
-                                            ? '2px solid #6a4df4'
-                                            : '1px solid #ccc',
-                                } }
                             />
                             <button
                                 type="button"
