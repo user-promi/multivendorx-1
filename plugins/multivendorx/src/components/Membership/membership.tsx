@@ -831,8 +831,6 @@ const Membership = ({ id }: { id: string }) => {
 													),
 												},
 											]}
-										// value={formData.status}
-										// onChange={handleToggleChange}
 										/>
 										<div
 											className="recommended-wrapper"
