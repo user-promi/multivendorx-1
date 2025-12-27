@@ -305,6 +305,14 @@
         margin-bottom: 1rem;
         /* add product form style*/
 
+        &.row{
+            flex-direction: row;
+            gap: 0.5rem;
+
+            label{
+                width: 60%;
+            }
+        }
         &.align-bottom {
             align-items: end;
         }
