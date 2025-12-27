@@ -12,6 +12,17 @@ export default {
 	submitUrl: 'settings',
 	modal: [
 		{
+			type: 'button',
+			name: __('Import Dummy Data', 'multivendorx'),
+			label: __('Import Dummy Data', 'multivendorx'),
+			desc: __(
+				'Import Dummy Data for testing purpose.',
+				'multivendorx'
+			),
+			apilink: 'import-dummy-data',
+			method: 'POST'
+		},
+		{
 			key: 'transients',
 			type: 'button',
 			name: __('Clear transients', 'multivendorx'),
