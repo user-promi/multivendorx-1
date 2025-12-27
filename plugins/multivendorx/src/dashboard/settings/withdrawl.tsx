@@ -136,7 +136,6 @@ const Withdrawl: React.FC = () => {
 	};
 
 	const handleButtonClick = (field, formData) => {
-		console.log('button click');
 		axios
 			.post(
 				appLocalizer.ajaxurl,

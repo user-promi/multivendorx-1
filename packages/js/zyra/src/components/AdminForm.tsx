@@ -176,7 +176,7 @@ interface InputField {
         | 'checkbox-custom-img'
         | 'api-connect'
         | 'nested'
-        | 'panel-tabs'
+        | 'expandable-panel'
         | 'multi-string'
         | 'verification-methods'
         | 'description'
@@ -2220,7 +2220,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                case 'panel-tabs':
+                case 'expandable-panel':
                     input = (
                         <ExpandablePanelGroup
                             key={ inputField.key }

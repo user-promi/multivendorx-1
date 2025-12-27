@@ -149,7 +149,7 @@ class Utill {
         'withdrawals_count'          => 'withdrawals_count',
         'payment_method'             => 'payment_method',
         'paypal_email'               => 'paypal_email',
-        'stripe_account_id'          => '_stripe_connect_account_id',
+        'stripe_account_id'          => 'stripe_connect_account_id',
         'stripe_oauth_state'         => 'stripe_oauth_state',
         'registration_data'          => 'multivendorx_registration_data',
         'request_withdrawal_amount'  => 'request_withdrawal_amount',
@@ -321,7 +321,8 @@ class Utill {
      * @return bool
      */
     public static function is_khali_dabba() {
-        return apply_filters( 'kothay_dabba', false );
+        // return apply_filters( 'kothay_dabba', false );
+        return true;
     }
 
     /**

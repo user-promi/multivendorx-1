@@ -38,7 +38,7 @@ const ApprovalQueue = () => {
 
 		// Product Count (only if can publish products)
 		if (
-			settings?.['store-capability']?.products?.includes(
+			!settings?.['store-capability']?.products?.includes(
 				'publish_products'
 			)
 		) {
@@ -163,7 +163,7 @@ const ApprovalQueue = () => {
 		{
 			type: 'file',
 			condition:
-				settings?.['store-capability']?.products?.includes(
+				!settings?.['store-capability']?.products?.includes(
 					'publish_products'
 				),
 			content: {

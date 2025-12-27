@@ -13,7 +13,7 @@ export default {
 	modal: [
 		{
 			key: 'shipping_modules',
-			type: 'panel-tabs',
+			type: 'expandable-panel',
 			moduleEnabled: 'store-shipping',
 			label: __('Shipping methods available to stores ', 'multivendorx'),
 			desc: __(

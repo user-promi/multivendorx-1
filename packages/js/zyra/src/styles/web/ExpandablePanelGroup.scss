@@ -3,11 +3,11 @@
 .expandable-panel-group {
     margin: 0;
 
-    .panel-item {
+    .expandable-item {
         margin-bottom: 1rem;
         cursor: pointer;
 
-        .panel-header {
+        .expandable-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -41,6 +41,7 @@
                 align-items: center;
                 width: 100%;
                 justify-content: space-between;
+                min-height: 2.063rem;
 
                 .details-wrapper {
                     display: flex;
@@ -49,7 +50,7 @@
 
 
 
-                .panel-header-icon {
+                .expandable-header-icon {
                     padding: 0.313rem;
                     background: $theme-background-color;
                     border-radius: 0.5rem;
@@ -69,7 +70,7 @@
                     }
                 }
 
-                .panel-header-info {
+                .expandable-header-info {
                     .title-wrapper {
                         display: flex;
                         gap: 0.5rem;
@@ -113,36 +114,16 @@
             .right-section {
                 display: flex;
                 align-items: center;
-                i {
-                    font-size: 1.25rem;
-                }
 
                 .disable-icon {
                     color: gray;
                 }
-
-                .settings-icon {
-                    color: $theme-color
-                }
                 ul{
                     margin: 0;
                 }
-                // ul {
-                //     display: flex;
-                //     gap: 0.625rem;
-                //     margin: 0;
-
-                //     li {
-                //         position: relative;
-                //         display: inline-block;
-                //         cursor: pointer;
-                //     }
-                // }
-            }
-
-            .panel-header-arrow {
-                i {
-                    font-size: 2rem;
+                .dropdown{
+                    min-width: 11rem;
+                    max-width: 11rem;
                 }
             }
         }
@@ -189,7 +170,7 @@
                 }
 
                 .expandable-panel-group {
-                    .panel-item {
+                    .expandable-item {
                         background: #fff;
                     }
 
@@ -211,12 +192,12 @@
             &.social-verification {
                 padding-top: 0.5rem;
 
-                .panel-header {
+                .expandable-header {
                     background: transparent;
                     border: $border-light-small;
                     padding: 0.625rem;
 
-                    .panel-header-icon {
+                    .expandable-header-icon {
                         width: 2rem;
                         height: 2rem;
                     }
@@ -270,7 +251,7 @@
         &.open-form {
             cursor: default;
 
-            .panel-header {
+            .expandable-header {
                 cursor: default;
             }
         }
