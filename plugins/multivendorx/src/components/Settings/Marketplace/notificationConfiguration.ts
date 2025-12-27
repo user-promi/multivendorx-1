@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'notification-configuration',
 	priority: 5,
-	name: __('Notifications', 'multivendorx'),
+	name: __('Notifications Providers', 'multivendorx'),
 	tabTitle: 'Email delivery setup',
 	desc: __(
 		'Configure how marketplace emails are sent. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
@@ -21,10 +21,15 @@ export default {
 				'Choose which service will send your marketplace emails.',
 				'multivendorx'
 			),
+			desc: __('<ul>\<li><strong>WordPress SMTP</strong> – Use the WordPress-supported SMTP plugin, which you can find here: <a href="https://wordpress.org/plugins/tags/smtp/" target="_blank">WordPress SMTP Plugins</a>.</li>\
+<strong>Important:</strong> The email address you configure in your SMTP plugin must match the <strong>Sender Email Address</strong>. Otherwise, WordPress default mail will be used.<li><strong>SendGrid, Mailgun, Amazon SES</strong> – Use these services if you have accounts configured with them.</li>\</ul>',
+    'multivendorx'
+),
+
 			options: [
 				{
 					key: 'wp_mail',
-					label: __('WordPress Default (wp_mail)', 'multivendorx'),
+					label: __('WordPress SMTP', 'multivendorx'),
 					value: 'wp_mail',
 				},
 				{
@@ -112,44 +117,44 @@ export default {
 				},
 			],
 		},
-		{
-			key: 'email_section',
-			type: 'section',
-			hint: __('Order confirmation email for main and sub-orders', 'multivendorx'),
-		},
-		{
-			key: 'sms_gateway_selector',
-			type: 'setting-toggle',
-			label: __('Order emails customers receives', 'multivendorx'),
-			settingDescription: __(
-				'Choose how order confirmation emails should be sent. ',
-				'multivendorx'
-			),
-			desc: __(
-				'In a multivendor setup, a <b>Main Order</b> is the parent order placed by the customer, while <b>Sub-orders</b> are created for each store.<br/><br/><b>Enabling the Main Order is recommended</b>, as it allows you to send a single email that includes the Main Order and all related Sub-orders. Alternatively, you can send separate emails for the Main Order and each Sub-order.',
-				'multivendorx'
-			),
+		// {
+		// 	key: 'email_section',
+		// 	type: 'section',
+		// 	hint: __('Order confirmation email for main and sub-orders', 'multivendorx'),
+		// },
+		// {
+		// 	key: 'sms_gateway_selector',
+		// 	type: 'setting-toggle',
+		// 	label: __('Order emails customers receives', 'multivendorx'),
+		// 	settingDescription: __(
+		// 		'Choose how order confirmation emails should be sent. ',
+		// 		'multivendorx'
+		// 	),
+		// 	desc: __(
+		// 		'In a multivendor setup, a <b>Main Order</b> is the parent order placed by the customer, while <b>Sub-orders</b> are created for each store.<br/><br/><b>Enabling the Main Order is recommended</b>, as it allows you to send a single email that includes the Main Order and all related Sub-orders. Alternatively, you can send separate emails for the Main Order and each Sub-order.',
+		// 		'multivendorx'
+		// 	),
 
 
 
-			options: [
-				{
-					key: 'mainorder',
-					label: __('Main order', 'multivendorx'),
-					value: 'mainorder',
-				},
-				{
-					key: 'suborder',
-					label: __('Sub-orders Only', 'multivendorx'),
-					value: 'suborder',
-				},
-				{
-					key: 'mainnsub',
-					label: __('Main & Sub order together', 'multivendorx'),
-					value: '',
-				},
-			],
+		// 	options: [
+		// 		{
+		// 			key: 'mainorder',
+		// 			label: __('Main order', 'multivendorx'),
+		// 			value: 'mainorder',
+		// 		},
+		// 		{
+		// 			key: 'suborder',
+		// 			label: __('Sub-orders Only', 'multivendorx'),
+		// 			value: 'suborder',
+		// 		},
+		// 		{
+		// 			key: 'mainnsub',
+		// 			label: __('Main & Sub order together', 'multivendorx'),
+		// 			value: '',
+		// 		},
+		// 	],
 
-		},
+		// },
 	],
 };
