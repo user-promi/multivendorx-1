@@ -51,10 +51,10 @@ const EditBlock = (props) => {
 	);
 };
 
-registerBlockType('multivendorx/marketplace-stores', {
+registerBlockType('multivendorx/stores-list', {
 	apiVersion: 2,
 	title: 'Stores List',
-	icon: 'cart',
+	icon: 'store',
 	category: 'multivendorx',
 	supports: { html: false },
 

@@ -55,7 +55,7 @@ module.exports = {
 		index: './src/index.tsx',
 		'block/RegistrationForm/index':
 			'./src/blocks/RegistrationForm/index.js',
-		'block/marketplaceStores/index': './src/blocks/marketplaceStores/index.js',
+		'block/stores-list/index': './src/blocks/stores-list/index.js',
 		'block/setupWizard/index': './src/blocks/setupWizard/index.js',
 	},
 

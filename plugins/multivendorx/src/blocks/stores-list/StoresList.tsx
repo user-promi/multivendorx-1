@@ -12,14 +12,6 @@ interface StoreRow {
 type Category = {
 	id: number;
 	name: string;
-	slug: string;
-	count: number;
-	description: string;
-	display: string;
-	image: any;
-	menu_order: number;
-	parent: number;
-	_links: any;
 };
 interface StoresListProps {
 	orderby?: string;

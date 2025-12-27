@@ -126,7 +126,6 @@ class Shortcode {
         if ( ($attributes['orderby'] ?? null) === 'registered' ) {
             $attributes['orderby'] = 'create_time';
         }        
-    
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
         FrontendScripts::load_scripts();
 
