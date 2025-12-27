@@ -238,6 +238,7 @@ class Stores extends \WP_REST_Controller {
             $filters = $request->get_param( 'filters' );
             if ( ! empty( $filters ) ) {
                 $args['orderBy'] = $filters['sort'] ?? $args['orderBy'] ?? '';
+                $args['order']   = $filters['order'] ?? '';
 
                 if ( ! empty( $filters['category'] ) ) {
                     $product_ids = wc_get_products(
