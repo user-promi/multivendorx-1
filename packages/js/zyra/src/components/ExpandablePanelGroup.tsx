@@ -33,23 +33,23 @@ interface FieldOption {
 interface PanelFormField {
     key: string;
     type:
-    | 'text'
-    | 'password'
-    | 'number'
-    | 'checkbox'
-    | 'verification-methods'
-    | 'textarea'
-    | 'expandable-panel'
-    | 'multi-checkbox'
-    | 'check-list'
-    | 'description'
-    | 'setup'
-    | 'setting-toggle'
-    | 'buttons'
-    | 'nested'
-    | 'clickable-list'
-    | 'iconlibrary'
-    | 'copy-text';
+        | 'text'
+        | 'password'
+        | 'number'
+        | 'checkbox'
+        | 'verification-methods'
+        | 'textarea'
+        | 'expandable-panel'
+        | 'multi-checkbox'
+        | 'check-list'
+        | 'description'
+        | 'setup'
+        | 'setting-toggle'
+        | 'buttons'
+        | 'nested'
+        | 'clickable-list'
+        | 'iconlibrary'
+        | 'copy-text';
 
     label: string;
     placeholder?: string;
@@ -157,36 +157,43 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
     moduleChange,
     modules,
     addNewBtn,
-    addNewTemplate
-}) => {
-    const [activeTabs, setActiveTabs] = useState<string[]>([]);
-    const menuRef = useRef<HTMLDivElement>(null);
-    const [wizardIndex, setWizardIndex] = useState(0);
-    const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const [iconDropdownOpen, setIconDropdownOpen] = useState<string | null>(null);
+    addNewTemplate,
+} ) => {
+    const [ activeTabs, setActiveTabs ] = useState< string[] >( [] );
+    const menuRef = useRef< HTMLDivElement >( null );
+    const [ wizardIndex, setWizardIndex ] = useState( 0 );
+    const [ openDropdownId, setOpenDropdownId ] = useState< string | null >(
+        null
+    );
+    const wrapperRef = useRef< HTMLDivElement >( null );
+    const [ iconDropdownOpen, setIconDropdownOpen ] = useState< string | null >(
+        null
+    );
 
-    const [ExpandablePanelMethods, setExpandablePanelMethods] = useState<
+    const [ ExpandablePanelMethods, setExpandablePanelMethods ] = useState<
         ExpandablePanelMethod[]
-    >(() =>
-        methods.map((method) => {
-            if (!method.isCustom) return method;
+    >( () =>
+        methods.map( ( method ) => {
+            if ( ! method.isCustom ) {
+                return method;
+            }
 
             const templateFields = addNewTemplate?.formFields ?? [];
             const methodFields = method.formFields ?? [];
 
-            const existingKeys = new Set(methodFields.map(f => f.key));
+            const existingKeys = new Set( methodFields.map( ( f ) => f.key ) );
 
             return {
                 ...method,
                 formFields: [
                     ...methodFields,
-                    ...templateFields.filter(f => !existingKeys.has(f.key)),
+                    ...templateFields.filter(
+                        ( f ) => ! existingKeys.has( f.key )
+                    ),
                 ],
             };
-        })
+        } )
     );
-
 
     useEffect( () => {
         const handleClickOutside = ( event: MouseEvent ) => {
@@ -203,13 +210,15 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
         return () => {
             document.removeEventListener( 'mousedown', handleClickOutside );
         };
-    }, []);
-    useEffect(() => {
-        const updated: Record<string, Record<string, unknown>> = { ...value };
+    }, [] );
+    useEffect( () => {
+        const updated: Record< string, Record< string, unknown > > = {
+            ...value,
+        };
 
-        methods.forEach((method) => {
-            if (!updated[method.id]) {
-                updated[method.id] = {
+        methods.forEach( ( method ) => {
+            if ( ! updated[ method.id ] ) {
+                updated[ method.id ] = {
                     enable: true,
                     title: method.label ?? '',
                     description: method.desc ?? '',
@@ -217,12 +226,10 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                     required: method.required ?? false,
                 };
             }
-        });
+        } );
 
-        onChange(updated);
-    }, []);
-
-
+        onChange( updated );
+    }, [] );
 
     // add new
     const createNewExpandablePanelMethod = (): ExpandablePanelMethod => {
@@ -232,7 +239,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             );
         }
 
-        const id = `custom_${Date.now()}`;
+        const id = `custom_${ Date.now() }`;
 
         return {
             id,
@@ -241,39 +248,41 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             desc: addNewTemplate.desc || '',
             connected: false,
             isCustom: true,
-            formFields: addNewTemplate.formFields.map(field => ({ ...field })),
+            formFields: addNewTemplate.formFields.map( ( field ) => ( {
+                ...field,
+            } ) ),
         };
     };
 
     const handleAddNewMethod = () => {
         const newMethod = createNewExpandablePanelMethod();
 
-        setExpandablePanelMethods(prev => [...prev, newMethod]);
+        setExpandablePanelMethods( ( prev ) => [ ...prev, newMethod ] );
 
-        const initialValues: Record<string, unknown> = {
+        const initialValues: Record< string, unknown > = {
             enable: true,
             title: newMethod.label,
             description: '',
             required: false,
         };
 
-        newMethod.formFields?.forEach(field => {
-            if (field.type === 'iconlibrary') {
-                initialValues[field.key] = '';
+        newMethod.formFields?.forEach( ( field ) => {
+            if ( field.type === 'iconlibrary' ) {
+                initialValues[ field.key ] = '';
             }
-        });
+        } );
 
-        onChange({
+        onChange( {
             ...value,
-            [newMethod.id]: initialValues,
-        });
+            [ newMethod.id ]: initialValues,
+        } );
 
-        setActiveTabs(prev => [...prev, newMethod.id]);
+        setActiveTabs( ( prev ) => [ ...prev, newMethod.id ] );
     };
 
-    const handleDeleteMethod = (methodId: string) => {
-        setExpandablePanelMethods((prev) =>
-            prev.filter((m) => m.id !== methodId)
+    const handleDeleteMethod = ( methodId: string ) => {
+        setExpandablePanelMethods( ( prev ) =>
+            prev.filter( ( m ) => m.id !== methodId )
         );
 
         const updatedValue = { ...value };
@@ -839,10 +848,10 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                 const iconOptions = field.iconOptions ?? [];
                 const selectedIcon = fieldValue as string;
 
-                const dropdownKey = `${methodId}_${field.key}`;
+                const dropdownKey = `${ methodId }_${ field.key }`;
                 const isOpen = iconDropdownOpen === dropdownKey;
 
-                if (!iconEnable || iconOptions.length === 0) {
+                if ( ! iconEnable || iconOptions.length === 0 ) {
                     return null;
                 }
 
@@ -850,47 +859,50 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                     <div className="icon-library-wrapper">
                         <div
                             className="selected-icon"
-                            onClick={() =>
+                            onClick={ () =>
                                 setIconDropdownOpen(
                                     isOpen ? null : dropdownKey
                                 )
                             }
                         >
-                            {selectedIcon ? (
-                                <i className={selectedIcon}></i>
+                            { selectedIcon ? (
+                                <i className={ selectedIcon }></i>
                             ) : (
                                 <span>Select Icon</span>
-                            )}
+                            ) }
                             <span className="dropdown-arrow">▾</span>
                         </div>
 
-                        {isOpen && (
+                        { isOpen && (
                             <ul className="icon-options-list">
-                                {iconOptions.map((icon) => (
+                                { iconOptions.map( ( icon ) => (
                                     <li
-                                        key={icon}
-                                        className={`icon-option ${selectedIcon === icon ? 'selected' : ''
-                                            }`}
-                                        onClick={() => {
+                                        key={ icon }
+                                        className={ `icon-option ${
+                                            selectedIcon === icon
+                                                ? 'selected'
+                                                : ''
+                                        }` }
+                                        onClick={ () => {
                                             handleInputChange(
                                                 methodId,
                                                 field.key,
                                                 icon
                                             );
-                                            setIconDropdownOpen(null);
-                                        }}
+                                            setIconDropdownOpen( null );
+                                        } }
                                     >
-                                        <i className={icon}></i>
+                                        <i className={ icon }></i>
                                     </li>
-                                ))}
+                                ) ) }
                             </ul>
-                        )}
+                        ) }
 
-                        {field.desc && (
+                        { field.desc && (
                             <div className="settings-metabox-description">
-                                {field.desc}
+                                { field.desc }
                             </div>
-                        )}
+                        ) }
                     </div>
                 );
             }
@@ -922,12 +934,13 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
     return (
         <>
             <div className="expandable-panel-group">
-                {ExpandablePanelMethods.map((method, index) => {
-                    const isEnabled = value?.[method.id]?.enable ?? false;
-                    const isActive = activeTabs.includes(method.id);
-                    const headerIcon = (value?.[method.id]?.icon as string) || method.icon;
+                { ExpandablePanelMethods.map( ( method, index ) => {
+                    const isEnabled = value?.[ method.id ]?.enable ?? false;
+                    const isActive = activeTabs.includes( method.id );
+                    const headerIcon =
+                        ( value?.[ method.id ]?.icon as string ) || method.icon;
 
-                    if (isWizardMode && index > wizardIndex) {
+                    if ( isWizardMode && index > wizardIndex ) {
                         return null;
                     }
 
@@ -1004,9 +1017,9 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                     } }
                                 >
                                     <div className="details-wrapper">
-                                        {headerIcon && (
+                                        { headerIcon && (
                                             <div className="expandable-header-icon">
-                                                <i className={headerIcon}></i>
+                                                <i className={ headerIcon }></i>
                                             </div>
                                         ) }
                                         <div className="expandable-header-info">
@@ -1138,7 +1151,14 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                     ) : null }
                                     { method.isCustom && (
                                         <>
-                                            <div onClick={() => { toggleActiveTab(method.id) }} className="admin-btn btn-blue">
+                                            <div
+                                                onClick={ () => {
+                                                    toggleActiveTab(
+                                                        method.id
+                                                    );
+                                                } }
+                                                className="admin-btn btn-blue"
+                                            >
                                                 <i className="adminlib-edit"></i>
                                                 Edit
                                             </div>
@@ -1246,36 +1266,37 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                                                         </li>
                                                                     ) }
                                                                 </>
-                                                            ) : null}
-                                                            {(method.isCustom && method.required) && (
-                                                                <>
-                                                                    <li
-                                                                        onClick={ () => {
-                                                                            toggleActiveTab(
-                                                                                method.id
-                                                                            );
-                                                                        } }
-                                                                    >
-                                                                        <div className="item">
-                                                                            <i className="adminlib-edit"></i>
-                                                                            Edit
-                                                                        </div>
-                                                                    </li>
-                                                                    <li
-                                                                        onClick={ () =>
-                                                                            handleDeleteMethod(
-                                                                                method.id
-                                                                            )
-                                                                        }
-                                                                        className="delete"
-                                                                    >
-                                                                        <div className="item">
-                                                                            <i className="adminlib-delete"></i>
-                                                                            Delete
-                                                                        </div>
-                                                                    </li>
-                                                                </>
-                                                            ) }
+                                                            ) : null }
+                                                            { method.isCustom &&
+                                                                method.required && (
+                                                                    <>
+                                                                        <li
+                                                                            onClick={ () => {
+                                                                                toggleActiveTab(
+                                                                                    method.id
+                                                                                );
+                                                                            } }
+                                                                        >
+                                                                            <div className="item">
+                                                                                <i className="adminlib-edit"></i>
+                                                                                Edit
+                                                                            </div>
+                                                                        </li>
+                                                                        <li
+                                                                            onClick={ () =>
+                                                                                handleDeleteMethod(
+                                                                                    method.id
+                                                                                )
+                                                                            }
+                                                                            className="delete"
+                                                                        >
+                                                                            <div className="item">
+                                                                                <i className="adminlib-delete"></i>
+                                                                                Delete
+                                                                            </div>
+                                                                        </li>
+                                                                    </>
+                                                                ) }
                                                             { isEnabled &&
                                                                 ! method.isCustom && (
                                                                     <li
@@ -1332,11 +1353,17 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                                 : ''
                                         } ${ method.openForm ? 'open' : '' }` }
                                     >
-                                        {method.formFields.map((field) => {
-                                            if (field.key === 'required' && method.required === true) {
+                                        { method.formFields.map( ( field ) => {
+                                            if (
+                                                field.key === 'required' &&
+                                                method.required === true
+                                            ) {
                                                 return null;
                                             }
-                                            if (isWizardMode && field.type === 'buttons') {
+                                            if (
+                                                isWizardMode &&
+                                                field.type === 'buttons'
+                                            ) {
                                                 return null;
                                             }
 
