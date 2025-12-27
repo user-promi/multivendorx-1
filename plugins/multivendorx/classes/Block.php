@@ -48,7 +48,7 @@ class Block {
         $blocks = array();
 
         $blocks[] = array(
-            'name'       => 'stores-list', // block name.
+            'name'       => 'marketplace-stores', // block name.
             'textdomain' => 'multivendorx',
             'block_path' => MultiVendorX()->plugin_path . FrontendScripts::get_build_path_name() . 'js/block/',
         );
