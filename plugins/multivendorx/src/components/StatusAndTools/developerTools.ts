@@ -125,7 +125,7 @@ export default {
         {
             key: 'sync_notifications',
             type: 'setting-toggle',
-            label: __('Notification events 	 rules', 'multivendorx'),
+            label: __('Notification events rules', 'multivendorx'),
 			// settingDescription: __(
 			// 	'MultiVendorX includes predefined notification events by default. Additional notification events added via custom code are not listed automatically. Select a sync option below to define how notifications are synced, then click Sync.',
 			// 	'multivendorx'
@@ -133,7 +133,7 @@ export default {
             desc: __(
                     'MultiVendorX includes predefined notification events by default. Additional notification events added via custom code are not listed automatically. Select a synchronization rules below to define how notifications are synced, then click Sync.<ul>\
                         <li><strong>Restore default</strong> - Clears all existing events and inserts the full default event list.<br></li>\
-                        <li><strong>Override and update</strong> - Allows selective overriding of predefined events:<br> When a field is selected, its value will be replaced with the default value during sync.<br> Fields not selected will remain unchanged.<br> Any newly added events will automatically appear in the event list.<br></li>\
+                        <li><strong>Overwrite and update</strong> - Allows selective overriding of predefined events:<br> When a field is selected, its value will be replaced with the default value during sync.<br> Fields not selected will remain unchanged.<br> Any newly added events will automatically appear in the event list.<br></li>\
                     </ul>', 'multivendorx'
                 ),
             options: [
@@ -144,7 +144,7 @@ export default {
                 },
                 {
                     key: 'sync_existing_entry',
-                    label: __('Override and Update', 'multivendorx'),
+                    label: __('Overwrite and Update', 'multivendorx'),
                     value: 'sync_existing_entry',
                 },
             ],
