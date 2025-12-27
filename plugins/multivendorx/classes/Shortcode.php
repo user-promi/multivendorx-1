@@ -123,9 +123,9 @@ class Shortcode {
      * Display stores list
      */
     public function display_stores_list( $attributes ) {
-        if ( isset($attributes['orderby']) && $attributes['orderby'] === 'registered' ) {
+        if ( ($attributes['orderby'] ?? null) === 'registered' ) {
             $attributes['orderby'] = 'create_time';
-        }
+        }        
     
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
         FrontendScripts::load_scripts();
