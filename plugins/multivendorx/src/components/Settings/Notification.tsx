@@ -20,8 +20,8 @@ interface RecipientBadgeProps {
 
 const RecipientBadge: React.FC<RecipientBadgeProps> = ({
 	recipient,
-	onToggle,
-	onDelete,
+	// onToggle,
+	// onDelete,
 }) => {
 	let iconClass = 'adminlib-mail';
 	let badgeClass = 'red';
@@ -48,10 +48,10 @@ const RecipientBadge: React.FC<RecipientBadgeProps> = ({
 			{recipient.enabled && (
 				<div
 					className={`admin-badge ${badgeClass}`}
-					onClick={(e) => {
-						e.stopPropagation();
-						onToggle();
-					}}
+					// onClick={(e) => {
+					// 	e.stopPropagation();
+					// 	onToggle();
+					// }}
 					role="button"
 					tabIndex={0}
 				>
@@ -220,26 +220,72 @@ const Notification: React.FC = () => {
 		if (formData.system_message) {
 			const matches =
 				(formData.system_message as string).match(/\[[^\]]+\]/g) || [];
-			setSystemTags(matches);
+			const uniqueTags = matches.filter(
+				(tag, index) => matches.indexOf(tag) === index
+			);
+
+			setSystemTags(uniqueTags);
 		} else {
 			setSystemTags([]);
 		}
 	}, [formData.system_message]);
 
-	const handleAutoSave = (id: number | null) => {
-		if (id == null) {
-			return;
-		}
+	const handleAutoSave = (
+		id: number | null,
+		data?: any
+	) => {
+		if (id == null) return;
+
+		const payload = data ?? formData;
+
 		axios({
 			method: 'POST',
 			url: getApiLink(appLocalizer, `notifications/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
-				formData,
+				formData: payload,
 			},
 		}).then(() => {
-			setOpenChannel(null);
+			// setOpenChannel(null);
 		});
+	};
+
+	const [cursorPos, setCursorPos] = useState({
+		start: 0,
+		end: 0,
+		field: null,
+	});
+
+	const insertAtCursor = (tag) => {
+		const { start, end, field } = cursorPos;
+		if (!field) return;
+
+		const value = formData[field] || '';
+		const updated =
+			value.slice(0, start) +
+			tag +
+			value.slice(end);
+		
+		const updatedFormData = {
+			...formData,
+			[field]: updated,
+		};
+
+		setFormData(updatedFormData);
+
+		// Restore cursor position
+		requestAnimationFrame(() => {
+			const el = document.activeElement;
+			if (el && el.setSelectionRange) {
+				el.setSelectionRange(
+					start + tag.length,
+					start + tag.length
+				);
+			}
+		});
+
+		handleAutoSave(updatedFormData.id, updatedFormData);
+
 	};
 
 	// -------------- TAGS: auto-generate unique tags from notifications --------------
@@ -260,6 +306,19 @@ const Notification: React.FC = () => {
 		}
 		return notifications.filter((n) => n.tag === activeTag);
 	}, [notifications, activeTag]);
+
+	const editNotification = notifications.find(
+		(item) => item.id === notificationId
+	);
+
+	const defaultRecipients = editNotification?.recipients.filter((r) =>
+		['Store', 'Admin', 'Customer'].includes(r.type)
+	);
+
+	const customRecipients = editNotification?.recipients.filter(
+		(r) => !['Store', 'Admin', 'Customer'].includes(r.type)
+	);
+
 	// ------------------ Render ------------------
 	return (
 		<div className="notification-container tab-bg">
@@ -387,21 +446,21 @@ const Notification: React.FC = () => {
 														<RecipientBadge
 															key={r.id}
 															recipient={r}
-															onToggle={() =>
-																toggleRecipient(
-																	notif.id,
-																	r.id
-																)
-															}
-															onDelete={
-																r.canDelete
-																	? () =>
-																			deleteRecipient(
-																				notif.id,
-																				r.id
-																			)
-																	: undefined
-															}
+															// onToggle={() =>
+															// 	toggleRecipient(
+															// 		notif.id,
+															// 		r.id
+															// 	)
+															// }
+															// onDelete={
+															// 	r.canDelete
+															// 		? () =>
+															// 				deleteRecipient(
+															// 					notif.id,
+															// 					r.id
+															// 				)
+															// 		: undefined
+															// }
 														/>
 													)
 												)}
@@ -509,6 +568,7 @@ const Notification: React.FC = () => {
 									'System Notification'}
 								{openChannel === 'sms' && 'SMS Message'}
 								{openChannel === 'mail' && 'Email Message'}
+								- {editNotification?.event}
 							</div>
 							<i
 								className="icon adminlib-close"
@@ -539,6 +599,13 @@ const Notification: React.FC = () => {
 											value={
 												formData.system_message || ''
 											}
+											onClick={(e) =>
+												setCursorPos({
+													start: e.target.selectionStart,
+													end: e.target.selectionEnd,
+													field: 'system_message',
+												})
+											}
 											onChange={(e) => {
 												setFormData({
 													...formData,
@@ -547,6 +614,9 @@ const Notification: React.FC = () => {
 												});
 											}}
 											onBlur={() => {
+												handleAutoSave(formData.id);
+											}}
+											onKeyDown={() => {
 												handleAutoSave(formData.id);
 											}}
 										/>
@@ -563,6 +633,13 @@ const Notification: React.FC = () => {
 											name="sms_content"
 											inputClass="textarea-input"
 											value={formData.sms_content || ''}
+											onClick={(e) =>
+												setCursorPos({
+													start: e.target.selectionStart,
+													end: e.target.selectionEnd,
+													field: 'sms_content',
+												})
+											}
 											onChange={(e) => {
 												setFormData({
 													...formData,
@@ -580,12 +657,12 @@ const Notification: React.FC = () => {
 						</div>
 						<div className="form-group-wrapper">
 							{openChannel === 'mail' && (
-								<div className="form-group">
-									<>
+								<>
+									<div className="form-group">
 										<label>Email Subject</label>
 										<BasicInput
 											type="text"
-											name="title"
+											name="email_subject"
 											value={formData.email_subject || ''}
 											onChange={(e) => {
 												setFormData({
@@ -595,46 +672,58 @@ const Notification: React.FC = () => {
 												});
 												handleAutoSave(formData.id);
 											}}
+											onClick={(e) =>
+												setCursorPos({
+													start: e.target.selectionStart,
+													end: e.target.selectionEnd,
+													field: 'email_subject',
+												})
+											}
 											onBlur={() => {
 												handleAutoSave(formData.id);
 											}}
 										/>
-									</>
-								</div>
+									</div>
+
+									<div className="form-group">
+										<label>Email Body</label>
+										<TextArea
+											name="email_body"
+											inputClass="textarea-input"
+											value={formData.email_body || ''}
+											onClick={(e) =>
+												setCursorPos({
+													start: e.target.selectionStart,
+													end: e.target.selectionEnd,
+													field: 'email_body',
+												})
+											}
+											onChange={(e) => {
+												setFormData({
+													...formData,
+													email_body: e.target.value,
+												});
+												handleAutoSave(formData.id);
+											}}
+											onBlur={() => {
+												handleAutoSave(formData.id);
+											}}
+										/>
+									</div>
+								</>
 							)}
-						</div>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label>Email Body</label>
-								<TextArea
-									name="sms_content"
-									inputClass="textarea-input"
-									value={formData.email_body || ''}
-									onChange={(e) => {
-										setFormData({
-											...formData,
-											email_body: e.target.value,
-										});
-										handleAutoSave(formData.id);
-									}}
-									onBlur={() => {
-										handleAutoSave(formData.id);
-									}}
-								/>
-							</div>
 						</div>
 						<div className="form-group-wrapper">
 							{systemTags?.length > 0 && (
 								<div className="tag-list">
-									<p>You can use these tags:</p>
 									{systemTags.map((tag, idx) => (
 										<span
 											key={idx}
 											className="tag-item"
-											onClick={() =>
-												navigator.clipboard.writeText(
-													tag
-												)
+											onClick={() => insertAtCursor(tag)
+												// navigator.clipboard.writeText(
+												// 	tag
+												// )
 											}
 										>
 											{tag}
@@ -658,11 +747,10 @@ const Notification: React.FC = () => {
 						<>
 							<div className="title">
 								<i className="adminlib-notification"></i>
-								Notification preferences
+								Settings - {editNotification?.event}
 							</div>
 							<div className="des">
-								Edit and control notification method and
-								recipients for this event.
+								{editNotification?.description}
 							</div>
 							<i
 								className="icon adminlib-close"
@@ -738,62 +826,77 @@ const Notification: React.FC = () => {
 						<div className="title">Recipients</div>
 
 						<div className="drawer-recipients">
-							{notifications
-								.find((n) => n.id === editingNotification)
-								?.recipients.map((r: any) => (
-									<div
-										key={r.id}
-										className={`recipient ${
-											r.enabled ? '' : 'disable'
-										}`}
-									>
-										<span className="icon">
-											<i
-												className={
-													r.label === 'Store'
-														? 'adminlib-storefront'
-														: r.label === 'Admin'
-															? 'adminlib-person'
-															: r.label ===
-																  'Customer'
-																? 'adminlib-user-circle'
-																: 'adminlib-mail'
-												}
-											></i>
-										</span>
-										<div className="details">
-											<span>{r.label}</span>
-											{/* <div className="description">Lorem, ipsum.</div> */}
-										</div>
-										{r.canDelete && (
-											<i
-												className="delete-btn adminlib-delete"
-												onClick={() =>
-													deleteRecipient(
-														editingNotification,
-														r.id
-													)
-												}
-											></i>
-										)}
-										{!r.canDelete && (
-											<i
-												onClick={() =>
-													toggleRecipient(
-														editingNotification,
-														r.id
-													)
-												}
-												className={
-													r.enabled
-														? 'adminlib-eye'
-														: 'adminlib-eye-blocked'
-												}
-											></i>
-										)}
+							{defaultRecipients.map((r) => (
+								<div
+									key={r.id}
+									className={`recipient ${r.enabled ? '' : 'disable'}`}
+								>
+									<span className="icon">
+										<i
+											className={
+												r.label === 'Store'
+													? 'adminlib-storefront'
+													: r.label === 'Admin'
+													? 'adminlib-person'
+													: r.label === 'Customer'
+													? 'adminlib-user-circle'
+													: 'adminlib-mail'
+											}
+										></i>
+									</span>
+
+									<div className="details">
+										<span>{r.label}</span>
 									</div>
-								))}
+
+									<i
+										onClick={() =>
+											toggleRecipient(editingNotification, r.id)
+										}
+										className={
+											r.enabled
+												? 'adminlib-eye'
+												: 'adminlib-eye-blocked'
+										}
+									></i>
+								</div>
+							))}
 						</div>
+
+						{customRecipients.length > 0 && (
+							<>
+								<div className="title">Custom Recipients</div>
+								<div className="drawer-recipients">
+									<>
+										{customRecipients.map((r) => (
+											<div
+												key={r.id}
+												className={`recipient ${r.enabled ? '' : 'disable'}`}
+											>
+												<span className="icon">
+													<i className="adminlib-mail"></i>
+												</span>
+
+												<div className="details">
+													<span>{r.label}</span>
+												</div>
+
+												<i
+													className="delete-btn adminlib-delete"
+													onClick={() =>
+														deleteRecipient(
+															editingNotification,
+															r.id
+														)
+													}
+												></i>
+											</div>
+										))}
+									</>
+								</div>
+							</>
+						)}
+
 
 						<div className="drawer-add-recipient">
 							<input

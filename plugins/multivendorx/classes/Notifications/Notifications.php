@@ -635,22 +635,37 @@ class Notifications {
             $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['system_events'] . '` WHERE system_action = %s', $action_name )
         );
 
-        if ( $event->admin_enabled ) {
-            $admin_email = $parameters['admin_email'];
-        }
-        if ( $event->store_enabled ) {
-            $store_email = $parameters['store_email'];
-        }
-        if ( $event->customer_enabled ) {
-            $customer_email = $parameters['customer_email'];
-        }
-
         if ( $event->system_enabled ) {
             $this->send_notifications( $event, $parameters );
         }
 
         if ( $event->email_enabled ) {
-            // Call email class.
+            $receivers = array();
+
+            // System recipients.
+            if ( $event->admin_enabled ) {
+                $receivers[] = $parameters['admin_email'];
+            }
+
+            if ( $event->store_enabled ) {
+                $receivers[] = $parameters['store_email'];
+            }
+
+            if ( $event->customer_enabled ) {
+                $receivers[] = $parameters['customer_email'];
+            }
+
+            // Custom recipients.
+            if ( ! empty( $event->custom_emails ) && is_array( $event->custom_emails ) ) {
+                $receivers = array_merge( $receivers, $event->custom_emails );
+            }
+
+            $to = array_unique($receivers);
+            $subject = $event->email_subject;
+            $message = $event->email_body;
+            $headers = array('Content-Type: text/html; charset=UTF-8');
+
+            wp_mail( $to, $subject, $message, $headers );
         }
 
         if ( $event->sms_enabled ) {
