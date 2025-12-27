@@ -195,8 +195,8 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
-                'multivendorx-stores-list-script'          => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/stores-list/index.js',
+                'multivendorx-marketplace-stores-script'          => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/marketplace-stores/index.js',
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version' => $version,
 				),
@@ -582,7 +582,7 @@ class FrontendScripts {
                         ),
                     ),
                 ),
-                'multivendorx-stores-list-editor-script' => array(
+                'multivendorx-marketplace-stores-editor-script' => array(
                     'object_name' => 'storesList',
                     'data'        => array(
                         'apiUrl'  => untrailingslashit( get_rest_url() ),
@@ -590,7 +590,7 @@ class FrontendScripts {
                         'nonce'   => wp_create_nonce( 'wp_rest' ),
                     ),
                 ),
-                'multivendorx-stores-list-script'        => array(
+                'multivendorx-marketplace-stores-script'        => array(
                     'object_name' => 'storesList',
                     'data'        => array(
                         'apiUrl'  => untrailingslashit( get_rest_url() ),

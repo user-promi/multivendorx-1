@@ -129,8 +129,8 @@ class Shortcode {
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
         FrontendScripts::load_scripts();
 
-        FrontendScripts::enqueue_script( 'multivendorx-stores-list-script' );
-        FrontendScripts::localize_scripts( 'multivendorx-stores-list-script' );
+        FrontendScripts::enqueue_script( 'multivendorx-marketplace-stores-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-marketplace-stores-script' );
 
         // Use id instead of class
         return '<div id="marketplace-stores" data-attributes="' . $json_attrs . '"></div>';

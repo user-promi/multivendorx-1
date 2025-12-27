@@ -51,7 +51,7 @@ const EditBlock = (props) => {
 	);
 };
 
-registerBlockType('multivendorx/stores-list', {
+registerBlockType('multivendorx/marketplace-stores', {
 	apiVersion: 2,
 	title: 'Stores List',
 	icon: 'store',
