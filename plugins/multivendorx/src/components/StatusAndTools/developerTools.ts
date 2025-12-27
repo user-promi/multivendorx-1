@@ -3,6 +3,7 @@ export default {
     id: 'development-tools',
     priority: 3,
     name: __('Developer Tools', 'multivendorx'),
+    tabTitle: 'Dashboard Caching',
     desc: __(
         'Site errors and events are logged for easy troubleshooting.',
         'multivendorx'
@@ -14,7 +15,7 @@ export default {
             key: 'transients',
             type: 'button',
             name: __('Clear Transients', 'multivendorx'),
-            label: __('MultivendorX stores transients', 'multivendorx'),
+            label: __('Dashbaord transients', 'multivendorx'),
             desc: __(
                 'Clear all store dashboards transient cache.',
                 'multivendorx'
@@ -29,6 +30,12 @@ export default {
                 'Clear all the table data of MultivendorX visitors stats.',
                 'multivendorx'
             ),
+        },
+        {
+            key: 'separator_content',
+            type: 'section',
+            hint: __('Maintenance Tools', 'multivendorx'),
+            desc: __('', 'multivendorx'),
         },
         {
             key: 'default_pages',
@@ -101,7 +108,7 @@ export default {
             key: 'separator_content',
             type: 'section',
             wrapperClass: 'divider-wrapper red',
-            hint: __('Danger Zone', 'multivendorx'),
+            hint: __('Notification Events Handling', 'multivendorx'),
             desc: __('', 'multivendorx'),
         },
         {
