@@ -48,60 +48,22 @@ export default {
 					id: 'weapons-&-ammunition',
 					label: 'Weapons & ammunition',
 					required: true,
+					isCustom: true,
 				},
 				{
 					id: 'drugs-&-substances',
 					label: 'Illegal drugs & substances',
 					required: true,
+					isCustom: true,
 				},
 				{
 					id: 'counterfeit-products',
 					label: 'Counterfeit products',
 					required: true,
+					isCustom: true,
 				},
 			],
 		},
-		// {
-		// 	key: 'prohibited_product_categories',
-		// 	type: 'multi-string',
-		// 	label: __('Prohibited product categories', 'multivendorx'),
-		// 	placeholder: __('Add prohibited product category', 'multivendorx'),
-		// 	settingDescription: __(
-		// 		'Define one or more product categories that are not allowed to be listed on your marketplace.',
-		// 		'multivendorx'
-		// 	),
-		// 	requiredEnable: true,
-
-
-		// 	defaultValues: [
-		// 		{
-		// 			value: 'Weapons & ammunition',
-		// 			iconClass: 'adminlib-check',
-		// 			description: '',
-		// 			required: true,
-		// 			deleteDisabled: true,
-		// 		},
-		// 		{
-		// 			value: 'Illegal drugs & substances',
-		// 			iconClass: 'adminlib-clock',
-		// 			description: '',
-		// 			required: true,
-		// 			deleteDisabled: true,
-		// 		},
-		// 		{
-		// 			value: 'Counterfeit products',
-		// 			iconClass: 'adminlib-clock',
-		// 			description: '',
-		// 			required: true,
-		// 			deleteDisabled: true,
-		// 		},
-		// 		{ value: 'Stolen goods' },
-		// 	],
-		// 	desc: __(
-		// 		'<b>Note:</b> Ensure sellers are informed about disallowed items before publishing. Violations may result in product removal or account penalties.',
-		// 		'multivendorx'
-		// 	),
-		// },
 		{
 			key: 'required_store_uploads',
 			type: 'checkbox',
@@ -160,11 +122,6 @@ export default {
 					label: __('logged-in customers', 'multivendorx'),
 					value: 'logged_in',
 				},
-				// {
-				//     key: 'guests',
-				//     label: __('Guests', 'multivendorx'),
-				//     value: 'guests',
-				// },
 				{
 					key: 'anyone',
 					label: __('Anyone', 'multivendorx'),
@@ -175,33 +132,12 @@ export default {
 		},
 		{
 			key: 'abuse_report_reasons',
-			type: 'multi-string',
+			type: 'expandable-panel',
 			label: __('Reasons for abuse report', 'multivendorx'),
 			placeholder: __(
 				'Add a reason for reporting a product',
 				'multivendorx'
 			),
-			requiredEnable: true,
-			moduleEnabled: 'marketplace-compliance',
-			defaultValues: [
-				{
-					value: 'Product not received',
-					required: true,
-					deleteDisabled: true,
-				},
-				{
-					value: 'Product not as described',
-					required: true,
-					deleteDisabled: true,
-				},
-				{
-					value: 'Product damaged/defective',
-					required: true,
-					deleteDisabled: true,
-				},
-				{ value: 'Wrong item received' },
-				{ value: 'Order arrived late' },
-			],
 			settingDescription: __(
 				'Define one or more preset reasons that stores can choose from when submitting an abuse report.',
 				'multivendorx'
@@ -211,6 +147,54 @@ export default {
 				'multivendorx'
 			),
 			name: 'abuse_report_reasons',
+			moduleEnabled: 'marketplace-compliance',
+			addNewBtn: true,
+			addNewTemplate: {
+				label: 'New Reasons',
+				formFields: [
+					{
+						key: 'title',
+						type: 'text',
+						label: 'Reasons',
+						placeholder: 'Enter Reasons',
+					},
+					{
+						key: 'required',
+						type: 'checkbox',
+						label: 'Required',
+					},
+				],
+			},
+			modal: [
+				{
+					id: 'product-not-received',
+					label: 'Product not received',
+					required: true,
+					isCustom: true,
+				},
+				{
+					id: 'product-not-described',
+					label: 'Product not as described',
+					required: true,
+					isCustom: true,
+				},
+				{
+					id: 'product-damaged-defective',
+					label: 'Product damaged/defective',
+					required: true,
+					isCustom: true,
+				},
+				{
+					id: 'wrong-item-received',
+					label: 'Wrong item received',
+					isCustom: true,
+				},
+				{
+					id: 'order-arrived-late',
+					label: 'Order arrived late',
+					isCustom: true,
+				},
+			],
 		},
 	],
 };

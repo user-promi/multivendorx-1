@@ -158,13 +158,13 @@ export default {
 			type: 'setting-toggle',
 			label: __('Product listing model', 'multivendorx'),
 			desc: __(
-				'Decide how stores are allowed to sell products in your marketplace:<li><strong>Independent</strong> - Stores can sell only their own products, following standard marketplace rules.</li></ul><ul><li><strong>Co-listed products</strong> - Stores can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li>',
+				'Decide how stores are allowed to sell products in your marketplace:<ul><li><strong>Independent</strong> - Stores can sell only their own products, following standard marketplace rules.</li><li><strong>Co-listed products</strong> - Stores can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li>',
 				'multivendorx'
 			),
 			options: [
 				{
 					key: 'default',
-					label: __('Independent', 'multivendorx'),
+					label: __('Independent seller', 'multivendorx'),
 					value: 'default',
 					desc: __(
 						'Stores can sell only their own products unless other modes are enabled.',

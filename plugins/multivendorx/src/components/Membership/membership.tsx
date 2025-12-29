@@ -234,20 +234,12 @@ const field = {
 const Membership = ({ id }: { id: string }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
-	const [commissionType, setcommissionType] = useState<'prcentage' | 'fixed'>(
-		'prcentage'
-	);
+	const [aiFeatures, setAiFeatures] = useState(false);
+	const [featuredProducts, setfeaturedProducts] = useState(false);
 	const [starFill, setstarFill] = useState(false);
-	const [allowTrial, setAllowTrial] = useState(false);
-	const [pleaseCheck, setpleaseCheck] = useState(false);
 	const [features, setFeatures] = useState<string[]>(['']);
 	const [rules, setRules] = useState<any[]>([]);
-	const [billingStop, setBillingStop] = useState<string>('');
-	const [billingStopNumber, setBillingStopNumber] = useState<string>('');
-	const [BillingCycle, setBillingCycle] = useState<string>('');
-	const [ProductStatus, setProductStatus] = useState<string>('');
-	const [VendorRole, setVendorRole] = useState<string>('');
-	const [showTrialRules, setShowTrialRules] = useState(false);
+	const [featuredEnabled, setFeaturedEnabled] = useState(false);
 
 	const [imagePreviews, setImagePreviews] = useState<{
 		[key: string]: string;
@@ -256,47 +248,6 @@ const Membership = ({ id }: { id: string }) => {
 		{ label: string; value: string }[]
 	>([]);
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
-	const billingCycleNumber = [
-		{ value: '', label: '1' },
-		{ value: 'instock', label: '2' },
-		{ value: 'outofstock', label: '3' },
-		{ value: 'onbackorder', label: '5' },
-		{ value: 'onbackorder', label: '6' },
-		{ value: 'onbackorder', label: '7' },
-		{ value: 'onbackorder', label: '8' },
-		{ value: 'onbackorder', label: '9' },
-		{ value: 'onbackorder', label: '10' },
-		{ value: 'onbackorder', label: '11' },
-		{ value: 'onbackorder', label: '12' },
-	];
-	const billingCycle = [
-		{ value: '', label: 'Day(s)' },
-		{ value: 'instock', label: 'Week(s)' },
-		{ value: 'outofstock', label: 'Month(s)' },
-		{ value: 'onbackorder', label: 'Year(s)' },
-	];
-	const billingCycleStop = [
-		{ value: '', label: 'Select role...' },
-		{ value: 'instock', label: 'After 1 cycle' },
-		{ value: 'outofstock', label: 'After 2 cycles' },
-		{ value: 'onbackorder', label: 'After 3 cycles' },
-		{ value: 'onbackorder', label: 'After 6 cycles' },
-		{ value: 'onbackorder', label: 'After 12 cycles' },
-	];
-	const productStatus = [
-		{ value: '', label: 'Select action...' },
-		{ value: 'instock', label: 'Keep Products Visible' },
-		{ value: 'outofstock', label: 'After 2 cycles' },
-		{ value: 'onbackorder', label: 'Hide Products' },
-		{ value: 'onbackorder', label: 'Set to Draft' },
-	];
-	const vendorRole = [
-		{ value: '', label: 'Select role...' },
-		{ value: 'instock', label: 'Downgrade to Free Plan' },
-		{ value: 'outofstock', label: 'Suspend Account' },
-		{ value: 'onbackorder', label: 'Convert to Customer' },
-	];
 
 	useEffect(() => {
 		if (!id) {
@@ -645,65 +596,6 @@ const Membership = ({ id }: { id: string }) => {
 			},
 		},
 	];
-	const aiUsageLimits = [
-		{
-			key: 'enable_ai',
-			type: 'checkbox',
-			options: [
-				{
-					key: 'enable_ai',
-					label: __('', 'multivendorx'),
-					value: 'enable_ai',
-				},
-			],
-			look: 'toggle',
-		},
-		// {
-		// 	key: 'ai_product_images',
-		// 	type: 'select',
-		// 	size: '10rem',
-		// 	options: [
-		// 		{ value: 'enabled', label: __('Enabled', 'multivendorx') },
-		// 		{ value: 'disabled', label: __('Disabled', 'multivendorx') },
-		// 	],
-		// 	dependent: {
-		// 		key: 'enable_ai',
-		// 		set: true,
-		// 		value: 'enable_ai',
-		// 	},
-		// },
-		{
-			key: 'enable',
-			type: 'checkbox',
-			label: 'for product creation. Product image generation',
-			options: [
-				{
-					key: 'enable_ai',
-					label: __('', 'multivendorx'),
-					value: 'enable_ai',
-				},
-			],
-			look: 'toggle',
-			dependent: {
-				key: 'enable_ai',
-				set: true,
-				value: 'enable_ai',
-			},
-		},	
-		{
-			key: 'max_ai_images',
-			type: 'number',
-			size: '6rem',
-			postInsideText: __('images', 'multivendorx'),
-			preText: 'and alllow up to',
-			postText: 'per product',
-			dependent: {
-				key: 'enable_ai',
-				set: true,
-				value: 'enable_ai',
-			},
-		},
-	];
 	const productUploadSettings = [
 		{
 			key: 'enable_product_limits',
@@ -758,7 +650,7 @@ const Membership = ({ id }: { id: string }) => {
 				value: 'enable_product_limits',
 			},
 		},
-		
+
 
 		{
 			key: 'product_images',
@@ -940,8 +832,6 @@ const Membership = ({ id }: { id: string }) => {
 													),
 												},
 											]}
-										// value={formData.status}
-										// onChange={handleToggleChange}
 										/>
 										<div
 											className="recommended-wrapper"
@@ -1391,7 +1281,7 @@ const Membership = ({ id }: { id: string }) => {
 											options={[
 												{
 													key: 'free',
-													value: 'ree',
+													value: 'free',
 													label: __(
 														'Free',
 														'multivendorx'
@@ -1531,20 +1421,148 @@ const Membership = ({ id }: { id: string }) => {
 							<div className="card-body">
 								<div className="form-group-wrapper">
 									<div className="form-group">
-										<label htmlFor="">
-											Allow AI features
-										</label>
-										<NestedComponent
-											id="ai_usage_rules"
-											fields={aiUsageLimits}
-											value={rules}
-											single={true}
-											addButtonLabel="Add Rule"
-											deleteButtonLabel="Remove"
-											onChange={(val) => setRules(val)}
+										<MultiCheckBox
+											wrapperClass="toggle-btn"
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="toggle-checkbox"
+											idPrefix="toggle-switch-sold-individually"
+											type="checkbox"
+											value={aiFeatures ? ['ai_usage'] : []}
+											preText={"Product limits & pricing"}
+											onChange={(e) =>
+												setAiFeatures(
+													(e as React.ChangeEvent<HTMLInputElement>)
+														.target.checked
+												)
+											}
+											options={[
+												{
+													key: 'ai_usage',
+													value: 'ai_usage',
+												},
+											]}
 										/>
 									</div>
 								</div>
+								{aiFeatures && (
+									<>
+										<div className="form-group-wrapper">
+											<div className="form-group row">
+												<label htmlFor="">Maximum products upload allowed</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'max'}
+													size="8rem"
+												/>
+											</div>
+										</div>
+										<div className="form-group-wrapper">
+											<div className="form-group row">
+												<label htmlFor="">Charge per extra product</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'min'}
+													size="6rem"
+												/>
+											</div>
+										</div>
+										<div className="form-group-wrapper">
+											<div className="form-group row">
+												<label htmlFor="">Images per product</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'max'}
+													size="8rem"
+												/>
+											</div>
+										</div>
+										<div className="form-group-wrapper">
+											<div className="form-group row">
+												<label htmlFor="">Featured products allowed</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'max'}
+													size="8rem"
+												/>
+											</div>
+										</div>
+									</>
+								)}
+
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<MultiCheckBox
+											wrapperClass="toggle-btn"
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="toggle-checkbox"
+											idPrefix="toggle-switch-sold-individually"
+											type="checkbox"
+											value={featuredProducts ? ['featured_products'] : []}
+											preText={"AI usage and limits"}
+											onChange={(e) =>
+												setfeaturedProducts(
+													(e as React.ChangeEvent<HTMLInputElement>)
+														.target.checked
+												)
+											}
+											options={[
+												{
+													key: 'featured_products',
+													value: 'featured_products',
+												},
+											]}
+										/>
+									</div>
+								</div>
+
+								{featuredProducts && (
+									<>
+										<div className="form-group-wrapper">
+											<div className="form-group row">
+												<label htmlFor="">Featured products allowed</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'max'}
+													size="8rem"
+												/>
+											</div>
+										</div>
+										<div className="form-group-wrapper">
+											<div className="form-group row">
+												<label htmlFor="">AI image credits per store</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'max'}
+													size="8rem"
+												/>
+											</div>
+										</div>
+									</>
+								)}
 							</div>
 						</div>
 
@@ -1595,7 +1613,7 @@ const Membership = ({ id }: { id: string }) => {
 								</div>
 							</div>
 						</div>
-						<div className="card-content">
+						{/* <div className="card-content">
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
@@ -1622,7 +1640,7 @@ const Membership = ({ id }: { id: string }) => {
 									</div>
 								</div>
 							</div>
-						</div>	
+						</div> */}
 
 						<div className="card-content">
 							<div className="card-header">
@@ -1646,33 +1664,16 @@ const Membership = ({ id }: { id: string }) => {
 									</div>
 									<div className="form-group">
 										<label htmlFor="product-name">
-											Featured products
+											Maximum products upload allowed
 										</label>
-										<MultiCheckBox
-											wrapperClass="toggle-btn"
-											inputWrapperClass="toggle-checkbox-header"
-											inputInnerWrapperClass="toggle-checkbox"
-											idPrefix="toggle-switch-sold-individually"
-											type="checkbox"
-											// value={
-											// 	product.sold_individually
-											// 		? ['sold_individually']
-											// 		: []
-											// }
-											// onChange={(e) =>
-											// 	handleChange(
-											// 		'sold_individually',
-											// 		(
-											// 			e as React.ChangeEvent<HTMLInputElement>
-											// 		).target.checked
-											// 	)
-											// }
-											options={[
-												{
-													key: 'sold_individually',
-													value: 'sold_individually',
-												},
-											]}
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+											postInsideText={"%"}
+											size="8rem"
 										/>
 									</div>
 								</div>
@@ -1701,6 +1702,47 @@ const Membership = ({ id }: { id: string }) => {
 											onChange={handleChange}
 										/>
 									</div>
+								</div>
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<label htmlFor="product-name">
+											Featured products
+										</label>
+										<MultiCheckBox
+											wrapperClass="toggle-btn"
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="toggle-checkbox"
+											idPrefix="toggle-switch-sold-individually"
+											type="checkbox"
+											value={featuredEnabled ? ['sold_individually'] : []}
+											onChange={(e) =>
+												setFeaturedEnabled(
+													(e as React.ChangeEvent<HTMLInputElement>)
+														.target.checked
+												)
+											}
+											options={[
+												{
+													key: 'sold_individually',
+													value: 'sold_individually',
+												},
+											]}
+										/>
+									</div>
+									{featuredEnabled && (
+										<div className="form-group">
+											<BasicInput
+												name="name"
+												wrapperClass="setting-form-input"
+												descClass="settings-metabox-description"
+												value={formData.name}
+												onChange={handleChange}
+												postInsideText={"product"}
+												preText={"Upto"}
+												size="10rem"
+											/>
+										</div>
+									)}
 								</div>
 							</div>
 						</div>
