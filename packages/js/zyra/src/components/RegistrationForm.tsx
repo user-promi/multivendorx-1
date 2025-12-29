@@ -63,7 +63,7 @@ export interface FormField {
     sitekey?: string;
     readonly?: boolean;
     images?: ImageItem[];
-    layout?: { blocks?: FieldValue[] };
+    layout?: { blocks?: Array< Record< string, unknown > > };
     charlimit?: number;
     row?: number;
     column?: number;
@@ -80,7 +80,7 @@ export interface FormField {
         options?: string[];
         required?: boolean;
     } >;
-    value?: Record< string, FieldValue >;
+    value?: Record< string, unknown >;
 }
 
 interface ButtonSetting {
