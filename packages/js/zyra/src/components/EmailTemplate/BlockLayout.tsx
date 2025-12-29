@@ -133,7 +133,6 @@ const BlockLayout: React.FC = () => {
                             <img
                                 src={ block.image.url }
                                 alt={ block.image.alt }
-                                // style={{ maxWidth: '100%', height: 'auto' }}
                             />
                         ) : (
                             <div
