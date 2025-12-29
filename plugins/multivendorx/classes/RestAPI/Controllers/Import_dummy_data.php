@@ -28,7 +28,12 @@ class Import_dummy_data extends \WP_REST_Controller {
             array(
                 array(
                     'methods'             => \WP_REST_Server::CREATABLE,
-                    'callback'            => array( $this, 'get_items' ),
+                    'callback'            => array( $this, 'handle_request' ),
+                    'permission_callback' => array( $this, 'get_items_permissions_check' ),
+                ),
+                array(
+                    'methods'             => \WP_REST_Server::READABLE,
+                    'callback'            => array( $this, 'handle_request' ),
                     'permission_callback' => array( $this, 'get_items_permissions_check' ),
                 ),
             )
@@ -37,23 +42,19 @@ class Import_dummy_data extends \WP_REST_Controller {
 
     /**
      * Permission check for AI Operations
-     *
-     * @param mixed $request
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'edit_products' );
     }
 
     /**
-     * Handle AI request (main entry point)
-     *
-     * @param mixed $request
+     * Handle all requests
      */
-    public function get_items( $request ) {
+    public function handle_request( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
 
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            $error = new \WP_REST_Response(
+            return new \WP_REST_Response(
                 array(
                     'success' => false,
                     'code'    => 'invalid_nonce',
@@ -61,45 +62,157 @@ class Import_dummy_data extends \WP_REST_Controller {
                 ),
                 401
             );
-
-            // Log the error.
-            if ( is_wp_error( $error ) ) {
-                MultiVendorX()->util->log( $error );
-            }
-
-            return $error;
         }
-        return $this->import_dummy_data( $request );
+
+        $parameter = $request->get_param('parameter');
+
+        if ( ! $parameter ) {
+            return [
+                'success' => false,
+                'message' => 'Missing parameter'
+            ];
+        }
+
+        if ( $request->get_method() === 'GET' ) {
+            return $this->get_status( $request );
+        }
+
+        return $this->process_action( $request );
     }
 
-    public function import_dummy_data( $request ) {
-        $store_owners = $this->import_store_owner();
-        $store_ids = $this->import_stores( $store_owners );
-        $product_ids = $this->import_products($store_ids);
-        $this->import_commissions();
-        if( $product_ids ){
-            $this->import_orders( $product_ids);
-            $this->import_reviews($product_ids);
-        }
+    /**
+     * Get current status
+     */
+    public function get_status( $request ) {
+        $parameter = $request->get_param('parameter');
+        
+        // You can store status in a transient or option for tracking
+        $status = get_transient( 'mvx_import_status_' . $parameter ) ?: [];
+        
         return [
             'success' => true,
-            'store_owners' => $store_owners,
-            'store_ids' => $store_ids,
-            'product_ids' => $product_ids
-        ];        
+            'running' => !empty($status),
+            'status'  => $status,
+        ];
+    }
+
+    /**
+     * Process action request
+     */
+    public function process_action( $request ) {
+        $parameter = $request->get_param('parameter');
+        $action = $request->get_param('action');
+
+        if ( $parameter !== 'action' || ! $action ) {
+            return [
+                'success' => false,
+                'message' => 'Invalid request'
+            ];
+        }
+
+        // Map actions to methods dynamically
+        $method_name = 'process_' . $action;
+        
+        if ( method_exists( $this, $method_name ) ) {
+            return $this->$method_name( $request );
+        }
+
+        // Fallback to default import handlers
+        return $this->handle_import_action( $request );
+    }
+
+    /**
+     * Dynamic action handler
+     */
+    public function handle_import_action( $request ) {
+        $action = $request->get_param('action');
+        $params = $request->get_params();
+
+        // Remove action from params for cleaner data passing
+        unset($params['action']);
+        unset($params['parameter']);
+
+        switch ( $action ) {
+            case 'import_store_owners':
+                $result = $this->import_store_owner();
+                return [
+                    'success' => !empty($result),
+                    'data' => $result,
+                    'message' => !empty($result) 
+                        ? sprintf( __( 'Imported %d store owners', 'multivendorx' ), count($result) )
+                        : __( 'No store owners imported', 'multivendorx' )
+                ];
+
+            case 'import_stores':
+                $store_owners = $request->get_param('store_owners') ?: [];
+                $result = $this->import_stores( $store_owners );
+                return [
+                    'success' => !empty($result),
+                    'data' => $result,
+                    'message' => !empty($result)
+                        ? sprintf( __( 'Created %d stores', 'multivendorx' ), count($result) )
+                        : __( 'No stores created', 'multivendorx' )
+                ];
+
+            case 'import_products':
+                $store_ids = $request->get_param('store_ids') ?: [];
+                $result = $this->import_products( $store_ids );
+                return [
+                    'success' => !empty($result),
+                    'data' => $result,
+                    'message' => !empty($result)
+                        ? sprintf( __( 'Imported %d products', 'multivendorx' ), count($result) )
+                        : __( 'No products imported', 'multivendorx' )
+                ];
+
+            case 'import_commissions':
+                $store_ids = $request->get_param('store_ids') ?: [];
+                $result = $this->import_commissions( $store_ids );
+                return [
+                    'success' => !empty($result),
+                    'data' => $result,
+                    'message' => !empty($result)
+                        ? sprintf( __( 'Imported %d commission', 'multivendorx' ), count($result) )
+                        : __( 'No commission imported', 'multivendorx' )
+                ];
+
+            case 'import_orders':
+                $product_ids = $request->get_param('product_ids') ?: [];
+                $result = $this->import_orders( $product_ids );
+                return [
+                    'success' => (bool) $result,
+                    'message' => $result 
+                        ? __( 'Orders created successfully', 'multivendorx' )
+                        : __( 'Failed to create orders', 'multivendorx' )
+                ];
+
+            case 'import_reviews':
+                $product_ids = $request->get_param('product_ids') ?: [];
+                $result = $this->import_reviews( $product_ids );
+                return [
+                    'success' => (bool) $result,
+                    'message' => $result 
+                        ? __( 'Reviews created successfully', 'multivendorx' )
+                        : __( 'Failed to create reviews', 'multivendorx' )
+                ];
+
+            default:
+                return [
+                    'success' => false,
+                    'message' => sprintf( __( 'Unknown action: %s', 'multivendorx' ), $action )
+                ];
+        }
     }
 
     public function import_store_owner() {
-
         $xml = simplexml_load_file( MultiVendorX()->plugin_path . '/assets/dummy-data/store_owners.xml' );
         $store_owners = [];
     
         foreach ( $xml->store as $store ) {
-    
             $username = (string) $store->username;
             $email    = (string) $store->email;
     
-            // 1. Check if user already exists
+            // Check if user already exists
             $user = get_user_by( 'login', $username );
     
             if ( $user ) {
@@ -146,7 +259,7 @@ class Import_dummy_data extends \WP_REST_Controller {
         }
     
         return $store_owners;
-    }    
+    }
 
     public function import_stores( $store_owners ) {
 
@@ -222,21 +335,23 @@ class Import_dummy_data extends \WP_REST_Controller {
         return $created_store_ids;
     }
 
-    public function import_products( $store_ids ) {
+    public function import_products( $store_ids, $product_type = 'simple' ) {
 
-        $xml_url = MultiVendorX()->plugin_path . '/assets/dummy-data/products.xml';
+        // Determine XML path based on product type
+        $xml_path = MultiVendorX()->plugin_path . '/assets/dummy-data/' . sanitize_file_name( $product_type ) . '.xml';
     
-        $xml = simplexml_load_file(
-            $xml_url
-        );
+        if ( ! file_exists( $xml_path ) ) {
+            return [];
+        }
     
+        $xml = simplexml_load_file( $xml_path );
         if ( ! $xml ) {
             return [];
         }
     
         $created_products = [];
     
-        foreach ( $xml->product as $index => $product ) {
+        foreach ( $xml->product as $product ) {
     
             $store_index = (int) $product->store_index;
             $store_id    = $store_ids[ $store_index ] ?? 0;
@@ -246,10 +361,11 @@ class Import_dummy_data extends \WP_REST_Controller {
             }
     
             $post_data = [
-                'post_title'   => (string) $product->name,
-                'post_content' => (string) $product->description,
-                'post_excerpt' => (string) $product->short_description,
-                'post_status'  => (string) $product->status,
+                'post_title'   => sanitize_text_field( (string) $product->name ),
+                'post_name'    => sanitize_title( (string) $product->slug ),
+                'post_content' => wp_kses_post( (string) $product->description ),
+                'post_excerpt' => wp_kses_post( (string) $product->short_description ),
+                'post_status'  => (string) $product->status ?: 'publish',
                 'post_type'    => 'product',
                 'post_author'  => get_current_user_id(),
             ];
@@ -260,39 +376,49 @@ class Import_dummy_data extends \WP_REST_Controller {
                 continue;
             }
     
-            // Meta
             update_post_meta( $product_id, '_sku', (string) $product->sku );
             update_post_meta( $product_id, '_regular_price', (string) $product->price );
             update_post_meta( $product_id, '_sale_price', (string) $product->sale_price );
-            update_post_meta( $product_id, '_price', (string) $product->sale_price ?: (string) $product->price );
-            update_post_meta( $product_id, '_manage_stock', (string) $product->stock->manage === 'true' ? 'yes' : 'no' );
+            update_post_meta(
+                $product_id,
+                '_price',
+                ! empty( $product->sale_price ) ? (string) $product->sale_price : (string) $product->price
+            );
+    
+            update_post_meta( $product_id, '_visibility', 'visible' );
+    
+            $manage_stock = strtolower( trim( (string) $product->stock->manage ) ) === 'true';
+            update_post_meta( $product_id, '_manage_stock', $manage_stock ? 'yes' : 'no' );
             update_post_meta( $product_id, '_stock', (int) $product->stock->quantity );
             update_post_meta( $product_id, '_stock_status', (string) $product->stock->status );
     
-            // Product type
-            wp_set_object_terms( $product_id, (string) $product->type, 'product_type' );
+            // Set product type based on selection
+            wp_set_object_terms( $product_id, $product_type, 'product_type' );
     
             // Categories
             $category_ids = [];
-            foreach ( $product->categories->category as $cat_id ) {
-                $category_ids[] = (int) $cat_id;
+            if ( isset( $product->categories->category ) ) {
+                foreach ( $product->categories->category as $cat_id ) {
+                    $category_ids[] = (int) $cat_id;
+                }
             }
-    
             if ( ! empty( $category_ids ) ) {
                 wp_set_object_terms( $product_id, $category_ids, 'product_cat' );
             }
     
             // Tags
             $tags = [];
-            foreach ( $product->tags->tag as $tag ) {
-                $tags[] = sanitize_text_field( (string) $tag );
+            if ( isset( $product->tags->tag ) ) {
+                foreach ( $product->tags->tag as $tag ) {
+                    $tags[] = sanitize_text_field( (string) $tag );
+                }
             }
-    
             if ( ! empty( $tags ) ) {
                 wp_set_object_terms( $product_id, $tags, 'product_tag' );
             }
     
-            update_post_meta( $product_id, 'multivendorx_store_id', $store_id );
+            update_post_meta( $product_id, '_vendor_id', $store_id );
+            update_post_meta( $product_id, 'dc_vendor_shop', $store_id );
     
             do_action( 'multivendorx_after_product_import', $product_id, $store_id );
     
@@ -300,7 +426,7 @@ class Import_dummy_data extends \WP_REST_Controller {
         }
     
         return $created_products;
-    }
+    }    
 
     public function import_commissions() {
     

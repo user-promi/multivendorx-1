@@ -1414,7 +1414,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                     );
                     break;
 
-                // Normal select box
+                // Normal select box.
                 case 'select':
                     input = (
                         <SelectInput
