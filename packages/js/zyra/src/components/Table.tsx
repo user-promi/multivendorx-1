@@ -232,7 +232,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
                 <div
                     onClick={ ( e ) => {
                         e.stopPropagation();
-                        if (rowId !== '') {
+                        if ( rowId !== '' ) {
                             onToggleRow?.( rowId );
                         }
                     } }
@@ -746,14 +746,23 @@ const Table: React.FC< TableProps > = ( {
                                                     .map( ( header ) => (
                                                         <th
                                                             key={ header.id }
-                                                            onClick={(e) => {
-                                                                if (!header.column.getCanSort()) return;
-                                                            
-                                                                const handler = header.column.getToggleSortingHandler();
-                                                                if (!handler) return;
-                                                            
-                                                                handler(e);
-                                                            }}                                                                                                                        
+                                                            onClick={ ( e ) => {
+                                                                if (
+                                                                    ! header.column.getCanSort()
+                                                                ) {
+                                                                    return;
+                                                                }
+
+                                                                const handler =
+                                                                    header.column.getToggleSortingHandler();
+                                                                if (
+                                                                    ! handler
+                                                                ) {
+                                                                    return;
+                                                                }
+
+                                                                handler( e );
+                                                            } }
                                                             className={ [
                                                                 'header-col',
                                                                 header.column.getCanSort()

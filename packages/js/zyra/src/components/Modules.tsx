@@ -67,7 +67,7 @@ const Modules: React.FC< ModuleProps > = ( {
 
     const { modules, insertModule, removeModule } = useModules();
 
-    const formatCategory = ( category: string  ): string => {
+    const formatCategory = ( category: string ): string => {
         if ( ! category ) {
             return '';
         }

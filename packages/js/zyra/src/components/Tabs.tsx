@@ -85,10 +85,7 @@ const findFirstFile = ( items: TabData[] ): TabContent | null => {
     return null;
 };
 
-const findTabIcon = (
-    items: TabData[],
-    activeTabId: string
-): string  => {
+const findTabIcon = ( items: TabData[], activeTabId: string ): string => {
     for ( const item of items ) {
         if ( isFile( item ) && item.content.id === activeTabId ) {
             return item.content.icon as string;
@@ -490,10 +487,7 @@ const Tabs: React.FC< TabsProps > = ( {
 
     const currentMenu = menuStack[ menuStack.length - 1 ];
 
-    const findTabName = (
-        items: TabData[],
-        activeTabId: string
-    ): string => {
+    const findTabName = ( items: TabData[], activeTabId: string ): string => {
         for ( const item of items ) {
             if ( isFile( item ) && item.content.id === activeTabId ) {
                 return item.content.name;

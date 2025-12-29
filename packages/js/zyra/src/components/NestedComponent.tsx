@@ -22,7 +22,7 @@ interface NestedFieldOption {
 }
 
 interface NestedField {
-    lock: string ;
+    lock: string;
     treeData: never[];
     multiple: boolean;
     key: string;
@@ -62,7 +62,7 @@ interface NestedField {
     // for checkbox fields
     selectDeselect?: boolean;
     tour?: string;
-    rightContent?: boolean ;
+    rightContent?: boolean;
     moduleEnabled?: string;
     dependentSetting?: string;
     dependentPlugin?: string;
@@ -509,9 +509,7 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                                     <span className="step-title">
                                         { field.label }
                                     </span>
-                                    <span className="desc">
-                                        {field.desc}
-                                    </span>
+                                    <span className="desc">{ field.desc }</span>
                                 </div>
                             </div>
                             { field.link && (

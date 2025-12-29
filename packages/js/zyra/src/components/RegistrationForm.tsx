@@ -24,10 +24,10 @@ import AddressField, { AddressFormField } from './AddressField';
 import TemplateTextArea from './EmailTemplate/TemplateTextArea';
 
 // Types
-type Primitive = string | number | boolean ;
-
 export type FieldValue =
-    | Primitive
+    | string
+    | number
+    | boolean
     | FieldValue[]
     | { [ key: string ]: FieldValue };
 
@@ -449,7 +449,7 @@ const CustomForm: React.FC< CustomFormProps > = ( {
 
         const newFormFieldList = [ ...formFieldList ];
 
-        if (parentId !== -1) {
+        if ( parentId !== -1 ) {
             // Handle subfield
             const parentIndex = newFormFieldList.findIndex(
                 ( f ) => f.id === parentId

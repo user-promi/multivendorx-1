@@ -33,22 +33,22 @@ interface FieldOption {
 interface PanelFormField {
     key: string;
     type:
-    | 'text'
-    | 'password'
-    | 'number'
-    | 'checkbox'
-    | 'textarea'
-    | 'expandable-panel'
-    | 'multi-checkbox'
-    | 'check-list'
-    | 'description'
-    | 'setup'
-    | 'setting-toggle'
-    | 'buttons'
-    | 'nested'
-    | 'clickable-list'
-    | 'iconlibrary'
-    | 'copy-text';
+        | 'text'
+        | 'password'
+        | 'number'
+        | 'checkbox'
+        | 'textarea'
+        | 'expandable-panel'
+        | 'multi-checkbox'
+        | 'check-list'
+        | 'description'
+        | 'setup'
+        | 'setting-toggle'
+        | 'buttons'
+        | 'nested'
+        | 'clickable-list'
+        | 'iconlibrary'
+        | 'copy-text';
 
     label: string;
     placeholder?: string;
@@ -678,9 +678,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                     <span className="step-title">
                                         { field.title }
                                     </span>
-                                    <span className="desc">
-                                        {field.des}
-                                    </span>
+                                    <span className="desc">{ field.des }</span>
                                 </div>
                             </div>
                             { field.link && (
