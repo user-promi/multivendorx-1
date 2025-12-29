@@ -62,9 +62,9 @@ export default {
 		{
 			key: 'sms_gateway_selector',
 			type: 'setting-toggle',
-			label: __('Order emails customers receives', 'multivendorx'),
+			label: __('Customers will see information for', 'multivendorx'),
 			settingDescription: __(
-				'Choose how order confirmation emails should be sent. ',
+				'Choose for which order status customers will receive emails, PDF invoices, and view details in their account. ',
 				'multivendorx'
 			),
 			desc: __(
