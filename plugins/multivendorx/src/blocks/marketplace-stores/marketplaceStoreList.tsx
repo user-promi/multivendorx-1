@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getApiLink } from 'zyra';
 import { __ } from '@wordpress/i18n';
+import Select from 'react-select';
 
 interface StoreRow {
 	id: number;
@@ -59,7 +60,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			.get(`${storesList.apiUrl}/wc/v3/products`, {
 				headers: { 'X-WP-Nonce': storesList.nonce },
 				params: {
-					per_page: 100,
+					per_page: 10,
 					meta_key: 'multivendorx_store_id',
 				},
 			})
@@ -68,9 +69,37 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			});
 	}, []);
 
+	const loadProducts = async (inputValue: string) => {
+		try {
+			const response = await axios.get(
+				`${storesList.apiUrl}/wc/v3/products`,
+				{
+					headers: { 'X-WP-Nonce': storesList.nonce },
+					params: {
+						per_page: 10,
+						search: inputValue || undefined,
+						meta_key: 'multivendorx_store_id',
+					},
+				}
+			);
+
+			return response.data.map((product: any) => ({
+				label: product.name,
+				value: product.id,
+			}));
+		} catch (error) {
+			console.error('Product search error:', error);
+			return [];
+		}
+	};
+
 	useEffect(() => {
 		handleSubmit();
 	}, [filters, page, perPage]);
+
+	useEffect(() => {
+		setPage(1);
+	}, [filters.product]);
 
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -161,21 +190,23 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 						))}
 					</select>
 				)}
-
-				<select
-					name="product"
-					value={filters.product || ''}
-					onChange={handleInputChange}
-					className=""
-				>
-					<option value="">Select Products</option>
-					{product.map((pro) => (
-						<option key={pro.id} value={pro.id}>
-							{pro.name}
-						</option>
-					))}
-				</select>
-
+				<Select
+					options={product.map((p) => ({
+						label: String(p.name),
+						value: p.id,
+					}))}
+					onInputChange={(value) => {
+						loadProducts(value);
+						return value;
+					}}
+					onChange={(selected) =>
+						setFilters((prev) => ({
+							...prev,
+							product: selected?.value ?? '',
+						}))
+					}
+					isClearable
+				/>
 				<div className="">Viewing all {data.length} stores</div>
 
 				{/* Store Cards */}
