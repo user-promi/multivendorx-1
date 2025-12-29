@@ -17,16 +17,22 @@ interface StoresListProps {
 	orderby?: string;
 	order?: string;
 	category?: string;
+	perPage?: number;
 }
 
 const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	orderby = '',
 	order = '',
 	category = '',
+	perPage = 12,
 }) => {
 	const [data, setData] = useState<StoreRow[] | []>([]);
 	const [categoryList, setCategoryList] = useState<Category[]>([]);
 	const [product, setProduct] = useState<[]>([]);
+	const [page, setPage] = useState(1);
+	const [total, setTotal] = useState(0);
+
+	const totalPages = Math.ceil(total / perPage);
 
 	const [filters, setFilters] = useState({
 		address: '',
@@ -37,8 +43,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		category: category,
 		product: '',
 	});
-
-
 
 	useEffect(() => {
 		axios
@@ -66,7 +70,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 
 	useEffect(() => {
 		handleSubmit();
-	}, [filters]);
+	}, [filters, page, perPage]);
 
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -81,11 +85,16 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			url: getApiLink(storesList, 'store'),
 			headers: { 'X-WP-Nonce': storesList.nonce },
 			params: {
-				filters: { ...filters },
+				filters: {
+					...filters,
+					limit: perPage,
+					offset: (page - 1) * perPage,
+				},
 			},
 		})
 			.then((response) => {
 				setData(response.data.stores || []);
+				setTotal(response.data.all || 0);
 			})
 			.catch((error) =>
 				console.error('Error fetching filtered stores:', error)
@@ -210,6 +219,27 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 								</div>
 							</div>
 						))}
+				</div>
+
+
+				<div className="pagination">
+					<button
+						disabled={page === 1}
+						onClick={() => setPage((p) => p - 1)}
+					>
+						Previous
+					</button>
+
+					<span>
+						Page {page} of {totalPages}
+					</span>
+
+					<button
+						disabled={page >= totalPages}
+						onClick={() => setPage((p) => p + 1)}
+					>
+						Next
+					</button>
 				</div>
 			</div>
 		</>

@@ -156,9 +156,15 @@ export default {
 						},
 						{
 							attribute: 'order',
-							description: 'Decide the sorting direction (Default = DESC)',
-							accepted: 'number',
+							description: 'Set sorting direction',
+							accepted: 'ASC, DESC (Default = ASC)',
 							default: '[marketplace_stores order = "DESC"]',
+						},
+						{
+							attribute: 'perpage',
+							description: 'Set how many stores appear per page.',
+							accepted: 'Any number (Default = 12)',
+							default: '[marketplace_stores perpage = "12"]',
 						},
 					],
 				},
