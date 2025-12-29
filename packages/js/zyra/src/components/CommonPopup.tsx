@@ -5,7 +5,7 @@ import '../styles/web/CommonPopup.scss';
 // Slide transition from the right
 const Transition = forwardRef( function Transition(
     props: TransitionProps & { children: React.ReactElement },
-    ref: React.Ref< unknown >
+    ref: React.Ref< HTMLElement >
 ) {
     return <Slide direction="left" ref={ ref } { ...props } />;
 } );
