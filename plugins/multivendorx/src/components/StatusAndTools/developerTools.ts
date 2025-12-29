@@ -38,6 +38,17 @@ export default {
             desc: __('', 'multivendorx'),
         },
         {
+			type: 'button',
+			name: __('Import dummy data', 'multivendorx'),
+			label: __('Import Dummy Data', 'multivendorx'),
+			desc: __(
+				'Import Dummy Data for testing purpose.',
+				'multivendorx'
+			),
+			apilink: 'import-dummy-data',
+			method: 'POST'
+		},
+        {
             key: 'default_pages',
             type: 'button',
             name: __('Create Default MultiVendorX Page', 'multivendorx'),
