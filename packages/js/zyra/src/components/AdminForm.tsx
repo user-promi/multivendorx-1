@@ -662,11 +662,10 @@ const AdminForm: React.FC< AdminFormProps > = ( {
     const runUploader = (
         key: string,
         multiple = false,
-        replaceIndex?: number,
+        replaceIndex: number = -1,
         existingUrls: string[] = []
     ): void => {
         settingChanged.current = true;
-        console.log( 'replaceIndex', replaceIndex );
 
         const frame = wp.media( {
             title: 'Select Media',
@@ -678,7 +677,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
             const selection = frame.state().get( 'selection' ).toJSON();
             const selectedUrl = selection[ 0 ]?.url;
 
-            if ( multiple && replaceIndex !== undefined ) {
+            if ( multiple && replaceIndex !== -1 ) {
                 const next = [ ...existingUrls ];
                 next[ replaceIndex ] = selectedUrl;
                 updateSetting( key, next );
