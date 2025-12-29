@@ -117,11 +117,13 @@ class Notifications extends \WP_REST_Controller {
         try {
             $header_notifications = $request->get_param( 'header' );
             $events_notifications = $request->get_param( 'events' );
+            $type = $request->get_param( 'type' );
 
             if ( $header_notifications ) {
                 $args = array(
                     'limit'    => 10,
                     'offset'   => 1,
+                    'category' => $type
                 );
                 $store_id = $request->get_param( 'store_id' );
                 $results  = MultiVendorX()->notifications->get_all_notifications( ! empty( $store_id ) ? $store_id : null, $args );
@@ -311,6 +313,7 @@ class Notifications extends \WP_REST_Controller {
             global $wpdb;
             $notification_data = $request->get_param( 'notifications' );
 
+            $is_read = $request->get_param( 'is_read' );
             $is_dismissed = $request->get_param( 'is_dismissed' );
             $id           = $request->get_param( 'id' );
             $form_data    = $request->get_param( 'formData' );
@@ -336,6 +339,21 @@ class Notifications extends \WP_REST_Controller {
             if ( $is_dismissed ) {
                 $data = array(
                     'is_dismissed' => $is_dismissed,
+                );
+
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+                $updated = $wpdb->update( "{$wpdb->prefix}" . Utill::TABLES['notifications'], $data, array( 'id' => $id ), null, array( '%s' ) );
+
+                return rest_ensure_response(
+                    array(
+                        'success' => true,
+                    )
+                );
+            }
+
+            if ( $is_read ) {
+                $data = array(
+                    'is_read' => $is_read,
                 );
 
                 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
