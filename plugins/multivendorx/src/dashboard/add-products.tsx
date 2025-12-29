@@ -1107,6 +1107,36 @@ const AddProduct = () => {
 										</div>
 									</div>
 								</div>
+								<div className="form-group">
+									<div className="checkbox-wrapper">
+										<div className="item">
+											<input
+												type="checkbox"
+												checked={product.virtual}
+												onChange={(e) =>
+													handleChange(
+														'virtual',
+														e.target.checked
+													)
+												}
+											/>
+											{__('Virtual', 'multivendorx')}
+										</div>
+										<div className="item">
+											<input
+												type="checkbox"
+												checked={product.downloadable}
+												onChange={(e) =>
+													handleChange(
+														'downloadable',
+														e.target.checked
+													)
+												}
+											/>
+											{__('Download', 'multivendorx')}
+										</div>
+									</div>
+								</div>
 							</div>
 
 							<div className="form-group-wrapper">

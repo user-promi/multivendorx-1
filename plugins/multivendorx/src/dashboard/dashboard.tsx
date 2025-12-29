@@ -17,7 +17,7 @@ import { scaleLinear } from 'd3-scale';
 import React, { useState, useEffect } from 'react';
 import '../components/dashboard.scss';
 import '../dashboard/dashboard1.scss';
-import { getApiLink, MultiCalendarInput, TableCell, useModules } from 'zyra';
+import { Card, getApiLink, MultiCalendarInput, TableCell, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency } from '@/services/commonFunction';
@@ -1257,37 +1257,24 @@ const Dashboard: React.FC = () => {
 				</div>
 
 				<div className="card-wrapper">
-					<div className="card-content w-65">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Store Activity (P)', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-
-						<div className="card-body">
-							<div className="activity-log">
-								{activities.map((a, i) => (
-									<div key={i} className="activity">
-										<div className="title">{a.text}</div>
-										<div className="des">
-											{__(
-												'Your order has been placed successfully',
-												'multivendorx'
-											)}
-										</div>
-										<span>
-											{__(
-												'2 minutes ago',
-												'multivendorx'
-											)}
-										</span>
+					<Card
+						width= {8}
+						title={__('Store Activity (P)', 'multivendorx')}
+					>
+						<div className="activity-log">
+							{activities.map((a, i) => (
+								<div key={i} className="activity">
+									<div className="title">{a.text}</div>
+									<div className="des">
+										{__('Your order has been placed successfully', 'multivendorx')}
 									</div>
-								))}
-							</div>
+									<span>
+										{__('2 minutes ago', 'multivendorx')}
+									</span>
+								</div>
+							))}
 						</div>
-					</div>
+					</Card>
 
 					{modules.includes('store-review') && (
 						<div className="card-content w-35">
@@ -1333,11 +1320,11 @@ const Dashboard: React.FC = () => {
 																<i
 																	key={index}
 																	className={`star-icon adminlib-star ${index <
-																			Math.round(
-																				reviewItem.overall_rating
-																			)
-																			? 'active'
-																			: ''
+																		Math.round(
+																			reviewItem.overall_rating
+																		)
+																		? 'active'
+																		: ''
 																		}`}
 																></i>
 															)

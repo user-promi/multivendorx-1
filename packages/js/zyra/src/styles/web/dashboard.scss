@@ -26,7 +26,19 @@
         width: 100%;
         position: relative;
     }
-
+    .column-1  { flex: 0 0 8.3333%; max-width: 8.3333%; }
+    .column-2  { flex: 0 0 16.6667%; max-width: 16.6667%; }
+    .column-3  { flex: 0 0 25%; max-width: 25%; }
+    .column-4  { flex: 0 0 33.3333%; max-width: 33.3333%; }
+    .column-5  { flex: 0 0 41.6667%; max-width: 41.6667%; }
+    .column-6  { flex: 0 0 50%; max-width: 50%; }
+    .column-7  { flex: 0 0 58.3333%; max-width: 58.3333%; }
+    .column-8  { flex: 0 0 66.6667%; max-width: 66.6667%; }
+    .column-9  { flex: 0 0 75%; max-width: 75%; }
+    .column-10 { flex: 0 0 83.3333%; max-width: 83.3333%; }
+    .column-11 { flex: 0 0 91.6667%; max-width: 91.6667%; }
+    .column-12 { flex: 0 0 100%; max-width: 100%; }
+    
     .card-wrapper:has(.transaction) {
         margin-bottom: 1rem;
     }

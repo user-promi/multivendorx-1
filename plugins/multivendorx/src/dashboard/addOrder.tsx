@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { BasicInput, SelectInput, TextArea, getApiLink } from 'zyra';
+import { AdminButton, BasicInput, Card, FormGroup, FormGroupWrapper, SelectInput, TextArea, getApiLink } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '@/services/commonFunction';
 import { __ } from '@wordpress/i18n';
@@ -493,11 +493,11 @@ const AddOrder = () => {
 																				p
 																			) =>
 																				p.id ===
-																				item.id
+																					item.id
 																					? {
-																							...p,
-																							qty,
-																						}
+																						...p,
+																						qty,
+																					}
 																					: p
 																		)
 																);
@@ -562,12 +562,12 @@ const AddOrder = () => {
 																					s
 																				) =>
 																					s.id ===
-																					ship.id
+																						ship.id
 																						? {
-																								...s,
-																								method_id,
-																								name: method_title,
-																							}
+																							...s,
+																							method_id,
+																							name: method_title,
+																						}
 																						: s
 																			)
 																	);
@@ -597,11 +597,11 @@ const AddOrder = () => {
 																	prev.map(
 																		(s) =>
 																			s.id ===
-																			ship.id
+																				ship.id
 																				? {
-																						...s,
-																						cost,
-																					}
+																					...s,
+																					cost,
+																				}
 																				: s
 																	)
 															);
@@ -656,43 +656,34 @@ const AddOrder = () => {
 										</strong>
 									</div>
 								</div>
+								<AdminButton
+									wrapperClass="left"
+									buttons={[
+										{
+											icon: 'plus',
+											text: 'Add Product',
+											className: 'purple-bg',
+											onClick: () => setShowAddProduct(true),
+										},
+										{
+											icon: 'plus',
+											text: 'Add Shipping',
+											className: 'purple-bg',
+											onClick: () =>
+												setShippingLines((prev) => [
+													...prev,
+													{ name: 'Shipping', cost: 0 },
+												]),
+										},
+										{
+											icon: 'plus',
+											text: 'Add Tax',
+											className: 'purple-bg',
+											onClick: () => setShowAddTax(true),
+										},
+									]}
+								/>
 
-								<div className="buttons-wrapper left">
-									<button
-										className="admin-btn btn-purple-bg"
-										onClick={() => setShowAddProduct(true)}
-									>
-										<i className="adminlib-plus"></i>
-										{__('Add Product', 'multivendorx')}
-									</button>
-
-									<button
-										className="admin-btn btn-purple-bg"
-										onClick={() => {
-											setShippingLines((prev) => [
-												...prev,
-												{
-													name: __(
-														'Shipping',
-														'multivendorx'
-													),
-													cost: 0,
-												},
-											]);
-										}}
-									>
-										<i className="adminlib-plus"></i>
-										{__('Add Shipping', 'multivendorx')}
-									</button>
-
-									<button
-										className="admin-btn btn-purple-bg"
-										onClick={() => setShowAddTax(true)}
-									>
-										<i className="adminlib-plus"></i>
-										{__('Add Tax', 'multivendorx')}
-									</button>
-								</div>
 
 								{showAddProduct && (
 									<div className="select-product-wrapper">
@@ -840,166 +831,134 @@ const AddOrder = () => {
 					</div>
 				</div>
 				<div className="card-wrapper column w-35">
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Payment Method', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="payment-method">
-										{__(
-											'Select Payment Method',
-											'multivendorx'
-										)}
-									</label>
+					<Card title={__('Payment Method', 'multivendorx')}>
+						<FormGroupWrapper>
+							<FormGroup label={__('Select Payment Method', 'multivendorx')} htmlFor="payment-method">
+								<SelectInput
+									name="payment_method"
+									options={paymentOptions}
+									type="single-select"
+									value={selectedPayment?.value}
+									onChange={(value) => {
+										const method = paymentMethods.find(
+											(m) => m.value === value.value
+										);
+										setSelectedPayment(method || null);
+									}}
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
 
-									<SelectInput
-										name="payment_method"
-										options={paymentOptions}
-										type="single-select"
-										value={selectedPayment?.value}
-										onChange={(value) => {
-											const method = paymentMethods.find(
-												(m) => m.value === value.value
-											);
-											setSelectedPayment(method || null);
-										}}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
+					<Card title={__('Customer details', 'multivendorx')}>
+						{!selectedCustomer && (
+							<>
+								<FormGroupWrapper>
+									<FormGroup label={__('Select Customer', 'multivendorx')} htmlFor="Select-customer">
+										<SelectInput
+											name="new_owner"
+											options={customerOptions}
+											type="single-select"
+											onChange={(value) => {
+												const customer =
+													customers.find(
+														(c) =>
+															c.id ==
+															value.value
+													);
+												setSelectedCustomer(
+													customer
+												);
+												if (customer) {
+													setShippingAddress(
+														customer.shipping
+													);
+													setBillingAddress(
+														customer.billing
+													);
+													setShowCreateCustomer(
+														false
+													);
+												}
+											}}
+										/>
+									</FormGroup>
+								</FormGroupWrapper>
 
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Customer details', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							{!selectedCustomer && (
-								<>
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__(
-													'Select Customer',
+								<AdminButton
+									wrapperClass="left"
+									buttons={{
+										icon: 'plus',
+										text: __('Add New Customer', 'multivendorx'),
+										onClick: () => setShowCreateCustomer(!showCreateCustomer),
+										className: 'purple-bg',
+									}}
+								/>
+
+
+							</>
+						)}
+						{selectedCustomer && (
+							<div className="store-owner-details">
+								<div className="profile">
+									<div className="avatar">
+										<span>
+											{selectedCustomer
+												? selectedCustomer
+													.first_name[0]
+												: __('C', 'multivendorx')}
+										</span>
+									</div>
+
+									<div className="details">
+										<div className="name">
+											{selectedCustomer
+												? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
+												: __(
+													'Guest Customer',
 													'multivendorx'
 												)}
-											</label>
+										</div>
 
-											<SelectInput
-												name="new_owner"
-												options={customerOptions}
-												type="single-select"
-												onChange={(value) => {
-													const customer =
-														customers.find(
-															(c) =>
-																c.id ==
-																value.value
-														);
-													setSelectedCustomer(
-														customer
-													);
-													if (customer) {
-														setShippingAddress(
-															customer.shipping
-														);
-														setBillingAddress(
-															customer.billing
-														);
-														setShowCreateCustomer(
-															false
-														);
+										{selectedCustomer && (
+											<>
+												<div className="des">
+													{__(
+														'Customer ID:',
+														'multivendorx'
+													)}{' '}
+													#{selectedCustomer.id}
+												</div>
+
+												<div className="des">
+													<i className="adminlib-mail" />
+													{selectedCustomer.email}
+												</div>
+
+												<div className="des">
+													<i className="adminlib-phone" />
+													{
+														selectedCustomer
+															.billing.phone
 													}
-												}}
-											/>
-										</div>
-									</div>
-
-									<div
-										className="admin-btn btn-purple-bg"
-										onClick={() =>
-											setShowCreateCustomer(
-												!showCreateCustomer
-											)
-										}
-									>
-										<i className="adminlib-plus"></i>
-										{__('Add New Customer', 'multivendorx')}
-									</div>
-								</>
-							)}
-
-							{selectedCustomer && (
-								<div className="store-owner-details">
-									<div className="profile">
-										<div className="avatar">
-											<span>
-												{selectedCustomer
-													? selectedCustomer
-															.first_name[0]
-													: __('C', 'multivendorx')}
-											</span>
-										</div>
-
-										<div className="details">
-											<div className="name">
-												{selectedCustomer
-													? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
-													: __(
-															'Guest Customer',
-															'multivendorx'
-														)}
-											</div>
-
-											{selectedCustomer && (
-												<>
-													<div className="des">
-														{__(
-															'Customer ID:',
-															'multivendorx'
-														)}{' '}
-														#{selectedCustomer.id}
-													</div>
-
-													<div className="des">
-														<i className="adminlib-mail" />
-														{selectedCustomer.email}
-													</div>
-
-													<div className="des">
-														<i className="adminlib-phone" />
-														{
-															selectedCustomer
-																.billing.phone
-														}
-													</div>
-												</>
-											)}
-										</div>
-									</div>
-
-									<div
-										className="admin-badge blue"
-										onClick={() =>
-											setSelectedCustomer(false)
-										}
-									>
-										<i className="adminlib-edit"></i>
+												</div>
+											</>
+										)}
 									</div>
 								</div>
-							)}
-						</div>
-					</div>
+
+								<div
+									className="admin-badge blue"
+									onClick={() =>
+										setSelectedCustomer(false)
+									}
+								>
+									<i className="adminlib-edit"></i>
+								</div>
+							</div>
+						)}
+					</Card>
+
 					{showCreateCustomer && !selectedCustomer && (
 						<div className="card-content">
 							<div className="card-header">
