@@ -34,7 +34,6 @@ type SupportItem = {
 type AppLocalizer = {
     khali_dabba?: boolean;
     shop_url?: string;
-    [ key: string ]: unknown;
 };
 
 type TabsProps = {
@@ -86,13 +85,10 @@ const findFirstFile = ( items: TabData[] ): TabContent | null => {
     return null;
 };
 
-const findTabIcon = (
-    items: TabData[],
-    activeTabId: string
-): string | undefined => {
+const findTabIcon = ( items: TabData[], activeTabId: string ): string => {
     for ( const item of items ) {
         if ( isFile( item ) && item.content.id === activeTabId ) {
-            return item.content.icon;
+            return item.content.icon as string;
         }
         if ( isFolder( item ) ) {
             const icon = findTabIcon( item.content, activeTabId );
@@ -101,7 +97,7 @@ const findTabIcon = (
             }
         }
     }
-    return undefined;
+    return '';
 };
 
 const checkIfFolderContainsTab = (
@@ -357,7 +353,7 @@ const Tabs: React.FC< TabsProps > = ( {
     };
 
     // Get current tab's icon
-    const getCurrentTabIcon = (): string | undefined => {
+    const getCurrentTabIcon = (): string => {
         return findTabIcon( tabData, activeTab );
     };
 
@@ -491,10 +487,7 @@ const Tabs: React.FC< TabsProps > = ( {
 
     const currentMenu = menuStack[ menuStack.length - 1 ];
 
-    const findTabName = (
-        items: TabData[],
-        activeTabId: string
-    ): string | undefined => {
+    const findTabName = ( items: TabData[], activeTabId: string ): string => {
         for ( const item of items ) {
             if ( isFile( item ) && item.content.id === activeTabId ) {
                 return item.content.name;
@@ -506,7 +499,7 @@ const Tabs: React.FC< TabsProps > = ( {
                 }
             }
         }
-        return undefined;
+        return '';
     };
 
     const parentTab = findTabName( tabData, activeTab ) || '';
