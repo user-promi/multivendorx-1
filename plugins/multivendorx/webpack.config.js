@@ -53,11 +53,11 @@ module.exports = {
 
 	entry: {
 		index: './src/index.tsx',
-		'block/RegistrationForm/index':
-			'./src/blocks/RegistrationForm/index.js',
+		'block/registration-form/index':
+			'./src/blocks/registration-form/index.js',
 		'block/marketplace-stores/index': './src/blocks/marketplace-stores/index.js',
 		'block/marketplace-products/index': './src/blocks/marketplace-products/index.js',
-		'block/setupWizard/index': './src/blocks/setupWizard/index.js',
+		'block/setup-wizard/index': './src/blocks/setup-wizard/index.js',
 	},
 
 	output: {

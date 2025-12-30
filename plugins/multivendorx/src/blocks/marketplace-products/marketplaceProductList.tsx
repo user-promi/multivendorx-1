@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import { store } from '@wordpress/blocks';
 
 interface Product {
 	id: number;
@@ -14,9 +15,9 @@ interface MarketplaceProductListProps {
 	order?: 'asc' | 'desc';
 	category?: string; // comma-separated slugs
 	operator?: string;
-	product_visibility?:string;
-	value?:string;
-	store_slug?:string,
+	product_visibility?: string;
+	store_id?: string;
+	store_slug?: string,
 }
 
 const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
@@ -27,7 +28,7 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 	category = '',
 	operator = 'IN',
 	product_visibility = '',
-	value ='',
+	store_id = '',
 	store_slug = '',
 }) => {
 	const [products, setProducts] = useState<Product[]>([]);
@@ -47,11 +48,11 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 						page,
 						orderby,
 						order,
-						cat:category,
+						cat: category,
 						operator,
 						product_visibility,
 						meta_key: 'multivendorx_store_id',
-						value,
+						value: store_id,
 						store_slug
 					},
 				}
@@ -71,32 +72,33 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 	return (
 		<>
 			<div
-				style={{
-					display: 'grid',
-					gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-					gap: '20px',
-				}}
 			>
 				{products.map((product) => (
-					<div key={product.id} className="product-card">
+					<a
+						key={product.id}
+						href={product.permalink || '#'}
+						className="product-card"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
 						{product.images?.[0]?.src && (
 							<img
 								src={product.images[0].src}
 								alt={product.name}
-								style={{ width: '100%' }}
 							/>
 						)}
 						<h3>{product.name}</h3>
-					</div>
+					</a>
 				))}
 			</div>
 
-			<div style={{ marginTop: '20px', textAlign: 'center' }}>
+
+			<div >
 				<button disabled={page === 1} onClick={() => setPage(p => p - 1)}>
 					Previous
 				</button>
 
-				<span style={{ margin: '0 10px' }}>
+				<span>
 					Page {page} of {totalPages}
 				</span>
 

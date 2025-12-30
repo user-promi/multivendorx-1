@@ -1,0 +1,13 @@
+{
+	"apiVersion": 2,
+	"name": "multivendorx/registration-form",
+	"title": "Registration Form",
+	"category": "multivendorx",
+	"icon": "admin-users",
+	"description": "A block that renders the vendor registration form using React.",
+	"supports": {
+		"html": false
+	},
+	"editorScript": "file:./index.js",
+	"script": "file:./index.js"
+}

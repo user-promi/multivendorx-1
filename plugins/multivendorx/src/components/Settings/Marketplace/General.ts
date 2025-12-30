@@ -181,14 +181,14 @@ export default {
 							attribute: 'store',
 							description:
 								'Display products from a specific store. You can use Store ID, store slug, vendor email, or username. Leave empty to show products from all stores.',
-							accepted: 'store_id, store name, email, or username (Default = store name)',
-							default: '[marketplace_products store = "john-store"]',
+							accepted: 'store_id, store_name',
+							default: '[marketplace_products store_slug = "john-store" store_id = "1"]',
 						},
 						{
 							attribute: 'perpage',
 							description: 'Set how many products appear per page.',
 							accepted: 'Any number (Default = 12)',
-							default: '[marketplace_products perpage = "12"]',
+							default: '[marketplace_products perPage = "12"]',
 						},
 						{
 							attribute: 'columns',
@@ -197,26 +197,18 @@ export default {
 							default: '[marketplace_products columns = "4"]',
 						}, 
 						{
-							attribute: 'filter',
+							attribute: 'featured',
 							description: 'Choose which type of products to display. Options: all, recent (new arrivals), featured, sale (discounted), top_rated, best_selling.',
 							accepted:
-								'all, recent, featured, sale, top_rated, best_selling (Default = featured)',
-							default: '[marketplace_products filter = "featured"]',
-						},
-						{
-							attribute: 'sort',
-							description: 'Quick preset sorting for common scenarios. Options: latest, oldest, rating (highest rated), popularity (most sold), title (alphabetical). Overrides orderby and order if set.',
-							accepted:
-								'latest, oldest, rating, popularity, title (Default = latest)',
-							default: '[marketplace_products sort = "latest"]',
+								'featured (Default = featured)',
+							default: '[marketplace_products product_visibility = "featured"]',
 						},
 						{
 							attribute: 'orderby',
-							description:
-								'Choose the field used for sorting when no preset order is selected.',
-							accepted: 'title, date, rating (Default = title)',
-							default: '[marketplace_products orderby= "title"]',
-						},
+							description: 'Choose the field used for sorting when no preset order is selected.',
+							accepted: 'date, id, title, slug, menu_order, price, popularity, rating, modified (Default = title)',
+							default: '[marketplace_products orderby="title"]',
+						},						
 						{
 							attribute: 'order',
 							description: 'Set sorting direction',
