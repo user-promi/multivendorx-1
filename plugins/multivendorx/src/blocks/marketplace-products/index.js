@@ -2,11 +2,11 @@ import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { render } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
-import MarketplaceStoreList from './marketplaceStoreList';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
 import { initializeModules } from 'zyra';
+import MarketplaceProductList from './marketplaceProductList';
 
-initializeModules(storesList, 'multivendorx', 'free', 'modules');
+initializeModules(productList, 'multivendorx', 'free', 'modules');
 
 const EditBlock = (props) => {
 	const { attributes, setAttributes } = props;
@@ -54,7 +54,7 @@ const EditBlock = (props) => {
 
 
 			{/* Pass attributes to StoresList */}
-			<MarketplaceStoreList
+			<MarketplaceProductList
 				orderby={attributes.orderby}
 				order={attributes.order}
 				category={attributes.category}
@@ -63,10 +63,10 @@ const EditBlock = (props) => {
 	);
 };
 
-registerBlockType('multivendorx/marketplace-stores', {
+registerBlockType('multivendorx/marketplace-products', {
 	apiVersion: 2,
-	title: 'Stores List',
-	icon: 'store',
+	title: 'Product List',
+	icon: 'products',
 	category: 'multivendorx',
 	supports: { html: false },
 
@@ -80,17 +80,17 @@ registerBlockType('multivendorx/marketplace-stores', {
 	edit: EditBlock,
 
 	save({ attributes }) {
-		return <div id="marketplace-stores" data-attributes={JSON.stringify(attributes)}></div>;
+		return <div id="marketplace-products" data-attributes={JSON.stringify(attributes)}></div>;
 	},
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-	const element = document.getElementById('marketplace-stores');
+	const element = document.getElementById('marketplace-products');
 	if (element) {
 		const attributes = JSON.parse(element.getAttribute('data-attributes') || '{}');
 		render(
 			<BrowserRouter>
-				<MarketplaceStoreList {...attributes} />
+				<MarketplaceProductList {...attributes} />
 			</BrowserRouter>,
 			element
 		);

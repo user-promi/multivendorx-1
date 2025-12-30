@@ -24,7 +24,8 @@ class Shortcode {
     public function __construct() {
         add_shortcode( 'multivendorx_store_dashboard', array( $this, 'display_store_dashboard' ) );
         add_shortcode( 'multivendorx_store_registration', array( $this, 'display_store_registration' ) );
-        add_shortcode( 'marketplace_stores', array( $this, 'marketplace_stores_list' ) );
+        add_shortcode( 'marketplace_stores', array( $this, 'marketplace_stores' ) );
+        add_shortcode( 'marketplace_products', array( $this, 'marketplace_products' ) );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
         add_action( 'wp_print_styles', array( $this, 'dequeue_all_styles_on_page' ), 99 );
@@ -122,7 +123,7 @@ class Shortcode {
     /**
      * Display stores list
      */
-    public function marketplace_stores_list( $attributes ) {
+    public function marketplace_stores( $attributes ) {
         if ( ($attributes['orderby'] ?? null) === 'registered' ) {
             $attributes['orderby'] = 'create_time';
         }        
@@ -134,5 +135,18 @@ class Shortcode {
 
         // Use id instead of class
         return '<div id="marketplace-stores" data-attributes="' . $json_attrs . '"></div>';
+    }
+    /**
+     * Display stores list
+     */
+    public function marketplace_products( $attributes ) {      
+        $json_attrs = esc_attr( wp_json_encode( $attributes ) );
+        FrontendScripts::load_scripts();
+
+        FrontendScripts::enqueue_script( 'multivendorx-marketplace-products-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-marketplace-products-script' );
+
+        // Use id instead of class
+        return '<div id="marketplace-products" data-attributes="' . $json_attrs . '"></div>';
     } 
 }

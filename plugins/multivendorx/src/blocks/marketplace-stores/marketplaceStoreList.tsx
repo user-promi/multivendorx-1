@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getApiLink } from 'zyra';
+import { getApiLink, GoogleMap, Mapbox, useModules } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import Select from 'react-select';
 
@@ -32,6 +32,35 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	const [product, setProduct] = useState<[]>([]);
 	const [page, setPage] = useState(1);
 	const [total, setTotal] = useState(0);
+	const { modules } = useModules();
+	const [apiKey, setApiKey] = useState('');
+
+	const appLocalizer = (window as any).appLocalizer;
+	const settings = appLocalizer.settings_databases_value;
+
+	useEffect(() => {
+		if (!settings?.geolocation) return;
+
+		const provider = settings.geolocation.choose_map_api;
+
+		if (provider === 'google_map_set') {
+			setApiKey(settings.geolocation.google_api_key || '');
+		} else if (provider === 'mapbox_api_set') {
+			setApiKey(settings.geolocation.mapbox_api_key || '');
+		}
+	}, [settings]);
+
+	const [addressData, setAddressData] = useState({
+		location_address: '',
+		location_lat: '',
+		location_lng: '',
+		address: '',
+		city: '',
+		state: '',
+		country: '',
+		zip: '',
+		timezone: '',
+	});
 
 	const totalPages = Math.ceil(total / perPage);
 
@@ -130,8 +159,67 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			);
 	};
 
+	const handleLocationUpdate = (locationData: any) => {
+		if (!locationData) return;
+
+		const updatedAddress = {
+			location_address: locationData.location_address || '',
+			location_lat: locationData.location_lat || '',
+			location_lng: locationData.location_lng || '',
+			address: locationData.address || '',
+			city: locationData.city || '',
+			state: locationData.state || '',
+			country: locationData.country || '',
+			zip: locationData.zip || '',
+		};
+
+		// Update map UI
+		setAddressData((prev) => ({
+			...prev,
+			...updatedAddress,
+		}));
+
+		// Update filters so API call works
+		setFilters((prev) => ({
+			...prev,
+			location_lat: updatedAddress.location_lat,
+			location_lng: updatedAddress.location_lng,
+		}));
+	};
+
+
+	const renderMapComponent = () => {
+		if (!modules.includes('geo-location') || !apiKey) {
+			return null;
+		}
+
+		const commonProps = {
+			apiKey,
+			locationAddress: addressData.location_address,
+			locationLat: addressData.location_lat,
+			locationLng: addressData.location_lng,
+			onLocationUpdate: handleLocationUpdate,
+			labelSearch: __('Search for a location'),
+			labelMap: __('Drag or click on the map to choose a location'),
+			instructionText: __('Enter a search term or drag/drop a pin on the map.'),
+			placeholderSearch: __('Search for a location...'),
+		};
+
+		switch (settings.geolocation.choose_map_api) {
+			case 'google_map_set':
+				return <GoogleMap {...commonProps} />;
+
+			case 'mapbox_api_set':
+				return <Mapbox {...commonProps} />;
+
+			default:
+				return null;
+		}
+	};
+
 	return (
 		<>
+			{renderMapComponent()}
 			<div className="">
 				{/* Filter Bar */}
 				<input
