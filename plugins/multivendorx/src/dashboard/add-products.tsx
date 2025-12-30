@@ -597,7 +597,7 @@ const AddProduct = () => {
 
 					<div className="des">
 						{__(
-							'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas accusantium obcaecati labore nam quibusdam minus.',
+							'Enter your product details - name, price, stock, and image & publish.',
 							'multivendorx'
 						)}
 					</div>
