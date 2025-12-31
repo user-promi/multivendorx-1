@@ -984,7 +984,7 @@ const AllCoupon: React.FC = () => {
 							</div>
 							<div className="des">
 								{__(
-									'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+									'Set code, discount, and usage limits, then activate.',
 									'multivendorx'
 								)}
 							</div>
