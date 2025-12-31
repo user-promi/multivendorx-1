@@ -58,7 +58,7 @@ class Import_dummy_data extends \WP_REST_Controller {
                 array(
                     'success' => false,
                     'code'    => 'invalid_nonce',
-                    'message' => __( 'Invalid nonce.', 'multistorex' ),
+                    'message' => __( 'Invalid nonce.', 'multivendorx' ),
                 ),
                 401
             );
@@ -278,38 +278,45 @@ class Import_dummy_data extends \WP_REST_Controller {
 
             $owner_index = (int) $store->owner_index;
             $owner_id    = $store_owners[ $owner_index ] ?? 0;
-
+        
             if ( ! $owner_id ) {
                 continue;
             }
-
-            // Create Store Object
+        
+            $store_slug = sanitize_title( (string) $store->slug );
+        
+            // CHECK IF STORE ALREADY EXISTS BY SLUG
+            if ( \MultiVendorX\Store\Store::store_slug_exists( $store_slug ) ) {
+                // Store already exists → skip creation
+                continue;
+            }
+        
+            // Create store object
             $store_obj = new \MultiVendorX\Store\Store();
-
+        
             $store_data = array(
                 'name'        => (string) $store->name,
-                'slug'        => sanitize_title( (string) $store->slug ),
+                'slug'        => $store_slug,
                 'description' => (string) $store->description,
                 'status'      => (string) $store->status,
                 'who_created' => $owner_id,
             );
-
-            // Set core store data
+        
             foreach ( $store_data as $key => $value ) {
                 $store_obj->set( $key, $value );
             }
-
+        
             // Save store
             $store_id = $store_obj->save();
-
+        
             if ( ! $store_id ) {
                 continue;
             }
-
-            // Assign primary owner
+        
+            // Assign owner
             \MultiVendorX\Store\StoreUtil::set_primary_owner( $owner_id, $store_id );
-
-            // Save meta fields
+        
+            // Store meta
             $meta_fields = array(
                 'phone'     => (string) $store->phone,
                 'address_1' => (string) $store->address_1,
@@ -318,111 +325,199 @@ class Import_dummy_data extends \WP_REST_Controller {
                 'country'   => (string) $store->country,
                 'postcode'  => (string) $store->postcode,
             );
-
+        
             foreach ( $meta_fields as $key => $value ) {
                 if ( ! empty( $value ) ) {
                     $store_obj->update_meta( $key, $value );
                 }
             }
-
-            // Mark store as active
+        
             $store_obj->set( 'status', 'active' );
             $store_obj->save();
-    
+        
             $created_store_ids[] = $store_id;
-        }
+        }        
 
         return $created_store_ids;
     }
 
-    public function import_products( $store_ids, $product_type = 'simple' ) {
+    public function import_products( $store_ids ) {
 
-        // Determine XML path based on product type
-        $xml_path = MultiVendorX()->plugin_path . '/assets/dummy-data/' . sanitize_file_name( $product_type ) . '.xml';
-    
-        if ( ! file_exists( $xml_path ) ) {
-            return [];
-        }
-    
-        $xml = simplexml_load_file( $xml_path );
-        if ( ! $xml ) {
-            return [];
-        }
+        $base_path = MultiVendorX()->plugin_path . '/assets/dummy-data/';
+        $product_files = [
+            'simple',
+            'variable',
+            'subscription',
+            'variable-subscription',
+            'booking',
+            'rental',
+            'appointment',
+            'auction',
+            'bundle',
+            'gift_card',
+        ];
     
         $created_products = [];
     
-        foreach ( $xml->product as $product ) {
+        foreach ( $product_files as $product_type ) {
     
-            $store_index = (int) $product->store_index;
-            $store_id    = $store_ids[ $store_index ] ?? 0;
+            $xml_path = $base_path . $product_type . '.xml';
     
-            if ( ! $store_id ) {
+            if ( ! file_exists( $xml_path ) ) {
                 continue;
             }
     
-            $post_data = [
-                'post_title'   => sanitize_text_field( (string) $product->name ),
-                'post_name'    => sanitize_title( (string) $product->slug ),
-                'post_content' => wp_kses_post( (string) $product->description ),
-                'post_excerpt' => wp_kses_post( (string) $product->short_description ),
-                'post_status'  => (string) $product->status ?: 'publish',
-                'post_type'    => 'product',
-                'post_author'  => get_current_user_id(),
-            ];
-    
-            $product_id = wp_insert_post( $post_data );
-    
-            if ( is_wp_error( $product_id ) ) {
+            $xml = simplexml_load_file( $xml_path );
+            if ( ! $xml || empty( $xml->product ) ) {
                 continue;
             }
     
-            update_post_meta( $product_id, '_sku', (string) $product->sku );
-            update_post_meta( $product_id, '_regular_price', (string) $product->price );
-            update_post_meta( $product_id, '_sale_price', (string) $product->sale_price );
-            update_post_meta(
-                $product_id,
-                '_price',
-                ! empty( $product->sale_price ) ? (string) $product->sale_price : (string) $product->price
-            );
+            foreach ( $xml->product as $product ) {
     
-            update_post_meta( $product_id, '_visibility', 'visible' );
-    
-            $manage_stock = strtolower( trim( (string) $product->stock->manage ) ) === 'true';
-            update_post_meta( $product_id, '_manage_stock', $manage_stock ? 'yes' : 'no' );
-            update_post_meta( $product_id, '_stock', (int) $product->stock->quantity );
-            update_post_meta( $product_id, '_stock_status', (string) $product->stock->status );
-    
-            // Set product type based on selection
-            wp_set_object_terms( $product_id, $product_type, 'product_type' );
-    
-            // Categories
-            $category_ids = [];
-            if ( isset( $product->categories->category ) ) {
-                foreach ( $product->categories->category as $cat_id ) {
-                    $category_ids[] = (int) $cat_id;
+                $store_index = (int) $product->store_index;
+                $store_id    = $store_ids[ $store_index ] ?? 0;
+
+                $sku = (string) $product->sku;
+
+                if ( ! empty( $sku ) ) {
+                    $existing_id = wc_get_product_id_by_sku( $sku );
+                    if ( $existing_id ) {
+                        $created_products[] = $existing_id;
+                        continue;
+                    }
                 }
-            }
-            if ( ! empty( $category_ids ) ) {
-                wp_set_object_terms( $product_id, $category_ids, 'product_cat' );
-            }
+
     
-            // Tags
-            $tags = [];
-            if ( isset( $product->tags->tag ) ) {
-                foreach ( $product->tags->tag as $tag ) {
-                    $tags[] = sanitize_text_field( (string) $tag );
+                if ( ! $store_id ) {
+                    continue;
                 }
+    
+                $store = new \MultiVendorX\Store\Store( $store_id );
+                if ( ! $store ) {
+                    continue;
+                }
+
+                // ---------------------------
+                // CREATE PRODUCT
+                // ---------------------------
+                $product_id = wp_insert_post([
+                    'post_title'   => sanitize_text_field( (string) $product->name ),
+                    'post_name'    => sanitize_title( (string) $product->slug ),
+                    'post_content' => wp_kses_post( (string) $product->description ),
+                    'post_excerpt' => wp_kses_post( (string) $product->short_description ),
+                    'post_status'  => (string) $product->status ?: 'publish',
+                    'post_type'    => 'product',
+                    'post_author'  => get_current_user_id(),
+                ]);
+    
+                if ( is_wp_error( $product_id ) ) {
+                    continue;
+                }
+    
+                update_post_meta( $product_id, 'multivendorx_store_id', $store_id );
+    
+                do_action( 'multivendorx_after_product_import', $product_id, $store_id );
+    
+                // ---------------------------
+                // PRODUCT TYPE
+                // ---------------------------
+                wp_set_object_terms( $product_id, $product_type, 'product_type' );
+    
+                // ---------------------------
+                // COMMON META
+                // ---------------------------
+                update_post_meta( $product_id, '_sku', (string) $product->sku );
+                update_post_meta( $product_id, '_visibility', 'visible' );
+    
+                if ( isset( $product->price ) ) {
+                    update_post_meta( $product_id, '_regular_price', (string) $product->price );
+                    update_post_meta( $product_id, '_price', (string) $product->price );
+                }
+    
+                if ( isset( $product->sale_price ) ) {
+                    update_post_meta( $product_id, '_sale_price', (string) $product->sale_price );
+                    update_post_meta( $product_id, '_price', (string) $product->sale_price );
+                }
+    
+                // ---------------------------
+                // STOCK
+                // ---------------------------
+                if ( isset( $product->stock ) ) {
+                    update_post_meta( $product_id, '_manage_stock', (string) $product->stock->manage === 'true' ? 'yes' : 'no' );
+                    update_post_meta( $product_id, '_stock', (int) $product->stock->quantity );
+                    update_post_meta( $product_id, '_stock_status', (string) $product->stock->status );
+                }
+    
+                // ---------------------------
+                // CATEGORIES
+                // ---------------------------
+                if ( isset( $product->categories->category ) ) {
+                    $cats = [];
+                    foreach ( $product->categories->category as $cat ) {
+                        $cats[] = (int) $cat;
+                    }
+                    wp_set_object_terms( $product_id, $cats, 'product_cat' );
+                }
+    
+                // ---------------------------
+                // TAGS
+                // ---------------------------
+                if ( isset( $product->tags->tag ) ) {
+                    $tags = [];
+                    foreach ( $product->tags->tag as $tag ) {
+                        $tags[] = sanitize_text_field( (string) $tag );
+                    }
+                    wp_set_object_terms( $product_id, $tags, 'product_tag' );
+                }
+    
+                // ---------------------------
+                // SUBSCRIPTIONS
+                // ---------------------------
+                if ( in_array( $product_type, [ 'subscription', 'variable-subscription' ], true ) ) {
+                    update_post_meta( $product_id, '_subscription_price', (string) $product->price );
+                    update_post_meta( $product_id, '_subscription_period', (string) $product->period ?: 'month' );
+                    update_post_meta( $product_id, '_subscription_interval', (string) $product->interval ?: 1 );
+                }
+    
+                // ---------------------------
+                // VARIABLE PRODUCTS
+                // ---------------------------
+                if ( isset( $product->variations->variation ) ) {
+    
+                    wp_set_object_terms( $product_id, 'variable', 'product_type' );
+    
+                    foreach ( $product->variations->variation as $variation ) {
+    
+                        $variation_id = wp_insert_post([
+                            'post_title'  => 'Variation',
+                            'post_name'   => 'product-' . $product_id . '-variation',
+                            'post_status' => 'publish',
+                            'post_parent' => $product_id,
+                            'post_type'   => 'product_variation',
+                            'post_author' => get_current_user_id(),
+                        ]);
+    
+                        if ( is_wp_error( $variation_id ) ) {
+                            continue;
+                        }
+    
+                        foreach ( $variation->attributes->attribute as $attr ) {
+                            update_post_meta(
+                                $variation_id,
+                                'attribute_' . sanitize_title( (string) $attr->name ),
+                                sanitize_text_field( (string) $attr->value )
+                            );
+                        }
+    
+                        update_post_meta( $variation_id, '_regular_price', (string) $variation->price );
+                        update_post_meta( $variation_id, '_price', (string) $variation->price );
+                    }
+                }
+    
+                do_action( 'multivendorx_after_product_import', $product_id, $store_id );
+    
+                $created_products[] = $product_id;
             }
-            if ( ! empty( $tags ) ) {
-                wp_set_object_terms( $product_id, $tags, 'product_tag' );
-            }
-    
-            update_post_meta( $product_id, '_vendor_id', $store_id );
-            update_post_meta( $product_id, 'dc_vendor_shop', $store_id );
-    
-            do_action( 'multivendorx_after_product_import', $product_id, $store_id );
-    
-            $created_products[] = $product_id;
         }
     
         return $created_products;
@@ -461,6 +556,10 @@ class Import_dummy_data extends \WP_REST_Controller {
     
             $term_id = is_array( $term ) ? $term['term_id'] : $term;
     
+            $existing = get_term_meta( $term_id, 'category_' . $commission_type . '_commission', true );
+            if ( $existing ) {
+                continue;
+            }
             /**
              * Apply commission based on system configuration
              */
@@ -618,6 +717,17 @@ class Import_dummy_data extends \WP_REST_Controller {
     
         foreach ( $xml->review as $review ) {
     
+            $existing = get_comments([
+                'post_id' => $product_id,
+                'author_email' => sanitize_email( (string) $review->email ),
+                'type' => 'review',
+                'count' => true
+            ]);
+            
+            if ( $existing > 0 ) {
+                continue; // Review already exists
+            }
+            
             if ( $product_index >= $total_products ) {
                 break;
             }
