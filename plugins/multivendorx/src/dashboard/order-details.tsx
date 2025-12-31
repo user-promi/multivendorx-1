@@ -252,7 +252,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 					</div>
 
 					<div className="container-wrapper">
-						<div className="card-wrapper w-65">
+						<div className="card-wrapper column-8">
 							<div className="card-content">
 								<div className="table-wrapper view-order-table">
 									<table className="admin-table">
@@ -844,7 +844,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 							</div>
 						</div>
 
-						<div className="card-wrapper w-35">
+						<div className="card-wrapper column-4">
 							<div className="card-content">
 								<div className="card-header">
 									<div className="left">

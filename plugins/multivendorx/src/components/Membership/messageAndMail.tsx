@@ -161,7 +161,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 		<>
 			<SuccessNotice message={successMsg} />
 			<div className="container-wrapper">
-				<div className="card-wrapper column w-65">
+				<div className="card-wrapper column column-8">
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
@@ -331,7 +331,7 @@ const MessageAndMail = ({ id }: { id: string }) => {
 					</div>
 				</div>
 
-				<div className="card-wrapper column w-35">
+				<div className="card-wrapper column column-4">
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
@@ -451,7 +451,6 @@ const MessageAndMail = ({ id }: { id: string }) => {
 										deleteButtonLabel="Remove"
 										onChange={(val) => setRules(val)}
 									/>
-
 								</div>
 							</div>
 						</div>

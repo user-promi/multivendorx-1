@@ -405,7 +405,7 @@ const StoreSettings = ({
 		<>
 			<SuccessNotice message={successMsg} />
 			<div className="container-wrapper ">
-				<div className="card-wrapper column w-65">
+				<div className="card-wrapper column column-8">
 					{/* Contact Information */}
 					<div className="card-content">
 						<div className="card-header">
@@ -568,7 +568,7 @@ const StoreSettings = ({
 						/>
 					</div>
 				</div>
-				<div className="card-wrapper column w-35">
+				<div className="card-wrapper column column-4">
 					{/* Manage Store Status */}
 					<div id="store-status" className="card-content">
 						<div className="card-header">

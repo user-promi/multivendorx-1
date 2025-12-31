@@ -11,6 +11,7 @@ import {
 	TextArea,
 	useModules,
 	ToggleSetting,
+	Card,
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
@@ -425,12 +426,12 @@ const AddProduct = () => {
 			appLocalizer.settings_databases_value['product-preferencess']
 				?.category_selection_method == 'yes'
 				? [
-						{
-							id: Number(
-								selectedChild || selectedSub || selectedCat
-							),
-						},
-					]
+					{
+						id: Number(
+							selectedChild || selectedSub || selectedCat
+						),
+					},
+				]
 				: selectedCats.map((id) => ({ id }));
 
 		try {
@@ -620,7 +621,7 @@ const AddProduct = () => {
 			</div>
 
 			<div className="container-wrapper">
-				<div className="card-wrapper w-10">
+				<div className="card-wrapper column-2">
 					<div className="card-content">
 						<div className="card-body">
 							<div className="checklist-wrapper">
@@ -636,15 +637,6 @@ const AddProduct = () => {
 									>
 										<span></span> Name
 									</li>
-
-									<li
-										className={
-											checklist.image ? 'checked' : ''
-										}
-									>
-										<span></span> Image
-									</li>
-
 									{/* SIMPLE PRODUCT FIELDS */}
 									{product.type === 'simple' && (
 										<>
@@ -669,6 +661,30 @@ const AddProduct = () => {
 											</li>
 										</>
 									)}
+									<li
+										className={
+											checklist.image ? 'checked' : ''
+										}
+									>
+										<span></span> Image
+									</li>
+
+									<li
+										className={
+											checklist.image ? 'checked' : ''
+										}
+									>
+										<span></span> Category
+									</li>
+
+									<li
+										className={
+											checklist.image ? 'checked' : ''
+										}
+									>
+										<span></span> Policies
+									</li>
+
 
 									{applyFilters(
 										'product_checklist_items_render',
@@ -682,328 +698,220 @@ const AddProduct = () => {
 					</div>
 				</div>
 
-				<div className="card-wrapper column w-65">
+				<div className="card-wrapper column-6">
 					{/* General information */}
-					<div className="card-content" id="card-general">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('General information', 'multivendorx')}
-								</div>
-							</div>
-							<div className="right">
-								<i
-									className="adminlib-keyboard-arrow-down arrow-icon icon"
-									onClick={() => toggleCard('card-general')}
-								></i>
+					<Card
+						title={__('General information', 'multivendorx')}
+						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						toggle
+					>
+						{/* Product Name */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>{__('Product name', 'multivendorx')}</label>
+
+								<BasicInput
+									name="name"
+									wrapperClass="setting-form-input"
+									value={product.name}
+									onChange={(e) => handleChange('name', e.target.value)}
+								/>
 							</div>
 						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										{__('Product name', 'multivendorx')}
-									</label>
-									<BasicInput
-										name="name"
-										wrapperClass="setting-form-input"
-										value={product.name}
-										onChange={(e) =>
-											handleChange('name', e.target.value)
-										}
-									/>
-								</div>
-							</div>
 
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										{__(
-											'Product short description',
-											'multivendorx'
-										)}
-									</label>
-									<TextArea
-										name="short_description"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										value={product.short_description}
-										onChange={(e) =>
-											handleChange(
-												'short_description',
-												e.target.value
-											)
-										}
-									/>
-								</div>
-							</div>
+						{/* Short Description */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>
+									{__('Product short description', 'multivendorx')}
+								</label>
 
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										{__(
-											'Product description',
-											'multivendorx'
-										)}
-									</label>
-									<TextArea
-										name="description"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										value={product.description}
-										onChange={(e) =>
-											handleChange(
-												'description',
-												e.target.value
-											)
-										}
-									/>
-								</div>
+								<TextArea
+									name="short_description"
+									wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description"
+									value={product.short_description}
+									onChange={(e) =>
+										handleChange('short_description', e.target.value)
+									}
+								/>
 							</div>
 						</div>
-					</div>
+
+						{/* Description */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>
+									{__('Product description', 'multivendorx')}
+								</label>
+
+								<TextArea
+									name="description"
+									wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description"
+									value={product.description}
+									onChange={(e) =>
+										handleChange('description', e.target.value)
+									}
+								/>
+							</div>
+						</div>
+					</Card>
 
 					{/* Price and stock */}
-					<div className="card-content" id="card-price">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Price and stock', 'multivendorx')}
-								</div>
-							</div>
-							<div className="right">
-								<i
-									className="adminlib-keyboard-arrow-down arrow-icon icon"
-									onClick={() => toggleCard('card-price')}
-								></i>
-							</div>
-						</div>
-						<div className="card-body">
-							{product?.type == 'simple' && (
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__(
-												'Regular price',
-												'multivendorx'
-											)}
-										</label>
-										<BasicInput
-											name="regular_price"
-											wrapperClass="setting-form-input"
-											value={product.regular_price}
-											onChange={(e) =>
-												handleChange(
-													'regular_price',
-													e.target.value
-												)
-											}
-										/>
-									</div>
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__('Sale price', 'multivendorx')}
-										</label>
-										<BasicInput
-											name="sale_price"
-											wrapperClass="setting-form-input"
-											value={product.sale_price}
-											onChange={(e) =>
-												handleChange(
-													'sale_price',
-													e.target.value
-												)
-											}
-										/>
-									</div>
-								</div>
-							)}
-
+					<Card
+						title={__('Price and stock', 'multivendorx')}
+						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						toggle
+					>
+						{/* Regular & Sale Price (Simple Product) */}
+						{product?.type === 'simple' && (
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label htmlFor="product-name">
-										{__('SKU', 'multivendorx')}
-									</label>
+									<label>{__('Regular price', 'multivendorx')}</label>
 									<BasicInput
-										name="sku"
+										name="regular_price"
 										wrapperClass="setting-form-input"
-										value={product.sku}
+										value={product.regular_price}
 										onChange={(e) =>
-											handleChange('sku', e.target.value)
+											handleChange('regular_price', e.target.value)
 										}
 									/>
 								</div>
+
 								<div className="form-group">
-									<label htmlFor="">
-										{__(
-											'Sold individually',
-											'multivendorx'
-										)}
-									</label>
-									<MultiCheckBox
-										wrapperClass="toggle-btn"
-										inputWrapperClass="toggle-checkbox-header"
-										inputInnerWrapperClass="toggle-checkbox"
-										idPrefix="toggle-switch-sold-individually"
-										type="checkbox"
-										value={
-											product.sold_individually
-												? ['sold_individually']
-												: []
-										}
+									<label>{__('Sale price', 'multivendorx')}</label>
+									<BasicInput
+										name="sale_price"
+										wrapperClass="setting-form-input"
+										value={product.sale_price}
 										onChange={(e) =>
-											handleChange(
-												'sold_individually',
-												(
-													e as React.ChangeEvent<HTMLInputElement>
-												).target.checked
-											)
+											handleChange('sale_price', e.target.value)
 										}
-										options={[
-											{
-												key: 'sold_individually',
-												value: 'sold_individually',
-											},
-										]}
 									/>
 								</div>
 							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="">
-										{__('Stock management', 'multivendorx')}
-									</label>
-									<MultiCheckBox
-										wrapperClass="toggle-btn"
-										inputWrapperClass="toggle-checkbox-header"
-										inputInnerWrapperClass="toggle-checkbox"
-										idPrefix="toggle-switch-manage-stock"
-										type="checkbox"
-										value={
-											product.manage_stock
-												? ['manage_stock']
-												: []
-										}
-										onChange={(e) =>
-											handleChange(
-												'manage_stock',
-												(
-													e as React.ChangeEvent<HTMLInputElement>
-												).target.checked
-											)
-										}
-										options={[
-											{
-												key: 'manage_stock',
-												value: 'manage_stock',
-											},
-										]}
-									/>
-								</div>
-								{!product.manage_stock && (
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__('Stock Status', 'multivendorx')}
-										</label>
-										<SelectInput
-											name="stock_status"
-											options={stockStatusOptions}
-											type="single-select"
-											value={product.stock_status}
-											onChange={(selected) =>
-												handleChange(
-													'stock_status',
-													selected.value
-												)
-											}
-										/>
-									</div>
-								)}
+						)}
+
+						{/* SKU + Sold Individually */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>{__('SKU', 'multivendorx')}</label>
+								<BasicInput
+									name="sku"
+									wrapperClass="setting-form-input"
+									value={product.sku}
+									onChange={(e) => handleChange('sku', e.target.value)}
+								/>
 							</div>
-							{product.manage_stock && (
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__('Quantity', 'multivendorx')}
-										</label>
-										<BasicInput
-											name="stock"
-											wrapperClass="setting-form-input"
-											value={product.stock}
-											onChange={(e) =>
-												handleChange(
-													'stock',
-													e.target.value
-												)
-											}
-										/>
-									</div>
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__(
-												'Allow backorders?',
-												'multivendorx'
-											)}
-										</label>
-										<SelectInput
-											name="backorders"
-											options={backorderOptions}
-											type="single-select"
-											value={product.backorders}
-											onChange={(selected) =>
-												handleChange(
-													'backorders',
-													selected.value
-												)
-											}
-										/>
-									</div>
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__(
-												'Low stock threshold',
-												'multivendorx'
-											)}
-										</label>
-										<BasicInput
-											name="low_stock_amount"
-											wrapperClass="setting-form-input"
-											value={product.low_stock_amount}
-											onChange={(e) =>
-												handleChange(
-													'low_stock_amount',
-													e.target.value
-												)
-											}
-										/>
-									</div>
+
+							<div className="form-group">
+								<label>{__('Sold individually', 'multivendorx')}</label>
+								<MultiCheckBox
+									wrapperClass="toggle-btn"
+									inputWrapperClass="toggle-checkbox-header"
+									inputInnerWrapperClass="toggle-checkbox"
+									idPrefix="toggle-switch-sold-individually"
+									type="checkbox"
+									value={
+										product.sold_individually ? ['sold_individually'] : []
+									}
+									onChange={(e) =>
+										handleChange(
+											'sold_individually',
+											(e as React.ChangeEvent<HTMLInputElement>).target.checked
+										)
+									}
+									options={[
+										{ key: 'sold_individually', value: 'sold_individually' },
+									]}
+								/>
+							</div>
+						</div>
+
+						{/* Stock Management */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>{__('Stock management', 'multivendorx')}</label>
+								<MultiCheckBox
+									wrapperClass="toggle-btn"
+									inputWrapperClass="toggle-checkbox-header"
+									inputInnerWrapperClass="toggle-checkbox"
+									idPrefix="toggle-switch-manage-stock"
+									type="checkbox"
+									value={product.manage_stock ? ['manage_stock'] : []}
+									onChange={(e) =>
+										handleChange(
+											'manage_stock',
+											(e as React.ChangeEvent<HTMLInputElement>).target.checked
+										)
+									}
+									options={[
+										{ key: 'manage_stock', value: 'manage_stock' },
+									]}
+								/>
+							</div>
+
+							{!product.manage_stock && (
+								<div className="form-group">
+									<label>{__('Stock Status', 'multivendorx')}</label>
+									<SelectInput
+										name="stock_status"
+										options={stockStatusOptions}
+										type="single-select"
+										value={product.stock_status}
+										onChange={(selected) =>
+											handleChange('stock_status', selected.value)
+										}
+									/>
 								</div>
 							)}
-
-							{/* <div className="form-group-wrapper">
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        {__('Product URL', 'multivendorx')}
-                                    </label>
-                                    <BasicInput
-                                        name="address"
-                                        wrapperClass="setting-form-input"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="product-name">
-                                        {__('Button text', 'multivendorx')}
-                                    </label>
-                                    <BasicInput
-                                        name="address"
-                                        wrapperClass="setting-form-input"
-                                    />
-                                </div>
-                            </div> */}
 						</div>
-					</div>
+
+						{/* Managed Stock Fields */}
+						{product.manage_stock && (
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<label>{__('Quantity', 'multivendorx')}</label>
+									<BasicInput
+										name="stock"
+										wrapperClass="setting-form-input"
+										value={product.stock}
+										onChange={(e) =>
+											handleChange('stock', e.target.value)
+										}
+									/>
+								</div>
+
+								<div className="form-group">
+									<label>{__('Allow backorders?', 'multivendorx')}</label>
+									<SelectInput
+										name="backorders"
+										options={backorderOptions}
+										type="single-select"
+										value={product.backorders}
+										onChange={(selected) =>
+											handleChange('backorders', selected.value)
+										}
+									/>
+								</div>
+
+								<div className="form-group">
+									<label>{__('Low stock threshold', 'multivendorx')}</label>
+									<BasicInput
+										name="low_stock_amount"
+										wrapperClass="setting-form-input"
+										value={product.low_stock_amount}
+										onChange={(e) =>
+											handleChange('low_stock_amount', e.target.value)
+										}
+									/>
+								</div>
+							</div>
+						)}
+					</Card>
 
 					{modules.includes('min-max') &&
 						product?.type == 'simple' &&
@@ -1042,757 +950,456 @@ const AddProduct = () => {
 				</div>
 
 				{/* right column */}
-				<div className="card-wrapper column w-35">
+				<div className="card-wrapper column-4">
 					{/* ai assist */}
 					{applyFilters('product_ai_assist', null, product)}
 
-					<div className="card-content" id="card-visibility">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">Visibility</div>
-							</div>
-							<div className="right">
-								<i
-									className="adminlib-keyboard-arrow-down arrow-icon  icon"
-									onClick={() =>
-										toggleCard('card-visibility')
+					<Card
+						title={__('Visibility', 'multivendorx')}
+						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						toggle
+					>
+						{/* Product type */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>{__('Product type', 'multivendorx')}</label>
+								<SelectInput
+									name="type"
+									options={typeOptions}
+									value={product.type}
+									onChange={(selected) =>
+										handleChange('type', selected.value)
 									}
-								></i>
+								/>
 							</div>
 						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										{__('Product type', 'multivendorx')}
-									</label>
-									<SelectInput
-										name="type"
-										options={typeOptions}
-										value={product.type}
-										onChange={(selected) =>
-											handleChange('type', selected.value)
-										}
-									/>
-								</div>
-							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<div className="checkbox-wrapper">
-										<div className="item">
-											<input
-												type="checkbox"
-												checked={product.virtual}
-												onChange={(e) =>
-													handleChange(
-														'virtual',
-														e.target.checked
-													)
-												}
-											/>
-											{__('Virtual', 'multivendorx')}
-										</div>
-										<div className="item">
-											<input
-												type="checkbox"
-												checked={product.downloadable}
-												onChange={(e) =>
-													handleChange(
-														'downloadable',
-														e.target.checked
-													)
-												}
-											/>
-											{__('Download', 'multivendorx')}
-										</div>
-									</div>
-								</div>
-								<div className="form-group">
-									<div className="checkbox-wrapper">
-										<div className="item">
-											<input
-												type="checkbox"
-												checked={product.virtual}
-												onChange={(e) =>
-													handleChange(
-														'virtual',
-														e.target.checked
-													)
-												}
-											/>
-											{__('Virtual', 'multivendorx')}
-										</div>
-										<div className="item">
-											<input
-												type="checkbox"
-												checked={product.downloadable}
-												onChange={(e) =>
-													handleChange(
-														'downloadable',
-														e.target.checked
-													)
-												}
-											/>
-											{__('Download', 'multivendorx')}
-										</div>
-									</div>
-								</div>
-							</div>
 
-							<div className="form-group-wrapper">
-								<div className="catalog-visibility">
-									Catalog Visibility:
-									<span className="catalog-visibility-value">
-										<b>
-											{
-												VISIBILITY_LABELS[
-													product.catalog_visibility
-												]
-											}{' '}
-										</b>
-									</span>
-									<span
-										className="admin-badge blue"
-										onClick={() =>
-											setIsEditingVisibility(true)
-										}
-									>
-										<i className="adminlib-edit"></i>
-									</span>
-								</div>
-							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									{isEditingVisibility && (
-										<>
-											<div className="form-group">
-												<RadioInput
-													name="catalog_visibility"
-													idPrefix="catalog_visibility"
-													type="radio"
-													wrapperClass="settings-form-group-radio"
-													inputWrapperClass="radio-basic-input-wrap"
-													inputClass="setting-form-input"
-													descClass="settings-metabox-description"
-													activeClass="radio-select-active"
-													radiSelectLabelClass="radio-label"
-													options={[
-														{
-															key: 'vs1',
-															value: 'visible',
-															label: 'Shop and search results',
-														},
-														{
-															key: 'vs2',
-															value: 'catalog',
-															label: 'Shop only',
-														},
-														{
-															key: 'vs3',
-															value: 'search',
-															label: 'Search results only',
-														},
-														{
-															key: 'vs4',
-															value: 'hidden',
-															label: 'Hidden',
-														},
-													]}
-													value={
-														product.catalog_visibility
-													}
-													onChange={(e) => {
-														handleChange(
-															'catalog_visibility',
-															e.target.value
-														);
-														setIsEditingVisibility(
-															false
-														); // auto-hide after change
-													}}
-												/>
-											</div>
-											<div className="form-group">
-												<label
-													onClick={() =>
-														setstarFill(
-															(prev) => !prev
-														)
-													}
-													style={{
-														cursor: 'pointer',
-													}}
-												>
-													<i
-														className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'}`}
-													></i>
-													{/* <input
+						{/* Virtual / Downloadable */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<div className="checkbox-wrapper">
+									<div className="item">
+										<input
 											type="checkbox"
-											checked={product.featured}
+											checked={product.virtual}
 											onChange={(e) =>
-												handleChange(
-													'featured',
-													e.target.value
-												)
+												handleChange('virtual', e.target.checked)
 											}
-										/> */}
-													This is a featured product
-												</label>
-											</div>
-										</>
-									)}
+										/>
+										{__('Virtual', 'multivendorx')}
+									</div>
+
+									<div className="item">
+										<input
+											type="checkbox"
+											checked={product.downloadable}
+											onChange={(e) =>
+												handleChange('downloadable', e.target.checked)
+											}
+										/>
+										{__('Download', 'multivendorx')}
+									</div>
 								</div>
 							</div>
+						</div>
 
+						{/* Catalog visibility summary */}
+						<div className="form-group-wrapper">
+							<div className="catalog-visibility">
+								{__('Catalog Visibility:', 'multivendorx')}
+								<span className="catalog-visibility-value">
+									<b>{VISIBILITY_LABELS[product.catalog_visibility]}</b>
+								</span>
+								<span
+									className="admin-badge blue"
+									onClick={() => setIsEditingVisibility(true)}
+								>
+									<i className="adminlib-edit" />
+								</span>
+							</div>
+						</div>
+
+						{/* Edit catalog visibility */}
+						{isEditingVisibility && (
 							<div className="form-group-wrapper">
 								<div className="form-group">
-									<label>Status</label>
-
-									<ToggleSetting
-										wrapperClass="setting-form-input"
+									<RadioInput
+										name="catalog_visibility"
+										idPrefix="catalog_visibility"
+										type="radio"
+										wrapperClass="settings-form-group-radio"
+										inputWrapperClass="radio-basic-input-wrap"
+										inputClass="setting-form-input"
 										descClass="settings-metabox-description"
+										activeClass="radio-select-active"
+										radiSelectLabelClass="radio-label"
 										options={[
-											{
-												key: 'draft',
-												value: 'draft',
-												label: __(
-													'Draft',
-													'multivendorx'
-												),
-											},
-											{
-												key: 'publish',
-												value: 'publish',
-												label: __(
-													'Published',
-													'multivendorx'
-												),
-											},
-											{
-												key: 'pending',
-												value: 'pending',
-												label: __(
-													'Pending Review',
-													'multivendorx'
-												),
-											},
+											{ key: 'vs1', value: 'visible', label: 'Shop and search results' },
+											{ key: 'vs2', value: 'catalog', label: 'Shop only' },
+											{ key: 'vs3', value: 'search', label: 'Search results only' },
+											{ key: 'vs4', value: 'hidden', label: 'Hidden' },
 										]}
-										value={product.status}
-										onChange={(value) =>
-											handleChange('status', value)
-										}
+										value={product.catalog_visibility}
+										onChange={(e) => {
+											handleChange('catalog_visibility', e.target.value);
+											setIsEditingVisibility(false);
+										}}
 									/>
 								</div>
-							</div>
-							<div className="form-group-wrapper">
+
 								<div className="form-group">
-									{product.status === 'publish' && (
-										<label htmlFor="product-name">
-											{__(
-												`Published on Dec 16, 2025`,
-												'multivendorx'
-											)}
-										</label>
-									)}
-
-									{product.status === 'pending' && (
-										<>
-											<label htmlFor="product-name">
-												{__(
-													`Published on`,
-													'multivendorx'
-												)}
-											</label>
-											<div className="date-field-wrapper">
-												{product.date_created && (
-													<>
-														<CalendarInput
-															wrapperClass="calendar-wrapper"
-															inputClass="calendar-input"
-															value={
-																product.date_created?.split(
-																	'T'
-																)[0] || ''
-															}
-															onChange={(
-																date: any
-															) => {
-																const dateStr =
-																	date?.toString();
-
-																setProduct(
-																	(prev) => {
-																		const oldTime =
-																			prev.date_created?.split(
-																				'T'
-																			)[1] ||
-																			'00:00:00';
-																		return {
-																			...prev,
-																			date_created: `${dateStr}T${oldTime}`,
-																		};
-																	}
-																);
-															}}
-															format="YYYY-MM-DD"
-														/>
-
-														<BasicInput
-															wrapperClass="form-group-wrapper"
-															type="time"
-															id="published-time"
-															name="published_time"
-															value={
-																product.date_created
-																	?.split(
-																		'T'
-																	)[1]
-																	?.slice(
-																		0,
-																		5
-																	) || ''
-															}
-															onChange={(
-																e: any
-															) => {
-																const newTime =
-																	e.target
-																		.value;
-
-																setProduct(
-																	(prev) => {
-																		const oldDate =
-																			prev.date_created?.split(
-																				'T'
-																			)[0] ||
-																			'';
-																		return {
-																			...prev,
-																			date_created: `${oldDate}T${newTime}:00`,
-																		};
-																	}
-																);
-															}}
-														/>
-													</>
-												)}
-											</div>
-										</>
-									)}
+									<label
+										onClick={() => setstarFill((prev) => !prev)}
+										style={{ cursor: 'pointer' }}
+									>
+										<i
+											className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'
+												}`}
+										/>
+										{__('This is a featured product', 'multivendorx')}
+									</label>
 								</div>
 							</div>
-						</div>
-					</div>
+						)}
 
-					<div className="card-content" id="card-product-category">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">Category</div>
+						{/* Status */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>{__('Status', 'multivendorx')}</label>
+								<ToggleSetting
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									options={[
+										{ key: 'draft', value: 'draft', label: __('Draft', 'multivendorx') },
+										{ key: 'publish', value: 'publish', label: __('Published', 'multivendorx') },
+										{ key: 'pending', value: 'pending', label: __('Pending Review', 'multivendorx') },
+									]}
+									value={product.status}
+									onChange={(value) => handleChange('status', value)}
+								/>
 							</div>
-							<div className="right">
-								<i
-									className="adminlib-keyboard-arrow-down arrow-icon  icon"
-									onClick={() =>
-										toggleCard('card-product-category')
-									}
-								></i>
+						</div>
+
+						{/* Publish date */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								{product.status === 'publish' && (
+									<label>{__('Published on Dec 16, 2025', 'multivendorx')}</label>
+								)}
+
+								{product.status === 'pending' && (
+									<>
+										<label>{__('Published on', 'multivendorx')}</label>
+
+										<div className="date-field-wrapper">
+											{product.date_created && (
+												<>
+													<CalendarInput
+														wrapperClass="calendar-wrapper"
+														inputClass="calendar-input"
+														value={product.date_created.split('T')[0]}
+														onChange={(date: any) => {
+															const dateStr = date?.toString();
+															setProduct((prev) => ({
+																...prev,
+																date_created: `${dateStr}T${prev.date_created?.split('T')[1] || '00:00:00'
+																	}`,
+															}));
+														}}
+														format="YYYY-MM-DD"
+													/>
+
+													<BasicInput
+														type="time"
+														value={
+															product.date_created.split('T')[1]?.slice(0, 5) || ''
+														}
+														onChange={(e: any) => {
+															const newTime = e.target.value;
+															setProduct((prev) => ({
+																...prev,
+																date_created: `${prev.date_created?.split('T')[0]}T${newTime}:00`,
+															}));
+														}}
+													/>
+												</>
+											)}
+										</div>
+									</>
+								)}
 							</div>
 						</div>
-						<div className="card-body">
-							{appLocalizer.settings_databases_value[
-								'product-preferencess'
-							]?.category_selection_method == 'yes' ? (
-								<>
-									<div className="category-breadcrumb-wrapper">
-										<div className="category-breadcrumb">
-											{printPath()}
-										</div>
-										{(selectedCat ||
-											selectedSub ||
-											selectedChild) && (
-											<button
-												onClick={resetSelection}
-												className="admin-btn btn-red"
-											>
-												Reset
-											</button>
-										)}
-									</div>
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<div
-												className="category-wrapper template2"
-												ref={wrapperRef}
-											>
-												<ul className="settings-form-group-radio">
-													{treeData.map((cat) => (
-														<React.Fragment
-															key={cat.id}
-														>
-															{/* CATEGORY */}
-															<li
-																className={`category ${
-																	selectedCat ===
-																	cat.id
-																		? 'radio-select-active'
-																		: ''
-																}`}
-																style={{
-																	display:
-																		selectedCat ===
-																			null ||
-																		selectedCat ===
-																			cat.id
-																			? 'block'
-																			: 'none',
-																}}
-																onClick={() =>
-																	handleCategoryClick(
-																		cat.id
-																	)
-																}
-															>
-																<label>
-																	{cat.name}
-																</label>
-															</li>
+					</Card>
 
-															{/* CATEGORY CHILDREN */}
-															{selectedCat ===
-																cat.id &&
-																cat.children
-																	?.length >
-																	0 && (
-																	<ul className="settings-form-group-radio">
-																		{cat.children.map(
-																			(
-																				sub
-																			) => (
-																				<React.Fragment
-																					key={
-																						sub.id
-																					}
-																				>
-																					{/* SUB CATEGORY */}
-																					<li
-																						className={`sub-category ${
-																							selectedSub ===
-																							sub.id
-																								? 'radio-select-active'
-																								: ''
-																						}`}
-																						style={{
-																							display:
-																								!selectedSub ||
-																								selectedSub ===
-																									sub.id
-																									? 'block'
-																									: 'none',
-																						}}
-																						onClick={() =>
-																							handleSubClick(
-																								sub.id
-																							)
-																						}
-																					>
-																						<label>
-																							{
-																								sub.name
-																							}
-																						</label>
-																					</li>
-
-																					{/* CHILDREN */}
-																					{selectedSub ===
-																						sub.id &&
-																						sub
-																							.children
-																							?.length >
-																							0 && (
-																							<ul className="settings-form-group-radio">
-																								{sub.children.map(
-																									(
-																										child
-																									) => (
-																										<li
-																											key={
-																												child.id
-																											}
-																											className={`sub-category ${
-																												selectedChild ===
-																												child.id
-																													? 'radio-select-active'
-																													: ''
-																											}`}
-																											style={{
-																												display:
-																													!selectedChild ||
-																													selectedChild ===
-																														child.id
-																														? 'block'
-																														: 'none',
-																											}}
-																											onClick={() =>
-																												handleChildClick(
-																													child.id
-																												)
-																											}
-																										>
-																											<label>
-																												{
-																													child.name
-																												}
-																											</label>
-																										</li>
-																									)
-																								)}
-																							</ul>
-																						)}
-																				</React.Fragment>
-																			)
-																		)}
-																	</ul>
-																)}
-														</React.Fragment>
-													))}
-												</ul>
-											</div>
-										</div>
+					<Card
+						title={__('Category', 'multivendorx')}
+						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						toggle
+					>
+						{appLocalizer.settings_databases_value['product-preferencess']
+							?.category_selection_method === 'yes' ? (
+							<>
+								{/* Breadcrumb */}
+								<div className="category-breadcrumb-wrapper">
+									<div className="category-breadcrumb">
+										{printPath()}
 									</div>
-								</>
-							) : (
+
+									{(selectedCat || selectedSub || selectedChild) && (
+										<button
+											onClick={resetSelection}
+											className="admin-btn btn-red"
+										>
+											{__('Reset', 'multivendorx')}
+										</button>
+									)}
+								</div>
+
+								{/* Category tree (custom flow) */}
 								<div className="form-group-wrapper">
 									<div className="form-group">
-										<CategoryTree
-											categories={categories}
-											selectedCats={selectedCats}
-											toggleCategory={toggleCategory}
-										/>
-									</div>
-								</div>
-							)}
-						</div>
-					</div>
-
-					<div className="card-content" id="card-product-category">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">Product tag</div>
-							</div>
-							<div className="right">
-								<i
-									className="adminlib-keyboard-arrow-down arrow-icon  icon"
-									onClick={() =>
-										toggleCard('card-product-category')
-									}
-								></i>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<div className="tag-list">
-										{product.tags?.map((tag) => (
-											<span
-												className="admin-badge blue"
-												key={tag.id}
-											>
-												{tag.name}
-												<span
-													onClick={() =>
-														setProduct((prev) => ({
-															...prev,
-															tags: prev.tags.filter(
-																(t) =>
-																	t.name !==
-																	tag.name
-															),
-														}))
-													}
-												>
-													<i className="delete-icon adminlib-delete"></i>
-												</span>
-											</span>
-										))}
-									</div>
-
-									<div className="dropdown-field">
-										<input
-											type="text"
-											value={tagInput}
-											onChange={(e) =>
-												handleTagInput(e.target.value)
-											}
-											onKeyDown={(e) =>
-												e.key === 'Enter' &&
-												addTag(tagInput)
-											}
-											placeholder="Type tag…"
-											className="basic-input dropdown-input"
-										/>
-
-										<button
-											className="admin-btn btn-green"
-											onClick={() => addTag(tagInput)}
+										<div
+											className="category-wrapper template2"
+											ref={wrapperRef}
 										>
-										<i className="adminlib-plus"></i>	Add
-										</button>
-
-										{suggestions.length > 0 && (
-											<div className="input-dropdown">
-												<ul>
-													{suggestions.map((tag) => (
+											<ul className="settings-form-group-radio">
+												{treeData.map((cat) => (
+													<React.Fragment key={cat.id}>
+														{/* Category */}
 														<li
-															key={
-																tag.id ||
-																tag.name
-															}
-															className="dropdown-item"
-															// onClick={() =>
-															//     addTag(tag)
-															// }
-															onMouseDown={() =>
-																addTag(tag)
+															className={`category ${selectedCat === cat.id
+																	? 'radio-select-active'
+																	: ''
+																}`}
+															style={{
+																display:
+																	selectedCat === null ||
+																		selectedCat === cat.id
+																		? 'block'
+																		: 'none',
+															}}
+															onClick={() =>
+																handleCategoryClick(cat.id)
 															}
 														>
-															{tag.name}
+															<label>{cat.name}</label>
 														</li>
-													))}
-												</ul>
-											</div>
-										)}
+
+														{/* Sub categories */}
+														{selectedCat === cat.id &&
+															cat.children?.length > 0 && (
+																<ul className="settings-form-group-radio">
+																	{cat.children.map((sub) => (
+																		<React.Fragment key={sub.id}>
+																			<li
+																				className={`sub-category ${selectedSub === sub.id
+																						? 'radio-select-active'
+																						: ''
+																					}`}
+																				style={{
+																					display:
+																						!selectedSub ||
+																							selectedSub === sub.id
+																							? 'block'
+																							: 'none',
+																				}}
+																				onClick={() =>
+																					handleSubClick(sub.id)
+																				}
+																			>
+																				<label>{sub.name}</label>
+																			</li>
+
+																			{/* Child categories */}
+																			{selectedSub === sub.id &&
+																				sub.children?.length > 0 && (
+																					<ul className="settings-form-group-radio">
+																						{sub.children.map((child) => (
+																							<li
+																								key={child.id}
+																								className={`sub-category ${selectedChild === child.id
+																										? 'radio-select-active'
+																										: ''
+																									}`}
+																								style={{
+																									display:
+																										!selectedChild ||
+																											selectedChild === child.id
+																											? 'block'
+																											: 'none',
+																								}}
+																								onClick={() =>
+																									handleChildClick(child.id)
+																								}
+																							>
+																								<label>{child.name}</label>
+																							</li>
+																						))}
+																					</ul>
+																				)}
+																		</React.Fragment>
+																	))}
+																</ul>
+															)}
+													</React.Fragment>
+												))}
+											</ul>
+										</div>
 									</div>
+								</div>
+							</>
+						) : (
+							/* Default category tree */
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<CategoryTree
+										categories={categories}
+										selectedCats={selectedCats}
+										toggleCategory={toggleCategory}
+									/>
+								</div>
+							</div>
+						)}
+					</Card>
+
+					<Card
+						title="Product tag"
+						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						toggle={true} // enable collapse/expand
+					>
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<div className="tag-list">
+									{product.tags?.map((tag) => (
+										<span className="admin-badge blue" key={tag.id}>
+											{tag.name}
+											<span
+												onClick={() =>
+													setProduct((prev) => ({
+														...prev,
+														tags: prev.tags.filter((t) => t.name !== tag.name),
+													}))
+												}
+											>
+												<i className="delete-icon adminlib-delete"></i>
+											</span>
+										</span>
+									))}
+								</div>
+
+								<div className="dropdown-field">
+									<input
+										type="text"
+										value={tagInput}
+										onChange={(e) => handleTagInput(e.target.value)}
+										onKeyDown={(e) => e.key === 'Enter' && addTag(tagInput)}
+										placeholder="Type tag…"
+										className="basic-input dropdown-input"
+									/>
+
+									<button
+										className="admin-btn btn-green"
+										onClick={() => addTag(tagInput)}
+									>
+										<i className="adminlib-plus"></i> Add
+									</button>
+
+									{suggestions.length > 0 && (
+										<div className="input-dropdown">
+											<ul>
+												{suggestions.map((tag) => (
+													<li
+														key={tag.id || tag.name}
+														className="dropdown-item"
+														onMouseDown={() => addTag(tag)}
+													>
+														{tag.name}
+													</li>
+												))}
+											</ul>
+										</div>
+									)}
 								</div>
 							</div>
 						</div>
-					</div>
+					</Card>
+
 					{/* image upload */}
-					<div className="card-content" id="card-image-upload">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">Upload image</div>
-							</div>
-							<div className="right">
-								<i
-									className="adminlib-keyboard-arrow-down arrow-icon icon"
-									onClick={() =>
-										toggleCard('card-image-upload')
-									}
-								></i>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Features Image
-									</label>
-									<div>
-										<div>
-											<FileInput
-												type="hidden"
-												imageSrc={
-													featuredImage?.thumbnail
-												}
-												openUploader="Select Featured Image"
-												buttonClass="admin-btn btn-purple"
-												onButtonClick={
-													openFeaturedUploader
-												}
-												onRemove={() =>
-													setFeaturedImage(null)
-												}
-												onReplace={openFeaturedUploader}
-											/>
-										</div>
-										<div className="buttons-wrapper">
-										{
-											applyFilters(
-												'product_image_enhancement',
-												null,
-												{
-												currentImage: featuredImage? featuredImage : null,
-												isFeaturedImage: true,
-												setImage: setFeaturedImage,
-												}
-											)
-										}
-										</div>
+					<Card
+						title="Upload image"
+						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						toggle
+					>
+						{/* Featured Image */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>Features Image</label>
+
+								<div>
+									<FileInput
+										type="hidden"
+										imageSrc={featuredImage?.thumbnail}
+										openUploader="Select Featured Image"
+										buttonClass="admin-btn btn-purple"
+										onButtonClick={openFeaturedUploader}
+										onRemove={() => setFeaturedImage(null)}
+										onReplace={openFeaturedUploader}
+									/>
+
+									<div className="buttons-wrapper">
+										{applyFilters('product_image_enhancement', null, {
+											currentImage: featuredImage ?? null,
+											isFeaturedImage: true,
+											setImage: setFeaturedImage,
+										})}
 									</div>
 								</div>
 							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Product gallery
-									</label>
-									<div>
-										<FileInput
-											type="hidden"
-											imageSrc={null}
-											openUploader="Add Gallery Image"
-											buttonClass="admin-btn btn-purple"
-											onButtonClick={
-												openGalleryUploader
-											}
-										/>
-									</div>
-									<div className="uploaded-image">
-										{galleryImages.map((img, index) => (
-											<div className="image" key={img.id}>
-												{/* <FileInput
-														type="hidden"
-														imageSrc={img.thumbnail}
-														openUploader="Replace Image"
-														buttonClass="admin-btn btn-purple"
-														onRemove={() => {
-															setGalleryImages(
-																galleryImages.filter(
-																	(i, idx) =>
-																		idx !==
-																		index
-																)
-															);
-														}}
-														onReplace={() =>
-															openGalleryUploader()
-														}
-													/> */}
-												<img src={img.thumbnail} alt="" />
-												<div className="buttons-wrapper">
-													{galleryImages.length > 0 &&
-														applyFilters(
-															'product_image_enhancement',
-															null,
-															{
-															currentImage: img,
-															isFeaturedImage: false,
-															setImage: setGalleryImages,
-															}
-														)
-													}
-												</div>
-											</div>
-										))}
-										<div className="buttons-wrapper">
-											{galleryImages.length == 0 &&
-												applyFilters(
-													'product_image_enhancement',
-													null,
-													{
-													currentImage: null,
+						</div>
+
+						{/* Gallery */}
+						<div className="form-group-wrapper">
+							<div className="form-group">
+								<label>Product gallery</label>
+
+								<FileInput
+									type="hidden"
+									imageSrc={null}
+									openUploader="Add Gallery Image"
+									buttonClass="admin-btn btn-purple"
+									onButtonClick={openGalleryUploader}
+								/>
+
+								<div className="uploaded-image">
+									{galleryImages.map((img, index) => (
+										<div className="image" key={img.id}>
+											<img src={img.thumbnail} alt="" />
+
+											<div className="buttons-wrapper">
+												{applyFilters('product_image_enhancement', null, {
+													currentImage: img,
 													isFeaturedImage: false,
 													setImage: setGalleryImages,
-													featuredImage: featuredImage ? featuredImage : null,
-													}
-												)
-											}
+												})}
+											</div>
 										</div>
-									</div>
+									))}
+
+									{galleryImages.length === 0 && (
+										<div className="buttons-wrapper">
+											{applyFilters('product_image_enhancement', null, {
+												currentImage: null,
+												isFeaturedImage: false,
+												setImage: setGalleryImages,
+												featuredImage: featuredImage ?? null,
+											})}
+										</div>
+									)}
 								</div>
 							</div>
 						</div>
-					</div>
+					</Card>
+
 				</div>
 			</div>
 		</>

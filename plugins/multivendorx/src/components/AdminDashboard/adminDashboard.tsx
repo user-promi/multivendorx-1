@@ -29,7 +29,7 @@ interface WPPlugin {
 import './adminDashboard.scss';
 import '../dashboard.scss';
 import { useEffect, useState } from 'react';
-import { getApiLink, sendApiResponse, SuccessNotice, useModules } from 'zyra';
+import { Card, getApiLink, sendApiResponse, SuccessNotice, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
@@ -126,8 +126,7 @@ const AdminDashboard = () => {
 			await checkPluginStatus(slug);
 
 			setSuccessMsg(
-				`Plugin "${slug}" ${
-					existingPlugin ? 'activated' : 'installed & activated'
+				`Plugin "${slug}" ${existingPlugin ? 'activated' : 'installed & activated'
 				} successfully!`
 			);
 		} catch (error) {
@@ -474,7 +473,7 @@ const AdminDashboard = () => {
 			icon: 'adminlib-module',
 			content: (
 				<>
-					<div className="card-wrapper column w-65">
+					<div className="card-wrapper column column-8">
 						<div className="card-content">
 							<div className="card-body">
 								<div className="pro-banner-wrapper">
@@ -503,8 +502,8 @@ const AdminDashboard = () => {
 											<div
 												className="admin-btn"
 												onClick={() =>
-													(window.location.href =
-														'?page=multivendorx#&tab=setup')
+												(window.location.href =
+													'?page=multivendorx#&tab=setup')
 												}
 											>
 												{__(
@@ -524,84 +523,45 @@ const AdminDashboard = () => {
 						</div>
 
 						{!appLocalizer.khali_dabba && (
-							<div className="card-content">
-								<div className="card-header">
-									<div className="left">
-										<div className="title">
-											{__(
-												'Build a professional marketplace',
-												'multivendorx'
-											)}
-											<span className="admin-badge blue">
-												{__(
-													'Starting at $299/year',
-													'multivendorx'
-												)}
-											</span>
-										</div>
-										<div className="des">
-											{__(
-												'Unlock advanced features and premium modules to create a marketplace that stands out.',
-												'multivendorx'
-											)}
-										</div>
-									</div>
-								</div>
-								<div className="card-body">
-									<div className="features-wrapper">
-										{featuresList.map((res, index) => (
-											<div
-												className="feature"
-												key={index}
-											>
-												<i
-													className={res.iconClass}
-												></i>
-												<div className="content">
-													<h3>
-														{__(
-															res.title,
-															'multivendorx'
-														)}
-													</h3>
-													<p>
-														{__(
-															res.desc,
-															'multivendorx'
-														)}
-													</p>
-												</div>
+							<Card
+								title={__('Build a professional marketplace', 'multivendorx')}
+								badge={<span className="admin-badge blue">{__('Starting at $299/year', 'multivendorx')}</span>}
+								desc={__(
+									'Unlock advanced features and premium modules to create a marketplace that stands out.',
+									'multivendorx'
+								)}
+							>
+								<div className="features-wrapper">
+									{featuresList.map((res, index) => (
+										<div className="feature" key={index}>
+											<i className={res.iconClass}></i>
+											<div className="content">
+												<h3>{__(res.title, 'multivendorx')}</h3>
+												<p>{__(res.desc, 'multivendorx')}</p>
 											</div>
-										))}
+										</div>
+									))}
+								</div>
+
+								<div className="pro-banner">
+									<div className="text">
+										{__('Join 8,000+ successful marketplace owners', 'multivendorx')}
+									</div>
+									<div className="des">
+										{__(
+											'Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.',
+											'multivendorx'
+										)}
 									</div>
 
-									<div className="pro-banner">
-										<div className="text">
-											{__(
-												'Join 8,000+ successful marketplace owners',
-												'multivendorx'
-											)}
-										</div>
-										<div className="des">
-											{__(
-												'Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.',
-												'multivendorx'
-											)}
-										</div>
+									{renderUpgradeButton(__('Upgrade Now', 'multivendorx'))}
 
-										{renderUpgradeButton(
-											__('Upgrade Now', 'multivendorx')
-										)}
-
-										<div className="des">
-											{__(
-												'15-day money-back guarantee',
-												'multivendorx'
-											)}
-										</div>
+									<div className="des">
+										{__('15-day money-back guarantee', 'multivendorx')}
 									</div>
 								</div>
-							</div>
+							</Card>
+
 						)}
 
 						<div className="card-wrapper">
@@ -637,7 +597,7 @@ const AdminDashboard = () => {
 													></i>
 
 													{!module.pro ||
-													appLocalizer.khali_dabba ? (
+														appLocalizer.khali_dabba ? (
 														<div
 															className="toggle-checkbox"
 															data-tour={`id-showcase-tour`}
@@ -687,259 +647,233 @@ const AdminDashboard = () => {
 					</div>
 
 					{/* Right Side */}
-					<div className="card-wrapper column w-35">
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__(
-											'Extend your website',
-											'multivendorx'
-										)}
-									</div>
-								</div>
-							</div>
-
-							<div className="card-body">
-								<div className="cards-wrapper plugin">
-									{pluginStatus[
-										'woocommerce-catalog-enquiry'
-									] ? (
-										<div className="cards">
-											<div className="header">
-												<img src={catalogx} alt="" />
-												<div className="tag">
-													<span className="admin-badge red">
-														<i className="adminlib-pro-tag"></i>{' '}
-														{__(
-															'Pro',
-															'multivendorx'
-														)}
-													</span>
-													<a
-														href="https://catalogx.com/pricing/"
-														target="_blank"
-													>
-														{__(
-															'Get Pro',
-															'multivendorx'
-														)}
-													</a>
-												</div>
-											</div>
-											<h3>
-												{__(
-													'CatalogX Pro',
-													'multivendorx'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Advanced product catalog with enhanced enquiry features and premium templates',
-													'multivendorx'
-												)}
-											</p>
-										</div>
-									) : (
-										<div className="cards">
-											<div className="header">
-												<img src={catalogx} alt="" />
-												<div className="tag">
-													<span className="admin-badge green">
-														{__(
-															'Free',
-															'multivendorx'
-														)}
-													</span>
-													<a
-														href="#"
-														onClick={(e) => {
-															e.preventDefault();
-															if (!installing) {
-																installOrActivatePlugin(
-																	'woocommerce-catalog-enquiry'
-																);
-															}
-														}}
-														style={{
-															pointerEvents:
-																installing
-																	? 'none'
-																	: 'auto',
-															opacity:
-																installing ===
-																'woocommerce-catalog-enquiry'
-																	? 0.6
-																	: 1,
-														}}
-													>
-														{installing ===
-														'woocommerce-catalog-enquiry'
-															? __(
-																	'Installing...',
-																	'multivendorx'
-																)
-															: __(
-																	'Install',
-																	'multivendorx'
-																)}
-													</a>
-												</div>
-											</div>
-											<h3>
-												{__('CatalogX', 'multivendorx')}
-											</h3>
-											<p>
-												{__(
-													'Turn your store into a product catalog with enquiry-based sales',
-													'multivendorx'
-												)}
-											</p>
-										</div>
-									)}
-
-									{pluginStatus[
-										'woocommerce-product-stock-alert'
-									] ? (
-										<div className="cards">
-											<div className="header">
-												<img src={notifima} alt="" />
-												<div className="tag">
-													<span className="admin-badge red">
-														<i className="adminlib-pro-tag"></i>{' '}
-														{__(
-															'Pro',
-															'multivendorx'
-														)}
-													</span>
-													<a
-														href="https://notifima.com/pricing/"
-														target="_blank"
-													>
-														{__(
-															'Get Pro',
-															'multivendorx'
-														)}
-													</a>
-												</div>
-											</div>
-											<h3>
-												{__(
-													'Notifima Pro',
-													'multivendorx'
-												)}
-											</h3>
-											<p>
-												{__(
-													'Advanced stock alerts, wishlist features, and premium notification system',
-													'multivendorx'
-												)}
-											</p>
-										</div>
-									) : (
-										<div className="cards">
-											<div className="header">
-												<img src={notifima} alt="" />
-												<div className="tag">
-													<span className="admin-badge green">
-														{__(
-															'Free',
-															'multivendorx'
-														)}
-													</span>
-													<a
-														href="#"
-														onClick={(e) => {
-															e.preventDefault();
-															if (!installing) {
-																installOrActivatePlugin(
-																	'woocommerce-product-stock-alert'
-																);
-															}
-														}}
-														style={{
-															pointerEvents:
-																installing
-																	? 'none'
-																	: 'auto',
-															opacity:
-																installing ===
-																'woocommerce-product-stock-alert'
-																	? 0.6
-																	: 1,
-														}}
-													>
-														{installing ===
-														'woocommerce-product-stock-alert'
-															? __(
-																	'Installing...',
-																	'multivendorx'
-																)
-															: __(
-																	'Install',
-																	'multivendorx'
-																)}
-													</a>
-												</div>
-											</div>
-											<h3>
-												{__('Notifima', 'multivendorx')}
-											</h3>
-											<p>
-												{__(
-													'Advanced stock alerts and wishlist features for WooCommerce',
-													'multivendorx'
-												)}
-											</p>
-										</div>
-									)}
-								</div>
-							</div>
-						</div>
-
-						{/* Quick Links */}
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__(
-											'Need help getting started?',
-											'multivendorx'
-										)}
-									</div>
-								</div>
-							</div>
-
-							<div className="card-body">
-								<div className="cards-wrapper quick-link">
-									{resources.map((res, index) => (
-										<div className="cards" key={index}>
-											<div className="header">
-												<i
-													className={`icon ${res.iconClass}`}
-												></i>
-												<a
-													href={res.href}
-													target="blank"
-												>
+					<div className="card-wrapper column column-4">
+						<Card title={__('Extend your website', 'multivendorx')}>
+							<div className="cards-wrapper plugin">
+								{pluginStatus[
+									'woocommerce-catalog-enquiry'
+								] ? (
+									<div className="cards">
+										<div className="header">
+											<img src={catalogx} alt="" />
+											<div className="tag">
+												<span className="admin-badge red">
+													<i className="adminlib-pro-tag"></i>{' '}
 													{__(
-														res.linkText,
+														'Pro',
 														'multivendorx'
 													)}
-													<i className="adminlib-external"></i>
+												</span>
+												<a
+													href="https://catalogx.com/pricing/"
+													target="_blank"
+												>
+													{__(
+														'Get Pro',
+														'multivendorx'
+													)}
 												</a>
 											</div>
-											<h3>
-												{__(res.title, 'multivendorx')}
-											</h3>
-											<p>
-												{__(res.desc, 'multivendorx')}
-											</p>
 										</div>
-									))}
-								</div>
+										<h3>
+											{__(
+												'CatalogX Pro',
+												'multivendorx'
+											)}
+										</h3>
+										<p>
+											{__(
+												'Advanced product catalog with enhanced enquiry features and premium templates',
+												'multivendorx'
+											)}
+										</p>
+									</div>
+								) : (
+									<div className="cards">
+										<div className="header">
+											<img src={catalogx} alt="" />
+											<div className="tag">
+												<span className="admin-badge green">
+													{__(
+														'Free',
+														'multivendorx'
+													)}
+												</span>
+												<a
+													href="#"
+													onClick={(e) => {
+														e.preventDefault();
+														if (!installing) {
+															installOrActivatePlugin(
+																'woocommerce-catalog-enquiry'
+															);
+														}
+													}}
+													style={{
+														pointerEvents:
+															installing
+																? 'none'
+																: 'auto',
+														opacity:
+															installing ===
+																'woocommerce-catalog-enquiry'
+																? 0.6
+																: 1,
+													}}
+												>
+													{installing ===
+														'woocommerce-catalog-enquiry'
+														? __(
+															'Installing...',
+															'multivendorx'
+														)
+														: __(
+															'Install',
+															'multivendorx'
+														)}
+												</a>
+											</div>
+										</div>
+										<h3>
+											{__('CatalogX', 'multivendorx')}
+										</h3>
+										<p>
+											{__(
+												'Turn your store into a product catalog with enquiry-based sales',
+												'multivendorx'
+											)}
+										</p>
+									</div>
+								)}
+
+								{pluginStatus[
+									'woocommerce-product-stock-alert'
+								] ? (
+									<div className="cards">
+										<div className="header">
+											<img src={notifima} alt="" />
+											<div className="tag">
+												<span className="admin-badge red">
+													<i className="adminlib-pro-tag"></i>{' '}
+													{__(
+														'Pro',
+														'multivendorx'
+													)}
+												</span>
+												<a
+													href="https://notifima.com/pricing/"
+													target="_blank"
+												>
+													{__(
+														'Get Pro',
+														'multivendorx'
+													)}
+												</a>
+											</div>
+										</div>
+										<h3>
+											{__(
+												'Notifima Pro',
+												'multivendorx'
+											)}
+										</h3>
+										<p>
+											{__(
+												'Advanced stock alerts, wishlist features, and premium notification system',
+												'multivendorx'
+											)}
+										</p>
+									</div>
+								) : (
+									<div className="cards">
+										<div className="header">
+											<img src={notifima} alt="" />
+											<div className="tag">
+												<span className="admin-badge green">
+													{__(
+														'Free',
+														'multivendorx'
+													)}
+												</span>
+												<a
+													href="#"
+													onClick={(e) => {
+														e.preventDefault();
+														if (!installing) {
+															installOrActivatePlugin(
+																'woocommerce-product-stock-alert'
+															);
+														}
+													}}
+													style={{
+														pointerEvents:
+															installing
+																? 'none'
+																: 'auto',
+														opacity:
+															installing ===
+																'woocommerce-product-stock-alert'
+																? 0.6
+																: 1,
+													}}
+												>
+													{installing ===
+														'woocommerce-product-stock-alert'
+														? __(
+															'Installing...',
+															'multivendorx'
+														)
+														: __(
+															'Install',
+															'multivendorx'
+														)}
+												</a>
+											</div>
+										</div>
+										<h3>
+											{__('Notifima', 'multivendorx')}
+										</h3>
+										<p>
+											{__(
+												'Advanced stock alerts and wishlist features for WooCommerce',
+												'multivendorx'
+											)}
+										</p>
+									</div>
+								)}
 							</div>
-						</div>
+						</Card>
+
+						{/* Quick Links */}
+						<Card title={__('Need help getting started?', 'multivendorx')}>
+							<div className="cards-wrapper quick-link">
+								{resources.map((res, index) => (
+									<div className="cards" key={index}>
+										<div className="header">
+											<i
+												className={`icon ${res.iconClass}`}
+											></i>
+											<a
+												href={res.href}
+												target="blank"
+											>
+												{__(
+													res.linkText,
+													'multivendorx'
+												)}
+												<i className="adminlib-external"></i>
+											</a>
+										</div>
+										<h3>
+											{__(res.title, 'multivendorx')}
+										</h3>
+										<p>
+											{__(res.desc, 'multivendorx')}
+										</p>
+									</div>
+								))}
+							</div>
+						</Card>
 					</div>
 				</>
 			),
@@ -950,94 +884,76 @@ const AdminDashboard = () => {
 			icon: 'adminlib-pros-and-cons',
 			content: (
 				<>
-					<div className="card-wrapper w-65">
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__(
-											'Free vs Pro comparison',
-											'multivendorx'
-										)}
-									</div>
-									<div className="des">
-										{__(
-											'See what you get with MultiVendorX Pro',
-											'multivendorx'
-										)}
-									</div>
-								</div>
-								<div className="right">
-									<a
-										href="https://multivendorx.com/pricing/"
-										className="admin-btn btn-purple"
-									>
-										{__(
-											'Get Pro Access Today!',
-											'multivendorx'
-										)}
-										<i className="adminlib-arrow-right icon-pro-btn"></i>
-									</a>
-								</div>
+					<div className="card-wrapper column-8">
+						<Card
+							title={__('Free vs Pro comparison', 'multivendorx')}
+							desc={__('See what you get with MultiVendorX Pro', 'multivendorx')}
+							action={
+								<a
+									href="https://multivendorx.com/pricing/"
+									className="admin-btn btn-purple"
+								>
+									{__('Get Pro Access Today!', 'multivendorx')}
+									<i className="adminlib-arrow-right icon-pro-btn"></i>
+								</a>
+							}
+						>
+							<div id="free-vs-pro" className="free-vs-pro">
+								{sections.map((section, idx) => (
+									<table key={idx}>
+										<thead>
+											<tr>
+												<td>
+													{__(
+														section.title,
+														'multivendorx'
+													)}
+												</td>
+												<td>
+													{__(
+														'Free',
+														'multivendorx'
+													)}
+												</td>
+												<td>
+													{__(
+														'Pro',
+														'multivendorx'
+													)}
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+											{section.features.map(
+												(feature, i) => (
+													<tr key={i}>
+														<td>
+															{__(
+																feature.name,
+																'multivendorx'
+															)}
+														</td>
+														<td>
+															{renderCell(
+																feature.free
+															)}
+														</td>
+														<td>
+															{renderCell(
+																feature.pro
+															)}
+														</td>
+													</tr>
+												)
+											)}
+										</tbody>
+									</table>
+								))}
 							</div>
-							<div className="card-body">
-								<div id="free-vs-pro" className="free-vs-pro">
-									{sections.map((section, idx) => (
-										<table key={idx}>
-											<thead>
-												<tr>
-													<td>
-														{__(
-															section.title,
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Free',
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Pro',
-															'multivendorx'
-														)}
-													</td>
-												</tr>
-											</thead>
-											<tbody>
-												{section.features.map(
-													(feature, i) => (
-														<tr key={i}>
-															<td>
-																{__(
-																	feature.name,
-																	'multivendorx'
-																)}
-															</td>
-															<td>
-																{renderCell(
-																	feature.free
-																)}
-															</td>
-															<td>
-																{renderCell(
-																	feature.pro
-																)}
-															</td>
-														</tr>
-													)
-												)}
-											</tbody>
-										</table>
-									))}
-								</div>
-							</div>
-						</div>
+						</Card>
 					</div>
 
-					<div className="card-wrapper w-35">
+					<div className="card-wrapper column-4">
 						<div className="card-content">
 							<div className="card-body">
 								<div className="right-pro-banner">
@@ -1145,11 +1061,10 @@ const AdminDashboard = () => {
 									{tabs.map((tab) => (
 										<div
 											key={tab.id}
-											className={`title ${
-												activeTab === tab.id
-													? 'active'
-													: ''
-											}`}
+											className={`title ${activeTab === tab.id
+												? 'active'
+												: ''
+												}`}
 											onClick={() => setActiveTab(tab.id)}
 										>
 											<p>

@@ -91,7 +91,7 @@ const AdditionalInformation = () => {
 			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
-				<div className="card-wrapper w-65">
+				<div className="card-wrapper column-8">
 					{/* Message to Buyer */}
 					<div className="card-content">
 						<div className="card-title">

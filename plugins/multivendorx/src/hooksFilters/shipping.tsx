@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { addFilter } from '@wordpress/hooks';
-import { BasicInput, SelectInput } from 'zyra';
+import { BasicInput, Card, SelectInput } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 const ShippingCard = ({ product, handleChange }) => {
 	const [shippingClasses, setShippingClasses] = useState([]);
@@ -34,91 +35,87 @@ const ShippingCard = ({ product, handleChange }) => {
 	};
 
 	return (
-		<div className="card-content" id="card-shipping">
-			<div className="card-header">
-				<div className="left">
-					<div className="title">Shipping</div>
+		<Card
+			title={__('Shipping', 'multivendorx')}
+			iconName="adminlib-pagination-right-arrow icon"
+			toggle
+		>
+			{/* Weight & Shipping class */}
+			<div className="form-group-wrapper">
+				<div className="form-group">
+					<label>
+						{__('Weight', 'multivendorx')} ({appLocalizer.weight_unit})
+					</label>
+
+					<BasicInput
+						name="weight"
+						value={product.weight}
+						onChange={(e) =>
+							handleChange('weight', e.target.value)
+						}
+					/>
 				</div>
 
-				<div className="right">
-					<i
-						className="adminlib-pagination-right-arrow icon"
-						onClick={() => toggleCard('card-shipping')}
-					></i>
-				</div>
-			</div>
-			<div className="card-body">
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						<label>Weight ({appLocalizer.weight_unit})</label>
+				<div className="form-group">
+					<label>{__('Shipping classes', 'multivendorx')}</label>
 
-						<BasicInput
-							name="weight"
-							value={product.weight}
-							onChange={(e) =>
-								handleChange('weight', e.target.value)
-							}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label>Shipping classes</label>
-
-						<SelectInput
-							name="shipping_class"
-							options={shippingClasses}
-							value={product.shipping_class}
-							onChange={(selected) =>
-								handleChange('shipping_class', selected.value)
-							}
-						/>
-					</div>
-				</div>
-
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						<label>
-							Dimensions ({appLocalizer.dimension_unit})
-						</label>
-
-						<BasicInput
-							name="product_length"
-							value={product.product_length}
-							placeholder="Length"
-							onChange={(e) =>
-								handleChange('product_length', e.target.value)
-							}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label></label>
-
-						<BasicInput
-							name="product_width"
-							value={product.product_width}
-							placeholder="Width"
-							onChange={(e) =>
-								handleChange('product_width', e.target.value)
-							}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label></label>
-
-						<BasicInput
-							name="product_height"
-							value={product.product_height}
-							placeholder="Height"
-							onChange={(e) =>
-								handleChange('product_height', e.target.value)
-							}
-						/>
-					</div>
+					<SelectInput
+						name="shipping_class"
+						options={shippingClasses}
+						value={product.shipping_class}
+						onChange={(selected) =>
+							handleChange('shipping_class', selected.value)
+						}
+					/>
 				</div>
 			</div>
-		</div>
+
+			{/* Dimensions */}
+			<div className="form-group-wrapper">
+				<div className="form-group">
+					<label>
+						{__('Dimensions', 'multivendorx')} (
+						{appLocalizer.dimension_unit})
+					</label>
+
+					<BasicInput
+						name="product_length"
+						value={product.product_length}
+						placeholder={__('Length', 'multivendorx')}
+						onChange={(e) =>
+							handleChange('product_length', e.target.value)
+						}
+					/>
+				</div>
+
+				<div className="form-group">
+					<label></label>
+
+					<BasicInput
+						name="product_width"
+						value={product.product_width}
+						placeholder={__('Width', 'multivendorx')}
+						onChange={(e) =>
+							handleChange('product_width', e.target.value)
+						}
+					/>
+				</div>
+
+				<div className="form-group">
+					<label></label>
+
+					<BasicInput
+						name="product_height"
+						value={product.product_height}
+						placeholder={__('Height', 'multivendorx')}
+						onChange={(e) =>
+							handleChange('product_height', e.target.value)
+						}
+					/>
+				</div>
+			</div>
+		</Card>
+
 	);
 };
 

@@ -405,7 +405,7 @@ const AddOrder = () => {
 			</div>
 
 			<div className="container-wrapper">
-				<div className="card-wrapper w-65">
+				<div className="card-wrapper column-8">
 					<div className="card-content">
 						<div className="card-body">
 							<div className="table-wrapper view-order-table">
@@ -830,7 +830,7 @@ const AddOrder = () => {
 						</div>
 					</div>
 				</div>
-				<div className="card-wrapper column w-35">
+				<div className="card-wrapper column column-4">
 					<Card title={__('Payment Method', 'multivendorx')}>
 						<FormGroupWrapper>
 							<FormGroup label={__('Select Payment Method', 'multivendorx')} htmlFor="payment-method">

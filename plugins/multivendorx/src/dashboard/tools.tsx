@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { Card } from 'zyra';
 
 const Tools: React.FC = () => {
 	return (
@@ -16,31 +17,16 @@ const Tools: React.FC = () => {
 			</div>
 
 			<div className="card-wrapper">
-				<div className="card-content">
-					<div className="card-header">
-						<div className="left">
-							<div className="title">
-								{__(
-									'Vendor Dashboard transients',
-									'multivendorx'
-								)}
-							</div>
-							<div className="des">
-								{__(
-									'Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, nesciunt?',
-									'multivendorx'
-								)}
-							</div>
-						</div>
+				<Card
+					title={__('Vendor Dashboard transients', 'multivendorx')}
+					desc={__('Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, nesciunt?', 'multivendorx' )}
+				>
+					<div className="admin-btn btn-purple">
+						<i className="adminlib-delete"></i>
+						{__('Clear Transients', 'multivendorx')}
 					</div>
+				</Card>
 
-					<div className="card-body">
-						<div className="admin-btn btn-purple">
-							<i className="adminlib-delete"></i>
-							{__('Clear Transients', 'multivendorx')}
-						</div>
-					</div>
-				</div>
 			</div>
 		</>
 	);

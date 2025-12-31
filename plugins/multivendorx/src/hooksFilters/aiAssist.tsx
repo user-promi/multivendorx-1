@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { addFilter } from '@wordpress/hooks';
-import { getApiLink } from 'zyra';
+import { Card, getApiLink } from 'zyra';
 import axios from 'axios';
+import { __ } from '@wordpress/i18n';
 
 const AICard = () => {
 	const [aiSuggestions, setAiSuggestions] = useState({
@@ -12,7 +13,6 @@ const AICard = () => {
 	const [userPrompt, setUserPrompt] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
-	const [isCardOpen, setIsCardOpen] = useState(true);
 	const [hasSuggestions, setHasSuggestions] = useState(false);
 
 	// Function to update product fields (will be passed from parent)
@@ -141,10 +141,6 @@ const AICard = () => {
 		}
 	};
 
-	const toggleCard = () => {
-		setIsCardOpen(!isCardOpen);
-	};
-
 	// Reset suggestions when prompt is cleared
 	useEffect(() => {
 		if (!userPrompt.trim()) {
@@ -174,245 +170,201 @@ const AICard = () => {
 	}
 
 	return (
-		<div className="card-content" id="card-ai-assist">
-			<div className="card-header">
-				<div className="left">
-					<div className="title">AI assist</div>
-				</div>
-				<div className="right">
-					<i
-						className={`adminlib-pagination-right-arrow icon ${isCardOpen ? 'rotate' : ''
-							}`}
-						onClick={toggleCard}
-					></i>
-				</div>
-			</div>
+		<Card
+			title={__('AI assist', 'multivendorx')}
+			iconName="adminlib-pagination-right-arrow arrow-icon"
+			toggle
+		>
+			<div className="ai-assist-wrapper">
+				{/* Error */}
+				{error && (
+					<div className="error-message">
+						{error}
+					</div>
+				)}
 
-			{isCardOpen && (
-				<div className="card-body">
-					<div className="ai-assist-wrapper">
-						{error && (
-							<div
-								className="error-message"
-							>
-								{error}
-							</div>
-						)}
-						{/* Show message when waiting for input */}
-						{!hasSuggestions &&
-							!isLoading &&
-							!error &&
-							// userPrompt.trim() === '' &&
-							 (
-								<div className="assistant-welcome">
-									<div className="welcome-icon">
-										<i className="adminlib-ai"></i>
-									</div>
-									<div className="welcome-title">How can I help?</div>
-								</div>
-							)}
-
-						{/* Show loading state */}
-						{isLoading && (
-							<div className="assistant-loading">
-								<div className="loading-spinner"></div>
-								<p>Generating suggestions...</p>
-							</div>
-						)}
-						{/* Only show suggestions section if we have actual suggestions */}
-						{hasSuggestions && (
-							<div className="suggestions-wrapper">
-								{/* <div className="suggestions-title">
-									Suggestions
-									<small className="click-hint">
-										(Click any suggestion to apply it)
-									</small>
-								</div> */}
-								{groupedSuggestions.map((item, index) => (
-									<div className="box clickable-suggestion" key={`product-${index}`}>
-										<h4>Suggestions {index + 1}</h4>
-
-										{item.title && (
-											<div
-												className="title"
-												onClick={() =>
-													handleSuggestionClick(
-														'productName',
-														item.title
-													)
-												}
-											>	
-												Product Name: 
-												<span>{item.title}</span>
-												<i className="adminlib-arrow-right"></i>
-											</div>
-										)}
-
-										{item.shortDescription && (
-											<div
-												className="title"
-												onClick={() =>
-													handleSuggestionClick(
-														'productName',
-														item.shortDescription
-													)
-												}
-											>
-												Short Description: 
-												<span>{item.shortDescription}</span>
-												<i className="adminlib-arrow-right"></i>
-											</div>
-										)}
-
-										{item.description && (
-											<div
-												className="title"
-												onClick={() =>
-													handleSuggestionClick(
-														'productName',
-														item.description
-													)
-												}
-											>
-												Description:
-												<span>{item.description}</span>
-												<i className="adminlib-arrow-right"></i>
-											</div>
-										)}
-									</div>
-								))}
-								{/* Product Name Suggestions */}
-								{aiSuggestions.productName.length > 0 && (
-									<div className="suggestion-category">
-										<h4>Product Name Suggestions</h4>
-										{aiSuggestions.productName.map(
-											(suggestion, index) => (
-												<div
-													className="box clickable-suggestion"
-													key={`name-sugg-${index}`}
-													onClick={() =>
-														handleSuggestionClick(
-															'productName',
-															suggestion
-														)
-													}
-												>
-													<span>{suggestion}</span>
-													<i
-														className="adminlib-arrow-right"
-														style={{
-															marginLeft: '8px',
-															fontSize: '12px',
-														}}
-													></i>
-												</div>
-											)
-										)}
-									</div>
-								)}
-
-								{/* Product Short Description Suggestions */}
-								{aiSuggestions.shortDescription.length > 0 && (
-									<div className="suggestion-category">
-										<h4>
-											Product Short Description
-											Suggestions
-										</h4>
-										{aiSuggestions.shortDescription.map(
-											(suggestion, index) => (
-												<div
-													className="box clickable-suggestion"
-													key={`short-desc-sugg-${index}`}
-													onClick={() =>
-														handleSuggestionClick(
-															'shortDescription',
-															suggestion
-														)
-													}
-												>
-													<span>{suggestion}</span>
-													<i
-														className="adminlib-arrow-right"
-														style={{
-															marginLeft: '8px',
-															fontSize: '12px',
-														}}
-													></i>
-												</div>
-											)
-										)}
-									</div>
-								)}
-
-								{/* Product Description Suggestions */}
-								{aiSuggestions.productDescription.length >
-									0 && (
-										<div className="suggestion-category">
-											<h4>Product Description Suggestions</h4>
-											{aiSuggestions.productDescription.map(
-												(suggestion, index) => (
-													<div
-														className="box clickable-suggestion"
-														key={`desc-sugg-${index}`}
-														onClick={() =>
-															handleSuggestionClick(
-																'productDescription',
-																suggestion
-															)
-														}
-													>
-														<span>{suggestion}</span>
-														<i
-															className="adminlib-arrow-right"
-															style={{
-																marginLeft: '8px',
-																fontSize: '12px',
-															}}
-														></i>
-													</div>
-												)
-											)}
-										</div>
-									)}
-							</div>
-						)}
-
-						{/* Prompt Input Section */}
-						<div className="sender-wrapper">
-							<input
-								type="text"
-								placeholder="Write the prompt...'"
-								value={userPrompt}
-								onChange={(e) => setUserPrompt(e.target.value)}
-								onKeyPress={(e) => {
-									if (e.key === 'Enter' && !isLoading) {
-										handleSendPrompt();
-									}
-								}}
-								disabled={isLoading}
-							/>
-							<div className="icon-wrapper">
-								<i className="adminlib-mail"></i>
-								<i
-									className={`adminlib-send ${isLoading ? 'loading' : ''
-										}`}
-									onClick={
-										!isLoading
-											? handleSendPrompt
-											: undefined
-									}
-									style={{
-										cursor: isLoading
-											? 'not-allowed'
-											: 'pointer',
-									}}
-								></i>
-							</div>
+				{/* Welcome */}
+				{!hasSuggestions && !isLoading && !error && (
+					<div className="assistant-welcome">
+						<div className="welcome-icon">
+							<i className="adminlib-ai"></i>
+						</div>
+						<div className="welcome-title">
+							{__('How can I help?', 'multivendorx')}
 						</div>
 					</div>
+				)}
+
+				{/* Loading */}
+				{isLoading && (
+					<div className="assistant-loading">
+						<div className="loading-spinner"></div>
+						<p>{__('Generating suggestions...', 'multivendorx')}</p>
+					</div>
+				)}
+
+				{/* Suggestions */}
+				{hasSuggestions && (
+					<div className="suggestions-wrapper">
+						{groupedSuggestions.map((item, index) => (
+							<div
+								className="box clickable-suggestion"
+								key={`product-${index}`}
+							>
+								<h4>{__('Suggestions', 'multivendorx')} {index + 1}</h4>
+
+								{item.title && (
+									<div
+										className="title"
+										onClick={() =>
+											handleSuggestionClick(
+												'productName',
+												item.title
+											)
+										}
+									>
+										{__('Product Name:', 'multivendorx')}
+										<span>{item.title}</span>
+										<i className="adminlib-arrow-right"></i>
+									</div>
+								)}
+
+								{item.shortDescription && (
+									<div
+										className="title"
+										onClick={() =>
+											handleSuggestionClick(
+												'productName',
+												item.shortDescription
+											)
+										}
+									>
+										{__('Short Description:', 'multivendorx')}
+										<span>{item.shortDescription}</span>
+										<i className="adminlib-arrow-right"></i>
+									</div>
+								)}
+
+								{item.description && (
+									<div
+										className="title"
+										onClick={() =>
+											handleSuggestionClick(
+												'productName',
+												item.description
+											)
+										}
+									>
+										{__('Description:', 'multivendorx')}
+										<span>{item.description}</span>
+										<i className="adminlib-arrow-right"></i>
+									</div>
+								)}
+							</div>
+						))}
+
+						{/* Product Name */}
+						{aiSuggestions.productName.length > 0 && (
+							<div className="suggestion-category">
+								<h4>{__('Product Name Suggestions', 'multivendorx')}</h4>
+								{aiSuggestions.productName.map((suggestion, index) => (
+									<div
+										className="box clickable-suggestion"
+										key={`name-sugg-${index}`}
+										onClick={() =>
+											handleSuggestionClick(
+												'productName',
+												suggestion
+											)
+										}
+									>
+										<span>{suggestion}</span>
+										<i className="adminlib-arrow-right"></i>
+									</div>
+								))}
+							</div>
+						)}
+
+						{/* Short Description */}
+						{aiSuggestions.shortDescription.length > 0 && (
+							<div className="suggestion-category">
+								<h4>
+									{__('Product Short Description Suggestions', 'multivendorx')}
+								</h4>
+								{aiSuggestions.shortDescription.map((suggestion, index) => (
+									<div
+										className="box clickable-suggestion"
+										key={`short-desc-sugg-${index}`}
+										onClick={() =>
+											handleSuggestionClick(
+												'shortDescription',
+												suggestion
+											)
+										}
+									>
+										<span>{suggestion}</span>
+										<i className="adminlib-arrow-right"></i>
+									</div>
+								))}
+							</div>
+						)}
+
+						{/* Description */}
+						{aiSuggestions.productDescription.length > 0 && (
+							<div className="suggestion-category">
+								<h4>
+									{__('Product Description Suggestions', 'multivendorx')}
+								</h4>
+								{aiSuggestions.productDescription.map((suggestion, index) => (
+									<div
+										className="box clickable-suggestion"
+										key={`desc-sugg-${index}`}
+										onClick={() =>
+											handleSuggestionClick(
+												'productDescription',
+												suggestion
+											)
+										}
+									>
+										<span>{suggestion}</span>
+										<i className="adminlib-arrow-right"></i>
+									</div>
+								))}
+							</div>
+						)}
+					</div>
+				)}
+
+				{/* Prompt Input */}
+				<div className="sender-wrapper">
+					<input
+						type="text"
+						placeholder={__('Write the prompt...', 'multivendorx')}
+						value={userPrompt}
+						onChange={(e) => setUserPrompt(e.target.value)}
+						onKeyPress={(e) => {
+							if (e.key === 'Enter' && !isLoading) {
+								handleSendPrompt();
+							}
+						}}
+						disabled={isLoading}
+					/>
+
+					<div className="icon-wrapper">
+						<i className="adminlib-mail"></i>
+						<i
+							className={`adminlib-send ${isLoading ? 'loading' : ''
+								}`}
+							onClick={!isLoading ? handleSendPrompt : undefined}
+							style={{
+								cursor: isLoading ? 'not-allowed' : 'pointer',
+							}}
+						></i>
+					</div>
 				</div>
-			)}
-		</div>
+			</div>
+		</Card>
+
 	);
 };
 

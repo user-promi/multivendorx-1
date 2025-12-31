@@ -1,5 +1,6 @@
 import { addFilter } from '@wordpress/hooks';
-import { BasicInput, DynamicRowSetting } from 'zyra';
+import { BasicInput, Card, DynamicRowSetting } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 const Downloadable = ({ product, setProduct, handleChange }) => {
 	const downloadTemplate = {
@@ -91,87 +92,67 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 	};
 
 	return (
-		<div className="card-content" id="card-downloadable">
-			<div className="card-header">
-				<div className="left">
-					<div className="title">Downloadable</div>
+		<Card
+			title={__('Downloadable', 'multivendorx')}
+			iconName="adminlib-pagination-right-arrow arrow-icon"
+			toggle
+		>
+			<DynamicRowSetting
+				keyName="downloads"
+				template={downloadTemplate}
+				value={product.downloads}
+				addLabel={__('Add new', 'multivendorx')}
+				onChange={(rows) => {
+					const cleanedRows = rows.map(({ upload, ...rest }) => rest);
+
+					setProduct((prev) => ({
+						...prev,
+						downloads: cleanedRows,
+					}));
+				}}
+			/>
+
+			<div className="form-group-wrapper">
+				<div className="form-group">
+					<label htmlFor="product-name">
+						{__('Download limit', 'multivendorx')}
+					</label>
+
+					<BasicInput
+						name="download_limit"
+						type="number"
+						wrapperClass="setting-form-input"
+						value={product.download_limit}
+						onChange={(e) =>
+							handleChange(
+								'download_limit',
+								e.target.value
+							)
+						}
+					/>
 				</div>
-				<div className="right">
-					<i
-						className="adminlib-pagination-right-arrow  arrow-icon"
-						onClick={() => toggleCard('card-downloadable')}
-					></i>
-				</div>
-			</div>
-			<div className="card-body">
-				<DynamicRowSetting
-					keyName="downloads"
-					template={downloadTemplate}
-					value={product.downloads}
-					addLabel="Add new"
-					// onChange={(rows) => {
-					// 	setProduct((prev) => ({
-					// 		...prev,
-					// 		downloads: rows,
-					// 	}))
-					// }
-					// }
-					onChange={(rows) => {
-						const cleanedRows = rows.map(({ upload, ...rest }) => rest);
-					
-						setProduct((prev) => ({
-							...prev,
-							downloads: cleanedRows,
-						}));
-					}}
-					
 
-				// childrenRenderer={(row) => (
-				// 	<>
-				// 		<div
-				// 			className="admin-btn btn-purple"
-				// 			onClick={() => openMediaUploader(row.id)}
-				// 		>
-				// 			Upload file
-				// 		</div>
+				<div className="form-group">
+					<label htmlFor="product-name">
+						{__('Download expiry', 'multivendorx')}
+					</label>
 
-				// 		<div
-				// 			className="delete-icon adminlib-delete"
-				// 			onClick={() => removeDownloadableFile(row.id)}
-				// 		/>
-				// 	</>
-				// )}
-				/>
-
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						<label htmlFor="product-name">Download limit</label>
-						<BasicInput
-							name="download_limit"
-							type="number"
-							wrapperClass="setting-form-input"
-							value={product.download_limit}
-							onChange={(e) =>
-								handleChange('download_limit', e.target.value)
-							}
-						/>
-					</div>
-
-					<div className="form-group">
-						<label htmlFor="product-name">Download expiry</label>
-						<BasicInput
-							name="download_expiry"
-							type="number"
-							wrapperClass="setting-form-input"
-							value={product.download_expiry}
-							onChange={(e) =>
-								handleChange('download_expiry', e.target.value)
-							}
-						/>
-					</div>
+					<BasicInput
+						name="download_expiry"
+						type="number"
+						wrapperClass="setting-form-input"
+						value={product.download_expiry}
+						onChange={(e) =>
+							handleChange(
+								'download_expiry',
+								e.target.value
+							)
+						}
+					/>
 				</div>
 			</div>
-		</div>
+		</Card>
+
 	);
 };
 

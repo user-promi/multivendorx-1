@@ -164,7 +164,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 			<SuccessNotice message={successMsg} />
 
 			<div className="container-wrapper">
-				<div className="card-wrapper w-65">
+				<div className="card-wrapper column-8">
 					<div className="card-wrapper">
 						<div className="card-content">
 							<div className="card-header">
@@ -335,7 +335,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 					</div>
 				</div>
 				{/* Commission Amount */}
-				<div className="card-wrapper w-35">
+				<div className="card-wrapper column-4">
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">

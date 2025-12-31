@@ -1,11 +1,14 @@
 type FormGroupWrapperProps = {
   children: React.ReactNode;
-  className?: string; // optional additional classes
+  className?: string;
 };
 
-const FormGroupWrapper: React.FC<FormGroupWrapperProps> = ({ children, className }) => {
+const FormGroupWrapper: React.FC<FormGroupWrapperProps> = ({
+  children,
+  className = '',
+}) => {
   return (
-    <div className={`form-group-wrapper ${className ? className : ''}`}>
+    <div className={`form-group-wrapper ${className}`}>
       {children}
     </div>
   );

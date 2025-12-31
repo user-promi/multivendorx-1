@@ -24,7 +24,6 @@ const AdminButton: React.FC<AdminButtonProps> = ({ buttons, wrapperClass }) => {
     </button>
   ));
 
-  // Default wrapper class + optional alignment
   const wrapperClasses = `buttons-wrapper ${wrapperClass ? ` ${wrapperClass}` : ''}`;
 
   return <div className={wrapperClasses}>{renderedButtons}</div>;
