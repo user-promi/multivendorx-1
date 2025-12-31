@@ -5,6 +5,8 @@ const StoreCouponList = ({
 	store_id = '',
 	store_slug = '',
 	perPage = 10,
+	orderby = 'date',
+	order = 'DESC',
 }) => {
 	const [coupons, setCoupons] = useState([]);
 	const [page, setPage] = useState(1);
@@ -23,8 +25,10 @@ const StoreCouponList = ({
 					params: {
 						per_page: perPage,
 						page,
-						meta_key:'multivendorx_store_id',
-						value:store_id,
+						orderby,
+						order,
+						meta_key: 'multivendorx_store_id',
+						value: store_id,
 						store_slug,
 					},
 				}
@@ -35,7 +39,7 @@ const StoreCouponList = ({
 		} catch (error) {
 			console.error('Failed to load coupons:', error);
 		}
-	}, [page, perPage, store_id, store_slug]);
+	}, [page, perPage, store_id, store_slug, orderby, order]);
 
 	useEffect(() => {
 		fetchCoupons();
@@ -57,7 +61,7 @@ const StoreCouponList = ({
 			<div className="pagination">
 				<button
 					disabled={page === 1}
-					onClick={() => setPage(p => p - 1)}
+					onClick={() => setPage((p) => p - 1)}
 				>
 					Previous
 				</button>
@@ -68,7 +72,7 @@ const StoreCouponList = ({
 
 				<button
 					disabled={page >= totalPages}
-					onClick={() => setPage(p => p + 1)}
+					onClick={() => setPage((p) => p + 1)}
 				>
 					Next
 				</button>

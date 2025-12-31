@@ -5,7 +5,6 @@ import { render } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
 import StoreCouponList from './StoreCouponList';
 
-// Register block
 registerBlockType('multivendorx/marketplace-coupons', {
 	apiVersion: 2,
 	title: 'Store Coupons',
@@ -24,6 +23,14 @@ registerBlockType('multivendorx/marketplace-coupons', {
 		perPage: {
 			type: 'number',
 			default: 10,
+		},
+		orderby: {
+			type: 'string',
+			default: 'date',
+		},
+		order: {
+			type: 'string',
+			default: 'DESC',
 		},
 	},
 
@@ -56,6 +63,24 @@ registerBlockType('multivendorx/marketplace-coupons', {
 							value={attributes.perPage}
 							onChange={(value) =>
 								setAttributes({ perPage: parseInt(value, 10) || 10 })
+							}
+						/>
+
+						<TextControl
+							label="Order By"
+							help="date, id, title, code, modified"
+							value={attributes.orderby}
+							onChange={(value) =>
+								setAttributes({ orderby: value })
+							}
+						/>
+
+						<TextControl
+							label="Order"
+							help="ASC or DESC"
+							value={attributes.order}
+							onChange={(value) =>
+								setAttributes({ order: value })
 							}
 						/>
 					</PanelBody>
