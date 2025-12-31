@@ -431,7 +431,7 @@ class FrontendScripts {
 							'settings_databases_value' => $settings_databases_value,
 							'pages_list'               => $pages_array,
 							'pro_url'                  => esc_url( MULTIVENDORX_PRO_SHOP_URL ),
-							'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
+							'page_url'                 => admin_url( 'admin.php?page=multivendorx#&tab=dashboard' ),
 							'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
 							'tax'                      => MultiVendorX()->setting->get_setting( 'give_tax' ),
 							'taxes_enabled'            => get_option( Utill::WOO_SETTINGS['taxes'] ),

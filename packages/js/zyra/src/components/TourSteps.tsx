@@ -9,7 +9,7 @@ import { getApiLink } from '../utils/apiService';
 // Types
 interface AppLocalizer {
     enquiry_form_settings_url?: string;
-    module_page_url?: string;
+    page_url?: string;
     settings_page_url?: string;
     customization_settings_url?: string;
     site_url?: string;
@@ -99,7 +99,7 @@ const Tour: React.FC< TourProps > = ( { appLocalizer, steps, forceOpen } ) => {
             return;
         }
         const fetchTourState = async () => {
-            if ( window.location.href === appLocalizer.module_page_url ) {
+            if ( window.location.href === appLocalizer.page_url ) {
                 try {
                     const response = await axios.get(
                         getApiLink( appLocalizer, 'tour' ),
