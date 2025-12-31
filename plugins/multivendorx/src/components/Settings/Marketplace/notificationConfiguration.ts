@@ -89,11 +89,5 @@ export default {
 				},
 			],
 		},
-		{
-			key: 'email_section',
-			type: 'section',
-			hint: __('Order confirmation email for main and sub-orders', 'multivendorx'),
-		},
-		
 	],
 };
