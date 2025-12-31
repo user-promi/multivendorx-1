@@ -1,18 +1,18 @@
 export const getTourSteps = (appLocalizer: any) => [
 	{
-		selector: '[data-tour="appointment-showcase-tour"]',
-		placement: 'right',
+		selector: '.card-content',
+		placement: 'auto',
 		content: ({ navigateTo, finishTour }: any) => (
 			<div className="tour-box">
-				<h3>Store Commissions test from zyra</h3>
-				<h4>Manage your store commission settings here.</h4>
+				<h3>Dashboard</h3>
+				<h4>View and configure your disbursement settings here.</h4>
 
 				<div className="tour-footer">
 					<button
 						className="admin-btn btn-purple"
 						onClick={() =>
 							navigateTo(
-								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=general`,
 								1
 							)
 						}
@@ -30,13 +30,12 @@ export const getTourSteps = (appLocalizer: any) => [
 			</div>
 		),
 	},
-
 	{
-		selector: '.general-wrapper .menu-item.active-current-tab',
-		placement: 'auto',
+		selector: '.form-group:has(.settings-form-label[for="approve_store"])',
+		placement: 'right',
 		content: ({ navigateTo, finishTour }: any) => (
 			<div className="tour-box">
-				<h3>Disbursement</h3>
+				<h3>Store Configure</h3>
 				<h4>View and configure your disbursement settings here.</h4>
 
 				<div className="tour-footer">
@@ -44,7 +43,7 @@ export const getTourSteps = (appLocalizer: any) => [
 						className="admin-btn btn-purple"
 						onClick={() =>
 							navigateTo(
-								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=payment-integration`,
+								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
 								2
 							)
 						}
@@ -62,21 +61,20 @@ export const getTourSteps = (appLocalizer: any) => [
 			</div>
 		),
 	},
-
 	{
-		selector: undefined,
-		placement: 'auto',
+		selector: '.form-group:has(.settings-form-label[for="commission_type"])',
+		placement: 'right',
 		content: ({ navigateTo, finishTour }: any) => (
 			<div className="tour-box">
-				<h3>Payment Integration</h3>
-				<h4>Set up your payment integration settings here.</h4>
+				<h3>Marketplace commissions</h3>
+				<h4>View and configure your disbursement settings here.</h4>
 
 				<div className="tour-footer">
 					<button
 						className="admin-btn btn-purple"
 						onClick={() =>
 							navigateTo(
-								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-registration-form`,
+								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
 								3
 							)
 						}
@@ -94,21 +92,20 @@ export const getTourSteps = (appLocalizer: any) => [
 			</div>
 		),
 	},
-
 	{
-		selector: undefined,
-		placement: 'auto',
+		selector: '.form-group:has(.settings-form-label[for="commission_per_store_order"])',
+		placement: 'right',
 		content: ({ navigateTo, finishTour }: any) => (
 			<div className="tour-box">
-				<h3>Store Registration Form</h3>
-				<h4>Manage the registration form for new stores.</h4>
+				<h3>commission value</h3>
+				<h4>View and configure your disbursement settings here.</h4>
 
 				<div className="tour-footer">
 					<button
 						className="admin-btn btn-purple"
 						onClick={() =>
 							navigateTo(
-								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
+								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=disbursement`,
 								4
 							)
 						}
@@ -126,9 +123,39 @@ export const getTourSteps = (appLocalizer: any) => [
 			</div>
 		),
 	},
-
 	{
-		selector: undefined,
+		selector: '.form-group:has(.settings-form-label[for="disbursement_order_status"])',
+		placement: 'right',
+		content: ({ navigateTo, finishTour }: any) => (
+			<div className="tour-box">
+				<h3>order status</h3>
+				<h4>View and configure your disbursement settings here.</h4>
+
+				<div className="tour-footer">
+					<button
+						className="admin-btn btn-purple"
+						onClick={() =>
+							navigateTo(
+								`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
+								5
+							)
+						}
+					>
+						Next
+					</button>
+
+					<button
+						className="admin-btn btn-purple"
+						onClick={finishTour}
+					>
+						End Tour
+					</button>
+				</div>
+			</div>
+		),
+	},
+	{
+		selector: '[data-tour="appointment-showcase-tour"]',
 		placement: 'auto',
 		content: ({ finishTour }: any) => (
 			<div className="tour-box">
