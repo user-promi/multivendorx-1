@@ -122,6 +122,7 @@
 		"react-dom": "^19.2.1",
 		"react-leaflet": "^5.0.0",
 		"react-router-dom": "^7.10.1",
+		"react-select": "^5.10.2",
 		"react-simple-maps": "^3.0.0",
 		"recharts": "^3.5.1",
 		"ts-loader": "9.5.4",
