@@ -249,7 +249,7 @@ export default {
 						'Displays coupons created by a store along with their usage details.',
 						'multivendorx'
 					),
-					attributes: [
+					arguments: [
 						{
 							attribute: 'store_id',
 							description:
