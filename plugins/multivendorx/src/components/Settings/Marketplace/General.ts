@@ -149,22 +149,21 @@ export default {
 					arguments: [
 						{
 							attribute: 'orderby',
-							description:
-								'Decide how the store list is sorted',
-							accepted: 'name, category, registered (Default = registered)',
-							default: '[marketplace_stores orderby = "registered"]',
+							description: 'Decide how the store list is sorted.',
+							accepted: 'name, category, registered (Default: registered)',
+							default: '[marketplace_stores orderby="registered"]',
 						},
 						{
 							attribute: 'order',
-							description: 'Set sorting direction',
-							accepted: 'ASC, DESC (Default = ASC)',
-							default: '[marketplace_stores order = "DESC"]',
+							description: 'Set sorting direction.',
+							accepted: 'ASC, DESC (Default: ASC)',
+							default: '[marketplace_stores order="ASC"]',
 						},
 						{
 							attribute: 'perpage',
 							description: 'Set how many stores appear per page.',
-							accepted: 'Any number (Default = 12)',
-							default: '[marketplace_stores perpage = "12"]',
+							accepted: 'Any number (Default: 12)',
+							default: '[marketplace_stores perpage="12"]',
 						},
 					],
 				},
@@ -180,66 +179,115 @@ export default {
 						{
 							attribute: 'store',
 							description:
-								'Display products from a specific store. You can use Store ID, store slug, vendor email, or username. Leave empty to show products from all stores.',
-							accepted: 'store_id, store_name',
-							default: '[marketplace_products store_slug = "john-store" store_id = "1"]',
+								'Display products from a specific store using Store ID or Store Slug.',
+							accepted: 'store_id, store_slug',
+							default: '[marketplace_products store_id="1"]',
 						},
+					
 						{
 							attribute: 'perpage',
 							description: 'Set how many products appear per page.',
 							accepted: 'Any number (Default = 12)',
-							default: '[marketplace_products perPage = "12"]',
+							default: '[marketplace_products perPage="12"]',
 						},
+					
 						{
 							attribute: 'columns',
 							description: 'Decide how many products appear in one row.',
-							accepted: 'Any number (Default = 12)',
-							default: '[marketplace_products columns = "4"]',
-						}, 
-						{
-							attribute: 'featured',
-							description: 'Choose which type of products to display. Options: all, recent (new arrivals), featured, sale (discounted), top_rated, best_selling.',
-							accepted:
-								'featured (Default = featured)',
-							default: '[marketplace_products product_visibility = "featured"]',
+							accepted: 'Any number (Default = 4)',
+							default: '[marketplace_products columns="4"]',
 						},
+					
 						{
 							attribute: 'orderby',
-							description: 'Choose the field used for sorting when no preset order is selected.',
-							accepted: 'date, id, title, slug, menu_order, price, popularity, rating, modified (Default = title)',
+							description:
+								'Choose the field used for sorting products.',
+							accepted:
+								'title, date, price, popularity, rating, menu_order (Default = title)',
 							default: '[marketplace_products orderby="title"]',
-						},						
+						},
+					
 						{
 							attribute: 'order',
-							description: 'Set sorting direction',
+							description: 'Set sorting direction.',
 							accepted: 'ASC, DESC (Default = ASC)',
-							default: '[marketplace_products order= "ASC"]',
+							default: '[marketplace_products order="ASC"]',
 						},
+					
 						{
 							attribute: 'category',
 							description:
-								'Show products from specific categories. Enter category slugs separated by commas. Leave empty to include all categories.',
-							accepted: 'Category short names, separated by commas',
-							default: '[marketplace_products category= "clothing,shoes"]',
+								'Show products from specific categories. Use category slugs separated by commas.',
+							accepted: 'Comma-separated category slugs',
+							default: '[marketplace_products category="clothing,shoes"]',
 						},
+					
 						{
 							attribute: 'operator',
 							description:
-								'Define how selected categories should be matched.',
-							accepted: 'IN (Any of the), NOT IN (All of the), AND (None of the)',
-							default: '[marketplace_products category= "clothing,accessories" operator = "AND"]',
+								'Define how multiple categories should be matched.',
+							accepted: 'IN, NOT IN, AND (Default = IN)',
+							default:
+								'[marketplace_products category="clothing,shoes" operator="IN"]',
 						},
-					],
+					
+						{
+							attribute: 'product_visibility',
+							description:
+								'Filter products based on visibility status.',
+							accepted: 'visible, catalog, search, hidden',
+							default:
+								'[marketplace_products product_visibility="visible"]',
+						},
+					],					
 				},
 				{
-					key: 'store_coupons',
-					label: '[store_coupons]',
+					key: 'marketplace-coupons',
+					label: '[marketplace-coupons]',
 					name: 'Show store coupons',
 					desc: __(
-						'Displays coupons created by a store along with their usage details. Useful for stores to track coupon performance.',
+						'Displays coupons created by a store along with their usage details.',
 						'multivendorx'
 					),
-				},
+					arguments: [
+						{
+							attribute: 'store_id',
+							description:
+								'Display coupons from a specific store using the store ID.',
+							accepted: 'Store ID',
+							default: '[marketplace-coupons store_id="1"]',
+						},
+						{
+							attribute: 'store_slug',
+							description:
+								'Display coupons from a specific store using the store slug.',
+							accepted: 'Store slug',
+							default: '[marketplace-coupons store_slug="john-store"]',
+						},
+						{
+							attribute: 'perPage',
+							description:
+								'Set how many coupons appear per page.',
+							accepted: 'Any number (Default = 10)',
+							default: '[marketplace-coupons perPage="10"]',
+						},
+						{
+							attribute: 'orderby',
+							description:
+								'Choose how coupons are sorted.',
+							accepted:
+								'date, id, title, code, modified (Default = date)',
+							default: '[marketplace-coupons orderby="date"]',
+						},
+						{
+							attribute: 'order',
+							description:
+								'Set the sorting direction.',
+							accepted: 'ASC, DESC (Default = DESC)',
+							default: '[marketplace-coupons order="DESC"]',
+						},
+					],
+				}				
 			],
 		},
 	],

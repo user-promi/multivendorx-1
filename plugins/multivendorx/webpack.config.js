@@ -57,6 +57,7 @@ module.exports = {
 			'./src/blocks/registration-form/index.js',
 		'block/marketplace-stores/index': './src/blocks/marketplace-stores/index.js',
 		'block/marketplace-products/index': './src/blocks/marketplace-products/index.js',
+		'block/marketplace-coupons/index': './src/blocks/marketplace-coupons/index.js',
 		'block/setup-wizard/index': './src/blocks/setup-wizard/index.js',
 	},
 
