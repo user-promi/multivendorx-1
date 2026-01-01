@@ -124,10 +124,11 @@ class Notifications extends \WP_REST_Controller {
 
                 $args = array(
                     'limit'    => 10,
-                    'offset'   => 1,
+                    'offset'   => 0,
                     'category' => $type,
                     'store_id' => ! empty( $store_id ) ? $store_id : null,
                 );
+
                 $results  = MultiVendorX()->notifications->get_all_notifications( $args );
 
                 $formated_notifications = array();
