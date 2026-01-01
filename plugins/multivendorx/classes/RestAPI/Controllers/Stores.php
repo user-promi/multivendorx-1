@@ -240,6 +240,14 @@ class Stores extends \WP_REST_Controller {
                 $args['orderBy'] = $filters['sort'] ?? $args['orderBy'] ?? '';
                 $args['order']   = $filters['order'] ?? '';
 
+                if ( isset( $filters['limit'] ) && is_numeric( $filters['limit'] ) ) {
+                    $args['limit'] = absint( $filters['limit'] );
+                }
+            
+                if ( isset( $filters['offset'] ) && is_numeric( $filters['offset'] ) ) {
+                    $args['offset'] = absint( $filters['offset'] );
+                }
+                
                 if ( ! empty( $filters['category'] ) ) {
                     $product_ids = wc_get_products(
                         array(

@@ -1415,7 +1415,7 @@ const Membership = ({ id }: { id: string }) => {
 						<div className="card-content">
 							<div className="card-header">
 								<div className="left">
-									<div className="title">AI usage & limits</div>
+									<div className="title">Plan limits & access</div>
 								</div>
 							</div>
 							<div className="card-body">
@@ -1448,7 +1448,7 @@ const Membership = ({ id }: { id: string }) => {
 									<>
 										<div className="form-group-wrapper">
 											<div className="form-group row">
-												<label htmlFor="">Maximum products upload allowed</label>
+												<label htmlFor="">Products store can list</label>
 												<BasicInput
 													name="name"
 													wrapperClass="setting-form-input"
@@ -1462,21 +1462,21 @@ const Membership = ({ id }: { id: string }) => {
 										</div>
 										<div className="form-group-wrapper">
 											<div className="form-group row">
-												<label htmlFor="">Charge per extra product</label>
+												<label htmlFor="">Cost to add product beyond limit</label>
 												<BasicInput
 													name="name"
 													wrapperClass="setting-form-input"
 													descClass="settings-metabox-description"
 													value={formData.name}
 													onChange={handleChange}
-													postInsideText={'min'}
+													postInsideText={'/product'}
 													size="6rem"
 												/>
 											</div>
 										</div>
 										<div className="form-group-wrapper">
 											<div className="form-group row">
-												<label htmlFor="">Images per product</label>
+												<label htmlFor="">Product categories store can access</label>
 												<BasicInput
 													name="name"
 													wrapperClass="setting-form-input"
@@ -1488,7 +1488,7 @@ const Membership = ({ id }: { id: string }) => {
 												/>
 											</div>
 										</div>
-										<div className="form-group-wrapper">
+										{/* <div className="form-group-wrapper">
 											<div className="form-group row">
 												<label htmlFor="">Featured products allowed</label>
 												<BasicInput
@@ -1501,7 +1501,7 @@ const Membership = ({ id }: { id: string }) => {
 													size="8rem"
 												/>
 											</div>
-										</div>
+										</div> */}
 									</>
 								)}
 
@@ -1513,8 +1513,53 @@ const Membership = ({ id }: { id: string }) => {
 											inputInnerWrapperClass="toggle-checkbox"
 											idPrefix="toggle-switch-sold-individually"
 											type="checkbox"
+											value={featuredProducts ? ['featured_productss'] : []}
+											preText={"Image & media "}
+											onChange={(e) =>
+												setfeaturedProducts(
+													(e as React.ChangeEvent<HTMLInputElement>)
+														.target.checked
+												)
+											}
+											options={[
+												{
+													key: 'featured_productss',
+													value: 'featured_productss',
+												},
+											]}
+										/>
+									</div>
+								</div>
+
+								{featuredProducts && (
+									<>
+										<div className="form-group-wrapper">
+											<div className="form-group row">
+												<label htmlFor="">Images allowed per product </label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'max'}
+													size="8rem"
+												/>
+											</div>
+										</div>
+										
+									</>
+								)}
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<MultiCheckBox
+											wrapperClass="toggle-btn"
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="toggle-checkbox"
+											idPrefix="toggle-switch-sold-individually"
+											type="checkbox"
 											value={featuredProducts ? ['featured_products'] : []}
-											preText={"AI usage and limits"}
+											preText={"Featured products"}
 											onChange={(e) =>
 												setfeaturedProducts(
 													(e as React.ChangeEvent<HTMLInputElement>)
@@ -1535,7 +1580,7 @@ const Membership = ({ id }: { id: string }) => {
 									<>
 										<div className="form-group-wrapper">
 											<div className="form-group row">
-												<label htmlFor="">Featured products allowed</label>
+												<label htmlFor="">Products that can be marked as featured </label>
 												<BasicInput
 													name="name"
 													wrapperClass="setting-form-input"
@@ -1547,16 +1592,60 @@ const Membership = ({ id }: { id: string }) => {
 												/>
 											</div>
 										</div>
+									</>
+								)}
+								<div className="form-group-wrapper">
+									<div className="form-group">
+										<MultiCheckBox
+											wrapperClass="toggle-btn"
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="toggle-checkbox"
+											idPrefix="toggle-switch-sold-individually"
+											type="checkbox"
+											value={featuredProducts ? ['featured_products'] : []}
+											preText={"AI usage & limits"}
+											onChange={(e) =>
+												setfeaturedProducts(
+													(e as React.ChangeEvent<HTMLInputElement>)
+														.target.checked
+												)
+											}
+											options={[
+												{
+													key: 'featured_products',
+													value: 'featured_products',
+												},
+											]}
+										/>
+									</div>
+								</div>
+
+								{featuredProducts && (
+									<>
 										<div className="form-group-wrapper">
 											<div className="form-group row">
-												<label htmlFor="">AI image credits per store</label>
+												<label htmlFor="">Product content AI usage</label>
 												<BasicInput
 													name="name"
 													wrapperClass="setting-form-input"
 													descClass="settings-metabox-description"
 													value={formData.name}
 													onChange={handleChange}
-													postInsideText={'max'}
+													postInsideText={'credit'}
+													size="8rem"
+												/>
+											</div>
+										</div>
+										<div className="form-group-wrapper">
+											<div className="form-group row">
+												<label htmlFor="">Product image AI usage</label>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'credit'}
 													size="8rem"
 												/>
 											</div>
@@ -1642,7 +1731,7 @@ const Membership = ({ id }: { id: string }) => {
 							</div>
 						</div> */}
 
-						<div className="card-content">
+						{/* <div className="card-content">
 							<div className="card-header">
 								<div className="left">
 									<div className="title">Membership Perks</div>
@@ -1745,7 +1834,7 @@ const Membership = ({ id }: { id: string }) => {
 									)}
 								</div>
 							</div>
-						</div>
+						</div> */}
 					</div>
 				</div>
 			</div >

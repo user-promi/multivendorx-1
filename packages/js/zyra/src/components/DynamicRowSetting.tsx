@@ -43,7 +43,10 @@ export interface DynamicRowSettingProps {
     value: RowValue[];
     onChange: ( rows: RowValue[] ) => void;
     addLabel?: string;
-    childrenRenderer?: ( row: RowValue, rowIndex: number ) => React.ReactNode;
+    childrenRenderer?: (
+        row: RowValue,
+        rowIndex: number
+    ) => React.ReactNode | false;
 }
 
 const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
@@ -54,7 +57,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
     value,
     onChange,
     addLabel = 'Add New',
-    childrenRenderer = undefined,
+    childrenRenderer = () => false,
 } ) => {
     const handleAdd = () => {
         const emptyRow: RowValue = {};
