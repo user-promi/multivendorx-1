@@ -120,13 +120,15 @@ class Notifications extends \WP_REST_Controller {
             $type = $request->get_param( 'type' );
 
             if ( $header_notifications ) {
+                $store_id = $request->get_param( 'store_id' );
+
                 $args = array(
                     'limit'    => 10,
                     'offset'   => 1,
-                    'category' => $type
+                    'category' => $type,
+                    'store_id' => ! empty( $store_id ) ? $store_id : null,
                 );
-                $store_id = $request->get_param( 'store_id' );
-                $results  = MultiVendorX()->notifications->get_all_notifications( ! empty( $store_id ) ? $store_id : null, $args );
+                $results  = MultiVendorX()->notifications->get_all_notifications( $args );
 
                 $formated_notifications = array();
 
@@ -209,7 +211,6 @@ class Notifications extends \WP_REST_Controller {
 
             if ( $count ) {
                 return MultiVendorX()->notifications->get_all_notifications(
-                    null,
                     array(
                         'count'    => true,
                         'category' => $request->get_param( 'notification' ) ? 'notification' : 'activity',
@@ -229,7 +230,7 @@ class Notifications extends \WP_REST_Controller {
                 'store_id' => $request->get_param( 'store_id' ) ? $request->get_param( 'store_id' ) : '',
             );
 
-            $all_notifications = MultiVendorX()->notifications->get_all_notifications( null, $args );
+            $all_notifications = MultiVendorX()->notifications->get_all_notifications( $args );
             $notifications     = array();
             foreach ( $all_notifications as $notification ) {
                 $store           = new Store( (int) $notification['store_id'] );

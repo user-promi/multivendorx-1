@@ -4,7 +4,13 @@ import axios from 'axios';
 import { Skeleton } from '@mui/material';
 import { __ } from '@wordpress/i18n';
 
-const Notifications = () => {
+type NotificationsProps = {
+    type?: 'notification' | 'activity';
+};
+
+const Notifications : React.FC<NotificationsProps> = ({
+	type,
+}) => {
 	const [notifications, setNotifications] = useState<[] | null>(null);
 
 	useEffect(() => {
@@ -15,23 +21,52 @@ const Notifications = () => {
 			params: {
 				header: true,
 				store_id: appLocalizer.store_id,
+				type: type
 			},
 		}).then((response) => {
 			setNotifications(response.data || []);
 		});
 	}, []);
 
-	const dismissNotification = (id: number) => {
+	const handleNotificationClick = (id: number) => {
 		axios({
 			method: 'POST',
 			url: getApiLink(appLocalizer, `notifications/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			data: { id, is_dismissed: true },
+			data: { 
+				id, 
+				is_read: true,
+				store_id: appLocalizer.store_id,
+			},
 		}).then(() => {
 			setNotifications((prev) => prev.filter((n) => n.id !== id));
 		});
 	};
 
+	const dismissNotification = (id: number) => {
+		axios({
+			method: 'POST',
+			url: getApiLink(appLocalizer, `notifications/${id}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: { 
+				id, 
+				is_dismissed: true,
+				store_id: appLocalizer.store_id,
+			},
+		}).then(() => {
+			setNotifications((prev) => prev.filter((n) => n.id !== id));
+		});
+	};
+
+	if (notifications?.length === 0) {
+		return (
+			<li>
+				<div className="item no-notifications">
+					<span>{__('No notifications', 'multivendorx')}</span>
+				</div>
+			</li>
+		);
+	}
 	return (
 		<>
 			<div className="dropdown-menu notification">
@@ -48,7 +83,9 @@ const Notifications = () => {
 						{notifications && notifications.length > 0 ? (
 							notifications.map((item, idx) => (
 								<li key={idx}>
-									<div className="item">
+									<div className="item"
+									onClick={() => handleNotificationClick(item.id)}
+									>
 										<div
 											className={`icon admin-badge admin-color${idx + 5}`}
 										>
@@ -71,13 +108,12 @@ const Notifications = () => {
 											</span>
 										</div>
 
-										<span
-											className="check-icon"
-											// onClick={() => dismissNotification(item.id)}
-											// title={__("Dismiss", "multivendorx")}
-										>
-											<i className="adminlib-check"></i>
-										</span>
+										<i className="check-icon adminlib-check"></i>
+										<i className="check-icon adminlib-cross"  
+											onClick={(e) => {
+												e.stopPropagation();
+												dismissNotification(item.id)
+											}}></i>
 									</div>
 								</li>
 							))

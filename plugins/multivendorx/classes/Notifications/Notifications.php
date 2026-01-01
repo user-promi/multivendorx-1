@@ -837,26 +837,16 @@ class Notifications {
      * @param int|null $store_id Store ID.
      * @return array|object
      */
-    public function get_all_notifications( $store_id = null, $args = array() ) {
+    public function get_all_notifications( $args = array() ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
 
-        if ( ! empty( $store_id ) ) {
-            $events = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT * FROM $table WHERE store_id = %d AND is_dismissed = %d",
-                    $store_id,
-                    0
-                )
-            );
-        } else {
-            $events = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT * FROM $table WHERE is_dismissed = %d",
-                    0
-                )
-            );
-        }
+        $events = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM $table WHERE is_dismissed = %d",
+                0
+            )
+        );
 
         if ( ! empty( $args ) ) {
             $where = array();

@@ -9,7 +9,7 @@ type HeaderNotificationsProps = {
 };
 
 const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
-    type = 'notification',
+    type,
 }) => {
 	const [notifications, setNotifications] = useState<[] | null>(null);
 
