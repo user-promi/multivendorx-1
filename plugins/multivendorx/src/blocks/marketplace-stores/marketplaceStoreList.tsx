@@ -35,8 +35,8 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	const { modules } = useModules();
 	const [apiKey, setApiKey] = useState('');
 
-	const appLocalizer = (window as any).appLocalizer;
-	const settings = appLocalizer.settings_databases_value;
+	const storesList = (window as any).storesList;
+	const settings = storesList.settings_databases_value;
 
 	useEffect(() => {
 		if (!settings?.geolocation) return;
