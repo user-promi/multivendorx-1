@@ -4,7 +4,11 @@ import axios from 'axios';
 import { Skeleton } from '@mui/material';
 import { __ } from '@wordpress/i18n';
 
-const Notifications = () => {
+type NotificationsProps = {
+    type?: 'notification' | 'activity';
+};
+
+const Notifications : React.FC<NotificationsProps> = ({ type }) => {
 	const [notifications, setNotifications] = useState<[] | null>(null);
 
 	useEffect(() => {
@@ -15,22 +19,108 @@ const Notifications = () => {
 			params: {
 				header: true,
 				store_id: appLocalizer.store_id,
+				type: type
 			},
 		}).then((response) => {
 			setNotifications(response.data || []);
 		});
 	}, []);
 
+	const handleNotificationClick = (id: number) => {
+		axios({
+			method: 'POST',
+			url: getApiLink(appLocalizer, `notifications/${id}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: { 
+				id, 
+				is_read: true,
+				store_id: appLocalizer.store_id,
+			},
+		}).then(() => {
+			setNotifications((prev) => prev.filter((n) => n.id !== id));
+		});
+	};
+
 	const dismissNotification = (id: number) => {
 		axios({
 			method: 'POST',
 			url: getApiLink(appLocalizer, `notifications/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			data: { id, is_dismissed: true },
+			data: { 
+				id, 
+				is_dismissed: true,
+				store_id: appLocalizer.store_id,
+			},
 		}).then(() => {
 			setNotifications((prev) => prev.filter((n) => n.id !== id));
 		});
 	};
+
+	const renderContent = () => {
+		if (notifications === null) {
+			return (
+				<>
+					<li>
+						<div className="item">
+							<Skeleton variant="text" width={400} height={70} />
+						</div>
+						<div className="item">
+							<Skeleton variant="text" width={400} height={70} />
+						</div>
+						<div className="item">
+							<Skeleton variant="text" width={400} height={70} />
+						</div>
+						<div className="item">
+							<Skeleton variant="text" width={400} height={70} />
+						</div>
+					</li>
+				</>
+			);
+		}
+
+		if (notifications.length === 0) {
+			return (
+				<li>
+					<div className="item no-notifications">
+						<span>{__('No notifications', 'multivendorx')}</span>
+					</div>
+				</li>
+			);
+		}
+
+		return notifications.map((item, idx) => (
+			<li key={idx}>
+				<div className="item"
+					onClick={() => handleNotificationClick(item.id)}
+				>
+					<div className={`icon admin-badge green`}>
+						<i
+							className={
+								item.icon || 'adminlib-user-network-icon'
+							}
+						></i>
+					</div>
+					<div className="details">
+						<span className="heading">{item.title}</span>
+						<span className="message">{item.message}</span>
+						<span className="time">{item.time}</span>
+					</div>
+					<i className="check-icon adminlib-check"></i>
+					<i className="check-icon adminlib-cross"  
+						onClick={(e) => {
+							e.stopPropagation();
+							dismissNotification(item.id)
+						}}></i>
+				</div>
+			</li>
+		));
+	};
+
+	const subtab = type === 'notification' ? 'notifications' : 'activity';
+
+	const url = appLocalizer.permalink_structure
+		? `/${appLocalizer.dashboard_slug}/view-notifications/#subtab=${subtab}`
+		: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications&subtab=${subtab}`;
 
 	return (
 		<>
@@ -44,89 +134,20 @@ const Notifications = () => {
 					)}
 				</div>
 				<div className="notification">
-					<ul>
-						{notifications && notifications.length > 0 ? (
-							notifications.map((item, idx) => (
-								<li key={idx}>
-									<div className="item">
-										<div
-											className={`icon admin-badge admin-color${idx + 5}`}
-										>
-											<i
-												className={
-													item.icon ||
-													'adminlib-user-network-icon'
-												}
-											></i>
-										</div>
-										<div className="details">
-											<span className="heading">
-												{item.title}
-											</span>
-											<span className="message">
-												{item.message}
-											</span>
-											<span className="time">
-												{item.time}
-											</span>
-										</div>
-
-										<span
-											className="check-icon"
-											// onClick={() => dismissNotification(item.id)}
-											// title={__("Dismiss", "multivendorx")}
-										>
-											<i className="adminlib-check"></i>
-										</span>
-									</div>
-								</li>
-							))
-						) : (
-							<li>
-								<div className="item">
-									<Skeleton
-										variant="text"
-										width={400}
-										height={70}
-									/>
-								</div>
-								<div className="item">
-									<Skeleton
-										variant="text"
-										width={400}
-										height={70}
-									/>
-								</div>
-								<div className="item">
-									<Skeleton
-										variant="text"
-										width={400}
-										height={70}
-									/>
-								</div>
-								<div className="item">
-									<Skeleton
-										variant="text"
-										width={400}
-										height={70}
-									/>
-								</div>
-							</li>
-						)}
-					</ul>
+					<ul>{renderContent()}</ul>
 				</div>
 				<div className="footer">
 					<a
-						href={
-							appLocalizer.permalink_structure
-								? `/${appLocalizer.dashboard_slug}/view-notifications`
-								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications`
-						}
+						href={url}
 						className="admin-btn btn-purple"
+						onClick={(e) => e.stopPropagation()}
 					>
-						<i className="adminlib-eye"></i>{' '}
-						{__('View all notifications', 'multivendorx')}
+						<i className="adminlib-eye"></i>
+						{type === 'notification'
+							? __('View all notifications', 'multivendorx')
+							: __('View all activities', 'multivendorx')}
 					</a>
+
 				</div>
 			</div>
 		</>
