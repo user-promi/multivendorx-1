@@ -126,23 +126,6 @@ interface ExpandablePanelGroupProps {
     addNewTemplate?: AddNewTemplate;
     requiredEnable?: boolean;
 }
-const BASIC_RATING_FIELDS: PanelFormField[] = [
-    {
-        key: 'title',
-        type: 'text',
-        label: 'Parameters',
-        placeholder: 'Enter parameters',
-    },
-];
-
-const REQUIRED_RATING_FIELDS: PanelFormField[] = [
-    ...BASIC_RATING_FIELDS,
-    {
-        key: 'required',
-        type: 'checkbox',
-        label: 'Required',
-    },
-];
 
 const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
     methods,
@@ -204,31 +187,66 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             }
         };
 
-        document.addEventListener( 'mousedown', handleClickOutside );
+        document.addEventListener( 'click', handleClickOutside );
 
         return () => {
-            document.removeEventListener( 'mousedown', handleClickOutside );
+            document.removeEventListener( 'click', handleClickOutside );
         };
     }, [] );
-    useEffect( () => {
-        const updated: Record< string, Record< string, unknown > > = {
+    
+    useEffect(() => {
+        const updated: Record<string, Record<string, unknown>> = {
             ...value,
         };
 
-        methods.forEach( ( method ) => {
-            if ( ! updated[ method.id ] ) {
-                updated[ method.id ] = {
-                    enable: true,
-                    title: method.label ?? '',
-                    description: method.desc ?? '',
-                    icon: method.icon ?? '',
-                    required: method.required ?? false,
-                };
-            }
-        } );
+        const valueMethods: ExpandablePanelMethod[] = Object.entries(updated).map(
+            ([id, method]) => ({
+                id,
+                ...(method as any),
+            })
+        );
 
-        onChange( updated );
-    }, [] );
+        setExpandablePanelMethods((prev) => {
+            const methodMap = new Map<string, ExpandablePanelMethod>();
+
+            // existing state
+            prev.forEach((method) => {
+                methodMap.set(method.id, method);
+            });
+
+            // override / add from value
+            valueMethods.forEach((method) => {
+                methodMap.set(method.id, {
+                    ...methodMap.get(method.id),
+                    ...method,
+                });
+            });
+
+            // merge formFields
+            return Array.from(methodMap.values()).map((method) => {
+                if (!method.isCustom) {
+                    return method;
+                }
+
+                const templateFields = addNewTemplate?.formFields ?? [];
+                const methodFields = method.formFields ?? [];
+
+                const existingKeys = new Set(
+                    methodFields.map((f) => f.key)
+                );
+
+                return {
+                    ...method,
+                    formFields: [
+                        ...methodFields,
+                        ...templateFields.filter(
+                            (f) => !existingKeys.has(f.key)
+                        ),
+                    ],
+                };
+            });
+        });
+    }, [value]);
 
     // add new
     const createNewExpandablePanelMethod = (): ExpandablePanelMethod => {
@@ -238,7 +256,11 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             );
         }
 
-        const id = `custom_${ Date.now() }`;
+        const id = addNewTemplate.label
+            .trim()
+            .toLowerCase()
+            .replace( /\s+/g, '_' ) +
+            Math.floor(Math.random() * 10000);
 
         return {
             id,
@@ -259,9 +281,9 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
         setExpandablePanelMethods( ( prev ) => [ ...prev, newMethod ] );
 
         const initialValues: Record< string, unknown > = {
-            enable: true,
-            title: newMethod.label,
-            description: '',
+            isCustom: true,
+            label: newMethod.label,
+            desc: newMethod.desc,
             required: false,
         };
 
@@ -381,7 +403,11 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
 
         return renderField( step.id, buttonField );
     };
+
     const renderField = ( methodId: string, field: PanelFormField ) => {
+        console.log('field', field)
+        console.log('methodId', methodId)
+        console.log('valuee', value[ methodId ])
         const fieldValue = value[ methodId ]?.[ field.key ];
 
         switch ( field.type ) {
@@ -928,6 +954,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
         }
     };
 
+console.log('ExpandablePanelMethods', ExpandablePanelMethods)
     return (
         <>
             <div className="expandable-panel-group">
@@ -958,9 +985,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                         <div className="toggle-icon">
                                             <i
                                                 className={ `adminlib-${
-                                                    isEnabled && isActive
-                                                        ? 'keyboard-arrow-down'
-                                                        : 'pagination-right-arrow'
+                                                    isActive && isEnabled ? 'keyboard-arrow-down' : ((isActive && method.isCustom) ? 'keyboard-arrow-down' : 'pagination-right-arrow')
                                                 }` }
                                                 onClick={ () => {
                                                     if (
@@ -1264,8 +1289,8 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                                                     ) }
                                                                 </>
                                                             ) : null }
-                                                            { method.isCustom &&
-                                                                method.required && (
+                                                            { (method.isCustom ||
+                                                                method.required) && (
                                                                     <>
                                                                         <li
                                                                             onClick={ () => {
@@ -1280,7 +1305,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                                                             </div>
                                                                         </li>
                                                                         <li
-                                                                            onClick={ () =>
+                                                                            onClick={ () => 
                                                                                 handleDeleteMethod(
                                                                                     method.id
                                                                                 )
@@ -1344,19 +1369,16 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                         className={ `${
                                             method.wrapperClass || ''
                                         } expandable-panel ${
-                                            ( isActive || method.openForm ) &&
-                                            ( ! isEnabled || isEnabled )
-                                                ? 'open'
-                                                : ''
+                                            isActive && isEnabled ? 'open' : ((isActive && method.isCustom) ? 'open' : '')
                                         } ${ method.openForm ? 'open' : '' }` }
                                     >
                                         { method.formFields.map( ( field ) => {
-                                            if (
-                                                field.key === 'required' &&
-                                                method.required === true
-                                            ) {
-                                                return null;
-                                            }
+                                            // if (
+                                            //     field.key === 'required' &&
+                                            //     method.required === true
+                                            // ) {
+                                            //     return null;
+                                            // }
                                             if (
                                                 isWizardMode &&
                                                 field.type === 'buttons'
