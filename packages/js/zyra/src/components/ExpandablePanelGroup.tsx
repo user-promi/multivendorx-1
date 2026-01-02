@@ -405,9 +405,6 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
     };
 
     const renderField = ( methodId: string, field: PanelFormField ) => {
-        console.log('field', field)
-        console.log('methodId', methodId)
-        console.log('valuee', value[ methodId ])
         const fieldValue = value[ methodId ]?.[ field.key ];
 
         switch ( field.type ) {
@@ -954,7 +951,6 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
         }
     };
 
-console.log('ExpandablePanelMethods', ExpandablePanelMethods)
     return (
         <>
             <div className="expandable-panel-group">
