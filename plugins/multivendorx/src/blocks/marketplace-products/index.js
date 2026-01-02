@@ -2,12 +2,14 @@ import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { render } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
-import MarketplaceStoreList from './marketplaceStoreList';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
 import { initializeModules } from 'zyra';
+import MarketplaceProductList from './marketplaceProductList';
 
-initializeModules(storesList, 'multivendorx', 'free', 'modules');
+// Initialize ZYRA modules
+initializeModules(productList, 'multivendorx', 'free', 'modules');
 
+// EditBlock Component
 const EditBlock = (props) => {
 	const { attributes, setAttributes } = props;
 	const blockProps = useBlockProps();
@@ -15,14 +17,16 @@ const EditBlock = (props) => {
 	return (
 		<div {...blockProps}>
 			<InspectorControls>
-				<PanelBody title="Store Filters">
+				<PanelBody title="Product Filters" initialOpen={true}>
 					<SelectControl
 						label="Sort by"
 						value={attributes.orderby}
 						options={[
-							{ label: 'Name', value: 'name' },
-							{ label: 'Category', value: 'category' },
-							{ label: 'Registered', value: 'create-time' },
+							{ label: 'Title', value: 'title' },
+							{ label: 'Date', value: 'date' },
+							{ label: 'Rating', value: 'rating' },
+							{ label: 'Popularity', value: 'popularity' },
+							{ label: 'Price', value: 'price' },
 						]}
 						onChange={(value) => setAttributes({ orderby: value })}
 					/>
@@ -36,61 +40,82 @@ const EditBlock = (props) => {
 						onChange={(value) => setAttributes({ order: value })}
 					/>
 					<TextControl
-						label="Category"
+						label="Category (slug, comma-separated)"
 						value={attributes.category}
 						onChange={(value) => setAttributes({ category: value })}
 					/>
 					<TextControl
-						label="per page"
+						label="Store ID"
+						value={attributes.store_id || ''}
+						onChange={(value) => setAttributes({ store_id: value })}
+					/>
+					<TextControl
+						label="Store Slug"
+						value={attributes.store_slug || ''}
+						onChange={(value) => setAttributes({ store_slug: value })}
+					/>
+					<TextControl
+						label="Products per page"
 						type="number"
 						min={1}
-						value={attributes.perpage}
+						value={attributes.perPage}
 						onChange={(value) =>
-							setAttributes({ perpage: parseInt(value, 12) || 12 })
+							setAttributes({ perPage: parseInt(value, 10) || 12 })
 						}
 					/>
 				</PanelBody>
 			</InspectorControls>
 
-
-			{/* Pass attributes to StoresList */}
-			<MarketplaceStoreList
+			{/* Render the Product List with attributes */}
+			<MarketplaceProductList
 				orderby={attributes.orderby}
 				order={attributes.order}
 				category={attributes.category}
+				store_id={attributes.store_id}
+				store_slug={attributes.store_slug}
+				perPage={attributes.perPage}
 			/>
 		</div>
 	);
 };
 
-registerBlockType('multivendorx/marketplace-stores', {
+// Register the Block
+registerBlockType('multivendorx/marketplace-products', {
 	apiVersion: 2,
-	title: 'Stores List',
-	icon: 'store',
+	title: 'Marketplace Products',
+	icon: 'products',
 	category: 'multivendorx',
 	supports: { html: false },
 
 	attributes: {
-		orderby: { type: 'string', default: 'name' },
+		orderby: { type: 'string', default: 'title' },
 		order: { type: 'string', default: 'asc' },
 		category: { type: 'string', default: '' },
-		perpage: { type: 'number', default: 12 },
+		perPage: { type: 'number', default: 12 },
+		store_id: { type: 'string', default: '' },
+		store_slug: { type: 'string', default: '' },
 	},
 
 	edit: EditBlock,
 
 	save({ attributes }) {
-		return <div id="marketplace-stores" data-attributes={JSON.stringify(attributes)}></div>;
+		return (
+			<div
+				id="marketplace-products"
+				data-attributes={JSON.stringify(attributes)}
+			></div>
+		);
 	},
 });
 
+// Render on frontend
 document.addEventListener('DOMContentLoaded', () => {
-	const element = document.getElementById('marketplace-stores');
+	const element = document.getElementById('marketplace-products');
 	if (element) {
 		const attributes = JSON.parse(element.getAttribute('data-attributes') || '{}');
 		render(
 			<BrowserRouter>
-				<MarketplaceStoreList {...attributes} />
+				<MarketplaceProductList {...attributes} />
 			</BrowserRouter>,
 			element
 		);

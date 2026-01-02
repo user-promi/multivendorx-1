@@ -200,6 +200,16 @@ class FrontendScripts {
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version' => $version,
 				),
+                'multivendorx-marketplace-products-script'          => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/marketplace-products/index.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
+					'version' => $version,
+				),
+                'multivendorx-marketplace-coupons-script'          => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/marketplace-coupons/index.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_scripts as $name => $props ) {
@@ -421,7 +431,7 @@ class FrontendScripts {
 							'settings_databases_value' => $settings_databases_value,
 							'pages_list'               => $pages_array,
 							'pro_url'                  => esc_url( MULTIVENDORX_PRO_SHOP_URL ),
-							'module_page_url'          => admin_url( 'admin.php?page=multivendorx#&tab=modules' ),
+							'page_url'                 => admin_url( 'admin.php?page=multivendorx#&tab=dashboard' ),
 							'color'                    => MultiVendorX()->setting->get_setting( 'store_color_settings' ),
 							'tax'                      => MultiVendorX()->setting->get_setting( 'give_tax' ),
 							'taxes_enabled'            => get_option( Utill::WOO_SETTINGS['taxes'] ),
@@ -588,6 +598,7 @@ class FrontendScripts {
                         'apiUrl'  => untrailingslashit( get_rest_url() ),
                         'restUrl' => MultiVendorX()->rest_namespace,
                         'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'settings_databases_value' => $settings_databases_value,
                     ),
                 ),
                 'multivendorx-marketplace-stores-script'        => array(
@@ -596,6 +607,34 @@ class FrontendScripts {
                         'apiUrl'  => untrailingslashit( get_rest_url() ),
                         'restUrl' => MultiVendorX()->rest_namespace,
                         'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'settings_databases_value' => $settings_databases_value,
+                    ),
+                ),
+                'multivendorx-marketplace-products-editor-script' => array(
+                    'object_name' => 'productList',
+                    'data'        => array(
+                        'apiUrl'  => untrailingslashit( get_rest_url() ),
+                        'restUrl' => MultiVendorX()->rest_namespace,
+                        'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'settings_databases_value' => $settings_databases_value,
+                    ),
+                ),
+                'multivendorx-marketplace-products-script'        => array(
+                    'object_name' => 'productList',
+                    'data'        => array(
+                        'apiUrl'  => untrailingslashit( get_rest_url() ),
+                        'restUrl' => MultiVendorX()->rest_namespace,
+                        'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'settings_databases_value' => $settings_databases_value,
+                    ),
+                ),
+                'multivendorx-marketplace-coupons-script'        => array(
+                    'object_name' => 'couponList',
+                    'data'        => array(
+                        'apiUrl'  => untrailingslashit( get_rest_url() ),
+                        'restUrl' => MultiVendorX()->rest_namespace,
+                        'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'settings_databases_value' => $settings_databases_value,
                     ),
                 ),
 			)
