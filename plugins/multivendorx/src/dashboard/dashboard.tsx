@@ -13,11 +13,10 @@ import {
 	Legend,
 	PieLabelRenderProps,
 } from 'recharts';
-import { scaleLinear } from 'd3-scale';
 import React, { useState, useEffect } from 'react';
 import '../components/dashboard.scss';
 import '../dashboard/dashboard1.scss';
-import { getApiLink, MultiCalendarInput, TableCell, useModules } from 'zyra';
+import { AdminButton, Card, Column, Container, getApiLink, MultiCalendarInput, TableCell, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency } from '@/services/commonFunction';
@@ -537,10 +536,6 @@ const Dashboard: React.FC = () => {
 		CZ: 20,
 		US: 20,
 	};
-
-	const colorScale = scaleLinear()
-		.domain([0, 20])
-		.range(['#E0ECF8', '#1565c0']);
 	const chartData = [
 		{
 			name: 'Commission Earned',
@@ -558,6 +553,13 @@ const Dashboard: React.FC = () => {
 			color: themeColors[2],
 		},
 	];
+	const countrySales = {
+		IN: 12000,
+		US: 32000,
+		GB: 18000,
+		DE: 9000,
+		CZ: 4000,
+	};
 
 	return (
 		<>
@@ -582,9 +584,9 @@ const Dashboard: React.FC = () => {
 				</div>
 			</div>
 
-			<div className="container-wrapper column">
-				<div className="card-wrapper">
-					<div className="card-content transparent">
+			<Container >
+				<Column>
+					<Card transparent>
 						<div className="analytics-container dashboard">
 							{analyticsData.map((item, idx) => (
 								<div
@@ -595,31 +597,22 @@ const Dashboard: React.FC = () => {
 										<div className="text">
 											{__(item.text, 'multivendorx')}
 										</div>
+
 										<div className="number">
 											{item.number}
 										</div>
 
 										<div className="report">
 											<div>
-												{__(
-													'Last 30 days:',
-													'multivendorx'
-												)}{' '}
-												<span
-													className={`${item.color}-color`}
-												>
+												{__('Last 30 days:', 'multivendorx')}{' '}
+												<span className={`${item.color}-color`}>
 													$189
 												</span>
 											</div>
 
 											<div>
-												{__(
-													'Previous 30 days:',
-													'multivendorx'
-												)}{' '}
-												<span
-													className={`${item.color}-color`}
-												>
+												{__('Previous 30 days:', 'multivendorx')}{' '}
+												<span className={`${item.color}-color`}>
 													$690
 												</span>
 											</div>
@@ -629,748 +622,504 @@ const Dashboard: React.FC = () => {
 									<div className="analytics-icon">
 										<i
 											className={`${item.icon} ${item.color}-bg`}
-										></i>
+										/>
 									</div>
 								</div>
 							))}
 						</div>
-					</div>
-				</div>
+					</Card>
+				</Column>
+				<Column grid={8}>
+					<Card
+						title={__('Sales Overview (P)', 'multivendorx')}
+						iconName="adminlib-external icon"
+					>
+						<ResponsiveContainer width="100%" height={250}>
+							<BarChart
+								data={revenueData}
+								barSize={12}
+								barCategoryGap="20%"
+							>
+								<CartesianGrid stroke="#f0f0f0" vertical={false} />
+								<XAxis dataKey="month" axisLine={false} tickLine={false} />
+								<YAxis axisLine={false} tickLine={false} />
 
-				<div className="card-wrapper">
-					<div className="card-content w-65">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Sales Overview (P)', 'multivendorx')}
+								<Tooltip
+									contentStyle={{
+										background: '#fff',
+										border: 'none',
+										borderRadius: '3px',
+										boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+									}}
+								/>
+
+								<Legend />
+
+								{BarChartData.map((entry) => (
+									<Bar
+										key={entry.dataKey}
+										dataKey={entry.dataKey}
+										fill={entry.color}
+										radius={[6, 6, 0, 0]}
+										name={__(entry.name, 'multivendorx')}
+									/>
+								))}
+
+								<Line
+									type="monotone"
+									dataKey="conversion"
+									stroke="#ffa726"
+									strokeWidth={2}
+									dot={{ r: 3 }}
+									name={__('Conversion %', 'multivendorx')}
+									yAxisId={1}
+								/>
+
+								<YAxis
+									yAxisId={1}
+									orientation="right"
+									axisLine={false}
+									tickLine={false}
+									tickFormatter={(v) => `${v}%`}
+								/>
+							</BarChart>
+						</ResponsiveContainer>
+					</Card>
+				</Column>
+
+				<Column grid={4}>
+					<Card title={__('Last Withdrawal', 'multivendorx')} >
+						<div className="top-customer-wrapper">
+							{lastWithdraws && lastWithdraws.length > 0 ? (
+								lastWithdraws.map((item) => (
+									<div key={item.id} className="info-item">
+										<div className="details-wrapper">
+											<div className="details">
+												<div className="name">
+													{item.payment_method === 'stripe-connect' &&
+														__('Stripe', 'multivendorx')}
+
+													{item.payment_method === 'bank-transfer' &&
+														__('Direct to Local Bank (INR)', 'multivendorx')}
+
+													{item.payment_method === 'paypal-payout' &&
+														__('PayPal', 'multivendorx')}
+												</div>
+
+												<div className="des">
+													{formatWcShortDate(item.date)}
+												</div>
+											</div>
+										</div>
+
+										<div className="right-details">
+											<div className="price">
+												{formatCurrency(item.amount)}
+											</div>
+										</div>
+									</div>
+								))
+							) : (
+								<div className="no-data">
+									{__('No withdrawals found.', 'multivendorx')}
 								</div>
-							</div>
-							<div className="right">
-								<i className="adminlib-external icon"></i>
-							</div>
+							)}
 						</div>
-						<div className="card-body">
-							<ResponsiveContainer width="100%" height={250}>
-								<BarChart
-									data={revenueData}
-									barSize={12}
-									barCategoryGap="20%"
-								>
-									<CartesianGrid
-										stroke="#f0f0f0"
-										vertical={false}
-									/>
-									<XAxis
-										dataKey="month"
-										axisLine={false}
-										tickLine={false}
-									/>
-									<YAxis axisLine={false} tickLine={false} />
+
+						{lastWithdraws && lastWithdraws.length > 0 && (
+							// <div className="buttons-wrapper">
+							// 	<div
+							// 		className="admin-btn btn-purple"
+							// 		onClick={() => {
+							// 			window.location.href =
+							// 				'/dashboard/wallet/transactions/';
+							// 		}}
+							// 	>
+							// 		<i className="adminlib-preview"></i>
+							// 		{__('View transaction history', 'multivendorx')}
+							// 	</div>
+							// </div>
+							<AdminButton
+								wrapperClass="right"
+								buttons={{
+									icon: 'preview',
+									text: __('View transaction history', 'multivendorx'),
+									onClick: window.location.href = '/dashboard/wallet/transactions/',
+									className: 'purple-bg',
+								}}
+							/>
+						)}
+					</Card>
+				</Column>
+
+				<Column>
+					<Card
+						title={__('Recent Orders', 'multivendorx')}
+						iconName="adminlib-external icon"
+					>
+						<div className="table-wrapper">
+							{recentOrder && recentOrder.length > 0 ? (
+								<table>
+									<thead>
+										<tr className="header">
+											<td>{__('Order Id', 'multivendorx')}</td>
+											<td>{__('Order Date', 'multivendorx')}</td>
+											<td>{__('Product Name(P)', 'multivendorx')}</td>
+											<td>{__('Total Amount', 'multivendorx')}</td>
+											<td>{__('Order Status', 'multivendorx')}</td>
+											<td>{__('Status (P)', 'multivendorx')}</td>
+										</tr>
+									</thead>
+
+									<tbody>
+										{recentOrder.map((item) => {
+											const id = item.id;
+											const orderUrl = `/dashboard/sales/orders/#view/${id}`;
+
+											return (
+												<tr key={id}>
+													<td>
+														<a
+															href={orderUrl}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
+															#{id} {__('Customer', 'multivendorx')}
+														</a>
+													</td>
+													<td>{item.date}</td>
+													<td>{item.name}</td>
+													<td>{item.amount}</td>
+													<td>
+														<div className="admin-status">
+															{item.status}
+														</div>
+													</td>
+													<td>
+														<div className="admin-badge">
+															{item.status}
+														</div>
+													</td>
+												</tr>
+											);
+										})}
+									</tbody>
+								</table>
+							) : (
+								<div className="no-data">
+									{__('No products found.', 'multivendorx')}
+								</div>
+							)}
+						</div>
+					</Card>
+				</Column>
+
+				{/* Best-Selling Products */}
+				<Column grid={6}>
+					<Card
+						title={__('Best-Selling Products', 'multivendorx')}
+						iconName="adminlib-external icon"
+					>
+						<div className="table-wrapper top-products">
+							{topProducts && topProducts.length > 0 ? (
+								<table>
+									<thead>
+										<tr className="header">
+											<td>#</td>
+											<td>{__('Name', 'multivendorx')}</td>
+											<td>{__('Popularity', 'multivendorx')}</td>
+											<td>{__('Sales', 'multivendorx')}</td>
+										</tr>
+									</thead>
+
+									<tbody>
+										{topProducts.map((item, index) => (
+											<tr key={item.id}>
+												<td>
+													{String(index + 1).padStart(2, '0')}
+												</td>
+
+												<td>{item.name}</td>
+
+												<td className="progress-bar">
+													<div
+														className={`progress-bar admin-color${index + 1}`}
+													>
+														<span
+															className={`progress-bar admin-bg-color${index + 1}`}
+															style={{ width: `${item.popularity}%` }}
+														/>
+													</div>
+												</td>
+
+												<td>
+													<div
+														className={`admin-badge admin-color${index + 1}`}
+													>
+														{item.popularity}%
+													</div>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							) : (
+								<div className="no-data">
+									{__('No products found.', 'multivendorx')}
+								</div>
+							)}
+						</div>
+					</Card>
+				</Column>
+
+				{/* Commission Overview */}
+				<Column grid={6}>
+					<Card
+						title={__('Commission Overview', 'multivendorx')}
+						iconName="adminlib-external icon"
+						onIconClick={() => {
+							window.location.href = '/dashboard/reports/overview/';
+						}}
+					>
+						<div style={{ width: '100%', height: 400 }}>
+							<ResponsiveContainer>
+								<PieChart>
+									<Pie
+										data={chartData}
+										dataKey="value"
+										nameKey="name"
+										cx="50%"
+										cy="50%"
+										outerRadius={140}
+										innerRadius={80}
+										label={({ name, percent }) =>
+											`${name} ${(percent * 100).toFixed(1)}%`
+										}
+										labelLine={false}
+										isAnimationActive
+									>
+										{chartData.map((item, index) => (
+											<Cell
+												key={`cell-${index}`}
+												fill={item.color}
+											/>
+										))}
+									</Pie>
 
 									<Tooltip
+										formatter={(value) => formatCurrency(value)}
 										contentStyle={{
-											background: '#fff',
-											border: 'none',
-											borderRadius: '3px',
-											boxShadow:
-												'0 2px 6px rgba(0,0,0,0.08)',
+											backgroundColor: '#fff',
+											borderRadius: '8px',
+											border: '1px solid #ddd',
 										}}
 									/>
 
-									<Legend />
-
-									{BarChartData.map((entry) => (
-										<Bar
-											dataKey={entry.dataKey}
-											fill={entry.color}
-											radius={[6, 6, 0, 0]}
-											name={__(
-												entry.name,
-												'multivendorx'
-											)}
-										/>
-									))}
-
-									<Line
-										type="monotone"
-										dataKey="conversion"
-										stroke="#ffa726"
-										strokeWidth={2}
-										dot={{ r: 3 }}
-										name={__(
-											'Conversion %',
-											'multivendorx'
-										)}
-										yAxisId={1}
+									<Legend
+										verticalAlign="bottom"
+										height={36}
 									/>
-
-									<YAxis
-										yAxisId={1}
-										orientation="right"
-										axisLine={false}
-										tickLine={false}
-										tickFormatter={(v) => `${v}%`}
-									/>
-								</BarChart>
+								</PieChart>
 							</ResponsiveContainer>
 						</div>
-					</div>
+					</Card>
+				</Column>
+				{/* Admin Announcements */}
+				{modules.includes('announcement') && (
+					<Column grid={4}>
+						<Card
+							title={__('Admin Announcements', 'multivendorx')}
+							iconName="adminlib-external icon"
+						>
+							<div className="notification-wrapper">
+								{announcement && announcement.length > 0 ? (
+									<ul>
+										{announcement.map((item, index) => (
+											<li key={item.id}>
+												<div className="icon-wrapper">
+													<i
+														className={`adminlib-form-paypal-email admin-badge admin-color${index + 2}`}
+													/>
+												</div>
 
-					{/* Right Column */}
-					<div className="card-content w-35">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Last Withdrawal', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="top-customer-wrapper">
-								{lastWithdraws && lastWithdraws.length > 0 ? (
-									lastWithdraws.map((item) => (
-										<div key={item.id} className="info-item">
-											<div className="details-wrapper">
 												<div className="details">
-													<div className="name">
-														{item.payment_method ===
-															'stripe-connect' &&
-															__(
-																'Stripe',
-																'multivendorx'
-															)}
-														{item.payment_method ===
-															'bank-transfer' &&
-															__(
-																'Direct to Local Bank (INR)',
-																'multivendorx'
-															)}
-														{item.payment_method ===
-															'paypal-payout' &&
-															__(
-																'PayPal',
-																'multivendorx'
-															)}
-														{item.payment_method ===
-															'bank-transfer'
-															? __(
-																'Bank Transfer',
-																'multivendorx'
-															)
-															: ''}
+													<div className="notification-title">
+														{item.title}
 													</div>
 
 													<div className="des">
-														{formatWcShortDate(
-															item.date
-														)}
+														{item.content}
 													</div>
-												</div>
-											</div>
 
-											<div className="right-details">
-												<div className="price">
-													{formatCurrency(item.amount)}
+													<span>
+														{formatTimeAgo(item.date)}
+													</span>
+												</div>
+											</li>
+										))}
+									</ul>
+								) : (
+									<div className="no-data">
+										{__('No announcements found.', 'multivendorx')}
+									</div>
+								)}
+							</div>
+						</Card>
+					</Column>
+				)}
+				{modules.includes('marketplace-refund') && (
+					<Column grid={4}>
+						<Card
+							title={__('Pending Refunds', 'multivendorx')}
+							iconName="adminlib-external icon"
+							onIconClick={() => {
+								window.location.href =
+									'/dashboard/sales/orders/#refund-requested';
+							}}
+						>
+							<div className="top-customer-wrapper">
+								{pendingRefund && pendingRefund.length > 0 ? (
+									pendingRefund.map((customer) => (
+										<div
+											key={customer.id}
+											className="customer"
+										>
+											<div className="left-section">
+												<div className="details">
+													<div className="name">
+														{customer.name}
+													</div>
+													<div className="order-number">
+														{customer.reason} |{' '}
+														{formatWcShortDate(customer.time)}
+													</div>
 												</div>
 											</div>
 										</div>
 									))
 								) : (
 									<div className="no-data">
-										{__(
-											'No withdrawals found.',
-											'multivendorx'
-										)}
+										{__('No pending refunds found.', 'multivendorx')}
 									</div>
 								)}
 							</div>
-
-							{lastWithdraws && lastWithdraws.length > 0 && (
-								<div className="buttons-wrapper">
-									<div
-										className="admin-btn btn-purple"
-										onClick={() => {
-											window.location.href =
-												'/dashboard/wallet/transactions/';
-										}}
-									>
-										<i className="adminlib-preview"></i>
-										{__(
-											'View transaction history',
-											'multivendorx'
-										)}
+						</Card>
+					</Column>
+				)}
+				<Column grid={4}>
+					<Card
+						title={__('Top customer (P)', 'multivendorx')}
+					>
+						{customers.map((customer, index) => (
+							<div key={customer.id} className="info-item">
+								<div className="details-wrapper">
+									<div className="avatar">
+										<i
+											className={`${customer.icon} admin-bg-color${index + 1}`}
+										/>
 									</div>
-								</div>
-							)}
-						</div>
-					</div>
-				</div>
 
-				<div className="card-wrapper">
-					<div className="card-content">
-						<div className="card">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Recent Orders', 'multivendorx')}
-									</div>
-								</div>
-								<div className="right">
-									<i className="adminlib-external icon"></i>
-								</div>
-							</div>
-
-							<div className="card-body">
-								<div className="table-wrapper">
-									{recentOrder && recentOrder.length > 0 ? (
-										<table>
-											<thead>
-												<tr className="header">
-													<td>
-														{__(
-															'Order Id',
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Order Date',
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Product Name(P)',
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Total Amount',
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Order Status',
-															'multivendorx'
-														)}
-													</td>
-													<td>
-														{__(
-															'Status (P)',
-															'multivendorx'
-														)}
-													</td>
-												</tr>
-											</thead>
-											{recentOrder.map((item, index) => {
-												const id = item.id;
-												const orderUrl = `/dashboard/sales/orders/#view/${id}`;
-												return (
-													<tbody>
-														<tr key={item.id}>
-															<td>
-																<a
-																	href={
-																		orderUrl
-																	}
-																	target="_blank"
-																	rel="noopener noreferrer"
-																>
-																	#{id}
-																	{__(
-																		'Customer',
-																		'multivendorx'
-																	)}
-																</a>
-															</td>
-															<td>{item.date}</td>
-															<td>{item.name}</td>
-															<td>
-																{item.amount}
-															</td>
-															<td>
-																<div
-																	className={`admin-status`}
-																>
-																	{
-																		item.status
-																	}
-																</div>
-															</td>
-															<td>
-																<div
-																	className={`admin-badge`}
-																>
-																	{
-																		item.status
-																	}
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												);
-											})}
-										</table>
-									) : (
-										<div className="no-data">
-											{__(
-												'No products found.',
-												'multivendorx'
-											)}
+									<div className="details">
+										<div className="name">
+											{customer.name}
 										</div>
-									)}
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div className="card-wrapper">
-					{/* Best-Selling Products */}
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__(
-										'Best-Selling Products',
-										'multivendorx'
-									)}
-								</div>
-							</div>
-							<div className="right">
-								<i className="adminlib-external icon"></i>
-							</div>
-						</div>
-
-						<div className="card-body">
-							<div className="table-wrapper top-products">
-								{topProducts && topProducts.length > 0 ? (
-									<table>
-										<thead>
-											<tr className="header">
-												<td>#</td>
-												<td>
-													{__('Name', 'multivendorx')}
-												</td>
-												<td>
-													{__(
-														'Popularity',
-														'multivendorx'
-													)}
-												</td>
-												<td>
-													{__(
-														'Sales',
-														'multivendorx'
-													)}
-												</td>
-											</tr>
-										</thead>
-										{topProducts.map((item, index) => {
-											return (
-												<tbody>
-													<tr key={item.id}>
-														<td>
-															{String(
-																index + 1
-															).padStart(2, '0')}
-														</td>
-														<td>{item.name}</td>
-														<td
-															className={`progress-bar`}
-														>
-															<div
-																className={`progress-bar admin-color${index + 1}`}
-															>
-																<span
-																	className={`progress-bar admin-bg-color${index + 1}`}
-																	style={{
-																		width: `${item.popularity}%`,
-																	}}
-																></span>
-															</div>
-														</td>
-														<td>
-															<div
-																className={`admin-badge admin-color${index + 1}`}
-															>
-																{
-																	item.popularity
-																}
-																%
-															</div>
-														</td>
-													</tr>
-												</tbody>
-											);
-										})}
-									</table>
-								) : (
-									<div className="no-data">
-										{__(
-											'No products found.',
-											'multivendorx'
-										)}
-									</div>
-								)}
-							</div>
-						</div>
-					</div>
-
-					{/* Commission Overview */}
-					<div className="card-content">
-						<div className="card">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__(
-											'Commission Overview',
-											'multivendorx'
-										)}
-									</div>
-								</div>
-								<div
-									className="right"
-									onClick={() => {
-										window.location.href =
-											'/dashboard/reports/overview/';
-									}}
-								>
-									<i className="adminlib-external icon"></i>
-								</div>
-							</div>
-
-							<div className="card-body">
-								<div style={{ width: '100%', height: 400 }}>
-									<ResponsiveContainer>
-										<PieChart>
-											<Pie
-												data={chartData}
-												dataKey="value"
-												nameKey="name"
-												cx="50%"
-												cy="50%"
-												outerRadius={140}
-												innerRadius={80}
-												label={({ name, percent }) =>
-													`${name} ${(
-														percent * 100
-													).toFixed(1)}%`
-												}
-												labelLine={false}
-												isAnimationActive={true}
-											>
-												{chartData.map(
-													(item, index) => (
-														<Cell
-															key={`cell-${index}`}
-															fill={item.color}
-														/>
-													)
-												)}
-											</Pie>
-
-											<Tooltip
-												formatter={(value) =>
-													formatCurrency(value)
-												}
-												contentStyle={{
-													backgroundColor: '#fff',
-													borderRadius: '8px',
-													border: '1px solid #ddd',
-												}}
-											/>
-											<Legend
-												verticalAlign="bottom"
-												height={36}
-											/>
-										</PieChart>
-									</ResponsiveContainer>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div className="card-wrapper">
-					{/* Admin Announcements */}
-					{modules.includes('announcement') && (
-						<div className="card-content">
-							<div className="card">
-								<div className="card-header">
-									<div className="left">
-										<div className="title">
-											{__(
-												'Admin Announcements',
-												'multivendorx'
-											)}
+										<div className="des">
+											{customer.orders}
+											{__('orders', 'multivendorx')}
 										</div>
 									</div>
-									<div className="right">
-										<i className="adminlib-external icon"></i>
-									</div>
 								</div>
 
-								<div className="card-body">
-									<div className="notification-wrapper">
-										{announcement &&
-											announcement.length > 0 ? (
-											<ul>
-												{announcement.map(
-													(item, index) => (
-														<li key={item.id}>
-															<div className="icon-wrapper">
-																<i
-																	className={`adminlib-form-paypal-email admin-badge admin-color${index + 2}`}
-																></i>
-															</div>
-															<div className="details">
-																<div className="notification-title">
-																	{item.title}
-																</div>
-																<div className="des">
-																	{
-																		item.content
-																	}
-																</div>
-																<span>
-																	{formatTimeAgo(
-																		item.date
-																	)}
-																</span>
-															</div>
-														</li>
-													)
-												)}
-											</ul>
-										) : (
-											<div className="no-data">
-												{__(
-													'No announcements found.',
-													'multivendorx'
-												)}
-											</div>
-										)}
+								<div className="right-details">
+									<div className="price">
+										{customer.total}
 									</div>
 								</div>
 							</div>
-						</div>
-					)}
-
-					{modules.includes('marketplace-refund') && (
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Pending Refunds', 'multivendorx')}
+						))}
+					</Card>
+				</Column>
+				<Column grid={4}>
+					<Card
+						title={__('Store Activity (P)', 'multivendorx')}
+					>
+						<div className="activity-log">
+							{activities.map((a, i) => (
+								<div key={i} className="activity">
+									<div className="title">{a.text}</div>
+									<div className="des">
+										{__('Your order has been placed successfully', 'multivendorx')}
 									</div>
-								</div>
-								<div
-									className="right"
-									onClick={() =>
-									(window.location.href =
-										'/dashboard/sales/orders/#refund-requested')
-									}
-									style={{ cursor: 'pointer' }}
-								>
-									<i className="adminlib-external icon"></i>
-								</div>
-							</div>
-
-							<div className="card-body">
-								<div className="top-customer-wrapper">
-									{pendingRefund &&
-										pendingRefund.length > 0 ? (
-										pendingRefund.map((customer) => (
-											<div
-												key={customer.id}
-												className="customer"
-											>
-												<div className="left-section">
-													<div className="details">
-														<div className="name">
-															{customer.name}
-														</div>
-														<div className="order-number">
-															{customer.reason} |{' '}
-															{formatWcShortDate(
-																customer.time
-															)}
-														</div>
-													</div>
-												</div>
-											</div>
-										))
-									) : (
-										<div className="no-data">
-											{__(
-												'No pending refunds found.',
-												'multivendorx'
-											)}
-										</div>
-									)}
-								</div>
-							</div>
-						</div>
-					)}
-
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Top customer (P)', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-
-						<div className="card-body">
-							{customers.map((customer, index) => (
-								<div key={customer.id} className="info-item">
-									<div className="details-wrapper">
-										<div className="avatar">
-											<i
-												className={`${customer.icon} admin-bg-color${index + 1}`}
-											></i>
-										</div>
-										<div className="details">
-											<div className="name">
-												{customer.name}
-											</div>
-											<div className="des">
-												{customer.orders}
-												{__('orders', 'multivendorx')}
-											</div>
-										</div>
-									</div>
-
-									<div className="right-details">
-										<div className="price">
-											{customer.total}
-										</div>
-									</div>
+									<span>
+										{__('2 minutes ago', 'multivendorx')}
+									</span>
 								</div>
 							))}
 						</div>
-					</div>
-				</div>
-
-				<div className="card-wrapper">
-					<div className="card-content w-65">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Store Activity (P)', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-
-						<div className="card-body">
-							<div className="activity-log">
-								{activities.map((a, i) => (
-									<div key={i} className="activity">
-										<div className="title">{a.text}</div>
-										<div className="des">
-											{__(
-												'Your order has been placed successfully',
-												'multivendorx'
-											)}
-										</div>
-										<span>
-											{__(
-												'2 minutes ago',
-												'multivendorx'
-											)}
-										</span>
-									</div>
-								))}
-							</div>
-						</div>
-					</div>
-
-					{modules.includes('store-review') && (
-						<div className="card-content w-35">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Latest Reviews', 'multivendorx')}
-									</div>
-								</div>
-
-								<div
-									className="right"
-									onClick={() => {
-										window.location.href =
-											'/dashboard/store-support/store-review/';
-									}}
-								>
-									<i className="adminlib-external icon"></i>
-								</div>
-							</div>
-
-							<div className="card-body">
-								<div className="review-wrapper">
-									{review && review.length > 0 ? (
-										review.map((reviewItem) => (
-											<div
-												className="review"
-												key={reviewItem.review_id}
-											>
-												<div className="details">
-													<div className="title">
-														<div className="avatar">
-															<i className="adminlib-person"></i>
-														</div>
-														{
-															reviewItem.review_title
-														}
+					</Card>
+				</Column>
+				{modules.includes('store-review') && (
+					<Column grid={8}>
+						<Card
+							title={__('Latest Reviews', 'multivendorx')}
+							iconName="adminlib-external icon"
+							onIconClick={() => {
+								window.location.href =
+									'/dashboard/store-support/store-review/';
+							}}
+						>
+							<div className="review-wrapper">
+								{review && review.length > 0 ? (
+									review.map((reviewItem) => (
+										<div
+											className="review"
+											key={reviewItem.review_id}
+										>
+											<div className="details">
+												<div className="title">
+													<div className="avatar">
+														<i className="adminlib-person" />
 													</div>
+													{reviewItem.review_title}
+												</div>
 
-													<div className="star-wrapper">
-														{[...Array(5)].map(
-															(_, index) => (
-																<i
-																	key={index}
-																	className={`star-icon adminlib-star ${index <
-																			Math.round(
-																				reviewItem.overall_rating
-																			)
-																			? 'active'
-																			: ''
-																		}`}
-																></i>
-															)
+												<div className="star-wrapper">
+													{[...Array(5)].map((_, index) => (
+														<i
+															key={index}
+															className={`star-icon adminlib-star ${index <
+																Math.round(
+																	reviewItem.overall_rating
+																)
+																? 'active'
+																: ''
+																}`}
+														/>
+													))}
+													<span>
+														{formatWcShortDate(
+															reviewItem.date_created
 														)}
-														<span>
-															{formatWcShortDate(
-																reviewItem.date_created
-															)}
-														</span>
-													</div>
+													</span>
+												</div>
 
-													<div className="des">
-														{
-															reviewItem.review_content
-														}
-													</div>
+												<div className="des">
+													{reviewItem.review_content}
 												</div>
 											</div>
-										))
-									) : (
-										<div className="no-data">
-											{__(
-												'No reviews found.',
-												'multivendorx'
-											)}
 										</div>
-									)}
-								</div>
+									))
+								) : (
+									<div className="no-data">
+										{__('No reviews found.', 'multivendorx')}
+									</div>
+								)}
 							</div>
-						</div>
-					)}
-				</div>
-			</div>
+						</Card>
+					</Column>
+				)}
+
+			</Container>
 		</>
 	);
 };

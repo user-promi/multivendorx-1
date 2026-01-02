@@ -3,6 +3,8 @@ import { __ } from '@wordpress/i18n';
 import {
 	BasicInput,
 	CommonPopup,
+	FormGroup,
+	FormGroupWrapper,
 	getApiLink,
 	MultiCalendarInput,
 	SelectInput,
@@ -1014,13 +1016,9 @@ const AllCoupon: React.FC = () => {
 						</>
 					}
 				>
-					<div className="content">
-						{/* Coupon Code */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="title">
-									{__('Coupon code', 'multivendorx')}
-								</label>
+					<>
+						<FormGroupWrapper>
+							<FormGroup label={__('Coupon code', 'multivendorx')} htmlFor="title">
 								<BasicInput
 									type="text"
 									name="title"
@@ -1039,18 +1037,9 @@ const AllCoupon: React.FC = () => {
 										{validationErrors.title}
 									</div>
 								)}
-							</div>
-						</div>
+							</FormGroup>
 
-						{/* Description */}
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="title">
-									{__(
-										'Description (optional)',
-										'multivendorx'
-									)}
-								</label>
+							<FormGroup label={__('Description (optional)', 'multivendorx')} htmlFor="title">
 								<TextArea
 									name="content"
 									inputClass="textarea-input"
@@ -1063,17 +1052,15 @@ const AllCoupon: React.FC = () => {
 										})
 									}
 								/>
-							</div>
-						</div>
-
+							</FormGroup>
+						</FormGroupWrapper>
 						{/* Tabs */}
 						<div className="tab-titles">
 							{tabs.map((tab) => (
 								<div
 									key={tab.id}
-									className={`title ${
-										activeTab === tab.id ? 'active' : ''
-									}`}
+									className={`title ${activeTab === tab.id ? 'active' : ''
+										}`}
 									onClick={() => setActiveTab(tab.id)}
 								>
 									<h2>{__(tab.label, 'multivendorx')}</h2>
@@ -1092,7 +1079,7 @@ const AllCoupon: React.FC = () => {
 									)
 							)}
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			)}
 			<div className="admin-table-wrapper">

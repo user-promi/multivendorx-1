@@ -117,7 +117,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 	return (
 		<>
 			<div className="container-wrapper ">
-				<div className="card-wrapper column w-65">
+				<div className="card-wrapper column column-8">
 					<div className="analytics-container">
 						{overviewData.map((item, idx) => (
 							<div key={idx} className="analytics-item">
@@ -342,7 +342,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 						</div>
 					)}
 				</div>
-				<div className="card-wrapper column w-35">
+				<div className="card-wrapper column column-4">
 					{appLocalizer.khali_dabba && (
 						<div className="card-content">
 							<div className="card-header">

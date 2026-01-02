@@ -720,7 +720,7 @@ export const Announcements: React.FC = () => {
 					</>
 				}
 			>
-				<div className="content">
+				<>
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="title">
@@ -859,7 +859,7 @@ export const Announcements: React.FC = () => {
 							/>
 						</div>
 					</div>
-				</div>
+				</>
 
 				{error && <p className="error-text">{error}</p>}
 			</CommonPopup>

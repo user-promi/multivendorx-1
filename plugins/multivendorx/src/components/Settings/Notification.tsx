@@ -579,7 +579,7 @@ const Notification: React.FC = () => {
 						</div>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="form-group-wrapper">
 							{openChannel === 'system' && (
 								<div className="form-group">
@@ -720,7 +720,7 @@ const Notification: React.FC = () => {
 								</div>
 							)}
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			)}
 

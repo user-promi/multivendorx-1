@@ -47,7 +47,7 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 				}
 			>
 				<>
-					<div className="content">
+					<>
 						<div className="heading">
 							{__('Order Overview', 'multivendorx')}
 						</div>
@@ -141,7 +141,7 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 								</div>
 							</div>
 						</div>
-					</div>
+					</>
 				</>
 			</CommonPopup>
 		</>

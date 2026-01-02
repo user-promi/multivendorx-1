@@ -583,7 +583,7 @@ const CustomerQuestions: React.FC = () => {
 						</>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="question">
@@ -660,7 +660,7 @@ const CustomerQuestions: React.FC = () => {
 								/>
 							</div>
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			)}
 		</>

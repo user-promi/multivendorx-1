@@ -603,7 +603,7 @@ const Qna: React.FC = () => {
 						</>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="question">
@@ -677,7 +677,7 @@ const Qna: React.FC = () => {
 								/>
 							</div>
 						</div>
-					</div>
+					</>
 
 					{error && <p className="error-text">{error}</p>}
 				</CommonPopup>

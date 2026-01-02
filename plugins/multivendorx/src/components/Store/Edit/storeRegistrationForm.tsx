@@ -229,7 +229,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 				{(formData.core_data?.status == 'pending' ||
 					formData.core_data?.status == 'rejected' ||
 					formData.core_data?.status == 'permanently_rejected') && (
-					<div className="card-wrapper column w-35">
+					<div className="card-wrapper column column-4">
 						<div className="card-content">
 							<div className="card-header">
 								<div className="left">

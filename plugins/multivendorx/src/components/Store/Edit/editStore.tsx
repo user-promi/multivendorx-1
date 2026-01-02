@@ -1110,7 +1110,7 @@ const EditStore = () => {
 					</>
 				}
 			>
-				<div className="content">
+				<>
 					<div className="form-group-wrapper">
 						<div className="form-group">
 							<label htmlFor="title">
@@ -1176,7 +1176,7 @@ const EditStore = () => {
 							)}
 						</div>
 					</div>
-				</div>
+				</>
 			</CommonPopup>
 		</>
 	);

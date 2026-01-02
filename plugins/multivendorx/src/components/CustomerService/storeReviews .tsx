@@ -610,7 +610,7 @@ const StoreReviews: React.FC = () => {
 						</>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="review-popup-wrapper">
 							<div className="customer-wrapper">
 								<div className="avatar">
@@ -727,7 +727,7 @@ const StoreReviews: React.FC = () => {
 								/>
 							</div>
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			)}
 		</>
