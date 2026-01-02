@@ -74,7 +74,7 @@ export default {
 				label: 'New Reasons',
 				formFields: [
 					{
-						key: 'title',
+						key: 'label',
 						type: 'text',
 						label: 'Reason',
 						placeholder: 'Enter title',
@@ -87,34 +87,34 @@ export default {
 				],
 			},
 			modal: [
-				{
-					id: 'damaged-or-defective-product',
-					label: 'Damaged or defective product',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'wrong-item',
-					label: 'Wrong item delivered',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'product-not-as-described',
-					label: 'Product not as described',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'late-delivery',
-					label: 'Late delivery',
-					isCustom: true,
-				},
-				{
-					id: 'changed-mind',
-					label: 'Changed mind',
-					isCustom: true,
-				},
+				// {
+				// 	id: 'damaged-or-defective-product',
+				// 	label: 'Damaged or defective product',
+				// 	required: true,
+				// 	isCustom: true,
+				// },
+				// {
+				// 	id: 'wrong-item',
+				// 	label: 'Wrong item delivered',
+				// 	required: true,
+				// 	isCustom: true,
+				// },
+				// {
+				// 	id: 'product-not-as-described',
+				// 	label: 'Product not as described',
+				// 	required: true,
+				// 	isCustom: true,
+				// },
+				// {
+				// 	id: 'late-delivery',
+				// 	label: 'Late delivery',
+				// 	isCustom: true,
+				// },
+				// {
+				// 	id: 'changed-mind',
+				// 	label: 'Changed mind',
+				// 	isCustom: true,
+				// },
 			],
 			// requiredEnable: true,
 			// defaultValues: [

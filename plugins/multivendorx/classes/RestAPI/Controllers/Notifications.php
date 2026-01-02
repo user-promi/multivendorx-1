@@ -117,14 +117,19 @@ class Notifications extends \WP_REST_Controller {
         try {
             $header_notifications = $request->get_param( 'header' );
             $events_notifications = $request->get_param( 'events' );
+            $type = $request->get_param( 'type' );
 
             if ( $header_notifications ) {
+                $store_id = $request->get_param( 'store_id' );
+
                 $args = array(
                     'limit'    => 10,
-                    'offset'   => 1,
+                    'offset'   => 0,
+                    'category' => $type,
+                    'store_id' => ! empty( $store_id ) ? $store_id : null,
                 );
-                $store_id = $request->get_param( 'store_id' );
-                $results  = MultiVendorX()->notifications->get_all_notifications( ! empty( $store_id ) ? $store_id : null, $args );
+
+                $results  = MultiVendorX()->notifications->get_all_notifications( $args );
 
                 $formated_notifications = array();
 
@@ -207,7 +212,6 @@ class Notifications extends \WP_REST_Controller {
 
             if ( $count ) {
                 return MultiVendorX()->notifications->get_all_notifications(
-                    null,
                     array(
                         'count'    => true,
                         'category' => $request->get_param( 'notification' ) ? 'notification' : 'activity',
@@ -227,7 +231,7 @@ class Notifications extends \WP_REST_Controller {
                 'store_id' => $request->get_param( 'store_id' ) ? $request->get_param( 'store_id' ) : '',
             );
 
-            $all_notifications = MultiVendorX()->notifications->get_all_notifications( null, $args );
+            $all_notifications = MultiVendorX()->notifications->get_all_notifications( $args );
             $notifications     = array();
             foreach ( $all_notifications as $notification ) {
                 $store           = new Store( (int) $notification['store_id'] );
@@ -311,6 +315,7 @@ class Notifications extends \WP_REST_Controller {
             global $wpdb;
             $notification_data = $request->get_param( 'notifications' );
 
+            $is_read = $request->get_param( 'is_read' );
             $is_dismissed = $request->get_param( 'is_dismissed' );
             $id           = $request->get_param( 'id' );
             $form_data    = $request->get_param( 'formData' );
@@ -336,6 +341,21 @@ class Notifications extends \WP_REST_Controller {
             if ( $is_dismissed ) {
                 $data = array(
                     'is_dismissed' => $is_dismissed,
+                );
+
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+                $updated = $wpdb->update( "{$wpdb->prefix}" . Utill::TABLES['notifications'], $data, array( 'id' => $id ), null, array( '%s' ) );
+
+                return rest_ensure_response(
+                    array(
+                        'success' => true,
+                    )
+                );
+            }
+
+            if ( $is_read ) {
+                $data = array(
+                    'is_read' => $is_read,
                 );
 
                 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching

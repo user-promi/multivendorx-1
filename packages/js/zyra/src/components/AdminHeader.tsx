@@ -53,6 +53,8 @@ type AdminHeaderProps = {
     chatUrl?: string;
     managePlanUrl?: string;
     profileItems?: ProfileItem[];
+    showActivities?: boolean;
+    activities?: ReactNode;
 };
 
 const AdminHeader: React.FC< AdminHeaderProps > = ( {
@@ -75,9 +77,12 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
     showProfile,
     chatUrl,
     profileItems,
+    showActivities,
+    activities
 } ) => {
     const [ dropdownOpen, setDropdownOpen ] = useState( false );
     const [ notifOpen, setNotifOpen ] = useState( false );
+    const [ activityOpen, setActivityOpen ] = useState( false );
     const [ profileOpen, setProfileOpen ] = useState( false );
     const [ messageOpen, setMessageOpen ] = useState( false );
     const wrapperRef = useRef< HTMLDivElement >( null );
@@ -93,6 +98,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
             ) {
                 setDropdownOpen( false );
                 setNotifOpen( false );
+                setActivityOpen( false );
                 setMessageOpen( false );
                 setProfileOpen( false );
             }
@@ -221,9 +227,27 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                                     setNotifOpen( ! notifOpen );
                                     setProfileOpen( false );
                                     setMessageOpen( false );
+                                    setActivityOpen( false );
                                 } }
                             ></i>
                             { notifOpen && notifications }
+                        </div>
+                    ) }
+
+                    { /* Activities */ }
+                    { showActivities && (
+                        <div className="icon-wrapper">
+                            <i
+                                className="admin-icon adminlib-notification"
+                                title="Activities"
+                                onClick={ () => {
+                                    setActivityOpen( ! activityOpen );
+                                    setNotifOpen( false );
+                                    setProfileOpen( false );
+                                    setMessageOpen( false );
+                                } }
+                            ></i>
+                            { activityOpen && activities }
                         </div>
                     ) }
 
@@ -237,6 +261,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                                     setMessageOpen( ! messageOpen );
                                     setProfileOpen( false );
                                     setNotifOpen( false );
+                                    setActivityOpen( false );
                                 } }
                             ></i>
                             <span className="count">{ messages.length }</span>
@@ -307,6 +332,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                                 onClick={ () => {
                                     setProfileOpen( ! profileOpen );
                                     setNotifOpen( false );
+                                    setActivityOpen( false );
                                 } }
                             ></i>
                             { profileOpen && (

@@ -26,16 +26,17 @@ export default {
 			addNewBtn: true,
 			addNewTemplate: {
 				label: 'New progress stages',
+				desc: 'dummy desc',
 				icon: 'adminlib-rejecte',
 				formFields: [
 					{
-						key: 'title',
+						key: 'label',
 						type: 'text',
 						label: 'Progress Stages',
 						placeholder: 'Enter progress stages',
 					},
 					{
-						key: 'description',
+						key: 'desc',
 						type: 'textarea',
 						label: 'Description',
 					},
@@ -68,24 +69,7 @@ export default {
 					}
 				],
 			},
-			modal: [
-				{
-					id: 'delivered',
-					label: 'Delivered',
-					desc: 'Order is received by store',
-					icon: 'adminlib-delivery',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'cancelled',
-					label: 'Cancelled',
-					desc: 'Order is cancelled',
-					icon: 'adminlib-rejecte',
-					required: true,
-					isCustom: true,
-				},
-			],
+			modal: [],
 			proSetting: false,
 		},
 		{
