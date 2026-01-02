@@ -17,7 +17,7 @@ import {
 } from 'recharts';
 import axios from 'axios';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { getApiLink } from 'zyra';
+import { Card, Column, Container, getApiLink } from 'zyra';
 import { formatCurrency } from '@/services/commonFunction';
 
 type Stat = {
@@ -44,7 +44,7 @@ type OverviewProps = {
 	COLORS?: string[];
 };
 
-const Overview: React.FC<OverviewProps> = ({}) => {
+const Overview: React.FC<OverviewProps> = ({ }) => {
 	const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
 	const [earningSummary, setEarningSummary] = useState<any[]>([]);
 	const [pieData, setPieData] = useState<any>([]);
@@ -277,9 +277,9 @@ const Overview: React.FC<OverviewProps> = ({}) => {
 				</div>
 			</div>
 
-			<div className="container-wrapper column">
-				<div className="card-wrapper">
-					<div className="card-content transparent">
+			<Container>
+				<Column>
+					<Card transparent>
 						<div className="analytics-container report col-3">
 							{commissionDetails.map((item, idx) => (
 								<div key={idx} className="analytics-item">
@@ -299,105 +299,88 @@ const Overview: React.FC<OverviewProps> = ({}) => {
 								</div>
 							))}
 						</div>
-					</div>
-				</div>
+					</Card>
+				</Column>
 
-				<div className="card-wrapper">
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Revenue breakdown', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="top-items">
-								{earningSummary.map((product) => (
-									<div className="info-item" key={product.id}>
-										<div className="details-wrapper">
-											<div className="details">
-												<div className="name">
-													{__(
-														product.title,
-														'multivendorx'
-													)}
-												</div>
-											</div>
-										</div>
-										<div className="right-details">
-											<div className="price">
-												{product.price}
+				<Column grid={6}>
+					<Card title={__('Revenue breakdown', 'multivendorx')}>
+						<div className="top-items">
+							{earningSummary.map((product) => (
+								<div className="info-item" key={product.id}>
+									<div className="details-wrapper">
+										<div className="details">
+											<div className="name">
+												{__(
+													product.title,
+													'multivendorx'
+												)}
 											</div>
 										</div>
 									</div>
-								))}
-							</div>
-						</div>
-					</div>
-
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Revenue Breakdown', 'multivendorx')}
+									<div className="right-details">
+										<div className="price">
+											{product.price}
+										</div>
+									</div>
 								</div>
-							</div>
+							))}
 						</div>
-						<div className="card-body">
-							<div style={{ width: '100%', height: 400 }}>
-								<ResponsiveContainer>
-									<PieChart>
-										<Pie
-											data={pieData}
-											dataKey="value"
-											nameKey="name"
-											cx="50%"
-											cy="50%"
-											outerRadius={140}
-											innerRadius={80}
-											label={({ name, percent }) =>
-												`${__(name, 'multivendorx')} ${(
-													percent * 100
-												).toFixed(1)}%`
-											}
-											labelLine={false}
-											isAnimationActive={true}
-										>
-											{pieData.map((_, index) => (
-												<Cell
-													key={`cell-${index}`}
-													fill={
-														[
-															'#0088FE',
-															'#00C49F',
-															'#FF8042',
-														][index % 3]
-													}
-												/>
-											))}
-										</Pie>
-										<Tooltip
-											formatter={(value) =>
-												formatCurrency(value)
-											}
-											contentStyle={{
-												backgroundColor: '#fff',
-												borderRadius: '8px',
-												border: '1px solid #ddd',
-											}}
-										/>
-										<Legend
-											verticalAlign="bottom"
-											height={36}
-										/>
-									</PieChart>
-								</ResponsiveContainer>
-							</div>
+					</Card>
+				</Column>
+				<Column grid={6}>
+					<Card title={__('Revenue breakdown', 'multivendorx')}>
+						<div style={{ width: '100%', height: 400 }}>
+							<ResponsiveContainer>
+								<PieChart>
+									<Pie
+										data={pieData}
+										dataKey="value"
+										nameKey="name"
+										cx="50%"
+										cy="50%"
+										outerRadius={140}
+										innerRadius={80}
+										label={({ name, percent }) =>
+											`${__(name, 'multivendorx')} ${(
+												percent * 100
+											).toFixed(1)}%`
+										}
+										labelLine={false}
+										isAnimationActive={true}
+									>
+										{pieData.map((_, index) => (
+											<Cell
+												key={`cell-${index}`}
+												fill={
+													[
+														'#0088FE',
+														'#00C49F',
+														'#FF8042',
+													][index % 3]
+												}
+											/>
+										))}
+									</Pie>
+									<Tooltip
+										formatter={(value) =>
+											formatCurrency(value)
+										}
+										contentStyle={{
+											backgroundColor: '#fff',
+											borderRadius: '8px',
+											border: '1px solid #ddd',
+										}}
+									/>
+									<Legend
+										verticalAlign="bottom"
+										height={36}
+									/>
+								</PieChart>
+							</ResponsiveContainer>
 						</div>
-					</div>
-				</div>
-			</div>
+					</Card>
+				</Column>
+			</Container >
 		</>
 	);
 };

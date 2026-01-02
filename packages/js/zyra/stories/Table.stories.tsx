@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react';
 import Table, { TableCell } from '../src/components/Table';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import "../src/styles/common.scss";
 
 const meta: Meta<typeof Table> = {
     title: 'Zyra/Components/Table',

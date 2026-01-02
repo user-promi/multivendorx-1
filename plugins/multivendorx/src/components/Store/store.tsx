@@ -304,7 +304,7 @@ const Store = () => {
 								</>
 							}
 						>
-							<div className="content">
+							<>
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<label htmlFor="store-name">
@@ -454,7 +454,7 @@ const Store = () => {
 										/>
 									</div>
 								</div>
-							</div>
+							</>
 						</CommonPopup>
 					)}
 					<StoreTable />

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AdminButton, BasicInput, Card, FormGroup, FormGroupWrapper, SelectInput, TextArea, getApiLink } from 'zyra';
+import { AdminButton, BasicInput, Card, Column, Container, FormGroup, FormGroupWrapper, SelectInput, TextArea, getApiLink } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '@/services/commonFunction';
 import { __ } from '@wordpress/i18n';
@@ -404,433 +404,431 @@ const AddOrder = () => {
 				</div>
 			</div>
 
-			<div className="container-wrapper">
-				<div className="card-wrapper column-8">
-					<div className="card-content">
-						<div className="card-body">
-							<div className="table-wrapper view-order-table">
-								<table className="admin-table">
-									<thead className="admin-table-header">
-										<tr className="header-row">
-											<td className="header-col">
-												{__('Item', 'multivendorx')}
-											</td>
-											<td className="header-col">
-												{__('Price', 'multivendorx')}
-											</td>
-											<td className="header-col">
-												{__('Qty', 'multivendorx')}
-											</td>
-											<td className="header-col">
-												{__('Total', 'multivendorx')}
-											</td>
-										</tr>
-									</thead>
+			<Container>
+				<Column grid={8}>
+					<Card>
+						<div className="table-wrapper view-order-table">
+							<table className="admin-table">
+								<thead className="admin-table-header">
+									<tr className="header-row">
+										<td className="header-col">
+											{__('Item', 'multivendorx')}
+										</td>
+										<td className="header-col">
+											{__('Price', 'multivendorx')}
+										</td>
+										<td className="header-col">
+											{__('Qty', 'multivendorx')}
+										</td>
+										<td className="header-col">
+											{__('Total', 'multivendorx')}
+										</td>
+									</tr>
+								</thead>
 
-									<tbody className="admin-table-body">
-										{addedProducts.length > 0 &&
-											addedProducts.map((item) => (
-												<tr
-													key={`added-${item.id}`}
-													className="admin-row simple"
-												>
-													<td className="admin-column">
-														<div className="item-details">
-															<div className="image">
-																<img
-																	src={
-																		item
-																			?.images?.[0]
-																			?.src
-																	}
-																	width={40}
-																	alt={
-																		item.name
-																	}
-																/>
-															</div>
-
-															<div className="detail">
-																<div className="name">
-																	{item.name}
-																</div>
-
-																{item?.sku && (
-																	<div className="sku">
-																		{__(
-																			'SKU:',
-																			'multivendorx'
-																		)}{' '}
-																		{
-																			item.sku
-																		}
-																	</div>
-																)}
-															</div>
-														</div>
-													</td>
-
-													<td className="admin-column">
-														${item.price}
-													</td>
-
-													<td className="admin-column">
-														<input
-															type="number"
-															min="1"
-															className="basic-input"
-															value={
-																item.qty || 1
-															}
-															onChange={(e) => {
-																const qty =
-																	+e.target
-																		.value;
-																setAddedProducts(
-																	(prev) =>
-																		prev.map(
-																			(
-																				p
-																			) =>
-																				p.id ===
-																					item.id
-																					? {
-																						...p,
-																						qty,
-																					}
-																					: p
-																		)
-																);
-															}}
-														/>
-													</td>
-
-													<td className="admin-column">
-														$
-														{(
-															item.price *
-															(item.qty || 1)
-														).toFixed(2)}
-													</td>
-												</tr>
-											))}
-
-										{shippingLines.map((ship) => (
+								<tbody className="admin-table-body">
+									{addedProducts.length > 0 &&
+										addedProducts.map((item) => (
 											<tr
-												key={`ship-${ship.id}`}
-												className="admin-row shipping-row"
+												key={`added-${item.id}`}
+												className="admin-row simple"
 											>
 												<td className="admin-column">
 													<div className="item-details">
-														<div className="icon">
-															<i className="adminlib-cart green"></i>
+														<div className="image">
+															<img
+																src={
+																	item
+																		?.images?.[0]
+																		?.src
+																}
+																width={40}
+																alt={
+																	item.name
+																}
+															/>
 														</div>
 
 														<div className="detail">
 															<div className="name">
-																{__(
-																	'Shipping',
-																	'multivendorx'
-																)}
+																{item.name}
 															</div>
 
-															<SelectInput
-																name="shipping_method"
-																type="single-select"
-																options={
-																	availableShippingMethods
-																}
-																value={availableShippingMethods.find(
-																	(o) =>
-																		o.value ===
-																		ship.method_id
-																)}
-																onChange={(
-																	selected
-																) => {
-																	const method_id =
-																		selected.value;
-																	const method_title =
-																		selected.label;
-
-																	setShippingLines(
-																		(
-																			prev
-																		) =>
-																			prev.map(
-																				(
-																					s
-																				) =>
-																					s.id ===
-																						ship.id
-																						? {
-																							...s,
-																							method_id,
-																							name: method_title,
-																						}
-																						: s
-																			)
-																	);
-																}}
-															/>
+															{item?.sku && (
+																<div className="sku">
+																	{__(
+																		'SKU:',
+																		'multivendorx'
+																	)}{' '}
+																	{
+																		item.sku
+																	}
+																</div>
+															)}
 														</div>
 													</div>
 												</td>
 
-												<td className="admin-column"></td>
-												<td className="admin-column"></td>
+												<td className="admin-column">
+													${item.price}
+												</td>
 
 												<td className="admin-column">
 													<input
 														type="number"
-														min="0"
+														min="1"
 														className="basic-input"
-														value={ship.cost}
+														value={
+															item.qty || 1
+														}
 														onChange={(e) => {
-															const cost =
-																parseFloat(
-																	e.target
-																		.value
-																) || 0;
-															setShippingLines(
+															const qty =
+																+e.target
+																	.value;
+															setAddedProducts(
 																(prev) =>
 																	prev.map(
-																		(s) =>
-																			s.id ===
-																				ship.id
+																		(
+																			p
+																		) =>
+																			p.id ===
+																				item.id
 																				? {
-																					...s,
-																					cost,
+																					...p,
+																					qty,
 																				}
-																				: s
+																				: p
 																	)
 															);
 														}}
 													/>
 												</td>
+
+												<td className="admin-column">
+													$
+													{(
+														item.price *
+														(item.qty || 1)
+													).toFixed(2)}
+												</td>
 											</tr>
 										))}
-									</tbody>
-								</table>
 
-								<div className="total-summary">
-									<div className="row">
-										<span>
-											{__('Subtotal:', 'multivendorx')}
-										</span>
-										<span>${subtotal.toFixed(2)}</span>
-									</div>
+									{shippingLines.map((ship) => (
+										<tr
+											key={`ship-${ship.id}`}
+											className="admin-row shipping-row"
+										>
+											<td className="admin-column">
+												<div className="item-details">
+													<div className="icon">
+														<i className="adminlib-cart green"></i>
+													</div>
 
-									<div className="row">
-										<span>
-											{__('Tax:', 'multivendorx')}
-										</span>
-										<span>
-											$
-											{addedProducts
-												.reduce(
-													(sum, p) =>
-														sum +
-														(p.tax_amount || 0),
-													0
-												)
-												.toFixed(2)}
-										</span>
-									</div>
+													<div className="detail">
+														<div className="name">
+															{__(
+																'Shipping',
+																'multivendorx'
+															)}
+														</div>
 
-									<div className="row">
-										<span>
-											{__('Shipping:', 'multivendorx')}
-										</span>
-										<span>
-											{formatCurrency(totalShipping)}
-										</span>
-									</div>
+														<SelectInput
+															name="shipping_method"
+															type="single-select"
+															options={
+																availableShippingMethods
+															}
+															value={availableShippingMethods.find(
+																(o) =>
+																	o.value ===
+																	ship.method_id
+															)}
+															onChange={(
+																selected
+															) => {
+																const method_id =
+																	selected.value;
+																const method_title =
+																	selected.label;
 
-									<div className="row total">
-										<strong>
-											{__('Grand Total:', 'multivendorx')}
-										</strong>
-										<strong>
-											${grandTotal.toFixed(2)}
-										</strong>
-									</div>
+																setShippingLines(
+																	(
+																		prev
+																	) =>
+																		prev.map(
+																			(
+																				s
+																			) =>
+																				s.id ===
+																					ship.id
+																					? {
+																						...s,
+																						method_id,
+																						name: method_title,
+																					}
+																					: s
+																		)
+																);
+															}}
+														/>
+													</div>
+												</div>
+											</td>
+
+											<td className="admin-column"></td>
+											<td className="admin-column"></td>
+
+											<td className="admin-column">
+												<input
+													type="number"
+													min="0"
+													className="basic-input"
+													value={ship.cost}
+													onChange={(e) => {
+														const cost =
+															parseFloat(
+																e.target
+																	.value
+															) || 0;
+														setShippingLines(
+															(prev) =>
+																prev.map(
+																	(s) =>
+																		s.id ===
+																			ship.id
+																			? {
+																				...s,
+																				cost,
+																			}
+																			: s
+																)
+														);
+													}}
+												/>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+
+							<div className="total-summary">
+								<div className="row">
+									<span>
+										{__('Subtotal:', 'multivendorx')}
+									</span>
+									<span>${subtotal.toFixed(2)}</span>
 								</div>
-								<AdminButton
-									wrapperClass="left"
-									buttons={[
-										{
-											icon: 'plus',
-											text: 'Add Product',
-											className: 'purple-bg',
-											onClick: () => setShowAddProduct(true),
-										},
-										{
-											icon: 'plus',
-											text: 'Add Shipping',
-											className: 'purple-bg',
-											onClick: () =>
-												setShippingLines((prev) => [
+
+								<div className="row">
+									<span>
+										{__('Tax:', 'multivendorx')}
+									</span>
+									<span>
+										$
+										{addedProducts
+											.reduce(
+												(sum, p) =>
+													sum +
+													(p.tax_amount || 0),
+												0
+											)
+											.toFixed(2)}
+									</span>
+								</div>
+
+								<div className="row">
+									<span>
+										{__('Shipping:', 'multivendorx')}
+									</span>
+									<span>
+										{formatCurrency(totalShipping)}
+									</span>
+								</div>
+
+								<div className="row total">
+									<strong>
+										{__('Grand Total:', 'multivendorx')}
+									</strong>
+									<strong>
+										${grandTotal.toFixed(2)}
+									</strong>
+								</div>
+							</div>
+							<AdminButton
+								wrapperClass="left"
+								buttons={[
+									{
+										icon: 'plus',
+										text: 'Add Product',
+										className: 'purple-bg',
+										onClick: () => setShowAddProduct(true),
+									},
+									{
+										icon: 'plus',
+										text: 'Add Shipping',
+										className: 'purple-bg',
+										onClick: () =>
+											setShippingLines((prev) => [
+												...prev,
+												{ name: 'Shipping', cost: 0 },
+											]),
+									},
+									{
+										icon: 'plus',
+										text: 'Add Tax',
+										className: 'purple-bg',
+										onClick: () => setShowAddTax(true),
+									},
+								]}
+							/>
+
+
+							{showAddProduct && (
+								<div className="select-product-wrapper">
+									<label>
+										{__(
+											'Select Product',
+											'multivendorx'
+										)}
+									</label>
+
+									<SelectInput
+										name="product_select"
+										type="single-select"
+										options={[
+											{
+												label: __(
+													'Select a product',
+													'multivendorx'
+												),
+												value: '',
+											},
+											...allProducts.map((p) => ({
+												label: p.name,
+												value: p.id,
+											})),
+										]}
+										onChange={(selected) => {
+											if (!selected?.value) {
+												return;
+											}
+
+											const prod = allProducts.find(
+												(p) =>
+													p.id == selected.value
+											);
+											if (prod) {
+												setAddedProducts((prev) => [
 													...prev,
-													{ name: 'Shipping', cost: 0 },
-												]),
-										},
-										{
-											icon: 'plus',
-											text: 'Add Tax',
-											className: 'purple-bg',
-											onClick: () => setShowAddTax(true),
-										},
-									]}
-								/>
+													{ ...prod, qty: 1 },
+												]);
+											}
 
+											setShowAddProduct(false);
+										}}
+									/>
+								</div>
+							)}
 
-								{showAddProduct && (
-									<div className="select-product-wrapper">
-										<label>
-											{__(
-												'Select Product',
-												'multivendorx'
-											)}
-										</label>
+							{showAddTax && (
+								<div className="tax-modal">
+									<h2>{__('Add tax', 'multivendorx')}</h2>
 
-										<SelectInput
-											name="product_select"
-											type="single-select"
-											options={[
-												{
-													label: __(
-														'Select a product',
-														'multivendorx'
-													),
-													value: '',
-												},
-												...allProducts.map((p) => ({
-													label: p.name,
-													value: p.id,
-												})),
-											]}
-											onChange={(selected) => {
-												if (!selected?.value) {
-													return;
-												}
+									{taxRates.length > 0 ? (
+										<>
+											<table className="admin-table">
+												<thead>
+													<tr>
+														<td></td>
+														<td>
+															{__(
+																'Rate name',
+																'multivendorx'
+															)}
+														</td>
+														<td>
+															{__(
+																'Tax class',
+																'multivendorx'
+															)}
+														</td>
+														<td>
+															{__(
+																'Rate code',
+																'multivendorx'
+															)}
+														</td>
+														<td>
+															{__(
+																'Rate %',
+																'multivendorx'
+															)}
+														</td>
+													</tr>
+												</thead>
 
-												const prod = allProducts.find(
-													(p) =>
-														p.id == selected.value
-												);
-												if (prod) {
-													setAddedProducts((prev) => [
-														...prev,
-														{ ...prod, qty: 1 },
-													]);
-												}
-
-												setShowAddProduct(false);
-											}}
-										/>
-									</div>
-								)}
-
-								{showAddTax && (
-									<div className="tax-modal">
-										<h2>{__('Add tax', 'multivendorx')}</h2>
-
-										{taxRates.length > 0 ? (
-											<>
-												<table className="admin-table">
-													<thead>
-														<tr>
-															<td></td>
-															<td>
-																{__(
-																	'Rate name',
-																	'multivendorx'
-																)}
+												<tbody>
+													{taxRates.map((rate) => (
+														<tr
+															key={rate.id}
+															className="admin-row"
+														>
+															<td className="admin-column">
+																<input
+																	type="radio"
+																	name="tax"
+																	onChange={() =>
+																		setSelectedTaxRate(
+																			rate
+																		)
+																	}
+																	checked={
+																		selectedTaxRate?.id ===
+																		rate.id
+																	}
+																/>
 															</td>
-															<td>
-																{__(
-																	'Tax class',
-																	'multivendorx'
-																)}
+
+															<td className="admin-column">
+																{rate.name}
 															</td>
-															<td>
-																{__(
-																	'Rate code',
-																	'multivendorx'
-																)}
+															<td className="admin-column">
+																{rate.class ||
+																	__(
+																		'Standard',
+																		'multivendorx'
+																	)}
 															</td>
-															<td>
-																{__(
-																	'Rate %',
-																	'multivendorx'
-																)}
+															<td className="admin-column">{`${rate.country}-${rate.state}-${rate.name}`}</td>
+															<td className="admin-column">
+																{rate.rate}%
 															</td>
 														</tr>
-													</thead>
+													))}
+												</tbody>
+											</table>
 
-													<tbody>
-														{taxRates.map((rate) => (
-															<tr
-																key={rate.id}
-																className="admin-row"
-															>
-																<td className="admin-column">
-																	<input
-																		type="radio"
-																		name="tax"
-																		onChange={() =>
-																			setSelectedTaxRate(
-																				rate
-																			)
-																		}
-																		checked={
-																			selectedTaxRate?.id ===
-																			rate.id
-																		}
-																	/>
-																</td>
-
-																<td className="admin-column">
-																	{rate.name}
-																</td>
-																<td className="admin-column">
-																	{rate.class ||
-																		__(
-																			'Standard',
-																			'multivendorx'
-																		)}
-																</td>
-																<td className="admin-column">{`${rate.country}-${rate.state}-${rate.name}`}</td>
-																<td className="admin-column">
-																	{rate.rate}%
-																</td>
-															</tr>
-														))}
-													</tbody>
-												</table>
-
-												<button
-													className="admin-btn btn-purple-bg"
-													onClick={() => {
-														applyTaxToOrder();
-														setShowAddTax(false);
-													}}
-												>
-													{__('Add', 'multivendorx')}
-												</button>
-											</>
-										) : (
-											<div> No tax rates set contact admin
-											</div>
-										)}
-									</div>
-								)}
-							</div>
+											<button
+												className="admin-btn btn-purple-bg"
+												onClick={() => {
+													applyTaxToOrder();
+													setShowAddTax(false);
+												}}
+											>
+												{__('Add', 'multivendorx')}
+											</button>
+										</>
+									) : (
+										<div> No tax rates set contact admin
+										</div>
+									)}
+								</div>
+							)}
 						</div>
-					</div>
-				</div>
-				<div className="card-wrapper column column-4">
+					</Card>
+				</Column>
+				<Column grid={4}>
 					<Card title={__('Payment Method', 'multivendorx')}>
 						<FormGroupWrapper>
 							<FormGroup label={__('Select Payment Method', 'multivendorx')} htmlFor="payment-method">
@@ -853,37 +851,35 @@ const AddOrder = () => {
 					<Card title={__('Customer details', 'multivendorx')}>
 						{!selectedCustomer && (
 							<>
-								<FormGroupWrapper>
-									<FormGroup label={__('Select Customer', 'multivendorx')} htmlFor="Select-customer">
-										<SelectInput
-											name="new_owner"
-											options={customerOptions}
-											type="single-select"
-											onChange={(value) => {
-												const customer =
-													customers.find(
-														(c) =>
-															c.id ==
-															value.value
-													);
-												setSelectedCustomer(
-													customer
+								<FormGroup label={__('Select Customer', 'multivendorx')} htmlFor="Select-customer">
+									<SelectInput
+										name="new_owner"
+										options={customerOptions}
+										type="single-select"
+										onChange={(value) => {
+											const customer =
+												customers.find(
+													(c) =>
+														c.id ==
+														value.value
 												);
-												if (customer) {
-													setShippingAddress(
-														customer.shipping
-													);
-													setBillingAddress(
-														customer.billing
-													);
-													setShowCreateCustomer(
-														false
-													);
-												}
-											}}
-										/>
-									</FormGroup>
-								</FormGroupWrapper>
+											setSelectedCustomer(
+												customer
+											);
+											if (customer) {
+												setShippingAddress(
+													customer.shipping
+												);
+												setBillingAddress(
+													customer.billing
+												);
+												setShowCreateCustomer(
+													false
+												);
+											}
+										}}
+									/>
+								</FormGroup>
 
 								<AdminButton
 									wrapperClass="left"
@@ -894,8 +890,6 @@ const AddOrder = () => {
 										className: 'purple-bg',
 									}}
 								/>
-
-
 							</>
 						)}
 						{selectedCustomer && (
@@ -960,284 +954,190 @@ const AddOrder = () => {
 					</Card>
 
 					{showCreateCustomer && !selectedCustomer && (
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Create customer', 'multivendorx')}
-									</div>
-								</div>
-							</div>
-							<div className="card-body">
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__('First name', 'multivendorx')}
-										</label>
+						<Card title={__('Create customer', 'multivendorx')}>
 
-										<BasicInput
-											name="first_name"
-											value={newCustomer.first_name}
-											onChange={(e) =>
-												setNewCustomer({
-													...newCustomer,
-													first_name: e.target.value,
-												})
-											}
-											wrapperClass="setting-form-input"
-										/>
-									</div>
+							<FormGroupWrapper>
+								<FormGroup cols={2} label={__('First name', 'multivendorx')} htmlFor="Select-customer">
+									<BasicInput
+										name="first_name"
+										value={newCustomer.first_name}
+										onChange={(e) =>
+											setNewCustomer({
+												...newCustomer,
+												first_name: e.target.value,
+											})
+										}
+										wrapperClass="setting-form-input"
+									/>
+								</FormGroup>
 
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__('Last name', 'multivendorx')}
-										</label>
+								<FormGroup cols={2} label={__('Last name', 'multivendorx')} htmlFor="last-name">
+									<BasicInput
+										name="last_name"
+										value={newCustomer.last_name}
+										onChange={(e) =>
+											setNewCustomer({
+												...newCustomer,
+												last_name: e.target.value,
+											})
+										}
+										wrapperClass="setting-form-input"
+									/>
+								</FormGroup>
 
-										<BasicInput
-											name="last_name"
-											value={newCustomer.last_name}
-											onChange={(e) =>
-												setNewCustomer({
-													...newCustomer,
-													last_name: e.target.value,
-												})
-											}
-											wrapperClass="setting-form-input"
-										/>
-									</div>
-								</div>
+								<FormGroup label={__('Email', 'multivendorx')} htmlFor="email">
+									<BasicInput
+										name="email"
+										value={newCustomer.email}
+										onChange={(e) =>
+											setNewCustomer({
+												...newCustomer,
+												email: e.target.value,
+											})
+										}
+										wrapperClass="setting-form-input"
+									/>
+								</FormGroup>
 
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__('Email', 'multivendorx')}
-										</label>
+								<FormGroup label={__('Phone number', 'multivendorx')} htmlFor="phone-number">
+									<BasicInput
+										name="phone"
+										value={newCustomer.phone}
+										onChange={(e) =>
+											setNewCustomer({
+												...newCustomer,
+												phone: e.target.value,
+											})
+										}
+										wrapperClass="setting-form-input"
+									/>
+								</FormGroup>
+							</FormGroupWrapper>
 
-										<BasicInput
-											name="email"
-											value={newCustomer.email}
-											onChange={(e) =>
-												setNewCustomer({
-													...newCustomer,
-													email: e.target.value,
-												})
-											}
-											wrapperClass="setting-form-input"
-										/>
-									</div>
-								</div>
-
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="product-name">
-											{__('Phone number', 'multivendorx')}
-										</label>
-
-										<BasicInput
-											name="phone"
-											value={newCustomer.phone}
-											onChange={(e) =>
-												setNewCustomer({
-													...newCustomer,
-													phone: e.target.value,
-												})
-											}
-											wrapperClass="setting-form-input"
-										/>
-									</div>
-								</div>
-
-								<div className="buttons-wrapper">
-									<div
-										className="admin-btn btn-purple-bg"
-										onClick={createCustomer}
-									>
-										{__('Create', 'multivendorx')}
-									</div>
-								</div>
-							</div>
-						</div>
+							<AdminButton
+								wrapperClass="right"
+								buttons={{
+									icon: 'plus',
+									text: __('Create', 'multivendorx'),
+									onClick: () => createCustomer,
+									className: 'purple-bg',
+								}}
+							/>
+						</Card>
 					)}
 
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Shipping address', 'multivendorx')}
+					<Card title={__('Shipping address', 'multivendorx')}>
+						{/* No customer selected */}
+						{!hasCustomer && (
+							<div className="address-wrapper">
+								<div className="address">
+									<span>
+										{__('Please Select a customer', 'multivendorx')}
+									</span>
 								</div>
 							</div>
-						</div>
-						<div className="card-body">
-							{!hasCustomer && (
-								<div className="address-wrapper">
-									<div className="address">
-										<span>
-											{__(
-												'Please Select a customer',
-												'multivendorx'
-											)}
-										</span>
-									</div>
+						)}
+
+						{/* View mode */}
+						{hasCustomer && !showShippingAddressEdit && (
+							<div className="address-wrapper">
+								<div className="address">
+									<span>{shippingAddress.address_1}</span>
+									<span>{shippingAddress.city}</span>
+									<span>
+										{shippingAddress.postcode},{' '}
+										{shippingAddress.state}
+									</span>
+									<span>{shippingAddress.country}</span>
 								</div>
-							)}
 
-							{hasCustomer && !showShippingAddressEdit && (
-								<div className="address-wrapper">
-									<div className="address">
-										<span>{shippingAddress.address_1}</span>
-										<span>{shippingAddress.city}</span>
-										<span>
-											{shippingAddress.postcode},{' '}
-											{shippingAddress.state}
-										</span>
-										<span>{shippingAddress.country}</span>
-									</div>
-
-									<div
-										className="admin-badge blue"
-										onClick={() =>
-											setShowShippingAddressEdit(true)
-										}
-									>
-										<i className="adminlib-edit"></i>
-									</div>
+								<div
+									className="admin-badge blue"
+									onClick={() => setShowShippingAddressEdit(true)}
+								>
+									<i className="adminlib-edit" />
 								</div>
-							)}
+							</div>
+						)}
 
-							{showShippingAddressEdit && (
-								<div ref={shippingAddressEditRef}>
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__('Address', 'multivendorx')}
-											</label>
-											<BasicInput
-												name="address_1"
-												value={
-													shippingAddress.address_1
-												}
-												wrapperClass="setting-form-input"
-												onChange={(e) =>
-													setShippingAddress(
-														(prev) => ({
-															...prev,
-															address_1:
-																e.target.value,
-														})
-													)
-												}
-											/>
-										</div>
-									</div>
+						{/* Edit mode */}
+						{showShippingAddressEdit && (
+							<div ref={shippingAddressEditRef}>
+								<FormGroupWrapper>
+									<FormGroup label={__('Address', 'multivendorx')}>
+										<BasicInput
+											name="address_1"
+											value={shippingAddress.address_1}
+											wrapperClass="setting-form-input"
+											onChange={(e) =>
+												setShippingAddress((prev) => ({
+													...prev,
+													address_1: e.target.value,
+												}))
+											}
+										/>
+									</FormGroup>
+									<FormGroup cols={2} label={__('City', 'multivendorx')}>
+										<BasicInput
+											name="city"
+											value={shippingAddress.city || ''}
+											wrapperClass="setting-form-input"
+											onChange={(e) =>
+												setShippingAddress((prev) => ({
+													...prev,
+													city: e.target.value,
+												}))
+											}
+										/>
+									</FormGroup>
+									<FormGroup cols={2} label={__('Postcode / ZIP', 'multivendorx')}>
+										<BasicInput
+											name="postcode"
+											value={shippingAddress.postcode || ''}
+											wrapperClass="setting-form-input"
+											onChange={(e) =>
+												setShippingAddress((prev) => ({
+													...prev,
+													postcode: e.target.value,
+												}))
+											}
+										/>
+									</FormGroup>
+									<FormGroup cols={2} label={__('Country / Region', 'multivendorx')}>
+										<SelectInput
+											name="country"
+											value={shippingAddress.country}
+											options={appLocalizer.country_list || []}
+											type="single-select"
+											onChange={(selected) => {
+												setShippingAddress((prev) => ({
+													...prev,
+													country: selected.value,
+												}));
+												fetchStatesByCountry(selected.value);
+											}}
+										/>
+									</FormGroup>
 
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__('City', 'multivendorx')}
-											</label>
-											<BasicInput
-												name="city"
-												value={
-													shippingAddress.city || ''
-												}
-												onChange={(e) =>
-													setShippingAddress(
-														(prev) => ({
-															...prev,
-															city: e.target
-																.value,
-														})
-													)
-												}
-												wrapperClass="setting-form-input"
-											/>
-										</div>
+									<FormGroup cols={2} label={__('State / County', 'multivendorx')}>
+										<SelectInput
+											name="state"
+											value={shippingAddress.state}
+											options={stateOptions}
+											type="single-select"
+											onChange={(selected) =>
+												setShippingAddress((prev) => ({
+													...prev,
+													state: selected.value,
+												}))
+											}
+										/>
+									</FormGroup>
+								</FormGroupWrapper>
+							</div>
+						)}
+					</Card>
 
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__(
-													'Postcode / ZIP',
-													'multivendorx'
-												)}
-											</label>
-											<BasicInput
-												name="postcode"
-												value={
-													shippingAddress.postcode ||
-													''
-												}
-												onChange={(e) =>
-													setShippingAddress(
-														(prev) => ({
-															...prev,
-															postcode:
-																e.target.value,
-														})
-													)
-												}
-												wrapperClass="setting-form-input"
-											/>
-										</div>
-									</div>
-
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__(
-													'Country / Region',
-													'multivendorx'
-												)}
-											</label>
-											<SelectInput
-												name="country"
-												value={shippingAddress.country}
-												options={
-													appLocalizer.country_list ||
-													[]
-												}
-												type="single-select"
-												onChange={(selected) => {
-													setShippingAddress(
-														(prev) => ({
-															...prev,
-															country:
-																selected.value,
-														})
-													);
-													fetchStatesByCountry(
-														selected.value
-													);
-												}}
-											/>
-										</div>
-
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__(
-													'State / County',
-													'multivendorx'
-												)}
-											</label>
-											<SelectInput
-												name="state"
-												value={shippingAddress.state}
-												options={stateOptions}
-												type="single-select"
-												onChange={(selected) => {
-													setShippingAddress(
-														(prev) => ({
-															...prev,
-															state: selected.value,
-														})
-													);
-												}}
-											/>
-										</div>
-									</div>
-								</div>
-							)}
-						</div>
-					</div>
 
 					<div className="card-content">
 						<div className="card-header">
@@ -1415,34 +1315,24 @@ const AddOrder = () => {
 							)}
 						</div>
 					</div>
-
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Order note', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<TextArea
-										name="shipping_policy"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										placeholder={__(
-											'Enter order note...',
-											'multivendorx'
-										)}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+					<Card
+						title={__('Order note', 'multivendorx')}
+					>
+						<FormGroup>
+							<TextArea
+								name="shipping_policy"
+								wrapperClass="setting-from-textarea"
+								inputClass="textarea-input"
+								descClass="settings-metabox-description"
+								placeholder={__(
+									'Enter order note...',
+									'multivendorx'
+								)}
+							/>
+						</FormGroup>
+					</Card>
+				</Column>
+			</Container>
 		</>
 	);
 };

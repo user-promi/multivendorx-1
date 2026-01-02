@@ -210,7 +210,7 @@ const Documentation: React.FC = () => {
 							</div>
 						}
 					>
-						<div className="document-popup-wrapper content">
+						<div className="document-popup-wrapper">
 								<div className="heading">{activeDocument.title}</div>
 								<p className="des">{activeDocument.content}</p>
 						</div>

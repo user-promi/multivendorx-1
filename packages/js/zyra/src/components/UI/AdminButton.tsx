@@ -14,14 +14,14 @@ const AdminButton: React.FC<AdminButtonProps> = ({ buttons, wrapperClass }) => {
   const buttonsArray = Array.isArray(buttons) ? buttons : [buttons];
 
   const renderedButtons = buttonsArray.map((btn, index) => (
-    <button
+    <div
       key={index}
       className={`admin-btn ${btn.className ? `btn-${btn.className}` : ''}`}
       onClick={btn.onClick}
     >
       {btn.icon && <i className={`adminlib-${btn.icon}`}></i>}
       {btn.text}
-    </button>
+    </div>
   ));
 
   const wrapperClasses = `buttons-wrapper ${wrapperClass ? ` ${wrapperClass}` : ''}`;

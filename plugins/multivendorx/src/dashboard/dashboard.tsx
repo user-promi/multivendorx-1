@@ -16,7 +16,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import '../components/dashboard.scss';
 import '../dashboard/dashboard1.scss';
-import { Card, Container, getApiLink, MultiCalendarInput, TableCell, useModules } from 'zyra';
+import { AdminButton, Card, Column, Container, getApiLink, MultiCalendarInput, TableCell, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency } from '@/services/commonFunction';
@@ -585,522 +585,538 @@ const Dashboard: React.FC = () => {
 			</div>
 
 			<Container >
-				<Card transparent>
-					<div className="analytics-container dashboard">
-						{analyticsData.map((item, idx) => (
-							<div
-								key={idx}
-								className={`analytics-item ${item.color}`}
-							>
-								<div className="details">
-									<div className="text">
-										{__(item.text, 'multivendorx')}
-									</div>
-
-									<div className="number">
-										{item.number}
-									</div>
-
-									<div className="report">
-										<div>
-											{__('Last 30 days:', 'multivendorx')}{' '}
-											<span className={`${item.color}-color`}>
-												$189
-											</span>
-										</div>
-
-										<div>
-											{__('Previous 30 days:', 'multivendorx')}{' '}
-											<span className={`${item.color}-color`}>
-												$690
-											</span>
-										</div>
-									</div>
-								</div>
-
-								<div className="analytics-icon">
-									<i
-										className={`${item.icon} ${item.color}-bg`}
-									/>
-								</div>
-							</div>
-						))}
-					</div>
-				</Card>
-
-				<Card
-					title={__('Sales Overview (P)', 'multivendorx')}
-					iconName="adminlib-external icon"
-					grid={8}   // column-8 → grid 8
-				>
-					<ResponsiveContainer width="100%" height={250}>
-						<BarChart
-							data={revenueData}
-							barSize={12}
-							barCategoryGap="20%"
-						>
-							<CartesianGrid stroke="#f0f0f0" vertical={false} />
-							<XAxis dataKey="month" axisLine={false} tickLine={false} />
-							<YAxis axisLine={false} tickLine={false} />
-
-							<Tooltip
-								contentStyle={{
-									background: '#fff',
-									border: 'none',
-									borderRadius: '3px',
-									boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
-								}}
-							/>
-
-							<Legend />
-
-							{BarChartData.map((entry) => (
-								<Bar
-									key={entry.dataKey}
-									dataKey={entry.dataKey}
-									fill={entry.color}
-									radius={[6, 6, 0, 0]}
-									name={__(entry.name, 'multivendorx')}
-								/>
-							))}
-
-							<Line
-								type="monotone"
-								dataKey="conversion"
-								stroke="#ffa726"
-								strokeWidth={2}
-								dot={{ r: 3 }}
-								name={__('Conversion %', 'multivendorx')}
-								yAxisId={1}
-							/>
-
-							<YAxis
-								yAxisId={1}
-								orientation="right"
-								axisLine={false}
-								tickLine={false}
-								tickFormatter={(v) => `${v}%`}
-							/>
-						</BarChart>
-					</ResponsiveContainer>
-				</Card>
-
-				<Card
-					title={__('Last Withdrawal', 'multivendorx')}
-					grid={4}
-				>
-					<div className="top-customer-wrapper">
-						{lastWithdraws && lastWithdraws.length > 0 ? (
-							lastWithdraws.map((item) => (
-								<div key={item.id} className="info-item">
-									<div className="details-wrapper">
-										<div className="details">
-											<div className="name">
-												{item.payment_method === 'stripe-connect' &&
-													__('Stripe', 'multivendorx')}
-
-												{item.payment_method === 'bank-transfer' &&
-													__('Direct to Local Bank (INR)', 'multivendorx')}
-
-												{item.payment_method === 'paypal-payout' &&
-													__('PayPal', 'multivendorx')}
-											</div>
-
-											<div className="des">
-												{formatWcShortDate(item.date)}
-											</div>
-										</div>
-									</div>
-
-									<div className="right-details">
-										<div className="price">
-											{formatCurrency(item.amount)}
-										</div>
-									</div>
-								</div>
-							))
-						) : (
-							<div className="no-data">
-								{__('No withdrawals found.', 'multivendorx')}
-							</div>
-						)}
-					</div>
-
-					{lastWithdraws && lastWithdraws.length > 0 && (
-						<div className="buttons-wrapper">
-							<div
-								className="admin-btn btn-purple"
-								onClick={() => {
-									window.location.href =
-										'/dashboard/wallet/transactions/';
-								}}
-							>
-								<i className="adminlib-preview"></i>
-								{__('View transaction history', 'multivendorx')}
-							</div>
-						</div>
-					)}
-				</Card>
-
-				<Card
-					title={__('Recent Orders', 'multivendorx')}
-					iconName="adminlib-external icon"
-				>
-					<div className="table-wrapper">
-						{recentOrder && recentOrder.length > 0 ? (
-							<table>
-								<thead>
-									<tr className="header">
-										<td>{__('Order Id', 'multivendorx')}</td>
-										<td>{__('Order Date', 'multivendorx')}</td>
-										<td>{__('Product Name(P)', 'multivendorx')}</td>
-										<td>{__('Total Amount', 'multivendorx')}</td>
-										<td>{__('Order Status', 'multivendorx')}</td>
-										<td>{__('Status (P)', 'multivendorx')}</td>
-									</tr>
-								</thead>
-
-								<tbody>
-									{recentOrder.map((item) => {
-										const id = item.id;
-										const orderUrl = `/dashboard/sales/orders/#view/${id}`;
-
-										return (
-											<tr key={id}>
-												<td>
-													<a
-														href={orderUrl}
-														target="_blank"
-														rel="noopener noreferrer"
-													>
-														#{id} {__('Customer', 'multivendorx')}
-													</a>
-												</td>
-												<td>{item.date}</td>
-												<td>{item.name}</td>
-												<td>{item.amount}</td>
-												<td>
-													<div className="admin-status">
-														{item.status}
-													</div>
-												</td>
-												<td>
-													<div className="admin-badge">
-														{item.status}
-													</div>
-												</td>
-											</tr>
-										);
-									})}
-								</tbody>
-							</table>
-						) : (
-							<div className="no-data">
-								{__('No products found.', 'multivendorx')}
-							</div>
-						)}
-					</div>
-				</Card>
-
-				{/* Best-Selling Products */}
-				<Card
-					title={__('Best-Selling Products', 'multivendorx')}
-					iconName="adminlib-external icon"
-					grid={6}
-				>
-					<div className="table-wrapper top-products">
-						{topProducts && topProducts.length > 0 ? (
-							<table>
-								<thead>
-									<tr className="header">
-										<td>#</td>
-										<td>{__('Name', 'multivendorx')}</td>
-										<td>{__('Popularity', 'multivendorx')}</td>
-										<td>{__('Sales', 'multivendorx')}</td>
-									</tr>
-								</thead>
-
-								<tbody>
-									{topProducts.map((item, index) => (
-										<tr key={item.id}>
-											<td>
-												{String(index + 1).padStart(2, '0')}
-											</td>
-
-											<td>{item.name}</td>
-
-											<td className="progress-bar">
-												<div
-													className={`progress-bar admin-color${index + 1}`}
-												>
-													<span
-														className={`progress-bar admin-bg-color${index + 1}`}
-														style={{ width: `${item.popularity}%` }}
-													/>
-												</div>
-											</td>
-
-											<td>
-												<div
-													className={`admin-badge admin-color${index + 1}`}
-												>
-													{item.popularity}%
-												</div>
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						) : (
-							<div className="no-data">
-								{__('No products found.', 'multivendorx')}
-							</div>
-						)}
-					</div>
-				</Card>
-
-				{/* Commission Overview */}
-				<Card
-					title={__('Commission Overview', 'multivendorx')}
-					iconName="adminlib-external icon"
-					onIconClick={() => {
-						window.location.href = '/dashboard/reports/overview/';
-					}}
-					grid={6}
-				>
-					<div style={{ width: '100%', height: 400 }}>
-						<ResponsiveContainer>
-							<PieChart>
-								<Pie
-									data={chartData}
-									dataKey="value"
-									nameKey="name"
-									cx="50%"
-									cy="50%"
-									outerRadius={140}
-									innerRadius={80}
-									label={({ name, percent }) =>
-										`${name} ${(percent * 100).toFixed(1)}%`
-									}
-									labelLine={false}
-									isAnimationActive
+				<Column>
+					<Card transparent>
+						<div className="analytics-container dashboard">
+							{analyticsData.map((item, idx) => (
+								<div
+									key={idx}
+									className={`analytics-item ${item.color}`}
 								>
-									{chartData.map((item, index) => (
-										<Cell
-											key={`cell-${index}`}
-											fill={item.color}
+									<div className="details">
+										<div className="text">
+											{__(item.text, 'multivendorx')}
+										</div>
+
+										<div className="number">
+											{item.number}
+										</div>
+
+										<div className="report">
+											<div>
+												{__('Last 30 days:', 'multivendorx')}{' '}
+												<span className={`${item.color}-color`}>
+													$189
+												</span>
+											</div>
+
+											<div>
+												{__('Previous 30 days:', 'multivendorx')}{' '}
+												<span className={`${item.color}-color`}>
+													$690
+												</span>
+											</div>
+										</div>
+									</div>
+
+									<div className="analytics-icon">
+										<i
+											className={`${item.icon} ${item.color}-bg`}
 										/>
-									))}
-								</Pie>
+									</div>
+								</div>
+							))}
+						</div>
+					</Card>
+				</Column>
+				<Column grid={8}>
+					<Card
+						title={__('Sales Overview (P)', 'multivendorx')}
+						iconName="adminlib-external icon"
+					>
+						<ResponsiveContainer width="100%" height={250}>
+							<BarChart
+								data={revenueData}
+								barSize={12}
+								barCategoryGap="20%"
+							>
+								<CartesianGrid stroke="#f0f0f0" vertical={false} />
+								<XAxis dataKey="month" axisLine={false} tickLine={false} />
+								<YAxis axisLine={false} tickLine={false} />
 
 								<Tooltip
-									formatter={(value) => formatCurrency(value)}
 									contentStyle={{
-										backgroundColor: '#fff',
-										borderRadius: '8px',
-										border: '1px solid #ddd',
+										background: '#fff',
+										border: 'none',
+										borderRadius: '3px',
+										boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
 									}}
 								/>
 
-								<Legend
-									verticalAlign="bottom"
-									height={36}
+								<Legend />
+
+								{BarChartData.map((entry) => (
+									<Bar
+										key={entry.dataKey}
+										dataKey={entry.dataKey}
+										fill={entry.color}
+										radius={[6, 6, 0, 0]}
+										name={__(entry.name, 'multivendorx')}
+									/>
+								))}
+
+								<Line
+									type="monotone"
+									dataKey="conversion"
+									stroke="#ffa726"
+									strokeWidth={2}
+									dot={{ r: 3 }}
+									name={__('Conversion %', 'multivendorx')}
+									yAxisId={1}
 								/>
-							</PieChart>
+
+								<YAxis
+									yAxisId={1}
+									orientation="right"
+									axisLine={false}
+									tickLine={false}
+									tickFormatter={(v) => `${v}%`}
+								/>
+							</BarChart>
 						</ResponsiveContainer>
-					</div>
-				</Card>
+					</Card>
+				</Column>
 
-				{/* Admin Announcements */}
-				{modules.includes('announcement') && (
-					<Card
-						title={__('Admin Announcements', 'multivendorx')}
-						iconName="adminlib-external icon"
-						grid={4}
-					>
-						<div className="notification-wrapper">
-							{announcement && announcement.length > 0 ? (
-								<ul>
-									{announcement.map((item, index) => (
-										<li key={item.id}>
-											<div className="icon-wrapper">
-												<i
-													className={`adminlib-form-paypal-email admin-badge admin-color${index + 2}`}
-												/>
-											</div>
-
+				<Column grid={4}>
+					<Card title={__('Last Withdrawal', 'multivendorx')} >
+						<div className="top-customer-wrapper">
+							{lastWithdraws && lastWithdraws.length > 0 ? (
+								lastWithdraws.map((item) => (
+									<div key={item.id} className="info-item">
+										<div className="details-wrapper">
 											<div className="details">
-												<div className="notification-title">
-													{item.title}
+												<div className="name">
+													{item.payment_method === 'stripe-connect' &&
+														__('Stripe', 'multivendorx')}
+
+													{item.payment_method === 'bank-transfer' &&
+														__('Direct to Local Bank (INR)', 'multivendorx')}
+
+													{item.payment_method === 'paypal-payout' &&
+														__('PayPal', 'multivendorx')}
 												</div>
 
 												<div className="des">
-													{item.content}
+													{formatWcShortDate(item.date)}
 												</div>
-
-												<span>
-													{formatTimeAgo(item.date)}
-												</span>
 											</div>
-										</li>
-									))}
-								</ul>
+										</div>
+
+										<div className="right-details">
+											<div className="price">
+												{formatCurrency(item.amount)}
+											</div>
+										</div>
+									</div>
+								))
 							) : (
 								<div className="no-data">
-									{__('No announcements found.', 'multivendorx')}
+									{__('No withdrawals found.', 'multivendorx')}
+								</div>
+							)}
+						</div>
+
+						{lastWithdraws && lastWithdraws.length > 0 && (
+							// <div className="buttons-wrapper">
+							// 	<div
+							// 		className="admin-btn btn-purple"
+							// 		onClick={() => {
+							// 			window.location.href =
+							// 				'/dashboard/wallet/transactions/';
+							// 		}}
+							// 	>
+							// 		<i className="adminlib-preview"></i>
+							// 		{__('View transaction history', 'multivendorx')}
+							// 	</div>
+							// </div>
+							<AdminButton
+								wrapperClass="right"
+								buttons={{
+									icon: 'preview',
+									text: __('View transaction history', 'multivendorx'),
+									onClick: window.location.href = '/dashboard/wallet/transactions/',
+									className: 'purple-bg',
+								}}
+							/>
+						)}
+					</Card>
+				</Column>
+
+				<Column>
+					<Card
+						title={__('Recent Orders', 'multivendorx')}
+						iconName="adminlib-external icon"
+					>
+						<div className="table-wrapper">
+							{recentOrder && recentOrder.length > 0 ? (
+								<table>
+									<thead>
+										<tr className="header">
+											<td>{__('Order Id', 'multivendorx')}</td>
+											<td>{__('Order Date', 'multivendorx')}</td>
+											<td>{__('Product Name(P)', 'multivendorx')}</td>
+											<td>{__('Total Amount', 'multivendorx')}</td>
+											<td>{__('Order Status', 'multivendorx')}</td>
+											<td>{__('Status (P)', 'multivendorx')}</td>
+										</tr>
+									</thead>
+
+									<tbody>
+										{recentOrder.map((item) => {
+											const id = item.id;
+											const orderUrl = `/dashboard/sales/orders/#view/${id}`;
+
+											return (
+												<tr key={id}>
+													<td>
+														<a
+															href={orderUrl}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
+															#{id} {__('Customer', 'multivendorx')}
+														</a>
+													</td>
+													<td>{item.date}</td>
+													<td>{item.name}</td>
+													<td>{item.amount}</td>
+													<td>
+														<div className="admin-status">
+															{item.status}
+														</div>
+													</td>
+													<td>
+														<div className="admin-badge">
+															{item.status}
+														</div>
+													</td>
+												</tr>
+											);
+										})}
+									</tbody>
+								</table>
+							) : (
+								<div className="no-data">
+									{__('No products found.', 'multivendorx')}
 								</div>
 							)}
 						</div>
 					</Card>
+				</Column>
+
+				{/* Best-Selling Products */}
+				<Column grid={6}>
+					<Card
+						title={__('Best-Selling Products', 'multivendorx')}
+						iconName="adminlib-external icon"
+					>
+						<div className="table-wrapper top-products">
+							{topProducts && topProducts.length > 0 ? (
+								<table>
+									<thead>
+										<tr className="header">
+											<td>#</td>
+											<td>{__('Name', 'multivendorx')}</td>
+											<td>{__('Popularity', 'multivendorx')}</td>
+											<td>{__('Sales', 'multivendorx')}</td>
+										</tr>
+									</thead>
+
+									<tbody>
+										{topProducts.map((item, index) => (
+											<tr key={item.id}>
+												<td>
+													{String(index + 1).padStart(2, '0')}
+												</td>
+
+												<td>{item.name}</td>
+
+												<td className="progress-bar">
+													<div
+														className={`progress-bar admin-color${index + 1}`}
+													>
+														<span
+															className={`progress-bar admin-bg-color${index + 1}`}
+															style={{ width: `${item.popularity}%` }}
+														/>
+													</div>
+												</td>
+
+												<td>
+													<div
+														className={`admin-badge admin-color${index + 1}`}
+													>
+														{item.popularity}%
+													</div>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							) : (
+								<div className="no-data">
+									{__('No products found.', 'multivendorx')}
+								</div>
+							)}
+						</div>
+					</Card>
+				</Column>
+
+				{/* Commission Overview */}
+				<Column grid={6}>
+					<Card
+						title={__('Commission Overview', 'multivendorx')}
+						iconName="adminlib-external icon"
+						onIconClick={() => {
+							window.location.href = '/dashboard/reports/overview/';
+						}}
+					>
+						<div style={{ width: '100%', height: 400 }}>
+							<ResponsiveContainer>
+								<PieChart>
+									<Pie
+										data={chartData}
+										dataKey="value"
+										nameKey="name"
+										cx="50%"
+										cy="50%"
+										outerRadius={140}
+										innerRadius={80}
+										label={({ name, percent }) =>
+											`${name} ${(percent * 100).toFixed(1)}%`
+										}
+										labelLine={false}
+										isAnimationActive
+									>
+										{chartData.map((item, index) => (
+											<Cell
+												key={`cell-${index}`}
+												fill={item.color}
+											/>
+										))}
+									</Pie>
+
+									<Tooltip
+										formatter={(value) => formatCurrency(value)}
+										contentStyle={{
+											backgroundColor: '#fff',
+											borderRadius: '8px',
+											border: '1px solid #ddd',
+										}}
+									/>
+
+									<Legend
+										verticalAlign="bottom"
+										height={36}
+									/>
+								</PieChart>
+							</ResponsiveContainer>
+						</div>
+					</Card>
+				</Column>
+				{/* Admin Announcements */}
+				{modules.includes('announcement') && (
+					<Column grid={4}>
+						<Card
+							title={__('Admin Announcements', 'multivendorx')}
+							iconName="adminlib-external icon"
+						>
+							<div className="notification-wrapper">
+								{announcement && announcement.length > 0 ? (
+									<ul>
+										{announcement.map((item, index) => (
+											<li key={item.id}>
+												<div className="icon-wrapper">
+													<i
+														className={`adminlib-form-paypal-email admin-badge admin-color${index + 2}`}
+													/>
+												</div>
+
+												<div className="details">
+													<div className="notification-title">
+														{item.title}
+													</div>
+
+													<div className="des">
+														{item.content}
+													</div>
+
+													<span>
+														{formatTimeAgo(item.date)}
+													</span>
+												</div>
+											</li>
+										))}
+									</ul>
+								) : (
+									<div className="no-data">
+										{__('No announcements found.', 'multivendorx')}
+									</div>
+								)}
+							</div>
+						</Card>
+					</Column>
 				)}
 				{modules.includes('marketplace-refund') && (
-					<Card
-						title={__('Pending Refunds', 'multivendorx')}
-						iconName="adminlib-external icon"
-						onIconClick={() => {
-							window.location.href =
-								'/dashboard/sales/orders/#refund-requested';
-						}}
-						grid={4}
-					>
-						<div className="top-customer-wrapper">
-							{pendingRefund && pendingRefund.length > 0 ? (
-								pendingRefund.map((customer) => (
-									<div
-										key={customer.id}
-										className="customer"
-									>
-										<div className="left-section">
-											<div className="details">
-												<div className="name">
-													{customer.name}
-												</div>
-												<div className="order-number">
-													{customer.reason} |{' '}
-													{formatWcShortDate(customer.time)}
+					<Column grid={4}>
+						<Card
+							title={__('Pending Refunds', 'multivendorx')}
+							iconName="adminlib-external icon"
+							onIconClick={() => {
+								window.location.href =
+									'/dashboard/sales/orders/#refund-requested';
+							}}
+						>
+							<div className="top-customer-wrapper">
+								{pendingRefund && pendingRefund.length > 0 ? (
+									pendingRefund.map((customer) => (
+										<div
+											key={customer.id}
+											className="customer"
+										>
+											<div className="left-section">
+												<div className="details">
+													<div className="name">
+														{customer.name}
+													</div>
+													<div className="order-number">
+														{customer.reason} |{' '}
+														{formatWcShortDate(customer.time)}
+													</div>
 												</div>
 											</div>
 										</div>
+									))
+								) : (
+									<div className="no-data">
+										{__('No pending refunds found.', 'multivendorx')}
 									</div>
-								))
-							) : (
-								<div className="no-data">
-									{__('No pending refunds found.', 'multivendorx')}
-								</div>
-							)}
-						</div>
-					</Card>
+								)}
+							</div>
+						</Card>
+					</Column>
 				)}
-
-				<Card
-					title={__('Top customer (P)', 'multivendorx')}
-					grid={4}
-				>
-					{customers.map((customer, index) => (
-						<div key={customer.id} className="info-item">
-							<div className="details-wrapper">
-								<div className="avatar">
-									<i
-										className={`${customer.icon} admin-bg-color${index + 1}`}
-									/>
-								</div>
-
-								<div className="details">
-									<div className="name">
-										{customer.name}
+				<Column grid={4}>
+					<Card
+						title={__('Top customer (P)', 'multivendorx')}
+					>
+						{customers.map((customer, index) => (
+							<div key={customer.id} className="info-item">
+								<div className="details-wrapper">
+									<div className="avatar">
+										<i
+											className={`${customer.icon} admin-bg-color${index + 1}`}
+										/>
 									</div>
-									<div className="des">
-										{customer.orders}
-										{__('orders', 'multivendorx')}
+
+									<div className="details">
+										<div className="name">
+											{customer.name}
+										</div>
+										<div className="des">
+											{customer.orders}
+											{__('orders', 'multivendorx')}
+										</div>
 									</div>
 								</div>
-							</div>
 
-							<div className="right-details">
-								<div className="price">
-									{customer.total}
+								<div className="right-details">
+									<div className="price">
+										{customer.total}
+									</div>
 								</div>
-							</div>
-						</div>
-					))}
-				</Card>
-
-				<Card
-					grid={4}
-					title={__('Store Activity (P)', 'multivendorx')}
-				>
-					<div className="activity-log">
-						{activities.map((a, i) => (
-							<div key={i} className="activity">
-								<div className="title">{a.text}</div>
-								<div className="des">
-									{__('Your order has been placed successfully', 'multivendorx')}
-								</div>
-								<span>
-									{__('2 minutes ago', 'multivendorx')}
-								</span>
 							</div>
 						))}
-					</div>
-				</Card>
-				{modules.includes('store-review') && (
+					</Card>
+				</Column>
+				<Column grid={4}>
 					<Card
-						title={__('Latest Reviews', 'multivendorx')}
-						iconName="adminlib-external icon"
-						grid={8}
-						onIconClick={() => {
-							window.location.href =
-								'/dashboard/store-support/store-review/';
-						}}
+						title={__('Store Activity (P)', 'multivendorx')}
 					>
-						<div className="review-wrapper">
-							{review && review.length > 0 ? (
-								review.map((reviewItem) => (
-									<div
-										className="review"
-										key={reviewItem.review_id}
-									>
-										<div className="details">
-											<div className="title">
-												<div className="avatar">
-													<i className="adminlib-person" />
-												</div>
-												{reviewItem.review_title}
-											</div>
-
-											<div className="star-wrapper">
-												{[...Array(5)].map((_, index) => (
-													<i
-														key={index}
-														className={`star-icon adminlib-star ${index <
-															Math.round(
-																reviewItem.overall_rating
-															)
-															? 'active'
-															: ''
-															}`}
-													/>
-												))}
-												<span>
-													{formatWcShortDate(
-														reviewItem.date_created
-													)}
-												</span>
-											</div>
-
-											<div className="des">
-												{reviewItem.review_content}
-											</div>
-										</div>
+						<div className="activity-log">
+							{activities.map((a, i) => (
+								<div key={i} className="activity">
+									<div className="title">{a.text}</div>
+									<div className="des">
+										{__('Your order has been placed successfully', 'multivendorx')}
 									</div>
-								))
-							) : (
-								<div className="no-data">
-									{__('No reviews found.', 'multivendorx')}
+									<span>
+										{__('2 minutes ago', 'multivendorx')}
+									</span>
 								</div>
-							)}
+							))}
 						</div>
 					</Card>
+				</Column>
+				{modules.includes('store-review') && (
+					<Column grid={8}>
+						<Card
+							title={__('Latest Reviews', 'multivendorx')}
+							iconName="adminlib-external icon"
+							onIconClick={() => {
+								window.location.href =
+									'/dashboard/store-support/store-review/';
+							}}
+						>
+							<div className="review-wrapper">
+								{review && review.length > 0 ? (
+									review.map((reviewItem) => (
+										<div
+											className="review"
+											key={reviewItem.review_id}
+										>
+											<div className="details">
+												<div className="title">
+													<div className="avatar">
+														<i className="adminlib-person" />
+													</div>
+													{reviewItem.review_title}
+												</div>
+
+												<div className="star-wrapper">
+													{[...Array(5)].map((_, index) => (
+														<i
+															key={index}
+															className={`star-icon adminlib-star ${index <
+																Math.round(
+																	reviewItem.overall_rating
+																)
+																? 'active'
+																: ''
+																}`}
+														/>
+													))}
+													<span>
+														{formatWcShortDate(
+															reviewItem.date_created
+														)}
+													</span>
+												</div>
+
+												<div className="des">
+													{reviewItem.review_content}
+												</div>
+											</div>
+										</div>
+									))
+								) : (
+									<div className="no-data">
+										{__('No reviews found.', 'multivendorx')}
+									</div>
+								)}
+							</div>
+						</Card>
+					</Column>
 				)}
 
 			</Container>

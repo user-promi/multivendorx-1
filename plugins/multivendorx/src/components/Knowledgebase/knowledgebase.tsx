@@ -582,7 +582,7 @@ export const KnowledgeBase: React.FC = () => {
 						</>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="title">
@@ -661,7 +661,7 @@ export const KnowledgeBase: React.FC = () => {
 								/>
 							</div>
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			)}
 			<div className="general-wrapper">

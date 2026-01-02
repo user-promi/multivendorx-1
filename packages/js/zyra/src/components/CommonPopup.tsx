@@ -53,7 +53,7 @@ const CommonPopup = ( {
             { header && <div className="title-wrapper">{ header }</div> }
 
             <DialogContent>
-                <div>{ children }</div>
+                <div className="content">{ children }</div>
             </DialogContent>
 
             { footer && (

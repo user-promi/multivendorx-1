@@ -436,7 +436,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 						</>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label>
@@ -636,7 +636,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								</>
 							)}
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			)}
 		</>

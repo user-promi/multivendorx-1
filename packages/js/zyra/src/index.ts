@@ -65,6 +65,7 @@ export { default as DynamicRowSetting } from './components/DynamicRowSetting';
 export { default as InputWithSuggestions } from './components/InputWithSuggestions';
 
 export { default as Container } from './components/UI/Container';
+export { default as Column } from './components/UI/Column';
 export { default as Card } from './components/UI/Card';
 export { default as FormGroup } from './components/UI/FormGroup';
 export { default as FormGroupWrapper } from './components/UI/FormGroupWrapper';
