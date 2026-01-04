@@ -951,6 +951,16 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
         }
     };
 
+    const wizardSteps = methods
+        .map((m, i) => ({ ...m, originalIndex: i }))
+        .filter((m) => m.isWizardMode && m.countBtn);
+
+    const totalSteps = wizardSteps.length;
+
+    const currentStepIndex = wizardSteps.findIndex(
+        (m) => m.originalIndex === wizardIndex
+    );
+
     return (
         <>
             <div className="expandable-panel-group">
@@ -1162,9 +1172,9 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                                 </li>
                                             ) }
                                         </ul>
-                                    ) : method.countBtn ? (
-                                        <div className="admin-badge red">
-                                            1/3
+                                    ) : method.countBtn && currentStepIndex !== -1 ? (
+                                         <div className="admin-badge red">
+                                            {currentStepIndex + 1}/{totalSteps}
                                         </div>
                                     ) : null }
                                     { method.isCustom && (
@@ -1365,7 +1375,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                         className={ `${
                                             method.wrapperClass || ''
                                         } expandable-panel ${
-                                            isActive && isEnabled ? 'open' : ((isActive && method.isCustom) ? 'open' : '')
+                                            isActive && isEnabled ? 'open' : ((isActive && method.isCustom || method.openForm) ? 'open' : '')
                                         } ${ method.openForm ? 'open' : '' }` }
                                     >
                                         { method.formFields.map( ( field ) => {
