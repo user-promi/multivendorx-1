@@ -509,6 +509,9 @@ class FrontendScripts {
                         'store_icon'   => plugin_dir_url( __FILE__ ) . 'assets/images/store-icon.png',
                         'icon_width'   => 40,
                         'icon_height'  => 40,
+                        'mapbox_token' => MultiVendorX()->setting->get_setting( 'mapbox_api_key', '' ),
+                        'mapbox_style' => 'mapbox://styles/mapbox/streets-v11',   
+                        'map_provider' => MultiVendorX()->setting->get_setting('choose_map_api', '')            
                     ),
 				),
                 'multivendorx-report-abuse-frontend-script' => array(
