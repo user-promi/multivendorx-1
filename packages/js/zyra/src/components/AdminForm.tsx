@@ -46,6 +46,7 @@ import { useModules } from '../contexts/ModuleContext';
 import axios from 'axios';
 import MultiCalendarInput from './MultiCalendarInput';
 import CalendarInput from './CalendarInput';
+import EmailTemplate from './TemplateEditor/EmailTemplate';
 
 interface WPMediaAttachment {
     url: string;
@@ -182,6 +183,7 @@ interface InputField {
         | 'description'
         | 'treeselect'
         | 'form-builder'
+        | 'email-template'
         | 'setting-time'
         | 'multi-calender'
         | 'endpoint-editor';
@@ -2168,7 +2170,13 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-
+                case 'email-template':
+                    input = (
+                        <EmailTemplate 
+                             name={ inputField.key }
+                        />
+                    )
+                    break;
                 case 'form-builder':
                     input = (
                         <FromBuilder

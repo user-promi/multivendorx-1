@@ -398,9 +398,9 @@
             gap: 1rem;
 
             .section {
-                background: #fff;
+                background: $background-white;
                 border-radius: 0.313rem;
-                box-shadow: 0 0.313rem 0.85rem 0 rgb(74 73 73 / 9%);
+                box-shadow: $box-shadow;
                 width: 100%;
                 height: 8rem;
                 margin-top: 1rem;

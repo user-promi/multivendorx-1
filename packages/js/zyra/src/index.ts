@@ -56,13 +56,20 @@ export { default as WpEditor } from './components/WpEditor';
 export { default as AdminHeader } from './components/AdminHeader';
 export { default as AdminBreadcrumbs } from './components/AdminBreadcrumbs';
 export { default as NestedComponent } from './components/NestedComponent';
-export { default as PaymentTabsComponent } from './components/ExpandablePanelGroup';
+export { default as ExpandablePanelGroup } from './components/ExpandablePanelGroup';
 export { default as CommonPopup } from './components/CommonPopup';
 export { default as SuccessNotice } from './components/SuccessNotice';
 export { default as EmailsInput } from './components/EmailsInput';
 export { default as TourSetup } from './components/TourSetup';
 export { default as DynamicRowSetting } from './components/DynamicRowSetting';
 export { default as InputWithSuggestions } from './components/InputWithSuggestions';
+
+export { default as Container } from './components/UI/Container';
+export { default as Column } from './components/UI/Column';
+export { default as Card } from './components/UI/Card';
+export { default as FormGroup } from './components/UI/FormGroup';
+export { default as FormGroupWrapper } from './components/UI/FormGroupWrapper';
+export { default as AdminButton } from './components/UI/AdminButton';
 
 export { useModules, initializeModules } from './contexts/ModuleContext';
 export { SettingProvider, useSetting } from './contexts/SettingContext';

@@ -1075,7 +1075,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 					</>
 				}
 			>
-				<div className="content">
+				<>
 					{/* start left section */}
 					<div className="form-group-wrapper">
 						<div className="available-balance">
@@ -1186,7 +1186,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 							/>
 						</div>
 					</div>
-				</div>
+				</>
 			</CommonPopup>
 
 			<div className="admin-table-wrapper admin-pt-2">

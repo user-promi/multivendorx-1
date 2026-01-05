@@ -607,7 +607,7 @@ const SupportTickets: React.FC = () => {
 						</>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="form-group-wrapper">
 							<div className="review-popup-wrapper">
 								<div className="customer-wrapper">
@@ -724,7 +724,7 @@ const SupportTickets: React.FC = () => {
 								/>
 							</div>
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			)}
 		</>

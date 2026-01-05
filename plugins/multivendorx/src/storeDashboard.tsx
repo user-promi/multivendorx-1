@@ -12,6 +12,7 @@ const Dashboard = () => {
 	const [currentTab, setCurrentTab] = useState('');
 	const [showUserDropdown, setShowUserDropdown] = useState(false);
 	const [showNotifications, setShowNotifications] = useState(false);
+	const [showActivities, setShowActivities] = useState(false);
 	const [noPermission, setNoPermission] = useState(false);
 	const [showStoreList, setShowStoreList] = useState(false);
 	const [isDarkMode, setIsDarkMode] = useState(false);
@@ -284,6 +285,7 @@ const Dashboard = () => {
 				setShowUserDropdown(false);
 				setShowStoreList(false);
 				setShowNotifications(false);
+				setShowActivities(false);
 			}
 		};
 
@@ -295,12 +297,21 @@ const Dashboard = () => {
 	const toggleUserDropdown = () => {
 		setShowUserDropdown((prev) => !prev);
 		setShowNotifications(false);
+		setShowActivities(false);
 	};
 
 	// Toggle notifications
 	const toggleNotifications = (e) => {
 		e.stopPropagation();
 		setShowNotifications((prev) => !prev);
+		setShowUserDropdown(false);
+		setShowActivities(false);
+	};
+
+	const toggleActivities = (e) => {
+		e.stopPropagation();
+		setShowActivities((prev) => !prev);
+		setShowNotifications(false);
 		setShowUserDropdown(false);
 	};
 
@@ -505,7 +516,18 @@ const Dashboard = () => {
 										Notification
 									</span>
 
-									{showNotifications && <Notifications />}
+									{showNotifications && <Notifications type="notification"/>}
+								</li>
+								<li className="tooltip-wrapper bottom">
+									<i
+										className="adminlib-icon notification adminlib-notification"
+										onClick={toggleActivities}
+									></i>
+									<span className="tooltip-name">
+										Activity
+									</span>
+
+									{showActivities && <Notifications type="activity"/>}
 								</li>
 								<li
 									id="fullscreenToggle"

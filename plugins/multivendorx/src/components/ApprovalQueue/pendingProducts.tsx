@@ -464,7 +464,7 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 						</>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="form-group">
 							<TextArea
 								name="reject_reason"
@@ -479,7 +479,7 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 								rows={4}
 							/>
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			)}
 		</>

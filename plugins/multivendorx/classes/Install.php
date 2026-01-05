@@ -376,8 +376,6 @@ class Install {
         // 1. Get the existing option from DB
         $settings = get_option( 'multivendorx_identity_verification_settings', array() );
 
-        $order_settings = get_option( 'multivendorx_order_actions_refunds_settings', array() );
-
         // 2. Modify only what you need
         $settings['all_verification_methods']['ID']['verification_methods'] = array(
 
@@ -733,9 +731,57 @@ By signing and submitting, the Seller accepts all terms above.
 
         update_option( Utill::MULTIVENDORX_SETTINGS['store-registration-form'], $registration_from_settings );
 
+        $order_settings = array(
+            'refund_reasons' => array(
+                'damaged-or-defective-product' => array(
+                    'label' => 'Damaged or defective product',
+					'required'   =>  true,
+					'isCustom'  => true,
+                ),
+                'wrong-item' => array(
+                    'label' => 'Wrong item delivered',
+					'required'   =>  true,
+					'isCustom'  => true,
+                ),
+                'product-not-as-described' => array(
+                    'label' => 'Product not as described',
+					'required'   =>  true,
+					'isCustom'  => true,
+                ),
+                'late-delivery' => array(
+                    'label' => 'Late delivery',
+					'isCustom'  => true,
+                ),
+                'changed-mind' => array(
+                    'label' => 'Changed mind',
+					'isCustom'  => true,
+                ),
+            ),
+        );
+
+        $delivery_settings = array(
+            'shipping_stage' => array(
+                'delivered' => array(
+                    'label' => 'Delivered',
+                    'desc'  => 'Order is received by store',
+					'icon'  => 'adminlib-delivery',
+					'required'   =>  true,
+					'isCustom'  => true,
+                ),
+                'cancelled' => array(
+                    'label' => 'Cancelled',
+                    'desc'  => 'Order is cancelled',
+					'icon'  => 'adminlib-rejecte',
+					'required'   =>  true,
+					'isCustom'  => true,
+                ),
+            ),
+        );
+
         // 6. Save back to DB
         update_option( Utill::MULTIVENDORX_SETTINGS['identity-verification'], $settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $order_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['delivery'], $delivery_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['legal-compliance'], $legal_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-compliance'], $product_compliance_settings );
     }

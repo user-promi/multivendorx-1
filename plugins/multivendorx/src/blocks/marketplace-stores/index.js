@@ -4,6 +4,9 @@ import { render } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
 import MarketplaceStoreList from './marketplaceStoreList';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
+import { initializeModules } from 'zyra';
+
+initializeModules(storesList, 'multivendorx', 'free', 'modules');
 
 const EditBlock = (props) => {
 	const { attributes, setAttributes } = props;
@@ -37,6 +40,15 @@ const EditBlock = (props) => {
 						value={attributes.category}
 						onChange={(value) => setAttributes({ category: value })}
 					/>
+					<TextControl
+						label="per page"
+						type="number"
+						min={1}
+						value={attributes.perpage}
+						onChange={(value) =>
+							setAttributes({ perpage: parseInt(value, 12) || 12 })
+						}
+					/>
 				</PanelBody>
 			</InspectorControls>
 
@@ -62,24 +74,25 @@ registerBlockType('multivendorx/marketplace-stores', {
 		orderby: { type: 'string', default: 'name' },
 		order: { type: 'string', default: 'asc' },
 		category: { type: 'string', default: '' },
+		perpage: { type: 'number', default: 12 },
 	},
 
 	edit: EditBlock,
 
 	save({ attributes }) {
 		return <div id="marketplace-stores" data-attributes={JSON.stringify(attributes)}></div>;
-	},	
+	},
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const element = document.getElementById('marketplace-stores');
-    if (element) {
-        const attributes = JSON.parse(element.getAttribute('data-attributes') || '{}');
-        render(
-            <BrowserRouter>
-                <MarketplaceStoreList {...attributes} />
-            </BrowserRouter>,
-            element
-        );
-    }
+	const element = document.getElementById('marketplace-stores');
+	if (element) {
+		const attributes = JSON.parse(element.getAttribute('data-attributes') || '{}');
+		render(
+			<BrowserRouter>
+				<MarketplaceStoreList {...attributes} />
+			</BrowserRouter>,
+			element
+		);
+	}
 });

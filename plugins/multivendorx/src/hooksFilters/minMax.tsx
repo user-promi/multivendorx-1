@@ -1,6 +1,6 @@
 import { addFilter } from '@wordpress/hooks';
 import { useEffect, useState } from 'react';
-import { NestedComponent, BasicInput } from 'zyra';
+import { NestedComponent, BasicInput, Card } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const MinMax = ({ product, setProduct }) => {
@@ -81,85 +81,80 @@ const MinMax = ({ product, setProduct }) => {
 	};
 
 	return (
-		<div className="card-content" id="card-min-max">
-			<div className="card-header">
-				<div className="left">
-					<div className="title">Min/Max</div>
+		<Card
+			title={__('Min/Max', 'multivendorx')}
+			iconName="adminlib-pagination-right-arrow arrow-icon"
+			toggle
+		>
+			<div className="form-group-wrapper">
+				{/* Quantity */}
+				<div className="form-group">
+					<label>{__('Quantity', 'multivendorx')}</label>
+
+					<BasicInput
+						name="min_quantity"
+						type="number"
+						wrapperClass="setting-form-input"
+						preInsideText={__('Min', 'multivendorx')}
+						value={minMaxMeta.min_quantity}
+						onChange={(e) =>
+							handleQuantityChange(
+								'min_quantity',
+								e.target.value
+							)
+						}
+					/>
+
+					<BasicInput
+						name="max_quantity"
+						type="number"
+						wrapperClass="setting-form-input"
+						preInsideText={__('Max', 'multivendorx')}
+						value={minMaxMeta.max_quantity}
+						onChange={(e) =>
+							handleQuantityChange(
+								'max_quantity',
+								e.target.value
+							)
+						}
+					/>
 				</div>
 
-				<div className="right">
-					<i
-						className="adminlib-pagination-right-arrow arrow-icon"
-						onClick={() => toggleCard('card-min-max')}
-					></i>
-				</div>
-			</div>
-			<div className="card-body">
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						<label>Quantity</label>
+				{/* Amount */}
+				<div className="form-group">
+					<label>{__('Amount', 'multivendorx')}</label>
 
-						<BasicInput
-							name="min_quantity"
-							type="number"
-							wrapperClass="setting-form-input"
-							preInsideText={__('Min', 'multivendorx')}
-							value={minMaxMeta.min_quantity}
-							onChange={(e) =>
-								handleQuantityChange(
-									'min_quantity',
-									e.target.value
-								)
-							}
-						/>
+					<BasicInput
+						name="min_amount"
+						type="number"
+						wrapperClass="setting-form-input"
+						preInsideText={__('Min', 'multivendorx')}
+						value={minMaxMeta.min_amount}
+						onChange={(e) =>
+							handleQuantityChange(
+								'min_amount',
+								e.target.value
+							)
+						}
+					/>
 
-						<BasicInput
-							name="max_quantity"
-							type="number"
-							wrapperClass="setting-form-input"
-							preInsideText={__('Max', 'multivendorx')}
-							value={minMaxMeta.max_quantity}
-							onChange={(e) =>
-								handleQuantityChange(
-									'max_quantity',
-									e.target.value
-								)
-							}
-						/>
-					</div>
-					<div className="form-group">
-						<label>Amount</label>
-						<BasicInput
-							name="min_amount"
-							type="number"
-							wrapperClass="setting-form-input"
-							preInsideText={__('Min', 'multivendorx')}
-							value={minMaxMeta.min_amount}
-							onChange={(e) =>
-								handleQuantityChange(
-									'min_amount',
-									e.target.value
-								)
-							}
-						/>
-
-						<BasicInput
-							name="max_amount"
-							type="number"
-							wrapperClass="setting-form-input"
-							preInsideText={__('Max', 'multivendorx')}
-							value={minMaxMeta.max_amount}
-							onChange={(e) =>
-								handleQuantityChange(
-									'max_amount',
-									e.target.value
-								)
-							}
-						/>
-					</div>
+					<BasicInput
+						name="max_amount"
+						type="number"
+						wrapperClass="setting-form-input"
+						preInsideText={__('Max', 'multivendorx')}
+						value={minMaxMeta.max_amount}
+						onChange={(e) =>
+							handleQuantityChange(
+								'max_amount',
+								e.target.value
+							)
+						}
+					/>
 				</div>
 			</div>
-		</div>
+		</Card>
+
 	);
 };
 

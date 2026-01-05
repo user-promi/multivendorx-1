@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { CommonPopup, getApiLink } from 'zyra';
+import { getApiLink } from 'zyra';
 import axios from 'axios';
 import { Skeleton } from '@mui/material';
 import { __ } from '@wordpress/i18n';
 
-const HeaderNotifications = () => {
+type HeaderNotificationsProps = {
+    type?: 'notification' | 'activity';
+};
+
+const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
+    type,
+}) => {
 	const [notifications, setNotifications] = useState<[] | null>(null);
+	const [isDropdownOpen, setIsDropdownOpen] = useState(true);
 
 	useEffect(() => {
 		axios({
@@ -13,7 +20,8 @@ const HeaderNotifications = () => {
 			url: getApiLink(appLocalizer, 'notifications'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
-				header: true
+				header: true,
+				type: type
 			},
 		})
 			.then((response) => {
@@ -32,7 +40,17 @@ const HeaderNotifications = () => {
 			setNotifications((prev) => prev.filter((n) => n.id !== id));
 		});
 	};
-	// console.log(notifications)
+
+	const handleNotificationClick = (id: number) => {
+		axios({
+			method: 'POST',
+			url: getApiLink(appLocalizer, `notifications/${id}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: { id, is_read: true },
+		}).then(() => {
+			setNotifications((prev) => prev.filter((n) => n.id !== id));
+		});
+	};
 
 	const renderContent = () => {
 		if (notifications === null) {
@@ -68,7 +86,9 @@ const HeaderNotifications = () => {
 
 		return notifications.map((item, idx) => (
 			<li key={idx}>
-				<div className="item">
+				<div className="item"
+				 onClick={() => handleNotificationClick(item.id)}
+				>
 					<div className={`icon admin-badge green`}>
 						<i
 							className={
@@ -82,6 +102,11 @@ const HeaderNotifications = () => {
 						<span className="time">{item.time}</span>
 					</div>
 					<i className="check-icon adminlib-check"></i>
+					<i className="check-icon adminlib-cross"  
+						onClick={(e) => {
+        					e.stopPropagation();
+							dismissNotification(item.id)
+						}}></i>
 				</div>
 			</li>
 		));
@@ -89,6 +114,7 @@ const HeaderNotifications = () => {
 
 	return (
 		<>
+		{isDropdownOpen && (
 			<div className="dropdown notification">
 				<div className="title">
 					{__('Notifications', 'multivendorx')}
@@ -102,15 +128,29 @@ const HeaderNotifications = () => {
 					<ul>{renderContent()}</ul>
 				</div>
 				<div className="footer">
-					<a
-						href={`?page=multivendorx#&tab=notifications`}
-						className="admin-btn btn-purple"
-					>
-						<i className="adminlib-eye"></i>
-						{__('View all notifications', 'multivendorx')}
-					</a>
+					{type == 'notification' ? (
+
+						<a
+							href={`?page=multivendorx#&tab=notifications&subtab=notifications`}
+							className="admin-btn btn-purple"
+							onClick={() => setIsDropdownOpen(false)}
+						>
+							<i className="adminlib-eye"></i>
+							{__('View all notifications', 'multivendorx')}
+						</a>
+					) : (
+						<a
+							href={`?page=multivendorx#&tab=notifications&subtab=activities`}
+							className="admin-btn btn-purple"
+							onClick={() => setIsDropdownOpen(false)}
+						>
+							<i className="adminlib-eye"></i>
+							{__('View all activities', 'multivendorx')}
+						</a>
+					)}
 				</div>
 			</div>
+		)}
 		</>
 	);
 };

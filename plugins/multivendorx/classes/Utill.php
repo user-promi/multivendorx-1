@@ -79,6 +79,8 @@ class Utill {
         'ai-automation'                 => 'multivendorx_ai_automation_settings',
         'log'                           => 'multivendorx_log_settings',
         'min-max'                       => 'multivendorx_min_max_settings',
+        'delivery'                      => 'multivendorx_delivery_settings',
+        'notification-configuration'    => 'multivendorx_notification_configuration_settings',
     );
 
     const MULTIVENDORX_OTHER_SETTINGS = array(
@@ -321,8 +323,7 @@ class Utill {
      * @return bool
      */
     public static function is_khali_dabba() {
-        // return apply_filters( 'kothay_dabba', false );
-        return true;
+        return apply_filters( 'kothay_dabba', false );
     }
 
     /**

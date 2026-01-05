@@ -86,7 +86,7 @@ const ShopPolicies = () => {
 				</div>
 			</div>
 			<div className="container-wrapper">
-				<div className="card-wrapper w-65">
+				<div className="card-wrapper column-8">
 					<div className="card-content">
 						<div className="card-title">
 							{__('Shipping Policy', 'multivendorx')}

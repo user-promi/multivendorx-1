@@ -7,6 +7,10 @@
 namespace MultiVendorX\Notifications;
 
 use MultiVendorX\Utill;
+use MultiVendorX\Notifications\Gateways\Twilio;
+use MultiVendorX\Notifications\Gateways\Plivo;
+use MultiVendorX\Notifications\Gateways\Vonage;
+use MultiVendorX\Notifications\Gateways\Clickatell;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -669,7 +673,24 @@ class Notifications {
         }
 
         if ( $event->sms_enabled ) {
-            // Call sms class.
+            $receivers = array();
+
+            if ( $event->admin_enabled ) {
+                $receivers[] = $parameters['admin_phn'];
+            }
+
+            if ( $event->store_enabled ) {
+                $receivers[] = $parameters['store_phn'];
+            }
+
+            $message = $event->sms_content;
+            
+            $gateway = $this->active_gateway();
+            if ( $gateway ) {
+                foreach ( $receivers as $number ) {
+                    $gateway->send( $number, $message );
+                }
+            }
         }
     }
 
@@ -837,26 +858,16 @@ class Notifications {
      * @param int|null $store_id Store ID.
      * @return array|object
      */
-    public function get_all_notifications( $store_id = null, $args = array() ) {
+    public function get_all_notifications( $args = array() ) {
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
 
-        if ( ! empty( $store_id ) ) {
-            $events = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT * FROM $table WHERE store_id = %d AND is_dismissed = %d",
-                    $store_id,
-                    0
-                )
-            );
-        } else {
-            $events = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT * FROM $table WHERE is_dismissed = %d",
-                    0
-                )
-            );
-        }
+        $events = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM $table WHERE is_dismissed = %d",
+                0
+            )
+        );
 
         if ( ! empty( $args ) ) {
             $where = array();
@@ -936,5 +947,22 @@ class Notifications {
         );
 
         $wpdb->query( $query );
+    }
+
+    public function active_gateway() {
+        $gateways = apply_filters( 'multivendorx_available_sms_gateways', [
+            'twilio'     => new Twilio(),
+            'vonage'     => new Vonage(),
+            'clickatell' => new Clickatell(),
+            'plivo'      => new Plivo(),
+        ]);
+
+        $gateway   = MultiVendorX()->setting->get_setting( 'sms_gateway_selector' );
+
+        if ( $gateway && array_key_exists( $gateway, $gateways ) ) {
+            return new $gateways[ $gateway ];
+        }
+
+        return false;
     }
 }

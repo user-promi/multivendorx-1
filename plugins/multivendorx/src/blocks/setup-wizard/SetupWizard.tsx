@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import 'zyra/build/index.css';
-import { PaymentTabsComponent } from 'zyra';
+import { ExpandablePanelGroup } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import img from '../../assets/images/multivendorx-logo.png';
 
@@ -40,7 +40,7 @@ const SetupWizard: React.FC = () => {
 	const [sections, setSections] = useState<Section[]>(sectionsData);
 	const [expandedSection, setExpandedSection] = useState<number | null>(0);
 
-	// Required state for PaymentTabsComponent
+	// Required state for ExpandablePanelGroup
 	const [value, setValue] = useState({});
 	const settingChanged = useRef(false);
 
@@ -64,47 +64,7 @@ const SetupWizard: React.FC = () => {
 
 	const methods = [
 		{
-			id: 'store_setup',
-			label: 'Configure Your Store',
-			icon: 'adminlib-storefront',
-			desc: 'Configure basic settings for vendor stores.',
-			countBtn: true,
-			isWizardMode: true,
-			openForm:true,
-			formFields: [
-				{
-					key: 'store_url',
-					type: 'text',
-					label: 'Store URL',
-					placeholder: `Define vendor store URL`,
-				},
-				{
-					key: 'multi_vendor_products',
-					type: 'checkbox',
-					label: 'Single Product Multiple Vendors',
-					desc: 'Allows more than one store to sell the same product with their own price and stock.',
-					default: false,
-				},
-				{
-					key: 'wizardButtons',
-					type: 'buttons',
-					options: [
-						{
-							label: 'Back',
-							action: 'back',
-							btnClass: 'admin-btn btn-red',
-						},
-						{
-							label: 'Next',
-							action: 'next',
-							btnClass: 'admin-btn btn-purple',
-						},
-					],
-				},
-			],
-		},
-		{
-			id: 'commission_setup',
+			id: 'revenue_setup',
 			label: 'Set Up Revenue Sharing',
 			icon: 'adminlib-commission',
 			desc: 'Choose how earnings are split between Admin and Vendors.',
@@ -162,7 +122,7 @@ const SetupWizard: React.FC = () => {
 							type: 'setup',
 							label: 'Advanced commission rules',
 							desc: 'Set detailed commission rules by product, order, or store, including fees, taxes, and shipping.',
-							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+							link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
 						},
 					],
 				},
@@ -171,7 +131,89 @@ const SetupWizard: React.FC = () => {
 					type: 'setup',
 					title: 'Advanced commission rules',
 					desc: 'Set detailed commission rules by product, order, or store, including fees, taxes, and shipping.',
-					link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+				},
+				{
+					key: 'wizardButtons',
+					type: 'buttons',
+					options: [
+						{
+							label: 'Back',
+							action: 'back',
+							btnClass: 'admin-btn btn-red',
+						},
+						{
+							label: 'Next',
+							action: 'next',
+							btnClass: 'admin-btn btn-purple',
+						},
+					],
+				},
+			],
+		},
+		{
+			id: 'store_setup',
+			label: 'Configure Your Store',
+			icon: 'adminlib-storefront',
+			desc: 'Configure basic settings for vendor stores.',
+			countBtn: true,
+			isWizardMode: true,
+			openForm:true,
+			formFields: [
+				{
+					key: 'store_url',
+					type: 'text',
+					label: 'Store URL',
+					placeholder: `Define vendor store URL`,
+				},
+				{
+					key: 'multi_vendor_products',
+					type: 'checkbox',
+					label: 'Single Product Multiple Vendors',
+					desc: 'Allows more than one store to sell the same product with their own price and stock.',
+					default: false,
+				},
+				{
+					key: 'wizardButtons',
+					type: 'buttons',
+					options: [
+						{
+							label: 'Back',
+							action: 'back',
+							btnClass: 'admin-btn btn-red',
+						},
+						{
+							label: 'Next',
+							action: 'next',
+							btnClass: 'admin-btn btn-purple',
+						},
+					],
+				},
+			],
+		},
+		{
+			id: 'commission_setup',
+			label: 'Commission Setup',
+			icon: 'adminlib-storefront',
+			desc: 'Configure basic settings for vendor stores.',
+			countBtn: true,
+			isWizardMode: true,
+			openForm:true,
+			formFields: [
+				{
+					key: 'commission_percent',
+					type: 'number',
+					label: 'Commission Percentage',
+					default: 80,
+				},
+				{
+					key: 'commission_type',
+					type: 'select',
+					label: 'Commission Type',
+					options: [
+						{ label: 'Percentage', value: 'percentage' },
+						{ label: 'Fixed', value: 'fixed' },
+					],
 				},
 				{
 					key: 'wizardButtons',
@@ -198,6 +240,7 @@ const SetupWizard: React.FC = () => {
 			desc: 'Control which features and actions are available to each store role.',
 			countBtn: true,
 			isWizardMode: true,
+			openForm:true,
 			formFields: [
 				{
 					key: 'products_fields',
@@ -247,7 +290,7 @@ const SetupWizard: React.FC = () => {
 							type: 'setup',
 							label: 'Advanced store capabilities',
 							desc: 'Quickly manage additional store permissions and advanced features, including orders, coupons, analytics, and more.',
-							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
+							link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
 						},
 					],
 				},
@@ -256,48 +299,7 @@ const SetupWizard: React.FC = () => {
 					type: 'setup',
 					label: 'Advanced store capabilities',
 					desc: 'Quickly manage additional store permissions and advanced features, including orders, coupons, analytics, and more.',
-					link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
-				},
-				{
-					key: 'wizardButtons',
-					type: 'buttons',
-					options: [
-						{
-							label: 'Back',
-							action: 'back',
-							btnClass: 'admin-btn btn-red',
-						},
-						{
-							label: 'Next',
-							action: 'next',
-							btnClass: 'admin-btn btn-purple',
-						},
-					],
-				},
-			],
-		},
-		{
-			id: 'store_setup',
-			label: 'Commission Setup',
-			icon: 'adminlib-storefront',
-			desc: 'Configure basic settings for vendor stores.',
-			countBtn: true,
-			isWizardMode: true,
-			formFields: [
-				{
-					key: 'commission_percent',
-					type: 'number',
-					label: 'Commission Percentage',
-					default: 80,
-				},
-				{
-					key: 'commission_type',
-					type: 'select',
-					label: 'Commission Type',
-					options: [
-						{ label: 'Percentage', value: 'percentage' },
-						{ label: 'Fixed', value: 'fixed' },
-					],
+					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
 				},
 				{
 					key: 'wizardButtons',
@@ -324,6 +326,7 @@ const SetupWizard: React.FC = () => {
 			desc: 'Control what dashboard sections and tools are available to active vendors.',
 			countBtn: true,
 			isWizardMode: true,
+			openForm:true,
 			formFields: [
 				{
 					key: 'product_caps',
@@ -375,7 +378,7 @@ const SetupWizard: React.FC = () => {
 							label: 'Finish',
 							action: 'finish',
 							btnClass: 'admin-btn btn-purple',
-							redirect: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=dashboard`,
+							redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=dashboard`,
 						},
 					],
 				},
@@ -409,7 +412,7 @@ const SetupWizard: React.FC = () => {
 					</div>
 				</div>
 
-				<PaymentTabsComponent
+				<ExpandablePanelGroup
 					key={inputField.key}
 					name={inputField.key}
 					proSetting={isProSetting(inputField.proSetting ?? false)}

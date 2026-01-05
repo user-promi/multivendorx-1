@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, CommonPopup, BasicInput, SuccessNotice } from 'zyra';
+import { getApiLink, CommonPopup, BasicInput, SuccessNotice, Card, Container, AdminButton, Column } from 'zyra';
 import { formatCurrency, formatWcShortDate } from '../services/commonFunction';
 
 const Withdrawls: React.FC = () => {
@@ -110,17 +110,9 @@ const Withdrawls: React.FC = () => {
 				</div>
 			</div>
 
-			<div className="card-wrapper">
-				<div className="card-content">
-					<div className="card-header">
-						<div className="left">
-							<div className="title">
-								{__('Last Withdrawal', 'multivendorx')}
-							</div>
-						</div>
-					</div>
-
-					<div className="card-body">
+			<Container >
+				<Column grid={6}>
+					<Card title={__('Last Withdrawal', 'multivendorx')}>
 						{lastWithdraws && lastWithdraws.length > 0 ? (
 							lastWithdraws.map((item: any) => (
 								<div
@@ -145,11 +137,11 @@ const Withdrawls: React.FC = () => {
 												'paypal-payout' &&
 												__('PayPal', 'multivendorx')}
 											{item.payment_method ===
-											'bank-transfer'
+												'bank-transfer'
 												? __(
-														'Bank Transfer',
-														'multivendorx'
-													)
+													'Bank Transfer',
+													'multivendorx'
+												)
 												: ''}
 										</div>
 									</div>
@@ -166,22 +158,19 @@ const Withdrawls: React.FC = () => {
 							</div>
 						)}
 
-						<div className="buttons-wrapper">
-							<div
-								className="admin-btn btn-purple-bg"
-								onClick={() =>
-									(window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`)
-								}
-							>
-								<i className="adminlib-eye"></i>
-								{__('View transaction history', 'multivendorx')}
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div className="card-content">
-					<div className="card-body">
+						<AdminButton
+							wrapperClass="right"
+							buttons={{
+								icon: 'eye',
+								text: __('View transaction history', 'multivendorx'),
+								onClick: () => (window.location.href = `${appLocalizer.site_url}/dashboard/wallet/transactions/`),
+								className: 'purple-bg',
+							}}
+						/>
+					</Card>
+				</Column>
+				<Column grid={6}>
+					<Card>
 						<div className="payout-wrapper">
 							<div className="payout-header">
 								<div className="price-wrapper">
@@ -256,19 +245,28 @@ const Withdrawls: React.FC = () => {
 								(p)
 							</div>
 
-							<div className="buttons-wrapper">
-								<div
-									className="admin-btn btn-purple-bg"
-									onClick={() => setRequestWithdrawal(true)}
-								>
-									<i className="adminlib-withdraw"></i>
-									{__('Request Withdrawal', 'multivendorx')}
-								</div>
+							{/* <div className="buttons-wrapper">
+							<div
+								className="admin-btn btn-purple-bg"
+								onClick={() => setRequestWithdrawal(true)}
+							>
+								<i className="adminlib-withdraw"></i>
+								{__('Request Withdrawal', 'multivendorx')}
 							</div>
+						</div> */}
+							<AdminButton
+								wrapperClass="right"
+								buttons={{
+									icon: 'withdraw',
+									text: __('Request Withdrawal', 'multivendorx'),
+									onClick: () => setRequestWithdrawal(true),
+									className: 'purple-bg',
+								}}
+							/>
 						</div>
-					</div>
-				</div>
-			</div>
+					</Card>
+				</Column>
+			</Container>
 
 			{requestWithdrawal && (
 				<CommonPopup
@@ -289,16 +287,19 @@ const Withdrawls: React.FC = () => {
 					}
 					footer={
 						<>
-							<div
-								className="admin-btn btn-purple-bg"
-								onClick={() => handleWithdrawal()}
-							>
-								{__('Publish', 'multivendorx')}
-							</div>
+							<AdminButton
+								wrapperClass="right"
+								buttons={{
+									icon: 'withdraw',
+									text: __('Publish', 'multivendorx'),
+									onClick: () => handleWithdrawal(),
+									className: 'purple-bg',
+								}}
+							/>
 						</>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="amount">
@@ -319,7 +320,7 @@ const Withdrawls: React.FC = () => {
 								)}
 							</div>
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			)}
 		</>

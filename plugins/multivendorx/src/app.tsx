@@ -221,8 +221,10 @@ const App = () => {
 					{ value: 'modules', label: 'Modules' },
 					{ value: 'settings', label: 'Settings' },
 				]}
-				notifications={<HeaderNotification />}
+				notifications={<HeaderNotification type="notification" />}
 				showNotifications={true}
+				activities={<HeaderNotification type="activity" />}
+				showActivities={true}
 				messages={[
 					{
 						heading: 'Support Ticket #123',

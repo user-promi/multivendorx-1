@@ -526,7 +526,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 						</>
 					}
 				>
-					<div className="content">
+					<>
 						<div className="form-group-wrapper">
 							<div className="form-group">
 								<label htmlFor="content">Reject Message</label>
@@ -544,7 +544,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 								/>
 							</div>
 						</div>
-					</div>
+					</>
 				</CommonPopup>
 			</div>
 		</>

@@ -548,7 +548,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                 </div>
 
                                 <div className="dashboard-row">
-                                    <div className="section w-65">
+                                    <div className="section column-8">
                                         <div className="section-header">
                                             <div className="title"></div>
                                         </div>
@@ -559,7 +559,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                         <span></span>
                                         <span></span>
                                     </div>
-                                    <div className="section w-35">
+                                    <div className="section column-4">
                                         <div className="section-header">
                                             <div className="title"></div>
                                         </div>
@@ -573,7 +573,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                 </div>
 
                                 <div className="dashboard-row">
-                                    <div className="section w-35">
+                                    <div className="section column-4">
                                         <div className="section-header">
                                             <div className="title"></div>
                                         </div>
@@ -584,7 +584,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                         <span></span>
                                         <span></span>
                                     </div>
-                                    <div className="section w-65">
+                                    <div className="section column-8">
                                         <div className="section-header">
                                             <div className="title"></div>
                                         </div>
