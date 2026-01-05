@@ -172,7 +172,7 @@ const AICard = () => {
 	return (
 		<Card
 			title={__('AI assist', 'multivendorx')}
-			iconName="adminlib-pagination-right-arrow arrow-icon"
+			iconName="adminfont-pagination-right-arrow arrow-icon"
 			toggle
 		>
 			<div className="ai-assist-wrapper">
@@ -187,7 +187,7 @@ const AICard = () => {
 				{!hasSuggestions && !isLoading && !error && (
 					<div className="assistant-welcome">
 						<div className="welcome-icon">
-							<i className="adminlib-ai"></i>
+							<i className="adminfont-ai"></i>
 						</div>
 						<div className="welcome-title">
 							{__('How can I help?', 'multivendorx')}
@@ -225,7 +225,7 @@ const AICard = () => {
 									>
 										{__('Product Name:', 'multivendorx')}
 										<span>{item.title}</span>
-										<i className="adminlib-arrow-right"></i>
+										<i className="adminfont-arrow-right"></i>
 									</div>
 								)}
 
@@ -241,7 +241,7 @@ const AICard = () => {
 									>
 										{__('Short Description:', 'multivendorx')}
 										<span>{item.shortDescription}</span>
-										<i className="adminlib-arrow-right"></i>
+										<i className="adminfont-arrow-right"></i>
 									</div>
 								)}
 
@@ -257,7 +257,7 @@ const AICard = () => {
 									>
 										{__('Description:', 'multivendorx')}
 										<span>{item.description}</span>
-										<i className="adminlib-arrow-right"></i>
+										<i className="adminfont-arrow-right"></i>
 									</div>
 								)}
 							</div>
@@ -279,7 +279,7 @@ const AICard = () => {
 										}
 									>
 										<span>{suggestion}</span>
-										<i className="adminlib-arrow-right"></i>
+										<i className="adminfont-arrow-right"></i>
 									</div>
 								))}
 							</div>
@@ -303,7 +303,7 @@ const AICard = () => {
 										}
 									>
 										<span>{suggestion}</span>
-										<i className="adminlib-arrow-right"></i>
+										<i className="adminfont-arrow-right"></i>
 									</div>
 								))}
 							</div>
@@ -327,7 +327,7 @@ const AICard = () => {
 										}
 									>
 										<span>{suggestion}</span>
-										<i className="adminlib-arrow-right"></i>
+										<i className="adminfont-arrow-right"></i>
 									</div>
 								))}
 							</div>
@@ -351,9 +351,9 @@ const AICard = () => {
 					/>
 
 					<div className="icon-wrapper">
-						<i className="adminlib-mail"></i>
+						<i className="adminfont-mail"></i>
 						<i
-							className={`adminlib-send ${isLoading ? 'loading' : ''
+							className={`adminfont-send ${isLoading ? 'loading' : ''
 								}`}
 							onClick={!isLoading ? handleSendPrompt : undefined}
 							style={{

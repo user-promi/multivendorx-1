@@ -248,7 +248,7 @@ const DoActionBtn: React.FC< DoActionBtnProps > = ( {
                 ) }
                 { proSetting && (
                     <span className="admin-pro-tag">
-                        <i className="adminlib-pro-tag"></i>Pro
+                        <i className="adminfont-pro-tag"></i>Pro
                     </span>
                 ) }
             </div>
@@ -281,8 +281,8 @@ const DoActionBtn: React.FC< DoActionBtnProps > = ( {
                                     <i
                                         className={ `admin-font ${
                                             task.status === 'failed'
-                                                ? 'adminlib-cross'
-                                                : 'adminlib-icon-yes'
+                                                ? 'adminfont-cross'
+                                                : 'adminfont-icon-yes'
                                         }` }
                                     />
                                 </span>
@@ -322,7 +322,7 @@ const DoActionBtn: React.FC< DoActionBtnProps > = ( {
                         { status.action }
                         <div className="status-meta">
                             <span className="status-icons">
-                                <i className="admin-font adminlib-icon-yes" />
+                                <i className="admin-font adminfont-icon-yes" />
                             </span>
                             <span>
                                 { status.current } / { status.total }

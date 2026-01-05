@@ -22,7 +22,7 @@ const HelpSupport: React.FC = () => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-customer-support"
+				activeTabIcon="adminfont-customer-support"
 				tabTitle="Help & Support"
 				description={
 					'Get fast help, expert guidance, and easy-to-follow resources - all in one place.'
@@ -35,7 +35,7 @@ const HelpSupport: React.FC = () => {
 						<div className="support-wrapper">
 							<div className="support-item">
 								<div className="image">
-									<i className="adminlib-facebook-fill"></i>
+									<i className="adminfont-facebook-fill"></i>
 								</div>
 								<div className="details">
 									<div className="name">
@@ -61,7 +61,7 @@ const HelpSupport: React.FC = () => {
 
 							<div className="support-item">
 								<div className="image">
-									<i className="adminlib-wordpress"></i>
+									<i className="adminfont-wordpress"></i>
 								</div>
 								<div className="details">
 									<div className="name">
@@ -87,7 +87,7 @@ const HelpSupport: React.FC = () => {
 
 							<div className="support-item">
 								<div className="image">
-									<i className="adminlib-forum"></i>
+									<i className="adminfont-forum"></i>
 								</div>
 								<div className="details">
 									<div className="name">
@@ -113,7 +113,7 @@ const HelpSupport: React.FC = () => {
 
 							<div className="support-item">
 								<div className="image">
-									<i className="adminlib-live-chat"></i>
+									<i className="adminfont-live-chat"></i>
 								</div>
 								<div className="details">
 									<div className="name">
@@ -142,7 +142,7 @@ const HelpSupport: React.FC = () => {
 						<div className="support-wrapper">
 							<div className="support-item">
 								<div className="image">
-									<i className="adminlib-document"></i>
+									<i className="adminfont-document"></i>
 								</div>
 								<div className="details">
 									<div className="name">
@@ -168,7 +168,7 @@ const HelpSupport: React.FC = () => {
 
 							<div className="support-item">
 								<div className="image">
-									<i className="adminlib-youtube"></i>
+									<i className="adminfont-youtube"></i>
 								</div>
 								<div className="details">
 									<div className="name">
@@ -194,7 +194,7 @@ const HelpSupport: React.FC = () => {
 
 							<div className="support-item">
 								<div className="image">
-									<i className="adminlib-faq"></i>
+									<i className="adminfont-faq"></i>
 								</div>
 								<div className="details">
 									<div className="name">
@@ -217,7 +217,7 @@ const HelpSupport: React.FC = () => {
 
 							<div className="support-item">
 								<div className="image">
-									<i className="adminlib-coding"></i>
+									<i className="adminfont-coding"></i>
 								</div>
 								<div className="details">
 									<div className="name">

@@ -43,7 +43,7 @@ class BankTransfer {
      */
     public function get_settings() {
         return array(
-            'icon'         => 'adminlib-bank',
+            'icon'         => 'adminfont-bank',
             'id'           => $this->get_id(),
             'label'        => 'Bank Transfer',
             'enableOption' => true,

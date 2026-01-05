@@ -195,7 +195,7 @@ a {
             }
         }
 
-        li:has(.adminlib-setting) {
+        li:has(.adminfont-setting) {
             position: absolute;
             width: 100%;
             box-sizing: border-box;
@@ -263,7 +263,7 @@ a {
                         position: relative;
                         cursor: pointer;
 
-                        .adminlib-icon {
+                        .adminfont-icon {
                             color: $sub-text-color;
                             font-size: 1.25rem;
 

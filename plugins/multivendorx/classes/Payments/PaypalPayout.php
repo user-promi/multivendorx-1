@@ -36,7 +36,7 @@ class PaypalPayout {
      */
     public function get_settings() {
         return array(
-            'icon'         => 'adminlib-form-paypal-email',
+            'icon'         => 'adminfont-form-paypal-email',
             'id'           => $this->get_id(),
             'label'        => 'Paypal Payout',
             'enableOption' => true,

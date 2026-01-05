@@ -8,7 +8,7 @@ export default {
 		'Stores must provide valid bank account details and tax documents (PAN, GST, VAT, TIN) to receive payouts. Payment processor verification may be required. Non-compliant stores may be restricted from payouts.',
 		'mvx-pro'
 	),
-	icon: 'adminlib-tax-compliance',
+	icon: 'adminfont-tax-compliance',
 	submitUrl: 'settings',
 	modal: [
 		{

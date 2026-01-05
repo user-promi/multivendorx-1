@@ -650,7 +650,7 @@ const Membership = ({ id }: { id: string }) => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-storefront"
+				activeTabIcon="adminfont-storefront"
 				tabTitle="Add plan"
 				description={
 					'Manage marketplace stores with ease. Review, edit, or add new stores anytime.'
@@ -686,7 +686,7 @@ const Membership = ({ id }: { id: string }) => {
 										onClick={() => setstarFill((prev) => !prev)}
 									>
 										<i
-											className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'
+											className={`star-icon ${starFill ? 'adminfont-star' : 'adminfont-star-o'
 												}`}
 										></i>
 										<div className="hover-text">
@@ -1286,7 +1286,7 @@ const Membership = ({ id }: { id: string }) => {
 									</FormGroupWrapper>
 									<div className="settings-metabox-note">
 										<div className="metabox-note-wrapper">
-											<i className="adminlib-info"></i>
+											<i className="adminfont-info"></i>
 											<div className="details">
 												<p>Activate Stripe Marketplace or PayPal Marketplace module to use recurring subscriptions.</p>
 												<p>Sign-up fee 0.05 or more is required to create subscriptions in Stripe/PayPal</p>
@@ -1390,7 +1390,6 @@ const Membership = ({ id }: { id: string }) => {
 							<div className="membership-features">
 
 								<AdminButton
-									wrapperClass="right"
 									buttons={[
 										{
 											icon: 'delete',

@@ -89,56 +89,56 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						label: 'Total Order Amount',
 						count: Number(data.total_order_amount),
 						formatted: formatCurrency(data.total_order_amount),
-						icon: 'adminlib-order',
+						icon: 'adminfont-order',
 					},
 					{
 						id: 'facilitator_fee',
 						label: 'Facilitator Fee',
 						count: Number(data.facilitator_fee),
 						formatted: formatCurrency(data.facilitator_fee),
-						icon: 'adminlib-facilitator',
+						icon: 'adminfont-facilitator',
 					},
 					{
 						id: 'gateway_fee',
 						label: 'Gateway Fee',
 						count: Number(data.gateway_fee),
 						formatted: formatCurrency(data.gateway_fee),
-						icon: 'adminlib-credit-card',
+						icon: 'adminfont-credit-card',
 					},
 					{
 						id: 'shipping_amount',
 						label: 'Shipping Amount',
 						count: Number(data.shipping_amount),
 						formatted: formatCurrency(data.shipping_amount),
-						icon: 'adminlib-shipping',
+						icon: 'adminfont-shipping',
 					},
 					{
 						id: 'tax_amount',
 						label: 'Tax Amount',
 						count: Number(data.tax_amount),
 						formatted: formatCurrency(data.tax_amount),
-						icon: 'adminlib-tax-compliance',
+						icon: 'adminfont-tax-compliance',
 					},
 					{
 						id: 'shipping_tax_amount',
 						label: 'Shipping Tax Amount',
 						count: Number(data.shipping_tax_amount),
 						formatted: formatCurrency(data.shipping_tax_amount),
-						icon: 'adminlib-per-product-shipping',
+						icon: 'adminfont-per-product-shipping',
 					},
 					{
 						id: 'commission_total',
 						label: 'Commission Total',
 						count: Number(data.commission_total),
 						formatted: formatCurrency(data.commission_total),
-						icon: 'adminlib-commission',
+						icon: 'adminfont-commission',
 					},
 					{
 						id: 'commission_refunded',
 						label: 'Commission Refunded',
 						count: Number(data.commission_refunded),
 						formatted: formatCurrency(data.commission_refunded),
-						icon: 'adminlib-marketplace-refund',
+						icon: 'adminfont-marketplace-refund',
 					},
 				];
 
@@ -404,7 +404,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 												rel="noopener noreferrer"
 											>
 												<i
-													className={`adminlib-coupon admin-color${index + 1}`}
+													className={`adminfont-coupon admin-color${index + 1}`}
 												></i>
 											</a>
 										</div>

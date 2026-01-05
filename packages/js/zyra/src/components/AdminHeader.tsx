@@ -123,11 +123,11 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
 
                     <div className="version-tag">
                         <span className="admin-badge blue">
-                            <i className="adminlib-info"></i> <b>Free:</b>{ ' ' }
+                            <i className="adminfont-info"></i> <b>Free:</b>{ ' ' }
                             { free }
                         </span>
                         <span className="admin-badge red">
-                            <i className="adminlib-pro-tag"></i> Pro:{ ' ' }
+                            <i className="adminfont-pro-tag"></i> Pro:{ ' ' }
                             { pro ? pro : 'Not Installed' }
                         </span>
                     </div>
@@ -166,7 +166,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                                     onSearchChange( e.target.value )
                                 }
                             />
-                            <i className="adminlib-search"></i>
+                            <i className="adminfont-search"></i>
                         </div>
 
                         { /* dropdown render */ }
@@ -221,7 +221,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                     { showNotifications && (
                         <div className="icon-wrapper">
                             <i
-                                className="admin-icon adminlib-notification"
+                                className="admin-icon adminfont-notification"
                                 title="Notifications"
                                 onClick={ () => {
                                     setNotifOpen( ! notifOpen );
@@ -238,7 +238,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                     { showActivities && (
                         <div className="icon-wrapper">
                             <i
-                                className="admin-icon adminlib-notification"
+                                className="admin-icon adminfont-notification"
                                 title="Activities"
                                 onClick={ () => {
                                     setActivityOpen( ! activityOpen );
@@ -255,7 +255,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                     { showMessages && messages && messages.length > 0 && (
                         <div className="icon-wrapper">
                             <i
-                                className="admin-icon adminlib-enquiry"
+                                className="admin-icon adminfont-enquiry"
                                 title="Messages"
                                 onClick={ () => {
                                     setMessageOpen( ! messageOpen );
@@ -288,7 +288,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                                                             <i
                                                                 className={
                                                                     msg.icon ||
-                                                                    'adminlib-user-network-icon'
+                                                                    'adminfont-user-network-icon'
                                                                 }
                                                             ></i>
                                                         </div>
@@ -314,7 +314,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                                                 href={ messagesLink }
                                                 className="admin-btn btn-purple"
                                             >
-                                                <i className="adminlib-preview"></i>{ ' ' }
+                                                <i className="adminfont-preview"></i>{ ' ' }
                                                 View all messages
                                             </a>
                                         </div>
@@ -327,7 +327,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                     { showProfile && profileItems && (
                         <div className="icon-wrapper">
                             <i
-                                className="admin-icon adminlib-user-circle"
+                                className="admin-icon adminfont-user-circle"
                                 title="Admin support"
                                 onClick={ () => {
                                     setProfileOpen( ! profileOpen );
@@ -407,13 +407,13 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
           ${ isMinimized ? 'minimized' : '' }` }
             >
                 <i
-                    className="adminlib-close"
+                    className="adminfont-close"
                     onClick={ () => {
                         setContactSupportPopup( false );
                     } }
                 ></i>
                 <i
-                    className="adminlib-minus icon"
+                    className="adminfont-minus icon"
                     onClick={ () => {
                         setIsMinimized( ! isMinimized );
                         setContactSupportPopup( true );
@@ -434,7 +434,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                     className="minimized-icon"
                 >
                     <i
-                        className="admin-icon adminlib-enquiry"
+                        className="admin-icon adminfont-enquiry"
                         title="Messages"
                     ></i>
                 </div>

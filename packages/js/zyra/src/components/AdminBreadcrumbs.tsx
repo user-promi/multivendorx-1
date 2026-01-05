@@ -176,8 +176,8 @@ const AdminBreadcrumbs = < T, >( {
                                 href={ goPremiumLink }
                                 className="menu-item pro-btn"
                             >
-                                <i className="adminlib-pro-tag"></i> Upgrade
-                                <i className="adminlib-arrow-right"></i>
+                                <i className="adminfont-pro-tag"></i> Upgrade
+                                <i className="adminfont-arrow-right"></i>
                             </a>
                         ) }
                         { action && (

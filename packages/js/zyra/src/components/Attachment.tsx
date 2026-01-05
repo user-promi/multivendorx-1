@@ -14,7 +14,7 @@ const Attachment: React.FC = () => {
             <div className="attachment-section">
                 <label htmlFor="dropzone-file" className="attachment-label">
                     <div className="wrapper">
-                        <i className="adminlib-cloud-upload"></i>
+                        <i className="adminfont-cloud-upload"></i>
                         <p className="heading">
                             <span>{ 'Click to upload' }</span>{ ' ' }
                             { 'or drag and drop' }

@@ -70,9 +70,9 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
     }, [ localSetting ] );
 
     const menu: MenuItem[] = [
-        { name: 'Enquiry', id: 'enquiry', icon: 'adminlib-inquiry' },
-        { name: 'Quote', id: 'quote', icon: 'adminlib-price-quote-icon' },
-        { name: 'Catalog', id: 'catalog', icon: 'adminlib-catalog' },
+        { name: 'Enquiry', id: 'enquiry', icon: 'adminfont-inquiry' },
+        { name: 'Quote', id: 'quote', icon: 'adminfont-price-quote-icon' },
+        { name: 'Catalog', id: 'catalog', icon: 'adminfont-catalog' },
     ];
 
     const [ currentTab, setCurrentTab ] = useState< MenuItem >( menu[ 0 ] );
@@ -94,7 +94,7 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
                     className="button-visibility"
                 >
                     <i
-                        className={ `adminlib-eye${
+                        className={ `adminfont-eye${
                             hideProductPrice ? '-blocked' : ''
                         }` }
                     ></i>
@@ -127,7 +127,7 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
                     className="button-visibility"
                 >
                     <i
-                        className={ `adminlib-eye${
+                        className={ `adminfont-eye${
                             hideProductDesc ? '-blocked' : ''
                         }` }
                     ></i>
@@ -618,7 +618,7 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
                                     rel="noopener noreferrer"
                                 >
                                     Upgrade now
-                                    <i className="adminlib-arrow-right"></i>
+                                    <i className="adminfont-arrow-right"></i>
                                 </a>
                             </article>
                         ) }
@@ -629,7 +629,7 @@ const CatalogCustomizer: React.FC< CatalogCustomizerProps > = ( {
                         <li className="active">
                             Description{ ' ' }
                             <span>
-                                <i className="admin-font adminlib-keyboard-arrow-down"></i>
+                                <i className="admin-font adminfont-keyboard-arrow-down"></i>
                             </span>
                         </li>
                         <li>Additional Information</li>

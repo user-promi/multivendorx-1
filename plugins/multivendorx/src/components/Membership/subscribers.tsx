@@ -219,7 +219,7 @@ const Subscribers: React.FC = () => {
 									alt={row.original.store_name}
 								/>
 							) : (
-								<i className="item-icon adminlib-store-inventory"></i>
+								<i className="item-icon adminfont-store-inventory"></i>
 							)}
 
 							<div className="details">
@@ -279,7 +279,7 @@ const Subscribers: React.FC = () => {
 						actions: [
 							{
 								label: __('Settings', 'multivendorx'),
-								icon: 'adminlib-setting',
+								icon: 'adminfont-setting',
 								onClick: () => {
 									navigate(
 										`?page=multivendorx#&tab=stores&edit/${row.original.id}`
@@ -294,7 +294,7 @@ const Subscribers: React.FC = () => {
 											'Storefront',
 											'multivendorx'
 										),
-										icon: 'adminlib-storefront',
+										icon: 'adminfont-storefront',
 										onClick: () => {
 											if (!row.original.store_slug) {
 												return;
@@ -329,7 +329,7 @@ const Subscribers: React.FC = () => {
 						}}
 						value={filterValue || ''}
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},

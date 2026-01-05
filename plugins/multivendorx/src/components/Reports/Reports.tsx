@@ -37,31 +37,31 @@ const Reports = () => {
 			id: 'earnings',
 			label: 'No. of orders',
 			count: '7896',
-			icon: 'adminlib-order green',
+			icon: 'adminfont-order green',
 		},
 		{
 			id: 'Vendors',
 			label: 'Admin Commission',
 			count: '85669',
-			icon: 'adminlib-commission blue',
+			icon: 'adminfont-commission blue',
 		},
 		{
 			id: 'Pending Withdrawals',
 			label: 'Vendor Payout Pending',
 			count: '88200',
-			icon: 'adminlib-vendor-shipping red',
+			icon: 'adminfont-vendor-shipping red',
 		},
 		{
 			id: 'Pending Withdrawals',
 			label: 'Amount Refunds',
 			count: '600',
-			icon: 'adminlib-marketplace-refund green',
+			icon: 'adminfont-marketplace-refund green',
 		},
 		{
 			id: 'Pending Withdrawals',
 			label: 'No. of refunds',
 			count: '600',
-			icon: 'adminlib-calendar blue',
+			icon: 'adminfont-calendar blue',
 		},
 	];
 	const pieData = [
@@ -148,7 +148,7 @@ const Reports = () => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-report"
+				activeTabIcon="adminfont-report"
 				tabTitle={__('Reports', 'multivendorx')}
 				description={__(
 					'Track sales, earnings, and store performance with real-time marketplace insights.',

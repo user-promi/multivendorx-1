@@ -11,7 +11,7 @@ const Plans = () => {
 			id: 1,
 			tag: null,
 			title: 'Basic',
-			icon: 'adminlib-supervised-user-circle',
+			icon: 'adminfont-supervised-user-circle',
 			activeVendors: 89,
 			price: '29',
 			revenue: 2581,
@@ -23,7 +23,7 @@ const Plans = () => {
 			id: 2,
 			tag: 'MOST POPULAR',
 			title: 'Professional',
-			icon: 'adminlib-security',
+			icon: 'adminfont-security',
 			activeVendors: 124,
 			price: '59',
 			revenue: 7316,
@@ -41,7 +41,7 @@ const Plans = () => {
 			tag: null,
 			title: 'Premium',
 			activeVendors: 34,
-			icon: 'adminlib-resources',
+			icon: 'adminfont-resources',
 			price: '99 ',
 			revenue: 3366,
 			growth: '+8%',
@@ -59,7 +59,7 @@ const Plans = () => {
 			tag: null,
 			title: 'Enterprise',
 			activeVendors: 0,
-			icon: 'adminlib-wallet-open',
+			icon: 'adminfont-wallet-open',
 			price: '299',
 			revenue: null,
 			growth: null,
@@ -105,8 +105,8 @@ const Plans = () => {
 									<i
 										className={
 											mode === 'list'
-												? 'adminlib-editor-list-ul'
-												: 'adminlib-module'
+												? 'adminfont-editor-list-ul'
+												: 'adminfont-module'
 										}
 									></i>
 								</label>
@@ -121,7 +121,7 @@ const Plans = () => {
 							);
 						}}
 					>
-						<i className="adminlib-plus"></i>
+						<i className="adminfont-plus"></i>
 						Add New Plan
 					</div>
 				</div>
@@ -152,7 +152,7 @@ const Plans = () => {
 												<div className="table-row-custom">
 													<div className="product-wrapper notification">
 														<span
-															className={`item-icon notification-icon adminlibrary ${plan.icon}`}
+															className={`item-icon notification-icon adminfonts ${plan.icon}`}
 														></span>
 														<div className="details">
 															<div className="title">
@@ -181,7 +181,7 @@ const Plans = () => {
 													<div className="action-icons">
 														<div className="inline-actions">
 															<div className="inline-action-btn tooltip-wrapper">
-																<i className="adminlib-edit"></i>
+																<i className="adminfont-edit"></i>
 																<span className="tooltip-name">
 																	Edit
 																</span>
@@ -227,7 +227,7 @@ const Plans = () => {
 											{plan.checklist.map(
 												(item, idx) => (
 													<li key={idx}>
-														<i className="check adminlib-icon-yes"></i>
+														<i className="check adminfont-icon-yes"></i>
 														{item}
 													</li>
 												)

@@ -166,7 +166,7 @@ const DownloadCSVButton: React.FC<{
 				}
 				className="admin-btn"
 			>
-				<i className="adminlib-download"></i>
+				<i className="adminfont-download"></i>
 				{__('Download CSV', 'multivendorx')}
 			</button>
 		</div>
@@ -404,7 +404,7 @@ const Commission: React.FC = () => {
 				disabled={isDownloading}
 				className="admin-btn btn-purple-bg"
 			>
-				<span className="adminlib-download"></span>
+				<span className="adminfont-download"></span>
 				{__('Download CSV', 'multivendorx')}
 			</button>
 		);
@@ -662,12 +662,12 @@ const Commission: React.FC = () => {
 								{isExpanded ? (
 									<>
 										{__('Less', 'multivendorx')}
-										<i className="adminlib-arrow-up"></i>
+										<i className="adminfont-arrow-up"></i>
 									</>
 								) : (
 									<>
 										{__('More', 'multivendorx')}
-										<i className="adminlib-arrow-down"></i>
+										<i className="adminfont-arrow-down"></i>
 									</>
 								)}
 							</span>
@@ -733,7 +733,7 @@ const Commission: React.FC = () => {
 						actions: [
 							{
 								label: __('View Commission', 'multivendorx'),
-								icon: 'adminlib-eye',
+								icon: 'adminfont-eye',
 								onClick: (rowData: any) => {
 									setSelectedCommissionId(rowData.id ?? null);
 									setViewCommission(true);
@@ -744,7 +744,7 @@ const Commission: React.FC = () => {
 									'Regenerate Commission',
 									'multivendorx'
 								),
-								icon: 'adminlib-refresh refresh-icon',
+								icon: 'adminfont-refresh refresh-icon',
 								onClick: (rowData: any) => {
 									handleSingleAction('regenerate', rowData);
 								},
@@ -826,7 +826,7 @@ const Commission: React.FC = () => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-commission"
+				activeTabIcon="adminfont-commission"
 				tabTitle={__('Commissions', 'multivendorx')}
 				description={__(
 					'Details of commissions earned by each store for every order, including order amount, commission rate, and payout status.',

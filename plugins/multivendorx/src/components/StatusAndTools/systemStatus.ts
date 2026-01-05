@@ -8,7 +8,7 @@ export default {
 		'Website technical details are displayed to ensure optimal performance and compatibility.',
 		'multivendorx'
 	),
-	icon: 'adminlib-cogs-on-wheels',
+	icon: 'adminfont-cogs-on-wheels',
 	submitUrl: 'settings',
 	modal: [
 		{

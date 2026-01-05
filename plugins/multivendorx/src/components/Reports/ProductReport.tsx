@@ -255,25 +255,25 @@ const ProductReport: React.FC = () => {
 			id: 'sales',
 			label: 'Total Products',
 			count: totalRows,
-			icon: 'adminlib-single-product',
+			icon: 'adminfont-single-product',
 		},
 		{
 			id: 'earnings',
 			label: 'In Stock',
 			count: inStockCount,
-			icon: 'adminlib-per-product-shipping',
+			icon: 'adminfont-per-product-shipping',
 		},
 		{
 			id: 'Vendors',
 			label: 'On backorder',
 			count: onBackorderCount,
-			icon: 'adminlib-multi-product',
+			icon: 'adminfont-multi-product',
 		},
 		{
 			id: 'free',
 			label: 'Out of Stock',
 			count: outOfStockCount,
-			icon: 'adminlib-out-of-stock',
+			icon: 'adminfont-out-of-stock',
 		},
 	];
 
@@ -294,7 +294,7 @@ const ProductReport: React.FC = () => {
 								alt={row.original.store_name}
 							/>
 						) : (
-							<i className="item-icon adminlib-store-inventory"></i>
+							<i className="item-icon adminfont-store-inventory"></i>
 						)}
 						<div className="details">
 							<span className="title">{row.original.title}</span>
@@ -544,7 +544,7 @@ const ProductReport: React.FC = () => {
 						value={filterValue || ''}
 						className="basic-select"
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -554,7 +554,7 @@ const ProductReport: React.FC = () => {
 			name: 'actionButton',
 			render: () => (
 				<>
-					<div className="admin-btn btn-purple-bg"><i className="adminlib-download"></i> Download CSV</div>
+					<div className="admin-btn btn-purple-bg"><i className="adminfont-download"></i> Download CSV</div>
 				</>
 			),
 		},
@@ -656,12 +656,12 @@ const ProductReport: React.FC = () => {
 												</b>{' '}
 												{product.average_rating ||
 													'0'}
-												<i className="adminlib-card"></i>
+												<i className="adminfont-card"></i>
 											</div>
 										</div>
 										<div className="right">
 											<i
-												className={`adminlib-pagination-right-arrow ${openReviewedCards[
+												className={`adminfont-pagination-right-arrow ${openReviewedCards[
 													product.id
 												]
 													? 'rotate-90 transition-transform'

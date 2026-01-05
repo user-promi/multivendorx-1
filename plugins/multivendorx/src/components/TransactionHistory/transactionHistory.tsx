@@ -96,7 +96,7 @@ export const TransactionHistory: React.FC = () => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-store-reactivated"
+				activeTabIcon="adminfont-store-reactivated"
 				tabTitle={
 					selectedStore
 						? __(
@@ -119,7 +119,7 @@ export const TransactionHistory: React.FC = () => {
 				customContent={
 					<>
 						<label>
-							<i className="adminlib-switch-store"></i>
+							<i className="adminfont-switch-store"></i>
 							{__('Switch Store', 'multivendorx')}
 						</label>
 

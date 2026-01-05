@@ -153,7 +153,7 @@ const History: React.FC = () => {
 					<div className="action-section">
 						<div className="action-icons">
 							<i
-								className="adminlib-more-vertical"
+								className="adminfont-more-vertical"
 								onClick={() =>
 									toggleDropdown(row.original.order_id)
 								}
@@ -171,7 +171,7 @@ const History: React.FC = () => {
 											(window.location.href = `?page=multivendorx#&tab=stores&view&id=${row.original.id}`)
 										}
 									>
-										<i className="adminlib-preview"></i>
+										<i className="adminfont-preview"></i>
 										{__('View Store', 'multivendorx')}
 									</li>
 									<li
@@ -179,7 +179,7 @@ const History: React.FC = () => {
 											(window.location.href = `?page=multivendorx#&tab=stores&edit/${row.original.id}`)
 										}
 									>
-										<i className="adminlib-edit"></i>
+										<i className="adminfont-edit"></i>
 										{__('Edit Store', 'multivendorx')}
 									</li>
 								</ul>

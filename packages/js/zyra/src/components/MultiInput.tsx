@@ -286,7 +286,7 @@ const MultiInput: React.FC< MultiInputProps > = ( props ) => {
                                                     handleEdit( index )
                                                 }
                                             >
-                                                <i className="adminlib-edit"></i>
+                                                <i className="adminfont-edit"></i>
                                                 <span>Edit</span>
                                             </li>
                                         ) }
@@ -297,7 +297,7 @@ const MultiInput: React.FC< MultiInputProps > = ( props ) => {
                                                     handleDelete( index )
                                                 }
                                             >
-                                                <i className="adminlib-delete"></i>
+                                                <i className="adminfont-delete"></i>
                                                 <span>Delete</span>
                                             </li>
                                         ) }
@@ -438,7 +438,7 @@ const MultiInput: React.FC< MultiInputProps > = ( props ) => {
                             handleAddNew();
                         } }
                     >
-                        <i className="adminlib-plus"></i> Add New
+                        <i className="adminfont-plus"></i> Add New
                     </span>
                 </li>
             </ul>

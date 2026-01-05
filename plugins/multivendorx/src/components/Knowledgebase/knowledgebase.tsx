@@ -12,6 +12,11 @@ import {
 	CommonPopup,
 	ToggleSetting,
 	MultiCalendarInput,
+	Container,
+	Column,
+	FormGroupWrapper,
+	FormGroup,
+	AdminButton,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -415,13 +420,13 @@ export const KnowledgeBase: React.FC = () => {
 						actions: [
 							{
 								label: __('Edit', 'multivendorx'),
-								icon: 'adminlib-edit',
+								icon: 'adminfont-edit',
 								onClick: (rowData) => handleEdit(rowData.id),
 								hover: true,
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete delete',
+								icon: 'adminfont-delete delete',
 								onClick: async (rowData) => {
 									if (!rowData.id) {
 										return;
@@ -487,7 +492,7 @@ export const KnowledgeBase: React.FC = () => {
 							}}
 							value={filterValue || ''}
 						/>
-						<i className="adminlib-search"></i>
+						<i className="adminfont-search"></i>
 					</div>
 				</>
 			),
@@ -496,7 +501,7 @@ export const KnowledgeBase: React.FC = () => {
 
 	const BulkAction: React.FC = () => (
 		<div className="action">
-			<i className="adminlib-form"></i>
+			<i className="adminfont-form"></i>
 			<select
 				name="action"
 				ref={bulkSelectRef}
@@ -513,7 +518,7 @@ export const KnowledgeBase: React.FC = () => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-book"
+				activeTabIcon="adminfont-book"
 				tabTitle={__('Knowledge Base', 'multivendorx')}
 				description={__(
 					'Build your knowledge base: add new guides or manage existing ones in one place.',
@@ -527,7 +532,7 @@ export const KnowledgeBase: React.FC = () => {
 							setAddEntry(true);
 						}}
 					>
-						<i className="adminlib-plus"></i>
+						<i className="adminfont-plus"></i>
 						{__('Add New', 'multivendorx')}
 					</div>,
 				]}
@@ -538,56 +543,39 @@ export const KnowledgeBase: React.FC = () => {
 					open={addEntry}
 					onClose={handleCloseForm}
 					width="31.25rem"
-					height="80%"
-					header={
-						<>
-							<div className="title">
-								<i className="adminlib-book"></i>
-								{editId
-									? __('Edit Knowledgebase', 'multivendorx')
-									: __('Add Knowledgebase', 'multivendorx')}
-							</div>
-							<div className="des">
-								{__(
-									'Write and publish a new knowledge base article to help stores navigate their dashboard.',
-									'multivendorx'
-								)}
-							</div>
-							<i
-								onClick={handleCloseForm}
-								className="icon adminlib-close"
-							></i>
-						</>
-					}
+					height="70%"
+					header={{
+						icon: 'book',
+						title: editId
+							? __('Edit Knowledgebase', 'multivendorx')
+							: __('Add Knowledgebase', 'multivendorx'),
+						description: __(
+							'Write and publish a new knowledge base article to help stores navigate their dashboard.',
+							'multivendorx'
+						),
+					}}
 					footer={
-						<>
-							<div
-								onClick={handleCloseForm}
-								className="admin-btn btn-red"
-							>
-								<i className="adminlib-close"></i>
-								{__('Cancel', 'multivendorx')}
-							</div>
-							<button
-								type="button"
-								onClick={() =>
-									handleSubmit(formData.status || 'draft')
-								}
-								className="admin-btn btn-purple-bg"
-								disabled={submitting}
-							>
-								<i className="adminlib-active"></i>
-								{ __('Save', 'multivendorx')}
-							</button>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: handleCloseForm,
+								},
+								{
+									icon: 'active',
+									text: __('Save', 'multivendorx'),
+									className: 'purple-bg',
+									onClick: () => handleSubmit(formData.status || 'draft'),
+								},
+							]}
+						/>
 					}
 				>
 					<>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="title">
-									{__('Title', 'multivendorx')}
-								</label>
+						<FormGroupWrapper>
+							<FormGroup label={__('Title', 'multivendorx')} htmlFor="Title">
 								<BasicInput
 									type="text"
 									name="title"
@@ -599,13 +587,8 @@ export const KnowledgeBase: React.FC = () => {
 										{validationErrors.title}
 									</p>
 								)}
-							</div>
-						</div>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="content">
-									{__('Content', 'multivendorx')}
-								</label>
+							</FormGroup>
+							<FormGroup label={__('Content', 'multivendorx')} htmlFor="Content">
 								<TextArea
 									name="content"
 									inputClass="textarea-input"
@@ -614,7 +597,7 @@ export const KnowledgeBase: React.FC = () => {
 									usePlainText={false}
 									tinymceApiKey={
 										appLocalizer.settings_databases_value[
-											'marketplace'
+										'marketplace'
 										]['tinymce_api_section'] ?? ''
 									}
 								/>
@@ -623,13 +606,8 @@ export const KnowledgeBase: React.FC = () => {
 										{validationErrors.content}
 									</p>
 								)}
-							</div>
-						</div>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="status">
-									{__('Status', 'multivendorx')}
-								</label>
+							</FormGroup>
+							<FormGroup label={__('Status', 'multivendorx')} htmlFor="status">
 								<ToggleSetting
 									value={formData.status}
 									options={[
@@ -659,13 +637,13 @@ export const KnowledgeBase: React.FC = () => {
 										}))
 									}
 								/>
-							</div>
-						</div>
+							</FormGroup>
+						</FormGroupWrapper>
 					</>
 				</CommonPopup>
 			)}
-			<div className="general-wrapper">
-				<div className="admin-table-wrapper">
+			<Container general>
+				<Column>
 					<Table
 						data={data}
 						columns={
@@ -685,8 +663,8 @@ export const KnowledgeBase: React.FC = () => {
 						realtimeFilter={realtimeFilter}
 						searchFilter={searchFilter}
 					/>
-				</div>
-			</div>
+				</Column>
+			</Container>
 		</>
 	);
 };

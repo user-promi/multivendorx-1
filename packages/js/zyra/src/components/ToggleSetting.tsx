@@ -122,7 +122,7 @@ const ToggleSetting: React.FC< ToggleSettingProps > = ( {
                                 </label>
                                 { option.proSetting && ! khali_dabba && (
                                     <span className="admin-pro-tag">
-                                        <i className="adminlib-pro-tag"></i>Pro
+                                        <i className="adminfont-pro-tag"></i>Pro
                                     </span>
                                 ) }
                             </div>

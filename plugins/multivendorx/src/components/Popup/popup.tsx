@@ -19,7 +19,7 @@ export const proPopupContent = {
 	upgradeBtnText: __('Yes, Upgrade Me!', 'multivendorx'),
 	messages: [
 		{
-			icon: 'adminlib-commission',
+			icon: 'adminfont-commission',
 			text: __('Membership Rewards & Commission', 'multivendorx'),
 			des: __(
 				'Charge your sellers a monthly or yearly membership fee to sell on your marketplace - predictable revenue every month.',
@@ -27,7 +27,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-store-policy',
+			icon: 'adminfont-store-policy',
 			text: __('Verified Stores Only', 'multivendorx'),
 			des: __(
 				'Screen stores with document verification and approval - build a trusted marketplace from day one.',
@@ -35,7 +35,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-marketplace',
+			icon: 'adminfont-marketplace',
 			text: __('Diversified Marketplace', 'multivendorx'),
 			des: __(
 				' Enable bookings, subscriptions, and auctions to boost sales and engagement.',
@@ -43,7 +43,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-store-inventory',
+			icon: 'adminfont-store-inventory',
 			text: __('Vacation Mode for Stores', 'multivendorx'),
 			des: __(
 				'Stores can pause their stores temporarily with automatic buyer notifications - no missed messages.',
@@ -51,7 +51,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-out-of-stock',
+			icon: 'adminfont-out-of-stock',
 			text: __('Never Run Out of Stock', 'multivendorx'),
 			des: __(
 				' Real-time inventory tracking with automatic low-stock alerts keeps sellers prepared and buyers happy.',
@@ -59,7 +59,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-notification',
+			icon: 'adminfont-notification',
 			text: __('Autopilot Notifications', 'multivendorx'),
 			des: __(
 				'Automatic emails and alerts for every order, refund, and payout - everyone stays in the loop.',
@@ -67,7 +67,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-staff-manager',
+			icon: 'adminfont-staff-manager',
 			text: __('Staff Manager', 'multivendorx'),
 			des: __(
 				'Empower vendors to manage their team with role-based access and permissions.',
@@ -75,7 +75,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-business-hours',
+			icon: 'adminfont-business-hours',
 			text: __('Business Hours', 'multivendorx'),
 			des: __(
 				'Let stores set their operating hours for better customer expectations.',
@@ -83,7 +83,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-wholesale',
+			icon: 'adminfont-wholesale',
 			text: __('Wholesale', 'multivendorx'),
 			des: __(
 				'Enable bulk pricing and wholesale options to attract B2B buyers.',
@@ -91,7 +91,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-paypal-marketplace',
+			icon: 'adminfont-paypal-marketplace',
 			text: __('PayPal Marketplace', 'multivendorx'),
 			des: __(
 				'Split payments automatically to vendors via PayPal - seamless payouts.',
@@ -99,7 +99,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-stripe-marketplace',
+			icon: 'adminfont-stripe-marketplace',
 			text: __('Stripe Marketplace', 'multivendorx'),
 			des: __(
 				'Instant vendor payouts with Stripe Connect - fast and secure.',
@@ -107,7 +107,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-facilitator',
+			icon: 'adminfont-facilitator',
 			text: __('Facilitator', 'multivendorx'),
 			des: __(
 				'Manage complex commission structures with advanced calculation rules.',
@@ -115,7 +115,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-user-network-icon',
+			icon: 'adminfont-user-network-icon',
 			text: __('Franchises', 'multivendorx'),
 			des: __(
 				'Create multi-location marketplace networks with centralized control.',
@@ -123,7 +123,7 @@ export const proPopupContent = {
 			),
 		},
 		{
-			icon: 'adminlib-franchises-module',
+			icon: 'adminfont-franchises-module',
 			text: __('Invoice & Packing Slip', 'multivendorx'),
 			des: __(
 				'Professional invoices and packing slips for every order - build trust and credibility.',

@@ -8,7 +8,7 @@ export default {
 		'Choose whether stores follow a step-by-step guided process through the category hierarchy or freely select multiple categories & subcategories without restrictions.',
 		'multivendorx'
 	),
-	icon: 'adminlib-shipping',
+	icon: 'adminfont-shipping',
 	submitUrl: 'settings',
 	modal: [
 		{
@@ -24,7 +24,7 @@ export default {
 			modal: [
 				{
 					id: 'zone-wise-shipping',
-					icon: 'adminlib-zone-wise-shipping',
+					icon: 'adminfont-zone-wise-shipping',
 					label: 'Zone based shipping',
 					disableBtn: true,
 					enableOption: true,
@@ -46,7 +46,7 @@ export default {
 				},
 				{
 					id: 'country-wise-shipping',
-					icon: 'adminlib-country-shipping',
+					icon: 'adminfont-country-shipping',
 					label: 'Country-wise shipping',
 					moduleEnabled: 'store-shipping',
 					disableBtn: true,
@@ -63,7 +63,7 @@ export default {
 				},
 				{
 					id: 'distance-based-shipping',
-					icon: 'adminlib-distance-shipping',
+					icon: 'adminfont-distance-shipping',
 					label: 'Distance-based shipping',
 					disableBtn: true,
 					enableOption: true,

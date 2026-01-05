@@ -22,7 +22,7 @@ const Tools: React.FC = () => {
 					desc={__('Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, nesciunt?', 'multivendorx' )}
 				>
 					<div className="admin-btn btn-purple">
-						<i className="adminlib-delete"></i>
+						<i className="adminfont-delete"></i>
 						{__('Clear Transients', 'multivendorx')}
 					</div>
 				</Card>

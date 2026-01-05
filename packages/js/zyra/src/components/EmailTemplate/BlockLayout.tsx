@@ -142,7 +142,7 @@ const BlockLayout: React.FC = () => {
                                     setShowImageGallery( true );
                                 } }
                             >
-                                <i className="admin-font adminlib-image"></i>
+                                <i className="admin-font adminfont-image"></i>
                                 <span>Click to add image</span>
                             </div>
                         ) }
@@ -172,13 +172,13 @@ const BlockLayout: React.FC = () => {
                     className="admin-btn default-btn"
                     onClick={ () => addBlock( 'heading' ) }
                 >
-                    <i className="admin-font adminlib-heading"></i> Heading
+                    <i className="admin-font adminfont-heading"></i> Heading
                 </button>
                 <button
                     className="admin-btn default-btn"
                     onClick={ () => addBlock( 'text' ) }
                 >
-                    <i className="admin-font adminlib-text"></i> Text
+                    <i className="admin-font adminfont-text"></i> Text
                 </button>
                 <button
                     className="admin-btn default-btn"
@@ -187,13 +187,13 @@ const BlockLayout: React.FC = () => {
                         setShowImageGallery( true );
                     } }
                 >
-                    <i className="admin-font adminlib-image"></i> Image
+                    <i className="admin-font adminfont-image"></i> Image
                 </button>
                 <button
                     className="admin-btn default-btn"
                     onClick={ () => addBlock( 'spacer' ) }
                 >
-                    <i className="admin-font adminlib-spacer"></i> Spacer
+                    <i className="admin-font adminfont-spacer"></i> Spacer
                 </button>
             </div>
 
@@ -216,10 +216,10 @@ const BlockLayout: React.FC = () => {
                                     className="control-btn"
                                     onClick={ () => deleteBlock( block.id ) }
                                 >
-                                    <i className="admin-font adminlib-delete"></i>
+                                    <i className="admin-font adminfont-delete"></i>
                                 </button>
                                 <div className="drag-handle">
-                                    <i className="admin-font adminlib-drag"></i>
+                                    <i className="admin-font adminfont-drag"></i>
                                 </div>
                             </div>
                         ) }
@@ -228,7 +228,7 @@ const BlockLayout: React.FC = () => {
 
                 { blocks.length === 0 && (
                     <div className="empty-blocks-state">
-                        <i className="admin-font adminlib-layout"></i>
+                        <i className="admin-font adminfont-layout"></i>
                         <p>
                             No blocks added yet. Start by adding a block from
                             the toolbar above.
@@ -264,7 +264,7 @@ const BlockLayout: React.FC = () => {
                                 className="close-btn"
                                 onClick={ () => setShowImageGallery( false ) }
                             >
-                                <i className="admin-font adminlib-close"></i>
+                                <i className="admin-font adminfont-close"></i>
                             </button>
                         </div>
                         <ImageGallery onImageSelect={ handleImageSelect } />

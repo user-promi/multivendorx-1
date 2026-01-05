@@ -28,8 +28,8 @@ jQuery(document).ready(function ($) {
 					for (let i = 1; i <= 5; i++) {
 						html +=
 							i <= Math.round(overall)
-								? `<i class="adminlib-star"></i>`
-								: `<i class="adminlib-star-o"></i>`;
+								? `<i class="adminfont-star"></i>`
+								: `<i class="adminfont-star-o"></i>`;
 					}
 
 					html += `</div>
@@ -46,7 +46,7 @@ jQuery(document).ready(function ($) {
 							total > 0 ? Math.round((count / total) * 100) : 0;
 						html += `
                         <div class="rating">
-                            ${i} <i class="adminlib-star"></i> 
+                            ${i} <i class="adminfont-star"></i> 
                             <div class="bar"><span style="width:${percent}%;"></span></div> 
                             <span>${count} Review${
 								count !== 1 ? 's' : ''
@@ -227,13 +227,13 @@ jQuery(document).ready(function ($) {
 		var $rating = $(this).closest('.rating');
 
 		$rating.find('i').each(function () {
-			// Change to 'adminlib-star' on hover for the stars up to the hovered value, else 'adminlib-star-o'
+			// Change to 'adminfont-star' on hover for the stars up to the hovered value, else 'adminfont-star-o'
 			$(this).toggleClass(
-				'adminlib-star',
+				'adminfont-star',
 				$(this).data('value') <= value
 			);
 			$(this).toggleClass(
-				'adminlib-star-o',
+				'adminfont-star-o',
 				$(this).data('value') > value
 			);
 		});
@@ -242,15 +242,15 @@ jQuery(document).ready(function ($) {
 	$('.rating').on('mouseleave', function () {
 		var $rating = $(this);
 		$rating.find('i').each(function () {
-			// Reset back to 'adminlib-star-o' after mouse leaves
+			// Reset back to 'adminfont-star-o' after mouse leaves
 			if ($(this).data('value') > $rating.attr('data-selected')) {
 				$(this)
-					.removeClass('adminlib-star')
-					.addClass('adminlib-star-o');
+					.removeClass('adminfont-star')
+					.addClass('adminfont-star-o');
 			} else {
 				$(this)
-					.addClass('adminlib-star')
-					.removeClass('adminlib-star-o');
+					.addClass('adminfont-star')
+					.removeClass('adminfont-star-o');
 			}
 		});
 	});
@@ -262,16 +262,16 @@ jQuery(document).ready(function ($) {
 		// Set the selected rating value on click
 		$rating.attr('data-selected', value);
 
-		// Apply the 'adminlib-star' class for the selected stars
+		// Apply the 'adminfont-star' class for the selected stars
 		$rating.find('i').each(function () {
 			if ($(this).data('value') <= value) {
 				$(this)
-					.addClass('adminlib-star')
-					.removeClass('adminlib-star-o');
+					.addClass('adminfont-star')
+					.removeClass('adminfont-star-o');
 			} else {
 				$(this)
-					.addClass('adminlib-star-o')
-					.removeClass('adminlib-star');
+					.addClass('adminfont-star-o')
+					.removeClass('adminfont-star');
 			}
 		});
 

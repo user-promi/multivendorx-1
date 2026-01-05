@@ -8,7 +8,7 @@ export default {
 		'Control store access based on verification status. Ensure only compliant stores can operate fully on your marketplace.',
 		'mvx-pro'
 	),
-	icon: 'adminlib-compliance',
+	icon: 'adminfont-compliance',
 	submitUrl: 'settings',
 	modal: [
 		{
@@ -17,7 +17,7 @@ export default {
 			modal: [
 				{
 					id: 'seller-verification',
-					icon: 'adminlib-seller-verification',
+					icon: 'adminfont-seller-verification',
 					label: 'Seller verification',
 					connected: true,
 					disableBtn: true,					 
@@ -95,7 +95,7 @@ export default {
 				},
 				{
 					id: 'product-compliance',
-					icon: 'adminlib-product',
+					icon: 'adminfont-product',
 					label: 'Product compliance',
 					disableBtn: true,
 					desc: 'Ensure product listings meet marketplace standards',
@@ -179,7 +179,7 @@ export default {
 				},
 				{
 					id: 'legal-policy',
-					icon: 'adminlib-verification3',
+					icon: 'adminfont-verification3',
 					label: 'Legal & policy',
 					moduleEnabled: 'marketplace-compliance',
 					proSetting: true,
@@ -263,7 +263,7 @@ export default {
 				},
 				{
 					id: 'financial-compliance',
-					icon: 'adminlib-dollar',
+					icon: 'adminfont-dollar',
 					label: 'Financial compliance',
 					disableBtn: true,
 					moduleEnabled: 'marketplace-compliance',

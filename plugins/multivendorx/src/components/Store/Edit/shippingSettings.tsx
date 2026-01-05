@@ -528,7 +528,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 																					step="0.01"
 																				/>
 																				<span
-																					className="delete-icon adminlib-delete"
+																					className="delete-icon adminfont-delete"
 																					onClick={() => {
 																						const updatedRules =
 																							(
@@ -589,7 +589,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 																	});
 																}}
 															>
-																<i className="adminlib-plus"></i>{' '}
+																<i className="adminfont-plus"></i>{' '}
 																{__(
 																	'Add Rule',
 																	'multivendorx'

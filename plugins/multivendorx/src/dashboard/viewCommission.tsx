@@ -63,7 +63,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			header={
 				<>
 					<div className="title">
-						<i className="adminlib-commission"></i>
+						<i className="adminfont-commission"></i>
 						{__('Commission Details', 'multivendorx')}
 					</div>
 					<div className="des">
@@ -72,7 +72,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							'multivendorx'
 						)}
 					</div>
-					<i className="icon adminlib-close" onClick={onClose}></i>
+					<i className="icon adminfont-close" onClick={onClose}></i>
 				</>
 			}
 		>

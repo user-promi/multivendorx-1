@@ -134,7 +134,7 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
 							{image ? (
 								<img src={image} alt={productName} />
 							) : (
-								<i className="item-icon adminlib-multi-product"></i>
+								<i className="item-icon adminfont-multi-product"></i>
 							)}
 							<div className="details">
 								<span className="title">{productName}</span>
@@ -213,7 +213,7 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
 						actions: [
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete',
+								icon: 'adminfont-delete',
 								onClick: (rowData: ReportRow) => {
 									if (
 										confirm(

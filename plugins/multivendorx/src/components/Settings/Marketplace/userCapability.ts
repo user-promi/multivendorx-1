@@ -17,7 +17,7 @@ export default {
 		'Define what each store role can access and manage within the marketplace.',
 		'multivendorx'
 	),
-	icon: 'adminlib-user-network-icon',
+	icon: 'adminfont-user-network-icon',
 	submitUrl: 'settings',
 	modal: [
 		{

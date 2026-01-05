@@ -217,7 +217,7 @@ const Advertisement: React.FC = () => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-advertisement"
+				activeTabIcon="adminfont-advertisement"
 				tabTitle="Advertisement"
 				description={
 					'Manage all pending administrative actions including approvals, payouts, and notifications.'

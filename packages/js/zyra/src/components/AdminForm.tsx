@@ -2382,7 +2382,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             ! modules.includes( inputField.moduleEnabled ) && (
                                 <span className="admin-pro-tag module">
                                     <i
-                                        className={ `adminlib-${ inputField.moduleEnabled }` }
+                                        className={ `adminfont-${ inputField.moduleEnabled }` }
                                     ></i>
                                     { String( inputField.moduleEnabled )
                                         .split( '-' )
@@ -2392,13 +2392,13 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                                 word.slice( 1 )
                                         )
                                         .join( ' ' ) }
-                                    <i className="adminlib-lock"></i>
+                                    <i className="adminfont-lock"></i>
                                 </span>
                             ) }
                         { inputField.proSetting &&
                             ! appLocalizer.khali_dabba && (
                                 <span className="admin-pro-tag">
-                                    <i className="adminlib-pro-tag"></i>Pro
+                                    <i className="adminfont-pro-tag"></i>Pro
                                 </span>
                             ) }
                     </div>
@@ -2421,7 +2421,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     aria-labelledby="form-dialog-title"
                 >
                     <span
-                        className="admin-font adminlib-cross"
+                        className="admin-font adminfont-cross"
                         role="button"
                         tabIndex={ 0 }
                         onClick={ handleModelClose }
@@ -2450,14 +2450,14 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 { successMsg && (
                     <>
                         <div className="admin-notice-wrapper notice-error">
-                            <i className="admin-font adminlib-info"></i>
+                            <i className="admin-font adminfont-info"></i>
                             <div className="notice-details">
                                 <div className="title">Sorry!</div>
                                 <div className="desc">{ successMsg }</div>
                             </div>
                         </div>
                         <div className="admin-notice-wrapper">
-                            <i className="admin-font adminlib-icon-yes"></i>
+                            <i className="admin-font adminfont-icon-yes"></i>
                             <div className="notice-details">
                                 <div className="title">Success</div>
                                 <div className="desc">{ successMsg }</div>

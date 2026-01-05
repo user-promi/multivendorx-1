@@ -15,7 +15,7 @@ const Notifications = () => {
 				name: 'Notifications',
 				desc: 'Store Info',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 		{
@@ -25,7 +25,7 @@ const Notifications = () => {
 				name: 'Activities',
 				desc: 'Store Info',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 	];

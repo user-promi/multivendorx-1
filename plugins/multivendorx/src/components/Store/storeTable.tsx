@@ -218,7 +218,7 @@ const StoreTable: React.FC = () => {
 									alt={row.original.store_name}
 								/>
 							) : (
-								<i className="item-icon adminlib-store-inventory"></i>
+								<i className="item-icon adminfont-store-inventory"></i>
 							)}
 
 							<div className="details">
@@ -241,13 +241,13 @@ const StoreTable: React.FC = () => {
 					<div className="table-content">
 						{row.original.email && (
 							<div>
-								<i className="adminlib-mail"></i>{' '}
+								<i className="adminfont-mail"></i>{' '}
 								{row.original.email?.split('\n')[0].trim()}
 							</div>
 						)}
 						{row.original.phone && (
 							<div>
-								<i className="adminlib-form-phone"></i>
+								<i className="adminfont-form-phone"></i>
 								{row.original.phone ? row.original.phone : '-'}
 							</div>
 						)}
@@ -301,7 +301,7 @@ const StoreTable: React.FC = () => {
 										}}
 									/>
 								) : (
-									<i className="item-icon adminlib-person"></i>
+									<i className="item-icon adminfont-person"></i>
 								)}
 								<div className="details">
 									<div className="title">
@@ -337,7 +337,7 @@ const StoreTable: React.FC = () => {
 						actions: [
 							{
 								label: __('Settings', 'multivendorx'),
-								icon: 'adminlib-setting',
+								icon: 'adminfont-setting',
 								onClick: () => {
 									navigate(
 										`?page=multivendorx#&tab=stores&edit/${row.original.id}`
@@ -352,7 +352,7 @@ const StoreTable: React.FC = () => {
 												'Storefront',
 												'multivendorx'
 											),
-											icon: 'adminlib-storefront',
+											icon: 'adminfont-storefront',
 											onClick: () => {
 												if (!row.original.store_slug) {
 													return;
@@ -387,7 +387,7 @@ const StoreTable: React.FC = () => {
 						}}
 						value={filterValue || ''}
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},

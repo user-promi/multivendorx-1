@@ -355,7 +355,7 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 							);
 						}}
 					>
-						<i className="adminlib-check"></i> Approve
+						<i className="adminfont-check"></i> Approve
 					</span>
 					<span
 						className="admin-btn btn-red"
@@ -366,7 +366,7 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 							)
 						}
 					>
-						<i className="adminlib-close"></i> Reject
+						<i className="adminfont-close"></i> Reject
 					</span>
 				</TableCell>
 			),
@@ -405,7 +405,7 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 						header={
 							<>
 								<div className="title">
-									<i className="adminlib-cart"></i>
+									<i className="adminfont-cart"></i>
 									{__('Reason', 'multivendorx')}
 								</div>
 								<i
@@ -414,7 +414,7 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 										setRejectReason('');
 										setIsSubmitting(false);
 									}}
-									className="icon adminlib-close"
+									className="icon adminfont-close"
 								></i>
 							</>
 						}

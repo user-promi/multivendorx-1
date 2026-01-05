@@ -37,7 +37,7 @@ const Elements: React.FC< ElementsProps > = ( {
                     </h2>
                 ) }
                 <i
-                    className={ `adminlib-pagination-right-arrow ${
+                    className={ `adminfont-pagination-right-arrow ${
                         isOpen ? 'rotate' : ''
                     }` }
                 ></i>

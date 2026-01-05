@@ -50,7 +50,7 @@ const ShortCodeTable: React.FC< ShortCodeTableProps > = ( props ) => {
                             { option.name } - <code>{ option.label }</code>
                             { icon && option.label && (
                                 <i
-                                    className="adminlib-vendor-form-copy"
+                                    className="adminfont-vendor-form-copy"
                                     onClick={ () =>
                                         option.label &&
                                         handleCopy( option.label )

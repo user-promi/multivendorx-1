@@ -263,7 +263,7 @@ const Modules: React.FC< ModuleProps > = ( {
     return (
         <>
             <AdminBreadcrumbs
-                activeTabIcon="adminlib-module"
+                activeTabIcon="adminfont-module"
                 tabTitle="Modules"
                 description={
                     'Manage marketplace features by enabling or disabling modules. Turning a module on activates its settings and workflows, while turning it off hides them from admin and vendors.'
@@ -277,7 +277,7 @@ const Modules: React.FC< ModuleProps > = ( {
                     onClose={ () => setModelOpen( false ) }
                 >
                     <button
-                        className="admin-font adminlib-cross"
+                        className="admin-font adminfont-cross"
                         onClick={ () => setModelOpen( false ) }
                         aria-label="Close dialog"
                     ></button>
@@ -286,7 +286,7 @@ const Modules: React.FC< ModuleProps > = ( {
 
                 { successMsg && (
                     <div className="admin-notice-wrapper">
-                        <i className="admin-font adminlib-icon-yes"></i>
+                        <i className="admin-font adminfont-icon-yes"></i>
                         <div className="notice-details">
                             <div className="title">Success!</div>
                             <div className="desc">{ successMsg }</div>
@@ -352,7 +352,7 @@ const Modules: React.FC< ModuleProps > = ( {
                                         <div className="pro-tag">
                                             { module.pro_module &&
                                                 ! appLocalizer.khali_dabba && (
-                                                    <i className="adminlib-pro-tag"></i>
+                                                    <i className="adminfont-pro-tag"></i>
                                                 ) }
                                         </div>
                                     </div>
@@ -420,7 +420,7 @@ const Modules: React.FC< ModuleProps > = ( {
                                                     href={ module.doc_link }
                                                     target="_blank"
                                                 >
-                                                    <i className="adminlib-book"></i>
+                                                    <i className="adminfont-book"></i>
                                                 </a>
                                             ) }
                                             { module.video_link && (
@@ -428,7 +428,7 @@ const Modules: React.FC< ModuleProps > = ( {
                                                     href={ module.video_link }
                                                     target="_blank"
                                                 >
-                                                    <i className="adminlib-button-appearance"></i>
+                                                    <i className="adminfont-button-appearance"></i>
                                                 </a>
                                             ) }
                                             { module.settings_link && (
@@ -437,7 +437,7 @@ const Modules: React.FC< ModuleProps > = ( {
                                                         module.settings_link
                                                     }
                                                 >
-                                                    <i className="adminlib-setting"></i>
+                                                    <i className="adminfont-setting"></i>
                                                 </a>
                                             ) }
                                         </div>

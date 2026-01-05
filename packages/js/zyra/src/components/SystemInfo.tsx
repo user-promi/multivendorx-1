@@ -98,7 +98,7 @@ const SystemInfo: React.FC< SystemInfoProps > = ( {
                     className="admin-btn btn-purple"
                     onClick={ copyToClipboard }
                 >
-                    <i className="adminlib-vendor-form-copy"></i>
+                    <i className="adminfont-vendor-form-copy"></i>
                     { ! copied && (
                         <span className="copy-success">
                             { copyButtonLabel }
@@ -120,8 +120,8 @@ const SystemInfo: React.FC< SystemInfoProps > = ( {
                         <i
                             className={
                                 openKeys.includes( key )
-                                    ? 'adminlib-keyboard-arrow-down'
-                                    : 'adminlib-pagination-right-arrow '
+                                    ? 'adminfont-keyboard-arrow-down'
+                                    : 'adminfont-pagination-right-arrow '
                             }
                         ></i>
                     </div>
