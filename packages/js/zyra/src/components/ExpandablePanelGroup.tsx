@@ -284,7 +284,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             isCustom: true,
             label: newMethod.label,
             desc: newMethod.desc,
-            required: false,
+            required: newMethod.required ?? false,
         };
 
         newMethod.formFields?.forEach( ( field ) => {
