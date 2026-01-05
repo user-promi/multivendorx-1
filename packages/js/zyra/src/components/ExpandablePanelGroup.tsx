@@ -5,6 +5,8 @@ import ToggleSetting from './ToggleSetting';
 import MultiCheckBox from './MultiCheckbox';
 import NestedComponent from './NestedComponent';
 import SelectInput from './SelectInput';
+import { getApiLink } from '../utils/apiService';
+import axios from 'axios';
 
 interface ClickableItem {
     name: string;
@@ -29,6 +31,7 @@ interface FieldOption {
     action?: string;
     btnClass?: string;
     url?: string;
+    redirect?: string;
 }
 
 interface PanelFormField {
@@ -135,6 +138,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
     value,
     onChange,
     appLocalizer,
+    apilink,
     isWizardMode = false,
     proSetting,
     moduleEnabled,
@@ -182,7 +186,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             };
         } )
     );
-console.log('methods', methods)
+
     useEffect( () => {
         const handleClickOutside = ( event: MouseEvent ) => {
             if (
@@ -348,51 +352,53 @@ console.log('methods', methods)
             },
         };
 
-        const prevValue = value?.[methodKey]?.[fieldKey];
-
-        const isFilled = (val: any): boolean => {
-            if (val === undefined || val === null) return false;
-            if (typeof val === 'string') return val.trim() !== '';
-            if (Array.isArray(val)) return val.length > 0;
-            return true; // number | boolean
-        };
-
-        const wasFilled = isFilled(prevValue);
-        const nowFilled = isFilled(fieldValue);
-
-        // Only update progress if fill-state changed
-        if (wasFilled !== nowFilled) {
-            const methodIndex = methods.findIndex(
-                (m) => m.id === methodKey
-            );
-
-            if (methodIndex !== -1) {
-                setFieldProgress((prev) => {
-                    const updatedProgress = [...prev];
-
-                    /**
-                     * ✅ Count ONLY real fields (exclude buttons)
-                     */
-                    const countableFields =
-                        methods[methodIndex]?.formFields?.filter(
-                            (f) => f.type !== 'buttons'
-                        ) || [];
-
-                    const maxFields = countableFields.length;
-
-                    updatedProgress[methodIndex] += nowFilled ? 1 : -1;
-
-                    // Clamp value safely
-                    if (updatedProgress[methodIndex] < 0) {
-                        updatedProgress[methodIndex] = 0;
-                    }
-
-                    if (updatedProgress[methodIndex] > maxFields) {
-                        updatedProgress[methodIndex] = maxFields;
-                    }
-
-                    return updatedProgress;
-                });
+        if (isWizardMode) {
+            const prevValue = value?.[methodKey]?.[fieldKey];
+    
+            const isFilled = (val: any): boolean => {
+                if (val === undefined || val === null) return false;
+                if (typeof val === 'string') return val.trim() !== '';
+                if (Array.isArray(val)) return val.length > 0;
+                return true; // number | boolean
+            };
+    
+            const wasFilled = isFilled(prevValue);
+            const nowFilled = isFilled(fieldValue);
+    
+            // Only update progress if fill-state changed
+            if (wasFilled !== nowFilled) {
+                const methodIndex = methods.findIndex(
+                    (m) => m.id === methodKey
+                );
+    
+                if (methodIndex !== -1) {
+                    setFieldProgress((prev) => {
+                        const updatedProgress = [...prev];
+    
+                        /**
+                         * ✅ Count ONLY real fields (exclude buttons)
+                         */
+                        const countableFields =
+                            methods[methodIndex]?.formFields?.filter(
+                                (f) => f.type !== 'buttons'
+                            ) || [];
+    
+                        const maxFields = countableFields.length;
+    
+                        updatedProgress[methodIndex] += nowFilled ? 1 : -1;
+    
+                        // Clamp value safely
+                        if (updatedProgress[methodIndex] < 0) {
+                            updatedProgress[methodIndex] = 0;
+                        }
+    
+                        if (updatedProgress[methodIndex] > maxFields) {
+                            updatedProgress[methodIndex] = maxFields;
+                        }
+    
+                        return updatedProgress;
+                    });
+                }
             }
         }
 
@@ -459,7 +465,21 @@ console.log('methods', methods)
 
         return renderField( step.id, buttonField );
     };
-console.log('value', value)
+
+    const handleSaveSetupWizard = () => {
+        axios( {
+            url: getApiLink( appLocalizer, apilink ),
+            method: 'POST',
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            data: { 
+                setupWizard: true,
+                value: value
+            },
+        } ).then( ( res ) => {
+           console.log(res)
+        } );
+    };
+
     const renderField = ( methodId: string, field: PanelFormField ) => {
         const fieldValue = value[ methodId ]?.[ field.key ];
 
@@ -866,7 +886,6 @@ console.log('value', value)
                                                 if (!isFirstMethod) {
                                                     const prevStep =
                                                         wizardSteps[wizardIndex - 1];
-
                                                     setWizardIndex(prevStep.index);
                                                     setActiveTabs([prevStep.id]);
                                                 }
@@ -883,19 +902,17 @@ console.log('value', value)
                                             key={index}
                                             className={item.btnClass}
                                             onClick={() => {
+                                                handleSaveSetupWizard();
                                                 // next METHOD
                                                 if (!isLastMethod) {
                                                     const nextStep =
                                                         wizardSteps[wizardIndex + 1];
-
                                                     setWizardIndex(nextStep.index);
                                                     setActiveTabs([nextStep.id]);
                                                     return;
                                                 }
-
                                                 // FINISH
-                                                window.open(
-                                                    `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
+                                                window.open(item.redirect,
                                                     '_self'
                                                 );
                                             }}
@@ -1461,7 +1478,7 @@ console.log('value', value)
                                         className={ `${
                                             method.wrapperClass || ''
                                         } expandable-panel ${
-                                            isActive && isEnabled ? 'open' : ((isActive && method.isCustom || method.openForm) ? 'open' : '')
+                                            isActive && isEnabled ? 'open' : ((isActive && (method.isCustom || method.openForm)) ? 'open' : '')
                                         } ${ method.openForm ? 'open' : '' }` }
                                     >
                                         { method.formFields.map( ( field ) => {
