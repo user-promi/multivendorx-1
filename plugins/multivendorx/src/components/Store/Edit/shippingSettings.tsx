@@ -370,15 +370,15 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 											{/* Max Distance */}
 											<div className="form-group-wrapper">
 												<div className="form-group">
-													<label htmlFor="distance_max_km">
+													<label htmlFor="distance_max">
 														{__(
-															'Max Distance (km)',
+															'Max Distance',
 															'multivendorx'
 														)}
 													</label>
 													<BasicInput
 														type="number"
-														name="distance_max_km"
+														name="distance_max"
 														wrapperClass="setting-form-input"
 														descClass="settings-metabox-description"
 														placeholder={__(
@@ -386,7 +386,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 															'multivendorx'
 														)}
 														value={
-															formData.distance_max_km ||
+															formData.distance_max ||
 															''
 														}
 														onChange={handleChange}
@@ -451,7 +451,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 																		<BasicInput
 																			type="number"
 																			placeholder={__(
-																				'Up to km',
+																				'Up to',
 																				'multivendorx'
 																			)}
 																			value={
