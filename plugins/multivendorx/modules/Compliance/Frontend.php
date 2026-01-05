@@ -86,7 +86,7 @@ class Frontend {
                     </p>
 
                     <!-- Radio buttons for reasons -->
-                    <div class="report_abuse_reasons_wrapper">
+                    <div class="report-abuse-reasons-wrapper">
                         <!-- Dynamic radio buttons will be appended here via jQuery -->
                     </div>
 

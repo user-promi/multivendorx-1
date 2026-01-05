@@ -411,16 +411,24 @@
         &.row {
             flex-direction: row;
             gap: 0.5rem;
+            align-items: start;
 
-            label {
+            label:first-child {
                 width: 30%;
+            }
+            .checkbox-list-side-by-side,
+            .setting-form-input {
+                width: 70%;
             }
         }
 
         &.align-bottom {
             align-items: end;
         }
-
+        &.border-top{
+            padding-top: 1rem;
+            border-top: $border-light-small;
+        }
         .button-wrapper {
             display: flex;
             justify-content: start;
