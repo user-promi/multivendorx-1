@@ -641,9 +641,6 @@ By signing and submitting, the Seller accepts all terms above.
                     'enable'       => true,
                     'bank_details' => array( 'bank_name', 'account_number' ),
                 ),
-                'stripe-connect' => array(
-                    'enable'       => true
-                ),
             ),
         );
 
