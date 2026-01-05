@@ -650,7 +650,7 @@ const Membership = ({ id }: { id: string }) => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-storefront"
+				activeTabIcon="adminfont-storefront"
 				tabTitle="Add plan"
 				description={
 					'Manage marketplace stores with ease. Review, edit, or add new stores anytime.'
@@ -686,7 +686,7 @@ const Membership = ({ id }: { id: string }) => {
 										onClick={() => setstarFill((prev) => !prev)}
 									>
 										<i
-											className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'
+											className={`star-icon ${starFill ? 'adminfont-star' : 'adminfont-star-o'
 												}`}
 										></i>
 										<div className="hover-text">
@@ -862,7 +862,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Products store can list" cols={3}>
+									<FormGroup label="Products store can list">
 										<BasicInput
 											name="name"
 											wrapperClass="setting-form-input"
@@ -875,7 +875,6 @@ const Membership = ({ id }: { id: string }) => {
 									<FormGroup
 										label="Cost to add product beyond limit"
 										htmlFor="extra_product_cost"
-										cols={3}
 									>
 										<BasicInput
 											name="extra_product_cost"
@@ -890,7 +889,6 @@ const Membership = ({ id }: { id: string }) => {
 									<FormGroup
 										label="Product categories store can access"
 										htmlFor="product_category_limit"
-										cols={3}
 									>
 										<BasicInput
 											name="product_category_limit"
@@ -901,6 +899,56 @@ const Membership = ({ id }: { id: string }) => {
 											postInsideText="max"
 										/>
 									</FormGroup>
+									<FormGroup>
+										<MultiCheckBox
+											wrapperClass="toggle-btn"
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="toggle-checkbox"
+											idPrefix="toggle-switch-sold-individually"
+											type="checkbox"
+											value={featuredProducts ? ['featured_products'] : []}
+											preText={"Featured products"}
+											onChange={(e) =>
+												setfeaturedProducts(
+													(e as React.ChangeEvent<HTMLInputElement>)
+														.target.checked
+												)
+											}
+											options={[
+												{
+													key: 'featured_products',
+													value: 'featured_products',
+												},
+											]}
+										/>
+									</FormGroup>
+									<FormGroup label={__('Featured products', 'multivendorx')} htmlFor="featured_products" row>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+											postInsideText={'max'}
+											size="8rem"
+										/>
+									</FormGroup>
+
+									{featuredProducts && (
+										<>
+											<FormGroup label={__('Images allowed per product', 'multivendorx')} htmlFor="per_product" row>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'max'}
+													size="8rem"
+												/>
+											</FormGroup>
+										</>
+									)}
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">
@@ -1286,7 +1334,7 @@ const Membership = ({ id }: { id: string }) => {
 									</FormGroupWrapper>
 									<div className="settings-metabox-note">
 										<div className="metabox-note-wrapper">
-											<i className="adminlib-info"></i>
+											<i className="adminfont-info"></i>
 											<div className="details">
 												<p>Activate Stripe Marketplace or PayPal Marketplace module to use recurring subscriptions.</p>
 												<p>Sign-up fee 0.05 or more is required to create subscriptions in Stripe/PayPal</p>
@@ -1390,7 +1438,6 @@ const Membership = ({ id }: { id: string }) => {
 							<div className="membership-features">
 
 								<AdminButton
-									wrapperClass="right"
 									buttons={[
 										{
 											icon: 'delete',

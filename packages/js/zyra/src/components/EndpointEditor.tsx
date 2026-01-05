@@ -126,7 +126,7 @@ const EndpointManager: React.FC< EndpointEditorProps > = ( {
                 { editKey === key ? (
                     <div className="edit-menu" ref={ editRef }>
                         <div className="name-wrapper">
-                            <i className="adminlib-drag"></i>
+                            <i className="adminfont-drag"></i>
                             <label
                                 htmlFor={ `menu-name-${ key }` }
                                 className="input-label"
@@ -252,7 +252,7 @@ const EndpointManager: React.FC< EndpointEditorProps > = ( {
                     >
                         <div className="name-wrapper">
                             { key !== 'dashboard' && (
-                                <i className="adminlib-drag"></i>
+                                <i className="adminfont-drag"></i>
                             ) }
                             <i className={ endpoint.icon }></i>
                             <div className="name">
@@ -272,12 +272,12 @@ const EndpointManager: React.FC< EndpointEditorProps > = ( {
                                         onClick={ () =>
                                             startEdit( key, endpoint )
                                         }
-                                        className="adminlib-edit"
+                                        className="adminfont-edit"
                                     ></i>
                                 ) }
                                 <div>
                                     <i
-                                        className={ `adminlib-eye${
+                                        className={ `adminfont-eye${
                                             endpoint.visible === false
                                                 ? '-blocked'
                                                 : ''
@@ -397,10 +397,10 @@ const EndpointManager: React.FC< EndpointEditorProps > = ( {
                                             </>
                                         ) : (
                                             <>
-                                                <i className="adminlib-drag"></i>
+                                                <i className="adminfont-drag"></i>
                                                 { sub.name }
                                                 <i
-                                                    className="adminlib-edit"
+                                                    className="adminfont-edit"
                                                     onClick={ () => {
                                                         setEditKey( subKey );
                                                         setEditName( sub.name );

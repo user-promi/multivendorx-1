@@ -31,7 +31,7 @@ const SetupWizard: React.FC = () => {
 		{
 			id: 'marketplace_setup',
 			label: 'Configure Your Marketplace',
-			icon: 'adminlib-storefront',
+			icon: 'adminfont-storefront',
 			desc: 'Configure basic settings for vendor stores.',
 			countBtn: true,
 			isWizardMode: true,
@@ -130,7 +130,7 @@ const SetupWizard: React.FC = () => {
 		{
 			id: 'store_setup',
 			label: 'Configure Your Store',
-			icon: 'adminlib-storefront',
+			icon: 'adminfont-storefront',
 			desc: 'Configure basic settings for vendor stores.',
 			countBtn: true,
 			isWizardMode: true,
@@ -203,7 +203,7 @@ const SetupWizard: React.FC = () => {
 		{
 			id: 'commission_setup',
 			label: 'Commission Setup',
-			icon: 'adminlib-storefront',
+			icon: 'adminfont-storefront',
 			desc: 'Configure basic settings for vendor stores.',
 			countBtn: true,
 			isWizardMode: true,

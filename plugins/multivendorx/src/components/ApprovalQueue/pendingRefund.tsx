@@ -279,7 +279,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 						value={filterValue || ''}
 						className="basic-select"
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -442,7 +442,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 							actions: [
 								{
 									label: __('View Order', 'multivendorx'),
-									icon: 'adminlib-preview',
+									icon: 'adminfont-preview',
 									onClick: () => {
 										window.open(
 											orderUrl,
@@ -454,7 +454,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 								},
 								{
 									label: __('Reject', 'multivendorx'),
-									icon: 'adminlib-close',
+									icon: 'adminfont-close',
 									onClick: () => handleRejectClick(orderId),
 									hover: true,
 								},
@@ -492,7 +492,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-announcement"></i>
+								<i className="adminfont-announcement"></i>
 								{__('Reject Order', 'multivendorx')}
 							</div>
 							<div className="des">
@@ -503,7 +503,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 							</div>
 							<i
 								onClick={handleCloseForm}
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 							></i>
 						</>
 					}

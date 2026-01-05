@@ -74,27 +74,27 @@ const Customizer: React.FC< CustomizerProps > = ( {
                     },
                     {
                         title: 'Border Style',
-                        iconClass: 'adminlib-crop-free',
+                        iconClass: 'adminfont-crop-free',
                         type: 'border',
                     },
                     {
                         title: 'Text Style',
-                        iconClass: 'adminlib-text-fields',
+                        iconClass: 'adminfont-text-fields',
                         type: 'font',
                     },
                     {
                         title: 'Change Size',
-                        iconClass: 'adminlib-resize',
+                        iconClass: 'adminfont-resize',
                         type: 'size',
                     },
                     {
                         title: 'Add Url',
-                        iconClass: 'adminlib-link',
+                        iconClass: 'adminfont-link',
                         type: 'link',
                     },
                     {
                         title: 'Settings',
-                        iconClass: 'adminlib-setting',
+                        iconClass: 'adminfont-setting',
                         type: 'setting',
                     },
                 ].map( ( { title, iconClass, type } ) => (
@@ -118,7 +118,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                         onClick={ () => setSelect( '' ) }
                         className="wrapper-close"
                     >
-                        <i className="admin-font adminlib-cross"></i>
+                        <i className="admin-font adminfont-cross"></i>
                     </button>
 
                     { /* Render selected setting */ }
@@ -546,7 +546,7 @@ const Customizer: React.FC< CustomizerProps > = ( {
                                             );
                                         } }
                                     >
-                                        <i className="admin-font adminlib-send"></i>
+                                        <i className="admin-font adminfont-send"></i>
                                     </button>
                                 </div>
                             </div>

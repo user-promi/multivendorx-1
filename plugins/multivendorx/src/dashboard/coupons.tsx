@@ -835,14 +835,14 @@ const AllCoupon: React.FC = () => {
 						actions: [
 							{
 								label: __('Edit', 'multivendorx'),
-								icon: 'adminlib-edit',
+								icon: 'adminfont-edit',
 								onClick: (rowData: any) => {
 									handleEditCoupon(rowData.id);
 								},
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete delete',
+								icon: 'adminfont-delete delete',
 								onClick: async (rowData: any) => {
 									if (
 										confirm(
@@ -938,7 +938,7 @@ const AllCoupon: React.FC = () => {
 						}
 						className="basic-select"
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -966,7 +966,7 @@ const AllCoupon: React.FC = () => {
 							setAddCoupon(true); // open popup
 						}}
 					>
-						<i className="adminlib-plus"></i>
+						<i className="adminfont-plus"></i>
 						{__('Add New', 'multivendorx')}
 					</div>
 				</div>
@@ -981,7 +981,7 @@ const AllCoupon: React.FC = () => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-coupon"></i>
+								<i className="adminfont-coupon"></i>
 								{__('Add Coupon', 'multivendorx')}
 							</div>
 							<div className="des">
@@ -991,7 +991,7 @@ const AllCoupon: React.FC = () => {
 								)}
 							</div>
 							<i
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 								onClick={() => setAddCoupon(false)}
 							></i>
 						</>
@@ -1002,7 +1002,7 @@ const AllCoupon: React.FC = () => {
 								className="admin-btn btn-red"
 								onClick={() => handleSave('draft')}
 							>
-								<i className="adminlib-contact-form"></i>
+								<i className="adminfont-contact-form"></i>
 								{__('Draft', 'multivendorx')}
 							</div>
 
@@ -1010,7 +1010,7 @@ const AllCoupon: React.FC = () => {
 								className="admin-btn btn-purple-bg"
 								onClick={() => handleSave('publish')}
 							>
-								<i className="adminlib-publish"></i>
+								<i className="adminfont-publish"></i>
 								{__('Publish', 'multivendorx')}
 							</div>
 						</>

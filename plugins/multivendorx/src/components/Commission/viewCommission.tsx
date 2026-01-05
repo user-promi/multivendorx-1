@@ -233,7 +233,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 										className="product-thumb"
 									/>
 								) : (
-									<i className="item-icon adminlib-multi-product"></i>
+									<i className="item-icon adminfont-multi-product"></i>
 								)}
 
 								<div className="details">
@@ -358,7 +358,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			header={
 				<>
 					<div className="title">
-						<i className="adminlib-commission"></i>
+						<i className="adminfont-commission"></i>
 						{__('View Commission', 'multivendorx')}{' '}
 						{commissionId ? `#${commissionId}` : ''}
 					</div>
@@ -368,7 +368,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							'multivendorx'
 						)}
 					</div>
-					<i onClick={onClose} className="icon adminlib-close"></i>
+					<i onClick={onClose} className="icon adminfont-close"></i>
 				</>
 			}
 		>
@@ -398,7 +398,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<div className="details">
 							{storeData?.email && (
 								<div className="email">
-									<i className="adminlib-mail"></i>
+									<i className="adminfont-mail"></i>
 									<b>{__('Email:', 'multivendorx')}</b>{' '}
 									{storeData.email.split(/\s*[\n,]\s*/)[0]}
 								</div>
@@ -584,7 +584,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 								{__('Commission Notes', 'multivendorx')}
 							</div>
 							<div className="settings-metabox-note">
-								<i className="adminlib-info"></i>
+								<i className="adminfont-info"></i>
 								<p>{commissionData?.note}</p>
 							</div>
 						</>

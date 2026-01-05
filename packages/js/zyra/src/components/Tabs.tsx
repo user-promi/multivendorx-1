@@ -417,7 +417,7 @@ const Tabs: React.FC< TabsProps > = ( {
                     { /* <p className="menu-name">{tab.name}</p> */ }
                     <p className="menu-name">
                         { menuIcon && tab.icon && (
-                            <i className={ `adminlib-${ tab.icon }` }></i>
+                            <i className={ `adminfont-${ tab.icon }` }></i>
                         ) }
                         <span>{ tab.count }</span>
                         { tab.name }

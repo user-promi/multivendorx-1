@@ -318,7 +318,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                 >
                                     MultivendorX
                                 </div>
-                                <i className="adminlib-menu"></i>
+                                <i className="adminfont-menu"></i>
                             </div>
                             <ul className="dashboard-tabs">
                                 <li className="tab-name active">
@@ -330,25 +330,25 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                                 selectedColors.colorPrimary,
                                         } }
                                     >
-                                        <i className="adminlib-module"></i>
+                                        <i className="adminfont-module"></i>
                                         Dashboard
                                     </a>
                                 </li>
 
                                 <li className="tab-name ">
                                     <a className="tab">
-                                        <i className="adminlib-single-product"></i>
+                                        <i className="adminfont-single-product"></i>
                                         Products
                                     </a>
-                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                    <i className="admin-arrow adminfont-pagination-right-arrow"></i>
                                 </li>
 
                                 <li className="tab-name ">
                                     <a className="tab">
-                                        <i className="adminlib-sales"></i>
+                                        <i className="adminfont-sales"></i>
                                         Sales
                                     </a>
-                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                    <i className="admin-arrow adminfont-pagination-right-arrow"></i>
                                 </li>
 
                                 <ul className="subtabs">
@@ -365,41 +365,41 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
 
                                 <li className="tab-name ">
                                     <a className="tab">
-                                        <i className="adminlib-coupon"></i>
+                                        <i className="adminfont-coupon"></i>
                                         Coupons
                                     </a>
-                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                    <i className="admin-arrow adminfont-pagination-right-arrow"></i>
                                 </li>
 
                                 <li className="tab-name ">
                                     <a href="#" className="tab">
-                                        <i className="adminlib-wallet"></i>
+                                        <i className="adminfont-wallet"></i>
                                         Wallet
                                     </a>
-                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                    <i className="admin-arrow adminfont-pagination-right-arrow"></i>
                                 </li>
 
                                 <li className="tab-name ">
                                     <a href="#" className="tab">
-                                        <i className="adminlib-customer-service"></i>
+                                        <i className="adminfont-customer-service"></i>
                                         Store Support
                                     </a>
-                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                    <i className="admin-arrow adminfont-pagination-right-arrow"></i>
                                 </li>
 
                                 <li className="tab-name ">
                                     <a href="#" className="tab">
-                                        <i className="adminlib-report"></i>
+                                        <i className="adminfont-report"></i>
                                         Stats / Report
                                     </a>
-                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                    <i className="admin-arrow adminfont-pagination-right-arrow"></i>
                                 </li>
                                 <li className="tab-name ">
                                     <a href="#" className="tab">
-                                        <i className="adminlib-resources"></i>
+                                        <i className="adminfont-resources"></i>
                                         Resources
                                     </a>
-                                    <i className="admin-arrow adminlib-pagination-right-arrow"></i>
+                                    <i className="admin-arrow adminfont-pagination-right-arrow"></i>
                                 </li>
                             </ul>
                         </div>
@@ -411,19 +411,19 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                 <div className="navbar-rightside">
                                     <ul className="navbar-right">
                                         <li>
-                                            <div className="adminlib-icon adminlib-moon"></div>
+                                            <div className="adminfont-icon adminfont-moon"></div>
                                         </li>
                                         <li>
-                                            <div className="adminlib-icon adminlib-product-addon"></div>
+                                            <div className="adminfont-icon adminfont-product-addon"></div>
                                         </li>
                                         <li>
-                                            <div className="adminlib-icon adminlib-storefront"></div>
+                                            <div className="adminfont-icon adminfont-storefront"></div>
                                         </li>
                                         <li>
-                                            <div className="adminlib-icon adminlib-notification"></div>
+                                            <div className="adminfont-icon adminfont-notification"></div>
                                         </li>
                                         <li>
-                                            <div className="adminlib-icon adminlib-crop-free"></div>
+                                            <div className="adminfont-icon adminfont-crop-free"></div>
                                         </li>
 
                                         <li className="dropdown login-user">
@@ -438,7 +438,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                                             selectedColors.colorPrimary,
                                                     } }
                                                 >
-                                                    <i className="adminlib-person"></i>
+                                                    <i className="adminfont-person"></i>
                                                 </div>
                                             </a>
                                         </li>
@@ -482,7 +482,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                                     selectedColors.colorPrimary,
                                             } }
                                         >
-                                            <i className="adminlib-dollar"></i>
+                                            <i className="adminfont-dollar"></i>
                                         </div>
                                     </div>
                                     <div
@@ -502,7 +502,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                                     selectedColors.colorSecondary,
                                             } }
                                         >
-                                            <i className="adminlib-order"></i>
+                                            <i className="adminfont-order"></i>
                                         </div>
                                     </div>
                                     <div
@@ -522,7 +522,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                                     selectedColors.colorAccent,
                                             } }
                                         >
-                                            <i className="adminlib-store-seo"></i>
+                                            <i className="adminfont-store-seo"></i>
                                         </div>
                                     </div>
                                     <div
@@ -542,7 +542,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                                     selectedColors.colorSupport,
                                             } }
                                         >
-                                            <i className="adminlib-commission"></i>
+                                            <i className="adminfont-commission"></i>
                                         </div>
                                     </div>
                                 </div>

@@ -70,7 +70,7 @@ const CustomerServices = () => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-customer-service"
+				activeTabIcon="adminfont-customer-service"
 				tabTitle={__('Customer Service', 'multivendorx')}
 				description={__(
 					'Manage store reviews, support requests, financial transactions, and reported issues.',
@@ -97,7 +97,7 @@ const CustomerServices = () => {
 			) : (
 				<div className="general-wrapper">
 					<div className="permission-wrapper">
-						<i className="adminlib-info red"></i>
+						<i className="adminfont-info red"></i>
 						<div className="title">
 							{__(
 								'Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.',

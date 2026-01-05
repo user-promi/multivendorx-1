@@ -177,7 +177,7 @@ const RegistrationForm = () => {
 			<div>{registrationForm.content_after_form}</div>
 			{responseMessage && (
 				<div className="admin-notice-display-title">
-					<i className="admin-font adminlib-icon-yes"></i>
+					<i className="admin-font adminfont-icon-yes"></i>
 					<p>{responseMessage}</p>
 				</div>
 			)}

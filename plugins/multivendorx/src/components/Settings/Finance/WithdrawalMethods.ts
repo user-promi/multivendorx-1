@@ -12,7 +12,7 @@ export default {
 		'Choose which payment integrations to enable for store payouts.',
 		'multivendorx'
 	),
-	icon: 'adminlib-rules',
+	icon: 'adminfont-rules',
 	submitUrl: 'settings',
 	wrapperClass: 'form-wrapper',
 	modal: [

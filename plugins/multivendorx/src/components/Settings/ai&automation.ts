@@ -9,7 +9,7 @@ export default {
 		'AI services can be enabled to assist with creating product details and enhancing images automatically. These settings can be configured to control which AI services are used.',
 		'multivendorx'
 	),
-	icon: 'adminlib-ai',
+	icon: 'adminfont-ai',
 	submitUrl: 'settings',
 	modal: [
 		// --- Gemini API Key Section ---
@@ -81,19 +81,19 @@ export default {
 					key: 'gemini_api',
 					label: __('Gemini (Google)', 'multivendorx'),
 					value: __('gemini_api', 'multivendorx'),
-					icon: 'adminlib-gemini',
+					icon: 'adminfont-gemini',
 				},
 				{
 					key: 'openai_api',
 					label: __('OpenAI (ChatGPT)', 'multivendorx'),
 					value: __('openai_api', 'multivendorx'),
-					icon: 'adminlib-chatgpt',
+					icon: 'adminfont-chatgpt',
 				},
 				{
 					key: 'openrouter_api',
 					label: __('OpenRouter (Free/Open Models)', 'multivendorx'),
 					value: __('openrouter_api', 'multivendorx'),
-					icon: 'adminlib-openrouter',
+					icon: 'adminfont-openrouter',
 				},
 			],
 		},
@@ -156,13 +156,13 @@ export default {
 					key: 'gemini_api_image_enhancement',
 					label: __('Gemini (Google)', 'multivendorx'),
 					value: 'gemini_api',
-					icon: 'adminlib-gemini',
+					icon: 'adminfont-gemini',
 				},
 				{
 					key: 'openrouter_api_image_enhancement',
 					label: __('OpenRouter (Free/Open Models)', 'multivendorx'),
 					value: 'openrouter_api',
-					icon: 'adminlib-openrouter',
+					icon: 'adminfont-openrouter',
 				},
 			],
 			defaultValue: 'gemini_api_image_enhancement',

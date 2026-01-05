@@ -258,7 +258,7 @@ const SettingMetaBox: React.FC< SettingMetaBoxProps > = ( {
                                         key={ opt.id || index }
                                     >
                                         <div className="option-icon admin-badge blue">
-                                            <i className="adminlib-drag"></i>
+                                            <i className="adminfont-drag"></i>
                                         </div>
                                         <div className="option-label ">
                                             <input
@@ -284,7 +284,7 @@ const SettingMetaBox: React.FC< SettingMetaBoxProps > = ( {
                                         <div className="option-icon admin-badge red">
                                             <div
                                                 role="button"
-                                                className="delete-btn adminlib-delete"
+                                                className="delete-btn adminfont-delete"
                                                 tabIndex={ 0 }
                                                 onClick={ () => {
                                                     const newOptions = (
@@ -323,7 +323,7 @@ const SettingMetaBox: React.FC< SettingMetaBoxProps > = ( {
                             >
                                 Add new{ ' ' }
                                 <span>
-                                    <i className="admin-font adminlib-plus"></i>
+                                    <i className="admin-font adminfont-plus"></i>
                                 </span>
                             </div>
                         </div>

@@ -37,7 +37,7 @@ const ShippingCard = ({ product, handleChange }) => {
 	return (
 		<Card
 			title={__('Shipping', 'multivendorx')}
-			iconName="adminlib-pagination-right-arrow icon"
+			iconName="adminfont-pagination-right-arrow icon"
 			toggle
 		>
 			{/* Weight & Shipping class */}

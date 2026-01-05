@@ -8,7 +8,7 @@ export default {
 		'Seller verification confirms a store identity with address, contact, and social profiles-building trust and boosting buyer confidence.',
 		'mvx-pro'
 	),
-	icon: 'adminlib-identity-verification',
+	icon: 'adminfont-identity-verification',
 	submitUrl: 'settings',
 
 	modal: [
@@ -24,34 +24,34 @@ export default {
 			proSetting: true,
 			options: [
 				{
-					key: 'adminlib-verification1',
-					value: __('adminlib-verification1', 'multivendorx'),
-					icon: 'adminlib-verification1',
+					key: 'adminfont-verification1',
+					value: __('adminfont-verification1', 'multivendorx'),
+					icon: 'adminfont-verification1',
 				},
 				{
-					key: 'adminlib-verification2',
-					value: __('adminlib-verification2', 'multivendorx'),
-					icon: 'adminlib-verification2',
+					key: 'adminfont-verification2',
+					value: __('adminfont-verification2', 'multivendorx'),
+					icon: 'adminfont-verification2',
 				},
 				{
-					key: 'adminlib-verification3',
-					value: __('adminlib-verification3', 'multivendorx'),
-					icon: 'adminlib-verification3',
+					key: 'adminfont-verification3',
+					value: __('adminfont-verification3', 'multivendorx'),
+					icon: 'adminfont-verification3',
 				},
 				{
-					key: 'adminlib-verification5',
-					value: __('adminlib-verification5', 'multivendorx'),
-					icon: 'adminlib-verification5',
+					key: 'adminfont-verification5',
+					value: __('adminfont-verification5', 'multivendorx'),
+					icon: 'adminfont-verification5',
 				},
 				{
-					key: 'adminlib-verification7',
-					value: __('adminlib-verification7', 'multivendorx'),
-					icon: 'adminlib-verification7',
+					key: 'adminfont-verification7',
+					value: __('adminfont-verification7', 'multivendorx'),
+					icon: 'adminfont-verification7',
 				},
 				{
-					key: 'adminlib-verification9',
-					value: __('adminlib-verification9', 'multivendorx'),
-					icon: 'adminlib-verification9',
+					key: 'adminfont-verification9',
+					value: __('adminfont-verification9', 'multivendorx'),
+					icon: 'adminfont-verification9',
 				},
 			],
 		},
@@ -186,7 +186,7 @@ export default {
 			modal: [
 				{
 					id: 'google-connect',
-					icon: 'adminlib-google',
+					icon: 'adminfont-google',
 					label: 'Google',
 					connected: false,
 					disableBtn: true,
@@ -214,7 +214,7 @@ export default {
 				},
 				{
 					id: 'twitter-connect',
-					icon: 'adminlib-twitter',
+					icon: 'adminfont-twitter',
 					label: 'Twitter',
 					connected: false,
 					disableBtn: true,
@@ -243,7 +243,7 @@ export default {
 				},
 				{
 					id: 'facebook-connect',
-					icon: 'adminlib-facebook',
+					icon: 'adminfont-facebook',
 					label: 'Facebook',
 					connected: false,
 					disableBtn: true,
@@ -266,7 +266,7 @@ export default {
 				},
 				{
 					id: 'linkedin-connect',
-					icon: 'adminlib-linkedin',
+					icon: 'adminfont-linkedin',
 					label: 'LinkedIn',
 					disableBtn: true,
 					countBtn: false,

@@ -55,7 +55,7 @@ export default {
 		'Decide how your marketplace takes commission from sales.',
 		'multivendorx'
 	),
-	icon: 'adminlib-commission',
+	icon: 'adminfont-commission',
 	submitUrl: 'settings',
 	modal: [
 		{

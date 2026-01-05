@@ -412,7 +412,7 @@ const Dashboard = () => {
 
 											{hasSubmenu && (
 												<i
-													className={`admin-arrow adminlib-pagination-right-arrow ${isOpen ? 'rotate' : ''
+													className={`admin-arrow adminfont-pagination-right-arrow ${isOpen ? 'rotate' : ''
 														}`}
 												></i>
 											)}
@@ -472,7 +472,7 @@ const Dashboard = () => {
 					<div className="top-navbar">
 						<div className="navbar-leftside">
 							<i
-								className="adminlib-menu toggle-menu-icon"
+								className="adminfont-menu toggle-menu-icon"
 								onClick={() => {
 									setIsMenuCollapsed((prev) => {
 										const next = !prev;
@@ -490,26 +490,26 @@ const Dashboard = () => {
 									}
 								>
 									<div
-										className={`adminlib-icon dark-icon ${isDarkMode
-											? 'adminlib-light'
-											: 'adminlib-moon'
+										className={`adminfont-icon dark-icon ${isDarkMode
+											? 'adminfont-light'
+											: 'adminfont-moon'
 											}`}
 									></div>
 								</li>
 
 								<li className="tooltip-wrapper bottom">
-									<i className="adminlib-icon adminlib-product-addon"></i>
+									<i className="adminfont-icon adminfont-product-addon"></i>
 									<span className="tooltip-name">
 										Add product
 									</span>
 								</li>
 								<li className="tooltip-wrapper bottom">
-									<i className="adminlib-icon adminlib-storefront"></i>
+									<i className="adminfont-icon adminfont-storefront"></i>
 									<span className="tooltip-name">view storefront</span>
 								</li>
 								<li className="tooltip-wrapper bottom">
 									<i
-										className="adminlib-icon notification adminlib-notification"
+										className="adminfont-icon notification adminfont-notification"
 										onClick={toggleNotifications}
 									></i>
 									<span className="tooltip-name">
@@ -520,7 +520,7 @@ const Dashboard = () => {
 								</li>
 								<li className="tooltip-wrapper bottom">
 									<i
-										className="adminlib-icon notification adminlib-notification"
+										className="adminfont-icon notification adminfont-notification"
 										onClick={toggleActivities}
 									></i>
 									<span className="tooltip-name">
@@ -534,7 +534,7 @@ const Dashboard = () => {
 									onClick={toggleFullscreen}
 									className="tooltip-wrapper bottom"
 								>
-									<i className="adminlib-icon adminlib-crop-free"></i>
+									<i className="adminfont-icon adminfont-crop-free"></i>
 									<span className="tooltip-name">
 										Full Screen
 									</span>
@@ -548,7 +548,7 @@ const Dashboard = () => {
 										className="avatar-wrapper"
 										onClick={toggleUserDropdown}
 									>
-										<i className="adminlib-icon adminlib-person"></i>
+										<i className="adminfont-icon adminfont-person"></i>
 									</div>
 									{showUserDropdown && (
 										<div className="dropdown-menu">
@@ -595,14 +595,14 @@ const Dashboard = () => {
 												<ul>
 													<li>
 														<a href="#">
-															<i className="adminlib-person"></i>
+															<i className="adminfont-person"></i>
 															My Profile
 														</a>
 													</li>
 
 													<li>
 														<a href="#">
-															<i className="adminlib-setting"></i>
+															<i className="adminfont-setting"></i>
 															Account Setting
 														</a>
 													</li>
@@ -623,7 +623,7 @@ const Dashboard = () => {
 																		);
 																	}}
 																>
-																	<i className="adminlib-switch-store"></i>
+																	<i className="adminfont-switch-store"></i>
 																	Switch stores
 																	{firstTwoStores.length >
 																		0 && (
@@ -660,7 +660,7 @@ const Dashboard = () => {
 																							)}
 																					</>
 																				)}
-																				<span className="adminlib-keyboard-arrow-down arrow-icon"></span>
+																				<span className="adminfont-keyboard-arrow-down arrow-icon"></span>
 																			</span>
 																		)}
 																</a>
@@ -724,7 +724,7 @@ const Dashboard = () => {
 														appLocalizer.user_logout_url
 													}
 												>
-													<i className="adminlib-import"></i>{' '}
+													<i className="adminfont-import"></i>{' '}
 													Sign Out
 												</a>
 											</div>
@@ -739,7 +739,7 @@ const Dashboard = () => {
 				<div className="content-wrapper">
 					{storeData && storeData.status !== 'active' ? (
 						<div className="permission-wrapper">
-							<i className="adminlib-info red"></i>
+							<i className="adminfont-info red"></i>
 							<div className="title">
 								{storeData.status === 'pending' ? (
 									appLocalizer.settings_databases_value[
@@ -781,7 +781,7 @@ const Dashboard = () => {
 						</div>
 					) : noPermission ? (
 						<div className="permission-wrapper">
-							<i className="adminlib-info red"></i>
+							<i className="adminfont-info red"></i>
 							<div className="title">
 								You do not have permission to access this page.
 							</div>

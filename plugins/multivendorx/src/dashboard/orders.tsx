@@ -334,7 +334,7 @@ const Orders: React.FC = () => {
 		return (
 			<>
 				<div className="action-item">
-					<i className="adminlib-form"></i>
+					<i className="adminfont-form"></i>
 					<select
 						name="action"
 						ref={bulkSelectRef}
@@ -372,7 +372,7 @@ const Orders: React.FC = () => {
 						className="admin-btn"
 						onClick={downloadSelectedCSV}
 					>
-						<i className="adminlib-download"></i>
+						<i className="adminfont-download"></i>
 						{__('Download CSV', 'multivendorx')}
 					</button>
 				</div>
@@ -500,7 +500,7 @@ const Orders: React.FC = () => {
 								? [
 										{
 											label: __('View', 'multivendorx'),
-											icon: 'adminlib-eye',
+											icon: 'adminfont-eye',
 											onClick: (rowData) => {
 												setSelectedOrder(rowData);
 												// window.location.href = `view/${rowData.id}`;
@@ -517,14 +517,14 @@ const Orders: React.FC = () => {
 								: []),
 							{
 								label: __('Download', 'multivendorx'),
-								icon: 'adminlib-download',
+								icon: 'adminfont-download',
 								onClick: (rowData) => {
 									window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
 								},
 							},
 							{
 								label: __('Copy URL', 'multivendorx'),
-								icon: 'adminlib-vendor-form-copy',
+								icon: 'adminfont-vendor-form-copy',
 								onClick: (rowData) => {
 									navigator.clipboard.writeText(
 										window.location.href
@@ -533,14 +533,14 @@ const Orders: React.FC = () => {
 							},
 							{
 								label: __('Shipping', 'multivendorx'),
-								icon: 'adminlib-shipping',
+								icon: 'adminfont-shipping',
 								onClick: (rowData) => {
 									window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
 								},
 							},
 							{
 								label: __('PDF', 'multivendorx'),
-								icon: 'adminlib-pdf',
+								icon: 'adminfont-pdf',
 								onClick: (rowData) => {
 									window.location.href = `?page=multivendorx#&tab=stores&edit/${rowData.id}`;
 								},
@@ -616,7 +616,7 @@ const Orders: React.FC = () => {
 							value={filterValue || ''}
 							className="basic-input"
 						/>
-						<i className="adminlib-search"></i>
+						<i className="adminfont-search"></i>
 					</div>
 				</>
 			),
@@ -722,7 +722,7 @@ const Orders: React.FC = () => {
 								className="admin-btn btn-purple-bg"
 								onClick={exportAllOrders}
 							>
-								<i className="adminlib-export"></i>
+								<i className="adminfont-export"></i>
 								{__('Export', 'multivendorx')}
 							</div>
 							<div
@@ -731,7 +731,7 @@ const Orders: React.FC = () => {
 									window.location.hash = `add`;
 								}}
 							>
-								<i className="adminlib-plus"></i>
+								<i className="adminfont-plus"></i>
 								{__('Add New', 'multivendorx')}
 							</div>
 						</div>

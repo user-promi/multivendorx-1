@@ -330,7 +330,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								className="admin-btn btn-purple"
 								onClick={() => handleAdd(row.original)}
 							>
-								<i className="adminlib-plus"></i>{' '}
+								<i className="adminfont-plus"></i>{' '}
 								{__('Add Shipping Method', 'multivendorx')}
 							</button>
 						</TableCell>
@@ -351,7 +351,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									<div className="icon-wrapper">
 										<i
 											onClick={() => handleEdit(method)}
-											className="adminlib-edit"
+											className="adminfont-edit"
 										></i>
 										<i
 											onClick={() =>
@@ -360,7 +360,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 													row.original
 												)
 											}
-											className="adminlib-delete"
+											className="adminfont-delete"
 										></i>
 									</div>
 								</div>
@@ -370,7 +370,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								className="admin-btn btn-purple"
 								onClick={() => handleAdd(row.original)}
 							>
-								<i className="adminlib-plus"></i>{' '}
+								<i className="adminfont-plus"></i>{' '}
 								{__('Add New Method', 'multivendorx')}
 							</button>
 						</div>
@@ -405,14 +405,14 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-shipping"></i>
+								<i className="adminfont-shipping"></i>
 								{isEditing
 									? __('Edit Shipping — ', 'multivendorx')
 									: __('Add Shipping — ', 'multivendorx')}
 								{selectedZone.zone_name}
 							</div>
 							<i
-								className="icon adminlib-close "
+								className="icon adminfont-close "
 								onClick={() => setAddShipping(false)}
 							></i>
 						</>

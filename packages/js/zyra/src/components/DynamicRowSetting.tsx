@@ -204,7 +204,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                                 ) ) }
 
                                 <span
-                                    className="delete-icon adminlib-delete"
+                                    className="delete-icon adminfont-delete"
                                     onClick={ () => handleDelete( rowIndex ) }
                                 ></span>
                             </div>
@@ -228,7 +228,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                     className="admin-btn btn-purple-bg"
                     onClick={ handleAdd }
                 >
-                    <i className="adminlib-plus"></i> { addLabel }
+                    <i className="adminfont-plus"></i> { addLabel }
                 </button>
             </div>
 

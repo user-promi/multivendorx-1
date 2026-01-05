@@ -764,14 +764,14 @@ By signing and submitting, the Seller accepts all terms above.
                 'delivered' => array(
                     'label'    => 'Delivered',
                     'desc'     => 'Order is received by store',
-					'icon'     => 'adminlib-delivery',
+					'icon'     => 'adminfont-delivery',
 					'required' => true,
 					'isCustom' => true,
                 ),
                 'cancelled' => array(
                     'label'    => 'Cancelled',
                     'desc'     => 'Order is cancelled',
-					'icon'     => 'adminlib-rejecte',
+					'icon'     => 'adminfont-rejecte',
 					'required' => true,
 					'isCustom' => true,
                 ),

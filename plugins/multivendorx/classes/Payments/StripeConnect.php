@@ -52,7 +52,7 @@ class StripeConnect {
     public function get_settings() {
         $redirect_url = admin_url( 'admin-post.php?action=multivendorx_stripe_oauth_callback' );
         return array(
-            'icon'         => 'adminlib-stripe-connect',
+            'icon'         => 'adminfont-stripe-connect',
             'id'           => $this->get_id(),
             'label'        => 'Stripe Connect',
             'enableOption' => true,

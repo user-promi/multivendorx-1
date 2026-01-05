@@ -5,7 +5,7 @@ export default {
 	priority: 1,
 	name: __('Active', 'multivendorx'),
 	desc: '',
-	icon: 'adminlib-store-inventory',
+	icon: 'adminfont-store-inventory',
 	submitUrl: 'settings',
 	modal: [
 		{

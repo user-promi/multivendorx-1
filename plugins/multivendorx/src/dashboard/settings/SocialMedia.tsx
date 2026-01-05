@@ -57,7 +57,7 @@ const SocialMedia = () => {
 			<div className="form-group-wrapper">
 				<div className="form-group">
 					<label htmlFor="facebook">
-						<i className="adminlib-facebook-fill"></i>{' '}
+						<i className="adminfont-facebook-fill"></i>{' '}
 						{__('Facebook', 'multivendorx')}
 					</label>
 					<BasicInput
@@ -74,7 +74,7 @@ const SocialMedia = () => {
 			<div className="form-group-wrapper">
 				<div className="form-group">
 					<label htmlFor="twitter">
-						<i className="adminlib-twitter"></i>{' '}
+						<i className="adminfont-twitter"></i>{' '}
 						{__('X', 'multivendorx')}
 					</label>
 					<BasicInput
@@ -91,7 +91,7 @@ const SocialMedia = () => {
 			<div className="form-group-wrapper">
 				<div className="form-group">
 					<label htmlFor="linkedin">
-						<i className="adminlib-linkedin-border"></i>{' '}
+						<i className="adminfont-linkedin-border"></i>{' '}
 						{__('LinkedIn', 'multivendorx')}
 					</label>
 					<BasicInput
@@ -108,7 +108,7 @@ const SocialMedia = () => {
 			<div className="form-group-wrapper">
 				<div className="form-group">
 					<label htmlFor="youtube">
-						<i className="adminlib-youtube"></i>{' '}
+						<i className="adminfont-youtube"></i>{' '}
 						{__('YouTube', 'multivendorx')}
 					</label>
 					<BasicInput
@@ -125,7 +125,7 @@ const SocialMedia = () => {
 			<div className="form-group-wrapper">
 				<div className="form-group">
 					<label htmlFor="instagram">
-						<i className="adminlib-mail"></i>{' '}
+						<i className="adminfont-mail"></i>{' '}
 						{__('Instagram', 'multivendorx')}
 					</label>
 					<BasicInput

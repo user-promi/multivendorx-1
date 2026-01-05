@@ -643,7 +643,7 @@ const StoreSettings = ({
 										href={`${appLocalizer.store_page_url}${formData.slug}`}
 									>
 										{`${appLocalizer.store_page_url}${formData.slug}`}{' '}
-										<i className="adminlib-external"></i>
+										<i className="adminfont-external"></i>
 									</a>
 								</div>
 								{errorMsg.slug && (
@@ -672,7 +672,7 @@ const StoreSettings = ({
 								'youtube',
 								'instagram',
 							].map((network) => {
-								const iconClass = `adminlib-${network} ${network}`;
+								const iconClass = `adminfont-${network} ${network}`;
 								const defaultUrl = `https://${network === 'twitter' ? 'x' : network}.com/`;
 
 								return (

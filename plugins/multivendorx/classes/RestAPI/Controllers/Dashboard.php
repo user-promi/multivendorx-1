@@ -92,7 +92,7 @@ class Dashboard extends \WP_REST_Controller {
         $all_endpoints = array(
             'dashboard'     => array(
                 'name'       => 'Dashboard',
-                'icon'       => 'adminlib-module',
+                'icon'       => 'adminfont-module',
                 'slug'       => '',
                 'submenu'    => array(),
                 'capability' => array( 'create_stores' ),
@@ -100,20 +100,20 @@ class Dashboard extends \WP_REST_Controller {
             'products'      => array(
                 'name'       => 'Products',
                 'slug'       => 'products',
-                'icon'       => 'adminlib-single-product',
+                'icon'       => 'adminfont-single-product',
                 'submenu'    => array(),
                 'capability' => array( 'manage_products' ),
             ),
             'coupons'       => array(
                 'name'       => 'Coupons',
                 'slug'       => 'coupons',
-                'icon'       => 'adminlib-coupon',
+                'icon'       => 'adminfont-coupon',
                 'capability' => array( 'read_shop_coupons' ),
             ),
             'sales'         => array(
                 'name'       => 'Sales',
                 'slug'       => 'sales',
-                'icon'       => 'adminlib-sales',
+                'icon'       => 'adminfont-sales',
                 'submenu'    => array(
                     array(
                         'key'        => 'orders',
@@ -140,7 +140,7 @@ class Dashboard extends \WP_REST_Controller {
             ),
             'wallet'        => array(
                 'name'       => 'Wallet',
-                'icon'       => 'adminlib-wallet',
+                'icon'       => 'adminfont-wallet',
                 'slug'       => 'wallet',
                 'submenu'    => array(
                     array(
@@ -161,7 +161,7 @@ class Dashboard extends \WP_REST_Controller {
 
             'store_support' => array(
                 'name'       => 'Store Support',
-                'icon'       => 'adminlib-customer-service',
+                'icon'       => 'adminfont-customer-service',
                 'slug'       => 'store-support',
                 'submenu'    => array(
                     array(
@@ -197,7 +197,7 @@ class Dashboard extends \WP_REST_Controller {
             'reports'       => array(
                 'name'       => 'Stats / Report',
                 'slug'       => 'reports',
-                'icon'       => 'adminlib-report',
+                'icon'       => 'adminfont-report',
                 'submenu'    => array(
                     array(
                         'key'        => 'overview',
@@ -210,7 +210,7 @@ class Dashboard extends \WP_REST_Controller {
             ),
             'resources'     => array(
                 'name'       => 'Resources',
-                'icon'       => 'adminlib-resources',
+                'icon'       => 'adminfont-resources',
                 'slug'       => 'resources',
                 'submenu'    => array(
                     array(
@@ -231,7 +231,7 @@ class Dashboard extends \WP_REST_Controller {
             'settings'      => array(
                 'name'       => 'Settings',
                 'slug'       => 'settings',
-                'icon'       => 'adminlib-setting',
+                'icon'       => 'adminfont-setting',
                 'capability' => array( 'manage_store_settings' ),
             ),
         );

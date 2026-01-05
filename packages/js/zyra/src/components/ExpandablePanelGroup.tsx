@@ -718,7 +718,7 @@ console.log('value', value)
                         { field.title ? (
                             <div className="description-wrapper">
                                 <div className="title">
-                                    <i className="adminlib-error"></i>
+                                    <i className="adminfont-error"></i>
                                     { field.title }
                                 </div>
 
@@ -788,7 +788,7 @@ console.log('value', value)
                                     className="admin-btn btn-purple"
                                 >
                                     Set Up{ ' ' }
-                                    <i className="adminlib-arrow-right"></i>{ ' ' }
+                                    <i className="adminfont-arrow-right"></i>{ ' ' }
                                 </a>
                             ) }
                         </div>
@@ -803,9 +803,9 @@ console.log('value', value)
                                     ( item: FieldOption, index: number ) => (
                                         <li key={ index }>
                                             { item.check ? (
-                                                <i className="check adminlib-icon-yes"></i>
+                                                <i className="check adminfont-icon-yes"></i>
                                             ) : (
-                                                <i className="close adminlib-cross"></i>
+                                                <i className="close adminfont-cross"></i>
                                             ) }
                                             { item.desc }
                                         </li>
@@ -821,7 +821,7 @@ console.log('value', value)
                         <div className="copy-text-wrapper">
                             <code>{ field.title }</code>
                             <i
-                                className="adminlib-vendor-form-copy"
+                                className="adminfont-vendor-form-copy"
                                 onClick={ () => handleCopy( field.title ) }
                             ></i>
                         </div>
@@ -1070,7 +1070,7 @@ console.log('value', value)
                                     ! method.openForm && (
                                         <div className="toggle-icon">
                                             <i
-                                                className={ `adminlib-${
+                                                className={ `adminfont-${
                                                     isActive && isEnabled ? 'keyboard-arrow-down' : ((isActive && method.isCustom) ? 'keyboard-arrow-down' : 'pagination-right-arrow')
                                                 }` }
                                                 onClick={ () => {
@@ -1212,7 +1212,7 @@ console.log('value', value)
                                                                 } }
                                                             >
                                                                 <span className="admin-btn btn-blue">
-                                                                    <i className="adminlib-setting"></i>
+                                                                    <i className="adminfont-setting"></i>
                                                                     Settings
                                                                 </span>
                                                             </li>
@@ -1246,7 +1246,7 @@ console.log('value', value)
                                                     } }
                                                 >
                                                     <span className="admin-btn btn-green">
-                                                        <i className="adminlib-eye"></i>{ ' ' }
+                                                        <i className="adminfont-eye"></i>{ ' ' }
                                                         Enable
                                                     </span>
                                                 </li>
@@ -1273,7 +1273,7 @@ console.log('value', value)
                                                 } }
                                                 className="admin-btn btn-blue"
                                             >
-                                                <i className="adminlib-edit"></i>
+                                                <i className="adminfont-edit"></i>
                                                 Edit
                                             </div>
                                         </>
@@ -1294,7 +1294,7 @@ console.log('value', value)
                                                                 : method.id
                                                     );
                                                 } }
-                                                className="admin-icon adminlib-more-vertical"
+                                                className="admin-icon adminfont-more-vertical"
                                             ></i>
                                             { openDropdownId === method.id && (
                                                 <div
@@ -1340,7 +1340,7 @@ console.log('value', value)
                                                                                         } }
                                                                                     >
                                                                                         <span className="item">
-                                                                                            <i className="adminlib-setting"></i>
+                                                                                            <i className="adminfont-setting"></i>
                                                                                             Settings
                                                                                         </span>
                                                                                     </li>
@@ -1374,7 +1374,7 @@ console.log('value', value)
                                                                             } }
                                                                         >
                                                                             <span className="item">
-                                                                                <i className="adminlib-eye"></i>{ ' ' }
+                                                                                <i className="adminfont-eye"></i>{ ' ' }
                                                                                 Enable
                                                                             </span>
                                                                         </li>
@@ -1392,7 +1392,7 @@ console.log('value', value)
                                                                             } }
                                                                         >
                                                                             <div className="item">
-                                                                                <i className="adminlib-edit"></i>
+                                                                                <i className="adminfont-edit"></i>
                                                                                 Edit
                                                                             </div>
                                                                         </li>
@@ -1405,7 +1405,7 @@ console.log('value', value)
                                                                             className="delete"
                                                                         >
                                                                             <div className="item">
-                                                                                <i className="adminlib-delete"></i>
+                                                                                <i className="adminfont-delete"></i>
                                                                                 Delete
                                                                             </div>
                                                                         </li>
@@ -1441,7 +1441,7 @@ console.log('value', value)
                                                                         } }
                                                                     >
                                                                         <div className="item">
-                                                                            <i className="adminlib-eye-blocked"></i>
+                                                                            <i className="adminfont-eye-blocked"></i>
                                                                             Disable
                                                                         </div>
                                                                     </li>
@@ -1510,7 +1510,7 @@ console.log('value', value)
                         className="admin-btn btn-purple"
                         onClick={ handleAddNewMethod }
                     >
-                        <i className="adminlib-plus"></i> Add New
+                        <i className="adminfont-plus"></i> Add New
                     </div>
                 </div>
             ) }
