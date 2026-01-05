@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 import axios from 'axios';
-import { getApiLink, useModules } from 'zyra';
+import { Column, Container, getApiLink, useModules } from 'zyra';
 import { Skeleton } from '@mui/material';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './latestReview';
@@ -116,8 +116,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
 	return (
 		<>
-			<div className="container-wrapper ">
-				<div className="card-wrapper column column-8">
+			<Container>
+				<Column>
 					<div className="analytics-container">
 						{overviewData.map((item, idx) => (
 							<div key={idx} className="analytics-item">
@@ -341,8 +341,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 						</div>
 					)}
-				</div>
-				<div className="card-wrapper column column-4">
+				</Column>
+				<Column>
 					{appLocalizer.khali_dabba && (
 						<div className="card-content">
 							<div className="card-header">
@@ -552,8 +552,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+				</Column>
+			</Container>
 		</>
 	);
 };

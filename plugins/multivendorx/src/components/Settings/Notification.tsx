@@ -352,6 +352,7 @@ const Notification: React.FC = () => {
 								e.key === 'Enter' &&
 								setViewMode(mode as 'list' | 'grid')
 							}
+							className="toggle-option"
 						>
 							<input
 								className="toggle-setting-form-input"

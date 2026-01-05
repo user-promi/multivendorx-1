@@ -1,9 +1,9 @@
-import { BasicInput, TextArea } from 'zyra';
+import { BasicInput, Container, TextArea } from 'zyra';
 
 const Notifications = ({ id }: { id: string }) => {
 	return (
 		<>
-			<div className="container-wrapper">
+			<Container>
 				<div className="card-wrapper">
 					<div className="card-content">
 						<div className="card-header">
@@ -105,7 +105,7 @@ const Notifications = ({ id }: { id: string }) => {
 						</div>
 					</div>
 				</div>
-			</div>
+			</Container>
 		</>
 	);
 };
