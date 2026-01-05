@@ -89,5 +89,105 @@ export default {
 				},
 			],
 		},
+		{
+			key: 'twilio_account_sid',
+			type: 'text',
+			label: __('Account SID', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'twilio',
+			},
+		},
+		{
+			key: 'twilio_auth_token',
+			type: 'text',
+			label: __('Auth Token', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'twilio',
+			},
+		},
+		{
+			key: 'twilio_from_number',
+			type: 'text',
+			label: __('From Number', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'twilio',
+			},
+		},
+		{
+			key: 'vonage_api_key',
+			type: 'text',
+			label: __('API Key', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'vonage',
+			},
+		},
+		{
+			key: 'vonage_api_secret',
+			type: 'text',
+			label: __('API Secret', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'vonage',
+			},
+		},
+		{
+			key: 'vonage_from_number',
+			type: 'text',
+			label: __('From Number', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'vonage',
+			},
+		},
+		{
+			key: 'clickatell_api_key',
+			type: 'text',
+			label: __('API Key', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'clickatell',
+			},
+		},
+		{
+			key: 'plivo_auth_id',
+			type: 'text',
+			label: __('Auth ID', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'plivo',
+			},
+		},
+		{
+			key: 'plivo_auth_token',
+			type: 'text',
+			label: __('Auth Token', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'plivo',
+			},
+		},
+		{
+			key: 'plivo_from_number',
+			type: 'text',
+			label: __('From Number', 'multivendorx'),
+			dependent: {
+				key: 'sms_gateway_selector',
+				set: true,
+				value: 'plivo',
+			},
+		},
 	],
 };

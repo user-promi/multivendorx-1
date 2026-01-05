@@ -12,6 +12,7 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
     type,
 }) => {
 	const [notifications, setNotifications] = useState<[] | null>(null);
+	const [isDropdownOpen, setIsDropdownOpen] = useState(true);
 
 	useEffect(() => {
 		axios({
@@ -113,6 +114,7 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 
 	return (
 		<>
+		{isDropdownOpen && (
 			<div className="dropdown notification">
 				<div className="title">
 					{__('Notifications', 'multivendorx')}
@@ -129,16 +131,18 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 					{type == 'notification' ? (
 
 						<a
-							href={`?page=multivendorx#&tab=notifications`}
+							href={`?page=multivendorx#&tab=notifications&subtab=notifications`}
 							className="admin-btn btn-purple"
+							onClick={() => setIsDropdownOpen(false)}
 						>
 							<i className="adminlib-eye"></i>
 							{__('View all notifications', 'multivendorx')}
 						</a>
 					) : (
 						<a
-							href={`?page=multivendorx#&tab=activities`}
+							href={`?page=multivendorx#&tab=notifications&subtab=activities`}
 							className="admin-btn btn-purple"
+							onClick={() => setIsDropdownOpen(false)}
 						>
 							<i className="adminlib-eye"></i>
 							{__('View all activities', 'multivendorx')}
@@ -146,6 +150,7 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 					)}
 				</div>
 			</div>
+		)}
 		</>
 	);
 };

@@ -5,7 +5,7 @@ import ActivityTable from './ActivityTable';
 
 const Notifications = () => {
 	const location = new URLSearchParams(useLocation().hash.substring(1));
-	const initialTab = location.get('tab') || 'notifications';
+	const initialTab = location.get('subtab') || 'notifications';
 
 	const tabData = [
 		{
@@ -46,7 +46,7 @@ const Notifications = () => {
 			tabData={tabData}
 			currentTab={initialTab}
 			getForm={getForm}
-			prepareUrl={(tabid: string) => `?page=multivendorx#&tab=${tabid}`}
+			prepareUrl={(tabid: string) => `?page=multivendorx#&tab=notifications&subtab=${tabid}`}
 			appLocalizer={appLocalizer}
 			premium={false}
 			Link={Link}
