@@ -108,23 +108,11 @@ class PaypalPayout {
      * @return void
      */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
-
-        file_put_contents(
-            plugin_dir_path(__FILE__) . '/paypal-debug.log',
-            "\n==== PAYMENT START ====\n" .
-            "Store ID: $store_id\nAmount: $amount\nOrder ID: $order_id\n",
-            FILE_APPEND
-        );
     
         $payment_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $paypal_settings  = $payment_settings['paypal-payout'] ?? null;
     
         if ( ! $paypal_settings ) {
-            file_put_contents(
-                plugin_dir_path(__FILE__) . '/paypal-debug.log',
-                "Paypal settings missing\n",
-                FILE_APPEND
-            );
             return;
         }
     
@@ -139,29 +127,11 @@ class PaypalPayout {
         $client_secret = $paypal_settings['client_secret'] ?? '';
         $sandbox       = ( 'sandbox' === $paypal_settings['payment_mode'] );
     
-        file_put_contents(
-            plugin_dir_path(__FILE__) . '/paypal-debug.log',
-            "Receiver: {$receiver_email}\nClient ID Exists: " . ( $client_id ? 'YES' : 'NO' ) .
-            "\nSandbox: " . ( $sandbox ? 'YES' : 'NO' ) . "\n",
-            FILE_APPEND
-        );
-    
         if ( ! $receiver_email || ! $client_id || ! $client_secret ) {
-            file_put_contents(
-                plugin_dir_path(__FILE__) . '/paypal-debug.log',
-                "Missing required PayPal data\n",
-                FILE_APPEND
-            );
             return;
         }
     
         $access_token = $this->get_paypal_access_token( $client_id, $client_secret, $sandbox );
-    
-        file_put_contents(
-            plugin_dir_path(__FILE__) . '/paypal-debug.log',
-            "Access Token Response:\n" . print_r( $access_token, true ) . "\n",
-            FILE_APPEND
-        );
     
         if ( ! $access_token ) {
             return;
@@ -174,12 +144,6 @@ class PaypalPayout {
             get_woocommerce_currency(),
             $store_id,
             $sandbox
-        );
-    
-        file_put_contents(
-            plugin_dir_path(__FILE__) . '/paypal-debug.log',
-            "Payout API Response:\n" . print_r( $payout_response, true ) . "\n",
-            FILE_APPEND
         );
     
         if ( ! empty( $payout_response['batch_header']['payout_batch_id'] ) ) {
@@ -196,11 +160,6 @@ class PaypalPayout {
             $note
         );
     
-        file_put_contents(
-            plugin_dir_path(__FILE__) . '/paypal-debug.log',
-            "FINAL STATUS: {$status}\n=========================\n",
-            FILE_APPEND
-        );
     }
     
     /**
@@ -232,22 +191,11 @@ class PaypalPayout {
         $response = wp_remote_post( $url, $args );
     
         if ( is_wp_error( $response ) ) {
-            file_put_contents(
-                plugin_dir_path(__FILE__) . '/paypal-debug.log',
-                "ACCESS TOKEN ERROR: " . $response->get_error_message() . "\n",
-                FILE_APPEND
-            );
             return false;
         }
     
         $code = wp_remote_retrieve_response_code( $response );
         $body = wp_remote_retrieve_body( $response );
-    
-        file_put_contents(
-            plugin_dir_path(__FILE__) . '/paypal-debug.log',
-            "ACCESS TOKEN RAW RESPONSE ($code):\n$body\n",
-            FILE_APPEND
-        );
     
         $data = json_decode( $body, true );
     

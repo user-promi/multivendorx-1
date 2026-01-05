@@ -333,7 +333,7 @@ class StripeConnect {
         $fields[] = [
             'key' => 'stripe_account_type',
             'name'   => 'stripe_account_type',
-            'type'  => 'store-toggle',
+            'type'  => 'setting-toggle',
             'label' => __('Account Type', 'multivendorx-pro'),
             'options' => [
                 ['key' => 'new', 'label' => __('Create New Account', 'multivendorx-pro'), 'value' => 'new'],
@@ -480,8 +480,9 @@ class StripeConnect {
                     $html .= '</div>';
                 }
             } else {
+
                 $onboard_url = $this->create_pro_stripe_account_link($store_id, $stripe_settings);
-                
+
                 if ($onboard_url) {
                     $html .= '<div class="pro-stripe-onboarding-section" style="padding:15px; background:#f9f9f9; border-radius:4px; margin-top:10px;">';
                     $html .= '<div class="pro-features" style="background:#fff; padding:10px; border-left:4px solid #007cba; margin-bottom:10px;">';
@@ -640,7 +641,7 @@ class StripeConnect {
             if (!is_wp_error($response)) {
                 $body = wp_remote_retrieve_body($response);
                 $account = json_decode($body, true);
-                
+
                 if (isset($account['id'])) {
                     $stripe_account_id = $account['id'];
                     $store->update_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_id'], $stripe_account_id);
@@ -671,7 +672,7 @@ class StripeConnect {
             if (!is_wp_error($response)) {
                 $body = wp_remote_retrieve_body($response);
                 $account_link = json_decode($body, true);
-                
+
                 if (isset($account_link['url'])) {
                     return $account_link['url'];
                 }
