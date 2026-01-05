@@ -97,6 +97,37 @@ class Settings extends \WP_REST_Controller {
             return $error;
         }
         try {
+            $setupWizard = $request->get_param( 'setupWizard' );
+            if ( $setupWizard ) {
+                $value = $request->get_param( 'value' );
+                if (!empty($value)) {
+                    $general_settings = array(
+                        'approve_store' => $value['store_setup']['approve_store'] ?? '',
+                        'store_selling_mode' => $value['store_setup']['store_selling_mode'] ?? '',
+                    );
+    
+                    $commission_type = $value['commission_setup']['commission_type'] ?? '';
+    
+                    $commission_settings = array(
+                        'commission_type' => $commission_type,
+                        'commission_per_' . $commission_type => array(
+                            array(
+                                'commission_fixed' => $value['commission_setup']['commission_value'][0]['commission_fixed'] ?? '',
+                                'commission_percentage' => $value['commission_setup']['commission_value'][0]['commission_percentage'] ?? '',
+                            )
+                        ),
+                    );
+    
+                    $disbursment_settings = array(
+                        'disbursement_order_status' => $value['commission_setup']['disbursement_order_status'] ?? array(),
+                    );
+    
+                    MultiVendorX()->setting->update_option( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
+                    MultiVendorX()->setting->update_option( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
+                    MultiVendorX()->setting->update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
+                }
+                return;
+            }
             $all_details       = array();
             $get_settings_data = $request->get_param( 'setting' );
             $settingsname      = $request->get_param( 'settingName' );

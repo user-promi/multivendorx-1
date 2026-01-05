@@ -17,7 +17,7 @@ const SetupWizard: React.FC = () => {
 	const inputField = {
 		key: 'setup_wizard',
 		proSetting: false,
-		apiLink: '/wp-json/payments/v1/settings',
+		apiLink: 'settings',
 		moduleEnabled: true,
 		dependentSetting: '',
 		dependentPlugin: '',
@@ -157,7 +157,7 @@ const SetupWizard: React.FC = () => {
 					],
 				},
 				{
-					key: 'product_listing',
+					key: 'store_selling_mode',
 					type: 'setting-toggle',
 					label: __(
 						'Product listing model',
@@ -165,14 +165,14 @@ const SetupWizard: React.FC = () => {
 					),
 					options: [
 						{
-							key: 'independent_seller',
+							key: 'default',
 							label: __('Independent seller', 'multivendorx'),
-							value: 'independent_seller',
+							value: 'default',
 						},
 						{
-							key: 'listed_products',
+							key: 'single_product_multiple_vendor',
 							label: __('Co-listed products', 'multivendorx'),
-							value: 'listed_products',
+							value: 'single_product_multiple_vendor',
 						},
 						{
 							key: 'franchise',
@@ -228,14 +228,14 @@ const SetupWizard: React.FC = () => {
 							value: 'store_order',
 						},
 						{
-							key: 'per_item',
+							key: 'item',
 							label: __('Per item based', 'multivendorx'),
-							value: 'per_item',
+							value: 'item',
 						},
 					],
 				},
 				{
-					key: 'commission_per_item',
+					key: 'commission_value',
 					type: 'nested',
 					label: 'Commission value',
 					single: true,
@@ -309,9 +309,9 @@ const SetupWizard: React.FC = () => {
 						},
 						{
 							label: 'Finish',
-							action: 'finish',
+							action: 'next',
 							btnClass: 'admin-btn btn-purple',
-							redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=dashboard`,
+							redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=modules`,
 						},
 					],
 				},
