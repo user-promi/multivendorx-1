@@ -50,13 +50,13 @@ const SetupWizard: React.FC = () => {
 	const appLocalizer = (window as any).appLocalizer;
 
 	const inputField = {
-		key: 'payment_gateway',
-		proSetting: true,
+		key: 'setup_wizard',
+		proSetting: false,
 		apiLink: '/wp-json/payments/v1/settings',
-		moduleEnabled: 'yes',
+		moduleEnabled: true,
 		dependentSetting: '',
 		dependentPlugin: '',
-		modal: ['paypal', 'stripe', 'razorpay'],
+		modal: [],
 		buttonEnable: true,
 	};
 
@@ -423,6 +423,7 @@ const SetupWizard: React.FC = () => {
 					appLocalizer={appLocalizer}
 					methods={methods}
 					buttonEnable={inputField.buttonEnable}
+					moduleEnabled={inputField.moduleEnabled}
 					value={value}
 					onChange={(data: any) => {
 						if (hasAccess()) {
