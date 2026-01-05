@@ -147,7 +147,7 @@ class StripeConnect {
                     'options' => array(
                         array(
                             'key'   => 'standard',
-                            'label' => __( 'Stripe', 'multivendorx' ),
+                            'label' => __( 'Standard', 'multivendorx' ),
                             'value' => 'standard',
                         ),
                         array(
@@ -163,29 +163,6 @@ class StripeConnect {
                     ),
                     'default' => 'express',
                 ),
-                array(
-                    'key'     => 'charge_type',
-                    'type'    => 'setting-toggle',
-                    'label'   => __( 'Charge Type', 'multivendorx' ),
-                    'options' => array(
-                        array(
-                            'key'   => 'direct',
-                            'label' => __( 'Direct', 'multivendorx' ),
-                            'value' => 'direct',
-                        ),
-                        array(
-                            'key'   => 'destination',
-                            'label' => __( 'Destination', 'multivendorx' ),
-                            'value' => 'destination',
-                        ),
-                        array(
-                            'key'   => 'separate',
-                            'label' => __( 'Separate charges and transfers', 'multivendorx' ),
-                            'value' => 'separate',
-                        ),
-                    ),
-                    'default' => 'destination',
-                ),
             ),
         );
     }
@@ -194,83 +171,514 @@ class StripeConnect {
      * Get store payment settings
      */
     public function get_store_payment_settings() {
-        $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
-        $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
-
-        if ( ! empty( $stripe_settings ) && $stripe_settings['enable'] ) {
-            $store_id = get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true );
-
-            $store             = new Store( $store_id );
-            $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
-            $account_type      = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_type'] ) ?: 'new';
-            $onboarding_status = $stripe_account_id ? 'Connected' : 'Not Connected';
-            $badge_class       = $stripe_account_id ? 'green' : 'red';
-            
-            $fields = array();
-
-            // Account type selection
-            $fields[] = array(
-                'type'    => 'setting-toggle',
-                'key'     => 'stripe_account_type',
-                'name'    => 'stripe_account_type',
-                'label'   => __( 'Account Type', 'multivendorx' ),
-                'options' => array(
-                    array(
-                        'key'   => 'new',
-                        'label' => __( 'Create New Account', 'multivendorx' ),
-                        'value' => 'new',
-                    ),
-                    array(
-                        'key'   => 'existing',
-                        'label' => __( 'Connect Existing Account', 'multivendorx' ),
-                        'value' => 'existing',
-                    ),
-                ),
-                'default' => $account_type,
-            );
-
-            // Status message
-            $status_html = '<div class="form-group">';
-            $status_html .= '<label>' . __( 'Stripe Status:', 'multivendorx' ) . ' <span class="admin-badge ' . $badge_class . '">' . $onboarding_status . '</span></label>';
-            
-            if ( $stripe_account_id ) {
-                $status_html .= '<p><small>' . sprintf( __( 'Account ID: %s', 'multivendorx' ), esc_html( $stripe_account_id ) ) . '</small></p>';
-            }
-            
-            if ( $stripe_account_id && $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_onboarding_status'] ) !== 'complete' ) {
-                $status_html .= '<p><small style="color:orange;">' . __( 'Onboarding incomplete - please complete setup', 'multivendorx' ) . '</small></p>';
-            }
-            
-            $status_html .= '</div>';
-            
-            $fields[] = array(
-                'type' => 'html',
-                'html' => $status_html,
-            );
-
-            // Onboarding section
-            $onboarding_flow = $stripe_settings['onboarding_flow'] ?? 'hosted';
-            $onboarding_html = $this->get_onboarding_html( $store_id, $stripe_account_id, $onboarding_flow, $account_type );
-            
-            if ( $onboarding_html ) {
-                $fields[] = array(
-                    'type' => 'html',
-                    'html' => $onboarding_html,
-                );
-            }
-
-            // Toggle script
-            $fields[] = array(
-                'type' => 'html',
-                'html' => $this->get_toggle_script( $store_id ),
-            );
-
-            return array(
-                'id'     => $this->get_id(),
-                'label'  => __( 'Stripe Connect', 'multivendorx' ),
-                'fields' => $fields,
-            );
+        $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
+        $stripe_settings = isset($payment_admin_settings['stripe-connect']) ? $payment_admin_settings['stripe-connect'] : [];
+        
+        if (empty($stripe_settings) || empty($stripe_settings['enable'])) {
+            return [];
         }
+
+        $store_id = get_user_meta(get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true);
+        $store = new Store($store_id);
+        
+        $stripe_account_id = $store->get_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_id']);
+        $account_type = $store->get_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_type'] ) ?: 'new';
+
+        $account_type = 'new';
+
+        $fields = [];
+
+        if ($stripe_account_id === 'complete') {
+            // Connected state - show enhanced pro features
+            $fields = $this->get_connected_account_fields($store, $stripe_account_id);
+        } else {
+            // Not connected - show onboarding (uses free version's connection)
+            $fields = $this->get_onboarding_fields($store, $stripe_settings, $account_type);
+        }
+
+        return [
+            'id'     => $this->get_id(),
+            'label'  => __('Stripe Connect', 'multivendorx-pro'),
+            'fields' => $fields,
+        ];
+    }
+
+    private function get_connected_account_fields($store, $stripe_account_id)
+    {
+        $fields = [];
+        
+        // Status and account info
+        $disconnect_url = wp_nonce_url(
+            admin_url('admin-post.php?action=multivendorx_pro_stripe_connect_disconnect'), 
+            'multivendorx_pro_stripe_connect_disconnect_nonce'
+        );
+
+        $account_balance = $this->get_account_balance($stripe_account_id);
+        $next_payout_date = $this->get_next_payout_date($stripe_account_id);
+        
+        $html = '<div style="padding:15px; background:#f5f9ff; border-radius:4px; margin-bottom:15px;">';
+        $html .= '<span style="color:green; font-weight:bold;">✓ ' . __('Connected to Stripe Marketplace', 'multivendorx-pro') . '</span>';
+        $html .= '<p><small>' . sprintf(__('Account ID: %s', 'multivendorx-pro'), esc_html($stripe_account_id)) . '</small></p>';
+        
+        if ($account_balance !== false) {
+            $html .= '<p><strong>' . __('Available Balance:', 'multivendorx-pro') . '</strong> ' . wc_price($account_balance) . '</p>';
+        }
+        
+        if ($next_payout_date) {
+            $html .= '<p><strong>' . __('Next Payout:', 'multivendorx-pro') . '</strong> ' . $next_payout_date . '</p>';
+        }
+        
+        $html .= '</div>';
+        
+        $fields[] = [
+            'name'  => 'stripe_connect_status',
+            'type'  => 'html',
+            'label' => __('Stripe Marketplace Status', 'multivendorx-pro'),
+            'html'  => $html,
+        ];
+
+        // Pro features
+        $fields[] = [
+            'name'  => 'stripe_dashboard_link',
+            'type'  => 'html',
+            'label' => __('Stripe Dashboard', 'multivendorx-pro'),
+            'html'  => sprintf(
+                '<a href="https://dashboard.stripe.com/connect/accounts/%s" target="_blank" class="button">%s</a>',
+                esc_attr($stripe_account_id),
+                __('View Stripe Dashboard', 'multivendorx-pro')
+            ),
+        ];
+
+        // Disconnect button
+        $fields[] = [
+            'name'  => 'stripe_connect_disconnect_button',
+            'type'  => 'html',
+            'label' => __('&nbsp;', 'multivendorx-pro'),
+            'html'  => sprintf(
+                '<a href="%s" class="button button-secondary" onclick="return confirm(\'%s\');">%s</a>',
+                esc_url($disconnect_url),
+                esc_js(__('Are you sure you want to disconnect from Stripe?', 'multivendorx-pro')),
+                __('Disconnect from Stripe', 'multivendorx-pro')
+            ),
+        ];
+
+        return $fields;
+    }
+
+    /**
+     * Get next payout date
+     */
+    private function get_next_payout_date($stripe_account_id)
+    {
+        $secret_key = $this->get_stripe_secret_key();
+        if (empty($secret_key)) {
+            return false;
+        }
+
+        $response = wp_remote_get('https://api.stripe.com/v1/accounts/' . $stripe_account_id, [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $secret_key,
+            ],
+        ]);
+
+        if (!is_wp_error($response)) {
+            $body = wp_remote_retrieve_body($response);
+            $account = json_decode($body, true);
+            
+            if (isset($account['next_payout_date'])) {
+                return date_i18n(get_option('date_format'), $account['next_payout_date']);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get account balance from Stripe
+     */
+    private function get_account_balance($stripe_account_id)
+    {
+        $secret_key = $this->get_stripe_secret_key();
+        if (empty($secret_key)) {
+            return false;
+        }
+
+        $response = wp_remote_get('https://api.stripe.com/v1/accounts/' . $stripe_account_id . '/balance', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $secret_key,
+            ],
+        ]);
+
+        if (!is_wp_error($response)) {
+            $body = wp_remote_retrieve_body($response);
+            $balance = json_decode($body, true);
+            
+            if (isset($balance['available'][0]['amount'])) {
+                return $balance['available'][0]['amount'] / 100;
+            }
+        }
+
+        return false;
+    }
+
+    private function get_onboarding_fields($store, $stripe_settings, $account_type)
+    {
+        $store_id = $store->get_id();
+        $stripe_account_id = $store->get_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_id']);
+        $onboarding_flow = $stripe_settings['onboarding_flow'] ?? 'hosted';
+
+        $fields = [];
+
+        // Account type selection
+        $fields[] = [
+            'key' => 'stripe_account_type',
+            'name'   => 'stripe_account_type',
+            'type'  => 'store-toggle',
+            'label' => __('Account Type', 'multivendorx-pro'),
+            'options' => [
+                ['key' => 'new', 'label' => __('Create New Account', 'multivendorx-pro'), 'value' => 'new'],
+                ['key' => 'existing', 'label' => __('Connect Existing Account', 'multivendorx-pro'), 'value' => 'existing'],
+            ],
+            'default' => $account_type
+        ];
+
+        // Status message
+        $status_html = '<div style="margin-bottom:15px;">';
+        if ($stripe_account_id) {
+            $status_html .= '<span style="color:orange; font-weight:bold;">' . __('Onboarding Incomplete — Please complete setup.', 'multivendorx-pro') . '</span>';
+        } else {
+            $status_html .= '<span style="color:red; font-weight:bold;">' . __('Onboarding Not Started', 'multivendorx-pro') . '</span>';
+        }
+        $status_html .= '</div>';
+        
+        $fields[] = [
+            'name'  => 'stripe_connect_status_message',
+            'type'  => 'html',
+            'label' => __('Stripe Marketplace Onboarding', 'multivendorx-pro'),
+            'html'  => $status_html,
+        ];
+
+        // Onboarding options
+        $onboarding_html = $this->get_pro_onboarding_html($store_id, $stripe_account_id, $onboarding_flow, $account_type, $stripe_settings);
+        
+        if ($onboarding_html) {
+            $fields[] = [
+                'name'  => 'stripe_onboarding_options',
+                'type'  => 'html',
+                'label' => __('&nbsp;', 'multivendorx-pro'),
+                'html'  => $onboarding_html,
+            ];
+        }
+
+        // Toggle script
+        $fields[] = [
+            'name'  => 'stripe_toggle_script',
+            'type'  => 'html',
+            'label' => '',
+            'html'  => $this->get_pro_toggle_script($store_id),
+        ];
+
+        return $fields;
+    }
+
+    private function get_pro_toggle_script($store_id)
+    {
+        $nonce = wp_create_nonce('stripe_account_type_nonce');
+        
+        return '
+        <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            function handleProAccountTypeToggle() {
+                var selectedValue = $(\'input[name="stripe_account_type"]:checked\').val();
+                var oauthSection = $(\'.pro-stripe-oauth-section\');
+                var onboardingSection = $(\'.pro-stripe-onboarding-section\');
+                var embeddedSection = $(\'.pro-stripe-embedded-section\');
+                
+                oauthSection.hide();
+                onboardingSection.hide();
+                embeddedSection.hide();
+                
+                if (selectedValue === "existing") {
+                    oauthSection.show();
+                } else {
+                    if (onboardingSection.length) {
+                        onboardingSection.show();
+                    }
+                    if (embeddedSection.length) {
+                        embeddedSection.show();
+                    }
+                }
+                
+                // Save the selection via AJAX
+                $.ajax({
+                    url: "' . admin_url('admin-ajax.php') . '",
+                    type: "POST",
+                    data: {
+                        action: "multivendorx_stripe_save_account_type",
+                        store_id: ' . $store_id . ',
+                        account_type: selectedValue,
+                        nonce: "' . $nonce . '"
+                    }
+                });
+            }
+            
+            $(\'input[name="stripe_account_type"]\').on(\'change\', handleProAccountTypeToggle);
+            handleProAccountTypeToggle(); // Initial call
+        });
+        </script>';
+    }
+
+    private function get_pro_onboarding_html($store_id, $stripe_account_id, $onboarding_flow, $account_type, $stripe_settings)
+    {
+        $html = '';
+        
+        if ($account_type === 'existing') {
+            // OAuth for existing accounts
+            $oauth_url = wp_nonce_url(
+                admin_url('admin-post.php?action=multivendorx_pro_stripe_connect_oauth'),
+                'multivendorx_pro_stripe_connect_oauth_nonce'
+            );
+            
+            $html .= '<div class="pro-stripe-oauth-section" style="display:none; padding:15px; background:#f9f9f9; border-radius:4px; margin-top:10px;">';
+            $html .= '<p>' . __('Connect your existing Stripe account using OAuth. You will be redirected to Stripe to authorize the connection.', 'multivendorx-pro') . '</p>';
+            $html .= '<div class="pro-features" style="background:#fff; padding:10px; border-left:4px solid #007cba; margin:10px 0;">';
+            $html .= '<p><strong>' . __('Pro Features Included:', 'multivendorx-pro') . '</strong></p>';
+            $html .= '<ul style="margin-left:20px;">';
+            $html .= '<li>' . __('Instant payouts after order completion', 'multivendorx-pro') . '</li>';
+            $html .= '<li>' . __('Advanced fraud protection', 'multivendorx-pro') . '</li>';
+            $html .= '<li>' . __('Dispute management tools', 'multivendorx-pro') . '</li>';
+            $html .= '<li>' . __('Multi-currency support', 'multivendorx-pro') . '</li>';
+            $html .= '</ul>';
+            $html .= '</div>';
+            $html .= sprintf(
+                '<a href="%s" class="button button-primary">%s</a>',
+                esc_url($oauth_url),
+                __('Connect Existing Stripe Account', 'multivendorx-pro')
+            );
+            $html .= '</div>';
+        } else {
+            // New account onboarding
+            if ($onboarding_flow === 'embedded') {
+                $embedded_data = $this->create_stripe_account_session($store_id, $stripe_settings);
+                
+                if ($embedded_data && !empty($embedded_data['client_secret'])) {
+                    $html .= '<div class="pro-stripe-embedded-section">';
+                    $html .= '<div id="pro-stripe-embedded-onboarding-container" style="width:100%;height:700px;border:1px solid #ddd;"></div>';
+                    $html .= '<script type="text/javascript">';
+                    $html .= 'jQuery(document).ready(function($) {';
+                    $html .= 'if (typeof Stripe !== "undefined") {';
+                    $html .= 'var stripe = Stripe("' . esc_js($this->get_pro_publishable_key()) . '");';
+                    $html .= 'stripe.initEmbeddedOnboarding({';
+                    $html .= 'clientSecret: "' . esc_js($embedded_data['client_secret']) . '",';
+                    $html .= 'onComplete: function() {';
+                    $html .= 'window.location.reload();';
+                    $html .= '}';
+                    $html .= '});';
+                    $html .= '}';
+                    $html .= '});';
+                    $html .= '</script>';
+                    $html .= '</div>';
+                }
+            } else {
+                $onboard_url = $this->create_pro_stripe_account_link($store_id, $stripe_settings);
+                
+                if ($onboard_url) {
+                    $html .= '<div class="pro-stripe-onboarding-section" style="padding:15px; background:#f9f9f9; border-radius:4px; margin-top:10px;">';
+                    $html .= '<div class="pro-features" style="background:#fff; padding:10px; border-left:4px solid #007cba; margin-bottom:10px;">';
+                    $html .= '<p><strong>' . __('Pro Features Included:', 'multivendorx-pro') . '</strong></p>';
+                    $html .= '<ul style="margin-left:20px;">';
+                    $html .= '<li>' . __('Instant payouts after order completion', 'multivendorx-pro') . '</li>';
+                    $html .= '<li>' . __('Advanced fraud protection', 'multivendorx-pro') . '</li>';
+                    $html .= '<li>' . __('Dispute management tools', 'multivendorx-pro') . '</li>';
+                    $html .= '<li>' . __('Multi-currency support', 'multivendorx-pro') . '</li>';
+                    $html .= '<li>' . __('Subscription billing support', 'multivendorx-pro') . '</li>';
+                    $html .= '</ul>';
+                    $html .= '</div>';
+                    $html .= sprintf(
+                        '<a href="%s" target="_blank" class="button button-primary">%s</a>',
+                        esc_url($onboard_url),
+                        $stripe_account_id ? __('Continue Stripe Setup', 'multivendorx-pro') : __('Connect with Stripe Marketplace', 'multivendorx-pro')
+                    );
+                    $html .= '</div>';
+                }
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * Get Stripe publishable key
+     */
+    private function get_pro_publishable_key()
+    {
+        $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
+        $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
+        $mode = $stripe_settings['payment_mode'] ?? 'test';
+        
+        return $mode === 'test' ? ($stripe_settings['test_publishable_key'] ?? '') : ($stripe_settings['live_publishable_key'] ?? '');
+    }
+
+    /**
+     * Get Stripe secret key from settings
+     */
+    private function get_stripe_secret_key()
+    {
+        $payment_admin_settings = MultiVendorX()->setting->get_setting('payment_methods', []);
+        $stripe_settings = $payment_admin_settings['stripe-connect'] ?? [];
+        $mode = $stripe_settings['payment_mode'] ?? 'test';
+        
+        return $mode === 'test' ? ($stripe_settings['test_secret_key'] ?? '') : ($stripe_settings['live_secret_key'] ?? '');
+    }
+
+    /**
+     * Create Stripe account session for embedded onboarding
+     */
+    private function create_stripe_account_session($store_id, $stripe_settings)
+    {
+        $secret_key = $this->get_stripe_secret_key();
+        if (empty($secret_key)) {
+            return false;
+        }
+
+        $store = new Store($store_id);
+        $stripe_account_id = $store->get_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_id']);
+        $dashboard_access = $stripe_settings['dashboard_access'] ?? 'express';
+
+        // Create new account if needed
+        if (!$stripe_account_id) {
+            $response = wp_remote_post('https://api.stripe.com/v1/accounts', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $secret_key,
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'body' => [
+                    'type' => $dashboard_access,
+                    'capabilities[card_payments][requested]' => 'true',
+                    'capabilities[transfers][requested]' => 'true',
+                    'business_profile[mcc]' => '5045',
+                    'business_profile[url]' => home_url(),
+                    'metadata[store_id]' => $store_id,
+                    'metadata[platform]' => 'multivendorx-pro',
+                ],
+            ]);
+
+            if (!is_wp_error($response)) {
+                $body = wp_remote_retrieve_body($response);
+                $account = json_decode($body, true);
+                
+                if (isset($account['id'])) {
+                    $stripe_account_id = $account['id'];
+                    $store->update_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_id'], $stripe_account_id);
+                    $store->update_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_type'], 'new');
+                    $store->update_meta('stripe_marketplace_type', 'pro');
+                }
+            }
+        }
+
+        if ($stripe_account_id) {
+            // Create account session for embedded onboarding
+            $response = wp_remote_post('https://api.stripe.com/v1/account_sessions', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $secret_key,
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'body' => [
+                    'account' => $stripe_account_id,
+                    'components[account_onboarding][enabled]' => 'true',
+                ],
+            ]);
+
+            if (!is_wp_error($response)) {
+                $body = wp_remote_retrieve_body($response);
+                $session = json_decode($body, true);
+                
+                if (isset($session['client_secret'])) {
+                    return [
+                        'account_id' => $stripe_account_id,
+                        'client_secret' => $session['client_secret'],
+                    ];
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Create Stripe account link for hosted onboarding
+     */
+    private function create_pro_stripe_account_link($store_id, $stripe_settings)
+    {
+        $secret_key = $this->get_stripe_secret_key();
+        if (empty($secret_key)) {
+            return false;
+        }
+
+        $store = new Store($store_id);
+        $stripe_account_id = $store->get_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_id']);
+        $dashboard_access = $stripe_settings['dashboard_access'] ?? 'express';
+
+        // Create new account if needed
+        if (!$stripe_account_id) {
+            $response = wp_remote_post('https://api.stripe.com/v1/accounts', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $secret_key,
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'body' => [
+                    'type' => $dashboard_access,
+                    'capabilities[card_payments][requested]' => 'true',
+                    'capabilities[transfers][requested]' => 'true',
+                    'business_profile[mcc]' => '5045',
+                    'business_profile[url]' => home_url(),
+                    'metadata[store_id]' => $store_id,
+                    'metadata[platform]' => 'multivendorx-pro',
+                ],
+            ]);
+
+            if (!is_wp_error($response)) {
+                $body = wp_remote_retrieve_body($response);
+                $account = json_decode($body, true);
+                
+                if (isset($account['id'])) {
+                    $stripe_account_id = $account['id'];
+                    $store->update_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_id'], $stripe_account_id);
+                    $store->update_meta(Utill::STORE_SETTINGS_KEYS['stripe_account_type'], 'new');
+                    $store->update_meta('stripe_marketplace_type', 'pro');
+                }
+            }
+        }
+
+        if ($stripe_account_id) {
+            // Create account link for hosted onboarding
+            $refresh_url = admin_url('admin.php?page=multivendorx-settings&tab=settings&vendor_id=' . get_current_user_id());
+            $return_url = admin_url('admin-post.php?action=multivendorx_stripe_connect_onboard_callback&vendor_id=' . get_current_user_id());
+
+            $response = wp_remote_post('https://api.stripe.com/v1/account_links', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $secret_key,
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                'body' => [
+                    'account' => $stripe_account_id,
+                    'refresh_url' => $refresh_url,
+                    'return_url' => $return_url,
+                    'type' => 'account_onboarding',
+                ],
+            ]);
+
+            if (!is_wp_error($response)) {
+                $body = wp_remote_retrieve_body($response);
+                $account_link = json_decode($body, true);
+                
+                if (isset($account_link['url'])) {
+                    return $account_link['url'];
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -626,7 +1034,6 @@ class StripeConnect {
 
         if ( $response && ! empty( $response['stripe_user_id'] ) ) {
             $store->update_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'], sanitize_text_field( $response['stripe_user_id'] ) );
-            $store->update_meta( Utill::STORE_SETTINGS_KEYS['stripe_onboarding_status'], 'complete' );
             
             // Save additional OAuth data
             if ( isset( $response['access_token'] ) ) {
@@ -634,9 +1041,6 @@ class StripeConnect {
             }
             if ( isset( $response['refresh_token'] ) ) {
                 $store->update_meta( Utill::STORE_SETTINGS_KEYS['stripe_refresh_token'], $response['refresh_token'] );
-            }
-            if ( isset( $response['stripe_publishable_key'] ) ) {
-                $store->update_meta( Utill::STORE_SETTINGS_KEYS['stripe_publishable_key'], $response['stripe_publishable_key'] );
             }
             
             // Success.
@@ -683,10 +1087,8 @@ class StripeConnect {
         // Clear all Stripe meta
         $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
         $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_type'] );
-        $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_onboarding_status'] );
         $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_access_token'] );
         $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_refresh_token'] );
-        $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_publishable_key'] );
 
         wp_send_json_success([
             'message' => __( 'Stripe account disconnected successfully.', 'multivendorx' ),
@@ -758,17 +1160,6 @@ class StripeConnect {
             Utill::STORE_SETTINGS_KEYS['stripe_account_id'],
             $account['id']
         ) );
-
-        if ( $store_id ) {
-            $store = new Store( $store_id );
-            
-            // Update onboarding status
-            if ( isset( $account['charges_enabled'] ) && $account['charges_enabled'] ) {
-                $store->update_meta( Utill::STORE_SETTINGS_KEYS['stripe_onboarding_status'], 'complete' );
-            } elseif ( isset( $account['details_submitted'] ) && $account['details_submitted'] ) {
-                $store->update_meta( Utill::STORE_SETTINGS_KEYS['stripe_onboarding_status'], 'incomplete' );
-            }
-        }
     }
 
     /**
