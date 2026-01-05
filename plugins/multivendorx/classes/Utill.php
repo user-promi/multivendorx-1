@@ -184,10 +184,11 @@ class Utill {
         'location_lat'               => 'location_lat',
         'location_lng'               => 'location_lng',
         'distance_default_cost'      => 'distance_default_cost',
-        'distance_max_km'            => 'distance_max_km',
+        'distance_max'               => 'distance_max',
         'distance_local_pickup_cost' => 'distance_local_pickup_cost',
         'distance_rules'             => 'distance_rules',
         'shipping_options'           => 'shipping_options',
+        'distance_type'              => 'distance_type',
     );
 
     const USER_SETTINGS_KEYS = array(

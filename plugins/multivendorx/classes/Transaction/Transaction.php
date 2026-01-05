@@ -291,7 +291,7 @@ class Transaction {
         global $wpdb;
         $table_name = $wpdb->prefix . Utill::TABLES['transaction'];
 
-        if ($total) {
+        if ( $total ) {
             $total_earning = $wpdb->get_var(
                 $wpdb->prepare(
                     "SELECT SUM(amount) 

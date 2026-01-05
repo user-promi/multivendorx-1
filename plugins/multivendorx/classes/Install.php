@@ -574,63 +574,63 @@ By signing and submitting, the Seller accepts all terms above.
 
         update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
 
-        $shipping_provider_settings = array (
-            'shipping_providers_options' => [
-                array (
-                    'key' => 'australia_post',
+        $shipping_provider_settings = array(
+            'shipping_providers_options' => array(
+                array(
+                    'key'   => 'australia_post',
                     'label' => 'Australia post',
                     'value' => 'australia_post',
-                    'edit' => true,
+                    'edit'  => true,
                 ),
-                array (
-                    'key' => 'canada_post',
+                array(
+                    'key'   => 'canada_post',
                     'label' => 'Canada post',
                     'value' => 'canada_post',
-                    'edit' => true,
+                    'edit'  => true,
                 ),
-            
-                array (
-                    'key' => 'city_link',
+
+                array(
+                    'key'   => 'city_link',
                     'label' => 'City link',
                     'value' => 'city_link',
-                    'edit' => true,
+                    'edit'  => true,
                 ),
-                
-                array (
-                    'key' => 'dhl',
+
+                array(
+                    'key'   => 'dhl',
                     'label' => 'DHL',
                     'value' => 'dhl',
-                    'edit' => true,
+                    'edit'  => true,
                 ),
-                
-                array (
-                    'key' => 'fastway_south_africa',
+
+                array(
+                    'key'   => 'fastway_south_africa',
                     'label' => 'Fastway South Africa',
                     'value' => 'fastway_south_africa',
-                    'edit' => true,
+                    'edit'  => true,
                 ),
-                
-                array (
-                    'key' => 'fedex',
+
+                array(
+                    'key'   => 'fedex',
                     'label' => 'FedEx',
                     'value' => 'fedex',
-                    'edit' => true,
+                    'edit'  => true,
                 ),
-                
-                array (
-                    'key' => 'ontrac',
+
+                array(
+                    'key'   => 'ontrac',
                     'label' => 'OnTrac',
                     'value' => 'ontrac',
-                    'edit' => true,
+                    'edit'  => true,
                 ),
-                
-                array (
-                    'key' => 'polish_shipping',
+
+                array(
+                    'key'   => 'polish_shipping',
                     'label' => 'Polish shipping providers',
                     'value' => 'polish_shipping',
-                    'edit' => true,
+                    'edit'  => true,
                 ),
-            ]
+            ),
         );
 
         update_option( Utill::MULTIVENDORX_SETTINGS['shipping'], $shipping_provider_settings );
@@ -734,27 +734,27 @@ By signing and submitting, the Seller accepts all terms above.
         $order_settings = array(
             'refund_reasons' => array(
                 'damaged-or-defective-product' => array(
-                    'label' => 'Damaged or defective product',
-					'required'   =>  true,
-					'isCustom'  => true,
+                    'label'    => 'Damaged or defective product',
+					'required' => true,
+					'isCustom' => true,
                 ),
-                'wrong-item' => array(
-                    'label' => 'Wrong item delivered',
-					'required'   =>  true,
-					'isCustom'  => true,
+                'wrong-item'                   => array(
+                    'label'    => 'Wrong item delivered',
+					'required' => true,
+					'isCustom' => true,
                 ),
-                'product-not-as-described' => array(
-                    'label' => 'Product not as described',
-					'required'   =>  true,
-					'isCustom'  => true,
+                'product-not-as-described'     => array(
+                    'label'    => 'Product not as described',
+					'required' => true,
+					'isCustom' => true,
                 ),
-                'late-delivery' => array(
-                    'label' => 'Late delivery',
-					'isCustom'  => true,
+                'late-delivery'                => array(
+                    'label'    => 'Late delivery',
+					'isCustom' => true,
                 ),
-                'changed-mind' => array(
-                    'label' => 'Changed mind',
-					'isCustom'  => true,
+                'changed-mind'                 => array(
+                    'label'    => 'Changed mind',
+					'isCustom' => true,
                 ),
             ),
         );
@@ -762,18 +762,18 @@ By signing and submitting, the Seller accepts all terms above.
         $delivery_settings = array(
             'shipping_stage' => array(
                 'delivered' => array(
-                    'label' => 'Delivered',
-                    'desc'  => 'Order is received by store',
-					'icon'  => 'adminlib-delivery',
-					'required'   =>  true,
-					'isCustom'  => true,
+                    'label'    => 'Delivered',
+                    'desc'     => 'Order is received by store',
+					'icon'     => 'adminlib-delivery',
+					'required' => true,
+					'isCustom' => true,
                 ),
                 'cancelled' => array(
-                    'label' => 'Cancelled',
-                    'desc'  => 'Order is cancelled',
-					'icon'  => 'adminlib-rejecte',
-					'required'   =>  true,
-					'isCustom'  => true,
+                    'label'    => 'Cancelled',
+                    'desc'     => 'Order is cancelled',
+					'icon'     => 'adminlib-rejecte',
+					'required' => true,
+					'isCustom' => true,
                 ),
             ),
         );

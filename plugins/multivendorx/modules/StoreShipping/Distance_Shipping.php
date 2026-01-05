@@ -8,6 +8,7 @@
 namespace MultiVendorX\StoreShipping;
 
 use MultiVendorX\Utill;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -19,11 +20,12 @@ defined( 'ABSPATH' ) || exit;
  */
 class Distance_Shipping extends \WC_Shipping_Method {
 
+
     /**
      * Constructor for the shipping class
      */
     public function __construct() {
-        $this->id = 'multivendorx_distance_shipping';
+        $this->id = 'multivendorx-distance-shipping';
 
         $shipping_modules        = MultiVendorX()->setting->get_setting( 'shipping_modules', array() );
         $distance_based_shipping = $shipping_modules['distance-based-shipping'] ?? array();
@@ -46,18 +48,29 @@ class Distance_Shipping extends \WC_Shipping_Method {
         $this->tax_status = ( ! empty( $taxable_shipping ) && in_array( 'taxable', $taxable_shipping, true ) )
             ? 'taxable'
             : 'none';
-
-        $this->init();
     }
-
-
     /**
-     * Initialize settings
+     * Override admin options to show a custom message instead of settings
      */
-    public function init() {
-        add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
+    public function admin_options() {
+        // Dynamic URL to your MultiVendorX shipping settings.
+        $url = admin_url( 'admin.php?page=multivendorx#&tab=settings&subtab=shipping' );
+		?>
+        <h2><?php echo esc_html( $this->method_title ); ?></h2>
+        <p>
+            <?php
+            // Translation-ready message with a dynamic URL.
+            echo wp_kses_post(
+                sprintf(
+                    /* translators: %s: URL to MultiVendorX shipping settings page */
+                    __( 'This shipping method is fully managed in the <a href="%s" target="_blank">MultiVendorX Shipping Settings</a>.', 'multivendorx' ),
+                    esc_url( $url )
+                )
+            );
+            ?>
+        </p>
+		<?php
     }
-
 
     /**
      * Check if shipping is enabled
@@ -72,75 +85,95 @@ class Distance_Shipping extends \WC_Shipping_Method {
      * @param array $package Array of package data.
      */
     public function calculate_shipping( $package = array() ) {
+
         if ( empty( $package['contents'] ) ) {
-			return;
-        }
-        $products                       = $package['contents'];
-        $multivendorx_user_location_lat = $package[ Utill::USER_SETTINGS_KEYS['multivendorx_user_location_lat'] ] ?? '';
-        $multivendorx_user_location_lng = $package[ Utill::USER_SETTINGS_KEYS['multivendorx_user_location_lng'] ] ?? '';
-
-        if ( ! $multivendorx_user_location_lat || ! $multivendorx_user_location_lng ) {
-			return;
+            return;
         }
 
-        $seller_products = array();
+        $store_id = (int) ( $package['store_id'] ?? 0 );
+        if ( ! $store_id || ! self::is_shipping_enabled_for_seller( $store_id ) ) {
+            return;
+        }
 
-        foreach ( $products as $product ) {
-            $store_id = get_post_meta( $product['product_id'], Utill::POST_META_SETTINGS['store_id'], true );
-            if ( ! empty( $store_id ) && self::is_shipping_enabled_for_seller( $store_id ) ) {
-                $seller_products[ (int) $store_id ][] = $product;
+        $products = $package['contents'];
+
+        $user_lat = $package[ Utill::USER_SETTINGS_KEYS['multivendorx_user_location_lat'] ] ?? '';
+        $user_lng = $package[ Utill::USER_SETTINGS_KEYS['multivendorx_user_location_lng'] ] ?? '';
+
+        if ( ! $user_lat || ! $user_lng ) {
+            return;
+        }
+
+        $store = new \MultiVendorX\Store\Store( $store_id );
+        $meta  = $store->meta_data;
+
+        $store_lat            = (float) ( $meta[ Utill::STORE_SETTINGS_KEYS['location_lat'] ] ?? 0 );
+        $store_lng            = (float) ( $meta[ Utill::STORE_SETTINGS_KEYS['location_lng'] ] ?? 0 );
+        $default_cost         = (float) ( $meta[ Utill::STORE_SETTINGS_KEYS['distance_default_cost'] ] ?? 0 );
+        $max_distance         = (float) ( $meta[ Utill::STORE_SETTINGS_KEYS['distance_max'] ] ?? 0 );
+        $local_pickup_cost    = (float) ( $meta[ Utill::STORE_SETTINGS_KEYS['distance_local_pickup_cost'] ] ?? 0 );
+        $free_shipping_amount = (float) ( $meta[ Utill::STORE_SETTINGS_KEYS['free_shipping_amount'] ] ?? 0 );
+        $distance_type        = ( $meta[ Utill::STORE_SETTINGS_KEYS['distance_type'] ] ?? 'K' );
+        $distance_rules       = ! empty( $meta[ Utill::STORE_SETTINGS_KEYS['distance_rules'] ] )
+            ? json_decode( $meta[ Utill::STORE_SETTINGS_KEYS['distance_rules'] ], true )
+            : array();
+
+        if ( ! $store_lat || ! $store_lng ) {
+            return;
+        }
+
+        $distance = self::multivendorx_get_latlng_distance(
+            $user_lat,
+            $user_lng,
+            $store_lat,
+            $store_lng,
+            $distance_type
+        );
+
+        if ( ! $distance ) {
+            return;
+        }
+
+        if ( $max_distance && $distance > $max_distance ) {
+            static $notice_added = false;
+
+            if ( ! $notice_added ) {
+                wc_add_notice(
+                    __( 'Some cart item(s) are not deliverable to your location.', 'multivendorx' ),
+                    'error'
+                );
+                $notice_added = true;
             }
+
+            return;
         }
 
-        if ( empty( $seller_products ) ) {
-			return;
-        }
+        $store_amount = $this->calculate_per_seller(
+            $products,
+            $distance,
+            $default_cost,
+            $distance_rules,
+            $free_shipping_amount,
+            true
+        );
 
-        foreach ( $seller_products as $store_id => $products ) {
-            $store = new \MultiVendorX\Store\Store( $store_id );
-            $meta  = $store->meta_data;
+        $tax_rate = ( 'none' === $this->tax_status ) ? false : '';
+        $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
 
-            $store_lat            = $meta[ Utill::STORE_SETTINGS_KEYS['location_lat'] ] ?? 0;
-            $store_lng            = $meta[ Utill::STORE_SETTINGS_KEYS['location_lng'] ] ?? 0;
-            $default_cost         = floatval( $meta[ Utill::STORE_SETTINGS_KEYS['distance_default_cost'] ] ?? 0 );
-            $max_distance         = floatval( $meta[ Utill::STORE_SETTINGS_KEYS['distance_max_km'] ] ?? 0 );
-            $local_pickup_cost    = floatval( $meta[ Utill::STORE_SETTINGS_KEYS['distance_local_pickup_cost'] ] ?? 0 );
-            $free_shipping_amount = floatval( $meta[ Utill::STORE_SETTINGS_KEYS['free_shipping_amount'] ] ?? 0 );
-            $distance_rules       = isset( $meta[ Utill::STORE_SETTINGS_KEYS['distance_rules'] ] ) ? json_decode( $meta[ Utill::STORE_SETTINGS_KEYS['distance_rules'] ], true ) : array();
+        $label = ( $store_amount > 0 )
+            ? $this->title
+            : __( 'Free Shipping', 'multivendorx' );
 
-            if ( ! $store_lat || ! $store_lng ) {
-				continue;
-            }
+        $this->add_rate(
+            array(
+				'id'    => $this->id . ':' . $store_id,
+				'label' => $label,
+				'cost'  => $store_amount,
+				'taxes' => $tax_rate,
+            )
+        );
 
-            $distance = self::multivendorx_get_latlng_distance( $multivendorx_user_location_lat, $multivendorx_user_location_lng, $store_lat, $store_lng, 'k' );
-            if ( ! $distance ) {
-				continue;
-            }
-
-            if ( $max_distance && $distance > $max_distance ) {
-                wc_add_notice( __( 'Some cart item(s) are not deliverable to your location.', 'multivendorx' ), 'error' );
-                continue;
-            }
-
-            $store_amount = $this->calculate_per_seller( $products, $distance, $default_cost, $distance_rules, $free_shipping_amount, true );
-
-            $tax_rate = ( 'none' === $this->tax_status ) ? false : '';
-            $tax_rate = apply_filters( 'multivendorx_is_apply_tax_on_shipping_rates', $tax_rate );
-
-            // Set label to Free Shipping if shipping amount is zero.
-            $label = ( $store_amount > 0 ) ? $this->title : __( 'Free Shipping', 'multivendorx' );
-
-            $rate = array(
-                'id'    => $this->id . ':' . $store_id,
-                'label' => $label,
-                'cost'  => $store_amount,
-                'taxes' => $tax_rate,
-            );
-
-            $this->add_rate( $rate );
-
-            $this->maybe_add_local_pickup_rate( $store_id, $local_pickup_cost, $tax_rate );
-        }
+        $this->maybe_add_local_pickup_rate( $store_id, $local_pickup_cost, $tax_rate );
     }
 
     /**
@@ -152,7 +185,7 @@ class Distance_Shipping extends \WC_Shipping_Method {
      */
     public function maybe_add_local_pickup_rate( $store_id, $local_pickup_cost = 0, $tax_rate = false ) {
         if ( ! $local_pickup_cost ) {
-			return;
+            return;
         }
 
         $rate = array(
@@ -184,25 +217,32 @@ class Distance_Shipping extends \WC_Shipping_Method {
      * @param float  $lon1 Longitude of point 1.
      * @param float  $lat2 Latitude of point 2.
      * @param float  $lon2 Longitude of point 2.
-     * @param string $unit Unit of distance (M for miles, K for kilometers, N for nautical miles).
+     * @param string $unit Unit of distance ('M' for miles, 'K' for kilometers).
      * @return float
      */
-    public static function multivendorx_get_latlng_distance( $lat1, $lon1, $lat2, $lon2, $unit = 'M' ) {
+    public static function multivendorx_get_latlng_distance( $lat1, $lon1, $lat2, $lon2, $unit = 'K' ) {
+        // Normalize unit.
+        $unit = strtoupper( $unit );
+        if ( ! in_array( $unit, array( 'M', 'K' ), true ) ) {
+            $unit = 'K'; // Safe default.
+        }
+
+        // Haversine formula.
         $theta = $lon1 - $lon2;
-        $dist  = sin( deg2rad( $lat1 ) ) * sin( deg2rad( $lat2 ) ) + cos( deg2rad( $lat1 ) ) * cos( deg2rad( $lat2 ) ) * cos( deg2rad( $theta ) );
+        $dist  = sin( deg2rad( $lat1 ) ) * sin( deg2rad( $lat2 ) )
+            + cos( deg2rad( $lat1 ) ) * cos( deg2rad( $lat2 ) ) * cos( deg2rad( $theta ) );
+
+        // Floating-point safety.
+        $dist = min( 1, max( -1, $dist ) );
+
         $dist  = acos( $dist );
         $dist  = rad2deg( $dist );
         $miles = $dist * 60 * 1.1515;
-        $unit  = strtoupper( $unit );
 
-        if ( 'K' === $unit ) {
-            return ( $miles * 1.609344 );
-        } elseif ( 'N' === $unit ) {
-            return ( $miles * 0.8684 );
-        } else {
-            do_action( 'multivendorx_get_latlng_distance', $lat1, $lon1, $lat2, $lon2, $unit, $dist );
-            return $miles;
-        }
+        // Return unit-specific distance.
+        return ( 'K' === $unit )
+            ? $miles * 1.609344
+            : $miles;
     }
 
     /**
