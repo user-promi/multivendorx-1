@@ -862,7 +862,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Products store can list" cols={3}>
+									<FormGroup label="Products store can list">
 										<BasicInput
 											name="name"
 											wrapperClass="setting-form-input"
@@ -875,7 +875,6 @@ const Membership = ({ id }: { id: string }) => {
 									<FormGroup
 										label="Cost to add product beyond limit"
 										htmlFor="extra_product_cost"
-										cols={3}
 									>
 										<BasicInput
 											name="extra_product_cost"
@@ -890,7 +889,6 @@ const Membership = ({ id }: { id: string }) => {
 									<FormGroup
 										label="Product categories store can access"
 										htmlFor="product_category_limit"
-										cols={3}
 									>
 										<BasicInput
 											name="product_category_limit"
@@ -901,6 +899,56 @@ const Membership = ({ id }: { id: string }) => {
 											postInsideText="max"
 										/>
 									</FormGroup>
+									<FormGroup>
+										<MultiCheckBox
+											wrapperClass="toggle-btn"
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="toggle-checkbox"
+											idPrefix="toggle-switch-sold-individually"
+											type="checkbox"
+											value={featuredProducts ? ['featured_products'] : []}
+											preText={"Featured products"}
+											onChange={(e) =>
+												setfeaturedProducts(
+													(e as React.ChangeEvent<HTMLInputElement>)
+														.target.checked
+												)
+											}
+											options={[
+												{
+													key: 'featured_products',
+													value: 'featured_products',
+												},
+											]}
+										/>
+									</FormGroup>
+									<FormGroup label={__('Featured products', 'multivendorx')} htmlFor="featured_products" row>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+											postInsideText={'max'}
+											size="8rem"
+										/>
+									</FormGroup>
+
+									{featuredProducts && (
+										<>
+											<FormGroup label={__('Images allowed per product', 'multivendorx')} htmlFor="per_product" row>
+												<BasicInput
+													name="name"
+													wrapperClass="setting-form-input"
+													descClass="settings-metabox-description"
+													value={formData.name}
+													onChange={handleChange}
+													postInsideText={'max'}
+													size="8rem"
+												/>
+											</FormGroup>
+										</>
+									)}
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">

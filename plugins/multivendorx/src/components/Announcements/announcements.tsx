@@ -704,7 +704,7 @@ export const Announcements: React.FC = () => {
 								onClick: handleCloseForm,
 							},
 							{
-								icon: 'active',
+								icon: 'save',
 								text: __('Save', 'multivendorx'),
 								className: 'purple-bg',
 								onClick: () => handleSubmit(),

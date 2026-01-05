@@ -56,8 +56,8 @@ jQuery(function ($) {
 		}
 
 		var $form = $btn.closest('.report-abuse-form');
-		var name = $form.find('.report_abuse_name').val().trim();
-		var email = $form.find('.report_abuse_email').val().trim();
+		var name = $form.find('.report-abuse-name').val().trim();
+		var email = $form.find('.report-abuse-email').val().trim();
 		var reason = $form
 			.find('.report_abuse_reasons_wrapper input[type=radio]:checked')
 			.val();

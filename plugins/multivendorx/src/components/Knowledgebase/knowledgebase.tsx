@@ -564,7 +564,7 @@ export const KnowledgeBase: React.FC = () => {
 									onClick: handleCloseForm,
 								},
 								{
-									icon: 'active',
+									icon: 'save',
 									text: __('Save', 'multivendorx'),
 									className: 'purple-bg',
 									onClick: () => handleSubmit(formData.status || 'draft'),

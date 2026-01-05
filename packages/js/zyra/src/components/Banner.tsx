@@ -148,7 +148,6 @@ const Banner: React.FC< BannerProps > = ( { isPro, products, proUrl } ) => {
                                         i === 0 ? 'active' : ''
                                     }` }
                                 >
-                                    { /* <i className="adminfont-support"></i> */ }
                                     <span className="title">
                                         { product.title }:{ ' ' }
                                     </span>
