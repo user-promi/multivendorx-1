@@ -25,7 +25,6 @@ export default {
 					key: 'manually',
 					label: __('Manual', 'multivendorx'),
 					value: 'manually',
-					proSetting: true,
 				},
 				{
 					key: 'automatically',

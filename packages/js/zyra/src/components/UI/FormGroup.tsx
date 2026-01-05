@@ -20,7 +20,7 @@ const FormGroup: React.FC<FormGroupProps> = ({
 			className={`form-group ${row ? "row" : ""} ${className}`}
 			data-cols={cols}
 		>
-			{label && <label htmlFor={htmlFor}>{label}</label>}
+			{label && <label className="form-label" htmlFor={htmlFor}>{label}</label>}
 			{children}
 		</div>
 	);

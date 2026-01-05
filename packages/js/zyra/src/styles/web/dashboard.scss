@@ -411,9 +411,13 @@
         &.row {
             flex-direction: row;
             gap: 0.5rem;
+            align-items: start;
 
-            label {
+            label:first-child {
                 width: 30%;
+            }
+            div:last-child {
+                width: 70%;
             }
         }
 

@@ -242,6 +242,7 @@ const Membership = ({ id }: { id: string }) => {
 	const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
 	const [productLimitsCard, setproductLimitsCard] = useState(false);
 	const [orderManagement, setorderManagement] = useState(false);
+	const [additionalFeatures, setadditionalFeatures] = useState(false);
 	const [featuredProducts, setfeaturedProducts] = useState(false);
 	const [starFill, setstarFill] = useState(false);
 	const [features, setFeatures] = useState<string[]>(['']);
@@ -744,7 +745,7 @@ const Membership = ({ id }: { id: string }) => {
 						>
 							{productLimitsCard ? (
 								<FormGroupWrapper>
-									<FormGroup label="Product types stores can sell">
+									<FormGroup row label="Product types stores can sell">
 										<MultiCheckBox
 											khali_dabba={true}
 											wrapperClass="checkbox-list-side-by-side"
@@ -784,7 +785,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Categories stores can use">
+									<FormGroup row label="Categories stores can use">
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -823,7 +824,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Product permissions">
+									<FormGroup row label="Product permissions">
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -862,7 +863,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Products store can list">
+									<FormGroup label="Products store can list" row>
 										<BasicInput
 											name="name"
 											wrapperClass="setting-form-input"
@@ -872,7 +873,7 @@ const Membership = ({ id }: { id: string }) => {
 											postInsideText={'max'}
 										/>
 									</FormGroup>
-									<FormGroup
+									<FormGroup row
 										label="Cost to add product beyond limit"
 										htmlFor="extra_product_cost"
 									>
@@ -886,7 +887,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup
+									<FormGroup row
 										label="Product categories store can access"
 										htmlFor="product_category_limit"
 									>
@@ -899,7 +900,7 @@ const Membership = ({ id }: { id: string }) => {
 											postInsideText="max"
 										/>
 									</FormGroup>
-									<FormGroup>
+									<FormGroup row label={__('Featured products', 'multivendorx')}>
 										<MultiCheckBox
 											wrapperClass="toggle-btn"
 											inputWrapperClass="toggle-checkbox-header"
@@ -907,7 +908,6 @@ const Membership = ({ id }: { id: string }) => {
 											idPrefix="toggle-switch-sold-individually"
 											type="checkbox"
 											value={featuredProducts ? ['featured_products'] : []}
-											preText={"Featured products"}
 											onChange={(e) =>
 												setfeaturedProducts(
 													(e as React.ChangeEvent<HTMLInputElement>)
@@ -920,17 +920,6 @@ const Membership = ({ id }: { id: string }) => {
 													value: 'featured_products',
 												},
 											]}
-										/>
-									</FormGroup>
-									<FormGroup label={__('Featured products', 'multivendorx')} htmlFor="featured_products" row>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-											postInsideText={'max'}
-											size="8rem"
 										/>
 									</FormGroup>
 
@@ -952,7 +941,7 @@ const Membership = ({ id }: { id: string }) => {
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">
-									Product limits are not available for this plan.
+									Controls what stores can sell and how they manage products.
 								</p>
 							)}
 						</Card>
@@ -983,7 +972,7 @@ const Membership = ({ id }: { id: string }) => {
 						>
 							{orderManagement ? (
 								<FormGroupWrapper>
-									<FormGroup label="What order information stores can access" htmlFor={orderPermissionField.key}>
+									<FormGroup row label="What order information stores can access" htmlFor={orderPermissionField.key}>
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -1005,7 +994,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Information in Exported Orders" htmlFor={exportedOrderInfoField.key} >
+									<FormGroup row label="Information in Exported Orders" htmlFor={exportedOrderInfoField.key} >
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -1027,7 +1016,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Information in Order Emails" htmlFor={orderEmailInfoField.key} >
+									<FormGroup row label="Information in Order Emails" htmlFor={orderEmailInfoField.key} >
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -1051,64 +1040,13 @@ const Membership = ({ id }: { id: string }) => {
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">
-									Product limits are not available for this plan.
+									Defines how stores access and manage order information.
 								</p>
 							)}
 						</Card>
 
-						<Card title={__('Plan limits & access', 'multivendorx')}>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<MultiCheckBox
-										wrapperClass="toggle-btn"
-										inputWrapperClass="toggle-checkbox-header"
-										inputInnerWrapperClass="toggle-checkbox"
-										idPrefix="toggle-switch-sold-individually"
-										type="checkbox"
-										value={productLimitsCard ? ['ai_usage'] : []}
-										preText={"Product limits & pricing"}
-										onChange={(e) =>
-											setproductLimitsCard(
-												(e as React.ChangeEvent<HTMLInputElement>)
-													.target.checked
-											)
-										}
-										options={[
-											{
-												key: 'ai_usage',
-												value: 'ai_usage',
-											},
-										]}
-									/>
-								</div>
-							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-
-								</div>
-							</div>
-
-							{featuredProducts && (
-								<>
-									<div className="form-group-wrapper">
-										<div className="form-group row">
-											<label htmlFor="">Images allowed per product </label>
-											<BasicInput
-												name="name"
-												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
-												value={formData.name}
-												onChange={handleChange}
-												postInsideText={'max'}
-												size="8rem"
-											/>
-										</div>
-									</div>
-
-								</>
-							)}
-							<div className="form-group-wrapper">
-								<div className="form-group">
+						<Card title={__('AI usage & limits', 'multivendorx')}
+								action={
 									<MultiCheckBox
 										wrapperClass="toggle-btn"
 										inputWrapperClass="toggle-checkbox-header"
@@ -1116,7 +1054,6 @@ const Membership = ({ id }: { id: string }) => {
 										idPrefix="toggle-switch-sold-individually"
 										type="checkbox"
 										value={featuredProducts ? ['featured_products'] : []}
-										preText={"Featured products"}
 										onChange={(e) =>
 											setfeaturedProducts(
 												(e as React.ChangeEvent<HTMLInputElement>)
@@ -1130,54 +1067,10 @@ const Membership = ({ id }: { id: string }) => {
 											},
 										]}
 									/>
-								</div>
-							</div>
+								}
+						>
 
-							{featuredProducts && (
-								<>
-									<div className="form-group-wrapper">
-										<div className="form-group row">
-											<label htmlFor="">Products that can be marked as featured </label>
-											<BasicInput
-												name="name"
-												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
-												value={formData.name}
-												onChange={handleChange}
-												postInsideText={'max'}
-												size="8rem"
-											/>
-										</div>
-									</div>
-								</>
-							)}
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<MultiCheckBox
-										wrapperClass="toggle-btn"
-										inputWrapperClass="toggle-checkbox-header"
-										inputInnerWrapperClass="toggle-checkbox"
-										idPrefix="toggle-switch-sold-individually"
-										type="checkbox"
-										value={featuredProducts ? ['featured_products'] : []}
-										preText={"AI usage & limits"}
-										onChange={(e) =>
-											setfeaturedProducts(
-												(e as React.ChangeEvent<HTMLInputElement>)
-													.target.checked
-											)
-										}
-										options={[
-											{
-												key: 'featured_products',
-												value: 'featured_products',
-											},
-										]}
-									/>
-								</div>
-							</div>
-
-							{featuredProducts && (
+							{featuredProducts ? (
 								<>
 									<div className="form-group-wrapper">
 										<div className="form-group row">
@@ -1208,11 +1101,39 @@ const Membership = ({ id }: { id: string }) => {
 										</div>
 									</div>
 								</>
+							) : (
+								<p className="settings-metabox-description">
+									Manages access to AI-powered tools for stores.
+								</p>
 							)}
 						</Card>
-						<Card title={__('Additional Features & Settings', 'multivendorx')}>
+						<Card title={__('Additional Features & Settings', 'multivendorx')} 
+							action={
+								<MultiCheckBox
+									wrapperClass="toggle-btn"
+									inputWrapperClass="toggle-checkbox-header"
+									inputInnerWrapperClass="toggle-checkbox"
+									idPrefix="toggle-switch-sold-individually"
+									type="checkbox"
+									value={additionalFeatures ? ['plan_limits'] : []}
+									onChange={(e) =>
+										setadditionalFeatures(
+											(e as React.ChangeEvent<HTMLInputElement>)
+												.target.checked
+										)
+									}
+									options={[
+										{
+											key: 'plan_limits',
+											value: 'plan_limits',
+										},
+									]}
+								/>
+							}
+						>
+							{additionalFeatures ? (
 							<FormGroupWrapper>
-								<FormGroup
+								<FormGroup row
 									label="Vendor Storefront Capabilities"
 									htmlFor={vendorStorefrontField.key}
 								>
@@ -1239,7 +1160,7 @@ const Membership = ({ id }: { id: string }) => {
 									/>
 								</FormGroup>
 
-								<FormGroup
+								<FormGroup row
 									label="Include All Add-ons"
 									htmlFor={advancedFeaturesField.key}
 								>
@@ -1266,6 +1187,11 @@ const Membership = ({ id }: { id: string }) => {
 									/>
 								</FormGroup>
 							</FormGroupWrapper>
+							) : (
+								<p className="settings-metabox-description">
+									Governs advanced storefront and operational features.
+								</p>
+							)}
 
 						</Card>
 					</Column>
