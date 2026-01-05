@@ -9,6 +9,9 @@ import {
 	CommonPopup,
 	BasicInput,
 	TextArea,
+	Column,
+	Card,
+	Container,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -848,197 +851,189 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 	const fee = amount * (percentage / 100) + fixed;
 	return (
 		<>
-			<div className="card-wrapper">
-				<div className="card-content">
-					<div className="card-header">
-						<div className="left">
-							<div className="title">
-								{__('Recent payouts', 'multivendorx')}
-							</div>
-						</div>
-					</div>
-					<div className="card-body">
-						{recentDebits.length > 0 ? (
-							<>
-								{recentDebits.map((txn) => {
-									// Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
-									const formattedPaymentMethod =
-										txn.payment_method
-											? txn.payment_method
-													.replace(/[-_]/g, ' ') // replace - and _ with spaces
-													.replace(/\b\w/g, (char) =>
-														char.toUpperCase()
-													) // capitalize each word
-											: __('N/A', 'multivendorx');
+		<Container>
+			<Column grid={6}>
+				<Card title="Recent payouts">
+					{recentDebits.length > 0 ? (
+						<>
+							{recentDebits.map((txn) => {
+								// Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
+								const formattedPaymentMethod =
+									txn.payment_method
+										? txn.payment_method
+											.replace(/[-_]/g, ' ') // replace - and _ with spaces
+											.replace(/\b\w/g, (char) =>
+												char.toUpperCase()
+											) // capitalize each word
+										: __('N/A', 'multivendorx');
 
-									return (
-										<div key={txn.id} className="info-item">
-											<div className="details-wrapper">
-												<div className="details">
-													<div className="name">
-														{formattedPaymentMethod}
-														<div className="admin-badge green">Completed</div>
-													</div>
-													<div className="des">
-														{new Date(
-															txn.date
-														).toLocaleDateString(
-															'en-US',
-															{
-																month: 'short',
-																day: '2-digit',
-																year: 'numeric',
-															}
-														)}
-													</div>
+								return (
+									<div key={txn.id} className="info-item">
+										<div className="details-wrapper">
+											<div className="details">
+												<div className="name">
+													{formattedPaymentMethod}
+													<div className="admin-badge green">Completed</div>
 												</div>
-											</div>
-
-											<div
-												className="right-details"
-											>
-												<div
-													className={`price ${
-														parseFloat(txn.debit) <
-														0
-															? 'color-red'
-															: 'color-green'
-													}`}
-												>
-													{formatCurrency(txn.debit)}
+												<div className="des">
+													{new Date(
+														txn.date
+													).toLocaleDateString(
+														'en-US',
+														{
+															month: 'short',
+															day: '2-digit',
+															year: 'numeric',
+														}
+													)}
 												</div>
 											</div>
 										</div>
-									);
-								})}
-							</>
-						) : (
-							<>
-								<div className="des">
+
+										<div
+											className="right-details"
+										>
+											<div
+												className={`price ${parseFloat(txn.debit) <
+													0
+													? 'color-red'
+													: 'color-green'
+													}`}
+											>
+												{formatCurrency(txn.debit)}
+											</div>
+										</div>
+									</div>
+								);
+							})}
+						</>
+					) : (
+						<>
+							<div className="des">
+								{__(
+									'No recent payouts transactions found.',
+									'multivendorx'
+								)}
+							</div>
+						</>
+					)}
+				</Card>
+			</Column>
+
+			<Column grid={6}>
+				<Card>
+					<div className="payout-wrapper">
+					<div className="payout-header">
+						<div className="price-wrapper">
+							<div className="price-title">
+								{__(
+									'Available balance',
+									'multivendorx'
+								)}
+							</div>
+							<div className="price">
+								{formatCurrency(
+									wallet.available_balance
+								)}{' '}
+								<div className="admin-badge green">
 									{__(
-										'No recent payouts transactions found.',
+										'Ready to withdraw',
 										'multivendorx'
 									)}
 								</div>
-							</>
-						)}
-					</div>
-				</div>
-				<div className="card-content">
-					<div className="card-body">
-						<div className="payout-wrapper">
-							<div className="payout-header">
-								<div className="price-wrapper">
-									<div className="price-title">
-										{__(
-											'Available balance',
-											'multivendorx'
-										)}
-									</div>
-									<div className="price">
-										{formatCurrency(
-											wallet.available_balance
-										)}{' '}
-										<div className="admin-badge green">
-											{__(
-												'Ready to withdraw',
-												'multivendorx'
-											)}
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div className="small-text">
-								<b>{formatCurrency(wallet?.thresold)} </b>{' '}
-								{__(
-									'minimum required to withdraw',
-									'multivendorx'
-								)}
-							</div>
-
-							<div className="payout-card-wrapper">
-								<div className="payout-card">
-									<div className="card-title">
-										{__('Upcoming Balance', 'multivendorx')}
-									</div>
-									<div className="card-price">
-										{formatCurrency(wallet.locking_balance)}
-									</div>
-									<div className="card-des">
-										{__(
-											'Pending settlement. Released soon',
-											'multivendorx'
-										)}
-									</div>
-								</div>
-								{wallet?.withdrawal_setting?.length > 0 && (
-									<div className="payout-card">
-										<div className="card-title">
-											{__(
-												'Free Withdrawals',
-												'multivendorx'
-											)}
-										</div>
-
-										<div className="card-price">
-											{wallet?.withdrawal_setting?.[0]
-												?.free_withdrawals -
-												wallet?.free_withdrawal}{' '}
-											<span>
-												{__('Left', 'multivendorx')}
-											</span>
-										</div>
-
-										<div className="card-des">
-											{__('Then', 'multivendorx')}{' '}
-											{Number(
-												wallet?.withdrawal_setting?.[0]
-													?.withdrawal_percentage
-											) || 0}
-											% +
-											{formatCurrency(
-												Number(
-													wallet
-														?.withdrawal_setting?.[0]
-														?.withdrawal_fixed
-												) || 0
-											)}{' '}
-											{__('fee', 'multivendorx')}
-										</div>
-									</div>
-								)}
-							</div>
-							<div className="small-text">
-								{__(
-									'Some funds locked during settlement',
-									'multivendorx'
-								)}
-							</div>
-							{wallet?.payment_schedules ? (
-								<div className="small-text">
-									{__('Auto payouts run', 'multivendorx')}{' '}
-									{wallet.payment_schedules}
-								</div>
-							) : (
-								<div className="small-text">
-									{__('Auto payouts not set', 'multivendorx')}
-								</div>
-							)}
-
-							<div className="buttons-wrapper">
-								<div
-									className="admin-btn btn-purple-bg"
-									onClick={() => setRequestWithdrawal(true)}
-								>
-									<i className="adminlib-wallet"></i>
-									{__('Disburse Payment', 'multivendorx')}
-								</div>
 							</div>
 						</div>
 					</div>
+
+					<div className="small-text">
+						<b>{formatCurrency(wallet?.thresold)} </b>{' '}
+						{__(
+							'minimum required to withdraw',
+							'multivendorx'
+						)}
+					</div>
+
+					<div className="payout-card-wrapper">
+						<div className="payout-card">
+							<div className="card-title">
+								{__('Upcoming Balance', 'multivendorx')}
+							</div>
+							<div className="card-price">
+								{formatCurrency(wallet.locking_balance)}
+							</div>
+							<div className="card-des">
+								{__(
+									'Pending settlement. Released soon',
+									'multivendorx'
+								)}
+							</div>
+						</div>
+						{wallet?.withdrawal_setting?.length > 0 && (
+							<div className="payout-card">
+								<div className="card-title">
+									{__(
+										'Free Withdrawals',
+										'multivendorx'
+									)}
+								</div>
+
+								<div className="card-price">
+									{wallet?.withdrawal_setting?.[0]
+										?.free_withdrawals -
+										wallet?.free_withdrawal}{' '}
+									<span>
+										{__('Left', 'multivendorx')}
+									</span>
+								</div>
+
+								<div className="card-des">
+									{__('Then', 'multivendorx')}{' '}
+									{Number(
+										wallet?.withdrawal_setting?.[0]
+											?.withdrawal_percentage
+									) || 0}
+									% +
+									{formatCurrency(
+										Number(
+											wallet
+												?.withdrawal_setting?.[0]
+												?.withdrawal_fixed
+										) || 0
+									)}{' '}
+									{__('fee', 'multivendorx')}
+								</div>
+							</div>
+						)}
+					</div>
+					<div className="small-text">
+						{__(
+							'Some funds locked during settlement',
+							'multivendorx'
+						)}
+					</div>
+					{wallet?.payment_schedules ? (
+						<div className="small-text">
+							{__('Auto payouts run', 'multivendorx')}{' '}
+							{wallet.payment_schedules}
+						</div>
+					) : (
+						<div className="small-text">
+							{__('Auto payouts not set', 'multivendorx')}
+						</div>
+					)}
+
+					<div className="buttons-wrapper">
+						<div
+							className="admin-btn btn-purple-bg"
+							onClick={() => setRequestWithdrawal(true)}
+						>
+							<i className="adminlib-wallet"></i>
+							{__('Disburse Payment', 'multivendorx')}
+						</div>
+					</div>
 				</div>
-			</div>
+				</Card>
+			</Column>
 
 			<CommonPopup
 				open={requestWithdrawal}
@@ -1122,8 +1117,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 
 							<div className="free-wrapper">
 								{wallet?.withdrawal_setting?.length > 0 &&
-								wallet?.withdrawal_setting?.[0]
-									?.free_withdrawals ? (
+									wallet?.withdrawal_setting?.[0]
+										?.free_withdrawals ? (
 									<>
 										{freeLeft > 0 ? (
 											<span>
@@ -1188,7 +1183,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 					</div>
 				</>
 			</CommonPopup>
-
+			
+			<Column>
 			<div className="admin-table-wrapper admin-pt-2">
 				<Table
 					data={data}
@@ -1215,6 +1211,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 					)}
 				/>
 			</div>
+			</Column>
+			</Container>
 			{viewCommission && selectedCommissionId !== null && (
 				<ViewCommission
 					open={viewCommission}
