@@ -86,6 +86,7 @@ const ToggleSetting: React.FC< ToggleSettingProps > = ( {
                                 role="button"
                                 tabIndex={ 0 }
                                 key={ option.key }
+                                className="toggle-option"
                                 onClick={ () =>
                                     handleChange(
                                         option.value,
