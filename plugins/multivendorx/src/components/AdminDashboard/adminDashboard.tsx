@@ -29,7 +29,7 @@ interface WPPlugin {
 import './adminDashboard.scss';
 import '../dashboard.scss';
 import { useEffect, useState } from 'react';
-import { Card, getApiLink, sendApiResponse, SuccessNotice, useModules } from 'zyra';
+import { Card, Column, Container, getApiLink, sendApiResponse, SuccessNotice, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
@@ -473,63 +473,59 @@ const AdminDashboard = () => {
 			icon: 'adminlib-module',
 			content: (
 				<>
-					<div className="card-wrapper column column-8">
-						<div className="card-content">
-							<div className="card-body">
-								<div className="pro-banner-wrapper">
-									<div className="content">
-										<div className="heading">
-											{__(
-												'Welcome to MultiVendorX',
-												'multivendorx'
-											)}
-										</div>
-										<div className="description">
-											{__(
-												'Expand your WooCommerce store by creating a marketplace for multiple stores. Manage, grow, and scale seamlessly.',
-												'multivendorx'
-											)}
-										</div>
-
-										<div className="button-wrapper">
-											{renderUpgradeButton(
-												__(
-													'Upgrade Now',
-													'multivendorx'
-												)
-											)}
-
-											<div
-												className="admin-btn"
-												onClick={() =>
-												(window.location.href =
-													'?page=multivendorx#&tab=setup')
-												}
-											>
-												{__(
-													'Launch Setup Wizard',
-													'multivendorx'
-												)}
-												<i className="adminlib-import"></i>
-											</div>
-										</div>
+					<Column grid={8}>
+						<Card>
+							<div className="pro-banner-wrapper">
+								<div className="content">
+									<div className="heading">
+										{__(
+											'Welcome to MultiVendorX',
+											'multivendorx'
+										)}
+									</div>
+									<div className="description">
+										{__(
+											'Expand your WooCommerce store by creating a marketplace for multiple stores. Manage, grow, and scale seamlessly.',
+											'multivendorx'
+										)}
 									</div>
 
-									<div className="image">
-										<img src={Mascot} alt="" />
+									<div className="button-wrapper">
+										{renderUpgradeButton(
+											__(
+												'Upgrade Now',
+												'multivendorx'
+											)
+										)}
+
+										<div
+											className="admin-btn"
+											onClick={() =>
+											(window.location.href =
+												'?page=multivendorx#&tab=setup')
+											}
+										>
+											{__(
+												'Launch Setup Wizard',
+												'multivendorx'
+											)}
+											<i className="adminlib-import"></i>
+										</div>
 									</div>
 								</div>
-							</div>
-						</div>
 
+								<div className="image">
+									<img src={Mascot} alt="" />
+								</div>
+							</div>
+						</Card>
 						{!appLocalizer.khali_dabba && (
 							<Card
 								title={__('Build a professional marketplace', 'multivendorx')}
-								badge={<span className="admin-badge blue">{__('Starting at $299/year', 'multivendorx')}</span>}
-								desc={__(
-									'Unlock advanced features and premium modules to create a marketplace that stands out.',
-									'multivendorx'
-								)}
+								badge={[
+									{ text: 'Starting at $299/year', color: 'blue' }
+								]}
+								desc={__('Unlock advanced features and premium modules to create a marketplace that stands out.', 'multivendorx')}
 							>
 								<div className="features-wrapper">
 									{featuresList.map((res, index) => (
@@ -563,91 +559,68 @@ const AdminDashboard = () => {
 							</Card>
 
 						)}
+						<Card title="Modules" buttonLabel="View All" onButtonClick={() => (window.location.href = `?page=multivendorx#&tab=modules`)}>
+							<div className="mini-module">
+								{Modules.map((module) => (
+									<div
+										className="module-list-item"
+										key={module.id}
+									>
+										<div className="module-header">
+											<i
+												className={`font ${module.iconClass}`}
+											></i>
 
-						<div className="card-wrapper">
-							<div className="card-content">
-								<div className="card-header">
-									<div className="left">
-										<div className="title">
-											{__('Modules', 'multivendorx')}
-										</div>
-									</div>
-									<div className="right">
-										<div
-											className="admin-btn btn-purple"
-											onClick={() =>
-												(window.location.href = `?page=multivendorx#&tab=modules`)
-											}
-										>
-											<i className="adminlib-eye"></i>
-											{__('View All', 'multivendorx')}
-										</div>
-									</div>
-								</div>
-								<div className="card-body">
-									<div className="mini-module">
-										{Modules.map((module) => (
-											<div
-												className="module-list-item"
-												key={module.id}
-											>
-												<div className="module-header">
-													<i
-														className={`font ${module.iconClass}`}
-													></i>
-
-													{!module.pro ||
-														appLocalizer.khali_dabba ? (
-														<div
-															className="toggle-checkbox"
-															data-tour={`id-showcase-tour`}
-														>
-															<input
-																type="checkbox"
-																className="woo-toggle-checkbox"
-																id={`toggle-switch-${module.id}`}
-																checked={modules.includes(
-																	module.id
-																)}
-																onChange={(e) =>
-																	handleOnChange(
-																		e,
-																		module.id
-																	)
-																}
-															/>
-															<label
-																htmlFor={`toggle-switch-${module.id}`}
-																className="toggle-switch-is_hide_cart_checkout"
-															></label>
-														</div>
-													) : (
-														<span className="admin-pro-tag">
-															<i className="adminlib-pro-tag"></i>
-															{__(
-																'Pro',
-																'multivendorx'
-															)}
-														</span>
-													)}
+											{!module.pro ||
+												appLocalizer.khali_dabba ? (
+												<div
+													className="toggle-checkbox"
+													data-tour={`id-showcase-tour`}
+												>
+													<input
+														type="checkbox"
+														className="woo-toggle-checkbox"
+														id={`toggle-switch-${module.id}`}
+														checked={modules.includes(
+															module.id
+														)}
+														onChange={(e) =>
+															handleOnChange(
+																e,
+																module.id
+															)
+														}
+													/>
+													<label
+														htmlFor={`toggle-switch-${module.id}`}
+														className="toggle-switch-is_hide_cart_checkout"
+													></label>
 												</div>
-
-												<div className="module-name">
+											) : (
+												<span className="admin-pro-tag">
+													<i className="adminlib-pro-tag"></i>
 													{__(
-														module.name,
+														'Pro',
 														'multivendorx'
 													)}
-												</div>
-											</div>
-										))}
+												</span>
+											)}
+										</div>
+
+										<div className="module-name">
+											{__(
+												module.name,
+												'multivendorx'
+											)}
+										</div>
 									</div>
-								</div>
+								))}
 							</div>
-						</div>
-					</div>
+						</Card>
+					</Column>
 
 					{/* Right Side */}
-					<div className="card-wrapper column column-4">
+					<Column grid={4}>
 						<Card title={__('Extend your website', 'multivendorx')}>
 							<div className="cards-wrapper plugin">
 								{pluginStatus[
@@ -874,7 +847,7 @@ const AdminDashboard = () => {
 								))}
 							</div>
 						</Card>
-					</div>
+					</Column>
 				</>
 			),
 		},
@@ -884,7 +857,7 @@ const AdminDashboard = () => {
 			icon: 'adminlib-pros-and-cons',
 			content: (
 				<>
-					<div className="card-wrapper column-8">
+					<Column grid={8}>
 						<Card
 							title={__('Free vs Pro comparison', 'multivendorx')}
 							desc={__('See what you get with MultiVendorX Pro', 'multivendorx')}
@@ -951,95 +924,93 @@ const AdminDashboard = () => {
 								))}
 							</div>
 						</Card>
-					</div>
+					</Column>
 
-					<div className="card-wrapper column-4">
-						<div className="card-content">
-							<div className="card-body">
-								<div className="right-pro-banner">
-									<div className="image-wrapper">
-										<img src={freePro} alt="" />
-									</div>
+					<Column grid={4}>
+						<Card>
+							<div className="right-pro-banner">
+								<div className="image-wrapper">
+									<img src={freePro} alt="" />
+								</div>
 
-									<div className="title">
+								<div className="title">
+									{__(
+										'Join 8,000+ successful marketplace owners',
+										'multivendorx'
+									)}
+								</div>
+
+								<div className="des">
+									{__(
+										'Build, manage, and expand your marketplace with confidence. Loved by entrepreneurs globally.',
+										'multivendorx'
+									)}
+								</div>
+
+								<ul>
+									<li>
+										<i className="adminlib-check"></i>
 										{__(
-											'Join 8,000+ successful marketplace owners',
+											'Flexible selling models',
 											'multivendorx'
 										)}
-									</div>
-
-									<div className="des">
+									</li>
+									<li>
+										<i className="adminlib-check"></i>
 										{__(
-											'Build, manage, and expand your marketplace with confidence. Loved by entrepreneurs globally.',
+											'Effortless inventory control',
 											'multivendorx'
 										)}
-									</div>
+									</li>
+									<li>
+										<i className="adminlib-check"></i>
+										{__(
+											'Intelligent alert system',
+											'multivendorx'
+										)}
+									</li>
+									<li>
+										<i className="adminlib-check"></i>
+										{__(
+											'Secure seller onboarding',
+											'multivendorx'
+										)}
+									</li>
+									<li>
+										<i className="adminlib-check"></i>
+										{__(
+											'Recurring revenue tools',
+											'multivendorx'
+										)}
+									</li>
+								</ul>
 
-									<ul>
-										<li>
-											<i className="adminlib-check"></i>
-											{__(
-												'Flexible selling models',
-												'multivendorx'
-											)}
-										</li>
-										<li>
-											<i className="adminlib-check"></i>
-											{__(
-												'Effortless inventory control',
-												'multivendorx'
-											)}
-										</li>
-										<li>
-											<i className="adminlib-check"></i>
-											{__(
-												'Intelligent alert system',
-												'multivendorx'
-											)}
-										</li>
-										<li>
-											<i className="adminlib-check"></i>
-											{__(
-												'Secure seller onboarding',
-												'multivendorx'
-											)}
-										</li>
-										<li>
-											<i className="adminlib-check"></i>
-											{__(
-												'Recurring revenue tools',
-												'multivendorx'
-											)}
-										</li>
-									</ul>
+								<div className="button-wrapper">
+									<a
+										href="https://multivendorx.com/pricing/"
+										className="admin-btn btn-purple"
+									>
+										<i className="adminlib-pro-tag"></i>
+										{__('Upgrade Now', 'multivendorx')}
+										<i className="adminlib-arrow-right icon-pro-btn"></i>
+									</a>
 
-									<div className="button-wrapper">
-										<a
-											href="https://multivendorx.com/pricing/"
-											className="admin-btn btn-purple"
-										>
-											<i className="adminlib-pro-tag"></i>
-											{__('Upgrade Now', 'multivendorx')}
-											<i className="adminlib-arrow-right icon-pro-btn"></i>
-										</a>
-
-										<div
-											onClick={() =>
-												(window.location.href = `?page=multivendorx#&tab=setup`)
-											}
-											className="admin-btn"
-										>
-											{__(
-												'Launch Setup Wizard',
-												'multivendorx'
-											)}
-											<i className="adminlib-import"></i>
-										</div>
+									<div
+										onClick={() =>
+											(window.location.href = `?page=multivendorx#&tab=setup`)
+										}
+										className="admin-btn"
+									>
+										{__(
+											'Launch Setup Wizard',
+											'multivendorx'
+										)}
+										<i className="adminlib-import"></i>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
+						</Card>
+					</Column>
 				</>
 			),
 		},
@@ -1052,42 +1023,38 @@ const AdminDashboard = () => {
 	return (
 		<>
 			<SuccessNotice message={successMsg} />
-			<div className="general-wrapper admin-dashboard">
-				<div className="card-wrapper">
-					<div className="card-content">
-						<div className="card-body">
-							<div className="admin-tab">
-								<div className="tab-titles">
-									{tabs.map((tab) => (
-										<div
-											key={tab.id}
-											className={`title ${activeTab === tab.id
-												? 'active'
-												: ''
-												}`}
-											onClick={() => setActiveTab(tab.id)}
-										>
-											<p>
-												<i className={tab.icon}></i>
-												{tab.label}
-											</p>
-										</div>
-									))}
-								</div>
-								<div className="right">
-									{renderUpgradeButton('Upgrade Now')}
-								</div>
+			{/* <Container className="general-wrapper admin-dashboard"> */}
+			<Container general>
+				<Column>
+					<Card>
+						<div className="admin-tab">
+							<div className="tab-titles">
+								{tabs.map((tab) => (
+									<div
+										key={tab.id}
+										className={`title ${activeTab === tab.id
+											? 'active'
+											: ''
+											}`}
+										onClick={() => setActiveTab(tab.id)}
+									>
+										<p>
+											<i className={tab.icon}></i>
+											{tab.label}
+										</p>
+									</div>
+								))}
+							</div>
+							<div className="right">
+								{renderUpgradeButton('Upgrade Now')}
 							</div>
 						</div>
-					</div>
-				</div>
-
-				<div className="container-wrapper">
-					{tabs.map(
-						(tab) => activeTab === tab.id && <>{tab.content}</>
-					)}
-				</div>
-			</div>
+					</Card>
+				</Column>
+				{tabs.map(
+					(tab) => activeTab === tab.id && <>{tab.content}</>
+				)}
+			</Container>
 		</>
 	);
 };

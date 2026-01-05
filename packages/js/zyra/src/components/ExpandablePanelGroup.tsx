@@ -4,6 +4,7 @@ import TextArea from './TextArea';
 import ToggleSetting from './ToggleSetting';
 import MultiCheckBox from './MultiCheckbox';
 import NestedComponent from './NestedComponent';
+import SelectInput from './SelectInput';
 
 interface ClickableItem {
     name: string;
@@ -48,7 +49,8 @@ interface PanelFormField {
         | 'nested'
         | 'clickable-list'
         | 'iconlibrary'
-        | 'copy-text';
+        | 'copy-text'
+        | 'multi-select';
 
     label: string;
     placeholder?: string;
@@ -74,6 +76,7 @@ interface PanelFormField {
     check?: boolean;
     hideCheckbox?: boolean;
     btnClass?: string;
+    selectType?: string;
     items?: ClickableItem[];
     button?: ButtonItem;
     edit?: boolean;
@@ -144,6 +147,9 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
     const [ activeTabs, setActiveTabs ] = useState< string[] >( [] );
     const menuRef = useRef< HTMLDivElement >( null );
     const [ wizardIndex, setWizardIndex ] = useState( 0 );
+    const [fieldProgress, setFieldProgress] = useState(
+        methods.map(() => 0)
+    );
     const [ openDropdownId, setOpenDropdownId ] = useState< string | null >(
         null
     );
@@ -176,7 +182,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             };
         } )
     );
-
+console.log('methods', methods)
     useEffect( () => {
         const handleClickOutside = ( event: MouseEvent ) => {
             if (
@@ -284,7 +290,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             isCustom: true,
             label: newMethod.label,
             desc: newMethod.desc,
-            required: false,
+            required: newMethod.required ?? false,
         };
 
         newMethod.formFields?.forEach( ( field ) => {
@@ -332,6 +338,8 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             return;
         }
 
+        if (fieldKey === 'wizardButtons') return;
+
         const updated = {
             ...value,
             [ methodKey ]: {
@@ -339,6 +347,54 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                 [ fieldKey ]: fieldValue,
             },
         };
+
+        const prevValue = value?.[methodKey]?.[fieldKey];
+
+        const isFilled = (val: any): boolean => {
+            if (val === undefined || val === null) return false;
+            if (typeof val === 'string') return val.trim() !== '';
+            if (Array.isArray(val)) return val.length > 0;
+            return true; // number | boolean
+        };
+
+        const wasFilled = isFilled(prevValue);
+        const nowFilled = isFilled(fieldValue);
+
+        // Only update progress if fill-state changed
+        if (wasFilled !== nowFilled) {
+            const methodIndex = methods.findIndex(
+                (m) => m.id === methodKey
+            );
+
+            if (methodIndex !== -1) {
+                setFieldProgress((prev) => {
+                    const updatedProgress = [...prev];
+
+                    /**
+                     * ✅ Count ONLY real fields (exclude buttons)
+                     */
+                    const countableFields =
+                        methods[methodIndex]?.formFields?.filter(
+                            (f) => f.type !== 'buttons'
+                        ) || [];
+
+                    const maxFields = countableFields.length;
+
+                    updatedProgress[methodIndex] += nowFilled ? 1 : -1;
+
+                    // Clamp value safely
+                    if (updatedProgress[methodIndex] < 0) {
+                        updatedProgress[methodIndex] = 0;
+                    }
+
+                    if (updatedProgress[methodIndex] > maxFields) {
+                        updatedProgress[methodIndex] = maxFields;
+                    }
+
+                    return updatedProgress;
+                });
+            }
+        }
 
         onChange( updated );
     };
@@ -403,7 +459,7 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
 
         return renderField( step.id, buttonField );
     };
-
+console.log('value', value)
     const renderField = ( methodId: string, field: PanelFormField ) => {
         const fieldValue = value[ methodId ]?.[ field.key ];
 
@@ -523,6 +579,28 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                         }
                     />
                 );
+            case 'multi-select': {
+                return(
+                    <SelectInput
+                        name={field.key}
+                        options={field.options || []}
+                        type={field.selectType}
+                        value={fieldValue || []}
+                        onChange={(newValue: any) => {
+                            if ( Array.isArray( newValue ) ) {
+                                // Multi-select case
+                                const values = newValue.map( ( val ) => val.value );
+                                handleInputChange( methodId, field.key, values );
+                                return;
+                            } else if ( newValue !== null && 'value' in newValue ) {
+                                // Single-select case (ensures 'newValue' is an object with 'value')
+                                handleInputChange( methodId, field.key, newValue.value );
+                                return;
+                            }
+                        }}
+                    />
+                );
+            }
             case 'multi-checkbox': {
                 let normalizedValue: string[] = [];
 
@@ -756,91 +834,103 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
             case 'buttons':
                 return (
                     <>
-                        { Array.isArray( field.options ) &&
-                            field.options.map( ( item, index ) => {
-                                const wizardSteps =
-                                    ExpandablePanelMethods.filter(
-                                        ( m ) => m.isWizardMode === true
-                                    );
-                                const isLastStep =
-                                    wizardIndex === wizardSteps.length - 1;
+                        {Array.isArray(field.options) &&
+                            field.options.map((item, index) => {
+                                const wizardSteps = methods
+                                    .map((m, i) => ({ ...m, index: i }))
+                                    .filter((m) => m.isWizardMode);
 
-                                // Skip Button
-                                if ( item.action === 'skip' ) {
+                                const isLastMethod =
+                                    wizardIndex === wizardSteps.length - 1;
+                                const isFirstMethod = wizardIndex === 0;
+
+                                const currentMethod = methods[wizardIndex];
+                                const totalFields =
+                                    currentMethod?.formFields?.length || 0;
+
+                                const currentFieldIndex =
+                                    fieldProgress[wizardIndex] || 0;
+
+                                const isLastField =
+                                    currentFieldIndex === totalFields - 1;
+                                const isFirstField = currentFieldIndex === 0;
+
+                                if (item.action === 'back') {
                                     return (
                                         <button
-                                            key={ index }
-                                            className={ item.btnClass }
-                                            onClick={ () => {
-                                                setWizardIndex(
-                                                    methods.length
-                                                );
-                                                let url = `${ appLocalizer.site_url }`;
-                                                window.open( url, '_self' );
-                                            } }
+                                            key={index}
+                                            className={item.btnClass}
+                                            disabled={isFirstMethod && isFirstField}
+                                            onClick={() => {
+                                                // previous METHOD
+                                                if (!isFirstMethod) {
+                                                    const prevStep =
+                                                        wizardSteps[wizardIndex - 1];
+
+                                                    setWizardIndex(prevStep.index);
+                                                    setActiveTabs([prevStep.id]);
+                                                }
+                                            }}
                                         >
-                                            { item.label }
+                                            {item.label}
                                         </button>
                                     );
                                 }
 
-                                // Next / Finish Button
-                                if ( item.action === 'next' ) {
+                                if (item.action === 'next') {
                                     return (
                                         <button
-                                            key={ index }
-                                            className={ item.btnClass }
-                                            onClick={ () => {
-                                                if ( ! isLastStep ) {
-                                                    const allWizardSteps =
-                                                        methods
-                                                            .map(
-                                                                ( m, i ) => ( {
-                                                                    ...m,
-                                                                    index: i,
-                                                                } )
-                                                            )
-                                                            .filter(
-                                                                ( m ) =>
-                                                                    m.isWizardMode ===
-                                                                    true
-                                                            );
+                                            key={index}
+                                            className={item.btnClass}
+                                            onClick={() => {
+                                                // next METHOD
+                                                if (!isLastMethod) {
+                                                    const nextStep =
+                                                        wizardSteps[wizardIndex + 1];
 
-                                                    const nextWizardStep =
-                                                        allWizardSteps[
-                                                            wizardIndex + 1
-                                                        ];
-
-                                                    if ( nextWizardStep ) {
-                                                        setWizardIndex(
-                                                            nextWizardStep.index
-                                                        );
-                                                        setActiveTabs( [
-                                                            nextWizardStep.id,
-                                                        ] );
-                                                    }
-                                                } else {
-                                                    let url = `${ appLocalizer.site_url }/wp-admin/admin.php?page=multivendorx#&tab=modules`;
-                                                    window.open( url, '_self' );
+                                                    setWizardIndex(nextStep.index);
+                                                    setActiveTabs([nextStep.id]);
+                                                    return;
                                                 }
-                                            } }
+
+                                                // FINISH
+                                                window.open(
+                                                    `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
+                                                    '_self'
+                                                );
+                                            }}
                                         >
-                                            { isLastStep
+                                            {isLastMethod && isLastField
                                                 ? 'Finish'
-                                                : item.label }
+                                                : item.label}
+                                        </button>
+                                    );
+                                }
+
+                                if (item.action === 'skip') {
+                                    return (
+                                        <button
+                                            key={index}
+                                            className={item.btnClass}
+                                            onClick={() => {
+                                                setWizardIndex(methods.length);
+                                                window.open(
+                                                    appLocalizer.site_url,
+                                                    '_self'
+                                                );
+                                            }}
+                                        >
+                                            {item.label}
                                         </button>
                                     );
                                 }
 
                                 return (
-                                    <div
-                                        key={ index }
-                                        className={ item.btnClass }
-                                    >
-                                        { item.label }
+                                    <div key={index} className={item.btnClass}>
+                                        {item.label}
                                     </div>
                                 );
-                            } ) }
+                            })}
                     </>
                 );
 
@@ -950,16 +1040,6 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                 );
         }
     };
-
-    const wizardSteps = methods
-        .map((m, i) => ({ ...m, originalIndex: i }))
-        .filter((m) => m.isWizardMode && m.countBtn);
-
-    const totalSteps = wizardSteps.length;
-
-    const currentStepIndex = wizardSteps.findIndex(
-        (m) => m.originalIndex === wizardIndex
-    );
 
     return (
         <>
@@ -1172,11 +1252,17 @@ const ExpandablePanelGroup: React.FC< ExpandablePanelGroupProps > = ( {
                                                 </li>
                                             ) }
                                         </ul>
-                                    ) : method.countBtn && currentStepIndex !== -1 ? (
-                                         <div className="admin-badge red">
-                                            {currentStepIndex + 1}/{totalSteps}
-                                        </div>
-                                    ) : null }
+                                    ) : method.countBtn && method.formFields?.length > 0 && (() => {
+                                        const countableFields = method.formFields.filter(
+                                            (field) => field.type !== 'buttons'
+                                        );
+
+                                        return (
+                                            <div className="admin-badge red">
+                                                {fieldProgress[index] || 0}/{countableFields.length}
+                                            </div>
+                                        );
+                                    })()}
                                     { method.isCustom && (
                                         <>
                                             <div

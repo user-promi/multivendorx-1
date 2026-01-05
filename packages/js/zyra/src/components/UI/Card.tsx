@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 
+type Badge = {
+  text: string;
+  color?: string;
+};
+
 type CardProps = {
   title?: React.ReactNode;
   desc?: React.ReactNode;
@@ -11,6 +16,7 @@ type CardProps = {
   transparent?: boolean;
   children: React.ReactNode;
   toggle?: boolean;
+  badges?: Badge[];
 };
 
 const Card: React.FC<CardProps> = ({
@@ -24,6 +30,7 @@ const Card: React.FC<CardProps> = ({
   transparent = false,
   children,
   toggle = false,
+  badges = [],
 }) => {
   const [bodyVisible, setBodyVisible] = useState(true);
 
@@ -46,7 +53,18 @@ const Card: React.FC<CardProps> = ({
       {(title || iconName || buttonLabel || action) && (
         <div className="card-header">
           <div className="left">
-            {title && <div className="title">{title}</div>}
+            {title && (
+              <div className="title">
+                {title}
+                {badges.length > 0 && (
+                  <>
+                    {badges.map((badge, i) => (
+                      <span className={`admin-badge ${badge.color || ''}`}>{badge.text}</span>
+                    ))}
+                  </>
+                )}
+              </div>
+            )}
             {desc && <div className="des">{desc}</div>}
           </div>
 

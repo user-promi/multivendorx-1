@@ -4,42 +4,7 @@ import { ExpandablePanelGroup } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import img from '../../assets/images/multivendorx-logo.png';
 
-interface Step {
-	title: string;
-	description?: string;
-	completed: boolean;
-	actionText: string;
-}
-
-interface Section {
-	title: string;
-	steps: Step[];
-}
-
-const sectionsData: Section[] = [
-	{
-		title: 'Set Up The Basics',
-		steps: [
-			{
-				title: 'Set Site Title & Tagline',
-				description: 'Give your site a name and tagline.',
-				completed: true,
-				actionText: 'Set Up',
-			},
-			{
-				title: 'Review Admin Email',
-				description: 'Ensure your admin email is correct.',
-				completed: false,
-				actionText: 'Review',
-			},
-		],
-	},
-];
-
 const SetupWizard: React.FC = () => {
-	const [sections, setSections] = useState<Section[]>(sectionsData);
-	const [expandedSection, setExpandedSection] = useState<number | null>(0);
-
 	// Required state for ExpandablePanelGroup
 	const [value, setValue] = useState({});
 	const settingChanged = useRef(false);
@@ -50,13 +15,13 @@ const SetupWizard: React.FC = () => {
 	const appLocalizer = (window as any).appLocalizer;
 
 	const inputField = {
-		key: 'payment_gateway',
-		proSetting: true,
+		key: 'setup_wizard',
+		proSetting: false,
 		apiLink: '/wp-json/payments/v1/settings',
-		moduleEnabled: 'yes',
+		moduleEnabled: true,
 		dependentSetting: '',
 		dependentPlugin: '',
-		modal: ['paypal', 'stripe', 'razorpay'],
+		modal: [],
 		buttonEnable: true,
 	};
 
@@ -64,74 +29,85 @@ const SetupWizard: React.FC = () => {
 
 	const methods = [
 		{
-			id: 'revenue_setup',
-			label: 'Set Up Revenue Sharing',
-			icon: 'adminlib-commission',
-			desc: 'Choose how earnings are split between Admin and Vendors.',
+			id: 'marketplace_setup',
+			label: 'Configure Your Marketplace',
+			icon: 'adminlib-storefront',
+			desc: 'Configure basic settings for vendor stores.',
 			countBtn: true,
 			isWizardMode: true,
 			openForm:true,
 			formFields: [
 				{
-					key: 'approve_store',
-					type: 'setting-toggle',
+					key: 'marketplace_model',
+					type: 'multi-select',
+					selectType: 'single-select',
 					label: __(
-						'New store registration approval',
+						'Choose Your Marketplace Model',
 						'multivendorx'
 					),
 					options: [
 						{
-							key: 'manually',
-							label: __('Manual', 'multivendorx'),
-							value: 'manually',
+							key: 'general',
+							label: __('General', 'multivendorx'),
+							value: 'general',
 						},
 						{
-							key: 'automatically',
-							label: __('Automatic', 'multivendorx'),
-							value: 'automatically',
+							key: 'booking',
+							label: __('Booking', 'multivendorx'),
+							value: 'booking',
+						},
+						{
+							key: 'rental',
+							label: __('Rental', 'multivendorx'),
+							value: 'rental',
+						},
+						{
+							key: 'auction',
+							label: __('Auction', 'multivendorx'),
+							value: 'auction',
+						},
+						{
+							key: 'subscription',
+							label: __('Subscription', 'multivendorx'),
+							value: 'subscription',
 						},
 					],
 				},
 				{
-					key: 'commission_type',
-					type: 'setting-toggle',
-					label: __('Commission type', 'multivendorx'),
-					settingDescription: __(
-						'Choose how commissions should be calculated for your marketplace.',
-						'multivendorx'
-					),
-					desc: __(
-						'<ul><li>Store order based - Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based - Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
+					key: 'product_types',
+					type: 'multi-select',
+					selectType: 'multi-select',
+					label: __(
+						'Choose Your Product Types',
 						'multivendorx'
 					),
 					options: [
 						{
-							key: 'store_order',
-							label: __('Store order based', 'multivendorx'),
-							value: 'store_order',
+							key: 'simple',
+							label: __('Simple', 'multivendorx'),
+							value: 'simple',
 						},
 						{
-							key: 'per_item',
-							label: __('Per item based', 'multivendorx'),
-							value: 'per_item',
+							key: 'variable',
+							label: __('Variable', 'multivendorx'),
+							value: 'variable',
 						},
-					],
-					nestedFields: [
 						{
-							key: 'paid_promotion_limit',
-							type: 'setup',
-							label: 'Advanced commission rules',
-							desc: 'Set detailed commission rules by product, order, or store, including fees, taxes, and shipping.',
-							link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+							key: 'booking',
+							label: __('Booking', 'multivendorx'),
+							value: 'booking',
+						},
+						{
+							key: 'rental',
+							label: __('Rental', 'multivendorx'),
+							value: 'rental',
+						},
+						{
+							key: 'auction',
+							label: __('Auction', 'multivendorx'),
+							value: 'auction',
 						},
 					],
-				},
-				{
-					key: 'paid_promotion_limit',
-					type: 'setup',
-					title: 'Advanced commission rules',
-					desc: 'Set detailed commission rules by product, order, or store, including fees, taxes, and shipping.',
-					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
 				},
 				{
 					key: 'wizardButtons',
@@ -161,17 +137,50 @@ const SetupWizard: React.FC = () => {
 			openForm:true,
 			formFields: [
 				{
-					key: 'store_url',
-					type: 'text',
-					label: 'Store URL',
-					placeholder: `Define vendor store URL`,
+					key: 'approve_store',
+					type: 'setting-toggle',
+					label: __(
+						'New store registration approval',
+						'multivendorx'
+					),
+					options: [
+						{
+							key: 'manually',
+							label: __('Manual', 'multivendorx'),
+							value: 'manually',
+						},
+						{
+							key: 'automatically',
+							label: __('Automatic', 'multivendorx'),
+							value: 'automatically',
+						},
+					],
 				},
 				{
-					key: 'multi_vendor_products',
-					type: 'checkbox',
-					label: 'Single Product Multiple Vendors',
-					desc: 'Allows more than one store to sell the same product with their own price and stock.',
-					default: false,
+					key: 'product_listing',
+					type: 'setting-toggle',
+					label: __(
+						'Product listing model',
+						'multivendorx'
+					),
+					options: [
+						{
+							key: 'independent_seller',
+							label: __('Independent seller', 'multivendorx'),
+							value: 'independent_seller',
+						},
+						{
+							key: 'listed_products',
+							label: __('Co-listed products', 'multivendorx'),
+							value: 'listed_products',
+						},
+						{
+							key: 'franchise',
+							label: __('Franchise', 'multivendorx'),
+							value: 'franchise',
+							proSetting: true
+						},
+					],
 				},
 				{
 					key: 'wizardButtons',
@@ -201,169 +210,93 @@ const SetupWizard: React.FC = () => {
 			openForm:true,
 			formFields: [
 				{
-					key: 'commission_percent',
-					type: 'number',
-					label: 'Commission Percentage',
-					default: 80,
-				},
-				{
 					key: 'commission_type',
-					type: 'select',
-					label: 'Commission Type',
-					options: [
-						{ label: 'Percentage', value: 'percentage' },
-						{ label: 'Fixed', value: 'fixed' },
-					],
-				},
-				{
-					key: 'wizardButtons',
-					type: 'buttons',
-					options: [
-						{
-							label: 'Back',
-							action: 'back',
-							btnClass: 'admin-btn btn-red',
-						},
-						{
-							label: 'Next',
-							action: 'next',
-							btnClass: 'admin-btn btn-purple',
-						},
-					],
-				},
-			],
-		},
-		{
-			id: 'store_permissions',
-			label: 'Store Permissions',
-			icon: 'adminlib-commission',
-			desc: 'Control which features and actions are available to each store role.',
-			countBtn: true,
-			isWizardMode: true,
-			openForm:true,
-			formFields: [
-				{
-					key: 'products_fields',
-					type: 'multi-checkbox',
-					label: __('Edit product page blocks', 'multivendorx'),
+					type: 'setting-toggle',
+					label: __('Commission type', 'multivendorx'),
 					settingDescription: __(
-						'Control which product data fields are available to stores when creating or editing products.',
+						'Choose how commissions should be calculated for your marketplace.',
+						'multivendorx'
+					),
+					desc: __(
+						'<ul><li>Store order based - Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based - Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
+						'multivendorx'
+					),
+					options: [
+						{
+							key: 'store_order',
+							label: __('Store order based', 'multivendorx'),
+							value: 'store_order',
+						},
+						{
+							key: 'per_item',
+							label: __('Per item based', 'multivendorx'),
+							value: 'per_item',
+						},
+					],
+				},
+				{
+					key: 'commission_per_item',
+					type: 'nested',
+					label: 'Commission value',
+					single: true,
+					desc: __(
+						'Set global commission rates that apply to each individual item quantity. Commission will be calculated by multiplying the rate with the total number of items across all products in the order.',
+						'multivendorx'
+					),
+					nestedFields: [
+						{
+							key: 'commission_fixed',
+							type: 'number',
+							preInsideText: __('$', 'multivendorx'),
+							size: '8rem',
+							preText: 'Fixed',
+							postText: '+',
+						},
+						{
+							key: 'commission_percentage',
+							type: 'number',
+							postInsideText: __('%', 'multivendorx'),
+							size: '8rem',
+						},
+					],
+				},
+				{
+					key: 'disbursement_order_status',
+					type: 'multi-checkbox',
+					label: __(
+						'Eligible order statuses for store earning payout',
+						'multivendorx'
+					),
+					settingDescription: __(
+						'Select the order statuses after which earning will be added to the store wallet.',
 						'multivendorx'
 					),
 					class: 'mvx-toggle-checkbox',
 					options: [
 						{
-							key: 'general',
-							label: __('Manage Products', 'multivendorx'),
-							value: 'general',
+							key: 'completed',
+							label: __('Completed', 'multivendorx'),
+							value: 'completed',
 						},
 						{
-							key: 'view_products',
-							label: __('View Products', 'multivendorx'),
-							value: 'general',
+							key: 'delivered',
+							label: __('Delivered', 'multivendorx'),
+							value: 'delivered',
+							proSetting: true,
 						},
 						{
-							key: 'edit_products',
-							label: __('Edit Products', 'multivendorx'),
-							value: 'general',
+							key: 'processing',
+							label: __('Processing', 'multivendorx'),
+							value: 'processing',
 						},
 						{
-							key: 'delete_products',
-							label: __('Delete Products', 'multivendorx'),
-							value: 'general',
-						},
-						{
-							key: 'publish_products',
-							label: __('Publish Products', 'multivendorx'),
-							value: 'general',
-						},
-						{
-							key: 'upload_files',
-							label: __('Upload Files', 'multivendorx'),
-							value: 'general',
+							key: 'shipped',
+							label: __('Shipped', 'multivendorx'),
+							value: 'shipped',
+							proSetting: true,
 						},
 					],
 					selectDeselect: true,
-					nestedFields: [
-						{
-							key: 'paid_promotion_limit',
-							type: 'setup',
-							label: 'Advanced store capabilities',
-							desc: 'Quickly manage additional store permissions and advanced features, including orders, coupons, analytics, and more.',
-							link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
-						},
-					],
-				},
-				{
-					key: 'paid_promotion_limit',
-					type: 'setup',
-					label: 'Advanced store capabilities',
-					desc: 'Quickly manage additional store permissions and advanced features, including orders, coupons, analytics, and more.',
-					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-capability`,
-				},
-				{
-					key: 'wizardButtons',
-					type: 'buttons',
-					options: [
-						{
-							label: 'Back',
-							action: 'back',
-							btnClass: 'admin-btn btn-red',
-						},
-						{
-							label: 'Next',
-							action: 'next',
-							btnClass: 'admin-btn btn-purple',
-						},
-					],
-				},
-			],
-		},
-		{
-			id: 'vendor_capabilities',
-			label: 'Configure Vendor Permissions',
-			icon: 'adminlib-setting',
-			desc: 'Control what dashboard sections and tools are available to active vendors.',
-			countBtn: true,
-			isWizardMode: true,
-			openForm:true,
-			formFields: [
-				{
-					key: 'product_caps',
-					type: 'checkbox_group',
-					label: 'Products',
-					options: [
-						{ label: 'Submit Products', value: 'submit_products' },
-						{
-							label: 'Publish Products',
-							value: 'publish_products',
-						},
-						{
-							label: 'Edit Published Products',
-							value: 'edit_published_products',
-						},
-					],
-				},
-				{
-					key: 'coupon_caps',
-					type: 'checkbox_group',
-					label: 'Coupons',
-					options: [
-						{ label: 'Submit Coupons', value: 'submit_coupons' },
-						{ label: 'Publish Coupons', value: 'publish_coupons' },
-						{
-							label: 'Edit/Delete Published Coupons',
-							value: 'edit_delete_coupons',
-						},
-					],
-				},
-				{
-					key: 'media_caps',
-					type: 'checkbox_group',
-					label: 'Media',
-					options: [
-						{ label: 'Upload Media Files', value: 'upload_media' },
-					],
 				},
 				{
 					key: 'wizardButtons',
@@ -423,6 +356,7 @@ const SetupWizard: React.FC = () => {
 					appLocalizer={appLocalizer}
 					methods={methods}
 					buttonEnable={inputField.buttonEnable}
+					moduleEnabled={inputField.moduleEnabled}
 					value={value}
 					onChange={(data: any) => {
 						if (hasAccess()) {
