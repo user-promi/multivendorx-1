@@ -147,7 +147,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<div className="form-group">
 													<label htmlFor="multivendorx_shipping_type_price">
 														{__(
-															'Default Shipping Price ($)',
+															`Default Shipping Price (${appLocalizer.currency_symbol})`,
 															'multivendorx'
 														)}
 													</label>
@@ -180,7 +180,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<div className="form-group">
 													<label htmlFor="multivendorx_additional_product">
 														{__(
-															'Per Product Additional Price ($)',
+															`Per Product Additional Price (${appLocalizer.currency_symbol})`,
 															'multivendorx'
 														)}
 													</label>
@@ -213,7 +213,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<div className="form-group">
 													<label htmlFor="multivendorx_additional_qty">
 														{__(
-															'Per Qty Additional Price ($)',
+															`Per Qty Additional Price (${appLocalizer.currency_symbol})`,
 															'multivendorx'
 														)}
 													</label>
@@ -246,7 +246,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<div className="form-group">
 													<label htmlFor="free_shipping_amount">
 														{__(
-															'Free Shipping Minimum Order Amount ($)',
+															`Free Shipping Minimum Order Amount (${appLocalizer.currency_symbol})`,
 															'multivendorx'
 														)}
 													</label>
@@ -279,7 +279,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<div className="form-group">
 													<label htmlFor="local_pickup_cost">
 														{__(
-															'Local Pickup Cost ($)',
+															`Local Pickup Cost (${appLocalizer.currency_symbol})`,
 															'multivendorx'
 														)}
 													</label>
@@ -343,7 +343,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<div className="form-group">
 													<label htmlFor="distance_default_cost">
 														{__(
-															'Default Cost ($) *',
+															`Default Cost (${appLocalizer.currency_symbol}) *`,
 															'multivendorx'
 														)}
 													</label>

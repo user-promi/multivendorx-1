@@ -27,7 +27,7 @@ class Distance_Shipping extends \WC_Shipping_Method
      */
     public function __construct()
     {
-        $this->id = 'multivendorx_distance_shipping';
+        $this->id = 'multivendorx-distance-shipping';
 
         $shipping_modules        = MultiVendorX()->setting->get_setting('shipping_modules', array());
         $distance_based_shipping = $shipping_modules['distance-based-shipping'] ?? array();
@@ -50,6 +50,29 @@ class Distance_Shipping extends \WC_Shipping_Method
         $this->tax_status = (! empty($taxable_shipping) && in_array('taxable', $taxable_shipping, true))
             ? 'taxable'
             : 'none';
+    }
+    /**
+     * Override admin options to show a custom message instead of settings
+     */
+    public function admin_options()
+    {
+        // Dynamic URL to your MultiVendorX shipping settings
+        $url = admin_url('admin.php?page=multivendorx#&tab=settings&subtab=shipping');
+?>
+        <h2><?php echo esc_html($this->method_title); ?></h2>
+        <p>
+            <?php
+            // Translation-ready message with a dynamic URL
+            echo wp_kses_post(
+                sprintf(
+                    /* translators: %s: URL to MultiVendorX shipping settings page */
+                    __('This shipping method is fully managed in the <a href="%s" target="_blank">MultiVendorX Shipping Settings</a>.', 'multivendorx'),
+                    esc_url($url)
+                )
+            );
+            ?>
+        </p>
+<?php
     }
 
     /**
@@ -111,7 +134,7 @@ class Distance_Shipping extends \WC_Shipping_Method
             $store_lng,
             $distance_type
         );
-        
+
         if (! $distance) {
             return;
         }
