@@ -41,7 +41,7 @@ class Transactions extends \WP_REST_Controller {
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				)
+				),
 			)
         );
 
@@ -108,35 +108,37 @@ class Transactions extends \WP_REST_Controller {
             }
 
             // Pagination & basic params
-            $limit    = max( 1, (int) $request->get_param( 'row' ) ?: 10 );
-            $page     = max( 1, (int) $request->get_param( 'page' ) ?: 1 );
-            $offset   = ( $page - 1 ) * $limit;
-            $count    = $request->get_param( 'count' );
-            $store_id = (int) $request->get_param( 'store_id' );
-            $status              = $request->get_param( 'status' );
-            $filter_status       = $request->get_param( 'filter_status' );
-            $transaction_type    = $request->get_param( 'transaction_type' );
-            $transaction_status  = $request->get_param( 'transaction_status' );
-            $order_by            = sanitize_text_field( $request->get_param( 'orderBy' ) );
-            $order               = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
+            $limit              = max( 1, (int) $request->get_param( 'row' ) ?: 10 );
+            $page               = max( 1, (int) $request->get_param( 'page' ) ?: 1 );
+            $offset             = ( $page - 1 ) * $limit;
+            $count              = $request->get_param( 'count' );
+            $store_id           = (int) $request->get_param( 'store_id' );
+            $status             = $request->get_param( 'status' );
+            $filter_status      = $request->get_param( 'filter_status' );
+            $transaction_type   = $request->get_param( 'transaction_type' );
+            $transaction_status = $request->get_param( 'transaction_status' );
+            $order_by           = sanitize_text_field( $request->get_param( 'orderBy' ) );
+            $order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
 
             $start_date = $request->get_param( 'start_date' );
             $end_date   = $request->get_param( 'end_date' );
             $start_date = $start_date ? gmdate( 'Y-m-d H:i:s', strtotime( $start_date ) ) : '';
             $end_date   = $end_date ? gmdate( 'Y-m-d H:i:s', strtotime( $end_date ) ) : '';
 
-            $args = array_filter( array(
-                'store_id'         => $store_id ?: null,
-                'status'           => $status ?: null,
-                'start_date'       => $start_date ?: null,
-                'end_date'         => $end_date ?: null,
-                'entry_type'       => $filter_status ?: null,
-                'transaction_type' => $transaction_type ?: null,
-                'limit'            => $limit,
-                'offset'           => $offset,
-                'orderBy'          => $order_by ?: null,
-                'order'            => in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : null,
-            ) );
+            $args = array_filter(
+                array(
+					'store_id'         => $store_id ?: null,
+					'status'           => $status ?: null,
+					'start_date'       => $start_date ?: null,
+					'end_date'         => $end_date ?: null,
+					'entry_type'       => $filter_status ?: null,
+					'transaction_type' => $transaction_type ?: null,
+					'limit'            => $limit,
+					'offset'           => $offset,
+					'orderBy'          => $order_by ?: null,
+					'order'            => in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : null,
+                )
+            );
 
             // Count only
             if ( $count ) {
@@ -174,10 +176,12 @@ class Transactions extends \WP_REST_Controller {
                 $transactions
             );
 
-            $count_args = array_filter( array(
-                'count'    => true,
-                'store_id' => $store_id ?: null,
-            ) );
+            $count_args = array_filter(
+                array(
+					'count'    => true,
+					'store_id' => $store_id ?: null,
+                )
+            );
 
             $counts = array(
                 'all' => Transaction::get_transaction_information( $count_args ),
@@ -202,7 +206,6 @@ class Transactions extends \WP_REST_Controller {
                     $counts
                 )
             );
-
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 
@@ -231,11 +234,13 @@ class Transactions extends \WP_REST_Controller {
         $start_date = sanitize_text_field( $request->get_param( 'start_date' ) );
         $end_date   = sanitize_text_field( $request->get_param( 'end_date' ) );
 
-        $args = array_filter( array(
-            'store_id'         => $store_id ?: null,
-            'transaction_type' => $transaction_type ?: null,
-            'entry_type'       => $transaction_status ?: $filter_status ?: null,
-        ) );
+        $args = array_filter(
+            array(
+				'store_id'         => $store_id ?: null,
+				'transaction_type' => $transaction_type ?: null,
+				'entry_type'       => $transaction_status ?: $filter_status ?: null,
+            )
+        );
 
         if ( $start_date && $end_date ) {
             $args['start_date'] = gmdate( 'Y-m-d 00:00:00', strtotime( $start_date ) );
@@ -366,7 +371,7 @@ class Transactions extends \WP_REST_Controller {
                 )
             );
         }
-        $last_transaction = Transaction::get_balances_for_store($store_id);
+        $last_transaction = Transaction::get_balances_for_store( $store_id );
 
         $balance         = $last_transaction['balance'];
         $locking_balance = $last_transaction['locking_balance'];
@@ -377,7 +382,7 @@ class Transactions extends \WP_REST_Controller {
         // Lifetime earning minus locking balance.
         $lifetime_earning = $total_earning - (float) $locking_balance;
 
-        $payout_threshold = floatval(MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 ));
+        $payout_threshold      = floatval( MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 ) );
         $minimum_wallet_amount = MultiVendorX()->setting->get_setting( 'wallet_threshold_amount', 0 );
         $locking_day           = MultiVendorX()->setting->get_setting( 'commission_lock_period', 0 );
         $payment_schedules     = MultiVendorX()->setting->get_setting( 'payment_schedules', '' );
@@ -415,15 +420,15 @@ class Transactions extends \WP_REST_Controller {
             );
         }
 
-        $store_id = absint( $request->get_param( 'store_id' ) );
-        $amount   = (float) $request->get_param( 'amount' );
-        $withdraw = $request->get_param( 'withdraw' );
-        $action   = $request->get_param( 'action' );
+        $store_id     = absint( $request->get_param( 'store_id' ) );
+        $amount       = (float) $request->get_param( 'amount' );
+        $withdraw     = $request->get_param( 'withdraw' );
+        $action       = $request->get_param( 'action' );
         $disbursement = $request->get_param( 'disbursement' );
 
-        $store        = new Store( $store_id );
+        $store            = new Store( $store_id );
         $threshold_amount = MultiVendorX()->setting->get_setting( 'payout_threshold_amount', 0 );
-    
+
         if ( $disbursement ) {
             $method = $request->get_param( 'method' );
             $note   = $request->get_param( 'note' );
