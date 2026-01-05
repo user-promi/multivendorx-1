@@ -1,6 +1,6 @@
 jQuery(document).ready(function ($) {
     var opts = distanceShippingFrontend;
-    console.log('opt',opts)
+    console.log('opt', opts)
     if ($('#multivendorx_user_location_lat').length === 0) {
         return;
     }
@@ -36,7 +36,7 @@ jQuery(document).ready(function ($) {
 
         var geocoder = new google.maps.Geocoder();
         var autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById('mvx_user_location')
+            document.getElementById('multivendorx_user_location')
         );
 
         autocomplete.bindTo('bounds', map);
@@ -67,9 +67,8 @@ jQuery(document).ready(function ($) {
             });
         });
     }
-
     /* -----------------------------
-     * MAPBOX (NEW)
+     * MAPBOX WITH CUSTOM AUTOCOMPLETE
      * ----------------------------- */
     function initMapboxMap(opts) {
         mapboxgl.accessToken = opts.mapbox_token;
@@ -88,40 +87,90 @@ jQuery(document).ready(function ($) {
             .setLngLat([lng, lat])
             .addTo(map);
 
+        // Create custom autocomplete for Mapbox
+        var searchTimeout;
+        $('#multivendorx_user_location').on('input', function () {
+            clearTimeout(searchTimeout);
+            var query = $(this).val();
+
+            if (query.length < 3) {
+                removeSuggestions();
+                return;
+            }
+
+            searchTimeout = setTimeout(function () {
+                searchMapboxAddress(query, map, marker);
+            }, 300);
+        });
+
+        // Close suggestions when clicking elsewhere
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('#multivendorx_user_location, #mapbox-suggestions').length) {
+                removeSuggestions();
+            }
+        });
+
+        function searchMapboxAddress(query, map, marker) {
+            $.ajax({
+                url: 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(query) + '.json',
+                data: {
+                    access_token: opts.mapbox_token,
+                    limit: 5,
+                    types: 'address,place',
+                    proximity: lng + ',' + lat,
+                    country: opts.mapbox_country || '',
+                    language: opts.mapbox_language || 'en'
+                },
+                success: function (response) {
+                    if (response.features && response.features.length) {
+                        showAddressSuggestions(response.features, map, marker);
+                    }
+                }
+            });
+        }
+
+        function showAddressSuggestions(features, map, marker) {
+            removeSuggestions();
+
+            var suggestions = $('<ul id="mapbox-suggestions" style="position: absolute; z-index: 1000; background: white; border: 1px solid #ddd; list-style: none; margin: 0; padding: 0; max-height: 200px; overflow-y: auto; width: 100%;"></ul>');
+
+            $.each(features, function (index, feature) {
+                var li = $('<li style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;">' + feature.place_name + '</li>');
+                li.on('click', function () {
+                    $('#multivendorx_user_location').val(feature.place_name);
+                    removeSuggestions();
+
+                    // Update map and marker
+                    var coordinates = feature.center;
+                    map.flyTo({
+                        center: coordinates,
+                        zoom: 14
+                    });
+                    marker.setLngLat(coordinates);
+
+                    // Bind data
+                    bindData(feature.place_name, coordinates[1], coordinates[0]);
+                });
+                suggestions.append(li);
+            });
+
+            suggestions.insertAfter('#multivendorx_user_location');
+        }
+
+        function removeSuggestions() {
+            $('#mapbox-suggestions').remove();
+        }
+
         marker.on('dragend', function () {
             var pos = marker.getLngLat();
             reverseGeocodeMapbox(pos.lat, pos.lng);
         });
-
-        $('#mvx_user_location').on('change', function () {
-            geocodeMapbox($(this).val(), map, marker);
-        });
-    }
-
-    function geocodeMapbox(query, map, marker) {
-        $.get(
-            'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
-                encodeURIComponent(query) + '.json',
-            {
-                access_token: opts.mapbox_token,
-                limit: 1
-            },
-            function (res) {
-                if (!res.features || !res.features.length) return;
-
-                var c = res.features[0].center;
-                marker.setLngLat(c);
-                map.flyTo({ center: c });
-
-                bindData(res.features[0].place_name, c[1], c[0]);
-            }
-        );
     }
 
     function reverseGeocodeMapbox(lat, lng) {
         $.get(
             'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
-                lng + ',' + lat + '.json',
+            lng + ',' + lat + '.json',
             {
                 access_token: opts.mapbox_token,
                 limit: 1

@@ -26,11 +26,11 @@ class Frontend {
         add_filter( 'multivendorx_store_shipping_options', array( $this, 'add_shipping_options' ) );
 
         // Checkout fields and map.
-        add_filter( 'woocommerce_checkout_fields', array( $this, 'mvx_checkout_user_location_fields' ), 50 );
+        add_filter( 'woocommerce_checkout_fields', array( $this, 'multivendorx_checkout_user_location_fields' ), 50 );
         add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'multivendorx_checkout_user_location_map' ), 50 );
 
         // // Save session & order meta.
-        add_action( 'woocommerce_checkout_update_order_review', array( $this, 'mvx_checkout_user_location_session_set' ), 50 );
+        add_action( 'woocommerce_checkout_update_order_review', array( $this, 'multivendorx_checkout_user_location_session_set' ), 50 );
         add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'multivendorx_checkout_user_location_save' ), 50 );
 
         // // Load Google Maps JS.
@@ -114,7 +114,7 @@ class Frontend {
      * @param array $fields Checkout fields.
      * @return array
      */
-    public function mvx_checkout_user_location_fields( $fields ) {
+    public function multivendorx_checkout_user_location_fields( $fields ) {
 
         // show ONLY when distance-based shipping is used.
         if (
@@ -122,16 +122,16 @@ class Frontend {
             && apply_filters( 'mvx_is_allow_checkout_user_location', true )
             && $this->cart_has_distance_shipping()
         ) {
-            $fields['billing']['mvx_user_location'] = array(
+            $fields['billing']['multivendorx_user_location'] = array(
                 'label'       => __( 'Delivery Location', 'multivendorx' ),
                 'placeholder' => _x( 'Insert your address ..', 'placeholder', 'multivendorx' ),
                 'required'    => true,
                 'class'       => array( 'form-row-wide' ),
                 'clear'       => true,
                 'priority'    => 999,
-                'value'       => WC()->session->get( '_mvx_user_location' ),
+                'value'       => WC()->session->get( '_multivendorx_user_location' ),
                 'type'        => 'text',
-                'name'        => 'mvx_user_location',
+                'name'        => 'multivendorx_user_location',
             );
 
             $fields['billing']['multivendorx_user_location_lat'] = array(
@@ -180,7 +180,7 @@ class Frontend {
      *
      * @param string $post_data_raw POST data.
      */
-    public function mvx_checkout_user_location_session_set( $post_data_raw ) {
+    public function multivendorx_checkout_user_location_session_set( $post_data_raw ) {
         parse_str( $post_data_raw, $post_data );
         if ( ! empty( $post_data['multivendorx_user_location'] ) ) {
             WC()->session->set( '_multivendorx_user_location', sanitize_text_field( $post_data['multivendorx_user_location'] ) );
