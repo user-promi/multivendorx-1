@@ -785,7 +785,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup row label="Categories stores can use">
+									<FormGroup row label="Categories stores can use" className="border-top">
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -824,7 +824,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup row label="Product permissions">
+									<FormGroup row label="Product permissions" className="border-top">
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -863,7 +863,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Products store can list" row>
+									<FormGroup label="Products store can list" row className="border-top">
 										<BasicInput
 											name="name"
 											wrapperClass="setting-form-input"
@@ -871,6 +871,7 @@ const Membership = ({ id }: { id: string }) => {
 											value={formData.name}
 											onChange={handleChange}
 											postInsideText={'max'}
+											size="12rem"
 										/>
 									</FormGroup>
 									<FormGroup row
@@ -884,6 +885,7 @@ const Membership = ({ id }: { id: string }) => {
 											value={formData.extra_product_cost}
 											onChange={handleChange}
 											postInsideText="/product"
+											size="12rem"
 										/>
 									</FormGroup>
 
@@ -898,34 +900,10 @@ const Membership = ({ id }: { id: string }) => {
 											value={formData.product_category_limit}
 											onChange={handleChange}
 											postInsideText="max"
+											size="12rem"
 										/>
 									</FormGroup>
-									<FormGroup row label={__('Featured products', 'multivendorx')}>
-										<MultiCheckBox
-											wrapperClass="toggle-btn"
-											inputWrapperClass="toggle-checkbox-header"
-											inputInnerWrapperClass="toggle-checkbox"
-											idPrefix="toggle-switch-sold-individually"
-											type="checkbox"
-											value={featuredProducts ? ['featured_products'] : []}
-											onChange={(e) =>
-												setfeaturedProducts(
-													(e as React.ChangeEvent<HTMLInputElement>)
-														.target.checked
-												)
-											}
-											options={[
-												{
-													key: 'featured_products',
-													value: 'featured_products',
-												},
-											]}
-										/>
-									</FormGroup>
-
-									{featuredProducts && (
-										<>
-											<FormGroup label={__('Images allowed per product', 'multivendorx')} htmlFor="per_product" row>
+									<FormGroup label={__('Images allowed per product', 'multivendorx')} htmlFor="per_product" row>
 												<BasicInput
 													name="name"
 													wrapperClass="setting-form-input"
@@ -936,8 +914,6 @@ const Membership = ({ id }: { id: string }) => {
 													size="8rem"
 												/>
 											</FormGroup>
-										</>
-									)}
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">
@@ -972,7 +948,7 @@ const Membership = ({ id }: { id: string }) => {
 						>
 							{orderManagement ? (
 								<FormGroupWrapper>
-									<FormGroup row label="What order information stores can access" htmlFor={orderPermissionField.key}>
+									<FormGroup row label="What order information stores can access" htmlFor={orderPermissionField.key} className="border-top">
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -994,7 +970,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup row label="Information in Exported Orders" htmlFor={exportedOrderInfoField.key} >
+									<FormGroup row label="Information in Exported Orders" htmlFor={exportedOrderInfoField.key} className="border-top">
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -1016,7 +992,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup row label="Information in Order Emails" htmlFor={orderEmailInfoField.key} >
+									<FormGroup row label="Information in Order Emails" htmlFor={orderEmailInfoField.key} className="border-top">
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -1163,6 +1139,7 @@ const Membership = ({ id }: { id: string }) => {
 								<FormGroup row
 									label="Include All Add-ons"
 									htmlFor={advancedFeaturesField.key}
+									className="border-top"
 								>
 									<MultiCheckBox
 										wrapperClass="checkbox-list-side-by-side"
@@ -1337,32 +1314,8 @@ const Membership = ({ id }: { id: string }) => {
 							</FormGroupWrapper>
 						</Card>
 
-						<Card title={__('Membership Perks', 'multivendorx')}
-							action={
-								<MultiCheckBox
-									wrapperClass="toggle-btn"
-									inputWrapperClass="toggle-checkbox-header"
-									inputInnerWrapperClass="toggle-checkbox"
-									idPrefix="toggle-switch-sold-individually"
-									type="checkbox"
-									value={featuredProducts ? ['featured_productss'] : []}
-									preText={"Image & media "}
-									onChange={(e) =>
-										setfeaturedProducts(
-											(e as React.ChangeEvent<HTMLInputElement>)
-												.target.checked
-										)
-									}
-									options={[
-										{
-											key: 'featured_productss',
-											value: 'featured_productss',
-										},
-									]}
-								/>
-							}>
+						<Card title={__('Membership Perks', 'multivendorx')}>
 							<div className="membership-features">
-
 								<AdminButton
 									buttons={[
 										{
