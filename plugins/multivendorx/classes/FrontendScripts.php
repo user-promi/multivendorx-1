@@ -166,7 +166,7 @@ class FrontendScripts {
 					'version' => $version,
 				),
                 'multivendorx-registration-form-script'    => array(
-					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/block/RegistrationForm/index.js',
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/block/registration-form/index.js',
 					'deps'    => $component_asset['dependencies'],
 					'version' => $version,
 				),

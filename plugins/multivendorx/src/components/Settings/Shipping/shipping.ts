@@ -21,30 +21,6 @@ export default {
 				'multivendorx'
 			),
 			buttonEnable: true,
-			// addNewBtn: true,
-			// addNewTemplate: {
-			// 	icon: 'adminlib-credit-card',
-			// 	label: 'New Shipping Method',
-			// 	desc: 'Configure your custom shipping method.',
-			// 	formFields: [
-			// 		{
-			// 			key: 'title',
-			// 			type: 'text',
-			// 			label: 'Method title',
-			// 			placeholder: 'Enter title',
-			// 		},
-			// 		{
-			// 			key: 'description',
-			// 			type: 'textarea',
-			// 			label: 'Description',
-			// 		},
-			// 		{
-			// 			key: 'required',
-			// 			type: 'checkbox',
-			// 			label: 'Required',
-			// 		},
-			// 	],
-			// },
 			modal: [
 				{
 					id: 'zone-wise-shipping',
