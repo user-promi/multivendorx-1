@@ -195,17 +195,17 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
-                'multivendorx-marketplace-stores-script'          => array(
+                'multivendorx-marketplace-stores-script'   => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/marketplace-stores/index.js',
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version' => $version,
 				),
-                'multivendorx-marketplace-products-script'          => array(
+                'multivendorx-marketplace-products-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/marketplace-products/index.js',
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version' => $version,
 				),
-                'multivendorx-marketplace-coupons-script'          => array(
+                'multivendorx-marketplace-coupons-script'  => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/marketplace-coupons/index.js',
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version' => $version,
@@ -417,7 +417,7 @@ class FrontendScripts {
         $localize_scripts = apply_filters(
             'multivendorx_localize_scripts',
             array(
-                'multivendorx-admin-script'              => array(
+                'multivendorx-admin-script'                => array(
                     'object_name' => 'appLocalizer',
 					'data'        => apply_filters(
                         'multivendorx_admin_localize_scripts',
@@ -477,14 +477,14 @@ class FrontendScripts {
                         )
                     ),
                 ),
-                'multivendorx-product-tab-script'        => array(
+                'multivendorx-product-tab-script'          => array(
 					'object_name' => 'multivendorx',
 					'data'        => array(
 						'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 						'select_text' => __( 'Select an item...', 'multivendorx' ),
 					),
 				),
-                'multivendorx-qna-frontend-script'       => array(
+                'multivendorx-qna-frontend-script'         => array(
 					'object_name' => 'qnaFrontend',
 					'data'        => array(
 						'ajaxurl' => admin_url( 'admin-ajax.php' ),
@@ -510,8 +510,8 @@ class FrontendScripts {
                         'icon_width'   => 40,
                         'icon_height'  => 40,
                         'mapbox_token' => MultiVendorX()->setting->get_setting( 'mapbox_api_key', '' ),
-                        'mapbox_style' => 'mapbox://styles/mapbox/streets-v11',   
-                        'map_provider' => MultiVendorX()->setting->get_setting('choose_map_api', '')            
+                        'mapbox_style' => 'mapbox://styles/mapbox/streets-v11',
+                        'map_provider' => MultiVendorX()->setting->get_setting( 'choose_map_api', '' ),
                     ),
 				),
                 'multivendorx-report-abuse-frontend-script' => array(
@@ -521,7 +521,7 @@ class FrontendScripts {
                         'nonce'   => wp_create_nonce( 'report_abuse_ajax_nonce' ),
 					),
 				),
-                'multivendorx-review-frontend-script'    => array(
+                'multivendorx-review-frontend-script'      => array(
 					'object_name' => 'review',
 					'data'        => array(
 						'ajaxurl'    => admin_url( 'admin-ajax.php' ),
@@ -529,7 +529,7 @@ class FrontendScripts {
                         'parameters' => MultiVendorX()->setting->get_setting( 'ratings_parameters', array() ),
 					),
 				),
-                'multivendorx-dashboard-script'          => array(
+                'multivendorx-dashboard-script'            => array(
                     'object_name' => 'appLocalizer',
                     'data'        => array(
                         'apiUrl'                   => untrailingslashit( get_rest_url() ),
@@ -580,7 +580,7 @@ class FrontendScripts {
                         'random_string_generate'   => wp_generate_uuid4(),
                     ),
                 ),
-                'multivendorx-registration-form-script'  => array(
+                'multivendorx-registration-form-script'    => array(
                     'object_name' => 'registrationForm',
                     'data'        => array(
                         'apiUrl'              => untrailingslashit( get_rest_url() ),
@@ -598,45 +598,45 @@ class FrontendScripts {
                 'multivendorx-marketplace-stores-editor-script' => array(
                     'object_name' => 'storesList',
                     'data'        => array(
-                        'apiUrl'  => untrailingslashit( get_rest_url() ),
-                        'restUrl' => MultiVendorX()->rest_namespace,
-                        'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'apiUrl'                   => untrailingslashit( get_rest_url() ),
+                        'restUrl'                  => MultiVendorX()->rest_namespace,
+                        'nonce'                    => wp_create_nonce( 'wp_rest' ),
                         'settings_databases_value' => $settings_databases_value,
                     ),
                 ),
-                'multivendorx-marketplace-stores-script'        => array(
+                'multivendorx-marketplace-stores-script'   => array(
                     'object_name' => 'storesList',
                     'data'        => array(
-                        'apiUrl'  => untrailingslashit( get_rest_url() ),
-                        'restUrl' => MultiVendorX()->rest_namespace,
-                        'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'apiUrl'                   => untrailingslashit( get_rest_url() ),
+                        'restUrl'                  => MultiVendorX()->rest_namespace,
+                        'nonce'                    => wp_create_nonce( 'wp_rest' ),
                         'settings_databases_value' => $settings_databases_value,
                     ),
                 ),
                 'multivendorx-marketplace-products-editor-script' => array(
                     'object_name' => 'productList',
                     'data'        => array(
-                        'apiUrl'  => untrailingslashit( get_rest_url() ),
-                        'restUrl' => MultiVendorX()->rest_namespace,
-                        'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'apiUrl'                   => untrailingslashit( get_rest_url() ),
+                        'restUrl'                  => MultiVendorX()->rest_namespace,
+                        'nonce'                    => wp_create_nonce( 'wp_rest' ),
                         'settings_databases_value' => $settings_databases_value,
                     ),
                 ),
-                'multivendorx-marketplace-products-script'        => array(
+                'multivendorx-marketplace-products-script' => array(
                     'object_name' => 'productList',
                     'data'        => array(
-                        'apiUrl'  => untrailingslashit( get_rest_url() ),
-                        'restUrl' => MultiVendorX()->rest_namespace,
-                        'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'apiUrl'                   => untrailingslashit( get_rest_url() ),
+                        'restUrl'                  => MultiVendorX()->rest_namespace,
+                        'nonce'                    => wp_create_nonce( 'wp_rest' ),
                         'settings_databases_value' => $settings_databases_value,
                     ),
                 ),
-                'multivendorx-marketplace-coupons-script'        => array(
+                'multivendorx-marketplace-coupons-script'  => array(
                     'object_name' => 'couponList',
                     'data'        => array(
-                        'apiUrl'  => untrailingslashit( get_rest_url() ),
-                        'restUrl' => MultiVendorX()->rest_namespace,
-                        'nonce'   => wp_create_nonce( 'wp_rest' ),
+                        'apiUrl'                   => untrailingslashit( get_rest_url() ),
+                        'restUrl'                  => MultiVendorX()->rest_namespace,
+                        'nonce'                    => wp_create_nonce( 'wp_rest' ),
                         'settings_databases_value' => $settings_databases_value,
                     ),
                 ),

@@ -196,35 +196,36 @@ class Rest {
         $operator = strtoupper( $request->get_param( 'operator' ) ?: 'IN' );
 
         if ( ! empty( $category ) ) {
-    
             $slugs = array_map( 'sanitize_title', explode( ',', $category ) );
-    
-            $args['tax_query'][] = [
+
+            $args['tax_query'][] = array(
                 'taxonomy' => 'product_cat',
                 'field'    => 'slug',
                 'terms'    => $slugs,
-                'operator' => in_array( $operator, [ 'IN', 'NOT IN' ], true )
+                'operator' => in_array( $operator, array( 'IN', 'NOT IN' ), true )
                     ? $operator
                     : 'IN',
-            ];
+            );
         }
 
         $store_slug = $request->get_param( 'store_slug' );
 
         if ( ! empty( $store_slug ) ) {
-            $store = StoreUtil::get_store_information([
-                'slug' => sanitize_text_field( $store_slug ),
-            ]);
-        
+            $store = StoreUtil::get_store_information(
+                array(
+					'slug' => sanitize_text_field( $store_slug ),
+                )
+            );
+
             // Safely get first store row
             $store_row = is_array( $store ) ? reset( $store ) : null;
-        
+
             if ( ! empty( $store_row ) && ! empty( $store_row['ID'] ) ) {
-                $args['meta_query'][] = [
+                $args['meta_query'][] = array(
                     'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'value'   => (string) $store_row['ID'],
-                    'compare' => '='
-                ];
+                    'compare' => '=',
+                );
             }
         }
 
@@ -282,23 +283,25 @@ class Rest {
                 $args['meta_query']['relation'] = 'AND';
             }
         }
-        
+
         $store_slug = $request->get_param( 'store_slug' );
 
         if ( ! empty( $store_slug ) ) {
-            $store = StoreUtil::get_store_information([
-                'slug' => sanitize_text_field( $store_slug ),
-            ]);
-        
+            $store = StoreUtil::get_store_information(
+                array(
+					'slug' => sanitize_text_field( $store_slug ),
+                )
+            );
+
             // Safely get first store row
             $store_row = is_array( $store ) ? reset( $store ) : null;
-        
+
             if ( ! empty( $store_row ) && ! empty( $store_row['ID'] ) ) {
-                $args['meta_query'][] = [
+                $args['meta_query'][] = array(
                     'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'value'   => (string) $store_row['ID'],
-                    'compare' => '='
-                ];
+                    'compare' => '=',
+                );
             }
         }
 

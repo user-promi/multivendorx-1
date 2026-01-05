@@ -35,19 +35,19 @@ class Twilio {
      */
     public function send( $to, $message ) {
         $account_sid = MultiVendorX()->setting->get_setting( 'twilio_account_sid' );
-        $auth_token = MultiVendorX()->setting->get_setting( 'twilio_auth_token' );
+        $auth_token  = MultiVendorX()->setting->get_setting( 'twilio_auth_token' );
         $from_number = MultiVendorX()->setting->get_setting( 'twilio_from_number' );
 
-        $args = [
-            'headers' => [
+        $args = array(
+            'headers' => array(
                 'Authorization' => 'Basic ' . base64_encode( $account_sid . ':' . $auth_token ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
-            ],
-            'body' => [
+            ),
+            'body'    => array(
                 'From' => $from_number,
                 'To'   => $to,
                 'Body' => $message,
-            ],
-        ];
+            ),
+        );
 
         $endpoint = str_replace( '{sid}', $account_sid, self::ENDPOINT );
         $response = wp_remote_post( $endpoint, $args );
@@ -64,5 +64,4 @@ class Twilio {
 
         return true;
     }
-
 }
