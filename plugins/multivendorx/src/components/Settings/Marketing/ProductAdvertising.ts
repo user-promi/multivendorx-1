@@ -29,7 +29,7 @@ export default {
 					size: '8rem',
 					preText: __('Each store can promote up to', 'multivendorx'),
 					postText: __(
-						'products for free, and additionally promote up to',
+						'products for free, and can promote up to',
 						'multivendorx'
 					),
 				},
@@ -38,13 +38,13 @@ export default {
 					type: 'number',
 					size: '8rem',
 					// preText: __(' and additionally promote up to', 'multivendorx'),
-					postText: __('paid products at a cost of', 'multivendorx'),
+					postText: __('additional products by paying', 'multivendorx'),
 				},
 				{
 					key: 'promotion_slot_cost_',
 					type: 'number',
 					size: '8rem',
-					postText: __('per slot.', 'multivendorx'),
+					postText: __('per promotion slot.', 'multivendorx'),
 				},
 			],
 		},
@@ -52,11 +52,12 @@ export default {
 		{
 			key: 'expire_after_days',
 			type: 'number',
-			label: __('Max promotion duration', 'mvx-pro'),
-			desc: __(
-				'Set how long a product will stay advertised. Stores can choose the duration up to this limit.',
-				'mvx-pro'
+			label: __('Promotion duration', 'mvx-pro'),
+			settingDescription: __(
+				'Set the maximum number of days a product can be promoted.',
+				'multivendorx'
 			),
+			preText: __('Promoted products can stay visible for up to', 'multivendorx'),
 			postInsideText: __('days', 'multivendorx'),
 			size: '8rem',
 			moduleEnabled: 'advertisement',
@@ -95,7 +96,7 @@ export default {
 				{
 					key: 'display_advertised_product_on_top',
 					label: __(
-						'Show advertised products at the top',
+						'Show promoted products at the top',
 						'multivendorx'
 					),
 					value: 'display_advertised_product_on_top',
@@ -107,7 +108,7 @@ export default {
 				{
 					key: 'out_of_stock_visibility',
 					label: __(
-						'Hide out-of-stock advertised products',
+						'Hide promoted products when out of stock',
 						'multivendorx'
 					),
 					value: 'out_of_stock_visibility',
