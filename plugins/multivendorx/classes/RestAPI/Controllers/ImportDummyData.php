@@ -48,36 +48,14 @@ class ImportDummyData extends \WP_REST_Controller {
     }
 
     /**
-     * Verify nonce for security
-     * 
-     * @param \WP_REST_Request $request
-     */
-    protected function verify_nonce( $request ) {
-        $nonce = $request->get_header( 'X-WP-Nonce' );
-    
-        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            return new \WP_REST_Response(
-                [
-                    'success' => false,
-                    'code'    => 'invalid_nonce',
-                    'message' => __( 'Invalid nonce.', 'multivendorx' ),
-                ],
-                401
-            );
-        }
-    
-        return true;
-    }
-
-    /**
      * Process action request
      * 
      * @param \WP_REST_Request $request
      */
     public function process_action( $request ) {
-        $nonce_check = $this->verify_nonce( $request );
-        if ( $nonce_check !== true ) {
-            return $nonce_check;
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
         }
     
         $parameter = $request->get_param( 'parameter' );
@@ -90,10 +68,8 @@ class ImportDummyData extends \WP_REST_Controller {
             ];
         }
     
-        $method = $action;
-    
-        if ( method_exists( $this, $method ) ) {
-            return $this->$method( $request );
+        if ( method_exists( $this, $action ) ) {
+            return $this->$action( $request );
         }
     
         return [
@@ -106,9 +82,9 @@ class ImportDummyData extends \WP_REST_Controller {
      * Get current status
      */
     public function get_status( $request ) {
-        $nonce_check = $this->verify_nonce( $request );
-        if ( $nonce_check !== true ) {
-            return $nonce_check;
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            return new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
         }
     
         $parameter = $request->get_param( 'parameter' );
