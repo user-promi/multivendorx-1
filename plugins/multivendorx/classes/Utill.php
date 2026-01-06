@@ -7,6 +7,8 @@
 
 namespace MultiVendorX;
 
+use MultiVendorX\Store\Store;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -37,6 +39,7 @@ class Utill {
         'products_map'          => 'multivendorx_products_map',
         'notifications'         => 'multivendorx_store_activity_notifications',
         'system_events'         => 'multivendorx_system_events',
+        'visitors_stats'        => 'multivendorx_visitors_stats',
     );
 
     const MULTIVENDORX_SETTINGS = array(
@@ -381,5 +384,14 @@ class Utill {
     public static function is_store_registration_page() {
         $registration_page = (int) MultiVendorX()->setting->get_setting( 'store_registration_page' );
         return is_page( $registration_page );
+    }
+
+    public static function is_store_page() {
+        $store_name = get_query_var(  MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
+
+        if ( ! empty( $store_name ) ) {
+            $store = Store::get_store( $store_name, 'slug' );
+        }
+        return $store ?? false;
     }
 }

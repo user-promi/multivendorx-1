@@ -20,6 +20,7 @@ import { AdminButton, Card, Column, Container, getApiLink, MultiCalendarInput, T
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency } from '@/services/commonFunction';
+import VisitorsMap from './visitorsMap';
 
 const activities = [
 	{ icon: 'adminfont-cart', text: 'New order #10023 by Alex Doe.' },
@@ -748,6 +749,16 @@ const Dashboard: React.FC = () => {
 								}}
 							/>
 						)}
+					</Card>
+				</Column>
+
+				<Column>
+					<Card
+						title={__('Visitors Map', 'multivendorx')}
+						iconName="adminfont-external icon"
+					>
+						<VisitorsMap/>
+						
 					</Card>
 				</Column>
 

@@ -48,6 +48,10 @@ class Frontend {
         add_action( 'woocommerce_cart_loaded_from_session', array( $this, 'restrict_products_already_in_cart' ) );
         add_filter( 'woocommerce_add_to_cart_validation', array( $this, 'restrict_products_from_cart' ), 10, 2 );
         add_action( 'woocommerce_checkout_process', array( $this, 'restrict_products_from_checkout' ) );
+
+        // Store visitors stats data.
+        add_action('template_redirect', array($this, 'set_multivendorx_user_cookies'), 10);
+        add_action('template_redirect', array($this, 'multivendorx_store_visitors_stats'), 20);
     }
 
     /**
@@ -404,5 +408,151 @@ class Frontend {
             return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
         }
         return $template;
+    }
+
+    /**
+     * Set user cookies
+     */
+    public function set_multivendorx_user_cookies() {
+        if ( is_product() || Utill::is_store_page() ) {
+            $current_user_id = get_current_user_id();
+            $cookie_id = '_multivendorx_user_cookie_' . $current_user_id;
+
+            if ( ! headers_sent() ) {
+                $secure = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
+                $cookie_value = filter_input( INPUT_COOKIE, $cookie_id );
+
+                if ( ! $cookie_value ) {
+                    $cookie_value = uniqid( 'multivendorx_cookie', true );
+                }
+
+                setcookie(
+                    $cookie_id,
+                    $cookie_value,
+                    time() + YEAR_IN_SECONDS,
+                    COOKIEPATH,
+                    COOKIE_DOMAIN,
+                    $secure,
+                    true
+                );
+            }
+        }
+    }
+
+    public function multivendorx_store_visitors_stats() {
+        $product_store = false;
+
+        if ( is_product() ) {
+            global $post;
+            $product_store = Store::get_store( $post->ID, 'product' );
+        } elseif ( Utill::is_store_page() ) {
+            $product_store = Utill::is_store_page();
+        }
+
+        $user_id    = get_current_user_id();
+        $user_cookie = filter_input( INPUT_COOKIE, '_multivendorx_user_cookie_' . $user_id );
+
+        if ( $product_store && $user_cookie ) {
+            $ip_data = $this->get_visitor_ip_data();
+
+            if ( ! empty( $ip_data ) && $ip_data->status === 'success' ) {
+                $ip_data->user_id     = $user_id;
+                $ip_data->user_cookie = $user_cookie;
+                $ip_data->session_id  = session_id();
+
+                $this->multivendorx_save_visitor_stats(
+                    $product_store->get_id(),
+                    $ip_data
+                );
+            }
+        }
+    }
+
+    public function get_visitor_ip_data() {
+        if (!class_exists('WC_Geolocation', false)) {
+            include_once( WC_ABSPATH . 'includes/class-wc-geolocation.php' );
+        }
+        $e = new \WC_Geolocation();
+        $ip_address = $e->get_ip_address();
+        if ($ip_address) {
+            if (get_transient('multivendorx_' . $ip_address)) {
+                $data = get_transient('multivendorx_' . $ip_address);
+                if ($data->status != 'error')
+                    return $data;
+            }
+            $service_endpoint = 'http://ip-api.com/json/%s';
+            $response = wp_safe_remote_get(sprintf($service_endpoint, $ip_address), array('timeout' => 2));
+            if (!is_wp_error($response) && $response['body']) {
+                set_transient('multivendorx_' . $ip_address, json_decode($response['body']), 2 * MONTH_IN_SECONDS);
+                return json_decode($response['body']);
+            } else {
+                $data = new \stdClass();
+                $data->status = 'error';
+                set_transient('multivendorx_' . $ip_address, $data, 2 * MONTH_IN_SECONDS);
+                return $data;
+            }
+        }
+    }
+
+    /**
+     * Save vistor stats for store.
+     * 
+     * @since 3.0.0
+     * @param int $store_id
+     * @param array $data
+     */
+    public function multivendorx_save_visitor_stats($store_id, $data) {
+        global $wpdb;
+        $wpdb->query(
+                $wpdb->prepare(
+                        "INSERT INTO `{$wpdb->prefix}" . Utill::TABLES['visitors_stats'] . "` 
+                        ( store_id
+                        , user_id
+                        , user_cookie
+                        , session_id
+                        , ip
+                        , lat
+                        , lon
+                        , city
+                        , zip
+                        , regionCode
+                        , region
+                        , countryCode
+                        , country
+                        , isp
+                        , timezone
+                        ) VALUES ( %d
+                        , %d
+                        , %s
+                        , %s
+                        , %s
+                        , %s
+                        , %s
+                        , %s
+                        , %s 
+                        , %s
+                        , %s
+                        , %s
+                        , %s
+                        , %s
+                        , %s
+                        ) ON DUPLICATE KEY UPDATE `created` = now()"
+                        , $store_id
+                        , $data->user_id
+                        , $data->user_cookie
+                        , $data->session_id
+                        , $data->query
+                        , $data->lat
+                        , $data->lon
+                        , $data->city
+                        , $data->zip
+                        , $data->region
+                        , $data->regionName
+                        , $data->countryCode
+                        , $data->country
+                        , $data->isp
+                        , $data->timezone
+                )
+        );
     }
 }

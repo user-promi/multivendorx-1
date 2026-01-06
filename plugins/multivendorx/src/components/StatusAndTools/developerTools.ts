@@ -20,6 +20,8 @@ export default {
                 'Clear all store dashboards transient cache.',
                 'multivendorx'
             ),
+            apilink: 'status',
+			method: 'POST'
         },
         {
             key: 'visitor',
@@ -30,6 +32,8 @@ export default {
                 'Clear all the table data of MultivendorX visitors stats.',
                 'multivendorx'
             ),
+            apilink: 'status',
+			method: 'POST'
         },
         {
             key: 'separator_content',
