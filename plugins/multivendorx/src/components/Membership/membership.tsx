@@ -183,7 +183,7 @@ const orderEmailInfoField = {
 };
 
 const field = {
-	key: 'vendor_permissions',
+	key: 'productPermissions',
 	look: 'checkbox',
 	selectDeselect: true,
 	class: 'basic-checkbox',
@@ -242,7 +242,7 @@ const Membership = ({ id }: { id: string }) => {
 	const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
 	const [productLimitsCard, setproductLimitsCard] = useState(false);
 	const [orderManagement, setorderManagement] = useState(false);
-	const [ allowedProducts, setallowedProducts] = useState(false);
+	const [allowedProducts, setallowedProducts] = useState(false);
 	const [additionalFeatures, setadditionalFeatures] = useState(false);
 	const [featuredProducts, setfeaturedProducts] = useState(false);
 	const [starFill, setstarFill] = useState(false);
@@ -864,14 +864,100 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Products store can list" className="border-top" desc={__('Products store can list', 'multivendorx')}>
+									
+
+									<FormGroup
+										label="Product categories store can access"
+										htmlFor="product_category_limit"
+										desc={__('Product categories store can access', 'multivendorx')}
+										className="border-top"
+									>
+										<BasicInput
+											name="product_category_limit"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.product_category_limit}
+											onChange={handleChange}
+											postInsideText="max"
+											size="12rem"
+										/>
+									</FormGroup>
+									
+								</FormGroupWrapper>
+							) : (
+								<p className="settings-metabox-description">
+									Controls what stores can sell and how they manage products.
+								</p>
+							)}
+						</Card>
+						<Card title={__('Product permissions', 'multivendorx')}
+							action={
+								<MultiCheckBox
+									wrapperClass="toggle-btn"
+									inputWrapperClass="toggle-checkbox-header"
+									inputInnerWrapperClass="toggle-checkbox"
+									idPrefix="toggle-switch-product-permissions"
+									type="checkbox"
+									value={productPermissions ? ['product_permissions'] : []}
+									onChange={(e) =>
+										setProductPermissions(
+											(e as React.ChangeEvent<HTMLInputElement>).target.checked
+										)
+									}
+									options={[
+										{
+											key: 'product_permissions',
+											value: 'product_permissions',
+										},
+									]}
+								/>
+							}
+						>
+							{productPermissions ? (
+								<FormGroupWrapper>
+									<FormGroup
+										label={__('What stores are allowed to do with products', 'multivendorx')}
+										htmlFor={productPermissionField.key}
+									>
+										<MultiCheckBox
+											wrapperClass="checkbox-list-side-by-side"
+											descClass="settings-metabox-description"
+											description={productPermissionField.desc}
+											inputWrapperClass="toggle-checkbox-header"
+											inputInnerWrapperClass="default-checkbox"
+											inputClass={productPermissionField.class}
+											idPrefix={productPermissionField.key}
+											selectDeselect
+											options={productPermissionField.options}
+											value={normalizeValue(productPermissionField.key)}
+											onChange={handleMultiCheckboxChange(productPermissionField.key)}
+											onMultiSelectDeselectChange={() =>
+												handleSelectDeselect(productPermissionField)
+											}
+											proSetting={false}
+											moduleChange={() => { }}
+											modules={[]}
+										/>
+									</FormGroup>
+									<FormGroup className="border-top" label={__('Images per product', 'multivendorx')} htmlFor="per_product" desc={__('Control how many images a store can add for each product.', 'multivendorx')}>
 										<BasicInput
 											name="name"
 											wrapperClass="setting-form-input"
 											descClass="settings-metabox-description"
 											value={formData.name}
 											onChange={handleChange}
-											postInsideText={'max'}
+											postInsideText={'images max'}
+											size="8rem"
+										/>
+									</FormGroup>
+									<FormGroup label="How many products a store can list" className="border-top" desc={__('Set the total number of products a store can have at one time.', 'multivendorx')}>
+										<BasicInput
+											name="name"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.name}
+											onChange={handleChange}
+											postInsideText={'products maximum'}
 											size="12rem"
 										/>
 									</FormGroup>
@@ -891,41 +977,15 @@ const Membership = ({ id }: { id: string }) => {
 											size="12rem"
 										/>
 									</FormGroup>
-
-									<FormGroup
-										label="Product categories store can access"
-										htmlFor="product_category_limit"
-										desc={__('Product categories store can access', 'multivendorx')}
-										className="border-top"
-									>
-										<BasicInput
-											name="product_category_limit"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.product_category_limit}
-											onChange={handleChange}
-											postInsideText="max"
-											size="12rem"
-										/>
-									</FormGroup>
-									<FormGroup className="border-top" label={__('Images allowed per product', 'multivendorx')} htmlFor="per_product" desc={__('Images allowed per product', 'multivendorx')}>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-											postInsideText={'max'}
-											size="8rem"
-										/>
-									</FormGroup>
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">
-									Controls what stores can sell and how they manage products.
+									Decide how much control stores have after adding a product, such as publishing
+									it themselves or making changes later.
 								</p>
 							)}
 						</Card>
+
 
 						<Card title={__('Order & Data Management', 'multivendorx')}
 							action={
