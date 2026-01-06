@@ -739,6 +739,16 @@ const Dashboard: React.FC = () => {
 
 				<Column>
 					<Card
+						title={__('Visitors Map', 'multivendorx')}
+						iconName="adminfont-external icon"
+					>
+						<VisitorsMap/>
+						
+					</Card>
+				</Column>
+
+				<Column>
+					<Card
 						title={__('Recent Orders', 'multivendorx')}
 						iconName="adminfont-external icon"
 					>

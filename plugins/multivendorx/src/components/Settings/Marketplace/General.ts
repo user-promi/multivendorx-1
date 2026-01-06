@@ -57,14 +57,14 @@ export default {
 		{
 			key: 'section',
 			type: 'section',
-			hint: __('Customer order notifications', 'multivendorx'),
+			hint: __('Customer-facing order presentation & invoicing', 'multivendorx'),
 		},
 		{
 			key: 'sms_gateway_selector',
 			type: 'setting-toggle',
 			label: __('Customers will see information for', 'multivendorx'),
 			settingDescription: __(
-				'Choose for which order status customers will receive emails, PDF invoices, and view details in their account. ',
+				'Choose which order statuses will send customers email notifications, PDF invoices, and display order details in their account.',
 				'multivendorx'
 			),
 			desc: __(
