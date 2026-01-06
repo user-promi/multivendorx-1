@@ -101,8 +101,8 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 						<span className="message">{item.message}</span>
 						<span className="time">{item.time}</span>
 					</div>
-					<i className="check-icon adminfont-check"></i>
-					<i className="check-icon adminfont-cross"  
+					<i className="check-icon adminfont-check color-green"></i>
+					<i className="check-icon adminfont-cross color-red"  
 						onClick={(e) => {
         					e.stopPropagation();
 							dismissNotification(item.id)

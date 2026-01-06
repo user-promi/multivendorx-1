@@ -154,7 +154,7 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 		const now = new Date();
 		const formattedStartDate = formatDateToISO8601(
 			startDate ||
-				new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())
+			new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())
 		);
 		const formattedEndDate = formatDateToISO8601(endDate || now);
 
@@ -332,10 +332,10 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 				const rawDate = row.original.date_created;
 				const formattedDate = rawDate
 					? new Intl.DateTimeFormat('en-US', {
-							month: 'short',
-							day: 'numeric',
-							year: 'numeric',
-						}).format(new Date(rawDate))
+						month: 'short',
+						day: 'numeric',
+						year: 'numeric',
+					}).format(new Date(rawDate))
 					: '-';
 				return (
 					<TableCell title={formattedDate}>{formattedDate}</TableCell>
@@ -345,32 +345,36 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 		{
 			header: __('Action', 'multivendorx'),
 			cell: ({ row }) => (
-				<TableCell title={row.original.status || ''}>
+				<TableCell>
 					<span
 						className="admin-btn btn-purple"
-						onClick={() => {
+						onClick={() =>
 							handleSingleAction(
 								'approve_coupon',
-								row.original.id!
-							);
-						}}
+								row.original.id
+							)
+						}
 					>
-						<i className="adminfont-check"></i> Approve
+						<i className="adminfont-check"></i>
+						{__('Approve', 'multivendorx')}
 					</span>
+
 					<span
 						className="admin-btn btn-red"
 						onClick={() =>
 							handleSingleAction(
 								'reject_coupon',
-								row.original.id!
+								row.original.id
 							)
 						}
 					>
-						<i className="adminfont-close"></i> Reject
+						<i className="adminfont-close"></i>
+						{__('Reject', 'multivendorx')}
 					</span>
 				</TableCell>
 			),
-		},
+		}
+
 	];
 
 	return (

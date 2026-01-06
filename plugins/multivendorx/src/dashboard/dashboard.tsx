@@ -19,6 +19,7 @@ import { AdminButton, Card, Column, Container, getApiLink, MultiCalendarInput, T
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency, formatTimeAgo } from '@/services/commonFunction';
+import VisitorsMap from './visitorsMap';
 
 const activities = [
 	{ icon: 'adminfont-cart', text: 'New order #10023 by Alex Doe.' },
@@ -583,18 +584,6 @@ const Dashboard: React.FC = () => {
 						</div>
 
 						{lastWithdraws && lastWithdraws.length > 0 && (
-							// <div className="buttons-wrapper">
-							// 	<div
-							// 		className="admin-btn btn-purple"
-							// 		onClick={() => {
-							// 			window.location.href =
-							// 				'/dashboard/wallet/transactions/';
-							// 		}}
-							// 	>
-							// 		<i className="adminfont-preview"></i>
-							// 		{__('View transaction history', 'multivendorx')}
-							// 	</div>
-							// </div>
 							<AdminButton
 								buttons={{
 									icon: 'preview',

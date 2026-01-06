@@ -9,6 +9,10 @@ import {
 	getApiLink,
 	ToggleSetting,
 	MultiCalendarInput,
+	AdminButton,
+	FormGroupWrapper,
+	FormGroup,
+	TextArea,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -285,10 +289,10 @@ const StoreReview: React.FC = () => {
 				prev.map((r) =>
 					r.review_id === selectedReview.review_id
 						? {
-								...r,
-								reply: replyText,
-								status: selectedReview.status,
-							}
+							...r,
+							reply: replyText,
+							status: selectedReview.status,
+						}
 						: r
 				)
 			);
@@ -402,10 +406,10 @@ const StoreReview: React.FC = () => {
 				const rawDate = row.original.date_created;
 				const formattedDate = rawDate
 					? new Intl.DateTimeFormat('en-US', {
-							month: 'short',
-							day: 'numeric',
-							year: 'numeric',
-						}).format(new Date(rawDate))
+						month: 'short',
+						day: 'numeric',
+						year: 'numeric',
+					}).format(new Date(rawDate))
 					: '-';
 				return (
 					<TableCell title={formattedDate}>{formattedDate}</TableCell>
@@ -467,155 +471,134 @@ const StoreReview: React.FC = () => {
 					onClose={() => setSelectedReview(null)}
 					width="31.25rem"
 					height="70%"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-store-review"></i>
-								{__('Reply to Review', 'multivendorx')} -{' '}
-								{selectedReview.store_name}
-							</div>
-							<i
-								onClick={() => setSelectedReview(null)}
-								className="icon adminfont-close"
-							></i>
-						</>
-					}
+					header={{
+						icon: 'store-review',
+						title: `${__('Reply to Review', 'multivendorx')} – ${selectedReview?.store_name}`,
+						description: __(
+							'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+							'multivendorx'
+						),
+					}}
 					footer={
-						<>
-							<button
-								type="button"
-								onClick={() => setSelectedReview(null)}
-								className="admin-btn btn-red"
-							>
-								<i className="adminfont-close"></i>
-								{__('Cancel', 'multivendorx')}
-							</button>
-							<button
-								onClick={handleSaveReply}
-								className="admin-btn btn-purple-bg"
-							>
-								<i className="adminfont-active"></i>
-								Save
-							</button>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: () => setSelectedReview(null),
+								},
+								{
+									icon: 'save',
+									text: __('Save', 'multivendorx'),
+									className: 'purple-bg',
+									onClick: handleSaveReply,
+								},
+							]}
+						/>
 					}
 				>
 					<>
-						<div className="form-group-wrapper">
-							<div className="review-popup-wrapper">
-								<div className="customer-wrapper">
-									<div className="avatar">
-										<i className="item-icon adminfont-person"></i>
-									</div>
-									{selectedReview && (
-										<div className="name-wrapper">
-											<div
-												className="name"
-												dangerouslySetInnerHTML={{
-													__html: selectedReview.review_title,
-												}}
-											></div>
+						<div className="review-popup-wrapper">
+							<div className="customer-wrapper">
+								<div className="avatar">
+									<i className="item-icon adminfont-person"></i>
+								</div>
+								{selectedReview && (
+									<div className="name-wrapper">
+										<div
+											className="name"
+											dangerouslySetInnerHTML={{
+												__html: selectedReview.review_title,
+											}}
+										></div>
 
-											<div className="rating-wrapper">
-												{[...Array(5)].map((_, i) => (
-													<i
-														key={i}
-														className={`star-icon adminfont-star ${
-															i <
-															Math.round(
-																selectedReview.overall_rating
-															)
-																? 'filled'
-																: ''
+										<div className="rating-wrapper">
+											{[...Array(5)].map((_, i) => (
+												<i
+													key={i}
+													className={`star-icon adminfont-star ${i <
+														Math.round(
+															selectedReview.overall_rating
+														)
+														? 'filled'
+														: ''
 														}`}
-													></i>
-												))}
+												></i>
+											))}
 
-												<div className="date">
-													{new Date(
-														selectedReview.date_created
-													).toLocaleDateString(
-														'en-GB',
-														{
-															day: '2-digit',
-															month: 'short',
-															year: 'numeric',
-														}
-													)}
-												</div>
+											<div className="date">
+												{new Date(
+													selectedReview.date_created
+												).toLocaleDateString(
+													'en-GB',
+													{
+														day: '2-digit',
+														month: 'short',
+														year: 'numeric',
+													}
+												)}
 											</div>
 										</div>
-									)}
-								</div>
-
-								<div className="review">
-									{selectedReview.review_content}
-								</div>
+									</div>
+								)}
 							</div>
 
-							<div className="form-group">
-								<label htmlFor="reply">
-									{__('Respond to customer', 'multivendorx')}
-								</label>
-								<textarea
-									id="reply"
+							<div className="review">
+								{selectedReview.review_content}
+							</div>
+						</div>
+
+						<FormGroupWrapper>
+							<FormGroup
+								label={__('Respond to customer', 'multivendorx')}
+								htmlFor="reply"
+							>
+								<TextArea
+									name="reply"
+									inputClass="textarea-input input-text"
 									value={replyText}
-									onChange={(e) =>
-										setReplyText(e.target.value)
-									}
-									rows={5}
-									className="textarea-input"
+									onChange={(e) => setReplyText(e.target.value)}
+									usePlainText={true}
 								/>
-							</div>
+							</FormGroup>
 
-							{/* Status Toggle */}
-							<div className="form-group">
-								<label htmlFor="status">
-									{__(
-										'Control if this review appears publicly, stays under moderation, or is excluded from the store page.',
-										'multivendorx'
-									)}
-								</label>
+							<FormGroup
+								label={__(
+									'Control if this review appears publicly, stays under moderation, or is excluded from the store page.',
+									'multivendorx'
+								)}
+								htmlFor="status"
+							>
 								<ToggleSetting
-									wrapperclassName="setting-form-input"
-									descclassName="settings-metabox-description"
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
 									options={[
 										{
 											key: 'pending',
 											value: 'Pending',
-											label: __(
-												'Pending',
-												'multivendorx'
-											),
+											label: __('Pending', 'multivendorx'),
 										},
 										{
 											key: 'approved',
 											value: 'Approved',
-											label: __(
-												'Approved',
-												'multivendorx'
-											),
+											label: __('Approved', 'multivendorx'),
 										},
 										{
 											key: 'rejected',
 											value: 'Rejected',
-											label: __(
-												'Rejected',
-												'multivendorx'
-											),
+											label: __('Rejected', 'multivendorx'),
 										},
 									]}
 									value={selectedReview.status}
-									onChange={(val) => {
+									onChange={(val) =>
 										setSelectedReview((prev) =>
-											prev
-												? { ...prev, status: val }
-												: prev
-										);
-									}}
+											prev ? { ...prev, status: val } : prev
+										)
+									}
 								/>
-							</div>
-						</div>
+							</FormGroup>
+						</FormGroupWrapper>
 					</>
 				</CommonPopup>
 			)}
