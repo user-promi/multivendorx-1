@@ -1,5 +1,22 @@
 /*global jQuery reportAbuseFrontend */
 jQuery(function ($) {
+	function showThemeNotice(container, type, message) {
+		var $container = $(container);
+		$container.empty(); // Clear previous messages
+
+		var noticeHtml = '<div class="wc-block-components-notice-banner is-' + type + '">' +
+			'<div class="wc-block-components-notice-banner__content">' +
+			'<strong>' + capitalizeFirstLetter(type) + ':</strong> ' + message +
+			'</div>' +
+			'</div>';
+
+		$container.html(noticeHtml);
+	}
+
+	function capitalizeFirstLetter(str) {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+
 	// Fetch reasons dynamically on form open
 	$(document).on('click', '.open-report-abuse', function (e) {
 		e.preventDefault();
@@ -18,13 +35,13 @@ jQuery(function ($) {
 					if (res.success) {
 						$.each(res.data, function (i, reason) {
 							var radio =
-								'<p><label><input type="radio" name="report_abuse_reason_' +
+								'<div class="woocommerce-form__radio"><label class="woocommerce-form__label woocommerce-form__label-for-radio"><input type="radio" class="woocommerce-form__input woocommerce-form__input-radio" name="report_abuse_reason_' +
 								$form.find('.report_abuse_product_id').val() +
 								'" value="' +
 								reason +
-								'"> ' +
+								'"> <span>' +
 								reason +
-								'</label></p>';
+								'</span> </label></div>';
 							$wrapper.append(radio);
 						});
 					}
@@ -68,20 +85,19 @@ jQuery(function ($) {
 		var pid = $form.find('.report_abuse_product_id').val();
 		var $msgBox = $form.find('.report-abuse-msg-box');
 
+		// Clear previous messages
+		$msgBox.empty();
+
 		// Simple email regex validation
 		var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 		if (!name || !email || !reason || !msg) {
-			$msgBox.html(
-				'<span style="color:red;">All fields are required.</span>'
-			);
+			showThemeNotice($msgBox, 'error', 'All fields are required.');
 			return;
 		}
 
 		if (!emailRegex.test(email)) {
-			$msgBox.html(
-				'<span style="color:red;">Please enter a valid email address.</span>'
-			);
+			showThemeNotice($msgBox, 'error', 'Please enter a valid email address.');
 			return;
 		}
 
@@ -103,7 +119,11 @@ jQuery(function ($) {
 			success: function (res) {
 				if (res.success) {
 					$msgBox.html(
-						'<span style="color:green;">' + res.data + '</span>'
+						'<div class="wc-block-components-notice-banner is-success">' +
+						'<div class="wc-block-components-notice-banner__content">' +
+						'<strong>Success:</strong> ' + res.data +
+						'</div>' +
+						'</div>'
 					);
 
 					// Hide the form after success

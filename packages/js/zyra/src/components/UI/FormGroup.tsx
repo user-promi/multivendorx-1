@@ -1,6 +1,7 @@
 type FormGroupProps = {
 	label?: React.ReactNode;
 	htmlFor?: string;
+	desc?: React.ReactNode;
 	children: React.ReactNode;
 	className?: string;
 	cols?: 1 | 2 | 3 | 4;
@@ -9,6 +10,7 @@ type FormGroupProps = {
 
 const FormGroup: React.FC<FormGroupProps> = ({
 	label,
+	desc,
 	htmlFor,
 	children,
 	className = '',
@@ -20,7 +22,10 @@ const FormGroup: React.FC<FormGroupProps> = ({
 			className={`form-group ${row ? "row" : ""} ${className}`}
 			data-cols={cols}
 		>
-			{label && <label className="form-label" htmlFor={htmlFor}>{label}</label>}
+			{label && <label className="form-label" htmlFor={htmlFor}>
+				{label}
+				{desc && <div className="settings-metabox-description">{desc}</div>}
+			</label>}
 			{children}
 		</div>
 	);
