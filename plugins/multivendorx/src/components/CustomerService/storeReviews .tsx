@@ -581,19 +581,6 @@ const StoreReviews: React.FC = () => {
 					onClose={() => setSelectedReview(null)}
 					width="31.25rem"
 					height="60%"
-					// header={
-					// 	<>
-					// 		<div className="title">
-					// 			<i className="adminfont-store-review"></i>
-					// 			{__('Reply to Review', 'multivendorx')} -
-					// 			{selectedReview.store_name}
-					// 		</div>
-					// 		<i
-					// 			onClick={() => setSelectedReview(null)}
-					// 			className="icon adminfont-close"
-					// 		></i>
-					// 	</>
-					// }
 					header={{
 						icon: 'store-review',
 						title: `${__('Reply to Review', 'multivendorx')} – ${selectedReview?.store_name}`,
