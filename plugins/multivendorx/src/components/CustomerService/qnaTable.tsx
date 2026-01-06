@@ -565,7 +565,7 @@ const Qna: React.FC = () => {
 				<CommonPopup
 					open={selectedQna}
 					onClose={() => setSelectedQna(null)}
-					width="37.5rem"
+					width="30rem"
 					height="70%"
 					header={{
 						icon: 'question',
@@ -576,24 +576,22 @@ const Qna: React.FC = () => {
 						),
 					}}
 					footer={
-						<>
-							<AdminButton
-								buttons={[
-									{
-										icon: 'close',
-										text: __('Cancel', 'multivendorx'),
-										className: 'red',
-										onClick: setSelectedQna(null),
-									},
-									{
-										icon: 'save',
-										text: __('Save Answer', 'multivendorx'),
-										className: 'purple-bg',
-										onClick: () => handleSaveAnswer,
-									},
-								]}
-							/>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: setSelectedQna(null),
+								},
+								{
+									icon: 'save',
+									text: __('Save Answer', 'multivendorx'),
+									className: 'purple-bg',
+									onClick: () => handleSaveAnswer,
+								},
+							]}
+						/>
 					}
 				>
 					<>

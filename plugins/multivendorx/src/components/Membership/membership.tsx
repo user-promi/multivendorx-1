@@ -30,8 +30,7 @@ const productTypeField = {
 	options: [
 		{ key: 'simple', value: 'simple', label: 'Simple product' },
 		{ key: 'variable', value: 'variable', label: 'Variable Product' },
-		{ key: 'external', value: 'external', label: 'External / Affiliate Product' },
-		{ key: 'gift-card', value: 'gift-card', label: 'Gift Card' },
+		{ key: 'external', value: 'external', label: 'External / Affiliate' },
 		{ key: 'downloadable', value: 'downloadable', label: 'Downloadable Product' },
 	],
 };
@@ -100,12 +99,6 @@ const categoryField = {
 		{ key: 'casual', value: 'casual', label: 'Casual' },
 		{ key: 'clothing', value: 'clothing', label: 'Clothing' },
 		{ key: 'accessories', value: 'accessories', label: 'Accessories' },
-		{ key: 'hoodies', value: 'hoodies', label: 'Hoodies' },
-		{ key: 'tshirts', value: 't-shirts', label: 'T-shirts' },
-		{ key: 'decor', value: 'decor', label: 'Decor' },
-		{ key: 'evening', value: 'evening-dresses', label: 'Evening Dresses' },
-		{ key: 'music', value: 'music', label: 'Music' },
-		{ key: 'office', value: 'work-office', label: 'Work & Office' },
 	],
 };
 const advancedFeaturesField = {
@@ -243,6 +236,7 @@ const Membership = ({ id }: { id: string }) => {
 	const [productLimitsCard, setproductLimitsCard] = useState(false);
 	const [orderManagement, setorderManagement] = useState(false);
 	const [allowedProducts, setallowedProducts] = useState(false);
+	const [productPermissions, setproductPermissions] = useState(false);
 	const [additionalFeatures, setadditionalFeatures] = useState(false);
 	const [featuredProducts, setfeaturedProducts] = useState(false);
 	const [starFill, setstarFill] = useState(false);
@@ -721,6 +715,7 @@ const Membership = ({ id }: { id: string }) => {
 
 
 						<Card title={__('What stores can sell', 'multivendorx')}
+							desc={__('Decide what kind of items stores are allowed to list on your marketplace.', 'multivendorx')}
 							action={
 								<MultiCheckBox
 									wrapperClass="toggle-btn"
@@ -746,7 +741,7 @@ const Membership = ({ id }: { id: string }) => {
 						>
 							{productLimitsCard ? (
 								<FormGroupWrapper>
-									<FormGroup label="Types of products allowed" desc={__('Types of products allowed', 'multivendorx')}>
+									<FormGroup label={__('Types of products allowed', 'multivendorx')} desc={__('Choose the kinds of items stores can sell under this plan. Only selected types will be available when a store adds a new product.', 'multivendorx')}>
 										<MultiCheckBox
 											khali_dabba={true}
 											wrapperClass="checkbox-list-side-by-side"
@@ -786,7 +781,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Categories stores can sell in" className="border-top" desc={__('Types of products allowed', 'multivendorx')}>
+									<FormGroup label={__('Categories stores can sell in', 'multivendorx')} className="border-top" desc={__('Limit where stores can list their products. This helps you control what your marketplace focuses on.')}>
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -823,66 +818,7 @@ const Membership = ({ id }: { id: string }) => {
 											moduleChange={() => { }}
 											modules={[]}
 										/>
-									</FormGroup>
-
-									<FormGroup label="Product permissions" className="border-top" desc={__('Product permissions', 'multivendorx')}>
-										<MultiCheckBox
-											wrapperClass="checkbox-list-side-by-side"
-											descClass="settings-metabox-description"
-											description={field.desc}
-											inputWrapperClass="toggle-checkbox-header"
-											inputInnerWrapperClass="default-checkbox"
-											inputClass={field.class}
-											idPrefix="category"
-											selectDeselect
-											options={field.options}
-											value={normalizeValue(field.key)}
-											onChange={(e: any) => {
-												if (Array.isArray(e)) {
-													handleInputChange(field.key, e);
-													return;
-												}
-
-												if (e?.target) {
-													const val = String(e.target.value);
-													const checked = !!e.target.checked;
-													let current = normalizeValue(field.key);
-
-													current = checked
-														? [...new Set([...current, val])]
-														: current.filter((v) => v !== val);
-
-													handleInputChange(field.key, current);
-												}
-											}}
-											onMultiSelectDeselectChange={() =>
-												handleSelectDeselect(field)
-											}
-											proSetting={false}
-											moduleChange={() => { }}
-											modules={[]}
-										/>
-									</FormGroup>
-
-									
-
-									<FormGroup
-										label="Product categories store can access"
-										htmlFor="product_category_limit"
-										desc={__('Product categories store can access', 'multivendorx')}
-										className="border-top"
-									>
-										<BasicInput
-											name="product_category_limit"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.product_category_limit}
-											onChange={handleChange}
-											postInsideText="max"
-											size="12rem"
-										/>
-									</FormGroup>
-									
+									</FormGroup>									
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">
@@ -890,7 +826,7 @@ const Membership = ({ id }: { id: string }) => {
 								</p>
 							)}
 						</Card>
-						<Card title={__('Product permissions', 'multivendorx')}
+						<Card title={__('What stores are allowed to do with products', 'multivendorx')}
 							action={
 								<MultiCheckBox
 									wrapperClass="toggle-btn"

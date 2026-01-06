@@ -95,12 +95,12 @@ $selected_template = isset( $template['selectedPalette'] ) ? $template['selected
                         <?php
                         // Show email if not hidden.
                         if ( ! empty( $meta_data['email'] ) && ( $meta_data['hideEmail'] ?? 'no' ) === 'no' ) {
-                            echo '<div class="store-email"><i class="adminlib-mail"></i> ' . esc_html( $meta_data['email'] ) . '</div>';
+                            echo '<div class="store-email"><i class="dashicons dashicons-email"></i> ' . esc_html( $meta_data['email'] ) . '</div>';
                         }
 
                         // Show phone if not hidden.
                         if ( ! empty( $meta_data['phone'] ) && ( $meta_data['hidePhone'] ?? 'no' ) === 'no' ) {
-                            echo '<div class="store-phone"> <i class="adminlib-form-phone"></i>' . esc_html( $meta_data['phone'] ) . '</div>';
+                            echo '<div class="store-phone"> <i class="dashicons dashicons-phone"></i>' . esc_html( $meta_data['phone'] ) . '</div>';
                         }
                         ?>
                     </div>
@@ -108,7 +108,7 @@ $selected_template = isset( $template['selectedPalette'] ) ? $template['selected
                     // Show full address.
                     $address = trim( ( $meta_data['address_1'] ?? '' ) . ' ' . ( $meta_data['address_2'] ?? '' ) );
                     if ( ! empty( $address ) ) {
-                        echo '<div class="store-address"> <i class="adminlib-location"></i>' . esc_html( $address ) . '</div>';
+                        echo '<div class="store-address"> <i class="dashicons dashicons-location"></i>' . esc_html( $address ) . '</div>';
                     }
                     ?>
                     <?php if ( ! empty( $description ) ) { ?>

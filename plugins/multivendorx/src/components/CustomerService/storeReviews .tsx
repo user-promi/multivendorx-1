@@ -9,6 +9,10 @@ import {
 	getApiLink,
 	ToggleSetting,
 	MultiCalendarInput,
+	AdminButton,
+	FormGroupWrapper,
+	FormGroup,
+	TextArea,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -577,37 +581,44 @@ const StoreReviews: React.FC = () => {
 					onClose={() => setSelectedReview(null)}
 					width="31.25rem"
 					height="60%"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-store-review"></i>
-								{__('Reply to Review', 'multivendorx')} -
-								{selectedReview.store_name}
-							</div>
-							<i
-								onClick={() => setSelectedReview(null)}
-								className="icon adminfont-close"
-							></i>
-						</>
-					}
+					// header={
+					// 	<>
+					// 		<div className="title">
+					// 			<i className="adminfont-store-review"></i>
+					// 			{__('Reply to Review', 'multivendorx')} -
+					// 			{selectedReview.store_name}
+					// 		</div>
+					// 		<i
+					// 			onClick={() => setSelectedReview(null)}
+					// 			className="icon adminfont-close"
+					// 		></i>
+					// 	</>
+					// }
+					header={{
+						icon: 'store-review',
+						title: `${__('Reply to Review', 'multivendorx')} – ${selectedReview?.store_name}`,
+						description: __(
+							'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+							'multivendorx'
+						),
+					}}
 					footer={
-						<>
-							<button
-								type="button"
-								onClick={() => setSelectedReview(null)}
-								className="admin-btn btn-red"
-							>
-								<i className="adminfont-close"></i>
-								{__('Cancel', 'multivendorx')}
-							</button>
-							<button
-								onClick={handleSaveReply}
-								className="admin-btn btn-purple-bg"
-							>
-								<i className="adminfont-active"></i>
-								{__('Save', 'multivendorx')}
-							</button>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: () => setSelectedReview(null),
+								},
+								{
+									icon: 'save',
+									text: __('Save', 'multivendorx'),
+									className: 'purple-bg',
+									onClick: handleSaveReply,
+								},
+							]}
+						/>
 					}
 				>
 					<>
@@ -662,31 +673,20 @@ const StoreReviews: React.FC = () => {
 								{selectedReview.review_content}
 							</div>
 						</div>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="reply">
-									{__('Respond to customer', 'multivendorx')}
-								</label>
-								<textarea
-									id="reply"
+
+						<FormGroupWrapper>
+							<FormGroup label={__('Respond to customer', 'multivendorx')} htmlFor="reply">
+								<TextArea
+									name="reply"
+									inputClass="textarea-input"
 									value={replyText}
-									onChange={(e) =>
-										setReplyText(e.target.value)
-									}
-									rows={5}
-									className="textarea-input"
+									onChange={(e) => setReplyText(e.target.value)}
+									usePlainText={true}
 								/>
-							</div>
-						</div>
-						<div className="form-group-wrapper">
-							{/* Status Toggle */}
-							<div className="form-group">
-								<label htmlFor="status">
-									{__(
-										'Control if this review appears publicly, stays under moderation, or is excluded from the store page.',
-										'multivendorx'
-									)}
-								</label>
+
+							</FormGroup>
+
+							<FormGroup label={__('Control if this review appears publicly, stays under moderation, or is excluded from the store page.', 'multivendorx')} htmlFor="control">
 								<ToggleSetting
 									wrapperclassName="setting-form-input"
 									descclassName="settings-metabox-description"
@@ -725,8 +725,8 @@ const StoreReviews: React.FC = () => {
 										);
 									}}
 								/>
-							</div>
-						</div>
+							</FormGroup>
+						</FormGroupWrapper>
 					</>
 				</CommonPopup>
 			)}

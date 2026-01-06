@@ -332,7 +332,9 @@ const CustomerQuestions: React.FC = () => {
 					<TableCell title={text}>
 						<div className="question-wrapper">
 							<div className="question">Q: {displayText}</div>
-							<div className="answer">A: {displayAnswer}</div>
+							{displayAnswer && (
+								<div className="answer">A: {displayAnswer}</div>
+							)}
 							<div className="des">
 								By: {row.original.author_name ?? '-'}
 							</div>
@@ -541,7 +543,7 @@ const CustomerQuestions: React.FC = () => {
 				<CommonPopup
 					open={selectedQna}
 					onClose={() => setSelectedQna(null)}
-					width="37.5rem"
+					width="30rem"
 					height="70%"
 					header={{
 						icon: 'question',
