@@ -132,7 +132,6 @@ class Stores extends \WP_REST_Controller {
         try {
             if ( $request->get_param( 'visitorMap' ) ) {
                 $store_id     = (int) $request->get_param( 'id' );
-                $period = absint( $request->get_param( 'period' ) ?: 7 );
                 $cache_key = 'multivendorx_visitor_stats_data_' . $store_id;
 
                 if ( $cached = get_transient( $cache_key ) ) {
@@ -141,18 +140,13 @@ class Stores extends \WP_REST_Controller {
 
                 global $wpdb;
 
-                $start = date( 'Y-m-d H:i:s', strtotime( "-{$period} days" ) );
-                $end   = date( 'Y-m-d 23:59:59' );
-
                 $rows = $wpdb->get_results(
                     $wpdb->prepare(
                         "SELECT countryCode
-                        FROM {$wpdb->prefix}mvx_visitors_stats
+                        FROM `{$wpdb->prefix}" . Utill::TABLES['visitors_stats'] . "`
                         WHERE created BETWEEN %s AND %s
                         AND store_id = %d
                         GROUP BY user_cookie",
-                        $start,
-                        $end,
                         $store_id
                     )
                 );

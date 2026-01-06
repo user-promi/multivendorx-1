@@ -118,13 +118,31 @@ class Commissions extends \WP_REST_Controller {
 
             if ( 'reports' === $format ) {
                 $top_stores = $request->get_param( 'top_stores' );
+                $dashboard = $request->get_param( 'dashboard' );
+                $start_date = $request->get_param( 'start_date' );
+                $end_date   = $request->get_param( 'end_date' );
+                $args = [
+                    'start_date' => $start_date,
+                    'end_date' => $end_date
+                ];
+
+                if ( $dashboard ) {
+                    if (get_transient('multivendorx_report_data_' . $store_id)) {
+                        return get_transient('multivendorx_report_data_' . $store_id);
+                    }
+                    $results = CommissionUtil::get_commission_summary_for_store( $store_id, $dashboard, false, null, $args );
+                    if (!empty($results)) {
+                        set_transient('multivendorx_report_data_' . $store_id, $results, DAY_IN_SECONDS);
+                    }
+                    return $results;
+                }
 
                 if ( $store_id ) {
                     return CommissionUtil::get_commission_summary_for_store( $store_id );
                 }
 
                 if ( $top_stores ) {
-                    return CommissionUtil::get_commission_summary_for_store( null, $top_stores, $top_stores );
+                    return CommissionUtil::get_commission_summary_for_store( null, false, $top_stores, $top_stores );
                 }
 
                 return CommissionUtil::get_commission_summary_for_store();
