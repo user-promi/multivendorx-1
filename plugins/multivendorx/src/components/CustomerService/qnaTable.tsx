@@ -11,6 +11,9 @@ import {
 	ToggleSetting,
 	BasicInput,
 	MultiCalendarInput,
+	AdminButton,
+	FormGroupWrapper,
+	FormGroup,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -220,11 +223,11 @@ const Qna: React.FC = () => {
 				prev.map((q) =>
 					q.id === selectedQna.id
 						? {
-								...q,
-								answer_text: answer,
-								question_visibility:
-									selectedQna.question_visibility || 'public',
-							}
+							...q,
+							answer_text: answer,
+							question_visibility:
+								selectedQna.question_visibility || 'public',
+						}
 						: q
 				)
 			);
@@ -349,10 +352,10 @@ const Qna: React.FC = () => {
 				const rawDate = row.original.question_date;
 				const formattedDate = rawDate
 					? new Intl.DateTimeFormat('en-US', {
-							month: 'short',
-							day: 'numeric',
-							year: 'numeric',
-						}).format(new Date(rawDate))
+						month: 'short',
+						day: 'numeric',
+						year: 'numeric',
+					}).format(new Date(rawDate))
 					: '-';
 				return (
 					<TableCell title={formattedDate}>{formattedDate}</TableCell>
@@ -562,53 +565,38 @@ const Qna: React.FC = () => {
 				<CommonPopup
 					open={selectedQna}
 					onClose={() => setSelectedQna(null)}
-					width="37.5rem"
+					width="30rem"
 					height="70%"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-question"></i>
-								{__('Answer Question', 'multivendorx')}
-							</div>
-							<div className="des">
-								{__(
-									'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
-									'multivendorx'
-								)}
-							</div>
-							<i
-								onClick={() => setSelectedQna(null)}
-								className="icon adminfont-close"
-							></i>
-						</>
-					}
+					header={{
+						icon: 'question',
+						title: __('Answer Question', 'multivendorx'),
+						description: __(
+							'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+							'multivendorx'
+						),
+					}}
 					footer={
-						<>
-							<button
-								type="button"
-								onClick={() => setSelectedQna(null)}
-								className="admin-btn btn-red"
-							>
-								<i className="adminfont-close"></i>
-								{__('Cancel', 'multivendorx')}
-							</button>
-							<button
-								onClick={handleSaveAnswer}
-								disabled={saving}
-								className="admin-btn btn-purple-bg"
-							>
-								<i className="adminfont-active"></i>
-								{__('Save Answer', 'multivendorx')}
-							</button>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: setSelectedQna(null),
+								},
+								{
+									icon: 'save',
+									text: __('Save Answer', 'multivendorx'),
+									className: 'purple-bg',
+									onClick: () => handleSaveAnswer,
+								},
+							]}
+						/>
 					}
 				>
 					<>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="question">
-									{__('Question', 'multivendorx')}
-								</label>
+						<FormGroupWrapper>
+							<FormGroup label={__('Question', 'multivendorx')} htmlFor="question">
 								<BasicInput
 									name="phone"
 									value={qna}
@@ -616,31 +604,16 @@ const Qna: React.FC = () => {
 									descClass="settings-metabox-description"
 									onChange={(e) => setQna(e.target.value)}
 								/>
-							</div>
-						</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="ans">
-									{__('Answer', 'multivendorx')}
-								</label>
+							</FormGroup>
+							<FormGroup label={__('Answer', 'multivendorx')} htmlFor="ans">
 								<TextArea
 									name="answer"
 									inputClass="textarea-input"
 									value={answer}
 									onChange={(e) => setAnswer(e.target.value)}
 								/>
-							</div>
-						</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="visibility">
-									{__(
-										'Decide whether this Q&A is visible to everyone or only to the store team.',
-										'multivendorx'
-									)}
-								</label>
+							</FormGroup>
+							<FormGroup label={__('Decide whether this Q&A is visible to everyone or only to the store team', 'multivendorx')} htmlFor="visibility">
 								<ToggleSetting
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
@@ -667,16 +640,16 @@ const Qna: React.FC = () => {
 										setSelectedQna((prev) =>
 											prev
 												? {
-														...prev,
-														question_visibility:
-															value,
-													}
+													...prev,
+													question_visibility:
+														value,
+												}
 												: prev
 										)
 									}
 								/>
-							</div>
-						</div>
+							</FormGroup>
+						</FormGroupWrapper>
 					</>
 
 					{error && <p className="error-text">{error}</p>}

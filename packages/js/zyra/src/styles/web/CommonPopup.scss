@@ -63,6 +63,9 @@
 .MuiDialog-container {
     .content {
         max-height: 70vh;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
 
         .form-group-wrapper {
             display: flex;
