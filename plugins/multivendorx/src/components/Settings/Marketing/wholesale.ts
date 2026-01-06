@@ -65,7 +65,7 @@ export default {
 		{
 			key: 'wholesale_price_display',
 			type: 'setting-toggle',
-			label: __('Wholesale price display', 'multivendorx'),
+			label: __('How wholesale prices are shown', 'multivendorx'),
 			settingDescription: __(
 				'Control whether wholesale prices are shown alongside retail prices or separately.',
 				'multivendorx'
