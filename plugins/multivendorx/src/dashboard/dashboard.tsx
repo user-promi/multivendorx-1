@@ -11,7 +11,6 @@ import {
 	Pie,
 	Cell,
 	Legend,
-	PieLabelRenderProps,
 } from 'recharts';
 import React, { useState, useEffect } from 'react';
 import '../components/dashboard.scss';
@@ -43,9 +42,9 @@ const themeColors = [
 ];
 
 const BarChartData = [
-	{ name: 'Sales', dataKey: 'orders', color: themeColors[0] },
-	{ name: 'Earnings', dataKey: 'earnings', color: themeColors[1] },
-	{ name: 'Orders', dataKey: 'refunds', color: themeColors[2] },
+	{ name: 'Sales', dataKey: 'total_order_amount', color: themeColors[0] },
+	{ name: 'Earnings', dataKey: 'store_earnings', color: themeColors[1] },
+	{ name: 'Orders', dataKey: 'orders', color: themeColors[2] },
 ];
 
 const customers = [
@@ -79,54 +78,28 @@ const customers = [
 	},
 ];
 
-const RADIAN = Math.PI / 180;
-const COLORS = [themeColors[0], themeColors[1], themeColors[2], themeColors[3]];
+interface DateRange {
+	startDate: Date;
+	endDate: Date;
+}
 
-const renderCustomizedLabel = ({
-	cx,
-	cy,
-	midAngle,
-	innerRadius,
-	outerRadius,
-	percent,
-}: PieLabelRenderProps) => {
-	if (
-		cx == null ||
-		cy == null ||
-		innerRadius == null ||
-		outerRadius == null
-	) {
-		return null;
-	}
-
-	const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-	const x = cx + radius * Math.cos(-midAngle! * RADIAN);
-	const y = cy + radius * Math.sin(-midAngle! * RADIAN);
-
-	return (
-		<text
-			x={x}
-			y={y}
-			fill="#fff"
-			textAnchor={x > cx ? 'start' : 'end'}
-			dominantBaseline="central"
-			fontSize={12}
-			fontWeight={600}
-		>
-			{`${((percent ?? 0) * 100).toFixed(0)}%`}
-		</text>
-	);
-};
 const Dashboard: React.FC = () => {
 	const [review, setReview] = useState<any[]>([]);
 	const [pendingRefund, setPendingRefund] = useState<any[]>([]);
 	const [announcement, setAnnouncement] = useState<any[]>([]);
 	const [topProducts, setTopProducts] = useState([]);
+	const [revenueData, setRevenueData] = useState([]);
 	const [recentOrder, setRecentOrders] = useState<any[]>([]);
 	const [transaction, setTransaction] = useState<any[]>([]);
 	const [store, setStore] = useState<any[]>([]);
 	const [totalOrder, setTotalOrder] = useState<any>([]);
 	const [lastWithdraws, setLastWithdraws] = useState<any>([]);
+	const [dateRange, setDateRange] = useState<DateRange>({
+		startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+		endDate: new Date(),
+	});
+
+
 	const { modules } = useModules();
 
 	useEffect(() => {
@@ -238,7 +211,6 @@ const Dashboard: React.FC = () => {
 						popularity,
 					};
 				});
-				console.log('pro', processed);
 				setTopProducts(processed);
 			})
 			.catch((error) => {
@@ -368,77 +340,6 @@ const Dashboard: React.FC = () => {
 		},
 	];
 
-	const columns: ColumnDef<StoreRow>[] = [
-		{
-			id: 'order_id',
-			header: __('Order', 'multivendorx'),
-			cell: ({ row }) => {
-				const id = row.original.id;
-
-				const orderUrl = `/dashboard/sales/orders/#view/${id}`;
-
-				return (
-					<TableCell>
-						<a
-							href={orderUrl}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							#{id}
-						</a>
-					</TableCell>
-				);
-			},
-		},
-		{
-			header: __('Amount', 'multivendorx'),
-			cell: ({ row }) => <TableCell>{row.original.amount}</TableCell>,
-		},
-		{
-			header: __('Commission', 'multivendorx'),
-			cell: ({ row }) => (
-				<TableCell>{row.original.commission_amount}</TableCell>
-			),
-		},
-		{
-			header: __('Date', 'multivendorx'),
-			cell: ({ row }) => <TableCell>{row.original.date}</TableCell>,
-		},
-		{
-			header: __('Status', 'multivendorx'),
-			cell: ({ row }) => {
-				const rawStatus = row.original.status || '';
-				const status = rawStatus.toLowerCase();
-
-				const statusColorMap: Record<string, string> = {
-					completed: 'green',
-					processing: 'blue',
-					refunded: 'red',
-					'on-hold': 'yellow',
-					cancelled: 'gray',
-					pending: 'orange',
-					failed: 'dark-red',
-					'refund-requested': 'purple',
-				};
-
-				const badgeClass = statusColorMap[status] || 'gray';
-
-				const displayStatus =
-					status
-						?.replace(/-/g, ' ')
-						?.replace(/\b\w/g, (c) => c.toUpperCase()) || '-';
-
-				return (
-					<TableCell title={displayStatus}>
-						<span className={`admin-badge ${badgeClass}`}>
-							{displayStatus}
-						</span>
-					</TableCell>
-				);
-			},
-		},
-	];
-
 	const formatWcShortDate = (dateString: any) => {
 		const date = new Date(dateString);
 		return date.toLocaleDateString('en-GB', {
@@ -477,66 +378,22 @@ const Dashboard: React.FC = () => {
 			return 'Good Night';
 		}
 	};
-	const revenueData = [
-		{
-			month: 'Jan',
-			orders: 4000,
-			earnings: 2400,
-			refunds: 200,
-			conversion: 2.4,
-		},
-		{
-			month: 'Feb',
-			orders: 3000,
-			earnings: 1398,
-			refunds: 40,
-			conversion: 2.1,
-		},
-		{
-			month: 'Mar',
-			orders: 5000,
-			earnings: 2800,
-			refunds: 280,
-			conversion: 3.2,
-		},
-		{
-			month: 'Apr',
-			orders: 4780,
-			earnings: 3908,
-			refunds: 1000,
-			conversion: 2.6,
-		},
-		{
-			month: 'May',
-			orders: 5890,
-			earnings: 4800,
-			refunds: 300,
-			conversion: 3.4,
-		},
-		{
-			month: 'Jun',
-			orders: 4390,
-			earnings: 3800,
-			refunds: 210,
-			conversion: 2.9,
-		},
-		{
-			month: 'Jul',
-			orders: 6490,
-			earnings: 5200,
-			refunds: 600,
-			conversion: 3.6,
-		},
-	];
 
-	// map data
-	const visitorData = {
-		IN: 20,
-		DE: 20,
-		GB: 20,
-		CZ: 20,
-		US: 20,
-	};
+	useEffect(() => {
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, 'commission'),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: { 
+				format: 'reports', 
+				store_id: appLocalizer.store_id, 
+				dashboard: true,
+				start_date: dateRange.startDate,
+				end_date: dateRange.endDate,
+			},
+		})
+			.then((response) => {
+				const data = response.data;
 	const chartData = [
 		{
 			name: 'Commission Earned',
@@ -554,13 +411,6 @@ const Dashboard: React.FC = () => {
 			color: themeColors[2],
 		},
 	];
-	const countrySales = {
-		IN: 12000,
-		US: 32000,
-		GB: 18000,
-		DE: 9000,
-		CZ: 4000,
-	};
 
 	return (
 		<>
@@ -581,7 +431,16 @@ const Dashboard: React.FC = () => {
 				</div>
 
 				<div className="buttons-wrapper">
-					<MultiCalendarInput wrapperClass="" inputClass="" />
+					<MultiCalendarInput 
+						wrapperClass="" 
+						inputClass="" 
+						onChange={(range: DateRange) => {
+							setDateRange({
+								startDate: range.startDate,
+								endDate: range.endDate,
+							});
+						}}
+					/>
 				</div>
 			</div>
 
@@ -632,59 +491,66 @@ const Dashboard: React.FC = () => {
 				</Column>
 				<Column grid={8}>
 					<Card
-						title={__('Sales Overview (P)', 'multivendorx')}
+						title={__('Sales Overview', 'multivendorx')}
 						iconName="adminfont-external icon"
 					>
-						<ResponsiveContainer width="100%" height={250}>
-							<BarChart
-								data={revenueData}
-								barSize={12}
-								barCategoryGap="20%"
-							>
-								<CartesianGrid stroke="#f0f0f0" vertical={false} />
-								<XAxis dataKey="month" axisLine={false} tickLine={false} />
-								<YAxis axisLine={false} tickLine={false} />
+						{revenueData && revenueData.length > 0 ? (
+							<ResponsiveContainer width="100%" height={250}>
+								<BarChart
+									data={revenueData}
+									barSize={12}
+									barCategoryGap="20%"
+								>
+									<CartesianGrid stroke="#f0f0f0" vertical={false} />
+									<XAxis dataKey="month" axisLine={false} tickLine={false} />
+									<YAxis axisLine={false} tickLine={false} />
 
-								<Tooltip
-									contentStyle={{
-										background: '#fff',
-										border: 'none',
-										borderRadius: '3px',
-										boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
-									}}
-								/>
-
-								<Legend />
-
-								{BarChartData.map((entry) => (
-									<Bar
-										key={entry.dataKey}
-										dataKey={entry.dataKey}
-										fill={entry.color}
-										radius={[6, 6, 0, 0]}
-										name={__(entry.name, 'multivendorx')}
+									<Tooltip
+										contentStyle={{
+											background: '#fff',
+											border: 'none',
+											borderRadius: '3px',
+											boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+										}}
 									/>
-								))}
 
-								<Line
-									type="monotone"
-									dataKey="conversion"
-									stroke="#ffa726"
-									strokeWidth={2}
-									dot={{ r: 3 }}
-									name={__('Conversion %', 'multivendorx')}
-									yAxisId={1}
-								/>
+									<Legend />
 
-								<YAxis
-									yAxisId={1}
-									orientation="right"
-									axisLine={false}
-									tickLine={false}
-									tickFormatter={(v) => `${v}%`}
-								/>
-							</BarChart>
-						</ResponsiveContainer>
+									{BarChartData.map((entry) => (
+										<Bar
+											key={entry.dataKey}
+											dataKey={entry.dataKey}
+											fill={entry.color}
+											radius={[6, 6, 0, 0]}
+											name={__(entry.name, 'multivendorx')}
+										/>
+									))}
+
+									{/* <Line
+										type="monotone"
+										dataKey="conversion"
+										stroke="#ffa726"
+										strokeWidth={2}
+										dot={{ r: 3 }}
+										name={__('Conversion %', 'multivendorx')}
+										yAxisId={1}
+									/> */}
+
+									<YAxis
+										yAxisId={1}
+										orientation="right"
+										axisLine={false}
+										tickLine={false}
+										tickFormatter={(v) => `${v}%`}
+									/>
+								</BarChart>
+							</ResponsiveContainer>
+						) : (
+							<div className="no-data">
+								{__('No sales found.', 'multivendorx')}
+							</div>
+						)}
+
 					</Card>
 				</Column>
 

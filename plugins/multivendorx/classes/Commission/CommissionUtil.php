@@ -22,6 +22,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class CommissionUtil {
 
+
     /**
      * Get a single commission row from databse by using commission id.
      * Return stdClass object represent a single row.
@@ -168,7 +169,7 @@ class CommissionUtil {
      *
      * @return  array  Array of commission summary.
      */
-    public static function get_commission_summary_for_store( $store_id = null, $top_stores = false, $limit = 3 ) {
+    public static function get_commission_summary_for_store( $store_id = null, $dashboard = false, $top_stores = false, $limit = 3, $args = [] ) {
         global $wpdb;
 
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];
@@ -221,6 +222,38 @@ class CommissionUtil {
                 },
                 $results
             );
+        }
+
+        if ( $dashboard ) {
+            $query = "
+                SELECT
+                    DATE_FORMAT(created_at, '%b') AS month,
+                    ROUND(SUM(total_order_value), 2) AS total_order_amount,
+                    ROUND(SUM(store_earning), 2) AS store_earnings,
+                    COUNT(DISTINCT order_id) AS orders
+                FROM {$table_name}
+                WHERE store_id = %d
+            ";
+
+            $params = [ $store_id ];
+
+            if ( ! empty( $args['start_date'] ) && ! empty( $args['end_date'] ) ) {
+                $query   .= " AND DATE(created_at) BETWEEN %s AND %s";
+                $params[] = $args['start_date'];
+                $params[] = $args['end_date'];
+            }
+
+            $query .= "
+                GROUP BY YEAR(created_at), MONTH(created_at)
+                ORDER BY created_at ASC
+            ";
+
+            $results = $wpdb->get_results(
+                $wpdb->prepare( $query, $params ),
+                ARRAY_A
+            );
+
+            return $results ?? [];
         }
 
         // Summary for a specific store.

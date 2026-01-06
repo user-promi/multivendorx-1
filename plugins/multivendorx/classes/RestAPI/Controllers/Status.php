@@ -131,7 +131,7 @@ class Status extends \WP_REST_Controller {
                         'mvx_clear_all_transients_included_vendor_id',
                         [
                             'multivendorx_visitor_stats_data_',
-                            'mvx_stats_report_data_',
+                            'multivendorx_report_data_',
                         ]
                     );
 
