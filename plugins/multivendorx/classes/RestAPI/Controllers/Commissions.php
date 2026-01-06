@@ -160,10 +160,7 @@ class Commissions extends \WP_REST_Controller {
             $order    = sanitize_text_field( $request->get_param( 'order' ) );
 
             // Prepare filter.
-            $filter = array(
-                'perpage' => $limit,
-                'page'    => $page,
-            );
+            $filter = array();
 
             if ( ! empty( $store_id ) ) {
                 $filter['store_id'] = intval( $store_id );
