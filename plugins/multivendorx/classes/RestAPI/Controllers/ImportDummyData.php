@@ -292,9 +292,7 @@ class ImportDummyData extends \WP_REST_Controller {
                     continue;
                 }
 
-                // ---------------------------
                 // CREATE PRODUCT
-                // ---------------------------
                 $product_id = wp_insert_post([
                     'post_title'   => sanitize_text_field( (string) $product->name ),
                     'post_name'    => sanitize_title( (string) $product->slug ),
@@ -313,14 +311,10 @@ class ImportDummyData extends \WP_REST_Controller {
     
                 do_action( 'multivendorx_after_product_import', $product_id, $store_id );
     
-                // ---------------------------
                 // PRODUCT TYPE
-                // ---------------------------
                 wp_set_object_terms( $product_id, $product_type, 'product_type' );
     
-                // ---------------------------
                 // COMMON META
-                // ---------------------------
                 update_post_meta( $product_id, '_sku', (string) $product->sku );
                 update_post_meta( $product_id, '_visibility', 'visible' );
     
@@ -334,18 +328,14 @@ class ImportDummyData extends \WP_REST_Controller {
                     update_post_meta( $product_id, '_price', (string) $product->sale_price );
                 }
     
-                // ---------------------------
                 // STOCK
-                // ---------------------------
                 if ( isset( $product->stock ) ) {
                     update_post_meta( $product_id, '_manage_stock', (string) $product->stock->manage === 'true' ? 'yes' : 'no' );
                     update_post_meta( $product_id, '_stock', (int) $product->stock->quantity );
                     update_post_meta( $product_id, '_stock_status', (string) $product->stock->status );
                 }
     
-                // ---------------------------
                 // CATEGORIES
-                // ---------------------------
                 if ( isset( $product->categories->category ) ) {
                     $cats = [];
                     foreach ( $product->categories->category as $cat ) {
@@ -354,9 +344,7 @@ class ImportDummyData extends \WP_REST_Controller {
                     wp_set_object_terms( $product_id, $cats, 'product_cat' );
                 }
     
-                // ---------------------------
                 // TAGS
-                // ---------------------------
                 if ( isset( $product->tags->tag ) ) {
                     $tags = [];
                     foreach ( $product->tags->tag as $tag ) {
@@ -365,18 +353,14 @@ class ImportDummyData extends \WP_REST_Controller {
                     wp_set_object_terms( $product_id, $tags, 'product_tag' );
                 }
     
-                // ---------------------------
                 // SUBSCRIPTIONS
-                // ---------------------------
                 if ( in_array( $product_type, [ 'subscription', 'variable-subscription' ], true ) ) {
                     update_post_meta( $product_id, '_subscription_price', (string) $product->price );
                     update_post_meta( $product_id, '_subscription_period', (string) $product->period ?: 'month' );
                     update_post_meta( $product_id, '_subscription_interval', (string) $product->interval ?: 1 );
                 }
-    
-                // ---------------------------
+
                 // VARIABLE PRODUCTS
-                // ---------------------------
                 if ( isset( $product->variations->variation ) ) {
     
                     wp_set_object_terms( $product_id, 'variable', 'product_type' );
