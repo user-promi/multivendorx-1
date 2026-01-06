@@ -32,8 +32,10 @@ $login_url     = add_query_arg( 'redirect_to', $current_url, $myaccount_url );
     <div class="header">
         <h3>Questions about this product</h3>
         <div class="qna-search">
-            <input type="text" id="qna-search" placeholder="Search questions...">
-            <button id="qna-direct-submit" style="display:none;">Ask this question</button>
+            <p class="form-row form-row-wide">
+                 <input type="text" id="qna-search" class="input-text" placeholder="Search questions...">
+            </p>
+            <button id="qna-direct-submit" class="button alt" style="display:none;">Ask this question</button>
         </div>
     </div>
 

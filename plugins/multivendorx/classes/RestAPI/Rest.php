@@ -7,6 +7,7 @@
 
 namespace MultiVendorX\RestAPI;
 
+use MultiVendorX\RestAPI\Controllers\ImportDummyData;
 use MultiVendorX\RestAPI\Controllers\Settings;
 use MultiVendorX\RestAPI\Controllers\Dashboard;
 use MultiVendorX\RestAPI\Controllers\Stores;
@@ -627,6 +628,7 @@ class Rest {
             'tour'          => new Tour(),
             'logs'          => new Logs(),
             'ai_assistant'  => new AI(),
+            'import_dummy_data' => new ImportDummyData(),
         );
     }
 
