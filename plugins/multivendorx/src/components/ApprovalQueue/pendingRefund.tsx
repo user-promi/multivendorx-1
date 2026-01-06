@@ -164,7 +164,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 
 					//Extract refund reason
 					const reasonMeta = metaData.find(
-						(meta: any) => meta.key === '_customer_refund_reason'
+						(meta: any) => meta.key === 'multivendorx_customer_refund_reason'
 					);
 					const refundReason = reasonMeta ? reasonMeta.value : '-';
 

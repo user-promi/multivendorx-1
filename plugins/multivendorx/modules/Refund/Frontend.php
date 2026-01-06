@@ -111,7 +111,7 @@ class Frontend {
                         echo '<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                             <label class="refund_reason_option" for="refund_reason_option-' . esc_attr( $index ) . '">
                                 <input type="radio" class="woocommerce-Input input-radio" name="refund_reason_option" id="refund_reason_option-' . esc_attr( $index ) . '" value="' . esc_attr( $index ) . '" />
-                                ' . esc_html( $reason['value'] ) . '
+                                ' . esc_html( $reason['label'] ) . '
                             </label></p>';
                     }
                     // Add others reason.
@@ -291,7 +291,7 @@ class Frontend {
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
         $refund_reason         = ( 'others' === $reason_option )
             ? $refund_reason_other
-            : ( $refund_reason_options[ $reason_option ]['value'] ?? '' );
+            : ( $refund_reason_options[ $reason_option ]['label'] ?? '' );
 
         $uploaded_image_urls = array();
         $attach_ids          = array();
@@ -431,6 +431,6 @@ class Frontend {
             );
         }
 
-        wc_add_notice( __( 'Refund request successfully placed.', 'multivendorx' ) );
+        wc_add_notice( __( 'Refund request successfully submitted.', 'multivendorx' ) );
     }
 }

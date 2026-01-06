@@ -26,29 +26,53 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 	// When any item total changes, recalculate refundAmount
 	const handleItemChange = (id, field, value) => {
 		setRefundItems((prev) => {
+			const item = orderData.line_items.find((i) => i.id === id);
+			if (!item) return prev;
+	
+			const maxQty = Number(item.quantity);
+			const unitPrice = Number(item.subtotal) / Number(item.quantity);
+			const maxTotal = Number(item.subtotal);
+	
+			let quantity = prev[id]?.quantity ?? 0;
+			let total = prev[id]?.total ?? 0;
+			let tax = prev[id]?.tax ?? 0;
+	
+			if (field === 'quantity') {
+				quantity = Math.min(Math.max(value, 0), maxQty);
+				total = Number((quantity * unitPrice).toFixed(2));
+			}
+	
+			if (field === 'total') {
+				total = Math.min(Math.max(value, 0), maxTotal);
+				quantity = Math.round(total / unitPrice);
+			}
+	
+			if (field === 'tax') {
+				tax = Math.max(value, 0);
+			}
+	
 			const updated = {
 				...prev,
 				[id]: {
-					...prev[id],
-					[field]: value,
+					quantity,
+					total,
+					tax,
 				},
 			};
-
+	
 			const refundAmount = Object.values(updated).reduce((sum, item) => {
-				const itemTotal = item.total ? Number(item.total) : 0;
-				const itemTax = item.tax ? Number(item.tax) : 0;
-				return sum + (itemTotal + itemTax);
+				return sum + Number(item.total || 0) + Number(item.tax || 0);
 			}, 0);
-
+	
 			setRefundDetails((prevDetails) => ({
 				...prevDetails,
 				refundAmount,
 			}));
-
+	
 			return updated;
 		});
 	};
-
+	
 	const handleRefundSubmit = () => {
 		const payload = {
 			orderId: orderId,
