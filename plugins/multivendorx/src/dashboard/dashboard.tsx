@@ -22,13 +22,13 @@ import { __ } from '@wordpress/i18n';
 import { formatCurrency } from '@/services/commonFunction';
 
 const activities = [
-	{ icon: 'adminlib-cart', text: 'New order #10023 by Alex Doe.' },
-	{ icon: 'adminlib-star', text: 'Inventory updated: "Coffee Beans"' },
+	{ icon: 'adminfont-cart', text: 'New order #10023 by Alex Doe.' },
+	{ icon: 'adminfont-star', text: 'Inventory updated: "Coffee Beans"' },
 	{
-		icon: 'adminlib-global-community',
+		icon: 'adminfont-global-community',
 		text: 'Customer "davidchen" updated account.',
 	},
-	{ icon: 'adminlib-cart', text: 'New product "Wireless Headset"' },
+	{ icon: 'adminfont-cart', text: 'New product "Wireless Headset"' },
 ];
 
 const getCSSVar = (name) =>
@@ -53,28 +53,28 @@ const customers = [
 		name: 'David Chen',
 		orders: 7,
 		total: '$1250',
-		icon: 'adminlib-person',
+		icon: 'adminfont-person',
 	},
 	{
 		id: 2,
 		name: 'Sophia Martinez',
 		orders: 12,
 		total: '$2320',
-		icon: 'adminlib-person',
+		icon: 'adminfont-person',
 	},
 	{
 		id: 3,
 		name: 'Ethan Johnson',
 		orders: 4,
 		total: '$890',
-		icon: 'adminlib-person',
+		icon: 'adminfont-person',
 	},
 	{
 		id: 4,
 		name: 'Liam Patel',
 		orders: 9,
 		total: '$1560',
-		icon: 'adminlib-person',
+		icon: 'adminfont-person',
 	},
 ];
 
@@ -342,25 +342,25 @@ const Dashboard: React.FC = () => {
 
 	const analyticsData = [
 		{
-			icon: 'adminlib-dollar',
+			icon: 'adminfont-dollar',
 			number: formatCurrency(store?.commission?.total_order_amount || 0),
 			text: 'Total Revenue',
 			color: 'primary',
 		},
 		{
-			icon: 'adminlib-order',
+			icon: 'adminfont-order',
 			number: totalOrder,
 			text: 'Total Orders',
 			color: 'secondary',
 		},
 		{
-			icon: 'adminlib-store-seo',
+			icon: 'adminfont-store-seo',
 			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Store Views',
 			color: 'accent',
 		},
 		{
-			icon: 'adminlib-commission',
+			icon: 'adminfont-commission',
 			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Commission Earned',
 			color: 'support',
@@ -632,7 +632,7 @@ const Dashboard: React.FC = () => {
 				<Column grid={8}>
 					<Card
 						title={__('Sales Overview (P)', 'multivendorx')}
-						iconName="adminlib-external icon"
+						iconName="adminfont-external icon"
 					>
 						<ResponsiveContainer width="100%" height={250}>
 							<BarChart
@@ -735,12 +735,11 @@ const Dashboard: React.FC = () => {
 							// 				'/dashboard/wallet/transactions/';
 							// 		}}
 							// 	>
-							// 		<i className="adminlib-preview"></i>
+							// 		<i className="adminfont-preview"></i>
 							// 		{__('View transaction history', 'multivendorx')}
 							// 	</div>
 							// </div>
 							<AdminButton
-								wrapperClass="right"
 								buttons={{
 									icon: 'preview',
 									text: __('View transaction history', 'multivendorx'),
@@ -755,7 +754,7 @@ const Dashboard: React.FC = () => {
 				<Column>
 					<Card
 						title={__('Recent Orders', 'multivendorx')}
-						iconName="adminlib-external icon"
+						iconName="adminfont-external icon"
 					>
 						<div className="table-wrapper">
 							{recentOrder && recentOrder.length > 0 ? (
@@ -818,7 +817,7 @@ const Dashboard: React.FC = () => {
 				<Column grid={6}>
 					<Card
 						title={__('Best-Selling Products', 'multivendorx')}
-						iconName="adminlib-external icon"
+						iconName="adminfont-external icon"
 					>
 						<div className="table-wrapper top-products">
 							{topProducts && topProducts.length > 0 ? (
@@ -876,7 +875,7 @@ const Dashboard: React.FC = () => {
 				<Column grid={6}>
 					<Card
 						title={__('Commission Overview', 'multivendorx')}
-						iconName="adminlib-external icon"
+						iconName="adminfont-external icon"
 						onIconClick={() => {
 							window.location.href = '/dashboard/reports/overview/';
 						}}
@@ -929,7 +928,7 @@ const Dashboard: React.FC = () => {
 					<Column grid={4}>
 						<Card
 							title={__('Admin Announcements', 'multivendorx')}
-							iconName="adminlib-external icon"
+							iconName="adminfont-external icon"
 						>
 							<div className="notification-wrapper">
 								{announcement && announcement.length > 0 ? (
@@ -938,7 +937,7 @@ const Dashboard: React.FC = () => {
 											<li key={item.id}>
 												<div className="icon-wrapper">
 													<i
-														className={`adminlib-form-paypal-email admin-badge admin-color${index + 2}`}
+														className={`adminfont-form-paypal-email admin-badge admin-color${index + 2}`}
 													/>
 												</div>
 
@@ -971,7 +970,7 @@ const Dashboard: React.FC = () => {
 					<Column grid={4}>
 						<Card
 							title={__('Pending Refunds', 'multivendorx')}
-							iconName="adminlib-external icon"
+							iconName="adminfont-external icon"
 							onIconClick={() => {
 								window.location.href =
 									'/dashboard/sales/orders/#refund-requested';
@@ -1062,7 +1061,7 @@ const Dashboard: React.FC = () => {
 					<Column grid={8}>
 						<Card
 							title={__('Latest Reviews', 'multivendorx')}
-							iconName="adminlib-external icon"
+							iconName="adminfont-external icon"
 							onIconClick={() => {
 								window.location.href =
 									'/dashboard/store-support/store-review/';
@@ -1078,7 +1077,7 @@ const Dashboard: React.FC = () => {
 											<div className="details">
 												<div className="title">
 													<div className="avatar">
-														<i className="adminlib-person" />
+														<i className="adminfont-person" />
 													</div>
 													{reviewItem.review_title}
 												</div>
@@ -1087,7 +1086,7 @@ const Dashboard: React.FC = () => {
 													{[...Array(5)].map((_, index) => (
 														<i
 															key={index}
-															className={`star-icon adminlib-star ${index <
+															className={`star-icon adminfont-star ${index <
 																Math.round(
 																	reviewItem.overall_rating
 																)

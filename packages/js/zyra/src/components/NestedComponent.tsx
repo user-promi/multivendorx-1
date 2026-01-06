@@ -490,8 +490,8 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                                     <i
                                         className={
                                             opt.check
-                                                ? 'check adminlib-icon-yes'
-                                                : 'close adminlib-cross'
+                                                ? 'check adminfont-icon-yes'
+                                                : 'close adminfont-cross'
                                         }
                                     ></i>
                                     { opt.label ?? opt.value }
@@ -518,7 +518,7 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                                     className="admin-btn btn-purple"
                                 >
                                     Set Up{ ' ' }
-                                    <i className="adminlib-arrow-right"></i>{ ' ' }
+                                    <i className="adminfont-arrow-right"></i>{ ' ' }
                                 </a>
                             ) }
                         </div>
@@ -554,7 +554,7 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                                     onClick={ addRow }
                                     disabled={ ! isLastRowComplete() }
                                 >
-                                    <i className="adminlib-plus"></i>{ ' ' }
+                                    <i className="adminfont-plus"></i>{ ' ' }
                                     { addButtonLabel }
                                 </button>
                             ) }
@@ -566,7 +566,7 @@ const NestedComponent: React.FC< NestedComponentProps > = ( {
                                     className="admin-btn btn-red"
                                     onClick={ () => removeRow( rowIndex ) }
                                 >
-                                    <i className="adminlib-delete"></i>{ ' ' }
+                                    <i className="adminfont-delete"></i>{ ' ' }
                                     { deleteButtonLabel }
                                 </button>
                             ) }

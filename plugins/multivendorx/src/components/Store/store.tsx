@@ -236,7 +236,7 @@ const Store = () => {
 			{!isAddStore && !iseditStore && (
 				<>
 					<AdminBreadcrumbs
-						activeTabIcon="adminlib-storefront"
+						activeTabIcon="adminfont-storefront"
 						tabTitle="Stores"
 						description={
 							'Manage marketplace stores with ease. Review, edit, or add new stores anytime.'
@@ -250,7 +250,7 @@ const Store = () => {
 									setaddStore(true);
 								}}
 							>
-								<i className="adminlib-plus"></i>
+								<i className="adminfont-plus"></i>
 								Add Store
 							</div>,
 						]}
@@ -263,7 +263,7 @@ const Store = () => {
 							header={
 								<>
 									<div className="title">
-										<i className="adminlib-storefront"></i>
+										<i className="adminfont-storefront"></i>
 										{__('Add Store', 'multivendorx')}
 									</div>
 									<div className="des">
@@ -278,7 +278,7 @@ const Store = () => {
 											setImagePreview('');
 											setaddStore(false);
 										}}
-										className="icon adminlib-close"
+										className="icon adminfont-close"
 									></i>
 								</>
 							}

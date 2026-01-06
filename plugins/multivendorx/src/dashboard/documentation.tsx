@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { CommonPopup, getApiLink } from 'zyra';
+import { AdminButton, Card, CommonPopup, getApiLink } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 type DocumentItem = {
@@ -101,54 +101,52 @@ const Documentation: React.FC = () => {
 						{__('Documentation', 'multivendorx')}
 					</div>
 					<div className="des">
-						{__('Everything you need to know about store operations', 'multivendorx' )}
+						{__('Everything you need to know about store operations', 'multivendorx')}
 					</div>
 				</div>
 			</div>
 
-			<div className="card-content">
-				<div className="card-body">
-					<div className="buttons-wrapper">
-						<div className="search-field">
-							<div className="search-section">
-								<input
-									type="text"
-									placeholder={__(
-										'Search documents...',
-										'multivendorx'
-									)}
-									value={searchText}
-									onChange={(e) =>
-										setSearchText(e.target.value)
-									}
-									className="basic-input"
-								/>
-								<i className="adminlib-search"></i>
-							</div>
+			<Card>
+				<div className="buttons-wrapper">
+					<div className="search-field">
+						<div className="search-section">
+							<input
+								type="text"
+								placeholder={__(
+									'Search documents...',
+									'multivendorx'
+								)}
+								value={searchText}
+								onChange={(e) =>
+									setSearchText(e.target.value)
+								}
+								className="basic-input"
+							/>
+							<i className="adminfont-search"></i>
 						</div>
 					</div>
-
-					<div className="documentation-wrapper">
-						{filteredDocuments.length === 0 && (
-							<div className="permission-wrapper">
-								<i className="adminlib-info red"></i>
-								<div className="title">
-									{__('No documents found.', 'multivendorx')}
-								</div>
+				</div>
+				<div className="documentation-wrapper">
+					{filteredDocuments.length === 0 && (
+						<div className="permission-wrapper">
+							<i className="adminfont-info red"></i>
+							<div className="title">
+								{__('No documents found.', 'multivendorx')}
 							</div>
-						)}
+						</div>
+					)}
 
-						{filteredDocuments.map((doc) => (
-							<div key={doc.id} className="document">
-								<div className="document-icon">
-									<i className="adminlib-contact-form"></i>
-								</div>
-								<div className="document-content">
-									<div className="title">{doc.title}</div>
-									<div className="des">
-										{truncateText(doc.content || '', 10)}
-										{(doc.content || '').split(' ').length >
-											10 && (
+					{filteredDocuments.map((doc) => (
+						<div key={doc.id} className="document">
+							<div className="document-icon">
+								<i className="adminfont-contact-form"></i>
+							</div>
+							<div className="document-content">
+								<div className="title">{doc.title}</div>
+								<div className="des">
+									{truncateText(doc.content || '', 10)}
+									{(doc.content || '').split(' ').length >
+										10 && (
 											<a
 												className="read-more"
 												onClick={() =>
@@ -161,61 +159,46 @@ const Documentation: React.FC = () => {
 												)}
 											</a>
 										)}
-									</div>
 								</div>
 							</div>
-						))}
-					</div>
+						</div>
+					))}
 				</div>
-			</div>
+			</Card>
 
 			{activeDocument && (
-				<>
-					<CommonPopup
-						open={popupOpen}
-						onClose={() => setPopupOpen(false)}
-						width="31.25rem"
-						header={
-							<>
-								<div className="title">
-									<i className="adminlib-contact-form"></i>
-									{activeDocument.title}
-								</div>
-								<i
-									className="icon adminlib-close"
-									onClick={() => setPopupOpen(false)}
-								></i>
-							</>
-						}
-						footer={
-							<div className="footer-buttons">
-								<div className="buttons-wrapper">
-									<div
-										className="admin-btn btn-red"
-										onClick={() => setPopupOpen(false)}
-									>
-										<i className="adminlib-close"></i>
-										{__('Close', 'multivendorx')}
-									</div>
-									<div
-										className="admin-btn btn-purple"
-										onClick={() =>
-											handlePrint(activeDocument)
-										}
-									>
-										<i className="adminlib-import"></i>
-										{__('Print', 'multivendorx')}
-									</div>
-								</div>
-							</div>
-						}
-					>
-						<div className="document-popup-wrapper">
-								<div className="heading">{activeDocument.title}</div>
-								<p className="des">{activeDocument.content}</p>
-						</div>
-					</CommonPopup>
-				</>
+				<CommonPopup
+					open={popupOpen}
+					onClose={() => setPopupOpen(false)}
+					width="31.25rem"
+					header={{
+						icon: 'contact-form',
+						title: activeDocument.title,
+					}}
+					footer={
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Close', 'multivendorx'),
+									className: 'red',
+									onClick: () => setPopupOpen(false),
+								},
+								{
+									icon: 'import',
+									text: __('Print', 'multivendorx'),
+									className: 'purple',
+									onClick: () => handlePrint(activeDocument),
+								},
+							]}
+						/>
+					}
+				>
+					<div className="document-popup-wrapper">
+						<div className="heading">{activeDocument.title}</div>
+						<p className="des">{activeDocument.content}</p>
+					</div>
+				</CommonPopup>
 			)}
 		</>
 	);

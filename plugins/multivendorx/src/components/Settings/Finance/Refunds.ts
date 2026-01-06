@@ -8,7 +8,7 @@ export default {
 		'Control refund rules, eligibility stages, and valid claim periods.',
 		'multivendorx'
 	),
-	icon: 'adminlib-marketplace-refund',
+	icon: 'adminfont-marketplace-refund',
 	submitUrl: 'settings',
 	modal: [
 		{
@@ -87,55 +87,35 @@ export default {
 				],
 			},
 			modal: [
-				// {
-				// 	id: 'damaged-or-defective-product',
-				// 	label: 'Damaged or defective product',
-				// 	required: true,
-				// 	isCustom: true,
-				// },
-				// {
-				// 	id: 'wrong-item',
-				// 	label: 'Wrong item delivered',
-				// 	required: true,
-				// 	isCustom: true,
-				// },
-				// {
-				// 	id: 'product-not-as-described',
-				// 	label: 'Product not as described',
-				// 	required: true,
-				// 	isCustom: true,
-				// },
-				// {
-				// 	id: 'late-delivery',
-				// 	label: 'Late delivery',
-				// 	isCustom: true,
-				// },
-				// {
-				// 	id: 'changed-mind',
-				// 	label: 'Changed mind',
-				// 	isCustom: true,
-				// },
+				{
+					id: 'damaged-or-defective-product',
+					label: 'Damaged or defective product',
+					required: true,
+					isCustom: true,
+				},
+				{
+					id: 'wrong-item',
+					label: 'Wrong item delivered',
+					required: true,
+					isCustom: true,
+				},
+				{
+					id: 'product-not-as-described',
+					label: 'Product not as described',
+					required: true,
+					isCustom: true,
+				},
+				{
+					id: 'late-delivery',
+					label: 'Late delivery',
+					isCustom: true,
+				},
+				{
+					id: 'changed-mind',
+					label: 'Changed mind',
+					isCustom: true,
+				},
 			],
-			// requiredEnable: true,
-			// defaultValues: [
-			// 	{
-			// 		value: 'Damaged or defective product',
-			// 		required: true,
-			// 		deleteDisabled: true,
-			// 	},
-			// 	{
-			// 		value: 'Wrong item delivered',
-			// 		required: true,
-			// 		deleteDisabled: true,
-			// 	},
-			// 	{
-			// 		value: 'Product not as described',
-			// 		required: true,
-			// 		deleteDisabled: true,
-			// 	},
-			// 	{ value: 'Late delivery' },
-			// 	{ value: 'Changed mind' },
-			// ],
 			moduleEnabled: 'marketplace-refund',
 		},
 	],

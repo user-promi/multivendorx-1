@@ -629,7 +629,7 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                                     >
                                         &nbsp;
                                         <div className="wrapper">
-                                            <i className="adminlib-cloud-upload"></i>
+                                            <i className="adminfont-cloud-upload"></i>
                                             <p className="heading">
                                                 { fileName === '' ? (
                                                     <>

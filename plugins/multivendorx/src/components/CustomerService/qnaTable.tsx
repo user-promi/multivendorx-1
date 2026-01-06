@@ -283,7 +283,7 @@ const Qna: React.FC = () => {
 									alt={row.original.store_name}
 								/>
 							) : (
-								<i className="item-icon adminlib-multi-product"></i>
+								<i className="item-icon adminfont-multi-product"></i>
 							)}
 							<div className="details">
 								<span className="title">
@@ -388,7 +388,7 @@ const Qna: React.FC = () => {
 						actions: [
 							{
 								label: __('Answer', 'multivendorx'),
-								icon: 'adminlib-eye',
+								icon: 'adminfont-eye',
 								onClick: (rowData: any) => {
 									setSelectedQna(rowData);
 									setQna(rowData.question_text);
@@ -398,7 +398,7 @@ const Qna: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete delete',
+								icon: 'adminfont-delete delete',
 								onClick: (rowData) => {
 									if (
 										confirm(
@@ -533,7 +533,7 @@ const Qna: React.FC = () => {
 						}}
 						value={filterValue || ''}
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -567,7 +567,7 @@ const Qna: React.FC = () => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-question"></i>
+								<i className="adminfont-question"></i>
 								{__('Answer Question', 'multivendorx')}
 							</div>
 							<div className="des">
@@ -578,7 +578,7 @@ const Qna: React.FC = () => {
 							</div>
 							<i
 								onClick={() => setSelectedQna(null)}
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 							></i>
 						</>
 					}
@@ -589,7 +589,7 @@ const Qna: React.FC = () => {
 								onClick={() => setSelectedQna(null)}
 								className="admin-btn btn-red"
 							>
-								<i className="adminlib-close"></i>
+								<i className="adminfont-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
@@ -597,7 +597,7 @@ const Qna: React.FC = () => {
 								disabled={saving}
 								className="admin-btn btn-purple-bg"
 							>
-								<i className="adminlib-active"></i>
+								<i className="adminfont-active"></i>
 								{__('Save Answer', 'multivendorx')}
 							</button>
 						</>

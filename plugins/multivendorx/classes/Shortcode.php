@@ -63,8 +63,6 @@ class Shortcode {
             FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
             FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
         }
-
-
     }
 
     /**
@@ -125,9 +123,9 @@ class Shortcode {
      * Display stores list
      */
     public function marketplace_stores( $attributes ) {
-        if ( ($attributes['orderby'] ?? null) === 'registered' ) {
+        if ( ( $attributes['orderby'] ?? null ) === 'registered' ) {
             $attributes['orderby'] = 'create_time';
-        }        
+        }
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
         FrontendScripts::load_scripts();
 
@@ -140,7 +138,7 @@ class Shortcode {
     /**
      * Display stores list
      */
-    public function marketplace_products( $attributes ) {      
+    public function marketplace_products( $attributes ) {
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
         FrontendScripts::load_scripts();
 
@@ -149,11 +147,11 @@ class Shortcode {
 
         // Use id instead of class
         return '<div id="marketplace-products" data-attributes="' . $json_attrs . '"></div>';
-    } 
+    }
     /**
      * Display stores list
      */
-    public function marketplace_coupons( $attributes ) {      
+    public function marketplace_coupons( $attributes ) {
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
         FrontendScripts::load_scripts();
 
@@ -162,5 +160,5 @@ class Shortcode {
 
         // Use id instead of class
         return '<div id="marketplace-coupons" data-attributes="' . $json_attrs . '"></div>';
-    } 
+    }
 }

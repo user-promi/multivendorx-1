@@ -8,7 +8,7 @@ export default {
 		'Define and publish the rules and guidelines that apply to your marketplace.',
 		'mvx-pro'
 	),
-	icon: 'adminlib-store-policy',
+	icon: 'adminfont-store-policy',
 	submitUrl: 'settings',
 	modal: [
 		{

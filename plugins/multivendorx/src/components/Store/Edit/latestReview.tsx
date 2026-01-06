@@ -116,7 +116,7 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
 												(_, i) => (
 													<i
 														key={`filled-${i}`}
-														className="star-icon adminlib-star"
+														className="star-icon adminfont-star"
 													></i>
 												)
 											)}
@@ -127,7 +127,7 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
 											].map((_, i) => (
 												<i
 													key={`empty-${i}`}
-													className="star-icon adminlib-star-o"
+													className="star-icon adminfont-star-o"
 												></i>
 											))}
 										</>

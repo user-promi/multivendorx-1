@@ -9,7 +9,7 @@ export default {
 		'Choose how new stores enter your marketplace, review them manually or allow instant access.',
 		'multivendorx'
 	),
-	icon: 'adminlib-onboarding',
+	icon: 'adminfont-onboarding',
 	submitUrl: 'settings',
 	modal: [
 		{
@@ -25,7 +25,6 @@ export default {
 					key: 'manually',
 					label: __('Manual', 'multivendorx'),
 					value: 'manually',
-					proSetting: true,
 				},
 				{
 					key: 'automatically',

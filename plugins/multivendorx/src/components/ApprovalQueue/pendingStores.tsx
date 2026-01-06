@@ -252,7 +252,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 							handleSingleAction('active', row.original.id!);
 						}}
 					>
-						<i className="adminlib-check"></i> Approve
+						<i className="adminfont-check"></i> Approve
 					</span>
 
 					<span
@@ -261,7 +261,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 							handleSingleAction('declined', row.original.id!)
 						}
 					>
-						<i className="adminlib-close"></i> Reject
+						<i className="adminfont-close"></i> Reject
 					</span>
 				</TableCell>
 			),
@@ -320,7 +320,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-cart"></i>
+								<i className="adminfont-cart"></i>
 								{__('Reason', 'multivendorx')}
 							</div>
 							<i
@@ -328,7 +328,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 									setRejectPopupOpen(false);
 									setRejectReason('');
 								}}
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 							></i>
 						</>
 					}

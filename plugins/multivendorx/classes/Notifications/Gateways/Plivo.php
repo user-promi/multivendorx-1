@@ -34,20 +34,20 @@ class Plivo {
      * @return WP_Error|true
      */
     public function send( $to, $message ) {
-        $auth_id = MultiVendorX()->setting->get_setting( 'plivo_auth_id' );
-        $auth_token = MultiVendorX()->setting->get_setting( 'plivo_auth_token' );
+        $auth_id     = MultiVendorX()->setting->get_setting( 'plivo_auth_id' );
+        $auth_token  = MultiVendorX()->setting->get_setting( 'plivo_auth_token' );
         $from_number = MultiVendorX()->setting->get_setting( 'plivo_from_number' );
 
-        $args = [
-            'headers' => [
+        $args = array(
+            'headers' => array(
                 'Authorization' => 'Basic ' . base64_encode( $auth_id . ':' . $auth_token ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
-            ],
-            'body'    => [
+            ),
+            'body'    => array(
                 'src'  => $from_number,
                 'dst'  => $to,
                 'text' => $message,
-            ],
-        ];
+            ),
+        );
 
         $endpoint = str_replace( '{auth_id}', $auth_id, self::ENDPOINT );
         $response = wp_remote_post( $endpoint, $args );
@@ -59,5 +59,4 @@ class Plivo {
 
         return true;
     }
-
 }

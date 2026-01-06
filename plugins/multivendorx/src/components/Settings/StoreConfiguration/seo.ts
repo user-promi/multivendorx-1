@@ -8,7 +8,7 @@ export default {
 		'Enable stores to enhance their product visibility using advanced third-party SEO plugins.',
 		'mvx-pro'
 	),
-	icon: 'adminlib-store-seo',
+	icon: 'adminfont-store-seo',
 	submitUrl: 'settings',
 	modal: [
 		{

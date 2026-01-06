@@ -279,7 +279,7 @@ const SupportTickets: React.FC = () => {
 						}}
 						value={filterValue || ''}
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -419,7 +419,7 @@ const SupportTickets: React.FC = () => {
 												(_, i) => (
 													<i
 														key={`filled-${i}`}
-														className="star-icon adminlib-star"
+														className="star-icon adminfont-star"
 													></i>
 												)
 											)}
@@ -430,7 +430,7 @@ const SupportTickets: React.FC = () => {
 											].map((_, i) => (
 												<i
 													key={`empty-${i}`}
-													className="star-icon adminlib-star-o"
+													className="star-icon adminfont-star-o"
 												></i>
 											))}
 										</>
@@ -487,7 +487,7 @@ const SupportTickets: React.FC = () => {
 						actions: [
 							{
 								label: __('Reply / Edit', 'multivendorx'),
-								icon: 'adminlib-edit',
+								icon: 'adminfont-edit',
 								onClick: () => {
 									setSelectedReview(row.original);
 									setReplyText(row.original.reply || '');
@@ -496,7 +496,7 @@ const SupportTickets: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete delete',
+								icon: 'adminfont-delete delete',
 								onClick: async () => {
 									if (
 										confirm(
@@ -577,13 +577,13 @@ const SupportTickets: React.FC = () => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-store-review"></i>
+								<i className="adminfont-store-review"></i>
 								{__('Reply to Review', 'multivendorx')} -{' '}
 								{selectedReview.store_name}
 							</div>
 							<i
 								onClick={() => setSelectedReview(null)}
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 							></i>
 						</>
 					}
@@ -594,14 +594,14 @@ const SupportTickets: React.FC = () => {
 								onClick={() => setSelectedReview(null)}
 								className="admin-btn btn-red"
 							>
-								<i className="adminlib-close"></i>
+								<i className="adminfont-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
 								onClick={handleSaveReply}
 								className="admin-btn btn-purple-bg"
 							>
-								<i className="adminlib-active"></i>
+								<i className="adminfont-active"></i>
 								{__('Save', 'multivendorx')}
 							</button>
 						</>
@@ -612,7 +612,7 @@ const SupportTickets: React.FC = () => {
 							<div className="review-popup-wrapper">
 								<div className="customer-wrapper">
 									<div className="avatar">
-										<i className="item-icon adminlib-person"></i>
+										<i className="item-icon adminfont-person"></i>
 									</div>
 									{selectedReview && (
 										<div className="name-wrapper">
@@ -627,7 +627,7 @@ const SupportTickets: React.FC = () => {
 												{[...Array(5)].map((_, i) => (
 													<i
 														key={i}
-														className={`star-icon adminlib-star ${
+														className={`star-icon adminfont-star ${
 															i <
 															Math.round(
 																selectedReview.overall_rating

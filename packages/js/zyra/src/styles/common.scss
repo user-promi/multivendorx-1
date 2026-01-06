@@ -118,7 +118,7 @@ body:has(.admin-main-wrapper) {
   justify-content: end;
   align-items: end;
   gap: 0.625rem;
-  padding-top: 0.5rem;
+  // padding-top: 0.5rem;
   flex-wrap: wrap;
 
   &.center {
@@ -1109,7 +1109,7 @@ $index: 1;
     }
   }
 
-  .adminlib-update-data {
+  .adminfont-update-data {
     font-size: 1rem;
   }
 
@@ -1455,7 +1455,7 @@ $index: 1;
 
   &::before {
     position: absolute;
-    font-family: adminlibrary, sans-serif;
+    font-family: adminfonts, sans-serif;
     content: "\e807";
     top: 0.125rem;
     left: 0;
@@ -1472,7 +1472,7 @@ $index: 1;
   margin: 0;
 
   &::before {
-    font-family: adminlibrary, sans-serif;
+    font-family: adminfonts, sans-serif;
     position: absolute;
     content: "\e809";
     top: 0.125rem;

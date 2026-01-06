@@ -1,7 +1,7 @@
 /* global appLocalizer */
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { TextArea, SuccessNotice, getApiLink } from 'zyra';
+import { TextArea, SuccessNotice, getApiLink, Container, Column, Card, FormGroupWrapper, FormGroup } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
@@ -56,105 +56,74 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 		<>
 			<SuccessNotice message={successMsg} />
 
-			<div className="container-wrapper">
-				<div className="card-wrapper">
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Shipping policy', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<TextArea
-										name="shipping_policy"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										value={formData.shipping_policy}
-										onChange={handleChange}
-										usePlainText={false}
-										tinymceApiKey={
-											appLocalizer
-												.settings_databases_value[
-												'marketplace'
-											]['tinymce_api_section'] ?? ''
-										}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
+			<Container>
+				<Column row>
+					<Card title="Shipping policy">
+						<FormGroupWrapper>
+							<FormGroup>
+								<TextArea
+									name="shipping_policy"
+									wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description"
+									value={formData.shipping_policy}
+									onChange={handleChange}
+									usePlainText={false}
+									tinymceApiKey={
+										appLocalizer
+											.settings_databases_value[
+										'marketplace'
+										]['tinymce_api_section'] ?? ''
+									}
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
 
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Refund policy', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<TextArea
-										name="refund_policy"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										value={formData.refund_policy}
-										onChange={handleChange}
-										usePlainText={false}
-										tinymceApiKey={
-											appLocalizer
-												.settings_databases_value[
-												'marketplace'
-											]['tinymce_api_section'] ?? ''
-										}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__(
-										'Cancellation / Return / Exchange policy',
-										'multivendorx'
-									)}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<TextArea
-										name="exchange_policy"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										value={formData.exchange_policy}
-										onChange={handleChange}
-										usePlainText={false}
-										tinymceApiKey={
-											appLocalizer
-												.settings_databases_value[
-												'marketplace'
-											]['tinymce_api_section'] ?? ''
-										}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+					<Card title="Refund policy">
+						<FormGroupWrapper>
+							<FormGroup>
+								<TextArea
+									name="refund_policy"
+									wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description"
+									value={formData.refund_policy}
+									onChange={handleChange}
+									usePlainText={false}
+									tinymceApiKey={
+										appLocalizer
+											.settings_databases_value[
+										'marketplace'
+										]['tinymce_api_section'] ?? ''
+									}
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
+					<Card title="Refund policy">
+						<FormGroupWrapper>
+							<FormGroup>
+								<TextArea
+									name="exchange_policy"
+									wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description"
+									value={formData.exchange_policy}
+									onChange={handleChange}
+									usePlainText={false}
+									tinymceApiKey={
+										appLocalizer
+											.settings_databases_value[
+										'marketplace'
+										]['tinymce_api_section'] ?? ''
+									}
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
+				</Column>
+			</Container>
 		</>
 	);
 };

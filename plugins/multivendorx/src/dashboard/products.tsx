@@ -319,7 +319,7 @@ const AllProduct: React.FC = () => {
 							// />
 							<></>
 						) : (
-							<i className="item-icon adminlib-multi-product"></i>
+							<i className="item-icon adminfont-multi-product"></i>
 						)}
 
 						<div className="details">
@@ -406,7 +406,7 @@ const AllProduct: React.FC = () => {
 						actions: [
 							{
 								label: __('Edit', 'multivendorx'),
-								icon: 'adminlib-edit',
+								icon: 'adminfont-edit',
 								onClick: (rowData) => {
 									if (appLocalizer.permalink_structure) {
 										navigate(
@@ -422,7 +422,7 @@ const AllProduct: React.FC = () => {
 							},
 							{
 								label: __('View', 'multivendorx'),
-								icon: 'adminlib-eye',
+								icon: 'adminfont-eye',
 								onClick: () => {
 									window.location.assign(
 										`${row.original.permalink}`
@@ -431,7 +431,7 @@ const AllProduct: React.FC = () => {
 							},
 							{
 								label: __('Copy URL', 'multivendorx'),
-								icon: 'adminlib-vendor-form-copy',
+								icon: 'adminfont-vendor-form-copy',
 								onClick: () => {
 									const url = row.original.permalink;
 									navigator.clipboard
@@ -441,7 +441,7 @@ const AllProduct: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete delete',
+								icon: 'adminfont-delete delete',
 								onClick: (rowData) => {
 									handleDelete(rowData.id);
 								},
@@ -562,7 +562,7 @@ const AllProduct: React.FC = () => {
 							className="basic-select"
 							value={filterValue || ''}
 						/>
-						<i className="adminlib-search"></i>
+						<i className="adminfont-search"></i>
 					</div>
 				</>
 			),
@@ -747,7 +747,7 @@ const AllProduct: React.FC = () => {
 									}
 								}}
 							>
-								<i className="adminlib-plus"></i> {__('Add New', 'multivendorx')}
+								<i className="adminfont-plus"></i> {__('Add New', 'multivendorx')}
 							</div>
 						</div>
 					</div>

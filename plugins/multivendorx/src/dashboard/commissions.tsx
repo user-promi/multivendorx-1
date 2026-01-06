@@ -361,12 +361,12 @@ const StoreCommission: React.FC = () => {
 								{isExpanded ? (
 									<>
 										Less{' '}
-										<i className="adminlib-arrow-up"></i>
+										<i className="adminfont-arrow-up"></i>
 									</>
 								) : (
 									<>
 										More{' '}
-										<i className="adminlib-arrow-down"></i>
+										<i className="adminfont-arrow-down"></i>
 									</>
 								)}
 							</span>
@@ -448,7 +448,7 @@ const StoreCommission: React.FC = () => {
 												'View Commission',
 												'multivendorx'
 											),
-											icon: 'adminlib-eye',
+											icon: 'adminfont-eye',
 											onClick: (rowData) => {
 												setModalCommission(rowData);
 											},
@@ -584,7 +584,7 @@ const StoreCommission: React.FC = () => {
 					}
 					className="admin-btn"
 				>
-					<i className="adminlib-download"></i>
+					<i className="adminfont-download"></i>
 					{__('Download CSV', 'multivendorx')}
 				</button>
 			</div>
@@ -686,7 +686,7 @@ const StoreCommission: React.FC = () => {
 						className="admin-btn btn-purple-bg"
 						onClick={handleExportAll}
 					>
-						<i className="adminlib-export"></i>
+						<i className="adminfont-export"></i>
 						{__('Export', 'multivendorx')}
 					</button>
 				</div>

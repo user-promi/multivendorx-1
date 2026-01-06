@@ -92,7 +92,7 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 					<div className={`icon admin-badge green`}>
 						<i
 							className={
-								item.icon || 'adminlib-user-network-icon'
+								item.icon || 'adminfont-user-network-icon'
 							}
 						></i>
 					</div>
@@ -101,8 +101,8 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 						<span className="message">{item.message}</span>
 						<span className="time">{item.time}</span>
 					</div>
-					<i className="check-icon adminlib-check"></i>
-					<i className="check-icon adminlib-cross"  
+					<i className="check-icon adminfont-check"></i>
+					<i className="check-icon adminfont-cross"  
 						onClick={(e) => {
         					e.stopPropagation();
 							dismissNotification(item.id)
@@ -135,7 +135,7 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 							className="admin-btn btn-purple"
 							onClick={() => setIsDropdownOpen(false)}
 						>
-							<i className="adminlib-eye"></i>
+							<i className="adminfont-eye"></i>
 							{__('View all notifications', 'multivendorx')}
 						</a>
 					) : (
@@ -144,7 +144,7 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 							className="admin-btn btn-purple"
 							onClick={() => setIsDropdownOpen(false)}
 						>
-							<i className="adminlib-eye"></i>
+							<i className="adminfont-eye"></i>
 							{__('View all activities', 'multivendorx')}
 						</a>
 					)}

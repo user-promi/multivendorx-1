@@ -159,7 +159,6 @@ const Withdrawls: React.FC = () => {
 						)}
 
 						<AdminButton
-							wrapperClass="right"
 							buttons={{
 								icon: 'eye',
 								text: __('View transaction history', 'multivendorx'),
@@ -250,12 +249,11 @@ const Withdrawls: React.FC = () => {
 								className="admin-btn btn-purple-bg"
 								onClick={() => setRequestWithdrawal(true)}
 							>
-								<i className="adminlib-withdraw"></i>
+								<i className="adminfont-withdraw"></i>
 								{__('Request Withdrawal', 'multivendorx')}
 							</div>
 						</div> */}
 							<AdminButton
-								wrapperClass="right"
 								buttons={{
 									icon: 'withdraw',
 									text: __('Request Withdrawal', 'multivendorx'),
@@ -276,11 +274,11 @@ const Withdrawls: React.FC = () => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-wallet"></i>
+								<i className="adminfont-wallet"></i>
 								{__('Request Withdrawal', 'multivendorx')}
 							</div>
 							<i
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 								onClick={() => setRequestWithdrawal(false)}
 							></i>
 						</>
@@ -288,7 +286,6 @@ const Withdrawls: React.FC = () => {
 					footer={
 						<>
 							<AdminButton
-								wrapperClass="right"
 								buttons={{
 									icon: 'withdraw',
 									text: __('Publish', 'multivendorx'),

@@ -200,7 +200,7 @@ const EditStore = () => {
 				name: 'Overview',
 				desc: 'Store Info',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 		{
@@ -210,7 +210,7 @@ const EditStore = () => {
 				name: 'General',
 				desc: 'Store Info',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 		{
@@ -220,7 +220,7 @@ const EditStore = () => {
 				name: 'Payment',
 				desc: 'Payment Methods',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 		{
@@ -230,7 +230,7 @@ const EditStore = () => {
 				name: 'Staff',
 				desc: 'Store staff',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 		{
@@ -241,7 +241,7 @@ const EditStore = () => {
 				name: 'Shipping',
 				desc: 'Store Shipping',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 		{
@@ -252,7 +252,7 @@ const EditStore = () => {
 				name: 'Policy',
 				desc: 'Policy',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 		{
@@ -262,7 +262,7 @@ const EditStore = () => {
 				name: 'Application Details',
 				desc: 'Application',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 		{
@@ -273,7 +273,7 @@ const EditStore = () => {
 				name: 'Facilitator',
 				desc: 'Facilitator',
 				hideTabHeader: true,
-				icon: 'adminlib-credit-card',
+				icon: 'adminfont-credit-card',
 			},
 		},
 	].filter((tab) => !tab.module || modules.includes(tab.module));
@@ -403,7 +403,7 @@ const EditStore = () => {
 													setLogoMenu(false);
 												}}
 											>
-												<i className="adminlib-edit"></i>
+												<i className="adminfont-edit"></i>
 												{__(
 													'Edit banner image',
 													'multivendorx'
@@ -427,7 +427,7 @@ const EditStore = () => {
 																}}
 															>
 																<div className="item">
-																	<i className="adminlib-cloud-upload"></i>{' '}
+																	<i className="adminfont-cloud-upload"></i>{' '}
 																	{__(
 																		'Upload',
 																		'multivendorx'
@@ -457,7 +457,7 @@ const EditStore = () => {
 																}}
 															>
 																<div className="item">
-																	<i className="adminlib-delete"></i>{' '}
+																	<i className="adminfont-delete"></i>{' '}
 																	{__(
 																		'Delete',
 																		'multivendorx'
@@ -494,7 +494,7 @@ const EditStore = () => {
 															);
 														}}
 													>
-														<i className="adminlib-edit"></i>
+														<i className="adminfont-edit"></i>
 													</span>
 													{logoMenu && (
 														<div className="dropdown">
@@ -514,7 +514,7 @@ const EditStore = () => {
 																		}}
 																	>
 																		<div className="item">
-																			<i className="adminlib-cloud-upload"></i>{' '}
+																			<i className="adminfont-cloud-upload"></i>{' '}
 																			{__(
 																				'Upload',
 																				'multivendorx'
@@ -544,7 +544,7 @@ const EditStore = () => {
 																		}}
 																	>
 																		<div className="item">
-																			<i className="adminlib-delete"></i>{' '}
+																			<i className="adminfont-delete"></i>{' '}
 																			{__(
 																				'Delete',
 																				'multivendorx'
@@ -632,7 +632,7 @@ const EditStore = () => {
 															className={
 																editName
 																	? ''
-																	: 'adminlib-edit'
+																	: 'adminfont-edit'
 															}
 														></i>
 													</span>
@@ -705,13 +705,13 @@ const EditStore = () => {
 												) && (
 													<>
 														<div className="admin-badge green">
-															<i className="adminlib-store-inventory"></i>
+															<i className="adminfont-store-inventory"></i>
 														</div>
 														<div className="admin-badge blue">
-															<i className="adminlib-geo-my-wp"></i>
+															<i className="adminfont-geo-my-wp"></i>
 														</div>
 														<div className="admin-badge yellow">
-															<i className="adminlib-staff-manager"></i>
+															<i className="adminfont-staff-manager"></i>
 														</div>
 													</>
 												)}
@@ -822,7 +822,7 @@ const EditStore = () => {
 														className={
 															editDesc
 																? ''
-																: 'adminlib-edit'
+																: 'adminfont-edit'
 														}
 													></i>
 												</span>
@@ -836,7 +836,7 @@ const EditStore = () => {
 														(_, i) => (
 															<i
 																key={i}
-																className={`review adminlib-star${
+																className={`review adminfont-star${
 																	data.total_reviews >
 																		0 &&
 																	i <
@@ -919,7 +919,7 @@ const EditStore = () => {
 																		);
 																	}}
 																>
-																	<i className="adminlib-edit"></i>
+																	<i className="adminfont-edit"></i>
 																</span>
 															)}
 													</>
@@ -957,7 +957,7 @@ const EditStore = () => {
 									setLogoMenu(false);
 									setBannerMenu(false);
 								}}
-								className="admin-icon adminlib-more-vertical"
+								className="admin-icon adminfont-more-vertical"
 							></i>
 							{actionMenu && (
 								<div className="dropdown">
@@ -971,12 +971,12 @@ const EditStore = () => {
 														rel="noopener noreferrer"
 														className="item"
 													>
-														<i className="adminlib-storefront"></i>{' '}
+														<i className="adminfont-storefront"></i>{' '}
 														{__(
 															'View Storefront',
 															'multivendorx'
 														)}{' '}
-														<i className="external adminlib-external"></i>
+														<i className="external adminfont-external"></i>
 													</a>
 												</li>
 											)}
@@ -1005,7 +1005,7 @@ const EditStore = () => {
 											>
 												<span className="item">
 													{' '}
-													<i className="adminlib-form-multi-select"></i>{' '}
+													<i className="adminfont-form-multi-select"></i>{' '}
 													{__(
 														'Manage status',
 														'multivendorx'
@@ -1017,7 +1017,7 @@ const EditStore = () => {
 													href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`}
 													className="item"
 												>
-													<i className="adminlib-single-product"></i>{' '}
+													<i className="adminfont-single-product"></i>{' '}
 													{__(
 														'Products',
 														'multivendorx'
@@ -1033,7 +1033,7 @@ const EditStore = () => {
 												}}
 											>
 												<span className="item">
-													<i className="adminlib-order"></i>{' '}
+													<i className="adminfont-order"></i>{' '}
 													{__(
 														'Orders',
 														'multivendorx'
@@ -1049,7 +1049,7 @@ const EditStore = () => {
 											>
 												<span className="item">
 													{' '}
-													<i className="adminlib-delete"></i>{' '}
+													<i className="adminfont-delete"></i>{' '}
 													{__(
 														'Delete store',
 														'multivendorx'
@@ -1073,7 +1073,7 @@ const EditStore = () => {
 				header={
 					<>
 						<div className="title">
-							<i className="adminlib-storefront"></i>
+							<i className="adminfont-storefront"></i>
 							{__('Manage store deletion', 'multivendorx')}
 						</div>
 						<div className="des">
@@ -1084,7 +1084,7 @@ const EditStore = () => {
 						</div>
 						<i
 							onClick={() => setDeleteModal(false)}
-							className="icon adminlib-close"
+							className="icon adminfont-close"
 						></i>
 					</>
 				}

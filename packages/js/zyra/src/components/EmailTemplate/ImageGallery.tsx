@@ -155,7 +155,7 @@ const ImageGallery: React.FC< ImageGalleryProps > = ( {
                         <div className="image-container">
                             <img src={ image.url } alt={ image.alt } />
                             <div className="image-overlay">
-                                <i className="admin-font adminlib-check"></i>
+                                <i className="admin-font adminfont-check"></i>
                             </div>
                         </div>
                         <div className="image-meta">
@@ -167,7 +167,7 @@ const ImageGallery: React.FC< ImageGalleryProps > = ( {
 
             { images.length === 0 && (
                 <div className="empty-state">
-                    <i className="admin-font adminlib-image"></i>
+                    <i className="admin-font adminfont-image"></i>
                     <p>No images found</p>
                     <button
                         className="admin-btn btn-purple"

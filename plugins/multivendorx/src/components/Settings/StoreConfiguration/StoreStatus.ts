@@ -8,7 +8,7 @@ export default {
 		'Control access and visibility based on store approval status. Configure how pending, denied, under review, suspended, active, and deactivated stores behave within your marketplace.',
 		'multivendorx'
 	),
-	icon: 'adminlib-store-inventory',
+	icon: 'adminfont-store-inventory',
 	submitUrl: 'settings',
 	modal: [
 		{
@@ -29,7 +29,7 @@ export default {
 			modal: [
 				{
 					id: 'store_pending_status',
-					icon: 'adminlib-store-analytics',
+					icon: 'adminfont-store-analytics',
 					label: 'Pending approval',
 					connected: true,
 					 
@@ -84,7 +84,7 @@ export default {
 				},
 				{
 					id: 'store_rejected_status',
-					icon: 'adminlib-like',
+					icon: 'adminfont-like',
 					label: 'Rejected',
 					connected: true,
 					 
@@ -145,7 +145,7 @@ export default {
 				},
 				{
 					id: 'store_under_review_status',
-					icon: 'adminlib-store-review',
+					icon: 'adminfont-store-review',
 					label: 'Under review',
 					connected: true,
 					 
@@ -183,7 +183,7 @@ export default {
 				},
 				{
 					id: 'store_suspended_status',
-					icon: 'adminlib-error',
+					icon: 'adminfont-error',
 					label: 'Suspended',
 					connected: true,
 					 
@@ -215,7 +215,7 @@ export default {
 				},
 				{
 					id: 'store_active_status',
-					icon: 'adminlib-store-support',
+					icon: 'adminfont-store-support',
 					label: 'Active',
 					connected: true,
 					 
@@ -243,7 +243,7 @@ export default {
 				},
 				{
 					id: 'store_deactivated_status',
-					icon: 'adminlib-identity-verification',
+					icon: 'adminfont-identity-verification',
 					label: 'Deactivated',
 					connected: true,
 					 

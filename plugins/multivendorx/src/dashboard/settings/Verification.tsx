@@ -175,7 +175,7 @@ const Verification = () => {
 		const socialConfigs = [
 			{
 				provider: 'linkedin',
-				icon: 'adminlib-linkedin yellow',
+				icon: 'adminfont-linkedin yellow',
 				name: 'Verify via LinkedIn',
 				enabled:
 					allVerificationMethods?.['social-verification']
@@ -184,7 +184,7 @@ const Verification = () => {
 			},
 			{
 				provider: 'google',
-				icon: 'adminlib-google yellow',
+				icon: 'adminfont-google yellow',
 				name: 'Verify via Google',
 				enabled:
 					allVerificationMethods?.['social-verification']
@@ -193,7 +193,7 @@ const Verification = () => {
 			},
 			{
 				provider: 'facebook',
-				icon: 'adminlib-facebook yellow',
+				icon: 'adminfont-facebook yellow',
 				name: 'Verify via Facebook',
 				enabled:
 					allVerificationMethods?.['social-verification']
@@ -202,7 +202,7 @@ const Verification = () => {
 			},
 			{
 				provider: 'twitter',
-				icon: 'adminlib-twitter yellow',
+				icon: 'adminfont-twitter yellow',
 				name: 'Verify via Twitter',
 				enabled:
 					allVerificationMethods?.['social-verification']
@@ -276,7 +276,7 @@ const Verification = () => {
 									className="varification-wrapper"
 								>
 									<div className="left">
-										<i className="adminlib-verification3 yellow"></i>
+										<i className="adminfont-verification3 yellow"></i>
 										<div className="name">
 											{method.label}
 										</div>

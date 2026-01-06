@@ -707,7 +707,7 @@ const AddProduct = () => {
 					{/* General information */}
 					<Card
 						title={__('General information', 'multivendorx')}
-						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
 						toggle
 					>
 						<FormGroupWrapper>
@@ -754,7 +754,7 @@ const AddProduct = () => {
 					{/* Price and stock */}
 					<Card
 						title={__('Price and stock', 'multivendorx')}
-						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
 						toggle
 					>
 						<FormGroupWrapper>
@@ -937,7 +937,7 @@ const AddProduct = () => {
 
 					<Card
 						title={__('Visibility', 'multivendorx')}
-						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
 						toggle
 					>
 						{/* Product type */}
@@ -991,7 +991,7 @@ const AddProduct = () => {
 										className="admin-badge blue"
 										onClick={() => setIsEditingVisibility(true)}
 									>
-										<i className="adminlib-edit" />
+										<i className="adminfont-edit" />
 									</span>
 								</div>
 							</FormGroup>
@@ -1029,7 +1029,7 @@ const AddProduct = () => {
 											style={{ cursor: 'pointer' }}
 										>
 											<i
-												className={`star-icon ${starFill ? 'adminlib-star' : 'adminlib-star-o'
+												className={`star-icon ${starFill ? 'adminfont-star' : 'adminfont-star-o'
 													}`}
 											/>
 											{__('This is a featured product', 'multivendorx')}
@@ -1101,7 +1101,7 @@ const AddProduct = () => {
 
 					<Card
 						title={__('Category', 'multivendorx')}
-						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
 						toggle
 					>
 						{appLocalizer.settings_databases_value['product-preferencess']
@@ -1232,7 +1232,7 @@ const AddProduct = () => {
 
 					<Card
 						title="Product tag"
-						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
 						toggle={true} // enable collapse/expand
 					>
 						<FormGroupWrapper>
@@ -1252,7 +1252,7 @@ const AddProduct = () => {
 													}))
 												}
 											>
-												<i className="delete-icon adminlib-delete" />
+												<i className="delete-icon adminfont-delete" />
 											</span>
 										</span>
 									))}
@@ -1275,7 +1275,7 @@ const AddProduct = () => {
 										className="admin-btn btn-green"
 										onClick={() => addTag(tagInput)}
 									>
-										<i className="adminlib-plus" />{' '}
+										<i className="adminfont-plus" />{' '}
 										{__('Add', 'multivendorx')}
 									</button>
 
@@ -1302,7 +1302,7 @@ const AddProduct = () => {
 					{/* image upload */}
 					<Card
 						title="Upload image"
-						iconName="adminlib-keyboard-arrow-down arrow-icon icon"
+						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
 						toggle
 					>
 						{/* Featured Image */}

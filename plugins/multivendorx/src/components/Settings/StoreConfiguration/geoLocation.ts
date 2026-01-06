@@ -8,7 +8,7 @@ export default {
 		'Help customers discover stores and products near them by enabling location-based search and maps.',
 		'multivendorx'
 	),
-	icon: 'adminlib-location',
+	icon: 'adminfont-location',
 	submitUrl: 'settings',
 	modal: [
 		{
@@ -60,13 +60,13 @@ export default {
 					key: 'google_map_set',
 					label: __('Google', 'multivendorx'),
 					value: __('google_map_set', 'multivendorx'),
-					icon: 'adminlib-google',
+					icon: 'adminfont-google',
 				},
 				{
 					key: 'mapbox_api_set',
 					label: __('Mapbox', 'multivendorx'),
 					value: __('mapbox_api_set', 'multivendorx'),
-					icon: 'adminlib-mapbox',
+					icon: 'adminfont-mapbox',
 				},
 			],
 			moduleEnabled: 'geo-location',

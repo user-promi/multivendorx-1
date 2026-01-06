@@ -19,20 +19,20 @@ interface RecipientBadgeProps {
 const RecipientBadge: React.FC<RecipientBadgeProps> = ({
 	recipient
 }) => {
-	let iconClass = 'adminlib-mail';
+	let iconClass = 'adminfont-mail';
 	let badgeClass = 'red';
 
 	switch (recipient.label) {
 		case 'Store':
-			iconClass = 'adminlib-storefront';
+			iconClass = 'adminfont-storefront';
 			badgeClass = 'blue';
 			break;
 		case 'Admin':
-			iconClass = 'adminlib-person';
+			iconClass = 'adminfont-person';
 			badgeClass = ' green';
 			break;
 		case 'Customer':
-			iconClass = 'adminlib-user-circle';
+			iconClass = 'adminfont-user-circle';
 			badgeClass = 'yellow';
 			break;
 		default:
@@ -352,6 +352,7 @@ const Notification: React.FC = () => {
 								e.key === 'Enter' &&
 								setViewMode(mode as 'list' | 'grid')
 							}
+							className="toggle-option"
 						>
 							<input
 								className="toggle-setting-form-input"
@@ -366,8 +367,8 @@ const Notification: React.FC = () => {
 								<i
 									className={
 										mode === 'list'
-											? 'adminlib-editor-list-ul'
-											: 'adminlib-module'
+											? 'adminfont-editor-list-ul'
+											: 'adminfont-module'
 									}
 								></i>
 							</label>
@@ -404,7 +405,7 @@ const Notification: React.FC = () => {
 										<div className="table-row-custom">
 											<div className="product-wrapper notification">
 												<span
-													className={`item-icon notification-icon adminlibrary adminicon-${notif.id}`}
+													className={`item-icon notification-icon adminfonts adminicon-${notif.id}`}
 												></span>
 												<div className="details">
 													<div className="title">
@@ -475,19 +476,19 @@ const Notification: React.FC = () => {
 														switch (channel) {
 															case 'mail':
 																iconClass =
-																	'adminlib-mail';
+																	'adminfont-mail';
 																badgeClass +=
 																	'yellow';
 																break;
 															case 'sms':
 																iconClass =
-																	'adminlib-enquiry';
+																	'adminfont-enquiry';
 																badgeClass +=
 																	'green';
 																break;
 															case 'system':
 																iconClass =
-																	'adminlib-notification';
+																	'adminfont-notification';
 																badgeClass +=
 																	'blue';
 																break;
@@ -530,7 +531,7 @@ const Notification: React.FC = () => {
 											<div className="action-icons">
 												<div className="inline-actions">
 													<div className="inline-action-btn tooltip-wrapper">
-														<i className="adminlib-edit"></i>
+														<i className="adminfont-edit"></i>
 														<span className="tooltip-name">
 															Edit
 														</span>
@@ -555,7 +556,7 @@ const Notification: React.FC = () => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-cart"></i>
+								<i className="adminfont-cart"></i>
 								{openChannel === 'system' &&
 									'System Notification'}
 								{openChannel === 'sms' && 'SMS Message'}
@@ -563,7 +564,7 @@ const Notification: React.FC = () => {
 								- {editNotification?.event}
 							</div>
 							<i
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 								onClick={() => setOpenChannel(null)}
 							></i>
 						</>
@@ -734,14 +735,14 @@ const Notification: React.FC = () => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-notification"></i>
+								<i className="adminfont-notification"></i>
 								Settings - {editNotification?.event}
 							</div>
 							<div className="des">
 								{editNotification?.description}
 							</div>
 							<i
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 								onClick={() => setEditingNotification(null)}
 							></i>
 						</>
@@ -779,13 +780,13 @@ const Notification: React.FC = () => {
 												<i
 													className={
 														label === 'Mail'
-															? 'adminlib-mail'
+															? 'adminfont-mail'
 															: label === 'SMS'
-																? 'adminlib-enquiry'
+																? 'adminfont-enquiry'
 																: label ===
 																	  'System'
-																	? 'adminlib-notification'
-																	: 'adminlib-mail'
+																	? 'adminfont-notification'
+																	: 'adminfont-mail'
 													}
 												></i>
 											</span>
@@ -801,8 +802,8 @@ const Notification: React.FC = () => {
 												}
 												className={
 													enabled
-														? 'adminlib-eye'
-														: 'adminlib-eye-blocked'
+														? 'adminfont-eye'
+														: 'adminfont-eye-blocked'
 												}
 											></i>
 										</div>
@@ -823,12 +824,12 @@ const Notification: React.FC = () => {
 										<i
 											className={
 												r.label === 'Store'
-													? 'adminlib-storefront'
+													? 'adminfont-storefront'
 													: r.label === 'Admin'
-													? 'adminlib-person'
+													? 'adminfont-person'
 													: r.label === 'Customer'
-													? 'adminlib-user-circle'
-													: 'adminlib-mail'
+													? 'adminfont-user-circle'
+													: 'adminfont-mail'
 											}
 										></i>
 									</span>
@@ -843,8 +844,8 @@ const Notification: React.FC = () => {
 										}
 										className={
 											r.enabled
-												? 'adminlib-eye'
-												: 'adminlib-eye-blocked'
+												? 'adminfont-eye'
+												: 'adminfont-eye-blocked'
 										}
 									></i>
 								</div>
@@ -862,7 +863,7 @@ const Notification: React.FC = () => {
 												className={`recipient ${r.enabled ? '' : 'disable'}`}
 											>
 												<span className="icon">
-													<i className="adminlib-mail"></i>
+													<i className="adminfont-mail"></i>
 												</span>
 
 												<div className="details">
@@ -870,7 +871,7 @@ const Notification: React.FC = () => {
 												</div>
 
 												<i
-													className="delete-btn adminlib-delete"
+													className="delete-btn adminfont-delete"
 													onClick={() =>
 														deleteRecipient(
 															editingNotification,
@@ -906,7 +907,7 @@ const Notification: React.FC = () => {
 									addRecipient(editingNotification)
 								}
 							>
-								<i className="adminlib-plus"></i>
+								<i className="adminfont-plus"></i>
 								Add
 							</button>
 						</div>
@@ -922,7 +923,7 @@ const Notification: React.FC = () => {
 							<div className="card-body">
 								<div className="title-wrapper">
 									<i
-										className={`notification-icon adminlibrary ${notif.icon}`}
+										className={`notification-icon adminfonts ${notif.icon}`}
 									></i>
 									<div className="details">
 										<div className="title">
@@ -962,17 +963,17 @@ const Notification: React.FC = () => {
 											let badgeClass = 'admin-badge ';
 											switch (channel) {
 												case 'mail':
-													iconClass = 'adminlib-mail';
+													iconClass = 'adminfont-mail';
 													badgeClass += 'yellow';
 													break;
 												case 'sms':
 													iconClass =
-														'adminlib-enquiry';
+														'adminfont-enquiry';
 													badgeClass += 'green';
 													break;
 												case 'system':
 													iconClass =
-														'adminlib-notification';
+														'adminfont-notification';
 													badgeClass += 'blue';
 													break;
 											}
@@ -1003,7 +1004,7 @@ const Notification: React.FC = () => {
 										setEditingNotification(notif.id)
 									}
 								>
-									Manage <i className="adminlib-edit"></i>
+									Manage <i className="adminfont-edit"></i>
 								</div>
 							</div>
 						</div>

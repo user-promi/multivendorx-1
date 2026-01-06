@@ -10,7 +10,7 @@ import {
 	Tooltip,
 } from 'recharts';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, MultiCalendarInput, Table, TableCell } from 'zyra';
+import { Card, Column, Container, getApiLink, MultiCalendarInput, Table, TableCell } from 'zyra';
 import axios from 'axios';
 import {
 	PaginationState,
@@ -255,25 +255,25 @@ const ProductReport: React.FC = () => {
 			id: 'sales',
 			label: 'Total Products',
 			count: totalRows,
-			icon: 'adminlib-single-product',
+			icon: 'adminfont-single-product',
 		},
 		{
 			id: 'earnings',
 			label: 'In Stock',
 			count: inStockCount,
-			icon: 'adminlib-per-product-shipping',
+			icon: 'adminfont-per-product-shipping',
 		},
 		{
 			id: 'Vendors',
 			label: 'On backorder',
 			count: onBackorderCount,
-			icon: 'adminlib-multi-product',
+			icon: 'adminfont-multi-product',
 		},
 		{
 			id: 'free',
 			label: 'Out of Stock',
 			count: outOfStockCount,
-			icon: 'adminlib-out-of-stock',
+			icon: 'adminfont-out-of-stock',
 		},
 	];
 
@@ -294,7 +294,7 @@ const ProductReport: React.FC = () => {
 								alt={row.original.store_name}
 							/>
 						) : (
-							<i className="item-icon adminlib-store-inventory"></i>
+							<i className="item-icon adminfont-store-inventory"></i>
 						)}
 						<div className="details">
 							<span className="title">{row.original.title}</span>
@@ -544,7 +544,7 @@ const ProductReport: React.FC = () => {
 						value={filterValue || ''}
 						className="basic-select"
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -554,17 +554,17 @@ const ProductReport: React.FC = () => {
 			name: 'actionButton',
 			render: () => (
 				<>
-					<div className="admin-btn btn-purple-bg"><i className="adminlib-download"></i> Download CSV</div>
+					<div className="admin-btn btn-purple-bg"><i className="adminfont-download"></i> Download CSV</div>
 				</>
 			),
 		},
 	];
 	return (
 		<>
-			<div className="container-wrapper column">
+			<Container>
 				{/* Keep entire top dashboard layout */}
-				<div className="card-wrapper">
-					<div className="card-content transparent">
+				<Column row>
+					<Card transparent>
 						<div className="analytics-container report">
 							{overview.map((item, idx) => (
 								<div key={idx} className="analytics-item">
@@ -584,269 +584,234 @@ const ProductReport: React.FC = () => {
 								</div>
 							))}
 						</div>
-					</div>
-
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__(
-										'Revenue & Sales Comparison',
-										'multivendorx'
-									)}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							{error ? (
-								<p>{error}</p>
-							) : chartData.length > 0 ? (
-								<ResponsiveContainer width="100%" height={300}>
-									<BarChart data={chartData}>
-										<CartesianGrid strokeDasharray="3 3" />
-										<XAxis dataKey="name" />
-										<YAxis />
-										<Tooltip />
-										<Legend />
-										<Bar
-											dataKey="net_sales"
-											fill="#5007aa"
-											name={__(
-												'Net Sales',
-												'multivendorx'
-											)}
-										/>
-										<Bar
-											dataKey="items_sold"
-											fill="#00c49f"
-											name={__(
-												'Items Sold',
-												'multivendorx'
-											)}
-										/>
-									</BarChart>
-								</ResponsiveContainer>
-							) : (
-								<p>
-									{__(
-										'No product sales data found.',
-										'multivendorx'
-									)}
-								</p>
-							)}
-						</div>
-					</div>
-				</div>
+					</Card>
+					<Card title="Revenue & Sales Comparison">
+						{error ? (
+							<p>{error}</p>
+						) : chartData.length > 0 ? (
+							<ResponsiveContainer width="100%" height={300}>
+								<BarChart data={chartData}>
+									<CartesianGrid strokeDasharray="3 3" />
+									<XAxis dataKey="name" />
+									<YAxis />
+									<Tooltip />
+									<Legend />
+									<Bar
+										dataKey="net_sales"
+										fill="#5007aa"
+										name={__(
+											'Net Sales',
+											'multivendorx'
+										)}
+									/>
+									<Bar
+										dataKey="items_sold"
+										fill="#00c49f"
+										name={__(
+											'Items Sold',
+											'multivendorx'
+										)}
+									/>
+								</BarChart>
+							</ResponsiveContainer>
+						) : (
+							<p>
+								{__(
+									'No product sales data found.',
+									'multivendorx'
+								)}
+							</p>
+						)}
+					</Card>
+				</Column>
 
 				{/* Categories and brands */}
-				<div className="card-wrapper">
+				<Column row>
 					{/* Top Reviewed Products Section */}
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__(
-										'Top Reviewed Products',
-										'multivendorx'
+					<Card title="Top Reviewed Products">
+						{toReviewedProduct.length > 0 ? (
+							toReviewedProduct.map((product: any) => (
+								<div
+									className="card-content"
+									key={`review-${product.id}`}
+								>
+									<div
+										className="card-header"
+										onClick={() =>
+											toggleReviewedCard(
+												product.id.toString()
+											)
+										}
+									>
+										<div className="left">
+											<div className="product-name font-medium">
+												{product.name}
+											</div>
+											<div className="price text-sm text-gray-600">
+												<b>
+													{__(
+														'Rating:',
+														'multivendorx'
+													)}
+												</b>{' '}
+												{product.average_rating ||
+													'0'}
+												<i className="adminfont-card"></i>
+											</div>
+										</div>
+										<div className="right">
+											<i
+												className={`adminfont-pagination-right-arrow ${openReviewedCards[
+													product.id
+												]
+													? 'rotate-90 transition-transform'
+													: ''
+													}`}
+											></i>
+										</div>
+									</div>
+
+									{openReviewedCards[product.id] && (
+										<div className="top-items">
+											<div className="items">
+												<div className="left-side flex items-center">
+													<div className="avatar">
+														{product.images
+															?.length ? (
+															<img
+																src={
+																	product
+																		.images[0]
+																		.src
+																}
+																alt={
+																	product.name
+																}
+															/>
+														) : (
+															<div>
+																{product.name?.charAt(
+																	0
+																) || '?'}
+															</div>
+														)}
+													</div>
+
+													<div className="details text-sm leading-6">
+														<div>
+															{__(
+																'Price:',
+																'multivendorx'
+															)}
+															<span
+																dangerouslySetInnerHTML={{
+																	__html:
+																		product.price_html ||
+																		product.price ||
+																		'—',
+																}}
+															/>
+														</div>
+														<div>
+															{__(
+																'Total Sales:',
+																'multivendorx'
+															)}
+															{product.total_sales ||
+																0}
+														</div>
+														<div>
+															{__(
+																'Category:',
+																'multivendorx'
+															)}
+															{product.categories
+																?.map(
+																	(
+																		c: any
+																	) =>
+																		c.name
+																)
+																.join(
+																	', '
+																) || '-'}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									)}
 								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							{toReviewedProduct.length > 0 ? (
-								toReviewedProduct.map((product: any) => (
+							))
+						) : (
+							<p>
+								{__(
+									'No reviewed products found.',
+									'multivendorx'
+								)}
+							</p>
+						)}
+					</Card>
+					<Card title="Top Selling Products">
+						{toSellingProduct.length > 0 ? (
+							toSellingProduct.map(
+								(product: any, index: number) => (
 									<div
-										className="card-content"
-										key={`review-${product.id}`}
+										className="info-item"
+										key={`selling-${product.id}`}
 									>
-										<div
-											className="card-header"
-											onClick={() =>
-												toggleReviewedCard(
-													product.id.toString()
-												)
-											}
-										>
-											<div className="left">
-												<div className="product-name font-medium">
+										<div className="details-wrapper">
+											<div className="avatar">
+												{product.images?.length ? (
+													<img
+														src={
+															product
+																.images[0]
+																.src
+														}
+														alt={product.name}
+													/>
+												) : (
+													<span
+														className={`admin-color${index + 1}`}
+													>
+														{product.name?.charAt(
+															0
+														) || '?'}
+													</span>
+												)}
+											</div>
+											<div className="details">
+												<div className="name">
 													{product.name}
 												</div>
-												<div className="price text-sm text-gray-600">
-													<b>
-														{__(
-															'Rating:',
-															'multivendorx'
-														)}
-													</b>{' '}
-													{product.average_rating ||
-														'0'}
-													<i className="adminlib-card"></i>
+												<div className="des">
+													{__(
+														'Total Sales:',
+														'multivendorx'
+													)}{' '}
+													{product.total_sales ||
+														0}
 												</div>
-											</div>
-											<div className="right">
-												<i
-													className={`adminlib-pagination-right-arrow ${openReviewedCards[
-														product.id
-													]
-														? 'rotate-90 transition-transform'
-														: ''
-														}`}
-												></i>
 											</div>
 										</div>
-
-										{openReviewedCards[product.id] && (
-											<div className="top-items">
-												<div className="items">
-													<div className="left-side flex items-center">
-														<div className="avatar">
-															{product.images
-																?.length ? (
-																<img
-																	src={
-																		product
-																			.images[0]
-																			.src
-																	}
-																	alt={
-																		product.name
-																	}
-																/>
-															) : (
-																<div>
-																	{product.name?.charAt(
-																		0
-																	) || '?'}
-																</div>
-															)}
-														</div>
-
-														<div className="details text-sm leading-6">
-															<div>
-																{__(
-																	'Price:',
-																	'multivendorx'
-																)}
-																<span
-																	dangerouslySetInnerHTML={{
-																		__html:
-																			product.price_html ||
-																			product.price ||
-																			'—',
-																	}}
-																/>
-															</div>
-															<div>
-																{__(
-																	'Total Sales:',
-																	'multivendorx'
-																)}
-																{product.total_sales ||
-																	0}
-															</div>
-															<div>
-																{__(
-																	'Category:',
-																	'multivendorx'
-																)}
-																{product.categories
-																	?.map(
-																		(
-																			c: any
-																		) =>
-																			c.name
-																	)
-																	.join(
-																		', '
-																	) || '-'}
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										)}
+										<div className="right-details">
+											<div className="price"></div>
+										</div>
 									</div>
-								))
-							) : (
-								<p>
-									{__(
-										'No reviewed products found.',
-										'multivendorx'
-									)}
-								</p>
-							)}
-						</div>
-					</div>
-
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Top Selling Products', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							{toSellingProduct.length > 0 ? (
-								toSellingProduct.map(
-									(product: any, index: number) => (
-										<div
-											className="info-item"
-											key={`selling-${product.id}`}
-										>
-											<div className="details-wrapper">
-												<div className="avatar">
-													{product.images?.length ? (
-														<img
-															src={
-																product
-																	.images[0]
-																	.src
-															}
-															alt={product.name}
-														/>
-													) : (
-														<span
-															className={`admin-color${index + 1}`}
-														>
-															{product.name?.charAt(
-																0
-															) || '?'}
-														</span>
-													)}
-												</div>
-												<div className="details">
-													<div className="name">
-														{product.name}
-													</div>
-													<div className="des">
-														{__(
-															'Total Sales:',
-															'multivendorx'
-														)}{' '}
-														{product.total_sales ||
-															0}
-													</div>
-												</div>
-											</div>
-											<div className="right-details">
-												<div className="price"></div>
-											</div>
-										</div>
-									)
 								)
-							) : (
-								<p>
-									{__(
-										'No top selling products found.',
-										'multivendorx'
-									)}
-								</p>
-							)}
-						</div>
-					</div>
-				</div>
-			</div>
+							)
+						) : (
+							<p>
+								{__(
+									'No top selling products found.',
+									'multivendorx'
+								)}
+							</p>
+						)}
+					</Card>
+				</Column>
+			</Container>
 
 			<div className="card-header admin-pt-2">
 				<div className="left">

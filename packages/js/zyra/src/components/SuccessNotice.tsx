@@ -9,7 +9,7 @@ interface SuccessNoticeProps {
 const SuccessNotice: React.FC< SuccessNoticeProps > = ( {
     message,
     title = 'Great!',
-    iconClass = 'adminlib-icon-yes',
+    iconClass = 'adminfont-icon-yes',
 } ) => {
     if ( ! message ) {
         return null;

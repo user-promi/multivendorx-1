@@ -9,7 +9,7 @@ export default {
 		'Configure how marketplace emails are sent. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
 		'multivendorx'
 	),
-	icon: 'adminlib-notification',
+	icon: 'adminfont-notification',
 	submitUrl: 'settings',
 	modal: [
 

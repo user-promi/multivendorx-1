@@ -255,7 +255,7 @@ const Transactions: React.FC = () => {
 						actions: [
 							{
 								label: __('View', 'multivendorx'),
-								icon: 'adminlib-eye',
+								icon: 'adminfont-eye',
 								onClick: (rowData) => {
 									setModalTransaction(rowData);
 								},

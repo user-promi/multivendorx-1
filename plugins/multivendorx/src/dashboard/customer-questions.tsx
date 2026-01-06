@@ -284,7 +284,7 @@ const CustomerQuestions: React.FC = () => {
 									alt={row.original.store_name}
 								/>
 							) : (
-								<i className="item-icon adminlib-multi-product"></i>
+								<i className="item-icon adminfont-multi-product"></i>
 							)}
 							<div className="details">
 								<span className="title">
@@ -384,7 +384,7 @@ const CustomerQuestions: React.FC = () => {
 						actions: [
 							{
 								label: __('Answer', 'multivendorx'),
-								icon: 'adminlib-eye',
+								icon: 'adminfont-eye',
 								onClick: (rowData: any) => {
 									setSelectedQna(rowData);
 									setQna(rowData.question_text);
@@ -393,7 +393,7 @@ const CustomerQuestions: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete delete',
+								icon: 'adminfont-delete delete',
 								onClick: (rowData) => {
 									if (
 										confirm(
@@ -496,7 +496,7 @@ const CustomerQuestions: React.FC = () => {
 						}}
 						value={filterValue || ''}
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -544,7 +544,7 @@ const CustomerQuestions: React.FC = () => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-question"></i>
+								<i className="adminfont-question"></i>
 								{__('Answer Question', 'multivendorx')}
 							</div>
 
@@ -557,7 +557,7 @@ const CustomerQuestions: React.FC = () => {
 
 							<i
 								onClick={() => setSelectedQna(null)}
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 							></i>
 						</>
 					}

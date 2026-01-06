@@ -254,7 +254,7 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
                                             onClick={ generateSSOKey }
                                         >
                                             <>
-                                                <i className="adminlib-star-icon"></i>
+                                                <i className="adminfont-star-icon"></i>
                                                 <span className="text">
                                                     Generate
                                                 </span>
@@ -266,7 +266,7 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
                                                 wraperClass="clear-btn"
                                                 onClick={ handleClear }
                                             >
-                                                <i className="adminlib-delete"></i>
+                                                <i className="adminfont-delete"></i>
                                             </DisplayButton>
 
                                             <DisplayButton
@@ -274,7 +274,7 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
                                                 onClick={ handleCopy }
                                             >
                                                 <>
-                                                    <i className="adminlib-vendor-form-copy"></i>
+                                                    <i className="adminfont-vendor-form-copy"></i>
                                                     <span
                                                         className={
                                                             ! copied
@@ -284,7 +284,7 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
                                                     >
                                                         { copied ? (
                                                             <>
-                                                                <i className="adminlib-success-notification"></i>
+                                                                <i className="adminfont-success-notification"></i>
                                                                 Copied
                                                             </>
                                                         ) : (

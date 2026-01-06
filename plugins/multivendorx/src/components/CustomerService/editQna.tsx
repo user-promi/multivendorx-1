@@ -86,7 +86,7 @@ const EditQna: React.FC<EditQnaProps> = ({
 			header={
 				<>
 					<div className="title">
-						<i className="adminlib-comment"></i>
+						<i className="adminfont-comment"></i>
 						{__('Edit Question', 'multivendorx')}{' '}
 						{qna ? `#${qna.id}` : ''}
 					</div>
@@ -96,7 +96,7 @@ const EditQna: React.FC<EditQnaProps> = ({
 							'multivendorx'
 						)}
 					</div>
-					<i onClick={onClose} className="icon adminlib-close"></i>
+					<i onClick={onClose} className="icon adminfont-close"></i>
 				</>
 			}
 			footer={
@@ -151,7 +151,7 @@ const EditQna: React.FC<EditQnaProps> = ({
 							{__('Question', 'multivendorx')}
 						</div>
 						<div className="settings-metabox-note">
-							<i className="adminlib-help"></i>
+							<i className="adminfont-help"></i>
 							<p>
 								<b>Q:</b> {qna.question_text}
 							</p>

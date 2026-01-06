@@ -253,7 +253,7 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 							{image ? (
 								<img src={image} alt={product.name} />
 							) : (
-								<i className="item-icon adminlib-multi-product"></i>
+								<i className="item-icon adminfont-multi-product"></i>
 							)}
 							<div className="details">
 								<span className="title">
@@ -332,7 +332,7 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 							);
 						}}
 					>
-						<i className="adminlib-check"></i> Approve
+						<i className="adminfont-check"></i> Approve
 					</span>
 
 					<span
@@ -344,7 +344,7 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 							)
 						}
 					>
-						<i className="adminlib-close"></i> Reject
+						<i className="adminfont-close"></i> Reject
 					</span>
 				</TableCell>
 			),
@@ -427,7 +427,7 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-cart"></i>
+								<i className="adminfont-cart"></i>
 								{__('Reason', 'multivendorx')}
 							</div>
 							<i
@@ -436,7 +436,7 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 									setRejectReason('');
 									setIsSubmitting(false);
 								}}
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 							></i>
 						</>
 					}

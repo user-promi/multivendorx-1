@@ -6,7 +6,7 @@ jQuery(function ($) {
 		var $form = $(this).siblings('.report-abuse-form');
 		$form.toggle();
 
-		var $wrapper = $form.find('.report_abuse_reasons_wrapper');
+		var $wrapper = $form.find('.report-abuse-reasons-wrapper');
 
 		// If not already loaded, fetch reasons
 		if ($wrapper.children().length === 0) {
@@ -36,7 +36,7 @@ jQuery(function ($) {
 	// Show/hide custom message textarea if "Other" is selected
 	$(document).on(
 		'change',
-		'.report_abuse_reasons_wrapper input[type=radio]',
+		'.report-abuse-reasons-wrapper input[type=radio]',
 		function () {
 			var $form = $(this).closest('.report-abuse-form');
 			if ($(this).val().toLowerCase() === 'other') {
@@ -56,10 +56,10 @@ jQuery(function ($) {
 		}
 
 		var $form = $btn.closest('.report-abuse-form');
-		var name = $form.find('.report_abuse_name').val().trim();
-		var email = $form.find('.report_abuse_email').val().trim();
+		var name = $form.find('.report-abuse-name').val().trim();
+		var email = $form.find('.report-abuse-email').val().trim();
 		var reason = $form
-			.find('.report_abuse_reasons_wrapper input[type=radio]:checked')
+			.find('.report-abuse-reasons-wrapper input[type=radio]:checked')
 			.val();
 		var msg =
 			reason === 'Other'

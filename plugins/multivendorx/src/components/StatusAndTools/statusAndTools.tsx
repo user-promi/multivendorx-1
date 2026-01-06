@@ -34,7 +34,7 @@ interface Products {
 const supportLink = [
 	{
 		title: __('Get in touch with Support', 'notifima'),
-		icon: 'adminlib-mail',
+		icon: 'adminfont-mail',
 		description: __(
 			'Reach out to the support team for assistance or guidance.',
 			'notifima'
@@ -43,13 +43,13 @@ const supportLink = [
 	},
 	{
 		title: __('Explore Documentation', 'notifima'),
-		icon: 'adminlib-submission-message',
+		icon: 'adminfont-submission-message',
 		description: __('Understand the plugin and its settings.', 'notifima'),
 		link: 'https://notifima.com/docs/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima',
 	},
 	{
 		title: __('Contribute Here', 'notifima'),
-		icon: 'adminlib-support',
+		icon: 'adminfont-support',
 		description: __('Participate in product enhancement.', 'notifima'),
 		link: 'https://github.com/multivendorx/multivendorx/issues/',
 	},

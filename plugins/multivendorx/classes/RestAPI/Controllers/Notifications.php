@@ -117,7 +117,7 @@ class Notifications extends \WP_REST_Controller {
         try {
             $header_notifications = $request->get_param( 'header' );
             $events_notifications = $request->get_param( 'events' );
-            $type = $request->get_param( 'type' );
+            $type                 = $request->get_param( 'type' );
 
             if ( $header_notifications ) {
                 $store_id = $request->get_param( 'store_id' );
@@ -129,14 +129,14 @@ class Notifications extends \WP_REST_Controller {
                     'store_id' => ! empty( $store_id ) ? $store_id : null,
                 );
 
-                $results  = MultiVendorX()->notifications->get_all_notifications( $args );
+                $results = MultiVendorX()->notifications->get_all_notifications( $args );
 
                 $formated_notifications = array();
 
                 foreach ( $results as $row ) {
                     $formated_notifications[] = array(
                         'id'      => (int) $row['id'],
-                        'icon'    => 'adminlib-cart',
+                        'icon'    => 'adminfont-cart',
                         'title'   => $row['title'],
                         'message' => $row['message'],
                         'time'    => $this->time_ago( $row->created_at ),
@@ -195,7 +195,7 @@ class Notifications extends \WP_REST_Controller {
 
                     $formated_notifications[] = array(
                         'id'          => (int) $row->id,
-                        'icon'        => 'adminlib-cart',
+                        'icon'        => 'adminfont-cart',
                         'event'       => $row->event_name,
                         'description' => $row->description,
                         'tag'         => $row->tag,
@@ -255,15 +255,15 @@ class Notifications extends \WP_REST_Controller {
         }
     }
 
-    public function update_items ( $request ) {
+    public function update_items( $request ) {
         $sync_notifications = MultiVendorX()->setting->get_setting( 'sync_notifications', '' );
 
-        if ($sync_notifications == 'sync_only_new_entry') {
+        if ( $sync_notifications == 'sync_only_new_entry' ) {
             MultiVendorX()->notifications->delete_all_events();
-            MultiVendorX()->notifications->insert_system_events(true);
-        } 
+            MultiVendorX()->notifications->insert_system_events( true );
+        }
 
-        if ($sync_notifications == 'sync_existing_entry') {
+        if ( $sync_notifications == 'sync_existing_entry' ) {
             MultiVendorX()->notifications->sync_events();
         }
     }
@@ -315,7 +315,7 @@ class Notifications extends \WP_REST_Controller {
             global $wpdb;
             $notification_data = $request->get_param( 'notifications' );
 
-            $is_read = $request->get_param( 'is_read' );
+            $is_read      = $request->get_param( 'is_read' );
             $is_dismissed = $request->get_param( 'is_dismissed' );
             $id           = $request->get_param( 'id' );
             $form_data    = $request->get_param( 'formData' );

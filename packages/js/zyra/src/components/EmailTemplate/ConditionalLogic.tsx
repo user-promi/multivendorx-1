@@ -88,7 +88,7 @@ const ConditionalLogicModal: React.FC< ConditionalLogicProps > = ( {
                 <div className="modal-header">
                     <h3>Conditional Logic for { formField.name }</h3>
                     <button className="close-btn" onClick={ onClose }>
-                        <i className="admin-font adminlib-close"></i>
+                        <i className="admin-font adminfont-close"></i>
                     </button>
                 </div>
 
@@ -225,7 +225,7 @@ const ConditionalLogicModal: React.FC< ConditionalLogicProps > = ( {
                                                     removeRule( index )
                                                 }
                                             >
-                                                <i className="admin-font adminlib-delete"></i>
+                                                <i className="admin-font adminfont-delete"></i>
                                             </button>
                                         ) }
                                     </div>
@@ -235,7 +235,7 @@ const ConditionalLogicModal: React.FC< ConditionalLogicProps > = ( {
                                     className="add-rule-btn admin-btn default-btn"
                                     onClick={ addRule }
                                 >
-                                    <i className="admin-font adminlib-plus-circle"></i>{ ' ' }
+                                    <i className="admin-font adminfont-plus-circle"></i>{ ' ' }
                                     Add Rule
                                 </button>
                             </div>

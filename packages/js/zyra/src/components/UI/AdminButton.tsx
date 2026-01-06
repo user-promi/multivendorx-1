@@ -19,7 +19,7 @@ const AdminButton: React.FC<AdminButtonProps> = ({ buttons, wrapperClass }) => {
       className={`admin-btn ${btn.className ? `btn-${btn.className}` : ''}`}
       onClick={btn.onClick}
     >
-      {btn.icon && <i className={`adminlib-${btn.icon}`}></i>}
+      {btn.icon && <i className={`adminfont-${btn.icon}`}></i>}
       {btn.text}
     </div>
   ));
