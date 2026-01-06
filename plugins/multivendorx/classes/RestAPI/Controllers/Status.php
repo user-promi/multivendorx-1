@@ -130,7 +130,7 @@ class Status extends \WP_REST_Controller {
                     $store_transient_names = apply_filters(
                         'mvx_clear_all_transients_included_vendor_id',
                         [
-                            'mvx_visitor_stats_data_',
+                            'multivendorx_visitor_stats_data_',
                             'mvx_stats_report_data_',
                         ]
                     );

@@ -133,7 +133,7 @@ class Stores extends \WP_REST_Controller {
             if ( $request->get_param( 'visitorMap' ) ) {
                 $store_id     = (int) $request->get_param( 'id' );
                 $period = absint( $request->get_param( 'period' ) ?: 7 );
-                $cache_key = 'mvx_visitor_stats_data_' . $store_id . '_' . $period;
+                $cache_key = 'multivendorx_visitor_stats_data_' . $store_id;
 
                 if ( $cached = get_transient( $cache_key ) ) {
                     return $cached;
