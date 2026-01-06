@@ -30,9 +30,9 @@ const SetupWizard: React.FC = () => {
 	const methods = [
 		{
 			id: 'marketplace_setup',
-			label: 'Configure Your Marketplace',
+			label: 'Choose what kind of marketplace you are building',
 			icon: 'adminfont-storefront',
-			desc: 'Configure basic settings for vendor stores.',
+			desc: 'This helps us tailor features for your business.',
 			countBtn: true,
 			isWizardMode: true,
 			openForm:true,
@@ -42,34 +42,39 @@ const SetupWizard: React.FC = () => {
 					type: 'multi-select',
 					selectType: 'single-select',
 					label: __(
-						'Choose Your Marketplace Model',
+						'Marketplace type',
 						'multivendorx'
 					),
 					options: [
 						{
 							key: 'general',
-							label: __('General', 'multivendorx'),
+							label: __('Product marketplace', 'multivendorx'),
 							value: 'general',
 						},
 						{
 							key: 'booking',
-							label: __('Booking', 'multivendorx'),
+							label: __('Subscription marketplace', 'multivendorx'),
 							value: 'booking',
 						},
 						{
 							key: 'rental',
-							label: __('Rental', 'multivendorx'),
+							label: __('Rental marketplace', 'multivendorx'),
 							value: 'rental',
 						},
 						{
 							key: 'auction',
-							label: __('Auction', 'multivendorx'),
+							label: __('Auction marketplace', 'multivendorx'),
 							value: 'auction',
 						},
 						{
 							key: 'subscription',
-							label: __('Subscription', 'multivendorx'),
+							label: __('Service marketplace', 'multivendorx'),
 							value: 'subscription',
+						},
+						{
+							key: 'mixed',
+							label: __('Mixed marketplace', 'multivendorx'),
+							value: 'mixed',
 						},
 					],
 				},
@@ -78,7 +83,7 @@ const SetupWizard: React.FC = () => {
 					type: 'multi-select',
 					selectType: 'multi-select',
 					label: __(
-						'Choose Your Product Types',
+						'Choose what product store can sell',
 						'multivendorx'
 					),
 					options: [
@@ -183,7 +188,77 @@ const SetupWizard: React.FC = () => {
 			id: 'store_setup',
 			label: 'Configure Your Store',
 			icon: 'adminfont-storefront',
-			desc: 'Configure basic settings for vendor stores.',
+			desc: 'How stores sell on your marketplace',
+			countBtn: true,
+			isWizardMode: true,
+			openForm:true,
+			formFields: [
+				
+				{
+					key: 'store_selling_mode',
+					type: 'setting-toggle',
+					label: __(
+						'Product listing model',
+						'multivendorx'
+					),
+					options: [
+						{
+							key: 'default',
+							label: __('Independent seller', 'multivendorx'),
+							value: 'default',
+						},
+						{
+							key: 'single_product_multiple_vendor',
+							label: __('Co-listed products', 'multivendorx'),
+							value: 'single_product_multiple_vendor',
+						},
+						{
+							key: 'franchise',
+							label: __('Franchise', 'multivendorx'),
+							value: 'franchise',
+							proSetting: true
+						},
+					],
+				},
+				{
+					key: 'wizardButtons',
+					type: 'buttons',
+					options: [
+						{
+							label: 'Back',
+							action: 'back',
+							btnClass: 'admin-btn btn-red',
+						},
+						{
+							label: 'Next',
+							action: 'next',
+							btnClass: 'admin-btn btn-purple',
+						},
+					],
+				},
+				{
+					key: 'wizardButtons',
+					type: 'buttons',
+					options: [
+						{
+							label: 'Back',
+							action: 'back',
+							btnClass: 'admin-btn btn-red',
+						},
+						{
+							label: 'Next',
+							action: 'next',
+							btnClass: 'admin-btn btn-purple',
+						},
+					],
+				},
+			],
+		},
+		{
+			id: 'store_setup',
+			label: 'Configure Your Store',
+			icon: 'adminfont-storefront',
+			desc: 'How stores gets approved on your marketplace',
 			countBtn: true,
 			isWizardMode: true,
 			openForm:true,
@@ -254,9 +329,9 @@ const SetupWizard: React.FC = () => {
 		},
 		{
 			id: 'commission_setup',
-			label: 'Commission Setup',
+			label: 'How marketplace commission is calculated',
 			icon: 'adminfont-storefront',
-			desc: 'Configure basic settings for vendor stores.',
+			desc: 'Decide how your marketplace earns money.',
 			countBtn: true,
 			isWizardMode: true,
 			openForm:true,
@@ -360,6 +435,22 @@ const SetupWizard: React.FC = () => {
 							btnClass: 'admin-btn btn-red',
 						},
 						{
+							label: 'Next',
+							action: 'next',
+							btnClass: 'admin-btn btn-purple',
+						},
+					],
+				},
+				{
+					key: 'wizardButtons',
+					type: 'buttons',
+					options: [
+						{
+							label: 'Back',
+							action: 'back',
+							btnClass: 'admin-btn btn-red',
+						},
+						{
 							label: 'Finish',
 							action: 'next',
 							btnClass: 'admin-btn btn-purple',
@@ -367,6 +458,141 @@ const SetupWizard: React.FC = () => {
 						},
 					],
 				},
+				
+			],
+		},
+		{
+			id: 'commission_setup',
+			label: 'Want to set up more details?',
+			icon: 'adminfont-storefront',
+			desc: 'You’re all set with the basics! If you’d like to fine-tune your marketplace now, use the quick links below',
+			countBtn: true,
+			isWizardMode: true,
+			openForm:true,
+			formFields: [
+				{
+				// 	key: 'commission_type',
+				// 	type: 'setting-toggle',
+				// 	label: __('Commission type', 'multivendorx'),
+				// 	settingDescription: __(
+				// 		'Choose how commissions should be calculated for your marketplace.',
+				// 		'multivendorx'
+				// 	),
+				// 	desc: __(
+				// 		'<ul><li>Store order based - Calculated on the full order amount of each store. Example: A customer buys from 3 stores → commission applies separately to each store’s order.</li><li>Per item based - Applied to each product in the order. Example: An order with 5 items → commission applies 5 times, once per item.</li></ul>',
+				// 		'multivendorx'
+				// 	),
+				// 	options: [
+				// 		{
+				// 			key: 'store_order',
+				// 			label: __('Store order based', 'multivendorx'),
+				// 			value: 'store_order',
+				// 		},
+				// 		{
+				// 			key: 'item',
+				// 			label: __('Per item based', 'multivendorx'),
+				// 			value: 'item',
+				// 		},
+				// 	],
+				// },
+				// {
+				// 	key: 'commission_value',
+				// 	type: 'nested',
+				// 	label: 'Commission value',
+				// 	single: true,
+				// 	desc: __(
+				// 		'Set global commission rates that apply to each individual item quantity. Commission will be calculated by multiplying the rate with the total number of items across all products in the order.',
+				// 		'multivendorx'
+				// 	),
+				// 	nestedFields: [
+				// 		{
+				// 			key: 'commission_fixed',
+				// 			type: 'number',
+				// 			preInsideText: __('$', 'multivendorx'),
+				// 			size: '8rem',
+				// 			preText: 'Fixed',
+				// 			postText: '+',
+				// 		},
+				// 		{
+				// 			key: 'commission_percentage',
+				// 			type: 'number',
+				// 			postInsideText: __('%', 'multivendorx'),
+				// 			size: '8rem',
+				// 		},
+				// 	],
+				// },
+				// {
+				// 	key: 'disbursement_order_status',
+				// 	type: 'multi-checkbox',
+				// 	label: __(
+				// 		'Eligible order statuses for store earning payout',
+				// 		'multivendorx'
+				// 	),
+				// 	settingDescription: __(
+				// 		'Select the order statuses after which earning will be added to the store wallet.',
+				// 		'multivendorx'
+				// 	),
+				// 	class: 'mvx-toggle-checkbox',
+				// 	options: [
+				// 		{
+				// 			key: 'completed',
+				// 			label: __('Completed', 'multivendorx'),
+				// 			value: 'completed',
+				// 		},
+				// 		{
+				// 			key: 'delivered',
+				// 			label: __('Delivered', 'multivendorx'),
+				// 			value: 'delivered',
+				// 			proSetting: true,
+				// 		},
+				// 		{
+				// 			key: 'processing',
+				// 			label: __('Processing', 'multivendorx'),
+				// 			value: 'processing',
+				// 		},
+				// 		{
+				// 			key: 'shipped',
+				// 			label: __('Shipped', 'multivendorx'),
+				// 			value: 'shipped',
+				// 			proSetting: true,
+				// 		},
+				// 	],
+				// 	selectDeselect: true,
+				// },
+				// {
+				// 	key: 'wizardButtons',
+				// 	type: 'buttons',
+				// 	options: [
+				// 		{
+				// 			label: 'Back',
+				// 			action: 'back',
+				// 			btnClass: 'admin-btn btn-red',
+				// 		},
+				// 		{
+				// 			label: 'Next',
+				// 			action: 'next',
+				// 			btnClass: 'admin-btn btn-purple',
+				// 		},
+				// 	],
+				// },
+				{
+					key: 'wizardButtons',
+					type: 'buttons',
+					options: [
+						{
+							label: 'Back',
+							action: 'back',
+							btnClass: 'admin-btn btn-red',
+						},
+						{
+							label: 'Finish',
+							action: 'next',
+							btnClass: 'admin-btn btn-purple',
+							redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=modules`,
+						},
+					],
+				},
+				
 			],
 		},
 	];
