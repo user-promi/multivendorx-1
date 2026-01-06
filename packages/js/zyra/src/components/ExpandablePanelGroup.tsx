@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/web/ExpandablePanelGroup.scss';
 import TextArea from './TextArea';
+import BlockText from './BlockText';
 import ToggleSetting from './ToggleSetting';
 import MultiCheckBox from './MultiCheckbox';
 import NestedComponent from './NestedComponent';
@@ -53,6 +54,7 @@ interface PanelFormField {
     | 'clickable-list'
     | 'iconlibrary'
     | 'copy-text'
+    | 'blocktext'
     | 'multi-select';
 
     label: string;
@@ -375,12 +377,10 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                     setFieldProgress((prev) => {
                         const updatedProgress = [...prev];
 
-                        /**
-                         * ✅ Count ONLY real fields (exclude buttons)
-                         */
+                        // Count ONLY real fields (exclude buttons)
                         const countableFields =
                             methods[methodIndex]?.formFields?.filter(
-                                (f) => f.type !== 'buttons'
+                                (f) => f.type !== 'buttons' && f.type !== 'blocktext'
                             ) || [];
 
                         const maxFields = countableFields.length;
@@ -483,6 +483,47 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         });
     };
 
+    const isContain = (
+        key: string,
+        methodId: string,
+        valuee: string | number | boolean | null = null
+    ): boolean => {
+        const settingValue = value[ methodId ]?.[ key ];
+
+        // If settingValue is an array
+        if ( Array.isArray( settingValue ) ) {
+            // If value is null and settingValue has elements, return true
+            if ( valuee === null && settingValue.length > 0 ) {
+                return true;
+            }
+
+            return settingValue.includes( valuee );
+        }
+
+        // If settingValue is not an array
+        if ( valuee === null && Boolean( settingValue ) ) {
+            return true;
+        }
+
+        return settingValue === valuee;
+    };
+
+    const shouldRender = ( dependent: any, methodId: string ): boolean => {
+        if ( dependent.set === true && ! isContain( dependent.key, methodId ) ) {
+            return false;
+        }
+        if ( dependent.set === false && isContain( dependent.key, methodId ) ) {
+            return false;
+        }
+        if (
+            dependent.value !== undefined &&
+            ! isContain( dependent.key, methodId, dependent.value )
+        ) {
+            return false;
+        }
+        return true;
+    };
+
     const renderField = (methodId: string, field: PanelFormField) => {
         const fieldValue = value[methodId]?.[field.key];
 
@@ -504,6 +545,19 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                         onChange={(val) =>
                             handleInputChange(methodId, field.key, val)
                         }
+                    />
+                );
+
+            case 'blocktext':
+                return (
+                    <BlockText
+                        key={ field.blocktext }
+                        blockTextClass={
+                            field.blockTextClass ||
+                            'settings-metabox-note'
+                        }
+                        title={ field.title }
+                        value={ String( field.blocktext ) }
                     />
                 );
 
@@ -1268,7 +1322,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                         </ul>
                                     ) : method.countBtn && method.formFields?.length > 0 && (() => {
                                         const countableFields = method.formFields.filter(
-                                            (field) => field.type !== 'buttons'
+                                            (field) => field.type !== 'buttons' && field.type !== 'blocktext'
                                         );
 
                                         return (
@@ -1490,12 +1544,30 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                 return null;
                                             }
 
+                                            const shouldShowField = (() => {
+                                                if (Array.isArray(field.dependent)) {
+                                                    return field.dependent.every((dependent) =>
+                                                        shouldRender(dependent, method.id)
+                                                    );
+                                                }
+
+                                                if (field.dependent) {
+                                                    return shouldRender(field.dependent, method.id);
+                                                }
+
+                                                return true;
+                                            })();
+
+                                            if (!shouldShowField) {
+                                                return null;
+                                            }
+
                                             return (
                                                 <div
                                                     key={field.key}
                                                     className="form-group"
                                                 >
-                                                    {field.label && (
+                                                    {field.type !== 'blocktext' && field.label && (
                                                         <label>
                                                             {field.label}
                                                         </label>

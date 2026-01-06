@@ -110,6 +110,58 @@ const SetupWizard: React.FC = () => {
 					],
 				},
 				{
+					key: 'notice',
+					type: 'blocktext',
+					label: __('no_label', 'multivendorx'),
+					blocktext: __(
+						'Woocommerce Booking and MultiVendorX Pro required for this.',
+						'multivendorx'
+					),
+					dependent: {
+						key: 'marketplace_model',
+						value: 'booking',
+					},
+				},
+				{
+					key: 'notice',
+					type: 'blocktext',
+					label: __('no_label', 'multivendorx'),
+					blocktext: __(
+						'Woocommerce Rental and MultiVendorX Pro required for this.',
+						'multivendorx'
+					),
+					dependent: {
+						key: 'marketplace_model',
+						value: 'rental',
+					},
+				},
+				{
+					key: 'notice',
+					type: 'blocktext',
+					label: __('no_label', 'multivendorx'),
+					blocktext: __(
+						'Woocommerce Auction and MultiVendorX Pro required for this.',
+						'multivendorx'
+					),
+					dependent: {
+						key: 'marketplace_model',
+						value: 'auction',
+					},
+				},
+				{
+					key: 'notice',
+					type: 'blocktext',
+					label: __('no_label', 'multivendorx'),
+					blocktext: __(
+						'Woocommerce Subscription and MultiVendorX Pro required for this.',
+						'multivendorx'
+					),
+					dependent: {
+						key: 'marketplace_model',
+						value: 'subscription',
+					},
+				},
+				{
 					key: 'wizardButtons',
 					type: 'buttons',
 					options: [

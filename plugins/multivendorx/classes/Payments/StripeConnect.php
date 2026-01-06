@@ -81,24 +81,44 @@ class StripeConnect {
                     'type'        => 'text',
                     'label'       => __( 'Stripe client ID', 'multivendorx' ),
                     'placeholder' => __( 'Enter Stripe Client ID', 'multivendorx' ),
+                    'dependent'   => [
+                        'key' => 'payment_mode',
+                        'set' => true,
+                        'value' => 'test',
+                    ],
                 ),
                 array(
                     'key'         => 'live_client_id',
                     'type'        => 'text',
                     'label'       => __( 'Stripe client ID', 'multivendorx' ),
                     'placeholder' => __( 'Enter Stripe Client ID', 'multivendorx' ),
+                    'dependent'   => [
+                        'key' => 'payment_mode',
+                        'set' => true,
+                        'value' => 'live',
+                    ],
                 ),
                 array(
                     'key'         => 'test_secret_key',
                     'type'        => 'text',
                     'label'       => __( 'Secret key', 'multivendorx' ),
                     'placeholder' => __( 'Enter secret key ', 'multivendorx' ),
+                    'dependent'   => [
+                        'key' => 'payment_mode',
+                        'set' => true,
+                        'value' => 'test',
+                    ],
                 ),
                 array(
                     'key'         => 'live_secret_key',
                     'type'        => 'text',
                     'label'       => __( 'Secret key', 'multivendorx' ),
                     'placeholder' => __( 'Enter secret key', 'multivendorx' ),
+                    'dependent'   => [
+                        'key' => 'payment_mode',
+                        'set' => true,
+                        'value' => 'live',
+                    ],
                 ),
                 array(
                     'key'   => 'redirect_url',
