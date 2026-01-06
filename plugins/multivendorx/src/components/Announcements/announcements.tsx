@@ -18,6 +18,7 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	AdminButton,
+	ProPopup,
 } from 'zyra';
 
 import {
@@ -27,6 +28,7 @@ import {
 } from '@tanstack/react-table';
 import './announcements.scss';
 import { truncateText } from '@/services/commonFunction';
+import { Dialog } from '@mui/material';
 
 type AnnouncementRow = {
 	stores: number[] | null;
@@ -150,6 +152,48 @@ export const Announcements: React.FC = () => {
 	const [validationErrors, setValidationErrors] = useState<{
 		[key: string]: string;
 	}>({});
+	const [selectedAn, setSelectedAn] = useState<{
+		id: number;
+	} | null>(null);
+	const [confirmOpen, setConfirmOpen] = useState(false);
+
+	const handleDeleteClick = (rowData) => {
+		setSelectedAn({
+			id: rowData.id,
+		});
+		setConfirmOpen(true);
+	};
+	const handleConfirmDelete = async () => {
+		if (!selectedAn) {
+			return;
+		}
+
+		try {
+			await axios({
+				method: 'DELETE',
+				url: getApiLink(
+					appLocalizer,
+					`announcement/${selectedAn.id}`
+				),
+				headers: {
+					'X-WP-Nonce':
+						appLocalizer.nonce,
+				},
+			});
+
+			// Refresh data after deletion
+			await fetchTotalRows();
+			requestData(
+				pagination.pageSize,
+				pagination.pageIndex + 1,
+				'',
+				''
+			);
+		} finally {
+			setConfirmOpen(false);
+			setSelectedAn(null);
+		}
+	};
 
 	const validateForm = () => {
 		const errors: { [key: string]: string } = {};
@@ -374,7 +418,7 @@ export const Announcements: React.FC = () => {
 					{ key: 'all', name: 'All', count: response.data.all || 0 },
 					{
 						key: 'publish',
-						name: 'Publish',
+						name: 'Published',
 						count: response.data.publish || 0,
 					},
 					{
@@ -566,50 +610,8 @@ export const Announcements: React.FC = () => {
 							{
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminfont-delete delete',
-								onClick: async (rowData: AnnouncementRow) => {
-									if (!rowData.id) {
-										return;
-									}
-									if (
-										!confirm(
-											__(
-												'Are you sure you want to delete this announcement?',
-												'multivendorx'
-											)
-										)
-									) {
-										return;
-									}
-
-									try {
-										await axios({
-											method: 'DELETE',
-											url: getApiLink(
-												appLocalizer,
-												`announcement/${rowData.id}`
-											),
-											headers: {
-												'X-WP-Nonce':
-													appLocalizer.nonce,
-											},
-										});
-
-										// Refresh data after deletion
-										await fetchTotalRows();
-										requestData(
-											pagination.pageSize,
-											pagination.pageIndex + 1,
-											'',
-											''
-										);
-									} catch (err: unknown) {
-										setError(
-											__(
-												`Failed to delete announcement${err}`,
-												'multivendorx'
-											)
-										);
-									}
+								onClick: (rowData: AnnouncementRow) => {
+									handleDeleteClick(rowData);
 								},
 								hover: true,
 							},
@@ -658,6 +660,27 @@ export const Announcements: React.FC = () => {
 	];
 	return (
 		<>
+			<Dialog
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+			>
+				<ProPopup
+					confirmMode
+					title="Delete Announcement"
+					confirmMessage={
+						selectedAn
+							? `Are you sure you want to delete Announcement?`
+							: ''
+					}
+					confirmYesText="Delete"
+					confirmNoText="Cancel"
+					onConfirm={handleConfirmDelete}
+					onCancel={() => {
+						setConfirmOpen(false);
+						setSelectedAn(null);
+					}}
+				/>
+			</Dialog>
 			<AdminBreadcrumbs
 				activeTabIcon="adminfont-announcement"
 				description={
