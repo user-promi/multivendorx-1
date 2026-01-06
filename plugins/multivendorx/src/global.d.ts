@@ -70,6 +70,7 @@ declare global {
 		adminUrl: any;
 		module_page_url: any;
 		current_user: any;
+		order_meta:any;
 	}
 	interface Color {
 		color: any;

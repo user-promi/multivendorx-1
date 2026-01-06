@@ -474,6 +474,7 @@ class FrontendScripts {
 									'manage_plan_url' => MULTIVENDORX_PRO_SHOP_URL,
 								)
 							),
+                            'order_meta'               => Utill::ORDER_META_SETTINGS,
                         )
                     ),
                 ),
