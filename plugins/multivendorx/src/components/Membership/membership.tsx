@@ -34,6 +34,24 @@ const productTypeField = {
 		{ key: 'downloadable', value: 'downloadable', label: 'Downloadable Product' },
 	],
 };
+
+const proFeatures = {
+	key: 'pro_features',
+	look: 'checkbox',
+	selectDeselect: true,
+	class: 'basic-checkbox',
+	desc: 'Choose the kinds of items stores can sell under this plan. Only selected types will be available when a store adds a new product.',
+	options: [
+		{ key: 'invoice_management', value: 'invoice_management', label: 'Invoice Management' },
+		{ key: 'store_staff', value: 'store_staff', label: 'Store Staff' },
+		{ key: 'seo_tools', value: 'seo_tools', label: 'SEO Tools' },
+		{ key: 'affiliate_program', value: 'affiliate_program', label: 'Affiliate Program' },
+		{ key: 'advertisement', value: 'advertisement', label: 'Advertisement' },
+		{ key: 'advanced_inventory', value: 'advanced_inventory', label: 'Advanced Inventory' },
+		{ key: 'analytics_dashboard', value: 'analytics_dashboard', label: 'Analytics Dashboard' },
+		{ key: 'shipping_management', value: 'shipping_management', label: 'Shipping Management' },
+	],
+};
 const orderPermissionField = {
 	key: 'order_permissions',
 	look: 'checkbox',
@@ -43,12 +61,12 @@ const orderPermissionField = {
 	options: [
 		{
 			key: 'add-order-notes',
-			value: 'add-order-notes',
+			value: 'Add Order Notes',
 			label: 'Add Order Notes',
 		},
 		{
 			key: 'export-order-data',
-			value: 'export-order-data',
+			value: 'Export Order Data',
 			label: 'Export Order Data',
 		},
 	],
@@ -60,31 +78,10 @@ const vendorStorefrontField = {
 	class: 'basic-checkbox',
 	desc: 'Select the storefront capabilities available to vendors',
 	options: [
-		{
-			key: 'edit-store-policies',
-			value: 'edit-store-policies',
-			label: 'Edit Store Policies',
-		},
-		{
-			key: 'external-store-url',
-			value: 'enable-external-store-url',
-			label: 'Enable External Store URL',
-		},
-		{
-			key: 'send-messages',
-			value: 'send-messages-to-buyers',
-			label: 'Send Messages to Buyers',
-		},
-		{
-			key: 'shop-support',
-			value: 'shop-support-system',
-			label: 'Shop Support System',
-		},
-		{
-			key: 'vendor-vacation',
-			value: 'vendor-vacation-mode',
-			label: 'Vendor Vacation Mode',
-		},
+		{ key: 'edit_store_policies', value: 'edit_store_policies', label: 'Edit Store Policies' },
+		{ key: 'send_messages', value: 'send_messages', label: 'Send Messages' },
+		{ key: 'support_system', value: 'support_system', label: 'Support System' },
+		{ key: 'vacation_mode', value: 'vacation_mode', label: 'Vacation Mode' },
 	],
 };
 
@@ -183,49 +180,24 @@ const field = {
 	desc: 'Select the actions stores are allowed to perform.',
 	options: [
 		{
-			key: 'submit-products',
-			value: 'submit-products',
+			key: 'submit_products',
+			value: 'submit_products',
 			label: 'Submit Products',
 		},
 		{
-			key: 'publish-products',
-			value: 'publish-products-directly',
-			label: 'Publish Products Directly',
+			key: 'publish_directly',
+			value: 'publish_directly',
+			label: 'Publish Directly',
 		},
 		{
-			key: 'edit-published-products',
-			value: 'edit-published-products',
-			label: 'Edit Published Products',
+			key: 'edit_published',
+			value: 'edit_published',
+			label: 'Edit Published',
 		},
 		{
-			key: 'upload-media',
-			value: 'upload-media-files',
-			label: 'Upload Media Files',
-		},
-		{
-			key: 'create-coupons',
-			value: 'create-coupons',
-			label: 'Create Coupons',
-		},
-		{
-			key: 'publish-coupons',
-			value: 'publish-coupons',
-			label: 'Publish Coupons',
-		},
-		{
-			key: 'edit-published-coupons',
-			value: 'edit-published-coupons',
-			label: 'Edit Published Coupons',
-		},
-		{
-			key: 'view-orders',
-			value: 'view-orders',
-			label: 'View Orders',
-		},
-		{
-			key: 'manage-shipping',
-			value: 'manage-shipping',
-			label: 'Manage Shipping',
+			key: 'upload_media',
+			value: 'upload_media',
+			label: 'Upload Media',
 		},
 	],
 };
@@ -818,7 +790,25 @@ const Membership = ({ id }: { id: string }) => {
 											moduleChange={() => { }}
 											modules={[]}
 										/>
-									</FormGroup>									
+									</FormGroup>
+
+									{/* <FormGroup
+										label="Product categories store can access"
+										htmlFor="product_category_limit"
+										desc={__('Product categories store can access', 'multivendorx')}
+										className="border-top"
+									>
+										<BasicInput
+											name="product_category_limit"
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={formData.product_category_limit}
+											onChange={handleChange}
+											postInsideText="max"
+											size="12rem"
+										/>
+									</FormGroup> */}
+
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">
@@ -826,7 +816,100 @@ const Membership = ({ id }: { id: string }) => {
 								</p>
 							)}
 						</Card>
+
 						<Card title={__('What stores are allowed to do with products', 'multivendorx')}
+							desc={__('Decide how much control stores have after adding a product — for example, whether they can publish it themselves or make changes later.', 'multivendorx')}
+							action={
+								<MultiCheckBox
+									wrapperClass="toggle-btn"
+									inputWrapperClass="toggle-checkbox-header"
+									inputInnerWrapperClass="toggle-checkbox"
+									idPrefix="toggle-switch-sold-individually"
+									type="checkbox"
+									value={allowedProducts ? ['allowed_products'] : []}
+									onChange={(e) =>
+										setallowedProducts(
+											(e as React.ChangeEvent<HTMLInputElement>)
+												.target.checked
+										)
+									}
+									options={[
+										{
+											key: 'allowed_products',
+											value: 'allowed_products',
+										},
+									]}
+								/>
+							}
+						>
+
+							{allowedProducts ? (
+								<>
+									<FormGroupWrapper>
+										<FormGroup
+											label="Product permissions"
+											htmlFor={vendorStorefrontField.key}
+											desc={__('Select the actions stores are allowed to perform.', 'multivendorx')}
+										>
+											<MultiCheckBox
+												wrapperClass="checkbox-list-side-by-side"
+												descClass="settings-metabox-description"
+												description={vendorStorefrontField.desc}
+												inputWrapperClass="toggle-checkbox-header"
+												inputInnerWrapperClass="default-checkbox"
+												inputClass={vendorStorefrontField.class}
+												idPrefix={vendorStorefrontField.key}
+												selectDeselect
+												options={vendorStorefrontField.options}
+												value={normalizeValue(vendorStorefrontField.key)}
+												onChange={handleMultiCheckboxChange(
+													vendorStorefrontField.key
+												)}
+												onMultiSelectDeselectChange={() =>
+													handleSelectDeselect(vendorStorefrontField)
+												}
+												proSetting={false}
+												moduleChange={() => { }}
+												modules={[]}
+											/>
+										</FormGroup>
+
+										<FormGroup label="How many products a store can list" className="border-top" desc={__('Set the total number of products a store can have at one time.', 'multivendorx')}>
+											<BasicInput
+												name="name"
+												wrapperClass="setting-form-input"
+												descClass="settings-metabox-description"
+												value={formData.name}
+												onChange={handleChange}
+												// postInsideText={'credits per month'}
+												size="10rem"
+												postText={'products maximum'}
+											/>
+										</FormGroup>
+
+										<FormGroup label="Images per product" className="border-top" desc={__('Control how many images a store can add for each product.', 'multivendorx')}>
+											<BasicInput
+												name="name"
+												wrapperClass="setting-form-input"
+												descClass="settings-metabox-description"
+												value={formData.name}
+												onChange={handleChange}
+												// postInsideText={'credits per month'}
+												size="10rem"
+												postText={'images maximum'}
+											/>
+										</FormGroup>
+									</FormGroupWrapper>
+								</>
+							) : (
+								<p className="settings-metabox-description">
+									Manages access to AI-powered tools for stores.
+								</p>
+							)}
+						</Card>
+
+						<Card title={__('MultiVendorX Pro Features', 'multivendorx')}
+							desc={'Select which premium features stores can access with this plan.'}
 							action={
 								<MultiCheckBox
 									wrapperClass="toggle-btn"
@@ -836,7 +919,7 @@ const Membership = ({ id }: { id: string }) => {
 									type="checkbox"
 									value={productPermissions ? ['product_permissions'] : []}
 									onChange={(e) =>
-										setProductPermissions(
+										setproductPermissions(
 											(e as React.ChangeEvent<HTMLInputElement>).target.checked
 										)
 									}
@@ -851,66 +934,43 @@ const Membership = ({ id }: { id: string }) => {
 						>
 							{productPermissions ? (
 								<FormGroupWrapper>
-									<FormGroup
-										label={__('What stores are allowed to do with products', 'multivendorx')}
-										htmlFor={productPermissionField.key}
-									>
+									<FormGroup label="Available Pro Features" desc={__('Enable advanced features that give stores more control and capabilities.', 'multivendorx')}>
 										<MultiCheckBox
+											khali_dabba={true}
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
-											description={productPermissionField.desc}
+											description={productTypeField.desc}
 											inputWrapperClass="toggle-checkbox-header"
 											inputInnerWrapperClass="default-checkbox"
-											inputClass={productPermissionField.class}
-											idPrefix={productPermissionField.key}
+											inputClass={productTypeField.class}
+											idPrefix="product-type"
 											selectDeselect
-											options={productPermissionField.options}
-											value={normalizeValue(productPermissionField.key)}
-											onChange={handleMultiCheckboxChange(productPermissionField.key)}
+											options={proFeatures.options}
+											value={normalizeValue(proFeatures.key)}
+											onChange={(e: any) => {
+												if (Array.isArray(e)) {
+													handleInputChange(proFeatures.key, e);
+													return;
+												}
+
+												if (e?.target) {
+													const val = String(e.target.value);
+													const checked = !!e.target.checked;
+													let current = normalizeValue(proFeatures.key);
+
+													current = checked
+														? [...new Set([...current, val])]
+														: current.filter((v) => v !== val);
+
+													handleInputChange(proFeatures.key, current);
+												}
+											}}
 											onMultiSelectDeselectChange={() =>
-												handleSelectDeselect(productPermissionField)
+												handleSelectDeselect(proFeatures)
 											}
 											proSetting={false}
 											moduleChange={() => { }}
 											modules={[]}
-										/>
-									</FormGroup>
-									<FormGroup className="border-top" label={__('Images per product', 'multivendorx')} htmlFor="per_product" desc={__('Control how many images a store can add for each product.', 'multivendorx')}>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-											postInsideText={'images max'}
-											size="8rem"
-										/>
-									</FormGroup>
-									<FormGroup label="How many products a store can list" className="border-top" desc={__('Set the total number of products a store can have at one time.', 'multivendorx')}>
-										<BasicInput
-											name="name"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.name}
-											onChange={handleChange}
-											postInsideText={'products maximum'}
-											size="12rem"
-										/>
-									</FormGroup>
-									<FormGroup
-										label="Cost to add product beyond limit"
-										htmlFor="extra_product_cost"
-										desc={__('Cost to add product beyond limit', 'multivendorx')}
-										className="border-top"
-									>
-										<BasicInput
-											name="extra_product_cost"
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											value={formData.extra_product_cost}
-											onChange={handleChange}
-											postInsideText="/product"
-											size="12rem"
 										/>
 									</FormGroup>
 								</FormGroupWrapper>
@@ -922,8 +982,8 @@ const Membership = ({ id }: { id: string }) => {
 							)}
 						</Card>
 
-
-						<Card title={__('Order & Data Management', 'multivendorx')}
+						<Card title={__('How stores handle orders and customer information', 'multivendorx')}
+							desc={__('Decide what stores can see and do after a customer places an order.', 'multivendorx')}
 							action={
 								<MultiCheckBox
 									wrapperClass="toggle-btn"
@@ -949,7 +1009,9 @@ const Membership = ({ id }: { id: string }) => {
 						>
 							{orderManagement ? (
 								<FormGroupWrapper>
-									<FormGroup label="What order information stores can access" htmlFor={orderPermissionField.key}>
+									<FormGroup label="Actions stores can take on orders"
+										desc="Choose whether stores can add notes, download order details, or take other actions."
+									>
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -971,7 +1033,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label="Information in Exported Orders" htmlFor={exportedOrderInfoField.key} className="border-top">
+									{/* <FormGroup label="Information in Exported Orders" htmlFor={exportedOrderInfoField.key} className="border-top">
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -1013,7 +1075,7 @@ const Membership = ({ id }: { id: string }) => {
 											moduleChange={() => { }}
 											modules={[]}
 										/>
-									</FormGroup>
+									</FormGroup> */}
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">
@@ -1023,6 +1085,7 @@ const Membership = ({ id }: { id: string }) => {
 						</Card>
 
 						<Card title={__('AI tools available to stores', 'multivendorx')}
+							desc={'Decide whether stores can use AI tools and how much they can use them.'}
 							action={
 								<MultiCheckBox
 									wrapperClass="toggle-btn"
@@ -1080,100 +1143,9 @@ const Membership = ({ id }: { id: string }) => {
 								</p>
 							)}
 						</Card>
-						<Card title={__('What stores are allowed to do with products', 'multivendorx')}
-							action={
-								<MultiCheckBox
-									wrapperClass="toggle-btn"
-									inputWrapperClass="toggle-checkbox-header"
-									inputInnerWrapperClass="toggle-checkbox"
-									idPrefix="toggle-switch-sold-individually"
-									type="checkbox"
-									value={allowedProducts ? ['allowed_products'] : []}
-									onChange={(e) =>
-										setallowedProducts(
-											(e as React.ChangeEvent<HTMLInputElement>)
-												.target.checked
-										)
-									}
-									options={[
-										{
-											key: 'allowed_products',
-											value: 'allowed_products',
-										},
-									]}
-								/>
-							}
-						>
-
-							{allowedProducts ? (
-								<>
-									<FormGroupWrapper>
-										<FormGroup
-											label="Vendor Storefront Capabilities"
-											htmlFor={vendorStorefrontField.key}
-											desc={__('Images allowed per product', 'multivendorx')}
-										>
-											<MultiCheckBox
-												wrapperClass="checkbox-list-side-by-side"
-												descClass="settings-metabox-description"
-												description={vendorStorefrontField.desc}
-												inputWrapperClass="toggle-checkbox-header"
-												inputInnerWrapperClass="default-checkbox"
-												inputClass={vendorStorefrontField.class}
-												idPrefix={vendorStorefrontField.key}
-												selectDeselect
-												options={vendorStorefrontField.options}
-												value={normalizeValue(vendorStorefrontField.key)}
-												onChange={handleMultiCheckboxChange(
-													vendorStorefrontField.key
-												)}
-												onMultiSelectDeselectChange={() =>
-													handleSelectDeselect(vendorStorefrontField)
-												}
-												proSetting={false}
-												moduleChange={() => { }}
-												modules={[]}
-											/>
-										</FormGroup>
-
-										<FormGroup
-											label="Include All Add-ons"
-											htmlFor={advancedFeaturesField.key}
-											className="border-top"
-											desc={__('Images allowed per product', 'multivendorx')}
-										>
-											<MultiCheckBox
-												wrapperClass="checkbox-list-side-by-side"
-												descClass="settings-metabox-description"
-												description={advancedFeaturesField.desc}
-												inputWrapperClass="toggle-checkbox-header"
-												inputInnerWrapperClass="default-checkbox"
-												inputClass={advancedFeaturesField.class}
-												idPrefix={advancedFeaturesField.key}
-												selectDeselect
-												options={advancedFeaturesField.options}
-												value={normalizeValue(advancedFeaturesField.key)}
-												onChange={handleMultiCheckboxChange(
-													advancedFeaturesField.key
-												)}
-												onMultiSelectDeselectChange={() =>
-													handleSelectDeselect(advancedFeaturesField)
-												}
-												proSetting={false}
-												moduleChange={() => { }}
-												modules={[]}
-											/>
-										</FormGroup>
-									</FormGroupWrapper>
-								</>
-							) : (
-								<p className="settings-metabox-description">
-									Manages access to AI-powered tools for stores.
-								</p>
-							)}
-						</Card>
 
 						<Card title={__('Extra tools for running a store', 'multivendorx')}
+							desc={'Decide which additional tools stores get to manage their storefront and customers.'}
 							action={
 								<MultiCheckBox
 									wrapperClass="toggle-btn"
@@ -1200,9 +1172,9 @@ const Membership = ({ id }: { id: string }) => {
 							{additionalFeatures ? (
 								<FormGroupWrapper>
 									<FormGroup
-										label="Vendor Storefront Capabilities"
+										label="Store management tools"
 										htmlFor={vendorStorefrontField.key}
-										desc={__('Images allowed per product', 'multivendorx')}
+										desc={__('Choose whether stores can set store rules, communicate with buyers, pause sales, or offer customer support.', 'multivendorx')}
 									>
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
@@ -1227,7 +1199,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup
+									{/* <FormGroup
 										label="Include All Add-ons"
 										htmlFor={advancedFeaturesField.key}
 										className="border-top"
@@ -1254,7 +1226,7 @@ const Membership = ({ id }: { id: string }) => {
 											moduleChange={() => { }}
 											modules={[]}
 										/>
-									</FormGroup>
+									</FormGroup> */}
 								</FormGroupWrapper>
 							) : (
 								<p className="settings-metabox-description">
