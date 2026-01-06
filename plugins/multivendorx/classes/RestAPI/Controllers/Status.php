@@ -8,6 +8,8 @@
 namespace MultiVendorX\RestAPI\Controllers;
 
 use MultiVendorX\Install;
+use MultiVendorX\Utill;
+use MultiVendorX\Store\StoreUtil;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -40,6 +42,11 @@ class Status extends \WP_REST_Controller {
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
 				),
+                array(
+                    'methods'             => 'POST',
+                    'callback'            => array( $this, 'update_tools_action' ),
+                    'permission_callback' => array( $this, 'update_item_permissions_check' ),
+                ),
 			)
         );
     }
@@ -51,6 +58,15 @@ class Status extends \WP_REST_Controller {
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'read' );
+    }
+
+    /**
+     * Check if a given request has access to update settings.
+     *
+     * @param object $request The REST request object.
+     */
+    public function update_item_permissions_check( $request ) {
+        return current_user_can( 'manage_options' );
     }
 
     /**
@@ -82,6 +98,76 @@ class Status extends \WP_REST_Controller {
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 
+            return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
+        }
+    }
+
+    public function update_tools_action( $request ) {
+        global $wpdb;
+        $nonce = $request->get_header( 'X-WP-Nonce' );
+        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+            $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
+
+            // Log the error.
+            if ( is_wp_error( $error ) ) {
+                MultiVendorX()->util->log( $error );
+            }
+
+            return $error;
+        }
+        try {
+            $key = $request->get_param( 'key' );
+            if ( 'transients' === $key ) {
+                $deleted = false;
+                $stores = StoreUtil::get_stores(); 
+
+                foreach ( $stores as $store ) {
+                    $store_id = $store['ID'] ?? 0;
+
+                    $transients_to_clear = [];
+
+                    // Transient prefixes that include vendor ID
+                    $store_transient_names = apply_filters(
+                        'mvx_clear_all_transients_included_vendor_id',
+                        [
+                            'multivendorx_visitor_stats_data_',
+                            'mvx_stats_report_data_',
+                        ]
+                    );
+
+                    foreach ( $store_transient_names as $transient ) {
+                        $transients_to_clear[] = $transient . $store_id;
+                    }
+
+                    $transients_to_clear = apply_filters(
+                        'mvx_vendor_before_transients_to_clear',
+                        $transients_to_clear,
+                        $store_id
+                    );
+
+                    // Delete transients
+                    foreach ( $transients_to_clear as $transient ) {
+                        if ( delete_transient( $transient ) ) {
+                            $deleted = true;
+                        }
+                    }
+
+                    do_action( 'mvx_vendor_clear_all_transients', $store_id );
+                }
+                return rest_ensure_response( $deleted );
+            }
+
+            if ( 'visitor' === $key ) {
+                $table = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+                $result = $wpdb->query( "TRUNCATE TABLE `$table`" );
+
+                if ( $result ) {
+                    $message = __( 'MultiVendorX visitors stats successfully deleted', 'multivendorx' );
+                    return rest_ensure_response( $message );
+                }
+            }
+        } catch ( \Exception $e ) {
+            MultiVendorX()->util->log( $e );
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
