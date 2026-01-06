@@ -161,16 +161,15 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 						(meta: any) => meta.key === 'multivendorx_store_id'
 					);
 					const store_id = storeMeta ? storeMeta.value : null;
-
 					//Extract refund reason
 					const reasonMeta = metaData.find(
-						(meta: any) => meta.key === '_customer_refund_reason'
+						(meta: any) => meta.key === appLocalizer.order_meta['customer_refund_reason']
 					);
 					const refundReason = reasonMeta ? reasonMeta.value : '-';
 
 					return {
 						id: order.id,
-						store_id, // ✅ added
+						store_id, //added
 						store_name: order.store_name || '-', // fallback
 						amount: formatCurrency(order.total),
 						commission_amount: order.commission_amount

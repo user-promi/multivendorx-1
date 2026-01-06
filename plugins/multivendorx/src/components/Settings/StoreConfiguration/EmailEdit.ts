@@ -3,9 +3,9 @@ import { __ } from '@wordpress/i18n';
 export default {
     id: 'email-edit',
     priority: 10,
-    name: __('Email Editor', 'multivendorx'),
+    name: __('Email Template Customizer', 'multivendorx'),
     desc: __(
-        'Enable stores to enhance their product visibility using advanced third-party SEO plugins.',
+        'Edit and manage individual email templates used across the marketplace.',
         'multivendorx'
     ),
     icon: 'adminfont-store-seo',
