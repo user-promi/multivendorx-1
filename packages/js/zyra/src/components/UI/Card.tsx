@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 
-type Badge = {
-  text: string;
-  color?: string;
-};
-
-type CardProps = {
+export type CardProps = {
   title?: React.ReactNode;
   desc?: React.ReactNode;
   iconName?: string;
@@ -14,12 +9,15 @@ type CardProps = {
   onButtonClick?: () => void;
   action?: React.ReactNode;
   transparent?: boolean;
-  children: React.ReactNode;
   toggle?: boolean;
-  badges?: Badge[];
+  badges?: {
+    text: string;
+    color?: string;
+  }[];
+  children?: React.ReactNode;
 };
 
-const Card: React.FC<CardProps> = ({
+const Card = ({
   title,
   desc,
   iconName,
@@ -28,25 +26,11 @@ const Card: React.FC<CardProps> = ({
   onButtonClick,
   action,
   transparent = false,
-  children,
   toggle = false,
   badges = [],
-}) => {
+  children,
+}: CardProps) => {
   const [bodyVisible, setBodyVisible] = useState(true);
-
-  const handleToggleClick = () => {
-    if (toggle) {
-      setBodyVisible(!bodyVisible);
-    }
-    if (onIconClick) onIconClick();
-  };
-
-  const handleButtonClick = () => {
-    if (toggle) {
-      setBodyVisible(!bodyVisible);
-    }
-    if (onButtonClick) onButtonClick();
-  };
 
   return (
     <div className={`card-content ${transparent ? 'transparent' : ''}`}>
@@ -56,13 +40,11 @@ const Card: React.FC<CardProps> = ({
             {title && (
               <div className="title">
                 {title}
-                {badges.length > 0 && (
-                  <>
-                    {badges.map((badge, i) => (
-                      <span className={`admin-badge ${badge.color || ''}`}>{badge.text}</span>
-                    ))}
-                  </>
-                )}
+                {badges.map((b, i) => (
+                  <span key={i} className={`admin-badge ${b.color ?? ''}`}>
+                    {b.text}
+                  </span>
+                ))}
               </div>
             )}
             {desc && <div className="des">{desc}</div>}
@@ -74,13 +56,15 @@ const Card: React.FC<CardProps> = ({
             {iconName && !action && (
               <i
                 className={iconName}
-                onClick={handleToggleClick}
-                style={{ cursor: 'pointer', marginRight: buttonLabel ? '0.5rem' : 0 }}
+                onClick={() => {
+                  if (toggle) setBodyVisible(!bodyVisible);
+                  onIconClick?.();
+                }}
               />
             )}
 
             {buttonLabel && !action && (
-              <button className="admin-btn btn-purple" onClick={handleButtonClick}>
+              <button className="admin-btn btn-purple" onClick={onButtonClick}>
                 {buttonLabel}
               </button>
             )}
@@ -88,7 +72,9 @@ const Card: React.FC<CardProps> = ({
         </div>
       )}
 
-      {bodyVisible && <div className="card-body">{children}</div>}
+      {bodyVisible && children && (
+        <div className="card-body">{children}</div>
+      )}
     </div>
   );
 };

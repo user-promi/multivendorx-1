@@ -524,7 +524,7 @@ const Dashboard = () => {
 										onClick={toggleActivities}
 									></i>
 									<span className="tooltip-name">
-										Activity
+										Announcements
 									</span>
 
 									{showActivities && <Notifications type="activity"/>}
@@ -542,7 +542,6 @@ const Dashboard = () => {
 
 								<li
 									className="dropdown login-user"
-									ref={userDropdownRef}
 								>
 									<div
 										className="avatar-wrapper"
@@ -551,7 +550,7 @@ const Dashboard = () => {
 										<i className="adminfont-icon adminfont-person"></i>
 									</div>
 									{showUserDropdown && (
-										<div className="dropdown-menu">
+										<div className="dropdown-menu" ref={userDropdownRef}>
 											<div className="dropdown-header">
 												<div className="user-card">
 													<div className="user-avatar">

@@ -1339,7 +1339,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                         method.id
                                                     );
                                                 }}
-                                                className="admin-btn btn-blue"
+                                                className="admin-btn btn-purple"
                                             >
                                                 <i className="adminfont-edit"></i>
                                                 Edit

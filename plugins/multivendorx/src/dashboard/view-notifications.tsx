@@ -3,6 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { Tabs } from 'zyra';
 import NotificationsTable from './notificationsTable';
 import ActivitiesTable from './activityTable';
+import AnnouncementsTable from './AnnouncementsTable';
 
 const ViewNotifications = (React.FC = () => {
 	const SimpleLink = ({ to, children, onClick, className }: any) => (
@@ -49,6 +50,16 @@ const ViewNotifications = (React.FC = () => {
 				icon: 'tools',
 			},
 		},
+		{
+			type: 'file',
+			content: {
+				id: 'announcements',
+				name: 'Announcements',
+				desc: 'Store Info',
+				hideTabHeader: true,
+				icon: 'adminfont-credit-card',
+			},
+		},
 	];
 
 	const getForm = (tabId: string) => {
@@ -57,6 +68,8 @@ const ViewNotifications = (React.FC = () => {
 				return <NotificationsTable />;
 			case 'activity':
 				return <ActivitiesTable />;
+				case 'announcements':
+				return <AnnouncementsTable />;
 			default:
 				return <div></div>;
 		}
