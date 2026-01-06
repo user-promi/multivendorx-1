@@ -51,13 +51,13 @@ class Frontend {
 
         $current_user_id = get_current_user_id();
 
-        $html  = '<button class="follow-btn" 
+        $html  = '<div class="follow-wrapper"> <button class="follow-btn woocommerce-button button" 
                     data-store-id="' . esc_attr( $store_id ) . '" 
                     data-user-id="' . esc_attr( $current_user_id ) . '" 
                     style="display:none;">
                     Follow
                 </button>';
-        $html .= ' <div class="multivendorx-follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</div>';
+        $html .= ' <div class="follower-count" id="followers-count-' . esc_attr( $store_id ) . '">0 Follower</div> </div>';
 
         $html = apply_filters( 'multivendorx_follow_button_html', $html, $store_id, $current_user_id );
 

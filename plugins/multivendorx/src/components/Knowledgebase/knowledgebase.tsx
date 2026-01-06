@@ -17,6 +17,7 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	AdminButton,
+	ProPopup,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -24,6 +25,7 @@ import {
 	PaginationState,
 } from '@tanstack/react-table';
 import '../Announcements/announcements.scss';
+import { Dialog } from '@mui/material';
 
 type KBRow = {
 	date: any;
@@ -45,7 +47,7 @@ type AnnouncementStatus = {
 	count: number;
 };
 type FilterData = {
-	typeCount?: any;
+	categoryFilter?: any;
 	searchField?: any;
 };
 export interface RealtimeFilter {
@@ -81,6 +83,44 @@ export const KnowledgeBase: React.FC = () => {
 	const [validationErrors, setValidationErrors] = useState<{
 		[key: string]: string;
 	}>({});
+	const [selectedKb, setSelectedKb] = useState<{
+		id: number;
+	} | null>(null);
+	const [confirmOpen, setConfirmOpen] = useState(false);
+
+	const handleDeleteClick = (rowData) => {
+		setSelectedKb({
+			id: rowData.id,
+		});
+		setConfirmOpen(true);
+	};
+	const handleConfirmDelete = async () => {
+		if (!selectedKb) {
+			return;
+		}
+
+		try {
+			await axios({
+				method: 'DELETE',
+				url: getApiLink(
+					appLocalizer,
+					`knowledge/${selectedKb.id}`
+				),
+				headers: {
+					'X-WP-Nonce':
+						appLocalizer.nonce,
+				},
+			});
+			await fetchTotalRows();
+			requestData(
+				pagination.pageSize,
+				pagination.pageIndex + 1
+			);
+		} finally {
+			setConfirmOpen(false);
+			setSelectedKb(null);
+		}
+	};
 
 	const validateForm = () => {
 		const errors: { [key: string]: string } = {};
@@ -249,7 +289,7 @@ export const KnowledgeBase: React.FC = () => {
 	function requestData(
 		rowsPerPage = 10,
 		currentPage = 1,
-		typeCount = '',
+		categoryFilter = '',
 		searchField = '',
 		startDate = new Date(0),
 		endDate = new Date()
@@ -262,7 +302,7 @@ export const KnowledgeBase: React.FC = () => {
 			params: {
 				page: currentPage,
 				row: rowsPerPage,
-				status: typeCount === 'all' ? '' : typeCount,
+				status: categoryFilter === 'all' ? '' : categoryFilter,
 				startDate,
 				endDate,
 				searchField,
@@ -309,7 +349,7 @@ export const KnowledgeBase: React.FC = () => {
 		requestData(
 			rowsPerPage,
 			currentPage,
-			filterData?.typeCount,
+			filterData?.categoryFilter,
 			filterData?.searchField,
 			filterData?.date?.start_date,
 			filterData?.date?.end_date
@@ -427,46 +467,8 @@ export const KnowledgeBase: React.FC = () => {
 							{
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminfont-delete delete',
-								onClick: async (rowData) => {
-									if (!rowData.id) {
-										return;
-									}
-									if (
-										!confirm(
-											__(
-												'Are you sure you want to delete this entry?',
-												'multivendorx'
-											)
-										)
-									) {
-										return;
-									}
-
-									try {
-										await axios({
-											method: 'DELETE',
-											url: getApiLink(
-												appLocalizer,
-												`knowledge/${rowData.id}`
-											),
-											headers: {
-												'X-WP-Nonce':
-													appLocalizer.nonce,
-											},
-										});
-										await fetchTotalRows();
-										requestData(
-											pagination.pageSize,
-											pagination.pageIndex + 1
-										);
-									} catch {
-										setError(
-											__(
-												'Failed to delete entry',
-												'multivendorx'
-											)
-										);
-									}
+								onClick: (rowData: any) => {
+									handleDeleteClick(rowData);
 								},
 								hover: true,
 							},
@@ -517,6 +519,27 @@ export const KnowledgeBase: React.FC = () => {
 
 	return (
 		<>
+			<Dialog
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+			>
+				<ProPopup
+					confirmMode
+					title="Delete Knowledge Base"
+					confirmMessage={
+						selectedKb
+							? `Are you sure you want to delete knowledge base?`
+							: ''
+					}
+					confirmYesText="Delete"
+					confirmNoText="Cancel"
+					onConfirm={handleConfirmDelete}
+					onCancel={() => {
+						setConfirmOpen(false);
+						setSelectedKb(null);
+					}}
+				/>
+			</Dialog>
 			<AdminBreadcrumbs
 				activeTabIcon="adminfont-book"
 				tabTitle={__('Knowledge Base', 'multivendorx')}
@@ -657,7 +680,7 @@ export const KnowledgeBase: React.FC = () => {
 						onPaginationChange={setPagination}
 						handlePagination={requestApiForData}
 						perPageOption={[10, 25, 50]}
-						typeCounts={announcementStatus as AnnouncementStatus[]}
+						categoryFilter={announcementStatus as AnnouncementStatus[]}
 						bulkActionComp={() => <BulkAction />}
 						totalCounts={totalRows}
 						realtimeFilter={realtimeFilter}

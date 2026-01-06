@@ -145,20 +145,17 @@ const Documentation: React.FC = () => {
 								<div className="title">{doc.title}</div>
 								<div className="des">
 									{truncateText(doc.content || '', 10)}
-									{(doc.content || '').split(' ').length >
-										10 && (
-											<a
-												className="read-more"
-												onClick={() =>
-													handleReadMore(doc)
-												}
-											>
-												{__(
-													'Read More',
-													'multivendorx'
-												)}
-											</a>
+									<a
+										className="read-more"
+										onClick={() =>
+											handleReadMore(doc)
+										}
+									>
+										{__(
+											'Read More',
+											'multivendorx'
 										)}
+									</a>
 								</div>
 							</div>
 						</div>

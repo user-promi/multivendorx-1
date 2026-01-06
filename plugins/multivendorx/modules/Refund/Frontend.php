@@ -46,6 +46,31 @@ class Frontend {
         if ( ! in_array( $order_status, $allowed_statuses, true ) ) {
             return; // Don't show button.
         }
+        $refund_days = (int) MultiVendorX()->setting->get_setting( 'refund_days', 0 );
+
+        if ( $refund_days > 0 ) {
+        
+            $order_date = $order->get_date_created();
+            if ( ! $order_date ) {
+                return;
+            }
+        
+            // Order created timestamp
+            $order_ts = $order_date->getTimestamp();
+        
+            // Expiry timestamp
+            $expiry_ts = strtotime( "+{$refund_days} days", $order_ts );
+        
+            // Current WP time
+            $now_ts = current_time( 'timestamp' );
+        
+            // If expired → stop (no button)
+            if ( $now_ts > $expiry_ts ) {
+                return;
+            }
+        }
+        
+
         $refund_settings       = MultiVendorX()->setting->get_option( 'multivendorx_order_actions_refunds_settings', array() );
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
         $refund_button_text    = apply_filters( 'mvx_customer_my_account_refund_request_button_text', __( 'Request a refund', 'multivendorx' ), $order );
@@ -111,7 +136,7 @@ class Frontend {
                         echo '<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                             <label class="refund_reason_option" for="refund_reason_option-' . esc_attr( $index ) . '">
                                 <input type="radio" class="woocommerce-Input input-radio" name="refund_reason_option" id="refund_reason_option-' . esc_attr( $index ) . '" value="' . esc_attr( $index ) . '" />
-                                ' . esc_html( $reason['value'] ) . '
+                                ' . esc_html( $reason['label'] ) . '
                             </label></p>';
                     }
                     // Add others reason.
@@ -291,7 +316,7 @@ class Frontend {
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
         $refund_reason         = ( 'others' === $reason_option )
             ? $refund_reason_other
-            : ( $refund_reason_options[ $reason_option ]['value'] ?? '' );
+            : ( $refund_reason_options[ $reason_option ]['label'] ?? '' );
 
         $uploaded_image_urls = array();
         $attach_ids          = array();
@@ -431,6 +456,6 @@ class Frontend {
             );
         }
 
-        wc_add_notice( __( 'Refund request successfully placed.', 'multivendorx' ) );
+        wc_add_notice( __( 'Refund request successfully submitted.', 'multivendorx' ) );
     }
 }

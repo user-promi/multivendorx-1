@@ -229,7 +229,7 @@ class Rest extends \WP_REST_Controller {
                     'content'    => $post->post_content,
                     'store_name' => implode( ', ', $store_names ),
                     'date'       => get_the_date( 'Y-m-d H:i:s', $post->ID ),
-                    'status'     => $post->post_status,
+                    'status'     => $post->post_status === 'publish' ? 'published' : $post->post_status,
                 );
             }
 

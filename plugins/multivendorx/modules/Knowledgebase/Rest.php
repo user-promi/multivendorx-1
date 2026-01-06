@@ -188,12 +188,13 @@ class Rest extends \WP_REST_Controller {
             $items = array();
 
             foreach ( $posts as $post ) {
+                $status = $post->post_status === 'publish' ? 'published' : $post->post_status;
                 $items[] = array(
                     'id'      => $post->ID,
                     'title'   => $post->post_title,
                     'content' => $post->post_content,
                     'date'    => get_the_date( 'Y-m-d H:i:s', $post->ID ),
-                    'status'  => $post->post_status,
+                    'status'  => $status,
                 );
             }
 

@@ -120,8 +120,8 @@ class Ajax {
     
                     <!-- Voting buttons -->
                     <div class="qna-votes">
-                        <span class="qna-vote adminfont-thumbs-ok admin-badge green" data-type="up"></span>
-                        <span class="qna-vote adminfont-thumbs-ok admin-badge red" data-type="down"></span>
+                        <span class="qna-vote dashicons dashicons-thumbs-up" data-type="up"></span>
+                        <span class="qna-vote dashicons dashicons-thumbs-down" data-type="down"></span>
                         <p><?php echo intval( $row->total_votes ); ?></p>
                     </div>
                 </li>

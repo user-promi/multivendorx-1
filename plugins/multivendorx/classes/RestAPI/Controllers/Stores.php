@@ -130,6 +130,64 @@ class Stores extends \WP_REST_Controller {
         }
 
         try {
+            if ( $request->get_param( 'visitorMap' ) ) {
+                $store_id     = (int) $request->get_param( 'id' );
+                $period = absint( $request->get_param( 'period' ) ?: 7 );
+                $cache_key = 'multivendorx_visitor_stats_data_' . $store_id;
+
+                if ( $cached = get_transient( $cache_key ) ) {
+                    return $cached;
+                }
+
+                global $wpdb;
+
+                $start = date( 'Y-m-d H:i:s', strtotime( "-{$period} days" ) );
+                $end   = date( 'Y-m-d 23:59:59' );
+
+                $rows = $wpdb->get_results(
+                    $wpdb->prepare(
+                        "SELECT countryCode
+                        FROM {$wpdb->prefix}mvx_visitors_stats
+                        WHERE created BETWEEN %s AND %s
+                        AND store_id = %d
+                        GROUP BY user_cookie",
+                        $start,
+                        $end,
+                        $store_id
+                    )
+                );
+
+                $mapStats = [];
+
+                foreach ( $rows as $row ) {
+                    $code = strtolower( $row->countryCode ?: 'xx' );
+                    $mapStats[ $code ] = ( $mapStats[ $code ] ?? 0 ) + 1;
+                }
+
+                arsort( $mapStats );
+
+                $colors = [];
+                $scale  = [ '#316fa8', '#3f7fb5', '#4c8fc1', '#5b9fcd', '#6bb0d9' ];
+                $i = 0;
+
+                foreach ( array_slice( $mapStats, 0, 5, true ) as $code => $count ) {
+                    $colors[ $code ] = $scale[ $i ] ?? '#316fa8';
+                    $i++;
+                }
+
+                $data = [
+                    'map_stats' => array_map(
+                        fn( $count ) => [ 'hits_count' => $count ],
+                        $mapStats
+                    ),
+                    'colors' => $colors,
+                ];
+
+                set_transient( $cache_key, $data, 12 * HOUR_IN_SECONDS );
+
+                return rest_ensure_response($data);
+            }
+
             // Store registration (rejected stores).
             if ( $request->get_param( 'store_registration' ) ) {
                 $rejected_stores = Store::get_store( 'rejected', 'primary_owner' );

@@ -2,11 +2,14 @@
 
  // Variables
 
- $primary: #5007aa;
- $text-dark: #222;
- $text-light: #777;
- $border: #e0e0e0;
  $border-light-small: 0.063rem solid #e0e4e9;
+
+ :root {
+  --primary: var(--wp--preset--color--primary, #5007aa);
+  --text-color: var(--wp--preset--color--contrast, #222);
+  --text-color-light: var(--wp--preset--color--secondary, #777);
+}
+
 
  // input style
 //  input[type="checkbox"] {
@@ -99,6 +102,9 @@
          .row {
              display: flex;
              gap: 1rem;
+         }
+         .contact-details{
+            width: 60%;
          }
      }
 
@@ -229,10 +235,10 @@
          padding: 0.625rem 0;
 
          &.active {
-             border-bottom: 0.126rem solid $primary;
+             border-bottom: 0.126rem solid var(--primary);
 
              a {
-                 color: $primary;
+                 color: var(--primary);
              }
          }
      }
@@ -422,7 +428,7 @@
                      font-size: 2.5rem;
                      font-weight: 700;
                      color: #000;
-                     line-height: 3;
+                     line-height: 1;
                  }
 
                  .total-number {
@@ -465,7 +471,7 @@
                              content: "";
                              width: 50%;
                              height: 0.625rem;
-                             background: #5007aa;
+                             background: var(--primary);
                              border-top-left-radius: 0.313rem;
                              border-bottom-left-radius: 0.313rem;
                          }
@@ -502,11 +508,11 @@
      }
 
      #multivendorx-vendor-reviews-list {
-         .mvx-review-list {
+         .multivendorx-review-list {
              margin: 0;
              list-style-type: none;
 
-             .mvx-review-item {
+             .multivendorx-review-item {
                  padding: 1.5rem 0;
                  border-bottom: 0.063rem solid #d3d0d0;
 
@@ -521,7 +527,7 @@
                          .avatar {
                              width: 2rem;
                              height: 2rem;
-                             background: #5007aa;
+                             background: var(--primary);
                              border-radius: 50%;
                              display: flex;
                              justify-content: center;
@@ -578,7 +584,7 @@
                      }
                  }
 
-                 .mvx-review-reply {
+                 .multivendorx-review-reply {
                      padding: 0.625rem;
                      background: #8f8f8f1f;
                      margin-top: 0.5rem;

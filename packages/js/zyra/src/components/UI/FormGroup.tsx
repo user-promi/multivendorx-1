@@ -10,8 +10,8 @@ type FormGroupProps = {
 
 const FormGroup: React.FC<FormGroupProps> = ({
 	label,
-	desc,
-	htmlFor,
+	desc = '',
+	htmlFor = '',
 	children,
 	className = '',
 	cols = 1,

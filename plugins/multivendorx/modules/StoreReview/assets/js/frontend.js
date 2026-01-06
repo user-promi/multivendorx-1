@@ -28,8 +28,8 @@ jQuery(document).ready(function ($) {
 					for (let i = 1; i <= 5; i++) {
 						html +=
 							i <= Math.round(overall)
-								? `<i class="adminfont-star"></i>`
-								: `<i class="adminfont-star-o"></i>`;
+								? `<i class="dashicons dashicons-star-filled"></i>`
+								: `<i class="dashicons dashicons-star-empty"></i>`;
 					}
 
 					html += `</div>
@@ -46,7 +46,7 @@ jQuery(document).ready(function ($) {
 							total > 0 ? Math.round((count / total) * 100) : 0;
 						html += `
                         <div class="rating">
-                            ${i} <i class="adminfont-star"></i> 
+                            ${i} <i class="dashicons dashicons-star-filled"></i> 
                             <div class="bar"><span style="width:${percent}%;"></span></div> 
                             <span>${count} Review${
 								count !== 1 ? 's' : ''
@@ -227,13 +227,13 @@ jQuery(document).ready(function ($) {
 		var $rating = $(this).closest('.rating');
 
 		$rating.find('i').each(function () {
-			// Change to 'adminfont-star' on hover for the stars up to the hovered value, else 'adminfont-star-o'
+			// Change to 'dashicons dashicons-star-filled' on hover for the stars up to the hovered value, else 'dashicons dashicons-star-empty'
 			$(this).toggleClass(
-				'adminfont-star',
+				'dashicons dashicons-star-filled',
 				$(this).data('value') <= value
 			);
 			$(this).toggleClass(
-				'adminfont-star-o',
+				'dashicons dashicons-star-empty',
 				$(this).data('value') > value
 			);
 		});
@@ -242,15 +242,15 @@ jQuery(document).ready(function ($) {
 	$('.rating').on('mouseleave', function () {
 		var $rating = $(this);
 		$rating.find('i').each(function () {
-			// Reset back to 'adminfont-star-o' after mouse leaves
+			// Reset back to 'dashicons dashicons-star-empty' after mouse leaves
 			if ($(this).data('value') > $rating.attr('data-selected')) {
 				$(this)
-					.removeClass('adminfont-star')
-					.addClass('adminfont-star-o');
+					.removeClass('dashicons dashicons-star-filled')
+					.addClass('dashicons dashicons-star-empty');
 			} else {
 				$(this)
-					.addClass('adminfont-star')
-					.removeClass('adminfont-star-o');
+					.addClass('dashicons dashicons-star-filled')
+					.removeClass('dashicons dashicons-star-empty');
 			}
 		});
 	});
@@ -262,16 +262,16 @@ jQuery(document).ready(function ($) {
 		// Set the selected rating value on click
 		$rating.attr('data-selected', value);
 
-		// Apply the 'adminfont-star' class for the selected stars
+		// Apply the 'dashicons dashicons-star-filled' class for the selected stars
 		$rating.find('i').each(function () {
 			if ($(this).data('value') <= value) {
 				$(this)
-					.addClass('adminfont-star')
-					.removeClass('adminfont-star-o');
+					.addClass('dashicons dashicons-star-filled')
+					.removeClass('dashicons dashicons-star-empty');
 			} else {
 				$(this)
-					.addClass('adminfont-star-o')
-					.removeClass('adminfont-star');
+					.addClass('dashicons dashicons-star-empty')
+					.removeClass('dashicons dashicons-star-filled');
 			}
 		});
 
