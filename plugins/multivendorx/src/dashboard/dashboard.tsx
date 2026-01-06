@@ -19,7 +19,7 @@ import '../dashboard/dashboard1.scss';
 import { AdminButton, Card, Column, Container, getApiLink, MultiCalendarInput, TableCell, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { formatCurrency } from '@/services/commonFunction';
+import { formatCurrency, formatTimeAgo } from '@/services/commonFunction';
 
 const activities = [
 	{ icon: 'adminfont-cart', text: 'New order #10023 by Alex Doe.' },
@@ -199,6 +199,7 @@ const Dashboard: React.FC = () => {
 				page: 1,
 				row: 4,
 				store_id: appLocalizer.store_id,
+				status:'publish'
 			},
 		})
 			.then((response) => {
@@ -447,21 +448,6 @@ const Dashboard: React.FC = () => {
 		});
 	};
 
-	function formatTimeAgo(dateString: any) {
-		const date = new Date(dateString.replace(' ', 'T'));
-		const diff = (Date.now() - date.getTime()) / 1000;
-
-		if (diff < 60) {
-			return 'just now';
-		}
-		if (diff < 3600) {
-			return Math.floor(diff / 60) + 'm ago';
-		}
-		if (diff < 86400) {
-			return Math.floor(diff / 3600) + 'h ago';
-		}
-		return Math.floor(diff / 86400) + 'd ago';
-	}
 	// Helper function to get dynamic greeting
 	const getGreeting = () => {
 		const hour = new Date().getHours();
