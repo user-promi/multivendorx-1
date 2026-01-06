@@ -394,6 +394,10 @@ const Dashboard: React.FC = () => {
 		})
 			.then((response) => {
 				const data = response.data;
+				setRevenueData(data);
+			});
+	}, [dateRange]);
+
 	const chartData = [
 		{
 			name: 'Commission Earned',
