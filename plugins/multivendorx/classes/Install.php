@@ -51,6 +51,7 @@ class Install {
 
         // Get the charset collate for the tables.
         $collate = $wpdb->get_charset_collate();
+        $max_index_length = 191;
 
         $sql_commission = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['commission'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -264,6 +265,33 @@ class Install {
             PRIMARY KEY (`id`)
         ) $collate;";
 
+        $sql_stats = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['visitors_stats'] . "` (
+            `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+            `store_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+            `user_id` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+            `user_cookie` varchar(255) NOT NULL,
+            `session_id` varchar(191) NOT NULL,
+            `ip` varchar(60) NOT NULL,
+            `lat` varchar(60) NOT NULL,
+            `lon` varchar(60) NOT NULL,
+            `city` text NOT NULL,
+            `zip` varchar(20) NOT NULL,
+            `regionCode` text NOT NULL,
+            `region` text NOT NULL,
+            `countryCode` text NOT NULL,
+            `country` text NOT NULL,
+            `isp` text NOT NULL,
+            `timezone` varchar(255) NOT NULL,
+            `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`ID`),
+            CONSTRAINT visitor UNIQUE (store_id, session_id),
+            KEY store_id (store_id),
+            KEY user_id (user_id),
+            KEY user_cookie (user_cookie($max_index_length)),
+            KEY session_id (session_id($max_index_length)),
+            KEY ip (ip)
+        ) $collate;";
+
         // Include upgrade functions if not loaded.
         if ( ! function_exists( 'dbDelta' ) ) {
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -283,6 +311,7 @@ class Install {
         dbDelta( $sql_ratings );
         dbDelta( $sql_notifications );
         dbDelta( $sql_system_events );
+        dbDelta( $sql_stats );
     }
 
     /**

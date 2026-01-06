@@ -110,9 +110,9 @@ class Ajax {
 
         ob_start();
         if ( $reviews ) {
-            echo '<ul class="mvx-review-list">';
+            echo '<ul class="multivendorx-review-list">';
             foreach ( $reviews as $review ) {
-                echo '<li class="mvx-review-item">';
+                echo '<li class="multivendorx-review-item">';
                 $user_info     = get_userdata( $review->customer_id );
                 $reviewer_name = $user_info ? $user_info->display_name : __( 'Anonymous', 'multivendorx' );
                 echo '<div class="header"> <div class="details-wrapper">';
@@ -124,9 +124,9 @@ class Ajax {
                 echo '<div class="rating">';
                 for ( $i = 1; $i <= 5; $i++ ) {
                     if ( $i <= $overall_rating ) {
-                        echo '<i class="adminfont-star"></i>';
+                        echo '<i class="dashicons dashicons-star-filled"></i>';
                     } else {
-                        echo '<i class="adminfont-star-o"></i>';
+                        echo '<i class="dashicons dashicons-star-empty"></i>';
                     }
                 }
                 echo '<span class="title">' . esc_html( $review->review_title ) . '</span></div>';
@@ -149,7 +149,7 @@ class Ajax {
                 echo '</div>';
 
                 if ( ! empty( $review->reply ) ) {
-                    echo '<div class="mvx-review-reply">';
+                    echo '<div class="multivendorx-review-reply">';
                     echo '<strong>' . esc_html__( 'Admin reply:', 'multivendorx' ) . '</strong> ';
                     echo '<p>' . esc_html( $review->reply ) . '</p>';
                     echo '</div>';

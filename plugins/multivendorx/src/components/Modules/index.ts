@@ -606,6 +606,7 @@ export default {
 				'https://multivendorx.com/docs/knowledgebase/announcement/',
 			pro_module: false,
 			category: ['notification', 'marketplace_boosters'],
+			reloadOnChange: true
 		},
 		{
 			id: 'knowladgebase',
@@ -616,6 +617,7 @@ export default {
 				'https://multivendorx.com/docs/knowledgebase/knowledgebase/',
 			pro_module: false,
 			category: 'notification',
+			reloadOnChange: true
 		},
 		{ type: 'separator', id: 'integration', label: 'Integration' },
 		{

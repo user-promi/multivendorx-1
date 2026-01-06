@@ -1279,7 +1279,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                                     }
                                                                 }}
                                                             >
-                                                                <span className="admin-btn btn-blue">
+                                                                <span className="admin-btn btn-purple">
                                                                     <i className="adminfont-setting"></i>
                                                                     Settings
                                                                 </span>
@@ -1313,7 +1313,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                         }
                                                     }}
                                                 >
-                                                    <span className="admin-btn btn-green">
+                                                    <span className="admin-btn btn-purple-bg">
                                                         <i className="adminfont-eye"></i>{' '}
                                                         Enable
                                                     </span>

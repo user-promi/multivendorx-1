@@ -10,7 +10,7 @@ type AdminButtonProps = {
   wrapperClass?: 'left' | 'right' | 'center'; // alignment class
 };
 
-const AdminButton: React.FC<AdminButtonProps> = ({ buttons, wrapperClass }) => {
+const AdminButton: React.FC<AdminButtonProps> = ({ buttons, wrapperClass='' }) => {
   const buttonsArray = Array.isArray(buttons) ? buttons : [buttons];
 
   const renderedButtons = buttonsArray.map((btn, index) => (
