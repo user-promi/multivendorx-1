@@ -198,12 +198,8 @@ class PaypalPayout {
         $body = wp_remote_retrieve_body( $response );
     
         $data = json_decode( $body, true );
-    
-        if ( empty( $data['access_token'] ) ) {
-            return false;
-        }
-    
-        return $data['access_token'];
+
+        return ! empty( $data['access_token'] ) ? $data['access_token'] : false;
     }    
 
     /**

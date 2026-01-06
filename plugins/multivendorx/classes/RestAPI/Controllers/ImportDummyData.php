@@ -22,21 +22,21 @@ class ImportDummyData extends \WP_REST_Controller {
      * Register AI Assistant API routes
      */
     public function register_routes() {
-        $data = register_rest_route(
+        register_rest_route(
             MultiVendorX()->rest_namespace,
             '/' . $this->rest_base,
-            array(
-                array(
-                    'methods'             => \WP_REST_Server::CREATABLE,
-                    'callback'            => array( $this, 'handle_request' ),
-                    'permission_callback' => array( $this, 'get_items_permissions_check' ),
-                ),
-                array(
-                    'methods'             => \WP_REST_Server::READABLE,
-                    'callback'            => array( $this, 'handle_request' ),
-                    'permission_callback' => array( $this, 'get_items_permissions_check' ),
-                ),
-            )
+            [
+                [
+                    'methods'             => \WP_REST_Server::CREATABLE, // POST
+                    'callback'            => [ $this, 'process_action' ],
+                    'permission_callback' => [ $this, 'get_items_permissions_check' ],
+                ],
+                [
+                    'methods'             => \WP_REST_Server::READABLE, // GET
+                    'callback'            => [ $this, 'get_status' ],
+                    'permission_callback' => [ $this, 'get_items_permissions_check' ],
+                ],
+            ]
         );
     }
 
@@ -48,163 +48,80 @@ class ImportDummyData extends \WP_REST_Controller {
     }
 
     /**
-     * Handle all requests
+     * Verify nonce for security
+     * 
+     * @param \WP_REST_Request $request
      */
-    public function handle_request( $request ) {
+    protected function verify_nonce( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
-
+    
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
             return new \WP_REST_Response(
-                array(
+                [
                     'success' => false,
                     'code'    => 'invalid_nonce',
                     'message' => __( 'Invalid nonce.', 'multivendorx' ),
-                ),
+                ],
                 401
             );
         }
-
-        $parameter = $request->get_param('parameter');
-
-        if ( ! $parameter ) {
-            return [
-                'success' => false,
-                'message' => 'Missing parameter'
-            ];
-        }
-
-        if ( $request->get_method() === 'GET' ) {
-            return $this->get_status( $request );
-        }
-
-        return $this->process_action( $request );
-    }
-
-    /**
-     * Get current status
-     */
-    public function get_status( $request ) {
-        $parameter = $request->get_param('parameter');
-        
-        // You can store status in a transient or option for tracking
-        $status = get_transient( 'mvx_import_status_' . $parameter ) ?: [];
-        
-        return [
-            'success' => true,
-            'running' => !empty($status),
-            'status'  => $status,
-        ];
+    
+        return true;
     }
 
     /**
      * Process action request
+     * 
+     * @param \WP_REST_Request $request
      */
     public function process_action( $request ) {
-        $parameter = $request->get_param('parameter');
-        $action = $request->get_param('action');
-
+        $nonce_check = $this->verify_nonce( $request );
+        if ( $nonce_check !== true ) {
+            return $nonce_check;
+        }
+    
+        $parameter = $request->get_param( 'parameter' );
+        $action    = $request->get_param( 'action' );
+    
         if ( $parameter !== 'action' || ! $action ) {
             return [
                 'success' => false,
                 'message' => 'Invalid request'
             ];
         }
-
-        // Map actions to methods dynamically
-        $method_name = 'process_' . $action;
-        
-        if ( method_exists( $this, $method_name ) ) {
-            return $this->$method_name( $request );
+    
+        $method = $action;
+    
+        if ( method_exists( $this, $method ) ) {
+            return $this->$method( $request );
         }
-
-        // Fallback to default import handlers
-        return $this->handle_import_action( $request );
-    }
+    
+        return [
+            'success' => false,
+            'message' => 'Unknown action'
+        ];
+    }    
 
     /**
-     * Dynamic action handler
+     * Get current status
      */
-    public function handle_import_action( $request ) {
-        $action = $request->get_param('action');
-        $params = $request->get_params();
-
-        // Remove action from params for cleaner data passing
-        unset($params['action']);
-        unset($params['parameter']);
-
-        switch ( $action ) {
-            case 'import_store_owners':
-                $result = $this->import_store_owner();
-                return [
-                    'success' => !empty($result),
-                    'data' => $result,
-                    'message' => !empty($result) 
-                        ? sprintf( __( 'Imported %d store owners', 'multivendorx' ), count($result) )
-                        : __( 'No store owners imported', 'multivendorx' )
-                ];
-
-            case 'import_stores':
-                $store_owners = $request->get_param('store_owners') ?: [];
-                $result = $this->import_stores( $store_owners );
-                return [
-                    'success' => !empty($result),
-                    'data' => $result,
-                    'message' => !empty($result)
-                        ? sprintf( __( 'Created %d stores', 'multivendorx' ), count($result) )
-                        : __( 'No stores created', 'multivendorx' )
-                ];
-
-            case 'import_products':
-                $store_ids = $request->get_param('store_ids') ?: [];
-                $result = $this->import_products( $store_ids );
-                return [
-                    'success' => !empty($result),
-                    'data' => $result,
-                    'message' => !empty($result)
-                        ? sprintf( __( 'Imported %d products', 'multivendorx' ), count($result) )
-                        : __( 'No products imported', 'multivendorx' )
-                ];
-
-            case 'import_commissions':
-                $store_ids = $request->get_param('store_ids') ?: [];
-                $result = $this->import_commissions( $store_ids );
-                return [
-                    'success' => !empty($result),
-                    'data' => $result,
-                    'message' => !empty($result)
-                        ? sprintf( __( 'Imported %d commission', 'multivendorx' ), count($result) )
-                        : __( 'No commission imported', 'multivendorx' )
-                ];
-
-            case 'import_orders':
-                $product_ids = $request->get_param('product_ids') ?: [];
-                $result = $this->import_orders( $product_ids );
-                return [
-                    'success' => (bool) $result,
-                    'message' => $result 
-                        ? __( 'Orders created successfully', 'multivendorx' )
-                        : __( 'Failed to create orders', 'multivendorx' )
-                ];
-
-            case 'import_reviews':
-                $product_ids = $request->get_param('product_ids') ?: [];
-                $result = $this->import_reviews( $product_ids );
-                return [
-                    'success' => (bool) $result,
-                    'message' => $result 
-                        ? __( 'Reviews created successfully', 'multivendorx' )
-                        : __( 'Failed to create reviews', 'multivendorx' )
-                ];
-
-            default:
-                return [
-                    'success' => false,
-                    'message' => sprintf( __( 'Unknown action: %s', 'multivendorx' ), $action )
-                ];
+    public function get_status( $request ) {
+        $nonce_check = $this->verify_nonce( $request );
+        if ( $nonce_check !== true ) {
+            return $nonce_check;
         }
+    
+        $parameter = $request->get_param( 'parameter' );
+        $status    = get_transient( 'multivendorx_import_status_' . $parameter ) ?: [];
+    
+        return [
+            'success' => true,
+            'running' => ! empty( $status ),
+            'status'  => $status,
+        ];
     }
 
-    public function import_store_owner() {
+    public function import_store_owners() {
         $xml = simplexml_load_file( MultiVendorX()->plugin_path . '/assets/dummy-data/store_owners.xml' );
         $store_owners = [];
     
@@ -258,7 +175,11 @@ class ImportDummyData extends \WP_REST_Controller {
             }
         }
     
-        return $store_owners;
+        return [
+            'success' => true,
+            'data'    => $store_owners,
+            'message' => __( 'Store owners imported successfully.', 'multivendorx' ),
+        ];        
     }
 
     public function import_stores( $store_owners ) {
@@ -338,7 +259,10 @@ class ImportDummyData extends \WP_REST_Controller {
             $created_store_ids[] = $store_id;
         }        
 
-        return $created_store_ids;
+        return [
+            'success' => true,
+            'data'    => $created_store_ids,
+        ];        
     }
 
     public function import_products( $store_ids ) {
@@ -520,7 +444,10 @@ class ImportDummyData extends \WP_REST_Controller {
             }
         }
     
-        return $created_products;
+        return [
+            'success' => true,
+            'data'    => $created_products,
+        ];        
     }    
 
     public function import_commissions() {
@@ -690,57 +617,62 @@ class ImportDummyData extends \WP_REST_Controller {
             }
         }
     
-        return true;
+        return [
+            'success' => true,
+        ];        
     }
     
-    public function import_reviews( $product_ids ) {
+    public function import_reviews( $request ) {
 
-        if ( empty( $product_ids ) ) {
-            return;
+        $product_ids = $request->get_param( 'product_ids' );
+    
+        if ( empty( $product_ids ) || ! is_array( $product_ids ) ) {
+            return [
+                'success' => false,
+                'message' => 'No product IDs provided',
+            ];
         }
     
-        // Load reviews XML
         $xml = simplexml_load_file(
             MultiVendorX()->plugin_path . '/assets/dummy-data/reviews.xml'
         );
     
         if ( ! $xml ) {
-            return;
+            return [
+                'success' => false,
+                'message' => 'Invalid reviews XML',
+            ];
         }
     
-        /**
-         * We assign reviews sequentially to products.
-         * If reviews < products → remaining products get no reviews.
-         */
-        $product_index = 0;
+        $product_index  = 0;
         $total_products = count( $product_ids );
     
         foreach ( $xml->review as $review ) {
     
-            $existing = get_comments([
-                'post_id' => $product_id,
-                'author_email' => sanitize_email( (string) $review->email ),
-                'type' => 'review',
-                'count' => true
-            ]);
-            
-            if ( $existing > 0 ) {
-                continue; // Review already exists
-            }
-            
             if ( $product_index >= $total_products ) {
                 break;
             }
     
-            $product_id = $product_ids[ $product_index ];
+            $product_id = (int) $product_ids[ $product_index ];
             $product_index++;
     
             if ( ! $product_id || get_post_type( $product_id ) !== 'product' ) {
                 continue;
             }
     
-            // Insert comment as WooCommerce review
-            $comment_data = array(
+            // Prevent duplicate reviews
+            $existing = get_comments([
+                'post_id'        => $product_id,
+                'author_email'   => sanitize_email( (string) $review->email ),
+                'type'           => 'review',
+                'count'          => true,
+            ]);
+    
+            if ( $existing > 0 ) {
+                continue;
+            }
+    
+            $comment_id = wp_insert_comment([
                 'comment_post_ID'      => $product_id,
                 'comment_author'       => sanitize_text_field( (string) $review->reviewer ),
                 'comment_author_email' => sanitize_email( (string) $review->email ),
@@ -748,51 +680,22 @@ class ImportDummyData extends \WP_REST_Controller {
                 'comment_type'         => 'review',
                 'comment_approved'     => 1,
                 'comment_date'         => current_time( 'mysql' ),
-            );
-    
-            $comment_id = wp_insert_comment( $comment_data );
+            ]);
     
             if ( is_wp_error( $comment_id ) ) {
                 continue;
             }
     
-            // Rating meta
-            $rating = max( 1, min( 5, intval( $review->rating ) ) );
+            $rating = max( 1, min( 5, (int) $review->rating ) );
             update_comment_meta( $comment_id, 'rating', $rating );
     
-            /**
-             * Recalculate product rating properly
-             * (WooCommerce compatible way)
-             */
-            $comments = get_approved_comments( $product_id );
-            $rating_sum   = 0;
-            $rating_count = 0;
-    
-            foreach ( $comments as $comment ) {
-                if ( $comment->comment_type !== 'review' ) {
-                    continue;
-                }
-    
-                $r = intval( get_comment_meta( $comment->comment_ID, 'rating', true ) );
-                if ( $r > 0 ) {
-                    $rating_sum += $r;
-                    $rating_count++;
-                }
-            }
-    
-            if ( $rating_count > 0 ) {
-                $average = round( $rating_sum / $rating_count, 2 );
-    
-                update_post_meta( $product_id, '_wc_average_rating', $average );
-                update_post_meta( $product_id, '_wc_review_count', $rating_count );
-                update_post_meta( $product_id, '_wc_rating_count', array_fill( 1, 5, 0 ) );
-            }
-    
-            // Trigger hooks for compatibility
-            do_action( 'woocommerce_review_posted', $comment_id, $comment_data );
+            do_action( 'woocommerce_review_posted', $comment_id );
         }
     
-        return true;
-    }
+        return [
+            'success' => true,
+            'message' => __( 'Reviews imported successfully.', 'multivendorx' ),
+        ];
+    }    
     
 }
