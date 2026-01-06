@@ -10,7 +10,6 @@ const productTypes = [
     { key: 'subscription', label: 'Subscription', value: 'subscription', pro: true },
     { key: 'gift_card', label: 'Gift Card', value: 'gift_card', pro: true },
 ];
-console.log(appLocalizer);
 export default {
     id: 'development-tools',
     priority: 3,

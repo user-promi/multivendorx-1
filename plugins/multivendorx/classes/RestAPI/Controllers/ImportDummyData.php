@@ -9,7 +9,7 @@ namespace MultiVendorX\RestAPI\Controllers;
 
 defined( 'ABSPATH' ) || exit;
 
-class Import_dummy_data extends \WP_REST_Controller {
+class ImportDummyData extends \WP_REST_Controller {
 
     /**
      * Route Base.
