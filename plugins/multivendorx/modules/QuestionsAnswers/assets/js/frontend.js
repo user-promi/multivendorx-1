@@ -27,6 +27,11 @@ jQuery(document).ready(function ($) {
 					$('#qna-question').val('');
 					$('#qna-form').slideUp();
 					$('#qna-show-form').show();
+					$('#qna-success-message')
+					.stop(true, true)
+					.fadeIn()
+					.delay(4000)
+					.fadeOut();
 				} else {
 					alert(res.data.message);
 				}
@@ -82,8 +87,15 @@ jQuery(document).ready(function ($) {
 			},
 			function (res) {
 				if (res.success) {
-					location.reload();
-				} else {
+					$('#qna-success-message')
+						.stop(true, true)
+						.fadeIn()
+						.delay(4000)
+						.fadeOut();
+				
+					$('#qna-direct-submit').hide();
+					$('#qna-search').val('');
+				}else {
 					alert(res.data.message);
 				}
 			}

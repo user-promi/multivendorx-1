@@ -66,7 +66,7 @@ type StoreQnaRow = {
 
 type FilterData = {
 	searchField: string;
-	typeCount?: any;
+	categoryFilter?: any;
 	store?: string;
 	orderBy?: any;
 	order?: any;
@@ -130,7 +130,7 @@ const CustomerQuestions: React.FC = () => {
 	function requestData(
 		rowsPerPage = 10,
 		currentPage = 1,
-		typeCount = '',
+		categoryFilter = '',
 		store = '',
 		searchField = '',
 		orderBy = '',
@@ -146,7 +146,7 @@ const CustomerQuestions: React.FC = () => {
 			params: {
 				page: currentPage,
 				row: rowsPerPage,
-				status: typeCount === 'all' ? '' : typeCount,
+				status: categoryFilter === 'all' ? '' : categoryFilter,
 				store_id: appLocalizer.store_id,
 				searchField,
 				orderBy,
@@ -191,7 +191,7 @@ const CustomerQuestions: React.FC = () => {
 		requestData(
 			rowsPerPage,
 			currentPage,
-			filterData?.typeCount,
+			filterData?.categoryFilter,
 			filterData?.store,
 			filterData?.searchField,
 			filterData?.orderBy,
@@ -244,23 +244,6 @@ const CustomerQuestions: React.FC = () => {
 	};
 
 	const columns: ColumnDef<QnaRow>[] = [
-		{
-			id: 'select',
-			header: ({ table }) => (
-				<input
-					type="checkbox"
-					checked={table.getIsAllRowsSelected()}
-					onChange={table.getToggleAllRowsSelectedHandler()}
-				/>
-			),
-			cell: ({ row }) => (
-				<input
-					type="checkbox"
-					checked={row.getIsSelected()}
-					onChange={row.getToggleSelectedHandler()}
-				/>
-			),
-		},
 		{
 			id: 'product',
 			header: __('Product', 'multivendorx'),
@@ -535,7 +518,7 @@ const CustomerQuestions: React.FC = () => {
 				totalCounts={totalRows}
 				realtimeFilter={realtimeFilter}
 				handlePagination={requestApiForData}
-				typeCounts={status as Status[]}
+				categoryFilter={status as Status[]}
 				searchFilter={searchFilter}
 			/>
 

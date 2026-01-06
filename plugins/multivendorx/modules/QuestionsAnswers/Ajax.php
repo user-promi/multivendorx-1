@@ -103,7 +103,6 @@ class Ajax {
 				return ! empty( $q->answer_text );
 			}
         );
-
         ob_start();
 
         if ( ! empty( $answered_rows ) ) {
@@ -113,7 +112,7 @@ class Ajax {
                     <p class="qna-question"><strong>Q:</strong> <?php echo esc_html( $row->question_text ); ?></p>
                     <small class="qna-meta">
                         By <?php echo esc_html( get_the_author_meta( 'display_name', $row->question_by ) ); ?>,
-                        <?php echo esc_html( human_time_diff( strtotime( $row->question_date ), current_time( 'mysql' ) ) ) . ' ago'; ?>
+                        <?php echo esc_html( human_time_diff( strtotime( $row->question_date ), current_time( 'timestamp' ) ) ) . ' ago'; ?>
                     </small>
     
                     <p class="qna-answer"><strong>A:</strong> <?php echo esc_html( $row->answer_text ); ?></p>

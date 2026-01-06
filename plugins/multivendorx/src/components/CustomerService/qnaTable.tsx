@@ -14,12 +14,14 @@ import {
 	AdminButton,
 	FormGroupWrapper,
 	FormGroup,
+	ProPopup,
 } from 'zyra';
 import {
 	ColumnDef,
 	RowSelectionState,
 	PaginationState,
 } from '@tanstack/react-table';
+import { Dialog } from '@mui/material';
 export interface RealtimeFilter {
 	name: string;
 	render: (
@@ -66,15 +68,15 @@ type StoreQnaRow = {
 
 type FilterData = {
 	searchField: string;
-	typeCount?: any;
+	categoryFilter?: any;
 	store?: string;
 	orderBy?: any;
 	order?: any;
 	date?: any;
+	question_visibility?:string;
 };
 
 const Qna: React.FC = () => {
-	const [error, setError] = useState<string>();
 	const [selectedQna, setSelectedQna] = useState<StoreQnaRow | null>(null);
 	const [answer, setAnswer] = useState('');
 	const [qna, setQna] = useState('');
@@ -90,6 +92,46 @@ const Qna: React.FC = () => {
 		pageSize: 10,
 	});
 	const [pageCount, setPageCount] = useState(0);
+	const [selectedQn, setSelectedQn] = useState<{
+		id: number;
+	} | null>(null);
+	const [confirmOpen, setConfirmOpen] = useState(false);
+
+	const handleDeleteClick = (rowData) => {
+		setSelectedQn({
+			id: rowData.id,
+		});
+		setConfirmOpen(true);
+	};
+
+	const handleConfirmDelete = async () => {
+		if (!selectedQn) {
+			return;
+		}
+
+		try {
+			await axios({
+				method: 'DELETE',
+				url: getApiLink(
+					appLocalizer,
+					`qna/${selectedQn.id}`
+				),
+				headers: {
+					'X-WP-Nonce':
+						appLocalizer.nonce,
+				},
+			});
+
+			requestData(
+				pagination.pageSize,
+				pagination.pageIndex + 1,
+			);
+
+		} finally {
+			setConfirmOpen(false);
+			setSelectedQn(null);
+		}
+	};
 
 	// Fetch total rows on mount
 	useEffect(() => {
@@ -102,7 +144,6 @@ const Qna: React.FC = () => {
 				setStore(response.data.stores);
 			})
 			.catch(() => {
-				setError(__('Failed to load stores', 'multivendorx'));
 				setStore([]);
 			});
 		axios({
@@ -115,9 +156,6 @@ const Qna: React.FC = () => {
 				setTotalRows(response.data || 0);
 				setPageCount(Math.ceil(response.data / pagination.pageSize));
 			})
-			.catch(() => {
-				setError(__('Failed to load total rows', 'multivendorx'));
-			});
 	}, []);
 
 	useEffect(() => {
@@ -131,13 +169,14 @@ const Qna: React.FC = () => {
 	function requestData(
 		rowsPerPage = 10,
 		currentPage = 1,
-		typeCount = '',
+		categoryFilter = '',
 		store = '',
 		searchField = '',
 		orderBy = '',
 		order = '',
 		startDate = new Date(0),
-		endDate = new Date()
+		endDate = new Date(),
+		question_visibility = ''
 	) {
 		setData(null);
 		axios({
@@ -147,13 +186,14 @@ const Qna: React.FC = () => {
 			params: {
 				page: currentPage,
 				row: rowsPerPage,
-				status: typeCount === 'all' ? '' : typeCount,
+				status: categoryFilter === 'all' ? '' : categoryFilter,
 				store_id: store,
 				searchField,
 				orderBy,
 				order,
 				startDate,
 				endDate,
+				question_visibility
 			},
 		})
 			.then((response) => {
@@ -175,7 +215,6 @@ const Qna: React.FC = () => {
 				setStatus(statuses.filter((status) => status.count > 0));
 			})
 			.catch(() => {
-				setError(__('Failed to load Q&A', 'multivendorx'));
 				setData([]);
 			});
 	}
@@ -190,13 +229,14 @@ const Qna: React.FC = () => {
 		requestData(
 			rowsPerPage,
 			currentPage,
-			filterData?.typeCount,
+			filterData?.categoryFilter,
 			filterData?.store,
 			filterData?.searchField,
 			filterData?.orderBy,
 			filterData?.order,
 			filterData?.date?.start_date,
-			filterData?.date?.end_date
+			filterData?.date?.end_date,
+			filterData?.question_visibility
 		);
 	};
 
@@ -243,23 +283,6 @@ const Qna: React.FC = () => {
 	};
 
 	const columns: ColumnDef<QnaRow>[] = [
-		{
-			id: 'select',
-			header: ({ table }) => (
-				<input
-					type="checkbox"
-					checked={table.getIsAllRowsSelected()}
-					onChange={table.getToggleAllRowsSelectedHandler()}
-				/>
-			),
-			cell: ({ row }) => (
-				<input
-					type="checkbox"
-					checked={row.getIsSelected()}
-					onChange={row.getToggleSelectedHandler()}
-				/>
-			),
-		},
 		{
 			id: 'product',
 			header: __('Product', 'multivendorx'),
@@ -313,7 +336,6 @@ const Qna: React.FC = () => {
 				);
 			},
 		},
-
 		{
 			header: __('Question', 'multivendorx'),
 			id: 'question',
@@ -403,42 +425,7 @@ const Qna: React.FC = () => {
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminfont-delete delete',
 								onClick: (rowData) => {
-									if (
-										confirm(
-											__(
-												'Are you sure you want to delete this question?',
-												'multivendorx'
-											)
-										)
-									) {
-										axios
-											.delete(
-												getApiLink(
-													appLocalizer,
-													`qna/${rowData.id}`
-												),
-												{
-													headers: {
-														'X-WP-Nonce':
-															appLocalizer.nonce,
-													},
-												}
-											)
-											.then(() =>
-												requestData(
-													pagination.pageSize,
-													pagination.pageIndex + 1
-												)
-											)
-											.catch(() =>
-												alert(
-													__(
-														'Failed to delete question',
-														'multivendorx'
-													)
-												)
-											);
-									}
+									handleDeleteClick(rowData);
 								},
 								hover: true,
 							},
@@ -479,14 +466,14 @@ const Qna: React.FC = () => {
 			),
 		},
 		{
-			name: 'visibility',
+			name: 'question_visibility',
 			render: (
 				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="group-field">
 					<select
-						name="visibility"
+						name="question_visibility"
 						onChange={(e) =>
 							updateFilter(e.target.name, e.target.value)
 						}
@@ -541,9 +528,29 @@ const Qna: React.FC = () => {
 			),
 		},
 	];
-
 	return (
 		<>
+			<Dialog
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+			>
+				<ProPopup
+					confirmMode
+					title="Delete Question"
+					confirmMessage={
+						selectedQn
+							? `Are you sure you want to delete Question?`
+							: ''
+					}
+					confirmYesText="Delete"
+					confirmNoText="Cancel"
+					onConfirm={handleConfirmDelete}
+					onCancel={() => {
+						setConfirmOpen(false);
+						setSelectedQn(null);
+					}}
+				/>
+			</Dialog>
 			<Table
 				data={data}
 				columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -557,7 +564,7 @@ const Qna: React.FC = () => {
 				totalCounts={totalRows}
 				realtimeFilter={realtimeFilter}
 				handlePagination={requestApiForData}
-				typeCounts={status as Status[]}
+				categoryFilter={status as Status[]}
 				searchFilter={searchFilter}
 			/>
 
@@ -582,13 +589,13 @@ const Qna: React.FC = () => {
 									icon: 'close',
 									text: __('Cancel', 'multivendorx'),
 									className: 'red',
-									onClick: setSelectedQna(null),
+									onClick: () => setSelectedQna(null),
 								},
 								{
 									icon: 'save',
 									text: __('Save Answer', 'multivendorx'),
 									className: 'purple-bg',
-									onClick: () => handleSaveAnswer,
+									onClick: () => handleSaveAnswer(),
 								},
 							]}
 						/>
@@ -652,7 +659,6 @@ const Qna: React.FC = () => {
 						</FormGroupWrapper>
 					</>
 
-					{error && <p className="error-text">{error}</p>}
 				</CommonPopup>
 			)}
 		</>

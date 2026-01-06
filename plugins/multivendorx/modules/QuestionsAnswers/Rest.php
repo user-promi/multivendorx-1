@@ -141,7 +141,8 @@ class Rest extends \WP_REST_Controller {
             $search     = sanitize_text_field( $request->get_param( 'searchField' ) );
             $orderBy    = sanitize_text_field( $request->get_param( 'orderBy' ) );
             $order      = sanitize_text_field( $request->get_param( 'order' ) );
-
+            $question_visibility     = sanitize_text_field( $request->get_param( 'question_visibility' ) );
+            
             $args = array();
 
             if ( $store_id ) {
@@ -209,7 +210,9 @@ class Rest extends \WP_REST_Controller {
                 $args['orderBy'] = $orderBy;
                 $args['order']   = $order;
             }
-
+            if ( !empty($question_visibility)){
+                $args['question_visibility']   = $question_visibility;
+            }
             // --- Step 7: Fetch Question Data ---
             $questions = Util::get_question_information( $args );
 
@@ -249,7 +252,7 @@ class Rest extends \WP_REST_Controller {
                         'question_date'       => $q['question_date'],
                         'answer_by'           => isset( $q['answer_by'] ) ? (int) $q['answer_by'] : 0,
                         'answer_date'         => $q['answer_date'] ?? '',
-                        'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'mysql' ) ) . ' ago',
+                        'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
                         'total_votes'         => (int) $q['total_votes'],
                         'question_visibility' => $q['question_visibility'],
                     );
@@ -356,7 +359,7 @@ class Rest extends \WP_REST_Controller {
             'question_by'         => (int) $q['question_by'],
             'author_name'         => get_the_author_meta( 'display_name', $q['question_by'] ),
             'question_date'       => $q['question_date'],
-            'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'mysql' ) ) . ' ago',
+            'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
             'total_votes'         => (int) $q['total_votes'],
             'question_visibility' => $q['question_visibility'],
         );
