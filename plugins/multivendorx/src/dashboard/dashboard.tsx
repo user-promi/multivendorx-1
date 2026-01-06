@@ -627,7 +627,7 @@ const Dashboard: React.FC = () => {
 						title={__('Visitors Map', 'multivendorx')}
 						iconName="adminfont-external icon"
 					>
-						<VisitorsMap/>
+						<VisitorsMap dateRange={dateRange}/>
 						
 					</Card>
 				</Column>

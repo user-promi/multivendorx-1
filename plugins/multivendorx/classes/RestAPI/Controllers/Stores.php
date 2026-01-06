@@ -131,30 +131,35 @@ class Stores extends \WP_REST_Controller {
 
         try {
             if ( $request->get_param( 'visitorMap' ) ) {
-                $store_id     = (int) $request->get_param( 'id' );
+                $store_id  = (int) $request->get_param( 'id' );
                 $cache_key = 'multivendorx_visitor_stats_data_' . $store_id;
 
                 if ( $cached = get_transient( $cache_key ) ) {
                     return $cached;
                 }
 
+                $start = gmdate( 'Y-m-d H:i:s', strtotime( $request->get_param( 'start_date' ) ) );
+                $end   = gmdate( 'Y-m-d H:i:s', strtotime( $request->get_param( 'end_date' ) ) );
+
                 global $wpdb;
 
-                $rows = $wpdb->get_results(
+                 $rows = $wpdb->get_results(
                     $wpdb->prepare(
-                        "SELECT countryCode
-                        FROM `{$wpdb->prefix}" . Utill::TABLES['visitors_stats'] . "`
-                        WHERE created BETWEEN %s AND %s
-                        AND store_id = %d
-                        GROUP BY user_cookie",
-                        $store_id
+                        "SELECT country
+                        FROM {$wpdb->prefix}" . Utill::TABLES['visitors_stats'] . "
+                        WHERE store_id = %d
+                        AND created >= %s
+                        AND created <= %s",
+                        $store_id,
+                        $start,
+                        $end
                     )
                 );
 
                 $mapStats = [];
 
                 foreach ( $rows as $row ) {
-                    $code = strtolower( $row->countryCode ?: 'xx' );
+                    $code = strtolower( $row->country ?: '' );
                     $mapStats[ $code ] = ( $mapStats[ $code ] ?? 0 ) + 1;
                 }
 
