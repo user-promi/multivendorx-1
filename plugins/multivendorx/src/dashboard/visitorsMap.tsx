@@ -21,41 +21,43 @@ type VisitorMapResponse = {
     colors: Record<string, string>;
 };
 
-const VisitorsMap: React.FC = () => {
-    const [period, setPeriod] = useState<number>(7);
+type VisitorsMapProps = {
+    dateRange: {
+        startDate: string;
+        endDate: string;
+    };
+};
+
+const VisitorsMap: React.FC<VisitorsMapProps> = ({ dateRange }) => {
     const [data, setData] = useState<VisitorMapResponse | null>(null);
     const [tooltip, setTooltip] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         setLoading(true);
-
         axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, 'store'),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
+            method: 'GET',
+            url: getApiLink(appLocalizer, 'store'),
+            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            params: {
                 visitorMap: true,
-				period: period,
-                id: appLocalizer.store_id
-			},
-		})
-			.then((response) => {
-				setData(response);
+                id: appLocalizer.store_id,
+                start_date: dateRange.startDate,
+                end_date: dateRange.endDate,
+            },
+        })
+            .then((response) => {
+                setData(response.data);
                 setLoading(false);
-			});
+            });
 
-    }, [period]);
+    }, [dateRange]);
 
     const getCountryCode = (geo: any): string | null => {
-        const iso = geo?.properties?.ISO_A2;
-
-        // Ignore invalid / missing ISO codes
-        if (!iso || iso === '-99') {
-            return null;
-        }
-
-        return iso.toLowerCase();
+        const name = geo?.properties?.name;
+        console.log('name', name)
+        if (!name) return null;
+        return name.toLowerCase();
     };
 
     const handleMouseEnter = (geo: any) => {
@@ -63,26 +65,26 @@ const VisitorsMap: React.FC = () => {
         if (!code || !data) return;
 
         const hits = data.map_stats[code]?.hits_count ?? 0;
-        setTooltip(`${geo.properties.NAME} - ${hits} visitors`);
+        setTooltip(`${geo.properties.name} - ${hits} visitors`);
     };
 
-    return (
-        <div className="mvx-visitors-map-widget">
+    const tableRows = data
+        ? Object.entries(data.map_stats)
+                .map(([code, value]) => ({
+                    countryCode: code.toUpperCase(),
+                    visitors: value.hits_count,
+                }))
+                .sort((a, b) => b.visitors - a.visitors)
+        : [];
 
-            {/* FILTER */}
-            <select
-                value={period}
-                onChange={(e) => setPeriod(Number(e.target.value))}
-            >
-                <option value={7}>Last 7 Days</option>
-                <option value={30}>Last 30 Days</option>
-            </select>
+    return (
+        <div className="">
 
             {loading && <p>Loading visitor map…</p>}
 
             {!loading && data && (
                 <div style={{ position: 'relative' }}>
-                    {/* TOOLTIP */}
+
                     {tooltip && (
                         <div
                             style={{
@@ -102,7 +104,6 @@ const VisitorsMap: React.FC = () => {
                         </div>
                     )}
 
-                    {/* 🌍 MAP */}
                     <ComposableMap
                         projectionConfig={{ scale: 145 }}
                         style={{ width: '100%', height: '270px' }}
@@ -140,6 +141,33 @@ const VisitorsMap: React.FC = () => {
                             }
                         </Geographies>
                     </ComposableMap>
+
+                    {tableRows.length > 0 && (
+                        <div style={{ marginTop: '16px', maxHeight: '220px', overflowY: 'auto' }}>
+                            <table
+                                style={{
+                                    width: '100%',
+                                    borderCollapse: 'collapse',
+                                    fontSize: '13px',
+                                }}
+                            >
+                                <thead>
+                                    <tr>
+                                        <th>Country</th>
+                                        <th>Visitors</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {tableRows.map((row) => (
+                                        <tr key={row.countryCode}>
+                                            <td>{row.countryCode}</td>
+                                            <td>{row.visitors}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
