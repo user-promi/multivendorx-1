@@ -30,39 +30,41 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 			if (!item) return prev;
 	
 			const maxQty = Number(item.quantity);
-			const unitPrice = Number(item.subtotal) / Number(item.quantity);
-			const maxTotal = Number(item.subtotal);
+			const unitPrice = Number(item.subtotal) / maxQty;
 	
 			let quantity = prev[id]?.quantity ?? 0;
-			let total = prev[id]?.total ?? 0;
-			let tax = prev[id]?.tax ?? 0;
+			let total = prev[id]?.total ?? '';
+			let tax = prev[id]?.tax ?? '';
 	
+			//Qty is numeric and restricted
 			if (field === 'quantity') {
-				quantity = Math.min(Math.max(value, 0), maxQty);
-				total = Number((quantity * unitPrice).toFixed(2));
+				const qty = Math.min(Math.max(Math.floor(value), 0), maxQty);
+				quantity = qty;
+				total = (qty * unitPrice).toFixed(2);
 			}
 	
+			//Total: allow empty, NO restriction
 			if (field === 'total') {
-				total = Math.min(Math.max(value, 0), maxTotal);
-				quantity = Math.round(total / unitPrice);
+				total = value === '' ? '' : value;
 			}
 	
+			// Tax: allow empty, NO restriction
 			if (field === 'tax') {
-				tax = Math.max(value, 0);
+				tax = value === '' ? '' : value;
 			}
 	
 			const updated = {
 				...prev,
-				[id]: {
-					quantity,
-					total,
-					tax,
-				},
+				[id]: { quantity, total, tax },
 			};
 	
-			const refundAmount = Object.values(updated).reduce((sum, item) => {
-				return sum + Number(item.total || 0) + Number(item.tax || 0);
-			}, 0);
+			const refundAmount = Object.values(updated).reduce(
+				(sum, row) =>
+					sum +
+					Number(row.total || 0) +
+					Number(row.tax || 0),
+				0
+			);
 	
 			setRefundDetails((prevDetails) => ({
 				...prevDetails,
@@ -73,6 +75,8 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 		});
 	};
 	
+
+
 	const handleRefundSubmit = () => {
 		const payload = {
 			orderId: orderId,
@@ -416,7 +420,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																	)}
 																{isRefund && (
 																	<input
-																		type="number"
+																		type="text"
 																		min="0"
 																		className="basic-input"
 																		value={
@@ -433,7 +437,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																			handleItemChange(
 																				item.id,
 																				'total',
-																				+e
+																				e
 																					.target
 																					.value
 																			)
@@ -468,7 +472,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																	)}
 																{isRefund && (
 																	<input
-																		type="number"
+																		type="text"
 																		min="0"
 																		className="basic-input"
 																		value={
@@ -485,7 +489,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																			handleItemChange(
 																				item.id,
 																				'tax',
-																				+e
+																				e
 																					.target
 																					.value
 																			)
@@ -536,7 +540,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 															<td className="admin-column">
 																{isRefund ? (
 																	<input
-																		type="number"
+																		type="text"
 																		min="0"
 																		className="basic-input"
 																		// value="$95"
@@ -554,7 +558,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																			handleItemChange(
 																				item.id,
 																				'total',
-																				+e
+																				e
 																					.target
 																					.value
 																			)
@@ -582,7 +586,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 															<td className="admin-column">
 																{isRefund ? (
 																	<input
-																		type="number"
+																		type="text"
 																		min="0"
 																		className="basic-input"
 																		value={
@@ -599,7 +603,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																			handleItemChange(
 																				item.id,
 																				'tax',
-																				+e
+																				e
 																					.target
 																					.value
 																			)
