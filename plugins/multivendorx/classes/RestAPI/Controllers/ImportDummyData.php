@@ -61,10 +61,8 @@ class ImportDummyData extends \WP_REST_Controller {
         $parameter = $request->get_param( 'parameter' );
         $action    = $request->get_param( 'action' );
     
-        if ( $parameter == 'action' ) {
-            if ( method_exists( $this, $action ) ) {
-                return $this->$action( $request );
-            }
+        if ( $parameter == 'action'  &&  method_exists( $this, $action ) ) {
+            return $this->$action( $request );
         }
     
         return [
