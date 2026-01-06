@@ -418,7 +418,7 @@ export const Announcements: React.FC = () => {
 					{ key: 'all', name: 'All', count: response.data.all || 0 },
 					{
 						key: 'publish',
-						name: 'Publish',
+						name: 'Published',
 						count: response.data.publish || 0,
 					},
 					{
