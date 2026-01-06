@@ -133,7 +133,7 @@
             flex-wrap: wrap;
             border: $border-light-small;
             border-top: 0;
-            // overflow: hidden;
+            overflow: hidden;
             transition: max-height 0.4s ease, opacity 0.4s ease;
             max-height: 0;
             opacity: 0;

@@ -334,7 +334,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                 />
                                                 <div className="edit-icon">
                                                     <span
-                                                        className="admin-badge green border adminlib-check"
+                                                        className="admin-badge green border adminfont-check"
                                                         onClick={ ( e ) => {
                                                             e.stopPropagation();
                                                             saveEditedOption(
@@ -355,7 +355,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                 { option.proSetting &&
                                                     ! props.khali_dabba && (
                                                         <span className="admin-pro-tag">
-                                                            <i className="adminlib-pro-tag"></i>
+                                                            <i className="adminfont-pro-tag"></i>
                                                             Pro
                                                         </span>
                                                     ) }
@@ -368,7 +368,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                     ) && (
                                                         <span className="admin-pro-tag module">
                                                             <i
-                                                                className={ `adminlib-${ option.moduleEnabled }` }
+                                                                className={ `adminfont-${ option.moduleEnabled }` }
                                                             ></i>
                                                             { String(
                                                                 option.moduleEnabled
@@ -388,7 +388,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                                         )
                                                                 )
                                                                 .join( ' ' ) }
-                                                            <i className="adminlib-lock"></i>
+                                                            <i className="adminfont-lock"></i>
                                                         </span>
                                                     ) }
                                                 <div className="label-des">
@@ -408,7 +408,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                                     option.value
                                                             );
                                                         } }
-                                                        className="admin-badge blue border adminlib-edit"
+                                                        className="admin-badge blue border adminfont-edit"
                                                     ></span>
                                                     <span
                                                         onClick={ ( e ) => {
@@ -417,7 +417,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                                                 index
                                                             );
                                                         } }
-                                                        className="admin-badge red border adminlib-delete"
+                                                        className="admin-badge red border adminfont-delete"
                                                     ></span>
                                                 </div>
                                             ) }
@@ -473,7 +473,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                                 handleSaveNewOption();
                             } }
                         >
-                            <i className="adminlib-active"></i> Save
+                            <i className="adminfont-active"></i> Save
                         </button>
                     </div>
                 ) : (
@@ -482,7 +482,7 @@ const MultiCheckBox: React.FC< MultiCheckBoxProps > = ( props ) => {
                             className="admin-btn btn-purple"
                             onClick={ handleAddNewClick }
                         >
-                            <i className="adminlib-plus"></i>{ ' ' }
+                            <i className="adminfont-plus"></i>{ ' ' }
                             { props.addNewBtn }
                         </div>
                     </div>

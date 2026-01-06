@@ -191,7 +191,7 @@ const DownloadTransactionCSVButton: React.FC<{
 				}
 				className="admin-btn"
 			>
-				<i className="adminlib-download"></i>
+				<i className="adminfont-download"></i>
 				{__('Download CSV', 'multivendorx')}
 			</button>
 		</div>
@@ -288,7 +288,7 @@ const ExportAllTransactionCSVButton: React.FC<{
 			disabled={isDownloading || !storeId}
 			className="admin-btn btn-purple-bg"
 		>
-			<span className="adminlib-download"></span>
+			<span className="adminfont-download"></span>
 			Download CSV
 		</button>
 	);
@@ -1027,7 +1027,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 							className="admin-btn btn-purple-bg"
 							onClick={() => setRequestWithdrawal(true)}
 						>
-							<i className="adminlib-wallet"></i>
+							<i className="adminfont-wallet"></i>
 							{__('Disburse Payment', 'multivendorx')}
 						</div>
 					</div>
@@ -1042,11 +1042,11 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 				header={
 					<>
 						<div className="title">
-							<i className="adminlib-wallet"></i>
+							<i className="adminfont-wallet"></i>
 							{__('Disburse payment', 'multivendorx')}
 						</div>
 						<i
-							className="icon adminlib-close"
+							className="icon adminfont-close"
 							onClick={() => {
 								setRequestWithdrawal(false);
 							}}
@@ -1087,7 +1087,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 							<div className="payment-method">
 								{storeData?.payment_method ? (
 									<div className="method">
-										<i className="adminlib-bank"></i>
+										<i className="adminfont-bank"></i>
 										{formatMethod(storeData.payment_method)}
 									</div>
 								) : (

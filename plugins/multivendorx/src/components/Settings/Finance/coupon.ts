@@ -8,7 +8,7 @@ export default {
 		'Manage how discounts and coupons affect commission calculations.',
 		'mvx-pro'
 	),
-	icon: 'adminlib-coupon',
+	icon: 'adminfont-coupon',
 	submitUrl: 'settings',
 	modal: [
 		{

@@ -188,25 +188,25 @@ const StoreReport: React.FC = () => {
 						id: 'all',
 						label: 'All Stores',
 						count: response.data.all || 0,
-						icon: 'adminlib-storefront blue',
+						icon: 'adminfont-storefront blue',
 					},
 					{
 						id: 'active',
 						label: 'Active Stores',
 						count: response.data.active || 0,
-						icon: 'adminlib-store-policy green',
+						icon: 'adminfont-store-policy green',
 					},
 					{
 						id: 'pending',
 						label: 'Pending Stores',
 						count: response.data.pending || 0,
-						icon: 'adminlib-pending yellow',
+						icon: 'adminfont-pending yellow',
 					},
 					{
 						id: 'deactivated',
 						label: 'Deactivated Stores',
 						count: response.data.deactivated || 0,
-						icon: 'adminlib-close-delete red',
+						icon: 'adminfont-close-delete red',
 					},
 				]);
 			})
@@ -249,7 +249,7 @@ const StoreReport: React.FC = () => {
 						}}
 						value={filterValue || ''}
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -307,7 +307,7 @@ const StoreReport: React.FC = () => {
 									alt={row.original.store_name}
 								/>
 							) : (
-								<i className="item-icon adminlib-store-inventory"></i>
+								<i className="item-icon adminfont-store-inventory"></i>
 							)}
 
 							<div className="details">
@@ -317,14 +317,14 @@ const StoreReport: React.FC = () => {
 								<div className="des">
 									{row.original.email && (
 										<>
-											<i className="adminlib-mail"></i>{' '}
+											<i className="adminfont-mail"></i>{' '}
 											{row.original.email}
 										</>
 									)}
 									{row.original.phone && (
 										<div>
 											<b>
-												<i className="adminlib-form-phone"></i>
+												<i className="adminfont-form-phone"></i>
 											</b>
 											{row.original.phone
 												? row.original.phone
@@ -366,7 +366,7 @@ const StoreReport: React.FC = () => {
 										alt={row.original.store_name}
 									/>
 								) : (
-									<i className="item-icon adminlib-person"></i>
+									<i className="item-icon adminfont-person"></i>
 								)}
 								<div className="details">
 									<span className="title">

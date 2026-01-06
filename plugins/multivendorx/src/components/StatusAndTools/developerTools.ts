@@ -19,7 +19,7 @@ export default {
         'Site errors and events are logged for easy troubleshooting.',
         'multivendorx'
     ),
-    icon: 'adminlib-database',
+    icon: 'adminfont-database',
     submitUrl: 'settings',
     modal: [
         {

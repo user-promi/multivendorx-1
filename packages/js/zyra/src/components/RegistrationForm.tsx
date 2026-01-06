@@ -143,59 +143,59 @@ const DEFAULT_FORM_TITLE = 'Demo Form';
 // Example select options
 const selectOptions: SelectOption[] = [
     {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        icon: 'adminfont-t-letter-bold icon-form-textbox',
         value: 'text',
         label: 'Textbox',
     },
-    { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Email' },
+    { icon: 'adminfont-unread icon-form-email', value: 'email', label: 'Email' },
     {
-        icon: 'adminlib-text icon-form-textarea',
+        icon: 'adminfont-text icon-form-textarea',
         value: 'textarea',
         label: 'Textarea',
     },
     {
-        icon: 'adminlib-checkbox icon-form-checkboxes',
+        icon: 'adminfont-checkbox icon-form-checkboxes',
         value: 'checkboxes',
         label: 'Checkboxes',
     },
     {
-        icon: 'adminlib-multi-select icon-form-multi-select',
+        icon: 'adminfont-multi-select icon-form-multi-select',
         value: 'multiselect',
         label: 'Multi Select',
     },
-    { icon: 'adminlib-radio icon-form-radio', value: 'radio', label: 'Radio' },
+    { icon: 'adminfont-radio icon-form-radio', value: 'radio', label: 'Radio' },
     {
-        icon: 'adminlib-dropdown-checklist icon-form-dropdown',
+        icon: 'adminfont-dropdown-checklist icon-form-dropdown',
         value: 'dropdown',
         label: 'Dropdown',
     },
     {
-        icon: 'adminlib-captcha-automatic-code icon-form-recaptcha',
+        icon: 'adminfont-captcha-automatic-code icon-form-recaptcha',
         value: 'recaptcha',
         label: 'reCaptcha v3',
     },
     {
-        icon: 'adminlib-submission-message icon-form-attachment',
+        icon: 'adminfont-submission-message icon-form-attachment',
         value: 'attachment',
         label: 'Attachment',
     },
     {
-        icon: 'adminlib-form-section icon-form-section',
+        icon: 'adminfont-form-section icon-form-section',
         value: 'section',
         label: 'Section',
     },
     {
-        icon: 'adminlib-calendar icon-form-store-description',
+        icon: 'adminfont-calendar icon-form-store-description',
         value: 'datepicker',
         label: 'Date Picker',
     },
     {
-        icon: 'adminlib-alarm icon-form-address',
+        icon: 'adminfont-alarm icon-form-address',
         value: 'TimePicker',
         label: 'Time Picker',
     },
     {
-        icon: 'adminlib-divider icon-form-address',
+        icon: 'adminfont-divider icon-form-address',
         value: 'divider',
         label: 'Divider',
     },
@@ -203,31 +203,31 @@ const selectOptions: SelectOption[] = [
 
 const selectOptionsStore: SelectOption[] = [
     {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        icon: 'adminfont-t-letter-bold icon-form-textbox',
         value: 'text',
         label: 'Store Name',
         name: 'name',
     },
     {
-        icon: 'adminlib-text icon-form-textarea',
+        icon: 'adminfont-text icon-form-textarea',
         value: 'textarea',
         label: 'Store Desc',
         name: 'description',
     },
     {
-        icon: 'adminlib-t-letter-bold icon-form-textbox',
+        icon: 'adminfont-t-letter-bold icon-form-textbox',
         value: 'text',
         label: 'Store Phone',
         name: 'phone',
     },
     {
-        icon: 'adminlib-unread icon-form-email',
+        icon: 'adminfont-unread icon-form-email',
         value: 'email',
         label: 'Store Paypal Email',
         name: 'paypal_email',
     },
     {
-        icon: 'adminlib-divider icon-form-address',
+        icon: 'adminfont-divider icon-form-address',
         value: 'address',
         label: 'Store Address',
         name: 'address',
@@ -560,14 +560,14 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                             onChange('images', newImages);
                                         }}
                                     >
-                                        <i className="admin-font adminlib-delete"></i>
+                                        <i className="admin-font adminfont-delete"></i>
                                     </button>
                                 </div>
                             ))}
                         </div>
                     ) : (
                         <div className="empty-gallery">
-                            <i className="admin-font adminlib-image"></i>
+                            <i className="admin-font adminfont-image"></i>
                             <p>No images selected</p>
                         </div>
                     )}
@@ -579,7 +579,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         setShowImageGallery(true);
                     }}
                 >
-                    <i className="admin-font adminlib-plus-circle"></i>
+                    <i className="admin-font adminfont-plus-circle"></i>
                     Select Images
                 </button>
             </div>
@@ -666,7 +666,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                         }}
                     />
                     <i
-                        className={`adminlib-${formFieldList[0]?.disabled ? 'eye-blocked' : 'eye'
+                        className={`adminfont-${formFieldList[0]?.disabled ? 'eye-blocked' : 'eye'
                             }`}
                         title={
                             formFieldList[0]?.disabled
@@ -738,7 +738,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                             }}
                                             className="admin-badge red"
                                         >
-                                            <i className="admin-font adminlib-delete"></i>
+                                            <i className="admin-font adminfont-delete"></i>
                                         </span>
                                     </section>
                                 )}
@@ -1022,7 +1022,7 @@ const CustomForm: React.FC<CustomFormProps> = ({
                                     setSelectedFieldForGallery(null);
                                 }}
                             >
-                                <i className="admin-font adminlib-close"></i>
+                                <i className="admin-font adminfont-close"></i>
                             </button>
                         </div>
                         <ImageGallery

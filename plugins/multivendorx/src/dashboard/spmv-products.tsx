@@ -81,7 +81,7 @@ const SpmvProducts: React.FC = () => {
 								value={query}
 								onChange={(e) => setQuery(e.target.value)}
 							/>
-							<i className="adminlib-search"></i>
+							<i className="adminfont-search"></i>
 						</div>
 					</div>
 				</div>
@@ -106,7 +106,7 @@ const SpmvProducts: React.FC = () => {
 										className="product-thumb"
 									/>
 								) : (
-									<i className="product-icon adminlib-multi-product"></i>
+									<i className="product-icon adminfont-multi-product"></i>
 								)}
 
 								<div className="name">{product.name}</div>
@@ -127,7 +127,7 @@ const SpmvProducts: React.FC = () => {
 											duplicateProduct(product)
 										}
 									>
-										<i className="adminlib-vendor-form-copy"></i>{' '}
+										<i className="adminfont-vendor-form-copy"></i>{' '}
 										Copy
 									</div>
 								</div>

@@ -124,9 +124,9 @@ class Ajax {
                 echo '<div class="rating">';
                 for ( $i = 1; $i <= 5; $i++ ) {
                     if ( $i <= $overall_rating ) {
-                        echo '<i class="adminlib-star"></i>';
+                        echo '<i class="adminfont-star"></i>';
                     } else {
-                        echo '<i class="adminlib-star-o"></i>';
+                        echo '<i class="adminfont-star-o"></i>';
                     }
                 }
                 echo '<span class="title">' . esc_html( $review->review_title ) . '</span></div>';

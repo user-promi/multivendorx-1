@@ -143,7 +143,7 @@ const EmailsInput = forwardRef< HTMLInputElement, EmailsInputProps >(
                     >
                         { enablePrimary && (
                             <i
-                                className={ `stat-icon adminlib-star${
+                                className={ `stat-icon adminfont-star${
                                     primaryEmail === email ? ' primary' : '-o'
                                 }` }
                                 onClick={ ( e ) => {
@@ -154,7 +154,7 @@ const EmailsInput = forwardRef< HTMLInputElement, EmailsInputProps >(
                         ) }
                         <span>{ email }</span>
                         <i
-                            className="adminlib-close close-icon"
+                            className="adminfont-close close-icon"
                             onClick={ ( e ) => {
                                 e.stopPropagation();
                                 removeEmail( email );
@@ -183,7 +183,7 @@ const EmailsInput = forwardRef< HTMLInputElement, EmailsInputProps >(
                                 className="inline-suggestion"
                                 onClick={ () => addEmail( inputValue.trim() ) }
                             >
-                                <i className="adminlib-mail orange"></i>{ ' ' }
+                                <i className="adminfont-mail orange"></i>{ ' ' }
                                 { inputValue.trim() }
                             </div>
                         ) }

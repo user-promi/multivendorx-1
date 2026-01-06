@@ -9,6 +9,11 @@ import {
 	SuccessNotice,
 	MultiCheckBox,
 	ToggleSetting,
+	Container,
+	Column,
+	Card,
+	FormGroupWrapper,
+	FormGroup,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
@@ -114,172 +119,117 @@ const Settings = ({ id }: { id: string }) => {
 	return (
 		<>
 			<SuccessNotice message={successMsg} />
-			<div className="container-wrapper">
-				<div className="card-wrapper column column-8">
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									Webhook Configuration
+			<Container>
+				<Column grid={8}>
+					<Card title="Webhook Configuration">
+						<FormGroupWrapper>
+							<FormGroup label={__('Membership plans showcase page', 'multivendorx')}>
+								<SelectInput
+									name="stock_status"
+									options={stockStatusOptions}
+									type="single-select"
+								// value={product.stock_status}
+								// onChange={(selected) =>
+								//     handleChange(
+								//         'stock_status',
+								//         selected.value
+								//     )
+								// }
+								/>
+								<div className="settings-metabox-description">
+									{__(
+										'This page shows all plan options to vendors when they sign up or upgrade their subscription.'
+									)}
 								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Membership plans showcase page
-									</label>
-									<SelectInput
-										name="stock_status"
-										options={stockStatusOptions}
-										type="single-select"
-										// value={product.stock_status}
-										// onChange={(selected) =>
-										//     handleChange(
-										//         'stock_status',
-										//         selected.value
-										//     )
-										// }
-									/>
-									<div className="settings-metabox-description">
-										{__(
-											'This page shows all plan options to vendors when they sign up or upgrade their subscription.'
-										)}
-									</div>
-								</div>
-							</div>
+							</FormGroup>
+							<FormGroup label={__('Payment Due Message', 'multivendorx')}>
+								<TextArea
+									name="short_description"
+									wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description"
+								// value={product.short_description}
+								// onChange={(e) =>
+								//     handleChange(
+								//         'short_description',
+								//         e.target.value
+								//     )
+								// }
+								/>
+							</FormGroup>
+							<FormGroup label={__('Upcoming Renewal Reminder', 'multivendorx')}>
+								<TextArea
+									name="short_description"
+									wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description"
+								// value={product.short_description}
+								// onChange={(e) =>
+								//     handleChange(
+								//         'short_description',
+								//         e.target.value
+								//     )
+								// }
+								/>
+							</FormGroup>
+							<FormGroup label={__('Grace Period Expiry Message', 'multivendorx')}>
+								<TextArea
+									name="short_description"
+									wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description"
+								// value={product.short_description}
+								// onChange={(e) =>
+								//     handleChange(
+								//         'short_description',
+								//         e.target.value
+								//     )
+								// }
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
+				</Column>
 
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Payment Due Message
-									</label>
-									<TextArea
-										name="short_description"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										// value={product.short_description}
-										// onChange={(e) =>
-										//     handleChange(
-										//         'short_description',
-										//         e.target.value
-										//     )
-										// }
-									/>
-								</div>
-							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Upcoming Renewal Reminder
-									</label>
-									<TextArea
-										name="short_description"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										// value={product.short_description}
-										// onChange={(e) =>
-										//     handleChange(
-										//         'short_description',
-										//         e.target.value
-										//     )
-										// }
-									/>
-								</div>
-							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Grace Period Expiry Message
-									</label>
-									<TextArea
-										name="short_description"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										// value={product.short_description}
-										// onChange={(e) =>
-										//     handleChange(
-										//         'short_description',
-										//         e.target.value
-										//     )
-										// }
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div className="card-wrapper column column-4">
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									Webhook Configuration
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Primary Webhook URL
-									</label>
-									<BasicInput
-										name="name"
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										value={formData.name}
-										onChange={handleChange}
-									/>
-								</div>
-							</div>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Stripe Webhook URL
-									</label>
-									<BasicInput
-										name="name"
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										value={formData.name}
-										onChange={handleChange}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">Notifications</div>
-							</div>
-						</div>
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										Reminder Days Before Expiration
-									</label>
-									<BasicInput
-										name="name"
-										postText="before expiration"
-										size="8rem"
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										postInsideText="Days"
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+				<Column grid={4}>
+					<Card title="Webhook Configuration">
+						<FormGroupWrapper>
+							<FormGroup label={__('Primary Webhook URL', 'multivendorx')}>
+								<BasicInput
+									name="name"
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									value={formData.name}
+									onChange={handleChange}
+								/>
+							</FormGroup>
+							<FormGroup label={__('Stripe Webhook URL', 'multivendorx')}>
+								<BasicInput
+									name="name"
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									value={formData.name}
+									onChange={handleChange}
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
+					<Card title="Notifications">
+						<FormGroupWrapper>
+							<FormGroup label={__('Reminder Days Before Expiration', 'multivendorx')}>
+								<BasicInput
+									name="name"
+									postText="before expiration"
+									size="8rem"
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									postInsideText="Days"
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
+				</Column>
+			</Container>
 		</>
 	);
 };

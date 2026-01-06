@@ -522,7 +522,7 @@ const AddOrder = () => {
 											<td className="admin-column">
 												<div className="item-details">
 													<div className="icon">
-														<i className="adminlib-cart green"></i>
+														<i className="adminfont-cart green"></i>
 													</div>
 
 													<div className="detail">
@@ -925,12 +925,12 @@ const AddOrder = () => {
 												</div>
 
 												<div className="des">
-													<i className="adminlib-mail" />
+													<i className="adminfont-mail" />
 													{selectedCustomer.email}
 												</div>
 
 												<div className="des">
-													<i className="adminlib-phone" />
+													<i className="adminfont-phone" />
 													{
 														selectedCustomer
 															.billing.phone
@@ -947,7 +947,7 @@ const AddOrder = () => {
 										setSelectedCustomer(false)
 									}
 								>
-									<i className="adminlib-edit"></i>
+									<i className="adminfont-edit"></i>
 								</div>
 							</div>
 						)}
@@ -1015,7 +1015,6 @@ const AddOrder = () => {
 							</FormGroupWrapper>
 
 							<AdminButton
-								wrapperClass="right"
 								buttons={{
 									icon: 'plus',
 									text: __('Create', 'multivendorx'),
@@ -1055,7 +1054,7 @@ const AddOrder = () => {
 									className="admin-badge blue"
 									onClick={() => setShowShippingAddressEdit(true)}
 								>
-									<i className="adminlib-edit" />
+									<i className="adminfont-edit" />
 								</div>
 							</div>
 						)}
@@ -1177,7 +1176,7 @@ const AddOrder = () => {
 										className="admin-badge blue"
 										onClick={() => setShowAddressEdit(true)}
 									>
-										<i className="adminlib-edit"></i>
+										<i className="adminfont-edit"></i>
 									</div>
 								</div>
 							)}

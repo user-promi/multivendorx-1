@@ -241,7 +241,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 									className="tooltip-btn admin-badge blue"
 									onClick={onBack}
 								>
-									<i className="adminlib-arrow-right"></i>
+									<i className="adminfont-arrow-right"></i>
 									<span className="tooltip">
 										{' '}
 										Back to Orders{' '}
@@ -490,7 +490,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 															>
 																<div className="item-details">
 																	<div className="icon">
-																		<i className="adminlib-cart green"></i>
+																		<i className="adminfont-cart green"></i>
 																	</div>
 																	<div className="detail">
 																		<div className="name">
@@ -613,7 +613,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 															>
 																<div className="item-details">
 																	<div className="icon">
-																		<i className="adminlib-cart green"></i>
+																		<i className="adminfont-cart green"></i>
 																	</div>
 																	<div className="detail">
 																		<div className="name">
@@ -894,14 +894,14 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
 											{orderData?.billing?.email && (
 												<div className="des">
-													<i className="adminlib-mail" />{' '}
+													<i className="adminfont-mail" />{' '}
 													{orderData.billing.email}
 												</div>
 											)}
 
 											{orderData?.billing?.phone && (
 												<div className="des">
-													<i className="adminlib-phone" />{' '}
+													<i className="adminfont-phone" />{' '}
 													{orderData.billing.phone}
 												</div>
 											)}
@@ -1107,8 +1107,8 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 															<i
 																className={
 																	note.is_customer_note
-																		? 'adminlib-mail orange'
-																		: 'adminlib-form-paypal-email blue'
+																		? 'adminfont-mail orange'
+																		: 'adminfont-form-paypal-email blue'
 																}
 															></i>
 														</div>

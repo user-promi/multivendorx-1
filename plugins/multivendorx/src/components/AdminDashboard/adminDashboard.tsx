@@ -170,28 +170,28 @@ const AdminDashboard = () => {
 		{
 			title: 'Documentation',
 			desc: 'Step-by-step guides to set up and manage your marketplace.',
-			iconClass: 'adminlib-book',
+			iconClass: 'adminfont-book',
 			linkText: 'Explore Docs',
 			href: 'https://multivendorx.com/docs/knowledgebase/',
 		},
 		{
 			title: 'Expert consultation',
 			desc: 'Get tailored advice from our marketplace specialists.',
-			iconClass: 'adminlib-preview',
+			iconClass: 'adminfont-preview',
 			linkText: 'Book Consultation',
 			href: 'https://multivendorx.com/custom-development/',
 		},
 		{
 			title: 'Developer community',
 			desc: 'Connect with our team and fellow builders on Discord.',
-			iconClass: 'adminlib-global-community',
+			iconClass: 'adminfont-global-community',
 			linkText: 'Join Discord',
 			href: 'https://discord.com/channels/1376811097134469191/1376811102020829258',
 		},
 		{
 			title: 'Facebook group',
 			desc: 'Share experiences and tips with other marketplace owners.',
-			iconClass: 'adminlib-user-circle',
+			iconClass: 'adminfont-user-circle',
 			linkText: 'Join Group',
 			href: 'https://www.facebook.com/groups/226246620006065/',
 		},
@@ -201,42 +201,42 @@ const AdminDashboard = () => {
 		{
 			title: 'Membership rewards & commission',
 			desc: 'Charge your sellers a monthly or yearly membership fee to sell on your marketplace - predictable revenue every month.',
-			iconClass: 'adminlib-commission',
+			iconClass: 'adminfont-commission',
 			linkText: 'Join Discord',
 			href: '#',
 		},
 		{
 			title: 'Verified stores only',
 			desc: 'Screen stores with document verification and approval - build a trusted marketplace from day one.',
-			iconClass: 'adminlib-verification3',
+			iconClass: 'adminfont-verification3',
 			linkText: 'Join Discord',
 			href: '#',
 		},
 		{
 			title: 'Diversified marketplace',
 			desc: 'Enable bookings, subscriptions, and auctions to boost sales and engagement.',
-			iconClass: 'adminlib-marketplace',
+			iconClass: 'adminfont-marketplace',
 			linkText: 'Explore Docs',
 			href: '#',
 		},
 		{
 			title: 'Vacation mode for stores',
 			desc: 'Stores can pause their stores temporarily with automatic buyer notifications - no missed messages.',
-			iconClass: 'adminlib-vacation',
+			iconClass: 'adminfont-vacation',
 			linkText: 'Explore Docs',
 			href: '#',
 		},
 		{
 			title: 'Never run out of stock',
 			desc: 'Real-time inventory tracking with automatic low-stock alerts keeps sellers prepared and buyers happy.',
-			iconClass: 'adminlib-global-community',
+			iconClass: 'adminfont-global-community',
 			linkText: 'Book Consultation',
 			href: '#',
 		},
 		{
 			title: 'Autopilot notifications',
 			desc: 'Automatic emails and alerts for every order, refund, and payout - everyone stays in the loop.',
-			iconClass: 'adminlib-notification',
+			iconClass: 'adminfont-notification',
 			linkText: 'Join Discord',
 			href: '#',
 		},
@@ -364,9 +364,9 @@ const AdminDashboard = () => {
 	const renderCell = (value: string | boolean) => {
 		if (typeof value === 'boolean') {
 			return value ? (
-				<i className="check-icon adminlib-check"></i>
+				<i className="check-icon adminfont-check"></i>
 			) : (
-				<i className="close-icon adminlib-close"></i>
+				<i className="close-icon adminfont-close"></i>
 			);
 		}
 		return value;
@@ -376,73 +376,73 @@ const AdminDashboard = () => {
 		{
 			id: 'spmv',
 			name: 'Single product multiple vendor',
-			iconClass: 'adminlib-spmv',
+			iconClass: 'adminfont-spmv',
 			pro: false,
 		},
 		{
 			id: 'staff-manager',
 			name: 'Staff manager',
-			iconClass: 'adminlib-staff-manager',
+			iconClass: 'adminfont-staff-manager',
 			pro: true,
 		},
 		{
 			id: 'vacation',
 			name: 'Vacation mode',
-			iconClass: 'adminlib-vacation',
+			iconClass: 'adminfont-vacation',
 			pro: true,
 		},
 		{
 			id: 'business-hours',
 			name: 'Business hours',
-			iconClass: 'adminlib-business-hours',
+			iconClass: 'adminfont-business-hours',
 			pro: true,
 		},
 		{
 			id: 'store-inventory',
 			name: 'Store inventory',
-			iconClass: 'adminlib-store-inventory',
+			iconClass: 'adminfont-store-inventory',
 			pro: true,
 		},
 		{
 			id: 'min-max-quantities',
 			name: 'Min/Max quantities',
-			iconClass: 'adminlib-min-max',
+			iconClass: 'adminfont-min-max',
 			pro: false,
 		},
 		{
 			id: 'wholesale',
 			name: 'Wholesale',
-			iconClass: 'adminlib-wholesale',
+			iconClass: 'adminfont-wholesale',
 			pro: true,
 		},
 		{
 			id: 'paypal-marketplace',
 			name: 'PayPal marketplace',
-			iconClass: 'adminlib-paypal-marketplace',
+			iconClass: 'adminfont-paypal-marketplace',
 			pro: true,
 		},
 		{
 			id: 'stripe-marketplace',
 			name: 'Stripe marketplace',
-			iconClass: 'adminlib-stripe-marketplace',
+			iconClass: 'adminfont-stripe-marketplace',
 			pro: true,
 		},
 		{
 			id: 'facilitator',
 			name: 'Facilitator',
-			iconClass: 'adminlib-facilitator',
+			iconClass: 'adminfont-facilitator',
 			pro: true,
 		},
 		{
 			id: 'franchises-module',
 			name: 'Franchises',
-			iconClass: 'adminlib-franchises-module',
+			iconClass: 'adminfont-franchises-module',
 			pro: true,
 		},
 		{
 			id: 'invoice',
 			name: 'Invoice & packing slip',
-			iconClass: 'adminlib-invoice',
+			iconClass: 'adminfont-invoice',
 			pro: true,
 		},
 	];
@@ -459,9 +459,9 @@ const AdminDashboard = () => {
 				target="_blank"
 				className="admin-btn btn-purple"
 			>
-				<i className="adminlib-pro-tag"></i>
+				<i className="adminfont-pro-tag"></i>
 				{label}
-				<i className="adminlib-arrow-right icon-pro-btn"></i>
+				<i className="adminfont-arrow-right icon-pro-btn"></i>
 			</a>
 		);
 	};
@@ -470,7 +470,7 @@ const AdminDashboard = () => {
 		{
 			id: 'dashboard',
 			label: __('Dashboard', 'multivendorx'),
-			icon: 'adminlib-module',
+			icon: 'adminfont-module',
 			content: (
 				<>
 					<Column grid={8}>
@@ -509,7 +509,7 @@ const AdminDashboard = () => {
 												'Launch Setup Wizard',
 												'multivendorx'
 											)}
-											<i className="adminlib-import"></i>
+											<i className="adminfont-import"></i>
 										</div>
 									</div>
 								</div>
@@ -598,7 +598,7 @@ const AdminDashboard = () => {
 												</div>
 											) : (
 												<span className="admin-pro-tag">
-													<i className="adminlib-pro-tag"></i>
+													<i className="adminfont-pro-tag"></i>
 													{__(
 														'Pro',
 														'multivendorx'
@@ -631,7 +631,7 @@ const AdminDashboard = () => {
 											<img src={catalogx} alt="" />
 											<div className="tag">
 												<span className="admin-badge red">
-													<i className="adminlib-pro-tag"></i>{' '}
+													<i className="adminfont-pro-tag"></i>{' '}
 													{__(
 														'Pro',
 														'multivendorx'
@@ -727,7 +727,7 @@ const AdminDashboard = () => {
 											<img src={notifima} alt="" />
 											<div className="tag">
 												<span className="admin-badge red">
-													<i className="adminlib-pro-tag"></i>{' '}
+													<i className="adminfont-pro-tag"></i>{' '}
 													{__(
 														'Pro',
 														'multivendorx'
@@ -834,7 +834,7 @@ const AdminDashboard = () => {
 													res.linkText,
 													'multivendorx'
 												)}
-												<i className="adminlib-external"></i>
+												<i className="adminfont-external"></i>
 											</a>
 										</div>
 										<h3>
@@ -854,7 +854,7 @@ const AdminDashboard = () => {
 		{
 			id: 'free-vs-pro',
 			label: __('Free vs Pro', 'multivendorx'),
-			icon: 'adminlib-pros-and-cons',
+			icon: 'adminfont-pros-and-cons',
 			content: (
 				<>
 					<Column grid={8}>
@@ -867,7 +867,7 @@ const AdminDashboard = () => {
 									className="admin-btn btn-purple"
 								>
 									{__('Get Pro Access Today!', 'multivendorx')}
-									<i className="adminlib-arrow-right icon-pro-btn"></i>
+									<i className="adminfont-arrow-right icon-pro-btn"></i>
 								</a>
 							}
 						>
@@ -949,35 +949,35 @@ const AdminDashboard = () => {
 
 								<ul>
 									<li>
-										<i className="adminlib-check"></i>
+										<i className="adminfont-check"></i>
 										{__(
 											'Flexible selling models',
 											'multivendorx'
 										)}
 									</li>
 									<li>
-										<i className="adminlib-check"></i>
+										<i className="adminfont-check"></i>
 										{__(
 											'Effortless inventory control',
 											'multivendorx'
 										)}
 									</li>
 									<li>
-										<i className="adminlib-check"></i>
+										<i className="adminfont-check"></i>
 										{__(
 											'Intelligent alert system',
 											'multivendorx'
 										)}
 									</li>
 									<li>
-										<i className="adminlib-check"></i>
+										<i className="adminfont-check"></i>
 										{__(
 											'Secure seller onboarding',
 											'multivendorx'
 										)}
 									</li>
 									<li>
-										<i className="adminlib-check"></i>
+										<i className="adminfont-check"></i>
 										{__(
 											'Recurring revenue tools',
 											'multivendorx'
@@ -990,9 +990,9 @@ const AdminDashboard = () => {
 										href="https://multivendorx.com/pricing/"
 										className="admin-btn btn-purple"
 									>
-										<i className="adminlib-pro-tag"></i>
+										<i className="adminfont-pro-tag"></i>
 										{__('Upgrade Now', 'multivendorx')}
-										<i className="adminlib-arrow-right icon-pro-btn"></i>
+										<i className="adminfont-arrow-right icon-pro-btn"></i>
 									</a>
 
 									<div
@@ -1005,7 +1005,7 @@ const AdminDashboard = () => {
 											'Launch Setup Wizard',
 											'multivendorx'
 										)}
-										<i className="adminlib-import"></i>
+										<i className="adminfont-import"></i>
 									</div>
 								</div>
 							</div>

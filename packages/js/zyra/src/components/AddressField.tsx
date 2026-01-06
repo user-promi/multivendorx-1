@@ -76,7 +76,7 @@ const AddressField: React.FC< AddressFieldProps > = ( {
                     >
                         <div className="meta-menu">
                             <span className="admin-badge blue drag-handle">
-                                <i className="admin-font adminlib-drag"></i>
+                                <i className="admin-font adminfont-drag"></i>
                             </span>
                         </div>
 

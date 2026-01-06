@@ -103,7 +103,7 @@ const ProPopup: React.FC< PopupProps > = ( props ) => {
                                     rel="noreferrer"
                                 >
                                     { props.upgradeBtnText }{ ' ' }
-                                    <i className="adminlib-arrow-right arrow-icon"></i>
+                                    <i className="adminfont-arrow-right arrow-icon"></i>
                                 </a>
                             </div>
                             <div className="popup-content">
@@ -137,7 +137,7 @@ const ProPopup: React.FC< PopupProps > = ( props ) => {
                         <>
                             <div className="popup-header">
                                 <i
-                                    className={ `adminlib-${ props.moduleName }` }
+                                    className={ `adminfont-${ props.moduleName }` }
                                 ></i>
                             </div>
                             <div className="popup-body">
@@ -159,7 +159,7 @@ const ProPopup: React.FC< PopupProps > = ( props ) => {
                                         className="admin-btn btn-purple"
                                         href={ props.modulePageUrl }
                                     >
-                                        <i className="adminlib-eye"></i>{ ' ' }
+                                        <i className="adminfont-eye"></i>{ ' ' }
                                         { props.moduleButton }
                                     </a>
                                 </div>

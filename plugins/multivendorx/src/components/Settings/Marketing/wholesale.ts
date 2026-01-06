@@ -5,7 +5,7 @@ export default {
 	priority: 3,
 	name: __('Wholesale', 'mvx-pro'),
 	desc: __('Configure rules for wholesale buyers and pricing.', 'mvx-pro'),
-	icon: 'adminlib-wholesale1',
+	icon: 'adminfont-wholesale1',
 	submitUrl: 'settings',
 	modal: [
 		{

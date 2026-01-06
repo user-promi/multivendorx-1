@@ -37,19 +37,19 @@ class Clickatell {
     public function send( $to, $message ) {
         $api_key = MultiVendorX()->setting->get_setting( 'clickatell_api_key' );
 
-        $args = [
-            'headers' => [
+        $args = array(
+            'headers' => array(
                 'Authorization' => $api_key,
                 'Content-Type'  => 'application/json',
                 'Accept'        => 'application/json',
-            ],
-            'body' => wp_json_encode(
-                [
-                    'to'      => [ $to ],
-                    'content' => $message,
-                ]
             ),
-        ];
+            'body'    => wp_json_encode(
+                array(
+                    'to'      => array( $to ),
+                    'content' => $message,
+                )
+            ),
+        );
 
         $response = wp_remote_post( self::ENDPOINT, $args );
 
@@ -88,5 +88,4 @@ class Clickatell {
 
         return true;
     }
-
 }

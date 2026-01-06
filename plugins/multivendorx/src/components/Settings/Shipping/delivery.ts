@@ -11,7 +11,7 @@ export default {
 		'Define the steps orders follow from purchase to completion. Set what customers see in tracking and choose whether orders complete automatically or after customer confirmation.',
 		'multivendorx'
 	),
-	icon: 'adminlib-delivery',
+	icon: 'adminfont-delivery',
 	submitUrl: 'settings',
 	modal: [
 		{
@@ -27,7 +27,7 @@ export default {
 			addNewTemplate: {
 				label: 'New progress stages',
 				desc: 'dummy desc',
-				icon: 'adminlib-rejecte',
+				icon: 'adminfont-rejecte',
 				formFields: [
 					{
 						key: 'label',
@@ -46,24 +46,24 @@ export default {
 						label: 'Select Icon',
 						iconEnable: true,
 						iconOptions: [
-							'adminlib-delivery',
-							'adminlib-rejecte',
-							'adminlib-delivery-person',
-							'adminlib-pending',
-							'adminlib-order-completed',
-							'adminlib-refund',
-							'adminlib-cart',
-							'adminlib-active',
-							'adminlib-distance-shipping',
-							'adminlib-geo-my-wp',
-							'adminlib-per-product-shipping',
-							'adminlib-verification7',
-							'adminlib-verification9',
-							'adminlib-verification3',
-							'adminlib-multi-product',
-							'adminlib-marketplace',
-							'adminlib-location',
-							'adminlib-wholesale1',
+							'adminfont-delivery',
+							'adminfont-rejecte',
+							'adminfont-delivery-person',
+							'adminfont-pending',
+							'adminfont-order-completed',
+							'adminfont-refund',
+							'adminfont-cart',
+							'adminfont-active',
+							'adminfont-distance-shipping',
+							'adminfont-geo-my-wp',
+							'adminfont-per-product-shipping',
+							'adminfont-verification7',
+							'adminfont-verification9',
+							'adminfont-verification3',
+							'adminfont-multi-product',
+							'adminfont-marketplace',
+							'adminfont-location',
+							'adminfont-wholesale1',
 						],
 						desc: 'Choose an icon for this panel'
 					}

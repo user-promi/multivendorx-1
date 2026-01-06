@@ -18,6 +18,7 @@ use MultiVendorX\Utill;
  * @author      MultiVendorX
  */
 class Frontend {
+
     /**
      * Frontend class constructor function
      */
@@ -25,11 +26,11 @@ class Frontend {
         add_filter( 'multivendorx_store_shipping_options', array( $this, 'add_shipping_options' ) );
 
         // Checkout fields and map.
-        add_filter( 'woocommerce_checkout_fields', array( $this, 'mvx_checkout_user_location_fields' ), 50 );
+        add_filter( 'woocommerce_checkout_fields', array( $this, 'multivendorx_checkout_user_location_fields' ), 50 );
         add_action( 'woocommerce_after_checkout_billing_form', array( $this, 'multivendorx_checkout_user_location_map' ), 50 );
 
         // // Save session & order meta.
-        add_action( 'woocommerce_checkout_update_order_review', array( $this, 'mvx_checkout_user_location_session_set' ), 50 );
+        add_action( 'woocommerce_checkout_update_order_review', array( $this, 'multivendorx_checkout_user_location_session_set' ), 50 );
         add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'multivendorx_checkout_user_location_save' ), 50 );
 
         // // Load Google Maps JS.
@@ -68,8 +69,8 @@ class Frontend {
         }
 
         $distance_based_shipping = isset( $settings['distance-based-shipping']['enable'] )
-        ? $settings['distance-based-shipping']['enable']
-        : false;
+            ? $settings['distance-based-shipping']['enable']
+            : false;
 
         // Only add if country-wise shipping is enabled.
         if ( $distance_based_shipping ) {
@@ -86,8 +87,8 @@ class Frontend {
         }
 
         $zone_wise_shipping = isset( $settings['zone-wise-shipping']['enable'] )
-        ? $settings['zone-wise-shipping']['enable']
-        : false;
+            ? $settings['zone-wise-shipping']['enable']
+            : false;
 
         // Only add if country-wise shipping is enabled.
         if ( $zone_wise_shipping ) {
@@ -113,7 +114,7 @@ class Frontend {
      * @param array $fields Checkout fields.
      * @return array
      */
-    public function mvx_checkout_user_location_fields( $fields ) {
+    public function multivendorx_checkout_user_location_fields( $fields ) {
 
         // show ONLY when distance-based shipping is used.
         if (
@@ -121,16 +122,16 @@ class Frontend {
             && apply_filters( 'mvx_is_allow_checkout_user_location', true )
             && $this->cart_has_distance_shipping()
         ) {
-            $fields['billing']['mvx_user_location'] = array(
+            $fields['billing']['multivendorx_user_location'] = array(
                 'label'       => __( 'Delivery Location', 'multivendorx' ),
                 'placeholder' => _x( 'Insert your address ..', 'placeholder', 'multivendorx' ),
                 'required'    => true,
                 'class'       => array( 'form-row-wide' ),
                 'clear'       => true,
                 'priority'    => 999,
-                'value'       => WC()->session->get( '_mvx_user_location' ),
+                'value'       => WC()->session->get( '_multivendorx_user_location' ),
                 'type'        => 'text',
-                'name'        => 'mvx_user_location',
+                'name'        => 'multivendorx_user_location',
             );
 
             $fields['billing']['multivendorx_user_location_lat'] = array(
@@ -161,7 +162,7 @@ class Frontend {
             echo '<div class="woocommerce-billing-fields__field-wrapper">';
             echo '<div id="mvx-user-locaton-map" style="width:100%; height:18.75rem; margin-bottom:1.25rem;"></div>';
             echo '</div>';
-            ?>
+			?>
             <style>
                 /*Ensure map always visible even if inline CSS fails */
                 #mvx-user-locaton-map {
@@ -170,7 +171,7 @@ class Frontend {
                     margin-bottom: 1.25rem;
                 }
             </style>
-            <?php
+			<?php
         }
     }
 
@@ -179,7 +180,7 @@ class Frontend {
      *
      * @param string $post_data_raw POST data.
      */
-    public function mvx_checkout_user_location_session_set( $post_data_raw ) {
+    public function multivendorx_checkout_user_location_session_set( $post_data_raw ) {
         parse_str( $post_data_raw, $post_data );
         if ( ! empty( $post_data['multivendorx_user_location'] ) ) {
             WC()->session->set( '_multivendorx_user_location', sanitize_text_field( $post_data['multivendorx_user_location'] ) );
@@ -216,29 +217,52 @@ class Frontend {
      * Load frontend scripts
      */
     public function load_scripts() {
-        // Check if distance-based shipping module is enabled.
         $settings         = MultiVendorX()->setting->get_setting( 'shipping_modules', array() );
         $distance_enabled = $settings['distance-based-shipping']['enable'] ?? false;
 
-        // Load map ONLY when distance module enabled AND cart contains distance shipping store.
-        if ( $distance_enabled && $this->cart_has_distance_shipping() ) {
+        if ( ! $distance_enabled || ! $this->cart_has_distance_shipping() ) {
+            return;
+        }
+
+        $provider = MultiVendorX()->setting->get_setting( 'choose_map_api', '' );
+
+        // GOOGLE MAPS.
+        if ( 'google_map_set' === $provider ) {
             $google_maps_api_key = MultiVendorX()->setting->get_setting( 'google_api_key', '' );
-            if ( ! empty( $google_maps_api_key ) ) {
+            if ( $google_maps_api_key ) {
                 wp_enqueue_script(
                     'google-maps',
                     'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key . '&libraries=places',
-                    array( 'jquery' ),
-                    '3.57',
+                    array(),
+                    'weekly',
                     true
                 );
             }
-
-            // Load addon frontend scripts.
-            FrontendScripts::load_scripts();
-            FrontendScripts::enqueue_script( 'multivendorx-store-shipping-frontend-script' );
-            FrontendScripts::localize_scripts( 'multivendorx-store-shipping-frontend-script' );
         }
+
+        // MAPBOX.
+        if ( 'mapbox_api_set' === $provider ) {
+            wp_enqueue_script(
+                'mapbox-gl',
+                'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js',
+                array(),
+                '2.15.0',
+                true
+            );
+
+            wp_enqueue_style(
+                'mapbox-gl-css',
+                'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css',
+                array(),
+                '2.15.0'
+            );
+        }
+
+        FrontendScripts::load_scripts();
+        FrontendScripts::enqueue_script( 'multivendorx-store-shipping-frontend-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-store-shipping-frontend-script' );
     }
+
 
     /**
      * Inject user location into shipping packages
@@ -259,7 +283,7 @@ class Frontend {
      */
     public function cart_has_distance_shipping() {
         if ( empty( WC()->cart ) ) {
-			return false;
+            return false;
         }
 
         foreach ( WC()->cart->get_cart() as $cart_item ) {

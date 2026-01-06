@@ -63,7 +63,7 @@ class Frontend {
             <div class="mvx-report-abuse-wrapper">
                 <a href="javascript:void(0);" class="open-report-abuse"><?php echo esc_html( $report_abuse_text ); ?></a>
 
-                <div class="report-abuse-form" style="display:none;">
+                <form class="woocommerce-form woocommerce-form-login login report-abuse-form" style="display:none;">
                     <h3>
                         <?php
                             $report_title = sprintf(
@@ -76,11 +76,17 @@ class Frontend {
                     </h3>
 
                     <!-- Name & Email -->
-                    <p><input type="text" class="report_abuse_name" placeholder="<?php esc_attr_e( 'Name', 'multivendorx' ); ?>"></p>
-                    <p><input type="email" class="report_abuse_email" placeholder="<?php esc_attr_e( 'Email', 'multivendorx' ); ?>"></p>
+                    <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                        <label for="report-abuse-name"><?php esc_attr_e( 'Name', 'multivendorx' ); ?></label>
+                        <input type="text" name="report-abuse-name" class="woocommerce-Input woocommerce-Input--text input-text report-abuse-name">
+                    </p>
+                    <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                        <label for="report-abuse-email"><?php esc_attr_e( 'Email', 'multivendorx' ); ?></label>
+                        <input type="email" name="" class="report-abuse-email" placeholder="<?php esc_attr_e( 'Email', 'multivendorx' ); ?>">
+                    </p>
 
                     <!-- Radio buttons for reasons -->
-                    <div class="report_abuse_reasons_wrapper">
+                    <div class="report-abuse-reasons-wrapper">
                         <!-- Dynamic radio buttons will be appended here via jQuery -->
                     </div>
 
@@ -98,7 +104,7 @@ class Frontend {
                     </button>
 
                     <div class="report-abuse-msg-box"></div>
-                </div>
+                </form>
             </div>
             <?php
         }

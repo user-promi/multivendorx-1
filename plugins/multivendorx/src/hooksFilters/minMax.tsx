@@ -83,7 +83,7 @@ const MinMax = ({ product, setProduct }) => {
 	return (
 		<Card
 			title={__('Min/Max', 'multivendorx')}
-			iconName="adminlib-pagination-right-arrow arrow-icon"
+			iconName="adminfont-pagination-right-arrow arrow-icon"
 			toggle
 		>
 			<div className="form-group-wrapper">

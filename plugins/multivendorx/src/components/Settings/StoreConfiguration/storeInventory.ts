@@ -9,7 +9,7 @@ export default {
 		'Manage inventory alerts and stock monitoring settings for stores in your marketplace.',
 		'multivendorx'
 	),
-	icon: 'adminlib-store-inventory',
+	icon: 'adminfont-store-inventory',
 	submitUrl: 'settings',
 	modal: [
 		{

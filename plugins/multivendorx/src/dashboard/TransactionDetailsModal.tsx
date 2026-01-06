@@ -30,7 +30,7 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 				header={
 					<>
 						<div className="title">
-							<i className="adminlib-wallet-in"></i>
+							<i className="adminfont-wallet-in"></i>
 							{__('Transaction Details', 'multivendorx')}
 						</div>
 						<div className="des">
@@ -40,7 +40,7 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 							)}
 						</div>
 						<i
-							className="icon adminlib-close"
+							className="icon adminfont-close"
 							onClick={onClose}
 						></i>
 					</>

@@ -11,7 +11,7 @@ export default {
 		'Set up when and how invoices are generated in your marketplace.',
 		'mvx-pro'
 	),
-	icon: 'adminlib-invoice',
+	icon: 'adminfont-invoice',
 	submitUrl: 'settings',
 	modal: [
 		{

@@ -126,14 +126,14 @@ const Log: React.FC< LogProps > = ( {
                     onClick={ handleDownloadLog }
                     className="admin-btn btn-purple"
                 >
-                    <i className="adminlib-import"></i>
+                    <i className="adminfont-import"></i>
                     Download
                 </button>
                 <button
                     className="admin-btn btn-red delete-btn"
                     onClick={ handleClearLog }
                 >
-                    <i className="adminlib-delete"></i>
+                    <i className="adminfont-delete"></i>
                     <span className="text">Clear</span>
                 </button>
             </div>
@@ -146,7 +146,7 @@ const Log: React.FC< LogProps > = ( {
                         className="copy-btn"
                         onClick={ handleCopyToClipboard }
                     >
-                        <i className="adminlib-vendor-form-copy"></i>
+                        <i className="adminfont-vendor-form-copy"></i>
                         <span
                             className={
                                 ! copied ? 'tooltip' : 'tooltip tool-clip'
@@ -155,7 +155,7 @@ const Log: React.FC< LogProps > = ( {
                             { ! copied ? (
                                 'Copy to clipboard'
                             ) : (
-                                <i className="adminlib-success-notification"></i>
+                                <i className="adminfont-success-notification"></i>
                             ) }
                             { ! copied ? '' : 'Copied' }
                         </span>

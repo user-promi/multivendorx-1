@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 import axios from 'axios';
-import { getApiLink, useModules } from 'zyra';
+import { Column, Container, getApiLink, useModules } from 'zyra';
 import { Skeleton } from '@mui/material';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './latestReview';
@@ -96,19 +96,19 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
 	const overviewData = [
 		{
-			icon: 'adminlib-wallet red',
+			icon: 'adminfont-wallet red',
 			number: formatCurrency(storeData.transactions?.balance ?? 0),
 			text: 'Wallet balance',
 		},
 		{
-			icon: 'adminlib-dollar yellow',
+			icon: 'adminfont-dollar yellow',
 			number: formatCurrency(
 				storeData.transactions?.locking_balance ?? 0
 			),
 			text: 'Upcoming balance',
 		},
 		{
-			icon: 'adminlib-wallet-in blue',
+			icon: 'adminfont-wallet-in blue',
 			number: formatCurrency(storeData.request_withdrawal_amount ?? 0),
 			text: 'Requested payout',
 		},
@@ -116,8 +116,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
 	return (
 		<>
-			<div className="container-wrapper ">
-				<div className="card-wrapper column column-8">
+			<Container>
+				<Column grid={8}>
 					<div className="analytics-container">
 						{overviewData.map((item, idx) => (
 							<div key={idx} className="analytics-item">
@@ -142,7 +142,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</div>
 								<div className="right">
 									<i
-										className="adminlib-external icon"
+										className="adminfont-external icon"
 										onClick={() => {
 											navigate(
 												`?page=multivendorx#&tab=transaction-history&store_id=${id}`
@@ -201,7 +201,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</div>
 								<div className="right">
 									<i
-										className="adminlib-external icon"
+										className="adminfont-external icon"
 										onClick={() => {
 											window.open(
 												`${appLocalizer.admin_url}edit.php?post_type=product`,
@@ -243,7 +243,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 															/>
 														) : (
 															<i
-																className={`item-icon adminlib-single-product admin-color${idx + 2}`}
+																className={`item-icon adminfont-single-product admin-color${idx + 2}`}
 															></i>
 														)}
 													</div>
@@ -300,7 +300,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</div>
 								<div className="right">
 									<i
-										className="adminlib-external icon"
+										className="adminfont-external icon"
 										onClick={() => {
 											navigate(
 												`?page=multivendorx#&tab=customer-support&subtab=review`
@@ -325,7 +325,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</div>
 								<div className="right">
 									<i
-										className="adminlib-external icon"
+										className="adminfont-external icon"
 										onClick={() => {
 											navigate(
 												`?page=multivendorx#&tab=customer-support&subtab=refund-requests`
@@ -341,8 +341,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 						</div>
 					)}
-				</div>
-				<div className="card-wrapper column column-4">
+				</Column>
+				<Column grid={4}>
 					{appLocalizer.khali_dabba && (
 						<div className="card-content">
 							<div className="card-header">
@@ -394,7 +394,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-external icon"
+									className="adminfont-external icon"
 									onClick={() => {
 										navigate(
 											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`
@@ -456,7 +456,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							{appLocalizer.khali_dabba && (
 								<div className="description-wrapper">
 									<div className="title">
-										<i className="adminlib-error"></i>
+										<i className="adminfont-error"></i>
 										{__('Gold plan', 'multivendorx')}
 										<span className="admin-badge green">
 											{__('Active', 'multivendorx')}
@@ -482,7 +482,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 							<div className="right">
 								<i
-									className="adminlib-external icon"
+									className="adminfont-external icon"
 									onClick={() => {
 										navigate(
 											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`
@@ -495,7 +495,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							<div className="info-item">
 								<div className="details-wrapper">
 									<div className="avatar">
-										<i className="item-icon adminlib-person secondary"></i>
+										<i className="item-icon adminfont-person secondary"></i>
 									</div>
 									<div className="details">
 										<div className="name">
@@ -514,7 +514,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 											</div>
 											<span className="admin-badge blue">
 												<i
-													className="adminlib-edit "
+													className="adminfont-edit "
 													onClick={() => {
 														navigate(
 															`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
@@ -552,8 +552,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+				</Column>
+			</Container>
 		</>
 	);
 };

@@ -253,7 +253,7 @@ const StoreReview: React.FC = () => {
 						}}
 						value={filterValue || ''}
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -355,7 +355,7 @@ const StoreReview: React.FC = () => {
 												(_, i) => (
 													<i
 														key={`filled-${i}`}
-														className="star-icon adminlib-star"
+														className="star-icon adminfont-star"
 													></i>
 												)
 											)}
@@ -366,7 +366,7 @@ const StoreReview: React.FC = () => {
 											].map((_, i) => (
 												<i
 													key={`empty-${i}`}
-													className="star-icon adminlib-star-o"
+													className="star-icon adminfont-star-o"
 												></i>
 											))}
 										</>
@@ -423,7 +423,7 @@ const StoreReview: React.FC = () => {
 						actions: [
 							{
 								label: __('Reply / Edit', 'multivendorx'),
-								icon: 'adminlib-edit',
+								icon: 'adminfont-edit',
 								onClick: () => {
 									setSelectedReview(row.original);
 									setReplyText(row.original.reply || '');
@@ -470,13 +470,13 @@ const StoreReview: React.FC = () => {
 					header={
 						<>
 							<div className="title">
-								<i className="adminlib-store-review"></i>
+								<i className="adminfont-store-review"></i>
 								{__('Reply to Review', 'multivendorx')} -{' '}
 								{selectedReview.store_name}
 							</div>
 							<i
 								onClick={() => setSelectedReview(null)}
-								className="icon adminlib-close"
+								className="icon adminfont-close"
 							></i>
 						</>
 					}
@@ -487,14 +487,14 @@ const StoreReview: React.FC = () => {
 								onClick={() => setSelectedReview(null)}
 								className="admin-btn btn-red"
 							>
-								<i className="adminlib-close"></i>
+								<i className="adminfont-close"></i>
 								{__('Cancel', 'multivendorx')}
 							</button>
 							<button
 								onClick={handleSaveReply}
 								className="admin-btn btn-purple-bg"
 							>
-								<i className="adminlib-active"></i>
+								<i className="adminfont-active"></i>
 								Save
 							</button>
 						</>
@@ -505,7 +505,7 @@ const StoreReview: React.FC = () => {
 							<div className="review-popup-wrapper">
 								<div className="customer-wrapper">
 									<div className="avatar">
-										<i className="item-icon adminlib-person"></i>
+										<i className="item-icon adminfont-person"></i>
 									</div>
 									{selectedReview && (
 										<div className="name-wrapper">
@@ -520,7 +520,7 @@ const StoreReview: React.FC = () => {
 												{[...Array(5)].map((_, i) => (
 													<i
 														key={i}
-														className={`star-icon adminlib-star ${
+														className={`star-icon adminfont-star ${
 															i <
 															Math.round(
 																selectedReview.overall_rating

@@ -165,7 +165,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
             if (
                 ! ( e.target as HTMLElement ).closest( '.action-dropdown' ) &&
                 ! ( e.target as HTMLElement ).closest(
-                    '.adminlib-more-vertical'
+                    '.adminfont-more-vertical'
                 )
             ) {
                 setShowDropdown( null );
@@ -320,7 +320,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
                         { header.actions && header.actions.length > 2 ? (
                             <>
                                 <i
-                                    className="adminlib-more-vertical"
+                                    className="adminfont-more-vertical"
                                     onClick={ ( e ) => {
                                         e.stopPropagation();
                                         toggleDropdown( rowId as number );
@@ -1008,7 +1008,7 @@ const Table: React.FC< TableProps > = ( {
                                                         table.setPageIndex( 0 );
                                                     } }
                                                 >
-                                                    <i className="admin-font adminlib-pagination-prev-arrow"></i>
+                                                    <i className="admin-font adminfont-pagination-prev-arrow"></i>
                                                 </span>
                                                 <span
                                                     tabIndex={ 0 }
@@ -1026,7 +1026,7 @@ const Table: React.FC< TableProps > = ( {
                                                         table.previousPage();
                                                     } }
                                                 >
-                                                    <i className="admin-font adminlib-pagination-left-arrow"></i>
+                                                    <i className="admin-font adminfont-pagination-left-arrow"></i>
                                                 </span>
                                                 { /* <span>
                                             Page{ ' ' }
@@ -1076,7 +1076,7 @@ const Table: React.FC< TableProps > = ( {
                                                         table.nextPage();
                                                     } }
                                                 >
-                                                    <i className="admin-font adminlib-pagination-right-arrow"></i>
+                                                    <i className="admin-font adminfont-pagination-right-arrow"></i>
                                                 </span>
                                                 <span
                                                     tabIndex={ 0 }
@@ -1096,7 +1096,7 @@ const Table: React.FC< TableProps > = ( {
                                                         );
                                                     } }
                                                 >
-                                                    <i className="admin-font adminlib-pagination-next-arrow"></i>
+                                                    <i className="admin-font adminfont-pagination-next-arrow"></i>
                                                 </span>
                                             </div>
                                         ) }
@@ -1121,7 +1121,7 @@ const Table: React.FC< TableProps > = ( {
                                             onClick={ () =>
                                                 onRowSelectionChange?.( {} )
                                             }
-                                            className="adminlib-close"
+                                            className="adminfont-close"
                                         ></i>
                                     </button>
                                 </div>
@@ -1137,8 +1137,8 @@ const Table: React.FC< TableProps > = ( {
                                         <i
                                             className={
                                                 table.getIsAllRowsSelected()
-                                                    ? 'adminlib-close'
-                                                    : 'adminlib-active'
+                                                    ? 'adminfont-close'
+                                                    : 'adminfont-active'
                                             }
                                         ></i>
                                         { table.getIsAllRowsSelected()
@@ -1156,7 +1156,7 @@ const Table: React.FC< TableProps > = ( {
                                 realtimeFilter.length > 0 && (
                                     <div className="wrap-bulk-all-date filter">
                                         <span className="title">
-                                            <i className="adminlib-filter"></i>{ ' ' }
+                                            <i className="adminfont-filter"></i>{ ' ' }
                                             Filter
                                         </span>
                                         { realtimeFilter?.map( ( filter ) => (
@@ -1188,7 +1188,7 @@ const Table: React.FC< TableProps > = ( {
                                         } }
                                         className="admin-badge red"
                                     >
-                                        <i className="adminlib-refresh"></i>{ ' ' }
+                                        <i className="adminfont-refresh"></i>{ ' ' }
                                         Reset
                                     </span>
                                 </div>
@@ -1197,7 +1197,7 @@ const Table: React.FC< TableProps > = ( {
                     ) }
                     { successMsg && (
                         <div className="admin-notice-display-title">
-                            <i className="admin-font adminlib-icon-yes"></i>
+                            <i className="admin-font adminfont-icon-yes"></i>
                             { successMsg }
                         </div>
                     ) }

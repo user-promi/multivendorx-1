@@ -36,12 +36,12 @@ class Cron {
         }
 
         // This is add for testing
-        add_filter( 'multivendorx_system_events', [$this, 'add_new_event'], 10 );
+        add_filter( 'multivendorx_system_events', array( $this, 'add_new_event' ), 10 );
     }
 
-    public function add_new_event($existing) {
-        $new = [
-            'add_custom_event'        => array(
+    public function add_new_event( $existing ) {
+        $new = array(
+            'add_custom_event' => array(
 				'name'           => 'Custom event',
 				'desc'           => 'This is custom event.',
 				'admin_enabled'  => true,
@@ -53,9 +53,9 @@ class Cron {
 				'tag'            => 'Store',
 				'category'       => 'activity',
 			),
-        ];
+        );
 
-        return array_merge($existing, $new);
+        return array_merge( $existing, $new );
     }
     /**
      * Add custom cron schedules

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, MultiCalendarInput } from 'zyra';
+import { Table, getApiLink, TableCell, MultiCalendarInput, Container, Column } from 'zyra';
 import {
 	ColumnDef,
 	RowSelectionState,
@@ -70,7 +70,7 @@ const Subscribers: React.FC = () => {
 				setTotalRows(response.data || 0);
 				setPageCount(Math.ceil(response.data / pagination.pageSize));
 			})
-			.catch(() => {});
+			.catch(() => { });
 	}, []);
 
 	useEffect(() => {
@@ -219,7 +219,7 @@ const Subscribers: React.FC = () => {
 									alt={row.original.store_name}
 								/>
 							) : (
-								<i className="item-icon adminlib-store-inventory"></i>
+								<i className="item-icon adminfont-store-inventory"></i>
 							)}
 
 							<div className="details">
@@ -279,7 +279,7 @@ const Subscribers: React.FC = () => {
 						actions: [
 							{
 								label: __('Settings', 'multivendorx'),
-								icon: 'adminlib-setting',
+								icon: 'adminfont-setting',
 								onClick: () => {
 									navigate(
 										`?page=multivendorx#&tab=stores&edit/${row.original.id}`
@@ -289,24 +289,24 @@ const Subscribers: React.FC = () => {
 							},
 							...(row.original.status === 'active'
 								? [
-										{
-											label: __(
-												'Storefront',
-												'multivendorx'
-											),
-											icon: 'adminlib-storefront',
-											onClick: () => {
-												if (!row.original.store_slug) {
-													return;
-												}
-												window.open(
-													`${appLocalizer.site_url}/store/${row.original.store_slug}/`,
-													'_blank'
-												);
-											},
-											hover: true,
+									{
+										label: __(
+											'Storefront',
+											'multivendorx'
+										),
+										icon: 'adminfont-storefront',
+										onClick: () => {
+											if (!row.original.store_slug) {
+												return;
+											}
+											window.open(
+												`${appLocalizer.site_url}/store/${row.original.store_slug}/`,
+												'_blank'
+											);
 										},
-									]
+										hover: true,
+									},
+								]
 								: []),
 						],
 					}}
@@ -329,7 +329,7 @@ const Subscribers: React.FC = () => {
 						}}
 						value={filterValue || ''}
 					/>
-					<i className="adminlib-search"></i>
+					<i className="adminfont-search"></i>
 				</div>
 			),
 		},
@@ -356,9 +356,8 @@ const Subscribers: React.FC = () => {
 	];
 
 	return (
-		<div className="general-wrapper">
-			<div className="admin-table-wrapper">
-				{error && <div className="error-notice">{error}</div>}
+		<Container general>
+			<Column>
 				<Table
 					data={data}
 					columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -375,8 +374,8 @@ const Subscribers: React.FC = () => {
 					searchFilter={searchFilter}
 					realtimeFilter={realtimeFilter}
 				/>
-			</div>
-		</div>
+			</Column>
+		</Container>
 	);
 };
 

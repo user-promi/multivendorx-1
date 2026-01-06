@@ -226,7 +226,7 @@ const DropDownMapping: React.FC< DropDownMappingProps > = ( {
                                         } }
                                     >
                                         <span className="text">Clear</span>
-                                        <span className="icon adminlib-close"></span>
+                                        <span className="icon adminfont-close"></span>
                                     </button>
                                 </div>
                             )
@@ -246,7 +246,7 @@ const DropDownMapping: React.FC< DropDownMappingProps > = ( {
                         } }
                     >
                         <span className="text">Add</span>
-                        <i className="adminlib-vendor-form-add"></i>
+                        <i className="adminfont-vendor-form-add"></i>
                     </button>
                 </div>
             </div>

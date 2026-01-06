@@ -94,7 +94,7 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 	return (
 		<Card
 			title={__('Downloadable', 'multivendorx')}
-			iconName="adminlib-pagination-right-arrow arrow-icon"
+			iconName="adminfont-pagination-right-arrow arrow-icon"
 			toggle
 		>
 			<DynamicRowSetting

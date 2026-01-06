@@ -4,59 +4,59 @@ import { FormField } from '../RegistrationForm';
 
 const selectOptions: SelectOption[] = [
   {
-    icon: 'adminlib-t-letter-bold icon-form-textbox',
+    icon: 'adminfont-t-letter-bold icon-form-textbox',
     value: 'text',
     label: 'Textbox',
   },
-  { icon: 'adminlib-unread icon-form-email', value: 'email', label: 'Email' },
+  { icon: 'adminfont-unread icon-form-email', value: 'email', label: 'Email' },
   {
-    icon: 'adminlib-text icon-form-textarea',
+    icon: 'adminfont-text icon-form-textarea',
     value: 'textarea',
     label: 'Textarea',
   },
   {
-    icon: 'adminlib-checkbox icon-form-checkboxes',
+    icon: 'adminfont-checkbox icon-form-checkboxes',
     value: 'checkboxes',
     label: 'Checkboxes',
   },
   {
-    icon: 'adminlib-multi-select icon-form-multi-select',
+    icon: 'adminfont-multi-select icon-form-multi-select',
     value: 'multiselect',
     label: 'Multi Select',
   },
-  { icon: 'adminlib-radio icon-form-radio', value: 'radio', label: 'Radio' },
+  { icon: 'adminfont-radio icon-form-radio', value: 'radio', label: 'Radio' },
   {
-    icon: 'adminlib-dropdown-checklist icon-form-dropdown',
+    icon: 'adminfont-dropdown-checklist icon-form-dropdown',
     value: 'dropdown',
     label: 'Dropdown',
   },
   {
-    icon: 'adminlib-captcha-automatic-code icon-form-recaptcha',
+    icon: 'adminfont-captcha-automatic-code icon-form-recaptcha',
     value: 'recaptcha',
     label: 'reCaptcha v3',
   },
   {
-    icon: 'adminlib-submission-message icon-form-attachment',
+    icon: 'adminfont-submission-message icon-form-attachment',
     value: 'attachment',
     label: 'Attachment',
   },
   {
-    icon: 'adminlib-form-section icon-form-section',
+    icon: 'adminfont-form-section icon-form-section',
     value: 'section',
     label: 'Section',
   },
   {
-    icon: 'adminlib-calendar icon-form-store-description',
+    icon: 'adminfont-calendar icon-form-store-description',
     value: 'datepicker',
     label: 'Date Picker',
   },
   {
-    icon: 'adminlib-alarm icon-form-address',
+    icon: 'adminfont-alarm icon-form-address',
     value: 'TimePicker',
     label: 'Time Picker',
   },
   {
-    icon: 'adminlib-divider icon-form-address',
+    icon: 'adminfont-divider icon-form-address',
     value: 'divider',
     label: 'Divider',
   },

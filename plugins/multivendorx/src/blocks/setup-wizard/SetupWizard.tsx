@@ -17,7 +17,7 @@ const SetupWizard: React.FC = () => {
 	const inputField = {
 		key: 'setup_wizard',
 		proSetting: false,
-		apiLink: '/wp-json/payments/v1/settings',
+		apiLink: 'settings',
 		moduleEnabled: true,
 		dependentSetting: '',
 		dependentPlugin: '',
@@ -31,7 +31,7 @@ const SetupWizard: React.FC = () => {
 		{
 			id: 'marketplace_setup',
 			label: 'Configure Your Marketplace',
-			icon: 'adminlib-storefront',
+			icon: 'adminfont-storefront',
 			desc: 'Configure basic settings for vendor stores.',
 			countBtn: true,
 			isWizardMode: true,
@@ -110,6 +110,58 @@ const SetupWizard: React.FC = () => {
 					],
 				},
 				{
+					key: 'notice',
+					type: 'blocktext',
+					label: __('no_label', 'multivendorx'),
+					blocktext: __(
+						'Woocommerce Booking and MultiVendorX Pro required for this.',
+						'multivendorx'
+					),
+					dependent: {
+						key: 'marketplace_model',
+						value: 'booking',
+					},
+				},
+				{
+					key: 'notice',
+					type: 'blocktext',
+					label: __('no_label', 'multivendorx'),
+					blocktext: __(
+						'Woocommerce Rental and MultiVendorX Pro required for this.',
+						'multivendorx'
+					),
+					dependent: {
+						key: 'marketplace_model',
+						value: 'rental',
+					},
+				},
+				{
+					key: 'notice',
+					type: 'blocktext',
+					label: __('no_label', 'multivendorx'),
+					blocktext: __(
+						'Woocommerce Auction and MultiVendorX Pro required for this.',
+						'multivendorx'
+					),
+					dependent: {
+						key: 'marketplace_model',
+						value: 'auction',
+					},
+				},
+				{
+					key: 'notice',
+					type: 'blocktext',
+					label: __('no_label', 'multivendorx'),
+					blocktext: __(
+						'Woocommerce Subscription and MultiVendorX Pro required for this.',
+						'multivendorx'
+					),
+					dependent: {
+						key: 'marketplace_model',
+						value: 'subscription',
+					},
+				},
+				{
 					key: 'wizardButtons',
 					type: 'buttons',
 					options: [
@@ -130,7 +182,7 @@ const SetupWizard: React.FC = () => {
 		{
 			id: 'store_setup',
 			label: 'Configure Your Store',
-			icon: 'adminlib-storefront',
+			icon: 'adminfont-storefront',
 			desc: 'Configure basic settings for vendor stores.',
 			countBtn: true,
 			isWizardMode: true,
@@ -157,7 +209,7 @@ const SetupWizard: React.FC = () => {
 					],
 				},
 				{
-					key: 'product_listing',
+					key: 'store_selling_mode',
 					type: 'setting-toggle',
 					label: __(
 						'Product listing model',
@@ -165,14 +217,14 @@ const SetupWizard: React.FC = () => {
 					),
 					options: [
 						{
-							key: 'independent_seller',
+							key: 'default',
 							label: __('Independent seller', 'multivendorx'),
-							value: 'independent_seller',
+							value: 'default',
 						},
 						{
-							key: 'listed_products',
+							key: 'single_product_multiple_vendor',
 							label: __('Co-listed products', 'multivendorx'),
-							value: 'listed_products',
+							value: 'single_product_multiple_vendor',
 						},
 						{
 							key: 'franchise',
@@ -203,7 +255,7 @@ const SetupWizard: React.FC = () => {
 		{
 			id: 'commission_setup',
 			label: 'Commission Setup',
-			icon: 'adminlib-storefront',
+			icon: 'adminfont-storefront',
 			desc: 'Configure basic settings for vendor stores.',
 			countBtn: true,
 			isWizardMode: true,
@@ -228,14 +280,14 @@ const SetupWizard: React.FC = () => {
 							value: 'store_order',
 						},
 						{
-							key: 'per_item',
+							key: 'item',
 							label: __('Per item based', 'multivendorx'),
-							value: 'per_item',
+							value: 'item',
 						},
 					],
 				},
 				{
-					key: 'commission_per_item',
+					key: 'commission_value',
 					type: 'nested',
 					label: 'Commission value',
 					single: true,
@@ -309,9 +361,9 @@ const SetupWizard: React.FC = () => {
 						},
 						{
 							label: 'Finish',
-							action: 'finish',
+							action: 'next',
 							btnClass: 'admin-btn btn-purple',
-							redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=dashboard`,
+							redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=modules`,
 						},
 					],
 				},

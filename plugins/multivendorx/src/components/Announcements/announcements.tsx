@@ -13,6 +13,11 @@ import {
 	SelectInput,
 	ToggleSetting,
 	MultiCalendarInput,
+	Container,
+	Column,
+	FormGroupWrapper,
+	FormGroup,
+	AdminButton,
 } from 'zyra';
 
 import {
@@ -404,9 +409,9 @@ export const Announcements: React.FC = () => {
 		const selectedStatus = announcementStatus?.find(
 			(status) => status.key === filterData?.categoryFilter
 		);
-	
+
 		setTotalRows(selectedStatus ? selectedStatus.count : announcementStatus?.find(s => s.key === 'all')?.count || 0);
-	
+
 		setData(null);
 		requestData(
 			rowsPerPage,
@@ -433,7 +438,7 @@ export const Announcements: React.FC = () => {
 							}}
 							value={filterValue || ''}
 						/>
-						<i className="adminlib-search"></i>
+						<i className="adminfont-search"></i>
 					</div>
 				</>
 			),
@@ -552,7 +557,7 @@ export const Announcements: React.FC = () => {
 						actions: [
 							{
 								label: __('Edit', 'multivendorx'),
-								icon: 'adminlib-edit',
+								icon: 'adminfont-edit',
 								onClick: (rowData: AnnouncementRow) => {
 									handleEdit(rowData.id);
 								},
@@ -560,7 +565,7 @@ export const Announcements: React.FC = () => {
 							},
 							{
 								label: __('Delete', 'multivendorx'),
-								icon: 'adminlib-delete delete',
+								icon: 'adminfont-delete delete',
 								onClick: async (rowData: AnnouncementRow) => {
 									if (!rowData.id) {
 										return;
@@ -618,7 +623,7 @@ export const Announcements: React.FC = () => {
 
 	const BulkAction: React.FC = () => (
 		<div className="action">
-			<i className="adminlib-form"></i>
+			<i className="adminfont-form"></i>
 			<select
 				name="action"
 				ref={bulkSelectRef}
@@ -654,7 +659,7 @@ export const Announcements: React.FC = () => {
 	return (
 		<>
 			<AdminBreadcrumbs
-				activeTabIcon="adminlib-announcement"
+				activeTabIcon="adminfont-announcement"
 				description={
 					'Central hub for managing marketplace announcements. Review past updates and create new ones to keep stores informed.'
 				}
@@ -668,7 +673,7 @@ export const Announcements: React.FC = () => {
 							setAddAnnouncements(true);
 						}}
 					>
-						<i className="adminlib-plus"></i>
+						<i className="adminfont-plus"></i>
 						{__('Add New', 'multivendorx')}
 					</div>,
 				]}
@@ -678,55 +683,39 @@ export const Announcements: React.FC = () => {
 				open={addAnnouncements}
 				onClose={handleCloseForm}
 				width="31.25rem"
-				header={
-					<>
-						<div className="title">
-							<i className="adminlib-announcement"></i>
-							{editId
-								? __('Edit Announcement', 'multivendorx')
-								: __('Add Announcement', 'multivendorx')}
-						</div>
-
-						<div className="des">
-							{__(
-								'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
-								'multivendorx'
-							)}
-						</div>
-
-						<i
-							onClick={handleCloseForm}
-							className="icon adminlib-close"
-						></i>
-					</>
-				}
+				height="70%"
+				header={{
+					icon: 'announcement',
+					title: editId
+						? __('Edit Announcement', 'multivendorx')
+						: __('Add Announcement', 'multivendorx'),
+					description: __(
+						'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+						'multivendorx'
+					),
+				}}
 				footer={
-					<>
-						<div
-							onClick={handleCloseForm}
-							className="admin-btn btn-red"
-						>
-							<i className="adminlib-close"></i>
-							{__('Cancel', 'multivendorx')}
-						</div>
-
-						<div
-							onClick={() => handleSubmit()}
-							className="admin-btn btn-purple-bg"
-						>
-							<i className="adminlib-active"></i>
-							{__('Save', 'multivendorx')}
-						</div>
-					</>
+					<AdminButton
+						buttons={[
+							{
+								icon: 'close',
+								text: __('Cancel', 'multivendorx'),
+								className: 'red',
+								onClick: handleCloseForm,
+							},
+							{
+								icon: 'save',
+								text: __('Save', 'multivendorx'),
+								className: 'purple-bg',
+								onClick: () => handleSubmit(),
+							},
+						]}
+					/>
 				}
 			>
 				<>
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label htmlFor="title">
-								{__('Title', 'multivendorx')}
-							</label>
-
+					<FormGroupWrapper>
+						<FormGroup label={__('Title', 'multivendorx')} htmlFor="title">
 							<BasicInput
 								type="text"
 								name="title"
@@ -739,14 +728,8 @@ export const Announcements: React.FC = () => {
 									{validationErrors.title}
 								</div>
 							)}
-						</div>
-					</div>
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label htmlFor="content">
-								{__('Announcement message', 'multivendorx')}
-							</label>
-
+						</FormGroup>
+						<FormGroup label={__('Announcement message', 'multivendorx')} htmlFor="content">
 							<TextArea
 								name="content"
 								inputClass="textarea-input"
@@ -755,7 +738,7 @@ export const Announcements: React.FC = () => {
 								usePlainText={false}
 								tinymceApiKey={
 									appLocalizer.settings_databases_value[
-										'marketplace'
+									'marketplace'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
@@ -765,14 +748,8 @@ export const Announcements: React.FC = () => {
 									{validationErrors.content}
 								</div>
 							)}
-						</div>
-					</div>
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label htmlFor="stores">
-								{__('Stores', 'multivendorx')}
-							</label>
-
+						</FormGroup>
+						<FormGroup label={__('Stores', 'multivendorx')} htmlFor="stores">
 							<SelectInput
 								name="stores"
 								type="multi-select"
@@ -822,14 +799,8 @@ export const Announcements: React.FC = () => {
 									{validationErrors.stores}
 								</div>
 							)}
-						</div>
-					</div>
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label htmlFor="status">
-								{__('Status', 'multivendorx')}
-							</label>
-
+						</FormGroup>
+						<FormGroup label={__('Status', 'multivendorx')} htmlFor="status">
 							<ToggleSetting
 								wrapperClass="setting-form-input"
 								descClass="settings-metabox-description"
@@ -857,15 +828,15 @@ export const Announcements: React.FC = () => {
 								value={formData.status}
 								onChange={handleToggleChange}
 							/>
-						</div>
-					</div>
+						</FormGroup>
+					</FormGroupWrapper>
 				</>
 
 				{error && <p className="error-text">{error}</p>}
 			</CommonPopup>
 
-			<div className="general-wrapper">
-				<div className="admin-table-wrapper">
+			<Container general>
+				<Column>
 					<Table
 						data={data}
 						columns={
@@ -887,8 +858,8 @@ export const Announcements: React.FC = () => {
 						totalCounts={totalRows}
 						realtimeFilter={realtimeFilter}
 					/>
-				</div>
-			</div>
+				</Column>
+			</Container>
 		</>
 	);
 };

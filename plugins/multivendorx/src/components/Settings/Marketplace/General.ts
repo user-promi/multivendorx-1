@@ -10,14 +10,14 @@ export default {
 		'multivendorx'
 	),
 	video: {
-		icon: 'adminlib-general-tab', // optional icon class
+		icon: 'adminfont-general-tab', // optional icon class
 		link: 'https://example.com/video/general-settings',
 	},
 	docs: {
-		icon: 'adminlib-general-tab', // optional icon class
+		icon: 'adminfont-general-tab', // optional icon class
 		link: 'https://example.com/docs/general-settings',
 	},
-	icon: 'adminlib-view-files',
+	icon: 'adminfont-view-files',
 	submitUrl: 'settings',
 	modal: [
 		{
@@ -118,7 +118,7 @@ export default {
 			label: __('Available shortcodes', 'multivendorx'),
 			desc: __('', 'multivendorx'),
 			optionLabel: ['Shortcodes', 'Description', 'Arguments'],
-			icon: 'adminlib-general-tab',
+			icon: 'adminfont-general-tab',
 			options: [
 				{
 					key: 'marketplace_registration',

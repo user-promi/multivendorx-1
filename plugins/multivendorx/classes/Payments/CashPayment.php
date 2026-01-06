@@ -37,7 +37,7 @@ class CashPayment {
      */
     public function get_settings() {
         return array(
-            'icon'         => 'adminlib-cash',
+            'icon'         => 'adminfont-cash',
             'id'           => $this->get_id(),
             'label'        => 'Cash',
             'enableOption' => true,

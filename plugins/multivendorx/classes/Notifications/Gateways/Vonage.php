@@ -34,20 +34,19 @@ class Vonage {
      * @return WP_Error|bool
      */
     public function send( $to, $message ) {
-        $api_key = MultiVendorX()->setting->get_setting( 'vonage_api_key' );
-        $api_secret = MultiVendorX()->setting->get_setting( 'vonage_api_secret' );
+        $api_key     = MultiVendorX()->setting->get_setting( 'vonage_api_key' );
+        $api_secret  = MultiVendorX()->setting->get_setting( 'vonage_api_secret' );
         $from_number = MultiVendorX()->setting->get_setting( 'vonage_from_number' );
 
-
-        $args = [
-            'body' => [
+        $args = array(
+            'body' => array(
                 'from'       => $from_number,
                 'text'       => $message,
                 'to'         => $to,
                 'api_key'    => $api_key,
                 'api_secret' => $api_secret,
-            ],
-        ];
+            ),
+        );
 
         $request       = wp_remote_post( self::ENDPOINT . '/sms/json', $args );
         $body          = json_decode( wp_remote_retrieve_body( $request ) );
@@ -66,5 +65,4 @@ class Vonage {
 
         return true;
     }
-
 }

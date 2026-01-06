@@ -125,7 +125,7 @@ const Banner: React.FC< BannerProps > = ( { isPro, products, proUrl } ) => {
                         aria-labelledby="form-dialog-title"
                     >
                         <span
-                            className="admin-font adminlib-cross"
+                            className="admin-font adminfont-cross"
                             role="button"
                             tabIndex={ 0 }
                             onClick={ handleClose }
@@ -134,7 +134,7 @@ const Banner: React.FC< BannerProps > = ( { isPro, products, proUrl } ) => {
                     </Dialog>
 
                     <i
-                        className="adminlib-close"
+                        className="adminfont-close"
                         role="button"
                         tabIndex={ 0 }
                         onClick={ handleCloseBanner }
@@ -148,7 +148,6 @@ const Banner: React.FC< BannerProps > = ( { isPro, products, proUrl } ) => {
                                         i === 0 ? 'active' : ''
                                     }` }
                                 >
-                                    { /* <i className="adminlib-support"></i> */ }
                                     <span className="title">
                                         { product.title }:{ ' ' }
                                     </span>

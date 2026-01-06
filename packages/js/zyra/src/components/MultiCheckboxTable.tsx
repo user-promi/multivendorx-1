@@ -47,7 +47,7 @@ const SelectedOptionDisplay: React.FC< SelectedOptionDisplayProps > = ( {
                             tabIndex={ 0 }
                             onClick={ () => removeSelectedValues( value ) }
                         >
-                            <i className="admin-font adminlib-close"></i>
+                            <i className="admin-font adminfont-close"></i>
                         </div>
                     </div>
                 ) ) }
@@ -73,7 +73,7 @@ const SelectedOptionDisplay: React.FC< SelectedOptionDisplayProps > = ( {
                     tabIndex={ 0 }
                     onClick={ clearSelectedValues }
                 >
-                    <i className="admin-font adminlib-close"></i>
+                    <i className="admin-font adminfont-close"></i>
                 </div>
             </div>
         </div>
@@ -128,7 +128,7 @@ const SearchOptionDisplay: React.FC< SearchOptionDisplayProps > = ( {
                 />
 
                 <span>
-                    <i className="admin-font adminlib-keyboard-arrow-down"></i>
+                    <i className="admin-font adminfont-keyboard-arrow-down"></i>
                 </span>
             </div>
 
@@ -314,7 +314,7 @@ const Select: React.FC< SelectProps > = ( {
                             className="modal-close-btn"
                             onClick={ () => setPopupOpened( false ) }
                         >
-                            <i className="admin-font adminlib-cross"></i>
+                            <i className="admin-font adminfont-cross"></i>
                         </div>
                         <SelectedOptionDisplay
                             popupOpend={ popupOpened }
@@ -401,7 +401,7 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
         <>
             { proSetting && (
                 <span className="admin-pro-tag">
-                    <i className="adminlib-pro-tag"></i>Pro
+                    <i className="adminfont-pro-tag"></i>Pro
                 </span>
             ) }
             <table className="grid-table">
@@ -413,7 +413,7 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                 { column.label }
                                 { column?.proSetting && ! khali_dabba && (
                                     <span className="admin-pro-tag">
-                                        <i className="adminlib-pro-tag"></i>Pro
+                                        <i className="adminfont-pro-tag"></i>Pro
                                     </span>
                                 ) }
                             </th>
@@ -550,7 +550,7 @@ const MultiCheckboxTable: React.FC< MultiCheckboxTableProps > = ( {
                                               <h1>
                                                   { group.label }
                                                   <i
-                                                      className={ `adminlib-${
+                                                      className={ `adminfont-${
                                                           isOpen
                                                               ? 'keyboard-arrow-down'
                                                               : 'pagination-right-arrow'
