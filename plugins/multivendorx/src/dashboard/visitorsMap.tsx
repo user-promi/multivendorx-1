@@ -55,7 +55,6 @@ const VisitorsMap: React.FC<VisitorsMapProps> = ({ dateRange }) => {
 
     const getCountryCode = (geo: any): string | null => {
         const name = geo?.properties?.name;
-        console.log('name', name)
         if (!name) return null;
         return name.toLowerCase();
     };

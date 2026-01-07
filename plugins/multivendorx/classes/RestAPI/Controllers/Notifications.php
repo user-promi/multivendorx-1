@@ -223,12 +223,18 @@ class Notifications extends \WP_REST_Controller {
             $limit  = max( intval( $request->get_param( 'row' ) ), 10 );
             $page   = max( intval( $request->get_param( 'page' ) ), 1 );
             $offset = ( $page - 1 ) * $limit;
+            $start_date = $request->get_param( 'start_date' );
+            $end_date   = $request->get_param( 'end_date' );
+            $start_date = $start_date ? gmdate( 'Y-m-d H:i:s', strtotime( $start_date ) ) : '';
+            $end_date   = $end_date ? gmdate( 'Y-m-d H:i:s', strtotime( $end_date ) ) : '';
 
             $args = array(
                 'limit'    => $limit,
                 'offset'   => $offset,
                 'category' => $request->get_param( 'notification' ) ? 'notification' : 'activity',
                 'store_id' => $request->get_param( 'store_id' ) ? $request->get_param( 'store_id' ) : '',
+                'start_date' => $start_date ?: null,
+				'end_date'   => $end_date ?: null,
             );
 
             $all_notifications = MultiVendorX()->notifications->get_all_notifications( $args );
@@ -242,6 +248,7 @@ class Notifications extends \WP_REST_Controller {
                         'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'type'       => $notification['type'],
                         'title'      => $notification['title'],
+                        'message'    => $notification['message'],
                         'date'       => gmdate( 'M j, Y', strtotime( $notification['created_at'] ) ),
                     )
                 );

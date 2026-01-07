@@ -886,7 +886,7 @@ class Notifications {
             }
 
             if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
-                $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
+                $where[] = "created_at BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
             }
 
             $table = $wpdb->prefix . Utill::TABLES['notifications'];
