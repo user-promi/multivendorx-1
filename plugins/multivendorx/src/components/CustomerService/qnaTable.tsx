@@ -73,14 +73,13 @@ type FilterData = {
 	orderBy?: any;
 	order?: any;
 	date?: any;
-	question_visibility?:string;
+	question_visibility?: string;
 };
 
 const Qna: React.FC = () => {
 	const [selectedQna, setSelectedQna] = useState<StoreQnaRow | null>(null);
 	const [answer, setAnswer] = useState('');
 	const [qna, setQna] = useState('');
-	const [saving, setSaving] = useState(false);
 	const [data, setData] = useState<QnaRow[] | null>(null);
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -161,7 +160,7 @@ const Qna: React.FC = () => {
 	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData(rowsPerPage, currentPage);
+		requestData(rowsPerPage, currentPage, 'no_answer');
 		setPageCount(Math.ceil(totalRows / rowsPerPage));
 	}, [pagination]);
 
@@ -169,7 +168,7 @@ const Qna: React.FC = () => {
 	function requestData(
 		rowsPerPage = 10,
 		currentPage = 1,
-		categoryFilter = '',
+		categoryFilter = 'no_answer',
 		store = '',
 		searchField = '',
 		orderBy = '',
@@ -245,7 +244,6 @@ const Qna: React.FC = () => {
 		if (!selectedQna) {
 			return;
 		}
-		setSaving(true);
 		try {
 			await axios.put(
 				getApiLink(appLocalizer, `qna/${selectedQna.id}`),
@@ -277,8 +275,6 @@ const Qna: React.FC = () => {
 		} catch (err) {
 			console.error('Failed to save answer:', err);
 			alert('Failed to save answer');
-		} finally {
-			setSaving(false);
 		}
 	};
 
@@ -480,12 +476,16 @@ const Qna: React.FC = () => {
 						value={filterValue || ''}
 						className="basic-select"
 					>
+						<option value="">
+							{__('All', 'multivendorx')}
+						</option>
 						<option value="public">
 							{__('Public', 'multivendorx')}
 						</option>
 						<option value="private">
 							{__('Private', 'multivendorx')}
 						</option>
+
 					</select>
 				</div>
 			),
@@ -566,6 +566,7 @@ const Qna: React.FC = () => {
 				handlePagination={requestApiForData}
 				categoryFilter={status as Status[]}
 				searchFilter={searchFilter}
+				defaultCounts="no_answer"
 			/>
 
 			{selectedQna && (

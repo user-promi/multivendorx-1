@@ -8,7 +8,6 @@ import {
 	TableCell,
 	CommonPopup,
 	TextArea,
-	ToggleSetting,
 	BasicInput,
 	MultiCalendarInput,
 	FormGroupWrapper,
@@ -70,10 +69,10 @@ type FilterData = {
 	store?: string;
 	orderBy?: any;
 	order?: any;
+	question_visibility?: string;
 };
 
 const CustomerQuestions: React.FC = () => {
-	const [error, setError] = useState<string>();
 	const [selectedQna, setSelectedQna] = useState<StoreQnaRow | null>(null);
 	const [answer, setAnswer] = useState('');
 	const [qna, setQna] = useState('');
@@ -82,7 +81,6 @@ const CustomerQuestions: React.FC = () => {
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [status, setStatus] = useState<Status[] | null>(null);
-	const [store, setStore] = useState<any[] | null>(null);
 
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
@@ -94,35 +92,20 @@ const CustomerQuestions: React.FC = () => {
 	useEffect(() => {
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'store'),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		})
-			.then((response) => {
-				setStore(response.data.stores);
-			})
-			.catch(() => {
-				setError(__('Failed to load stores', 'multivendorx'));
-				setStore([]);
-			});
-		axios({
-			method: 'GET',
 			url: getApiLink(appLocalizer, 'qna'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: { count: true },
+			params: { count: true, store_id: appLocalizer.store_id, },
 		})
 			.then((response) => {
 				setTotalRows(response.data || 0);
 				setPageCount(Math.ceil(response.data / pagination.pageSize));
 			})
-			.catch(() => {
-				setError(__('Failed to load total rows', 'multivendorx'));
-			});
 	}, []);
 
 	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData(rowsPerPage, currentPage);
+		requestData(rowsPerPage, currentPage, 'no_answer');
 		setPageCount(Math.ceil(totalRows / rowsPerPage));
 	}, [pagination]);
 
@@ -130,13 +113,13 @@ const CustomerQuestions: React.FC = () => {
 	function requestData(
 		rowsPerPage = 10,
 		currentPage = 1,
-		categoryFilter = '',
-		store = '',
+		categoryFilter = 'no_answer',
 		searchField = '',
 		orderBy = '',
 		order = '',
 		startDate = new Date(0),
-		endDate = new Date()
+		endDate = new Date(),
+		question_visibility = ''
 	) {
 		setData(null);
 		axios({
@@ -153,16 +136,13 @@ const CustomerQuestions: React.FC = () => {
 				order,
 				startDate,
 				endDate,
+				question_visibility
 			},
 		})
 			.then((response) => {
 				setData(response.data.items || []);
-				setStatus([
-					{
-						key: 'all',
-						name: 'All',
-						count: response.data.all || 0,
-					},
+				const statuses = [
+					{ key: 'all', name: 'All', count: response.data.all || 0 },
 					{
 						key: 'has_answer',
 						name: 'Answered',
@@ -173,10 +153,11 @@ const CustomerQuestions: React.FC = () => {
 						name: 'Unanswered',
 						count: response.data.unanswered || 0,
 					},
-				]);
+				];
+
+				setStatus(statuses.filter((status) => status.count > 0));
 			})
 			.catch(() => {
-				setError(__('Failed to load Q&A', 'multivendorx'));
 				setData([]);
 			});
 	}
@@ -192,12 +173,12 @@ const CustomerQuestions: React.FC = () => {
 			rowsPerPage,
 			currentPage,
 			filterData?.categoryFilter,
-			filterData?.store,
 			filterData?.searchField,
 			filterData?.orderBy,
 			filterData?.order,
 			filterData?.date?.start_date,
-			filterData?.date?.end_date
+			filterData?.date?.end_date,
+			filterData?.question_visibility
 		);
 	};
 
@@ -297,7 +278,6 @@ const CustomerQuestions: React.FC = () => {
 				);
 			},
 		},
-
 		{
 			header: __('Question', 'multivendorx'),
 			id: 'question',
@@ -358,7 +338,7 @@ const CustomerQuestions: React.FC = () => {
 			id: 'status',
 			header: __('Status', 'multivendorx'),
 			cell: ({ row }) => {
-				return <TableCell type="status" status={row.original.status} />;
+				return <TableCell type="status" status={row.original.question_visibility} />;
 			},
 		},
 		{
@@ -377,49 +357,7 @@ const CustomerQuestions: React.FC = () => {
 									setQna(rowData.question_text);
 									setAnswer(rowData.answer_text || '');
 								},
-							},
-							{
-								label: __('Delete', 'multivendorx'),
-								icon: 'adminfont-delete delete',
-								onClick: (rowData) => {
-									if (
-										confirm(
-											__(
-												'Are you sure you want to delete this question?',
-												'multivendorx'
-											)
-										)
-									) {
-										axios
-											.delete(
-												getApiLink(
-													appLocalizer,
-													`qna/${rowData.id}`
-												),
-												{
-													headers: {
-														'X-WP-Nonce':
-															appLocalizer.nonce,
-													},
-												}
-											)
-											.then(() =>
-												requestData(
-													pagination.pageSize,
-													pagination.pageIndex + 1
-												)
-											)
-											.catch(() =>
-												alert(
-													__(
-														'Failed to delete question',
-														'multivendorx'
-													)
-												)
-											);
-									}
-								},
-							},
+							}
 						],
 					}}
 				/>
@@ -429,22 +367,30 @@ const CustomerQuestions: React.FC = () => {
 
 	const realtimeFilter: RealtimeFilter[] = [
 		{
-			name: 'visibility',
+			name: 'question_visibility',
 			render: (
 				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
 				<div className="group-field">
 					<select
-						name="store"
+						name="question_visibility"
 						onChange={(e) =>
 							updateFilter(e.target.name, e.target.value)
 						}
 						value={filterValue || ''}
 						className="basic-select"
 					>
-						<option value="">Public</option>
-						<option value="">Private</option>
+						<option value="">
+							{__('All', 'multivendorx')}
+						</option>
+						<option value="public">
+							{__('Public', 'multivendorx')}
+						</option>
+						<option value="private">
+							{__('Private', 'multivendorx')}
+						</option>
+
 					</select>
 				</div>
 			),
@@ -520,6 +466,7 @@ const CustomerQuestions: React.FC = () => {
 				handlePagination={requestApiForData}
 				categoryFilter={status as Status[]}
 				searchFilter={searchFilter}
+				defaultCounts="no_answer"
 			/>
 
 			{selectedQna && (
@@ -575,29 +522,6 @@ const CustomerQuestions: React.FC = () => {
 								inputClass="textarea-input"
 								value={answer}
 								onChange={(e) => setAnswer(e.target.value)}
-							/>
-						</FormGroup>
-
-						<FormGroup
-							label={__(
-								'Decide whether this Q&A is visible to everyone or only to the store team.',
-								'multivendorx'
-							)}
-							htmlFor="visibility"
-						>
-							<ToggleSetting
-								wrapperClass="setting-form-input"
-								descClass="settings-metabox-description"
-								options={[
-									{ key: 'public', value: 'public', label: __('Public', 'multivendorx') },
-									{ key: 'private', value: 'private', label: __('Private', 'multivendorx') },
-								]}
-								value={selectedQna?.question_visibility || 'public'}
-								onChange={(value) =>
-									setSelectedQna((prev) =>
-										prev ? { ...prev, question_visibility: value } : prev
-									)
-								}
 							/>
 						</FormGroup>
 					</FormGroupWrapper>
