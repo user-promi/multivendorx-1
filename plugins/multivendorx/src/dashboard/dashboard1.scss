@@ -157,12 +157,14 @@ a {
                 text-decoration: none;
                 font-weight: 500;
 
-                i{
+                i {
                     font-size: 1.25rem;
                 }
-                span{
+
+                span {
                     line-height: 1;
                 }
+
                 .tab-name {
                     display: flex;
                     gap: 0.875rem;
@@ -267,7 +269,7 @@ a {
                             color: $sub-text-color;
                             font-size: 1.25rem;
 
-                            &.dark-icon{
+                            &.dark-icon {
                                 font-size: 1.625rem;
                             }
                         }
@@ -649,8 +651,10 @@ a {
                     }
 
                     .time {
-                        font-size: 0.813rem;
-                        color: #0000004a;
+                        position: absolute;
+                        top: 0.5rem;
+                        right: 0.5rem;
+                        color: $sub-text-color
                     }
                 }
             }
@@ -934,9 +938,10 @@ a {
         .store {
             border-bottom: $border-light-small;
 
-            &:last-child{
+            &:last-child {
                 border: none;
             }
+
             .store-name {
                 color: $text-color;
             }
