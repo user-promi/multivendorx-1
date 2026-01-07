@@ -60,26 +60,20 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			onClose={onClose}
 			width="31.25rem"
 			height="70%"
-			header={
-				<>
-					<div className="title">
-						<i className="adminfont-commission"></i>
-						{__('Commission Details', 'multivendorx')}
-					</div>
-					<div className="des">
-						{__(
-							'Details of this commission, including the order breakdown and notes.',
-							'multivendorx'
-						)}
-					</div>
-					<i className="icon adminfont-close" onClick={onClose}></i>
-				</>
-			}
+			header={{
+				icon: 'commission',
+				title: __('Commission Details', 'multivendorx'),
+				description: __(
+					'Details of this commission, including the order breakdown and notes.',
+					'multivendorx'
+				),
+			}}
+
 		>
 			{loading && <p>{__('Loading...', 'multivendorx')}</p>}
 
 			{!loading && details && (
-				<div className="content">
+				<>
 					<div className="heading">
 						{__('Order Overview', 'multivendorx')}
 					</div>
@@ -103,19 +97,18 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							</div>
 							<div className="value">
 								<span
-									className={`admin-badge ${
-										details.status === 'paid'
-											? 'green'
-											: 'red'
-									}`}
+									className={`admin-badge ${details.status === 'paid'
+										? 'green'
+										: 'red'
+										}`}
 								>
 									{details.status
 										? details.status
-												.replace(/^wc-/, '') // remove prefix like 'wc-'
-												.replace(/_/g, ' ') // replace underscores with spaces
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase()
-												) // capitalize words
+											.replace(/^wc-/, '') // remove prefix like 'wc-'
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize words
 										: ''}
 								</span>
 							</div>
@@ -177,7 +170,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							</div>
 						</div>
 					</div>
-				</div>
+				</>
 			)}
 		</CommonPopup>
 	);

@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './Notifications.scss';
-import { CommonPopup, getApiLink, TextArea, BasicInput } from 'zyra';
+import { CommonPopup, getApiLink, TextArea, BasicInput, AdminButton, FormGroupWrapper, FormGroup } from 'zyra';
 import axios from 'axios';
+import { __ } from '@wordpress/i18n';
 
 // ------------------ RecipientBadge Component ------------------
 interface Recipient {
@@ -117,13 +118,13 @@ const Notification: React.FC = () => {
 			prev.map((n) =>
 				n.id === notifId
 					? {
-							...n,
-							recipients: n.recipients.map((r: any) =>
-								r.id === recipientId
-									? { ...r, enabled: !r.enabled }
-									: r
-							),
-						}
+						...n,
+						recipients: n.recipients.map((r: any) =>
+							r.id === recipientId
+								? { ...r, enabled: !r.enabled }
+								: r
+						),
+					}
 					: n
 			)
 		);
@@ -134,11 +135,11 @@ const Notification: React.FC = () => {
 			prev.map((n) =>
 				n.id === notifId
 					? {
-							...n,
-							recipients: n.recipients.filter(
-								(r: any) => r.id !== recipientId
-							),
-						}
+						...n,
+						recipients: n.recipients.filter(
+							(r: any) => r.id !== recipientId
+						),
+					}
 					: n
 			)
 		);
@@ -182,12 +183,12 @@ const Notification: React.FC = () => {
 			prev.map((n) =>
 				n.id === notifId
 					? {
-							...n,
-							channels: {
-								...n.channels,
-								[channel]: !n.channels[channel],
-							},
-						}
+						...n,
+						channels: {
+							...n.channels,
+							[channel]: !n.channels[channel],
+						},
+					}
 					: n
 			)
 		);
@@ -257,7 +258,7 @@ const Notification: React.FC = () => {
 			value.slice(0, start) +
 			tag +
 			value.slice(end);
-		
+
 		const updatedFormData = {
 			...formData,
 			[field]: updated,
@@ -320,9 +321,8 @@ const Notification: React.FC = () => {
 					{uniqueTags.map((tag) => (
 						<div
 							key={tag}
-							className={`category-item ${
-								activeTag === tag ? 'active' : ''
-							}`}
+							className={`category-item ${activeTag === tag ? 'active' : ''
+								}`}
 							role="button"
 							tabIndex={0}
 							onClick={(e) => {
@@ -439,21 +439,21 @@ const Notification: React.FC = () => {
 														<RecipientBadge
 															key={r.id}
 															recipient={r}
-															// onToggle={() =>
-															// 	toggleRecipient(
-															// 		notif.id,
-															// 		r.id
-															// 	)
-															// }
-															// onDelete={
-															// 	r.canDelete
-															// 		? () =>
-															// 				deleteRecipient(
-															// 					notif.id,
-															// 					r.id
-															// 				)
-															// 		: undefined
-															// }
+														// onToggle={() =>
+														// 	toggleRecipient(
+														// 		notif.id,
+														// 		r.id
+														// 	)
+														// }
+														// onDelete={
+														// 	r.canDelete
+														// 		? () =>
+														// 				deleteRecipient(
+														// 					notif.id,
+														// 					r.id
+														// 				)
+														// 		: undefined
+														// }
 														/>
 													)
 												)}
@@ -500,11 +500,10 @@ const Notification: React.FC = () => {
 																		key={
 																			channel
 																		}
-																		className={`${iconClass} ${badgeClass} ${
-																			!enabled
-																				? 'disable'
-																				: ''
-																		}`}
+																		className={`${iconClass} ${badgeClass} ${!enabled
+																			? 'disable'
+																			: ''
+																			}`}
 																		onClick={(
 																			e
 																		) => {
@@ -553,106 +552,93 @@ const Notification: React.FC = () => {
 					onClose={() => setOpenChannel(null)}
 					width="31.25rem"
 					height="70%"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-cart"></i>
-								{openChannel === 'system' &&
-									'System Notification'}
-								{openChannel === 'sms' && 'SMS Message'}
-								{openChannel === 'mail' && 'Email Message'}
-								- {editNotification?.event}
-							</div>
-							<i
-								className="icon adminfont-close"
-								onClick={() => setOpenChannel(null)}
-							></i>
-						</>
-					}
+					header={{
+						icon: 'cart',
+						title: `${openChannel === 'system'
+							? __('System Notification', 'multivendorx')
+							: openChannel === 'sms'
+								? __('SMS Message', 'multivendorx')
+								: __('Email Message', 'multivendorx')
+							} - ${editNotification?.event ?? ''}`,
+					}}
+
 					footer={
-						<div className="drawer-footer">
-							<button
-								className="admin-btn btn-red"
-								onClick={() => setOpenChannel(null)}
-							>
-								Cancel
-							</button>
-						</div>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: () => setOpenChannel(null),
+								},
+							]}
+						/>
 					}
+
 				>
 					<>
-						<div className="form-group-wrapper">
+						<FormGroupWrapper>
+
 							{openChannel === 'system' && (
-								<div className="form-group">
-									<>
-										<label>System Message</label>
-										<TextArea
-											name="system_message"
-											inputClass="textarea-input"
-											value={
-												formData.system_message || ''
-											}
-											onClick={(e) =>
-												setCursorPos({
-													start: e.target.selectionStart,
-													end: e.target.selectionEnd,
-													field: 'system_message',
-												})
-											}
-											onChange={(e) => {
-												setFormData({
-													...formData,
-													system_message:
-														e.target.value,
-												});
-											}}
-											onBlur={() => {
-												handleAutoSave(formData.id);
-											}}
-											onKeyDown={() => {
-												handleAutoSave(formData.id);
-											}}
-										/>
-									</>
-								</div>
+								<FormGroup label={__('System Message', 'multivendorx')} htmlFor="system-message">
+									<TextArea
+										name="system_message"
+										inputClass="textarea-input"
+										value={
+											formData.system_message || ''
+										}
+										onClick={(e) =>
+											setCursorPos({
+												start: e.target.selectionStart,
+												end: e.target.selectionEnd,
+												field: 'system_message',
+											})
+										}
+										onChange={(e) => {
+											setFormData({
+												...formData,
+												system_message:
+													e.target.value,
+											});
+										}}
+										onBlur={() => {
+											handleAutoSave(formData.id);
+										}}
+										onKeyDown={() => {
+											handleAutoSave(formData.id);
+										}}
+									/>
+								</FormGroup>
 							)}
-						</div>
-						<div className="form-group-wrapper">
 							{openChannel === 'sms' && (
-								<div className="form-group">
-									<>
-										<label>SMS Content</label>
-										<TextArea
-											name="sms_content"
-											inputClass="textarea-input"
-											value={formData.sms_content || ''}
-											onClick={(e) =>
-												setCursorPos({
-													start: e.target.selectionStart,
-													end: e.target.selectionEnd,
-													field: 'sms_content',
-												})
-											}
-											onChange={(e) => {
-												setFormData({
-													...formData,
-													sms_content: e.target.value,
-												});
-												handleAutoSave(formData.id);
-											}}
-											onBlur={() => {
-												handleAutoSave(formData.id);
-											}}
-										/>
-									</>
-								</div>
+								<FormGroup label={__('SMS Content', 'multivendorx')} htmlFor="sms-content">
+									<TextArea
+										name="sms_content"
+										inputClass="textarea-input"
+										value={formData.sms_content || ''}
+										onClick={(e) =>
+											setCursorPos({
+												start: e.target.selectionStart,
+												end: e.target.selectionEnd,
+												field: 'sms_content',
+											})
+										}
+										onChange={(e) => {
+											setFormData({
+												...formData,
+												sms_content: e.target.value,
+											});
+											handleAutoSave(formData.id);
+										}}
+										onBlur={() => {
+											handleAutoSave(formData.id);
+										}}
+									/>
+								</FormGroup>
 							)}
-						</div>
-						<div className="form-group-wrapper">
 							{openChannel === 'mail' && (
 								<>
-									<div className="form-group">
-										<label>Email Subject</label>
+									<FormGroup cols={2} label={__('Email Subject', 'multivendorx')} htmlFor="email-subject">
 										<BasicInput
 											type="text"
 											name="email_subject"
@@ -676,10 +662,8 @@ const Notification: React.FC = () => {
 												handleAutoSave(formData.id);
 											}}
 										/>
-									</div>
-
-									<div className="form-group">
-										<label>Email Body</label>
+									</FormGroup>
+									<FormGroup cols={2} label={__('Email Body', 'multivendorx')} htmlFor="email-body">
 										<TextArea
 											name="email_body"
 											inputClass="textarea-input"
@@ -702,11 +686,9 @@ const Notification: React.FC = () => {
 												handleAutoSave(formData.id);
 											}}
 										/>
-									</div>
+									</FormGroup>
 								</>
 							)}
-						</div>
-						<div className="form-group-wrapper">
 							{systemTags?.length > 0 && (
 								<div className="tag-list">
 									{systemTags.map((tag, idx) => (
@@ -720,7 +702,7 @@ const Notification: React.FC = () => {
 									))}
 								</div>
 							)}
-						</div>
+						</FormGroupWrapper>
 					</>
 				</CommonPopup>
 			)}
@@ -732,185 +714,173 @@ const Notification: React.FC = () => {
 					onClose={() => setEditingNotification(null)}
 					width="31.25rem"
 					height="70%"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-notification"></i>
-								Settings - {editNotification?.event}
-							</div>
-							<div className="des">
-								{editNotification?.description}
-							</div>
-							<i
-								className="icon adminfont-close"
-								onClick={() => setEditingNotification(null)}
-							></i>
-						</>
-					}
+					header={{
+						icon: 'notification',
+						title: `${__('Settings', 'multivendorx')} - ${editNotification?.event ?? ''}`,
+						description: editNotification?.description,
+					}}
+
 				>
-					<div className="content">
-						<div className="title">Delivery method</div>
-						<div className="drawer-recipients">
-							{Object.entries(
-								notifications.find(
-									(n) => n.id === editingNotification
-								)?.channels || {}
-							).map(([channel, enabled]: any) => {
-								let label = '';
-								switch (channel) {
-									case 'mail':
-										label = 'Mail';
-										break;
-									case 'sms':
-										label = 'SMS';
-										break;
-									case 'system':
-										label = 'System';
-										break;
-								}
-								return (
-									<>
-										<div
-											key={channel}
-											className={`recipient ${
-												!enabled ? 'disable' : ''
+					<div className="title">Delivery method</div>
+					<div className="drawer-recipients">
+						{Object.entries(
+							notifications.find(
+								(n) => n.id === editingNotification
+							)?.channels || {}
+						).map(([channel, enabled]: any) => {
+							let label = '';
+							switch (channel) {
+								case 'mail':
+									label = 'Mail';
+									break;
+								case 'sms':
+									label = 'SMS';
+									break;
+								case 'system':
+									label = 'System';
+									break;
+							}
+							return (
+								<>
+									<div
+										key={channel}
+										className={`recipient ${!enabled ? 'disable' : ''
 											}`}
+									>
+										<span className="icon">
+											<i
+												className={
+													label === 'Mail'
+														? 'adminfont-mail'
+														: label === 'SMS'
+															? 'adminfont-enquiry'
+															: label ===
+																'System'
+																? 'adminfont-notification'
+																: 'adminfont-mail'
+												}
+											></i>
+										</span>
+										<div className="details">
+											<span>{label}</span>
+										</div>
+										<i
+											onClick={() =>
+												toggleChannel(
+													editingNotification,
+													channel
+												)
+											}
+											className={
+												enabled
+													? 'adminfont-eye'
+													: 'adminfont-eye-blocked'
+											}
+										></i>
+									</div>
+								</>
+							);
+						})}
+					</div>
+
+					<div className="title">Recipients</div>
+
+					<div className="drawer-recipients">
+						{defaultRecipients.map((r) => (
+							<div
+								key={r.id}
+								className={`recipient ${r.enabled ? '' : 'disable'}`}
+							>
+								<span className="icon">
+									<i
+										className={
+											r.label === 'Store'
+												? 'adminfont-storefront'
+												: r.label === 'Admin'
+													? 'adminfont-person'
+													: r.label === 'Customer'
+														? 'adminfont-user-circle'
+														: 'adminfont-mail'
+										}
+									></i>
+								</span>
+
+								<div className="details">
+									<span>{r.label}</span>
+								</div>
+
+								<i
+									onClick={() =>
+										toggleRecipient(editingNotification, r.id)
+									}
+									className={
+										r.enabled
+											? 'adminfont-eye'
+											: 'adminfont-eye-blocked'
+									}
+								></i>
+							</div>
+						))}
+					</div>
+
+					{customRecipients.length > 0 && (
+						<>
+							<div className="title">Custom Recipients</div>
+							<div className="drawer-recipients">
+								<>
+									{customRecipients.map((r) => (
+										<div
+											key={r.id}
+											className={`recipient ${r.enabled ? '' : 'disable'}`}
 										>
 											<span className="icon">
-												<i
-													className={
-														label === 'Mail'
-															? 'adminfont-mail'
-															: label === 'SMS'
-																? 'adminfont-enquiry'
-																: label ===
-																	  'System'
-																	? 'adminfont-notification'
-																	: 'adminfont-mail'
-													}
-												></i>
+												<i className="adminfont-mail"></i>
 											</span>
+
 											<div className="details">
-												<span>{label}</span>
+												<span>{r.label}</span>
 											</div>
+
 											<i
+												className="delete-btn adminfont-delete"
 												onClick={() =>
-													toggleChannel(
+													deleteRecipient(
 														editingNotification,
-														channel
+														r.id
 													)
-												}
-												className={
-													enabled
-														? 'adminfont-eye'
-														: 'adminfont-eye-blocked'
 												}
 											></i>
 										</div>
-									</>
-								);
-							})}
-						</div>
-
-						<div className="title">Recipients</div>
-
-						<div className="drawer-recipients">
-							{defaultRecipients.map((r) => (
-								<div
-									key={r.id}
-									className={`recipient ${r.enabled ? '' : 'disable'}`}
-								>
-									<span className="icon">
-										<i
-											className={
-												r.label === 'Store'
-													? 'adminfont-storefront'
-													: r.label === 'Admin'
-													? 'adminfont-person'
-													: r.label === 'Customer'
-													? 'adminfont-user-circle'
-													: 'adminfont-mail'
-											}
-										></i>
-									</span>
-
-									<div className="details">
-										<span>{r.label}</span>
-									</div>
-
-									<i
-										onClick={() =>
-											toggleRecipient(editingNotification, r.id)
-										}
-										className={
-											r.enabled
-												? 'adminfont-eye'
-												: 'adminfont-eye-blocked'
-										}
-									></i>
-								</div>
-							))}
-						</div>
-
-						{customRecipients.length > 0 && (
-							<>
-								<div className="title">Custom Recipients</div>
-								<div className="drawer-recipients">
-									<>
-										{customRecipients.map((r) => (
-											<div
-												key={r.id}
-												className={`recipient ${r.enabled ? '' : 'disable'}`}
-											>
-												<span className="icon">
-													<i className="adminfont-mail"></i>
-												</span>
-
-												<div className="details">
-													<span>{r.label}</span>
-												</div>
-
-												<i
-													className="delete-btn adminfont-delete"
-													onClick={() =>
-														deleteRecipient(
-															editingNotification,
-															r.id
-														)
-													}
-												></i>
-											</div>
-										))}
-									</>
-								</div>
-							</>
-						)}
+									))}
+								</>
+							</div>
+						</>
+					)}
 
 
-						<div className="drawer-add-recipient">
-							<input
-								type="text"
-								className="basic-input"
-								placeholder="Type the email address of the additional recipient you want to notify, then click ‘Add’. "
-								value={newRecipientValue}
-								onChange={(e) =>
-									setNewRecipientValue(e.target.value)
-								}
-								onKeyPress={(e) =>
-									e.key === 'Enter' &&
-									addRecipient(editingNotification)
-								}
-							/>
-							<button
-								className="admin-btn btn-purple"
-								onClick={() =>
-									addRecipient(editingNotification)
-								}
-							>
-								<i className="adminfont-plus"></i>
-								Add
-							</button>
-						</div>
+					<div className="drawer-add-recipient">
+						<input
+							type="text"
+							className="basic-input"
+							placeholder="Type the email address of the additional recipient you want to notify, then click ‘Add’. "
+							value={newRecipientValue}
+							onChange={(e) =>
+								setNewRecipientValue(e.target.value)
+							}
+							onKeyPress={(e) =>
+								e.key === 'Enter' &&
+								addRecipient(editingNotification)
+							}
+						/>
+						<button
+							className="admin-btn btn-purple"
+							onClick={() =>
+								addRecipient(editingNotification)
+							}
+						>
+							<i className="adminfont-plus"></i>
+							Add
+						</button>
 					</div>
 				</CommonPopup>
 			)}
@@ -945,10 +915,10 @@ const Notification: React.FC = () => {
 											onDelete={
 												r.canDelete
 													? () =>
-															deleteRecipient(
-																notif.id,
-																r.id
-															)
+														deleteRecipient(
+															notif.id,
+															r.id
+														)
 													: undefined
 											}
 										/>
@@ -980,11 +950,10 @@ const Notification: React.FC = () => {
 											return (
 												<i
 													key={channel}
-													className={`${iconClass} ${badgeClass} ${
-														!enabled
-															? 'disable'
-															: ''
-													}`}
+													className={`${iconClass} ${badgeClass} ${!enabled
+														? 'disable'
+														: ''
+														}`}
 													onClick={(e) => {
 														e.stopPropagation();
 														toggleChannel(

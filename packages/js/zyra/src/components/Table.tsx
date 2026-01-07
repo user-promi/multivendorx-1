@@ -127,14 +127,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
         setShowDropdown( ( prev ) => ( prev === id ? null : id ) );
     };
     const statusGroups: Record< string, readonly string[] > = {
-        green: [
-            'completed',
-            'active',
-            'approved',
-            'paid',
-            'public',
-            'publish',
-        ],
+        green: ['completed','active','approved','paid', 'public','publish','published'],
         yellow: [ 'pending', 'on-hold', 'partially_refunded' ],
         blue: [ 'under_review', 'private', 'upcoming', 'draft' ],
         red: [ 'rejected', 'unpaid', 'cancelled', 'failed', 'expired' ],
