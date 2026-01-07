@@ -159,13 +159,12 @@ class Frontend {
                         break;
                     }
                 }
-            }
-
+            }    
             $name        = $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
             $description = $store->get( Utill::STORE_SETTINGS_KEYS['description'] );
             $phone       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ) ?? '';
             $email       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['email'] ) ?? '';
-            $address_1   = $store->get_meta( Utill::STORE_SETTINGS_KEYS['address_1'] ) ?? '';
+            $address     = $store->get_meta( Utill::STORE_SETTINGS_KEYS['address'] ) ?? '';
 
             $logo_html = '';
             if ( in_array( 'show_store_logo_next_to_products', $store_details, true ) ) {
@@ -182,7 +181,7 @@ class Frontend {
                 'owner_name'  => $store_owner_name,
                 'phone'       => $phone,
                 'email'       => $email,
-                'address'     => $address_1,
+                'address'     => $address,
             );
         }
     }

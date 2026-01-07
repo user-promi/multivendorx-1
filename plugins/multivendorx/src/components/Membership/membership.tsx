@@ -1389,10 +1389,10 @@ const Membership = ({ id }: { id: string }) => {
 						</Card>
 						<Card title={__('Commission type', 'multivendorx')}>
 							<FormGroupWrapper>
-								{/* <FormGroup
+								<FormGroup
 									label="Include All Add-ons"
 									htmlFor={advancedFeaturesField.key}
-								> */}
+								>
 									<NestedComponent
 										id="role_rules"
 										fields={nestedFields}
