@@ -13,7 +13,6 @@ use MultiVendorX\StorePolicy\Util;
 
 $store_id = $args['store_id'];
 $policies = Util::get_store_policies( $store_id );
-
 if ( empty( $policies ) ) {
     echo 'No policy found.';
 }

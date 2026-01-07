@@ -13,12 +13,14 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	TextArea,
+	ProPopup,
 } from 'zyra';
 import {
 	ColumnDef,
 	RowSelectionState,
 	PaginationState,
 } from '@tanstack/react-table';
+import { Dialog } from '@mui/material';
 
 type Review = {
 	review_id: number;
@@ -65,7 +67,6 @@ export interface RealtimeFilter {
 
 const StoreReviews: React.FC = () => {
 	const [data, setData] = useState<Review[]>([]);
-	const [error, setError] = useState<string>();
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [pageCount, setPageCount] = useState<number>(0);
@@ -78,6 +79,45 @@ const StoreReviews: React.FC = () => {
 		pageIndex: 0,
 		pageSize: 10,
 	});
+	const [selectedRv, setSelectedRv] = useState<{
+		id: number;
+	} | null>(null);
+	const [confirmOpen, setConfirmOpen] = useState(false);
+
+	const handleDeleteClick = (rowData) => {
+		setSelectedRv({
+			id: rowData.review_id,
+		});
+		setConfirmOpen(true);
+	};
+
+	const handleConfirmDelete = async () => {
+		if (!selectedRv) {
+			return;
+		}
+
+		try {
+			await axios({
+				method: 'DELETE',
+				url: getApiLink(
+					appLocalizer,
+					`review/${selectedRv.id}`
+				),
+				headers: {
+					'X-WP-Nonce':
+						appLocalizer.nonce,
+				},
+			});
+
+			requestData(
+				pagination.pageSize,
+				pagination.pageIndex + 1
+			);
+		} finally {
+			setConfirmOpen(false);
+			setSelectedRv(null);
+		}
+	};
 
 	// Fetch total rows on mount
 	useEffect(() => {
@@ -90,7 +130,6 @@ const StoreReviews: React.FC = () => {
 				setStore(response.data.stores);
 			})
 			.catch(() => {
-				setError(__('Failed to load stores', 'multivendorx'));
 				setStore([]);
 			});
 		axios({
@@ -103,9 +142,6 @@ const StoreReviews: React.FC = () => {
 				setTotalRows(response.data || 0);
 				setPageCount(Math.ceil(response.data / pagination.pageSize));
 			})
-			.catch(() => {
-				setError(__('Failed to load total rows', 'multivendorx'));
-			});
 	}, []);
 
 	useEffect(() => {
@@ -170,7 +206,6 @@ const StoreReviews: React.FC = () => {
 				setStatus(statuses.filter((status) => status.count > 0));
 			})
 			.catch(() => {
-				setError(__('Failed to load Q&A', 'multivendorx'));
 				setData([]);
 			});
 	}
@@ -511,44 +546,8 @@ const StoreReviews: React.FC = () => {
 							{
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminfont-delete delete',
-								onClick: async () => {
-									if (
-										confirm(
-											__(
-												'Are you sure you want to delete this review?',
-												'multivendorx'
-											)
-										)
-									) {
-										try {
-											await axios.delete(
-												getApiLink(
-													appLocalizer,
-													`review/${row.original.review_id}`
-												),
-												{
-													headers: {
-														'X-WP-Nonce':
-															appLocalizer.nonce,
-													},
-												}
-											);
-
-											// ✅ Refresh the table after delete
-											requestData(
-												pagination.pageSize,
-												pagination.pageIndex + 1
-											);
-										} catch (error) {
-											console.error(error);
-											alert(
-												__(
-													'Failed to delete review',
-													'multivendorx'
-												)
-											);
-										}
-									}
+								onClick: () => {
+									handleDeleteClick(row.original);
 								},
 								hover: true,
 							},
@@ -560,6 +559,27 @@ const StoreReviews: React.FC = () => {
 	];
 	return (
 		<>
+			<Dialog
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+			>
+				<ProPopup
+					confirmMode
+					title="Delete Review"
+					confirmMessage={
+						selectedRv
+							? `Are you sure you want to delete review?`
+							: ''
+					}
+					confirmYesText="Delete"
+					confirmNoText="Cancel"
+					onConfirm={handleConfirmDelete}
+					onCancel={() => {
+						setConfirmOpen(false);
+						setSelectedRv(null);
+					}}
+				/>
+			</Dialog>
 			<Table
 				data={data || []}
 				columns={columns as ColumnDef<Record<string, any>, any>[]}
@@ -580,7 +600,7 @@ const StoreReviews: React.FC = () => {
 					open={!!selectedReview}
 					onClose={() => setSelectedReview(null)}
 					width="31.25rem"
-					height="60%"
+					height="80%"
 					header={{
 						icon: 'store-review',
 						title: `${__('Reply to Review', 'multivendorx')} – ${selectedReview?.store_name}`,
@@ -629,16 +649,23 @@ const StoreReviews: React.FC = () => {
 										></div>
 
 										<div className="rating-wrapper">
-											{[...Array(5)].map((_, i) => (
+											{[...Array(Math.round(selectedReview.overall_rating || 0))].map(
+												(_, i) => (
+													<i
+														key={`filled-${i}`}
+														className="star-icon adminfont-star"
+													></i>
+												)
+											)}
+
+											{[
+												...Array(
+													5 - Math.round(selectedReview.overall_rating || 0)
+												),
+											].map((_, i) => (
 												<i
-													key={i}
-													className={`star-icon adminfont-star ${i <
-														Math.round(
-															selectedReview.overall_rating
-														)
-														? 'filled'
-														: ''
-														}`}
+													key={`empty-${i}`}
+													className="star-icon adminfont-star-o"
 												></i>
 											))}
 

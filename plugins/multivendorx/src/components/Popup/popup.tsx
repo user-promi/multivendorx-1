@@ -163,7 +163,7 @@ const ShowProPopup: React.FC<PopupProps> = (props) => {
 		moduleButton: __('Enable Now', 'multivendorx'),
 		modulePageUrl:
 			typeof appLocalizer !== 'undefined'
-				? `${appLocalizer.module_page_url}&module=${props.moduleName}`
+				? `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=modules&module=${props.moduleName}`
 				: '#',
 	};
 
