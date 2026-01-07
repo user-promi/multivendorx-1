@@ -26,12 +26,12 @@ const productTypeField = {
 	look: 'checkbox',
 	selectDeselect: true,
 	class: 'basic-checkbox',
-	desc: 'Choose the kinds of items stores can sell under this plan. Only selected types will be available when a store adds a new product.',
+	desc: 'Decide what kind of listings stores are allowed to create on your marketplace.',
 	options: [
-		{ key: 'simple', value: 'simple', label: 'Simple product' },
-		{ key: 'variable', value: 'variable', label: 'Variable Product' },
-		{ key: 'external', value: 'external', label: 'External / Affiliate' },
-		{ key: 'downloadable', value: 'downloadable', label: 'Downloadable Product' },
+		{ key: 'simple', value: 'simple', label: 'Simple (one price)' },
+		{ key: 'variable', value: 'variable', label: 'Variable (multiple options)' },
+		{ key: 'external', value: 'external', label: 'External / Affiliate (Links to another website)' },
+		{ key: 'downloadable', value: 'downloadable', label: 'Downloadable Product (Digital files / media)' },
 	],
 };
 
@@ -42,14 +42,28 @@ const proFeatures = {
 	class: 'basic-checkbox',
 	desc: 'Choose the kinds of items stores can sell under this plan. Only selected types will be available when a store adds a new product.',
 	options: [
-		{ key: 'invoice_management', value: 'invoice_management', label: 'Invoice Management' },
-		{ key: 'store_staff', value: 'store_staff', label: 'Store Staff' },
-		{ key: 'seo_tools', value: 'seo_tools', label: 'SEO Tools' },
-		{ key: 'affiliate_program', value: 'affiliate_program', label: 'Affiliate Program' },
-		{ key: 'advertisement', value: 'advertisement', label: 'Advertisement' },
-		{ key: 'advanced_inventory', value: 'advanced_inventory', label: 'Advanced Inventory' },
-		{ key: 'analytics_dashboard', value: 'analytics_dashboard', label: 'Analytics Dashboard' },
-		{ key: 'shipping_management', value: 'shipping_management', label: 'Shipping Management' },
+		{ key: 'invoice_management', value: 'invoice_management', label: 'Create and send invoices' },
+{ key: 'store_staff', value: 'store_staff', label: 'Let store add staff to help run the store' },
+{ key: 'seo_tools', value: 'seo_tools', label: 'Get products noticed online via search results' },
+{ key: 'affiliate_program', value: 'affiliate_program', label: 'Use affiliates to bring in more sales' },
+{ key: 'advertisement', value: 'advertisement', label: 'Advertise products on the marketplace' },
+{ key: 'advanced_inventory', value: 'advanced_inventory', label: 'Keep track of available stock' },
+{ key: 'analytics_dashboard', value: 'analytics_dashboard', label: 'View sales and earnings' },
+{ key: 'shipping_management', value: 'shipping_management', label: 'Manage how products are shipped' },
+{ key: 'gift_card', value: 'gift_card', label: 'Sell gift cards to customers' },
+{ key: 'import_export_tools', value: 'import_export_tools', label: 'Import and export products and data' },
+{ key: 'business_hours', value: 'business_hours', label: 'Set store working hours' },
+{ key: 'vacation_mode', value: 'vacation_mode', label: 'Pause store when unavailable' },
+{ key: 'paypal_marketplace', value: 'paypal_marketplace', label: 'Receive payments through PayPal' },
+{ key: 'stripe_marketplace', value: 'stripe_marketplace', label: 'Receive payments through Stripe' },
+{ key: 'live_chat', value: 'live_chat', label: 'Chat with customers in real time' },
+{ key: 'customer_support', value: 'customer_support', label: 'Respond to customer support requests' },
+{ key: 'enquiry', value: 'enquiry', label: 'Receive and reply to product enquiries' },
+{ key: 'analytics', value: 'analytics', label: 'Track store performance and trends' },
+{ key: 'advertisement_product', value: 'advertisement_product', label: 'Promote individual products with ads' },
+{ key: 'wholesale', value: 'wholesale', label: 'Sell products at wholesale prices' },
+{ key: 'min_max_quantities', value: 'min_max_quantities', label: 'Set minimum and maximum order quantities' },
+
 	],
 };
 const orderPermissionField = {
@@ -57,18 +71,29 @@ const orderPermissionField = {
 	look: 'checkbox',
 	selectDeselect: true,
 	class: 'basic-checkbox',
-	desc: 'Select the order management actions vendors are allowed to perform',
+	desc: 'Select the order management actions stores are allowed to perform',
 	options: [
 		{
-			key: 'add-order-notes',
-			value: 'Add Order Notes',
-			label: 'Add Order Notes',
-		},
-		{
-			key: 'export-order-data',
-			value: 'Export Order Data',
-			label: 'Export Order Data',
-		},
+	key: 'view_orders',
+	value: 'view_orders',
+	label: 'View customer orders',
+},
+{
+	key: 'add_order_notes',
+	value: 'add_order_notes',
+	label: 'Add notes to orders',
+},
+{
+	key: 'export_order_data',
+	value: 'export_order_data',
+	label: 'Export order data',
+},
+{
+	key: 'manage_shipping',
+	value: 'manage_shipping',
+	label: 'Manage shipping for orders',
+},
+
 	],
 };
 const vendorStorefrontField = {
@@ -76,12 +101,15 @@ const vendorStorefrontField = {
 	look: 'checkbox',
 	selectDeselect: true,
 	class: 'basic-checkbox',
-	desc: 'Select the storefront capabilities available to vendors',
+	desc: 'Only selected actions will be available to stores.',
 	options: [
-		{ key: 'edit_store_policies', value: 'edit_store_policies', label: 'Edit Store Policies' },
-		{ key: 'send_messages', value: 'send_messages', label: 'Send Messages' },
-		{ key: 'support_system', value: 'support_system', label: 'Support System' },
-		{ key: 'vacation_mode', value: 'vacation_mode', label: 'Vacation Mode' },
+		{ key: 'publish_listings', value: 'publish_listings', label: 'Publish Listings' },
+{ key: 'edit_published_listing', value: 'edit_published_listing', label: 'Edit Published Listing' },
+{ key: 'upload_media_files', value: 'upload_media_files', label: 'Upload Media Files' },
+{ key: 'submit_coupons', value: 'submit_coupons', label: 'Submit Coupons' },
+{ key: 'publish_coupons', value: 'publish_coupons', label: 'Publish Coupons' },
+{ key: 'edit_published_coupons', value: 'edit_published_coupons', label: 'Edit Published Coupons' },
+
 	],
 };
 
@@ -713,7 +741,7 @@ const Membership = ({ id }: { id: string }) => {
 						>
 							{productLimitsCard ? (
 								<FormGroupWrapper>
-									<FormGroup label={__('Types of products allowed', 'multivendorx')} desc={__('Choose the kinds of items stores can sell under this plan. Only selected types will be available when a store adds a new product.', 'multivendorx')}>
+									<FormGroup label={__('Listing formats allowed', 'multivendorx')} desc={__('Choose the kinds of listings stores can create under this plan. Only selected types will be available when a store adds a new listing.', 'multivendorx')}>
 										<MultiCheckBox
 											khali_dabba={true}
 											wrapperClass="checkbox-list-side-by-side"
@@ -753,7 +781,7 @@ const Membership = ({ id }: { id: string }) => {
 										/>
 									</FormGroup>
 
-									<FormGroup label={__('Categories stores can sell in', 'multivendorx')} className="border-top" desc={__('Limit where stores can list their products. This helps you control what your marketplace focuses on.')}>
+									<FormGroup label={__('Categories stores can list in', 'multivendorx')} className="border-top" desc={__('Limit where stores can list their products. This helps you control what your marketplace focuses on.')}>
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
 											descClass="settings-metabox-description"
@@ -817,8 +845,8 @@ const Membership = ({ id }: { id: string }) => {
 							)}
 						</Card>
 
-						<Card title={__('What stores are allowed to do with products', 'multivendorx')}
-							desc={__('Decide how much control stores have after adding a product — for example, whether they can publish it themselves or make changes later.', 'multivendorx')}
+						<Card title={__('What stores can do with their listings', 'multivendorx')}
+							desc={__('Decide how much control stores have after creating a listing. Choose what actions stores are allowed to perform.', 'multivendorx')}
 							action={
 								<MultiCheckBox
 									wrapperClass="toggle-btn"
@@ -847,7 +875,7 @@ const Membership = ({ id }: { id: string }) => {
 								<>
 									<FormGroupWrapper>
 										<FormGroup
-											label="Product permissions"
+											label="Listing permissions"
 											htmlFor={vendorStorefrontField.key}
 											desc={__('Select the actions stores are allowed to perform.', 'multivendorx')}
 										>
@@ -874,7 +902,7 @@ const Membership = ({ id }: { id: string }) => {
 											/>
 										</FormGroup>
 
-										<FormGroup label="How many products a store can list" className="border-top" desc={__('Set the total number of products a store can have at one time.', 'multivendorx')}>
+										<FormGroup label="How many listings a store can add" className="border-top" desc={__('Control how many listings a store can have at the same time.', 'multivendorx')}>
 											<BasicInput
 												name="name"
 												wrapperClass="setting-form-input"
@@ -883,11 +911,11 @@ const Membership = ({ id }: { id: string }) => {
 												onChange={handleChange}
 												// postInsideText={'credits per month'}
 												size="10rem"
-												postText={'products maximum'}
+												postText={'listings maximum'}
 											/>
 										</FormGroup>
 
-										<FormGroup label="Images per product" className="border-top" desc={__('Control how many images a store can add for each product.', 'multivendorx')}>
+										<FormGroup label="Images per listing" className="border-top" desc={__('Control how many images a store can add for each listing.', 'multivendorx')}>
 											<BasicInput
 												name="name"
 												wrapperClass="setting-form-input"
@@ -908,7 +936,7 @@ const Membership = ({ id }: { id: string }) => {
 							)}
 						</Card>
 
-						<Card title={__('MultiVendorX Pro Features', 'multivendorx')}
+						<Card title={__('What premium features stores can access with this plan', 'multivendorx')}
 							desc={'Select which premium features stores can access with this plan.'}
 							action={
 								<MultiCheckBox
@@ -982,7 +1010,7 @@ const Membership = ({ id }: { id: string }) => {
 							)}
 						</Card>
 
-						<Card title={__('How stores handle orders and customer information', 'multivendorx')}
+						<Card title={__('How stores handle orders and shipping', 'multivendorx')}
 							desc={__('Decide what stores can see and do after a customer places an order.', 'multivendorx')}
 							action={
 								<MultiCheckBox
@@ -1010,7 +1038,7 @@ const Membership = ({ id }: { id: string }) => {
 							{orderManagement ? (
 								<FormGroupWrapper>
 									<FormGroup label="Actions stores can take on orders"
-										desc="Choose whether stores can add notes, download order details, or take other actions."
+										desc="Choose whether stores can add notes, download order details, or ship orders."
 									>
 										<MultiCheckBox
 											wrapperClass="checkbox-list-side-by-side"
@@ -1120,7 +1148,7 @@ const Membership = ({ id }: { id: string }) => {
 												descClass="settings-metabox-description"
 												value={formData.name}
 												onChange={handleChange}
-												postInsideText={'credits per month'}
+												postText={'credits per month'}
 												size="8rem"
 											/>
 										</FormGroup>
@@ -1131,7 +1159,7 @@ const Membership = ({ id }: { id: string }) => {
 												descClass="settings-metabox-description"
 												value={formData.name}
 												onChange={handleChange}
-												postInsideText={'credits per month'}
+												postText={'credits per month'}
 												size="8rem"
 											/>
 										</FormGroup>
@@ -1361,10 +1389,10 @@ const Membership = ({ id }: { id: string }) => {
 						</Card>
 						<Card title={__('Commission type', 'multivendorx')}>
 							<FormGroupWrapper>
-								<FormGroup
+								{/* <FormGroup
 									label="Include All Add-ons"
 									htmlFor={advancedFeaturesField.key}
-								>
+								> */}
 									<NestedComponent
 										id="role_rules"
 										fields={nestedFields}

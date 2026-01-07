@@ -570,4 +570,56 @@ class StoreUtil {
 
         return false;
     }
+
+    public static function get_store_visitors( $store_id ) {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+
+        // Total users (all-time).
+        $total_users = $wpdb->get_var(
+            $wpdb->prepare(
+                "
+                SELECT COUNT(DISTINCT user_id)
+                FROM {$table_name}
+                WHERE store_id = %d
+                ",
+                $store_id
+            )
+        );
+
+        // Last 30 days.
+        $last_30_days = $wpdb->get_var(
+            $wpdb->prepare(
+                "
+                SELECT COUNT(DISTINCT user_id)
+                FROM {$table_name}
+                WHERE store_id = %d
+                AND created >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                ",
+                $store_id
+            )
+        );
+
+        // Previous 30 days (30–60 days ago).
+        $previous_30_days = $wpdb->get_var(
+            $wpdb->prepare(
+                "
+                SELECT COUNT(DISTINCT user_id)
+                FROM {$table_name}
+                WHERE store_id = %d
+                AND created >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
+                AND created < DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                ",
+                $store_id
+            )
+        );
+
+        return [
+            'total' => (int) $total_users,
+            'last_30_days' => (int) $last_30_days,
+            'previous_30_days' => (int) $previous_30_days,
+        ];
+    }
+
 }

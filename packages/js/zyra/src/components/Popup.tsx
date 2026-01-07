@@ -8,6 +8,7 @@ import { DialogContent, DialogContentText } from '@mui/material';
  * Internal dependencies
  */
 import '../styles/web/Popup.scss';
+import AdminButton from './UI/AdminButton';
 
 export interface PopupMessage {
     text: string;
@@ -178,25 +179,27 @@ const ProPopup: React.FC<PopupProps> = (props) => {
                         </>
                     )}
                     {props.confirmMode && (
-                        <div className="popup-wrapper popup-confirm">
+                        <div className="popup-confirm">
+                            <i className="popup-icon adminfont-suspended admin-badge red"></i>
                             <h2>{props.title || 'Confirmation'}</h2>
-                            <p>{props.confirmMessage}</p>
-
-                            <div className="buttons-wrapper center">
-                                <button
-                                    className="admin-btn btn-gray"
-                                    onClick={props.onCancel}
-                                >
-                                    {props.confirmNoText || 'Cancel'}
-                                </button>
-
-                                <button
-                                    className="admin-btn btn-purple"
-                                    onClick={props.onConfirm}
-                                >
-                                    {props.confirmYesText || 'Confirm'}
-                                </button>
-                            </div>
+                            <p className="desc">{props.confirmMessage}</p>
+                            <AdminButton
+                            wrapperClass="center"
+                                buttons={[
+                                    {
+                                        icon: 'close',
+                                        text: props.confirmNoText || 'Cancel',
+                                        className: 'red',
+                                        onClick: props.onCancel,
+                                    },
+                                    {
+                                        icon: 'delete',
+                                        text: props.confirmYesText || 'Confirm',
+                                        className: 'purple-bg',
+                                        onClick: props.onConfirm,
+                                    },
+                                ]}
+                            />
                         </div>
                     )}
                 </div>

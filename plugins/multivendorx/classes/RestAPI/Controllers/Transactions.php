@@ -119,7 +119,7 @@ class Transactions extends \WP_REST_Controller {
             $transaction_status = $request->get_param( 'transaction_status' );
             $order_by           = sanitize_text_field( $request->get_param( 'orderBy' ) );
             $order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
-
+            $dashboard = $request->get_param( 'dashboard' );
             $start_date = $request->get_param( 'start_date' );
             $end_date   = $request->get_param( 'end_date' );
             $start_date = $start_date ? gmdate( 'Y-m-d H:i:s', strtotime( $start_date ) ) : '';
@@ -150,6 +150,12 @@ class Transactions extends \WP_REST_Controller {
 
             if ( $transaction_status ) {
                 $args['entry_type'] = $transaction_status;
+            }
+
+            if ($dashboard) {
+                if (get_transient('multivendorx_withdrawal_data_' . $store_id)) {
+                    return get_transient('multivendorx_withdrawal_data_' . $store_id);
+                }
             }
 
             $transactions = Transaction::get_transaction_information( $args );
@@ -200,6 +206,9 @@ class Transactions extends \WP_REST_Controller {
                 );
             }
 
+            if ($dashboard) {
+                set_transient('multivendorx_withdrawal_data_' . $store_id, array( 'transaction' => $formatted ), DAY_IN_SECONDS);
+            }
             return rest_ensure_response(
                 array_merge(
                     array( 'transaction' => $formatted ),
