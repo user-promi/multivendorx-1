@@ -42,19 +42,19 @@ const SetupWizard: React.FC = () => {
 					type: 'multi-select',
 					selectType: 'single-select',
 					label: __(
-						'Marketplace type',
+						'What kind of marketplace you are building',
 						'multivendorx'
 					),
 					options: [
 						{
 							key: 'general',
-							label: __('Product marketplace', 'multivendorx'),
+							label: __('General marketplace', 'multivendorx'),
 							value: 'general',
 						},
 						{
-							key: 'booking',
-							label: __('Subscription marketplace', 'multivendorx'),
-							value: 'booking',
+							key: 'product',
+							label: __('Product marketplace', 'multivendorx'),
+							value: 'product',
 						},
 						{
 							key: 'rental',
@@ -68,14 +68,19 @@ const SetupWizard: React.FC = () => {
 						},
 						{
 							key: 'subscription',
-							label: __('Service marketplace', 'multivendorx'),
+							label: __('Subscription marketplace', 'multivendorx'),
 							value: 'subscription',
+						},
+						{
+							key: 'service',
+							label: __('Service marketplace', 'multivendorx'),
+							value: 'service',
 						},
 						{
 							key: 'mixed',
 							label: __('Mixed marketplace', 'multivendorx'),
 							value: 'mixed',
-						},
+						}
 					],
 				},
 				{
@@ -83,7 +88,7 @@ const SetupWizard: React.FC = () => {
 					type: 'multi-select',
 					selectType: 'multi-select',
 					label: __(
-						'Choose what product store can sell',
+						'What kind of listings stores can create',
 						'multivendorx'
 					),
 					options: [
@@ -103,6 +108,11 @@ const SetupWizard: React.FC = () => {
 							value: 'booking',
 						},
 						{
+							key: 'subscription',
+							label: __('Subscription', 'multivendorx'),
+							value: 'subscription',
+						},
+						{
 							key: 'rental',
 							label: __('Rental', 'multivendorx'),
 							value: 'rental',
@@ -112,6 +122,11 @@ const SetupWizard: React.FC = () => {
 							label: __('Auction', 'multivendorx'),
 							value: 'auction',
 						},
+						{
+							key: 'accommodation',
+							label: __('Accommodation', 'multivendorx'),
+							value: 'accommodation',
+						},
 					],
 				},
 				{
@@ -119,20 +134,7 @@ const SetupWizard: React.FC = () => {
 					type: 'blocktext',
 					label: __('no_label', 'multivendorx'),
 					blocktext: __(
-						'Woocommerce Booking and MultiVendorX Pro required for this.',
-						'multivendorx'
-					),
-					dependent: {
-						key: 'marketplace_model',
-						value: 'booking',
-					},
-				},
-				{
-					key: 'notice',
-					type: 'blocktext',
-					label: __('no_label', 'multivendorx'),
-					blocktext: __(
-						'Woocommerce Rental and MultiVendorX Pro required for this.',
+						'Ready to unlock the full potential of your marketplace? Activate Woocommerce Rental with MultiVendorX Pro and start selling like a pro today!',
 						'multivendorx'
 					),
 					dependent: {
@@ -145,7 +147,7 @@ const SetupWizard: React.FC = () => {
 					type: 'blocktext',
 					label: __('no_label', 'multivendorx'),
 					blocktext: __(
-						'Woocommerce Auction and MultiVendorX Pro required for this.',
+						'Ready to unlock the full potential of your marketplace? Activate Woocommerce Simple Auction with MultiVendorX Pro and start selling like a pro today!',
 						'multivendorx'
 					),
 					dependent: {
@@ -158,7 +160,7 @@ const SetupWizard: React.FC = () => {
 					type: 'blocktext',
 					label: __('no_label', 'multivendorx'),
 					blocktext: __(
-						'Woocommerce Subscription and MultiVendorX Pro required for this.',
+						'Ready to unlock the full potential of your marketplace? Activate Woocommerce Subscription with MultiVendorX Pro and start selling like a pro today!',
 						'multivendorx'
 					),
 					dependent: {
@@ -167,49 +169,22 @@ const SetupWizard: React.FC = () => {
 					},
 				},
 				{
-					key: 'wizardButtons',
-					type: 'buttons',
-					options: [
-						{
-							label: 'Back',
-							action: 'back',
-							btnClass: 'admin-btn btn-red',
-						},
-						{
-							label: 'Next',
-							action: 'next',
-							btnClass: 'admin-btn btn-purple',
-						},
-					],
-				},
-			],
-		},
-		{
-			id: 'store_setup',
-			label: 'Configure Your Store',
-			icon: 'adminfont-storefront',
-			desc: 'How stores sell on your marketplace',
-			countBtn: true,
-			isWizardMode: true,
-			openForm:true,
-			formFields: [
-				
-				{
 					key: 'store_selling_mode',
 					type: 'setting-toggle',
 					label: __(
-						'Product listing model',
+						'How stores sell on your marketplace',
 						'multivendorx'
 					),
+					desc: __('Choose how listings are created and sold by stores.', 'multivendorx'),
 					options: [
 						{
 							key: 'default',
-							label: __('Independent seller', 'multivendorx'),
+							label: __('Own listing', 'multivendorx'),
 							value: 'default',
 						},
 						{
 							key: 'single_product_multiple_vendor',
-							label: __('Co-listed products', 'multivendorx'),
+							label: __('Shared listing', 'multivendorx'),
 							value: 'single_product_multiple_vendor',
 						},
 						{
@@ -236,29 +211,13 @@ const SetupWizard: React.FC = () => {
 						},
 					],
 				},
-				{
-					key: 'wizardButtons',
-					type: 'buttons',
-					options: [
-						{
-							label: 'Back',
-							action: 'back',
-							btnClass: 'admin-btn btn-red',
-						},
-						{
-							label: 'Next',
-							action: 'next',
-							btnClass: 'admin-btn btn-purple',
-						},
-					],
-				},
 			],
 		},
 		{
 			id: 'store_setup',
 			label: 'Configure Your Store',
 			icon: 'adminfont-storefront',
-			desc: 'How stores gets approved on your marketplace',
+			desc: 'How stores sell on your marketplace.',
 			countBtn: true,
 			isWizardMode: true,
 			openForm:true,
@@ -267,7 +226,7 @@ const SetupWizard: React.FC = () => {
 					key: 'approve_store',
 					type: 'setting-toggle',
 					label: __(
-						'New store registration approval',
+						'Store registration approval',
 						'multivendorx'
 					),
 					options: [
@@ -280,32 +239,6 @@ const SetupWizard: React.FC = () => {
 							key: 'automatically',
 							label: __('Automatic', 'multivendorx'),
 							value: 'automatically',
-						},
-					],
-				},
-				{
-					key: 'store_selling_mode',
-					type: 'setting-toggle',
-					label: __(
-						'Product listing model',
-						'multivendorx'
-					),
-					options: [
-						{
-							key: 'default',
-							label: __('Independent seller', 'multivendorx'),
-							value: 'default',
-						},
-						{
-							key: 'single_product_multiple_vendor',
-							label: __('Co-listed products', 'multivendorx'),
-							value: 'single_product_multiple_vendor',
-						},
-						{
-							key: 'franchise',
-							label: __('Franchise', 'multivendorx'),
-							value: 'franchise',
-							proSetting: true
 						},
 					],
 				},
@@ -339,9 +272,9 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'commission_type',
 					type: 'setting-toggle',
-					label: __('Commission type', 'multivendorx'),
+					label: __('How commission is calculated', 'multivendorx'),
 					settingDescription: __(
-						'Choose how commissions should be calculated for your marketplace.',
+						'Choose how marketplace commission is applied.',
 						'multivendorx'
 					),
 					desc: __(
@@ -391,11 +324,11 @@ const SetupWizard: React.FC = () => {
 					key: 'disbursement_order_status',
 					type: 'multi-checkbox',
 					label: __(
-						'Eligible order statuses for store earning payout',
+						'When stores earn money',
 						'multivendorx'
 					),
 					settingDescription: __(
-						'Select the order statuses after which earning will be added to the store wallet.',
+						'Choose when store earnings are added to their wallet.',
 						'multivendorx'
 					),
 					class: 'mvx-toggle-checkbox',
@@ -441,6 +374,49 @@ const SetupWizard: React.FC = () => {
 						},
 					],
 				},
+			],
+		},
+		{
+			id: 'more_settings',
+			label: 'Want to configure more settings?',
+			icon: 'adminfont-storefront',
+			desc: "You're all set with the basics! Use the quick links below to fine-tune your marketplace now — or come back later anytime.",
+			countBtn: true,
+			isWizardMode: true,
+			openForm:true,
+			formFields: [
+				{
+					key: 'commission_settings',
+					type: 'setup',
+					title: 'Commission settings',
+					desc: 'Adjust commission rules and payout behavior.',
+					hideCheckbox: true,
+					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+				},
+				{
+					key: 'commission_settings',
+					type: 'setup',
+					title: 'Commission settings',
+					desc: 'Adjust commission rules and payout behavior.',
+					hideCheckbox: true,
+					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+				},
+				{
+					key: 'commission_settings',
+					type: 'setup',
+					title: 'Commission settings',
+					desc: 'Adjust commission rules and payout behavior.',
+					hideCheckbox: true,
+					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+				},
+				{
+					key: 'commission_settings',
+					type: 'setup',
+					title: 'Commission settings',
+					desc: 'Adjust commission rules and payout behavior.',
+					hideCheckbox: true,
+					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+				},
 				{
 					key: 'wizardButtons',
 					type: 'buttons',
@@ -458,9 +434,8 @@ const SetupWizard: React.FC = () => {
 						},
 					],
 				},
-				
 			],
-		}
+		},
 	];
 
 	const proSettingChanged = (pro: boolean) => {

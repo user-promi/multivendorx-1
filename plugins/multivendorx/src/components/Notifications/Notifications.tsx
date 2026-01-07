@@ -2,7 +2,6 @@ import { Tabs } from 'zyra';
 import { Link, useLocation } from 'react-router-dom';
 import NotificationTable from './NotificationTable';
 import ActivityTable from './ActivityTable';
-import AnnouncementsTable from './AnnouncementsTable';
 
 const Notifications = () => {
 	const location = new URLSearchParams(useLocation().hash.substring(1));
@@ -29,16 +28,6 @@ const Notifications = () => {
 				icon: 'adminfont-credit-card',
 			},
 		},
-		{
-			type: 'file',
-			content: {
-				id: 'announcements',
-				name: 'Announcements',
-				desc: 'Store Info',
-				hideTabHeader: true,
-				icon: 'adminfont-credit-card',
-			},
-		},
 	];
 
 	const getForm = (tabId: string) => {
@@ -47,8 +36,6 @@ const Notifications = () => {
 				return <NotificationTable />;
 			case 'activities':
 				return <ActivityTable />;
-			case 'announcements':
-				return <AnnouncementsTable />;
 			default:
 				return <div></div>;
 		}
