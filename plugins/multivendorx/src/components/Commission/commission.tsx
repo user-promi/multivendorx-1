@@ -9,6 +9,8 @@ import {
 	AdminBreadcrumbs,
 	useModules,
 	MultiCalendarInput,
+	AdminButton,
+	Container,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -159,16 +161,15 @@ const DownloadCSVButton: React.FC<{
 
 	return (
 		<div className="action-item">
-			<button
-				onClick={handleDownload}
-				disabled={
-					isDownloading || isLoading || (!hasSelectedRows && !data)
-				}
-				className="admin-btn"
-			>
-				<i className="adminfont-download"></i>
-				{__('Download CSV', 'multivendorx')}
-			</button>
+			<AdminButton
+				buttons={{
+					icon: 'download',
+					text: __('Download CSV', 'multivendorx'),
+					onClick: handleDownload,
+					disabled:
+						isDownloading || isLoading || (!hasSelectedRows && !data),
+				}}
+			/>
 		</div>
 	);
 };
@@ -181,13 +182,11 @@ const BulkActions: React.FC<{
 	onActionComplete?: () => void;
 }> = ({ selectedRows, data, filterData, onActionComplete }) => {
 	return (
-		<div>
-			<DownloadCSVButton
-				selectedRows={selectedRows}
-				data={data}
-				filterData={filterData}
-			/>
-		</div>
+		<DownloadCSVButton
+			selectedRows={selectedRows}
+			data={data}
+			filterData={filterData}
+		/>
 	);
 };
 
@@ -239,7 +238,7 @@ const Commission: React.FC = () => {
 				setTotalRows(response.data || 0);
 				setPageCount(Math.ceil(response.data / pagination.pageSize));
 			})
-			.catch(() => {});
+			.catch(() => { });
 	}, []);
 
 	useEffect(() => {
@@ -399,14 +398,15 @@ const Commission: React.FC = () => {
 		};
 
 		return (
-			<button
-				onClick={handleExportAll}
-				disabled={isDownloading}
-				className="admin-btn btn-purple-bg"
-			>
-				<span className="adminfont-download"></span>
-				{__('Download CSV', 'multivendorx')}
-			</button>
+			<AdminButton
+				buttons={{
+					icon: 'download',
+					text: __('Download CSV', 'multivendorx'),
+					onClick: handleExportAll,
+					disabled: isDownloading,
+					className: 'purple-bg',
+				}}
+			/>
 		);
 	};
 
@@ -476,9 +476,9 @@ const Commission: React.FC = () => {
 				const orderId = row.original.orderId;
 				const url = orderId
 					? `${appLocalizer.site_url.replace(
-							/\/$/,
-							''
-						)}/wp-admin/post.php?post=${orderId}&action=edit`
+						/\/$/,
+						''
+					)}/wp-admin/post.php?post=${orderId}&action=edit`
 					: '#';
 
 				return (
@@ -526,9 +526,8 @@ const Commission: React.FC = () => {
 				return (
 					<TableCell title={'commission-summary'}>
 						<ul
-							className={`details ${
-								isExpanded ? '' : 'overflow'
-							}`}
+							className={`details ${isExpanded ? '' : 'overflow'
+								}`}
 						>
 							{row.original?.storeEarning ? (
 								<li>
@@ -600,54 +599,54 @@ const Commission: React.FC = () => {
 									row.original?.facilitatorFee) ||
 								(modules.includes('marketplace-fee') &&
 									row.original?.marketplaceFee)) && (
-								<li>
-									{modules.includes('marketplace-gateway') &&
-										row.original?.gatewayFee && (
-											<div className="item">
-												<div className="des">
-													Gateway Fee
+									<li>
+										{modules.includes('marketplace-gateway') &&
+											row.original?.gatewayFee && (
+												<div className="item">
+													<div className="des">
+														Gateway Fee
+													</div>
+													<div className="title">
+														-{' '}
+														{formatCurrency(
+															row.original.gatewayFee
+														)}
+													</div>
 												</div>
-												<div className="title">
-													-{' '}
-													{formatCurrency(
-														row.original.gatewayFee
-													)}
-												</div>
-											</div>
-										)}
+											)}
 
-									{modules.includes('facilitator') &&
-										row.original?.facilitatorFee && (
-											<div className="item">
-												<div className="des">
-													Facilitator Fee
+										{modules.includes('facilitator') &&
+											row.original?.facilitatorFee && (
+												<div className="item">
+													<div className="des">
+														Facilitator Fee
+													</div>
+													<div className="title">
+														-{' '}
+														{formatCurrency(
+															row.original
+																.facilitatorFee
+														)}
+													</div>
 												</div>
-												<div className="title">
-													-{' '}
-													{formatCurrency(
-														row.original
-															.facilitatorFee
-													)}
-												</div>
-											</div>
-										)}
+											)}
 
-									{modules.includes('marketplace-fee') &&
-										row.original?.platformFee && (
-											<div className="item">
-												<div className="des">
-													Platform Fee
+										{modules.includes('marketplace-fee') &&
+											row.original?.platformFee && (
+												<div className="item">
+													<div className="des">
+														Platform Fee
+													</div>
+													<div className="title">
+														-{' '}
+														{formatCurrency(
+															row.original.platformFee
+														)}
+													</div>
 												</div>
-												<div className="title">
-													-{' '}
-													{formatCurrency(
-														row.original.platformFee
-													)}
-												</div>
-											</div>
-										)}
-								</li>
-							)}
+											)}
+									</li>
+								)}
 
 							<span
 								className="more-btn"
@@ -782,43 +781,37 @@ const Commission: React.FC = () => {
 				updateFilter: (key: string, value: string) => void,
 				filterValue: string | undefined
 			) => (
-				<div className="group-field">
-					<select
-						name="store"
-						onChange={(e) =>
-							updateFilter(e.target.name, e.target.value)
-						}
-						value={filterValue || ''}
-						className="basic-select"
-					>
-						<option value="">
-							{__('All Store', 'multivendorx')}
+				<select
+					name="store"
+					onChange={(e) =>
+						updateFilter(e.target.name, e.target.value)
+					}
+					value={filterValue || ''}
+					className="basic-select"
+				>
+					<option value="">
+						{__('All Store', 'multivendorx')}
+					</option>
+					{store?.map((s: any) => (
+						<option key={s.id} value={s.id}>
+							{s.store_name.charAt(0).toUpperCase() +
+								s.store_name.slice(1)}
 						</option>
-						{store?.map((s: any) => (
-							<option key={s.id} value={s.id}>
-								{s.store_name.charAt(0).toUpperCase() +
-									s.store_name.slice(1)}
-							</option>
-						))}
-					</select>
-				</div>
+					))}
+				</select>
 			),
 		},
 		{
 			name: 'date',
 			render: (updateFilter) => (
-				<div className="right">
-					<MultiCalendarInput
-						wrapperClass=""
-						inputClass=""
-						onChange={(range: any) => {
-							updateFilter('date', {
-								start_date: range.startDate,
-								end_date: range.endDate,
-							});
-						}}
-					/>
-				</div>
+				<MultiCalendarInput
+					onChange={(range: any) => {
+						updateFilter('date', {
+							start_date: range.startDate,
+							end_date: range.endDate,
+						});
+					}}
+				/>
 			),
 		},
 	];
@@ -833,35 +826,33 @@ const Commission: React.FC = () => {
 					'multivendorx'
 				)}
 			/>
-			<div className="general-wrapper">
-				<div className="admin-table-wrapper">
-					<Table
-						data={data}
-						columns={
-							columns as ColumnDef<Record<string, any>, any>[]
-						}
-						rowSelection={rowSelection}
-						onRowSelectionChange={setRowSelection}
-						defaultRowsPerPage={10}
-						realtimeFilter={realtimeFilter}
-						pageCount={pageCount}
-						pagination={pagination}
-						onPaginationChange={setPagination}
-						handlePagination={requestApiForData}
-						perPageOption={[10, 25, 50]}
-						typeCounts={commissionStatus as CommissionStatus}
-						bulkActionComp={() => (
-							<BulkActions
-								selectedRows={rowSelection}
-								data={data}
-								filterData={currentFilterData}
-							/>
-						)}
-						totalCounts={totalRows}
-						actionButton={actionButton}
-					/>
-				</div>
-			</div>
+			<Container>
+				<Table
+					data={data}
+					columns={
+						columns as ColumnDef<Record<string, any>, any>[]
+					}
+					rowSelection={rowSelection}
+					onRowSelectionChange={setRowSelection}
+					defaultRowsPerPage={10}
+					realtimeFilter={realtimeFilter}
+					pageCount={pageCount}
+					pagination={pagination}
+					onPaginationChange={setPagination}
+					handlePagination={requestApiForData}
+					perPageOption={[10, 25, 50]}
+					typeCounts={commissionStatus as CommissionStatus}
+					bulkActionComp={() => (
+						<BulkActions
+							selectedRows={rowSelection}
+							data={data}
+							filterData={currentFilterData}
+						/>
+					)}
+					totalCounts={totalRows}
+					actionButton={actionButton}
+				/>
+			</Container>
 			{viewCommission && selectedCommissionId !== null && (
 				<ViewCommission
 					open={viewCommission}

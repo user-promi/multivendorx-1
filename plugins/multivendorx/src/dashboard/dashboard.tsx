@@ -15,7 +15,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import '../components/dashboard.scss';
 import '../dashboard/dashboard1.scss';
-import { AdminButton, Card, Column, Container, getApiLink, MultiCalendarInput, useModules } from 'zyra';
+import { AdminButton, Card, Column, Container, getApiLink, InfoItem, MultiCalendarInput, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency, formatTimeAgo } from '@/services/commonFunction';
@@ -136,7 +136,7 @@ const Dashboard: React.FC = () => {
 				page: 1,
 				row: 5,
 				store_id: appLocalizer.store_id,
-				status:'publish',
+				status: 'publish',
 				startDate: dateRange.startDate,
 				endDate: dateRange.endDate,
 				dashboard: true
@@ -398,9 +398,9 @@ const Dashboard: React.FC = () => {
 			method: 'GET',
 			url: getApiLink(appLocalizer, 'commission'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: { 
-				format: 'reports', 
-				store_id: appLocalizer.store_id, 
+			params: {
+				format: 'reports',
+				store_id: appLocalizer.store_id,
 				dashboard: true,
 				start_date: dateRange.startDate,
 				end_date: dateRange.endDate,
@@ -451,9 +451,9 @@ const Dashboard: React.FC = () => {
 				</div>
 
 				<div className="buttons-wrapper">
-					<MultiCalendarInput 
-						wrapperClass="" 
-						inputClass="" 
+					<MultiCalendarInput
+						wrapperClass=""
+						inputClass=""
 						onChange={(range: DateRange) => {
 							setDateRange({
 								startDate: range.startDate,
@@ -578,32 +578,22 @@ const Dashboard: React.FC = () => {
 						<div className="top-customer-wrapper">
 							{lastWithdraws && lastWithdraws.length > 0 ? (
 								lastWithdraws.map((item) => (
-									<div key={item.id} className="info-item">
-										<div className="details-wrapper">
-											<div className="details">
-												<div className="name">
-													{item.payment_method === 'stripe-connect' &&
-														__('Stripe', 'multivendorx')}
-
-													{item.payment_method === 'bank-transfer' &&
-														__('Direct to Local Bank (INR)', 'multivendorx')}
-
-													{item.payment_method === 'paypal-payout' &&
-														__('PayPal', 'multivendorx')}
-												</div>
-
-												<div className="des">
-													{formatWcShortDate(item.date)}
-												</div>
-											</div>
-										</div>
-
-										<div className="right-details">
-											<div className="price">
-												{formatCurrency(item.amount)}
-											</div>
-										</div>
-									</div>
+									<InfoItem
+										key={item.id}
+										title={
+											item.payment_method === 'stripe-connect'
+												? __('Stripe', 'multivendorx')
+												: item.payment_method === 'bank-transfer'
+													? __('Direct to Local Bank (INR)', 'multivendorx')
+													: item.payment_method === 'paypal-payout'
+														? __('PayPal', 'multivendorx')
+														: ''
+										}
+										descriptions={[
+											{ value: formatWcShortDate(item.date) },
+										]}
+										amount={formatCurrency(item.amount)}
+									/>
 								))
 							) : (
 								<div className="no-data">
@@ -629,8 +619,8 @@ const Dashboard: React.FC = () => {
 					<Card
 						title={__('Visitors Map', 'multivendorx')}
 					>
-						<VisitorsMap dateRange={dateRange}/>
-						
+						<VisitorsMap dateRange={dateRange} />
+
 					</Card>
 				</Column>
 
@@ -640,8 +630,8 @@ const Dashboard: React.FC = () => {
 						iconName="adminfont-external icon"
 						onIconClick={() => {
 							const url = appLocalizer.permalink_structure
-									? `/${appLocalizer.dashboard_slug}/orders`
-									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=orders`
+								? `/${appLocalizer.dashboard_slug}/orders`
+								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=orders`
 							window.open(url);
 						}}
 					>
@@ -719,8 +709,8 @@ const Dashboard: React.FC = () => {
 						iconName="adminfont-external icon"
 						onIconClick={() => {
 							const url = appLocalizer.permalink_structure
-									? `/${appLocalizer.dashboard_slug}/products`
-									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=products`
+								? `/${appLocalizer.dashboard_slug}/products`
+								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=products`
 							window.open(url);
 						}}
 					>
@@ -783,8 +773,8 @@ const Dashboard: React.FC = () => {
 						iconName="adminfont-external icon"
 						onIconClick={() => {
 							const url = appLocalizer.permalink_structure
-									? `/${appLocalizer.dashboard_slug}/overview`
-									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=overview`
+								? `/${appLocalizer.dashboard_slug}/overview`
+								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=overview`
 							window.open(url);
 						}}
 					>
@@ -923,29 +913,20 @@ const Dashboard: React.FC = () => {
 						>
 							{customers && customers.length > 0 ? (
 								customers.map((customer, index) => (
-									<div key={customer.id} className="info-item">
-										<div className="details-wrapper">
-											<div className="avatar red-color">
-												{customer.name?.charAt(0).toUpperCase()}
-											</div>
-
-											<div className="details">
-												<div className="name">
-													{customer.name}
-												</div>
-												<div className="des">
-													{customer.order_count}
-													{__('orders', 'multivendorx')}
-												</div>
-											</div>
-										</div>
-
-										<div className="right-details">
-											<div className="price">
-												{customer.total_spent}
-											</div>
-										</div>
-									</div>
+									<InfoItem
+										key={customer.id}
+										title={customer.name}
+										avatar={{
+											text: customer.name?.charAt(0).toUpperCase(),
+											iconClass: 'red-color', // keeps your red avatar style
+										}}
+										descriptions={[
+											{
+												value: `${customer.order_count} ${__('orders', 'multivendorx')}`,
+											},
+										]}
+										amount={customer.total_spent}
+									/>
 								))
 							) : (
 								<div className="no-data">

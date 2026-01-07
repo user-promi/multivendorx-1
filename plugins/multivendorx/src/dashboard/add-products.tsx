@@ -1124,109 +1124,105 @@ const AddProduct = () => {
 								</div>
 
 								{/* Category tree (custom flow) */}
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<div
-											className="category-wrapper template2"
-											ref={wrapperRef}
-										>
-											<ul className="settings-form-group-radio">
-												{treeData.map((cat) => (
-													<React.Fragment key={cat.id}>
-														{/* Category */}
-														<li
-															className={`category ${selectedCat === cat.id
-																? 'radio-select-active'
-																: ''
-																}`}
-															style={{
-																display:
-																	selectedCat === null ||
-																		selectedCat === cat.id
-																		? 'block'
-																		: 'none',
-															}}
-															onClick={() =>
-																handleCategoryClick(cat.id)
-															}
-														>
-															<label>{cat.name}</label>
-														</li>
+								<FormGroupWrapper>
+									<div
+										className="category-wrapper template2"
+										ref={wrapperRef}
+									>
+										<ul className="settings-form-group-radio">
+											{treeData.map((cat) => (
+												<React.Fragment key={cat.id}>
+													{/* Category */}
+													<li
+														className={`category ${selectedCat === cat.id
+															? 'radio-select-active'
+															: ''
+															}`}
+														style={{
+															display:
+																selectedCat === null ||
+																	selectedCat === cat.id
+																	? 'block'
+																	: 'none',
+														}}
+														onClick={() =>
+															handleCategoryClick(cat.id)
+														}
+													>
+														<label>{cat.name}</label>
+													</li>
 
-														{/* Sub categories */}
-														{selectedCat === cat.id &&
-															cat.children?.length > 0 && (
-																<ul className="settings-form-group-radio">
-																	{cat.children.map((sub) => (
-																		<React.Fragment key={sub.id}>
-																			<li
-																				className={`sub-category ${selectedSub === sub.id
-																					? 'radio-select-active'
-																					: ''
-																					}`}
-																				style={{
-																					display:
-																						!selectedSub ||
-																							selectedSub === sub.id
-																							? 'block'
-																							: 'none',
-																				}}
-																				onClick={() =>
-																					handleSubClick(sub.id)
-																				}
-																			>
-																				<label>{sub.name}</label>
-																			</li>
+													{/* Sub categories */}
+													{selectedCat === cat.id &&
+														cat.children?.length > 0 && (
+															<ul className="settings-form-group-radio">
+																{cat.children.map((sub) => (
+																	<React.Fragment key={sub.id}>
+																		<li
+																			className={`sub-category ${selectedSub === sub.id
+																				? 'radio-select-active'
+																				: ''
+																				}`}
+																			style={{
+																				display:
+																					!selectedSub ||
+																						selectedSub === sub.id
+																						? 'block'
+																						: 'none',
+																			}}
+																			onClick={() =>
+																				handleSubClick(sub.id)
+																			}
+																		>
+																			<label>{sub.name}</label>
+																		</li>
 
-																			{/* Child categories */}
-																			{selectedSub === sub.id &&
-																				sub.children?.length > 0 && (
-																					<ul className="settings-form-group-radio">
-																						{sub.children.map((child) => (
-																							<li
-																								key={child.id}
-																								className={`sub-category ${selectedChild === child.id
-																									? 'radio-select-active'
-																									: ''
-																									}`}
-																								style={{
-																									display:
-																										!selectedChild ||
-																											selectedChild === child.id
-																											? 'block'
-																											: 'none',
-																								}}
-																								onClick={() =>
-																									handleChildClick(child.id)
-																								}
-																							>
-																								<label>{child.name}</label>
-																							</li>
-																						))}
-																					</ul>
-																				)}
-																		</React.Fragment>
-																	))}
-																</ul>
-															)}
-													</React.Fragment>
-												))}
-											</ul>
-										</div>
+																		{/* Child categories */}
+																		{selectedSub === sub.id &&
+																			sub.children?.length > 0 && (
+																				<ul className="settings-form-group-radio">
+																					{sub.children.map((child) => (
+																						<li
+																							key={child.id}
+																							className={`sub-category ${selectedChild === child.id
+																								? 'radio-select-active'
+																								: ''
+																								}`}
+																							style={{
+																								display:
+																									!selectedChild ||
+																										selectedChild === child.id
+																										? 'block'
+																										: 'none',
+																							}}
+																							onClick={() =>
+																								handleChildClick(child.id)
+																							}
+																						>
+																							<label>{child.name}</label>
+																						</li>
+																					))}
+																				</ul>
+																			)}
+																	</React.Fragment>
+																))}
+															</ul>
+														)}
+												</React.Fragment>
+											))}
+										</ul>
 									</div>
-								</div>
+								</FormGroupWrapper>
 							</>
 						) : (
 							/* Default category tree */
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<CategoryTree
-										categories={categories}
-										selectedCats={selectedCats}
-										toggleCategory={toggleCategory}
-									/>
-								</div>
-							</div>
+							<FormGroupWrapper>
+								<CategoryTree
+									categories={categories}
+									selectedCats={selectedCats}
+									toggleCategory={toggleCategory}
+								/>
+							</FormGroupWrapper>
 						)}
 					</Card>
 

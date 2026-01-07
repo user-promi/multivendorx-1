@@ -63,6 +63,7 @@ export default {
 			key: 'sms_gateway_selector',
 			type: 'setting-toggle',
 			label: __('Customers will see information for', 'multivendorx'),
+			custom: true,
 			settingDescription: __(
 				'Choose which order statuses will send customers email notifications, PDF invoices, and display order details in their account.',
 				'multivendorx'
@@ -71,24 +72,75 @@ export default {
 				'In a multivendor setup, a <b>Main Order</b> is the parent order placed by the customer, while <b>Sub-orders</b> are created for each store.<br/><br/><b>Enabling the Main Order is recommended</b>, as it allows you to send a single email that includes the Main Order and all related Sub-orders. Alternatively, you can send separate emails for the Main Order and each Sub-order.',
 				'multivendorx'
 			),
-
-
-
 			options: [
 				{
 					key: 'mainorder',
 					label: __('Main order', 'multivendorx'),
+					desc: __('Customer receives separate emails and sees individual store orders', 'multivendorx'),
+					icon: 'adminfont-cart',
 					value: 'mainorder',
+					customHtml: `<div class="toggle-notice">
+									<div class="title">What Happens</div>
+									<ul>
+										<li>Customer gets one email about their purchase</li>
+										<li>One order shows in "My Account"</li>
+										<li>One order shows in "My Account"</li>
+									</ul>
+								</div>
+								<div class="toggle-notice">
+									<div class="title">What Happens</div>
+									<ul>
+										<li>Customer gets one email about their purchase</li>
+										<li>One order shows in "My Account"</li>
+										<li>One order shows in "My Account"</li>
+									</ul>
+								</div>`
 				},
 				{
 					key: 'suborder',
+					icon: 'adminfont-cart',
 					label: __('Sub-orders Only', 'multivendorx'),
+					desc: __('Customer receives separate emails and sees individual store orders', 'multivendorx'),
 					value: 'suborder',
+					customHtml: `<div class="toggle-notice">
+									<div class="title">What Happens</div>
+									<ul>
+										<li>Customer gets one email about their purchase</li>
+										<li>One order shows in "My Account"</li>
+										<li>One order shows in "My Account"</li>
+									</ul>
+								</div>
+								<div class="toggle-notice">
+									<div class="title">What Happens</div>
+									<ul>
+										<li>Customer gets one email about their purchase</li>
+										<li>One order shows in "My Account"</li>
+										<li>One order shows in "My Account"</li>
+									</ul>
+								</div>`					
 				},
 				{
 					key: 'mainnsub',
+					icon: 'adminfont-cart',
 					label: __('Main & Sub order together', 'multivendorx'),
+					desc: __('Customer receives separate emails and sees individual store orders', 'multivendorx'),
 					value: '',
+					customHtml: `<div class="toggle-notice">
+									<div class="title">What Happens</div>
+									<ul>
+										<li>Customer gets one email about their purchase</li>
+										<li>One order shows in "My Account"</li>
+										<li>One order shows in "My Account"</li>
+									</ul>
+								</div>
+								<div class="toggle-notice">
+									<div class="title">What Happens</div>
+									<ul>
+										<li>Customer gets one email about their purchase</li>
+										<li>One order shows in "My Account"</li>
+										<li>One order shows in "My Account"</li>
+									</ul>
+								</div>`
 				},
 			],
 
@@ -183,21 +235,21 @@ export default {
 							accepted: 'store_id, store_slug',
 							default: '[marketplace_products store_id="1"]',
 						},
-					
+
 						{
 							attribute: 'perpage',
 							description: 'Set how many products appear per page.',
 							accepted: 'Any number (Default = 12)',
 							default: '[marketplace_products perPage="12"]',
 						},
-					
+
 						{
 							attribute: 'columns',
 							description: 'Decide how many products appear in one row.',
 							accepted: 'Any number (Default = 4)',
 							default: '[marketplace_products columns="4"]',
 						},
-					
+
 						{
 							attribute: 'orderby',
 							description:
@@ -206,14 +258,14 @@ export default {
 								'title, date, price, popularity, rating, menu_order (Default = title)',
 							default: '[marketplace_products orderby="title"]',
 						},
-					
+
 						{
 							attribute: 'order',
 							description: 'Set sorting direction.',
 							accepted: 'ASC, DESC (Default = ASC)',
 							default: '[marketplace_products order="ASC"]',
 						},
-					
+
 						{
 							attribute: 'category',
 							description:
@@ -221,7 +273,7 @@ export default {
 							accepted: 'Comma-separated category slugs',
 							default: '[marketplace_products category="clothing,shoes"]',
 						},
-					
+
 						{
 							attribute: 'operator',
 							description:
@@ -230,7 +282,7 @@ export default {
 							default:
 								'[marketplace_products category="clothing,shoes" operator="IN"]',
 						},
-					
+
 						{
 							attribute: 'product_visibility',
 							description:
@@ -239,7 +291,7 @@ export default {
 							default:
 								'[marketplace_products product_visibility="visible"]',
 						},
-					],					
+					],
 				},
 				{
 					key: 'marketplace-coupons',
@@ -287,7 +339,7 @@ export default {
 							default: '[marketplace-coupons order="DESC"]',
 						},
 					],
-				}				
+				}
 			],
 		},
 	],

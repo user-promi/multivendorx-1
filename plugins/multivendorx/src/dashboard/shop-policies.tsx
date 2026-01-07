@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { TextArea, SuccessNotice, getApiLink } from 'zyra';
+import { TextArea, SuccessNotice, getApiLink, Container, Column, Card, FormGroupWrapper, FormGroup } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const ShopPolicies = () => {
@@ -85,15 +85,11 @@ const ShopPolicies = () => {
 					</div>
 				</div>
 			</div>
-			<div className="container-wrapper">
-				<div className="card-wrapper column-8">
-					<div className="card-content">
-						<div className="card-title">
-							{__('Shipping Policy', 'multivendorx')}
-						</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
+			<Container>
+				<Column>
+					<Card title={__('Shipping Policy', 'multivendorx')}>
+						<FormGroupWrapper>
+							<FormGroup label={__('Title', 'multivendorx')} htmlFor="title">
 								<TextArea
 									name="shipping_policy"
 									wrapperClass="setting-from-textarea"
@@ -102,31 +98,32 @@ const ShopPolicies = () => {
 									value={formData.shipping_policy}
 									onChange={handleChange}
 								/>
-							</div>
-						</div>
-					</div>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
 
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
 								<div className="title">
-									{__('Refund Policy', 'multivendorx')}
+									{__('', 'multivendorx')}
 								</div>
 							</div>
 						</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<TextArea
-									name="refund_policy"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
-									value={formData.refund_policy}
-									onChange={handleChange}
-								/>
+						<Card title={__('Refund Policy', 'multivendorx')}>
+							<div className="form-group-wrapper">
+								<div className="form-group">
+									<TextArea
+										name="refund_policy"
+										wrapperClass="setting-from-textarea"
+										inputClass="textarea-input"
+										descClass="settings-metabox-description"
+										value={formData.refund_policy}
+										onChange={handleChange}
+									/>
+								</div>
 							</div>
-						</div>
+						</Card>
 					</div>
 
 					<div className="card-content">
@@ -150,8 +147,8 @@ const ShopPolicies = () => {
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+				</Column>
+			</Container>
 		</>
 	);
 };

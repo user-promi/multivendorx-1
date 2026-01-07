@@ -7,6 +7,8 @@ import {
 	SelectInput,
 	getApiLink,
 	SuccessNotice,
+	FormGroupWrapper,
+	FormGroup,
 } from 'zyra';
 
 interface FormData {
@@ -113,11 +115,9 @@ const Appearance = () => {
 		<>
 			<SuccessNotice message={successMsg} />
 
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="product-name">
-						{__('Profile Image', 'multivendorx')}
-					</label>
+			<FormGroupWrapper>
+				{/* Profile Image */}
+				<FormGroup label={__('Profile Image', 'multivendorx')} htmlFor="image">
 					<FileInput
 						value={formData.image}
 						inputClass="form-input"
@@ -131,55 +131,43 @@ const Appearance = () => {
 						buttonClass="admin-btn btn-purple"
 						descClass="settings-metabox-description"
 						onRemove={() => {
-							if (settings.includes('store_images')) {
-								return;
-							}
+							if (settings.includes('store_images')) return;
+
 							const updated = { ...formData, image: '' };
 							setFormData(updated);
-							setImagePreviews((prev) => ({
-								...prev,
-								image: '',
-							}));
+							setImagePreviews((prev) => ({ ...prev, image: '' }));
 							autoSave(updated);
 						}}
 						onReplace={() => runUploader('image')}
 					/>
-				</div>
-			</div>
+				</FormGroup>
 
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="banner-type">
-						{__('Banner / Cover Image', 'multivendorx')}
-					</label>
-
-					{/*IMPORTANT: use banner_type key and autoSave on change */}
+				{/* Banner Type */}
+				<FormGroup label={__('Banner / Cover Image', 'multivendorx')} htmlFor="banner_type">
 					<SelectInput
 						name="banner_type"
 						type="single-select"
 						options={storeOptions}
 						value={formData.banner_type || ''}
 						onChange={(newValue: any) => {
-							if (settings.includes('store_images')) {
-								return;
-							}
-							const selectedValue = newValue?.value || '';
+							if (settings.includes('store_images')) return;
+
 							const updated = {
 								...formData,
-								banner_type: selectedValue,
+								banner_type: newValue?.value || '',
 							};
 							setFormData(updated);
 							autoSave(updated);
 						}}
 					/>
-				</div>
-			</div>
-			{formData.banner_type === 'static_image' && (
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						<label htmlFor="product-name">
-							{__('Static Banner Image', 'multivendorx')}
-						</label>
+				</FormGroup>
+
+				{/* Static Banner Image */}
+				{formData.banner_type === 'static_image' && (
+					<FormGroup
+						label={__('Static Banner Image', 'multivendorx')}
+						htmlFor="banner"
+					>
 						<FileInput
 							value={formData.banner}
 							inputClass="form-input"
@@ -193,36 +181,31 @@ const Appearance = () => {
 							buttonClass="admin-btn btn-purple"
 							descClass="settings-metabox-description"
 							onRemove={() => {
-								if (settings.includes('store_images')) {
-									return;
-								}
+								if (settings.includes('store_images')) return;
+
 								const updated = { ...formData, banner: '' };
 								setFormData(updated);
-								setImagePreviews((prev) => ({
-									...prev,
-									banner: '',
-								}));
+								setImagePreviews((prev) => ({ ...prev, banner: '' }));
 								autoSave(updated);
 							}}
 							onReplace={() => runUploader('banner')}
 						/>
-					</div>
-				</div>
-			)}
-			{formData.banner_type === 'slider_image' && (
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						{__(
-							'Slider upload feature coming soon...',
-							'multivendorx'
-						)}
-					</div>
-				</div>
-			)}
+					</FormGroup>
+				)}
 
-			{formData.banner_type === 'video' && (
-				<div className="form-group-wrapper">
-					<div className="form-group">
+				{/* Slider (Coming soon) */}
+				{formData.banner_type === 'slider_image' && (
+					<FormGroup>
+						{__('Slider upload feature coming soon...', 'multivendorx')}
+					</FormGroup>
+				)}
+
+				{/* Video Banner */}
+				{formData.banner_type === 'video' && (
+					<FormGroup
+						label={__('Banner Video URL', 'multivendorx')}
+						htmlFor="banner_video"
+					>
 						<BasicInput
 							name="banner_video"
 							type="text"
@@ -235,13 +218,12 @@ const Appearance = () => {
 								setFormData(updated);
 								autoSave(updated);
 							}}
-							readOnly={
-								settings.includes('store_images') ? true : false
-							}
+							readOnly={settings.includes('store_images')}
 						/>
-					</div>
-				</div>
-			)}
+					</FormGroup>
+				)}
+			</FormGroupWrapper>
+
 		</>
 	);
 };

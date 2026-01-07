@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { BasicInput, ToggleSetting, getApiLink } from 'zyra';
+import { BasicInput, FormGroup, FormGroupWrapper, ToggleSetting, getApiLink } from 'zyra';
 import {
 	ConnectComponentsProvider,
 	ConnectAccountOnboarding,
@@ -155,137 +155,128 @@ const Withdrawl: React.FC = () => {
 	return (
 		<>
 			{/* Payment Method Toggle */}
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label>{__('Payment Method', 'multivendorx')}</label>
+			<FormGroupWrapper>
+				<FormGroup
+					label={__('Payment Method', 'multivendorx')}
+					htmlFor="payment_method"
+				>
 					<ToggleSetting
 						wrapperClass="setting-form-input"
 						descClass="settings-metabox-description"
 						description={
 							paymentOptions && paymentOptions.length === 0
 								? __(
-										'You haven’t enabled any payment methods yet.',
-										'multivendorx'
-									)
+									'You haven’t enabled any payment methods yet.',
+									'multivendorx'
+								)
 								: ''
 						}
 						options={paymentOptions}
 						value={formData.payment_method || ''}
 						onChange={(value) => handleToggleChange(value)}
 					/>
-				</div>
-			</div>
+				</FormGroup>
 
-			{/* Dynamic Fields */}
-			{Array.isArray(selectedProvider?.fields) &&
-				selectedProvider.fields.map((field, index) => {
-					if (field.type === 'html' && field.html) {
-						return (
-							<div
-								key={`html-${index}`}
-								className="form-group-wrapper"
-								dangerouslySetInnerHTML={{
-									__html: field.html,
-								}}
-							/>
-						);
-					}
+				{/* Dynamic Fields */}
+				{Array.isArray(selectedProvider?.fields) &&
+					selectedProvider.fields.map((field, index) => {
+						if (field.type === 'html' && field.html) {
+							return (
+								<div
+									key={`html-${index}`}
+									className="form-group-wrapper"
+									dangerouslySetInnerHTML={{
+										__html: field.html,
+									}}
+								/>
+							);
+						}
 
-					if (field.type === 'embedded') {
-						return (
-							<div ref={containerRef} key={`embedded-${index}`}>
-								{stripeConnectInstance && (
-									<ConnectComponentsProvider
-										connectInstance={stripeConnectInstance}
-									>
-										<ConnectAccountOnboarding
-											onExit={() =>
-												console.log('Onboarding exited')
-											}
-											onStepChange={({ step }) => {
-												console.log(
-													'Current step:',
-													step
-												);
-												if (step === 'complete') {
-													axios
-														.post(
-															appLocalizer.ajaxurl,
-															new URLSearchParams(
-																{
-																	action: 'mark_stripe_onboarding_complete',
-																	_ajax_nonce:
-																		appLocalizer.nonce,
-																	vendor_id:
-																		appLocalizer.store_id,
-																}
-															)
-														)
-														.then((res) => {
-															if (
-																res.data.success
-															) {
-																console.log(
-																	__(
-																		'Stripe onboarding marked complete!',
-																		'multivendorx'
-																	)
-																);
-																window.location.reload();
-															} else {
-																console.error(
-																	__(
-																		'Failed to update onboarding status',
-																		'multivendorx'
-																	),
-																	res.data
-																);
-															}
-														});
+						if (field.type === 'embedded') {
+							return (
+								<div ref={containerRef} key={`embedded-${index}`}>
+									{stripeConnectInstance && (
+										<ConnectComponentsProvider
+											connectInstance={stripeConnectInstance}
+										>
+											<ConnectAccountOnboarding
+												onExit={() =>
+													console.log('Onboarding exited')
 												}
-											}}
-											collectionOptions={{
-												fields: 'eventually_due',
-												futureRequirements: 'include',
-											}}
-										/>
-									</ConnectComponentsProvider>
-								)}
-							</div>
-						);
-					}
-
-					if (field.type === 'button') {
-						return (
-							<div
-								className="form-group-wrapper"
-								key={field.key || index}
-							>
-								<button
-									type="button"
-									className="admin-btn btn-purple-bg"
-									onClick={() =>
-										handleButtonClick(field, formData)
-									}
-								>
-									{__(field.label, 'multivendorx')}
-								</button>
-							</div>
-						);
-					}
-
-					if (field.type === 'setting-toggle') {
-						return (
-							<div
-								className="form-group-wrapper"
-								key={field.key || index}
-							>
-								<div className="form-group">
-									{field.label && (
-										<label htmlFor={field.key}>
-											{__(field.label, 'multivendorx')}
-										</label>
+												onStepChange={({ step }) => {
+													console.log(
+														'Current step:',
+														step
+													);
+													if (step === 'complete') {
+														axios
+															.post(
+																appLocalizer.ajaxurl,
+																new URLSearchParams(
+																	{
+																		action: 'mark_stripe_onboarding_complete',
+																		_ajax_nonce:
+																			appLocalizer.nonce,
+																		vendor_id:
+																			appLocalizer.store_id,
+																	}
+																)
+															)
+															.then((res) => {
+																if (
+																	res.data.success
+																) {
+																	console.log(
+																		__(
+																			'Stripe onboarding marked complete!',
+																			'multivendorx'
+																		)
+																	);
+																	window.location.reload();
+																} else {
+																	console.error(
+																		__(
+																			'Failed to update onboarding status',
+																			'multivendorx'
+																		),
+																		res.data
+																	);
+																}
+															});
+													}
+												}}
+												collectionOptions={{
+													fields: 'eventually_due',
+													futureRequirements: 'include',
+												}}
+											/>
+										</ConnectComponentsProvider>
 									)}
+								</div>
+							);
+						}
+
+						if (field.type === 'button') {
+							return (
+								<div
+									className="form-group-wrapper"
+									key={field.key || index}
+								>
+									<button
+										type="button"
+										className="admin-btn btn-purple-bg"
+										onClick={() =>
+											handleButtonClick(field, formData)
+										}
+									>
+										{__(field.label, 'multivendorx')}
+									</button>
+								</div>
+							);
+						}
+						if (field.type === 'setting-toggle') {
+							return (
+								<FormGroup label={__(field.label, 'multivendorx')} htmlFor={field.key}>
 									<ToggleSetting
 										key={field.key}
 										description={
@@ -296,11 +287,11 @@ const Withdrawl: React.FC = () => {
 										options={
 											Array.isArray(field.options)
 												? field.options.map((opt) => ({
-														...opt,
-														value: String(
-															opt.value
-														),
-													}))
+													...opt,
+													value: String(
+														opt.value
+													),
+												}))
 												: []
 										}
 										value={formData[field.key || ''] || ''}
@@ -308,22 +299,13 @@ const Withdrawl: React.FC = () => {
 											handleToggleChange(value, field.key)
 										}
 									/>
-								</div>
-							</div>
-						);
-					}
+								</FormGroup>
+							);
+						}
 
-					return (
-						<div
-							className="form-group-wrapper"
-							key={field.key || index}
-						>
-							<div className="form-group">
-								{field.label && (
-									<label htmlFor={field.key}>
-										{__(field.label, 'multivendorx')}
-									</label>
-								)}
+						return (
+							<FormGroup
+								label={__(field.label, 'multivendorx')} htmlFor={field.key}>
 								<BasicInput
 									key={field.key || ''}
 									name={field.key}
@@ -333,18 +315,18 @@ const Withdrawl: React.FC = () => {
 									placeholder={
 										field.placeholder
 											? __(
-													field.placeholder,
-													'multivendorx'
-												)
+												field.placeholder,
+												'multivendorx'
+											)
 											: ''
 									}
 									value={formData[field.key] || ''}
 									onChange={handleChange}
 								/>
-							</div>
-						</div>
-					);
-				})}
+							</FormGroup>
+						);
+					})}
+			</FormGroupWrapper>
 		</>
 	);
 };

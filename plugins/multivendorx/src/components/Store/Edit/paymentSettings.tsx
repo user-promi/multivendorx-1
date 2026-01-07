@@ -6,6 +6,11 @@ import {
 	getApiLink,
 	SuccessNotice,
 	BlockText,
+	Container,
+	Column,
+	Card,
+	FormGroupWrapper,
+	FormGroup,
 } from 'zyra';
 import { __, sprintf } from '@wordpress/i18n';
 
@@ -163,237 +168,180 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 		<>
 			<SuccessNotice message={successMsg} />
 
-			<div className="container-wrapper">
-				<div className="card-wrapper column-8">
-					<div className="card-wrapper">
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__(
-											'Withdrawal methods',
-											'multivendorx'
-										)}
-									</div>
-								</div>
-							</div>
-							<div className="card-body">
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<ToggleSetting
-											wrapperClass="setting-form-input"
-											descClass="settings-metabox-description"
-											description={
-												paymentOptions &&
-												paymentOptions.length === 0
-													? sprintf(
-															/* translators: %s: link to payment integration settings */
-															__(
-																'You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.',
-																'multivendorx'
-															),
-															'?page=multivendorx#&tab=settings&subtab=payment-integration'
-														)
-													: ''
-											}
-											options={paymentOptions}
-											value={
-												formData.payment_method || ''
-											}
-											onChange={(value) =>
-												handleToggleChange(
-													value,
-													'payment_method'
-												)
-											}
-										/>
-									</div>
-								</div>
+			<Container>
+				<Column grid={8}>
+					<Card title={__('Withdrawal methods', 'multivendorx')}>
+						<FormGroupWrapper>
+							<FormGroup>
+								<ToggleSetting
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									description={
+										paymentOptions &&
+											paymentOptions.length === 0
+											? sprintf(
+												/* translators: %s: link to payment integration settings */
+												__(
+													'You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.',
+													'multivendorx'
+												),
+												'?page=multivendorx#&tab=settings&subtab=payment-integration'
+											)
+											: ''
+									}
+									options={paymentOptions}
+									value={
+										formData.payment_method || ''
+									}
+									onChange={(value) =>
+										handleToggleChange(
+											value,
+											'payment_method'
+										)
+									}
+								/>
+							</FormGroup>
 
-								{bankDetails &&
-									providerFields.map((field, index) => {
-										const shouldRender =
-											field.key === 'account_type' ||
-											bankDetails.includes(field.key);
 
-										if (!shouldRender) {
-											return null; // skip rendering
-										}
+							{bankDetails &&
+								providerFields.map((field, index) => {
+									const shouldRender =
+										field.key === 'account_type' ||
+										bankDetails.includes(field.key);
 
-										// Render HTML (e.g., connect button)
-										if (
-											field.type === 'html' &&
-											field.html
-										) {
-											return (
-												<div
-													key={`html-${index}`}
-													className="form-group-wrapper"
-													dangerouslySetInnerHTML={{
-														__html: field.html,
-													}}
-												/>
-											);
-										}
+									if (!shouldRender) {
+										return null; // skip rendering
+									}
 
-										// Render Toggle Settings
-										if (field.type === 'setting-toggle') {
-											return (
-												<div
-													className="form-group-wrapper"
-													key={field.key}
-												>
-													<div className="form-group">
-														<label
-															htmlFor={field.key}
-														>
-															{__(
-																field.label,
-																'multivendorx'
-															)}
-														</label>
-														<ToggleSetting
-															key={field.key}
-															description={__(
-																field.desc ||
-																	'',
-																'multivendorx'
-															)}
-															options={
-																Array.isArray(
-																	field.options
-																)
-																	? field.options.map(
-																			(
-																				opt
-																			) => ({
-																				...opt,
-																				value: String(
-																					opt.value
-																				),
-																			})
-																		)
-																	: []
-															}
-															value={
-																formData[
-																	field.key ||
-																		''
-																] || ''
-															}
-															onChange={(value) =>
-																handleToggleChange(
-																	value,
-																	field.key
-																)
-															}
-														/>
-													</div>
-												</div>
-											);
-										}
-
-										// Default input field rendering
+									// Render HTML (e.g., connect button)
+									if (
+										field.type === 'html' &&
+										field.html
+									) {
 										return (
 											<div
+												key={`html-${index}`}
 												className="form-group-wrapper"
-												key={field.key}
-											>
-												<div className="form-group">
-													<label htmlFor={field.key}>
-														{__(
-															field.label,
-															'multivendorx'
-														)}
-													</label>
-													<BasicInput
-														name={field.key || ''}
-														type={
-															field.type || 'text'
-														}
-														wrapperClass="setting-form-input"
-														descClass="settings-metabox-description"
-														placeholder={
-															field.placeholder
-																? __(
-																		field.placeholder,
-																		'multivendorx'
-																	)
-																: ''
-														}
-														value={
-															formData[field.key]
-														}
-														onChange={handleChange}
-													/>
-												</div>
-											</div>
+												dangerouslySetInnerHTML={{
+													__html: field.html,
+												}}
+											/>
 										);
-									})}
-							</div>
-						</div>
-					</div>
-				</div>
+									}
+
+									// Render Toggle Settings
+									if (field.type === 'setting-toggle') {
+										return (
+											<FormGroup label={__(field.label, 'multivendorx')} htmlFor={field.key}>
+												<ToggleSetting
+													key={field.key}
+													description={__(
+														field.desc ||
+														'',
+														'multivendorx'
+													)}
+													options={
+														Array.isArray(
+															field.options
+														)
+															? field.options.map(
+																(
+																	opt
+																) => ({
+																	...opt,
+																	value: String(
+																		opt.value
+																	),
+																})
+															)
+															: []
+													}
+													value={
+														formData[
+														field.key ||
+														''
+														] || ''
+													}
+													onChange={(value) =>
+														handleToggleChange(
+															value,
+															field.key
+														)
+													}
+												/>
+											</FormGroup>
+										);
+									}
+
+									// Default input field rendering
+									return (
+										<FormGroup label={__(field.label, 'multivendorx')} htmlFor={field.key}>
+											<BasicInput
+												name={field.key || ''}
+												type={
+													field.type || 'text'
+												}
+												wrapperClass="setting-form-input"
+												descClass="settings-metabox-description"
+												placeholder={
+													field.placeholder
+														? __(
+															field.placeholder,
+															'multivendorx'
+														)
+														: ''
+												}
+												value={
+													formData[field.key]
+												}
+												onChange={handleChange}
+											/>
+										</FormGroup>
+									);
+								})}
+						</FormGroupWrapper>
+					</Card>
+				</Column>
 				{/* Commission Amount */}
-				<div className="card-wrapper column-4">
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__(
-										'Store-specific commission',
-										'multivendorx'
-									)}
-								</div>
-							</div>
-						</div>
-
-						<div className="card-body">
-							<BlockText
-								blockTextClass="settings-metabox-note"
-								value={sprintf(
-									/* translators: %s: link to global commission settings */
-									__(
-										'If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.',
-										'multivendorx'
-									),
-									`${appLocalizer.plugin_url}settings&subtab=store-commissions`
-								)}
-							/>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="product-name">
-										{__('Fixed', 'multivendorx')}
-									</label>
-									<BasicInput
-										preInsideText="$"
-										postText="+"
-										name="commission_fixed"
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										value={formData.commission_fixed}
-										onChange={handleChange}
-									/>
-								</div>
-
-								<div className="form-group">
-									<label htmlFor="product-name">
-										{__('Percentage', 'multivendorx')}
-									</label>
-									<BasicInput
-										postInsideText="%"
-										name="commission_percentage"
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										value={formData.commission_percentage}
-										onChange={handleChange}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+				<Column grid={4}>
+					<Card title={__('Store-specific commission', 'multivendorx')}>
+						<BlockText
+							blockTextClass="settings-metabox-note"
+							value={sprintf(
+								/* translators: %s: link to global commission settings */
+								__(
+									'If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.',
+									'multivendorx'
+								),
+								`${appLocalizer.plugin_url}settings&subtab=store-commissions`
+							)}
+						/>
+						<FormGroupWrapper>
+							<FormGroup cols={2} label={__('Fixed', 'multivendorx')} htmlFor="Fixed">
+								<BasicInput
+									preInsideText="$"
+									postText="+"
+									name="commission_fixed"
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									value={formData.commission_fixed}
+									onChange={handleChange}
+								/>
+							</FormGroup>
+							<FormGroup cols={2} label={__('Percentage', 'multivendorx')} htmlFor="Percentage">
+								<BasicInput
+									postInsideText="%"
+									name="commission_percentage"
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									value={formData.commission_percentage}
+									onChange={handleChange}
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
+				</Column>
+			</Container >
 		</>
 	);
 };

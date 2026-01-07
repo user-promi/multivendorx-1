@@ -6,9 +6,6 @@ import {
 	SuccessNotice,
 	Section,
 	MultiCheckBox,
-	Container,
-	Column,
-	Card,
 	FormGroupWrapper,
 	FormGroup,
 } from 'zyra';
@@ -182,15 +179,14 @@ const Privacy = () => {
 				</div>
 			) : (
 				<>
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label htmlFor="store-description">
-								{__('Enable Deactivation', 'multivendorx')}
-							</label>
+					<FormGroupWrapper>
+						<FormGroup
+							label={__('Enable Deactivation', 'multivendorx')}
+							htmlFor="enable_deactivation"
+						>
 							<MultiCheckBox
 								wrapperClass="toggle-btn"
 								descClass="settings-metabox-description"
-								description=""
 								inputWrapperClass="toggle-checkbox-header"
 								inputInnerWrapperClass="toggle-checkbox"
 								idPrefix="toggle-switch"
@@ -202,21 +198,18 @@ const Privacy = () => {
 									},
 								]}
 								value={formData.enable_deactivation || []}
-								onChange={(selected) => {
-									setFormData((prev) => ({
-										...prev,
-										enable_deactivation:
-											selected.target.value,
-									}));
-									autoSave({
+								onChange={(selected: any) => {
+									const updated = {
 										...formData,
-										enable_deactivation:
-											selected.target.value,
-									});
+										enable_deactivation: selected.target.value,
+									};
+									setFormData(updated);
+									autoSave(updated);
 								}}
 							/>
-						</div>
-					</div>
+						</FormGroup>
+					</FormGroupWrapper>
+
 					{formData.enable_deactivation && (
 						<>
 							<div className="form-group-wrapper">

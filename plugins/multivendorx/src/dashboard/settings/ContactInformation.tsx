@@ -7,6 +7,8 @@ import {
 	useModules,
 	getApiLink,
 	SuccessNotice,
+	FormGroupWrapper,
+	FormGroup,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
@@ -83,9 +85,11 @@ const ContactInformation = () => {
 	return (
 		<>
 			<SuccessNotice message={successMsg} />
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="phone">{__('Phone', 'multivendorx')}</label>
+			<FormGroupWrapper>
+				<FormGroup
+					label={__('Phone', 'multivendorx')}
+					htmlFor="phone"
+				>
 					<BasicInput
 						name="phone"
 						value={formData.phone}
@@ -94,43 +98,40 @@ const ContactInformation = () => {
 						onChange={handleChange}
 						readOnly={settings.includes('store_contact')}
 					/>
-				</div>
-			</div>
-
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="email">
-						{__('Email / Additional Email', 'multivendorx')}
-					</label>
+				</FormGroup>
+				<FormGroup
+					label={__('Email / Additional Email', 'multivendorx')}
+					htmlFor="email"
+				>
 					<BasicInput
 						type="email"
 						name="email"
+						value={formData.email}
 						wrapperClass="setting-form-input"
 						descClass="settings-metabox-description"
-						value={formData.email}
 						onChange={handleChange}
 						readOnly={settings.includes('store_contact')}
 					/>
-				</div>
-			</div>
+				</FormGroup>
 
-			{modules.includes('live-chat') && (
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						<label htmlFor="live_chat">
-							{__(
-								'Live Chat (Enable, WhatsApp, etc.)',
-								'multivendorx'
-							)}
-						</label>
+				{modules.includes('live-chat') && (
+					<FormGroup
+						label={__(
+							'Live Chat (Enable, WhatsApp, etc.)',
+							'multivendorx'
+						)}
+						htmlFor="live_chat"
+					>
 						<BasicInput
 							name="live_chat"
 							wrapperClass="setting-form-input"
 							descClass="settings-metabox-description"
 						/>
-					</div>
-				</div>
-			)}
+					</FormGroup>
+				)}
+
+			</FormGroupWrapper>
+
 		</>
 	);
 };

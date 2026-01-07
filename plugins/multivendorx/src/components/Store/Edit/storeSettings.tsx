@@ -9,6 +9,11 @@ import {
 	EmailsInput,
 	GoogleMap,
 	Mapbox,
+	Container,
+	Column,
+	Card,
+	FormGroupWrapper,
+	FormGroup,
 } from 'zyra';
 import { useLocation } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
@@ -53,18 +58,18 @@ const StoreSettings = ({
 	useEffect(() => {
 		if (!newAddress) return;
 		if (!stateOptions.length) return;
-	
+
 		const foundState = stateOptions.find(
 			(item) =>
 				item.label.split(' ')[0] === newAddress.state.split(' ')[0] ||
 				item.value === newAddress.state
 		);
-	
+
 		const resolvedLocation = {
 			...newAddress,
 			state: foundState ? foundState.value : newAddress.state,
 		};
-	
+
 		applyLocation(resolvedLocation);
 		setNewAddress(null);
 	}, [stateOptions]);
@@ -111,9 +116,9 @@ const StoreSettings = ({
 
 	useEffect(() => {
 		if (!settings?.geolocation) return;
-	
+
 		const provider = settings.geolocation.choose_map_api;
-	
+
 		if (provider === 'google_map_set') {
 			setApiKey(settings.geolocation.google_api_key || '');
 		} else if (provider === 'mapbox_api_set') {
@@ -203,11 +208,11 @@ const StoreSettings = ({
 
 	const applyLocation = (locationData: any) => {
 		setAddressData((prev) => ({ ...prev, ...locationData }));
-	
+
 		const updatedFormData = { ...formData, ...locationData };
 		setFormData(updatedFormData);
 		autoSave(updatedFormData);
-	};	
+	};
 
 	const handleLocationUpdate = (locationData: any) => {
 		setNewAddress(locationData);
@@ -218,7 +223,7 @@ const StoreSettings = ({
 		}
 		return;
 	};
-	
+
 
 	// Handle country select change (from old code)
 	const handleCountryChange = (newValue: any) => {
@@ -376,7 +381,7 @@ const StoreSettings = ({
 		if (!modules.includes('geo-location') || !apiKey) {
 			return null;
 		}
-	
+
 		const commonProps = {
 			apiKey,
 			locationAddress: addressData.location_address,
@@ -388,14 +393,14 @@ const StoreSettings = ({
 			instructionText: __('Enter a search term or drag/drop a pin on the map.'),
 			placeholderSearch: __('Search for a location...'),
 		};
-	
+
 		switch (settings.geolocation.choose_map_api) {
 			case 'google_map_set':
 				return <GoogleMap {...commonProps} />;
-	
+
 			case 'mapbox_api_set':
 				return <Mapbox {...commonProps} />;
-	
+
 			default:
 				return null;
 		}
@@ -404,63 +409,47 @@ const StoreSettings = ({
 	return (
 		<>
 			<SuccessNotice message={successMsg} />
-			<div className="container-wrapper ">
-				<div className="card-wrapper column column-8">
+			<Container>
+				<Column grid={8}>
 					{/* Contact Information */}
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Contact information')}
-								</div>
+					<Card title={__('Contact information', 'multivendorx')}>
+						<FormGroup label={__('Store email(s)', 'multivendorx')}>
+							<EmailsInput
+								value={emails}
+								primary={primaryEmail}
+								enablePrimary={true}
+								onChange={(list, primary) =>
+									saveEmails(list, primary)
+								}
+							/>
+							<div className="settings-metabox-description">
+								<b>{__('Tip:')}</b>{' '}
+								{__(
+									'You can add multiple email addresses. All added emails will receive notifications.'
+								)}{' '}
+								<br />
+								<b>{__('Primary email:')}</b>{' '}
+								{__(
+									'Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.'
+								)}
 							</div>
-						</div>
+						</FormGroup>
 
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label>{__('Store email(s)')}</label>
-									<EmailsInput
-										value={emails}
-										primary={primaryEmail}
-										enablePrimary={true}
-										onChange={(list, primary) =>
-											saveEmails(list, primary)
-										}
-									/>
-									<div className="settings-metabox-description">
-										<b>{__('Tip:')}</b>{' '}
-										{__(
-											'You can add multiple email addresses. All added emails will receive notifications.'
-										)}{' '}
-										<br />
-										<b>{__('Primary email:')}</b>{' '}
-										{__(
-											'Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.'
-										)}
-									</div>
-								</div>
-							</div>
-
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="phone">{__('Phone')}</label>
-									<BasicInput
-										name="phone"
-										type="number"
-										value={formData.phone}
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										onChange={handleChange}
-									/>
-									{errorMsg.phone && (
-										<p className="invalid-massage">
-											{errorMsg.phone}
-										</p>
-									)}
-								</div>
-							</div>
-						</div>
+						<FormGroup label={__('Phone', 'multivendorx')}>
+							<BasicInput
+								name="phone"
+								type="number"
+								value={formData.phone}
+								wrapperClass="setting-form-input"
+								descClass="settings-metabox-description"
+								onChange={handleChange}
+							/>
+							{errorMsg.phone && (
+								<p className="invalid-massage">
+									{errorMsg.phone}
+								</p>
+							)}
+						</FormGroup>
 						{/* Hidden coordinates */}
 						<input
 							type="hidden"
@@ -472,89 +461,63 @@ const StoreSettings = ({
 							name="location_lng"
 							value={addressData.location_lng}
 						/>
-					</div>
+					</Card>
 					{/* Communication Address */}
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Communication address')}
-								</div>
-							</div>
-						</div>
+					<Card title={__('Communication address', 'multivendorx')}>
+						<FormGroupWrapper>
+							<FormGroup label={__('Address *', 'multivendorx')} htmlFor="address">
+								<BasicInput
+									name="location_address"
+									value={addressData.location_address}
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									onChange={handleAddressChange}
+								/>
+							</FormGroup>
 
-						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="location_address">
-										{__('Address *')}
-									</label>
-									<BasicInput
-										name="location_address"
-										value={addressData.location_address}
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										onChange={handleAddressChange}
-									/>
-								</div>
-							</div>
-
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="city">{__('City')}</label>
-									<BasicInput
-										name="city"
-										value={addressData.city}
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										onChange={handleAddressChange}
-									/>
-								</div>
-								<div className="form-group">
-									<label htmlFor="zip">
-										{__('Zip code')}
-									</label>
-									<BasicInput
-										name="zip"
-										value={addressData.zip}
-										wrapperClass="setting-form-input"
-										descClass="settings-metabox-description"
-										onChange={handleAddressChange}
-									/>
-								</div>
-							</div>
+							<FormGroup cols={2} label={__('City', 'multivendorx')} htmlFor="City">
+								<BasicInput
+									name="city"
+									value={addressData.city}
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									onChange={handleAddressChange}
+								/>
+							</FormGroup>
+							<FormGroup cols={2} label={__('Zip code', 'multivendorx')} htmlFor="zip">
+								<BasicInput
+									name="zip"
+									value={addressData.zip}
+									wrapperClass="setting-form-input"
+									descClass="settings-metabox-description"
+									onChange={handleAddressChange}
+								/>
+							</FormGroup>
 
 							{/* Country and State */}
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label htmlFor="country">
-										{__('Country')}
-									</label>
-									<SelectInput
-										name="country"
-										value={formData.country}
-										options={
-											appLocalizer.country_list || []
-										}
-										type="single-select"
-										onChange={handleCountryChange}
-									/>
-								</div>
-								<div className="form-group">
-									<label htmlFor="state">{__('State')}</label>
-									<SelectInput
-										name="state"
-										value={formData.state}
-										options={stateOptions}
-										type="single-select"
-										onChange={handleStateChange}
-									/>
-								</div>
-							</div>
-						</div>
-						{/* Map Component */}
-						{renderMapComponent()}
-
+							<FormGroup cols={2} label={__('Country', 'multivendorx')} htmlFor="country">
+								<SelectInput
+									name="country"
+									value={formData.country}
+									options={
+										appLocalizer.country_list || []
+									}
+									type="single-select"
+									onChange={handleCountryChange}
+								/>
+							</FormGroup>
+							<FormGroup cols={2} label={__('State', 'multivendorx')} htmlFor="state">
+								<SelectInput
+									name="state"
+									value={formData.state}
+									options={stateOptions}
+									type="single-select"
+									onChange={handleStateChange}
+								/>
+							</FormGroup>
+							{/* Map Component */}
+							{renderMapComponent()}
+						</FormGroupWrapper>
 						{/* Hidden coordinates */}
 						<input
 							type="hidden"
@@ -566,9 +529,9 @@ const StoreSettings = ({
 							name="location_lng"
 							value={addressData.location_lng}
 						/>
-					</div>
-				</div>
-				<div className="card-wrapper column column-4">
+					</Card>
+				</Column>
+				<Column grid={4}>
 					{/* Manage Store Status */}
 					<div id="store-status" className="card-content">
 						<div className="card-header">
@@ -578,33 +541,32 @@ const StoreSettings = ({
 								</div>
 							</div>
 						</div>
-						<div className="card-body   form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="store-status">
-									{__('Current status', 'multivendorx')}
-								</label>
-								<SelectInput
-									name="status"
-									value={formData.status}
-									options={statusOptions}
-									type="single-select"
-									onChange={(newValue: any) => {
-										if (
-											!newValue ||
-											Array.isArray(newValue)
-										) {
-											return;
-										}
-										const updated = {
-											...formData,
-											status: newValue.value,
-										};
-										onUpdate({ status: newValue.value });
-										setFormData(updated);
-										autoSave(updated);
-									}}
-								/>
-							</div>
+						<div className="card-body">
+							<FormGroupWrapper>
+								<FormGroup label={__('Current status', 'multivendorx')}>
+									<SelectInput
+										name="status"
+										value={formData.status}
+										options={statusOptions}
+										type="single-select"
+										onChange={(newValue: any) => {
+											if (
+												!newValue ||
+												Array.isArray(newValue)
+											) {
+												return;
+											}
+											const updated = {
+												...formData,
+												status: newValue.value,
+											};
+											onUpdate({ status: newValue.value });
+											setFormData(updated);
+											autoSave(updated);
+										}}
+									/>
+								</FormGroup>
+							</FormGroupWrapper>
 						</div>
 					</div>
 					{/* Manage Storefront Link */}
@@ -619,95 +581,79 @@ const StoreSettings = ({
 								</div>
 							</div>
 						</div>
-						<div className="card-body form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="slug">
-									{__(
-										'Current storefront link',
-										'multivendorx'
+						<div className="card-body">
+							<FormGroupWrapper>
+								<FormGroup label={__('Current storefront link', 'multivendorx')}>
+									<BasicInput
+										name="slug"
+										wrapperClass="setting-form-input"
+										descClass="settings-metabox-description"
+										value={formData.slug}
+										onChange={handleChange}
+									/>
+									<div className="settings-metabox-description slug">
+										{__('Store URL', 'multivendorx')} :{' '}
+										<a
+											className="link-item"
+											target="_blank"
+											rel="noopener noreferrer"
+											href={`${appLocalizer.store_page_url}${formData.slug}`}
+										>
+											{`${appLocalizer.store_page_url}${formData.slug}`}{' '}
+											<i className="adminfont-external"></i>
+										</a>
+									</div>
+									{errorMsg.slug && (
+										<p className="invalid-massage">
+											{errorMsg.slug}
+										</p>
 									)}
-								</label>
-								<BasicInput
-									name="slug"
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									value={formData.slug}
-									onChange={handleChange}
-								/>
-								<div className="settings-metabox-description slug">
-									{__('Store URL', 'multivendorx')} :{' '}
-									<a
-										className="link-item"
-										target="_blank"
-										rel="noopener noreferrer"
-										href={`${appLocalizer.store_page_url}${formData.slug}`}
-									>
-										{`${appLocalizer.store_page_url}${formData.slug}`}{' '}
-										<i className="adminfont-external"></i>
-									</a>
-								</div>
-								{errorMsg.slug && (
-									<p className="invalid-massage">
-										{errorMsg.slug}
-									</p>
-								)}
-							</div>
+								</FormGroup>
+							</FormGroupWrapper>
 						</div>
 					</div>
 
 					{/* Social Information */}
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Social information', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							{[
-								'facebook',
-								'twitter',
-								'linkedin',
-								'youtube',
-								'instagram',
-							].map((network) => {
-								const iconClass = `adminfont-${network} ${network}`;
-								const defaultUrl = `https://${network === 'twitter' ? 'x' : network}.com/`;
+					<Card title={__('Social information', 'multivendorx')}>
+						{[
+							'facebook',
+							'twitter',
+							'linkedin',
+							'youtube',
+							'instagram',
+						].map((network) => {
+							const iconClass = `adminfont-${network} ${network}`;
+							const defaultUrl = `https://${network === 'twitter' ? 'x' : network}.com/`;
 
-								return (
-									<div
-										className="form-group-wrapper"
-										key={network}
-									>
-										<div className="form-group">
-											<label htmlFor={network}>
-												<i className={iconClass}></i>{' '}
-												{network === 'twitter'
-													? 'X'
-													: network
-															.charAt(0)
-															.toUpperCase() +
-														network.slice(1)}
-											</label>
-											<BasicInput
-												name={network}
-												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
-												value={
-													formData[network]?.trim() ||
-													defaultUrl
-												}
-												onChange={handleChange}
-											/>
-										</div>
+							return (
+								<FormGroupWrapper>
+									<div className="form-group">
+										<label htmlFor={network}>
+											<i className={iconClass}></i>
+											{network === 'twitter'
+												? 'X'
+												: network
+													.charAt(0)
+													.toUpperCase() +
+												network.slice(1)}
+										</label>
+										<BasicInput
+											name={network}
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={
+												formData[network]?.trim() ||
+												defaultUrl
+											}
+											onChange={handleChange}
+										/>
 									</div>
-								);
-							})}
-						</div>
-					</div>
-				</div>
-			</div>
+								</FormGroupWrapper>
+							);
+						})}
+					</Card>
+				</Column>
+			</Container >
 		</>
 	);
 };

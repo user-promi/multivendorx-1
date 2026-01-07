@@ -1,5 +1,5 @@
 import { addFilter } from '@wordpress/hooks';
-import { BasicInput, Card, DynamicRowSetting } from 'zyra';
+import { BasicInput, Card, DynamicRowSetting, FormGroup, FormGroupWrapper } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const Downloadable = ({ product, setProduct, handleChange }) => {
@@ -112,12 +112,8 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 				}}
 			/>
 
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="product-name">
-						{__('Download limit', 'multivendorx')}
-					</label>
-
+			<FormGroupWrapper>
+				<FormGroup label={__('Download limit', 'multivendorx')} htmlFor="download_limit">
 					<BasicInput
 						name="download_limit"
 						type="number"
@@ -130,13 +126,9 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 							)
 						}
 					/>
-				</div>
+				</FormGroup>
 
-				<div className="form-group">
-					<label htmlFor="product-name">
-						{__('Download expiry', 'multivendorx')}
-					</label>
-
+				<FormGroup label={__('Download limit', 'multivendorx')} htmlFor="download_limit">
 					<BasicInput
 						name="download_expiry"
 						type="number"
@@ -149,9 +141,9 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 							)
 						}
 					/>
-				</div>
-			</div>
-		</Card>
+				</FormGroup>
+			</FormGroupWrapper>
+		</Card >
 
 	);
 };
