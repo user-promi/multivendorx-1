@@ -677,6 +677,7 @@ class Stores extends \WP_REST_Controller {
             $action        = $request->get_param( 'action' );
             $store_flag    = $request->get_param( 'store' );
             $fetch_user    = $request->get_param( 'fetch_user' );
+            $dashboard     = $request->get_param( 'dashboard' );
             $registrations = (bool) $request->get_header( 'registrations' );
 
             if ( $id && 'switch' === $action ) {
@@ -722,16 +723,35 @@ class Stores extends \WP_REST_Controller {
             }
 
             $commission   = CommissionUtil::get_commission_summary_for_store( $id );
-            $transactions = Transaction::get_balances_for_store( $id );
-
+            
             $primary_owner_id   = StoreUtil::get_primary_owner( $id );
             $primary_owner_info = $primary_owner_id
                 ? get_userdata( $primary_owner_id )
                 : null;
 
+            if ($dashboard) {
+                if (get_transient('multivendorx_dashboard_data_' . $id)) {
+                    return get_transient('multivendorx_dashboard_data_' . $id);
+                }
+
+                $visitors  = StoreUtil::get_store_visitors( $id );
+
+                $response = [
+                    'id'  => $store->get_id(),
+                    'name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                    'commission'         => $commission,
+                    'primary_owner_info' => $primary_owner_info,
+                    'visitors'           => $visitors,
+                ];
+
+                set_transient('multivendorx_dashboard_data_' . $id, $response, DAY_IN_SECONDS);
+                
+                return rest_ensure_response( $response );
+            }
+            
+            $transactions = Transaction::get_balances_for_store( $id );
             $overall_reviews = Util::get_overall_rating( $id );
             $reviews         = Util::get_reviews_by_store( $id );
-            $visitors        = StoreUtil::get_store_visitors( $id );
 
             $response = array(
                 'id'                 => $store->get_id(),

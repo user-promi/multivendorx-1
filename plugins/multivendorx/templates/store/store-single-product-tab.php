@@ -13,7 +13,6 @@ use MultiVendorX\Store\Store;
 
 global $product;
 $html = '';
-
 $store = Store::get_store( $product->get_id(), 'product' );
 if ( $store ) {
     $html .= apply_filters( 'mvx_before_seller_info_tab', '' );
@@ -77,7 +76,7 @@ if ( $store ) {
 
     $html .= apply_filters( 'mvx_after_seller_info_tab', '' );
 
-    wp_kses_post( $html );
+    echo wp_kses_post( $html );
 
     do_action( 'mvx_after_vendor_tab' );
 }

@@ -229,6 +229,7 @@ const Dashboard: React.FC = () => {
 			method: 'GET',
 			url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: { dashboard: true, id: appLocalizer.store_id }
 		}).then((res: any) => {
 			const data = res.data || {};
 			setStore(data);

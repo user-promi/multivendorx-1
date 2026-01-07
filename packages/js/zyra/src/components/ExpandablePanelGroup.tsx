@@ -855,7 +855,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                     <span className="step-title">
                                         {field.title}
                                     </span>
-                                    <span className="desc">{field.des}</span>
+                                    <span className="desc">{field.desc}</span>
                                 </div>
                             </div>
                             {field.link && (
