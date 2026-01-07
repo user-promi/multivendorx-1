@@ -203,9 +203,14 @@ const Dashboard: React.FC = () => {
 				const orders = response.data.map((order) => {
 					return {
 						id: order.id,
-						product_names: order.line_items
-							?.map((item) => item.name)
-							.join(', ') || '-',
+						products:
+							order.line_items?.map((item) => ({
+								name: item.name,
+								image:
+									item.image?.src ||
+									item.image_url ||
+									'-',
+							})) || [],
 						store_name: order.store_name || '-',
 						amount: formatCurrency(order.total),
 						commission_amount: order.commission_amount
@@ -657,7 +662,6 @@ const Dashboard: React.FC = () => {
 										{recentOrder.map((item) => {
 											const id = item.id;
 											const orderUrl = `/dashboard/sales/orders/#view/${id}`;
-
 											return (
 												<tr key={id}>
 													<td>
@@ -670,7 +674,23 @@ const Dashboard: React.FC = () => {
 														</a>
 													</td>
 													<td>{item.date}</td>
-													<td>{item.product_names}</td>
+													<td>
+														{item.products && item.products.length > 0 ? (
+															item.products.map((product, index) => (
+																<div key={index} className="product-wrapper">
+																	{/* <img
+																		src={product.image}
+																		alt={product.name}
+																	/> */}
+																	{product.name}
+																</div>
+
+															))
+														) : (
+															'-'
+														)}
+													</td>
+
 													<td>{item.amount}</td>
 													<td>
 														<div className="admin-status">
