@@ -177,6 +177,8 @@ class Utill {
         'shipping_class_id'          => 'shipping_class_id',
         'store_policy'               => 'store_policy',
         'shipping_policy'            => 'shipping_policy',
+        'refund_policy'              => 'refund_policy',
+        'cancellation_policy'        => 'cancellation_policy',
         'return_policy'              => 'return_policy',
         'exchange_policy'            => 'exchange_policy',
         'local_pickup_cost'          => 'local_pickup_cost',

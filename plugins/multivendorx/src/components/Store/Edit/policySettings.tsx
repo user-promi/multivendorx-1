@@ -57,7 +57,28 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 			<SuccessNotice message={successMsg} />
 
 			<Container>
-				<Column row>
+				<Column>
+					<Card title="Store policy">
+						<FormGroupWrapper>
+							<FormGroup>
+								<TextArea
+									name="store_policy"
+									wrapperClass="setting-from-textarea"
+									inputClass="textarea-input"
+									descClass="settings-metabox-description"
+									value={formData.store_policy}
+									onChange={handleChange}
+									usePlainText={false}
+									tinymceApiKey={
+										appLocalizer
+											.settings_databases_value[
+										'marketplace'
+										]['tinymce_api_section'] ?? ''
+									}
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
 					<Card title="Shipping policy">
 						<FormGroupWrapper>
 							<FormGroup>
@@ -79,7 +100,6 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 							</FormGroup>
 						</FormGroupWrapper>
 					</Card>
-
 					<Card title="Refund policy">
 						<FormGroupWrapper>
 							<FormGroup>
@@ -101,15 +121,15 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 							</FormGroup>
 						</FormGroupWrapper>
 					</Card>
-					<Card title="Refund policy">
+					<Card title="Cancellation / return / exchange policy">
 						<FormGroupWrapper>
 							<FormGroup>
 								<TextArea
-									name="exchange_policy"
+									name="cancellation_policy"
 									wrapperClass="setting-from-textarea"
 									inputClass="textarea-input"
 									descClass="settings-metabox-description"
-									value={formData.exchange_policy}
+									value={formData.cancellation_policy}
 									onChange={handleChange}
 									usePlainText={false}
 									tinymceApiKey={

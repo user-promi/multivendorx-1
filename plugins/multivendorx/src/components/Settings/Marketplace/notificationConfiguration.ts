@@ -71,6 +71,7 @@ export default {
 					key: 'twilio',
 					label: __('Twilio', 'multivendorx'),
 					value: 'twilio',
+					
 				},
 				{
 					key: 'vonage',
@@ -93,6 +94,7 @@ export default {
 			key: 'twilio_account_sid',
 			type: 'text',
 			label: __('Account SID', 'multivendorx'),
+			desc: __( '<ul> Send SMS notifications using Twilio.<br> Get your <strong>Account SID</strong> and <strong>Auth Token</strong> from your Twilio dashboard: <a href="https://www.twilio.com/console" target="_blank">Twilio Console</a>.<br> <strong>Important:</strong> Make sure the Account SID and Token you enter here match your Twilio account details exactly.<br> Follow Twilio’s setup instructions to complete the SMS gateway configuration. </ul>', 'multivendorx' ),
 			dependent: {
 				key: 'sms_gateway_selector',
 				set: true,
@@ -123,6 +125,7 @@ export default {
 			key: 'vonage_api_key',
 			type: 'text',
 			label: __('API Key', 'multivendorx'),
+			desc: __( '<ul> Send SMS notifications using Vonage (formerly Nexmo).<br> Get your <strong>API Key</strong> and <strong>API Secret</strong> from your Vonage dashboard: <a href="https://dashboard.nexmo.com" target="_blank">Vonage Dashboard</a>.<br> <strong>Important:</strong> Make sure the API Key and Secret you enter here match your Vonage account details exactly.<br> Follow Vonage’s setup instructions to complete the SMS gateway configuration. </ul>', 'multivendorx' ),
 			dependent: {
 				key: 'sms_gateway_selector',
 				set: true,
@@ -153,6 +156,7 @@ export default {
 			key: 'clickatell_api_key',
 			type: 'text',
 			label: __('API Key', 'multivendorx'),
+			desc: __( '<ul> Send SMS notifications using Clickatell.<br> Get your <strong>API Key</strong> from your Clickatell dashboard: <a href="https://platform.clickatell.com/" target="_blank">Clickatell Dashboard</a>.<br> <strong>Important:</strong> Make sure the API Key you enter here matches your Clickatell account details exactly.<br> Follow Clickatell’s setup instructions to complete the SMS gateway configuration. </ul>', 'multivendorx' ),
 			dependent: {
 				key: 'sms_gateway_selector',
 				set: true,
@@ -163,6 +167,7 @@ export default {
 			key: 'plivo_auth_id',
 			type: 'text',
 			label: __('Auth ID', 'multivendorx'),
+			desc: __( '<ul> Send SMS notifications using Plivo.<br> Get your <strong>Auth ID</strong> and <strong>Auth Token</strong> from your Plivo dashboard: <a href="https://console.plivo.com/" target="_blank">Plivo Console</a>.<br> <strong>Important:</strong> Make sure the Auth ID and Token you enter here match your Plivo account details exactly.<br> Follow Plivo’s setup instructions to complete the SMS gateway configuration. </ul>', 'multivendorx' ),
 			dependent: {
 				key: 'sms_gateway_selector',
 				set: true,

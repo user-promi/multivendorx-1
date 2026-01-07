@@ -54,7 +54,7 @@ export default {
 				label: 'New Rating Parameters',
 				formFields: [
 					{
-						key: 'title',
+						key: 'label',
 						type: 'text',
 						label: 'Parameters',
 						placeholder: 'Enter parameters',
@@ -66,26 +66,7 @@ export default {
 					},
 				],
 			},
-			modal: [
-				{
-					id: 'quality-of-product',
-					label: 'Quality of product',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'communication-support',
-					label: 'Communication Support',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'delivery-experience',
-					label: 'Delivery experience',
-					required: true,
-					isCustom: true,
-				},
-			],
+			modal: [],
 			proSetting: false,
 			moduleEnabled: 'store-review',
 		},

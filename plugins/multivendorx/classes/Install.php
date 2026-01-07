@@ -807,12 +807,33 @@ By signing and submitting, the Seller accepts all terms above.
             ),
         );
 
+        $review_settings = array(
+            'ratings_parameters' => array(
+                'quality-of-product' => array(
+                    'label'    => 'Quality of product',
+					'required' => true,
+					'isCustom' => true,
+                ),
+                'communication-support' => array(
+                    'label'    => 'Communication Support',
+					'required' => true,
+					'isCustom' => true,
+                ),
+                'delivery-experience' => array(
+                    'label'    => 'Delivery experience',
+					'required' => true,
+					'isCustom' => true,
+                ),
+            ),
+        );
+
         // 6. Save back to DB
         update_option( Utill::MULTIVENDORX_SETTINGS['identity-verification'], $settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $order_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['delivery'], $delivery_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['legal-compliance'], $legal_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-compliance'], $product_compliance_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['review-management'], $review_settings );
     }
 
     /**

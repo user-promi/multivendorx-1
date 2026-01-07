@@ -7,7 +7,6 @@ import {
 	TableCell,
 	CommonPopup,
 	getApiLink,
-	ToggleSetting,
 	MultiCalendarInput,
 	AdminButton,
 	FormGroupWrapper,
@@ -65,12 +64,10 @@ export interface RealtimeFilter {
 
 const StoreReview: React.FC = () => {
 	const [data, setData] = useState<Review[]>([]);
-	const [error, setError] = useState<string>();
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [pageCount, setPageCount] = useState<number>(0);
 	const [status, setStatus] = useState<Status[] | null>(null);
-	const [store, setStore] = useState<any[] | null>(null);
 	const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 	const [replyText, setReplyText] = useState<string>('');
 
@@ -83,29 +80,14 @@ const StoreReview: React.FC = () => {
 	useEffect(() => {
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'store'),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		})
-			.then((response) => {
-				setStore(response.data.stores);
-			})
-			.catch(() => {
-				setError(__('Failed to load stores', 'multivendorx'));
-				setStore([]);
-			});
-		axios({
-			method: 'GET',
 			url: getApiLink(appLocalizer, 'review'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: { count: true },
+			params: { count: true,store_id: appLocalizer.store_id },
 		})
 			.then((response) => {
 				setTotalRows(response.data || 0);
 				setPageCount(Math.ceil(response.data / pagination.pageSize));
 			})
-			.catch(() => {
-				setError(__('Failed to load total rows', 'multivendorx'));
-			});
 	}, []);
 
 	useEffect(() => {
@@ -120,7 +102,6 @@ const StoreReview: React.FC = () => {
 		rowsPerPage = 10,
 		currentPage = 1,
 		typeCount = '',
-		store = '',
 		rating = '',
 		searchField = '',
 		orderBy = '',
@@ -172,7 +153,6 @@ const StoreReview: React.FC = () => {
 				]);
 			})
 			.catch(() => {
-				setError(__('Failed to load Q&A', 'multivendorx'));
 				setData([]);
 			});
 	}
@@ -514,16 +494,23 @@ const StoreReview: React.FC = () => {
 										></div>
 
 										<div className="rating-wrapper">
-											{[...Array(5)].map((_, i) => (
+											{[...Array(Math.round(selectedReview.overall_rating || 0))].map(
+												(_, i) => (
+													<i
+														key={`filled-${i}`}
+														className="star-icon adminfont-star"
+													></i>
+												)
+											)}
+
+											{[
+												...Array(
+													5 - Math.round(selectedReview.overall_rating || 0)
+												),
+											].map((_, i) => (
 												<i
-													key={i}
-													className={`star-icon adminfont-star ${i <
-														Math.round(
-															selectedReview.overall_rating
-														)
-														? 'filled'
-														: ''
-														}`}
+													key={`empty-${i}`}
+													className="star-icon adminfont-star-o"
 												></i>
 											))}
 
@@ -560,42 +547,6 @@ const StoreReview: React.FC = () => {
 									value={replyText}
 									onChange={(e) => setReplyText(e.target.value)}
 									usePlainText={true}
-								/>
-							</FormGroup>
-
-							<FormGroup
-								label={__(
-									'Control if this review appears publicly, stays under moderation, or is excluded from the store page.',
-									'multivendorx'
-								)}
-								htmlFor="status"
-							>
-								<ToggleSetting
-									wrapperClass="setting-form-input"
-									descClass="settings-metabox-description"
-									options={[
-										{
-											key: 'pending',
-											value: 'Pending',
-											label: __('Pending', 'multivendorx'),
-										},
-										{
-											key: 'approved',
-											value: 'Approved',
-											label: __('Approved', 'multivendorx'),
-										},
-										{
-											key: 'rejected',
-											value: 'Rejected',
-											label: __('Rejected', 'multivendorx'),
-										},
-									]}
-									value={selectedReview.status}
-									onChange={(val) =>
-										setSelectedReview((prev) =>
-											prev ? { ...prev, status: val } : prev
-										)
-									}
 								/>
 							</FormGroup>
 						</FormGroupWrapper>

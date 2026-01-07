@@ -161,7 +161,7 @@ export default {
 				'Protect your shoppers by deciding how much of their information stores can access.',
 				'multivendorx'
 			),
-			hint: __('Customer Privacy', 'multivendorx'),
+			hint: __('Customer Data Privacy', 'multivendorx'),
 		},
 		{
 			key: 'customer_information_access',
