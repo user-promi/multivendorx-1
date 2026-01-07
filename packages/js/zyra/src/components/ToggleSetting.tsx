@@ -13,8 +13,10 @@ interface Option {
     key?: string;
     value: string;
     label?: string;
+    desc?: string;
     img?: string;
     icon?: string;
+    customHtml?: string;
     proSetting?: boolean;
 }
 
@@ -33,6 +35,7 @@ interface ToggleSettingProps {
     preText?: string;
     postText?: string;
     multiSelect?: boolean;
+    custom?: boolean;
 }
 
 const ToggleSetting: React.FC< ToggleSettingProps > = ( {
@@ -47,6 +50,7 @@ const ToggleSetting: React.FC< ToggleSettingProps > = ( {
     iconEnable = false,
     postText,
     preText,
+    custom,
     multiSelect = false,
 } ) => {
     const handleChange = ( optionValue: string, isPro: boolean ) => {
@@ -74,7 +78,7 @@ const ToggleSetting: React.FC< ToggleSettingProps > = ( {
             <div className="toggle-setting-container">
                 { preText && <span className="before">{ preText }</span> }
 
-                <div className="toggle-setting-wrapper">
+                <div className={`toggle-setting-wrapper ${custom ? 'custom' : ''}`}>
                     { options.map( ( option ) => {
                         const isChecked = multiSelect
                             ? Array.isArray( value ) &&
@@ -104,21 +108,29 @@ const ToggleSetting: React.FC< ToggleSettingProps > = ( {
                                     readOnly
                                 />
                                 <label htmlFor={ option.key }>
-                                    { iconEnable ? (
-                                        <i className={ option.value }></i>
-                                    ) : option.img ? (
-                                        <>
-                                            <img src={ option.img } />
-                                            { option.label }
-                                        </>
-                                    ) : option.icon ? (
-                                        <>
-                                            <i className={ option.icon }></i>
-                                            { option.label }
-                                        </>
-                                    ) : (
-                                        option.label
-                                    ) }
+                                    <span>
+                                        { iconEnable ? (
+                                            <i className={ option.value }></i>
+                                        ) : option.img ? (
+                                            <>
+                                                <img src={ option.img } />
+                                                { option.label }
+                                            </>
+                                        ) : option.icon ? (
+                                            <>
+                                                <i className={ option.icon }></i>
+                                                { option.label }
+                                            </>
+                                        ) : (
+                                            option.label
+                                        ) }
+                                    </span>
+                                    {option.desc && (
+                                        <div className="desc">{option.desc}</div>
+                                    )}
+                                    {option.customHtml && (
+                                        <div className="toggle-custom-wrapper" dangerouslySetInnerHTML={{ __html: option.customHtml }} />
+                                    )} 
                                 </label>
                                 { option.proSetting && ! khali_dabba && (
                                     <span className="admin-pro-tag">

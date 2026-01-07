@@ -127,9 +127,12 @@
         }
 
         input:checked+label {
-            color: $theme-color;
             background: $theme-background-color;
             border: $border-theme-medium;
+
+            span {
+                color: $theme-color;
+            }
         }
 
         .admin-pro-tag {
@@ -141,6 +144,63 @@
     div:has(input:checked)+div label {
         border-left: none;
     }
+
+    &.custom {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 50%;
+
+        span {
+            font-size: 1.125rem;
+            padding-left: 1.125rem;
+        }
+
+        i {
+            padding-right: 0.5rem;
+        }
+
+        label {
+            border: $border-light-medium;
+            border-radius: 0.313rem;
+            align-items: start;
+            gap: 0.313rem;
+        }
+
+        input {
+            display: block;
+            position: absolute;
+            top: 1rem;
+            left: 0.5rem;
+        }
+        input[type=radio]:checked::before{
+            color: $theme-color;
+        }
+
+        .toggle-custom-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.625rem;
+
+            .toggle-notice {
+                border: $border-light-small;
+                border-radius: 0.313rem;
+                padding: 1rem;
+
+                .title {
+                    font-size: 1rem;
+                    color: $sub-text-color;
+                }
+
+                ul {
+                    margin-bottom: 0;
+                }
+            }
+        }
+        div:has(input:checked)+div label{
+            border: $border-light-medium;
+        }
+    }
 }
 
 .toggle-setting-container {
@@ -148,6 +208,10 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.toggle-setting-container:has(.custom) {
+    width: 100%;
 }
 
 // Modal styles

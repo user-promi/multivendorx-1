@@ -196,6 +196,7 @@ interface InputField {
     max?: number;
     icon?: string;
     iconEnable?: boolean;
+    custom?: boolean;
     size?: string;
     preText?: string;
     postText?: string;
@@ -1704,6 +1705,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             description={ inputField.desc }
                             key={ inputField.key }
                             iconEnable={ inputField.iconEnable } // If true, will display the toggle value as an icon
+                            custom={ inputField.custom }
                             multiSelect={ inputField.multiSelect } // If true, allows selecting multiple options (checkboxes), else single select (radio)
                             preText={ inputField.preText } // Optional content displayed before the toggle group
                             postText={ inputField.postText } // Optional content displayed after the toggle group
