@@ -17,7 +17,6 @@ $store_id     = $args['store_id'] ?? 0;
 $is_logged_in = is_user_logged_in();
 $user         = wp_get_current_user();
 $parameters   = MultiVendorX()->setting->get_setting( 'ratings_parameters', array() );
-
 $review_status          = '';
 $is_verified_buyer      = 0;
 $is_verified_buyer_only = reset( MultiVendorX()->setting->get_setting( 'is_storereview_varified', array() ) ) ?? false;
@@ -57,7 +56,7 @@ if ( $is_logged_in && $store_id ) {
                         <?php esc_html_e( 'Write a review', 'multivendorx' ); ?>
                     </button>
                     <!--Show form only if no review submitted and verified -->
-                    <form id="commentform" class="comment-form">
+                    <form id="commentform" class="comment-form" class="comment-form" style="display:none;">
                         <div class="form-wrapper">
                             <label><?php esc_html_e( 'Review Title', 'multivendorx' ); ?></label>
                             <input type="text" id="review_title" name="review_title" />
@@ -72,7 +71,7 @@ if ( $is_logged_in && $store_id ) {
                         <?php if ( ! empty( $parameters ) && is_array( $parameters ) ) : ?>
                             <?php
                             foreach ( $parameters as $param ) :
-                                $param_value = is_array( $param ) ? ( $param['value'] ?? '' ) : $param;
+                                $param_value = is_array( $param ) ? ( $param['label'] ?? '' ) : $param;
                                 if ( empty( $param_value ) ) {
                                     continue;
                                 }
