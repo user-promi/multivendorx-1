@@ -594,7 +594,7 @@ const Dashboard = () => {
 													<a
 														href={appLocalizer.permalink_structure
 															? `/${appLocalizer.dashboard_slug}/view-notifications/#subtab=announcements`
-															: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications&subtab=announcements`}
+															: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=announcements`}
 														className="admin-btn btn-purple"
 													// onClick={(e) => e.stopPropagation()}
 													>

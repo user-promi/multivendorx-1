@@ -8,16 +8,16 @@ import {
     PaginationState,
 } from '@tanstack/react-table';
 
-type NotificationStore = {
-    id?: number;
-    store_name?: string;
-    title?: string;
-    type?: string;
-    date?: string; // Add date field
+type AnnouncementForm = {
+	title: string;
+	url: string;
+	content: string;
+	stores: number[];
+	status: 'draft' | 'pending' | 'publish';
 };
 
 const AnnouncementsTable = (React.FC = () => {
-    const [data, setData] = useState<NotificationStore[] | null>(null);
+    const [data, setData] = useState<AnnouncementForm[] | null>(null);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [totalRows, setTotalRows] = useState<number>(0);
     const [pagination, setPagination] = useState<PaginationState>({
@@ -34,10 +34,8 @@ const AnnouncementsTable = (React.FC = () => {
 			url: getApiLink(appLocalizer, 'announcement'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
-				page: 1,
-				row: 4,
 				store_id: appLocalizer.store_id,
-				status: 'publish'
+				count: true
 			},
         })
             .then((response) => {
@@ -61,24 +59,23 @@ const AnnouncementsTable = (React.FC = () => {
         setData(null);
         axios({
             method: 'GET',
-            url: getApiLink(appLocalizer, 'notifications'),
+            url: getApiLink(appLocalizer, 'announcement'),
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             params: {
                 page: currentPage,
                 row: rowsPerPage,
-                filter_status: typeCount === 'all' ? '' : typeCount,
-                notification: true,
                 store_id: appLocalizer?.store_id,
             },
         })
             .then((response) => {
-                setData(response.data || []);
+                setData(response.data.items || []);
             })
             .catch(() => {
                 setError(__('Failed to load stores', 'multivendorx'));
                 setData([]);
             });
     }
+    console.log('data', data)
 
     // Handle pagination and filter changes
     const requestApiForData = (
@@ -95,40 +92,65 @@ const AnnouncementsTable = (React.FC = () => {
     };
 
     // Column definitions with sorting enabled
-    const columns: ColumnDef<NotificationStore>[] = [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <input
-                    type="checkbox"
-                    checked={table.getIsAllRowsSelected()}
-                    onChange={table.getToggleAllRowsSelectedHandler()}
-                />
-            ),
-            cell: ({ row }) => (
-                <input
-                    type="checkbox"
-                    checked={row.getIsSelected()}
-                    onChange={row.getToggleSelectedHandler()}
-                />
-            ),
-        },
+    const columns: ColumnDef<AnnouncementForm>[] = [
         {
             header: __('Title', 'multivendorx'),
             cell: ({ row }) => (
                 <TableCell title={row.original.title || ''}>
-                    {row.original.title || ''}
+                    {row.original.title}
                 </TableCell>
             ),
         },
-
         {
-            header: __('Type', 'multivendorx'),
+            header: __('Content', 'multivendorx'),
             cell: ({ row }) => (
-                <TableCell title={row.original.type || ''}>
-                    {row.original.type || ''}
+                <TableCell title={row.original.content || ''}>
+                    {row.original.content}
                 </TableCell>
             ),
+        },
+        {
+            id: 'status',
+            header: __('Status', 'multivendorx'),
+            cell: ({ row }) => {
+                return (
+                    <TableCell
+                        title={'status'}
+                        type="status"
+                        status={row.original.status}
+                        children={undefined}
+                    />
+                );
+            },
+        },
+        {
+            header: __('Recipients', 'multivendorx'),
+            cell: ({ row }) => {
+                const storeString = row.original.store_name;
+
+                // 🔹 If store_name is empty, null, or undefined → show All Stores
+                if (!storeString) {
+                    return (
+                        <TableCell title={'stores'}>
+                            {__('All Stores', 'multivendorx')}
+                        </TableCell>
+                    );
+                }
+
+                // 🔹 Otherwise, split and format store names
+                const stores = storeString.split(',').map((s) => s.trim());
+                let displayStores = stores;
+
+                if (stores.length > 2) {
+                    displayStores = [...stores.slice(0, 2), '...'];
+                }
+
+                return (
+                    <TableCell title={stores.join(', ')}>
+                        {displayStores.join(', ')}
+                    </TableCell>
+                );
+            },
         },
         {
             header: __('Date', 'multivendorx'),
@@ -156,8 +178,6 @@ const AnnouncementsTable = (React.FC = () => {
                 perPageOption={[10, 25, 50]}
                 typeCounts={[]}
                 totalCounts={totalRows}
-                // searchFilter={searchFilter}
-                // realtimeFilter={realtimeFilter}
             />
         </>
     );
