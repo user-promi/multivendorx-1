@@ -151,7 +151,7 @@ class ImportDummyData extends \WP_REST_Controller {
         ];        
     }
 
-    public function import_stores( $store_owners ) {
+    public function import_stores( $request ) {
 
         $xml_url = MultiVendorX()->plugin_path . '/assets/dummy-data/store.xml';
         $xml = simplexml_load_file(
@@ -166,6 +166,7 @@ class ImportDummyData extends \WP_REST_Controller {
 
         foreach ( $xml->store as $store ) {
 
+            $store_owners = $request->get_param( 'store_owners' );
             $owner_index = (int) $store->owner_index;
             $owner_id    = $store_owners[ $owner_index ] ?? 0;
         
@@ -234,7 +235,7 @@ class ImportDummyData extends \WP_REST_Controller {
         ];        
     }
 
-    public function import_products( $store_ids ) {
+    public function import_products( $request ) {
 
         $base_path = MultiVendorX()->plugin_path . '/assets/dummy-data/';
         $product_files = [
@@ -268,6 +269,7 @@ class ImportDummyData extends \WP_REST_Controller {
             foreach ( $xml->product as $product ) {
     
                 $store_index = (int) $product->store_index;
+                $store_ids = $request->get_param( 'store_ids' );
                 $store_id    = $store_ids[ $store_index ] ?? 0;
 
                 $sku = (string) $product->sku;
@@ -491,7 +493,7 @@ class ImportDummyData extends \WP_REST_Controller {
         );
     }
 
-    public function import_orders( $product_ids ) {
+    public function import_orders( $request ) {
 
         $xml = simplexml_load_file(
             MultiVendorX()->plugin_path . '/assets/dummy-data/orders.xml'
@@ -524,6 +526,7 @@ class ImportDummyData extends \WP_REST_Controller {
     
             // Add products
             foreach ( $order_xml->items->item as $item ) {
+                $product_ids = $request->get_param( 'product_ids' );
                 $product_id = (int) $product_ids[ (int) $item->product_index ] ?? 0;
     
                 if ( ! $product_id ) {
