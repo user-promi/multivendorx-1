@@ -145,16 +145,6 @@ const Qna: React.FC = () => {
 			.catch(() => {
 				setStore([]);
 			});
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, 'qna'),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: { count: true },
-		})
-			.then((response) => {
-				setTotalRows(response.data || 0);
-				setPageCount(Math.ceil(response.data / pagination.pageSize));
-			})
 	}, []);
 
 	useEffect(() => {
@@ -212,6 +202,22 @@ const Qna: React.FC = () => {
 				];
 
 				setStatus(statuses.filter((status) => status.count > 0));
+				let totalFiltered = 0;
+				switch (categoryFilter) {
+					case 'all':
+						totalFiltered = response.data.all || 0;
+						break;
+					case 'has_answer':
+						totalFiltered = response.data.answered || 0;
+						break;
+					case 'no_answer':
+					default:
+						totalFiltered = response.data.unanswered || 0;
+				}
+				setTotalRows(totalFiltered);
+
+				// Update pagination pageCount
+				setPageCount(Math.ceil(totalFiltered / rowsPerPage));
 			})
 			.catch(() => {
 				setData([]);
