@@ -10,7 +10,7 @@ import {
 	Tooltip,
 } from 'recharts';
 import { __ } from '@wordpress/i18n';
-import { Card, Column, Container, getApiLink, MultiCalendarInput, Table, TableCell } from 'zyra';
+import { Card, Column, Container, getApiLink, InfoItem, MultiCalendarInput, Table, TableCell } from 'zyra';
 import axios from 'axios';
 import {
 	PaginationState,
@@ -756,49 +756,21 @@ const ProductReport: React.FC = () => {
 						{toSellingProduct.length > 0 ? (
 							toSellingProduct.map(
 								(product: any, index: number) => (
-									<div
-										className="info-item"
+									<InfoItem
 										key={`selling-${product.id}`}
-									>
-										<div className="details-wrapper">
-											<div className="avatar">
-												{product.images?.length ? (
-													<img
-														src={
-															product
-																.images[0]
-																.src
-														}
-														alt={product.name}
-													/>
-												) : (
-													<span
-														className={`admin-color${index + 1}`}
-													>
-														{product.name?.charAt(
-															0
-														) || '?'}
-													</span>
-												)}
-											</div>
-											<div className="details">
-												<div className="name">
-													{product.name}
-												</div>
-												<div className="des">
-													{__(
-														'Total Sales:',
-														'multivendorx'
-													)}{' '}
-													{product.total_sales ||
-														0}
-												</div>
-											</div>
-										</div>
-										<div className="right-details">
-											<div className="price"></div>
-										</div>
-									</div>
+										title={product.name}
+										avatar={{
+											image: product.images?.[0]?.src,
+											text: product.name?.charAt(0) || '?',
+											iconClass: `admin-color${index + 1}`,
+										}}
+										descriptions={[
+											{
+												label: __('Total Sales:', 'multivendorx'),
+												value: product.total_sales || 0,
+											},
+										]}
+									/>
 								)
 							)
 						) : (

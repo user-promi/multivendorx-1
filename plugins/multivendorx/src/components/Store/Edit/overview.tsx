@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 import axios from 'axios';
-import { Column, Container, getApiLink, useModules } from 'zyra';
+import { Column, Container, getApiLink, InfoItem, useModules } from 'zyra';
 import { Skeleton } from '@mui/material';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './latestReview';
@@ -154,35 +154,20 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							<div className="card-body">
 								{recentDebits && recentDebits.length > 0 ? (
 									recentDebits.map((txn) => (
-										<div key={txn.id} className="info-item">
-											<div className="details-wrapper">
-												<div className="details">
-													<div className="name">
-														{__(
-															'Bank Transfer',
-															'multivendorx'
-														)}
-													</div>
-													<div className="des">
-														{new Date(
-															txn.date
-														).toLocaleDateString(
-															'en-US',
-															{
-																month: 'short',
-																day: '2-digit',
-																year: 'numeric',
-															}
-														)}
-													</div>
-												</div>
-											</div>
-											<div className="right-details">
-												<div className="price">
-													{formatCurrency(txn.amount)}
-												</div>
-											</div>
-										</div>
+										<InfoItem
+											key={txn.id}
+											title={__('Bank Transfer', 'multivendorx')}
+											descriptions={[
+												{
+													value: new Date(txn.date).toLocaleDateString('en-US', {
+														month: 'short',
+														day: '2-digit',
+														year: 'numeric',
+													}),
+												},
+											]}
+											amount={formatCurrency(txn.amount)}
+										/>
 									))
 								) : (
 									<div className="no-data">
@@ -226,56 +211,22 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 											}&action=edit`;
 
 										return (
-											<div
+											<InfoItem
 												key={product.id}
-												className="info-item"
-											>
-												<div className="details-wrapper">
-													<div className="avatar">
-														{productImage ? (
-															<img
-																src={
-																	productImage
-																}
-																alt={
-																	product.name
-																}
-															/>
-														) : (
-															<i
-																className={`item-icon adminfont-single-product admin-color${idx + 2}`}
-															></i>
-														)}
-													</div>
-
-													<div className="details">
-														<div className="name">
-															<a
-																href={editUrl}
-																target="_blank"
-																rel="noopener noreferrer"
-															>
-																{product.name}
-															</a>
-														</div>
-														<div className="des">
-															{__(
-																'sku',
-																'multivendorx'
-															)}
-															: {product.sku}
-														</div>
-													</div>
-												</div>
-
-												<div className="right-details">
-													<div className="price">
-														{formatCurrency(
-															product.price ?? 0
-														)}
-													</div>
-												</div>
-											</div>
+												title={product.name}
+												titleLink={editUrl}
+												avatar={{
+													image: productImage,
+													iconClass: `item-icon adminfont-single-product admin-color${idx + 2}`,
+												}}
+												descriptions={[
+													{
+														label: __('sku', 'multivendorx'),
+														value: product.sku,
+													},
+												]}
+												amount={formatCurrency(product.price ?? 0)}
+											/>
 										);
 									})
 								) : (
@@ -492,64 +443,48 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 						</div>
 						<div className="card-body">
-							<div className="info-item">
-								<div className="details-wrapper">
-									<div className="avatar">
-										<i className="item-icon adminfont-person secondary"></i>
-									</div>
-									<div className="details">
-										<div className="name">
-											{storeData.primary_owner_info?.data
-												?.display_name ?? (
-													<Skeleton
-														variant="text"
-														width={150}
-													/>
-												)}
-											<div className="admin-badge green">
-												{__(
-													'Primary Owner',
-													'multivendorx'
-												)}
-											</div>
-											<span className="admin-badge blue">
-												<i
-													className="adminfont-edit "
-													onClick={() => {
-														navigate(
-															`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
-															{
-																state: {
-																	highlightTarget:
-																		'primary-owner',
-																},
-															}
-														);
-														setTimeout(() => {
-															navigate(
-																`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
-																{
-																	replace: true,
-																}
-															);
-														}, 500);
-													}}
-												></i>
-											</span>
-										</div>
-										<div className="des">
-											{__('Email', 'multivendorx')}:{' '}
-											{storeData.primary_owner_info?.data
-												?.user_email ?? (
-													<Skeleton
-														variant="text"
-														width={150}
-													/>
-												)}
-										</div>
-									</div>
-								</div>
-							</div>
+							<InfoItem
+								title={
+									storeData.primary_owner_info?.data?.display_name ?? (
+										<Skeleton variant="text" width={150} />
+									)
+								}
+								avatar={{
+									iconClass: 'item-icon adminfont-person secondary',
+								}}
+								descriptions={[
+									{
+										label: __('Email', 'multivendorx'),
+										value:
+											storeData.primary_owner_info?.data?.user_email ?? (
+												<Skeleton variant="text" width={150} />
+											),
+									},
+								]}
+								badges={[
+									{
+										text: __('Primary Owner', 'multivendorx'),
+										className: 'green',
+									},
+									{
+										text: <i className="adminfont-edit" />,
+										className: 'blue',
+										onClick: () => {
+											navigate(
+												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
+												{ state: { highlightTarget: 'primary-owner' } }
+											);
+											setTimeout(() => {
+												navigate(
+													`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
+													{ replace: true }
+												);
+											}, 500);
+										},
+									},
+								]}
+							/>
+
 						</div>
 					</div>
 				</Column>

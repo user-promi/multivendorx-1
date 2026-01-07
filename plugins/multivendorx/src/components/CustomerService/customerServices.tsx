@@ -1,4 +1,4 @@
-import { AdminBreadcrumbs, getApiLink, useModules, Tabs } from 'zyra';
+import { AdminBreadcrumbs, getApiLink, useModules, Tabs, Container } from 'zyra';
 import './customerServices.scss';
 import '../AdminDashboard/adminDashboard.scss';
 import Qna from './qnaTable';
@@ -95,7 +95,7 @@ const CustomerServices = () => {
 					menuIcon={true}
 				/>
 			) : (
-				<div className="general-wrapper">
+				<Container>
 					<div className="permission-wrapper">
 						<i className="adminfont-info red"></i>
 						<div className="title">
@@ -111,7 +111,7 @@ const CustomerServices = () => {
 							{__('Enable Now', 'multivendorx')}
 						</a>
 					</div>
-				</div>
+				</Container>
 			)}
 		</>
 	);
