@@ -1137,201 +1137,159 @@ const AddOrder = () => {
 						)}
 					</Card>
 
-
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Billing address', 'multivendorx')}
+					<Card title={__('Billing address', 'multivendorx')}>
+						{!hasCustomer && (
+							<div className="address-wrapper">
+								<div className="address">
+									<span>
+										{__(
+											'No billing address found',
+											'multivendorx'
+										)}
+									</span>
 								</div>
 							</div>
-						</div>
-						<div className="card-body">
-							{!hasCustomer && (
-								<div className="address-wrapper">
-									<div className="address">
-										<span>
-											{__(
-												'No billing address found',
-												'multivendorx'
-											)}
-										</span>
-									</div>
+						)}
+
+						{hasCustomer && !showAddressEdit && (
+							<div className="address-wrapper">
+								<div className="address">
+									<span>{billingAddress.address_1}</span>
+									<span>{billingAddress.city}</span>
+									<span>
+										{billingAddress.postcode},{' '}
+										{billingAddress.state}
+									</span>
+									<span>{billingAddress.country}</span>
 								</div>
-							)}
 
-							{hasCustomer && !showAddressEdit && (
-								<div className="address-wrapper">
-									<div className="address">
-										<span>{billingAddress.address_1}</span>
-										<span>{billingAddress.city}</span>
-										<span>
-											{billingAddress.postcode},{' '}
-											{billingAddress.state}
-										</span>
-										<span>{billingAddress.country}</span>
-									</div>
-
-									<div
-										className="admin-badge blue"
-										onClick={() => setShowAddressEdit(true)}
-									>
-										<i className="adminfont-edit"></i>
-									</div>
+								<div
+									className="admin-badge blue"
+									onClick={() => setShowAddressEdit(true)}
+								>
+									<i className="adminfont-edit"></i>
 								</div>
+							</div>
+						)}
+
+						{showAddressEdit && (
+							<div ref={addressEditRef}>
+								<FormGroupWrapper>
+									<FormGroup label={__('Address', 'multivendorx')} htmlFor="Address">
+										<BasicInput
+											name="address_1"
+											value={billingAddress.address_1}
+											wrapperClass="setting-form-input"
+											onChange={(e) =>
+												setBillingAddress(
+													(prev) => ({
+														...prev,
+														address_1:
+															e.target.value,
+													})
+												)
+											}
+										/>
+									</FormGroup>
+
+									<FormGroup cols={2} label={__('City', 'multivendorx')} htmlFor="city">
+										<BasicInput
+											name="city"
+											value={
+												billingAddress.city || ''
+											}
+											onChange={(e) =>
+												setBillingAddress(
+													(prev) => ({
+														...prev,
+														city: e.target
+															.value,
+													})
+												)
+											}
+											wrapperClass="setting-form-input"
+										/>
+								</FormGroup>
+								<FormGroup cols={2} label={__('Postcode / ZIP', 'multivendorx')} htmlFor="postcode-zip">
+									<BasicInput
+										name="postcode"
+										value={
+											billingAddress.postcode ||
+											''
+										}
+										onChange={(e) =>
+											setBillingAddress(
+												(prev) => ({
+													...prev,
+													postcode:
+														e.target.value,
+												})
+											)
+										}
+										wrapperClass="setting-form-input"
+									/></FormGroup>
+
+								<FormGroup cols={2} label={__('Country / Region', 'multivendorx')} htmlFor="country-region">
+									<SelectInput
+										name="country"
+										value={billingAddress.country}
+										options={
+											appLocalizer.country_list ||
+											[]
+										}
+										type="single-select"
+										onChange={(selected) => {
+											setBillingAddress(
+												(prev) => ({
+													...prev,
+													country:
+														selected.value,
+												})
+											);
+											fetchStatesByCountry(
+												selected.value
+											);
+										}}
+									/>
+								</FormGroup>
+								<FormGroup cols={2} label={__('State / County', 'multivendorx')} htmlFor="state-county">
+									<SelectInput
+										name="state"
+										value={billingAddress.state}
+										options={stateOptions}
+										type="single-select"
+										onChange={(selected) => {
+											setBillingAddress(
+												(prev) => ({
+													...prev,
+													state: selected.value,
+												})
+											);
+										}}
+									/>
+								</FormGroup>
+							</FormGroupWrapper>
+							</div>
+						)}
+				</Card>
+				<Card
+					title={__('Order note', 'multivendorx')}
+				>
+					<FormGroup>
+						<TextArea
+							name="shipping_policy"
+							wrapperClass="setting-from-textarea"
+							inputClass="textarea-input"
+							descClass="settings-metabox-description"
+							placeholder={__(
+								'Enter order note...',
+								'multivendorx'
 							)}
-
-							{showAddressEdit && (
-								<div ref={addressEditRef}>
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__('Address', 'multivendorx')}
-											</label>
-
-											<BasicInput
-												name="address_1"
-												value={billingAddress.address_1}
-												wrapperClass="setting-form-input"
-												onChange={(e) =>
-													setBillingAddress(
-														(prev) => ({
-															...prev,
-															address_1:
-																e.target.value,
-														})
-													)
-												}
-											/>
-										</div>
-									</div>
-
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__('City', 'multivendorx')}
-											</label>
-											<BasicInput
-												name="city"
-												value={
-													billingAddress.city || ''
-												}
-												onChange={(e) =>
-													setBillingAddress(
-														(prev) => ({
-															...prev,
-															city: e.target
-																.value,
-														})
-													)
-												}
-												wrapperClass="setting-form-input"
-											/>
-										</div>
-
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__(
-													'Postcode / ZIP',
-													'multivendorx'
-												)}
-											</label>
-											<BasicInput
-												name="postcode"
-												value={
-													billingAddress.postcode ||
-													''
-												}
-												onChange={(e) =>
-													setBillingAddress(
-														(prev) => ({
-															...prev,
-															postcode:
-																e.target.value,
-														})
-													)
-												}
-												wrapperClass="setting-form-input"
-											/>
-										</div>
-									</div>
-
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__(
-													'Country / Region',
-													'multivendorx'
-												)}
-											</label>
-											<SelectInput
-												name="country"
-												value={billingAddress.country}
-												options={
-													appLocalizer.country_list ||
-													[]
-												}
-												type="single-select"
-												onChange={(selected) => {
-													setBillingAddress(
-														(prev) => ({
-															...prev,
-															country:
-																selected.value,
-														})
-													);
-													fetchStatesByCountry(
-														selected.value
-													);
-												}}
-											/>
-										</div>
-
-										<div className="form-group">
-											<label htmlFor="product-name">
-												{__(
-													'State / County',
-													'multivendorx'
-												)}
-											</label>
-											<SelectInput
-												name="state"
-												value={billingAddress.state}
-												options={stateOptions}
-												type="single-select"
-												onChange={(selected) => {
-													setBillingAddress(
-														(prev) => ({
-															...prev,
-															state: selected.value,
-														})
-													);
-												}}
-											/>
-										</div>
-									</div>
-								</div>
-							)}
-						</div>
-					</div>
-					<Card
-						title={__('Order note', 'multivendorx')}
-					>
-						<FormGroup>
-							<TextArea
-								name="shipping_policy"
-								wrapperClass="setting-from-textarea"
-								inputClass="textarea-input"
-								descClass="settings-metabox-description"
-								placeholder={__(
-									'Enter order note...',
-									'multivendorx'
-								)}
-							/>
-						</FormGroup>
-					</Card>
-				</Column>
-			</Container>
+						/>
+					</FormGroup>
+				</Card>
+			</Column>
+		</Container >
 		</>
 	);
 };

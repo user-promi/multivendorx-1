@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SuccessNotice, SelectInput, getApiLink, useModules } from 'zyra';
+import { SuccessNotice, SelectInput, getApiLink, useModules, Container, Column } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 
@@ -45,8 +45,8 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 		<>
 			<SuccessNotice message={successMsg} />
 
-			<div className="container-wrapper">
-				<div className="card-wrapper column-8">
+			<Container>
+				<Column grid={8}>
 					<div className="card-content">
 						<div className="card-header">
 							<div className="left">
@@ -117,9 +117,9 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 							}
 						</div>
 					</div>
-				</div>
+				</Column>
 
-				<div className="card-wrapper column-4">
+				<Column grid={4}>
 					<div id="primary-owner" className="card-content">
 						<div className="card-header">
 							<div className="left">
@@ -163,8 +163,8 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+				</Column>
+			</Container>
 		</>
 	);
 };
