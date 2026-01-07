@@ -52,9 +52,9 @@ const SetupWizard: React.FC = () => {
 							value: 'general',
 						},
 						{
-							key: 'booking',
+							key: 'subscription',
 							label: __('Subscription marketplace', 'multivendorx'),
-							value: 'booking',
+							value: 'subscription',
 						},
 						{
 							key: 'rental',
@@ -67,15 +67,15 @@ const SetupWizard: React.FC = () => {
 							value: 'auction',
 						},
 						{
-							key: 'subscription',
+							key: 'service',
 							label: __('Service marketplace', 'multivendorx'),
-							value: 'subscription',
+							value: 'service',
 						},
 						{
 							key: 'mixed',
 							label: __('Mixed marketplace', 'multivendorx'),
 							value: 'mixed',
-						},
+						}
 					],
 				},
 				{
@@ -167,34 +167,6 @@ const SetupWizard: React.FC = () => {
 					},
 				},
 				{
-					key: 'wizardButtons',
-					type: 'buttons',
-					options: [
-						{
-							label: 'Back',
-							action: 'back',
-							btnClass: 'admin-btn btn-red',
-						},
-						{
-							label: 'Next',
-							action: 'next',
-							btnClass: 'admin-btn btn-purple',
-						},
-					],
-				},
-			],
-		},
-		{
-			id: 'store_setup',
-			label: 'Configure Your Store',
-			icon: 'adminfont-storefront',
-			desc: 'How stores sell on your marketplace',
-			countBtn: true,
-			isWizardMode: true,
-			openForm:true,
-			formFields: [
-				
-				{
 					key: 'store_selling_mode',
 					type: 'setting-toggle',
 					label: __(
@@ -236,29 +208,13 @@ const SetupWizard: React.FC = () => {
 						},
 					],
 				},
-				{
-					key: 'wizardButtons',
-					type: 'buttons',
-					options: [
-						{
-							label: 'Back',
-							action: 'back',
-							btnClass: 'admin-btn btn-red',
-						},
-						{
-							label: 'Next',
-							action: 'next',
-							btnClass: 'admin-btn btn-purple',
-						},
-					],
-				},
 			],
 		},
 		{
 			id: 'store_setup',
 			label: 'Configure Your Store',
 			icon: 'adminfont-storefront',
-			desc: 'How stores gets approved on your marketplace',
+			desc: 'How stores sell on your marketplace.',
 			countBtn: true,
 			isWizardMode: true,
 			openForm:true,
@@ -280,32 +236,6 @@ const SetupWizard: React.FC = () => {
 							key: 'automatically',
 							label: __('Automatic', 'multivendorx'),
 							value: 'automatically',
-						},
-					],
-				},
-				{
-					key: 'store_selling_mode',
-					type: 'setting-toggle',
-					label: __(
-						'Product listing model',
-						'multivendorx'
-					),
-					options: [
-						{
-							key: 'default',
-							label: __('Independent seller', 'multivendorx'),
-							value: 'default',
-						},
-						{
-							key: 'single_product_multiple_vendor',
-							label: __('Co-listed products', 'multivendorx'),
-							value: 'single_product_multiple_vendor',
-						},
-						{
-							key: 'franchise',
-							label: __('Franchise', 'multivendorx'),
-							value: 'franchise',
-							proSetting: true
 						},
 					],
 				},
@@ -435,22 +365,6 @@ const SetupWizard: React.FC = () => {
 							btnClass: 'admin-btn btn-red',
 						},
 						{
-							label: 'Next',
-							action: 'next',
-							btnClass: 'admin-btn btn-purple',
-						},
-					],
-				},
-				{
-					key: 'wizardButtons',
-					type: 'buttons',
-					options: [
-						{
-							label: 'Back',
-							action: 'back',
-							btnClass: 'admin-btn btn-red',
-						},
-						{
 							label: 'Finish',
 							action: 'next',
 							btnClass: 'admin-btn btn-purple',
@@ -458,9 +372,8 @@ const SetupWizard: React.FC = () => {
 						},
 					],
 				},
-				
 			],
-		}
+		},
 	];
 
 	const proSettingChanged = (pro: boolean) => {

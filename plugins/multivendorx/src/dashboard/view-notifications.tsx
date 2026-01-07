@@ -15,7 +15,7 @@ const ViewNotifications = (React.FC = () => {
 	const getCurrentTabFromUrl = () => {
 		const hash = window.location.hash.replace(/^#/, '');
 		const hashParams = new URLSearchParams(hash);
-		return hashParams.get('subtab') || 'nottifications';
+		return hashParams.get('subtab') || 'notifications';
 	};
 
 	const [currentTab, setCurrentTab] = useState(getCurrentTabFromUrl());
@@ -33,7 +33,7 @@ const ViewNotifications = (React.FC = () => {
 		{
 			type: 'file',
 			content: {
-				id: 'nottifications',
+				id: 'notifications',
 				name: 'Notifications',
 				desc: 'general',
 				hideTabHeader: true,
@@ -57,18 +57,18 @@ const ViewNotifications = (React.FC = () => {
 				name: 'Announcements',
 				desc: 'Store Info',
 				hideTabHeader: true,
-				icon: 'adminfont-credit-card',
+				icon: 'tools',
 			},
 		},
 	];
 
 	const getForm = (tabId: string) => {
 		switch (tabId) {
-			case 'nottifications':
+			case 'notifications':
 				return <NotificationsTable />;
 			case 'activity':
 				return <ActivitiesTable />;
-				case 'announcements':
+			case 'announcements':
 				return <AnnouncementsTable />;
 			default:
 				return <div></div>;
