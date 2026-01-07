@@ -221,7 +221,11 @@ class Modules {
                 require_once $module['module_file'];
 
                 $module_class                   = $module['module_class'];
-                $this->container[ $modules_id ] = new $module_class();
+                try {
+                    $this->container[ $modules_id ] = new $module_class();
+                } catch ( \Throwable $e ) {
+                    MultiVendorX()->util->log( $e );
+                }                
                 /**
                  * Module activation hook
                  *

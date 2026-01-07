@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Utill class file.
  *
@@ -9,7 +10,7 @@ namespace MultiVendorX;
 
 use MultiVendorX\Store\Store;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 /**
  * MultiVendorX Utill class
@@ -18,7 +19,8 @@ defined( 'ABSPATH' ) || exit;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-class Utill {
+class Utill
+{
 
     /**
      * Constent holds table name
@@ -162,6 +164,7 @@ class Utill {
         'store_reject_note'          => 'store_reject_note',
         'primary_email'              => 'primary_email',
         'phone'                      => 'phone',
+        'address'                    => 'address',
         'address_1'                  => 'address_1',
         'address_2'                  => 'address_2',
         'image'                      => 'image',
@@ -228,18 +231,19 @@ class Utill {
      * @param array  $extra   Additional metadata to include.
      * @return bool           True on success, false on failure.
      */
-    public static function log( $message = '', $type = 'INFO', $extra = array() ) {
+    public static function log($message = '', $type = 'INFO', $extra = array())
+    {
         global $wp_filesystem, $wpdb;
 
         // Initialize the WordPress filesystem API.
-        if ( empty( $wp_filesystem ) ) {
+        if (empty($wp_filesystem)) {
             require_once ABSPATH . '/wp-admin/includes/file.php';
             WP_Filesystem();
         }
 
         // Create the logs directory and protect it with .htaccess.
-        if ( ! file_exists( MultiVendorX()->multivendorx_logs_dir . '/.htaccess' ) ) {
-            wp_mkdir_p( MultiVendorX()->multivendorx_logs_dir );
+        if (! file_exists(MultiVendorX()->multivendorx_logs_dir . '/.htaccess')) {
+            wp_mkdir_p(MultiVendorX()->multivendorx_logs_dir);
             try {
                 $wp_filesystem->put_contents(
                     MultiVendorX()->multivendorx_logs_dir . '/.htaccess',
@@ -249,13 +253,13 @@ class Utill {
                     MultiVendorX()->multivendorx_logs_dir . '/index.html',
                     ''
                 );
-            } catch ( Exception $e ) {// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+            } catch (Exception $e) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
                 // Directory creation failed but logging should continue.
             }
         }
 
         // Convert Exception into structured metadata.
-        if ( $message instanceof \Exception ) {
+        if ($message instanceof \Exception) {
             $type             = 'EXCEPTION';
             $extra['Message'] = $message->getMessage();
             $extra['Code']    = $message->getCode();
@@ -265,9 +269,19 @@ class Utill {
             $extra['Stack'] = $message->getTraceAsString();
             $message        = 'Exception occurred';
         }
+        // Convert Throwable into structured metadata.
+        if ($message instanceof \Throwable) {
+            $type             = 'EXCEPTION';
+            $extra['Message'] = $message->getMessage();
+            $extra['Code']    = $message->getCode();
+            $extra['File']    = $message->getFile();
+            $extra['Line']    = $message->getLine();
+            $extra['Stack']   = $message->getTraceAsString();
+            $message          = 'Throwable occurred';
+        }
 
         // Convert WP_Error into structured metadata.
-        if ( $message instanceof \WP_Error ) {
+        if ($message instanceof \WP_Error) {
             $type             = 'WP_ERROR';
             $extra['Code']    = $message->get_error_code();
             $extra['Message'] = $message->get_error_message();
@@ -277,7 +291,7 @@ class Utill {
         }
 
         // Automatically capture database errors.
-        if ( isset( $wpdb ) && ! empty( $wpdb->last_error ) ) {
+        if (isset($wpdb) && ! empty($wpdb->last_error)) {
             $extra['DB Error']   = $wpdb->last_error;
             $extra['Last Query'] = $wpdb->last_query;
         }
@@ -286,7 +300,7 @@ class Utill {
         $meta = array_merge(
             array(
                 'Type'      => $type,
-                'Timestamp' => current_time( 'mysql' ),
+                'Timestamp' => current_time('mysql'),
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
                 'File'      => debug_backtrace()[1]['file'] ?? '',
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
@@ -300,21 +314,21 @@ class Utill {
         $timestamp = $meta['Timestamp'];
         $log_lines = array();
 
-        foreach ( $meta as $key => $val ) {
+        foreach ($meta as $key => $val) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
-            $val         = trim( print_r( $val, true ) );
+            $val         = trim(print_r($val, true));
             $log_lines[] = "{$timestamp} : {$key}: {$val}";
         }
 
         // Add the main message.
         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
-        $log_lines[] = "{$timestamp} : Message: " . trim( print_r( $message, true ) );
+        $log_lines[] = "{$timestamp} : Message: " . trim(print_r($message, true));
 
         // Build final entry block.
-        $log_entry = implode( "\n", $log_lines ) . "\n";
+        $log_entry = implode("\n", $log_lines) . "\n";
 
-        $existing = $wp_filesystem->get_contents( MultiVendorX()->log_file );
-        if ( ! empty( $existing ) ) {
+        $existing = $wp_filesystem->get_contents(MultiVendorX()->log_file);
+        if (! empty($existing)) {
             $log_entry = "\n" . $log_entry; // Add spacing.
         }
 
@@ -329,8 +343,9 @@ class Utill {
      *
      * @return bool
      */
-    public static function is_khali_dabba() {
-        return apply_filters( 'kothay_dabba', false );
+    public static function is_khali_dabba()
+    {
+        return apply_filters('kothay_dabba', false);
     }
 
     /**
@@ -341,16 +356,17 @@ class Utill {
      * @param  array $args          ( default: array() ).
      * @return void
      */
-    public static function get_template( $template_name, $args = array() ) {
+    public static function get_template($template_name, $args = array())
+    {
 
         // Check if the template exists in the theme.
         $theme_template = get_stylesheet_directory() . '/dc-woocommerce-product-vendor/' . $template_name;
 
         // Use the theme template if it exists, otherwise use the plugin template.
-        $located = file_exists( $theme_template ) ? $theme_template : MultiVendorX()->plugin_path . 'templates/' . $template_name;
+        $located = file_exists($theme_template) ? $theme_template : MultiVendorX()->plugin_path . 'templates/' . $template_name;
 
         // Load the template.
-        load_template( $located, false, $args );
+        load_template($located, false, $args);
     }
 
 
@@ -361,8 +377,9 @@ class Utill {
      *
      * @return string The string wrapped in single quotes, or the original value if not a string.
      */
-    public static function add_single_quotes( $value ) {
-        if ( is_string( $value ) ) {
+    public static function add_single_quotes($value)
+    {
+        if (is_string($value)) {
             return "'" . $value . "'";
         }
 
@@ -374,9 +391,10 @@ class Utill {
      *
      * @return bool
      */
-    public static function is_store_dashboard() {
-        $dashboard_page = (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' );
-        return is_page( $dashboard_page );
+    public static function is_store_dashboard()
+    {
+        $dashboard_page = (int) MultiVendorX()->setting->get_setting('store_dashboard_page');
+        return is_page($dashboard_page);
     }
 
     /**
@@ -384,16 +402,18 @@ class Utill {
      *
      * @return bool
      */
-    public static function is_store_registration_page() {
-        $registration_page = (int) MultiVendorX()->setting->get_setting( 'store_registration_page' );
-        return is_page( $registration_page );
+    public static function is_store_registration_page()
+    {
+        $registration_page = (int) MultiVendorX()->setting->get_setting('store_registration_page');
+        return is_page($registration_page);
     }
 
-    public static function is_store_page() {
-        $store_name = get_query_var(  MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
+    public static function is_store_page()
+    {
+        $store_name = get_query_var(MultiVendorX()->setting->get_setting('store_url', 'store'));
 
-        if ( ! empty( $store_name ) ) {
-            $store = Store::get_store( $store_name, 'slug' );
+        if (! empty($store_name)) {
+            $store = Store::get_store($store_name, 'slug');
         }
         return $store ?? false;
     }
