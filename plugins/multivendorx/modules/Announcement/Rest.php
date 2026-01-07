@@ -143,11 +143,9 @@ class Rest extends \WP_REST_Controller {
             $start_raw = sanitize_text_field( $request->get_param( 'startDate' ) );
             $end_raw   = sanitize_text_field( $request->get_param( 'endDate' ) );
 
-            $start_ts = $start_raw ? strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $start_raw ) ) ) : false;
-            $end_ts   = $end_raw ? strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $end_raw ) ) ) : false;
-
-            $start_date = $start_ts ? gmdate( 'Y-m-d 00:00:00', $start_ts ) : '';
-            $end_date   = $end_ts ? gmdate( 'Y-m-d 23:59:59', $end_ts ) : '';
+            $start_date = $start_raw ? gmdate( 'Y-m-d H:i:s', strtotime( $start_raw ) ) : '';
+            $end_date   = $end_raw ? gmdate( 'Y-m-d H:i:s', strtotime( $end_raw ) ) : '';
+            $dashboard      = $request->get_param( 'dashboard' );
 
             // ----- Count Only (FAST) -----
             if ( $count_param ) {
@@ -208,6 +206,12 @@ class Rest extends \WP_REST_Controller {
                 $query_args['s'] = $search_field;
             }
 
+            if ($dashboard) {
+                if (get_transient('multivendorx_announcement_data_' . $store_id)) {
+                    return get_transient('multivendorx_announcement_data_' . $store_id);
+                }
+            }
+
             // ----- Fetch Posts -----
             $posts = get_posts( $query_args );
             $items = array();
@@ -246,6 +250,10 @@ class Rest extends \WP_REST_Controller {
                 );
                 return intval( $query->found_posts );
             };
+
+            if ($dashboard) {
+                set_transient('multivendorx_announcement_data_' . $store_id, array( 'items' => $items ), DAY_IN_SECONDS);
+            }
 
             return rest_ensure_response(
                 array(

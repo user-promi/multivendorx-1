@@ -4,6 +4,7 @@
     padding: 0 !important; // for overwrite react popup component
 }
 
+// pro popup
 .pro-popup-content {
     .popup-wrapper {
         .top-section {
@@ -108,6 +109,7 @@
     }
 }
 
+// module popup
 .module-popup-content {
     width: 30rem;
 
@@ -144,6 +146,28 @@
 
     .adminfont-cross {
         color: #000;
+    }
+}
+
+// popup confirm
+.popup-confirm {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .title {
+        font-size: 1625rem;
+        color: $text-color;
+        padding-top: 0.625rem;
+    }
+
+    .popup-icon {
+        font-size: 2.125rem;
+        padding: 0.813rem;
+    }
+    .buttons-wrapper {
+        padding-top: 0.813rem;
     }
 }
 

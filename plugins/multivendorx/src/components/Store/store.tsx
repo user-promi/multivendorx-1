@@ -3,10 +3,13 @@ import StoreTable from './storeTable';
 import EditStore from './Edit/editStore';
 import {
 	AdminBreadcrumbs,
+	AdminButton,
 	BasicInput,
 	CommonPopup,
 	EmailsInput,
 	FileInput,
+	FormGroup,
+	FormGroupWrapper,
 	getApiLink,
 	SelectInput,
 	TextArea,
@@ -260,201 +263,168 @@ const Store = () => {
 						<CommonPopup
 							open={addStore}
 							width="31.25rem"
-							header={
-								<>
-									<div className="title">
-										<i className="adminfont-storefront"></i>
-										{__('Add Store', 'multivendorx')}
-									</div>
-									<div className="des">
-										{__(
-											'Create a new store and set it up with essential details.',
+							onClose={() => {
+								setFormData({});
+								setImagePreview('');
+								setaddStore(false);
+							}}
+							header={{
+								icon: 'storefront',
+								title: __('Add Store', 'multivendorx'),
+								description: __(
+									'Create a new store and set it up with essential details.',
+									'multivendorx'
+								),
+							}}
+							footer={
+								<AdminButton
+									buttons={[
+										{
+											icon: 'close',
+											text: __('Cancel', 'multivendorx'),
+											className: 'red',
+											onClick: () => {
+												setFormData({});
+												setImagePreview('');
+												setaddStore(false);
+											},
+										},
+										{
+											icon: 'save',
+											text: __('Submit', 'multivendorx'),
+											className: 'purple',
+											onClick: handleSubmit,
+										},
+									]}
+								/>
+							}
+
+						>
+							<FormGroupWrapper>
+								<FormGroup label={__('Store name', 'multivendorx')} htmlFor="store-name">
+									<BasicInput
+										type="text"
+										name="name"
+										value={formData.name || ''}
+										onChange={handleChange}
+										required={true}
+									/>
+									{error?.name?.message && (
+										<div className="invalid-massage">
+											{error?.name?.message}
+										</div>
+									)}
+								</FormGroup>
+
+								<FormGroup label={__('Store slug', 'multivendorx')} htmlFor="store-slug">
+									<BasicInput
+										type="text"
+										name="slug"
+										value={formData.slug || ''}
+										wrapperClass="setting-form-input"
+										onChange={handleChange}
+										required={true}
+										clickBtnName={__(
+											'Check Slug',
 											'multivendorx'
 										)}
-									</div>
-									<i
-										onClick={() => {
-											setFormData({});
-											setImagePreview('');
-											setaddStore(false);
+										onclickCallback={handleNameBlur}
+										msg={error.slug}
+									/>
+									{error?.slug?.message && (
+										<div className={error?.slug?.type}>
+											{error?.slug?.message}
+										</div>
+									)}
+								</FormGroup>
+
+								<FormGroup label={__('Store Email', 'multivendorx')}>
+									<EmailsInput
+										value={formData.emails || []}
+										enablePrimary={true}
+										onChange={(list, primary) => {
+											saveEmails(list, primary);
 										}}
-										className="icon adminfont-close"
-									></i>
-								</>
-							}
-							footer={
-								<>
-									<div
-										onClick={() => {
-											setFormData({});
-											setImagePreview('');
-											setaddStore(false);
+									/>
+									{error?.email?.message && (
+										<div className="invalid-massage">
+											{error?.email?.message}
+										</div>
+									)}
+								</FormGroup>
+
+								<FormGroup label={__('Description', 'multivendorx')} htmlFor="Description">
+									<TextArea
+										name="description"
+										inputClass="textarea-input"
+										value={formData.description || ''}
+										onChange={handleChange}
+										usePlainText={false}
+										tinymceApiKey={
+											appLocalizer
+												.settings_databases_value[
+											'marketplace'
+											]['tinymce_api_section'] ?? ''
+										}
+									/>
+								</FormGroup>
+
+								<FormGroup label={__('Primary owner', 'multivendorx')} htmlFor="store_owners">
+									<SelectInput
+										name="store_owners"
+										options={
+											appLocalizer?.store_owners || []
+										}
+										value={formData.store_owners}
+										type="single-select"
+										onChange={(newValue: any) => {
+											if (
+												!newValue ||
+												Array.isArray(newValue)
+											) {
+												return;
+											}
+											const updated = {
+												...formData,
+												store_owners:
+													newValue.value,
+											};
+											setFormData(updated);
 										}}
-										className="admin-btn btn-red"
-									>
-										{__('Cancel', 'multivendorx')}
-									</div>
+									/>
+									{error?.primary?.message && (
+										<div className="invalid-massage">
+											{error?.primary?.message}
+										</div>
+									)}
+								</FormGroup>
 
-									<div
-										onClick={handleSubmit}
-										className="admin-btn btn-purple"
-									>
-										{__('Submit', 'multivendorx')}
-									</div>
-								</>
-							}
-						>
-							<>
-								<div className="form-group-wrapper">
-									<div className="form-group">
-										<label htmlFor="store-name">
-											{__('Store name', 'multivendorx')}
-										</label>
-										<BasicInput
-											type="text"
-											name="name"
-											value={formData.name || ''}
-											onChange={handleChange}
-											required={true}
-										/>
-										{error?.name?.message && (
-											<div className="invalid-massage">
-												{error?.name?.message}
-											</div>
+								<FormGroup label={__('Profile image', 'multivendorx')} htmlFor="store_owners">
+									<FileInput
+										value={formData.image || ''}
+										inputClass="form-input"
+										name="image"
+										type="hidden"
+										imageSrc={imagePreview || ''}
+										imageWidth={75}
+										imageHeight={75}
+										openUploader={__(
+											'Upload Image',
+											'multivendorx'
 										)}
-									</div>
-
-									<div className="form-group">
-										<label htmlFor="store-url">
-											{__('Store slug', 'multivendorx')}
-										</label>
-										<BasicInput
-											type="text"
-											name="slug"
-											value={formData.slug || ''}
-											wrapperClass="setting-form-input"
-											onChange={handleChange}
-											required={true}
-											clickBtnName={__(
-												'Check Slug',
-												'multivendorx'
-											)}
-											onclickCallback={handleNameBlur}
-											msg={error.slug}
-										/>
-										{error?.slug?.message && (
-											<div className={error?.slug?.type}>
-												{error?.slug?.message}
-											</div>
-										)}
-									</div>
-
-									<div className="form-group">
-										<label htmlFor="store-name">
-											{__('Store Email', 'multivendorx')}
-										</label>
-										<EmailsInput
-											value={formData.emails || []}
-											enablePrimary={true}
-											onChange={(list, primary) => {
-												saveEmails(list, primary);
-											}}
-										/>
-										{error?.email?.message && (
-											<div className="invalid-massage">
-												{error?.email?.message}
-											</div>
-										)}
-									</div>
-
-									<div className="form-group">
-										<label htmlFor="store-desc">
-											{__('Description', 'multivendorx')}
-										</label>
-										<TextArea
-											name="description"
-											inputClass="textarea-input"
-											value={formData.description || ''}
-											onChange={handleChange}
-											usePlainText={false}
-											tinymceApiKey={
-												appLocalizer
-													.settings_databases_value[
-												'marketplace'
-												]['tinymce_api_section'] ?? ''
-											}
-										/>
-									</div>
-
-									<div className="form-group">
-										<label htmlFor="store-owner">
-											{__(
-												'Primary owner',
-												'multivendorx'
-											)}
-										</label>
-										<SelectInput
-											name="store_owners"
-											options={
-												appLocalizer?.store_owners || []
-											}
-											value={formData.store_owners}
-											type="single-select"
-											onChange={(newValue: any) => {
-												if (
-													!newValue ||
-													Array.isArray(newValue)
-												) {
-													return;
-												}
-												const updated = {
-													...formData,
-													store_owners:
-														newValue.value,
-												};
-												setFormData(updated);
-											}}
-										/>
-										{error?.primary?.message && (
-											<div className="invalid-massage">
-												{error?.primary?.message}
-											</div>
-										)}
-									</div>
-
-									<div className="form-group">
-										<label htmlFor="store-image">
-											{__(
-												'Profile image',
-												'multivendorx'
-											)}
-										</label>
-										<FileInput
-											value={formData.image || ''}
-											inputClass="form-input"
-											name="image"
-											type="hidden"
-											imageSrc={imagePreview || ''}
-											imageWidth={75}
-											imageHeight={75}
-											openUploader={__(
-												'Upload Image',
-												'multivendorx'
-											)}
-											buttonClass="admin-btn btn-purple"
-											onButtonClick={() =>
-												runUploader('image')
-											}
-											onRemove={() =>
-												handleRemoveImage('image')
-											}
-											onReplace={() =>
-												handleReplaceImage('image')
-											}
-										/>
-									</div>
-								</div>
-							</>
+										buttonClass="admin-btn btn-purple"
+										onButtonClick={() =>
+											runUploader('image')
+										}
+										onRemove={() =>
+											handleRemoveImage('image')
+										}
+										onReplace={() =>
+											handleReplaceImage('image')
+										}
+									/>
+								</FormGroup>
+							</FormGroupWrapper>
 						</CommonPopup>
 					)}
 					<StoreTable />

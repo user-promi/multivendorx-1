@@ -8,6 +8,7 @@
 namespace MultiVendorX\StorePolicy;
 
 use MultiVendorX\Utill;
+use MultiVendorX\Store\Store;
 
 /**
  * MultiVendorX Store Policy Util class
@@ -74,7 +75,7 @@ class Util {
 
             if ( in_array( 'refund_return', $privacy_override_settings, true ) ) {
                 $refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['refund_policy'] );
-                $cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['exchange_policy'] );
+                $cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['cancellation_policy'] );
             }
         }
 

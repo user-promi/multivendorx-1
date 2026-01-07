@@ -93,7 +93,7 @@ const Notifications : React.FC<NotificationsProps> = ({ type }) => {
 				<div className="item"
 					onClick={() => handleNotificationClick(item.id)}
 				>
-					<div className={`icon admin-badge green`}>
+					<div className={`icon admin-badge admin-color${item.id}`} >
 						<i
 							className={
 								item.icon || 'adminfont-user-network-icon'
@@ -120,7 +120,7 @@ const Notifications : React.FC<NotificationsProps> = ({ type }) => {
 
 	const url = appLocalizer.permalink_structure
 		? `/${appLocalizer.dashboard_slug}/view-notifications/#subtab=${subtab}`
-		: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications&subtab=${subtab}`;
+		: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=${subtab}`;
 
 	return (
 		<>

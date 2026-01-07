@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, CommonPopup, BasicInput, SuccessNotice, Card, Container, AdminButton, Column } from 'zyra';
+import { getApiLink, CommonPopup, BasicInput, SuccessNotice, Card, Container, AdminButton, Column, FormGroupWrapper, FormGroup } from 'zyra';
 import { formatCurrency, formatWcShortDate } from '../services/commonFunction';
 
 const Withdrawls: React.FC = () => {
@@ -270,19 +270,11 @@ const Withdrawls: React.FC = () => {
 				<CommonPopup
 					open={requestWithdrawal}
 					width="31.25rem"
-					height="60%"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-wallet"></i>
-								{__('Request Withdrawal', 'multivendorx')}
-							</div>
-							<i
-								className="icon adminfont-close"
-								onClick={() => setRequestWithdrawal(false)}
-							></i>
-						</>
-					}
+					header={{
+						icon: 'wallet',
+						title: __('Request Withdrawal', 'multivendorx'),
+					}}
+
 					footer={
 						<>
 							<AdminButton
@@ -297,11 +289,8 @@ const Withdrawls: React.FC = () => {
 					}
 				>
 					<>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="amount">
-									{__('Amount', 'multivendorx')}
-								</label>
+						<FormGroupWrapper>
+							<FormGroup label={__('Amount', 'multivendorx')} htmlFor="Amount">
 								<BasicInput
 									type="number"
 									name="amount"
@@ -315,8 +304,8 @@ const Withdrawls: React.FC = () => {
 								{error && (
 									<p className="error-message">{error}</p>
 								)}
-							</div>
-						</div>
+							</FormGroup>
+						</FormGroupWrapper>
 					</>
 				</CommonPopup>
 			)}

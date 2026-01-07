@@ -15,21 +15,11 @@ import {
 import React, { useState, useEffect } from 'react';
 import '../components/dashboard.scss';
 import '../dashboard/dashboard1.scss';
-import { AdminButton, Card, Column, Container, getApiLink, MultiCalendarInput, TableCell, useModules } from 'zyra';
+import { AdminButton, Card, Column, Container, getApiLink, MultiCalendarInput, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency, formatTimeAgo } from '@/services/commonFunction';
 import VisitorsMap from './visitorsMap';
-
-const activities = [
-	{ icon: 'adminfont-cart', text: 'New order #10023 by Alex Doe.' },
-	{ icon: 'adminfont-star', text: 'Inventory updated: "Coffee Beans"' },
-	{
-		icon: 'adminfont-global-community',
-		text: 'Customer "davidchen" updated account.',
-	},
-	{ icon: 'adminfont-cart', text: 'New product "Wireless Headset"' },
-];
 
 const getCSSVar = (name) =>
 	getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -47,37 +37,6 @@ const BarChartData = [
 	{ name: 'Orders', dataKey: 'orders', color: themeColors[2] },
 ];
 
-const customers = [
-	{
-		id: 1,
-		name: 'David Chen',
-		orders: 7,
-		total: '$1250',
-		icon: 'adminfont-person',
-	},
-	{
-		id: 2,
-		name: 'Sophia Martinez',
-		orders: 12,
-		total: '$2320',
-		icon: 'adminfont-person',
-	},
-	{
-		id: 3,
-		name: 'Ethan Johnson',
-		orders: 4,
-		total: '$890',
-		icon: 'adminfont-person',
-	},
-	{
-		id: 4,
-		name: 'Liam Patel',
-		orders: 9,
-		total: '$1560',
-		icon: 'adminfont-person',
-	},
-];
-
 interface DateRange {
 	startDate: Date;
 	endDate: Date;
@@ -90,15 +49,15 @@ const Dashboard: React.FC = () => {
 	const [topProducts, setTopProducts] = useState([]);
 	const [revenueData, setRevenueData] = useState([]);
 	const [recentOrder, setRecentOrders] = useState<any[]>([]);
-	const [transaction, setTransaction] = useState<any[]>([]);
 	const [store, setStore] = useState<any[]>([]);
 	const [totalOrder, setTotalOrder] = useState<any>([]);
+	const [customers, setCustomers] = useState<any>([]);
 	const [lastWithdraws, setLastWithdraws] = useState<any>([]);
+	const [activities, setActivities] = useState<any>([]);
 	const [dateRange, setDateRange] = useState<DateRange>({
 		startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
 		endDate: new Date(),
 	});
-
 
 	const { modules } = useModules();
 
@@ -113,6 +72,9 @@ const Dashboard: React.FC = () => {
 				store_id: appLocalizer.store_id,
 				orderBy: 'date_created',
 				order: 'desc',
+				startDate: dateRange.startDate,
+				endDate: dateRange.endDate,
+				dashboard: true
 			},
 		})
 			.then((response) => {
@@ -130,12 +92,13 @@ const Dashboard: React.FC = () => {
 			params: {
 				meta_key: 'multivendorx_store_id',
 				value: appLocalizer.store_id,
-				// refund_status: "refund_request",
 				status: 'refund-requested',
 				page: 1,
 				per_page: 4,
 				orderby: 'date',
 				order: 'desc',
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
 			},
 		})
 			.then((response) => {
@@ -171,15 +134,17 @@ const Dashboard: React.FC = () => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: 1,
-				row: 4,
+				row: 5,
 				store_id: appLocalizer.store_id,
-				status:'publish'
+				status:'publish',
+				startDate: dateRange.startDate,
+				endDate: dateRange.endDate,
+				dashboard: true
 			},
 		})
 			.then((response) => {
 				setAnnouncement(response.data.items || []);
-			})
-			.catch(() => { });
+			});
 
 		axios({
 			method: 'GET',
@@ -191,6 +156,8 @@ const Dashboard: React.FC = () => {
 				orderby: 'popularity',
 				order: 'desc',
 				value: appLocalizer.store_id,
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
 			},
 		})
 			.then((response) => {
@@ -227,13 +194,23 @@ const Dashboard: React.FC = () => {
 				order: 'desc',
 				orderby: 'date',
 				meta_key: 'multivendorx_store_id',
-				value: appLocalizer.store_id, // THIS FIXES YOUR ISSUE
+				value: appLocalizer.store_id,
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
 			},
 		})
 			.then((response) => {
 				const orders = response.data.map((order) => {
 					return {
 						id: order.id,
+						products:
+							order.line_items?.map((item) => ({
+								name: item.name,
+								image:
+									item.image?.src ||
+									item.image_url ||
+									'-',
+							})) || [],
 						store_name: order.store_name || '-',
 						amount: formatCurrency(order.total),
 						commission_amount: order.commission_amount
@@ -246,36 +223,18 @@ const Dashboard: React.FC = () => {
 				});
 
 				setRecentOrders(orders);
-			})
-			.catch(() => { });
-
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, 'transaction'),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				page: 1,
-				row: 4,
-				store_id: appLocalizer.store_id,
-				orderBy: 'created_at',
-				order: 'DESC',
-			},
-		})
-			.then((response) => {
-				setTransaction(response.data.transaction || []);
-			})
-			.catch((error) => {
-				setTransaction([]);
 			});
 
 		axios({
 			method: 'GET',
 			url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: { dashboard: true, id: appLocalizer.store_id }
 		}).then((res: any) => {
 			const data = res.data || {};
 			setStore(data);
 		});
+
 		axios({
 			method: 'GET',
 			url: `${appLocalizer.apiUrl}/wc/v3/orders`,
@@ -284,6 +243,8 @@ const Dashboard: React.FC = () => {
 				per_page: 1,
 				meta_key: 'multivendorx_store_id',
 				value: appLocalizer.store_id,
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
 			},
 		})
 			.then((response) => {
@@ -306,13 +267,72 @@ const Dashboard: React.FC = () => {
 				transaction_status: 'Completed',
 				orderBy: 'created_at',
 				order: 'DESC',
+				start_date: dateRange.startDate,
+				end_date: dateRange.endDate,
+				dashboard: true
 			},
 		})
 			.then((response) => {
 				setLastWithdraws(response.data.transaction || []);
 			})
 			.catch(() => setLastWithdraws([]));
-	}, []);
+
+		axios({
+			method: 'GET',
+			url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				per_page: 50,
+				status: ['completed', 'processing'],
+				meta_key: 'multivendorx_store_id',
+				meta_value: appLocalizer.store_id,
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
+			},
+		}).then((response) => {
+			const customersMap = {};
+
+			response.data.forEach((order) => {
+				const key = order.customer_id || order.billing?.email;
+				if (!key) return;
+
+				if (!customersMap[key]) {
+					customersMap[key] = {
+						name: `${order.billing.first_name} ${order.billing.last_name}`,
+						email: order.billing.email,
+						total_spent: 0,
+						order_count: 0,
+					};
+				}
+
+				customersMap[key].total_spent += Number(order.total);
+				customersMap[key].order_count += 1;
+			});
+
+			const topCustomers = Object.values(customersMap)
+				.sort((a, b) => b.total_spent - a.total_spent)
+				.slice(0, 5);
+
+			setCustomers(topCustomers)
+		});
+
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, 'notifications'),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				page: 1,
+				row: 5,
+				store_id: appLocalizer?.store_id,
+				start_date: dateRange.startDate,
+				end_date: dateRange.endDate,
+			},
+		})
+			.then((response) => {
+				setActivities(response.data || []);
+			})
+
+	}, [dateRange]);
 
 	const analyticsData = [
 		{
@@ -320,24 +340,32 @@ const Dashboard: React.FC = () => {
 			number: formatCurrency(store?.commission?.total_order_amount || 0),
 			text: 'Total Revenue',
 			color: 'primary',
+			last30: formatCurrency(store?.commission?.last_30_days.total || 0),
+			prev30: formatCurrency(store?.commission?.previous_30_days.total || 0)
 		},
 		{
 			icon: 'adminfont-order',
 			number: totalOrder,
 			text: 'Total Orders',
 			color: 'secondary',
+			last30: formatCurrency(store?.commission?.last_30_days.orders || 0),
+			prev30: formatCurrency(store?.commission?.previous_30_days.orders || 0)
 		},
 		{
 			icon: 'adminfont-store-seo',
-			number: formatCurrency(store?.commission?.commission_total || 0),
+			number: store?.visitors?.total || 0,
 			text: 'Store Views',
 			color: 'accent',
+			last30: store?.visitors?.last_30_days || 0,
+			prev30: store?.visitors?.previous_30_days || 0
 		},
 		{
 			icon: 'adminfont-commission',
 			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Commission Earned',
 			color: 'support',
+			last30: formatCurrency(store?.commission?.last_30_days.commission || 0),
+			prev30: formatCurrency(store?.commission?.previous_30_days.commission || 0)
 		},
 	];
 
@@ -402,6 +430,8 @@ const Dashboard: React.FC = () => {
 		},
 	];
 
+	const access = appLocalizer.settings_databases_value['privacy']['customer_information_access'];
+
 	return (
 		<>
 			<div className="page-title-wrapper">
@@ -456,14 +486,14 @@ const Dashboard: React.FC = () => {
 											<div>
 												{__('Last 30 days:', 'multivendorx')}{' '}
 												<span className={`${item.color}-color`}>
-													$189
+													{item.last30}
 												</span>
 											</div>
 
 											<div>
 												{__('Previous 30 days:', 'multivendorx')}{' '}
 												<span className={`${item.color}-color`}>
-													$690
+													{item.prev30}
 												</span>
 											</div>
 										</div>
@@ -482,7 +512,6 @@ const Dashboard: React.FC = () => {
 				<Column grid={8}>
 					<Card
 						title={__('Sales Overview', 'multivendorx')}
-						iconName="adminfont-external icon"
 					>
 						{revenueData && revenueData.length > 0 ? (
 							<ResponsiveContainer width="100%" height={250}>
@@ -599,7 +628,6 @@ const Dashboard: React.FC = () => {
 				<Column>
 					<Card
 						title={__('Visitors Map', 'multivendorx')}
-						iconName="adminfont-external icon"
 					>
 						<VisitorsMap dateRange={dateRange}/>
 						
@@ -610,6 +638,12 @@ const Dashboard: React.FC = () => {
 					<Card
 						title={__('Recent Orders', 'multivendorx')}
 						iconName="adminfont-external icon"
+						onIconClick={() => {
+							const url = appLocalizer.permalink_structure
+									? `/${appLocalizer.dashboard_slug}/orders`
+									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=orders`
+							window.open(url);
+						}}
 					>
 						<div className="table-wrapper">
 							{recentOrder && recentOrder.length > 0 ? (
@@ -618,10 +652,10 @@ const Dashboard: React.FC = () => {
 										<tr className="header">
 											<td>{__('Order Id', 'multivendorx')}</td>
 											<td>{__('Order Date', 'multivendorx')}</td>
-											<td>{__('Product Name(P)', 'multivendorx')}</td>
+											<td>{__('Product Name', 'multivendorx')}</td>
 											<td>{__('Total Amount', 'multivendorx')}</td>
 											<td>{__('Order Status', 'multivendorx')}</td>
-											<td>{__('Status (P)', 'multivendorx')}</td>
+											{/* <td>{__('Delivery Status (P)', 'multivendorx')}</td> */}
 										</tr>
 									</thead>
 
@@ -629,7 +663,6 @@ const Dashboard: React.FC = () => {
 										{recentOrder.map((item) => {
 											const id = item.id;
 											const orderUrl = `/dashboard/sales/orders/#view/${id}`;
-
 											return (
 												<tr key={id}>
 													<td>
@@ -642,15 +675,26 @@ const Dashboard: React.FC = () => {
 														</a>
 													</td>
 													<td>{item.date}</td>
-													<td>{item.name}</td>
+													<td>
+														{item.products && item.products.length > 0 ? (
+															item.products.map((product, index) => (
+																<div key={index} className="product-wrapper">
+																	{/* <img
+																		src={product.image}
+																		alt={product.name}
+																	/> */}
+																	{product.name}
+																</div>
+
+															))
+														) : (
+															'-'
+														)}
+													</td>
+
 													<td>{item.amount}</td>
 													<td>
 														<div className="admin-status">
-															{item.status}
-														</div>
-													</td>
-													<td>
-														<div className="admin-badge">
 															{item.status}
 														</div>
 													</td>
@@ -673,6 +717,12 @@ const Dashboard: React.FC = () => {
 					<Card
 						title={__('Best-Selling Products', 'multivendorx')}
 						iconName="adminfont-external icon"
+						onIconClick={() => {
+							const url = appLocalizer.permalink_structure
+									? `/${appLocalizer.dashboard_slug}/products`
+									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=products`
+							window.open(url);
+						}}
 					>
 						<div className="table-wrapper top-products">
 							{topProducts && topProducts.length > 0 ? (
@@ -732,7 +782,10 @@ const Dashboard: React.FC = () => {
 						title={__('Commission Overview', 'multivendorx')}
 						iconName="adminfont-external icon"
 						onIconClick={() => {
-							window.location.href = '/dashboard/reports/overview/';
+							const url = appLocalizer.permalink_structure
+									? `/${appLocalizer.dashboard_slug}/overview`
+									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=overview`
+							window.open(url);
 						}}
 					>
 						<div style={{ width: '100%', height: 400 }}>
@@ -827,8 +880,10 @@ const Dashboard: React.FC = () => {
 							title={__('Pending Refunds', 'multivendorx')}
 							iconName="adminfont-external icon"
 							onIconClick={() => {
-								window.location.href =
-									'/dashboard/sales/orders/#refund-requested';
+								const url = appLocalizer.permalink_structure
+									? `/${appLocalizer.dashboard_slug}/refund`
+									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=refund`
+								window.open(url);
 							}}
 						>
 							<div className="top-customer-wrapper">
@@ -860,55 +915,68 @@ const Dashboard: React.FC = () => {
 						</Card>
 					</Column>
 				)}
+
+				{modules.includes('privacy') && Array.isArray(access) && access.includes('name') && (
+					<Column grid={4}>
+						<Card
+							title={__('Top customer', 'multivendorx')}
+						>
+							{customers && customers.length > 0 ? (
+								customers.map((customer, index) => (
+									<div key={customer.id} className="info-item">
+										<div className="details-wrapper">
+											<div className="avatar red-color">
+												{customer.name?.charAt(0).toUpperCase()}
+											</div>
+
+											<div className="details">
+												<div className="name">
+													{customer.name}
+												</div>
+												<div className="des">
+													{customer.order_count}
+													{__('orders', 'multivendorx')}
+												</div>
+											</div>
+										</div>
+
+										<div className="right-details">
+											<div className="price">
+												{customer.total_spent}
+											</div>
+										</div>
+									</div>
+								))
+							) : (
+								<div className="no-data">
+									{__('No customers found.', 'multivendorx')}
+								</div>
+							)}
+						</Card>
+					</Column>
+				)}
 				<Column grid={4}>
 					<Card
-						title={__('Top customer (P)', 'multivendorx')}
-					>
-						{customers.map((customer, index) => (
-							<div key={customer.id} className="info-item">
-								<div className="details-wrapper">
-									<div className="avatar">
-										<i
-											className={`${customer.icon} admin-bg-color${index + 1}`}
-										/>
-									</div>
-
-									<div className="details">
-										<div className="name">
-											{customer.name}
-										</div>
-										<div className="des">
-											{customer.orders}
-											{__('orders', 'multivendorx')}
-										</div>
-									</div>
-								</div>
-
-								<div className="right-details">
-									<div className="price">
-										{customer.total}
-									</div>
-								</div>
-							</div>
-						))}
-					</Card>
-				</Column>
-				<Column grid={4}>
-					<Card
-						title={__('Store Activity (P)', 'multivendorx')}
+						title={__('Store Activity', 'multivendorx')}
 					>
 						<div className="activity-log">
-							{activities.map((a, i) => (
-								<div key={i} className="activity">
-									<div className="title">{a.text}</div>
-									<div className="des">
-										{__('Your order has been placed successfully', 'multivendorx')}
+							{activities && activities.length > 0 ? (
+								activities.map((a, i) => (
+									<div key={i} className="activity">
+										<div className="title">{a.title}</div>
+										<div className="des">
+											{a.message}
+										</div>
+										<span>
+											{a.date}
+										</span>
 									</div>
-									<span>
-										{__('2 minutes ago', 'multivendorx')}
-									</span>
+								))
+							) : (
+								<div className="no-data">
+									{__('No activity found.', 'multivendorx')}
 								</div>
-							))}
+							)}
 						</div>
 					</Card>
 				</Column>
@@ -918,8 +986,10 @@ const Dashboard: React.FC = () => {
 							title={__('Latest Reviews', 'multivendorx')}
 							iconName="adminfont-external icon"
 							onIconClick={() => {
-								window.location.href =
-									'/dashboard/store-support/store-review/';
+								const url = appLocalizer.permalink_structure
+									? `/${appLocalizer.dashboard_slug}/store-review`
+									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=store-review`
+								window.open(url);
 							}}
 						>
 							<div className="review-wrapper">

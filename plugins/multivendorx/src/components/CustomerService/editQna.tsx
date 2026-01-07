@@ -1,7 +1,7 @@
 /* global appLocalizer */
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { CommonPopup, getApiLink } from 'zyra';
+import { AdminButton, CommonPopup, getApiLink } from 'zyra';
 import axios from 'axios';
 
 interface QnaItem {
@@ -83,33 +83,36 @@ const EditQna: React.FC<EditQnaProps> = ({
 			onClose={onClose}
 			width="50rem"
 			height="100%"
-			header={
-				<>
-					<div className="title">
-						<i className="adminfont-comment"></i>
-						{__('Edit Question', 'multivendorx')}{' '}
-						{qna ? `#${qna.id}` : ''}
-					</div>
-					<div className="des">
-						{__(
-							'Update the answer or change visibility of this question.',
-							'multivendorx'
-						)}
-					</div>
-					<i onClick={onClose} className="icon adminfont-close"></i>
-				</>
-			}
+			header={{
+				icon: 'comment',
+				title: `${__('Edit Question', 'multivendorx')}${qna ? ` #${qna.id}` : ''
+					}`,
+				description: __(
+					'Update the answer or change visibility of this question.',
+					'multivendorx'
+				),
+			}}
+
 			footer={
-				<>
-					<div onClick={onClose} className="admin-btn btn-red">
-						{__('Cancel', 'multivendorx')}
-					</div>
-					<div onClick={handleSave} className="admin-btn btn-green">
-						{saving
-							? __('Saving...', 'multivendorx')
-							: __('Save', 'multivendorx')}
-					</div>
-				</>
+				<AdminButton
+					buttons={[
+						{
+							icon: 'close',
+							text: __('Cancel', 'multivendorx'),
+							className: 'red',
+							onClick: onClose,
+						},
+						{
+							icon: 'save',
+							text: saving
+								? __('Saving...', 'multivendorx')
+								: __('Save', 'multivendorx'),
+							className: 'green',
+							disabled: saving,
+							onClick: handleSave,
+						},
+					]}
+				/>
 			}
 		>
 			{qna ? (

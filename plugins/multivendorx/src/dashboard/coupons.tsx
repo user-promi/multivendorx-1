@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
+	AdminButton,
 	BasicInput,
 	CommonPopup,
 	FormGroup,
@@ -978,43 +979,33 @@ const AllCoupon: React.FC = () => {
 					onClick={() => setAddCoupon(false)}
 					width="31.25rem"
 					height="100%"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-coupon"></i>
-								{__('Add Coupon', 'multivendorx')}
-							</div>
-							<div className="des">
-								{__(
-									'Set code, discount, and usage limits, then activate.',
-									'multivendorx'
-								)}
-							</div>
-							<i
-								className="icon adminfont-close"
-								onClick={() => setAddCoupon(false)}
-							></i>
-						</>
-					}
+					header={{
+						icon: 'coupon',
+						title: __('Add Coupon', 'multivendorx'),
+						description: __(
+							'Set code, discount, and usage limits, then activate.',
+							'multivendorx'
+						),
+					}}
 					footer={
-						<>
-							<div
-								className="admin-btn btn-red"
-								onClick={() => handleSave('draft')}
-							>
-								<i className="adminfont-contact-form"></i>
-								{__('Draft', 'multivendorx')}
-							</div>
-
-							<div
-								className="admin-btn btn-purple-bg"
-								onClick={() => handleSave('publish')}
-							>
-								<i className="adminfont-publish"></i>
-								{__('Publish', 'multivendorx')}
-							</div>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'contact-form',
+									text: __('Draft', 'multivendorx'),
+									className: 'red',
+									onClick: () => handleSave('draft'),
+								},
+								{
+									icon: 'save',
+									text: __('Publish', 'multivendorx'),
+									className: 'purple-bg',
+									onClick: () => handleSave('publish'),
+								},
+							]}
+						/>
 					}
+
 				>
 					<>
 						<FormGroupWrapper>

@@ -281,6 +281,41 @@ class CommissionUtil {
             MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
+        // Last 30 days.
+        $last_30_days = $wpdb->get_row(
+            $wpdb->prepare(
+                "
+                SELECT
+                    COUNT(DISTINCT order_id) AS orders,
+                    ROUND(SUM(store_payable), 2) AS commission,
+                    ROUND(SUM(total_order_value), 2) AS total
+                FROM {$table_name}
+                WHERE store_id = %d
+                AND created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                ",
+                $store_id
+            ),
+            ARRAY_A
+        );
+
+        // Previous 30 Days.
+        $previous_30_days = $wpdb->get_row(
+            $wpdb->prepare(
+                "
+                SELECT
+                    COUNT(DISTINCT order_id) AS orders,
+                    ROUND(SUM(store_payable), 2) AS commission,
+                    ROUND(SUM(total_order_value), 2) AS total
+                FROM {$table_name}
+                WHERE store_id = %d
+                AND created_at >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
+                AND created_at < DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                ",
+                $store_id
+            ),
+            ARRAY_A
+        );
+
         return array(
             'total_order_amount'  => floatval( $result->total_order_amount ),
             'facilitator_fee'     => floatval( $result->facilitator_fee ),
@@ -290,6 +325,8 @@ class CommissionUtil {
             'shipping_tax_amount' => floatval( $result->shipping_tax_amount ),
             'commission_total'    => floatval( $result->commission_total ),
             'commission_refunded' => floatval( $result->commission_refunded ),
+            'last_30_days'        => $last_30_days,
+            'previous_30_days'    => $previous_30_days,
         );
     }
 }

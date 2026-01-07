@@ -8,6 +8,7 @@ import {
 	ToggleSetting,
 	BasicInput,
 	getApiLink,
+	AdminButton,
 } from 'zyra';
 import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { __ } from '@wordpress/i18n';
@@ -231,9 +232,9 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			const method = isUpdate ? 'PUT' : 'POST';
 			const url = isUpdate
 				? getApiLink(
-						appLocalizer,
-						`zone-shipping/${selectedZone.zone_id}`
-					)
+					appLocalizer,
+					`zone-shipping/${selectedZone.zone_id}`
+				)
 				: getApiLink(appLocalizer, 'zone-shipping');
 
 			const requestData: any = {
@@ -277,8 +278,8 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 				alert(
 					__(
 						'Failed to ' +
-							(isUpdate ? 'update' : 'add') +
-							' shipping method',
+						(isUpdate ? 'update' : 'add') +
+						' shipping method',
 						'multivendorx'
 					)
 				);
@@ -286,15 +287,15 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		} catch (err) {
 			console.error(
 				'Error ' +
-					(isEditing ? 'updating' : 'adding') +
-					' shipping method:',
+				(isEditing ? 'updating' : 'adding') +
+				' shipping method:',
 				err
 			);
 			alert(
 				__(
 					'Error ' +
-						(isEditing ? 'updating' : 'adding') +
-						' shipping method',
+					(isEditing ? 'updating' : 'adding') +
+					' shipping method',
 					'multivendorx'
 				)
 			);
@@ -393,7 +394,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					data={data}
 					columns={columns as ColumnDef<Record<string, any>, any>[]}
 					rowSelection={{}}
-					onRowSelectionChange={() => {}}
+					onRowSelectionChange={() => { }}
 				/>
 			</div>
 
@@ -402,39 +403,35 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					open={addShipping}
 					width="31.25rem"
 					height="60%"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-shipping"></i>
-								{isEditing
-									? __('Edit Shipping — ', 'multivendorx')
-									: __('Add Shipping — ', 'multivendorx')}
-								{selectedZone.zone_name}
-							</div>
-							<i
-								className="icon adminfont-close "
-								onClick={() => setAddShipping(false)}
-							></i>
-						</>
-					}
+					header={{
+						icon: 'shipping',
+						title: `${isEditing
+							? __('Edit Shipping', 'multivendorx')
+							: __('Add Shipping', 'multivendorx')
+							} — ${selectedZone.zone_name}`,
+					}}
+
 					footer={
-						<>
-							<button
-								className="admin-btn btn-red"
-								onClick={() => setAddShipping(false)}
-							>
-								{__('Cancel', 'multivendorx')}
-							</button>
-							<button
-								className="admin-btn btn-purple-bg"
-								onClick={handleSave}
-							>
-								{isEditing
-									? __('Update', 'multivendorx')
-									: __('Save', 'multivendorx')}
-							</button>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: () => setAddShipping(false),
+								},
+								{
+									icon: 'save',
+									text: isEditing
+										? __('Update', 'multivendorx')
+										: __('Save', 'multivendorx'),
+									className: 'purple-bg',
+									onClick: handleSave,
+								},
+							]}
+						/>
 					}
+
 				>
 					<>
 						<div className="form-group-wrapper">
@@ -453,35 +450,35 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									options={
 										isEditing
 											? [
-													{
-														key: formData.shippingMethod,
-														value: formData.shippingMethod,
-														label: formData.shippingMethod
-															.replace('_', ' ')
-															.replace(
-																/\b\w/g,
-																(c) =>
-																	c.toUpperCase()
-															),
-													},
-												]
+												{
+													key: formData.shippingMethod,
+													value: formData.shippingMethod,
+													label: formData.shippingMethod
+														.replace('_', ' ')
+														.replace(
+															/\b\w/g,
+															(c) =>
+																c.toUpperCase()
+														),
+												},
+											]
 											: [
-													{
-														key: 'local_pickup',
-														value: 'local_pickup',
-														label: 'Local pickup',
-													},
-													{
-														key: 'free_shipping',
-														value: 'free_shipping',
-														label: 'Free shipping',
-													},
-													{
-														key: 'flat_rate',
-														value: 'flat_rate',
-														label: 'Flat Rate',
-													},
-												]
+												{
+													key: 'local_pickup',
+													value: 'local_pickup',
+													label: 'Local pickup',
+												},
+												{
+													key: 'free_shipping',
+													value: 'free_shipping',
+													label: 'Free shipping',
+												},
+												{
+													key: 'flat_rate',
+													value: 'flat_rate',
+													label: 'Flat Rate',
+												},
+											]
 									}
 									disabled={isEditing}
 								/>
@@ -535,27 +532,27 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									</div>
 									{formData.freeShippingType ===
 										'min_order' && (
-										<div className="form-group">
-											<label className="font-medium">
-												{__(
-													'Minimum Order Cost',
-													'multivendorx'
-												)}
-											</label>
-											<BasicInput
-												type="number"
-												name="minOrderCost"
-												placeholder="Enter minimum order cost"
-												value={formData.minOrderCost}
-												onChange={(e: any) =>
-													handleChange(
-														'minOrderCost',
-														e.target.value
-													)
-												}
-											/>
-										</div>
-									)}
+											<div className="form-group">
+												<label className="font-medium">
+													{__(
+														'Minimum Order Cost',
+														'multivendorx'
+													)}
+												</label>
+												<BasicInput
+													type="number"
+													name="minOrderCost"
+													placeholder="Enter minimum order cost"
+													value={formData.minOrderCost}
+													onChange={(e: any) =>
+														handleChange(
+															'minOrderCost',
+															e.target.value
+														)
+													}
+												/>
+											</div>
+										)}
 								</>
 							)}
 
