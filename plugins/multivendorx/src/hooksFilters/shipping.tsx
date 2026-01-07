@@ -65,9 +65,7 @@ const ShippingCard = ({ product, handleChange }) => {
 
 			{/* Dimensions */}
 			<FormGroupWrapper>
-				<FormGroup cols={3}
-					label={`${__('Dimensions', 'multivendorx')} (${appLocalizer.dimension_unit})`}
-				>
+				<FormGroup cols={3} label={`${__('Dimensions', 'multivendorx')} (${appLocalizer.dimension_unit})`} >
 					<BasicInput
 						name="product_length"
 						value={product.product_length}
