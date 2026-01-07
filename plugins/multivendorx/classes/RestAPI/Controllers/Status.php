@@ -132,6 +132,9 @@ class Status extends \WP_REST_Controller {
                         [
                             'multivendorx_visitor_stats_data_',
                             'multivendorx_report_data_',
+                            'multivendorx_withdrawal_data_',
+                            'multivendorx_review_data_',
+                            'multivendorx_announcement_data_',
                         ]
                     );
 

@@ -145,6 +145,7 @@ class Rest extends \WP_REST_Controller {
             $orderBy        = sanitize_text_field( $request->get_param( 'orderBy' ) );
             $order          = sanitize_text_field( $request->get_param( 'order' ) );
             $overall_rating = $request->get_param( 'overall_rating' );
+            $dashboard      = $request->get_param( 'dashboard' );
             $args           = array();
 
             // --- Step 3: Apply Store Filter ---.
@@ -196,6 +197,12 @@ class Rest extends \WP_REST_Controller {
                 // Fallback default sort.
                 $args['order_by']  = 'date_created';
                 $args['order_dir'] = 'DESC';
+            }
+
+            if ($dashboard) {
+                if (get_transient('multivendorx_review_data_' . $store_id)) {
+                    return get_transient('multivendorx_review_data_' . $store_id);
+                }
             }
 
             // --- Step 6: Fetch Review Data ---.
@@ -253,6 +260,10 @@ class Rest extends \WP_REST_Controller {
             $rejected_args           = $base_args;
             $rejected_args['status'] = 'rejected';
             $rejected_count          = Util::get_review_information( $rejected_args );
+
+            if ($dashboard) {
+                set_transient('multivendorx_review_data_' . $store_id, array( 'items' => $formatted ), DAY_IN_SECONDS);
+            }
 
             // --- Step 9: Return Final Response ---.
             return rest_ensure_response(

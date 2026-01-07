@@ -182,7 +182,7 @@ class Stores extends \WP_REST_Controller {
                     'colors' => $colors,
                 ];
 
-                set_transient( $cache_key, $data, 12 * HOUR_IN_SECONDS );
+                set_transient( $cache_key, $data, DAY_IN_SECONDS );
 
                 return rest_ensure_response($data);
             }
@@ -731,6 +731,7 @@ class Stores extends \WP_REST_Controller {
 
             $overall_reviews = Util::get_overall_rating( $id );
             $reviews         = Util::get_reviews_by_store( $id );
+            $visitors        = StoreUtil::get_store_visitors( $id );
 
             $response = array(
                 'id'                 => $store->get_id(),
@@ -748,6 +749,7 @@ class Stores extends \WP_REST_Controller {
                 'primary_owner_info' => $primary_owner_info,
                 'overall_reviews'    => $overall_reviews,
                 'total_reviews'      => is_array( $reviews ) ? count( $reviews ) : 0,
+                'visitors'           => $visitors,
             );
 
             foreach ( (array) $store->meta_data as $key => $values ) {
