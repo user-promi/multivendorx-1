@@ -6,7 +6,14 @@ import img from '../../assets/images/multivendorx-logo.png';
 
 const SetupWizard: React.FC = () => {
 	// Required state for ExpandablePanelGroup
-	const [value, setValue] = useState({});
+	const [value, setValue] = useState({
+		'commission_setup': {
+			'disbursement_order_status': ['completed']
+		},
+		'store_setup': {
+			'approve_store' : 'manually'
+		}
+	});
 	const settingChanged = useRef(false);
 
 	// NEW: Wizard step control
