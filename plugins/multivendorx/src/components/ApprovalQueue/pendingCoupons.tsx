@@ -9,6 +9,7 @@ import {
 	CommonPopup,
 	TextArea,
 	MultiCalendarInput,
+	AdminButton,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -406,61 +407,54 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 							setIsSubmitting(false);
 						}}
 						width="31.25rem"
-						header={
-							<>
-								<div className="title">
-									<i className="adminfont-cart"></i>
-									{__('Reason', 'multivendorx')}
-								</div>
-								<i
-									onClick={() => {
-										setRejectPopupOpen(false);
-										setRejectReason('');
-										setIsSubmitting(false);
-									}}
-									className="icon adminfont-close"
-								></i>
-							</>
-						}
+						header={{
+							icon: 'cart',
+							title: __('Reason', 'multivendorx'),
+							onClose: () => {
+								setRejectPopupOpen(false);
+								setRejectReason('');
+								setIsSubmitting(false);
+							},
+						}}
 						footer={
-							<>
-								<div
-									className="admin-btn btn-red"
-									onClick={() => {
-										setRejectPopupOpen(false);
-										setRejectReason('');
-										setIsSubmitting(false);
-									}}
-								>
-									{__('Cancel', 'multivendorx')}
-								</div>
-								<button
-									className="admin-btn btn-purple"
-									onClick={submitReject}
-									disabled={isSubmitting}
-								>
-									{isSubmitting
-										? __('Submitting...', 'multivendorx')
-										: __('Reject', 'multivendorx')}
-								</button>
-							</>
+							<AdminButton
+								buttons={[
+									{
+										icon: 'close',
+										text: __('Cancel', 'multivendorx'),
+										className: 'red',
+										onClick: () => {
+											setRejectPopupOpen(false);
+											setRejectReason('');
+											setIsSubmitting(false);
+										},
+									},
+									{
+										icon: 'cross',
+										text: isSubmitting
+											? __('Submitting...', 'multivendorx')
+											: __('Reject', 'multivendorx'),
+										className: 'purple-bg',
+										disabled: isSubmitting,
+										onClick: submitReject,
+									},
+								]}
+							/>
 						}
 					>
 						<>
-							<div className="form-group">
-								<TextArea
-									name="reject_reason"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
-									value={rejectReason}
-									onChange={(
-										e: React.ChangeEvent<HTMLTextAreaElement>
-									) => setRejectReason(e.target.value)}
-									placeholder="Enter reason for rejecting this coupon..."
-									rows={4}
-								/>
-							</div>
+							<TextArea
+								name="reject_reason"
+								wrapperClass="setting-from-textarea"
+								inputClass="textarea-input"
+								descClass="settings-metabox-description"
+								value={rejectReason}
+								onChange={(
+									e: React.ChangeEvent<HTMLTextAreaElement>
+								) => setRejectReason(e.target.value)}
+								placeholder="Enter reason for rejecting this coupon..."
+								rows={4}
+							/>
 						</>
 					</CommonPopup>
 				)}

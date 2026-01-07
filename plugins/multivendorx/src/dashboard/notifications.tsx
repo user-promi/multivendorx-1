@@ -93,7 +93,7 @@ const Notifications : React.FC<NotificationsProps> = ({ type }) => {
 				<div className="item"
 					onClick={() => handleNotificationClick(item.id)}
 				>
-					<div className={`icon admin-badge green`}>
+					<div className={`icon admin-badge admin-color${item.id}`} >
 						<i
 							className={
 								item.icon || 'adminfont-user-network-icon'

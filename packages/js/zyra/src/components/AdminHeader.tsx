@@ -122,7 +122,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                     <img className="brand-logo" src={ brandImg } alt="Logo" />
 
                     <div className="version-tag">
-                        <span className="admin-badge blue">
+                        <span className="admin-badge purple">
                             <i className="adminfont-info"></i> <b>Free:</b>{ ' ' }
                             { free }
                         </span>

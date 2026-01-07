@@ -4,15 +4,18 @@ import { getApiLink } from 'zyra';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Notifications from './dashboard/notifications';
 import './hooksFilters';
+import { __ } from '@wordpress/i18n';
+import { formatTimeAgo } from './services/commonFunction';
 
 const Dashboard = () => {
 	const [menu, setMenu] = useState({});
 	const [openSubmenus, setOpenSubmenus] = useState({});
 	const [storeData, setStoreData] = useState(null);
 	const [currentTab, setCurrentTab] = useState('');
+	const [announcement, setAnnouncement] = useState<any[]>([]);
 	const [showUserDropdown, setShowUserDropdown] = useState(false);
 	const [showNotifications, setShowNotifications] = useState(false);
-	const [showActivities, setShowActivities] = useState(false);
+	const [showAnnouncements, setshowAnnouncements] = useState(false);
 	const [noPermission, setNoPermission] = useState(false);
 	const [showStoreList, setShowStoreList] = useState(false);
 	const [isDarkMode, setIsDarkMode] = useState(false);
@@ -64,12 +67,28 @@ const Dashboard = () => {
 		}).then((res) => {
 			setMenu(res.data || {});
 		});
+
+		axios({
+			method: 'GET',
+			url: getApiLink(appLocalizer, 'announcement'),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				page: 1,
+				row: 4,
+				store_id: appLocalizer.store_id,
+				status: 'publish'
+			},
+		})
+			.then((response) => {
+				setAnnouncement(response.data.items || []);
+			})
+			.catch(() => { });
 	}, []);
 
 	// dark mode
 	useEffect(() => {
 		document.body.classList.add(appLocalizer.settings_databases_value['store-appearance']
-            ?.store_color_settings?.selectedPalette);
+			?.store_color_settings?.selectedPalette);
 		document.body.classList.toggle('dark', isDarkMode);
 
 		return () => {
@@ -285,7 +304,7 @@ const Dashboard = () => {
 				setShowUserDropdown(false);
 				setShowStoreList(false);
 				setShowNotifications(false);
-				setShowActivities(false);
+				setshowAnnouncements(false);
 			}
 		};
 
@@ -297,7 +316,7 @@ const Dashboard = () => {
 	const toggleUserDropdown = () => {
 		setShowUserDropdown((prev) => !prev);
 		setShowNotifications(false);
-		setShowActivities(false);
+		setshowAnnouncements(false);
 	};
 
 	// Toggle notifications
@@ -305,12 +324,12 @@ const Dashboard = () => {
 		e.stopPropagation();
 		setShowNotifications((prev) => !prev);
 		setShowUserDropdown(false);
-		setShowActivities(false);
+		setshowAnnouncements(false);
 	};
 
-	const toggleActivities = (e) => {
+	const toggleAnnouncements = (e) => {
 		e.stopPropagation();
-		setShowActivities((prev) => !prev);
+		setshowAnnouncements((prev) => !prev);
 		setShowNotifications(false);
 		setShowUserDropdown(false);
 	};
@@ -516,18 +535,76 @@ const Dashboard = () => {
 										Notification
 									</span>
 
-									{showNotifications && <Notifications type="notification"/>}
+									{showNotifications && <Notifications type="notification" />}
 								</li>
 								<li className="tooltip-wrapper bottom">
 									<i
 										className="adminfont-icon notification adminfont-notification"
-										onClick={toggleActivities}
+										onClick={toggleAnnouncements}
 									></i>
 									<span className="tooltip-name">
 										Announcements
 									</span>
+									{showAnnouncements && (
+										<>
+											<div className="dropdown-menu notification" ref={userDropdownRef}>
+												<div className="title">
+													{__('Announcements', 'multivendorx')}
+													{announcement && announcement.length > 0 && (
+														<span className="admin-badge green">
+															{announcement.length} {__('New', 'multivendorx')}
+														</span>
+													)}
+												</div>
+												<div className="notification">
+													{announcement && announcement.length > 0 ? (
+														<ul>
+															{announcement.map((item, index) => (
+																<li key={item.id}>
+																	<div className="item"
+																	// onClick={() => handleNotificationClick(item.id)}
+																	>
+																		<div className={`icon admin-badge admin-color${index + 1}`} >
+																			<i
+																				// className={
+																				// 	item.icon || 'adminfont-user-network-icon'
+																				// }
+																				className={
+																					'adminfont-user-network-icon'
+																				}
+																			></i>
+																		</div>
+																		<div className="details">
+																			<span className="heading">{item.title}</span>
+																			<span className="message">{item.content}</span>
+																			<span className="time">{formatTimeAgo(item.date)}</span>
+																		</div>
+																	</div>
+																</li>
+															))}
+														</ul>
+													) : (
+														<div className="no-data">
+															{__('No announcements found.', 'multivendorx')}
+														</div>
+													)}
+												</div>
 
-									{showActivities && <Notifications type="activity"/>}
+												<div className="footer">
+													<a
+														href={appLocalizer.permalink_structure
+															? `/${appLocalizer.dashboard_slug}/view-notifications/#subtab=announcements`
+															: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications&subtab=announcements`}
+														className="admin-btn btn-purple"
+													// onClick={(e) => e.stopPropagation()}
+													>
+														<i className="adminfont-eye"></i>{__('View all announcements', 'multivendorx')}
+													</a>
+												</div>
+											</div>
+										</>
+									)
+									}
 								</li>
 								<li
 									id="fullscreenToggle"

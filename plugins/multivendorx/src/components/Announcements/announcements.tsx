@@ -666,7 +666,7 @@ export const Announcements: React.FC = () => {
 			>
 				<ProPopup
 					confirmMode
-					title="Delete Announcement"
+					title="Are you sure"
 					confirmMessage={
 						selectedAn
 							? `Are you sure you want to delete Announcement?`

@@ -27,24 +27,15 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 				onClose={onClose}
 				width="31.25rem"
 				height="70%"
-				header={
-					<>
-						<div className="title">
-							<i className="adminfont-wallet-in"></i>
-							{__('Transaction Details', 'multivendorx')}
-						</div>
-						<div className="des">
-							{__(
-								'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
-								'multivendorx'
-							)}
-						</div>
-						<i
-							className="icon adminfont-close"
-							onClick={onClose}
-						></i>
-					</>
-				}
+				header={{
+					icon: 'wallet-in',
+					title: __('Transaction Details', 'multivendorx'),
+					description: __(
+						'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+						'multivendorx'
+					),
+				}}
+
 			>
 				<>
 					<>
@@ -123,19 +114,18 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 								</div>
 								<div className="value">
 									<span
-										className={`admin-badge ${
-											transaction.status === 'Completed'
+										className={`admin-badge ${transaction.status === 'Completed'
 												? 'green'
 												: 'red'
-										}`}
+											}`}
 									>
 										{transaction.status
 											? transaction.status
-													.replace(/^wc-/, '') // remove prefix
-													.replace(/_/g, ' ') // underscores → spaces
-													.replace(/\b\w/g, (c) =>
-														c.toUpperCase()
-													) // capitalize
+												.replace(/^wc-/, '') // remove prefix
+												.replace(/_/g, ' ') // underscores → spaces
+												.replace(/\b\w/g, (c) =>
+													c.toUpperCase()
+												) // capitalize
 											: ''}
 									</span>
 								</div>

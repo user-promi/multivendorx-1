@@ -9,6 +9,9 @@ import {
 	getApiLink,
 	ToggleSetting,
 	MultiCalendarInput,
+	AdminButton,
+	FormGroupWrapper,
+	FormGroup,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -311,10 +314,10 @@ const SupportTickets: React.FC = () => {
 				prev.map((r) =>
 					r.review_id === selectedReview.review_id
 						? {
-								...r,
-								reply: replyText,
-								status: selectedReview.status,
-							}
+							...r,
+							reply: replyText,
+							status: selectedReview.status,
+						}
 						: r
 				)
 			);
@@ -466,10 +469,10 @@ const SupportTickets: React.FC = () => {
 				const rawDate = row.original.date_created;
 				const formattedDate = rawDate
 					? new Intl.DateTimeFormat('en-US', {
-							month: 'short',
-							day: 'numeric',
-							year: 'numeric',
-						}).format(new Date(rawDate))
+						month: 'short',
+						day: 'numeric',
+						year: 'numeric',
+					}).format(new Date(rawDate))
 					: '-';
 				return (
 					<TableCell title={formattedDate}>{formattedDate}</TableCell>
@@ -574,41 +577,32 @@ const SupportTickets: React.FC = () => {
 					open={!!selectedReview}
 					onClose={() => setSelectedReview(null)}
 					width="31.25rem"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-store-review"></i>
-								{__('Reply to Review', 'multivendorx')} -{' '}
-								{selectedReview.store_name}
-							</div>
-							<i
-								onClick={() => setSelectedReview(null)}
-								className="icon adminfont-close"
-							></i>
-						</>
-					}
+					header={{
+						icon: 'store-review',
+						title: `${__('Reply to Review', 'multivendorx')} - ${selectedReview.store_name}`,
+					}}
 					footer={
-						<>
-							<button
-								type="button"
-								onClick={() => setSelectedReview(null)}
-								className="admin-btn btn-red"
-							>
-								<i className="adminfont-close"></i>
-								{__('Cancel', 'multivendorx')}
-							</button>
-							<button
-								onClick={handleSaveReply}
-								className="admin-btn btn-purple-bg"
-							>
-								<i className="adminfont-active"></i>
-								{__('Save', 'multivendorx')}
-							</button>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: () => setSelectedReview(null),
+								},
+								{
+									icon: 'save',
+									text: __('Save', 'multivendorx'),
+									className: 'purple-bg',
+									onClick: handleSaveReply,
+								},
+							]}
+						/>
 					}
+
 				>
 					<>
-						<div className="form-group-wrapper">
+						<FormGroupWrapper>
 							<div className="review-popup-wrapper">
 								<div className="customer-wrapper">
 									<div className="avatar">
@@ -627,14 +621,13 @@ const SupportTickets: React.FC = () => {
 												{[...Array(5)].map((_, i) => (
 													<i
 														key={i}
-														className={`star-icon adminfont-star ${
-															i <
+														className={`star-icon adminfont-star ${i <
 															Math.round(
 																selectedReview.overall_rating
 															)
-																? 'filled'
-																: ''
-														}`}
+															? 'filled'
+															: ''
+															}`}
 													></i>
 												))}
 
@@ -660,10 +653,7 @@ const SupportTickets: React.FC = () => {
 								</div>
 							</div>
 
-							<div className="form-group">
-								<label htmlFor="reply">
-									{__('Respond to customer', 'multivendorx')}
-								</label>
+							<FormGroup label={__('Respond to customer', 'multivendorx')} htmlFor="respond-to-customer">
 								<textarea
 									id="reply"
 									value={replyText}
@@ -673,16 +663,10 @@ const SupportTickets: React.FC = () => {
 									rows={5}
 									className="textarea-input"
 								/>
-							</div>
+							</FormGroup>
 
 							{/* Status Toggle */}
-							<div className="form-group">
-								<label htmlFor="status">
-									{__(
-										'Control if this review appears publicly, stays under moderation, or is excluded from the store page.',
-										'multivendorx'
-									)}
-								</label>
+							<FormGroup label={__('Control if this review appears publicly, stays under moderation, or is excluded from the store page.', 'multivendorx')}>
 								<ToggleSetting
 									wrapperclassName="setting-form-input"
 									descclassName="settings-metabox-description"
@@ -722,8 +706,8 @@ const SupportTickets: React.FC = () => {
 										);
 									}}
 								/>
-							</div>
-						</div>
+							</FormGroup>
+						</FormGroupWrapper>
 					</>
 				</CommonPopup>
 			)}
