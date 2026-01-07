@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { BasicInput, getApiLink, GoogleMap, Mapbox, SelectInput, SuccessNotice, useModules } from 'zyra';
+import { BasicInput, FormGroup, FormGroupWrapper, getApiLink, GoogleMap, Mapbox, SelectInput, SuccessNotice, useModules } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 declare global {
@@ -46,29 +46,29 @@ const BusinessAddress = () => {
 	useEffect(() => {
 		if (!newAddress) return;
 		if (!stateOptions.length) return;
-	
+
 		const foundState = stateOptions.find(
 			(item) =>
 				item.label.split(' ')[0] === newAddress.state.split(' ')[0] ||
 				item.value === newAddress.state
 		);
-	
+
 		const resolvedLocation = {
 			...newAddress,
 			state: foundState ? foundState.value : newAddress.state,
 		};
-	
+
 		applyLocation(resolvedLocation);
 		setNewAddress(null);
 	}, [stateOptions]);
 
 	const applyLocation = (locationData: any) => {
 		setAddressData((prev) => ({ ...prev, ...locationData }));
-	
+
 		const updatedFormData = { ...formData, ...locationData };
 		setFormData(updatedFormData);
 		autoSave(updatedFormData);
-	};	
+	};
 
 	const handleLocationUpdate = (locationData: any) => {
 		setNewAddress(locationData);
@@ -83,11 +83,11 @@ const BusinessAddress = () => {
 	// Get REST API base URL
 	useEffect(() => {
 		if (!settings?.geolocation) return;
-	
+
 		const provider = settings.geolocation.choose_map_api;
-	
+
 		setMapProvider(provider);
-	
+
 		if (provider === 'google_map_set') {
 			setApiKey(settings.geolocation.google_api_key || '');
 		} else if (provider === 'mapbox_api_set') {
@@ -240,11 +240,11 @@ const BusinessAddress = () => {
 
 	// Then update your autoSave function:
 	const autoSave = (updatedData: any) => {
-        if (settings['store-capability']
-            ?.edit_store_info_activation || [].includes('store_address')) {
-            return;
-        }
-        // Format email data for backend
+		if (settings['store-capability']
+			?.edit_store_info_activation || [].includes('store_address')) {
+			return;
+		}
+		// Format email data for backend
 		const formattedData = { ...updatedData };
 
 		axios({
@@ -267,7 +267,7 @@ const BusinessAddress = () => {
 		if (!modules.includes('geo-location') || !apiKey) {
 			return null;
 		}
-	
+
 		const commonProps = {
 			apiKey,
 			locationAddress: addressData.location_address,
@@ -279,14 +279,14 @@ const BusinessAddress = () => {
 			instructionText: __('Enter a search term or drag/drop a pin on the map.'),
 			placeholderSearch: __('Search for a location...'),
 		};
-	
+
 		switch (settings.geolocation.choose_map_api) {
 			case 'google_map_set':
 				return <GoogleMap {...commonProps} />;
-	
+
 			case 'mapbox_api_set':
 				return <Mapbox {...commonProps} />;
-	
+
 			default:
 				return null;
 		}
@@ -298,76 +298,65 @@ const BusinessAddress = () => {
 
 			{errorMsg && <div className="error-message">{errorMsg}</div>}
 
-			{/* Address Field */}
-			<div className="card-body">
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						<label htmlFor="location_address">
-							{__('Address *')}
-						</label>
-						<BasicInput
-							name="location_address"
-							value={addressData.location_address}
-							wrapperClass="setting-form-input"
-							descClass="settings-metabox-description"
-							onChange={handleAddressChange}
-						/>
-					</div>
-				</div>
+			<FormGroupWrapper>
+				{/* Address */}
+				<FormGroup
+					label={__('Address *', 'multivendorx')}
+					htmlFor="location_address"
+				>
+					<BasicInput
+						name="location_address"
+						value={addressData.location_address}
+						wrapperClass="setting-form-input"
+						descClass="settings-metabox-description"
+						onChange={handleAddressChange}
+					/>
+				</FormGroup>
+				{/* City */}
+				<FormGroup cols={2} label={__('City', 'multivendorx')} htmlFor="city">
+					<BasicInput
+						name="city"
+						value={addressData.city}
+						wrapperClass="setting-form-input"
+						descClass="settings-metabox-description"
+						onChange={handleAddressChange}
+					/>
+				</FormGroup>
 
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						<label htmlFor="city">{__('City')}</label>
-						<BasicInput
-							name="city"
-							value={addressData.city}
-							wrapperClass="setting-form-input"
-							descClass="settings-metabox-description"
-							onChange={handleAddressChange}
-						/>
-					</div>
-					<div className="form-group">
-						<label htmlFor="zip">
-							{__('Zip code')}
-						</label>
-						<BasicInput
-							name="zip"
-							value={addressData.zip}
-							wrapperClass="setting-form-input"
-							descClass="settings-metabox-description"
-							onChange={handleAddressChange}
-						/>
-					</div>
-				</div>
+				{/* Zip */}
+				<FormGroup cols={2} label={__('Zip code', 'multivendorx')} htmlFor="zip">
+					<BasicInput
+						name="zip"
+						value={addressData.zip}
+						wrapperClass="setting-form-input"
+						descClass="settings-metabox-description"
+						onChange={handleAddressChange}
+					/>
+				</FormGroup>
 
-				{/* Country and State */}
-				<div className="form-group-wrapper">
-					<div className="form-group">
-						<label htmlFor="country">
-							{__('Country')}
-						</label>
-						<SelectInput
-							name="country"
-							value={formData.country}
-							options={
-								appLocalizer.country_list || []
-							}
-							type="single-select"
-							onChange={handleCountryChange}
-						/>
-					</div>
-					<div className="form-group">
-						<label htmlFor="state">{__('State')}</label>
-						<SelectInput
-							name="state"
-							value={formData.state}
-							options={stateOptions}
-							type="single-select"
-							onChange={handleStateChange}
-						/>
-					</div>
-				</div>
-			</div>
+				{/* Country */}
+				<FormGroup cols={2} label={__('Country', 'multivendorx')} htmlFor="country">
+					<SelectInput
+						name="country"
+						value={formData.country}
+						options={appLocalizer.country_list || []}
+						type="single-select"
+						onChange={handleCountryChange}
+					/>
+				</FormGroup>
+
+				{/* State */}
+				<FormGroup cols={2} label={__('State', 'multivendorx')} htmlFor="state">
+					<SelectInput
+						name="state"
+						value={formData.state}
+						options={stateOptions}
+						type="single-select"
+						onChange={handleStateChange}
+					/>
+				</FormGroup>
+			</FormGroupWrapper>
+
 
 			{/* Map Component */}
 			{renderMapComponent()}

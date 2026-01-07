@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BasicInput, TextArea, SuccessNotice, getApiLink } from 'zyra';
+import { BasicInput, TextArea, SuccessNotice, getApiLink, FormGroupWrapper, FormGroup } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const GeneralSettings = () => {
@@ -76,11 +76,11 @@ const GeneralSettings = () => {
 
 	return (
 		<>
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="store-name">
-						{__('Name', 'multivendorx')}
-					</label>
+			<FormGroupWrapper>
+				<FormGroup
+					label={__('Name', 'multivendorx')}
+					htmlFor="name"
+				>
 					<BasicInput
 						name="name"
 						wrapperClass="setting-form-input"
@@ -89,14 +89,12 @@ const GeneralSettings = () => {
 						onChange={handleChange}
 						readOnly={settings.includes('store_name')}
 					/>
-				</div>
-			</div>
+				</FormGroup>
 
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="store-slug">
-						{__('Storefront link', 'multivendorx')}
-					</label>
+				<FormGroup
+					label={__('Storefront link', 'multivendorx')}
+					htmlFor="slug"
+				>
 					<BasicInput
 						name="slug"
 						wrapperClass="setting-form-input"
@@ -104,14 +102,12 @@ const GeneralSettings = () => {
 						value={formData.slug || ''}
 						onChange={handleChange}
 					/>
-				</div>
-			</div>
+				</FormGroup>
 
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="store-description">
-						{__('Description', 'multivendorx')}
-					</label>
+				<FormGroup
+					label={__('Description', 'multivendorx')}
+					htmlFor="description"
+				>
 					<TextArea
 						name="description"
 						inputClass="textarea-input"
@@ -119,17 +115,15 @@ const GeneralSettings = () => {
 						onChange={handleChange}
 						readOnly={settings.includes('store_description')}
 					/>
-				</div>
-			</div>
+				</FormGroup>
 
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="message-to-buyer">
-						{__(
-							'Buyer welcome message after purchase',
-							'multivendorx'
-						)}
-					</label>
+				<FormGroup
+					label={__(
+						'Buyer welcome message after purchase',
+						'multivendorx'
+					)}
+					htmlFor="messageToBuyer"
+				>
 					<BasicInput
 						name="messageToBuyer"
 						wrapperClass="setting-form-input"
@@ -137,8 +131,9 @@ const GeneralSettings = () => {
 						value={formData.messageToBuyer || ''}
 						onChange={handleChange}
 					/>
-				</div>
-			</div>
+				</FormGroup>
+			</FormGroupWrapper>
+
 
 			<SuccessNotice message={successMsg} />
 		</>

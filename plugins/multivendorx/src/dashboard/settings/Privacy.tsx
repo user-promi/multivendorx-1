@@ -6,6 +6,8 @@ import {
 	SuccessNotice,
 	Section,
 	MultiCheckBox,
+	FormGroupWrapper,
+	FormGroup,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
@@ -78,50 +80,47 @@ const Privacy = () => {
 		<>
 			<SuccessNotice message={successMsg} />
 
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="shipping_policy">
-						{__('Shipping Policy', 'multivendorx')}
-					</label>
+			<FormGroupWrapper>
+				<FormGroup
+					label={__('Shipping Policy', 'multivendorx')}
+					htmlFor="shipping_policy"
+				>
 					<TextArea
 						name="shipping_policy"
 						inputClass="textarea-input"
 						value={formData.shipping_policy || ''}
 						onChange={handleChange}
 					/>
-				</div>
-			</div>
+				</FormGroup>
 
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="refund_policy">
-						{__('Refund Policy', 'multivendorx')}
-					</label>
+				<FormGroup
+					label={__('Refund Policy', 'multivendorx')}
+					htmlFor="refund_policy"
+				>
 					<TextArea
 						name="refund_policy"
 						inputClass="textarea-input"
 						value={formData.refund_policy || ''}
 						onChange={handleChange}
 					/>
-				</div>
-			</div>
+				</FormGroup>
 
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label htmlFor="exchange_policy">
-						{__(
-							'Cancellation/Return/Exchange Policy',
-							'multivendorx'
-						)}
-					</label>
+				<FormGroup
+					label={__(
+						'Cancellation/Return/Exchange Policy',
+						'multivendorx'
+					)}
+					htmlFor="exchange_policy"
+				>
 					<TextArea
 						name="exchange_policy"
 						inputClass="textarea-input"
 						value={formData.exchange_policy || ''}
 						onChange={handleChange}
 					/>
-				</div>
-			</div>
+				</FormGroup>
+			</FormGroupWrapper>
+
 
 			<Section key="section" hint="Deactivation" />
 
@@ -134,15 +133,14 @@ const Privacy = () => {
 				</div>
 			) : (
 				<>
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label htmlFor="store-description">
-								{__('Enable Deactivation', 'multivendorx')}
-							</label>
+					<FormGroupWrapper>
+						<FormGroup
+							label={__('Enable Deactivation', 'multivendorx')}
+							htmlFor="enable_deactivation"
+						>
 							<MultiCheckBox
 								wrapperClass="toggle-btn"
 								descClass="settings-metabox-description"
-								description=""
 								inputWrapperClass="toggle-checkbox-header"
 								inputInnerWrapperClass="toggle-checkbox"
 								idPrefix="toggle-switch"
@@ -154,21 +152,18 @@ const Privacy = () => {
 									},
 								]}
 								value={formData.enable_deactivation || []}
-								onChange={(selected) => {
-									setFormData((prev) => ({
-										...prev,
-										enable_deactivation:
-											selected.target.value,
-									}));
-									autoSave({
+								onChange={(selected: any) => {
+									const updated = {
 										...formData,
-										enable_deactivation:
-											selected.target.value,
-									});
+										enable_deactivation: selected.target.value,
+									};
+									setFormData(updated);
+									autoSave(updated);
 								}}
 							/>
-						</div>
-					</div>
+						</FormGroup>
+					</FormGroupWrapper>
+
 					{formData.enable_deactivation && (
 						<>
 							<div className="form-group-wrapper">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { addFilter } from '@wordpress/hooks';
-import { BasicInput, Card, SelectInput } from 'zyra';
+import { BasicInput, Card, FormGroup, FormGroupWrapper, SelectInput } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const ShippingCard = ({ product, handleChange }) => {
@@ -41,12 +41,8 @@ const ShippingCard = ({ product, handleChange }) => {
 			toggle
 		>
 			{/* Weight & Shipping class */}
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label>
-						{__('Weight', 'multivendorx')} ({appLocalizer.weight_unit})
-					</label>
-
+			<FormGroupWrapper>
+				<FormGroup label={__('Weight', 'multivendorx')} htmlFor="Weight">
 					<BasicInput
 						name="weight"
 						value={product.weight}
@@ -54,11 +50,8 @@ const ShippingCard = ({ product, handleChange }) => {
 							handleChange('weight', e.target.value)
 						}
 					/>
-				</div>
-
-				<div className="form-group">
-					<label>{__('Shipping classes', 'multivendorx')}</label>
-
+				</FormGroup>
+				<FormGroup label={__('Shipping classes', 'multivendorx')} htmlFor="shipping-classes">
 					<SelectInput
 						name="shipping_class"
 						options={shippingClasses}
@@ -67,17 +60,14 @@ const ShippingCard = ({ product, handleChange }) => {
 							handleChange('shipping_class', selected.value)
 						}
 					/>
-				</div>
-			</div>
+				</FormGroup>
+			</FormGroupWrapper>
 
 			{/* Dimensions */}
-			<div className="form-group-wrapper">
-				<div className="form-group">
-					<label>
-						{__('Dimensions', 'multivendorx')} (
-						{appLocalizer.dimension_unit})
-					</label>
-
+			<FormGroupWrapper>
+				<FormGroup cols={3}
+					label={`${__('Dimensions', 'multivendorx')} (${appLocalizer.dimension_unit})`}
+				>
 					<BasicInput
 						name="product_length"
 						value={product.product_length}
@@ -86,11 +76,9 @@ const ShippingCard = ({ product, handleChange }) => {
 							handleChange('product_length', e.target.value)
 						}
 					/>
-				</div>
+				</FormGroup>
 
-				<div className="form-group">
-					<label></label>
-
+				<FormGroup cols={3}>
 					<BasicInput
 						name="product_width"
 						value={product.product_width}
@@ -99,11 +87,9 @@ const ShippingCard = ({ product, handleChange }) => {
 							handleChange('product_width', e.target.value)
 						}
 					/>
-				</div>
+				</FormGroup>
 
-				<div className="form-group">
-					<label></label>
-
+				<FormGroup cols={3}>
 					<BasicInput
 						name="product_height"
 						value={product.product_height}
@@ -112,8 +98,9 @@ const ShippingCard = ({ product, handleChange }) => {
 							handleChange('product_height', e.target.value)
 						}
 					/>
-				</div>
-			</div>
+				</FormGroup>
+			</FormGroupWrapper>
+
 		</Card>
 
 	);

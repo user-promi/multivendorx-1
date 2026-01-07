@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { SuccessNotice, SelectInput, getApiLink, useModules, Container, Column } from 'zyra';
+import { SuccessNotice, SelectInput, getApiLink, useModules, Container, Column, FormGroupWrapper, FormGroup, Card } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 
@@ -47,76 +47,65 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 
 			<Container>
 				<Column grid={8}>
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Store owners', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<div className="card-body">
-							{/* Store owners multi-select */}
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<SelectInput
-										name="store_owners"
-										options={
-											appLocalizer.store_owners || []
-										}
-										type="multi-select"
-										value={(
-											formData.store_owners || []
-										).map((id: any) => {
-											const match = (
-												appLocalizer.store_owners || []
-											).find(
-												(opt: any) =>
-													String(opt.value) ===
-													String(id)
-											);
-											return match
-												? match.value
-												: String(id);
-										})}
-										onChange={(selected: any) => {
-											const store_owners =
-												(selected as any[])?.map(
-													(option) => option.value
-												) || [];
-											const updated = {
-												...formData,
-												store_owners,
-												state: '',
-											};
-											setFormData(updated);
-											autoSave(updated);
-										}}
-									/>
-								</div>
-							</div>
+					<Card title={__('Store owners', 'multivendorx')}>
+						{/* Store owners multi-select */}
+						<FormGroupWrapper>
+							<SelectInput
+								name="store_owners"
+								options={
+									appLocalizer.store_owners || []
+								}
+								type="multi-select"
+								value={(
+									formData.store_owners || []
+								).map((id: any) => {
+									const match = (
+										appLocalizer.store_owners || []
+									).find(
+										(opt: any) =>
+											String(opt.value) ===
+											String(id)
+									);
+									return match
+										? match.value
+										: String(id);
+								})}
+								onChange={(selected: any) => {
+									const store_owners =
+										(selected as any[])?.map(
+											(option) => option.value
+										) || [];
+									const updated = {
+										...formData,
+										store_owners,
+										state: '',
+									};
+									setFormData(updated);
+									autoSave(updated);
+								}}
+							/>
+						</FormGroupWrapper>
 
-							{modules.includes('staff-manager') && (
-								applyFilters(
-									'additional_staff_manager_fields',
-									null,
-									formData,
-									setFormData,
-									autoSave
-								))
-							}			
+						{modules.includes('staff-manager') && (
+							applyFilters(
+								'additional_staff_manager_fields',
+								null,
+								formData,
+								setFormData,
+								autoSave
+							))
+						}
 
-							{modules.includes('facilitator') && (
-								applyFilters(
-									'additional_facilitator_fields',
-									null,
-									formData,
-									setFormData,
-									autoSave
-								))
-							}
-						</div>
-					</div>
+						{modules.includes('facilitator') && (
+							applyFilters(
+								'additional_facilitator_fields',
+								null,
+								formData,
+								setFormData,
+								autoSave
+							))
+						}
+					</Card>
 				</Column>
 
 				<Column grid={4}>
@@ -129,14 +118,8 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 							</div>
 						</div>
 						<div className="card-body">
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<label>
-										{__(
-											'Select primary owner',
-											'multivendorx'
-										)}
-									</label>
+							<FormGroupWrapper>
+								<FormGroup label={__('Select primary owner', 'multivendorx')} >
 									<SelectInput
 										name="primary_owner"
 										options={
@@ -159,8 +142,8 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 											autoSave(updated);
 										}}
 									/>
-								</div>
-							</div>
+								</FormGroup>
+							</FormGroupWrapper>
 						</div>
 					</div>
 				</Column>

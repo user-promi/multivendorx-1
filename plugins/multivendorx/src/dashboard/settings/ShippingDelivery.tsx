@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import {
 	BasicInput,
 	DynamicRowSetting,
+	FormGroup,
+	FormGroupWrapper,
 	getApiLink,
 	SuccessNotice,
 	ToggleSetting,
@@ -91,11 +93,11 @@ const ShippingDelivery = () => {
 			{appLocalizer.shipping_methods &&
 				appLocalizer.shipping_methods.length > 0 && (
 					<>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="">
-									{__('Method Type', 'multivendorx')}
-								</label>
+						<FormGroupWrapper>
+							<FormGroup
+								label={__('Method Type', 'multivendorx')}
+								htmlFor="shipping_options"
+							>
 								<ToggleSetting
 									wrapperClass="setting-form-input"
 									descClass="settings-metabox-description"
@@ -106,14 +108,12 @@ const ShippingDelivery = () => {
 									options={appLocalizer.shipping_methods}
 									value={formData.shipping_options || ''}
 									onChange={(value: any) =>
-										handleToggleChange(
-											value,
-											'shipping_options'
-										)
+										handleToggleChange(value, 'shipping_options')
 									}
 								/>
-							</div>
-						</div>
+							</FormGroup>
+						</FormGroupWrapper>
+
 
 						{/* Zone by Shipping */}
 						{formData.shipping_options === 'shipping_by_zone' && (
@@ -139,25 +139,20 @@ const ShippingDelivery = () => {
 										</div>
 									</div>
 
-									{/* Default Shipping Price */}
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="multivendorx_shipping_type_price">
-												{__(
-													`Default Shipping Price (${appLocalizer.currency_symbol})`,
-													'multivendorx'
-												)}
-											</label>
+									<FormGroupWrapper>
+										<FormGroup
+											label={__(
+												`Default Shipping Price (${appLocalizer.currency_symbol})`,
+												'multivendorx'
+											)}
+											htmlFor="multivendorx_shipping_type_price"
+										>
 											<BasicInput
 												type="number"
 												name="multivendorx_shipping_type_price"
 												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
 												placeholder="0.00"
-												value={
-													formData.multivendorx_shipping_type_price ||
-													''
-												}
+												value={formData.multivendorx_shipping_type_price || ''}
 												onChange={handleChange}
 											/>
 											<div className="settings-metabox-description">
@@ -166,28 +161,21 @@ const ShippingDelivery = () => {
 													'multivendorx'
 												)}
 											</div>
-										</div>
-									</div>
+										</FormGroup>
 
-									{/* Per Product Additional Price */}
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="multivendorx_additional_product">
-												{__(
-													`Per Product Additional Price (${appLocalizer.currency_symbol})`,
-													'multivendorx'
-												)}
-											</label>
+										<FormGroup
+											label={__(
+												`Per Product Additional Price (${appLocalizer.currency_symbol})`,
+												'multivendorx'
+											)}
+											htmlFor="multivendorx_additional_product"
+										>
 											<BasicInput
 												type="number"
 												name="multivendorx_additional_product"
 												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
 												placeholder="0.00"
-												value={
-													formData.multivendorx_additional_product ||
-													''
-												}
+												value={formData.multivendorx_additional_product || ''}
 												onChange={handleChange}
 											/>
 											<div className="settings-metabox-description">
@@ -196,28 +184,21 @@ const ShippingDelivery = () => {
 													'multivendorx'
 												)}
 											</div>
-										</div>
-									</div>
+										</FormGroup>
 
-									{/* Per Qty Additional Price */}
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="multivendorx_additional_qty">
-												{__(
-													`Per Qty Additional Price (${appLocalizer.currency_symbol})`,
-													'multivendorx'
-												)}
-											</label>
+										<FormGroup
+											label={__(
+												`Per Qty Additional Price (${appLocalizer.currency_symbol})`,
+												'multivendorx'
+											)}
+											htmlFor="multivendorx_additional_qty"
+										>
 											<BasicInput
 												type="number"
 												name="multivendorx_additional_qty"
 												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
 												placeholder="0.00"
-												value={
-													formData.multivendorx_additional_qty ||
-													''
-												}
+												value={formData.multivendorx_additional_qty || ''}
 												onChange={handleChange}
 											/>
 											<div className="settings-metabox-description">
@@ -226,31 +207,21 @@ const ShippingDelivery = () => {
 													'multivendorx'
 												)}
 											</div>
-										</div>
-									</div>
+										</FormGroup>
 
-									{/* Free Shipping Minimum Order Amount */}
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="free_shipping_amount">
-												{__(
-													`Free Shipping Minimum Order Amount (${appLocalizer.currency_symbol})`,
-													'multivendorx'
-												)}
-											</label>
+										<FormGroup
+											label={__(
+												`Free Shipping Minimum Order Amount (${appLocalizer.currency_symbol})`,
+												'multivendorx'
+											)}
+											htmlFor="free_shipping_amount"
+										>
 											<BasicInput
 												type="number"
 												name="free_shipping_amount"
 												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
-												placeholder={__(
-													'NO Free Shipping',
-													'multivendorx'
-												)}
-												value={
-													formData.free_shipping_amount ||
-													''
-												}
+												placeholder={__('NO Free Shipping', 'multivendorx')}
+												value={formData.free_shipping_amount || ''}
 												onChange={handleChange}
 											/>
 											<div className="settings-metabox-description">
@@ -259,27 +230,21 @@ const ShippingDelivery = () => {
 													'multivendorx'
 												)}
 											</div>
-										</div>
-									</div>
+										</FormGroup>
 
-									{/* Local Pickup Cost */}
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="local_pickup_cost">
-												{__(
-													`Local Pickup Cost (${appLocalizer.currency_symbol})`,
-													'multivendorx'
-												)}
-											</label>
+										<FormGroup
+											label={__(
+												`Local Pickup Cost (${appLocalizer.currency_symbol})`,
+												'multivendorx'
+											)}
+											htmlFor="local_pickup_cost"
+										>
 											<BasicInput
 												type="number"
 												name="local_pickup_cost"
 												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
 												placeholder="0.00"
-												value={
-													formData.local_pickup_cost || ''
-												}
+												value={formData.local_pickup_cost || ''}
 												onChange={handleChange}
 											/>
 											<div className="settings-metabox-description">
@@ -288,8 +253,9 @@ const ShippingDelivery = () => {
 													'multivendorx'
 												)}
 											</div>
-										</div>
-									</div>
+										</FormGroup>
+									</FormGroupWrapper>
+
 
 									<div className="form-group-title-wrapper">
 										<div className="title">
@@ -322,37 +288,32 @@ const ShippingDelivery = () => {
 										</div>
 									</div>
 
-									{/* Default Cost */}
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="distance_default_cost">
-												{__(
-													`Default Cost (${appLocalizer.currency_symbol}) *`,
-													'multivendorx'
-												)}
-											</label>
+									<FormGroupWrapper>
+										{/* Default Cost */}
+										<FormGroup
+											label={__(
+												`Default Cost (${appLocalizer.currency_symbol}) *`,
+												'multivendorx'
+											)}
+											htmlFor="distance_default_cost"
+										>
 											<BasicInput
 												type="number"
 												name="distance_default_cost"
 												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
 												placeholder="0.00"
-												value={
-													formData.distance_default_cost ||
-													''
-												}
+												value={formData.distance_default_cost || ''}
 												onChange={handleChange}
 												min="0"
 												step="0.01"
 											/>
-										</div>
-									</div>
+										</FormGroup>
 
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="">
-												{__('Distance Type', 'multivendorx')}
-											</label>
+										{/* Distance Type */}
+										<FormGroup
+											label={__('Distance Type', 'multivendorx')}
+											htmlFor="distance_type"
+										>
 											<ToggleSetting
 												wrapperClass="setting-form-input"
 												descClass="settings-metabox-description"
@@ -361,108 +322,68 @@ const ShippingDelivery = () => {
 													'multivendorx'
 												)}
 												options={[
-													{
-														label: 'Kilometers (km)',
-														value: 'K',
-													},
-													{
-														label: 'Miles (mi)',
-														value: 'M',
-													},
+													{ label: __('Kilometers (km)', 'multivendorx'), value: 'K' },
+													{ label: __('Miles (mi)', 'multivendorx'), value: 'M' },
 												]}
 												value={formData.distance_type || ''}
 												onChange={(value: any) =>
-													handleToggleChange(
-														value,
-														'distance_type'
-													)
+													handleToggleChange(value, 'distance_type')
 												}
 											/>
-										</div>
-									</div>
+										</FormGroup>
 
-									{/* Max Distance */}
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="distance_max">
-												{__(
-													'Max Distance',
-													'multivendorx'
-												)}
-											</label>
+										{/* Max Distance */}
+										<FormGroup
+											label={__('Max Distance', 'multivendorx')}
+											htmlFor="distance_max"
+										>
 											<BasicInput
 												type="number"
 												name="distance_max"
 												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
 												placeholder="0"
-												value={
-													formData.distance_max || ''
-												}
+												value={formData.distance_max || ''}
 												onChange={handleChange}
 												min="0"
 												step="0.1"
 											/>
-										</div>
-									</div>
+										</FormGroup>
 
-									{/* Local Pickup Cost */}
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label htmlFor="distance_local_pickup_cost">
-												{__(
-													`Local Pickup Cost (${appLocalizer.currency_symbol}) (Optional)`,
-													'multivendorx'
-												)}
-											</label>
+										{/* Local Pickup Cost */}
+										<FormGroup
+											label={__(
+												`Local Pickup Cost (${appLocalizer.currency_symbol}) (Optional)`,
+												'multivendorx'
+											)}
+											htmlFor="distance_local_pickup_cost"
+										>
 											<BasicInput
 												type="number"
 												name="distance_local_pickup_cost"
 												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
 												placeholder="0.00"
-												value={
-													formData.distance_local_pickup_cost ||
-													''
-												}
+												value={formData.distance_local_pickup_cost || ''}
 												onChange={handleChange}
 												min="0"
 												step="0.01"
 											/>
-										</div>
-									</div>
+										</FormGroup>
 
-									{/* Distance–Cost Rules */}
-									<div className="form-group-wrapper">
-										<div className="form-group">
-											<label>
-												{__(
-													'Distance–Cost Rules',
-													'multivendorx'
-												)}
-											</label>
+										{/* Distance–Cost Rules */}
+										<FormGroup
+											label={__('Distance–Cost Rules', 'multivendorx')}
+										>
 											<DynamicRowSetting
 												keyName="distance_rules"
-												addLabel={__(
-													'Add Rule',
-													'multivendorx'
-												)}
-												value={
-													formData.distance_rules || []
-												}
+												addLabel={__('Add Rule', 'multivendorx')}
+												value={formData.distance_rules || []}
 												template={{
 													fields: [
 														{
 															key: 'max_distance',
 															type: 'number',
-															label: __(
-																'Up to ',
-																'multivendorx'
-															),
-															placeholder: __(
-																'Up to',
-																'multivendorx'
-															),
+															label: __('Up to', 'multivendorx'),
+															placeholder: __('Up to', 'multivendorx'),
 															step: '0.1',
 															min: '0',
 														},
@@ -485,15 +406,14 @@ const ShippingDelivery = () => {
 												onChange={(updatedRules: any[]) => {
 													const updated = {
 														...formData,
-														distance_rules:
-															updatedRules,
+														distance_rules: updatedRules,
 													};
 													setFormData(updated);
 													autoSave(updated);
 												}}
 											/>
-										</div>
-									</div>
+										</FormGroup>
+									</FormGroupWrapper>
 								</>
 							)}
 					</>

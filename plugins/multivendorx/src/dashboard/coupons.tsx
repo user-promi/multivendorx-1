@@ -459,94 +459,55 @@ const AllCoupon: React.FC = () => {
 			label: __('General', 'multivendorx'),
 			content: (
 				<>
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>{__('Discount type', 'multivendorx')}</label>
+					<FormGroupWrapper>
+						<FormGroup label={__('Discount type', 'multivendorx')} htmlFor="discount_type">
 							<SelectInput
 								name="discount_type"
 								value={formData.discount_type}
 								options={discountOptions}
 								type="single-select"
 								onChange={(val: any) =>
-									setFormData({
-										...formData,
-										discount_type: val?.value || '',
-									})
+									setFormData({ ...formData, discount_type: val?.value || '' })
 								}
 							/>
 							{validationErrors.discount_type && (
-								<div className="invalid-massage">
-									{validationErrors.discount_type}
-								</div>
+								<div className="invalid-massage">{validationErrors.discount_type}</div>
 							)}
-						</div>
-					</div>
+						</FormGroup>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>{__('Coupon amount', 'multivendorx')}</label>
+						<FormGroup label={__('Coupon amount', 'multivendorx')} htmlFor="coupon_amount">
 							<BasicInput
 								type="number"
 								name="coupon_amount"
 								value={formData.coupon_amount}
 								onChange={(e: any) =>
-									setFormData({
-										...formData,
-										coupon_amount: e.target.value,
-									})
+									setFormData({ ...formData, coupon_amount: e.target.value })
 								}
 							/>
-						</div>
-					</div>
+						</FormGroup>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>
-								{__('Allow free shipping', 'multivendorx')}
-							</label>
+						<FormGroup label={__('Allow free shipping', 'multivendorx')} htmlFor="free_shipping">
 							<ToggleSetting
 								wrapperClass="setting-form-input"
 								options={[
-									{
-										key: 'yes',
-										value: 'yes',
-										label: __('Yes', 'multivendorx'),
-									},
-									{
-										key: 'no',
-										value: 'no',
-										label: __('No', 'multivendorx'),
-									},
+									{ key: 'yes', value: 'yes', label: __('Yes', 'multivendorx') },
+									{ key: 'no', value: 'no', label: __('No', 'multivendorx') },
 								]}
 								value={formData.free_shipping}
-								onChange={(val: any) =>
-									setFormData({
-										...formData,
-										free_shipping: val,
-									})
-								}
+								onChange={(val: any) => setFormData({ ...formData, free_shipping: val })}
 							/>
-						</div>
-					</div>
+						</FormGroup>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>
-								{__('Coupon expiry date', 'multivendorx')}
-							</label>
+						<FormGroup label={__('Coupon expiry date', 'multivendorx')} htmlFor="expiry_date">
 							<BasicInput
 								type="date"
 								name="expiry_date"
 								value={formData.expiry_date}
-								onChange={(e: any) =>
-									setFormData({
-										...formData,
-										expiry_date: e.target.value,
-									})
-								}
+								onChange={(e: any) => setFormData({ ...formData, expiry_date: e.target.value })}
 							/>
-						</div>
-					</div>
+						</FormGroup>
+					</FormGroupWrapper>
+
 				</>
 			),
 		},
@@ -555,62 +516,41 @@ const AllCoupon: React.FC = () => {
 			label: __('Usage Limits', 'multivendorx'),
 			content: (
 				<>
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>
-								{__('Usage limit per coupon', 'multivendorx')}
-							</label>
+					<FormGroupWrapper>
+						<FormGroup label={__('Usage limit per coupon', 'multivendorx')} htmlFor="usage_limit">
 							<BasicInput
 								type="number"
 								name="usage_limit"
 								value={formData.usage_limit}
 								onChange={(e: any) =>
-									setFormData({
-										...formData,
-										usage_limit: e.target.value,
-									})
+									setFormData({ ...formData, usage_limit: e.target.value })
 								}
 							/>
-						</div>
-					</div>
+						</FormGroup>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>
-								{__('Limit usage to X items', 'multivendorx')}
-							</label>
+						<FormGroup label={__('Limit usage to X items', 'multivendorx')} htmlFor="limit_usage_to_x_items">
 							<BasicInput
 								type="number"
 								name="limit_usage_to_x_items"
 								value={formData.limit_usage_to_x_items}
 								onChange={(e: any) =>
-									setFormData({
-										...formData,
-										limit_usage_to_x_items: e.target.value,
-									})
+									setFormData({ ...formData, limit_usage_to_x_items: e.target.value })
 								}
 							/>
-						</div>
-					</div>
+						</FormGroup>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>
-								{__('Usage limit per user', 'multivendorx')}
-							</label>
+						<FormGroup label={__('Usage limit per user', 'multivendorx')} htmlFor="usage_limit_per_user">
 							<BasicInput
 								type="number"
 								name="usage_limit_per_user"
 								value={formData.usage_limit_per_user}
 								onChange={(e: any) =>
-									setFormData({
-										...formData,
-										usage_limit_per_user: e.target.value,
-									})
+									setFormData({ ...formData, usage_limit_per_user: e.target.value })
 								}
 							/>
-						</div>
-					</div>
+						</FormGroup>
+					</FormGroupWrapper>
+
 				</>
 			),
 		},
@@ -619,118 +559,69 @@ const AllCoupon: React.FC = () => {
 			label: __('Usage Restriction', 'multivendorx'),
 			content: (
 				<>
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>{__('Minimum spend', 'multivendorx')}</label>
+					<FormGroupWrapper>
+						<FormGroup label={__('Minimum spend', 'multivendorx')} htmlFor="minimum_amount">
 							<BasicInput
 								type="number"
 								name="minimum_amount"
 								value={formData.minimum_amount}
 								onChange={(e: any) =>
-									setFormData({
-										...formData,
-										minimum_amount: e.target.value,
-									})
+									setFormData({ ...formData, minimum_amount: e.target.value })
 								}
 							/>
-						</div>
-					</div>
+						</FormGroup>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>{__('Maximum spend', 'multivendorx')}</label>
+						<FormGroup label={__('Maximum spend', 'multivendorx')} htmlFor="maximum_amount">
 							<BasicInput
 								type="number"
 								name="maximum_amount"
 								value={formData.maximum_amount}
 								onChange={(e: any) =>
-									setFormData({
-										...formData,
-										maximum_amount: e.target.value,
-									})
+									setFormData({ ...formData, maximum_amount: e.target.value })
 								}
 							/>
-						</div>
-					</div>
+						</FormGroup>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>
-								{__('Individual use only', 'multivendorx')}
-							</label>
+						<FormGroup label={__('Individual use only', 'multivendorx')} htmlFor="individual_use">
 							<ToggleSetting
 								wrapperClass="setting-form-input"
 								options={[
-									{
-										key: 'yes',
-										value: 'yes',
-										label: __('Yes', 'multivendorx'),
-									},
-									{
-										key: 'no',
-										value: 'no',
-										label: __('No', 'multivendorx'),
-									},
+									{ key: 'yes', value: 'yes', label: __('Yes', 'multivendorx') },
+									{ key: 'no', value: 'no', label: __('No', 'multivendorx') },
 								]}
 								value={formData.individual_use}
 								onChange={(val: any) =>
-									setFormData({
-										...formData,
-										individual_use: val,
-									})
+									setFormData({ ...formData, individual_use: val })
 								}
 							/>
-						</div>
-					</div>
+						</FormGroup>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>
-								{__('Exclude sale items', 'multivendorx')}
-							</label>
+						<FormGroup label={__('Exclude sale items', 'multivendorx')} htmlFor="exclude_sale_items">
 							<ToggleSetting
 								wrapperClass="setting-form-input"
 								options={[
-									{
-										key: 'yes',
-										value: 'yes',
-										label: __('Yes', 'multivendorx'),
-									},
-									{
-										key: 'no',
-										value: 'no',
-										label: __('No', 'multivendorx'),
-									},
+									{ key: 'yes', value: 'yes', label: __('Yes', 'multivendorx') },
+									{ key: 'no', value: 'no', label: __('No', 'multivendorx') },
 								]}
 								value={formData.exclude_sale_items}
 								onChange={(val: any) =>
-									setFormData({
-										...formData,
-										exclude_sale_items: val,
-									})
+									setFormData({ ...formData, exclude_sale_items: val })
 								}
 							/>
-						</div>
-					</div>
+						</FormGroup>
 
-					<div className="form-group-wrapper">
-						<div className="form-group">
-							<label>
-								{__('Allowed emails', 'multivendorx')}
-							</label>
+						<FormGroup label={__('Allowed emails', 'multivendorx')} htmlFor="customer_email">
 							<BasicInput
 								type="text"
 								name="customer_email"
 								value={formData.customer_email}
 								onChange={(e: any) =>
-									setFormData({
-										...formData,
-										customer_email: e.target.value,
-									})
+									setFormData({ ...formData, customer_email: e.target.value })
 								}
 							/>
-						</div>
-					</div>
+						</FormGroup>
+					</FormGroupWrapper>
+
 				</>
 			),
 		},
