@@ -10,7 +10,7 @@ import {
 	Tooltip,
 } from 'recharts';
 import { __ } from '@wordpress/i18n';
-import { Card, Column, Container, getApiLink, InfoItem, MultiCalendarInput, Table, TableCell } from 'zyra';
+import { Analytics, Card, Column, Container, getApiLink, InfoItem, MultiCalendarInput, Table, TableCell } from 'zyra';
 import axios from 'axios';
 import {
 	PaginationState,
@@ -564,27 +564,17 @@ const ProductReport: React.FC = () => {
 			<Container>
 				{/* Keep entire top dashboard layout */}
 				<Column row>
-					<Card transparent>
-						<div className="analytics-container report">
-							{overview.map((item, idx) => (
-								<div key={idx} className="analytics-item">
-									<div className="analytics-icon">
-										<i
-											className={`admin-color${idx + 2} ${item.icon}`}
-										></i>
-									</div>
-									<div className="details">
-										<div className="number">
-											<Counter value={item.count} />
-										</div>
-										<div className="text">
-											{__(item.label, 'multivendorx')}
-										</div>
-									</div>
-								</div>
-							))}
-						</div>
-					</Card>
+				
+					<Analytics
+						template="template-2"
+						data={overview.map((item, idx) => ({
+							icon: item.icon,
+							iconClass: `admin-color${idx + 2}`,
+							number: <Counter value={item.count} />,
+							text: __(item.label, 'multivendorx'),
+						}))}
+					/>
+
 					<Card title="Revenue & Sales Comparison">
 						{error ? (
 							<p>{error}</p>

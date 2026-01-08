@@ -172,7 +172,7 @@ class Util
             'total_votes'        => 0,
             'voters'             => maybe_serialize(array()),
             'answer_text'        => '',
-            'question_visibility' => 'public',
+            'question_visibility' => 'private',
             'question_date'      => current_time('mysql'),
         );
 

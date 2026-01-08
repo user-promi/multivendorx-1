@@ -87,7 +87,7 @@ const Privacy = () => {
 			<SuccessNotice message={successMsg} />
 
 			<Container>
-				<Column>
+				<Column row>
 					{modules.includes('privacy') && Array.isArray(store_policy) &&
 						store_policy.includes('store') && (
 							<Card title="Store policy">
