@@ -163,7 +163,7 @@ class Frontend {
             $name        = $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
             $description = $store->get( Utill::STORE_SETTINGS_KEYS['description'] );
             $phone       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ) ?? '';
-            $email       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['email'] ) ?? '';
+            $email       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ) ?? '';
             $address     = $store->get_meta( Utill::STORE_SETTINGS_KEYS['address'] ) ?? '';
 
             $logo_html = '';

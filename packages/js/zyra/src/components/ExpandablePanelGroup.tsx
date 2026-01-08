@@ -206,6 +206,38 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         };
     }, []);
 
+    const isFilled = (val: any): boolean => {
+        if (val === undefined || val === null) return false;
+        if (typeof val === 'string') return val.trim() !== '';
+        if (Array.isArray(val)) return val.length > 0;
+        return true; // number | boolean
+    };
+
+    useEffect(() => {
+        if (!isWizardMode && !methods?.length) return;
+
+        const initialProgress = methods.map((method) => {
+            const countableFields =
+                method.formFields?.filter(
+                    (f) => f.type !== 'buttons' && f.type !== 'blocktext'
+                ) || [];
+
+            let filledCount = 0;
+
+            countableFields.forEach((field) => {
+                const fieldValue = value?.[method.id]?.[field.key];
+                if (isFilled(fieldValue)) {
+                    filledCount += 1;
+                }
+            });
+
+            return filledCount;
+        });
+
+        setFieldProgress(initialProgress);
+    }, [methods, value, isWizardMode]);
+
+
     useEffect(() => {
         const updated: Record<string, Record<string, unknown>> = {
             ...value,
@@ -356,14 +388,6 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
 
         if (isWizardMode) {
             const prevValue = value?.[methodKey]?.[fieldKey];
-
-            const isFilled = (val: any): boolean => {
-                if (val === undefined || val === null) return false;
-                if (typeof val === 'string') return val.trim() !== '';
-                if (Array.isArray(val)) return val.length > 0;
-                return true; // number | boolean
-            };
-
             const wasFilled = isFilled(prevValue);
             const nowFilled = isFilled(fieldValue);
 
