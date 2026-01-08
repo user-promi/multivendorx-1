@@ -2,8 +2,8 @@ import { __ } from '@wordpress/i18n';
 
 export default {
 	id: 'notifications',
-	priority: 11,
-	name: 'Notifications',
+	priority: 2,
+	name: 'When messages are sent',
 	desc: __(
 		'Help customers discover stores and products near them by enabling location-based search and maps.',
 		'multivendorx'
