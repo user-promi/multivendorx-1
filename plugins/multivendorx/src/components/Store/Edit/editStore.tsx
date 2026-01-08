@@ -10,6 +10,7 @@ import {
 	SuccessNotice,
 	FormGroupWrapper,
 	FormGroup,
+	AdminButton,
 } from 'zyra';
 import { Skeleton } from '@mui/material';
 
@@ -610,8 +611,8 @@ const EditStore = () => {
 
 													<span
 														className={`edit-icon  ${editName
-																? ''
-																: 'admin-badge blue'
+															? ''
+															: 'admin-badge blue'
 															}`}
 														onClick={(e) => {
 															e.stopPropagation();
@@ -800,8 +801,8 @@ const EditStore = () => {
 
 												<span
 													className={`edit-icon ${editDesc
-															? ''
-															: 'admin-badge blue'
+														? ''
+														: 'admin-badge blue'
 														}`}
 													onClick={(e) => {
 														e.stopPropagation();
@@ -837,13 +838,13 @@ const EditStore = () => {
 																<i
 																	key={i}
 																	className={`review adminfont-star${data.total_reviews >
-																			0 &&
-																			i <
-																			Math.round(
-																				data.overall_reviews
-																			)
-																			? ''
-																			: '-o'
+																		0 &&
+																		i <
+																		Math.round(
+																			data.overall_reviews
+																		)
+																		? ''
+																		: '-o'
 																		}`}
 																></i>
 															)
@@ -1066,44 +1067,35 @@ const EditStore = () => {
 				onClose={() => setDeleteModal(false)}
 				width="37.5rem"
 				height="50%"
-				header={
-					<>
-						<div className="title">
-							<i className="adminfont-storefront"></i>
-							{__('Manage store deletion', 'multivendorx')}
-						</div>
-						<div className="des">
-							{__(
-								'Choose the appropriate action to take when deleting this store.',
-								'multivendorx'
-							)}
-						</div>
-						<i
-							onClick={() => setDeleteModal(false)}
-							className="icon adminfont-close"
-						></i>
-					</>
-				}
+				header={{
+					icon: 'storefront',
+					title: __('Manage store deletion', 'multivendorx'),
+					description: __(
+						'Choose the appropriate action to take when deleting this store.',
+						'multivendorx'
+					),
+				}}
 				footer={
-					<>
-						<button
-							type="button"
-							onClick={() => setDeleteModal(false)}
-							className="admin-btn btn-red"
-						>
-							{__('Cancel', 'multivendorx')}
-						</button>
-						<button
-							onClick={() => {
-								if (deleteOption) {
-									deleteStoreApiCall(deleteOption);
-								}
-							}}
-							className="admin-btn btn-purple"
-						>
-							{__('Delete', 'multivendorx')}
-						</button>
-					</>
+					<AdminButton
+						buttons={[
+							{
+								icon: 'close',
+								text: 'Cancel',
+								className: 'red',
+								onClick: () => setDeleteModal(false),
+							},
+							{
+								icon: 'delete',
+								text: 'Delete',
+								className: 'red-bg',
+								onClick: () => {
+									if (deleteOption) {
+										deleteStoreApiCall(deleteOption);
+									}
+								},
+							},
+						]}
+					/>
 				}
 			>
 				<>

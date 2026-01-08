@@ -9,6 +9,10 @@ import {
 	TextArea,
 	getApiLink,
 	MultiCalendarInput,
+	AdminButton,
+	FormGroupWrapper,
+	Container,
+	Column,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -290,23 +294,25 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 
 	return (
 		<>
-			<div className="admin-table-wrapper">
-				<Table
-					data={data}
-					columns={columns as ColumnDef<Record<string, any>, any>[]}
-					rowSelection={rowSelection}
-					onRowSelectionChange={setRowSelection}
-					defaultRowsPerPage={10}
-					pageCount={pageCount}
-					pagination={pagination}
-					onPaginationChange={setPagination}
-					handlePagination={requestApiForData}
-					perPageOption={[10, 25, 50]}
-					typeCounts={[]}
-					totalCounts={totalRows}
-					realtimeFilter={realtimeFilter}
-				/>
-			</div>
+			<Container general>
+				<Column>
+					<Table
+						data={data}
+						columns={columns as ColumnDef<Record<string, any>, any>[]}
+						rowSelection={rowSelection}
+						onRowSelectionChange={setRowSelection}
+						defaultRowsPerPage={10}
+						pageCount={pageCount}
+						pagination={pagination}
+						onPaginationChange={setPagination}
+						handlePagination={requestApiForData}
+						perPageOption={[10, 25, 50]}
+						typeCounts={[]}
+						totalCounts={totalRows}
+						realtimeFilter={realtimeFilter}
+					/>
+				</Column>
+			</Container>
 
 			{/* Reject Popup */}
 			{rejectPopupOpen && (
@@ -317,46 +323,34 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 						setRejectReason('');
 					}}
 					width="31.25rem"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-cart"></i>
-								{__('Reason', 'multivendorx')}
-							</div>
-							<i
-								onClick={() => {
-									setRejectPopupOpen(false);
-									setRejectReason('');
-								}}
-								className="icon adminfont-close"
-							></i>
-						</>
-					}
+					header={{
+						icon: 'cart',
+						title: __('Reason', 'multivendorx'),
+					}}
 					footer={
-						<>
-							<div
-								className="admin-btn btn-red"
-								onClick={() => {
-									setRejectPopupOpen(false);
-									setRejectReason('');
-								}}
-							>
-								Cancel
-							</div>
-							<button
-								className="admin-btn btn-purple"
-								onClick={submitReject}
-								disabled={isSubmitting} // disable while submitting
-							>
-								{isSubmitting
-									? __('Submitting...', 'multivendorx')
-									: __('Reject', 'multivendorx')}
-							</button>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: () => {
+										setRejectPopupOpen(false);
+										setRejectReason('');
+									},
+								},
+								{
+									icon: 'permanently-rejected',
+									text: __('Reject', 'multivendorx'),
+									className: 'red-bg',
+									onClick: () => submitReject,
+								},
+							]}
+						/>
 					}
 				>
 					<>
-						<div className="form-group">
+						<FormGroupWrapper>
 							<TextArea
 								name="reject_reason"
 								wrapperClass="setting-from-textarea"
@@ -372,7 +366,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 								)}
 								rows={4}
 							/>
-						</div>
+						</FormGroupWrapper>
 					</>
 				</CommonPopup>
 			)}

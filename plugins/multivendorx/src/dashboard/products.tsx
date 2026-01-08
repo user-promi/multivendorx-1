@@ -255,7 +255,6 @@ const AllProduct: React.FC = () => {
 										);
 									}
 								},
-								hover: true,
 							},
 							{
 								label: __('View', 'multivendorx'),
@@ -282,7 +281,7 @@ const AllProduct: React.FC = () => {
 								onClick: (rowData) => {
 									handleDelete(rowData.id);
 								},
-								hover: true,
+								 
 							},
 						],
 					}}

@@ -4,7 +4,7 @@ import {
 	RowSelectionState,
 } from '@tanstack/react-table';
 import { useState } from 'react';
-import { AdminBreadcrumbs, Table, TableCell } from 'zyra';
+import { AdminBreadcrumbs, Column, Container, Table, TableCell } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 export interface RealtimeFilter {
@@ -224,19 +224,21 @@ const Advertisement: React.FC = () => {
 				}
 			/>
 
-			<div className="admin-table-wrapper">
-				<Table
-					data={demoData}
-					columns={columns as ColumnDef<Record<string, any>, any>[]}
-					rowSelection={rowSelection}
-					onRowSelectionChange={setRowSelection}
-					defaultRowsPerPage={10}
-					pageCount={pageCount}
-					pagination={pagination}
-					onPaginationChange={setPagination}
-					perPageOption={[10, 25, 50]}
-				/>
-			</div>
+			<Container general>
+				<Column>
+					<Table
+						data={demoData}
+						columns={columns as ColumnDef<Record<string, any>, any>[]}
+						rowSelection={rowSelection}
+						onRowSelectionChange={setRowSelection}
+						defaultRowsPerPage={10}
+						pageCount={pageCount}
+						pagination={pagination}
+						onPaginationChange={setPagination}
+						perPageOption={[10, 25, 50]}
+					/>
+				</Column>
+			</Container>
 		</>
 	);
 };
