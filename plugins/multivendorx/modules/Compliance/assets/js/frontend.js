@@ -128,7 +128,9 @@ jQuery(function ($) {
 
 					// Hide the form after success
 					setTimeout(function () {
-						$form.slideUp();
+						$form.slideUp(function () {
+							$form.find('.report-abuse-msg-box').empty();
+						});
 					}, 1000);
 
 					// Reset form fields

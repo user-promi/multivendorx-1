@@ -87,7 +87,7 @@ class Ajax {
         // Extract reason values.
         $reason_list = array();
         foreach ( $reasons as $reason ) {
-            $reason_list[] = $reason['value'];
+            $reason_list[] = $reason['label'];
         }
 
         // Add an "Other" option at the end.
