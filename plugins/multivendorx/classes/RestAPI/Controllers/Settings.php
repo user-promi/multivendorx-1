@@ -122,10 +122,11 @@ class Settings extends \WP_REST_Controller {
                         'disbursement_order_status' => $value['commission_setup']['disbursement_order_status'] ?? array( 'completed' ),
                     );
     
-                    update_option( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
-                    update_option( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
-                    update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
+                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
+                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
+                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
                 }
+                
                 return;
             }
             $all_details       = array();

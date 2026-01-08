@@ -392,7 +392,7 @@ const Dashboard = () => {
 				{storeData?.status == 'active' && (
 					<div className="dashboard-tabs">
 						<ul>
-							{Object.entries(menu).map(([key, item]) => {
+							{Object.entries(filteredMenu).map(([key, item]) => {
 								if (!item.name) {
 									return null;
 								}
@@ -592,11 +592,12 @@ const Dashboard = () => {
 
 												<div className="footer">
 													<a
-														href={appLocalizer.permalink_structure
-															? `/${appLocalizer.dashboard_slug}/view-notifications/#subtab=announcements`
-															: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=announcements`}
+														href={
+															appLocalizer.permalink_structure
+																? `${appLocalizer.site_url.replace(/\/$/, '')}/${appLocalizer.dashboard_slug}/view-notifications/#subtab=announcements`
+																: `${appLocalizer.site_url.replace(/\/$/, '')}/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=announcements`
+														}
 														className="admin-btn btn-purple"
-													// onClick={(e) => e.stopPropagation()}
 													>
 														<i className="adminfont-eye"></i>{__('View all announcements', 'multivendorx')}
 													</a>

@@ -118,9 +118,12 @@ const Notifications : React.FC<NotificationsProps> = ({ type }) => {
 
 	const subtab = type === 'notification' ? 'notifications' : 'activity';
 
+	const baseUrl = appLocalizer.site_url.replace(/\/$/, '');
+
 	const url = appLocalizer.permalink_structure
-		? `/${appLocalizer.dashboard_slug}/view-notifications/#subtab=${subtab}`
-		: `/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=${subtab}`;
+		? `${baseUrl}/${appLocalizer.dashboard_slug}/view-notifications/#subtab=${subtab}`
+		: `${baseUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=${subtab}`;
+
 
 	return (
 		<>
