@@ -112,6 +112,10 @@ module.exports = {
 		...defaultConfig.module,
 		rules: [
 			{
+				test: /\.html$/i,
+				type: 'asset/source',
+			},			  
+			{
 				test: /\.(t|j)sx?$/,
 				exclude: /[\\/]node_modules[\\/]/,
 				use: {

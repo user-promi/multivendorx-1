@@ -1,6 +1,8 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, useMemo } from 'react';
 import '../styles/web/ColorSettingInput.scss';
 import ToggleSetting from './ToggleSetting';
+import axios from 'axios';
+import { getApiLink } from '../utils/apiService';
 
 interface CustomColors {
     colorPrimary: string;
@@ -29,6 +31,21 @@ interface ImagePaletteOption {
     img?: string;
 }
 
+// 🔹 NEW: Template & Theme interfaces for invoice templates
+type ThemeVars = Record<string, string>;
+
+interface Template {
+    key: string;
+    label: string;
+    preview?: string;
+    html: string;
+}
+
+interface PresetTheme {
+    name: string;
+    vars: Partial<ThemeVars>;
+}
+
 interface ColorSettingProps {
     wrapperClass?: string;
     inputClass?: string;
@@ -36,13 +53,30 @@ interface ColorSettingProps {
     description?: string;
     predefinedOptions: PaletteOption[];
     images: ImagePaletteOption[];
-    value?: { selectedPalette: string; colors: Partial< CustomColors > }; // object from DB
+    value?: { selectedPalette: string; colors: Partial< CustomColors >; templateKey?: string; themeVars?: ThemeVars }; // object from DB
     onChange?: ( e: {
-        target: { name: string; value: ColorSettingValue };
+        target: { name: string; value: ColorSettingValue | { templateKey: string; themeVars: ThemeVars } };
     } ) => void;
     idPrefix?: string;
     showPreview?: boolean;
+    // 🔹 NEW: Template & PDF support
+    templates?: Template[];
+    presetThemes?: PresetTheme[];
+    showPdfButton?: boolean;
+    apiLink?: string;
+    appLocalizer?: any;
 }
+
+// 🔹 Default colors for invoice templates
+const DEFAULT_COLORS: ThemeVars = {
+    '--accent': '#6366f1',
+    '--accent-secondary': '#22d3ee',
+    '--bg-page': '#ffffff',
+    '--bg-card': '#f9fafb',
+    '--text-primary': '#111827',
+    '--text-muted': '#6b7280',
+    '--border-color': '#e5e7eb',
+};
 
 const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
     // Initialize selectedPalette from DB value or default to first option
@@ -51,8 +85,16 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
         ( props.predefinedOptions[ 0 ]?.value ?? '' );
     const initialColors = props.value?.colors || {};
 
-    const [ mode, setMode ] = useState< 'predefined' | 'custom' >(
-        initialPalette === 'custom' ? 'custom' : 'predefined'
+    // 🔹 Determine initial mode based on whether templates are provided
+    const hasTemplates = props.templates && props.templates.length > 0;
+    const initialMode = hasTemplates && initialPalette === 'templates'
+        ? 'templates'
+        : initialPalette === 'custom'
+        ? 'custom'
+        : 'predefined';
+
+    const [ mode, setMode ] = useState< 'predefined' | 'custom' | 'templates' >(
+        initialMode as 'predefined' | 'custom' | 'templates'
     );
     const [ selectedPalette, setSelectedPalette ] = useState( initialPalette );
     const [ selectedColors, setSelectedColors ] =
@@ -67,6 +109,22 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
 
     const [ selectedImage, setSelectedImage ] = useState< string | null >(
         props.images?.[ 0 ]?.img || null
+    );
+
+    // 🔹 NEW: Template-related state
+    const [ templateKey, setTemplateKey ] = useState(
+        props.value?.templateKey || props.templates?.[ 0 ]?.key || ''
+    );
+    const [ themeVars, setThemeVars ] = useState< ThemeVars >( {
+        ...DEFAULT_COLORS,
+        ...props.value?.themeVars,
+    } );
+    const [ isDownloadingPdf, setIsDownloadingPdf ] = useState( false );
+
+    // 🔹 Get active template
+    const activeTemplate = useMemo(
+        () => props.templates?.find( ( t ) => t.key === templateKey ),
+        [ templateKey, props.templates ]
     );
 
     useEffect( () => {
@@ -138,6 +196,99 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
         } );
     };
 
+    // 🔹 NEW: Template handlers
+    const emitTemplateChange = ( nextVars = themeVars, nextTemplate = templateKey ) => {
+        props.onChange?.( {
+            target: {
+                name: 'store_color_settings',
+                value: {
+                    templateKey: nextTemplate,
+                    themeVars: nextVars,
+                } as any,
+            },
+        } );
+    };
+
+    const updateThemeColor = ( key: string, val: string ) => {
+        const updated = { ...themeVars, [ key ]: val };
+        setThemeVars( updated );
+        emitTemplateChange( updated );
+    };
+
+    const applyPresetTheme = ( vars: Partial< ThemeVars > ) => {
+        const updated = { ...DEFAULT_COLORS, ...vars } as ThemeVars;
+        setThemeVars( updated );
+        emitTemplateChange( updated );
+    };
+
+    const resetThemeColors = () => {
+        setThemeVars( DEFAULT_COLORS );
+        emitTemplateChange( DEFAULT_COLORS );
+    };
+
+    const changeTemplate = ( key: string ) => {
+        setTemplateKey( key );
+        emitTemplateChange( themeVars, key );
+    };
+
+    // 🔹 NEW: PDF Download handler
+    const handleDownloadPdf = async () => {
+        if ( ! props.apiLink || ! props.appLocalizer || ! activeTemplate ) {
+            console.error( 'Missing required props for PDF download' );
+            return;
+        }
+
+        setIsDownloadingPdf( true );
+
+        try {
+            // Apply theme variables to the HTML
+            let styledHtml = activeTemplate.html;
+
+            // Inject CSS variables into the HTML
+            const styleTag = `<style>:root { ${Object.entries(themeVars).map(([key, val]) => `${key}: ${val};`).join(' ')} }</style>`;
+
+            // Insert style tag before closing head tag or at the beginning
+            // if (styledHtml.includes('</head>')) {
+            //     styledHtml = styledHtml.replace('</head>', `${styleTag}</head>`);
+            // } else {
+            //     styledHtml = styleTag + styledHtml;
+            // }
+
+            const response = await axios( {
+                url: getApiLink( props.appLocalizer, props.apiLink ),
+                method: 'POST',
+                headers: {
+                    'X-WP-Nonce': props.appLocalizer.nonce,
+                    'Content-Type': 'application/json',
+                },
+                data: {
+                    html: styledHtml,
+                    paper: 'A4',
+                    orientation: 'portrait',
+                },
+                responseType: 'blob',
+            } );
+
+            // Create download link
+            const blob = new Blob( [ response.data ], {
+                type: 'application/pdf',
+            } );
+            const url = window.URL.createObjectURL( blob );
+            const link = document.createElement( 'a' );
+            link.href = url;
+            link.setAttribute( 'download', `invoice-${ templateKey }.pdf` );
+            document.body.appendChild( link );
+            link.click();
+            document.body.removeChild( link );
+            window.URL.revokeObjectURL( url );
+        } catch ( error ) {
+            console.error( 'Error downloading PDF:', error );
+            alert( 'Failed to download PDF. Please try again.' );
+        } finally {
+            setIsDownloadingPdf( false );
+        }
+    };
+
     return (
         <>
             <div className={ props.wrapperClass }>
@@ -148,6 +299,15 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                             wrapperClass="setting-form-input"
                             descClass="settings-metabox-description"
                             options={ [
+                                ...( hasTemplates
+                                    ? [
+                                          {
+                                              key: 'templates',
+                                              value: 'templates',
+                                              label: 'Templates',
+                                          },
+                                      ]
+                                    : [] ),
                                 {
                                     key: 'predefined',
                                     value: 'predefined',
@@ -160,8 +320,10 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                 },
                             ] }
                             value={ mode }
-                            onChange={ ( val: string ) => {
-                                if ( val === 'predefined' ) {
+                            onChange={ ( val: string | string[] ) => {
+                                const selectedVal = Array.isArray( val ) ? val[ 0 ] : val;
+
+                                if ( selectedVal === 'predefined' ) {
                                     setMode( 'predefined' );
 
                                     const value =
@@ -189,7 +351,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                     } );
                                 }
 
-                                if ( val === 'custom' ) {
+                                if ( selectedVal === 'custom' ) {
                                     setMode( 'custom' );
                                     setSelectedPalette( 'custom' );
                                     setSelectedColors( customColors );
@@ -203,6 +365,14 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                             },
                                         },
                                     } );
+                                }
+                                if ( selectedVal === 'templates' ) {
+                                    setMode( 'templates' );
+                                    setSelectedPalette( 'templates' );
+                                    setSelectedColors( {} );
+
+                                    // Emit template change instead
+                                    emitTemplateChange( themeVars, templateKey );
                                 }
                             } }
                         />
@@ -299,6 +469,148 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                         </div>
                                     )
                                 ) }
+                            </div>
+                        ) }
+                    </div>
+                    <div className="templates">
+                        { /* 🔹 NEW: Full Template Builder with Tabs */ }
+                        { mode === 'templates' && hasTemplates && (
+                            <div className="template-builder-container">
+                                { /* Left Side: Template List + Color Controls */ }
+                                <div className="template-controls">
+                                    { /* Template Selection */ }
+                                    <div className="template-list-section">
+                                        <h4 className="section-title">Choose Template</h4>
+                                        <div className="template-list">
+                                            { props.templates?.map( ( tpl ) => (
+                                                <div
+                                                    key={ tpl.key }
+                                                    className={ `template-item ${
+                                                        tpl.key === templateKey ? 'active' : ''
+                                                    }` }
+                                                    onClick={ () => changeTemplate( tpl.key ) }
+                                                >
+                                                    { tpl.preview && (
+                                                        <img src={ tpl.preview } alt={ tpl.label } />
+                                                    ) }
+                                                    <p>{ tpl.label }</p>
+                                                </div>
+                                            ) ) }
+                                        </div>
+                                    </div>
+
+                                    { /* Color Tabs */ }
+                                    <div className="color-tabs-section">
+                                        <ToggleSetting
+                                            wrapperClass="template-color-tabs"
+                                            descClass=""
+                                            options={ [
+                                                {
+                                                    key: 'preset',
+                                                    value: 'preset',
+                                                    label: 'Preset Colors',
+                                                },
+                                                {
+                                                    key: 'custom',
+                                                    value: 'custom',
+                                                    label: 'Custom Colors',
+                                                },
+                                            ] }
+                                            value={ selectedPalette === 'custom' ? 'custom' : 'preset' }
+                                            onChange={ ( val: string | string[] ) => {
+                                                const selectedVal = Array.isArray( val ) ? val[ 0 ] : val;
+                                                setSelectedPalette( selectedVal );
+                                            } }
+                                        />
+
+                                        { /* Preset Themes */ }
+                                        { selectedPalette !== 'custom' && props.presetThemes && props.presetThemes.length > 0 && (
+                                            <div className="preset-themes">
+                                                <h4 className="section-title">Preset Themes</h4>
+                                                <div className="theme-grid">
+                                                    { props.presetThemes.map( ( theme, index ) => (
+                                                        <div
+                                                            key={ index }
+                                                            className="theme-item"
+                                                            onClick={ () => applyPresetTheme( theme.vars ) }
+                                                        >
+                                                            <div className="theme-colors">
+                                                                { Object.values( theme.vars ).slice(0, 4).map( ( c, i ) => (
+                                                                    <div key={ i } className="color-dot" style={ { background: c } } />
+                                                                ) ) }
+                                                            </div>
+                                                            <span className="theme-name">{ theme.name }</span>
+                                                        </div>
+                                                    ) ) }
+                                                </div>
+                                            </div>
+                                        ) }
+
+                                        { /* Custom Theme Colors */ }
+                                        { selectedPalette === 'custom' && (
+                                            <div className="custom-colors">
+                                                <h4 className="section-title">Custom Colors</h4>
+                                                <div className="color-pickers">
+                                                    { Object.entries( themeVars ).map( ( [ key, val ] ) => (
+                                                        <div key={ key } className="color-picker-item">
+                                                            <label>
+                                                                <span className="color-label">
+                                                                    { key
+                                                                        .replace( '--', '' )
+                                                                        .replace( /-/g, ' ' )
+                                                                        .replace(/\b\w/g, l => l.toUpperCase()) }
+                                                                </span>
+                                                                <div className="color-input-wrapper">
+                                                                    <input
+                                                                        type="color"
+                                                                        value={ val }
+                                                                        onChange={ ( e ) =>
+                                                                            updateThemeColor( key, e.target.value )
+                                                                        }
+                                                                    />
+                                                                    <span className="color-value">{ val }</span>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    ) ) }
+                                                </div>
+                                            </div>
+                                        ) }
+
+                                        { /* Action Buttons */ }
+                                        <div className="template-actions">
+                                            <button
+                                                onClick={ resetThemeColors }
+                                                className="btn-reset"
+                                            >
+                                                Reset Colors
+                                            </button>
+                                            { props.showPdfButton && (
+                                                <button
+                                                    onClick={ handleDownloadPdf }
+                                                    disabled={ isDownloadingPdf }
+                                                    className="btn-download-pdf"
+                                                >
+                                                    { isDownloadingPdf
+                                                        ? 'Downloading...'
+                                                        : 'Download PDF' }
+                                                </button>
+                                            ) }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                { /* Right Side: Live Preview */ }
+                                <div className="template-preview">
+                                    <h4 className="section-title">Live Preview</h4>
+                                    <div
+                                        className="preview-iframe-wrapper"
+                                        style={ themeVars as React.CSSProperties }
+                                        dangerouslySetInnerHTML={ {
+                                            __html: activeTemplate?.html || '',
+                                        } }
+                                    />
+                                </div>
                             </div>
                         ) }
                     </div>

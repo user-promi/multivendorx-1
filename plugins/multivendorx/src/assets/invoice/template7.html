@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+        }
+
+        .invoice-box {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .invoice-box h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .company-details {
+            text-align: right;
+        }
+
+        .company-details h2 {
+            margin: 0;
+            color: #2E86DE;
+        }
+
+        .company-details p {
+            margin: 2px 0;
+            color: #555;
+        }
+
+        .invoice-details {
+            margin-bottom: 40px;
+        }
+
+        .invoice-details table {
+            width: 100%;
+        }
+
+        .invoice-details table td {
+            padding: 5px 0;
+            color: #555;
+        }
+
+        .invoice-details table td.label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .items table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .items table th {
+            background-color: #2E86DE;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .items table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .total {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .total h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .status-paid {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-due {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-box">
+        <div class="invoice-header">
+            <div class="logo">
+                <h1>MyCompany</h1>
+            </div>
+            <div class="company-details">
+                <h2>MyCompany Pvt Ltd</h2>
+                <p>123 Business St.</p>
+                <p>City, State, 12345</p>
+                <p>Email: info@mycompany.com</p>
+            </div>
+        </div>
+
+        <div class="invoice-details">
+            <table>
+                <tr>
+                    <td class="label">Invoice Number:</td>
+                    <td>INV-2025-1001</td>
+                </tr>
+                <tr>
+                    <td class="label">Invoice Date:</td>
+                    <td>October 9, 2025</td>
+                </tr>
+                <tr>
+                    <td class="label">Due Date:</td>
+                    <td>October 23, 2025</td>
+                </tr>
+                <tr>
+                    <td class="label">Payment Status:</td>
+                    <td class="status-paid">Paid</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="recipient-details" style="margin-bottom: 40px;">
+            <strong>Bill To:</strong>
+            <p>John Doe</p>
+            <p>456 Customer Rd.</p>
+            <p>City, State, 67890</p>
+        </div>
+
+        <div class="items">
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td>Website Design</td>
+                    <td>1</td>
+                    <td>$800.00</td>
+                    <td>$800.00</td>
+                </tr>
+                <tr>
+                    <td>Hosting (1 Year)</td>
+                    <td>1</td>
+                    <td>$100.00</td>
+                    <td>$100.00</td>
+                </tr>
+                <tr>
+                    <td>Maintenance</td>
+                    <td>1</td>
+                    <td>$150.00</td>
+                    <td>$150.00</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="total">
+            <h3>Total: $1050.00</h3>
+        </div>
+
+        <div class="footer">
+            Thank you for your business!<br>
+            Please make the payment by the due date.
+        </div>
+    </div>
+</body>
+</html>

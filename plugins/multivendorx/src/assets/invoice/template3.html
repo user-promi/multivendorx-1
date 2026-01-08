@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice #201815311526476267</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .invoice-box {
+      max-width: 850px;
+      background: #fff;
+      margin: 40px auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 40px 50px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #0056b3;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+
+    .logo img {
+      width: 130px;
+    }
+
+    .invoice-details {
+      text-align: right;
+    }
+
+    .invoice-details h1 {
+      margin: 0;
+      color: #0056b3;
+      font-size: 26px;
+      letter-spacing: 0.5px;
+    }
+
+    .invoice-details p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .info {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    .info div {
+      flex: 1 1 45%;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .info h3 {
+      color: #0056b3;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .invoice-to {
+      margin-bottom: 25px;
+    }
+
+    .invoice-to h3 {
+      color: #0056b3;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .invoice-to p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    td.amount {
+      text-align: right;
+    }
+
+    .seller {
+      font-size: 12px;
+      color: #777;
+    }
+
+    .totals {
+      margin-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .totals table {
+      width: 300px;
+      border-collapse: collapse;
+    }
+
+    .totals td {
+      padding: 8px 0;
+      font-size: 15px;
+    }
+
+    .totals tr:last-child td {
+      font-size: 17px;
+      font-weight: bold;
+      border-top: 2px solid #0056b3;
+      color: #111;
+    }
+
+    .paid {
+      background: #e8f7e3;
+      color: #256029;
+      font-weight: 600;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 30px;
+      font-size: 15px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+      margin-top: 35px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 12px;
+    }
+
+    @media (max-width: 650px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .invoice-details {
+        text-align: left;
+        margin-top: 15px;
+      }
+
+      .info {
+        flex-direction: column;
+      }
+
+      .totals {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-box">
+    <header>
+      <div class="logo">
+        <img src="logo.png" alt="Company Logo">
+      </div>
+      <div class="invoice-details">
+        <h1>INVOICE</h1>
+        <p><strong>Invoice No:</strong> 201815311526476267</p>
+        <p><strong>Invoice Date:</strong> May 16, 2018</p>
+      </div>
+    </header>
+
+    <section class="info">
+      <div>
+        <p><strong>Order Number:</strong> 2015</p>
+        <p><strong>Order Date:</strong> 01/03/2018</p>
+        <p><strong>Payment Method:</strong> Cash on Delivery</p>
+      </div>
+      <div class="invoice-to">
+        <h3>Invoice To:</h3>
+        <p><strong>ABC Infotech</strong></p>
+        <p>BB-164, BB Block, Sector 1,</p>
+        <p>Salt Lake City, Kolkata,</p>
+        <p>West Bengal 700064</p>
+      </div>
+    </section>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Beanie with Logo<br>
+            <span class="seller">Sold By: Test Shop</span>
+          </td>
+          <td>1</td>
+          <td>$250.00</td>
+          <td class="amount">$200.00</td>
+        </tr>
+        <tr>
+          <td>
+            New Dress<br>
+            <span class="seller">Sold By: Test Shop</span>
+          </td>
+          <td>1</td>
+          <td>$500.00</td>
+          <td class="amount">$450.00</td>
+        </tr>
+        <tr>
+          <td>
+            Ninja Shirt<br>
+            <span class="seller">Sold By: Test Shop</span>
+          </td>
+          <td>1</td>
+          <td>$550.00</td>
+          <td class="amount">$550.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="totals">
+      <table>
+        <tr>
+          <td>Subtotal:</td>
+          <td class="amount">$1200.00</td>
+        </tr>
+        <tr>
+          <td>Tax (10%):</td>
+          <td class="amount">$135.00</td>
+        </tr>
+        <tr>
+          <td>Total:</td>
+          <td class="amount">$1335.00</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="paid">
+      Amount Paid: $997.00 — Remaining Balance: $338.00
+    </div>
+
+    <footer>
+      © 2018 ABC Infotech — Thank you for your business.
+    </footer>
+  </div>
+</body>
+</html>

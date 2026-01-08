@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invoice — Template</title>
+  <style>
+    /* Reset & base */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: Inter, Roboto, "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial; color: #111827; background: #f3f4f6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Container */
+    .invoice-wrap {
+      max-width: 920px;
+      margin: 28px auto;
+      padding: 28px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .invoice-header {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px;
+      border-bottom: 1px solid #eef2f7;
+    }
+
+    .brand {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 68px;
+      height: 68px;
+      background: linear-gradient(135deg,#6366f1,#06b6d4);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-details {
+      line-height: 1;
+    }
+
+    .brand-details .company {
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .brand-details .tagline {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .invoice-meta {
+      text-align: right;
+      min-width: 220px;
+    }
+    .invoice-meta .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .invoice-meta .muted {
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    /* Info sections */
+    .invoice-body {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 28px;
+    }
+
+    .row {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .box {
+      background: #fbfdff;
+      border: 1px solid #eef2f7;
+      padding: 18px;
+      border-radius: 8px;
+      flex: 1;
+    }
+
+    .box h4 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      color: #374151;
+    }
+    .box p {
+      margin: 0;
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.45;
+    }
+
+    /* Items table */
+    .items {
+      padding: 0 28px 28px 28px;
+      overflow-x: auto;
+    }
+
+    table.invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    table.invoice-table thead th {
+      text-align: left;
+      padding: 12px 10px;
+      font-size: 13px;
+      color: #374151;
+      border-bottom: 1px solid #eef2f7;
+      font-weight: 600;
+    }
+
+    table.invoice-table tbody td {
+      padding: 12px 10px;
+      vertical-align: middle;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .qty, .unit, .amount, .price {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .item-desc {
+      font-size: 14px;
+      color: #374151;
+    }
+    .item-meta {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
+    /* Totals area */
+    .totals {
+      display: flex;
+      justify-content: flex-end;
+      padding: 18px 28px 36px 28px;
+    }
+    .totals .totals-table {
+      width: 320px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: linear-gradient(180deg,#ffffff,#fbfdff);
+      border: 1px solid #eef2f7;
+    }
+    .totals .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 16px;
+      align-items: center;
+    }
+    .totals .row.total {
+      font-weight: 700;
+      font-size: 18px;
+      background: #f8fafc;
+    }
+    .muted-small {
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    /* Footer */
+    .invoice-footer {
+      padding: 18px 28px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      border-top: 1px dashed #eef2f7;
+    }
+    .notes {
+      font-size: 13px;
+      color: #6b7280;
+    }
+    .sign {
+      text-align: right;
+      min-width: 220px;
+    }
+    .sign .sign-box {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px dashed #e6eef7;
+      color: #374151;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    /* Responsive */
+    @media (min-width: 780px) {
+      .invoice-body { grid-template-columns: 1fr 1fr; }
+      .items { padding-top: 0; }
+    }
+
+    @media (max-width: 600px) {
+      .invoice-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .invoice-meta { text-align: left; width: 100%; }
+      table.invoice-table { min-width: 600px; }
+      .totals { padding: 12px; }
+      .invoice-wrap { padding: 12px; }
+    }
+
+    /* Print */
+    @media print {
+      body { background: white; }
+      .invoice-wrap { margin: 0; padding: 0; max-width: 100%; }
+      .card { box-shadow: none; border-radius: 0; }
+      .invoice-footer, .invoice-header { page-break-inside: avoid; }
+    }
+
+    /* Utility */
+    .muted { color: #6b7280; font-size: 13px; }
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      background: #e6f4ff;
+      border-radius: 999px;
+      font-weight: 600;
+      color: #0369a1;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-wrap">
+    <div class="card" role="article" aria-label="Invoice">
+      <!-- Header -->
+      <div class="invoice-header">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">MK</div>
+          <div class="brand-details">
+            <div class="company">MarketKit Ltd.</div>
+            <div class="tagline">Modern products, simple invoices</div>
+            <div class="muted" style="margin-top:6px">123 Elm Street, Suite 400 &middot; (555) 555-0123</div>
+          </div>
+        </div>
+
+        <div class="invoice-meta">
+          <div class="title">Invoice</div>
+          <div class="muted">Invoice #: <strong>INV-2025-0091</strong></div>
+          <div class="muted">Issued: <strong>October 9, 2025</strong></div>
+          <div class="muted">Due: <strong>October 23, 2025</strong></div>
+          <div style="margin-top:8px"><span class="pill">Unpaid</span></div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="invoice-body" style="padding-top:20px; padding-bottom:0;">
+        <div class="box" aria-labelledby="bill-to">
+          <h4 id="bill-to">Bill To</h4>
+          <p><strong>Acme Corporation</strong></p>
+          <p class="muted">Attn: Jane Doe<br/>456 Oak Avenue<br/>Springfield, IL 62701<br/>jane.doe@acme.co<br/>(555) 987-6543</p>
+        </div>
+
+        <div class="box" aria-labelledby="ship-to">
+          <h4 id="ship-to">Ship To</h4>
+          <p><strong>Acme Warehouse</strong></p>
+          <p class="muted">789 Distribution Road<br/>Springfield, IL 62702</p>
+
+          <div style="height:10px"></div>
+
+          <h4 style="margin-top:8px">Payment</h4>
+          <p class="muted">Bank: First Modern Bank<br/>Account: <strong>0123456789</strong><br/>IBAN: <strong>US00FM123456</strong></p>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="items">
+        <table class="invoice-table" role="table" aria-label="Invoice items">
+          <thead>
+            <tr>
+              <th style="width:48%;">Description</th>
+              <th style="width:12%;">Unit</th>
+              <th style="width:10%;" class="qty">Qty</th>
+              <th style="width:15%;" class="price">Unit Price</th>
+              <th style="width:15%;" class="amount">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="item-desc">Premium SaaS Subscription — Pro Plan</div>
+                <div class="item-meta">License: 12 months, includes priority support</div>
+              </td>
+              <td class="unit">Plan</td>
+              <td class="qty">1</td>
+              <td class="price">$6,000.00</td>
+              <td class="amount">$6,000.00</td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="item-desc">Integration & Onboarding (one-time)</div>
+                <div class="item-meta">Up to 10 hours of professional services</div>
+              </td>
+              <td class="unit">Service</td>
+              <td class="qty">1</td>
+              <td class="price">$1,200.00</td>
+              <td class="amount">$1,200.00</td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="item-desc">Custom Connector (development)</div>
+                <div class="item-meta">Flat rate for custom connector</div>
+              </td>
+              <td class="unit">Project</td>
+              <td class="qty">1</td>
+              <td class="price">$1,800.00</td>
+              <td class="amount">$1,800.00</td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="item-desc">Discount</div>
+                <div class="item-meta">Loyalty discount</div>
+              </td>
+              <td class="unit">—</td>
+              <td class="qty">—</td>
+              <td class="price">—</td>
+              <td class="amount">−$500.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Totals -->
+      <div class="totals" aria-hidden="false">
+        <div class="totals-table" role="table" aria-label="Invoice totals">
+          <div class="row">
+            <div class="muted-small">Subtotal</div>
+            <div class="muted-small">$8,500.00</div>
+          </div>
+          <div class="row">
+            <div class="muted-small">Sales Tax (8.25%)</div>
+            <div class="muted-small">$701.25</div>
+          </div>
+          <div class="row">
+            <div class="muted-small">Shipping</div>
+            <div class="muted-small">$0.00</div>
+          </div>
+          <div class="row total">
+            <div>Total Due</div>
+            <div>$9,201.25</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="invoice-footer">
+        <div class="notes">
+          <strong>Notes</strong>
+          <div style="height:6px"></div>
+          <div>Thank you for your business. Please make payment within 14 days. Late payments may incur additional fees.</div>
+        </div>
+        <div class="sign">
+          <div class="sign-box">Authorized Signature</div>
+          <div style="height:8px"></div>
+          <div class="muted" style="font-size:12px; margin-top:6px">marketkit@support.co • +1 (555) 555-0123</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

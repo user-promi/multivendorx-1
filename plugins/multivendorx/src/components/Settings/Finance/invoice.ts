@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
-import template1 from '../../../assets/images/template/store/template1.jpg';
-import template2 from '../../../assets/images/template/store/template2.jpg';
-import template3 from '../../../assets/images/template/store/template3.jpg';
+import template1Html from '../../../assets/invoice/template1.html';
+import template2Html from '../../../assets/invoice/template2.html';
+import template3Html from '../../../assets/invoice/template3.html';
 
 export default {
 	id: 'store-invoice',
@@ -174,32 +174,62 @@ export default {
 			moduleEnabled: 'invoice',
 		},
 		{
-			key: 'store_color_settings',
+			key: 'invoice_template_builder',
 			type: 'color-setting',
-			label: 'Dashboard color scheme',
-			settingDescription:
-				'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
+			label: __('Invoice Template & PDF', 'mvx-pro'),
 			moduleEnabled: 'invoice',
-			images: [
-				{
-					key: 'template1',
-					label: 'Outer Space',
-					img: template1,
-					value: 'template1',
-				},
-				{
-					key: 'template2',
-					label: 'Green Lagoon',
-					img: template2,
-					value: 'template2',
-				},
-				{
-					key: 'template3',
-					label: 'Old West',
-					img: template3,
-					value: 'template3',
-				},
+			apilink: 'pdf',
+		  
+			/* 🔹 HTML templates */
+			templates: [
+			  {
+				key: 'invoice_1',
+				label: __('Invoice Classic', 'mvx-pro'),
+				html: template1Html,
+			  },
+			  {
+				key: 'invoice_2',
+				label: __('Invoice Modern', 'mvx-pro'),
+				html: template2Html,
+			  },
+			  {
+				key: 'invoice_3',
+				label: __('Invoice Minimal', 'mvx-pro'),
+				html: template3Html,
+			  },
 			],
-		},
+		  
+			/* 🎨 PRESET THEMES */
+			presetThemes: [
+			  {
+				name: __('Blue', 'mvx-pro'),
+				vars: {
+				  '--accent': '#2563eb',
+				  '--accent-secondary': '#0ea5e9',
+				},
+			  },
+			  {
+				name: __('Green', 'mvx-pro'),
+				vars: {
+				  '--accent': '#16a34a',
+				  '--accent-secondary': '#22c55e',
+				},
+			  },
+			  {
+				name: __('Dark', 'mvx-pro'),
+				vars: {
+				  '--bg-page': '#0f172a',
+				  '--bg-card': '#020617',
+				  '--text-primary': '#e5e7eb',
+				  '--text-muted': '#94a3b8',
+				  '--border-color': '#1e293b',
+				  '--accent': '#6366f1',
+				  '--accent-secondary': '#22d3ee',
+				},
+			  },
+			],
+		  
+			showPdfButton: true,
+		}		  
 	],
 };

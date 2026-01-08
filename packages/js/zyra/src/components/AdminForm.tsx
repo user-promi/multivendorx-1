@@ -47,6 +47,7 @@ import axios from 'axios';
 import MultiCalendarInput from './MultiCalendarInput';
 import CalendarInput from './CalendarInput';
 import EmailTemplate from './TemplateEditor/EmailTemplate';
+import TemplateColorPdfBuilder from './TemplateColorPdfBuilder';
 
 interface WPMediaAttachment {
     url: string;
@@ -131,6 +132,10 @@ interface MultiStringItem {
 }
 
 interface InputField {
+    pdfEndpoint: string;
+    showPdfButton: boolean | undefined;
+    presetThemes: never[];
+    templates: never[];
     key: string;
     id?: string;
     class?: string;
@@ -144,6 +149,7 @@ interface InputField {
         | 'checkbox'
         | 'radio-color'
         | 'color-setting'
+        | 'template-color-pdf-builder'
         | 'radio-select'
         | 'radio'
         | 'button'
@@ -1420,20 +1426,24 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'color-setting':
                     input = (
                         <ColorSettingInput
-                            wrapperClass="form-group-color-setting"
-                            inputClass="setting-form-input"
-                            descClass="settings-metabox-description"
-                            description={ inputField.desc } // optional description displayed under the input
-                            showPreview={ inputField.showPreview ?? false } // whether to show a color preview box
-                            predefinedOptions={
-                                inputField.predefinedOptions ?? []
-                            } // array of predefined color options for quick selection
-                            images={ inputField.images ?? [] } // optional array of images associated with colors
-                            value={ value } // currently selected color value
-                            idPrefix="color-setting"
-                            onChange={ ( e ) =>
-                                handleChange( e, inputField.key )
-                            }
+                        wrapperClass="form-group-color-setting"
+                        inputClass="setting-form-input"
+                        descClass="settings-metabox-description"
+                        description={inputField.desc}
+                        showPreview={inputField.showPreview ?? false}
+                        predefinedOptions={inputField.predefinedOptions ?? []}
+                        images={inputField.images ?? []}
+                        /* 🔹 EXISTING */
+                        value={value}
+                        idPrefix="color-setting"
+                        onChange={(e) => handleChange(e, inputField.key)}
+                        /* 🔥 NEW – TEMPLATE + PDF SUPPORT */
+                        templates={inputField.templates ?? []}
+                        presetThemes={inputField.presetThemes ?? []}
+                        showPdfButton={inputField.showPdfButton}
+                        pdfEndpoint={inputField.pdfEndpoint}
+                        appLocalizer={appLocalizer}
+                        apiLink={inputField.apilink}
                         />
                     );
                     break;
