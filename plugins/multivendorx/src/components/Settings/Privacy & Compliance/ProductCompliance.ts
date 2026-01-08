@@ -36,11 +36,6 @@ export default {
 						label: 'Categories Name',
 						placeholder: 'Enter title',
 					},
-					{
-						key: 'required',
-						type: 'checkbox',
-						label: 'Required',
-					},
 				],
 			},
 			modal: [],
