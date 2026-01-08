@@ -1232,7 +1232,6 @@ const AddProduct = () => {
 						toggle={true} // enable collapse/expand
 					>
 						<FormGroupWrapper>
-							<FormGroup >
 								{/* Selected tags */}
 								<div className="tag-list">
 									{product.tags?.map((tag) => (
@@ -1291,7 +1290,6 @@ const AddProduct = () => {
 										</div>
 									)}
 								</div>
-							</FormGroup>
 						</FormGroupWrapper>
 					</Card>
 

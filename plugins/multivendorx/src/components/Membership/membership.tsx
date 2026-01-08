@@ -61,29 +61,11 @@ const proFeatures = {
 	class: 'basic-checkbox',
 	desc: 'Choose the kinds of items stores can sell under this plan. Only selected types will be available when a store adds a new product.',
 	options: [
-		{ key: 'invoice_management', value: 'invoice_management', label: 'Create and send invoices' },
-		{ key: 'store_staff', value: 'store_staff', label: 'Let store add staff to help run the store' },
-		{ key: 'seo_tools', value: 'seo_tools', label: 'Get products noticed online via search results' },
-		{ key: 'affiliate_program', value: 'affiliate_program', label: 'Use affiliates to bring in more sales' },
-		{ key: 'advertisement', value: 'advertisement', label: 'Advertise products on the marketplace' },
-		{ key: 'advanced_inventory', value: 'advanced_inventory', label: 'Keep track of available stock' },
-		{ key: 'analytics_dashboard', value: 'analytics_dashboard', label: 'View sales and earnings' },
-		{ key: 'shipping_management', value: 'shipping_management', label: 'Manage how products are shipped' },
-		{ key: 'gift_card', value: 'gift_card', label: 'Sell gift cards to customers' },
-		{ key: 'import_export_tools', value: 'import_export_tools', label: 'Import and export products and data' },
-		{ key: 'business_hours', value: 'business_hours', label: 'Set store working hours' },
-		{ key: 'vacation_mode', value: 'vacation_mode', label: 'Pause store when unavailable' },
-		{ key: 'paypal_marketplace', value: 'paypal_marketplace', label: 'Receive payments through PayPal' },
-		{ key: 'stripe_marketplace', value: 'stripe_marketplace', label: 'Receive payments through Stripe' },
-		{ key: 'live_chat', value: 'live_chat', label: 'Chat with customers in real time' },
-		{ key: 'customer_support', value: 'customer_support', label: 'Respond to customer support requests' },
-		{ key: 'enquiry', value: 'enquiry', label: 'Receive and reply to product enquiries' },
-		{ key: 'analytics', value: 'analytics', label: 'Track store performance and trends' },
-		{ key: 'advertisement_product', value: 'advertisement_product', label: 'Promote individual products with ads' },
-		{ key: 'wholesale', value: 'wholesale', label: 'Sell products at wholesale prices' },
-		{ key: 'min_max_quantities', value: 'min_max_quantities', label: 'Set minimum and maximum order quantities' },
-
-	],
+		{ key: 'seo_tools', value: 'seo_tools', label: __('Store SEO', 'multivendorx'), desc: __('Help products get discovered through search engines', 'multivendorx') },
+		{ key: 'advertisement', value: 'advertisement', label: __('Product advertising', 'multivendorx'), desc: __('Promote products across the marketplace', 'multivendorx') },
+		{ key: 'affiliate_program', value: 'affiliate_program', label: __('Affiliate program', 'multivendorx'), desc: __('Use affiliates to drive more sales', 'multivendorx') },
+		{ key: 'wholesale', value: 'wholesale', label: __('Wholesale pricing', 'multivendorx'), desc: __('Sell products at wholesale prices', 'multivendorx') },
+		],
 };
 const orderPermissionField = {
 	key: 'order_permissions',
@@ -178,21 +160,14 @@ const exportedOrderInfoField = {
 	class: 'basic-checkbox',
 	desc: 'Select the information to include when exporting order data',
 	options: [
-		{
-			key: 'customer-name-contact',
-			value: 'customer-name-contact',
-			label: 'Customer Name & Contact',
-		},
-		{
-			key: 'billing-address',
-			value: 'billing-address',
-			label: 'Billing Address',
-		},
-		{
-			key: 'shipping-address',
-			value: 'shipping-address',
-			label: 'Shipping Address',
-		},
+		{ key: 'advanced_inventory', value: 'advanced_inventory', label: __('Stock inventory', 'multivendorx'), desc: __('Track and manage available product stock', 'multivendorx') },
+		{ key: 'shipping_management', value: 'shipping_management', label: __('Store shipping', 'multivendorx'), desc: __('Manage shipping methods and delivery options', 'multivendorx') },
+		{ key: 'import_export_tools', value: 'import_export_tools', label: __('Import and export tools', 'multivendorx'), desc: __('Import or export products and store data', 'multivendorx') },
+		{ key: 'business_hours', value: 'business_hours', label: __('Business hours', 'multivendorx'), desc: __('Set store working and availability hours', 'multivendorx') },
+		{ key: 'vacation_mode', value: 'vacation_mode', label: __('Vacation mode', 'multivendorx'), desc: __('Temporarily pause store operations', 'multivendorx') },
+		{ key: 'min_max_quantities', value: 'min_max_quantities', label: __('Minimum and maximum quantities', 'multivendorx'), desc: __('Set minimum and maximum order quantities per product', 'multivendorx') },
+	    { key: 'analytics_dashboard', value: 'analytics_dashboard', label: __('Store analytics', 'multivendorx'), desc: __('View store sales, earnings, and performance insights', 'multivendorx') },
+		
 	],
 };
 const orderEmailInfoField = {
@@ -202,26 +177,24 @@ const orderEmailInfoField = {
 	class: 'basic-checkbox',
 	desc: 'Select the information to include in order-related emails',
 	options: [
-		{
-			key: 'customer-name-contact',
-			value: 'customer-name-contact',
-			label: 'Customer Name & Contact',
-		},
-		{
-			key: 'billing-address',
-			value: 'billing-address',
-			label: 'Billing Address',
-		},
-		{
-			key: 'shipping-address',
-			value: 'shipping-address',
-			label: 'Shipping Address',
-		},
-		{
-			key: 'order-calculations',
-			value: 'order-calculations',
-			label: 'Order Calculations',
-		},
+		{ key: 'live_chat', value: 'live_chat', label: __('Live chat', 'multivendorx'), desc: __('Chat with customers in real time', 'multivendorx') },
+		{ key: 'customer_support', value: 'customer_support', label: __('Customer support', 'multivendorx'), desc: __('Respond to customer support requests', 'multivendorx') },
+		{ key: 'enquiry', value: 'enquiry', label: __('Product enquiries', 'multivendorx'), desc: __('Receive and respond to customer product enquiries', 'multivendorx') },
+		{ key: 'gift_card', value: 'gift_card', label: __('Gift cards', 'multivendorx'), desc: __('Sell gift cards to customers', 'multivendorx') },
+		
+	],
+};
+const businessAndPaymentsFeatures = {
+	key: 'business-and-payments-features',
+	look: 'checkbox',
+	selectDeselect: true,
+	class: 'basic-checkbox',
+	desc: 'Select the information to include in order-related emails',
+	options: [
+		{ key: 'paypal_marketplace', value: 'paypal_marketplace', label: __('PayPal marketplace', 'multivendorx'), desc: __('Accept marketplace payments via PayPal', 'multivendorx') },
+		{ key: 'stripe_marketplace', value: 'stripe_marketplace', label: __('Stripe marketplace', 'multivendorx'), desc: __('Accept marketplace payments via Stripe', 'multivendorx') },
+		{ key: 'store_staff', value: 'store_staff', label: __('Staff manager', 'multivendorx'), desc: __('Allow stores to add staff members to help manage their store', 'multivendorx') },
+		
 	],
 };
 
@@ -428,7 +401,7 @@ const Membership = ({ id }: { id: string }) => {
 			key: 'facilitator_fixed',
 			type: 'number',
 			preInsideText: __('$', 'multivendorx'),
-			size: '8rem',
+			size: '7rem',
 			preText: 'Fixed',
 			postText: '+',
 		},
@@ -436,18 +409,13 @@ const Membership = ({ id }: { id: string }) => {
 			key: 'facilitator_percentage',
 			type: 'number',
 			postInsideText: __('%', 'multivendorx'),
-			size: '8rem',
+			size: '7rem',
 		},
 	];
 	const subscription = [
 		{
 			key: 'disable_coupon_for_wholesale',
 			type: 'checkbox',
-			// label: __( 'Coupon restriction for wholesalers', 'catalogx' ),
-			// desc: __(
-			//     'Prevent wholesale users from applying any coupon and get addional discount on their orders.',
-			//     'catalogx'
-			// ),
 			options: [
 				{
 					key: 'disable_coupon_for_wholesale',
@@ -971,6 +939,71 @@ const Membership = ({ id }: { id: string }) => {
 										modules={[]}
 									/>
 								</FormGroup>
+								<FormGroup label="Information in Exported Orders" className="border-top">
+									<MultiCheckBox
+										wrapperClass="checkbox-list-side-by-side"
+										descClass="settings-metabox-description"
+										description={exportedOrderInfoField.desc}
+										inputWrapperClass="toggle-checkbox-header"
+										inputInnerWrapperClass="default-checkbox"
+										inputClass={exportedOrderInfoField.class}
+										idPrefix={exportedOrderInfoField.key}
+										selectDeselect
+										options={exportedOrderInfoField.options}
+										value={normalizeValue(exportedOrderInfoField.key)}
+										onChange={handleMultiCheckboxChange(exportedOrderInfoField.key)}
+										onMultiSelectDeselectChange={() =>
+											handleSelectDeselect(exportedOrderInfoField)
+										}
+										proSetting={false}
+										moduleChange={() => { }}
+										modules={[]}
+									/>
+								</FormGroup>
+
+								<FormGroup label="Customer Support" className="border-top">
+									<MultiCheckBox
+										wrapperClass="checkbox-list-side-by-side"
+										descClass="settings-metabox-description"
+										description={orderEmailInfoField.desc}
+										inputWrapperClass="toggle-checkbox-header"
+										inputInnerWrapperClass="default-checkbox"
+										inputClass={orderEmailInfoField.class}
+										idPrefix={orderEmailInfoField.key}
+										selectDeselect
+										options={orderEmailInfoField.options}
+										value={normalizeValue(orderEmailInfoField.key)}
+										onChange={handleMultiCheckboxChange(orderEmailInfoField.key)}
+										onMultiSelectDeselectChange={() =>
+											handleSelectDeselect(orderEmailInfoField)
+										}
+										proSetting={false}
+										moduleChange={() => { }}
+										modules={[]}
+									/>
+								</FormGroup>
+
+								<FormGroup label="Analytics & Team" className="border-top">
+									<MultiCheckBox
+										wrapperClass="checkbox-list-side-by-side"
+										descClass="settings-metabox-description"
+										description={businessAndPaymentsFeatures.desc}
+										inputWrapperClass="toggle-checkbox-header"
+										inputInnerWrapperClass="default-checkbox"
+										inputClass={businessAndPaymentsFeatures.class}
+										idPrefix={businessAndPaymentsFeatures.key}
+										selectDeselect
+										options={businessAndPaymentsFeatures.options}
+										value={normalizeValue(businessAndPaymentsFeatures.key)}
+										onChange={handleMultiCheckboxChange(businessAndPaymentsFeatures.key)}
+										onMultiSelectDeselectChange={() =>
+											handleSelectDeselect(businessAndPaymentsFeatures)
+										}
+										proSetting={false}
+										moduleChange={() => { }}
+										modules={[]}
+									/>
+								</FormGroup>
 							</FormGroupWrapper>
 						</Card>
 
@@ -1001,50 +1034,6 @@ const Membership = ({ id }: { id: string }) => {
 										modules={[]}
 									/>
 								</FormGroup>
-
-								{/* <FormGroup label="Information in Exported Orders" htmlFor={exportedOrderInfoField.key} className="border-top">
-										<MultiCheckBox
-											wrapperClass="checkbox-list-side-by-side"
-											descClass="settings-metabox-description"
-											description={exportedOrderInfoField.desc}
-											inputWrapperClass="toggle-checkbox-header"
-											inputInnerWrapperClass="default-checkbox"
-											inputClass={exportedOrderInfoField.class}
-											idPrefix={exportedOrderInfoField.key}
-											selectDeselect
-											options={exportedOrderInfoField.options}
-											value={normalizeValue(exportedOrderInfoField.key)}
-											onChange={handleMultiCheckboxChange(exportedOrderInfoField.key)}
-											onMultiSelectDeselectChange={() =>
-												handleSelectDeselect(exportedOrderInfoField)
-											}
-											proSetting={false}
-											moduleChange={() => { }}
-											modules={[]}
-										/>
-									</FormGroup>
-
-									<FormGroup label="Information in Order Emails" htmlFor={orderEmailInfoField.key} className="border-top">
-										<MultiCheckBox
-											wrapperClass="checkbox-list-side-by-side"
-											descClass="settings-metabox-description"
-											description={orderEmailInfoField.desc}
-											inputWrapperClass="toggle-checkbox-header"
-											inputInnerWrapperClass="default-checkbox"
-											inputClass={orderEmailInfoField.class}
-											idPrefix={orderEmailInfoField.key}
-											selectDeselect
-											options={orderEmailInfoField.options}
-											value={normalizeValue(orderEmailInfoField.key)}
-											onChange={handleMultiCheckboxChange(orderEmailInfoField.key)}
-											onMultiSelectDeselectChange={() =>
-												handleSelectDeselect(orderEmailInfoField)
-											}
-											proSetting={false}
-											moduleChange={() => { }}
-											modules={[]}
-										/>
-									</FormGroup> */}
 							</FormGroupWrapper>
 						</Card>
 
@@ -1053,7 +1042,7 @@ const Membership = ({ id }: { id: string }) => {
 						>
 
 							<FormGroupWrapper>
-								<FormGroup label="AI for writing product details" htmlFor={exportedOrderInfoField.key} className="border-top" desc={__('AI for writing product details', 'multivendorx')}>
+								<FormGroup label="AI for writing product details" className="border-top" desc={__('AI for writing product details', 'multivendorx')}>
 									<BasicInput
 										name="name"
 										wrapperClass="setting-form-input"
@@ -1064,7 +1053,7 @@ const Membership = ({ id }: { id: string }) => {
 										size="8rem"
 									/>
 								</FormGroup>
-								<FormGroup label="AI for writing product details" htmlFor={exportedOrderInfoField.key} className="border-top" desc={__('AI for writing product details', 'multivendorx')}>
+								<FormGroup label="AI for writing product details" className="border-top" desc={__('AI for writing product details', 'multivendorx')}>
 									<BasicInput
 										name="name"
 										wrapperClass="setting-form-input"
@@ -1254,7 +1243,6 @@ const Membership = ({ id }: { id: string }) => {
 								</FormGroup>
 							</FormGroupWrapper>
 						</Card>
-
 						<Card title={__('Membership Perks', 'multivendorx')}>
 							<div className="membership-features">
 								<AdminButton

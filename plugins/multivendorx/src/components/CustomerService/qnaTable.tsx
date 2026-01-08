@@ -665,7 +665,6 @@ const Qna: React.FC = () => {
 							</FormGroup>
 						</FormGroupWrapper>
 					</>
-
 				</CommonPopup>
 			)}
 		</>

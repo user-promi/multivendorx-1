@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell } from 'zyra';
+import { Table, getApiLink, TableCell, Container, Column } from 'zyra';
 import {
 	ColumnDef,
 	RowSelectionState,
@@ -43,7 +43,7 @@ const ActivityTable = (React.FC = () => {
 				setError(__('Failed to load total rows', 'multivendorx'));
 			});
 	}, []);
-	
+
 	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
@@ -142,8 +142,8 @@ const ActivityTable = (React.FC = () => {
 	];
 
 	return (
-		<div className="general-wrapper">
-			<div className="admin-table-wrapper">
+		<Container general>
+			<Column>
 				{error && <div className="error-notice">{error}</div>}
 				<Table
 					data={data}
@@ -158,11 +158,11 @@ const ActivityTable = (React.FC = () => {
 					perPageOption={[10, 25, 50]}
 					typeCounts={[]}
 					totalCounts={totalRows}
-					// searchFilter={searchFilter}
-					// realtimeFilter={realtimeFilter}
+				// searchFilter={searchFilter}
+				// realtimeFilter={realtimeFilter}
 				/>
-			</div>
-		</div>
+			</Column>
+		</Container>
 	);
 });
 

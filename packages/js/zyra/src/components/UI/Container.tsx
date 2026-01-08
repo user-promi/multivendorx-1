@@ -1,3 +1,5 @@
+import "../../styles/web/UI/Container.scss";
+
 type ContainerProps = {
   column?: boolean;
   children: React.ReactNode;
