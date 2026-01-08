@@ -64,6 +64,12 @@ class Block {
             'block_path' => MultiVendorX()->plugin_path . FrontendScripts::get_build_path_name() . 'js/block/',
         );
 
+        $blocks[] = array(
+            'name'       => 'registration-form', // block name.
+            'textdomain' => 'multivendorx',
+            'block_path' => MultiVendorX()->plugin_path . FrontendScripts::get_build_path_name() . 'js/block/',
+        );
+
         return apply_filters( 'multivendorx_initialize_blocks', $blocks );
     }
 

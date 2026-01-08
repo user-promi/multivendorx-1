@@ -48,6 +48,16 @@ class PaymentProcessor {
         global $wpdb;
         $store = new Store( $store_id );
 
+        if ( $method ) {
+            $payment_method = $method;
+        } else {
+            $payment_method = $store->get_meta( Utill::STORE_SETTINGS_KEYS['payment_method'] ) ?? '';
+        }
+
+        if ( $payment_method === 'bank-transfer' || $payment_method === 'cash' || $payment_method === 'custom-gateway' ) {
+            return;
+        }
+
         if ( ! $order_id ) {
             $withdrawals_fees  = MultiVendorX()->setting->get_setting( 'withdrawals_fees', array() );
             $withdrawals_count = (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] );
@@ -80,12 +90,6 @@ class PaymentProcessor {
 
                 $transaction_id = $wpdb->insert_id;
             }
-        }
-
-        if ( $method ) {
-            $payment_method = $method;
-        } else {
-            $payment_method = $store->get_meta( Utill::STORE_SETTINGS_KEYS['payment_method'] ) ?? '';
         }
 
         if ( empty( $payment_method ) ) {
