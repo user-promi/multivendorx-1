@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, MultiCalendarInput, Table, TableCell } from 'zyra';
+import { Analytics, Card, Column, getApiLink, MultiCalendarInput, Table, TableCell } from 'zyra';
 import { Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { Tooltip } from 'react-leaflet';
 import axios from 'axios';
@@ -390,7 +390,7 @@ const StoreReport: React.FC = () => {
 					<TableCell
 						type="status"
 						status={row.original.status}
-						// <div className="des">Since {formattedDate}</div>
+					// <div className="des">Since {formattedDate}</div>
 					/>
 				);
 			},
@@ -399,14 +399,13 @@ const StoreReport: React.FC = () => {
 			header: __('Order Total', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
-					title={`${currencySymbol}${
-						row.original.commission.total_order_amount || ''
-					}`}
+					title={`${currencySymbol}${row.original.commission.total_order_amount || ''
+						}`}
 				>
 					{row.original.commission.total_order_amount
 						? formatCurrency(
-								row.original.commission.total_order_amount
-							)
+							row.original.commission.total_order_amount
+						)
 						: '-'}
 				</TableCell>
 			),
@@ -415,14 +414,13 @@ const StoreReport: React.FC = () => {
 			header: __('Shipping', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
-					title={`${currencySymbol}${
-						row.original.commission.shipping_amount || ''
-					}`}
+					title={`${currencySymbol}${row.original.commission.shipping_amount || ''
+						}`}
 				>
 					{row.original.commission.shipping_amount
 						? formatCurrency(
-								row.original.commission.shipping_amount
-							)
+							row.original.commission.shipping_amount
+						)
 						: '-'}
 				</TableCell>
 			),
@@ -431,9 +429,8 @@ const StoreReport: React.FC = () => {
 			header: __('Tax', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
-					title={`${currencySymbol}${
-						row.original.commission.tax_amount || ''
-					}`}
+					title={`${currencySymbol}${row.original.commission.tax_amount || ''
+						}`}
 				>
 					{row.original.commission.tax_amount
 						? formatCurrency(row.original.commission.tax_amount)
@@ -445,14 +442,13 @@ const StoreReport: React.FC = () => {
 			header: __('Store Commission', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
-					title={`${currencySymbol}${
-						row.original.commission.commission_total || ''
-					}`}
+					title={`${currencySymbol}${row.original.commission.commission_total || ''
+						}`}
 				>
 					{row.original.commission.commission_total
 						? formatCurrency(
-								row.original.commission.commission_total
-							)
+							row.original.commission.commission_total
+						)
 						: '-'}
 				</TableCell>
 			),
@@ -462,7 +458,7 @@ const StoreReport: React.FC = () => {
 			cell: ({ row }) => {
 				const adminEarnings =
 					Number(row.original.commission.total_order_amount || 0) -
-						Number(row.original.commission.commission_total || 0) ||
+					Number(row.original.commission.commission_total || 0) ||
 					0;
 
 				return (
@@ -476,71 +472,49 @@ const StoreReport: React.FC = () => {
 
 	return (
 		<>
-			<div className="card-wrapper">
-				<div className="card-content transparent">
-					<div className="analytics-container report">
-						{overviewData.map((item, idx) => (
-							<div key={idx} className="analytics-item">
-								<div className="analytics-icon">
-									<i className={item.icon}></i>
-								</div>
-								<div className="details">
-									<div className="number">
-										<Counter value={item.count} />
-									</div>
-									<div className="text">
-										{__(item.label, 'multivendorx')}
-									</div>
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
-
-				<div className="card-content">
-					<div className="card-header">
-						<div className="left">
-							<div className="title">
-								{__(
-									'Top revenue-generating stores',
-									'multivendorx'
-								)}
-							</div>
-						</div>
-					</div>
-
-					<ResponsiveContainer width="100%" height={300}>
-						<PieChart>
-							<Pie
-								data={pieData}
-								cx="50%"
-								cy="50%"
-								outerRadius={100}
-								dataKey="value"
-								label={({ name, percent }) =>
-									`${name} ${(percent * 100).toFixed(1)}%`
-								}
-							>
-								{pieData.map((entry, index) => (
-									<Cell
-										key={`cell-${index}`}
-										fill={COLORS[index % COLORS.length]}
-									/>
-								))}
-							</Pie>
-							<Tooltip
-								formatter={(value) => formatCurrency(value)}
-								contentStyle={{
-									backgroundColor: '#fff',
-									borderRadius: '8px',
-									border: '1px solid #ddd',
-								}}
-							/>
-							<Legend />
-						</PieChart>
-					</ResponsiveContainer>
-				</div>
-			</div>
+			<Column>
+				<Analytics
+					template="template-2"
+					data={overviewData.map((item) => ({
+						icon: item.icon,
+						number: <Counter value={item.count} />,
+						text: __(item.label, 'multivendorx'),
+					}))}
+				/>
+			</Column>
+			
+			<Card title={__('Top revenue-generating stores', 'multivendorx')}>
+				<ResponsiveContainer width="100%" height={300}>
+					<PieChart>
+						<Pie
+							data={pieData}
+							cx="50%"
+							cy="50%"
+							outerRadius={100}
+							dataKey="value"
+							label={({ name, percent }) =>
+								`${name} ${(percent * 100).toFixed(1)}%`
+							}
+						>
+							{pieData.map((entry, index) => (
+								<Cell
+									key={`cell-${index}`}
+									fill={COLORS[index % COLORS.length]}
+								/>
+							))}
+						</Pie>
+						<Tooltip
+							formatter={(value) => formatCurrency(value)}
+							contentStyle={{
+								backgroundColor: '#fff',
+								borderRadius: '8px',
+								border: '1px solid #ddd',
+							}}
+						/>
+						<Legend />
+					</PieChart>
+				</ResponsiveContainer>
+			</Card>
 
 			<div className="card-header admin-pt-2">
 				<div className="left">
