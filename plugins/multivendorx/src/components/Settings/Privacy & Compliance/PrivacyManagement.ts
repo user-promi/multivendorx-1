@@ -147,9 +147,14 @@ export default {
 					value: 'shipping',
 				},
 				{
-					key: 'refund_return',
-					label: __('Refund and return', 'multivendorx'),
-					value: 'refund_return',
+					key: 'refund',
+					label: __('Refund', 'multivendorx'),
+					value: 'refund',
+				},
+				{
+					key: 'cancellation_return',
+					label: __('Cancellation / return', 'multivendorx'),
+					value: 'cancellation_return',
 				},
 			],
 			selectDeselect: true,

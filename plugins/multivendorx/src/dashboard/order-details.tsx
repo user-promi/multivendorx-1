@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
-import { AdminButton, BasicInput, Card, Column, Container, FormGroup, FormGroupWrapper, SelectInput, getApiLink } from 'zyra';
+import { AdminButton, BasicInput, Card, Column, Container, FormGroup, FormGroupWrapper, SelectInput, getApiLink, useModules } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 
@@ -22,42 +22,44 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 		restock: true,
 		reason: '',
 	});
+	const { modules } = useModules();
+	const customer_information_access = appLocalizer.settings_databases_value['privacy'].customer_information_access;
 
 	// When any item total changes, recalculate refundAmount
 	const handleItemChange = (id, field, value) => {
 		setRefundItems((prev) => {
 			const item = orderData.line_items.find((i) => i.id === id);
 			if (!item) return prev;
-	
+
 			const maxQty = Number(item.quantity);
 			const unitPrice = Number(item.subtotal) / maxQty;
-	
+
 			let quantity = prev[id]?.quantity ?? 0;
 			let total = prev[id]?.total ?? '';
 			let tax = prev[id]?.tax ?? '';
-	
+
 			//Qty is numeric and restricted
 			if (field === 'quantity') {
 				const qty = Math.min(Math.max(Math.floor(value), 0), maxQty);
 				quantity = qty;
 				total = (qty * unitPrice).toFixed(2);
 			}
-	
+
 			//Total: allow empty, NO restriction
 			if (field === 'total') {
 				total = value === '' ? '' : value;
 			}
-	
+
 			// Tax: allow empty, NO restriction
 			if (field === 'tax') {
 				tax = value === '' ? '' : value;
 			}
-	
+
 			const updated = {
 				...prev,
 				[id]: { quantity, total, tax },
 			};
-	
+
 			const refundAmount = Object.values(updated).reduce(
 				(sum, row) =>
 					sum +
@@ -65,18 +67,15 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 					Number(row.tax || 0),
 				0
 			);
-	
+
 			setRefundDetails((prevDetails) => ({
 				...prevDetails,
 				refundAmount,
 			}));
-	
+
 			return updated;
 		});
 	};
-	
-
-
 	const handleRefundSubmit = () => {
 		const payload = {
 			orderId: orderId,
@@ -881,61 +880,51 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 										<div className="avatar">
 											<img
 												src={customerData?.avatar_url}
-												alt={`${orderData?.billing
-													?.first_name ||
-													__(
-														'Customer',
-														'multivendorx'
-													)
-													} avatar`}
+												alt={`${orderData?.billing?.first_name || __('Customer', 'multivendorx')} avatar`}
 											/>
 										</div>
 
 										<div className="details">
-											<div className="name">
-												{orderData?.billing
-													?.first_name ||
-													orderData?.billing?.last_name
-													? `${orderData?.billing
-														?.first_name ??
-													''
-													} ${orderData?.billing
-														?.last_name ??
-													''
-													}`
-													: __(
-														'Guest Customer',
-														'multivendorx'
-													)}
-											</div>
-											<div className="des">
-												{__(
-													'Customer ID',
-													'multivendorx'
+											{/* Customer Name */}
+											{modules.includes('privacy') && Array.isArray(customer_information_access) &&
+												customer_information_access.includes('name') && (
+													<div className="name">
+														{orderData?.billing?.first_name ||
+															orderData?.billing?.last_name
+															? `${orderData?.billing?.first_name ?? ''} ${orderData?.billing?.last_name ?? ''
+															}`
+															: __('Guest Customer', 'multivendorx')}
+													</div>
 												)}
-												: #
-												{orderData?.customer_id &&
-													orderData.customer_id !== 0
+
+											<div className="des">
+												{__('Customer ID', 'multivendorx')}: #
+												{orderData?.customer_id && orderData.customer_id !== 0
 													? orderData.customer_id
 													: '—'}
 											</div>
 
-											{orderData?.billing?.email && (
-												<div className="des">
-													<i className="adminfont-mail" />{' '}
-													{orderData.billing.email}
-												</div>
-											)}
+											{/* Email */}
+											{modules.includes('privacy') && Array.isArray(customer_information_access) &&
+												customer_information_access.includes('email_address') &&
+												orderData?.billing?.email && (
+													<div className="des">
+														<i className="adminfont-mail" /> {orderData.billing.email}
+													</div>
+												)}
 
-											{orderData?.billing?.phone && (
-												<div className="des">
-													<i className="adminfont-phone" />{' '}
-													{orderData.billing.phone}
-												</div>
-											)}
+											{/* Phone */}
+											{modules.includes('privacy') && Array.isArray(customer_information_access) &&
+												customer_information_access.includes('phone_number') &&
+												orderData?.billing?.phone && (
+													<div className="des">
+														<i className="adminfont-phone" /> {orderData.billing.phone}
+													</div>
+												)}
 										</div>
 									</div>
 								</div>
+
 							</Card>
 
 							<Card
@@ -1072,24 +1061,25 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 									</div>
 								</div>
 							</Card>
+							{modules.includes('privacy') && Array.isArray(customer_information_access) &&
+								customer_information_access.includes('shipping_address') && (
+									<Card
+										title={__('Shipping address', 'multivendorx')}
+									>
+										<div>{orderData?.shipping.address_1}</div>
+										{orderData?.shipping.address_2 && (
+											<div>{orderData?.shipping.address_2}</div>
+										)}
 
-							<Card
-								title={__('Shipping address', 'multivendorx')}
-							>
-								<div>{orderData?.shipping.address_1}</div>
-								{orderData?.shipping.address_2 && (
-									<div>{orderData?.shipping.address_2}</div>
+										<div>
+											{orderData?.shipping.city},{' '}
+											{orderData?.shipping.state}{' '}
+											{orderData?.shipping.postcode}
+										</div>
+
+										<div>{orderData?.shipping.country}</div>
+									</Card>
 								)}
-
-								<div>
-									{orderData?.shipping.city},{' '}
-									{orderData?.shipping.state}{' '}
-									{orderData?.shipping.postcode}
-								</div>
-
-								<div>{orderData?.shipping.country}</div>
-							</Card>
-
 							<Card
 								title={__('Shipping Tracking (P)', 'multivendorx')}
 							>
@@ -1120,64 +1110,66 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 									}}
 								/>
 							</Card>
-
-							<Card
-								title={__('Order notes', 'multivendorx')}
-							>
-								{orderData?.order_notes &&
-									orderData.order_notes.length > 0 ? (
-									<div className="notification-wrapper">
-										<ul>
-											{orderData.order_notes.map(
-												(note: any, index: number) => (
-													<li key={index}>
-														<div className="icon-wrapper">
-															<i
-																className={
-																	note.is_customer_note
-																		? 'adminfont-mail orange'
-																		: 'adminfont-form-paypal-email blue'
-																}
-															></i>
-														</div>
-														<div className="details">
-															<div className="notification-title">
-																{note.author ||
-																	__(
-																		'System Note',
-																		'multivendorx'
-																	)}
-															</div>
-															<div
-																className="des"
-																dangerouslySetInnerHTML={{
-																	__html:
-																		note.content ||
-																		'',
-																}}
-															></div>
-															<span>
-																{new Date(
-																	note
-																		.date_created
-																		.date
-																).toLocaleString()}
-															</span>
-														</div>
-													</li>
-												)
-											)}
-										</ul>
-									</div>
-								) : (
-									<p>
-										{__(
-											'No order notes found.',
-											'multivendorx'
+							{modules.includes('privacy') && Array.isArray(customer_information_access) &&
+								customer_information_access.includes('order_notes') && (
+									<Card
+										title={__('Order notes', 'multivendorx')}
+									>
+										{orderData?.order_notes &&
+											orderData.order_notes.length > 0 ? (
+											<div className="notification-wrapper">
+												<ul>
+													{orderData.order_notes.map(
+														(note: any, index: number) => (
+															<li key={index}>
+																<div className="icon-wrapper">
+																	<i
+																		className={
+																			note.is_customer_note
+																				? 'adminfont-mail orange'
+																				: 'adminfont-form-paypal-email blue'
+																		}
+																	></i>
+																</div>
+																<div className="details">
+																	<div className="notification-title">
+																		{note.author ||
+																			__(
+																				'System Note',
+																				'multivendorx'
+																			)}
+																	</div>
+																	<div
+																		className="des"
+																		dangerouslySetInnerHTML={{
+																			__html:
+																				note.content ||
+																				'',
+																		}}
+																	></div>
+																	<span>
+																		{new Date(
+																			note
+																				.date_created
+																				.date
+																		).toLocaleString()}
+																	</span>
+																</div>
+															</li>
+														)
+													)}
+												</ul>
+											</div>
+										) : (
+											<p>
+												{__(
+													'No order notes found.',
+													'multivendorx'
+												)}
+											</p>
 										)}
-									</p>
+									</Card>
 								)}
-							</Card>
 						</Column>
 					</Container>
 				</>
