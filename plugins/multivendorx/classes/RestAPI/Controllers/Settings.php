@@ -102,7 +102,7 @@ class Settings extends \WP_REST_Controller {
                 $value = $request->get_param( 'value' );
                 if (!empty($value)) {
                     $general_settings = array(
-                        'approve_store' => $value['store_setup']['approve_store'] ?? '',
+                        'approve_store' => $value['store_setup']['approve_store'] ?? 'manually',
                         'store_selling_mode' => $value['store_setup']['store_selling_mode'] ?? '',
                     );
     
@@ -119,12 +119,12 @@ class Settings extends \WP_REST_Controller {
                     );
     
                     $disbursment_settings = array(
-                        'disbursement_order_status' => $value['commission_setup']['disbursement_order_status'] ?? array(),
+                        'disbursement_order_status' => $value['commission_setup']['disbursement_order_status'] ?? array( 'completed' ),
                     );
     
-                    MultiVendorX()->setting->update_option( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
-                    MultiVendorX()->setting->update_option( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
-                    MultiVendorX()->setting->update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
+                    update_option( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
+                    update_option( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
+                    update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
                 }
                 return;
             }
