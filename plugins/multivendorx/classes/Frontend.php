@@ -25,6 +25,7 @@ class Frontend {
         // Redirect store dashboard page.
         add_filter( 'template_include', array( $this, 'store_dashboard_template' ) );
         add_filter( 'woocommerce_login_redirect', array( $this, 'redirect_store_dashboard' ), 10, 2 );
+        add_filter( 'login_redirect', array( $this, 'redirect_store_dashboard_wordpress' ), 10, 3 );
 
         // Modify related products section in single product page.
         add_filter( 'woocommerce_related_products', array( $this, 'show_related_products' ), 99, 3 );
@@ -277,8 +278,22 @@ class Frontend {
      * @return string
      */
     public function redirect_store_dashboard( $redirect, $user ) {
-        if ( in_array('store_owner', $user->roles, true) ) {
-            if (get_user_meta( $user->ID, Utill::USER_SETTINGS_KEYS['active_store'], true )) {
+        if ( in_array('store_owner', $user->roles, true) && get_user_meta( $user->ID, Utill::USER_SETTINGS_KEYS['active_store'], true ) ) {
+            return get_permalink(MultiVendorX()->setting->get_setting( 'store_dashboard_page' ));
+        }
+        return $redirect;
+    }
+
+    /**
+     * Redirect Store dashboard wordpress
+     *
+     * @param string $redirect redirect url.
+     *
+     * @return string
+     */
+    public function redirect_store_dashboard_wordpress( $redirect, $requested, $user ) {
+        if ($requested == admin_url()) {
+            if ( in_array('store_owner', $user->roles, true) && get_user_meta( $user->ID, Utill::USER_SETTINGS_KEYS['active_store'], true ) ) {
                 return get_permalink(MultiVendorX()->setting->get_setting( 'store_dashboard_page' ));
             }
         }
