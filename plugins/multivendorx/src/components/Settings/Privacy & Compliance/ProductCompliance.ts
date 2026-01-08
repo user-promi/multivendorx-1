@@ -139,11 +139,6 @@ export default {
 						label: 'Reasons',
 						placeholder: 'Enter Reasons',
 					},
-					{
-						key: 'required',
-						type: 'checkbox',
-						label: 'Required',
-					},
 				],
 			},
 			modal: [],
