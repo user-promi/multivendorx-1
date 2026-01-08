@@ -521,17 +521,6 @@ By signing and submitting, the Seller accepts all terms above.
    - Sellers must upload supporting documents for regulated products.
 ',
         );
-        $product_compliance_settings = array(
-            'prohibited_product_categories' => array(
-                'Weapons & Ammunition',
-                'Illegal Drugs & Substances',
-                'Counterfeit Products',
-                'Stolen Goods',
-            ),
-            'who_can_report'                => 'anyone',
-            // You can add other keys here if needed, e.g. 'required_store_uploads' => [...].
-        );
-
         $pending_store_status = array(
             'pending_msg' => 'Your store is awaiting approval and will be activated soon.',
         );
@@ -829,7 +818,51 @@ By signing and submitting, the Seller accepts all terms above.
                 ),
             ),
         );
-
+        $product_compliance_settings['abuse_report_reasons'] = array(
+            'product-not-received' => array(
+                'label'    => 'Product not received',
+                'required' => true,
+                'isCustom' => true,
+            ),
+            'product-not-described' => array(
+                'label'    =>'Product not as described',
+                'required' => true,
+                'isCustom' => true,
+            ),
+            'product-damaged-defective' => array(
+                'label'    => 'Product damaged / defective',
+                'required' => true,
+                'isCustom' => true,
+            ),
+            'wrong-item-received' => array(
+                'label'    =>'Wrong item received',
+                'required' => true,
+                'isCustom' => true,
+            ),
+            'order-arrived-late' => array(
+                'label'    => 'Order arrived late',
+                'required' => true,
+                'isCustom' => true,
+            ),
+        );
+        $product_compliance_settings['who_can_report'] ='anyone';
+        $product_compliance_settings['prohibited_product_categories'] = array(
+            'weapons-&-ammunition' => array(
+                'label'    => 'Weapons & ammunition',
+                'required' => true,
+                'isCustom' => true,
+            ),
+            'drugs-&-substances' => array(
+                'label'    =>'Illegal drugs & substances',
+                'required' => true,
+                'isCustom' => true,
+            ),
+            'counterfeit-products' => array(
+                'label'    => 'Counterfeit products',
+                'required' => true,
+                'isCustom' => true,
+            ),
+        );
         // 6. Save back to DB
         update_option( Utill::MULTIVENDORX_SETTINGS['identity-verification'], $settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $order_settings );

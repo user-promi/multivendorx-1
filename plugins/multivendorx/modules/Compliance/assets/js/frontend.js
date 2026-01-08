@@ -21,6 +21,10 @@ jQuery(function ($) {
 	$(document).on('click', '.open-report-abuse', function (e) {
 		e.preventDefault();
 		var $form = $(this).siblings('.report-abuse-form');
+		$form.find('.report-abuse-msg-box').empty();
+		$form.find('.report-abuse-custom-msg').hide();
+		$form.find('input[type=radio]').prop('checked', false);
+	
 		$form.toggle();
 
 		var $wrapper = $form.find('.report-abuse-reasons-wrapper');

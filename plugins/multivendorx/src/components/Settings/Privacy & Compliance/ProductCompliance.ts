@@ -31,7 +31,7 @@ export default {
 				label: 'New Product Categories',
 				formFields: [
 					{
-						key: 'title',
+						key: 'label',
 						type: 'text',
 						label: 'Categories Name',
 						placeholder: 'Enter title',
@@ -43,26 +43,7 @@ export default {
 					},
 				],
 			},
-			modal: [
-				{
-					id: 'weapons-&-ammunition',
-					label: 'Weapons & ammunition',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'drugs-&-substances',
-					label: 'Illegal drugs & substances',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'counterfeit-products',
-					label: 'Counterfeit products',
-					required: true,
-					isCustom: true,
-				},
-			],
+			modal: [],
 		},
 		{
 			key: 'required_store_uploads',
@@ -153,7 +134,7 @@ export default {
 				label: 'New Reasons',
 				formFields: [
 					{
-						key: 'title',
+						key: 'label',
 						type: 'text',
 						label: 'Reasons',
 						placeholder: 'Enter Reasons',
@@ -165,36 +146,7 @@ export default {
 					},
 				],
 			},
-			modal: [
-				{
-					id: 'product-not-received',
-					label: 'Product not received',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'product-not-described',
-					label: 'Product not as described',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'product-damaged-defective',
-					label: 'Product damaged/defective',
-					required: true,
-					isCustom: true,
-				},
-				{
-					id: 'wrong-item-received',
-					label: 'Wrong item received',
-					isCustom: true,
-				},
-				{
-					id: 'order-arrived-late',
-					label: 'Order arrived late',
-					isCustom: true,
-				},
-			],
+			modal: [],
 		},
 	],
 };
