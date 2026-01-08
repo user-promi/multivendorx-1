@@ -24,6 +24,7 @@ class Frontend {
     public function __construct() {
         // Redirect store dashboard page.
         add_filter( 'template_include', array( $this, 'store_dashboard_template' ) );
+        add_filter( 'woocommerce_login_redirect', array( $this, 'redirect_store_dashboard' ), 10, 2 );
 
         // Add sold by in shop page.
         add_action( 'woocommerce_after_shop_loop_item', array( $this, 'add_sold_by_in_shop_and_single_product_page' ), 6 );
@@ -407,6 +408,22 @@ class Frontend {
             return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
         }
         return $template;
+    }
+
+    /**
+     * Redirect Store dashboard
+     *
+     * @param string $redirect redirect url.
+     *
+     * @return string
+     */
+    public function redirect_store_dashboard( $redirect, $user ) {
+        if ( in_array('store_owner', $user->roles, true) ) {
+            if (get_user_meta( $user->ID, Utill::USER_SETTINGS_KEYS['active_store'], true )) {
+                return get_permalink(MultiVendorX()->setting->get_setting( 'store_dashboard_page' ));
+            }
+        }
+        return $redirect;
     }
 
     /**
