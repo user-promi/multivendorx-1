@@ -193,6 +193,36 @@ export default {
 				set: true,
 				value: 'plivo',
 			},
+			{
+	key: 'sms_sender_phone_number',
+	type: 'text',
+	label: __('Sender phone number', 'multivendorx'),
+	placeholder: __('+1 4151234567', 'multivendorx'),
+	settingDescription: __(
+		'The phone number SMS messages are sent from. Use country code followed by phone number. Example: +1 – 4151234567, +91 – 9876543210',
+		'multivendorx'
+	),
+	dependent: {
+		key: 'sms_gateway_selector',
+		set: true,
+	},
+},
+
+{
+	key: 'sms_receiver_phone_number',
+	type: 'text',
+	label: __('Receiver phone number', 'multivendorx'),
+	placeholder: __('+91 9000012345', 'multivendorx'),
+	settingDescription: __(
+		'The phone number that will receive SMS notifications. Use country code followed by phone number. Example: +44 – 7123456789, +91 – 9000012345',
+		'multivendorx'
+	),
+	dependent: {
+		key: 'sms_gateway_selector',
+		set: true,
+	},
+},
+
 		},
 	],
 };
