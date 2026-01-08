@@ -71,6 +71,7 @@ export { default as FormGroup } from './components/UI/FormGroup';
 export { default as FormGroupWrapper } from './components/UI/FormGroupWrapper';
 export { default as AdminButton } from './components/UI/AdminButton';
 export { default as InfoItem } from './components/UI/InfoItem';
+export { default as Analytics } from './components/UI/Analytics';
 
 export { useModules, initializeModules } from './contexts/ModuleContext';
 export { SettingProvider, useSetting } from './contexts/SettingContext';

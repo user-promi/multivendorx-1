@@ -106,12 +106,14 @@ class Ajax {
                 </li>
                 <?php
             }
-        } else {
-            echo '<li>No questions found.</li>';
         }
 
         $html = ob_get_clean();
-        wp_send_json_success( array( 'html' => $html ) );
+        wp_send_json_success( array(
+            'html'      => $html,
+            'has_items' => ! empty( $questions ),
+        ) );
+        
     }
 
     /**

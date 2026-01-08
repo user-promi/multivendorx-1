@@ -9,7 +9,7 @@ import {
 	Cell,
 } from 'recharts';
 import axios from 'axios';
-import { Card, Column, Container, getApiLink } from 'zyra';
+import { Analytics, Card, Column, Container, getApiLink } from 'zyra';
 import { formatCurrency } from '@/services/commonFunction';
 
 type Stat = {
@@ -286,30 +286,21 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 		<>
 			<Container>
 				<Column>
-					<div className="card-content transparent">
-						<div className="analytics-container report col-3">
-							{commissionDetails.map((item, idx) => (
-								<div key={idx} className="analytics-item">
-									<div className="analytics-icon">
-										<i
-											className={`${item.icon} admin-color${idx + 2}`}
-										></i>
-									</div>
-									<div className="details">
-										<div className="number">
-											<Counter
-												value={item.count}
-												format={formatCurrency}
-											/>
-										</div>
-										<div className="text">
-											{__(item.label, 'multivendorx')}
-										</div>
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
+					<Analytics
+						template="template-2"
+						col3
+						data={commissionDetails.map((item, idx) => ({
+							icon: item.icon,
+							iconClass: `admin-color${idx + 2}`,
+							number: (
+								<Counter
+									value={item.count}
+									format={formatCurrency}
+								/>
+							),
+							text: __(item.label, 'multivendorx'),
+						}))}
+					/>
 				</Column>
 
 				<Column grid={6}>

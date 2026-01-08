@@ -276,7 +276,11 @@ class Util {
             MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
 
-        return round( $overall, 2 );
+        if ( $overall === null ) {
+            return 0.00;
+        }
+        
+        return round( (float) $overall, 2 );
     }
 
     /**
