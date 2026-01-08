@@ -17,8 +17,8 @@ const RegistrationForm = () => {
 	useEffect(() => {
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store`),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			url: getApiLink(registrationForm, `store`),
+			headers: { 'X-WP-Nonce': registrationForm.nonce },
 			params: { store_registration: true },
 		}).then((res) => {
 			const data = res.data || {};
@@ -129,8 +129,8 @@ const RegistrationForm = () => {
 			});
 	}, []);
 
-	const memoizedCountryList = useMemo(() => appLocalizer.country_list, []);
-	const memoizedStateList = useMemo(() => appLocalizer.state_list, []);
+	const memoizedCountryList = useMemo(() => registrationForm.country_list, []);
+	const memoizedStateList = useMemo(() => registrationForm.state_list, []);
 
 	return (
 		<>

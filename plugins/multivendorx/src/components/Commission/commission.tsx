@@ -561,7 +561,7 @@ const Commission: React.FC = () => {
 										)}
 									</li>
 								)}
-							{row.original?.taxAmount && (
+							{row.original?.taxAmount && appLocalizer.settings_databases_value['store-commissions']?.give_tax !== 'no_tax' && (
 								<li>
 									{row.original?.taxAmount && (
 										<div className="item">
@@ -680,10 +680,21 @@ const Commission: React.FC = () => {
 			id: 'store_payable',
 			accessorKey: 'store_payable',
 			enableSorting: true,
-			header: __('Total Earned', 'multivendorx'),
+			header: __('Store Earning', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell title={''}>
 					{formatCurrency(row.original.storePayable)}
+				</TableCell>
+			),
+		},
+		{
+			id: 'marketplace_payable',
+			accessorKey: 'marketplace_payable',
+			enableSorting: true,
+			header: __('Marketplace Earning', 'multivendorx'),
+			cell: ({ row }) => (
+				<TableCell title={''}>
+					{formatCurrency(row.original.marketplacePayable)}
 				</TableCell>
 			),
 		},
