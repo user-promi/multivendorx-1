@@ -11,6 +11,7 @@ import {
 	MultiCalendarInput,
 	AdminButton,
 	Container,
+	Column,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -826,7 +827,8 @@ const Commission: React.FC = () => {
 					'multivendorx'
 				)}
 			/>
-			<Container>
+			<Container general>
+				<Column>
 				<Table
 					data={data}
 					columns={
@@ -852,6 +854,7 @@ const Commission: React.FC = () => {
 					totalCounts={totalRows}
 					actionButton={actionButton}
 				/>
+				</Column>
 			</Container>
 			{viewCommission && selectedCommissionId !== null && (
 				<ViewCommission

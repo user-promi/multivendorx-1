@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '../services/commonFunction';
+import { AdminButton } from 'zyra';
 
 const SpmvProducts: React.FC = () => {
 	const [products, setProducts] = useState([]);
 	const [query, setQuery] = useState('');
 	const navigate = useNavigate();
+	const ITEMS_PER_PAGE = 12;
+	const [pageIndex, setPageIndex] = useState(0);
+
 
 	useEffect(() => {
 		axios
@@ -24,6 +28,9 @@ const SpmvProducts: React.FC = () => {
 				setProducts(filtered);
 			});
 	}, []);
+	useEffect(() => {
+		setPageIndex(0);
+	}, [query]);
 
 	const filteredProducts = products.filter((p) => {
 		const name = p.name?.toLowerCase() || '';
@@ -32,6 +39,14 @@ const SpmvProducts: React.FC = () => {
 
 		return name.includes(q) || category.includes(q);
 	});
+
+	const pageCount = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+
+	const paginatedProducts = filteredProducts.slice(
+		pageIndex * ITEMS_PER_PAGE,
+		(pageIndex + 1) * ITEMS_PER_PAGE
+	);
+
 
 	const duplicateProduct = async (product) => {
 		const newProductPayload = {
@@ -70,20 +85,31 @@ const SpmvProducts: React.FC = () => {
 	return (
 		<>
 			<div className="product-category-select-wrapper">
-				<div className="title">Select a category from the list</div>
-				<div className="search-section-wrapper">
-					<div className="search-field">
-						<div className="search-section">
-							<input
-								type="text"
-								placeholder="Search Products"
-								className="basic-input"
-								value={query}
-								onChange={(e) => setQuery(e.target.value)}
-							/>
-							<i className="adminfont-search"></i>
+				<div className="header">
+					<div className="search-section-wrapper">
+						<div className="title">Select a category from the list</div>
+						<div className="search-field">
+							<div className="search-section">
+								<input
+									type="text"
+									placeholder="Search Products"
+									className="basic-input"
+									value={query}
+									onChange={(e) => setQuery(e.target.value)}
+								/>
+								<i className="adminfont-search"></i>
+							</div>
 						</div>
 					</div>
+					<AdminButton
+						buttons={
+							{
+								icon: 'plus',
+								text: 'Add new product',
+								className: 'purple-bg',
+								// onClick: props.onCancel,
+							}}
+					/>
 				</div>
 
 				<div className="product-wrapper">
@@ -91,7 +117,7 @@ const SpmvProducts: React.FC = () => {
 						<div>No products found.</div>
 					)}
 
-					{filteredProducts.map((product) => {
+					{paginatedProducts.map((product) => {
 						const imageSrc =
 							product.images && product.images.length > 0
 								? product.images[0].src
@@ -127,13 +153,81 @@ const SpmvProducts: React.FC = () => {
 											duplicateProduct(product)
 										}
 									>
-										<i className="adminfont-vendor-form-copy"></i>{' '}
+										<i className="adminfont-vendor-form-copy"></i>
 										Copy
 									</div>
 								</div>
 							</div>
 						);
 					})}
+				</div>
+				<div className="admin-pagination">
+					{pageCount > 1 && (
+						<div className="pagination-arrow">
+							<span
+								tabIndex={0}
+								className={`${pageIndex === 0 ? 'pagination-button-disabled' : ''}`}
+								onClick={() => {
+									if (pageIndex === 0) return;
+									setPageIndex(0);
+								}}
+							>
+								<i className="admin-font adminfont-pagination-prev-arrow"></i>
+							</span>
+
+							<span
+								tabIndex={0}
+								className={`${pageIndex === 0 ? 'pagination-button-disabled' : ''}`}
+								onClick={() => {
+									if (pageIndex === 0) return;
+									setPageIndex((p) => p - 1);
+								}}
+							>
+								<i className="admin-font adminfont-pagination-left-arrow"></i>
+							</span>
+
+							<div className="pagination">
+								{Array.from({ length: pageCount }, (_, i) => (
+									<button
+										key={i}
+										className={`number-btn ${pageIndex === i ? 'active' : ''
+											}`}
+										onClick={() => setPageIndex(i)}
+									>
+										{i + 1}
+									</button>
+								))}
+							</div>
+
+							<span
+								tabIndex={0}
+								className={`${pageIndex === pageCount - 1
+									? 'pagination-button-disabled'
+									: ''
+									}`}
+								onClick={() => {
+									if (pageIndex === pageCount - 1) return;
+									setPageIndex((p) => p + 1);
+								}}
+							>
+								<i className="admin-font adminfont-pagination-right-arrow"></i>
+							</span>
+
+							<span
+								tabIndex={0}
+								className={`${pageIndex === pageCount - 1
+									? 'pagination-button-disabled'
+									: ''
+									}`}
+								onClick={() => {
+									if (pageIndex === pageCount - 1) return;
+									setPageIndex(pageCount - 1);
+								}}
+							>
+								<i className="admin-font adminfont-pagination-next-arrow"></i>
+							</span>
+						</div>
+					)}
 				</div>
 			</div>
 		</>

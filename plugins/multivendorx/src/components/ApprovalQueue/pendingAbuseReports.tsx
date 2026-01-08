@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { Table, getApiLink, TableCell, MultiCalendarInput } from 'zyra';
+import { Table, getApiLink, TableCell, MultiCalendarInput, ProPopup, Container, Column } from 'zyra';
 import {
 	ColumnDef,
 	RowSelectionState,
 	PaginationState,
 } from '@tanstack/react-table';
+import { Dialog } from '@mui/material';
 
 export interface RealtimeFilter {
 	name: string;
@@ -53,6 +54,8 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
 	const [data, setData] = useState<ReportRow[] | null>(null);
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [totalRows, setTotalRows] = useState<number>(0);
+	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [selectedReport, setSelectedReport] = useState<ReportRow | null>(null);
 
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
@@ -60,6 +63,37 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
 	});
 	const [pageCount, setPageCount] = useState(0);
 	const [store, setStore] = useState<any[] | null>(null);
+
+	// delete popup
+	const handleDeleteClick = (rowData: ReportRow) => {
+		setSelectedReport(rowData);
+		setConfirmOpen(true);
+	};
+
+	const handleConfirmDelete = async () => {
+		if (!selectedReport) return;
+
+		try {
+			await axios.delete(
+				getApiLink(appLocalizer, `report-abuse/${selectedReport.ID}`),
+				{
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				}
+			);
+
+			requestData(
+				pagination.pageSize,
+				pagination.pageIndex + 1
+			);
+
+			onUpdated?.();
+		} catch {
+			alert(__('Failed to delete report', 'multivendorx'));
+		} finally {
+			setConfirmOpen(false);
+			setSelectedReport(null);
+		}
+	};
 
 	useEffect(() => {
 		axios({
@@ -192,10 +226,10 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
 				const rawDate = row.original.created_at;
 				const formattedDate = rawDate
 					? new Intl.DateTimeFormat('en-US', {
-							month: 'short',
-							day: 'numeric',
-							year: 'numeric',
-						}).format(new Date(rawDate))
+						month: 'short',
+						day: 'numeric',
+						year: 'numeric',
+					}).format(new Date(rawDate))
 					: '-';
 				return (
 					<TableCell title={formattedDate}>{formattedDate}</TableCell>
@@ -215,45 +249,8 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminfont-delete',
 								onClick: (rowData: ReportRow) => {
-									if (
-										confirm(
-											__(
-												'Are you sure you want to delete this report?',
-												'multivendorx'
-											)
-										)
-									) {
-										axios
-											.delete(
-												getApiLink(
-													appLocalizer,
-													`report-abuse/${rowData.ID}`
-												),
-												{
-													headers: {
-														'X-WP-Nonce':
-															appLocalizer.nonce,
-													},
-												}
-											)
-											.then(() => {
-												requestData(
-													pagination.pageSize,
-													pagination.pageIndex + 1
-												);
-												onUpdated?.();
-											})
-											.catch(() => {
-												alert(
-													__(
-														'Failed to delete report',
-														'multivendorx'
-													)
-												);
-											});
-									}
+									handleDeleteClick(rowData);
 								},
-								hover: true,
 							},
 						],
 					}}
@@ -367,22 +364,41 @@ const PendingReportAbuse: React.FC<Props> = ({ onUpdated }) => {
 
 	return (
 		<>
-			<div className="admin-table-wrapper">
-				<Table
-					data={data}
-					columns={columns as ColumnDef<Record<string, any>, any>[]}
-					rowSelection={rowSelection}
-					onRowSelectionChange={setRowSelection}
-					defaultRowsPerPage={10}
-					pageCount={pageCount}
-					pagination={pagination}
-					onPaginationChange={setPagination}
-					handlePagination={requestApiForData}
-					perPageOption={[10, 25, 50]}
-					totalCounts={totalRows}
-					realtimeFilter={realtimeFilter}
+			<Container general>
+				<Column>
+					<Table
+						data={data}
+						columns={columns as ColumnDef<Record<string, any>, any>[]}
+						rowSelection={rowSelection}
+						onRowSelectionChange={setRowSelection}
+						defaultRowsPerPage={10}
+						pageCount={pageCount}
+						pagination={pagination}
+						onPaginationChange={setPagination}
+						handlePagination={requestApiForData}
+						perPageOption={[10, 25, 50]}
+						totalCounts={totalRows}
+						realtimeFilter={realtimeFilter}
+					/>
+				</Column>
+			</Container>
+			<Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+				<ProPopup
+					confirmMode
+					title={__('Are you sure?', 'multivendorx')}
+					confirmMessage={__(
+						'Are you sure you want to delete this abuse report?',
+						'multivendorx'
+					)}
+					confirmYesText={__('Delete', 'multivendorx')}
+					confirmNoText={__('Cancel', 'multivendorx')}
+					onConfirm={handleConfirmDelete}
+					onCancel={() => {
+						setConfirmOpen(false);
+						setSelectedReport(null);
+					}}
 				/>
-			</div>
+			</Dialog>
 		</>
 	);
 };

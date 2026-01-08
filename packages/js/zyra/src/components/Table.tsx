@@ -934,7 +934,7 @@ const Table: React.FC< TableProps > = ( {
                             { /* Pagination Controls */ }
                             { pagination && pageCount && perPageOption && (
                                 <>
-                                    <div className="table-pagination">
+                                    <div className="admin-pagination">
                                         <div className="pagination-number-wrapper">
                                             <div className="show-section">
                                                 { `Showing ${
@@ -1021,12 +1021,6 @@ const Table: React.FC< TableProps > = ( {
                                                 >
                                                     <i className="admin-font adminfont-pagination-left-arrow"></i>
                                                 </span>
-                                                { /* <span>
-                                            Page{ ' ' }
-                                            { table.getState().pagination
-                                                .pageIndex + 1 }{ ' ' }
-                                            of { pageCount }
-                                        </span> */ }
                                                 <div className="pagination">
                                                     { Array.from(
                                                         { length: pageCount },

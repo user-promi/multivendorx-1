@@ -658,6 +658,7 @@ export const Announcements: React.FC = () => {
 			),
 		},
 	];
+	
 	return (
 		<>
 			<Dialog
