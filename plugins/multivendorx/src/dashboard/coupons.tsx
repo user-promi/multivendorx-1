@@ -621,7 +621,6 @@ const AllCoupon: React.FC = () => {
 							/>
 						</FormGroup>
 					</FormGroupWrapper>
-
 				</>
 			),
 		},

@@ -89,6 +89,7 @@ const ContactInformation = () => {
 				<FormGroup
 					label={__('Phone', 'multivendorx')}
 					htmlFor="phone"
+					cols={2}
 				>
 					<BasicInput
 						name="phone"
@@ -102,6 +103,7 @@ const ContactInformation = () => {
 				<FormGroup
 					label={__('Email / Additional Email', 'multivendorx')}
 					htmlFor="email"
+					cols={2}
 				>
 					<BasicInput
 						type="email"

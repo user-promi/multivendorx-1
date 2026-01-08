@@ -1,4 +1,5 @@
 import React from 'react';
+import "../../styles/web/UI/Container.scss";
 
 type ColumnProps = {
   grid?: number; // 1–12
@@ -13,10 +14,14 @@ const Column: React.FC<ColumnProps> = ({
   children,
   row = false,
 }) => {
-  const columnClass = `card-wrapper column-${grid}`;
-  const columnClasses = `${columnClass} ${className}`.trim();
+  // const columnClass = `card-wrapper column-${grid}`;
+  // const columnClasses = `${columnClass} ${className}`.trim();
 
-  return <div className={`${row ? 'row' : ''} ${columnClasses }`}>{children}</div>;
+  return <div className={`card-wrapper ${row ? 'row' : ''} ${className}`}
+              data-cols={grid}
+          >
+            {children}
+          </div>;
 };
 
 export default Column;
