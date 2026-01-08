@@ -57,89 +57,83 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 			<SuccessNotice message={successMsg} />
 
 			<Container>
-				<Column>
+				<Column row>
 					<Card title="Store policy">
 						<FormGroupWrapper>
-							<FormGroup>
-								<TextArea
-									name="store_policy"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
-									value={formData.store_policy}
-									onChange={handleChange}
-									usePlainText={false}
-									tinymceApiKey={
-										appLocalizer
-											.settings_databases_value[
-										'marketplace'
-										]['tinymce_api_section'] ?? ''
-									}
-								/>
-							</FormGroup>
+							<TextArea
+								name="store_policy"
+								wrapperClass="setting-from-textarea"
+								inputClass="textarea-input"
+								descClass="settings-metabox-description"
+								value={formData.store_policy}
+								onChange={handleChange}
+								usePlainText={false}
+								tinymceApiKey={
+									appLocalizer
+										.settings_databases_value[
+									'marketplace'
+									]['tinymce_api_section'] ?? ''
+								}
+							/>
 						</FormGroupWrapper>
 					</Card>
 					<Card title="Shipping policy">
 						<FormGroupWrapper>
-							<FormGroup>
-								<TextArea
-									name="shipping_policy"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
-									value={formData.shipping_policy}
-									onChange={handleChange}
-									usePlainText={false}
-									tinymceApiKey={
-										appLocalizer
-											.settings_databases_value[
-										'marketplace'
-										]['tinymce_api_section'] ?? ''
-									}
-								/>
-							</FormGroup>
+							<TextArea
+								name="shipping_policy"
+								wrapperClass="setting-from-textarea"
+								inputClass="textarea-input"
+								descClass="settings-metabox-description"
+								value={formData.shipping_policy}
+								onChange={handleChange}
+								usePlainText={false}
+								tinymceApiKey={
+									appLocalizer
+										.settings_databases_value[
+									'marketplace'
+									]['tinymce_api_section'] ?? ''
+								}
+							/>
 						</FormGroupWrapper>
 					</Card>
+				</Column>
+				<Column row>
 					<Card title="Refund policy">
 						<FormGroupWrapper>
-							<FormGroup>
-								<TextArea
-									name="refund_policy"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
-									value={formData.refund_policy}
-									onChange={handleChange}
-									usePlainText={false}
-									tinymceApiKey={
-										appLocalizer
-											.settings_databases_value[
-										'marketplace'
-										]['tinymce_api_section'] ?? ''
-									}
-								/>
-							</FormGroup>
+							<TextArea
+								name="refund_policy"
+								wrapperClass="setting-from-textarea"
+								inputClass="textarea-input"
+								descClass="settings-metabox-description"
+								value={formData.refund_policy}
+								onChange={handleChange}
+								usePlainText={false}
+								tinymceApiKey={
+									appLocalizer
+										.settings_databases_value[
+									'marketplace'
+									]['tinymce_api_section'] ?? ''
+								}
+							/>
 						</FormGroupWrapper>
 					</Card>
 					<Card title="Cancellation / return / exchange policy">
 						<FormGroupWrapper>
-							<FormGroup>
-								<TextArea
-									name="cancellation_policy"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
-									value={formData.cancellation_policy}
-									onChange={handleChange}
-									usePlainText={false}
-									tinymceApiKey={
-										appLocalizer
-											.settings_databases_value[
-										'marketplace'
-										]['tinymce_api_section'] ?? ''
-									}
-								/>
-							</FormGroup>
+							<TextArea
+								name="cancellation_policy"
+								wrapperClass="setting-from-textarea"
+								inputClass="textarea-input"
+								descClass="settings-metabox-description"
+								value={formData.cancellation_policy}
+								onChange={handleChange}
+								usePlainText={false}
+								tinymceApiKey={
+									appLocalizer
+										.settings_databases_value[
+									'marketplace'
+									]['tinymce_api_section'] ?? ''
+								}
+							/>
 						</FormGroupWrapper>
 					</Card>
 				</Column>

@@ -17,7 +17,7 @@ import {
 } from 'recharts';
 import axios from 'axios';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { Card, Column, Container, getApiLink } from 'zyra';
+import { Analytics, Card, Column, Container, getApiLink } from 'zyra';
 import { formatCurrency } from '@/services/commonFunction';
 
 type Stat = {
@@ -279,27 +279,16 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 
 			<Container>
 				<Column>
-					<Card transparent>
-						<div className="analytics-container report col-3">
-							{commissionDetails.map((item, idx) => (
-								<div key={idx} className="analytics-item">
-									<div className="analytics-icon">
-										<i
-											className={`${item.icon} admin-color${idx + 1}`}
-										></i>
-									</div>
-									<div className="details">
-										<div className="number">
-											{item.count}
-										</div>
-										<div className="text">
-											{__(item.label, 'multivendorx')}
-										</div>
-									</div>
-								</div>
-							))}
-						</div>
-					</Card>
+					<Analytics
+						template="template-2"
+						col3
+						data={commissionDetails.map((item, idx) => ({
+							icon: item.icon,
+							iconClass: `admin-color${idx + 1}`,
+							number: item.count,
+							text: __(item.label, 'multivendorx'),
+						}))}
+					/>
 				</Column>
 
 				<Column grid={6}>

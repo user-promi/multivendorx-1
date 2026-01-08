@@ -1,5 +1,5 @@
 import { AdminBreadcrumbs, Container } from 'zyra';
-import '../Settings/Notifications.scss';
+// import '../Settings/Notification/Notification.scss';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

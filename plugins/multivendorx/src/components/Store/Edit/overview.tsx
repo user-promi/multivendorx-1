@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 import axios from 'axios';
-import { Column, Container, getApiLink, InfoItem, useModules } from 'zyra';
+import { Analytics, Card, Column, Container, getApiLink, InfoItem, useModules } from 'zyra';
 import { Skeleton } from '@mui/material';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './latestReview';
@@ -118,198 +118,141 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 		<>
 			<Container>
 				<Column grid={8}>
-					<div className="analytics-container">
-						{overviewData.map((item, idx) => (
-							<div key={idx} className="analytics-item">
-								<div className="analytics-icon">
-									<i className={item.icon}></i>
-								</div>
-								<div className="details">
-									<div className="number">{item.number}</div>
-									<div className="text">{item.text}</div>
-								</div>
-							</div>
-						))}
-					</div>
-
+					<Analytics
+						template="template-1"
+						data={overviewData.map((item) => ({
+							icon: item.icon,
+							number: item.number,
+							text: item.text,
+						}))}
+					/>
 					<div className="card-wrapper">
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Recent payouts', 'multivendorx')}
-									</div>
+						<Card
+							title={__('Recent payouts', 'multivendorx')}
+							iconName="adminfont-external icon"
+							onIconClick={() => {
+								navigate(
+									`?page=multivendorx#&tab=transaction-history&store_id=${id}`
+								);
+							}}
+						>
+							{recentDebits && recentDebits.length > 0 ? (
+								recentDebits.map((txn) => (
+									<InfoItem
+										key={txn.id}
+										title={__('Bank Transfer', 'multivendorx')}
+										descriptions={[
+											{
+												value: new Date(txn.date).toLocaleDateString('en-US', {
+													month: 'short',
+													day: '2-digit',
+													year: 'numeric',
+												}),
+											},
+										]}
+										amount={formatCurrency(txn.amount)}
+									/>
+								))
+							) : (
+								<div className="no-data">
+									{__('No recent payout', 'multivendorx')}
 								</div>
-								<div className="right">
-									<i
-										className="adminfont-external icon"
-										onClick={() => {
-											navigate(
-												`?page=multivendorx#&tab=transaction-history&store_id=${id}`
-											);
-										}}
-									></i>
-								</div>
-							</div>
-							<div className="card-body">
-								{recentDebits && recentDebits.length > 0 ? (
-									recentDebits.map((txn) => (
-										<InfoItem
-											key={txn.id}
-											title={__('Bank Transfer', 'multivendorx')}
-											descriptions={[
-												{
-													value: new Date(txn.date).toLocaleDateString('en-US', {
-														month: 'short',
-														day: '2-digit',
-														year: 'numeric',
-													}),
-												},
-											]}
-											amount={formatCurrency(txn.amount)}
-										/>
-									))
-								) : (
-									<div className="no-data">
-										{__('No recent payout', 'multivendorx')}
-									</div>
-								)}
-							</div>
-						</div>
-
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Latest products', 'multivendorx')}
-									</div>
-								</div>
-								<div className="right">
-									<i
-										className="adminfont-external icon"
-										onClick={() => {
-											window.open(
-												`${appLocalizer.admin_url}edit.php?post_type=product`,
-												'_self'
-											);
-										}}
-									></i>
-								</div>
-							</div>
-							<div className="card-body">
-								{recentProducts.length > 0 ? (
-									recentProducts.map((product, idx) => {
-										const productImage =
-											product.images &&
-												product.images.length > 0
-												? product.images[0].src
-												: null;
-										const editUrl = `${appLocalizer.site_url.replace(
-											/\/$/,
-											''
-										)}/wp-admin/post.php?post=${product.id
-											}&action=edit`;
-
-										return (
-											<InfoItem
-												key={product.id}
-												title={product.name}
-												titleLink={editUrl}
-												avatar={{
-													image: productImage,
-													iconClass: `item-icon adminfont-single-product admin-color${idx + 2}`,
-												}}
-												descriptions={[
-													{
-														label: __('sku', 'multivendorx'),
-														value: product.sku,
-													},
-												]}
-												amount={formatCurrency(product.price ?? 0)}
-											/>
-										);
-									})
-								) : (
-									<p className="no-data">
-										{__(
-											'No recent products found.',
-											'multivendorx'
-										)}
-									</p>
-								)}
-							</div>
-						</div>
+							)}
+						</Card>
 					</div>
+
+					<Card
+						title={__('Latest products', 'multivendorx')}
+						iconName="adminfont-external icon"
+						onIconClick={() => {
+							window.open(
+								`${appLocalizer.admin_url}edit.php?post_type=product`,
+								'_self'
+							);
+						}}
+					>
+						{recentProducts.length > 0 ? (
+							recentProducts.map((product, idx) => {
+								const productImage =
+									product.images &&
+										product.images.length > 0
+										? product.images[0].src
+										: null;
+								const editUrl = `${appLocalizer.site_url.replace(
+									/\/$/,
+									''
+								)}/wp-admin/post.php?post=${product.id
+									}&action=edit`;
+
+								return (
+									<InfoItem
+										key={product.id}
+										title={product.name}
+										titleLink={editUrl}
+										avatar={{
+											image: productImage,
+											iconClass: `item-icon adminfont-single-product admin-color${idx + 2}`,
+										}}
+										descriptions={[
+											{
+												label: __('sku', 'multivendorx'),
+												value: product.sku,
+											},
+										]}
+										amount={formatCurrency(product.price ?? 0)}
+									/>
+								);
+							})
+						) : (
+							<p className="no-data">
+								{__(
+									'No recent products found.',
+									'multivendorx'
+								)}
+							</p>
+						)}
+					</Card>
 
 					{modules.includes('store-review') && (
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Latest reviews', 'multivendorx')}
-									</div>
-								</div>
-								<div className="right">
-									<i
-										className="adminfont-external icon"
-										onClick={() => {
-											navigate(
-												`?page=multivendorx#&tab=customer-support&subtab=review`
-											);
-										}}
-									></i>
-								</div>
-							</div>
-							<div className="card-body">
-								<LatestReview store_id={id} />
-							</div>
-						</div>
+						<Card
+							title={__('Latest reviews', 'multivendorx')}
+							iconName="adminfont-external icon"
+							onIconClick={() => {
+								navigate(
+									`?page=multivendorx#&tab=customer-support&subtab=review`
+								);
+							}}
+						>
+							<LatestReview store_id={id} />
+						</Card>
 					)}
 
 					{modules.includes('marketplace-refund') && (
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Latest refunds', 'multivendorx')}
-									</div>
-								</div>
-								<div className="right">
-									<i
-										className="adminfont-external icon"
-										onClick={() => {
-											navigate(
-												`?page=multivendorx#&tab=customer-support&subtab=refund-requests`
-											);
-										}}
-									></i>
-								</div>
+						<Card
+							title={__('Latest refunds', 'multivendorx')}
+							iconName="adminfont-external icon"
+							onIconClick={() => {
+								navigate(
+									`?page=multivendorx#&tab=customer-support&subtab=refund-requests`
+								);
+							}}
+						>
+							<div className="store-owner-details owner">
+								<LatestRefundRequest store_id={id} />
 							</div>
-							<div className="card-body">
-								<div className="store-owner-details owner">
-									<LatestRefundRequest store_id={id} />
-								</div>
-							</div>
-						</div>
+						</Card>
 					)}
 				</Column>
 				<Column grid={4}>
 					{appLocalizer.khali_dabba && (
-						<div className="card-content">
-							<div className="card-header">
-								<div className="left">
-									<div className="title">
-										{__('Store hours', 'multivendorx')}
-									</div>
-									<div className="des">
-										{__(
-											'Manage your weekly schedule and special hours',
-											'multivendorx'
-										)}
-									</div>
-								</div>
-							</div>
-							<div className="card-body store-time-wrapper">
+						<Card
+							title={__('Store hours', 'multivendorx')}
+							desc={__(
+								'Manage your weekly schedule and special hours',
+								'multivendorx'
+							)}>
+
+							<div className="store-time-wrapper">
 								<div className="card-wrapper">
 									<div className="time-wrapper">
 										<div className="des">
@@ -334,28 +277,18 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									</div>
 								</div>
 							</div>
-						</div>
+						</Card>
 					)}
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Store information', 'multivendorx')}
-								</div>
-							</div>
-							<div className="right">
-								<i
-									className="adminfont-external icon"
-									onClick={() => {
-										navigate(
-											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`
-										);
-									}}
-								></i>
-							</div>
-						</div>
-
-						<div className="card-body overview-wrapper">
+					<Card
+						title={__('Store information', 'multivendorx')}
+						iconName="adminfont-external icon"
+						onIconClick={() => {
+							navigate(
+								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`
+							);
+						}}
+					>
+						<div className="overview-wrapper">
 							<div className="items">
 								<div className="title">
 									{__('Created on', 'multivendorx')}
@@ -422,71 +355,59 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</div>
 							)}
 						</div>
-					</div>
+					</Card>
 
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('Store staff', 'multivendorx')}
-								</div>
-							</div>
-							<div className="right">
-								<i
-									className="adminfont-external icon"
-									onClick={() => {
+					<Card
+						title={__('Store staff', 'multivendorx')}
+						iconName="adminfont-external icon"
+						onIconClick={() => {
+							navigate(
+								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`
+							);
+						}}
+					>
+						<InfoItem
+							title={
+								storeData.primary_owner_info?.data?.display_name ?? (
+									<Skeleton variant="text" width={150} />
+								)
+							}
+							avatar={{
+								iconClass: 'item-icon adminfont-person secondary',
+							}}
+							descriptions={[
+								{
+									label: __('Email', 'multivendorx'),
+									value:
+										storeData.primary_owner_info?.data?.user_email ?? (
+											<Skeleton variant="text" width={150} />
+										),
+								},
+							]}
+							badges={[
+								{
+									text: __('Primary Owner', 'multivendorx'),
+									className: 'green',
+								},
+								{
+									text: <i className="adminfont-edit" />,
+									className: 'blue',
+									onClick: () => {
 										navigate(
-											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`
+											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
+											{ state: { highlightTarget: 'primary-owner' } }
 										);
-									}}
-								></i>
-							</div>
-						</div>
-						<div className="card-body">
-							<InfoItem
-								title={
-									storeData.primary_owner_info?.data?.display_name ?? (
-										<Skeleton variant="text" width={150} />
-									)
-								}
-								avatar={{
-									iconClass: 'item-icon adminfont-person secondary',
-								}}
-								descriptions={[
-									{
-										label: __('Email', 'multivendorx'),
-										value:
-											storeData.primary_owner_info?.data?.user_email ?? (
-												<Skeleton variant="text" width={150} />
-											),
-									},
-								]}
-								badges={[
-									{
-										text: __('Primary Owner', 'multivendorx'),
-										className: 'green',
-									},
-									{
-										text: <i className="adminfont-edit" />,
-										className: 'blue',
-										onClick: () => {
+										setTimeout(() => {
 											navigate(
 												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
-												{ state: { highlightTarget: 'primary-owner' } }
+												{ replace: true }
 											);
-											setTimeout(() => {
-												navigate(
-													`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
-													{ replace: true }
-												);
-											}, 500);
-										},
+										}, 500);
 									},
-								]}
-							/>
-
-						</div>
-					</div>
+								},
+							]}
+						/>
+					</Card>
 				</Column>
 			</Container>
 		</>

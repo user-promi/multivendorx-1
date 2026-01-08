@@ -15,7 +15,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import '../components/dashboard.scss';
 import '../dashboard/dashboard1.scss';
-import { AdminButton, Card, Column, Container, getApiLink, InfoItem, MultiCalendarInput, useModules } from 'zyra';
+import { AdminButton, Analytics, Card, Column, Container, getApiLink, InfoItem, MultiCalendarInput, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency, formatTimeAgo } from '@/services/commonFunction';
@@ -466,48 +466,32 @@ const Dashboard: React.FC = () => {
 
 			<Container >
 				<Column>
-					<Card transparent>
-						<div className="analytics-container dashboard">
-							{analyticsData.map((item, idx) => (
-								<div
-									key={idx}
-									className={`analytics-item ${item.color}`}
-								>
-									<div className="details">
-										<div className="text">
-											{__(item.text, 'multivendorx')}
-										</div>
-
-										<div className="number">
-											{item.number}
-										</div>
-
-										<div className="report">
-											<div>
-												{__('Last 30 days:', 'multivendorx')}{' '}
-												<span className={`${item.color}-color`}>
-													{item.last30}
-												</span>
-											</div>
-
-											<div>
-												{__('Previous 30 days:', 'multivendorx')}{' '}
-												<span className={`${item.color}-color`}>
-													{item.prev30}
-												</span>
-											</div>
-										</div>
+					<Analytics
+						template="template-3"
+						data={analyticsData.map((item) => ({
+							icon: item.icon,
+							iconClass: `${item.color}-bg`,
+							colorClass: item.color,
+							number: item.number,
+							text: __(item.text, 'multivendorx'),
+							extra: (
+								<>
+									<div>
+										{__('Last 30 days:', 'multivendorx')}{' '}
+										<span className={`${item.color}-color`}>
+											{item.last30}
+										</span>
 									</div>
-
-									<div className="analytics-icon">
-										<i
-											className={`${item.icon} ${item.color}-bg`}
-										/>
+									<div>
+										{__('Previous 30 days:', 'multivendorx')}{' '}
+										<span className={`${item.color}-color`}>
+											{item.prev30}
+										</span>
 									</div>
-								</div>
-							))}
-						</div>
-					</Card>
+								</>
+							),
+						}))}
+					/>
 				</Column>
 				<Column grid={8}>
 					<Card

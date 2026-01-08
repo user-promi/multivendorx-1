@@ -10,12 +10,16 @@ const SpmvProducts: React.FC = () => {
 	const navigate = useNavigate();
 	const ITEMS_PER_PAGE = 12;
 	const [pageIndex, setPageIndex] = useState(0);
-
+	const [newProductId, setNewProductId] = useState(null);
 
 	useEffect(() => {
 		axios
-			.get(`${appLocalizer.apiUrl}/wc/v3/products/?per_page=100`, {
+			.get(`${appLocalizer.apiUrl}/wc/v3/products/`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					status: 'publish',
+					per_page: 100,
+				},
 			})
 			.then(function (res) {
 				const filtered = res.data.filter((product) => {
@@ -47,6 +51,43 @@ const SpmvProducts: React.FC = () => {
 		(pageIndex + 1) * ITEMS_PER_PAGE
 	);
 
+	const createAutoDraftProduct = () => {
+		try {
+			const payload = {
+				name: 'Auto Draft',
+				status: 'draft',
+			};
+
+			axios
+				.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				})
+				.then((res) => {
+					setNewProductId(res.data.id);
+				});
+		} catch (err) {
+			console.error(
+				'Error creating auto-draft:',
+				err.response?.data || err
+			);
+		}
+	};
+
+	useEffect(() => {
+		if (!newProductId) {
+			return;
+		}
+
+		if (appLocalizer.permalink_structure) {
+			navigate(
+				`/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`
+			);
+		} else {
+			navigate(
+				`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`
+			);
+		}
+	}, [newProductId]);
 
 	const duplicateProduct = async (product) => {
 		const newProductPayload = {
@@ -101,15 +142,18 @@ const SpmvProducts: React.FC = () => {
 							</div>
 						</div>
 					</div>
-					<AdminButton
+					{/* <AdminButton
 						buttons={
 							{
 								icon: 'plus',
 								text: 'Add new product',
 								className: 'purple-bg',
-								// onClick: props.onCancel,
+								onClick: createAutoDraftProduct(),
 							}}
-					/>
+					/> */}
+					<button onClick={createAutoDraftProduct}>
+						Add
+					</button>
 				</div>
 
 				<div className="product-wrapper">
