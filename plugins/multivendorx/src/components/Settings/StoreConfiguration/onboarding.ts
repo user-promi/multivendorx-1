@@ -191,18 +191,8 @@ export default {
 				},
 			],
 		},
-		// {
-		// 	key: 'section',
-		// 	type: 'section',
-		// 	hint: __('Shared Product Listing', 'multivendorx'),
-		// 	desc: __(
-		// 		'Manage how multiple vendors (stores) can list and sell the same product in your marketplace.',
-		// 		'multivendorx'
-		// 	),
-		//
-		// },
 		{
-			key: 'singleproductmultistore_show_order',
+			key: 'spmv_show_order',
 			type: 'setting-toggle',
 			label: __(
 				'Co-listed product display priority',
@@ -219,29 +209,29 @@ export default {
 			),
 			options: [
 				{
-					key: 'min-price',
+					key: 'min_price',
 					label: __('Lowest price', 'multivendorx'),
-					value: __('min-price', 'multivendorx'),
+					value:'min_price',
 				},
 				{
-					key: 'max-price',
+					key: 'max_price',
 					label: __('Highest price', 'multivendorx'),
-					value: __('max-price', 'multivendorx'),
+					value: 'max_price',
 				},
 				{
-					key: 'top-rated-store',
+					key: 'top_rated_store',
 					label: __('Top rated store', 'multivendorx'),
-					value: __('top-rated-store', 'multivendorx'),
+					value: 'top_rated_store',
 				},
 				{
-					key: 'top-rated-store',
+					key: 'nearby_location',
 					label: __('Based on nearby location', 'multivendorx'),
-					value: __('based-on-nearby-location', 'multivendorx'),
+					value: 'nearby_location',
 				},
 			],
 		},
 		{
-			key: 'moreoffers_display_position',
+			key: 'more_offers_display_position',
 			type: 'setting-toggle',
 			label: __('More offers display position', 'multivendorx'),
 			desc: __(
@@ -261,19 +251,19 @@ export default {
 					value: 'none',
 				},
 				{
-					key: 'above-tabs',
+					key: 'above',
 					label: __('Above', 'multivendorx'),
-					value: 'above-tabs',
+					value: 'above',
 				},
 				{
-					key: 'inside-tabs',
+					key: 'inside',
 					label: __('Inside', 'multivendorx'),
-					value: 'inside-tabs',
+					value: 'inside',
 				},
 				{
-					key: 'after-tabs',
+					key: 'after',
 					label: __('After', 'multivendorx'),
-					value: 'after-tabs',
+					value: 'after',
 				},
 			],
 		},

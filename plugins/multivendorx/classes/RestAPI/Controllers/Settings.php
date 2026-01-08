@@ -103,7 +103,7 @@ class Settings extends \WP_REST_Controller {
                 if (!empty($value)) {
                     $general_settings = array(
                         'approve_store' => $value['store_setup']['approve_store'] ?? 'manually',
-                        'store_selling_mode' => $value['store_setup']['store_selling_mode'] ?? '',
+                        'store_selling_mode' => $value['marketplace_setup']['store_selling_mode'] ?? 'default',
                     );
     
                     $commission_type = $value['commission_setup']['commission_type'] ?? '';
