@@ -831,7 +831,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             wrapperClass={
                                 inputField.wrapperClass || 'setting-form-input'
                             }
-                            descClass="settings-metabox-description"
                             description={ inputField.desc }
                             key={ inputField.key }
                             id={ inputField.id }
@@ -886,7 +885,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             inputClass={ `${
                                 inputField.class || 'textarea-input'
                             }` }
-                            descClass="settings-metabox-description"
                             description={ inputField.desc }
                             key={ inputField.key }
                             id={ inputField.id }
@@ -964,7 +962,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'file':
                     input = (
                         <FileInput
-                            descClass="settings-metabox-description"
                             description={ inputField.desc }
                             inputClass={ `${ inputField.key } basic-input` }
                             imageSrc={ value ?? appLocalizer?.default_logo }
@@ -1034,7 +1031,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         <BasicInput
                             wrapperClass="settings-color-picker"
                             inputClass="setting-color-picker"
-                            descClass="settings-metabox-description"
                             description={ inputField.desc } // optional description displayed under the input
                             key={ inputField.key }
                             id={ inputField.id }
@@ -1201,7 +1197,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                 <BasicInput
                                     wrapperClass="settings-basic-input-class"
                                     inputClass="admin-btn btn-purple"
-                                    descClass="settings-metabox-description"
                                     description={ inputField.desc } // optional description displayed under the input
                                     name={ inputField.name } // name attribute for the input
                                     type={ inputField.type } // input type (text, number, password, etc.)
@@ -1422,7 +1417,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         <ColorSettingInput
                             wrapperClass="form-group-color-setting"
                             inputClass="setting-form-input"
-                            descClass="settings-metabox-description"
                             description={ inputField.desc } // optional description displayed under the input
                             showPreview={ inputField.showPreview ?? false } // whether to show a color preview box
                             predefinedOptions={

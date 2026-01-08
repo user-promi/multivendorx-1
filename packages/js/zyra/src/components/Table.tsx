@@ -109,7 +109,7 @@ interface actionButton {
     render: ( updateFilter: FilterUpdater, filterValue: unknown ) => ReactNode;
 }
 export const TableCell: React.FC< TableCellProps > = ( {
-    title,
+    title = '',
     fieldValue = '',
     children = <></>,
     type = '',
@@ -178,7 +178,6 @@ export const TableCell: React.FC< TableCellProps > = ( {
         type = '';
     }
     switch ( type ) {
-        case 'product':
         case 'text':
         case 'number':
             content = (
@@ -305,7 +304,6 @@ export const TableCell: React.FC< TableCellProps > = ( {
             );
             break;
         }
-
         case 'action-dropdown':
             content = (
                 <div className="action-section">

@@ -3,7 +3,9 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
 	AdminButton,
+	Column,
 	CommonPopup,
+	Container,
 	FormGroup,
 	FormGroupWrapper,
 	getApiLink,
@@ -470,77 +472,79 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 
 	return (
 		<>
-			<div className="admin-table-wrapper">
-				<Table
-					data={data}
-					columns={columns as ColumnDef<Record<string, any>, any>[]}
-					rowSelection={rowSelection}
-					onRowSelectionChange={setRowSelection}
-					defaultRowsPerPage={pagination.pageSize}
-					pageCount={pageCount}
-					pagination={pagination}
-					onPaginationChange={setPagination}
-					handlePagination={requestApiForData}
-					perPageOption={[10, 25, 50]}
-					realtimeFilter={realtimeFilter}
-					searchFilter={searchFilter}
-					totalCounts={totalRows}
-				/>
-				{error && <div className="error-message">{error}</div>}
-				<CommonPopup
-					open={popupOpen}
-					onClose={handleCloseForm}
-					width="31.25rem"
-					height="40%"
-					header={{
-						icon: 'announcement',
-						title: __('Reject Order', 'multivendorx'),
-						description: __(
-							'Provide a rejection message for this order.',
-							'multivendorx'
-						),
-						onClose: handleCloseForm,
-					}}
+			<Container general>
+				<Column>
+					<Table
+						data={data}
+						columns={columns as ColumnDef<Record<string, any>, any>[]}
+						rowSelection={rowSelection}
+						onRowSelectionChange={setRowSelection}
+						defaultRowsPerPage={pagination.pageSize}
+						pageCount={pageCount}
+						pagination={pagination}
+						onPaginationChange={setPagination}
+						handlePagination={requestApiForData}
+						perPageOption={[10, 25, 50]}
+						realtimeFilter={realtimeFilter}
+						searchFilter={searchFilter}
+						totalCounts={totalRows}
+					/>
+					{error && <div className="error-message">{error}</div>}
+					<CommonPopup
+						open={popupOpen}
+						onClose={handleCloseForm}
+						width="31.25rem"
+						height="40%"
+						header={{
+							icon: 'announcement',
+							title: __('Reject Order', 'multivendorx'),
+							description: __(
+								'Provide a rejection message for this order.',
+								'multivendorx'
+							),
+							onClose: handleCloseForm,
+						}}
 
-					footer={
-						<AdminButton
-							buttons={[
-								{
-									icon: 'close',
-									text: __('Cancel', 'multivendorx'),
-									className: 'red',
-									onClick: () => handleCloseForm,
-								},
-								{
-									icon: 'save',
-									text: __('Submit', 'multivendorx'),
-									className: 'purple-bg',
-									onClick: () => handleSubmit(),
-								},
-							]}
-						/>
-					}
-				>
-					<>
-						<FormGroupWrapper>
-							<FormGroup label={__('Reject Message', 'multivendorx')} htmlFor="content">
-								<TextArea
-									name="content"
-									inputClass="textarea-input"
-									value={formData.content}
-									onChange={handleChange}
-									usePlainText={false}
-									tinymceApiKey={
-										appLocalizer.settings_databases_value[
-										'marketplace'
-										]['tinymce_api_section'] ?? ''
-									}
-								/>
-							</FormGroup>
-						</FormGroupWrapper>
-					</>
-				</CommonPopup>
-			</div>
+						footer={
+							<AdminButton
+								buttons={[
+									{
+										icon: 'close',
+										text: __('Cancel', 'multivendorx'),
+										className: 'red',
+										onClick: () => handleCloseForm,
+									},
+									{
+										icon: 'save',
+										text: __('Submit', 'multivendorx'),
+										className: 'purple-bg',
+										onClick: () => handleSubmit(),
+									},
+								]}
+							/>
+						}
+					>
+						<>
+							<FormGroupWrapper>
+								<FormGroup label={__('Reject Message', 'multivendorx')} htmlFor="content">
+									<TextArea
+										name="content"
+										inputClass="textarea-input"
+										value={formData.content}
+										onChange={handleChange}
+										usePlainText={false}
+										tinymceApiKey={
+											appLocalizer.settings_databases_value[
+											'marketplace'
+											]['tinymce_api_section'] ?? ''
+										}
+									/>
+								</FormGroup>
+							</FormGroupWrapper>
+						</>
+					</CommonPopup>
+				</Column>
+			</Container>
 		</>
 	);
 };

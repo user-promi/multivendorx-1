@@ -658,7 +658,6 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                     <TextArea
                         wrapperClass="setting-from-textarea"
                         inputClass={`${field.class || ''} textarea-input`}
-                        descClass="settings-metabox-description"
                         description={field.desc || ''}
                         key={field.key}
                         id={field.key}

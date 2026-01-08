@@ -41,7 +41,6 @@ interface ToggleSettingProps {
 const ToggleSetting: React.FC< ToggleSettingProps > = ( {
     description,
     options,
-    descClass = '',
     value,
     key,
     onChange,
@@ -145,7 +144,7 @@ const ToggleSetting: React.FC< ToggleSettingProps > = ( {
             </div>
             { description && (
                 <p
-                    className={ descClass }
+                    className="settings-metabox-description"
                     dangerouslySetInnerHTML={ { __html: description } }
                 ></p>
             ) }

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import "../../styles/web/UI/Analytics.scss";
 type AnalyticsItem = {
 	icon?: string;
 	iconClass?: string;
