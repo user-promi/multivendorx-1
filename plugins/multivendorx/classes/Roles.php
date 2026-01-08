@@ -117,7 +117,7 @@ class Roles {
         if ( is_user_logged_in() ) {
             $user = get_userdata( $user_id );
 
-            if ( in_array( 'store_owner', (array) $user->roles, true ) ) {
+            if ( $user && in_array( 'store_owner', (array) $user->roles, true ) ) {
                 if ( 'edit_posts' === $cap ) {
                     $request_uri = $_SERVER['REQUEST_URI'] ?? '';
                     $is_edit_page = strpos( $request_uri, 'element=edit' ) !== false || strpos( $request_uri, '/edit/' ) !== false;
