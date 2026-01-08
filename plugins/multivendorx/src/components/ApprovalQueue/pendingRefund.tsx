@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
+	AdminButton,
 	CommonPopup,
+	FormGroup,
+	FormGroupWrapper,
 	getApiLink,
 	MultiCalendarInput,
 	Table,
@@ -488,47 +491,39 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 					open={popupOpen}
 					onClose={handleCloseForm}
 					width="31.25rem"
-					header={
-						<>
-							<div className="title">
-								<i className="adminfont-announcement"></i>
-								{__('Reject Order', 'multivendorx')}
-							</div>
-							<div className="des">
-								{__(
-									'Provide a rejection message for this order.',
-									'multivendorx'
-								)}
-							</div>
-							<i
-								onClick={handleCloseForm}
-								className="icon adminfont-close"
-							></i>
-						</>
-					}
+					height="40%"
+					header={{
+						icon: 'announcement',
+						title: __('Reject Order', 'multivendorx'),
+						description: __(
+							'Provide a rejection message for this order.',
+							'multivendorx'
+						),
+						onClose: handleCloseForm,
+					}}
+
 					footer={
-						<>
-							<div
-								onClick={handleCloseForm}
-								className="admin-btn btn-red"
-							>
-								Cancel
-							</div>
-							<button
-								type="button"
-								onClick={handleSubmit}
-								className="admin-btn btn-purple"
-								disabled={submitting}
-							>
-								{submitting ? 'Saving...' : 'Submit'}
-							</button>
-						</>
+						<AdminButton
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									className: 'red',
+									onClick: () => handleCloseForm,
+								},
+								{
+									icon: 'save',
+									text: __('Submit', 'multivendorx'),
+									className: 'purple-bg',
+									onClick: () => handleSubmit(),
+								},
+							]}
+						/>
 					}
 				>
 					<>
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label htmlFor="content">Reject Message</label>
+						<FormGroupWrapper>
+							<FormGroup label={__('Reject Message', 'multivendorx')} htmlFor="content">
 								<TextArea
 									name="content"
 									inputClass="textarea-input"
@@ -541,8 +536,8 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 										]['tinymce_api_section'] ?? ''
 									}
 								/>
-							</div>
-						</div>
+							</FormGroup>
+						</FormGroupWrapper>
 					</>
 				</CommonPopup>
 			</div>
