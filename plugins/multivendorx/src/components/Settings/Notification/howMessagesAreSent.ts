@@ -1,12 +1,11 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'notification-configuration',
-	priority: 5,
-	name: __('Notifications Providers', 'multivendorx'),
-	tabTitle: 'Email delivery setup',
+	id: 'how-messages-are-sent',
+	priority: 1,
+	name: 'How messages are sent',
 	desc: __(
-		'Configure how marketplace emails are sent. All notifications dispatched by the site can be tracked and reviewed from <b><a href="#&tab=settings&subtab=notifications">Notification Settings</a></b>',
+		'Help customers discover stores and products near them by enabling location-based search and maps.',
 		'multivendorx'
 	),
 	icon: 'adminfont-notification',
