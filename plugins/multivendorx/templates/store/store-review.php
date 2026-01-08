@@ -19,7 +19,8 @@ $user         = wp_get_current_user();
 $parameters   = MultiVendorX()->setting->get_setting( 'ratings_parameters', array() );
 $review_status          = '';
 $is_verified_buyer      = 0;
-$is_verified_buyer_only = reset( MultiVendorX()->setting->get_setting( 'is_storereview_varified', array() ) ) ?? false;
+$storereview  = MultiVendorX()->setting->get_setting( 'is_storereview_varified', array() );
+$is_verified_buyer_only = reset( $storereview ) ?? false;
 
 if ( $is_logged_in && $store_id ) {
     $review_status = \MultiVendorX\StoreReview\Util::get_user_review_status( $store_id, $user->ID );
