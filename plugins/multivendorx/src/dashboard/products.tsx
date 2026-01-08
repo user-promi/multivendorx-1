@@ -78,7 +78,6 @@ const AllProduct: React.FC = () => {
 		pageIndex: 0,
 		pageSize: 10,
 	});
-	const [AddProduct, setAddProduct] = useState(false);
 	const [categoriesList, setCategoriesList] = useState<
 		{ id: number; name: string }[]
 	>([]);

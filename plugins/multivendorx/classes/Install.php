@@ -708,6 +708,9 @@ By signing and submitting, the Seller accepts all terms above.
 
         $general_settings = array(
             'approve_store' => 'manually',
+            'store_selling_mode' => 'default',
+            'spmv_show_order' => 'min_price',
+            'more_offers_display_position' => 'after',
         );
         update_option( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
 
