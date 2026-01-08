@@ -95,13 +95,13 @@ jQuery(document).ready(function ($) {
             if (!res.data.has_items && search) {
                 $('#qna-list').html(`
                     <li class="qna-empty">
-                        No question found
+                        Have not discovered the information you seek
                         <button
                             type="button"
                             id="qna-direct-submit"
                             data-question="${search}"
                             class="qna-ask-now">
-                            (Ask now)
+                            Ask now
                         </button>
                     </li>
                 `);

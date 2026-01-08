@@ -15,7 +15,7 @@ $login_url    = add_query_arg( 'redirect_to', $current_url, $myaccount_url );
 
         <div class="qna-search">
             <p class="form-row form-row-wide">
-                <input type="text" id="qna-search" class="input-text" placeholder="<?php echo esc_attr__( 'Search questions...', 'multivendorx' ); ?>">
+                <input type="text" id="qna-search" class="input-text" placeholder="<?php echo esc_attr__( 'Have a question? Search for an answer.', 'multivendorx' ); ?>">
             </p>
         </div>
     </div>
