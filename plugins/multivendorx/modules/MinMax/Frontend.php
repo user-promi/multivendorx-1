@@ -25,6 +25,7 @@ class Frontend {
 
         add_filter( 'woocommerce_cart_item_quantity', array( $this, 'cart_quantity_message' ), 10, 3 );
         add_filter( 'woocommerce_cart_item_subtotal', array( $this, 'cart_amount_message' ), 10, 2 );
+        add_filter( 'woocommerce_store_api_cart_errors', array( $this, 'cart_error_message_block' ), 10, 2 );
 
         add_filter( 'woocommerce_available_variation', array( $this, 'available_variation_min_max' ), 10, 3 );
         add_filter( 'woocommerce_quantity_input_args', array( $this, 'update_quantity_args' ), 10, 2 );
@@ -57,25 +58,29 @@ class Frontend {
 
         switch ( $context ) {
             case 'quantity':
-                $settings     = reset( MultiVendorX()->setting->get_setting( 'product_quantity_rules', array() ) );
+                $settings     = MultiVendorX()->setting->get_setting( 'product_quantity_rules', array() );
+                $settings     = reset( $settings );
                 $rules['min'] = (int) ( $settings['product_min_quantity'] ?? 0 );
                 $rules['max'] = (int) ( $settings['product_max_quantity'] ?? 0 );
                 break;
 
             case 'amount':
-                $settings     = reset( MultiVendorX()->setting->get_setting( 'product_amount_rules', array() ) );
+                $settings     = MultiVendorX()->setting->get_setting( 'product_amount_rules', array() );
+                $settings     = reset( $settings );
                 $rules['min'] = (float) ( $settings['product_min_amount'] ?? 0 );
                 $rules['max'] = (float) ( $settings['product_max_amount'] ?? 0 );
                 break;
 
             case 'order_quantity':
-                $settings     = reset( MultiVendorX()->setting->get_setting( 'order_quantity_rules', array() ) );
+                $settings     = MultiVendorX()->setting->get_setting( 'order_quantity_rules', array() );
+                $settings     = reset( $settings );
                 $rules['min'] = (int) ( $settings['order_min_quantity'] ?? 0 );
                 $rules['max'] = (int) ( $settings['order_max_quantity'] ?? 0 );
                 break;
 
             case 'order_amount':
-                $settings     = reset( MultiVendorX()->setting->get_setting( 'order_amount_rules', array() ) );
+                $settings     = MultiVendorX()->setting->get_setting( 'order_amount_rules', array() );
+                $settings     = reset( $settings );
                 $rules['min'] = (float) ( $settings['order_min_amount'] ?? 0 );
                 $rules['max'] = (float) ( $settings['order_max_amount'] ?? 0 );
                 break;
@@ -161,7 +166,6 @@ class Frontend {
     }
 
     public function cart_amount_message( $html, $item ) {
-
         $id  = $item['variation_id'] ?: $item['product_id'];
         $msg = $this->validate_rules( $item['line_subtotal'], $id, 'amount' );
 
@@ -170,6 +174,38 @@ class Frontend {
             return $html . "<div class='required'>{$msg}</div>";
         } else {
             return $html;
+        }
+    }
+
+    public function cart_error_message_block( $errors, $cart ) {
+        foreach ( $cart->get_cart() as $cart_item ) {
+            $id = ! empty( $cart_item['variation_id'] )
+                ? $cart_item['variation_id']
+                : $cart_item['product_id'];
+
+            $subtotal = $cart_item['line_subtotal'];
+            $quantity = $cart_item['quantity'];
+
+            $amount_msg   = $this->validate_rules( $subtotal, $id, 'amount' );
+            $quantity_msg = $this->validate_rules( $quantity, $id, 'quantity' );
+
+            if ( $amount_msg ) {
+                $errors->add(
+                    'multivendorx_amount_error',
+                    $amount_msg,
+                    array( 'severity' => 'error' )
+                );
+                break;
+            }
+
+            if ( $quantity_msg ) {
+                $errors->add(
+                    'multivendorx_quantity_error',
+                    $quantity_msg,
+                    array( 'severity' => 'error' )
+                );
+                break;
+            }
         }
     }
 
@@ -205,7 +241,6 @@ class Frontend {
     }
 
     public function restrict_cart_quantity() {
-
         foreach ( WC()->cart->get_cart() as $key => $item ) {
             $id    = $item['variation_id'] ?: $item['product_id'];
             $rules = $this->get_rules( $id, 'quantity' );
