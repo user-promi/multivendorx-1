@@ -34,11 +34,7 @@ type CommissionRow = {
 	commissionTotal: string;
 	status: 'paid' | 'unpaid' | string;
 };
-type CommissionStatus = {
-	key: string;
-	name: string;
-	count: number;
-};
+
 type FilterData = {
 	searchAction?: string;
 	searchField?: string;
@@ -62,9 +58,6 @@ const StoreCommission: React.FC = () => {
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [pageCount, setPageCount] = useState(0);
 	const { modules } = useModules();
-	const [commissionStatus, setCommissionStatus] = useState<
-		CommissionStatus[] | null
-	>(null);
 	const [expandedRows, setExpandedRows] = useState<{
 		[key: number]: boolean;
 	}>({});
@@ -122,33 +115,6 @@ const StoreCommission: React.FC = () => {
 		})
 			.then((response) => {
 				setData(response.data.commissions || []);
-				setCommissionStatus([
-					{
-						key: 'all',
-						name: 'All',
-						count: response.data.all || 0,
-					},
-					{
-						key: 'paid',
-						name: 'Paid',
-						count: response.data.paid || 0,
-					},
-					{
-						key: 'refunded',
-						name: 'Refunded',
-						count: response.data.refunded || 0,
-					},
-					{
-						key: 'partially_refunded',
-						name: 'Partially Refunded',
-						count: response.data.partially_refunded || 0,
-					},
-					{
-						key: 'cancelled',
-						name: 'Cancelled',
-						count: response.data.cancelled || 0,
-					},
-				]);
 			})
 			.catch(() => {
 				setData([]);
@@ -196,7 +162,6 @@ const StoreCommission: React.FC = () => {
 		{
 			id: 'id',
 			accessorKey: 'id',
-			accessorFn: (row) => parseFloat(row.id || '0'),
 			enableSorting: true,
 			header: __('ID', 'multivendorx'),
 			cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
@@ -220,7 +185,6 @@ const StoreCommission: React.FC = () => {
 		{
 			id: 'totalOrderAmount',
 			accessorKey: 'totalOrderAmount',
-			accessorFn: (row) => parseFloat(row.totalOrderAmount || '0'),
 			enableSorting: true,
 			header: __('Order Amount', 'multivendorx'),
 			cell: ({ row }) => (
@@ -265,21 +229,27 @@ const StoreCommission: React.FC = () => {
 									</div>
 								</li>
 							) : null}
-							{(row.original?.shippingAmount ||
-								row.original?.taxAmount) && (
-								<li>
-									{row.original?.shippingAmount && (
-										<div className="item">
-											<div className="des">Shipping</div>
-											<div className="title">
-												+{' '}
-												{formatCurrency(
-													row.original.shippingAmount
-												)}
+							{modules.includes('store-shipping') &&
+								row.original?.shippingAmount && (
+									<li>
+										{row.original?.shippingAmount && (
+											<div className="item">
+												<div className="des">
+													Shipping
+												</div>
+												<div className="title">
+													+{' '}
+													{formatCurrency(
+														row.original
+															.shippingAmount
+													)}
+												</div>
 											</div>
-										</div>
-									)}
-
+										)}
+									</li>
+								)}
+							{row.original?.taxAmount && appLocalizer.settings_databases_value['store-commissions']?.give_tax !== 'no_tax' && (
+								<li>
 									{row.original?.taxAmount && (
 										<div className="item">
 											<div className="des">Tax</div>
@@ -287,6 +257,24 @@ const StoreCommission: React.FC = () => {
 												+{' '}
 												{formatCurrency(
 													row.original.taxAmount
+												)}
+											</div>
+										</div>
+									)}
+								</li>
+							)}
+							{row.original?.shippingTaxAmount && (
+								<li>
+									{row.original?.shippingTaxAmount && (
+										<div className="item">
+											<div className="des">
+												Shipping Tax
+											</div>
+											<div className="title">
+												+{' '}
+												{formatCurrency(
+													row.original
+														.shippingTaxAmount
 												)}
 											</div>
 										</div>
@@ -378,19 +366,18 @@ const StoreCommission: React.FC = () => {
 		{
 			id: 'totalEarned',
 			accessorKey: 'totalEarned',
-			accessorFn: (row) => parseFloat(row.taxAmount || '0'),
 			enableSorting: true,
 			header: __('Total Earned ', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
 					title={
-						row.original.taxAmount
-							? `${appLocalizer.currency_symbol}${row.original.taxAmount}`
+						row.original.storePayable
+							? `${appLocalizer.currency_symbol}${row.original.storePayable}`
 							: '-'
 					}
 				>
-					{row.original.taxAmount
-						? formatCurrency(row.original.taxAmount)
+					{row.original.storePayable
+						? formatCurrency(row.original.storePayable)
 						: '-'}
 				</TableCell>
 			),
@@ -701,7 +688,7 @@ const StoreCommission: React.FC = () => {
 				handlePagination={requestApiForData}
 				defaultRowsPerPage={10}
 				perPageOption={[10, 25, 50]}
-				typeCounts={commissionStatus as CommissionStatus}
+				typeCounts={[]}
 				totalCounts={totalRows}
 				pageCount={pageCount}
 				realtimeFilter={realtimeFilter}

@@ -152,9 +152,13 @@ class Commissions extends \WP_REST_Controller {
             $page       = max( intval( $request->get_param( 'page' ) ), 1 );
             $count      = $request->get_param( 'count' );
             $status     = $request->get_param( 'status' );
-            $start_date = gmdate( 'Y-m-d 00:00:00', strtotime( sanitize_text_field( $request->get_param( 'startDate' ) ) ) );
-            $end_date   = gmdate( 'Y-m-d 23:59:59', strtotime( sanitize_text_field( $request->get_param( 'endDate' ) ) ) );
 
+            $start_raw = sanitize_text_field( $request->get_param( 'startDate' ) );
+            $end_raw   = sanitize_text_field( $request->get_param( 'endDate' ) );
+
+            $start_date = $start_raw ? gmdate( 'Y-m-d H:i:s', strtotime( $start_raw ) ) : '';
+            $end_date   = $end_raw ? gmdate( 'Y-m-d H:i:s', strtotime( $end_raw ) ) : '';
+            
             // Sorting params.
             $order_by = sanitize_text_field( $request->get_param( 'orderBy' ) );
             $order    = sanitize_text_field( $request->get_param( 'order' ) );
