@@ -43,8 +43,6 @@ class Module {
      * @return void
      */
     public function init_classes() {
-        // $this->container['invoice'] = new Invoice();
-        $this->container['rest'] = new Rest();
     }
 
     /**
