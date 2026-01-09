@@ -244,11 +244,6 @@ export default {
 					value: 'above',
 				},
 				{
-					key: 'inside',
-					label: __('Inside', 'multivendorx'),
-					value: 'inside',
-				},
-				{
 					key: 'after',
 					label: __('After', 'multivendorx'),
 					value: 'after',

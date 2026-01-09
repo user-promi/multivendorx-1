@@ -175,6 +175,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
+                'multivendorx-spmv-frontend-script'         => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/SPMV/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
                 'multivendorx-follow-store-frontend-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/FollowStore/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
