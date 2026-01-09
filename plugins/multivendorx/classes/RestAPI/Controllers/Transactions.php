@@ -463,7 +463,7 @@ class Transactions extends \WP_REST_Controller {
                     'category'    => 'activity',
                 );
 
-                do_action( 'multivendorx_notify_payout_rejected', 'new_store_approval', $parameters );
+                do_action( 'multivendorx_notify_payout_rejected', 'payout_rejected', $parameters );
             }
 
             $store->delete_meta( Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] );
@@ -495,7 +495,7 @@ class Transactions extends \WP_REST_Controller {
         if ( 'automatic' === $withdraw_type && $threshold_amount < $amount ) {
             $payment_method = $store->get_meta( 'payment_method' ) ?? '';
 
-            if ( 'stripe-connect' === ! empty( $payment_method ) && ( $payment_method || 'paypal-payout' === $payment_method ) ) {
+            if ( ! empty( $payment_method ) && ( 'stripe-connect' === $payment_method || 'paypal-payout' === $payment_method ) ) {
                 do_action( "multivendorx_process_{$payment_method}_payment", $store_id, $amount, null, null, null );
             } else {
                 $should_update_meta = true;

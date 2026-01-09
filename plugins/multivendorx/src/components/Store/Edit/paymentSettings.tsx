@@ -203,102 +203,102 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 							</FormGroup>
 
 
-							{bankDetails &&
-								providerFields.map((field, index) => {
-									const shouldRender =
+							{providerFields.map((field, index) => {
+								if (bankDetails && formData.payment_method == 'bank-transfer' &&
+									!(
 										field.key === 'account_type' ||
-										bankDetails.includes(field.key);
+										bankDetails.includes(field.key)
+									)
+								) {
+									return null;
+								}
 
-									if (!shouldRender) {
-										return null; // skip rendering
-									}
+								// Render HTML (e.g., connect button)
+								if (
+									field.type === 'html' &&
+									field.html
+								) {
+									return (
+										<div
+											key={`html-${index}`}
+											className="form-group-wrapper"
+											dangerouslySetInnerHTML={{
+												__html: field.html,
+											}}
+										/>
+									);
+								}
 
-									// Render HTML (e.g., connect button)
-									if (
-										field.type === 'html' &&
-										field.html
-									) {
-										return (
-											<div
-												key={`html-${index}`}
-												className="form-group-wrapper"
-												dangerouslySetInnerHTML={{
-													__html: field.html,
-												}}
-											/>
-										);
-									}
-
-									// Render Toggle Settings
-									if (field.type === 'setting-toggle') {
-										return (
-											<FormGroup label={__(field.label, 'multivendorx')} htmlFor={field.key}>
-												<ToggleSetting
-													key={field.key}
-													description={__(
-														field.desc ||
-														'',
-														'multivendorx'
-													)}
-													options={
-														Array.isArray(
-															field.options
-														)
-															? field.options.map(
-																(
-																	opt
-																) => ({
-																	...opt,
-																	value: String(
-																		opt.value
-																	),
-																})
-															)
-															: []
-													}
-													value={
-														formData[
-														field.key ||
-														''
-														] || ''
-													}
-													onChange={(value) =>
-														handleToggleChange(
-															value,
-															field.key
-														)
-													}
-												/>
-											</FormGroup>
-										);
-									}
-
-									// Default input field rendering
+								// Render Toggle Settings
+								if (field.type === 'setting-toggle') {
 									return (
 										<FormGroup label={__(field.label, 'multivendorx')} htmlFor={field.key}>
-											<BasicInput
-												name={field.key || ''}
-												type={
-													field.type || 'text'
-												}
-												wrapperClass="setting-form-input"
-												descClass="settings-metabox-description"
-												placeholder={
-													field.placeholder
-														? __(
-															field.placeholder,
-															'multivendorx'
+											<ToggleSetting
+												key={field.key}
+												description={__(
+													field.desc ||
+													'',
+													'multivendorx'
+												)}
+												options={
+													Array.isArray(
+														field.options
+													)
+														? field.options.map(
+															(
+																opt
+															) => ({
+																...opt,
+																value: String(
+																	opt.value
+																),
+															})
 														)
-														: ''
+														: []
 												}
 												value={
-													formData[field.key]
+													formData[
+													field.key ||
+													''
+													] || ''
 												}
-												onChange={handleChange}
+												onChange={(value) =>
+													handleToggleChange(
+														value,
+														field.key
+													)
+												}
 											/>
 										</FormGroup>
 									);
-								})}
+								}
+
+								// Default input field rendering
+								return (
+									<FormGroup label={__(field.label, 'multivendorx')} htmlFor={field.key}>
+										<BasicInput
+											name={field.key || ''}
+											type={
+												field.type || 'text'
+											}
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											placeholder={
+												field.placeholder
+													? __(
+														field.placeholder,
+														'multivendorx'
+													)
+													: ''
+											}
+											value={
+												formData[field.key]
+											}
+											onChange={handleChange}
+										/>
+									</FormGroup>
+								);
+							})}
 						</FormGroupWrapper>
 					</Card>
 				</Column>
