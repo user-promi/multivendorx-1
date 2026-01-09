@@ -4,14 +4,41 @@ export default {
 	id: 'how-messages-are-sent',
 	priority: 1,
 	name: 'How messages are sent',
+	tabTitle: 'Notification recipients',
 	desc: __(
-		'Help customers discover stores and products near them by enabling location-based search and maps.',
+		'Define who receives notification messages from the marketplace.',
 		'multivendorx'
 	),
 	icon: 'adminfont-notification',
 	submitUrl: 'settings',
 	modal: [
 
+		{
+			key: 'sender_email_address',
+			type: 'email',
+			label: __('Admin email recipient', 'multivendorx'),
+			placeholder: __('noreply@yourstore.com', 'multivendorx'),
+			settingDescription: __(
+				'The primary email address that will receive system and marketplace notifications.',
+				'multivendorx'
+			),
+			desc: __('You can add multiple email addresses separated by commas to notify additional recipients.','multivendorx'),
+		},
+		{
+			key: 'sms_receiver_phone_number',
+			type: 'text',
+			label: __('Receiver phone number', 'multivendorx'),
+			placeholder: __('+91 9000012345', 'multivendorx'),
+			settingDescription: __(
+				'The phone number that will receive SMS notifications. Use country code followed by phone number. Example: +44 – 7123456789, +91 – 9000012345',
+				'multivendorx'
+			),
+		},
+		{
+			key: 'sms_section',
+			type: 'section',
+			hint: __('Email delivery settings', 'multivendorx'),
+		},
 		{
 			key: 'email_provider',
 			type: 'setting-toggle',
@@ -207,19 +234,6 @@ export default {
 				set: true,
 			},
 		},
-		{
-			key: 'sms_receiver_phone_number',
-			type: 'text',
-			label: __('Receiver phone number', 'multivendorx'),
-			placeholder: __('+91 9000012345', 'multivendorx'),
-			settingDescription: __(
-				'The phone number that will receive SMS notifications. Use country code followed by phone number. Example: +44 – 7123456789, +91 – 9000012345',
-				'multivendorx'
-			),
-			dependent: {
-				key: 'sms_gateway_selector',
-				set: true,
-			},
-		},
+		
 	],
 };
