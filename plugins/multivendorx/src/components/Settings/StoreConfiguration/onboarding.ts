@@ -244,11 +244,6 @@ export default {
 					value: 'above',
 				},
 				{
-					key: 'inside',
-					label: __('Inside', 'multivendorx'),
-					value: 'inside',
-				},
-				{
 					key: 'after',
 					label: __('After', 'multivendorx'),
 					value: 'after',
@@ -282,11 +277,6 @@ export default {
 					key: 'manual_assignment',
 					label: __('Manual assignment', 'multivendorx'),
 					value: 'manual_assignment',
-					desc: __(
-						'Orders remain unassigned until an admin manually selects a franchise store.',
-						'multivendorx'
-					),
-
 					dependent: {
 						key: 'store_selling_mode',
 						set: true,
@@ -299,10 +289,6 @@ export default {
 			key: 'location_restriction',
 			type: 'setting-toggle',
 			label: __('Location restriction', 'multivendorx'),
-			desc: __(
-				'Define how franchise operations are limited to specific service areas:<ul><li><strong>City</strong> – Orders are handled inside the assigned city limits.</li><li><strong>State</strong> – Customer locations are matched at the state level.</li><li><strong>Postal code</strong> – Eligibility is determined by selected postal codes.</li></ul>',
-				'multivendorx'
-			),
 			dependent: {
 				key: 'store_assignment_method',
 				set: true,
@@ -347,19 +333,11 @@ export default {
 					key: 'store_products_only',
 					label: __('Store products only', 'multivendorx'),
 					value: 'store_products_only',
-					desc: __(
-						'Automatically assign orders to the closest eligible franchise store based on the customer’s delivery address. Best suited for physical or region-based fulfillment.',
-						'multivendorx'
-					),
 				},
 				{
 					key: 'store_and_admin_products',
 					label: __('Store and admin products', 'multivendorx'),
 					value: 'store_and_admin_products',
-					desc: __(
-						'Orders remain unassigned until an admin manually selects a franchise store.',
-						'multivendorx'
-					),
 				},
 			],
 		},
@@ -367,10 +345,6 @@ export default {
 			key: 'store_price_override',
 			type: 'checkbox',
 			label: __('Store price override', 'multivendorx'),
-			desc: __(
-				'Allow franchise stores to adjust the selling price of admin products to match local market conditions.',
-				'multivendorx'
-			),
 			options: [
 				{
 					key: 'enabled',
