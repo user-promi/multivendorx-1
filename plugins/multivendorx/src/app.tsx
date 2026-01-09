@@ -90,7 +90,6 @@ const Route = () => {
 	return (
 		<>
 			{tab === 'settings' && <Settings id="settings" />}
-			{/* {tab === 'memberships' && <Memberships />} */}
 			{tab === 'memberships' && <AddMemberships />}
 			{tab === 'status-tools' && <StatusAndTools id="status-tools" />}
 			{tab === 'modules' && <Modules />}
@@ -214,7 +213,7 @@ const App = () => {
 				managePlanUrl={appLocalizer.pro_data.manage_plan_url}
 				chatUrl=""
 				showProfile={true}
-				profileItems={profileItems} // <-- add this
+				profileItems={profileItems}
 				showDropdown={true}
 				dropdownOptions={[
 					{ value: 'all', label: 'Modules & Settings' },
