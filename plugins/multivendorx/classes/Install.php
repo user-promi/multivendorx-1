@@ -756,17 +756,14 @@ By signing and submitting, the Seller accepts all terms above.
             'refund_reasons' => array(
                 'damaged-or-defective-product' => array(
                     'label'    => 'Damaged or defective product',
-					'required' => true,
 					'isCustom' => true,
                 ),
                 'wrong-item'                   => array(
                     'label'    => 'Wrong item delivered',
-					'required' => true,
 					'isCustom' => true,
                 ),
                 'product-not-as-described'     => array(
                     'label'    => 'Product not as described',
-					'required' => true,
 					'isCustom' => true,
                 ),
                 'late-delivery'                => array(
