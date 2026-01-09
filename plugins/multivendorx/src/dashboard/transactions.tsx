@@ -78,7 +78,7 @@ const Transactions: React.FC = () => {
 		typeCount = '',
 		transactionType = '',
 		transactionStatus = '',
-		startDate = new Date(0),
+		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date()
 	) {
 		setData([]);
