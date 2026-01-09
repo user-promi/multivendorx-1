@@ -108,7 +108,6 @@ class PaypalPayout {
      * @return void
      */
     public function process_payment( $store_id, $amount, $order_id = null, $transaction_id = null, $note = null ) {
-    
         $payment_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $paypal_settings  = $payment_settings['paypal-payout'] ?? null;
     
@@ -157,7 +156,8 @@ class PaypalPayout {
             $status,
             $order_id,
             $transaction_id,
-            $note
+            $note,
+            $amount
         );
     
     }

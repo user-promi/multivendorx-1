@@ -106,7 +106,7 @@ const StoreReview: React.FC = () => {
 		searchField = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date(0),
+		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date()
 	) {
 		setData([]);
@@ -426,7 +426,7 @@ const StoreReview: React.FC = () => {
 				<div className="page-title">
 					<div className="title">Store Review</div>
 					<div className="des">
-						Manage your store information and preferences
+						See all your store followers, engage with them, and grow your loyal customer base.
 					</div>
 				</div>
 			</div>

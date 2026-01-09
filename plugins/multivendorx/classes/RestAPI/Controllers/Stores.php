@@ -768,7 +768,6 @@ class Stores extends \WP_REST_Controller {
                 'primary_owner_info' => $primary_owner_info,
                 'overall_reviews'    => $overall_reviews,
                 'total_reviews'      => is_array( $reviews ) ? count( $reviews ) : 0,
-                'visitors'           => $visitors,
             );
 
             foreach ( (array) $store->meta_data as $key => $values ) {

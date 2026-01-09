@@ -103,7 +103,7 @@ const CustomerQuestions: React.FC = () => {
 		searchField = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date(0),
+		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date(),
 		question_visibility = ''
 	) {
@@ -448,7 +448,7 @@ const CustomerQuestions: React.FC = () => {
 
 					<div className="des">
 						{__(
-							'Manage your store information and preferences',
+							'Track and respond to customer product questions.',
 							'multivendorx'
 						)}
 					</div>

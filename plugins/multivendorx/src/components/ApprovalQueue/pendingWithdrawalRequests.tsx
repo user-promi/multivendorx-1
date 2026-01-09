@@ -104,6 +104,7 @@ const PendingWithdrawal: React.FC<Props> = ({ onUpdated }) => {
 			})
 			.catch(console.error);
 	};
+
 	// Column definitions
 	const columns: ColumnDef<StoreRow>[] = [
 		{
@@ -154,7 +155,7 @@ const PendingWithdrawal: React.FC<Props> = ({ onUpdated }) => {
 					<span
 						className="admin-btn btn-purple"
 						onClick={() => {
-							handleSingleAction('approve', row);
+							handleSingleAction('approve', row.original);
 						}}
 					>
 						<i className="adminfont-check"></i> Approve
@@ -162,7 +163,7 @@ const PendingWithdrawal: React.FC<Props> = ({ onUpdated }) => {
 
 					<span
 						className="admin-btn btn-red"
-						onClick={() => handleSingleAction('reject', row)}
+						onClick={() => handleSingleAction('reject', row.original)}
 					>
 						<i className="adminfont-close"></i> Reject
 					</span>

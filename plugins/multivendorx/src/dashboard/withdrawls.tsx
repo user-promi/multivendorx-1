@@ -6,7 +6,7 @@ import { formatCurrency, formatWcShortDate } from '../services/commonFunction';
 
 const Withdrawls: React.FC = () => {
 	const [data, setData] = useState<any>([]);
-	const [amount, setAmount] = useState<number>(0);
+	const [amount, setAmount] = useState<number>();
 	const [error, setError] = useState<string>('');
 	const [message, setMessage] = useState<string>('');
 	const [store, setStore] = useState<any>([]);
@@ -280,7 +280,7 @@ const Withdrawls: React.FC = () => {
 							<AdminButton
 								buttons={{
 									icon: 'withdraw',
-									text: __('Publish', 'multivendorx'),
+									text: __('Disburse', 'multivendorx'),
 									onClick: () => handleWithdrawal(),
 									className: 'purple-bg',
 								}}
