@@ -289,7 +289,7 @@ const RefundedOrderReport: React.FC = () => {
 		store_id = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date(0),
+		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date()
 	) {
 		setData(null);

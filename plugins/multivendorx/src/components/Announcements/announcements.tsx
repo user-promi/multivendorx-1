@@ -395,7 +395,7 @@ export const Announcements: React.FC = () => {
 		currentPage = 1,
 		categoryFilter = '',
 		searchField = '',
-		startDate = new Date(0),
+		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date()
 	) {
 		setData(null);
