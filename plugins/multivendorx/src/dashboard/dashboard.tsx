@@ -431,6 +431,7 @@ const Dashboard: React.FC = () => {
 	];
 
 	const access = appLocalizer.settings_databases_value['privacy']['customer_information_access'];
+	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
 
 	return (
 		<>
@@ -614,8 +615,8 @@ const Dashboard: React.FC = () => {
 						iconName="adminfont-external icon"
 						onIconClick={() => {
 							const url = appLocalizer.permalink_structure
-								? `/${appLocalizer.dashboard_slug}/orders`
-								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=orders`
+								? `${siteUrl}/${appLocalizer.dashboard_slug}/orders`
+								: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=orders`
 							window.open(url);
 						}}
 					>
@@ -693,8 +694,8 @@ const Dashboard: React.FC = () => {
 						iconName="adminfont-external icon"
 						onIconClick={() => {
 							const url = appLocalizer.permalink_structure
-								? `/${appLocalizer.dashboard_slug}/products`
-								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=products`
+								? `${siteUrl}/${appLocalizer.dashboard_slug}/products`
+								: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=products`
 							window.open(url);
 						}}
 					>
@@ -757,8 +758,8 @@ const Dashboard: React.FC = () => {
 						iconName="adminfont-external icon"
 						onIconClick={() => {
 							const url = appLocalizer.permalink_structure
-								? `/${appLocalizer.dashboard_slug}/overview`
-								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=overview`
+								? `${siteUrl}/${appLocalizer.dashboard_slug}/overview`
+								: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=overview`
 							window.open(url);
 						}}
 					>
@@ -855,8 +856,8 @@ const Dashboard: React.FC = () => {
 							iconName="adminfont-external icon"
 							onIconClick={() => {
 								const url = appLocalizer.permalink_structure
-									? `/${appLocalizer.dashboard_slug}/refund`
-									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=refund`
+									? `${siteUrl}/${appLocalizer.dashboard_slug}/refund`
+									: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=refund`
 								window.open(url);
 							}}
 						>
@@ -952,8 +953,8 @@ const Dashboard: React.FC = () => {
 							iconName="adminfont-external icon"
 							onIconClick={() => {
 								const url = appLocalizer.permalink_structure
-									? `/${appLocalizer.dashboard_slug}/store-review`
-									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=store-review`
+									? `${siteUrl}/${appLocalizer.dashboard_slug}/store-review`
+									: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=store-review`
 								window.open(url);
 							}}
 						>

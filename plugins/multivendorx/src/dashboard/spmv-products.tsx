@@ -8,6 +8,8 @@ const SpmvProducts: React.FC = () => {
 	const [products, setProducts] = useState([]);
 	const [query, setQuery] = useState('');
 	const navigate = useNavigate();
+	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
+	const basePath = siteUrl.replace(window.location.origin, '');
 	const ITEMS_PER_PAGE = 12;
 	const [pageIndex, setPageIndex] = useState(0);
 	const [newProductId, setNewProductId] = useState(null);
@@ -80,11 +82,11 @@ const SpmvProducts: React.FC = () => {
 
 		if (appLocalizer.permalink_structure) {
 			navigate(
-				`/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`
+				`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`
 			);
 		} else {
 			navigate(
-				`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`
+				`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`
 			);
 		}
 	}, [newProductId]);
@@ -114,11 +116,11 @@ const SpmvProducts: React.FC = () => {
 
 		if (appLocalizer.permalink_structure) {
 			navigate(
-				`/${appLocalizer.dashboard_slug}/products/edit/${newProduct.data.id}/`
+				`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${newProduct.data.id}/`
 			);
 		} else {
 			navigate(
-				`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProduct.data.id}`
+				`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProduct.data.id}`
 			);
 		}
 	};

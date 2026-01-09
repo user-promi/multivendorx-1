@@ -87,6 +87,8 @@ const AllProduct: React.FC = () => {
 
 	const location = useLocation();
 	const navigate = useNavigate();
+	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
+	const basePath = siteUrl.replace(window.location.origin, '');
 
 	const query = new URLSearchParams(location.search);
 	let element = query.get('element');
@@ -247,11 +249,11 @@ const AllProduct: React.FC = () => {
 								onClick: (rowData) => {
 									if (appLocalizer.permalink_structure) {
 										navigate(
-											`/${appLocalizer.dashboard_slug}/products/edit/${rowData.id}/`
+											`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${rowData.id}/`
 										);
 									} else {
 										navigate(
-											`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${rowData.id}`
+											`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${rowData.id}`
 										);
 									}
 								},
@@ -535,11 +537,11 @@ const AllProduct: React.FC = () => {
 
 		if (appLocalizer.permalink_structure) {
 			navigate(
-				`/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`
+				`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`
 			);
 		} else {
 			navigate(
-				`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`
+				`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`
 			);
 		}
 	}, [newProductId]);
@@ -571,11 +573,11 @@ const AllProduct: React.FC = () => {
 									if (modules.includes('spmv')) {
 										if (appLocalizer.permalink_structure) {
 											navigate(
-												`/${appLocalizer.dashboard_slug}/products/add/`
+												`${basePath}/${appLocalizer.dashboard_slug}/products/add/`
 											);
 										} else {
 											navigate(
-												`?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=add`
+												`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=add`
 											);
 										}
 									} else {
