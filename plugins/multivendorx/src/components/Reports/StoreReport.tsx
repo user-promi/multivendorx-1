@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { Analytics, Card, Column, getApiLink, MultiCalendarInput, Table, TableCell } from 'zyra';
-import { Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
-import { Tooltip } from 'react-leaflet';
+import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import axios from 'axios';
 import { PaginationState, RowSelectionState } from '@tanstack/react-table';
 import { formatCurrency } from '../../services/commonFunction';
@@ -150,7 +149,7 @@ const StoreReport: React.FC = () => {
 						)})`,
 						value: store.commission.commission_total,
 					}));
-
+				console.log(pieChartData)
 				setPieData(pieChartData);
 
 				const statuses = [
@@ -482,38 +481,24 @@ const StoreReport: React.FC = () => {
 					}))}
 				/>
 			</Column>
-			
+
 			<Card title={__('Top revenue-generating stores', 'multivendorx')}>
 				<ResponsiveContainer width="100%" height={300}>
 					<PieChart>
-						<Pie
-							data={pieData}
-							cx="50%"
-							cy="50%"
-							outerRadius={100}
-							dataKey="value"
-							label={({ name, percent }) =>
-								`${name} ${(percent * 100).toFixed(1)}%`
-							}
-						>
-							{pieData.map((entry, index) => (
-								<Cell
-									key={`cell-${index}`}
-									fill={COLORS[index % COLORS.length]}
-								/>
-							))}
-						</Pie>
-						<Tooltip
-							formatter={(value) => formatCurrency(value)}
-							contentStyle={{
-								backgroundColor: '#fff',
-								borderRadius: '8px',
-								border: '1px solid #ddd',
-							}}
-						/>
+						{pieData.length > 0 && (
+							<Pie
+								data={pieData}
+								cx="50%"
+								cy="50%"
+								outerRadius={100}
+								dataKey="value"
+							/>
+						)}
+						<Tooltip formatter={(value) => formatCurrency(value)} />
 						<Legend />
 					</PieChart>
 				</ResponsiveContainer>
+
 			</Card>
 
 			<div className="card-header admin-pt-2">
