@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
-import template1Html from '../../../assets/invoice/template1.html';
-import template2Html from '../../../assets/invoice/template2.html';
-import template3Html from '../../../assets/invoice/template3.html';
+import DashboardTemplate from '../../../assets/template/Dashbord';
+import InvoiceDOM from '../../../assets/template/Invoice.dom';
+import InvoicePDF from '../../../assets/template/Invoice.pdf';
 
 export default {
 	id: 'store-invoice',
@@ -178,58 +178,115 @@ export default {
 			type: 'color-setting',
 			label: __('Invoice Template & PDF', 'mvx-pro'),
 			moduleEnabled: 'invoice',
-			apilink: 'pdf',
-		  
+			showPreview: true,
+			showPdfButton: true,
+			showTemplates: true,
 			/* 🔹 HTML templates */
 			templates: [
 			  {
-				key: 'invoice_1',
-				label: __('Invoice Classic', 'mvx-pro'),
-				html: template1Html,
+				key: 'dashbord',
+				label: __('dashbord', 'mvx-pro'),
+				preview: DashboardTemplate,
+				component: DashboardTemplate,
 			  },
 			  {
 				key: 'invoice_2',
-				label: __('Invoice Modern', 'mvx-pro'),
-				html: template2Html,
-			  },
-			  {
-				key: 'invoice_3',
-				label: __('Invoice Minimal', 'mvx-pro'),
-				html: template3Html,
-			  },
+				label: 'Invoice Modern',
+				preview: InvoiceDOM,
+				component: InvoiceDOM,
+				pdf: InvoicePDF,
+			  }			  
 			],
-		  
-			/* 🎨 PRESET THEMES */
-			presetThemes: [
-			  {
-				name: __('Blue', 'mvx-pro'),
-				vars: {
-				  '--accent': '#2563eb',
-				  '--accent-secondary': '#0ea5e9',
+			predefinedOptions: [
+				{
+					key: 'orchid_bloom',
+					label: 'Orchid Bloom',
+					value: 'orchid_bloom',
+					colors: {
+						colorPrimary: '#FF5959',
+						colorSecondary: '#FADD3A',
+						colorAccent: '#49BEB6',
+						colorSupport: '#075F63',
+					},
 				},
-			  },
-			  {
-				name: __('Green', 'mvx-pro'),
-				vars: {
-				  '--accent': '#16a34a',
-				  '--accent-secondary': '#22c55e',
+				{
+					key: 'emerald_edge',
+					label: 'Emerald Edge',
+					value: 'emerald_edge',
+					colors: {
+						colorPrimary: '#e6b924',
+						colorSecondary: '#d888c1',
+						colorAccent: '#6b7923',
+						colorSupport: '#6e97d0',
+					},
 				},
-			  },
-			  {
-				name: __('Dark', 'mvx-pro'),
-				vars: {
-				  '--bg-page': '#0f172a',
-				  '--bg-card': '#020617',
-				  '--text-primary': '#e5e7eb',
-				  '--text-muted': '#94a3b8',
-				  '--border-color': '#1e293b',
-				  '--accent': '#6366f1',
-				  '--accent-secondary': '#22d3ee',
+				{
+					key: 'solar_ember',
+					label: 'Solar Ember',
+					value: 'solar_ember',
+					colors: {
+						colorPrimary: '#fe900d',
+						colorSecondary: '#6030db',
+						colorAccent: '#17cadb',
+						colorSupport: '#a52fff',
+					},
 				},
-			  },
+				{
+					key: 'crimson_blaze',
+					label: 'Crimson Blaze',
+					value: 'crimson_blaze',
+					colors: {
+						colorPrimary: '#04e762',
+						colorSecondary: '#f5b700',
+						colorAccent: '#dc0073',
+						colorSupport: '#008bf8',
+					},
+				},
+				{
+					key: 'golden_ray',
+					label: 'Golden Ray',
+					value: 'golden_ray',
+					colors: {
+						colorPrimary: '#0E117A',
+						colorSecondary: '#399169',
+						colorAccent: '#12E2A4',
+						colorSupport: '#DCF516',
+					},
+				},
+				{
+					key: 'obsidian_night',
+					label: 'Obsidian Night',
+					value: 'obsidian_night',
+					colors: {
+						colorPrimary: '#00eed0',
+						colorSecondary: '#0197af',
+						colorAccent: '#4b227a',
+						colorSupport: '#02153d',
+					},
+				},
+				{
+					key: 'obsidian',
+					label: 'Obsidian',
+					value: 'obsidian',
+					colors: {
+						colorPrimary: '#7ccc63',
+						colorSecondary: '#f39c12',
+						colorAccent: '#e74c3c',
+						colorSupport: '#2c3e50',
+					},
+				},
+				{
+					key: 'black',
+					label: 'black',
+					value: 'black',
+					colors: {
+						colorPrimary: '#2c3e50',
+						colorSecondary: '#2c3e50',
+						colorAccent: '#2c3e50',
+						colorSupport: '#2c3e50',
+					},
+				},
 			],
-		  
-			showPdfButton: true,
 		}		  
 	],
 };

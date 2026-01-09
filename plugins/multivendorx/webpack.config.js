@@ -114,7 +114,17 @@ module.exports = {
 			{
 				test: /\.html$/i,
 				type: 'asset/source',
-			},			  
+			},
+			{
+				test: /\.tsx?$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'ts-loader',
+					options: {
+						transpileOnly: true,
+					},
+				},
+			},
 			{
 				test: /\.(t|j)sx?$/,
 				exclude: /[\\/]node_modules[\\/]/,

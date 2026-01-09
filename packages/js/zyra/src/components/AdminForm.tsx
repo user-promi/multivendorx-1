@@ -134,6 +134,7 @@ interface MultiStringItem {
 interface InputField {
     pdfEndpoint: string;
     showPdfButton: boolean | undefined;
+    showTemplates: boolean | undefined;
     presetThemes: never[];
     templates: never[];
     key: string;
@@ -1431,9 +1432,12 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             images={ inputField.images ?? [] } // optional array of images associated with colors
                             value={ value } // currently selected color value
                             idPrefix="color-setting"
+                            templates={ inputField.templates } 
                             onChange={ ( e ) =>
                                 handleChange( e, inputField.key )
                             }
+                            showPdfButton={ inputField.showPdfButton ?? false }
+                            showTemplates={ inputField.showTemplates ?? false }
                         />
                     );
                     break;
