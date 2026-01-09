@@ -59,10 +59,10 @@ export default {
 					key: 'talkjs',
 					label: __('TalkJS', 'multivendorx'),
 					value: 'talkjs',
-					desc: __(
-				'<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token.</a>',
-				'multivendorx'
-			),
+			// 		desc: __(
+			// 	'<a href="https://docs.mapbox.com/help/getting-started/access-tokens/" target="_blank">Click here to generate access token.</a>',
+			// 	'multivendorx'
+			// ),
 				},
 				{
 					key: 'whatsapp',
@@ -76,10 +76,10 @@ export default {
 			key: 'messenger_color',
 			type: 'color',
 			label: __('Messenger theme color', 'multivendorx'),
-			desc: __(
-				'Pick a theme color for your Facebook Messenger chat window.',
-				'multivendorx'
-			),
+			// desc: __(
+			// 	'Pick a theme color for your Facebook Messenger chat window.',
+			// 	'multivendorx'
+			// ),
 			moduleEnabled: 'live-chat',
 			value: '#5007aa',
 			dependent: {
@@ -93,10 +93,10 @@ export default {
 			key: 'whatsapp_opening_pattern',
 			type: 'setting-toggle',
 			label: __('WhatsApp opening pattern', 'multivendorx'),
-			desc: __(
-				'Choose whether WhatsApp chats open in browser or app.',
-				'multivendorx'
-			),
+			// desc: __(
+			// 	'Choose whether WhatsApp chats open in browser or app.',
+			// 	'multivendorx'
+			// ),
 			options: [
 				{
 					key: 'browser',

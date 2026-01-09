@@ -618,20 +618,19 @@ class Stores extends \WP_REST_Controller {
 
             if ( 'active' === $store_data['status'] ) {
                 do_action( 'multivendorx_after_store_active', $store_id );
+
+                do_action(
+                    'multivendorx_notify_store_activated',
+                    'store_activated',
+                    array(
+                        'admin_email' => get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['admin_email'] ),
+                        'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                        'store_name' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'store_id'    => $store_id,
+                        'category'    => 'activity',
+                    )
+                );
             }
-
-            $admin_email = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['admin_email'] );
-
-            do_action(
-                'multivendorx_notify_new_store_approval',
-                'new_store_approval',
-                array(
-                    'admin_email' => $admin_email,
-                    'store_email' => 'test@gmail.com',
-                    'store_id'    => $store_id,
-                    'category'    => 'activity',
-                )
-            );
 
             return rest_ensure_response(
                 array(

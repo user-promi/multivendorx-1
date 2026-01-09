@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, MultiCalendarInput, Table, TableCell } from 'zyra';
+import { Column, Container, getApiLink, MultiCalendarInput, Table, TableCell } from 'zyra';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
 import TransactionDetailsModal from './TransactionDetailsModal';
 import { formatCurrency } from '../services/commonFunction';
@@ -373,30 +373,32 @@ const Transactions: React.FC = () => {
 				</div>
 			</div>
 
-			<div className="admin-table-wrapper">
-				<Table
-					data={data}
-					columns={columns as ColumnDef<Record<string, any>, any>[]}
-					rowSelection={{}}
-					onRowSelectionChange={() => {}}
-					defaultRowsPerPage={10}
-					pageCount={pageCount}
-					pagination={pagination}
-					realtimeFilter={realtimeFilter}
-					onPaginationChange={setPagination}
-					handlePagination={requestApiForData}
-					perPageOption={[10, 25, 50]}
-					totalCounts={totalRows}
-					typeCounts={transactionStatus as TransactionStatus[]}
-				/>
-
-				{modalTransaction && (
-					<TransactionDetailsModal
-						transaction={modalTransaction}
-						onClose={() => setModalTransaction(null)}
+			<Container general>
+				<Column>
+					<Table
+						data={data}
+						columns={columns as ColumnDef<Record<string, any>, any>[]}
+						rowSelection={{}}
+						onRowSelectionChange={() => { }}
+						defaultRowsPerPage={10}
+						pageCount={pageCount}
+						pagination={pagination}
+						realtimeFilter={realtimeFilter}
+						onPaginationChange={setPagination}
+						handlePagination={requestApiForData}
+						perPageOption={[10, 25, 50]}
+						totalCounts={totalRows}
+						typeCounts={transactionStatus as TransactionStatus[]}
 					/>
-				)}
-			</div>
+
+					{modalTransaction && (
+						<TransactionDetailsModal
+							transaction={modalTransaction}
+							onClose={() => setModalTransaction(null)}
+						/>
+					)}
+				</Column>
+			</Container>
 		</>
 	);
 };

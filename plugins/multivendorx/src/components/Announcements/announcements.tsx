@@ -658,6 +658,7 @@ export const Announcements: React.FC = () => {
 			),
 		},
 	];
+	
 	return (
 		<>
 			<Dialog
@@ -854,7 +855,6 @@ export const Announcements: React.FC = () => {
 						</FormGroup>
 					</FormGroupWrapper>
 				</>
-
 				{error && <p className="error-text">{error}</p>}
 			</CommonPopup>
 

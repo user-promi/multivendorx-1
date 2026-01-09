@@ -102,51 +102,31 @@ const ShopPolicies = () => {
 						</FormGroupWrapper>
 					</Card>
 
-					<div className="card-content">
-						<div className="card-header">
-							<div className="left">
-								<div className="title">
-									{__('', 'multivendorx')}
-								</div>
-							</div>
-						</div>
-						<Card title={__('Refund Policy', 'multivendorx')}>
-							<div className="form-group-wrapper">
-								<div className="form-group">
-									<TextArea
-										name="refund_policy"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
-										value={formData.refund_policy}
-										onChange={handleChange}
-									/>
-								</div>
-							</div>
-						</Card>
-					</div>
+					<Card title={__('Refund Policy', 'multivendorx')}>
+						<FormGroupWrapper>
+							<TextArea
+								name="refund_policy"
+								wrapperClass="setting-from-textarea"
+								inputClass="textarea-input"
+								descClass="settings-metabox-description"
+								value={formData.refund_policy}
+								onChange={handleChange}
+							/>
+						</FormGroupWrapper>
+					</Card>
 
-					<div className="card-content">
-						<div className="card-title">
-							{__(
-								'Cancellation / Return / Exchange Policy',
-								'multivendorx'
-							)}
-						</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<TextArea
-									name="exchange_policy"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
-									value={formData.exchange_policy}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-					</div>
+					<Card title={__('Cancellation / Return / Exchange Policy', 'multivendorx')}>
+						<FormGroupWrapper>
+							<TextArea
+								name="exchange_policy"
+								wrapperClass="setting-from-textarea"
+								inputClass="textarea-input"
+								descClass="settings-metabox-description"
+								value={formData.exchange_policy}
+								onChange={handleChange}
+							/>
+						</FormGroupWrapper>
+					</Card>
 				</Column>
 			</Container>
 		</>

@@ -1,5 +1,5 @@
 import React from 'react';
-import "./style/InfoItem.scss";
+import "../../styles/web/UI/InfoItem.scss";
 
 type AvatarProps = {
     image?: string;

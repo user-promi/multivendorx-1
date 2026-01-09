@@ -11,31 +11,6 @@ jQuery(document).ready(function ($) {
         $('#qna-form').slideDown();
         $(this).hide();
     });
-
-    // Submit question
-    $(document).on('click', '#qna-submit', function () {
-        let question = $('#qna-question').val().trim();
-        if (!question) return;
-
-        $.post(qnaFrontend.ajaxurl, {
-            action: 'qna_submit',
-            product_id: productId,
-            question: question,
-            nonce: qnaFrontend.nonce
-        }, function (res) {
-            if (res.success) {
-                $('#qna-question').val('');
-                $('#qna-form').slideUp();
-                $('#qna-show-form').show();
-                $('#qna-success-message').fadeIn().delay(2000).fadeOut(function () {
-                    loadQuestions('');
-                });
-            } else {
-                alert(res.data.message);
-            }
-        });
-    });
-
     // Search questions
     $(document).on('keyup', '#qna-search', function () {
         let keyword = $(this).val().trim();
@@ -50,20 +25,38 @@ jQuery(document).ready(function ($) {
 
     // Submit search as direct question
     $(document).on('click', '#qna-direct-submit', function () {
-        let question = $(this).data('question');
+
+        const $btn = $(this);
+    
+        // Prevent multiple clicks
+        if ($btn.prop('disabled')) {
+            return;
+        }
+    
+        $btn.prop('disabled', true).text('Submitting...');
+    
+        let question = $btn.data('question');
+    
         $.post(qnaFrontend.ajaxurl, {
             action: 'qna_submit',
             product_id: productId,
             question: question,
             nonce: qnaFrontend.nonce
         }, function (res) {
+    
             if (res.success) {
-                $('#qna-direct-submit').hide();
                 $('#qna-search').val('');
-                $('#qna-success-message').fadeIn().delay(4000).fadeOut(function () {
-                    loadQuestions('');
-                });
-            } else alert(res.data.message);
+                $('#qna-success-message')
+                    .fadeIn()
+                    .delay(2000)
+                    .fadeOut(function () {
+                        loadQuestions('');
+                    });
+            } else {
+                alert(res.data.message);
+                // Re-enable if failed
+                $btn.prop('disabled', false).text('(Ask now)');
+            }
         });
     });
 
@@ -94,16 +87,28 @@ jQuery(document).ready(function ($) {
             search: search || '',
             nonce: qnaFrontend.nonce
         }, function (res) {
-            if (res.success) {
+    
+            if (!res.success) return;
+    
+            $('#qna-list').empty();
+    
+            if (!res.data.has_items && search) {
+                $('#qna-list').html(`
+                    <li class="qna-empty">
+                        Have not discovered the information you seek
+                        <button
+                            type="button"
+                            id="qna-direct-submit"
+                            data-question="${search}"
+                            class="qna-ask-now">
+                            Ask now
+                        </button>
+                    </li>
+                `);
+            } else {
                 $('#qna-list').html(res.data.html);
-                const count = $('#qna-list .qna-item').length;
-                if (count === 0 && search) {
-                    $('#qna-direct-submit').show().data('question', search);
-                } else {
-                    $('#qna-direct-submit').hide();
-                }
             }
         });
-    }
+    }    
 
 });

@@ -46,7 +46,6 @@ interface BasicInputProps {
     onclickCallback?: ( e: MouseEvent< HTMLButtonElement > ) => void;
     proSetting?: boolean;
     description?: string;
-    descClass?: string;
     rangeUnit?: string;
     disabled?: boolean;
     readOnly?: boolean;
@@ -85,7 +84,6 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
             onclickCallback,
             feedback,
             description,
-            descClass,
             rangeUnit,
             disabled = false,
             readOnly = false,
@@ -307,7 +305,7 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
                         </>
                     ) }
                     { type === 'range' && (
-                        <output className={ descClass }>
+                        <output className="settings-metabox-description">
                             { value ?? 0 }
                             { rangeUnit }
                         </output>
@@ -316,7 +314,7 @@ const BasicInput = forwardRef< HTMLInputElement, BasicInputProps >(
 
                 { description && (
                     <p
-                        className={ descClass }
+                        className="settings-metabox-description"
                         dangerouslySetInnerHTML={ { __html: description } }
                     />
                 ) }

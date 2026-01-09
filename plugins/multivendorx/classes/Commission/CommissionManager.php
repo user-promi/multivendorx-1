@@ -310,8 +310,8 @@ class CommissionManager {
             switch ( $row['rule_type'] ) {
                 case 'order_value':
                     $base_val = (float) $row['order_value'];
-                    if ( ( 'less_than' && $order_total <= $base_val === $row['rule'] ) ||
-                        ( 'more_than' && $order_total > $base_val === $row['rule'] ) ) {
+                    if ( ( 'less_than' === $row['rule'] && $order_total <= $base_val ) ||
+                        ( 'more_than' === $row['rule'] && $order_total > $base_val ) ) {
                         $commission_amount = $order_total > 0 ? ( $order_total * ( (float) $row['commission_percentage'] / 100 ) + (float) $row['commission_fixed'] ) : 0;
 
                         $rules_array['commission_amount']['rules'][] = array(
@@ -344,8 +344,8 @@ class CommissionManager {
                             $base_value    = (float) $row['product_qty'];
                         }
 
-                        if ( ( 'less_than' && $compare_value <= $base_value === $row['rule'] ) ||
-                            ( 'more_than' && $compare_value > $base_value === $row['rule'] ) ) {
+                        if ( ( 'less_than' === $row['rule'] && $compare_value <= $base_value ) ||
+                            ( 'more_than' === $row['rule'] && $compare_value > $base_value ) ) {
                             $commission_amount += $line_total > 0 ? ( $line_total * ( (float) $row['commission_percentage'] / 100 ) + (float) $row['commission_fixed'] ) : 0;
 
                             $rules_array['commission_amount']['rules'][] = array(
@@ -450,7 +450,7 @@ class CommissionManager {
 
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
-            if ( ! empty( 'per_item' === $commission ) && $commission_type ) {
+            if ( ! empty( $commission ) && 'per_item' === $commission_type ) {
                 $amount = $line_total > 0 ? ( (float) $line_total * ( (float) $commission['commission_val'] / 100 ) + ( (float) $commission['commission_fixed'] * $item['qty'] ) ) : 0;
             }
 

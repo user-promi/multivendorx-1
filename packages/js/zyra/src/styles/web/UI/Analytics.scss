@@ -1,0 +1,126 @@
+@use '../../../global.scss' as *;
+
+.analytics-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+
+    .analytics-item {
+        display: flex;
+        gap: 1rem;
+        align-items: start;
+        background: $background-white;
+        padding: 1rem;
+        width: 100%;
+        border-radius: 0.313rem;
+        box-shadow: $box-shadow;
+
+        .analytics-icon {
+            i {
+                padding: 0.5rem;
+                font-size: 1.625rem;
+                border-radius: 0.313rem;
+            }
+        }
+
+        .details {
+            .number {
+                font-size: 1.25rem;
+                line-height: 0.9;
+                font-weight: 600;
+                color: $text-color;
+            }
+
+            .text {
+                color: $sub-text-color;
+                line-height: 1.713;
+            }
+        }
+    }
+
+    // admin Wallet Transaction table(common)
+    &.wallet {
+        padding: 0 0 1rem;
+        margin-bottom: 1rem;
+        border-bottom: $border-light-small;
+    }
+
+    // Wallet Transaction table
+
+    // report
+    &.report {
+        flex-wrap: wrap;
+
+        .analytics-item {
+            width: 48%;
+            box-sizing: border-box;
+
+            i {
+                font-size: 2.5rem;
+                padding: 0.625rem;
+                line-height: 1.5;
+            }
+
+            .details {
+                .number {
+                    font-size: 2.063rem;
+                }
+            }
+        }
+    }
+
+    &.col-3 {
+        .analytics-item {
+            width: 24%;
+        }
+    }
+
+    &.dashboard {
+        .analytics-item {
+            flex-direction: row-reverse;
+            justify-content: space-between;
+
+            .analytics-icon {
+                margin-top: 0.45rem;
+
+                i {
+                    padding: 0.5rem;
+                    font-size: 1.5rem;
+                    border-radius: 0.313rem;
+                    color: #fff;
+                    margin-top: 0.625rem;
+                }
+
+                .text {
+                    color: $sub-text-color;
+                    padding-top: 0.313rem;
+                }
+            }
+
+            .details {
+                .text {
+                    font-size: 1.063rem;
+                    font-weight: 500;
+                    color: $sub-text-color;
+                }
+
+                .number {
+                    font-size: 1.813rem !important;
+                    /* zyra style overwrite */
+                    line-height: 2 !important;
+                    /* zyra style overwrite */
+                    font-weight: 600;
+                }
+
+                .report {
+                    font-weight: 500;
+                    color: $sub-text-color;
+
+                    div {
+                        line-height: 1.313rem;
+                    }
+                }
+            }
+        }
+    }
+}

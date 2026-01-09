@@ -297,7 +297,6 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                     <>
                         <ToggleSetting
                             wrapperClass="setting-form-input"
-                            descClass="settings-metabox-description"
                             options={ [
                                 ...( hasTemplates
                                     ? [

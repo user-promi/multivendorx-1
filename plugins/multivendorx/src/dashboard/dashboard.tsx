@@ -15,7 +15,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import '../components/dashboard.scss';
 import '../dashboard/dashboard1.scss';
-import { AdminButton, Card, Column, Container, getApiLink, InfoItem, MultiCalendarInput, useModules } from 'zyra';
+import { AdminButton, Analytics, Card, Column, Container, getApiLink, InfoItem, MultiCalendarInput, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency, formatTimeAgo } from '@/services/commonFunction';
@@ -431,6 +431,7 @@ const Dashboard: React.FC = () => {
 	];
 
 	const access = appLocalizer.settings_databases_value['privacy']['customer_information_access'];
+	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
 
 	return (
 		<>
@@ -466,48 +467,32 @@ const Dashboard: React.FC = () => {
 
 			<Container >
 				<Column>
-					<Card transparent>
-						<div className="analytics-container dashboard">
-							{analyticsData.map((item, idx) => (
-								<div
-									key={idx}
-									className={`analytics-item ${item.color}`}
-								>
-									<div className="details">
-										<div className="text">
-											{__(item.text, 'multivendorx')}
-										</div>
-
-										<div className="number">
-											{item.number}
-										</div>
-
-										<div className="report">
-											<div>
-												{__('Last 30 days:', 'multivendorx')}{' '}
-												<span className={`${item.color}-color`}>
-													{item.last30}
-												</span>
-											</div>
-
-											<div>
-												{__('Previous 30 days:', 'multivendorx')}{' '}
-												<span className={`${item.color}-color`}>
-													{item.prev30}
-												</span>
-											</div>
-										</div>
+					<Analytics
+						template="template-3"
+						data={analyticsData.map((item) => ({
+							icon: item.icon,
+							iconClass: `${item.color}-bg`,
+							colorClass: item.color,
+							number: item.number,
+							text: __(item.text, 'multivendorx'),
+							extra: (
+								<>
+									<div>
+										{__('Last 30 days:', 'multivendorx')}{' '}
+										<span className={`${item.color}-color`}>
+											{item.last30}
+										</span>
 									</div>
-
-									<div className="analytics-icon">
-										<i
-											className={`${item.icon} ${item.color}-bg`}
-										/>
+									<div>
+										{__('Previous 30 days:', 'multivendorx')}{' '}
+										<span className={`${item.color}-color`}>
+											{item.prev30}
+										</span>
 									</div>
-								</div>
-							))}
-						</div>
-					</Card>
+								</>
+							),
+						}))}
+					/>
 				</Column>
 				<Column grid={8}>
 					<Card
@@ -630,8 +615,8 @@ const Dashboard: React.FC = () => {
 						iconName="adminfont-external icon"
 						onIconClick={() => {
 							const url = appLocalizer.permalink_structure
-								? `/${appLocalizer.dashboard_slug}/orders`
-								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=orders`
+								? `${siteUrl}/${appLocalizer.dashboard_slug}/orders`
+								: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=orders`
 							window.open(url);
 						}}
 					>
@@ -709,8 +694,8 @@ const Dashboard: React.FC = () => {
 						iconName="adminfont-external icon"
 						onIconClick={() => {
 							const url = appLocalizer.permalink_structure
-								? `/${appLocalizer.dashboard_slug}/products`
-								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=products`
+								? `${siteUrl}/${appLocalizer.dashboard_slug}/products`
+								: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=products`
 							window.open(url);
 						}}
 					>
@@ -773,8 +758,8 @@ const Dashboard: React.FC = () => {
 						iconName="adminfont-external icon"
 						onIconClick={() => {
 							const url = appLocalizer.permalink_structure
-								? `/${appLocalizer.dashboard_slug}/overview`
-								: `/?page_id=${appLocalizer.dashboard_page_id}&segment=overview`
+								? `${siteUrl}/${appLocalizer.dashboard_slug}/overview`
+								: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=overview`
 							window.open(url);
 						}}
 					>
@@ -871,8 +856,8 @@ const Dashboard: React.FC = () => {
 							iconName="adminfont-external icon"
 							onIconClick={() => {
 								const url = appLocalizer.permalink_structure
-									? `/${appLocalizer.dashboard_slug}/refund`
-									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=refund`
+									? `${siteUrl}/${appLocalizer.dashboard_slug}/refund`
+									: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=refund`
 								window.open(url);
 							}}
 						>
@@ -968,8 +953,8 @@ const Dashboard: React.FC = () => {
 							iconName="adminfont-external icon"
 							onIconClick={() => {
 								const url = appLocalizer.permalink_structure
-									? `/${appLocalizer.dashboard_slug}/store-review`
-									: `/?page_id=${appLocalizer.dashboard_page_id}&segment=store-review`
+									? `${siteUrl}/${appLocalizer.dashboard_slug}/store-review`
+									: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=store-review`
 								window.open(url);
 							}}
 						>

@@ -109,7 +109,7 @@ interface actionButton {
     render: ( updateFilter: FilterUpdater, filterValue: unknown ) => ReactNode;
 }
 export const TableCell: React.FC< TableCellProps > = ( {
-    title,
+    title = '',
     fieldValue = '',
     children = <></>,
     type = '',
@@ -178,7 +178,6 @@ export const TableCell: React.FC< TableCellProps > = ( {
         type = '';
     }
     switch ( type ) {
-        case 'product':
         case 'text':
         case 'number':
             content = (
@@ -305,7 +304,6 @@ export const TableCell: React.FC< TableCellProps > = ( {
             );
             break;
         }
-
         case 'action-dropdown':
             content = (
                 <div className="action-section">
@@ -934,7 +932,7 @@ const Table: React.FC< TableProps > = ( {
                             { /* Pagination Controls */ }
                             { pagination && pageCount && perPageOption && (
                                 <>
-                                    <div className="table-pagination">
+                                    <div className="admin-pagination">
                                         <div className="pagination-number-wrapper">
                                             <div className="show-section">
                                                 { `Showing ${
@@ -1021,12 +1019,6 @@ const Table: React.FC< TableProps > = ( {
                                                 >
                                                     <i className="admin-font adminfont-pagination-left-arrow"></i>
                                                 </span>
-                                                { /* <span>
-                                            Page{ ' ' }
-                                            { table.getState().pagination
-                                                .pageIndex + 1 }{ ' ' }
-                                            of { pageCount }
-                                        </span> */ }
                                                 <div className="pagination">
                                                     { Array.from(
                                                         { length: pageCount },

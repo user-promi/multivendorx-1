@@ -837,7 +837,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             wrapperClass={
                                 inputField.wrapperClass || 'setting-form-input'
                             }
-                            descClass="settings-metabox-description"
                             description={ inputField.desc }
                             key={ inputField.key }
                             id={ inputField.id }
@@ -892,7 +891,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             inputClass={ `${
                                 inputField.class || 'textarea-input'
                             }` }
-                            descClass="settings-metabox-description"
                             description={ inputField.desc }
                             key={ inputField.key }
                             id={ inputField.id }
@@ -970,7 +968,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'file':
                     input = (
                         <FileInput
-                            descClass="settings-metabox-description"
                             description={ inputField.desc }
                             inputClass={ `${ inputField.key } basic-input` }
                             imageSrc={ value ?? appLocalizer?.default_logo }
@@ -1040,7 +1037,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         <BasicInput
                             wrapperClass="settings-color-picker"
                             inputClass="setting-color-picker"
-                            descClass="settings-metabox-description"
                             description={ inputField.desc } // optional description displayed under the input
                             key={ inputField.key }
                             id={ inputField.id }
@@ -1207,7 +1203,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                 <BasicInput
                                     wrapperClass="settings-basic-input-class"
                                     inputClass="admin-btn btn-purple"
-                                    descClass="settings-metabox-description"
                                     description={ inputField.desc } // optional description displayed under the input
                                     name={ inputField.name } // name attribute for the input
                                     type={ inputField.type } // input type (text, number, password, etc.)
@@ -1426,24 +1421,19 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'color-setting':
                     input = (
                         <ColorSettingInput
-                        wrapperClass="form-group-color-setting"
-                        inputClass="setting-form-input"
-                        descClass="settings-metabox-description"
-                        description={inputField.desc}
-                        showPreview={inputField.showPreview ?? false}
-                        predefinedOptions={inputField.predefinedOptions ?? []}
-                        images={inputField.images ?? []}
-                        /* 🔹 EXISTING */
-                        value={value}
-                        idPrefix="color-setting"
-                        onChange={(e) => handleChange(e, inputField.key)}
-                        /* 🔥 NEW – TEMPLATE + PDF SUPPORT */
-                        templates={inputField.templates ?? []}
-                        presetThemes={inputField.presetThemes ?? []}
-                        showPdfButton={inputField.showPdfButton}
-                        pdfEndpoint={inputField.pdfEndpoint}
-                        appLocalizer={appLocalizer}
-                        apiLink={inputField.apilink}
+                            wrapperClass="form-group-color-setting"
+                            inputClass="setting-form-input"
+                            description={ inputField.desc } // optional description displayed under the input
+                            showPreview={ inputField.showPreview ?? false } // whether to show a color preview box
+                            predefinedOptions={
+                                inputField.predefinedOptions ?? []
+                            } // array of predefined color options for quick selection
+                            images={ inputField.images ?? [] } // optional array of images associated with colors
+                            value={ value } // currently selected color value
+                            idPrefix="color-setting"
+                            onChange={ ( e ) =>
+                                handleChange( e, inputField.key )
+                            }
                         />
                     );
                     break;

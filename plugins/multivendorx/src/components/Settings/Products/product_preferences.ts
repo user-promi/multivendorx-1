@@ -21,7 +21,7 @@ export default {
 			),
 			class: 'mvx-toggle-checkbox',
 			desc: __(
-				'<li>Virtual - Choose this option for products that don’t have a physical form (e.g., services, memberships). <li>Downloadable - Use this option for products that customers can download (e.g., software, eBooks).',
+				'<ul><li>Virtual - Choose this option for products that don’t have a physical form (e.g., services, memberships). <li>Downloadable - Use this option for products that customers can download (e.g., software, eBooks).</li><ul>',
 				'multivendorx'
 			),
 			options: [
@@ -141,7 +141,7 @@ export default {
 				'multivendorx'
 			),
 			desc: __(
-				'<li>Guided selection – Stores must first choose a primary category, then select from its subcategories.</li><li>Free selection – Stores can choose any number of categories and subcategories without restrictions.</li>',
+				'<ul><li>Guided selection – Stores must first choose a primary category, then select from its subcategories.</li><li>Free selection – Stores can choose any number of categories and subcategories without restrictions.</li><ul>',
 				'multivendorx'
 			),
 			options: [
@@ -237,7 +237,7 @@ export default {
 				'multivendorx'
 			),
 			desc: __(
-				'<li>Same store - Show related products only from the current store.</li><li>All stores - Show related products from across the marketplace.</li><li>Do not display - Hide related products completely.</li>',
+				'<ul><li>Same store - Show related products only from the current store.</li><li>All stores - Show related products from across the marketplace.</li><li>Do not display - Hide related products completely.</li><ul>',
 				'multivendorx'
 			),
 			options: [

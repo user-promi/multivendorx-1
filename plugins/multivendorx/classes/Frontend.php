@@ -24,15 +24,9 @@ class Frontend {
     public function __construct() {
         // Redirect store dashboard page.
         add_filter( 'template_include', array( $this, 'store_dashboard_template' ) );
+        add_filter( 'woocommerce_login_redirect', array( $this, 'redirect_store_dashboard' ), 10 );
+        add_filter( 'login_redirect', array( $this, 'redirect_store_dashboard' ), 10 );
 
-        // Add sold by in shop page.
-        add_action( 'woocommerce_after_shop_loop_item', array( $this, 'add_sold_by_in_shop_and_single_product_page' ), 6 );
-        // Add sold by in single product page.
-        add_action( 'woocommerce_product_meta_start', array( $this, 'add_sold_by_in_shop_and_single_product_page' ), 25 );
-        // Add sold by in cart page.
-        add_action( 'woocommerce_get_item_data', array( $this, 'add_sold_by_in_cart' ), 30, 2 );
-        // Add store tab in single product page.
-        add_filter( 'woocommerce_product_tabs', array( $this, 'add_store_tab_in_single_product' ) );
         // Modify related products section in single product page.
         add_filter( 'woocommerce_related_products', array( $this, 'show_related_products' ), 99, 3 );
 
@@ -130,139 +124,6 @@ class Frontend {
         }
     }
 
-    /**
-     * Get store info
-     *
-     * @param int $product_id Product ID.
-     * @return array
-     */
-    public function show_store_info( $product_id ) {
-        $store_details = MultiVendorX()->setting->get_setting( 'store_branding_details', array() );
-
-        if ( in_array( 'show_store_name', $store_details, true ) ) {
-            $store = Store::get_store( $product_id, 'product' );
-            if ( ! $store ) {
-				return array();
-            }
-
-            $store_user_ids   = StoreUtil::get_store_users( $store->get_id() );
-            $store_owner_id   = null;
-            $store_owner_name = '';
-
-            // Find store owner.
-            if ( ! empty( $store_user_ids ) ) {
-                foreach ( $store_user_ids as $user_id ) {
-                    $user = get_userdata( $user_id );
-                    if ( $user && in_array( 'store_owner', (array) $user->roles, true ) ) {
-                        $store_owner_id   = $user->ID;
-                        $store_owner_name = $user->display_name;
-                        break;
-                    }
-                }
-            }    
-            $name        = $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
-            $description = $store->get( Utill::STORE_SETTINGS_KEYS['description'] );
-            $phone       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ) ?? '';
-            $email       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ) ?? '';
-            $address     = $store->get_meta( Utill::STORE_SETTINGS_KEYS['address'] ) ?? '';
-
-            $logo_html = '';
-            if ( in_array( 'show_store_logo_next_to_products', $store_details, true ) ) {
-                $logo_url  = $store->get_meta( 'image' ) ?? MultiVendorX()->plugin_url . 'assets/images/default-store.jpg';
-                $logo_html = '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( $name ) . '" />';
-            }
-
-            return array(
-                'id'          => $store->get_id(),
-                'name'        => $name,
-                'description' => $description,
-                'logo_html'   => $logo_html,
-                'owner_id'    => $store_owner_id,
-                'owner_name'  => $store_owner_name,
-                'phone'       => $phone,
-                'email'       => $email,
-                'address'     => $address,
-            );
-        }
-    }
-
-    /**
-     * Add store name in shop and single product page
-     */
-    public function add_sold_by_in_shop_and_single_product_page() {
-        global $post;
-
-        if ( apply_filters( 'multivendorx_sold_by_text_after_products_shop_page', true, $post->ID ) ) {
-            $details = $this->show_store_info( ( $post->ID ) );
-
-            if ( ! empty( $details ) ) {
-                $sold_by_text = apply_filters( 'multivendorx_sold_by_text', __( 'Sold By', 'multivendorx' ), $post->ID );
-
-                echo '<a class="by-store-name-link" style="display:block;" target="_blank" href="'
-                    . esc_url( MultiVendorX()->store->storeutil->get_store_url( $details['id'] ) ) . '">'
-                    . esc_html( $sold_by_text ) . ' '
-                    . esc_html( $details['name'] )
-                    . '</a>';
-            }
-        }
-    }
-
-    /**
-     * Add store name in cart.
-     *
-     * @param array $item_data Existing item data array.
-     * @param array $cart_item Cart item data.
-     * @return array Modified item data.
-     */
-    public function add_sold_by_in_cart( $item_data, $cart_item ) {
-        if ( apply_filters( 'multivendorx_sold_by_text_in_cart_checkout', true, $cart_item['product_id'] ) ) {
-            $product_id = $cart_item['product_id'];
-            $details    = $this->show_store_info( $product_id );
-
-            if ( ! empty( $details ) ) {
-                $sold_by_text = apply_filters(
-                    'multivendorx_sold_by_text',
-                    __( 'Sold By', 'multivendorx' ),
-                    $product_id
-                );
-
-                $item_data[] = array(
-                    'name'  => esc_html( $sold_by_text ),
-                    'value' => esc_html( $details['name'] ),
-                );
-            }
-        }
-
-        return $item_data;
-    }
-
-    /**
-     * Add store tab in single product page
-     *
-     * @param array $tabs Tabs.
-     */
-    public function add_store_tab_in_single_product( $tabs ) {
-        global $product;
-        if ( $product ) {
-            $store = Store::get_store( $product->get_id(), 'product' );
-            if ( $store ) {
-                $title         = __( 'Store', 'multivendorx' );
-                $tabs['store'] = array(
-                    'title'    => $title,
-                    'priority' => 20,
-                    'callback' => array( $this, 'woocommerce_product_store_tab' ),
-                );
-            }
-        }
-        return $tabs;
-    }
-
-    /**
-     * Store tab content
-     */
-    public function woocommerce_product_store_tab() {
-        MultiVendorX()->util->get_template( 'store/store-single-product-tab.php' );
-    }
 
     /**
      * Show related products or not.
@@ -407,6 +268,20 @@ class Frontend {
             return MultiVendorX()->plugin_path . 'templates/store/store-dashboard.php';
         }
         return $template;
+    }
+
+    /**
+     * Redirect Store dashboard
+     *
+     * @param string $redirect redirect url.
+     *
+     * @return string
+     */
+    public function redirect_store_dashboard( $redirect ) {
+        if ( in_array('store_owner', wp_get_current_user()->roles, true) && get_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], true ) ) {
+            return get_permalink(MultiVendorX()->setting->get_setting( 'store_dashboard_page' ));
+        }
+        return $redirect;
     }
 
     /**

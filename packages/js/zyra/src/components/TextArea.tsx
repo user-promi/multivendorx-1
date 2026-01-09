@@ -34,7 +34,6 @@ const TextArea: React.FC< TextAreaProps > = ( {
     colNumber = 50,
     readOnly,
     description,
-    descClass,
     tinymceApiKey,
     usePlainText = false,
     onChange,
@@ -95,7 +94,7 @@ const TextArea: React.FC< TextAreaProps > = ( {
 
             { description && (
                 <p
-                    className={ descClass }
+                    className= "settings-metabox-description"
                     dangerouslySetInnerHTML={ { __html: description } }
                 ></p>
             ) }

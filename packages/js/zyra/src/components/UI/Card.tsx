@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "../../styles/web/UI/Card.scss";
 
 export type CardProps = {
   title?: React.ReactNode;
