@@ -123,6 +123,9 @@ class Utill
         'sold_by'                         => 'multivendorx_sold_by',
         'commissions_processed'           => 'multivendorx_commissions_processed',
         'commission_id'                   => 'multivendorx_commission_id',
+        'shipping_provider'               => 'multivendorx_shipping_provider',
+        'tracking_url'                    => 'multivendorx_tracking_url',
+        'tracking_id'                     => 'multivendorx_tracking_id',
     );
 
     const WORDPRESS_SETTINGS = array(
