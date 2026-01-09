@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import axios from 'axios';
-import { getApiLink } from 'zyra';
+import { getApiLink, Popover } from 'zyra';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Notifications from './dashboard/notifications';
 import './hooksFilters';
@@ -362,7 +362,15 @@ const Dashboard = () => {
 
 		return result;
 	}, [menu]);
+	const announcementItems = (announcement || []).map((item, index) => ({
+		title: item.title,
+		icon: 'adminfont-user-network-icon',
+		desc: item.content,
+		className: 'notification-item',
+		action: () => {
 
+		},
+	}));
 	return (
 		<div
 			id="store-dashboard"
@@ -539,7 +547,7 @@ const Dashboard = () => {
 								</li>
 								<li className="tooltip-wrapper bottom">
 									<i
-										className="adminfont-icon notification adminfont-notification"
+										className="adminfont-icon notification adminfont-announcement"
 										onClick={toggleAnnouncements}
 									></i>
 									<span className="tooltip-name">
@@ -607,6 +615,47 @@ const Dashboard = () => {
 									)
 									}
 								</li>
+								{/* <li className="tooltip-wrapper bottom">
+									<Popover
+										template="notification"
+										width="22rem"
+										toggleIcon="adminfont-notification"
+										header={
+											<div className="title">
+												{__('Announcements', 'multivendorx')}
+												{announcement?.length > 0 && (
+													<span className="admin-badge green">
+														{announcement.length} {__('New', 'multivendorx')}
+													</span>
+												)}
+											</div>
+										}
+										items={
+											announcementItems.length
+												? announcementItems
+												: [
+													{
+														title: __('No announcements found.', 'multivendorx'),
+														className: 'no-data',
+													},
+												]
+										}
+										footer={
+											<a
+												href={
+													appLocalizer.permalink_structure
+														? `${appLocalizer.site_url.replace(/\/$/, '')}/${appLocalizer.dashboard_slug}/view-notifications/#subtab=announcements`
+														: `${appLocalizer.site_url.replace(/\/$/, '')}/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=announcements`
+												}
+												className="admin-btn btn-purple"
+											>
+												<i className="adminfont-eye"></i>
+												{__('View all announcements', 'multivendorx')}
+											</a>
+										}
+									/>
+								</li> */}
+
 								<li
 									id="fullscreenToggle"
 									onClick={toggleFullscreen}
