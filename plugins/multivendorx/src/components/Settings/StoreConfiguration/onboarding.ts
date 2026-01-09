@@ -166,28 +166,16 @@ export default {
 					key: 'default',
 					label: __('Independent seller', 'multivendorx'),
 					value: 'default',
-					desc: __(
-						'Stores can sell only their own products unless other modes are enabled.',
-						'multivendorx'
-					),
 				},
 				{
 					key: 'single_product_multiple_vendor',
 					label: __('Co-listed products', 'multivendorx'),
 					value: 'single_product_multiple_vendor',
-					desc: __(
-						'Stores can copy existing products and sell them alongside new products they create.',
-						'multivendorx'
-					),
 				},
 				{
 					key: 'franchise',
 					label: __('Franchise', 'multivendorx'),
 					value: 'franchise',
-					desc: __(
-						'Franchise stores can sell only their own products and admin products.',
-						'multivendorx'
-					),
 				},
 			],
 		},
