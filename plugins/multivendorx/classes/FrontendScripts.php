@@ -579,6 +579,7 @@ class FrontendScripts {
                         'weight_unit'              => get_option( Utill::WOO_SETTINGS['weight_unit'] ),
                         'dimension_unit'           => get_option( Utill::WOO_SETTINGS['dimension_unit'] ),
                         'random_string_generate'   => wp_generate_uuid4(),
+                        'order_meta'               => Utill::ORDER_META_SETTINGS,
                     ),
                 ),
                 'multivendorx-registration-form-editor-script'    => array(

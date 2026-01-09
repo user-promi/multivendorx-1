@@ -22,9 +22,24 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 		restock: true,
 		reason: '',
 	});
+	const [shipmentData, setShipmentData] = useState({
+		provider: '',
+		tracking_url: '',
+		tracking_id: '',
+	});
 	const { modules } = useModules();
 	const customer_information_access = appLocalizer.settings_databases_value['privacy'].customer_information_access;
+	const shipping_providers_options =
+		appLocalizer.settings_databases_value['shipping']
+			.shipping_providers_options;
 
+	const selected_shipping_providers =
+		appLocalizer.settings_databases_value['shipping']
+			.shipping_providers;
+
+	const filteredShippingProviders = shipping_providers_options.filter(
+		(option) => selected_shipping_providers.includes(option.value)
+	);
 	// When any item total changes, recalculate refundAmount
 	const handleItemChange = (id, field, value) => {
 		setRefundItems((prev) => {
@@ -84,7 +99,6 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 			restock: refundDetails.restock,
 			reason: refundDetails.reason,
 		};
-		console.log('Refund Data Sent:', payload);
 		axios({
 			method: 'POST',
 			url: getApiLink(appLocalizer, 'refund'),
@@ -198,6 +212,37 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 			default:
 				return 'admin-badge';
 		}
+	};
+
+	useEffect(() => {
+		if (!orderData?.meta_data) return;
+
+		const meta = (key: string) =>
+			orderData.meta_data.find((m) => m.key === key)?.value ?? '';
+		setShipmentData({
+			provider: meta(appLocalizer.order_meta['shipping_provider']),
+			tracking_url: meta(appLocalizer.order_meta['tracking_url']),
+			tracking_id: meta(appLocalizer.order_meta['tracking_id']),
+		});
+	}, [orderData]);
+
+	const saveShipmentToOrder = async () => {
+		await axios.put(
+			`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
+			{
+				meta_data: [
+					{ key: appLocalizer.order_meta['shipping_provider'], value: shipmentData.provider },
+					{ key: appLocalizer.order_meta['tracking_url'], value: shipmentData.tracking_url },
+					{ key: appLocalizer.order_meta['tracking_id'], value: shipmentData.tracking_id },
+				],
+			},
+			{
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			}
+		);
+
+		// Refresh order data
+		fetchOrder();
 	};
 
 	return (
@@ -1081,21 +1126,46 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 									</Card>
 								)}
 							<Card
-								title={__('Shipping Tracking (P)', 'multivendorx')}
+								title={__('Shipping Tracking', 'multivendorx')}
 							>
 								<FormGroupWrapper>
 									<FormGroup label={__('Create Shipping', 'multivendorx')} htmlFor="create-shipping">
 										<SelectInput
-											name="country"
-											options={[]}
+											options={filteredShippingProviders}
 											type="single-select"
+											value={shipmentData.provider}
+											onChange={(option) =>
+												setShipmentData((prev) => ({
+													...prev,
+													provider: option.value,
+												}))
+											}
 										/>
 									</FormGroup>
-									<FormGroup label={__('Tracking Number', 'multivendorx')} htmlFor="tracking-number">
+									<FormGroup label={__('Enter Tracking Url ', 'multivendorx')} htmlFor="tracking-number">
 										<BasicInput
-											name="name"
 											wrapperClass="setting-form-input"
 											descClass="settings-metabox-description"
+											value={shipmentData.tracking_url}
+											onChange={(e) =>
+												setShipmentData((prev) => ({
+													...prev,
+													tracking_url: e.target.value,
+												}))
+											}
+										/>
+									</FormGroup>
+									<FormGroup label={__('Enter Tracking ID', 'multivendorx')} htmlFor="tracking-number">
+										<BasicInput
+											wrapperClass="setting-form-input"
+											descClass="settings-metabox-description"
+											value={shipmentData.tracking_id}
+											onChange={(e) =>
+												setShipmentData((prev) => ({
+													...prev,
+													tracking_id: e.target.value,
+												}))
+											}
 										/>
 									</FormGroup>
 								</FormGroupWrapper>
@@ -1105,8 +1175,8 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 									buttons={{
 										icon: 'plus',
 										text: __('Create Shipment', 'multivendorx'),
-										// onClick: () => setShowCreateCustomer(!showCreateCustomer),
 										className: 'purple-bg',
+										onClick: saveShipmentToOrder,
 									}}
 								/>
 							</Card>
