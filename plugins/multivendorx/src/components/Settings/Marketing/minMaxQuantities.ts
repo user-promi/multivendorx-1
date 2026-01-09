@@ -88,9 +88,10 @@ moduleEnabled: 'min-max',
 				'multivendorx'
 			),
 			desc: __(
-    '<strong>Example:</strong> You set <em>Min = $20</em> and <em>Max = $100</em> for a Backpack.<br> If a customer tries to buy 1 backpack priced at $10, the purchase is blocked.<br> However, buying 2 backpacks at $10 each (total $20) is allowed.',
-    'multivendorx'
+	'<strong>Example:</strong> You set <em>Min = 2</em> and <em>Max = 5</em> items for the cart.<br> If a customer tries to place an order with <em>1 item</em>, the purchase is blocked.<br> Adding <em>2 to 5 items</em> to the cart is allowed.',
+	'multivendorx'
 ),
+
 			moduleEnabled: 'min-max',
 			nestedFields: [
 				{
