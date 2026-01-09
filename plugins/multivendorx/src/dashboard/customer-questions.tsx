@@ -448,7 +448,7 @@ const CustomerQuestions: React.FC = () => {
 
 					<div className="des">
 						{__(
-							'Manage your store information and preferences',
+							'Track and respond to customer product questions.',
 							'multivendorx'
 						)}
 					</div>
