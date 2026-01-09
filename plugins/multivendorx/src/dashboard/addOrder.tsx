@@ -388,7 +388,7 @@ const AddOrder = () => {
 
 					<div className="des">
 						{__(
-							'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas accusantium obcaecati labore nam quibusdam minus.',
+							'Create a new order manually by adding products, charges, and customer details.',
 							'multivendorx'
 						)}
 					</div>
