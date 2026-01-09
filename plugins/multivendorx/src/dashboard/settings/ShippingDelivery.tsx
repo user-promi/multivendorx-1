@@ -297,6 +297,8 @@ const ShippingDelivery = () => {
 											)}
 											htmlFor="distance_default_cost"
 										>
+									
+											
 											<BasicInput
 												type="number"
 												name="distance_default_cost"
@@ -308,6 +310,12 @@ const ShippingDelivery = () => {
 												step="0.01"
 											/>
 										</FormGroup>
+										<div className="settings-metabox-description">
+												{__(
+													'Apply default shipping charge to orders that do not match any configured distance-based shipping range.',
+													'multivendorx'
+												)}
+											</div>
 
 										{/* Distance Type */}
 										<FormGroup
@@ -318,7 +326,7 @@ const ShippingDelivery = () => {
 												wrapperClass="setting-form-input"
 												descClass="settings-metabox-description"
 												description={__(
-													'Choose your preferred shipping method.',
+													'Choose kilometers or miles based on your region so shipping charges are calculated correctly.',
 													'multivendorx'
 												)}
 												options={[
@@ -348,6 +356,12 @@ const ShippingDelivery = () => {
 												step="0.1"
 											/>
 										</FormGroup>
+										<div className="settings-metabox-description">
+												{__(
+													'Set how far you are willing to deliver orders (leave blank to deliver everywhere).',
+													'multivendorx'
+												)}
+											</div>
 
 										{/* Local Pickup Cost */}
 										<FormGroup
@@ -368,6 +382,12 @@ const ShippingDelivery = () => {
 												step="0.01"
 											/>
 										</FormGroup>
+										<div className="settings-metabox-description">
+												{__(
+													'Set the fee for customers who pick up their order themselves (use 0 for free pickup, or leave blank to turn it off).',
+													'multivendorx'
+												)}
+											</div>
 
 										{/* Distance–Cost Rules */}
 										<FormGroup
@@ -403,6 +423,7 @@ const ShippingDelivery = () => {
 														},
 													],
 												}}
+												
 												onChange={(updatedRules: any[]) => {
 													const updated = {
 														...formData,
