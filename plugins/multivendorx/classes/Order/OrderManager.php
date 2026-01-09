@@ -347,11 +347,10 @@ class OrderManager {
     public static function create_shipping_item( $order, $items ) {
         $store_id     = $items['store_id'];
         $parent_order = $items['parent_order'];
-
         $shipping_items = $parent_order->get_items( 'shipping' );
 
         foreach ( $shipping_items as $item_id => $item ) {
-            $shipping_store_id = $item->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
+            $shipping_store_id = (int)$item->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
             if ( $shipping_store_id === $store_id ) {
                 $shipping = new \WC_Order_Item_Shipping();
                 $shipping->set_props(
