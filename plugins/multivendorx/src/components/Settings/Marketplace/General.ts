@@ -109,7 +109,7 @@ export default {
 									</ul>
 								</div>
 								<div class="toggle-notice">
-									<div class="title">What Happens</div>
+									<div class="title">Receipts & tax info</div>
 									<ul>
 										<li>Multiple receipts (one from each store) issued by Each Store with Each store's tax details</li>
 									</ul>
@@ -119,7 +119,7 @@ export default {
 					key: 'mainnsub',
 					icon: 'adminfont-cart',
 					label: __('Main & Sub order together (Show both combined + separate)', 'multivendorx'),
-					desc: __('Customer receives separate emails and sees individual store orders', 'multivendorx'),
+					desc: __('Customer receives multiple emails and sees all order versions', 'multivendorx'),
 					value: '',
 					customHtml: `<div class="toggle-notice">
 									<div class="title">What Happens</div>
@@ -130,7 +130,7 @@ export default {
 									</ul>
 								</div>
 								<div class="toggle-notice">
-									<div class="title">What Happens</div>
+									<div class="title">Receipts & tax info</div>
 									<ul>
 										<li>Multiple receipts (yours + all stores) issued by Your Marketplace + All Stores with Your and each store's tax details</li>
 									</ul>
