@@ -116,6 +116,7 @@ class Utill
         'customer_refund_product'         => 'multivendorx_customer_refund_product',
         'customer_refund_product_imgs'    => 'multivendorx_customer_refund_product_imgs',
         'customer_refund_product_img_ids' => 'multivendorx_customer_refund_product_img_ids',
+        'customer_refund_addi_info'       => 'multivendorx_customer_refund_addi_info',
         'store_order_shipping_item_id'    => 'store_order_shipping_item_id',
         'multivendorx_store_order'        => 'multivendorx_store_order',
         'has_sub_order'                   => 'multivendorx_has_sub_order',

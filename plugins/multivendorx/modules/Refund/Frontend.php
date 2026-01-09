@@ -413,6 +413,7 @@ class Frontend {
         $order->update_meta_data( Utill::ORDER_META_SETTINGS['customer_refund_product'], $refund_product );
         $order->update_meta_data( Utill::ORDER_META_SETTINGS['customer_refund_product_imgs'], $uploaded_image_urls );
         $order->update_meta_data( Utill::ORDER_META_SETTINGS['customer_refund_product_img_ids'], $attach_ids );
+        $order->update_meta_data( Utill::ORDER_META_SETTINGS['customer_refund_addi_info'], $refund_request_addi_info );
 
         $order->set_status( 'refund-requested' );
         $order->save();

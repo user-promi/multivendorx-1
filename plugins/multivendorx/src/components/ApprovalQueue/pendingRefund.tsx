@@ -19,7 +19,7 @@ import {
 	RowSelectionState,
 	PaginationState,
 } from '@tanstack/react-table';
-import { formatCurrency } from '../../services/commonFunction';
+import { formatCurrency, formatWcShortDate, truncateText } from '../../services/commonFunction';
 
 interface StoreRow {
 	id: number;
@@ -30,6 +30,10 @@ interface StoreRow {
 	date: string;
 	status: string;
 	currency_symbol: string;
+	reason?: string;
+	refund_images?: string[];
+	refund_products?: number[];
+	addi_info?: string;
 }
 
 export interface RealtimeFilter {
@@ -65,9 +69,9 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 	const [store, setStore] = useState<any[]>([]);
 	const [error, setError] = useState<string | null>(null);
 	const [popupOpen, setPopupOpen] = useState(false);
-	const [rejectOrderId, setRejectOrderId] = useState<number | null>(null);
 	const [formData, setFormData] = useState({ content: '' });
-	const [submitting, setSubmitting] = useState(false);
+	const [viewOrder, setViewOrder] = useState<StoreRow | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	/**
 	 * Fetch store list on mount
@@ -168,30 +172,43 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 					const store_id = storeMeta ? storeMeta.value : null;
 					//Extract refund reason
 					const reasonMeta = metaData.find(
-						(meta: any) => meta.key === appLocalizer.order_meta['customer_refund_reason']
+						(meta: any) =>
+							meta.key === appLocalizer.order_meta['customer_refund_reason']
 					);
-					const refundReason = reasonMeta ? reasonMeta.value : '-';
+
+					const addiInfoMeta = metaData.find(
+						(meta: any) =>
+							meta.key === appLocalizer.order_meta['customer_refund_addi_info']
+					);
+
+					const imageMeta = metaData.find(
+						(meta: any) =>
+							meta.key === appLocalizer.order_meta['customer_refund_product_imgs']
+					);
+
+					const productMeta = metaData.find(
+						(meta: any) =>
+							meta.key === appLocalizer.order_meta['customer_refund_product']
+					);
 
 					return {
 						id: order.id,
-						store_id, //added
-						store_name: order.store_name || '-', // fallback
+						store_id,
+						store_name: order.store_name || '-',
 						amount: formatCurrency(order.total),
 						commission_amount: order.commission_amount
 							? formatCurrency(order.commission_amount)
 							: '-',
-						date: new Date(order.date_created).toLocaleDateString(
-							undefined,
-							{
-								year: 'numeric',
-								month: 'short',
-								day: '2-digit',
-							}
-						),
+						date: new Date(order.date_created).toLocaleDateString(),
 						status: order.status,
 						currency_symbol: order.currency_symbol,
-						reason: refundReason,
+
+						reason: reasonMeta?.value || '',
+						addi_info: addiInfoMeta?.value || '',
+						refund_images: imageMeta?.value || [],
+						refund_products: productMeta?.value || [],
 					};
+
 				});
 
 				setData(orders);
@@ -288,14 +305,10 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 			),
 		},
 	];
-	const handleRejectClick = (orderId: number) => {
-		setRejectOrderId(orderId);
-		setPopupOpen(true);
-	};
 
 	const handleCloseForm = () => {
 		setPopupOpen(false);
-		setRejectOrderId(null);
+		setViewOrder(null);
 		setFormData({ content: '' });
 	};
 
@@ -304,17 +317,18 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 	};
 
 	const handleSubmit = async () => {
-		if (!rejectOrderId) {
+		if (!viewOrder?.id || isSubmitting) {
 			return;
 		}
 
-		setSubmitting(true);
+		setIsSubmitting(true);
 
 		try {
+			const orderId = viewOrder.id;
 			//Add order note
 			await axios({
 				method: 'POST',
-				url: `${appLocalizer.apiUrl}/wc/v3/orders/${rejectOrderId}/notes`,
+				url: `${appLocalizer.apiUrl}/wc/v3/orders/${orderId}/notes`,
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				data: {
 					note: formData.content,
@@ -325,7 +339,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 			//Update order status + meta
 			await axios({
 				method: 'PUT',
-				url: `${appLocalizer.apiUrl}/wc/v3/orders/${rejectOrderId}`,
+				url: `${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				data: {
 					status: 'processing',
@@ -343,9 +357,14 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 			onUpdated?.();
 		} catch (err) {
 			setError(__('Failed to reject order', 'multivendorx'));
+		} finally {
+			setIsSubmitting(false);
 		}
+	};
 
-		setSubmitting(false);
+	const handleViewDetails = (row: StoreRow) => {
+		setViewOrder(row);
+		setPopupOpen(true);
 	};
 
 	/**
@@ -415,7 +434,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 			header: __('Refund Reason', 'multivendorx'),
 			cell: ({ row }: any) => (
 				<TableCell title={row.original.reason || ''}>
-					{row.original.reason || '-'}
+					{truncateText(row.original.reason, 30)}
 				</TableCell>
 			),
 		},
@@ -425,7 +444,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 			enableSorting: true,
 			header: __('Date', 'multivendorx'),
 			cell: ({ row }) => (
-				<TableCell title={'title'}>{row.original.date}</TableCell>
+				<TableCell title={'title'}>{formatWcShortDate(row.original.date)}</TableCell>
 			),
 		},
 		{
@@ -445,21 +464,18 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 						header={{
 							actions: [
 								{
-									label: __('View Order', 'multivendorx'),
+									label: __('View Details', 'multivendorx'),
 									icon: 'adminfont-preview',
-									onClick: () => {
-										window.open(
-											orderUrl,
-											'_blank',
-											'noopener,noreferrer'
-										);
-									},
+									onClick: () => handleViewDetails(row.original),
 									hover: true,
 								},
 								{
 									label: __('Reject', 'multivendorx'),
 									icon: 'adminfont-close',
-									onClick: () => handleRejectClick(orderId),
+									onClick: () => {
+										setViewOrder(row.original);
+										handleSubmit();
+									},
 									hover: true,
 								},
 							],
@@ -493,15 +509,12 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 					<CommonPopup
 						open={popupOpen}
 						onClose={handleCloseForm}
-						width="31.25rem"
-						height="40%"
+						width="40rem"
+						height="80%"
 						header={{
 							icon: 'announcement',
-							title: __('Reject Order', 'multivendorx'),
-							description: __(
-								'Provide a rejection message for this order.',
-								'multivendorx'
-							),
+							title: __('Refund Request Details', 'multivendorx'),
+							description: __('Review refund details before taking action.', 'multivendorx'),
 							onClose: handleCloseForm,
 						}}
 
@@ -509,16 +522,23 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 							<AdminButton
 								buttons={[
 									{
-										icon: 'close',
-										text: __('Cancel', 'multivendorx'),
-										className: 'red',
-										onClick: () => handleCloseForm,
+										icon: 'external-link',
+										text: __('View order to release funds', 'multivendorx'),
+										className: 'yellow-bg',
+										onClick: () => {
+											if (!viewOrder) return;
+											window.open(
+												`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${viewOrder.id}&action=edit`,
+												'_blank'
+											);
+										},
 									},
 									{
 										icon: 'save',
-										text: __('Submit', 'multivendorx'),
+										text: __('Reject', 'multivendorx'),
 										className: 'purple-bg',
-										onClick: () => handleSubmit(),
+										onClick: handleSubmit,
+										disabled: isSubmitting,
 									},
 								]}
 							/>
@@ -526,6 +546,38 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 					>
 						<>
 							<FormGroupWrapper>
+								<FormGroup label={__('Refund Reason', 'multivendorx')}>
+									<div className="refund-reason-box">
+										{viewOrder?.reason || '-'}
+									</div>
+								</FormGroup>
+								<FormGroup label={__('Additional Information', 'multivendorx')}>
+									<div className="refund-additional-info">
+										{viewOrder?.addi_info || '-'}
+									</div>
+								</FormGroup>
+								{viewOrder?.refund_images?.length > 0 && (
+									<FormGroup label={viewOrder.refund_images.length === 1 ? 'Attachment' : 'Attachments'}>
+										<div className="refund-attachment-list">
+											{viewOrder.refund_images.map((img, index) => (
+												<a
+													key={index}
+													href={img}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="refund-attachment-item"
+												>
+													<div className="attachment-thumb">
+														<img src={img} alt={__('Refund attachment', 'multivendorx')} />
+													</div>
+													<div className="attachment-name">
+														{__('Attachment', 'multivendorx')} {index + 1}
+													</div>
+												</a>
+											))}
+										</div>
+									</FormGroup>
+								)}
 								<FormGroup label={__('Reject Message', 'multivendorx')} htmlFor="content">
 									<TextArea
 										name="content"
