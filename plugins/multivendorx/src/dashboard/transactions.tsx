@@ -366,7 +366,7 @@ const Transactions: React.FC = () => {
 					</div>
 					<div className="des">
 						{__(
-							'Manage your store information and preferences',
+							'Track your earnings, withdrawals, and current balance at a glance.',
 							'multivendorx'
 						)}
 					</div>
