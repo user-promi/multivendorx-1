@@ -1,35 +1,38 @@
 import React, { useState, useRef, useEffect } from 'react';
+import "../../styles/web/UI/Popover.scss";
 
-interface DropdownTab {
+interface PopoverTab {
     id: string;
     label: string;
     icon?: string;
     content: React.ReactNode;
 }
 
-interface DropdownItem {
+interface PopoverItem {
     title: string;
     icon?: string;
+    desc?: string;
+    time?: string;
     link?: string;
     targetBlank?: boolean;
     action?: () => void;
     className?: string;
 }
 
-interface DropdownProps {
+interface PopoverProps {
     toggleIcon?: string;
     toggleContent?: React.ReactNode;
-    items?: DropdownItem[];
+    items?: PopoverItem[];
     header?: React.ReactNode;
     footer?: React.ReactNode;
     width?: number | string;
     template?: 'default' | 'notification' | 'user' | 'action' | 'tab';
-    tabs?: DropdownTab[];
+    tabs?: PopoverTab[];
     defaultActiveTab?: string;
     className?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({
+const Popover: React.FC<PopoverProps> = ({
     toggleIcon,
     toggleContent,
     items = [],
@@ -48,7 +51,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         defaultActiveTab || tabs[0]?.id
     );
 
-    // Reset tab when dropdown opens
+    // Reset tab when Popover opens
     useEffect(() => {
         if (open && template === 'tab') {
             setActiveTab(defaultActiveTab || tabs[0]?.id);
@@ -71,55 +74,80 @@ const Dropdown: React.FC<DropdownProps> = ({
     }, []);
 
     return (
-        <div className={`icon-wrapper ${className}`} ref={wrapperRef}>
+        <div className={`popover-wrapper ${className}`} ref={wrapperRef}>
             <div
-                className="dropdown-toggle"
+                className="popover-toggle"
                 onClick={(e) => {
                     e.stopPropagation();
                     setOpen((prev) => !prev);
                 }}
             >
-                {toggleIcon && <i className={toggleIcon}></i>}
+                {toggleIcon && <i className={`admin-icon ${toggleIcon}`}></i>}
                 {toggleContent}
             </div>
 
             {open && (
                 <div
-                    className={`dropdown dropdown-${template}`}
+                    className={`popover popover-${template}`}
                     style={{ minWidth: width }}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    {header && <div className="dropdown-header">{header}</div>}
+                    {header && <div className="popover-header">{header}</div>}
 
-                    <div className="dropdown-body">
-                        {template === 'tab' && tabs.length ? (
-                            <div className="dropdown-tabs">
-                                {/* Tabs Header */}
-                                <div className="dropdown-tab-header">
-                                    {tabs.map((tab) => (
+                    <div className="popover-body">
+                        {/* NOTIFICATION */}
+                        {template === 'notification' && (
+                            <ul>
+                                {items.map((item, index) => (
+                                    <li key={index} className={item.className}>
                                         <div
-                                            key={tab.id}
-                                            className={`dropdown-tab ${activeTab === tab.id ? 'active' : ''
-                                                }`}
-                                            onClick={() => setActiveTab(tab.id)}
+                                            className="item"
+                                            onClick={() => {
+                                                item.action?.();
+                                                setOpen(false);
+                                            }}
                                         >
-                                            {tab.icon && <i className={tab.icon}></i>}
-                                            <span>{tab.label}</span>
+                                            <div className="icon admin-badge green">
+                                                {item.icon && <i className={item.icon}></i>}
+                                            </div>
+
+                                            <div className="details">
+                                                <div className="heading">{item.title}</div>
+                                                <div className="message">{item.desc}</div>
+                                                <div className="time">{item.time}</div>
+                                            </div>
                                         </div>
-                                    ))}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+
+                        {/* TAB */}
+                        {template === 'tab' && tabs.length > 0 && (
+                            <div className="popover-tabs">
+                                <div className="tabs-wrapper">
+                                    <div className="tabs-item">
+                                        {tabs.map((tab) => (
+                                            <div
+                                                key={tab.id}
+                                                className={`tab ${activeTab === tab.id ? 'active-tab' : ''
+                                                    }`}
+                                                onClick={() => setActiveTab(tab.id)}
+                                            >
+                                                <span className="tab-name">{tab.label}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
 
-                                {/* Tabs Content */}
-                                <div className="dropdown-tab-content">
-                                    {tabs.map(
-                                        (tab) =>
-                                            activeTab === tab.id && (
-                                                <div key={tab.id}>{tab.content}</div>
-                                            )
-                                    )}
+                                <div className="notification">
+                                    {tabs.find((tab) => tab.id === activeTab)?.content}
                                 </div>
                             </div>
-                        ) : (
+                        )}
+
+                        {/* DEFAULT */}
+                        {template !== 'notification' && template !== 'tab' && (
                             <ul>
                                 {items.map((item, index) => (
                                     <li key={index} className={item.className}>
@@ -155,11 +183,11 @@ const Dropdown: React.FC<DropdownProps> = ({
                         )}
                     </div>
 
-                    {footer && <div className="dropdown-footer">{footer}</div>}
+                    {footer && <div className="popover-footer">{footer}</div>}
                 </div>
             )}
         </div>
     );
 };
 
-export default Dropdown;
+export default Popover;

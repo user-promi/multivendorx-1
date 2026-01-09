@@ -282,6 +282,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					<Card
 						title={__('Store information', 'multivendorx')}
 						iconName="adminfont-external icon"
+						contentHeight
 						onIconClick={() => {
 							navigate(
 								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`
@@ -360,6 +361,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					<Card
 						title={__('Store staff', 'multivendorx')}
 						iconName="adminfont-external icon"
+						contentHeight
 						onIconClick={() => {
 							navigate(
 								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`
