@@ -149,6 +149,7 @@ final class MultiVendorX {
         $this->container['cron']            = new Cron();
         $this->container['block']           = new Block();
         $this->container['notifications']   = new Notifications\Notifications();
+        $this->container['widgets']         = new Widgets\Widgets();
 
         // Load all active modules.
         $this->container['modules']->load_active_modules();
