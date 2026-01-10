@@ -402,8 +402,8 @@ const Tabs: React.FC< TabsProps > = ( {
                 <Link
                     key={ tab.id }
                     to={ prepareUrl( tab.id ) }
-                    className={ `menu-item ${
-                        activeTab === tab.id ? 'active-current-tab' : ''
+                    className={ `tab ${
+                        activeTab === tab.id ? 'active-tab' : ''
                     }` }
                     onClick={ ( e ) => {
                         // For file items, let the Link handle navigation naturally
@@ -414,8 +414,8 @@ const Tabs: React.FC< TabsProps > = ( {
                         }
                     } }
                 >
-                    { /* <p className="menu-name">{tab.name}</p> */ }
-                    <p className="menu-name">
+                    { /* <p className="tab-name">{tab.name}</p> */ }
+                    <p className="tab-name">
                         { menuIcon && tab.icon && (
                             <i className={ `adminfont-${ tab.icon }` }></i>
                         ) }
@@ -441,8 +441,8 @@ const Tabs: React.FC< TabsProps > = ( {
                 <Link
                     key={ `folder-${ item.name || '' }-${ index }` }
                     to={ folderUrl }
-                    className={ `menu-item ${
-                        isActive ? 'active-current-tab' : ''
+                    className={ `tab ${
+                        isActive ? 'active-tab' : ''
                     }` }
                     onClick={ ( e ) => {
                         if (
@@ -456,7 +456,7 @@ const Tabs: React.FC< TabsProps > = ( {
                         }
                     } }
                 >
-                    <p className="menu-name">{ item.name }</p>
+                    <p className="tab-name">{ item.name }</p>
                 </Link>
             );
         }

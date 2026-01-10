@@ -31,7 +31,7 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 					icon: 'wallet-in',
 					title: __('Transaction Details', 'multivendorx'),
 					description: __(
-						'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+						'Track your order commissions and watch your earnings grow.',
 						'multivendorx'
 					),
 				}}

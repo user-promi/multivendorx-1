@@ -116,12 +116,16 @@ class Utill
         'customer_refund_product'         => 'multivendorx_customer_refund_product',
         'customer_refund_product_imgs'    => 'multivendorx_customer_refund_product_imgs',
         'customer_refund_product_img_ids' => 'multivendorx_customer_refund_product_img_ids',
+        'customer_refund_addi_info'       => 'multivendorx_customer_refund_addi_info',
         'store_order_shipping_item_id'    => 'store_order_shipping_item_id',
         'multivendorx_store_order'        => 'multivendorx_store_order',
         'has_sub_order'                   => 'multivendorx_has_sub_order',
         'sold_by'                         => 'multivendorx_sold_by',
         'commissions_processed'           => 'multivendorx_commissions_processed',
         'commission_id'                   => 'multivendorx_commission_id',
+        'shipping_provider'               => 'multivendorx_shipping_provider',
+        'tracking_url'                    => 'multivendorx_tracking_url',
+        'tracking_id'                     => 'multivendorx_tracking_id',
     );
 
     const WORDPRESS_SETTINGS = array(

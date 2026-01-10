@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { getApiLink } from 'zyra';
+import { Popover, getApiLink } from 'zyra';
 import axios from 'axios';
 import { Skeleton } from '@mui/material';
 import { __ } from '@wordpress/i18n';
 
 type HeaderNotificationsProps = {
-    type?: 'notification' | 'activity';
+	type?: 'notification' | 'activity';
 };
 
 const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
-    type,
+	type,
 }) => {
 	const [notifications, setNotifications] = useState<[] | null>(null);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(true);
@@ -87,7 +87,7 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 		return notifications.map((item, idx) => (
 			<li key={idx}>
 				<div className="item"
-				 onClick={() => handleNotificationClick(item.id)}
+					onClick={() => handleNotificationClick(item.id)}
 				>
 					<div className={`icon admin-badge green`}>
 						<i
@@ -102,9 +102,9 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 						<span className="time">{item.time}</span>
 					</div>
 					<i className="check-icon adminfont-check color-green"></i>
-					<i className="check-icon adminfont-cross color-red"  
+					<i className="check-icon adminfont-cross color-red"
 						onClick={(e) => {
-        					e.stopPropagation();
+							e.stopPropagation();
 							dismissNotification(item.id)
 						}}></i>
 				</div>
@@ -114,7 +114,7 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 
 	return (
 		<>
-		{isDropdownOpen && (
+			{/* {isDropdownOpen && (
 			<div className="dropdown notification">
 				<div className="title">
 					{__('Notifications', 'multivendorx')}
@@ -150,7 +150,57 @@ const HeaderNotifications: React.FC<HeaderNotificationsProps> = ({
 					)}
 				</div>
 			</div>
-		)}
+		)} */}
+			<Popover
+				template="tab"
+				width="24rem"
+				toggleIcon="adminfont-notification"
+				toggleContent={<span className="count">8</span>}
+				header={
+					<div className="title">
+						{__('Notifications', 'multivendorx')}
+						{notifications?.length > 0 && (
+							<span className="admin-badge yellow">
+								{notifications.length} {__('New', 'multivendorx')}
+							</span>
+						)}
+					</div>
+				}
+				tabs={[
+					{
+						id: 'notifications',
+						label: __('Notifications', 'multivendorx'),
+						icon: 'adminfont-notification',
+						content: (
+							<ul className="notification-list">
+								ddddsss
+							</ul>
+						),
+					},
+					{
+						id: 'activities',
+						label: __('Activities', 'multivendorx'),
+						icon: 'adminfont-activity',
+						content: (
+								<ul className="notification-list">
+									avavsggssg
+								</ul>
+						),
+					},
+				]}
+				footer={
+					<div className="footer">
+						<a
+							href={`?page=multivendorx#&tab=notifications&subtab=notifications`}
+							className="admin-btn btn-purple"
+						>
+							<i className="adminfont-eye"></i>
+							{__('View all notifications', 'multivendorx')}
+						</a>
+					</div>
+				}
+			/>
+
 		</>
 	);
 };

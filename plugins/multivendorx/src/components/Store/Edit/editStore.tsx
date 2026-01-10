@@ -11,6 +11,7 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	AdminButton,
+	Popover,
 } from 'zyra';
 import { Skeleton } from '@mui/material';
 
@@ -30,7 +31,7 @@ const EditStore = () => {
 	const [data, setData] = useState<any>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [bannerMenu, setBannerMenu] = useState(false);
-	const [actionMenu, setActionMenu] = useState(false);
+	// const [actionMenu, setActionMenu] = useState(false);
 	const [logoMenu, setLogoMenu] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [deleteOption, setDeleteOption] = useState('');
@@ -364,6 +365,54 @@ const EditStore = () => {
 		},
 		[editId, data, handleUpdateData]
 	);
+	const actionItems = [
+		data.status === 'active' && {
+			title: __('View Storefront', 'multivendorx'),
+			icon: 'adminfont-storefront',
+			link: `${appLocalizer.store_page_url}${data.slug}`,
+			targetBlank: true,
+		},
+		{
+			title: __('Manage status', 'multivendorx'),
+			icon: 'adminfont-form-multi-select',
+			action: () => {
+				navigate(
+					`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
+					{
+						state: { highlightTarget: 'store-status' },
+					}
+				);
+
+				setTimeout(() => {
+					navigate(
+						`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
+						{ replace: true }
+					);
+				}, 5000);
+			},
+		},
+		{
+			title: __('Products', 'multivendorx'),
+			icon: 'adminfont-single-product',
+			link: `${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`,
+		},
+		{
+			title: __('Orders', 'multivendorx'),
+			icon: 'adminfont-order',
+			action: () => {
+				navigate(`?page=multivendorx#&tab=reports&subtab=store-orders`);
+			},
+		},
+		{
+			title: __('Delete store', 'multivendorx'),
+			icon: 'adminfont-delete',
+			className: 'delete',
+			action: () => {
+				handleStoreDelete();
+			},
+		},
+	].filter(Boolean);
+
 	return (
 		<>
 			<SuccessNotice message={successMsg} />
@@ -942,123 +991,12 @@ const EditStore = () => {
 				hideTitle={true}
 				hideBreadcrumb={true}
 				action={
-					<>
-						<div
-							className="icon-wrapper edit-wrapper"
-							ref={wrapperRef}
-						>
-							<i
-								onClick={(e) => {
-									e.stopPropagation();
-									setActionMenu((prev) => !prev);
-									setLogoMenu(false);
-									setBannerMenu(false);
-								}}
-								className="admin-icon adminfont-more-vertical"
-							></i>
-							{actionMenu && (
-								<div className="dropdown">
-									<div className="dropdown-body">
-										<ul>
-											{data.status == 'active' && (
-												<li>
-													<a
-														href={`${appLocalizer.store_page_url}${data.slug}`}
-														target="_blank"
-														rel="noopener noreferrer"
-														className="item"
-													>
-														<i className="adminfont-storefront"></i>{' '}
-														{__(
-															'View Storefront',
-															'multivendorx'
-														)}{' '}
-														<i className="external adminfont-external"></i>
-													</a>
-												</li>
-											)}
-											<li
-												onClick={() => {
-													navigate(
-														`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
-														{
-															state: {
-																highlightTarget:
-																	'store-status',
-															},
-														}
-													);
-
-													setTimeout(() => {
-														navigate(
-															`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
-															{
-																replace: true,
-															}
-														);
-													}, 5000);
-													setActionMenu(false);
-												}}
-											>
-												<span className="item">
-													{' '}
-													<i className="adminfont-form-multi-select"></i>{' '}
-													{__(
-														'Manage status',
-														'multivendorx'
-													)}{' '}
-												</span>
-											</li>
-											<li>
-												<a
-													href={`${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`}
-													className="item"
-												>
-													<i className="adminfont-single-product"></i>{' '}
-													{__(
-														'Products',
-														'multivendorx'
-													)}
-												</a>
-											</li>
-
-											<li
-												onClick={() => {
-													navigate(
-														`?page=multivendorx#&tab=reports&subtab=store-orders`
-													);
-												}}
-											>
-												<span className="item">
-													<i className="adminfont-order"></i>{' '}
-													{__(
-														'Orders',
-														'multivendorx'
-													)}{' '}
-												</span>
-											</li>
-											<li
-												onClick={() => {
-													setActionMenu(false);
-													handleStoreDelete();
-												}}
-												className="delete"
-											>
-												<span className="item">
-													{' '}
-													<i className="adminfont-delete"></i>{' '}
-													{__(
-														'Delete store',
-														'multivendorx'
-													)}{' '}
-												</span>
-											</li>
-										</ul>
-									</div>
-								</div>
-							)}
-						</div>
-					</>
+					<Popover
+						className="edit-wrapper"
+						template="action"
+						toggleIcon="adminfont-more-vertical"
+						items={actionItems}
+					/>
 				}
 			/>
 

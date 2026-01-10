@@ -261,8 +261,8 @@ const AllCoupon: React.FC = () => {
 		searchField = '',
 		couponType = '',
 		typeCount = 'any',
-		startDate = '',
-		endDate = ''
+		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
+		endDate = new Date()
 	) {
 		setData([]);
 

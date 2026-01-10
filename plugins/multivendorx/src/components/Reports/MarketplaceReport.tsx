@@ -9,7 +9,7 @@ import {
 	Cell,
 } from 'recharts';
 import axios from 'axios';
-import { Analytics, Card, Column, Container, getApiLink } from 'zyra';
+import { Analytics, Card, Column, Container, getApiLink, useModules } from 'zyra';
 import { formatCurrency } from '@/services/commonFunction';
 
 type Stat = {
@@ -39,6 +39,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 	const [topCoupons, setTopCoupons] = useState<any[]>([]);
 	const [topCustomers, setTopCustomers] = useState<any[]>([]);
 	const [topStores, setTopStores] = useState<any[]>([]);
+	const { modules } = useModules();
 
 	const Counter = ({ value, duration = 1200, format }) => {
 		const [count, setCount] = React.useState(0);
@@ -97,6 +98,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						count: Number(data.facilitator_fee),
 						formatted: formatCurrency(data.facilitator_fee),
 						icon: 'adminfont-facilitator',
+						module: 'facilitator',
 					},
 					{
 						id: 'gateway_fee',
@@ -104,6 +106,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						count: Number(data.gateway_fee),
 						formatted: formatCurrency(data.gateway_fee),
 						icon: 'adminfont-credit-card',
+						condition: false,
 					},
 					{
 						id: 'shipping_amount',
@@ -111,6 +114,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						count: Number(data.shipping_amount),
 						formatted: formatCurrency(data.shipping_amount),
 						icon: 'adminfont-shipping',
+						module: 'store-shipping',
 					},
 					{
 						id: 'tax_amount',
@@ -118,6 +122,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						count: Number(data.tax_amount),
 						formatted: formatCurrency(data.tax_amount),
 						icon: 'adminfont-tax-compliance',
+						module: 'store-shipping',
 					},
 					{
 						id: 'shipping_tax_amount',
@@ -125,6 +130,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						count: Number(data.shipping_tax_amount),
 						formatted: formatCurrency(data.shipping_tax_amount),
 						icon: 'adminfont-per-product-shipping',
+						module: 'store-shipping',
 					},
 					{
 						id: 'commission_total',
@@ -139,8 +145,14 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						count: Number(data.commission_refunded),
 						formatted: formatCurrency(data.commission_refunded),
 						icon: 'adminfont-marketplace-refund',
+						module: 'marketplace-refund'
 					},
-				];
+				].filter(
+					(data) =>
+						//Show if:
+						(!data.module || modules.includes(data.module)) && // module active or not required
+						(data.condition === undefined || data.condition) // condition true or not set
+				);
 
 				// Just Admin + Store + Total for Revenue Breakdown
 				const earningSummary = [
@@ -163,26 +175,31 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						id: 'facilitator_fee',
 						title: 'Facilitator Fee',
 						price: formatCurrency(data.facilitator_fee),
+						module: 'facilitator',
 					},
 					{
 						id: 'gateway_fee',
 						title: 'Gateway Fee',
 						price: formatCurrency(data.gateway_fee),
+						condition: false
 					},
 					{
 						id: 'shipping_amount',
 						title: 'Shipping Amount',
 						price: formatCurrency(data.shipping_amount),
+						module: 'store-shipping',
 					},
 					{
 						id: 'tax_amount',
 						title: 'Tax Amount',
 						price: formatCurrency(data.tax_amount),
+						module: 'store-shipping',
 					},
 					{
 						id: 'shipping_tax_amount',
 						title: 'Shipping Tax Amount',
 						price: formatCurrency(data.shipping_tax_amount),
+						module: 'store-shipping',
 					},
 					{
 						id: 'commission_total',
@@ -193,13 +210,19 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						id: 'commission_refunded',
 						title: 'Commission Refunded',
 						price: formatCurrency(data.commission_refunded),
+						module: 'marketplace-refund'
 					},
 					{
 						id: 'grand_total',
 						title: 'Grand Total',
 						price: formatCurrency(adminEarning + storeEarning),
 					},
-				];
+				].filter(
+					(data) =>
+						//Show if:
+						(!data.module || modules.includes(data.module)) && // module active or not required
+						(data.condition === undefined || data.condition) // condition true or not set
+				);
 
 				const pieChartData = [
 					{ name: 'Admin Net Earning', value: adminEarning },
@@ -233,25 +256,21 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 	};
 
 	useEffect(() => {
-		// Top selling coupons
 		axios({
 			method: 'GET',
 			url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
-				meta_key: 'multivendorx_store_id',
-				per_page: 50, // get more so we can sort later
-				orderby: 'date', // valid param, required by API
-				order: 'desc',
+				per_page: 100, // fetch enough to rank properly
 			},
 		})
 			.then((response) => {
-				// Sort coupons manually by usage_count (descending)
-				const sortedCoupons = response.data
+				const topSellingCoupons = response.data
+					.filter((coupon) => Number(coupon.usage_count) > 0)
 					.sort((a, b) => b.usage_count - a.usage_count)
-					.slice(0, 5); // take top 5 only
+					.slice(0, 3);
 
-				setTopCoupons(sortedCoupons);
+				setTopCoupons(topSellingCoupons);
 			})
 			.catch((error) => {
 				console.error('Error fetching top coupons:', error);
@@ -262,25 +281,24 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 			url: `${appLocalizer.apiUrl}/wc-analytics/customers`,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
-				per_page: 50, // fetch more customers so we can sort manually
-				orderby: 'total_spend',
+				per_page: 3,            // only top 5
+				orderby: 'total_spend', // server-side sort
 				order: 'desc',
 			},
 		})
 			.then((response) => {
-				// Sort by total_spend manually in case API doesn't enforce order
-				const sortedCustomers = response.data
-					.sort((a, b) => b.total_spend - a.total_spend)
-					.slice(0, 5); // Top 5 customers only
-
-				setTopCustomers(sortedCustomers);
+				setTopCustomers(response.data);
 			})
 			.catch((error) => {
 				console.error('Error fetching top customers:', error);
 			});
 
-		fetchCommissionDetails();
 	}, []);
+
+	useEffect(() => {
+		if (!modules) return;
+		fetchCommissionDetails();
+	}, [modules]);
 
 	return (
 		<>

@@ -1631,6 +1631,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             }
                             proChanged={ () => setModelOpen( true ) }
                             modules={ modules } //Active module list for dependency validation.
+                            module ={inputField.moduleEnabled??''}
                             moduleChange={ ( moduleEnabled ) => {
                                 moduleEnabledChanged(
                                     String( moduleEnabled ?? '' )

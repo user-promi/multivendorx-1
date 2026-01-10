@@ -175,6 +175,11 @@ class FrontendScripts {
 					'deps'    => array( 'jquery' ),
 					'version' => $version,
 				),
+                'multivendorx-spmv-frontend-script'         => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/SPMV/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+					'deps'    => array( 'jquery' ),
+					'version' => $version,
+				),
                 'multivendorx-follow-store-frontend-script' => array(
 					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'modules/FollowStore/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
 					'deps'    => array( 'jquery' ),
@@ -579,6 +584,7 @@ class FrontendScripts {
                         'weight_unit'              => get_option( Utill::WOO_SETTINGS['weight_unit'] ),
                         'dimension_unit'           => get_option( Utill::WOO_SETTINGS['dimension_unit'] ),
                         'random_string_generate'   => wp_generate_uuid4(),
+                        'order_meta'               => Utill::ORDER_META_SETTINGS,
                     ),
                 ),
                 'multivendorx-registration-form-editor-script'    => array(

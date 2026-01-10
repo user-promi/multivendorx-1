@@ -174,7 +174,7 @@ const AdminBreadcrumbs = < T, >( {
                         { ! submenuRender && goPremium && premium && (
                             <a
                                 href={ goPremiumLink }
-                                className="menu-item pro-btn"
+                                className="tab pro-btn"
                             >
                                 <i className="adminfont-pro-tag"></i> Upgrade
                                 <i className="adminfont-arrow-right"></i>

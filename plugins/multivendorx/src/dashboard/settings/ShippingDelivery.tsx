@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
 	BasicInput,
+	Column,
+	Container,
 	DynamicRowSetting,
 	FormGroup,
 	FormGroupWrapper,
@@ -91,8 +93,9 @@ const ShippingDelivery = () => {
 			<SuccessNotice message={successMsg} />
 			{/* Only show ToggleSetting if shipping_methods has options */}
 			{appLocalizer.shipping_methods &&
-				appLocalizer.shipping_methods.length > 0 && (
-					<>
+				appLocalizer.shipping_methods.length > 0 ? (
+				<Container>
+					<Column>
 						<FormGroupWrapper>
 							<FormGroup
 								label={__('Method Type', 'multivendorx')}
@@ -297,6 +300,8 @@ const ShippingDelivery = () => {
 											)}
 											htmlFor="distance_default_cost"
 										>
+
+
 											<BasicInput
 												type="number"
 												name="distance_default_cost"
@@ -308,6 +313,12 @@ const ShippingDelivery = () => {
 												step="0.01"
 											/>
 										</FormGroup>
+										<div className="settings-metabox-description">
+											{__(
+												'Apply default shipping charge to orders that do not match any configured distance-based shipping range.',
+												'multivendorx'
+											)}
+										</div>
 
 										{/* Distance Type */}
 										<FormGroup
@@ -318,7 +329,7 @@ const ShippingDelivery = () => {
 												wrapperClass="setting-form-input"
 												descClass="settings-metabox-description"
 												description={__(
-													'Choose your preferred shipping method.',
+													'Choose kilometers or miles based on your region so shipping charges are calculated correctly.',
 													'multivendorx'
 												)}
 												options={[
@@ -348,6 +359,12 @@ const ShippingDelivery = () => {
 												step="0.1"
 											/>
 										</FormGroup>
+										<div className="settings-metabox-description">
+											{__(
+												'Set how far you are willing to deliver orders (leave blank to deliver everywhere).',
+												'multivendorx'
+											)}
+										</div>
 
 										{/* Local Pickup Cost */}
 										<FormGroup
@@ -368,6 +385,12 @@ const ShippingDelivery = () => {
 												step="0.01"
 											/>
 										</FormGroup>
+										<div className="settings-metabox-description">
+											{__(
+												'Set the fee for customers who pick up their order themselves (use 0 for free pickup, or leave blank to turn it off).',
+												'multivendorx'
+											)}
+										</div>
 
 										{/* Distance–Cost Rules */}
 										<FormGroup
@@ -403,6 +426,7 @@ const ShippingDelivery = () => {
 														},
 													],
 												}}
+
 												onChange={(updatedRules: any[]) => {
 													const updated = {
 														...formData,
@@ -416,8 +440,18 @@ const ShippingDelivery = () => {
 									</FormGroupWrapper>
 								</>
 							)}
-					</>
-				)}
+					</Column>
+				</Container>
+			)
+				: (
+					<div className="settings-metabox-description">
+						{__(
+							'No shipping methods are available at the moment.',
+							'multivendorx'
+						)}
+					</div>
+				)
+			}
 		</>
 	);
 };

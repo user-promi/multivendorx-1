@@ -1,27 +1,11 @@
 @use '../config.scss' as *;
 
-.admin-dashboard {
-    .card-wrapper {
-        margin-bottom: 1rem;
-    }
-
-    .tab-titles {
-        margin: 0;
-        padding: 0;
-        border: 0;
-
-        .title {
-            padding: 0;
-        }
-    }
-}
-
 // admin tab
 
 .admin-tab {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    .tabs-item .tab {
+        padding-top: 0;
+    }
 }
 
 // welcome section start
@@ -81,68 +65,68 @@
 
 // pro banner end
 
-.tab-titles {
-    display: flex;
-    gap: 1.313rem;
-    margin-bottom: 2.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: $border-light-small;
+// .tab-titles {
+//     display: flex;
+//     gap: 1.313rem;
+//     // margin-bottom: 2.5rem;
+//     // padding-bottom: 0.5rem;
+//     // border-bottom: $border-light-small;
 
-    .title {
-        cursor: pointer;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        gap: 0.313rem;
-        align-items: center;
-        background: #fff;
-        padding: 1rem 1rem 0.313rem 1rem;
-        min-width: 10%;
+//     .title {
+//         cursor: pointer;
+//         text-align: center;
+//         display: flex;
+//         flex-direction: column;
+//         gap: 0.313rem;
+//         align-items: center;
+//         background: #fff;
+//         padding: 1rem 1rem 0.313rem 1rem;
+//         min-width: 10%;
 
 
-        .icon {
-            font-size: 1.625rem;
-        }
+//         .icon {
+//             font-size: 1.625rem;
+//         }
 
-        p {
-            font-size: .938rem;
-            line-height: 1.5;
-            color: #707070;
-            font-weight: 500;
+//         p {
+//             font-size: .938rem;
+//             line-height: 1.5;
+//             color: #707070;
+//             font-weight: 500;
 
-            i {
-                padding-right: 0.313rem;
-                font-size: 1.125rem;
-            }
-        }
+//             i {
+//                 padding-right: 0.313rem;
+//                 font-size: 1.125rem;
+//             }
+//         }
 
-        &.active {
-            color: $theme-color;
-            border-bottom: 0.126rem solid $theme-color;
+//         &.active {
+//             color: $theme-color;
+//             border-bottom: 0.126rem solid $theme-color;
 
-            p {
-                color: $theme-color;
-            }
-        }
-    }
+//             p {
+//                 color: $theme-color;
+//             }
+//         }
+//     }
 
-    &.hover {
-        .title {
+//     &.hover {
+//         .title {
 
-            &:hover {
-                background: $theme-color;
+//             &:hover {
+//                 background: $theme-color;
 
-                i {
-                    color: #fff;
-                }
+//                 i {
+//                     color: #fff;
+//                 }
 
-                p {
-                    color: #fff;
-                }
-            }
-        }
-    }
-}
+//                 p {
+//                     color: #fff;
+//                 }
+//             }
+//         }
+//     }
+// }
 
 
 // admin dashboard card design start
@@ -740,6 +724,7 @@
             padding: 0.5rem;
             background: #efefefec;
             border-radius: 0.313rem;
+
             .feature-number {
                 padding: 0.313rem;
                 width: 1.25rem;
@@ -755,3 +740,176 @@
         }
     }
 }
+
+// dropdown menu style (table action, icon action)  remove
+.icon-wrapper {
+    position: relative;
+    .dropdown-icon{
+
+    }
+    .count {
+        position: absolute;
+        font-size: 0.75rem;
+        right: -0.25rem;
+        top: -0.45rem;
+        padding: 0.125rem;
+        background: $accent-color;
+        border-radius: 50%;
+        width: 0.75rem;
+        height: 0.75rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dropdown {
+        position: absolute;
+        top: 2rem;
+        overflow: hidden;
+        border: 0.063rem solid #e5e9f2;
+        max-width: 14rem;
+        min-width: 14rem;
+        right: 0;
+        background: #fff;
+        border-radius: 0.313rem;
+        transition: all 0.3s ease;
+        z-index: 9999;
+
+        .dropdown-body {
+            margin: 0;
+
+            .tabs-wrapper{
+                padding: 0.75rem;
+            }
+        }
+
+        .dropdown-header {
+            .title {
+                padding: 0.75rem;
+                border-bottom: $border-light-small;
+                display: flex;
+                justify-content: space-between;
+                font-size: 1.25rem;
+                align-items: center;
+            }
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0.5rem 0;
+
+            li {
+                margin: 0;
+
+                .item {
+                    display: flex;
+                    align-items: end;
+                    color: #526484;
+                    font-size: 0.95rem;
+                    line-height: 0.813;
+                    font-weight: 500;
+                    padding: .813rem 1.313rem;
+                    position: relative;
+                    gap: 0.5rem;
+                    cursor: pointer;
+
+
+                    i {
+                        font-size: 1.063rem;
+                    }
+
+                    &:hover {
+                        color: #854fff;
+                        background: $theme-background-color;
+                    }
+                }
+
+                &.delete {
+
+                    .item {
+                        color: $accent-color;
+                        border-top: 0.063rem solid;
+
+                        &:hover {
+                            background: transparent;
+                        }
+                    }
+                }
+            }
+        }
+
+        .footer {
+            padding: 0.75rem;
+            border: $border-light-small;
+        }
+
+        &.notification {
+            min-width: 25rem;
+
+            ul {
+                margin: 0;
+                max-height: 20rem;
+                overflow: auto;
+
+                li {
+                    margin: 0;
+                }
+
+                .item,
+                a {
+                    display: flex;
+                    gap: 0.813rem;
+                    padding: 0.75rem;
+                    align-items: start;
+                    border-bottom: $border-light-small;
+
+                    &:hover {
+                        background: #f3f3f3;
+                    }
+
+                    .icon {
+                        padding: 0.313rem;
+                        border-radius: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        i {
+                            font-size: 1.5rem;
+                        }
+                    }
+
+                    // .check-icon {
+                    //   font-size: 1.125rem;
+                    //   position: absolute;
+                    //   right: 1rem;
+                    // }
+
+                    .details {
+                        span {
+                            display: block;
+                        }
+
+                        .heading {
+                            font-size: 0.95rem;
+                            color: #000;
+                        }
+
+                        .message {
+                            color: #00000082;
+                            padding: 0.313rem 0;
+                        }
+
+                        .time {
+                            font-size: 0.813rem;
+                            color: #0000004a;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// dropdown menu end

@@ -67,9 +67,11 @@ export { default as InputWithSuggestions } from './components/InputWithSuggestio
 export { default as Container } from './components/UI/Container';
 export { default as Column } from './components/UI/Column';
 export { default as Card } from './components/UI/Card';
+export { default as MiniCard } from './components/UI/MiniCard';
 export { default as FormGroup } from './components/UI/FormGroup';
 export { default as FormGroupWrapper } from './components/UI/FormGroupWrapper';
 export { default as AdminButton } from './components/UI/AdminButton';
+export { default as Popover } from './components/UI/Popover';
 export { default as InfoItem } from './components/UI/InfoItem';
 export { default as Analytics } from './components/UI/Analytics';
 

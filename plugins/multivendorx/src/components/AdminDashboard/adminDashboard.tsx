@@ -29,7 +29,7 @@ interface WPPlugin {
 import './adminDashboard.scss';
 import '../dashboard.scss';
 import { useEffect, useState } from 'react';
-import { Card, Column, Container, getApiLink, sendApiResponse, SuccessNotice, useModules } from 'zyra';
+import { Card, Column, Container, getApiLink, MiniCard, sendApiResponse, SuccessNotice, useModules } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
@@ -527,17 +527,13 @@ const AdminDashboard = () => {
 								]}
 								desc={__('Unlock advanced features and premium modules to create a marketplace that stands out.', 'multivendorx')}
 							>
-								<div className="features-wrapper">
-									{featuresList.map((res, index) => (
-										<div className="feature" key={index}>
-											<i className={res.iconClass}></i>
-											<div className="content">
-												<h3>{__(res.title, 'multivendorx')}</h3>
-												<p>{__(res.desc, 'multivendorx')}</p>
-											</div>
-										</div>
-									))}
-								</div>
+								<MiniCard
+									items={featuresList.map((res) => ({
+										iconClass: res.iconClass,
+										title: res.title,
+										description: res.desc,
+									}))}
+								/>
 
 								<div className="pro-banner">
 									<div className="text">
@@ -621,204 +617,157 @@ const AdminDashboard = () => {
 
 					{/* Right Side */}
 					<Column grid={4}>
-						<Card title={__('Extend your website', 'multivendorx')}>
-							<div className="cards-wrapper plugin">
+						<Card contentHeight title={__('Extend your website', 'multivendorx')}>
+							<Column row>
 								{pluginStatus[
 									'woocommerce-catalog-enquiry'
 								] ? (
-									<div className="cards">
-										<div className="header">
-											<img src={catalogx} alt="" />
-											<div className="tag">
-												<span className="admin-badge red">
-													<i className="adminfont-pro-tag"></i>{' '}
-													{__(
-														'Pro',
-														'multivendorx'
-													)}
-												</span>
-												<a
-													href="https://catalogx.com/pricing/"
-													target="_blank"
-												>
-													{__(
-														'Get Pro',
-														'multivendorx'
-													)}
-												</a>
-											</div>
-										</div>
-										<h3>
-											{__(
-												'CatalogX Pro',
-												'multivendorx'
-											)}
-										</h3>
-										<p>
-											{__(
-												'Advanced product catalog with enhanced enquiry features and premium templates',
-												'multivendorx'
-											)}
-										</p>
-									</div>
+									<MiniCard background
+										header={
+											<>
+												<img src={catalogx} alt="" />
+												<div className="tag">
+													<span className="admin-badge red">
+														<i className="adminfont-pro-tag"></i>{' '}
+														{__('Pro', 'multivendorx')}
+													</span>
+													<a
+														href="https://catalogx.com/pricing/"
+														target="_blank"
+														rel="noopener noreferrer"
+													>
+														{__('Get Pro', 'multivendorx')}
+													</a>
+												</div>
+											</>
+										}
+										title={__('CatalogX Pro', 'multivendorx')}
+										description={__(
+											'Advanced product catalog with enhanced enquiry features and premium templates',
+											'multivendorx'
+										)}
+									/>
 								) : (
-									<div className="cards">
-										<div className="header">
-											<img src={catalogx} alt="" />
-											<div className="tag">
-												<span className="admin-badge green">
-													{__(
-														'Free',
-														'multivendorx'
-													)}
-												</span>
-												<a
-													href="#"
-													onClick={(e) => {
-														e.preventDefault();
-														if (!installing) {
-															installOrActivatePlugin(
-																'woocommerce-catalog-enquiry'
-															);
-														}
-													}}
-													style={{
-														pointerEvents:
-															installing
-																? 'none'
-																: 'auto',
-														opacity:
-															installing ===
-																'woocommerce-catalog-enquiry'
-																? 0.6
-																: 1,
-													}}
-												>
-													{installing ===
-														'woocommerce-catalog-enquiry'
-														? __(
-															'Installing...',
-															'multivendorx'
-														)
-														: __(
-															'Install',
-															'multivendorx'
-														)}
-												</a>
-											</div>
-										</div>
-										<h3>
-											{__('CatalogX', 'multivendorx')}
-										</h3>
-										<p>
-											{__(
-												'Turn your store into a product catalog with enquiry-based sales',
-												'multivendorx'
-											)}
-										</p>
-									</div>
+									<MiniCard background
+										header={
+											<>
+												<img src={catalogx} alt="" />
+												<div className="tag">
+													<span className="admin-badge green">
+														{__('Free', 'multivendorx')}
+													</span>
+													<a
+														href="#"
+														onClick={(e) => {
+															e.preventDefault();
+															if (!installing) {
+																installOrActivatePlugin(
+																	'woocommerce-catalog-enquiry'
+																);
+															}
+														}}
+														style={{
+															pointerEvents: installing ? 'none' : 'auto',
+															opacity:
+																installing ===
+																	'woocommerce-catalog-enquiry'
+																	? 0.6
+																	: 1,
+														}}
+													>
+														{installing ===
+															'woocommerce-catalog-enquiry'
+															? __('Installing...', 'multivendorx')
+															: __('Install', 'multivendorx')}
+													</a>
+												</div>
+											</>
+										}
+										title={__('CatalogX', 'multivendorx')}
+										description={__(
+											'Turn your store into a product catalog with enquiry-based sales',
+											'multivendorx'
+										)}
+									/>
 								)}
 
 								{pluginStatus[
 									'woocommerce-product-stock-alert'
 								] ? (
-									<div className="cards">
-										<div className="header">
-											<img src={notifima} alt="" />
-											<div className="tag">
-												<span className="admin-badge red">
-													<i className="adminfont-pro-tag"></i>{' '}
-													{__(
-														'Pro',
-														'multivendorx'
-													)}
-												</span>
-												<a
-													href="https://notifima.com/pricing/"
-													target="_blank"
-												>
-													{__(
-														'Get Pro',
-														'multivendorx'
-													)}
-												</a>
+									<MiniCard background
+										header={
+											<div className="header">
+												<img src={notifima} alt="" />
+												<div className="tag">
+													<span className="admin-badge red">
+														<i className="adminfont-pro-tag"></i>{' '}
+														{__('Pro', 'multivendorx')}
+													</span>
+													<a
+														href="https://notifima.com/pricing/"
+														target="_blank"
+														rel="noopener noreferrer"
+													>
+														{__('Get Pro', 'multivendorx')}
+													</a>
+												</div>
 											</div>
-										</div>
-										<h3>
-											{__(
-												'Notifima Pro',
-												'multivendorx'
-											)}
-										</h3>
-										<p>
-											{__(
-												'Advanced stock alerts, wishlist features, and premium notification system',
-												'multivendorx'
-											)}
-										</p>
-									</div>
+										}
+										title={__('Notifima Pro', 'multivendorx')}
+										description={__(
+											'Advanced stock alerts, wishlist features, and premium notification system',
+											'multivendorx'
+										)}
+									/>
 								) : (
-									<div className="cards">
-										<div className="header">
-											<img src={notifima} alt="" />
-											<div className="tag">
-												<span className="admin-badge green">
-													{__(
-														'Free',
-														'multivendorx'
-													)}
-												</span>
-												<a
-													href="#"
-													onClick={(e) => {
-														e.preventDefault();
-														if (!installing) {
-															installOrActivatePlugin(
-																'woocommerce-product-stock-alert'
-															);
-														}
-													}}
-													style={{
-														pointerEvents:
-															installing
-																? 'none'
-																: 'auto',
-														opacity:
-															installing ===
-																'woocommerce-product-stock-alert'
-																? 0.6
-																: 1,
-													}}
-												>
-													{installing ===
-														'woocommerce-product-stock-alert'
-														? __(
-															'Installing...',
-															'multivendorx'
-														)
-														: __(
-															'Install',
-															'multivendorx'
-														)}
-												</a>
-											</div>
-										</div>
-										<h3>
-											{__('Notifima', 'multivendorx')}
-										</h3>
-										<p>
-											{__(
-												'Advanced stock alerts and wishlist features for WooCommerce',
-												'multivendorx'
-											)}
-										</p>
-									</div>
+									<MiniCard background
+										header={
+											<>
+												<img src={notifima} alt="" />
+												<div className="tag">
+													<span className="admin-badge green">
+														{__('Free', 'multivendorx')}
+													</span>
+													<a
+														href="#"
+														onClick={(e) => {
+															e.preventDefault();
+															if (!installing) {
+																installOrActivatePlugin(
+																	'woocommerce-product-stock-alert'
+																);
+															}
+														}}
+														style={{
+															pointerEvents: installing ? 'none' : 'auto',
+															opacity:
+																installing ===
+																	'woocommerce-product-stock-alert'
+																	? 0.6
+																	: 1,
+														}}
+													>
+														{installing ===
+															'woocommerce-product-stock-alert'
+															? __('Installing...', 'multivendorx')
+															: __('Install', 'multivendorx')}
+													</a>
+												</div>
+											</>
+										}
+										title={__('Notifima', 'multivendorx')}
+										description={__(
+											'Advanced stock alerts and wishlist features for WooCommerce',
+											'multivendorx'
+										)}
+									/>
+
 								)}
-							</div>
+							</Column>
 						</Card>
 
 						{/* Quick Links */}
-						<Card title={__('Need help getting started?', 'multivendorx')}>
+						<Card contentHeight title={__('Need help getting started?', 'multivendorx')}>
 							<div className="cards-wrapper quick-link">
 								{resources.map((res, index) => (
 									<div className="cards" key={index}>
@@ -1027,18 +976,18 @@ const AdminDashboard = () => {
 			<Container general>
 				<Column>
 					<Card>
-						<div className="admin-tab">
-							<div className="tab-titles">
+						<div className="admin-tab tabs-wrapper">
+							<div className="tabs-item">
 								{tabs.map((tab) => (
 									<div
 										key={tab.id}
-										className={`title ${activeTab === tab.id
-											? 'active'
+										className={`tab ${activeTab === tab.id
+											? 'active-tab'
 											: ''
 											}`}
 										onClick={() => setActiveTab(tab.id)}
 									>
-										<p>
+										<p className="tab-name">
 											<i className={tab.icon}></i>
 											{tab.label}
 										</p>
