@@ -600,7 +600,7 @@ const Dashboard: React.FC = () => {
 					</Card>
 				</Column>
 
-				<Column>
+				<Column grid={4}>
 					<Card
 						title={__('Visitors Map', 'multivendorx')}
 					>
@@ -609,7 +609,7 @@ const Dashboard: React.FC = () => {
 					</Card>
 				</Column>
 
-				<Column>
+				<Column grid={8}>
 					<Card
 						title={__('Recent Orders', 'multivendorx')}
 						iconName="adminfont-external icon"
@@ -890,7 +890,6 @@ const Dashboard: React.FC = () => {
 						</Card>
 					</Column>
 				)}
-
 				{modules.includes('privacy') && Array.isArray(access) && access.includes('name') && (
 					<Column grid={4}>
 						<Card
@@ -903,7 +902,7 @@ const Dashboard: React.FC = () => {
 										title={customer.name}
 										avatar={{
 											text: customer.name?.charAt(0).toUpperCase(),
-											iconClass: 'red-color', // keeps your red avatar style
+											iconClass: 'red-color',
 										}}
 										descriptions={[
 											{
@@ -947,7 +946,7 @@ const Dashboard: React.FC = () => {
 					</Card>
 				</Column>
 				{modules.includes('store-review') && (
-					<Column grid={8}>
+					<Column grid={4}>
 						<Card
 							title={__('Latest Reviews', 'multivendorx')}
 							iconName="adminfont-external icon"
