@@ -230,6 +230,16 @@ class FrontendScripts {
 					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
 					'version' => $version,
 				),
+                'multivendorx-store-name-script'  => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/store-name/index.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
+					'version' => $version,
+				),
+                'multivendorx-store-description-script'  => array(
+					'src'     => MultiVendorX()->plugin_url . self::get_build_path_name() . 'js/blocks/store-description/index.js',
+					'deps'    => array( 'jquery', 'jquery-blockui', 'wp-element', 'wp-i18n', 'wp-blocks' ),
+					'version' => $version,
+				),
 			)
         );
         foreach ( $register_scripts as $name => $props ) {
