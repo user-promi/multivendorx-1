@@ -63,6 +63,8 @@ module.exports = {
 		'block/store-products/index': './src/blocks/store-products/index.js',
 		'block/stores/index': './src/blocks/stores/index.js',
 		'block/contact-info/index': './src/blocks/contact-info/index.js',
+		'block/store-name/index': './src/blocks/store-name/index.js',
+		'block/store-description/index': './src/blocks/store-description/index.js',
 	},
 
 	output: {
