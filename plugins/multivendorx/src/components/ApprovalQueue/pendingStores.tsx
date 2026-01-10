@@ -163,7 +163,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 			url: getApiLink(appLocalizer, `store/${rejectStoreId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
-				status: 'declined',
+				status: 'rejected',
 				_reject_note: rejectReason || '', // allow empty reason
 			},
 		})
@@ -343,7 +343,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 									icon: 'permanently-rejected',
 									text: __('Reject', 'multivendorx'),
 									className: 'red-bg',
-									onClick: () => submitReject,
+									onClick: () => submitReject(),
 								},
 							]}
 						/>
