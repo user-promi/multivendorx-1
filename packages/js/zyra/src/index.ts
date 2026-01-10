@@ -71,7 +71,7 @@ export { default as MiniCard } from './components/UI/MiniCard';
 export { default as FormGroup } from './components/UI/FormGroup';
 export { default as FormGroupWrapper } from './components/UI/FormGroupWrapper';
 export { default as AdminButton } from './components/UI/AdminButton';
-export { default as Dropdown } from './components/UI/Dropdown';
+export { default as Popover } from './components/UI/Popover';
 export { default as InfoItem } from './components/UI/InfoItem';
 export { default as Analytics } from './components/UI/Analytics';
 

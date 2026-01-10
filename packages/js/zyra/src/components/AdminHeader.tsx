@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, ReactNode } from 'react';
-import Dropdown from './UI/Dropdown';
+import Popover from './UI/Popover';
 
 // Accepts searchIndex-style items directly
 type SearchItem = {
@@ -220,23 +220,23 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
                     { /* Notifications */}
                     {showNotifications && (
-                        <div className="icon-wrapper">
-                            <i
-                                className="admin-icon adminfont-notification"
-                                title="Notifications"
-                                onClick={() => {
-                                    setNotifOpen(!notifOpen);
-                                    setProfileOpen(false);
-                                    setMessageOpen(false);
-                                    setActivityOpen(false);
-                                }}
-                            ></i>
-                            {notifOpen && notifications}
-                        </div>
+                        // <div className="icon-wrapper">
+                        //     <i
+                        //         className="admin-icon adminfont-notification"
+                        //         title="Notifications"
+                        //         onClick={() => {
+                        //             setNotifOpen(!notifOpen);
+                        //             setProfileOpen(false);
+                        //             setMessageOpen(false);
+                        //             setActivityOpen(false);
+                        //         }}
+                        //     ></i>
+                            notifications
+                        // </div>
                     )}
 
                     { /* Activities */}
-                    {showActivities && (
+                    {/* {showActivities && (
                         <div className="icon-wrapper">
                             <i
                                 className="admin-icon adminfont-notification"
@@ -250,39 +250,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                             ></i>
                             {activityOpen && activities}
                         </div>
-                    )}
-                    <Dropdown
-                        template="tab"
-                        width="22rem"
-                        toggleIcon="adminfont-notification"
-                        header={
-                            <div className="dropdown-title">
-                                <h4>Notifications</h4>
-                                <span className="count">3</span>
-                            </div>
-                        }
-                        tabs={[
-                            {
-                                id: 'messages',
-                                label: 'Messages',
-                                icon: 'adminfont-enquiry',
-                                content: notifications,
-                            },
-                            {
-                                id: 'notifications',
-                                label: 'Notifications',
-                                icon: 'adminfont-notification',
-                                content: <p>No notifications</p>,
-                            },
-                            {
-                                id: 'activity',
-                                label: 'Activity',
-                                icon: 'adminfont-activity',
-                                content: activities,
-                            },
-                        ]}
-                        defaultActiveTab="messages"
-                    />
+                    )} */}
 
                     { /* Messages */}
                     {showMessages && messages && messages.length > 0 && (
@@ -358,79 +326,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
                     {showProfile && profileItems && (
                         <>
-                            {/* <div className="icon-wrapper">
-                                <i
-                                    className="admin-icon adminfont-user-circle"
-                                    title="Admin support"
-                                    onClick={() => {
-                                        setProfileOpen(!profileOpen);
-                                        setNotifOpen(false);
-                                        setActivityOpen(false);
-                                    }}
-                                ></i>
-                                {profileOpen && (
-                                    <div className="dropdown">
-                                        <div className="dropdown-body">
-                                            <ul>
-                                                {profileItems.map(
-                                                    (item, index) => (
-                                                        <li key={index}>
-                                                            {item.link ? (
-                                                                <a
-                                                                    href={
-                                                                        item.link
-                                                                    }
-                                                                    target={
-                                                                        item.targetBlank
-                                                                            ? '_blank'
-                                                                            : '_self'
-                                                                    }
-                                                                    rel={
-                                                                        item.targetBlank
-                                                                            ? 'noopener noreferrer'
-                                                                            : ''
-                                                                    }
-                                                                    className="item"
-                                                                >
-                                                                    {item.icon && (
-                                                                        <i
-                                                                            className={
-                                                                                item.icon
-                                                                            }
-                                                                        ></i>
-                                                                    )}
-                                                                    {item.title}
-                                                                </a>
-                                                            ) : (
-                                                                <a
-                                                                    href="#"
-                                                                    className="item"
-                                                                    onClick={(
-                                                                        e
-                                                                    ) => {
-                                                                        e.preventDefault();
-                                                                        item.action?.();
-                                                                    }}
-                                                                >
-                                                                    {item.icon && (
-                                                                        <i
-                                                                            className={
-                                                                                item.icon
-                                                                            }
-                                                                        ></i>
-                                                                    )}
-                                                                    {item.title}
-                                                                </a>
-                                                            )}
-                                                        </li>
-                                                    )
-                                                )}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                )}
-                            </div> */}
-                            <Dropdown
+                            <Popover
                                 toggleIcon="admin-icon adminfont-user-circle"
                                 width="14rem"
                                 template="default"
