@@ -255,7 +255,7 @@ export default {
 			type: 'setting-toggle',
 			label: __('Franchise store assignment method', 'multivendorx'),
 			desc: __(
-				'Define how customer orders are assigned to franchise stores after checkout:<ul><li><strong>Nearest store</strong> - Orders are automatically assigned to the closest eligible franchise store based on the customer’s delivery address and the store’s configured "location restrictions".</li><li><strong>Manual assignment</strong> - Orders are created without a store assignment and must be manually assigned by the admin from the backend.</li></ul>',
+				'Define how customer orders are assigned to franchise stores after checkout:<ul><li><strong>Nearest store</strong> - Orders are automatically assigned to the closest eligible franchise store based on the customer’s delivery address and the store’s configured "location restrictions".Best suited for physical or region-based fulfillment.</li><li><strong>Manual assignment</strong> - Orders are created without a store assignment and must be manually assigned by the admin from the backend.</li></ul>',
 				'multivendorx'
 			),
 			dependent: {
@@ -268,10 +268,6 @@ export default {
 					key: 'nearest_store',
 					label: __('Nearest store', 'multivendorx'),
 					value: 'nearest_store',
-					desc: __(
-						'Automatically assign orders to the closest eligible franchise store based on the customer’s delivery address. Best suited for physical or region-based fulfillment.',
-						'multivendorx'
-					),
 				},
 				{
 					key: 'manual_assignment',
