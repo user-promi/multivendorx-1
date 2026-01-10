@@ -413,7 +413,7 @@ class Notifications {
 					'name'             => 'System announcement',
 					'desc'             => 'A system-wide announcement is published by the admin.',
 					'store_enabled'    => true,
-					'customer_enabled' => true,
+					'admin_enabled' => true,
 					'email_subject'    => 'New announcement',
 					'email_body'       => '[announcement_message]',
 					'sms_content'      => '[announcement_message]',
@@ -595,6 +595,9 @@ class Notifications {
             $to      = array_unique( $receivers );
             $subject = $event->email_subject;
             $message = $event->email_body;
+            foreach ( $parameters as $key => $value ) {
+				$message = str_replace('[' . $key . ']', $value, $message);
+			}
             $headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
             wp_mail( $to, $subject, $message, $headers );
@@ -612,6 +615,10 @@ class Notifications {
             }
 
             $message = $event->sms_content;
+
+			foreach ( $parameters as $key => $value ) {
+				$message = str_replace('[' . $key . ']', $value, $message);
+			}
 
             $gateway = $this->active_gateway();
             if ( $gateway ) {
