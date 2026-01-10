@@ -443,7 +443,7 @@ const CustomerQuestions: React.FC = () => {
 			<div className="page-title-wrapper">
 				<div className="page-title">
 					<div className="title">
-						{__('Product questions in queue', 'multivendorx')}
+						{__('Customer questions', 'multivendorx')}
 					</div>
 
 					<div className="des">

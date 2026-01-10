@@ -426,7 +426,7 @@ const StoreReview: React.FC = () => {
 				<div className="page-title">
 					<div className="title">Store Review</div>
 					<div className="des">
-						See all your store followers, engage with them, and grow your loyal customer base.
+						See all customer reviews and ratings submitted for your store in one centralized list.
 					</div>
 				</div>
 			</div>
