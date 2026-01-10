@@ -401,32 +401,40 @@ const EmailBlockSettings: React.FC<EmailBlockSettingsProps> = ({
         </>
       );
 
-    case 'columns':
-      return (
-        <>
-          <label>Layout</label>
-          <select
-            value={block.layout}
-            onChange={(e) =>
-              onChange({
-                layout: e.target.value as ColumnsBlock['layout'],
-              })
-            }
-          >
-            <option value="1">1 Column</option>
-            <option value="2-50">50 / 50</option>
-            <option value="2-66">66 / 34</option>
-            <option value="3">3 Columns</option>
-            <option value="4">4 Columns</option>
-          </select>
-        </>
+      case 'columns':
+        return (
+          <>
+            <label>Layout</label>
+            <select
+              value={block.layout}
+              onChange={(e) => {
+                const newLayout = e.target.value as ColumnsBlock['layout'];
+                const count = getColumnCount(newLayout);
+      
+                const newColumns = Array.from({ length: count }, (_, i) =>
+                  block.columns[i] || []
+                );
+      
+                onChange({
+                  layout: newLayout,
+                  columns: newColumns,
+                });
+              }}
+            >
+              <option value="1">1 Column</option>
+              <option value="2-50">50 / 50</option>
+              <option value="2-66">66 / 34</option>
+              <option value="3">3 Columns</option>
+              <option value="4">4 Columns</option>
+            </select>
+          </>      
       );
 
     default:
       return <div>No settings</div>;
   }
 };
-  
+
 const EMAIL_BLOCKS = [
   { id: 'text', icon: 'adminfont-text', value: 'text', label: 'Text' },
   { id: 'image', icon: 'adminfont-image', value: 'image', label: 'Image' },
@@ -519,10 +527,60 @@ const normalizeBlock = (item: any): EmailBlock => {
   return createBlock(item.value);
 };
 
+const getColumnCount = (layout: ColumnsBlock['layout']) => {
+  switch (layout) {
+    case '1': return 1;
+    case '2-50':
+    case '2-66': return 2;
+    case '3': return 3;
+    case '4': return 4;
+    default: return 2;
+  }
+};
+
+const BlockRenderer: React.FC<{
+  block: EmailBlock;
+  onChange: (patch: Partial<EmailBlock>) => void;
+  onSelect?: () => void;
+}> = ({ block, onChange, onSelect }) => {
+  return (
+    <div className="form-field" onClick={onSelect}>
+      <div className="drag-handle">⋮⋮</div>
+
+      {block.type === 'heading' && <h2>{block.text}</h2>}
+
+      {block.type === 'text' && (
+        <TextBlockView
+          block={block}
+          onChange={(html) => onChange({ html })}
+        />
+      )}
+
+      {block.type === 'image' && (
+        <ImageBlockView
+          block={block}
+          onChange={(src) => onChange({ src })}
+        />
+      )}
+
+      {block.type === 'divider' && <hr />}
+
+      {block.type === 'columns' && (
+        <ColumnsBlockView
+          block={block}
+          onChange={(columns) => onChange({ columns })}
+          onSelectBlock={onSelect!}
+        />
+      )}
+    </div>
+  );
+};
+
 const ColumnsBlockView: React.FC<{
   block: ColumnsBlock;
   onChange: (columns: EmailBlock[][]) => void;
-}> = ({ block, onChange }) => {
+  onSelectBlock: (block: EmailBlock) => void;
+}> = ({ block, onChange, onSelectBlock }) => {
   return (
     <div
       className={`email-columns layout-${block.layout}`}
@@ -533,11 +591,8 @@ const ColumnsBlockView: React.FC<{
     >
       {block.columns.map((col, colIndex) => (
         <div key={colIndex} className="email-column-wrapper">
-          <div className="column-label">
-            Column {colIndex + 1}
-          </div>
+          <div className="column-label">Column {colIndex + 1}</div>
 
-          {/* PLACEHOLDER — OUTSIDE SORTABLE */}
           <ReactSortable
             list={col}
             setList={(newList) => {
@@ -547,17 +602,24 @@ const ColumnsBlockView: React.FC<{
             }}
             group={{ name: 'email', pull: true, put: true }}
             className="email-column"
+            animation={150}
             handle=".drag-handle"
+            fallbackOnBody
+            swapThreshold={0.65}
           >
-            {col.length === 0 && (
-              <div className="column-placeholder">Drop blocks here</div>
-            )}
-
-            {col.map((child) => (
-              <div key={child.id} className="block child-block">
-                <div className="drag-handle">⋮⋮</div>
-                <small>{child.type.toUpperCase()}</small>
-              </div>
+            {col.map((child, childIndex) => (
+              <BlockRenderer
+                block={child}
+                onSelect={() => onSelectBlock(child)}
+                onChange={(patch) => {
+                  const updated = [...block.columns];
+                  updated[colIndex][childIndex] = {
+                    ...updated[colIndex][childIndex],
+                    ...patch,
+                  };
+                  onChange(updated);
+                }}
+              />
             ))}
           </ReactSortable>
         </div>
@@ -574,7 +636,7 @@ const EmailTemplate: React.FC = () => {
   const [activeTemplateId, setActiveTemplateId] =
     useState<string>(EMAIL_TEMPLATES[0].id);
 
-  const [openBlock, setOpenBlock] = useState<EmailBlock | null>(null);
+  const [openBlock, setOpenBlock] = useState<EmailBlock | null>(null); 
 
   const activeTemplate = templates.find(
     (t) => t.id === activeTemplateId
@@ -666,47 +728,26 @@ const EmailTemplate: React.FC = () => {
             const normalized = newList.map(normalizeBlock);
             updateBlocks(normalized);
           }}
-          group={{ name: 'email', pull: true, put: true }}
+          group={{
+            name: 'email',
+            pull: true,
+            put: true,
+          }}
           handle=".drag-handle"
+          animation={150}
+          fallbackOnBody
+          swapThreshold={0.65}
           className="email-canvas-sortable"
         >
           {activeTemplate.blocks.map((block, index) => (
-            <div
+            <BlockRenderer
               key={block.id}
-              className={`form-field ${
-                openBlock?.id === block.id ? 'active' : ''
-              }`}
-              onClick={() => setOpenBlock(block)}
-            >
-              <div className="drag-handle">⋮⋮</div>
-              {block.type === 'heading' && (
-                <h2>{block.text}</h2>
-              )}
-
-              {block.type === 'text' && (
-                <TextBlockView
-                  block={block}
-                  onChange={(html) => updateBlock(index, { html })}
-                />
-              )}
-
-              {block.type === 'image' && (
-                <ImageBlockView
-                  block={block}
-                  onChange={(src) => updateBlock(index, { src })}
-                />
-              )}
-
-              {block.type === 'columns' && (
-                <ColumnsBlockView
-                  block={block}
-                  onChange={(columns) => updateBlock(index, { columns })}
-                />
-              )}
-
-              {block.type === 'divider' && <hr />}
-            </div>
+              block={block}
+              onSelect={() => setOpenBlock(block)}
+              onChange={(patch) => updateBlock(index, patch)}
+            />          
           ))}
+
         </ReactSortable>
       </div>
 
