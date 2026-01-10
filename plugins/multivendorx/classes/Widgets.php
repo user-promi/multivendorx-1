@@ -1,6 +1,5 @@
 <?php
-namespace MultiVendorX\Widgets;
-use MultiVendorX\FrontendScripts;
+namespace MultiVendorX;
 
 defined('ABSPATH') || exit;
 
