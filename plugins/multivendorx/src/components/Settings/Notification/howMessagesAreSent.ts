@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'how-messages-are-sent',
+	id: 'notification-configuration',
 	priority: 1,
 	name: 'How messages are sent',
 	tabTitle: 'Notification recipients',

@@ -614,6 +614,10 @@ class Notifications {
                 $receivers[] = $parameters['store_phn'];
             }
 
+            if ( $event->customer_enabled ) {
+                $receivers[] = $parameters['customer_phn'];
+            }
+
             $message = $event->sms_content;
 
 			foreach ( $parameters as $key => $value ) {
