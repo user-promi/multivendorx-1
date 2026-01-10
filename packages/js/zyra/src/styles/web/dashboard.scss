@@ -79,6 +79,7 @@
             label:first-child {
                 width: 30%;
             }
+
             .checkbox-list-side-by-side,
             .setting-form-input {
                 width: 70%;
@@ -88,10 +89,12 @@
         &.align-bottom {
             align-items: end;
         }
-        &.border-top{
+
+        &.border-top {
             padding-top: 1rem;
             border-top: $border-light-small;
         }
+
         .button-wrapper {
             display: flex;
             justify-content: start;
@@ -435,7 +438,7 @@
                     color: $sub-text-color;
                     font-weight: 500;
                 }
-                
+
             }
 
             &:hover {
@@ -449,11 +452,10 @@
 
 // actively log start
 .activity-log {
-    border-left: 0.063rem solid $theme-color;
-
     .activity {
         padding: 0 0 1.45rem 1.313rem;
         position: relative;
+        border-left: 0.063rem solid $theme-color;
 
         span {
             position: absolute;
@@ -483,6 +485,9 @@
             left: -0.45rem;
             outline: 0.313rem solid $background-white;
         }
+    }
+    .activity:last-child{
+        border-left: 0.063rem solid #fff;
     }
 }
 
