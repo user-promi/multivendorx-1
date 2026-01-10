@@ -59,6 +59,12 @@ module.exports = {
 		'block/marketplace-products/index': './src/blocks/marketplace-products/index.js',
 		'block/marketplace-coupons/index': './src/blocks/marketplace-coupons/index.js',
 		'block/setup-wizard/index': './src/blocks/setup-wizard/index.js',
+		'block/store-coupons/index': './src/blocks/store-coupons/index.js',
+		'block/store-products/index': './src/blocks/store-products/index.js',
+		'block/stores/index': './src/blocks/stores/index.js',
+		'block/contact-info/index': './src/blocks/contact-info/index.js',
+		'block/store-name/index': './src/blocks/store-name/index.js',
+		'block/store-description/index': './src/blocks/store-description/index.js',
 	},
 
 	output: {
