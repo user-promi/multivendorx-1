@@ -90,21 +90,19 @@ const AllProduct: React.FC = () => {
 	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
 	const basePath = siteUrl.replace(window.location.origin, '');
 
-	const query = new URLSearchParams(location.search);
-	let element = query.get('element');
+	const params = new URLSearchParams(location.search);
+
+	let element = params.get('element');
 
 	if (!element) {
-		const parts = location.pathname.split('/').filter(Boolean);
-		if (parts.length >= 3) {
-			element = element || parts[2];
-		}
-		// if (parts.length >= 4) {
-		//     element = element || parts[2];
-		// }
+		const path = location.pathname;
+		if (path.includes('/edit/')) element = 'edit';
+		else if (path.includes('/add/')) element = 'add';
 	}
 
 	const isAddProduct = element === 'edit';
 	const isSpmvOn = element === 'add';
+
 	const fetchCategories = async () => {
 		try {
 			const response = await axios.get(
