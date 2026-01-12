@@ -103,7 +103,7 @@ class Notifications {
 					'sms_content'    => 'Store [store_name] permanently rejected.',
 					'system_message' => 'Store permanently rejected: [store_name].',
 					'tag'            => 'Store',
-					'category'       => 'activity',
+					'category'       => 'notification',
 				),
 
 				'store_activated'               => array(
@@ -116,7 +116,7 @@ class Notifications {
 					'sms_content'    => 'Store [store_name] is now active.',
 					'system_message' => 'Store activated: [store_name].',
 					'tag'            => 'Store',
-					'category'       => 'activity',
+					'category'       => 'notification',
 				),
 
 				'store_under_review'            => array(
@@ -155,7 +155,7 @@ class Notifications {
 					'sms_content'    => 'Store [store_name] permanently deactivated.',
 					'system_message' => 'Store permanently deactivated: [store_name].',
 					'tag'            => 'Store',
-					'category'       => 'activity',
+					'category'       => 'notification',
 				),
 
 				// ========== ORDER EVENTS ==========
@@ -170,7 +170,7 @@ class Notifications {
 					'sms_content'      => 'New order [order_id] received.',
 					'system_message'   => 'Order [order_id] placed successfully.',
 					'tag'              => 'Order',
-					'category'         => 'activity',
+					'category'         => 'notification',
 				),
 
 				'order_processing'              => array(
@@ -183,7 +183,7 @@ class Notifications {
 					'sms_content'      => 'Order [order_id] is now processing.',
 					'system_message'   => 'Order [order_id] status: Processing.',
 					'tag'              => 'Order',
-					'category'         => 'activity',
+					'category'         => 'notification',
 				),
 
 				'order_completed'               => array(
@@ -196,7 +196,7 @@ class Notifications {
 					'sms_content'      => 'Order [order_id] completed successfully.',
 					'system_message'   => 'Order [order_id] marked as completed.',
 					'tag'              => 'Order',
-					'category'         => 'activity',
+					'category'         => 'notification',
 				),
 
 				'order_cancelled'               => array(
@@ -210,7 +210,7 @@ class Notifications {
 					'sms_content'      => 'Order [order_id] cancelled successfully.',
 					'system_message'   => 'Order [order_id] cancelled.',
 					'tag'              => 'Order',
-					'category'         => 'activity',
+					'category'         => 'notification',
 				),
 
 				'order_refunded'                => array(
@@ -223,7 +223,7 @@ class Notifications {
 					'sms_content'      => 'Refund for [order_id] processed.',
 					'system_message'   => 'Order [order_id] refunded.',
 					'tag'              => 'Order',
-					'category'         => 'activity',
+					'category'         => 'notification',
 				),
 
 				// ========== PAYMENT ==========
@@ -237,7 +237,7 @@ class Notifications {
 					'sms_content'    => 'Payout received for [order_id].',
 					'system_message' => 'Payout for [order_id] received.',
 					'tag'            => 'Payment',
-					'category'       => 'activity',
+					'category'       => 'notification',
 				),
 
 				'payout_failed'                 => array(
@@ -250,7 +250,7 @@ class Notifications {
 					'sms_content'    => 'Payout failed for [store_name].',
 					'system_message' => 'Payout error for [store_name].',
 					'tag'            => 'Payment',
-					'category'       => 'activity',
+					'category'       => 'notification',
 				),
 
 				// ========== REFUND ==========
@@ -291,7 +291,7 @@ class Notifications {
 					'sms_content'    => 'New product “[product_name]” added by [store_name].',
 					'system_message' => 'Product “[product_name]” added successfully.',
 					'tag'            => 'Product',
-					'category'       => 'activity',
+					'category'       => 'notification',
 				),
 
 				'product_approved'              => array(
@@ -315,7 +315,7 @@ class Notifications {
 					'sms_content'    => 'Product “[product_name]” rejected.',
 					'system_message' => 'Product “[product_name]” rejected.',
 					'tag'            => 'Product',
-					'category'       => 'notification',
+					'category'       => 'activity',
 				),
 
 				'product_low_stock'             => array(
@@ -327,7 +327,7 @@ class Notifications {
 					'sms_content'    => 'Low stock alert: “[product_name]” – [quantity] left.',
 					'system_message' => 'Low stock alert for “[product_name]”.',
 					'tag'            => 'Product',
-					'category'       => 'notification',
+					'category'       => 'activity',
 				),
 
 				'product_out_of_stock'          => array(
@@ -339,7 +339,7 @@ class Notifications {
 					'sms_content'    => 'Out of stock: “[product_name]”.',
 					'system_message' => 'Product “[product_name]” is out of stock.',
 					'tag'            => 'Product',
-					'category'       => 'notification',
+					'category'       => 'activity',
 				),
 
 				// ========== WITHDRAWALS ==========
@@ -353,7 +353,7 @@ class Notifications {
 					'sms_content'    => 'Withdrawal request of [amount] submitted.',
 					'system_message' => 'Withdrawal requested by [store_name].',
 					'tag'            => 'Payment',
-					'category'       => 'notification',
+					'category'       => 'activity',
 				),
 
 				'withdrawal_released'           => array(
@@ -392,7 +392,7 @@ class Notifications {
 					'sms_content'      => 'Product “[product_name]” reported.',
 					'system_message'   => 'Abuse report for “[product_name]” received.',
 					'tag'              => 'Report',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
 				'report_abuse_action_taken'     => array(
@@ -461,7 +461,7 @@ class Notifications {
 					'sms_content'    => 'New coupon from [store_name]: [coupon_code].',
 					'system_message' => 'New coupon added by followed store [store_name].',
 					'tag'            => 'Coupon',
-					'category'       => 'activity',
+					'category'       => 'notifications',
 				),
 
 				'order_ready_to_ship'           => array(
@@ -498,7 +498,7 @@ class Notifications {
 					'sms_content'      => 'Return request for order #{order_id}.',
 					'system_message'   => 'Return request received for order #{order_id}.',
 					'tag'              => 'Refund',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
             )
         );

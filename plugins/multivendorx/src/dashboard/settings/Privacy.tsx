@@ -95,9 +95,6 @@ const Privacy = () => {
 									<FormGroup>
 										<TextArea
 											name="store_policy"
-											wrapperClass="setting-from-textarea"
-											inputClass="textarea-input"
-											descClass="settings-metabox-description"
 											value={formData.store_policy}
 											onChange={handleChange}
 											usePlainText={false}
@@ -119,9 +116,6 @@ const Privacy = () => {
 									<FormGroup>
 										<TextArea
 											name="shipping_policy"
-											wrapperClass="setting-from-textarea"
-											inputClass="textarea-input"
-											descClass="settings-metabox-description"
 											value={formData.shipping_policy}
 											onChange={handleChange}
 											usePlainText={false}
@@ -143,9 +137,6 @@ const Privacy = () => {
 									<FormGroup>
 										<TextArea
 											name="refund_policy"
-											wrapperClass="setting-from-textarea"
-											inputClass="textarea-input"
-											descClass="settings-metabox-description"
 											value={formData.refund_policy}
 											onChange={handleChange}
 											usePlainText={false}
@@ -167,9 +158,6 @@ const Privacy = () => {
 									<FormGroup>
 										<TextArea
 											name="cancellation_policy"
-											wrapperClass="setting-from-textarea"
-											inputClass="textarea-input"
-											descClass="settings-metabox-description"
 											value={formData.cancellation_policy}
 											onChange={handleChange}
 											usePlainText={false}
@@ -241,7 +229,6 @@ const Privacy = () => {
 									</label>
 									<TextArea
 										name="deactivation_reason"
-										inputClass="textarea-input"
 										value={
 											updateData.deactivation_reason || ''
 										}

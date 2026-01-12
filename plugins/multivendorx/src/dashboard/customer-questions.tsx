@@ -513,7 +513,7 @@ const CustomerQuestions: React.FC = () => {
 							<BasicInput
 								name="question"
 								value={qna}
-								wrapperClass="setting-form-input"
+								 
 								descClass="settings-metabox-description"
 								onChange={(e) => setQna(e.target.value)}
 							/>
@@ -522,7 +522,6 @@ const CustomerQuestions: React.FC = () => {
 						<FormGroup label={__('Answer', 'multivendorx')} htmlFor="ans">
 							<TextArea
 								name="answer"
-								inputClass="textarea-input"
 								value={answer}
 								onChange={(e) => setAnswer(e.target.value)}
 							/>

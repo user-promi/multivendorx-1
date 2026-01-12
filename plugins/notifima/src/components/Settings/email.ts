@@ -12,7 +12,6 @@ export default {
         {
             key: 'ban_email_domains',
             type: 'textarea',
-            class: 'textarea-input',
             desc: __(
                 'Specify email domains that are restricted from subscribing. You can add multiple commma seperated emails.',
                 'notifima'
@@ -28,7 +27,6 @@ export default {
         {
             key: 'ban_email_domain_text',
             type: 'textarea',
-            class: 'textarea-input',
             label: __( 'Blocked domain alert message', 'notifima' ),
             desc: __(
                 'Create an alert message for users attempting to subscribe from blocked domains.',
@@ -44,7 +42,6 @@ export default {
         {
             key: 'ban_email_addresses',
             type: 'textarea',
-            class: 'textarea-input',
             desc: __(
                 'Specify email addresses that are restricted from subscribing. You can add multiple commma seperated emails.',
                 'notifima'
@@ -60,7 +57,6 @@ export default {
         {
             key: 'ban_email_address_text',
             type: 'textarea',
-            class: 'textarea-input',
             label: __( 'Blocked email alert message', 'notifima' ),
             desc: __(
                 'Create an alert message for users attempting to subscribe from blocked Email ID.',

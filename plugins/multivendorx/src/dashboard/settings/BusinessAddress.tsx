@@ -307,7 +307,7 @@ const BusinessAddress = () => {
 					<BasicInput
 						name="location_address"
 						value={addressData.location_address}
-						wrapperClass="setting-form-input"
+						 
 						descClass="settings-metabox-description"
 						onChange={handleAddressChange}
 					/>
@@ -317,7 +317,7 @@ const BusinessAddress = () => {
 					<BasicInput
 						name="city"
 						value={addressData.city}
-						wrapperClass="setting-form-input"
+						 
 						descClass="settings-metabox-description"
 						onChange={handleAddressChange}
 					/>
@@ -328,7 +328,7 @@ const BusinessAddress = () => {
 					<BasicInput
 						name="zip"
 						value={addressData.zip}
-						wrapperClass="setting-form-input"
+						 
 						descClass="settings-metabox-description"
 						onChange={handleAddressChange}
 					/>

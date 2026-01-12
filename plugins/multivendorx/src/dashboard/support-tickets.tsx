@@ -12,6 +12,7 @@ import {
 	AdminButton,
 	FormGroupWrapper,
 	FormGroup,
+	TextArea,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -124,7 +125,7 @@ const SupportTickets: React.FC = () => {
 		searchField = '',
 		orderBy = '',
 		order = '',
-		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
+		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date()
 	) {
 		setData([]);
@@ -495,7 +496,6 @@ const SupportTickets: React.FC = () => {
 									setSelectedReview(row.original);
 									setReplyText(row.original.reply || '');
 								},
-								hover: true,
 							},
 							{
 								label: __('Delete', 'multivendorx'),
@@ -538,7 +538,6 @@ const SupportTickets: React.FC = () => {
 										}
 									}
 								},
-								hover: true,
 							},
 						],
 					}}
@@ -546,6 +545,7 @@ const SupportTickets: React.FC = () => {
 			),
 		},
 	];
+	
 	return (
 		<>
 			<div className="page-title-wrapper">
@@ -569,7 +569,6 @@ const SupportTickets: React.FC = () => {
 				perPageOption={[10, 25, 50]}
 				totalCounts={totalRows}
 				typeCounts={status as Status[]}
-				// searchFilter={searchFilter}
 				realtimeFilter={realtimeFilter}
 			/>
 			{selectedReview && (
@@ -577,6 +576,7 @@ const SupportTickets: React.FC = () => {
 					open={!!selectedReview}
 					onClose={() => setSelectedReview(null)}
 					width="31.25rem"
+					height= "70%"
 					header={{
 						icon: 'store-review',
 						title: `${__('Reply to Review', 'multivendorx')} - ${selectedReview.store_name}`,
@@ -599,7 +599,6 @@ const SupportTickets: React.FC = () => {
 							]}
 						/>
 					}
-
 				>
 					<>
 						<FormGroupWrapper>
@@ -654,23 +653,18 @@ const SupportTickets: React.FC = () => {
 							</div>
 
 							<FormGroup label={__('Respond to customer', 'multivendorx')} htmlFor="respond-to-customer">
-								<textarea
-									id="reply"
+								<TextArea
+									name="content"
 									value={replyText}
-									onChange={(e) =>
+									onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
 										setReplyText(e.target.value)
 									}
-									rows={5}
-									className="textarea-input"
 								/>
 							</FormGroup>
 
 							{/* Status Toggle */}
 							<FormGroup label={__('Control if this review appears publicly, stays under moderation, or is excluded from the store page.', 'multivendorx')}>
 								<ToggleSetting
-									wrapperclassName="setting-form-input"
-									descclassName="settings-metabox-description"
-									//description={__('Change review status', 'multivendorx')}
 									options={[
 										{
 											key: 'pending',

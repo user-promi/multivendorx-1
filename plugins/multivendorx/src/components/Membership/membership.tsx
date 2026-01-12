@@ -689,7 +689,7 @@ const Membership = ({ id }: { id: string }) => {
 							action={
 								<div className="field-wrapper">
 									<ToggleSetting
-										wrapperClass="setting-form-input"
+										 
 										descClass="settings-metabox-description"
 										options={[
 											{
@@ -724,7 +724,7 @@ const Membership = ({ id }: { id: string }) => {
 								<FormGroup label="Name" htmlFor="product-name">
 									<BasicInput
 										name="name"
-										wrapperClass="setting-form-input"
+										 
 										descClass="settings-metabox-description"
 										value={formData.name}
 										onChange={handleChange}
@@ -733,9 +733,6 @@ const Membership = ({ id }: { id: string }) => {
 								<FormGroup label="Description" htmlFor="short_description">
 									<TextArea
 										name="short_description"
-										wrapperClass="setting-from-textarea"
-										inputClass="textarea-input"
-										descClass="settings-metabox-description"
 									/>
 								</FormGroup>
 							</FormGroupWrapper>
@@ -862,7 +859,7 @@ const Membership = ({ id }: { id: string }) => {
 									>
 										<BasicInput
 											name="product_category_limit"
-											wrapperClass="setting-form-input"
+											 
 											descClass="settings-metabox-description"
 											value={formData.product_category_limit}
 											onChange={handleChange}
@@ -910,7 +907,7 @@ const Membership = ({ id }: { id: string }) => {
 								<FormGroup row label="How many listings a store can add" className="border-top" desc={__('Control how many listings a store can have at the same time.', 'multivendorx')}>
 									<BasicInput
 										name="name"
-										wrapperClass="setting-form-input"
+										 
 										descClass="settings-metabox-description"
 										value={formData.name}
 										onChange={handleChange}
@@ -923,7 +920,7 @@ const Membership = ({ id }: { id: string }) => {
 								<FormGroup row label="Images per listing" className="border-top" desc={__('Control how many images a store can add for each listing.', 'multivendorx')}>
 									<BasicInput
 										name="name"
-										wrapperClass="setting-form-input"
+										 
 										descClass="settings-metabox-description"
 										value={formData.name}
 										onChange={handleChange}
@@ -1084,7 +1081,7 @@ const Membership = ({ id }: { id: string }) => {
 								<FormGroup row label="AI for writing product details" desc={__('AI for writing product details', 'multivendorx')}>
 									<BasicInput
 										name="name"
-										wrapperClass="setting-form-input"
+										 
 										descClass="settings-metabox-description"
 										value={formData.name}
 										onChange={handleChange}
@@ -1095,7 +1092,7 @@ const Membership = ({ id }: { id: string }) => {
 								<FormGroup row label="AI for writing product details" className="border-top" desc={__('AI for writing product details', 'multivendorx')}>
 									<BasicInput
 										name="name"
-										wrapperClass="setting-form-input"
+										 
 										descClass="settings-metabox-description"
 										value={formData.name}
 										onChange={handleChange}
@@ -1150,7 +1147,7 @@ const Membership = ({ id }: { id: string }) => {
 									htmlFor="membership_type"
 								>
 									<ToggleSetting
-										wrapperClass="setting-form-input"
+										 
 										descClass="settings-metabox-description"
 										options={[
 											{
@@ -1182,7 +1179,7 @@ const Membership = ({ id }: { id: string }) => {
 										>
 											<BasicInput
 												name="signup_fee"
-												wrapperClass="setting-form-input"
+												 
 												descClass="settings-metabox-description"
 												value={formData.signup_fee}
 												onChange={handleChange}
@@ -1197,7 +1194,7 @@ const Membership = ({ id }: { id: string }) => {
 										>
 											<BasicInput
 												name="recurring_price"
-												wrapperClass="setting-form-input"
+												 
 												descClass="settings-metabox-description"
 												postInnerText = "month"
 												value={formData.recurring_price}
