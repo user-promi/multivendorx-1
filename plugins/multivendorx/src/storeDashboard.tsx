@@ -518,7 +518,7 @@ const Dashboard = () => {
 									}
 								>
 									<div
-										className={`adminfont-icon dark-icon ${isDarkMode
+										className={`adminfont-icon admin-icon dark-icon ${isDarkMode
 											? 'adminfont-light'
 											: 'adminfont-moon'
 											}`}
@@ -526,13 +526,13 @@ const Dashboard = () => {
 								</li>
 
 								<li className="tooltip-wrapper bottom">
-									<i className="adminfont-icon adminfont-product-addon"></i>
+									<i className="admin-icon adminfont-product-addon"></i>
 									<span className="tooltip-name">
 										Add product
 									</span>
 								</li>
 								<li className="tooltip-wrapper bottom">
-									<i className="adminfont-icon adminfont-storefront"></i>
+									<i className="admin-icon adminfont-storefront"></i>
 									<span className="tooltip-name">view storefront</span>
 								</li>
 								{/* <li className="tooltip-wrapper bottom">
@@ -546,11 +546,12 @@ const Dashboard = () => {
 
 									{showNotifications && <Notifications type="notification" />}
 								</li> */}
+								<li className="tooltip-wrapper bottom">
 								<Popover
 									template="tab"
 									width="24rem"
 									toggleIcon="adminfont-notification"
-									toggleContent={<span className="count">0</span>}
+									toggleContent={<><span className="count">0</span> <span className="tooltip-name">Notification</span></>}
 									onTabChange={(tabId) => {
 										setActiveType(
 											tabId === 'activities' ? 'activity' : 'notification'
@@ -622,7 +623,8 @@ const Dashboard = () => {
 										</div>
 									}
 								/>
-								{/* <li className="tooltip-wrapper bottom"> */}
+								</li>
+								<li className="tooltip-wrapper bottom">
 								<Popover
 									toggleIcon="adminfont-announcement"
 									toggleContent={<span className="tooltip-name">Announcements</span>}
@@ -665,14 +667,14 @@ const Dashboard = () => {
 										</a>
 									}
 								/>
-								{/* </li> */}
+								</li>
 
 								<li
 									id="fullscreenToggle"
 									onClick={toggleFullscreen}
 									className="tooltip-wrapper bottom"
 								>
-									<i className="adminfont-icon adminfont-crop-free"></i>
+									<i className="admin-icon adminfont-crop-free"></i>
 									<span className="tooltip-name">
 										Full Screen
 									</span>
@@ -685,7 +687,7 @@ const Dashboard = () => {
 										className="avatar-wrapper"
 										onClick={toggleUserDropdown}
 									>
-										<i className="adminfont-icon adminfont-person"></i>
+										<i className="admin-icon adminfont-person"></i>
 									</div>
 									{showUserDropdown && (
 										<div className="dropdown-menu" ref={userDropdownRef}>

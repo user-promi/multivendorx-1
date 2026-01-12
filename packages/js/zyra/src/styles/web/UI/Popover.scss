@@ -2,9 +2,7 @@
 
 .popover-wrapper {
     position: relative;
-    .popover-icon{
-        
-    }
+
     .count {
         position: absolute;
         font-size: 0.75rem;
@@ -36,7 +34,7 @@
         .popover-body {
             margin: 0;
 
-            .tabs-wrapper{
+            .tabs-wrapper {
                 padding: 0.75rem;
             }
         }
@@ -138,11 +136,13 @@
                             font-size: 1.5rem;
                         }
                     }
-                    i{
+
+                    i {
                         font-size: 1.625rem;
                         padding: 0.45rem;
                         border-radius: 50%;
                     }
+
                     .details {
                         span {
                             display: block;
@@ -163,7 +163,8 @@
                             color: #0000004a;
                         }
                     }
-                    .time{
+
+                    .time {
                         position: absolute;
                         top: 0.5rem;
                         right: 0.5rem;
@@ -171,5 +172,19 @@
                 }
             }
         }
+    }
+}
+
+.popover-icon,
+.admin-icon {
+    font-size: 1.125rem;
+    padding: 0.4rem;
+    border-radius: 50%;
+    // color: $theme-color;
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+        background: #e7e6e6cf;
     }
 }

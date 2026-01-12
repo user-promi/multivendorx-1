@@ -85,7 +85,7 @@ const Popover: React.FC<PopoverProps> = ({
                     setOpen((prev) => !prev);
                 }}
             >
-                {toggleIcon && <i className={`admin-icon ${toggleIcon}`}></i>}
+                {toggleIcon && <i className={`popover-icon ${toggleIcon}`}></i>}
                 {toggleContent}
             </div>
 
