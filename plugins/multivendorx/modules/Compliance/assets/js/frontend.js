@@ -20,8 +20,15 @@ jQuery(function ($) {
 	// Fetch reasons dynamically on form open
 	$(document).on('click', '.open-report-abuse', function (e) {
 		e.preventDefault();
+		e.stopPropagation();
+
 		var $form = $(this).siblings('.report-abuse-form');
-		$form.toggle();
+
+		// Close other open popups (optional but recommended)
+		$('.report-abuse-form').not($form).fadeOut(200);
+
+		// Toggle current popup
+		$form.fadeToggle(200);
 
 		var $wrapper = $form.find('.report-abuse-reasons-wrapper');
 
@@ -35,19 +42,44 @@ jQuery(function ($) {
 					if (res.success) {
 						$.each(res.data, function (i, reason) {
 							var radio =
-								'<div class="woocommerce-form__radio"><label class="woocommerce-form__label woocommerce-form__label-for-radio"><input type="radio" class="woocommerce-form__input woocommerce-form__input-radio" name="report_abuse_reason_' +
+								'<div class="woocommerce-form__radio">' +
+								'<label class="woocommerce-form__label woocommerce-form__label-for-radio">' +
+								'<input type="radio" class="woocommerce-form__input woocommerce-form__input-radio" ' +
+								'name="report_abuse_reason_' +
 								$form.find('.report_abuse_product_id').val() +
 								'" value="' +
 								reason +
 								'"> <span>' +
 								reason +
-								'</span> </label></div>';
+								'</span></label></div>';
+
 							$wrapper.append(radio);
 						});
 					}
 				},
 			});
 		}
+	});
+
+	// Close popup on X click
+	$(document).on('click', '.popup-close', function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+		$(this).closest('.report-abuse-form').fadeOut(200);
+	});
+
+	// Prevent closing when clicking inside the form
+	$(document).on(
+		'click',
+		'.woocommerce-form.woocommerce-form-login.login',
+		function (e) {
+			e.stopPropagation();
+		}
+	);
+
+	// Close popup when clicking outside
+	$(document).on('click', function () {
+		$('.report-abuse-form').fadeOut(200);
 	});
 
 	// Show/hide custom message textarea if "Other" is selected
@@ -80,7 +112,7 @@ jQuery(function ($) {
 			.val();
 		var msg =
 			reason === 'Other'
-				? $form.find('.report_abuse_msg').val().trim()
+				? $form.find('.report-abuse-msg').val().trim()
 				: reason;
 		var pid = $form.find('.report_abuse_product_id').val();
 		var $msgBox = $form.find('.report-abuse-msg-box');

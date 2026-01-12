@@ -866,7 +866,7 @@ const AllCoupon: React.FC = () => {
 			{AddCoupon && (
 				<CommonPopup
 					open={AddCoupon}
-					onClick={() => setAddCoupon(false)}
+					onClose={() => setAddCoupon(false)}
 					width="31.25rem"
 					height="100%"
 					header={{
@@ -963,24 +963,22 @@ const AllCoupon: React.FC = () => {
 					</>
 				</CommonPopup>
 			)}
-			<div className="admin-table-wrapper">
-				<Table
-					data={data}
-					columns={columns as ColumnDef<Record<string, any>, any>[]}
-					rowSelection={rowSelection}
-					onRowSelectionChange={setRowSelection}
-					defaultRowsPerPage={10}
-					pageCount={pageCount}
-					pagination={pagination}
-					onPaginationChange={setPagination}
-					realtimeFilter={realtimeFilter}
-					perPageOption={[10, 25, 50]}
-					handlePagination={requestApiForData}
-					totalCounts={totalRows}
-					typeCounts={couponTypeCounts}
-					searchFilter={searchFilter}
-				/>
-			</div>
+			<Table
+				data={data}
+				columns={columns as ColumnDef<Record<string, any>, any>[]}
+				rowSelection={rowSelection}
+				onRowSelectionChange={setRowSelection}
+				defaultRowsPerPage={10}
+				pageCount={pageCount}
+				pagination={pagination}
+				onPaginationChange={setPagination}
+				realtimeFilter={realtimeFilter}
+				perPageOption={[10, 25, 50]}
+				handlePagination={requestApiForData}
+				totalCounts={totalRows}
+				typeCounts={couponTypeCounts}
+				searchFilter={searchFilter}
+			/>
 		</>
 	);
 };

@@ -546,99 +546,33 @@ const Dashboard = () => {
 									{showNotifications && <Notifications type="notification" />}
 								</li>
 								<li className="tooltip-wrapper bottom">
-									<i
-										className="adminfont-icon notification adminfont-announcement"
-										onClick={toggleAnnouncements}
-									></i>
-									<span className="tooltip-name">
-										Announcements
-									</span>
-									{showAnnouncements && (
-										<>
-											<div className="dropdown-menu notification" ref={userDropdownRef}>
-												<div className="title">
-													{__('Announcements', 'multivendorx')}
-													{announcement && announcement.length > 0 && (
-														<span className="admin-badge green">
-															{announcement.length} {__('New', 'multivendorx')}
-														</span>
-													)}
-												</div>
-												<div className="notification">
-													{announcement && announcement.length > 0 ? (
-														<ul>
-															{announcement.map((item, index) => (
-																<li key={item.id}>
-																	<div className="item"
-																	// onClick={() => handleNotificationClick(item.id)}
-																	>
-																		<div className={`icon admin-badge admin-color${index + 1}`} >
-																			<i
-																				// className={
-																				// 	item.icon || 'adminfont-user-network-icon'
-																				// }
-																				className={
-																					'adminfont-user-network-icon'
-																				}
-																			></i>
-																		</div>
-																		<div className="details">
-																			<span className="heading">{item.title}</span>
-																			<span className="message">{item.content}</span>
-																			<span className="time">{formatTimeAgo(item.date)}</span>
-																		</div>
-																	</div>
-																</li>
-															))}
-														</ul>
-													) : (
-														<div className="no-data">
-															{__('No announcements found.', 'multivendorx')}
-														</div>
-													)}
-												</div>
-
-												<div className="footer">
-													<a
-														href={
-															appLocalizer.permalink_structure
-																? `${appLocalizer.site_url.replace(/\/$/, '')}/${appLocalizer.dashboard_slug}/view-notifications/#subtab=announcements`
-																: `${appLocalizer.site_url.replace(/\/$/, '')}/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=announcements`
-														}
-														className="admin-btn btn-purple"
-													>
-														<i className="adminfont-eye"></i>{__('View all announcements', 'multivendorx')}
-													</a>
-												</div>
-											</div>
-										</>
-									)
-									}
-								</li>
-								{/* <li className="tooltip-wrapper bottom">
 									<Popover
+										toggleIcon="adminfont-announcement"
+										toggleContent={<span className="tooltip-name">Announcements</span>}
 										template="notification"
-										width="22rem"
-										toggleIcon="adminfont-notification"
+										width="20rem"
+										className="tooltip-wrapper bottom"
+										items={announcement?.length
+											? announcement.map((item, index) => ({
+												title: item.title,
+												desc: item.content,
+												time: formatTimeAgo(item.date),
+												icon: `adminfont-user-network-icon admin-badge admin-color${index + 1}`,
+												action: () => {
+													// optional: handle click on individual announcement
+													// handleNotificationClick(item.id)
+												},
+											}))
+											: []}
 										header={
 											<div className="title">
 												{__('Announcements', 'multivendorx')}
-												{announcement?.length > 0 && (
+												{announcement && announcement.length > 0 && (
 													<span className="admin-badge green">
 														{announcement.length} {__('New', 'multivendorx')}
 													</span>
 												)}
 											</div>
-										}
-										items={
-											announcementItems.length
-												? announcementItems
-												: [
-													{
-														title: __('No announcements found.', 'multivendorx'),
-														className: 'no-data',
-													},
-												]
 										}
 										footer={
 											<a
@@ -654,7 +588,7 @@ const Dashboard = () => {
 											</a>
 										}
 									/>
-								</li> */}
+								</li>
 
 								<li
 									id="fullscreenToggle"

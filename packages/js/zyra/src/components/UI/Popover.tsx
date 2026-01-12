@@ -30,6 +30,8 @@ interface PopoverProps {
     tabs?: PopoverTab[];
     defaultActiveTab?: string;
     className?: string;
+
+    onTabChange?: (tabId: string) => void;
 }
 
 const Popover: React.FC<PopoverProps> = ({
@@ -43,6 +45,7 @@ const Popover: React.FC<PopoverProps> = ({
     tabs = [],
     defaultActiveTab,
     className = '',
+    onTabChange
 }) => {
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -132,7 +135,10 @@ const Popover: React.FC<PopoverProps> = ({
                                                 key={tab.id}
                                                 className={`tab ${activeTab === tab.id ? 'active-tab' : ''
                                                     }`}
-                                                onClick={() => setActiveTab(tab.id)}
+                                                onClick={() => {
+                                                    setActiveTab(tab.id);
+                                                    onTabChange?.(tab.id);
+                                                }}
                                             >
                                                 <span className="tab-name">{tab.label}</span>
                                             </div>
