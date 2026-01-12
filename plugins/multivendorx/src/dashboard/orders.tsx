@@ -22,7 +22,7 @@ type FilterData = {
 	searchAction?: string;
 	searchField?: string;
 	category?: any;
-	typeCount?: any;
+	categoryFilter?: any;
 	stock_status?: string;
 	productType?: string;
 };
@@ -81,7 +81,7 @@ const Orders: React.FC = () => {
 		if (hash === 'refund-requested') {
 			// call API with refund-requested filter
 			requestApiForData(rowsPerPage, currentPage, {
-				typeCount: 'refund-requested',
+				categoryFilter: 'refund-requested',
 			});
 		} else {
 			// normal API call
@@ -221,9 +221,9 @@ const Orders: React.FC = () => {
 			}
 		}
 
-		// Add typeCount filter
-		if (filterData.typeCount && filterData.typeCount !== 'all') {
-			params.status = filterData.typeCount;
+		// Add categoryFilter filter
+		if (filterData.categoryFilter && filterData.categoryFilter !== 'all') {
+			params.status = filterData.categoryFilter;
 		}
 		console.log('params', params);
 		requestData(rowsPerPage, currentPage, startDate, endDate, params);
@@ -753,7 +753,7 @@ const Orders: React.FC = () => {
 						totalCounts={totalRows}
 						searchFilter={searchFilter}
 						realtimeFilter={realtimeFilter}
-						typeCounts={orderStatus}
+						categoryFilter={orderStatus}
 						bulkActionComp={() => <BulkAction />}
 						defaultCounts={hash ? 'refund-requested' : 'all'}
 					/>
