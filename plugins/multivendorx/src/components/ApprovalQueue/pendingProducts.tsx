@@ -383,8 +383,6 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
-						wrapperClass=""
-						inputClass=""
 						onChange={(range: any) =>
 							updateFilter('date', {
 								start_date: range.startDate,

@@ -209,8 +209,6 @@ const StoreReview: React.FC = () => {
 			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
-						wrapperclassName=""
-						inputclassName=""
 						onChange={(range: any) =>
 							updateFilter('date', {
 								start_date: range.startDate,
