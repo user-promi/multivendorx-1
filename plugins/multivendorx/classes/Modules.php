@@ -174,7 +174,9 @@ class Modules
                         'module_file'  => MultiVendorX()->plugin_path . 'modules/WPML/Module.php',
                         'module_class' => 'MultiVendorX\WPML\Module',
                         'requires'     => array(
-                            'plugin' => 'sitepress-multilingual-cms/sitepress.php',
+                            'plugin' => array(
+                                'sitepress-multilingual-cms/sitepress.php',
+                            ),
                         ),
                     ),
                 )
@@ -259,49 +261,6 @@ class Modules
 
         self::$module_activated = true;
     }
-    /**
-     * Check whether a WordPress plugin is active (single or multisite).
-     *
-     * @param string $plugin Plugin folder OR plugin file.
-     *
-     * @return bool
-     */
-    public function is_plugin_active($plugin)
-    {
-
-        if (! function_exists('is_plugin_active')) {
-            require_once ABSPATH . 'wp-admin/includes/plugin.php';
-        }
-
-        // Full plugin file provided
-        if (str_contains($plugin, '/')) {
-            return is_plugin_active($plugin)
-                || (is_multisite() && is_plugin_active_for_network($plugin));
-        }
-
-        // Folder-only check
-        $active_plugins = (array) get_option('active_plugins', []);
-
-        foreach ($active_plugins as $active) {
-            if (str_starts_with($active, trailingslashit($plugin))) {
-                return true;
-            }
-        }
-
-        if (is_multisite()) {
-            $network_plugins = array_keys(
-                (array) get_site_option('active_sitewide_plugins', [])
-            );
-
-            foreach ($network_plugins as $active) {
-                if (str_starts_with($active, trailingslashit($plugin))) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 
     /**
      * Check a perticular module is available or not.
@@ -314,8 +273,11 @@ class Modules
     {
 
         if (! empty($module['requires']['plugin'])) {
-            if (! $this->is_plugin_active($module['requires']['plugin'])) {
-                return false;
+            $plugins = $module['requires']['plugin'];
+            foreach ($plugins as $plugin_slug) {
+                if (! Utill::is_active_plugin($plugin_slug)) {
+                    return false;
+                }
             }
         }
 
