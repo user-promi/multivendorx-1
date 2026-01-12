@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
-import { MultiCalendarInput, Table, TableCell } from 'zyra';
+import { MultiCalendarInput, Table, TableCell, useModules } from 'zyra';
 import {
 	ColumnDef,
 	RowSelectionState,
@@ -22,7 +22,7 @@ type FilterData = {
 	searchAction?: string;
 	searchField?: string;
 	category?: any;
-	typeCount?: any;
+	categoryFilter?: any;
 	stock_status?: string;
 	productType?: string;
 };
@@ -35,6 +35,7 @@ export interface RealtimeFilter {
 }
 
 const Orders: React.FC = () => {
+	const { modules } = useModules();
 	const location = useLocation();
 	const [data, setData] = useState<any[]>([]);
 	const [pagination, setPagination] = useState<PaginationState>({
@@ -81,7 +82,7 @@ const Orders: React.FC = () => {
 		if (hash === 'refund-requested') {
 			// call API with refund-requested filter
 			requestApiForData(rowsPerPage, currentPage, {
-				typeCount: 'refund-requested',
+				categoryFilter: 'refund-requested',
 			});
 		} else {
 			// normal API call
@@ -98,11 +99,14 @@ const Orders: React.FC = () => {
 				'on-hold',
 				'completed',
 				'cancelled',
-				'refund-requested',
 				'refunded',
 				'failed',
 				'trash',
 			];
+
+			if (modules.includes('marketplace-refund')) {
+				statuses.push('refund-requested');
+			}
 
 			const counts: OrderStatus[] = await Promise.all(
 				statuses.map(async (status) => {
@@ -131,7 +135,7 @@ const Orders: React.FC = () => {
 							status === 'all'
 								? __('All', 'multivendorx')
 								: status.charAt(0).toUpperCase() +
-									status.slice(1),
+								status.slice(1),
 						count: total,
 					};
 				})
@@ -156,7 +160,7 @@ const Orders: React.FC = () => {
 	function requestData(
 		rowsPerPage = 10,
 		currentPage = 1,
-		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
+		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date(),
 		extraParams: any = {}
 	) {
@@ -221,11 +225,10 @@ const Orders: React.FC = () => {
 			}
 		}
 
-		// Add typeCount filter
-		if (filterData.typeCount && filterData.typeCount !== 'all') {
-			params.status = filterData.typeCount;
+		// Add categoryFilter filter
+		if (filterData.categoryFilter && filterData.categoryFilter !== 'all') {
+			params.status = filterData.categoryFilter;
 		}
-		console.log('params', params);
 		requestData(rowsPerPage, currentPage, startDate, endDate, params);
 	};
 
@@ -264,7 +267,6 @@ const Orders: React.FC = () => {
 			if (!action || selectedOrderIds.length === 0) {
 				return;
 			}
-
 			// Change order status
 			try {
 				await Promise.all(
@@ -304,9 +306,8 @@ const Orders: React.FC = () => {
 
 			selectedOrders.forEach((order) => {
 				const customer = order.billing?.first_name
-					? `${order.billing.first_name} ${
-							order.billing.last_name || ''
-						}`
+					? `${order.billing.first_name} ${order.billing.last_name || ''
+					}`
 					: 'Guest';
 				const email = order.billing?.email || '';
 				const total = order.total || '';
@@ -324,9 +325,8 @@ const Orders: React.FC = () => {
 			});
 			const link = document.createElement('a');
 			link.href = URL.createObjectURL(blob);
-			link.download = `selected_orders_${
-				appLocalizer.store_id
-			}_${new Date().toISOString()}.csv`;
+			link.download = `selected_orders_${appLocalizer.store_id
+				}_${new Date().toISOString()}.csv`;
 			link.click();
 			URL.revokeObjectURL(link.href);
 		};
@@ -425,9 +425,8 @@ const Orders: React.FC = () => {
 				const { billing } = row.original;
 				const name =
 					billing?.first_name || billing?.last_name
-						? `${billing.first_name || ''} ${
-								billing.last_name || ''
-							}`
+						? `${billing.first_name || ''} ${billing.last_name || ''
+						}`
 						: billing?.email || __('Guest', 'multivendorx');
 				return <TableCell>{name}</TableCell>;
 			},
@@ -461,9 +460,8 @@ const Orders: React.FC = () => {
 				} else if (minutes > 0) {
 					timeAgo = `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
 				} else {
-					timeAgo = `${seconds} second${
-						seconds !== 1 ? 's' : ''
-					} ago`;
+					timeAgo = `${seconds} second${seconds !== 1 ? 's' : ''
+						} ago`;
 				}
 
 				return <TableCell>{timeAgo}</TableCell>;
@@ -498,22 +496,22 @@ const Orders: React.FC = () => {
 							// Conditionally include the "View" button
 							...(appLocalizer.edit_order_capability
 								? [
-										{
-											label: __('View', 'multivendorx'),
-											icon: 'adminfont-eye',
-											onClick: (rowData) => {
-												setSelectedOrder(rowData);
-												// window.location.href = `view/${rowData.id}`;
+									{
+										label: __('View', 'multivendorx'),
+										icon: 'adminfont-eye',
+										onClick: (rowData) => {
+											setSelectedOrder(rowData);
+											// window.location.href = `view/${rowData.id}`;
 
-												window.location.hash = `view/${rowData.id}`;
+											window.location.hash = `view/${rowData.id}`;
 
-												// const currentPath = window.location.pathname.replace(/\/$/, '');
-												// const newPath = `${currentPath}/view/${rowData.id}`;
-												// window.history.pushState({}, '', newPath);
-											},
-											hover: true,
+											// const currentPath = window.location.pathname.replace(/\/$/, '');
+											// const newPath = `${currentPath}/view/${rowData.id}`;
+											// window.history.pushState({}, '', newPath);
 										},
-									]
+										hover: true,
+									},
+								]
 								: []),
 							{
 								label: __('Download', 'multivendorx'),
@@ -666,9 +664,8 @@ const Orders: React.FC = () => {
 
 			allOrders.forEach((order) => {
 				const customer = order.billing?.first_name
-					? `${order.billing.first_name} ${
-							order.billing.last_name || ''
-						}`
+					? `${order.billing.first_name} ${order.billing.last_name || ''
+					}`
 					: 'Guest';
 				const email = order.billing?.email || '';
 				const total = order.total || '';
@@ -690,9 +687,8 @@ const Orders: React.FC = () => {
 			});
 			const link = document.createElement('a');
 			link.href = URL.createObjectURL(blob);
-			link.download = `orders_${
-				appLocalizer.store_id
-			}_${new Date().toISOString()}.csv`;
+			link.download = `orders_${appLocalizer.store_id
+				}_${new Date().toISOString()}.csv`;
 			link.click();
 			URL.revokeObjectURL(link.href);
 		} catch (err) {
@@ -753,7 +749,7 @@ const Orders: React.FC = () => {
 						totalCounts={totalRows}
 						searchFilter={searchFilter}
 						realtimeFilter={realtimeFilter}
-						typeCounts={orderStatus}
+						categoryFilter={orderStatus}
 						bulkActionComp={() => <BulkAction />}
 						defaultCounts={hash ? 'refund-requested' : 'all'}
 					/>
