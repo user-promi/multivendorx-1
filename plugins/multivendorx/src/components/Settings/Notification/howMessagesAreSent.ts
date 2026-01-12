@@ -4,7 +4,7 @@ export default {
 	id: 'notification-configuration',
 	priority: 1,
 	name: 'How messages are sent',
-	tabTitle: 'Notification recipients',
+	tabTitle: 'Email & SMS delivery',
 	desc: __(
 		'Define who receives notification messages from the marketplace.',
 		'multivendorx'
