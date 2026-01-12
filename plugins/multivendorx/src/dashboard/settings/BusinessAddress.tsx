@@ -240,10 +240,6 @@ const BusinessAddress = () => {
 
 	// Then update your autoSave function:
 	const autoSave = (updatedData: any) => {
-		if (settings['store-capability']
-			?.edit_store_info_activation || [].includes('store_address')) {
-			return;
-		}
 		// Format email data for backend
 		const formattedData = { ...updatedData };
 
