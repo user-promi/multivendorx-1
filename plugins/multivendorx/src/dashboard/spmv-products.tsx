@@ -153,9 +153,15 @@ const SpmvProducts: React.FC = () => {
 								onClick: createAutoDraftProduct(),
 							}}
 					/> */}
-					<button onClick={createAutoDraftProduct}>
-						Add
-					</button>
+					<AdminButton
+						buttons={
+							{
+								icon: 'plus',
+								text: 'Add New Poduct',
+								className: 'purple-bg',
+								onClick: createAutoDraftProduct,
+							}}
+					/>
 				</div>
 
 				<div className="product-wrapper">
