@@ -656,8 +656,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
             case 'textarea':
                 return (
                     <TextArea
-                        wrapperClass="setting-from-textarea"
-                        inputClass={`${field.class || ''} textarea-input`}
+                        inputClass={field.class}
                         description={field.desc || ''}
                         key={field.key}
                         id={field.key}

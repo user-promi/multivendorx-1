@@ -237,7 +237,6 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                 { ! selectedImage && (
                     <>
                         <ToggleSetting
-                            wrapperClass="setting-form-input"
                             options={ [
                                 ...( !!props.templates?.length
                                     ? [

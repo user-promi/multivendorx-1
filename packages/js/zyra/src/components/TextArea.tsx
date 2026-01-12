@@ -7,7 +7,6 @@ interface TextAreaProps {
     value?: string | number;
     maxLength?: number;
     placeholder?: string;
-    wrapperClass?: string;
     inputClass?: string;
     rowNumber?: number;
     colNumber?: number;
@@ -76,7 +75,7 @@ const TextArea: React.FC< TextAreaProps > = ( {
                 />
             ) : (
                 <textarea
-                    className={ inputClass }
+                    className={`textarea-input ${inputClass || ''}`}
                     id={ id }
                     name={ name }
                     value={ value }
@@ -91,7 +90,6 @@ const TextArea: React.FC< TextAreaProps > = ( {
                     readOnly={ readOnly }
                 />
             ) }
-
             { description && (
                 <p
                     className= "settings-metabox-description"

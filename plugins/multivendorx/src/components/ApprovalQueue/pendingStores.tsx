@@ -353,9 +353,6 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 						<FormGroupWrapper>
 							<TextArea
 								name="reject_reason"
-								wrapperClass="setting-from-textarea"
-								inputClass="textarea-input"
-								descClass="settings-metabox-description"
 								value={rejectReason}
 								onChange={(
 									e: React.ChangeEvent<HTMLTextAreaElement>

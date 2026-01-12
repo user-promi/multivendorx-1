@@ -614,7 +614,6 @@ export const KnowledgeBase: React.FC = () => {
 							<FormGroup label={__('Content', 'multivendorx')} htmlFor="Content">
 								<TextArea
 									name="content"
-									inputClass="textarea-input"
 									value={formData.content}
 									onChange={handleChange}
 									usePlainText={false}

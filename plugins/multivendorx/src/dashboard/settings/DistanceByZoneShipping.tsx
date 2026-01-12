@@ -440,7 +440,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									{__('Shipping Method', 'multivendorx')}
 								</label>
 								<ToggleSetting
-									wrapperClass="setting-form-input"
+									 
 									value={formData.shippingMethod}
 									onChange={(val: string) => {
 										if (!isEditing) {
@@ -508,7 +508,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								<>
 									<div className="form-group">
 										<ToggleSetting
-											wrapperClass="setting-form-input"
+											 
 											value={formData.freeShippingType}
 											onChange={(val: string) =>
 												handleChange(
@@ -606,7 +606,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 											)}
 										</label>
 										<ToggleSetting
-											wrapperClass="setting-form-input"
+											 
 											value={
 												formData.flatRateCalculationType
 											}

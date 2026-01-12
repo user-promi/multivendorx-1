@@ -715,7 +715,7 @@ const AddProduct = () => {
 							<FormGroup label={__('Product name', 'multivendorx')}>
 								<BasicInput
 									name="name"
-									wrapperClass="setting-form-input"
+									 
 									value={product.name}
 									onChange={(e) => handleChange('name', e.target.value)}
 								/>
@@ -725,9 +725,6 @@ const AddProduct = () => {
 							<FormGroup label={__('Product short description', 'multivendorx')}>
 								<TextArea
 									name="short_description"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
 									value={product.short_description}
 									onChange={(e) =>
 										handleChange('short_description', e.target.value)
@@ -739,9 +736,6 @@ const AddProduct = () => {
 							<FormGroup label={__('Product description', 'multivendorx')}>
 								<TextArea
 									name="description"
-									wrapperClass="setting-from-textarea"
-									inputClass="textarea-input"
-									descClass="settings-metabox-description"
 									value={product.description}
 									onChange={(e) =>
 										handleChange('description', e.target.value)
@@ -764,7 +758,7 @@ const AddProduct = () => {
 									<FormGroup cols={2} label={__('Regular price', 'multivendorx')}>
 										<BasicInput
 											name="regular_price"
-											wrapperClass="setting-form-input"
+											 
 											value={product.regular_price}
 											onChange={(e) =>
 												handleChange('regular_price', e.target.value)
@@ -775,7 +769,7 @@ const AddProduct = () => {
 									<FormGroup cols={2} label={__('Sale price', 'multivendorx')}>
 										<BasicInput
 											name="sale_price"
-											wrapperClass="setting-form-input"
+											 
 											value={product.sale_price}
 											onChange={(e) =>
 												handleChange('sale_price', e.target.value)
@@ -789,7 +783,7 @@ const AddProduct = () => {
 							<FormGroup cols={2} label={__('SKU', 'multivendorx')}>
 								<BasicInput
 									name="sku"
-									wrapperClass="setting-form-input"
+									 
 									value={product.sku}
 									onChange={(e) => handleChange('sku', e.target.value)}
 								/>
@@ -860,7 +854,7 @@ const AddProduct = () => {
 									<FormGroup cols={3} label={__('Quantity', 'multivendorx')}>
 										<BasicInput
 											name="stock"
-											wrapperClass="setting-form-input"
+											 
 											value={product.stock}
 											onChange={(e) =>
 												handleChange('stock', e.target.value)
@@ -883,7 +877,7 @@ const AddProduct = () => {
 									<FormGroup cols={3} label={__('Low stock threshold', 'multivendorx')}>
 										<BasicInput
 											name="low_stock_amount"
-											wrapperClass="setting-form-input"
+											 
 											value={product.low_stock_amount}
 											onChange={(e) =>
 												handleChange('low_stock_amount', e.target.value)
@@ -1041,7 +1035,7 @@ const AddProduct = () => {
 							{/* Status */}
 							<FormGroup label={__('Status', 'multivendorx')} htmlFor="status">
 								<ToggleSetting
-									wrapperClass="setting-form-input"
+									 
 									descClass="settings-metabox-description"
 									options={[
 										{ key: 'draft', value: 'draft', label: __('Draft', 'multivendorx') },
@@ -1307,7 +1301,6 @@ const AddProduct = () => {
 										type="hidden"
 										imageSrc={featuredImage?.thumbnail}
 										openUploader={__('Select Featured Image', 'multivendorx')}
-										buttonClass="admin-btn btn-purple"
 										onButtonClick={openFeaturedUploader}
 										onRemove={() => setFeaturedImage(null)}
 										onReplace={openFeaturedUploader}
@@ -1328,7 +1321,6 @@ const AddProduct = () => {
 									type="hidden"
 									imageSrc={null}
 									openUploader="Add Gallery Image"
-									buttonClass="admin-btn btn-purple"
 									onButtonClick={openGalleryUploader}
 								/>
 

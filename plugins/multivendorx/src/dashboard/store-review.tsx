@@ -543,7 +543,7 @@ const StoreReview: React.FC = () => {
 							>
 								<TextArea
 									name="reply"
-									inputClass="textarea-input input-text"
+									inputClass="input-text"
 									value={replyText}
 									onChange={(e) => setReplyText(e.target.value)}
 									usePlainText={true}

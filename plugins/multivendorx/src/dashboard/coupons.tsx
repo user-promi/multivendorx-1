@@ -8,6 +8,7 @@ import {
 	FormGroupWrapper,
 	getApiLink,
 	MultiCalendarInput,
+	ProPopup,
 	SelectInput,
 	Table,
 	TableCell,
@@ -21,6 +22,7 @@ import {
 } from '@tanstack/react-table';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
+import { Dialog } from '@mui/material';
 
 type CouponRow = {
 	id: number;
@@ -82,6 +84,47 @@ const AllCoupon: React.FC = () => {
 	const [validationErrors, setValidationErrors] = useState<{
 		[key: string]: string;
 	}>({});
+	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [selectedCoupon, setSelectedCoupon] = useState<{
+		id: number;
+		code: string;
+	} | null>(null);
+
+	// delete popup 
+	const handleDeleteClick = (rowData: CouponRow) => {
+		setSelectedCoupon({
+			id: rowData.id,
+			code: rowData.code,
+		});
+		setConfirmOpen(true);
+	};
+
+	const handleConfirmDelete = async () => {
+		if (!selectedCoupon) return;
+
+		try {
+			await axios.delete(
+				`${appLocalizer.apiUrl}/wc/v3/coupons/${selectedCoupon.id}`,
+				{
+					headers: {
+						'X-WP-Nonce': appLocalizer.nonce,
+					},
+				}
+			);
+
+			// Refresh list
+			requestData(
+				pagination.pageSize,
+				pagination.pageIndex + 1
+			);
+		} catch (err) {
+			console.error('Failed to delete coupon', err);
+		} finally {
+			setConfirmOpen(false);
+			setSelectedCoupon(null);
+		}
+	};
+
 
 	const validateForm = () => {
 		const errors: { [key: string]: string } = {};
@@ -261,7 +304,7 @@ const AllCoupon: React.FC = () => {
 		searchField = '',
 		couponType = '',
 		typeCount = 'any',
-		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
+		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date()
 	) {
 		setData([]);
@@ -488,7 +531,7 @@ const AllCoupon: React.FC = () => {
 
 						<FormGroup label={__('Allow free shipping', 'multivendorx')} htmlFor="free_shipping">
 							<ToggleSetting
-								wrapperClass="setting-form-input"
+								 
 								options={[
 									{ key: 'yes', value: 'yes', label: __('Yes', 'multivendorx') },
 									{ key: 'no', value: 'no', label: __('No', 'multivendorx') },
@@ -584,7 +627,7 @@ const AllCoupon: React.FC = () => {
 
 						<FormGroup label={__('Individual use only', 'multivendorx')} htmlFor="individual_use">
 							<ToggleSetting
-								wrapperClass="setting-form-input"
+								 
 								options={[
 									{ key: 'yes', value: 'yes', label: __('Yes', 'multivendorx') },
 									{ key: 'no', value: 'no', label: __('No', 'multivendorx') },
@@ -598,7 +641,7 @@ const AllCoupon: React.FC = () => {
 
 						<FormGroup label={__('Exclude sale items', 'multivendorx')} htmlFor="exclude_sale_items">
 							<ToggleSetting
-								wrapperClass="setting-form-input"
+								 
 								options={[
 									{ key: 'yes', value: 'yes', label: __('Yes', 'multivendorx') },
 									{ key: 'no', value: 'no', label: __('No', 'multivendorx') },
@@ -734,28 +777,10 @@ const AllCoupon: React.FC = () => {
 							{
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminfont-delete delete',
-								onClick: async (rowData: any) => {
-									if (
-										confirm(
-											`Are you sure you want to delete coupon "${rowData.code}"?`
-										)
-									) {
-										await axios.delete(
-											`${appLocalizer.apiUrl}/wc/v3/coupons/${rowData.id}`,
-											{
-												headers: {
-													'X-WP-Nonce':
-														appLocalizer.nonce,
-												},
-											}
-										);
-										requestData(
-											pagination.pageSize,
-											pagination.pageIndex + 1
-										);
-									}
+								onClick: (rowData: CouponRow) => {
+									handleDeleteClick(rowData);
 								},
-							},
+							}
 						],
 					}}
 				/>
@@ -903,7 +928,7 @@ const AllCoupon: React.FC = () => {
 								<BasicInput
 									type="text"
 									name="title"
-									wrapperClass="setting-form-input"
+									 
 									value={formData.title}
 									generate={true}
 									onChange={(e: any) =>
@@ -923,7 +948,6 @@ const AllCoupon: React.FC = () => {
 							<FormGroup label={__('Description (optional)', 'multivendorx')} htmlFor="title">
 								<TextArea
 									name="content"
-									inputClass="textarea-input"
 									rowNumber={6}
 									value={formData.content}
 									onChange={(e: any) =>
@@ -963,6 +987,31 @@ const AllCoupon: React.FC = () => {
 					</>
 				</CommonPopup>
 			)}
+			<Dialog
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+			>
+				<ProPopup
+					confirmMode
+					title={__('Are you sure?', 'multivendorx')}
+					confirmMessage={
+						selectedCoupon
+							? __(
+								`Are you sure you want to delete coupon "${selectedCoupon.code}"?`,
+								'multivendorx'
+							)
+							: ''
+					}
+					confirmYesText={__('Delete', 'multivendorx')}
+					confirmNoText={__('Cancel', 'multivendorx')}
+					onConfirm={handleConfirmDelete}
+					onCancel={() => {
+						setConfirmOpen(false);
+						setSelectedCoupon(null);
+					}}
+				/>
+			</Dialog>
+
 			<Table
 				data={data}
 				columns={columns as ColumnDef<Record<string, any>, any>[]}
