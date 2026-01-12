@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
-	BasicInput,
 	useModules,
 	Table,
 	TableCell,
@@ -14,7 +13,7 @@ import {
 } from '@tanstack/react-table';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { formatCurrency } from '../services/commonFunction';
+import { formatCurrency, formatWcShortDate } from '../services/commonFunction';
 import AddProductCom from './add-products';
 import SpmvProducts from './spmv-products';
 import { ReactNode } from 'react';
@@ -45,17 +44,6 @@ export interface RealtimeFilter {
 		filterValue: any
 	) => ReactNode;
 }
-const formatWooDate = (dateString: string) => {
-	if (!dateString) {
-		return '-';
-	}
-	const date = new Date(dateString);
-	return date.toLocaleString('en-US', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-	});
-};
 
 const stockStatusOptions = [
 	{ key: '', name: 'Stock Status' },
@@ -122,23 +110,6 @@ const AllProduct: React.FC = () => {
 	}, []);
 
 	const columns: ColumnDef<ProductRow>[] = [
-		// {
-		// 	id: 'select',
-		// 	header: ({ table }) => (
-		// 		<input
-		// 			type="checkbox"
-		// 			checked={table.getIsAllRowsSelected()}
-		// 			onChange={table.getToggleAllRowsSelectedHandler()}
-		// 		/>
-		// 	),
-		// 	cell: ({ row }) => (
-		// 		<input
-		// 			type="checkbox"
-		// 			checked={row.getIsSelected()}
-		// 			onChange={row.getToggleSelectedHandler()}
-		// 		/>
-		// 	),
-		// },
 		{
 			header: __('Product Name', 'multivendorx'),
 			cell: ({ row }) => (
@@ -221,7 +192,7 @@ const AllProduct: React.FC = () => {
 			header: __('Date', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell>
-					{formatWooDate(row.original.date_created)}
+					{formatWcShortDate(row.original.date_created)}
 				</TableCell>
 			),
 		},
@@ -272,7 +243,7 @@ const AllProduct: React.FC = () => {
 									const url = row.original.permalink;
 									navigator.clipboard
 										.writeText(url)
-										.catch(() => {});
+										.catch(() => { });
 								},
 							},
 							{
@@ -281,7 +252,7 @@ const AllProduct: React.FC = () => {
 								onClick: (rowData) => {
 									handleDelete(rowData.id);
 								},
-								 
+
 							},
 						],
 					}}
@@ -413,17 +384,16 @@ const AllProduct: React.FC = () => {
 
 	// Fetch data from backend.
 	function requestData(
-		rowsPerPage = 10,
-		currentPage = 1,
+		rowsPerPage: number,
+		currentPage: number,
 		category = '',
-		stockStatus = '', // <-- Positional Argument 4
-		searchField = '', // <-- Positional Argument 5
-		productType = '', // <-- Positional Argument 6
+		stockStatus = '',
+		searchField = '',
+		productType = '',
 		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date()
 	) {
 		setData([]);
-
 		const params: any = {
 			page: currentPage,
 			row: rowsPerPage,
@@ -556,14 +526,14 @@ const AllProduct: React.FC = () => {
 							</div>
 						</div>
 						<div className="buttons-wrapper">
-							{modules.includes('import-export') && 
+							{modules.includes('import-export') &&
 								applyFilters(
 									'product_import_export',
 									null,
 									requestData,
 									rowSelection,
 									data,
-								)								
+								)
 							}
 							<div
 								className="admin-btn btn-purple-bg"
@@ -600,7 +570,6 @@ const AllProduct: React.FC = () => {
 							pagination={pagination}
 							onPaginationChange={setPagination}
 							perPageOption={[10, 25, 50]}
-							typeCounts={[]}
 							realtimeFilter={realtimeFilter}
 							handlePagination={requestApiForData}
 							totalCounts={totalRows}

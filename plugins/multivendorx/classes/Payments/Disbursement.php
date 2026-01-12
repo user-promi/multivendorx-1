@@ -24,7 +24,6 @@ class Disbursement {
      * Constructor
      */
     public function __construct() {
-        // add_action('woocommerce_order_status_changed', array($this, 'disbursement_process'), 30, 4);
         add_action( 'multivendorx_transaction_status_update', array( $this, 'transaction_status_update' ) );
         add_action( 'multivendorx_payout_cron', array( $this, 'multivendorx_payout_cron' ) );
     }
