@@ -102,7 +102,7 @@ const ShippingDelivery = () => {
 								htmlFor="shipping_options"
 							>
 								<ToggleSetting
-									wrapperClass="setting-form-input"
+									 
 									descClass="settings-metabox-description"
 									description={__(
 										'Choose your preferred shipping method.',
@@ -153,7 +153,7 @@ const ShippingDelivery = () => {
 											<BasicInput
 												type="number"
 												name="multivendorx_shipping_type_price"
-												wrapperClass="setting-form-input"
+												 
 												placeholder="0.00"
 												value={formData.multivendorx_shipping_type_price || ''}
 												onChange={handleChange}
@@ -176,7 +176,7 @@ const ShippingDelivery = () => {
 											<BasicInput
 												type="number"
 												name="multivendorx_additional_product"
-												wrapperClass="setting-form-input"
+												 
 												placeholder="0.00"
 												value={formData.multivendorx_additional_product || ''}
 												onChange={handleChange}
@@ -199,7 +199,7 @@ const ShippingDelivery = () => {
 											<BasicInput
 												type="number"
 												name="multivendorx_additional_qty"
-												wrapperClass="setting-form-input"
+												 
 												placeholder="0.00"
 												value={formData.multivendorx_additional_qty || ''}
 												onChange={handleChange}
@@ -222,7 +222,7 @@ const ShippingDelivery = () => {
 											<BasicInput
 												type="number"
 												name="free_shipping_amount"
-												wrapperClass="setting-form-input"
+												 
 												placeholder={__('NO Free Shipping', 'multivendorx')}
 												value={formData.free_shipping_amount || ''}
 												onChange={handleChange}
@@ -245,7 +245,7 @@ const ShippingDelivery = () => {
 											<BasicInput
 												type="number"
 												name="local_pickup_cost"
-												wrapperClass="setting-form-input"
+												 
 												placeholder="0.00"
 												value={formData.local_pickup_cost || ''}
 												onChange={handleChange}
@@ -305,7 +305,7 @@ const ShippingDelivery = () => {
 											<BasicInput
 												type="number"
 												name="distance_default_cost"
-												wrapperClass="setting-form-input"
+												 
 												placeholder="0.00"
 												value={formData.distance_default_cost || ''}
 												onChange={handleChange}
@@ -326,7 +326,7 @@ const ShippingDelivery = () => {
 											htmlFor="distance_type"
 										>
 											<ToggleSetting
-												wrapperClass="setting-form-input"
+												 
 												descClass="settings-metabox-description"
 												description={__(
 													'Choose kilometers or miles based on your region so shipping charges are calculated correctly.',
@@ -351,7 +351,7 @@ const ShippingDelivery = () => {
 											<BasicInput
 												type="number"
 												name="distance_max"
-												wrapperClass="setting-form-input"
+												 
 												placeholder="0"
 												value={formData.distance_max || ''}
 												onChange={handleChange}
@@ -377,7 +377,7 @@ const ShippingDelivery = () => {
 											<BasicInput
 												type="number"
 												name="distance_local_pickup_cost"
-												wrapperClass="setting-form-input"
+												 
 												placeholder="0.00"
 												value={formData.distance_local_pickup_cost || ''}
 												onChange={handleChange}

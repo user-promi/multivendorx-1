@@ -90,7 +90,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 							<FormGroupWrapper>
 								<FormGroup>
 									<ToggleSetting
-										wrapperClass="setting-form-input"
+										 
 										descClass="settings-metabox-description"
 										description="Choose your preferred payment method."
 										options={
@@ -140,7 +140,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<BasicInput
 													type="number"
 													name="multivendorx_shipping_type_price"
-													wrapperClass="setting-form-input"
+													 
 													descClass="settings-metabox-description"
 													placeholder={__(
 														'0.00',
@@ -170,7 +170,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<BasicInput
 													type="number"
 													name="multivendorx_additional_product"
-													wrapperClass="setting-form-input"
+													 
 													descClass="settings-metabox-description"
 													placeholder={__('0.00', 'multivendorx')}
 													value={formData.multivendorx_additional_product || ''}
@@ -196,7 +196,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<BasicInput
 													type="number"
 													name="multivendorx_additional_qty"
-													wrapperClass="setting-form-input"
+													 
 													descClass="settings-metabox-description"
 													placeholder={__('0.00', 'multivendorx')}
 													value={formData.multivendorx_additional_qty || ''}
@@ -222,7 +222,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<BasicInput
 													type="number"
 													name="free_shipping_amount"
-													wrapperClass="setting-form-input"
+													 
 													descClass="settings-metabox-description"
 													placeholder={__('NO Free Shipping', 'multivendorx')}
 													value={formData.free_shipping_amount || ''}
@@ -248,7 +248,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<BasicInput
 													type="number"
 													name="local_pickup_cost"
-													wrapperClass="setting-form-input"
+													 
 													descClass="settings-metabox-description"
 													placeholder={__('0.00', 'multivendorx')}
 													value={formData.local_pickup_cost || ''}
@@ -306,7 +306,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<BasicInput
 													type="number"
 													name="distance_default_cost"
-													wrapperClass="setting-form-input"
+													 
 													descClass="settings-metabox-description"
 													placeholder={__('0.00', 'multivendorx')}
 													value={formData.distance_default_cost || ''}
@@ -319,7 +319,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 											{/* Distance Type */}
 											<FormGroup label={__('Distance Type', 'multivendorx')}>
 												<ToggleSetting
-													wrapperClass="setting-form-input"
+													 
 													descClass="settings-metabox-description"
 													description={__(
 														'Choose your preferred shipping method.',
@@ -344,7 +344,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<BasicInput
 													type="number"
 													name="distance_max"
-													wrapperClass="setting-form-input"
+													 
 													descClass="settings-metabox-description"
 													placeholder={__('0', 'multivendorx')}
 													value={formData.distance_max || ''}
@@ -365,7 +365,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												<BasicInput
 													type="number"
 													name="distance_local_pickup_cost"
-													wrapperClass="setting-form-input"
+													 
 													descClass="settings-metabox-description"
 													placeholder={__('0.00', 'multivendorx')}
 													value={formData.distance_local_pickup_cost || ''}

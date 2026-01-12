@@ -208,6 +208,7 @@ interface InputField {
     preText?: string;
     postText?: string;
     proSetting?: boolean;
+    buttonColor?: string;
     moduleEnabled?: string;
     postInsideText?: string;
     parameter?: string;
@@ -835,9 +836,8 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'time':
                     input = (
                         <BasicInput
-                            wrapperClass={
-                                inputField.wrapperClass || 'setting-form-input'
-                            }
+                            wrapperClass={inputField.wrapperClass}
+                            inputClass= {inputField.class}
                             description={ inputField.desc }
                             key={ inputField.key }
                             id={ inputField.id }
@@ -888,10 +888,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                      */
                     input = (
                         <TextArea
-                            wrapperClass="setting-from-textarea"
-                            inputClass={ `${
-                                inputField.class || 'textarea-input'
-                            }` }
+                            inputClass={inputField.class}
                             description={ inputField.desc }
                             key={ inputField.key }
                             id={ inputField.id }
@@ -937,7 +934,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'normalfile':
                     input = (
                         <BasicInput
-                            inputClass="setting-form-input"
+                            wrapperClass={inputField.wrapperClass}
                             type="file"
                             key={ inputField.key }
                             name={ inputField.name }
@@ -970,11 +967,11 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     input = (
                         <FileInput
                             description={ inputField.desc }
-                            inputClass={ `${ inputField.key } basic-input` }
+                            inputClass={ inputField.key}
                             imageSrc={ value ?? appLocalizer?.default_logo }
                             imageWidth={ inputField.width } // Width of the displayed image
                             imageHeight={ inputField.height } // Height of the displayed image
-                            buttonClass="admin-btn btn-purple" // CSS class for the file upload button
+                            buttonColor={ inputField.buttonColor }  // CSS class for the file upload button
                             openUploader={ appLocalizer?.open_uploader }
                             type="hidden" // Input type; in this case, hidden because the FileInput manages its own display
                             key={ inputField.key }
@@ -2365,9 +2362,11 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                                     <div className="title">
                                         { inputField.label }
                                     </div>
-                                    <div className="settings-metabox-description">
-                                        { inputField.settingDescription }
-                                    </div>
+                                     { inputField.settingDescription && 
+                                        <div className="settings-metabox-description">
+                                            { inputField.settingDescription }
+                                        </div>
+                                    }
                                 </label>
                             ) }
                         <div className="settings-input-content">

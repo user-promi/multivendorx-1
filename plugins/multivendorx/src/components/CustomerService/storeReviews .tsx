@@ -692,7 +692,6 @@ const StoreReviews: React.FC = () => {
 							<FormGroup label={__('Respond to customer', 'multivendorx')} htmlFor="reply">
 								<TextArea
 									name="reply"
-									inputClass="textarea-input"
 									value={replyText}
 									onChange={(e) => setReplyText(e.target.value)}
 									usePlainText={true}
