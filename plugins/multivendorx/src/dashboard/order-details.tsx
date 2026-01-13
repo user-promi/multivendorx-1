@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
-import { AdminButton, BasicInput, Card, Column, Container, FormGroup, FormGroupWrapper, InfoItem, SelectInput, getApiLink, useModules } from 'zyra';
+import { AdminButton, BasicInput, Card, Column, Container, FormGroup, FormGroupWrapper, InfoItem, SelectInput, TextArea, getApiLink, useModules } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 
@@ -325,7 +325,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
 					<Container>
 						<Column grid={8}>
-							<Card>
+							<Card contentHeight>
 								<div className="table-wrapper view-order-table">
 									<table className="admin-table">
 										<thead className="admin-table-header">
@@ -409,18 +409,15 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																</div>
 
 																{isRefund && (
-																	<input
+																	<BasicInput
+																		name="refund-amount"
 																		type="number"
-																		min="0"
-																		className="basic-input"
-																		value={
-																			refundItems[
-																				item
-																					.id
-																			]
-																				?.quantity ??
-																			0
-																		}
+																		value={refundItems[
+																			item
+																				.id
+																		]
+																			?.quantity ??
+																			0}
 																		onChange={(
 																			e
 																		) =>
@@ -463,10 +460,9 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																		</div>
 																	)}
 																{isRefund && (
-																	<input
-																		type="text"
-																		min="0"
-																		className="basic-input"
+																	<BasicInput
+																		name="refund-amount"
+																		type="number"
 																		value={
 																			refundItems[
 																				item
@@ -505,20 +501,13 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																	?.refunded_tax !==
 																	0 && (
 																		<div>
-																			{
-																				refundMap[
-																					item
-																						.id
-																				]
-																					.refunded_tax
-																			}
+																			{refundMap[item.id].refunded_tax}
 																		</div>
 																	)}
 																{isRefund && (
-																	<input
-																		type="text"
-																		min="0"
-																		className="basic-input"
+																	<BasicInput
+																		name="refund-amount"
+																		type="number"
 																		value={
 																			refundItems[
 																				item
@@ -583,11 +572,9 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 															<td className="admin-column"></td>
 															<td className="admin-column">
 																{isRefund ? (
-																	<input
-																		type="text"
-																		min="0"
-																		className="basic-input"
-																		// value="$95"
+																	<BasicInput
+																		name="refund"
+																		type="number"
 																		value={
 																			refundItems[
 																				item
@@ -629,10 +616,9 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 															</td>
 															<td className="admin-column">
 																{isRefund ? (
-																	<input
-																		type="text"
-																		min="0"
-																		className="basic-input"
+																	<BasicInput
+																		name="refund"
+																		type="number"
 																		value={
 																			refundItems[
 																				item
@@ -718,7 +704,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 												buttons={[
 													{
 														text: __('Refund', 'multivendorx'),
-														className: 'purple-bg',
+														className: 'purple',
 														onClick: () => setIsRefund(true),
 													},
 												]}
@@ -729,12 +715,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 												buttons={[
 													{
 														text: `${__('Refund', 'multivendorx')} $${refundDetails.refundAmount.toFixed(2)} ${__('manually', 'multivendorx')}`,
-														className: 'green-bg',
+														className: 'green',
 														onClick: handleRefundSubmit,
 													},
 													{
 														text: __('Cancel', 'multivendorx'),
-														className: 'red-bg',
+														className: 'red',
 														onClick: () => setIsRefund(false),
 													},
 												]}
@@ -799,12 +785,10 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 													<tr>
 														<td>Refund amount:</td>
 														<td>
-															<input
+															<BasicInput
+																name="refund-amount"
 																type="number"
-																className="basic-input"
-																value={
-																	refundDetails.refundAmount
-																}
+																value={refundDetails.refundAmount}
 																onChange={(e) =>
 																	setRefundDetails(
 																		{
@@ -821,15 +805,12 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 													</tr>
 													<tr>
 														<td>
-															Reason for refund
-															(optional):
+															Reason for refund (optional):
 														</td>
 														<td>
-															<textarea
+															<TextArea
+																value={refundDetails.reason}
 																placeholder="Reason for refund"
-																value={
-																	refundDetails.reason
-																}
 																onChange={(e) =>
 																	setRefundDetails(
 																		{
@@ -1133,7 +1114,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 									</FormGroup>
 									<FormGroup label={__('Enter Tracking Url ', 'multivendorx')} htmlFor="tracking-number">
 										<BasicInput
-											 
+
 											descClass="settings-metabox-description"
 											value={shipmentData.tracking_url}
 											onChange={(e) =>
@@ -1146,7 +1127,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 									</FormGroup>
 									<FormGroup label={__('Enter Tracking ID', 'multivendorx')} htmlFor="tracking-number">
 										<BasicInput
-											 
+
 											descClass="settings-metabox-description"
 											value={shipmentData.tracking_id}
 											onChange={(e) =>
@@ -1178,15 +1159,15 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 											orderData.order_notes.length > 0 ? (
 											<div className="notification-wrapper">
 												<ul>
-													{orderData.order_notes.map(
+													{orderData.order_notes.slice(0, 5).map(
 														(note: any, index: number) => (
 															<li key={index}>
-																<div className="icon-wrapper">
+																<div className={`icon-wrapper admin-color${index + 2}`}>
 																	<i
 																		className={
 																			note.is_customer_note
-																				? 'adminfont-mail orange'
-																				: 'adminfont-form-paypal-email blue'
+																				? 'adminfont-mail'
+																				: 'adminfont-contact-form'
 																		}
 																	></i>
 																</div>
@@ -1208,10 +1189,15 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 																	></div>
 																	<span>
 																		{new Date(
-																			note
-																				.date_created
-																				.date
-																		).toLocaleString()}
+																			note.date_created.date
+																		).toLocaleDateString(
+																			'en-GB',
+																			{
+																				day: '2-digit',
+																				month: 'short',
+																				year: 'numeric',
+																			}
+																		)}
 																	</span>
 																</div>
 															</li>

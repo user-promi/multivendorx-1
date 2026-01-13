@@ -63,7 +63,7 @@ export default {
 			key: 'onboarding_steps_configuration',
 			type: 'checkbox',
 			label: __('Onboarding steps', 'multivendorx'),
-			class: 'mvx-toggle-checkbox',
+			 
 			options: [
 				{
 					key: 'store_profile_setup',

@@ -90,7 +90,7 @@ export default {
 			type: 'checkbox',
 			classes: 'vertical',
 			label: __('Automatic email delivery', 'multivendorx'),
-			class: 'mvx-toggle-checkbox',
+			 
 			desc: __(
 				'Choose how invoices are automatically sent to customers and stores',
 				'multivendorx'

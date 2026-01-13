@@ -33,6 +33,7 @@ const TextArea: React.FC< TextAreaProps > = ( {
     colNumber = 50,
     readOnly,
     description,
+    placeholder,
     tinymceApiKey,
     usePlainText = false,
     onChange,
@@ -78,6 +79,7 @@ const TextArea: React.FC< TextAreaProps > = ( {
                     className={`textarea-input ${inputClass || ''}`}
                     id={ id }
                     name={ name }
+                    placeholder={placeholder}
                     value={ value }
                     rows={ rowNumber }
                     cols={ colNumber }

@@ -350,7 +350,7 @@ export default {
 			id: 'store-shipping',
 			name: __('Store Shipping', 'multivendorx'),
 			desc: 'Shipping charges calculated based on distance between store address and delivery location.',
-			icon: 'adminfont-distance-shipping',
+			icon: 'adminfont-store-shipping',
 			doc_link:
 				'https://multivendorx.com/docs/knowledgebase/distance-shipping',
 			settings_link: `${appLocalizer.plugin_url}settings&subtab=shipping`,
