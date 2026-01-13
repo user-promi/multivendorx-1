@@ -72,7 +72,6 @@ const AllProduct: React.FC = () => {
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [productStatus, setProductStatus] = useState<ProductStatus[]>([]);
 	const [languageProductCounts, setLanguageProductCounts] = useState<ProductStatus[]>([]);
-	const [translation, setTranslation] = useState([]);
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
@@ -101,6 +100,125 @@ const AllProduct: React.FC = () => {
 
 	const isAddProduct = element === 'edit';
 	const isSpmvOn = element === 'add';
+
+	const handleDelete = async (productId) => {
+		const res = await axios.delete(
+			`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
+			{
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			}
+		);
+
+		requestData();
+	};
+
+	const createAutoDraftProduct = () => {
+		try {
+			const payload = {
+				name: 'Auto Draft',
+				status: 'draft',
+			};
+
+			axios
+				.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				})
+				.then((res) => {
+					setNewProductId(res.data.id);
+				});
+		} catch (err) {
+			console.error(
+				'Error creating auto-draft:',
+				err.response?.data || err
+			);
+		}
+	};
+
+	useEffect(() => {
+		if (!newProductId) {
+			return;
+		}
+
+		if (appLocalizer.permalink_structure) {
+			navigate(
+				`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`
+			);
+		} else {
+			navigate(
+				`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`
+			);
+		}
+	}, [newProductId]);
+
+	const fetchCategories = async () => {
+		try {
+			const response = await axios.get(
+				`${appLocalizer.apiUrl}/wc/v3/products/categories`,
+				{
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				}
+			);
+			setCategoriesList(response.data);
+		} catch (error) {
+			console.error('Error fetching categories:', error);
+		}
+	};
+
+	const fetchProductStatusCounts = async () => {
+		try {
+			const statuses = [
+				'all',
+				'publish',
+				'draft',
+				'pending',
+				'private',
+				'trash',
+			];
+
+			const counts: ProductStatus[] = await Promise.all(
+				statuses.map(async (status) => {
+					const params: any = {
+						per_page: 1,
+						meta_key: 'multivendorx_store_id',
+						value: appLocalizer.store_id,
+					};
+
+					if (status !== 'all') {
+						params.status = status;
+					}
+
+					const res = await axios.get(
+						`${appLocalizer.apiUrl}/wc/v3/products`,
+						{
+							headers: { 'X-WP-Nonce': appLocalizer.nonce },
+							params,
+						}
+					);
+
+					const total = parseInt(res.headers['x-wp-total'] || '0');
+
+					return {
+						key: status,
+						name:
+							status === 'all'
+								? __('All', 'multivendorx')
+								: status.charAt(0).toUpperCase() +
+								status.slice(1),
+						count: total,
+					};
+				})
+			);
+
+			const filteredCounts = counts.filter(
+				(status) => status.key === 'all' || status.count > 0
+			);
+
+			setProductStatus(filteredCounts);
+		} catch (error) {
+			console.error('Failed to fetch order status counts:', error);
+		}
+	};
+
 	const fetchWpmlTranslations = async () => {
 		if (!modules.includes('wpml')) return;
 
@@ -109,7 +227,6 @@ const AllProduct: React.FC = () => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			});
 			const langs = response.data || [];
-			setTranslation(langs);
 
 			// Initialize language counts with 0
 			const initialCounts = langs.map((lang: any) => ({
@@ -124,7 +241,6 @@ const AllProduct: React.FC = () => {
 				fetchLanguageWiseProductCounts(langs);
 			}
 		} catch (err) {
-			setTranslation([]);
 			setLanguageProductCounts([]);
 			console.error('Failed to fetch WPML translations', err);
 		}
@@ -168,80 +284,118 @@ const AllProduct: React.FC = () => {
 		}
 	};
 
-
-
-	const fetchProductStatusCounts = async () => {
-		try {
-			const statuses = [
-				'all',
-				'publish',
-				'draft',
-				'pending',
-				'private',
-				'trash',
-			];
-
-			const counts: ProductStatus[] = await Promise.all(
-				statuses.map(async (status) => {
-					const params: any = {
-						per_page: 1,
-					};
-
-					if (status !== 'all') {
-						params.status = status;
-					}
-
-					const res = await axios.get(
-						`${appLocalizer.apiUrl}/wc/v3/products`,
-						{
-							headers: { 'X-WP-Nonce': appLocalizer.nonce },
-							params,
-						}
-					);
-
-					const total = parseInt(res.headers['x-wp-total'] || '0');
-
-					return {
-						key: status,
-						name:
-							status === 'all'
-								? __('All', 'multivendorx')
-								: status.charAt(0).toUpperCase() +
-								status.slice(1),
-						count: total,
-					};
-				})
-			);
-
-			const filteredCounts = counts.filter(
-				(status) => status.key === 'all' || status.count > 0
-			);
-
-			setProductStatus(filteredCounts);
-		} catch (error) {
-			console.error('Failed to fetch order status counts:', error);
-		}
-	};
-
-	const fetchCategories = async () => {
-		try {
-			const response = await axios.get(
-				`${appLocalizer.apiUrl}/wc/v3/products/categories`,
-				{
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				}
-			);
-			setCategoriesList(response.data);
-		} catch (error) {
-			console.error('Error fetching categories:', error);
-		}
-	};
-
 	useEffect(() => {
 		fetchCategories();
 		fetchProductStatusCounts();
 		fetchWpmlTranslations();
 	}, []);
+
+	useEffect(() => {
+		const currentPage = pagination.pageIndex + 1;
+		const rowsPerPage = pagination.pageSize;
+		requestData(rowsPerPage, currentPage);
+	}, [pagination]);
+
+	// Fetch data from backend.
+	function requestData(
+		rowsPerPage: number,
+		currentPage: number,
+		category?: string,
+		stockStatus?: string,
+		searchField?: string,
+		productType?: string,
+		startDate?: Date,
+		endDate?: Date,
+		categoryFilter?: string,
+		languageFilter?: string,
+	) {
+		category = category || '';
+		stockStatus = stockStatus || '';
+		searchField = searchField || '';
+		productType = productType || '';
+		startDate = startDate || new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
+		endDate = endDate || new Date();
+		categoryFilter = categoryFilter || '';
+		languageFilter = languageFilter || '';
+
+		setData(null);
+		const params: any = {
+			page: currentPage,
+			row: rowsPerPage,
+			category: category,
+			after: startDate,
+			before: endDate,
+			meta_key: 'multivendorx_store_id',
+			value: appLocalizer.store_id,
+			lang: languageFilter,
+		};
+
+		if (stockStatus) {
+			params.stock_status = stockStatus;
+		}
+
+		if (searchField) {
+			params.search = searchField;
+		}
+		if (productType) {
+			params.type = productType;
+		}
+		if (categoryFilter && categoryFilter !== 'all') {
+			params.status = categoryFilter;
+		}
+		axios({
+			method: 'GET',
+			url: `${appLocalizer.apiUrl}/wc/v3/products`,
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: params, // Use the dynamically built params object
+		})
+			.then((response) => {
+				const formattedProducts = response.data.map((p: any) => ({
+					id: p.id,
+					name: p.name,
+					sku: p.sku || '-',
+					price: p.price ? `${p.price}` : '-',
+					stock_status: p.stock_status,
+					categories: p.categories,
+					date_created: p.date_created,
+					status: p.status,
+					permalink: p.permalink,
+					image: p.images?.length ? p.images[0].src : null,
+				}));
+				setData(formattedProducts);
+
+				const total = parseInt(response.headers['x-wp-total']);
+				setTotalRows(total);
+				setPageCount(Math.ceil(total / rowsPerPage));
+			})
+			.catch(() => {
+				setData([]);
+				setTotalRows(0);
+				setPageCount(0);
+			});
+	}
+
+	// Handle pagination and filter changes
+	const requestApiForData = (
+		rowsPerPage: number,
+		currentPage: number,
+		filterData: FilterData
+	) => {
+		setData([]);
+		// Arguments must be passed in the exact order requestData expects them.
+		requestData(
+			rowsPerPage, // 1: rowsPerPage
+			currentPage, // 2: currentPage
+			filterData?.category, // 3: category
+			filterData?.stock_status, // 4: stockStatus
+			filterData?.searchField, // 5: searchField (Assuming filterData uses searchField for the search box value)
+			filterData?.productType, // 6: productType
+			filterData?.date?.start_date, // 7: startDate
+			filterData?.date?.end_date, // 8: endDate
+			filterData?.categoryFilter,
+			filterData?.languageFilter,
+		);
+	};
 
 	const columns: ColumnDef<ProductRow>[] = [
 		{
@@ -255,11 +409,10 @@ const AllProduct: React.FC = () => {
 						className="product-wrapper"
 					>
 						{row.original.image ? (
-							// <img
-							// 	src={row.original.image}
-							// 	alt={row.original.name}
-							// />
-							<></>
+							<img
+								src={row.original.image}
+								alt={row.original.name}
+							/>
 						) : (
 							<i className="item-icon adminfont-multi-product"></i>
 						)}
@@ -273,10 +426,6 @@ const AllProduct: React.FC = () => {
 			),
 		},
 		{
-			id: 'price',
-			accessorKey: 'price',
-			accessorFn: (row) => parseFloat(row.price || '0'),
-			enableSorting: true,
 			header: __('Price', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell>
@@ -334,7 +483,17 @@ const AllProduct: React.FC = () => {
 			id: 'status',
 			header: __('Status', 'multivendorx'),
 			cell: ({ row }) => {
-				return <TableCell type="status" status={row.original.status} />;
+				const statusMap: Record<string, string> = {
+					publish: 'Published',
+					draft: 'Draft',
+					pending: 'Pending',
+					private: 'Private',
+					trash: 'Trash',
+				};
+
+				const displayStatus = statusMap[row.original.status] || row.original.status;
+
+				return <TableCell type="status" status={displayStatus} />;
 			},
 		},
 		{
@@ -391,6 +550,29 @@ const AllProduct: React.FC = () => {
 						],
 					}}
 				/>
+			),
+		},
+	];
+
+	const searchFilter: RealtimeFilter[] = [
+		{
+			name: 'searchField',
+			render: (updateFilter, filterValue) => (
+				<>
+					<div className="search-section">
+						<input
+							name="searchField"
+							type="text"
+							placeholder={__('Search', 'multivendorx')}
+							onChange={(e) => {
+								updateFilter(e.target.name, e.target.value);
+							}}
+							className="basic-select"
+							value={filterValue || ''}
+						/>
+						<i className="adminfont-search"></i>
+					</div>
+				</>
 			),
 		},
 	];
@@ -485,172 +667,6 @@ const AllProduct: React.FC = () => {
 			),
 		},
 	];
-	const searchFilter: RealtimeFilter[] = [
-		{
-			name: 'searchField',
-			render: (updateFilter, filterValue) => (
-				<>
-					<div className="search-section">
-						<input
-							name="searchField"
-							type="text"
-							placeholder={__('Search', 'multivendorx')}
-							onChange={(e) => {
-								updateFilter(e.target.name, e.target.value);
-							}}
-							className="basic-select"
-							value={filterValue || ''}
-						/>
-						<i className="adminfont-search"></i>
-					</div>
-				</>
-			),
-		},
-	];
-
-	useEffect(() => {
-		const currentPage = pagination.pageIndex + 1;
-		const rowsPerPage = pagination.pageSize;
-		requestData(rowsPerPage, currentPage);
-	}, [pagination]);
-
-	// Fetch data from backend.
-	function requestData(
-		rowsPerPage: number,
-		currentPage: number,
-		category = '',
-		stockStatus = '',
-		searchField = '',
-		productType = '',
-		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
-		endDate = new Date(),
-		categoryFilter: '',
-		languageFilter: '',
-	) {
-		setData([]);
-		const params: any = {
-			page: currentPage,
-			row: rowsPerPage,
-			category: category,
-			after: startDate,
-			before: endDate,
-			meta_key: 'multivendorx_store_id',
-			value: appLocalizer.store_id,
-			status: categoryFilter,
-			lang: languageFilter,
-		};
-
-		if (stockStatus) {
-			params.stock_status = stockStatus;
-		}
-
-		if (searchField) {
-			params.search = searchField;
-		}
-		if (productType) {
-			params.type = productType;
-		}
-		axios({
-			method: 'GET',
-			url: `${appLocalizer.apiUrl}/wc/v3/products`,
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: params, // Use the dynamically built params object
-		})
-			.then((response) => {
-				const formattedProducts = response.data.map((p: any) => ({
-					id: p.id,
-					name: p.name,
-					sku: p.sku || '-',
-					price: p.price ? `${p.price}` : '-',
-					stock_status: p.stock_status,
-					categories: p.categories,
-					date_created: p.date_created,
-					status: p.status,
-					permalink: p.permalink,
-				}));
-				setData(formattedProducts);
-
-				const total = parseInt(response.headers['x-wp-total']);
-				setTotalRows(total);
-				setPageCount(Math.ceil(total / rowsPerPage));
-			})
-			.catch(() => {
-				setData([]);
-				setTotalRows(0);
-				setPageCount(0);
-			});
-	}
-
-	// Handle pagination and filter changes
-	const requestApiForData = (
-		rowsPerPage: number,
-		currentPage: number,
-		filterData: FilterData
-	) => {
-		setData([]);
-		// Arguments must be passed in the exact order requestData expects them.
-		requestData(
-			rowsPerPage, // 1: rowsPerPage
-			currentPage, // 2: currentPage
-			filterData?.category, // 3: category
-			filterData?.stock_status, // 4: stockStatus
-			filterData?.searchField, // 5: searchField (Assuming filterData uses searchField for the search box value)
-			filterData?.productType, // 6: productType
-			filterData?.date?.start_date, // 7: startDate
-			filterData?.date?.end_date, // 8: endDate
-			filterData?.categoryFilter,
-			filterData?.languageFilter,
-		);
-	};
-
-	const handleDelete = async (productId) => {
-		const res = await axios.delete(
-			`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
-			{
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			}
-		);
-
-		requestData();
-	};
-
-	const createAutoDraftProduct = () => {
-		try {
-			const payload = {
-				name: 'Auto Draft',
-				status: 'draft',
-			};
-
-			axios
-				.post(`${appLocalizer.apiUrl}/wc/v3/products/`, payload, {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				})
-				.then((res) => {
-					setNewProductId(res.data.id);
-				});
-		} catch (err) {
-			console.error(
-				'Error creating auto-draft:',
-				err.response?.data || err
-			);
-		}
-	};
-
-	useEffect(() => {
-		if (!newProductId) {
-			return;
-		}
-
-		if (appLocalizer.permalink_structure) {
-			navigate(
-				`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`
-			);
-		} else {
-			navigate(
-				`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`
-			);
-		}
-	}, [newProductId]);
 
 	return (
 		<>

@@ -21,6 +21,12 @@ defined('ABSPATH') || exit;
  */
 class Utill
 {
+    /**
+     * Utill class construct function
+     */
+    public function __construct() {
+        add_action('wp', array($this, 'disable_wpml_switcher_on_dashboard'), 99);
+    }
 
     /**
      * Constent holds table name
@@ -438,5 +444,18 @@ class Utill
             $store = Store::get_store($store_name, 'slug');
         }
         return $store ?? false;
+    }
+    
+    /**
+     * Disable WPML language switcher on multivendorx React store dashboard
+     */
+    public function disable_wpml_switcher_on_dashboard()
+    {
+
+        if (! Utill::is_store_dashboard()) {
+            return;
+        }
+
+        add_filter('icl_ls_languages', '__return_empty_array');
     }
 }

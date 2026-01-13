@@ -10,24 +10,10 @@ class Admin
 
     public function __construct()
     {
-        add_action('wp', array($this, 'disable_wpml_switcher_on_dashboard'), 99);
         add_filter('rest_pre_dispatch', array($this, 'switch_wpml_language_before_wc_query'), 10, 3);
         add_filter('rest_post_dispatch',array( $this, 'restore_wpml_language_after_request' ),10,3);
-        
     }
 
-    /**
-     * Disable WPML language switcher on multivendorx React store dashboard
-     */
-    public function disable_wpml_switcher_on_dashboard()
-    {
-
-        if (! Utill::is_store_dashboard()) {
-            return;
-        }
-
-        add_filter('icl_ls_languages', '__return_empty_array');
-    }
     public function switch_wpml_language_before_wc_query($result, $server, $request)
     {
 

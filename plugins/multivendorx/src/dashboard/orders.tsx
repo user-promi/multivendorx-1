@@ -74,194 +74,6 @@ const Orders: React.FC = () => {
 		})
 		.filter((id): id is number => id !== null);
 
-	// Fetch orders
-	useEffect(() => {
-		const currentPage = pagination.pageIndex + 1;
-		const rowsPerPage = pagination.pageSize;
-
-		if (hash === 'refund-requested') {
-			// call API with refund-requested filter
-			requestApiForData(rowsPerPage, currentPage, {
-				categoryFilter: 'refund-requested',
-			});
-		} else {
-			// normal API call
-			requestData(rowsPerPage, currentPage);
-		}
-	}, [pagination]);
-
-	const fetchOrderStatusCounts = async () => {
-		try {
-			const statuses = [
-				'all',
-				'pending',
-				'processing',
-				'on-hold',
-				'completed',
-				'cancelled',
-				'refunded',
-				'failed',
-				'trash',
-			];
-
-			if (modules.includes('marketplace-refund')) {
-				statuses.push('refund-requested');
-			}
-
-			const counts: OrderStatus[] = await Promise.all(
-				statuses.map(async (status) => {
-					const params: any = {
-						per_page: 1,
-						meta_key: 'multivendorx_store_id',
-						value: appLocalizer.store_id,
-					};
-					if (status !== 'all') {
-						params.status = status;
-					}
-
-					const res = await axios.get(
-						`${appLocalizer.apiUrl}/wc/v3/orders`,
-						{
-							headers: { 'X-WP-Nonce': appLocalizer.nonce },
-							params,
-						}
-					);
-
-					const total = parseInt(res.headers['x-wp-total'] || '0');
-
-					return {
-						key: status,
-						name:
-							status === 'all'
-								? __('All', 'multivendorx')
-								: status.charAt(0).toUpperCase() +
-								status.slice(1),
-						count: total,
-					};
-				})
-			);
-
-			// Filter out zero-count statuses except "all"
-			const filteredCounts = counts.filter(
-				(status) => status.key === 'all' || status.count > 0
-			);
-
-			setOrderStatus(filteredCounts);
-		} catch (error) {
-			console.error('Failed to fetch order status counts:', error);
-		}
-	};
-
-	// Fetch dynamic order status counts for typeCounts filter
-	useEffect(() => {
-		fetchOrderStatusCounts();
-	}, []);
-
-	function requestData(
-		rowsPerPage = 10,
-		currentPage = 1,
-		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
-		endDate = new Date(),
-		extraParams: any = {}
-	) {
-		setData([]);
-
-		const params: any = {
-			page: currentPage,
-			row: rowsPerPage,
-			after: startDate.toISOString(),
-			before: endDate.toISOString(),
-			meta_key: 'multivendorx_store_id',
-			value: appLocalizer.store_id,
-			...extraParams,
-		};
-
-		axios({
-			method: 'GET',
-			url: `${appLocalizer.apiUrl}/wc/v3/orders`,
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params,
-		})
-			.then((response) => {
-				setData(response.data);
-				const total = parseInt(response.headers['x-wp-total'] || '0');
-				setTotalRows(total);
-				setPageCount(Math.ceil(total / rowsPerPage));
-			})
-			.catch(() => {
-				setData([]);
-				setTotalRows(0);
-				setPageCount(0);
-			});
-	}
-
-	// Handle pagination and filter changes
-	const requestApiForData = (
-		rowsPerPage: number,
-		currentPage: number,
-		filterData: FilterData
-	) => {
-		setData([]);
-
-		let startDate = filterData?.date?.start_date || new Date(0);
-		let endDate = filterData?.date?.end_date || new Date();
-
-		const params: any = {
-			page: currentPage,
-			row: rowsPerPage,
-			after: startDate.toISOString(),
-			before: endDate.toISOString(),
-			meta_key: 'multivendorx_store_id',
-			value: appLocalizer.store_id,
-		};
-
-		// Search field
-		if (filterData.searchField) {
-			const searchValue = filterData.searchField.trim();
-			if (filterData.searchAction) {
-				params.search = searchValue;
-			} else {
-				params.search = searchValue;
-			}
-		}
-
-		// Add categoryFilter filter
-		if (filterData.categoryFilter && filterData.categoryFilter !== 'all') {
-			params.status = filterData.categoryFilter;
-		}
-		requestData(rowsPerPage, currentPage, startDate, endDate, params);
-	};
-
-	const handleBulkAction = async () => {
-		const action = bulkSelectRef.current?.value;
-
-		if (!action || selectedOrderIds.length === 0) {
-			return;
-		}
-
-		try {
-			await Promise.all(
-				selectedOrderIds.map((orderId) =>
-					axios.put(
-						`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
-						{ status: action },
-						{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-					)
-				)
-			);
-
-			setRowSelection({});
-			fetchOrderStatusCounts();
-			requestData(pagination.pageSize, pagination.pageIndex + 1);
-		} catch (err) {
-			console.error(err);
-		} finally {
-			if (bulkSelectRef.current) {
-				bulkSelectRef.current.value = '';
-			}
-		}
-	};
-
 	const BulkAction: React.FC = () => {
 		const handleBulkActionChange = async (action: string) => {
 			if (!action || selectedOrderIds.length === 0) {
@@ -379,6 +191,239 @@ const Orders: React.FC = () => {
 			</>
 		);
 	};
+
+	const exportAllOrders = async () => {
+		try {
+			let allOrders: any[] = [];
+			let page = 1;
+			const perPage = 100; // WooCommerce API max per page
+
+			// Fetch all pages
+			while (true) {
+				const res = await axios.get(
+					`${appLocalizer.apiUrl}/wc/v3/orders`,
+					{
+						headers: { 'X-WP-Nonce': appLocalizer.nonce },
+						params: {
+							per_page: perPage,
+							page,
+							meta_key: 'multivendorx_store_id',
+							value: appLocalizer.store_id,
+						},
+					}
+				);
+
+				allOrders = allOrders.concat(res.data);
+
+				const totalPages = parseInt(
+					res.headers['x-wp-totalpages'] || '1'
+				);
+				if (page >= totalPages) {
+					break;
+				}
+				page++;
+			}
+
+			if (allOrders.length === 0) {
+				alert('No orders found to export');
+				return;
+			}
+
+			// Convert orders to CSV
+			const csvRows: string[] = [];
+			csvRows.push('Order ID,Customer,Email,Total,Status,Date'); // Header
+
+			allOrders.forEach((order) => {
+				const customer = order.billing?.first_name
+					? `${order.billing.first_name} ${order.billing.last_name || ''
+					}`
+					: 'Guest';
+				const email = order.billing?.email || '';
+				const total = order.total || '';
+				const status = order.status || '';
+				const date = order.date_created || '';
+
+				csvRows.push(
+					[order.id, customer, email, total, status, date]
+						.map((field) => `"${field}"`)
+						.join(',')
+				);
+			});
+
+			const csvString = csvRows.join('\n');
+
+			// Trigger download
+			const blob = new Blob([csvString], {
+				type: 'text/csv;charset=utf-8;',
+			});
+			const link = document.createElement('a');
+			link.href = URL.createObjectURL(blob);
+			link.download = `orders_${appLocalizer.store_id
+				}_${new Date().toISOString()}.csv`;
+			link.click();
+			URL.revokeObjectURL(link.href);
+		} catch (err) {
+			console.error('Failed to export all orders:', err);
+			alert('Failed to export orders, check console for details');
+		}
+	};
+
+	const fetchOrderStatusCounts = async () => {
+		try {
+			const statuses = [
+				'all',
+				'pending',
+				'processing',
+				'on-hold',
+				'completed',
+				'cancelled',
+				'refunded',
+				'failed',
+				'trash',
+			];
+
+			if (modules.includes('marketplace-refund')) {
+				statuses.push('refund-requested');
+			}
+
+			const counts: OrderStatus[] = await Promise.all(
+				statuses.map(async (status) => {
+					const params: any = {
+						per_page: 1,
+						meta_key: 'multivendorx_store_id',
+						value: appLocalizer.store_id,
+					};
+					if (status !== 'all') {
+						params.status = status;
+					}
+
+					const res = await axios.get(
+						`${appLocalizer.apiUrl}/wc/v3/orders`,
+						{
+							headers: { 'X-WP-Nonce': appLocalizer.nonce },
+							params,
+						}
+					);
+
+					const total = parseInt(res.headers['x-wp-total'] || '0');
+
+					return {
+						key: status,
+						name:
+							status === 'all'
+								? __('All', 'multivendorx')
+								: status.charAt(0).toUpperCase() +
+								status.slice(1),
+						count: total,
+					};
+				})
+			);
+
+			// Filter out zero-count statuses except "all"
+			const filteredCounts = counts.filter(
+				(status) => status.count > 0
+			);
+			setOrderStatus(filteredCounts);
+		} catch (error) {
+			console.error('Failed to fetch order status counts:', error);
+		}
+	};
+
+	// Fetch dynamic order status counts for typeCounts filter
+	useEffect(() => {
+		fetchOrderStatusCounts();
+	}, []);
+
+	function requestData(
+		rowsPerPage = 10,
+		currentPage = 1,
+		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+		endDate = new Date(),
+		extraParams: any = {}
+	) {
+		setData(null);
+
+		const params: any = {
+			page: currentPage,
+			row: rowsPerPage,
+			after: startDate.toISOString(),
+			before: endDate.toISOString(),
+			meta_key: 'multivendorx_store_id',
+			value: appLocalizer.store_id,
+			...extraParams,
+		};
+
+		axios({
+			method: 'GET',
+			url: `${appLocalizer.apiUrl}/wc/v3/orders`,
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params,
+		})
+			.then((response) => {
+				setData(response.data);
+				const total = parseInt(response.headers['x-wp-total'] || '0');
+				setTotalRows(total);
+				setPageCount(Math.ceil(total / rowsPerPage));
+			})
+			.catch(() => {
+				setData([]);
+				setTotalRows(0);
+				setPageCount(0);
+			});
+	}
+
+	// Handle pagination and filter changes
+	const requestApiForData = (
+		rowsPerPage: number,
+		currentPage: number,
+		filterData: FilterData
+	) => {
+		setData([]);
+
+		let startDate = filterData?.date?.start_date || new Date(0);
+		let endDate = filterData?.date?.end_date || new Date();
+
+		const params: any = {
+			page: currentPage,
+			row: rowsPerPage,
+			after: startDate.toISOString(),
+			before: endDate.toISOString(),
+			meta_key: 'multivendorx_store_id',
+			value: appLocalizer.store_id,
+		};
+
+		// Search field
+		if (filterData.searchField) {
+			const searchValue = filterData.searchField.trim();
+			if (filterData.searchAction) {
+				params.search = searchValue;
+			} else {
+				params.search = searchValue;
+			}
+		}
+
+		// Add categoryFilter filter
+		if (filterData.categoryFilter && filterData.categoryFilter !== 'all') {
+			params.status = filterData.categoryFilter;
+		}
+		requestData(rowsPerPage, currentPage, startDate, endDate, params);
+	};
+
+	// Fetch orders
+	useEffect(() => {
+		const currentPage = pagination.pageIndex + 1;
+		const rowsPerPage = pagination.pageSize;
+
+		if (hash === 'refund-requested') {
+			// call API with refund-requested filter
+			requestApiForData(rowsPerPage, currentPage, {
+				categoryFilter: 'refund-requested',
+			});
+		} else {
+			// normal API call
+			requestData(rowsPerPage, currentPage);
+		}
+	}, [pagination]);
 
 	const columns: ColumnDef<any>[] = [
 		{
@@ -501,13 +546,7 @@ const Orders: React.FC = () => {
 										icon: 'adminfont-eye',
 										onClick: (rowData) => {
 											setSelectedOrder(rowData);
-											// window.location.href = `view/${rowData.id}`;
-
 											window.location.hash = `view/${rowData.id}`;
-
-											// const currentPath = window.location.pathname.replace(/\/$/, '');
-											// const newPath = `${currentPath}/view/${rowData.id}`;
-											// window.history.pushState({}, '', newPath);
 										},
 										hover: true,
 									},
@@ -618,82 +657,6 @@ const Orders: React.FC = () => {
 			),
 		},
 	];
-
-	const exportAllOrders = async () => {
-		try {
-			let allOrders: any[] = [];
-			let page = 1;
-			const perPage = 100; // WooCommerce API max per page
-
-			// Fetch all pages
-			while (true) {
-				const res = await axios.get(
-					`${appLocalizer.apiUrl}/wc/v3/orders`,
-					{
-						headers: { 'X-WP-Nonce': appLocalizer.nonce },
-						params: {
-							per_page: perPage,
-							page,
-							meta_key: 'multivendorx_store_id',
-							value: appLocalizer.store_id,
-						},
-					}
-				);
-
-				allOrders = allOrders.concat(res.data);
-
-				const totalPages = parseInt(
-					res.headers['x-wp-totalpages'] || '1'
-				);
-				if (page >= totalPages) {
-					break;
-				}
-				page++;
-			}
-
-			if (allOrders.length === 0) {
-				alert('No orders found to export');
-				return;
-			}
-
-			// Convert orders to CSV
-			const csvRows: string[] = [];
-			csvRows.push('Order ID,Customer,Email,Total,Status,Date'); // Header
-
-			allOrders.forEach((order) => {
-				const customer = order.billing?.first_name
-					? `${order.billing.first_name} ${order.billing.last_name || ''
-					}`
-					: 'Guest';
-				const email = order.billing?.email || '';
-				const total = order.total || '';
-				const status = order.status || '';
-				const date = order.date_created || '';
-
-				csvRows.push(
-					[order.id, customer, email, total, status, date]
-						.map((field) => `"${field}"`)
-						.join(',')
-				);
-			});
-
-			const csvString = csvRows.join('\n');
-
-			// Trigger download
-			const blob = new Blob([csvString], {
-				type: 'text/csv;charset=utf-8;',
-			});
-			const link = document.createElement('a');
-			link.href = URL.createObjectURL(blob);
-			link.download = `orders_${appLocalizer.store_id
-				}_${new Date().toISOString()}.csv`;
-			link.click();
-			URL.revokeObjectURL(link.href);
-		} catch (err) {
-			console.error('Failed to export all orders:', err);
-			alert('Failed to export orders, check console for details');
-		}
-	};
 
 	return (
 		<>
