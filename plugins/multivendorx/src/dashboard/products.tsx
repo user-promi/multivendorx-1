@@ -5,6 +5,7 @@ import {
 	Table,
 	TableCell,
 	MultiCalendarInput,
+	getApiLink,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -36,7 +37,13 @@ type FilterData = {
 	category?: any;
 	stock_status?: string;
 	productType?: string;
-	lang?:string;
+	categoryFilter?: string;
+	languageFilter?: string;
+};
+type ProductStatus = {
+	key: string;
+	name: string;
+	count: number;
 };
 export interface RealtimeFilter {
 	name: string;
@@ -63,6 +70,9 @@ const AllProduct: React.FC = () => {
 	const [data, setData] = useState<ProductRow[]>([]);
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [totalRows, setTotalRows] = useState<number>(0);
+	const [productStatus, setProductStatus] = useState<ProductStatus[]>([]);
+	const [languageProductCounts, setLanguageProductCounts] = useState<ProductStatus[]>([]);
+	const [translation, setTranslation] = useState([]);
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
@@ -91,6 +101,127 @@ const AllProduct: React.FC = () => {
 
 	const isAddProduct = element === 'edit';
 	const isSpmvOn = element === 'add';
+	const fetchWpmlTranslations = async () => {
+		if (!modules.includes('wpml')) return;
+
+		try {
+			const response = await axios.get(getApiLink(appLocalizer, 'multivendorx-wpml'), {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			});
+			const langs = response.data || [];
+			setTranslation(langs);
+
+			// Initialize language counts with 0
+			const initialCounts = langs.map((lang: any) => ({
+				key: lang.code,
+				name: lang.name,
+				count: 0,
+			}));
+			setLanguageProductCounts(initialCounts);
+
+			// Then fetch actual counts asynchronously
+			if (langs.length) {
+				fetchLanguageWiseProductCounts(langs);
+			}
+		} catch (err) {
+			setTranslation([]);
+			setLanguageProductCounts([]);
+			console.error('Failed to fetch WPML translations', err);
+		}
+	};
+
+	const fetchLanguageWiseProductCounts = async (langs: any[]) => {
+		if (!langs?.length) return;
+
+		try {
+			const counts = await Promise.all(
+				langs.map(async (lang) => {
+					const params: any = {
+						per_page: 1,
+						lang: lang.code,
+						meta_key: 'multivendorx_store_id',
+						value: appLocalizer.store_id,
+					};
+					const res = await axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
+						headers: { 'X-WP-Nonce': appLocalizer.nonce },
+						params,
+					});
+					const total = parseInt(res.headers['x-wp-total'] || '0');
+
+					return {
+						key: lang.code,
+						name: lang.name,
+						count: total,
+					};
+				})
+			);
+
+			// Merge counts with previous state so UI doesn't jump
+			setLanguageProductCounts((prev) =>
+				prev.map((lang) => {
+					const updated = counts.find((c) => c.key === lang.key);
+					return updated ? { ...lang, count: updated.count } : lang;
+				})
+			);
+		} catch (error) {
+			console.error('Failed to fetch language wise product counts:', error);
+		}
+	};
+
+
+
+	const fetchProductStatusCounts = async () => {
+		try {
+			const statuses = [
+				'all',
+				'publish',
+				'draft',
+				'pending',
+				'private',
+				'trash',
+			];
+
+			const counts: ProductStatus[] = await Promise.all(
+				statuses.map(async (status) => {
+					const params: any = {
+						per_page: 1,
+					};
+
+					if (status !== 'all') {
+						params.status = status;
+					}
+
+					const res = await axios.get(
+						`${appLocalizer.apiUrl}/wc/v3/products`,
+						{
+							headers: { 'X-WP-Nonce': appLocalizer.nonce },
+							params,
+						}
+					);
+
+					const total = parseInt(res.headers['x-wp-total'] || '0');
+
+					return {
+						key: status,
+						name:
+							status === 'all'
+								? __('All', 'multivendorx')
+								: status.charAt(0).toUpperCase() +
+								status.slice(1),
+						count: total,
+					};
+				})
+			);
+
+			const filteredCounts = counts.filter(
+				(status) => status.key === 'all' || status.count > 0
+			);
+
+			setProductStatus(filteredCounts);
+		} catch (error) {
+			console.error('Failed to fetch order status counts:', error);
+		}
+	};
 
 	const fetchCategories = async () => {
 		try {
@@ -108,6 +239,8 @@ const AllProduct: React.FC = () => {
 
 	useEffect(() => {
 		fetchCategories();
+		fetchProductStatusCounts();
+		fetchWpmlTranslations();
 	}, []);
 
 	const columns: ColumnDef<ProductRow>[] = [
@@ -264,28 +397,6 @@ const AllProduct: React.FC = () => {
 
 	const realtimeFilter: RealtimeFilter[] = [
 		{
-			name: 'lang',
-			render: (
-				updateFilter: (key: string, value: string) => void,
-				filterValue: string | undefined
-			) => (
-				<div className="group-field">
-					<select
-						name="lang"
-						onChange={(e) =>
-							updateFilter(e.target.name, e.target.value)
-						}
-						value={filterValue || ''}
-						className="basic-select"
-					>
-						<option value="">Language</option>
-						<option value="en">English</option>
-						<option value="bn">Bengali</option>
-					</select>
-				</div>
-			),
-		},		
-		{
 			name: 'category',
 			render: (
 				updateFilter: (key: string, value: string) => void,
@@ -411,9 +522,10 @@ const AllProduct: React.FC = () => {
 		stockStatus = '',
 		searchField = '',
 		productType = '',
-		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
+		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date(),
-		lang='',
+		categoryFilter: '',
+		languageFilter: '',
 	) {
 		setData([]);
 		const params: any = {
@@ -424,7 +536,8 @@ const AllProduct: React.FC = () => {
 			before: endDate,
 			meta_key: 'multivendorx_store_id',
 			value: appLocalizer.store_id,
-			lang:lang
+			status: categoryFilter,
+			lang: languageFilter,
 		};
 
 		if (stockStatus) {
@@ -485,7 +598,8 @@ const AllProduct: React.FC = () => {
 			filterData?.productType, // 6: productType
 			filterData?.date?.start_date, // 7: startDate
 			filterData?.date?.end_date, // 8: endDate
-			filterData?.lang
+			filterData?.categoryFilter,
+			filterData?.languageFilter,
 		);
 	};
 
@@ -598,6 +712,8 @@ const AllProduct: React.FC = () => {
 							handlePagination={requestApiForData}
 							totalCounts={totalRows}
 							searchFilter={searchFilter}
+							categoryFilter={productStatus}
+							languageFilter={languageProductCounts}
 						/>
 					</div>
 				</>

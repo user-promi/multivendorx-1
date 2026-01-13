@@ -12,12 +12,8 @@ class Admin
     {
         add_action('wp', array($this, 'disable_wpml_switcher_on_dashboard'), 99);
         add_filter('rest_pre_dispatch', array($this, 'switch_wpml_language_before_wc_query'), 10, 3);
-        // add_filter(
-        //     'rest_post_dispatch',
-        //     array( $this, 'restore_wpml_language_after_request' ),
-        //     10,
-        //     3
-        // );
+        add_filter('rest_post_dispatch',array( $this, 'restore_wpml_language_after_request' ),10,3);
+        
     }
 
     /**
@@ -59,21 +55,28 @@ class Admin
         return $result;
     }
 
-    public function restore_wpml_language_after_request()
-    {
+    public function restore_wpml_language_after_request( $response, $server, $request ) {
 
-        if (! defined('ICL_SITEPRESS_VERSION')) {
-            return;
+        if ( ! defined( 'ICL_SITEPRESS_VERSION' ) ) {
+            return $response;
         }
-
-        if (empty($this->original_lang)) {
-            return;
+    
+        // Only WooCommerce product REST
+        if ( strpos( $request->get_route(), '/wc/v3/products' ) === false ) {
+            return $response;
         }
-
+    
+        if ( empty( $this->original_lang ) ) {
+            return $response;
+        }
+    
         global $sitepress;
-        $sitepress->switch_lang($this->original_lang);
-
-        // Reset for next request
+    
+        $sitepress->switch_lang( $this->original_lang );
+    
+        // Reset after restoring
         $this->original_lang = null;
-    }
+    
+        return $response;
+    }    
 }
