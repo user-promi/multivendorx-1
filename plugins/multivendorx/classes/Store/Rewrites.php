@@ -39,8 +39,8 @@ class Rewrites {
         add_filter( 'render_block_context', array( $this, 'render_context' ), 10 );
         add_action( 'wp', array( $this, 'flash_rewrite_rules' ), 99 );
         // add_action( 'pre_get_posts', array( $this, 'store_query_filter' ) );
-        add_filter( 'get_block_templates', array( $this, 'add_block_template' ), 10, 3 );
-        add_filter( 'pre_get_block_file_template', array( $this, 'get_block_file_template' ), 10, 3 );
+        add_filter( 'get_block_templates', array( $this, 'register_block_template' ), 10, 3 );
+        add_filter( 'pre_get_block_file_template', array( $this, 'resolve_template_by_id' ), 10, 3 );
     }
 
     /**
@@ -154,28 +154,17 @@ class Rewrites {
             return $template;
         }
 
-        $plugin_template = trailingslashit( MultiVendorX()->plugin_path ) . 'templates/store/multivendorx-store.php';
-        if ( file_exists( $plugin_template ) ) {
-            return $plugin_template;
+        // Block theme → WP renders block template automatically
+        if ( wp_is_block_theme() ) {
+            return $template;
         }
 
-        // Check for block template
-        // $block_template = get_posts( array(
-        //     'post_type' => 'wp_template',
-        //     'name' => 'multivendorx-store',
-        //     'posts_per_page' => 1,
-        // ) );
-        
-        // if ( ! empty( $block_template ) && $store_name == 'store' ) {
-        //     // Render block template
-        //     $content = do_blocks( $block_template[0]->post_content );
-            
-        //     echo $content;
-        //     exit;
-        // }
+        return MultiVendorX()->util->get_template( 'store/store.php', array( 'store_id' => $store->get_id() ) );
 
-        // Fallback to original template
-        return $template;
+        // $plugin_template = trailingslashit( MultiVendorX()->plugin_path ) . 'templates/store/multivendorx-store.php';
+        // if ( file_exists( $plugin_template ) ) {
+        //     return $plugin_template;
+        // }
     }
 
     function render_context($context) {
@@ -194,103 +183,82 @@ class Rewrites {
     /**
      * Add block template to editor
      */
-    public function add_block_template( $templates, $query, $template_type ) {
-        if ( 'wp_template' !== $template_type ) {
+    public function register_block_template( $templates, $query, $type ) {
+
+        if ( 'wp_template' !== $type ) {
             return $templates;
         }
 
-        $theme_slug = get_stylesheet();
-        $template_slug = 'multivendorx-store';
-
-        if ( ! get_query_var( $this->custom_store_url ) ) {
+        if ( ! get_query_var( 'store' ) && ! is_admin() ) {
             return $templates;
         }
 
-        // Check if already exists
-        $template_id   = $theme_slug . '//' . $template_slug;
+        $theme = get_stylesheet();
+        $slug = 'multivendorx-store';
+        $id    = $theme . '//' . $slug;
 
         foreach ( $templates as $template ) {
-            if ( $template->id === $template_id ) {
+            if ( $template instanceof \WP_Block_Template && $template->id === $id ) {
                 return $templates;
             }
         }
 
-        // Get saved template from database
-        $saved = get_posts( array(
-            'post_type' => 'wp_template',
-            'name' => $template_slug,
-            'posts_per_page' => 1,
-        ) );
-
-        // Default content
-        $template_file = trailingslashit( MultiVendorX()->plugin_path ) . 'templates/store/store.html';
-        $default_content = file_get_contents( $template_file );
-
-        // Create template object
-        $template = new \WP_Block_Template();
-        $template->type = 'wp_template';
-        $template->theme = $theme_slug;
-        $template->slug = $template_slug;
-        $template->id = $theme_slug . '//' . $template_slug;
-        $template->title = 'MultiVendorX Store';
-        $template->description = 'Template for vendor store pages';
-        $template->source = 'plugin';
-        $template->origin = $theme_slug;
-        $template->status = 'publish';
-        $template->has_theme_file = false;
-        $template->is_custom = true;
-        $template->content = ! empty( $saved ) ? $saved[0]->post_content : $default_content;
-        $template->area = 'uncategorized';
-
-        $templates[] = $template;
+        $templates[] = $this->build_template_object();
         return $templates;
     }
 
     /**
-     * Get block file template for editing
-     */
-    public function get_block_file_template( $template, $id, $template_type ) {
-        if ( 'wp_template' !== $template_type ) {
+     * Get block template for editor
+     */    
+    public function resolve_template_by_id( $template, $id, $type ) {
+
+        if ( 'wp_template' !== $type ) {
             return $template;
         }
 
-        $theme_slug = get_stylesheet();
-        $template_slug = 'multivendorx-store';
-        $expected_id = $theme_slug . '//' . $template_slug;
+        if ( ! get_query_var( 'store' ) && ! is_admin() ) {
+            return $template;
+        }
 
-        // Check if this is our template
+        $slug = 'multivendorx-store';
+        $expected_id = get_stylesheet() . '//' . $slug;
+
         if ( $id !== $expected_id ) {
             return $template;
         }
 
-        // Get saved template from database
-        $saved = get_posts( array(
-            'post_type' => 'wp_template',
-            'name' => $template_slug,
+        return $this->build_template_object();
+    }
+
+    public function build_template_object() {
+        $slug = 'multivendorx-store';
+        $saved = get_posts( [
+            'post_type'      => 'wp_template',
+            'name'           => $slug,
             'posts_per_page' => 1,
-        ) );
+            'post_status'    => 'publish',
+        ] );
 
-        // Default content
-        $template_file = trailingslashit( MultiVendorX()->plugin_path ) . 'templates/store/store.html';
-        $default_content = file_get_contents( $template_file );
+        if ( ! empty( $saved ) ) {
+            $content = $saved[0]->post_content;
+        } else {
+            $content = file_get_contents(
+                plugin_dir_path( __FILE__ ) . 'templates/store/store.html'
+            );
+        }
+        $template = new \WP_Block_Template();
+        $template->id      = get_stylesheet() . '//' . $slug;
+        $template->theme   = 'MultiVendorX';
+        $template->slug    = $slug;
+        $template->type    = 'wp_template';
+        $template->title   = __( 'MultiVendorX Store', 'multivendorx' );
+        $template->source  = 'plugin';
+        $template->origin  = 'plugin';
+        $template->status  = 'publish';
+        $template->content = $content;
+        $template->is_custom = true;     
 
-        // Create template object
-        $template_obj = new \WP_Block_Template();
-        $template_obj->type = 'wp_template';
-        $template_obj->theme = $theme_slug;
-        $template_obj->slug = $template_slug;
-        $template_obj->id = $expected_id;
-        $template_obj->title = 'MultiVendorX Store';
-        $template_obj->description = 'Template for vendor store pages';
-        $template_obj->source = 'plugin';
-        $template_obj->origin = $theme_slug;
-        $template_obj->status = 'publish';
-        $template_obj->has_theme_file = false;
-        $template_obj->is_custom = true;
-        $template_obj->content = ! empty( $saved ) ? $saved[0]->post_content : $default_content;
-        $template_obj->area = 'uncategorized';
-
-        return $template_obj;
+        return $template;
     }
 
     /**
