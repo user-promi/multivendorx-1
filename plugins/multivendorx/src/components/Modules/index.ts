@@ -202,7 +202,7 @@ export default {
 		},
 		{
 			id: 'spmv',
-			name: __('Co-listed products', 'multivendorx'),
+			name: __('Shared listing', 'multivendorx'),
 			desc: 'Allows more than one store to sell the same product with their own price and stock.',
 			icon: 'adminfont-spmv',
 			doc_link:
