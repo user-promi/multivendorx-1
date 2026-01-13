@@ -128,24 +128,25 @@ const Dashboard: React.FC = () => {
 				setPendingRefund([]);
 			});
 
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, 'announcement'),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				page: 1,
-				row: 5,
-				store_id: appLocalizer.store_id,
-				status: 'publish',
-				startDate: dateRange.startDate,
-				endDate: dateRange.endDate,
-				dashboard: true
-			},
-		})
-			.then((response) => {
-				setAnnouncement(response.data.items || []);
-			});
-
+		if (modules.includes('announcement')) {
+			axios({
+				method: 'GET',
+				url: getApiLink(appLocalizer, 'announcement'),
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					page: 1,
+					row: 5,
+					store_id: appLocalizer.store_id,
+					status: 'publish',
+					startDate: dateRange.startDate,
+					endDate: dateRange.endDate,
+					dashboard: true
+				},
+			})
+				.then((response) => {
+					setAnnouncement(response.data.items || []);
+				});
+		}
 		axios({
 			method: 'GET',
 			url: `${appLocalizer.apiUrl}/wc/v3/products`,

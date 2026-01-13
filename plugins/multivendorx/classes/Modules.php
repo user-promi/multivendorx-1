@@ -176,6 +176,8 @@ class Modules
                         'requires'     => array(
                             'plugin' => array(
                                 'sitepress-multilingual-cms/sitepress.php',
+                                'wpml-string-translation/plugin.php',
+                                'woocommerce-multilingual/wpml-woocommerce.php',
                             ),
                         ),
                     ),

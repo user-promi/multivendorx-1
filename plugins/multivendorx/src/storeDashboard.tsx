@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import axios from 'axios';
-import { getApiLink, Popover } from 'zyra';
+import { getApiLink, Popover, useModules } from 'zyra';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Notifications from './dashboard/notifications';
 import './hooksFilters';
@@ -22,6 +22,7 @@ const Dashboard = () => {
 	const userDropdownRef = useRef(null);
 	const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
 	const [isMenuMinmize, setisMenuMinmize] = useState(false);
+	const { modules } = useModules();
 	const [activeType, setActiveType] = useState<'notification' | 'activity'>('notification');
 
 	const location = useLocation();
@@ -68,22 +69,24 @@ const Dashboard = () => {
 		}).then((res) => {
 			setMenu(res.data || {});
 		});
-
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, 'announcement'),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				page: 1,
-				row: 4,
-				store_id: appLocalizer.store_id,
-				status: 'publish'
-			},
-		})
-			.then((response) => {
-				setAnnouncement(response.data.items || []);
+		if (modules.includes('announcement')) {
+			axios({
+				method: 'GET',
+				url: getApiLink(appLocalizer, 'announcement'),
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					page: 1,
+					row: 4,
+					store_id: appLocalizer.store_id,
+					status: 'publish'
+				},
 			})
-			.catch(() => { });
+				.then((response) => {
+					setAnnouncement(response.data.items || []);
+				})
+				.catch(() => { });
+		}
+
 	}, []);
 
 	// dark mode
