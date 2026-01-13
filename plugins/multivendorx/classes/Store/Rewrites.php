@@ -176,7 +176,14 @@ class Rewrites {
         return $context;
     }
 
+    private function should_load_template() {
+        // Check if we're on the store endpoint
         if ( get_query_var( 'store' ) ) {
+            return true;
+        }
+        
+        // Check if we're in the site editor
+        if ( is_admin() && function_exists( 'get_current_screen' ) ) {
             $screen = get_current_screen();
             if ( $screen && $screen->id === 'site-editor' ) {
                 return true;
