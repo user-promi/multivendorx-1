@@ -202,9 +202,9 @@ class Rewrites {
         $theme_slug = get_stylesheet();
         $template_slug = 'multivendorx-store';
 
-        // if ( ! get_query_var( $this->custom_store_url ) ) {
-        //     return $templates;
-        // }
+        if ( ! get_query_var( $this->custom_store_url ) ) {
+            return $templates;
+        }
 
         // Check if already exists
         $template_id   = $theme_slug . '//' . $template_slug;

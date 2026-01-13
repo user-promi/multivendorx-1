@@ -203,6 +203,8 @@ class Rest extends \WP_REST_Controller
                 );
             }
 
+            $default_language = $sitepress->get_default_language();
+
             // Prevent duplicate creation if translation already exists
             $existing = $wpml_post_translations->element_id_in($product_id, $lang_code);
             if ($existing) {
@@ -232,6 +234,8 @@ class Rest extends \WP_REST_Controller
              * (inventory, vendor meta, etc.)
              */
             do_action('mvx_after_translated_new_product', $new_product_id);
+            
+            $sitepress->switch_lang($default_language);
 
             return rest_ensure_response(array(
                 'product_id' => absint($new_product_id),

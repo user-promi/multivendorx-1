@@ -36,6 +36,7 @@ type FilterData = {
 	category?: any;
 	stock_status?: string;
 	productType?: string;
+	lang?:string;
 };
 export interface RealtimeFilter {
 	name: string;
@@ -263,6 +264,28 @@ const AllProduct: React.FC = () => {
 
 	const realtimeFilter: RealtimeFilter[] = [
 		{
+			name: 'lang',
+			render: (
+				updateFilter: (key: string, value: string) => void,
+				filterValue: string | undefined
+			) => (
+				<div className="group-field">
+					<select
+						name="lang"
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
+						}
+						value={filterValue || ''}
+						className="basic-select"
+					>
+						<option value="">Language</option>
+						<option value="en">English</option>
+						<option value="bn">Bengali</option>
+					</select>
+				</div>
+			),
+		},		
+		{
 			name: 'category',
 			render: (
 				updateFilter: (key: string, value: string) => void,
@@ -391,7 +414,8 @@ const AllProduct: React.FC = () => {
 		searchField = '',
 		productType = '',
 		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
-		endDate = new Date()
+		endDate = new Date(),
+		lang='',
 	) {
 		setData([]);
 		const params: any = {
@@ -402,6 +426,7 @@ const AllProduct: React.FC = () => {
 			before: endDate,
 			meta_key: 'multivendorx_store_id',
 			value: appLocalizer.store_id,
+			lang
 		};
 
 		if (stockStatus) {
