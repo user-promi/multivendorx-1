@@ -424,7 +424,7 @@ const AllProduct: React.FC = () => {
 			before: endDate,
 			meta_key: 'multivendorx_store_id',
 			value: appLocalizer.store_id,
-			lang
+			lang:lang
 		};
 
 		if (stockStatus) {
@@ -484,7 +484,8 @@ const AllProduct: React.FC = () => {
 			filterData?.searchField, // 5: searchField (Assuming filterData uses searchField for the search box value)
 			filterData?.productType, // 6: productType
 			filterData?.date?.start_date, // 7: startDate
-			filterData?.date?.end_date // 8: endDate
+			filterData?.date?.end_date, // 8: endDate
+			filterData?.lang
 		);
 	};
 
