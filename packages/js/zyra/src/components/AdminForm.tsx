@@ -1028,7 +1028,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     );
                     break;
 
-                // Check in Multivendorx
+                // Check in MultiVendorX
                 case 'color':
                     input = (
                         <BasicInput
@@ -1160,7 +1160,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                // Check in Multivendorx
+                // Check in MultiVendorX
                 case 'map':
                     input = (
                         <Suspense fallback={ <div>Loading map...</div> }>
@@ -1180,7 +1180,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         </Suspense>
                     );
                     break;
-                // Check in Multivendorx
+                // Check in MultiVendorX
                 case 'google-map':
                     input = (
                         <GoogleMap
@@ -1192,7 +1192,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                // Check in Multivendorx
+                // Check in MultiVendorX
                 case 'button':
                     input = (
                         <div className="form-button-group">
@@ -1336,7 +1336,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     );
                     break;
 
-                // Check in Multivendorx
+                // Check in MultiVendorX
                 case 'color-setting':
                     input = (
                         <ColorSettingInput
@@ -1716,7 +1716,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                // Check in Multivendorx
+                // Check in MultiVendorX
                 case 'label':
                     input = (
                         <Label
@@ -1921,7 +1921,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                // Check in Multivendorx
+                // Check in MultiVendorX
                 case 'merge-component':
                     input = (
                         <MergeComponent
