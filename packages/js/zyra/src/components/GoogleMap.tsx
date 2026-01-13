@@ -54,8 +54,6 @@ const GoogleMap = ({
     const mapContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        console.log('stores map', stores);
-    
         if (!map || !stores?.data?.length) return;
     
         const markers: google.maps.Marker[] = [];
