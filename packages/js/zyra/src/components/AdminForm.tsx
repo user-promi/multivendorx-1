@@ -185,7 +185,6 @@ interface InputField {
         | 'api-connect'
         | 'nested'
         | 'expandable-panel'
-        | 'multi-string'
         | 'verification-methods'
         | 'description'
         | 'treeselect'
@@ -1029,7 +1028,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     );
                     break;
 
-                // Check in MVX
+                // Check in MultiVendorX
                 case 'color':
                     input = (
                         <BasicInput
@@ -1068,7 +1067,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'multi-calender':
                     input = (
                         <MultiCalendarInput
-                            wrapperClass="settings-calender"
+                            wrapperClass={inputField.wrapperClass}
                             inputClass="teal"
                             multiple={ inputField.multiple || false } //for single or mutiple input (true/false)
                             range={ inputField.range || false } // for range select (true/false)
@@ -1116,8 +1115,8 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'calender':
                     input = (
                         <CalendarInput
-                            wrapperClass="settings-calender"
-                            inputClass="teal"
+                            wrapperClass={inputField.wrapperClass}
+                            inputClass= {inputField.class}
                             multiple={ inputField.multiple || false } //for single or mutiple input (true/false)
                             range={ inputField.range || false } // for range select (true/false)
                             value={ setting[ inputField.key ] || '' }
@@ -1161,7 +1160,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                // Check in MVX
+                // Check in MultiVendorX
                 case 'map':
                     input = (
                         <Suspense fallback={ <div>Loading map...</div> }>
@@ -1181,7 +1180,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         </Suspense>
                     );
                     break;
-                // Check in MVX
+                // Check in MultiVendorX
                 case 'google-map':
                     input = (
                         <GoogleMap
@@ -1193,7 +1192,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                // Check in MVX
+                // Check in MultiVendorX
                 case 'button':
                     input = (
                         <div className="form-button-group">
@@ -1243,84 +1242,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     );
                     break;
 
-                case 'multi-string':
-                    {
-                        const existingValues = setting[ inputField.key ];
-                        const defaultValues = inputField.defaultValues || [];
-
-                        //Auto-save default values when not yet saved
-                        useEffect( () => {
-                            if (
-                                ( ! existingValues ||
-                                    existingValues.length === 0 ) &&
-                                defaultValues.length > 0
-                            ) {
-                                handleChange(
-                                    {
-                                        target: {
-                                            name: inputField.key,
-                                            value: defaultValues,
-                                        },
-                                    },
-                                    inputField.key
-                                );
-                            }
-                        }, [ existingValues, defaultValues, inputField.key ] );
-                        input = (
-                            <MultiInput
-                                inputType="multi-string"
-                                wrapperClass="setting-form-multi-input"
-                                inputClass="basic-input"
-                                listClass="expandable-panel-group"
-                                itemClass="multi-item"
-                                placeholder={ inputField.placeholder }
-                                values={
-                                    setting[ inputField.key ] ||
-                                    inputField.defaultValues ||
-                                    []
-                                }
-                                name={ inputField.key }
-                                proSetting={ isProSetting(
-                                    inputField.proSetting ?? false
-                                ) }
-                                moduleEnabled={
-                                    inputField.moduleEnabled
-                                        ? modules.includes(
-                                              inputField.moduleEnabled
-                                          )
-                                        : true
-                                }
-                                description={ inputField.desc } // Optional description text displayed below the input field.
-                                descClass="settings-metabox-description" // CSS class for the description text.
-                                iconEnable={ inputField.iconEnable } // Boolean to enable icon selection for each item.
-                                descEnable={ inputField.descEnable } // Boolean to enable description input for each item.
-                                requiredEnable={ inputField.requiredEnable } // Boolean to enable marking items as "required".
-                                iconOptions={ inputField.iconOptions || [] } // Array of icon class names available for selection.
-                                allowDuplicates={ false } // If true, allows adding items with duplicate values; false prevents duplicates.
-                                maxItems={ 20 } // Maximum number of items allowed in the list.
-                                onStringChange={ ( e ) => {
-                                    if (
-                                        hasAccess(
-                                            inputField.proSetting ?? false,
-                                            String(
-                                                inputField.moduleEnabled ?? ''
-                                            ),
-                                            String(
-                                                inputField.dependentSetting ??
-                                                    ''
-                                            ),
-                                            String(
-                                                inputField.dependentPlugin ?? ''
-                                            )
-                                        )
-                                    ) {
-                                        handleChange( e, inputField.key );
-                                    }
-                                } }
-                            />
-                        );
-                    }
-                    break;
                 case 'radio':
                     input = (
                         <RadioInput
@@ -1415,12 +1336,12 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     );
                     break;
 
-                // Check in MVX
+                // Check in MultiVendorX
                 case 'color-setting':
                     input = (
                         <ColorSettingInput
-                            wrapperClass="form-group-color-setting"
-                            inputClass="setting-form-input"
+                            wrapperClass={inputField.wrapperClass}
+                            inputClass={ inputField.class }
                             description={ inputField.desc } // optional description displayed under the input
                             showPreview={ inputField.showPreview ?? false } // whether to show a color preview box
                             predefinedOptions={
@@ -1428,7 +1349,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             } // array of predefined color options for quick selection
                             images={ inputField.images ?? [] } // optional array of images associated with colors
                             value={ value } // currently selected color value
-                            idPrefix="color-setting"
                             templates={ inputField.templates } 
                             onChange={ ( e ) =>
                                 handleChange( e, inputField.key )
@@ -1443,8 +1363,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                 case 'select':
                     input = (
                         <SelectInput
-                            wrapperClass="form-select-field-wrapper"
-                            descClass="settings-metabox-description"
+                            wrapperClass={inputField.wrapperClass}
                             name={ inputField.key }
                             description={ inputField.desc } // optional description displayed below the select input
                             inputClass={ inputField.className }
@@ -1797,7 +1716,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                // Check in MVX
+                // Check in MultiVendorX
                 case 'label':
                     input = (
                         <Label
@@ -2002,7 +1921,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                         />
                     );
                     break;
-                // Check in MVX
+                // Check in MultiVendorX
                 case 'merge-component':
                     input = (
                         <MergeComponent

@@ -453,8 +453,6 @@ const Dashboard: React.FC = () => {
 
 				<div className="buttons-wrapper">
 					<MultiCalendarInput
-						wrapperClass=""
-						inputClass=""
 						onChange={(range: DateRange) => {
 							setDateRange({
 								startDate: range.startDate,
@@ -926,7 +924,7 @@ const Dashboard: React.FC = () => {
 					>
 						<div className="activity-log">
 							{activities && activities.length > 0 ? (
-								activities.map((a, i) => (
+								activities.slice(0, 5).map((a, i) => (
 									<div key={i} className="activity">
 										<div className="title">{a.title}</div>
 										<div className="des">

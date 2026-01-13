@@ -13,12 +13,14 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	TextArea,
+	ProPopup,
 } from 'zyra';
 import {
 	ColumnDef,
 	RowSelectionState,
 	PaginationState,
 } from '@tanstack/react-table';
+import { Dialog } from '@mui/material';
 
 type Review = {
 	review_id: number;
@@ -73,11 +75,30 @@ const SupportTickets: React.FC = () => {
 	const [store, setStore] = useState<any[] | null>(null);
 	const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 	const [replyText, setReplyText] = useState<string>('');
-
 	const [pagination, setPagination] = useState<PaginationState>({
 		pageIndex: 0,
 		pageSize: 10,
 	});
+
+	const [deleteReview, setDeleteReview] = useState<Review | null>(null);
+
+	const handleDeleteConfirm = async () => {
+		if (!deleteReview) return;
+
+		try {
+			await axios.delete(
+				getApiLink(appLocalizer, `review/${deleteReview.review_id}`),
+				{
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				}
+			);
+
+			requestData(pagination.pageSize, pagination.pageIndex + 1);
+			setDeleteReview(null);
+		} catch {
+			alert(__('Failed to delete review', 'multivendorx'));
+		}
+	};
 
 	// Fetch total rows on mount
 	useEffect(() => {
@@ -255,8 +276,6 @@ const SupportTickets: React.FC = () => {
 			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
-						wrapperclassName=""
-						inputclassName=""
 						onChange={(range: any) =>
 							updateFilter('date', {
 								start_date: range.startDate,
@@ -500,43 +519,8 @@ const SupportTickets: React.FC = () => {
 							{
 								label: __('Delete', 'multivendorx'),
 								icon: 'adminfont-delete delete',
-								onClick: async () => {
-									if (
-										confirm(
-											__(
-												'Are you sure you want to delete this review?',
-												'multivendorx'
-											)
-										)
-									) {
-										try {
-											await axios.delete(
-												getApiLink(
-													appLocalizer,
-													`review/${row.original.review_id}`
-												),
-												{
-													headers: {
-														'X-WP-Nonce':
-															appLocalizer.nonce,
-													},
-												}
-											);
-
-											//Refresh the table after delete
-											requestData(
-												pagination.pageSize,
-												pagination.pageIndex + 1
-											);
-										} catch (error) {
-											alert(
-												__(
-													'Failed to delete review',
-													'multivendorx'
-												)
-											);
-										}
-									}
+								onClick: () => {
+									setDeleteReview(row.original);
 								},
 							},
 						],
@@ -545,7 +529,7 @@ const SupportTickets: React.FC = () => {
 			),
 		},
 	];
-	
+
 	return (
 		<>
 			<div className="page-title-wrapper">
@@ -571,12 +555,36 @@ const SupportTickets: React.FC = () => {
 				typeCounts={status as Status[]}
 				realtimeFilter={realtimeFilter}
 			/>
+
+			<Dialog
+				open={deleteReview}
+				onClose={() => setDeleteReview(false)}
+			>
+				<ProPopup
+					open={!!deleteReview}
+					confirmMode
+					onClose={() => setDeleteReview(null)}
+					onConfirm={handleDeleteConfirm}
+					title={__('Are you sure?', 'multivendorx')}
+					confirmMessage={__(
+						'Are you sure you want to delete this review? This action cannot be undone.',
+						'multivendorx'
+					)}
+					confirmYesText={__('Delete', 'multivendorx')}
+					confirmNoText={__('Cancel', 'multivendorx')}
+					onCancel={() => {
+						setDeleteReview(false);
+						// setSelectedCoupon(null);
+					}}
+				/>
+			</Dialog>
+
 			{selectedReview && (
 				<CommonPopup
 					open={!!selectedReview}
 					onClose={() => setSelectedReview(null)}
 					width="31.25rem"
-					height= "70%"
+					height="70%"
 					header={{
 						icon: 'store-review',
 						title: `${__('Reply to Review', 'multivendorx')} - ${selectedReview.store_name}`,

@@ -91,9 +91,9 @@ const HeaderNotifications: React.FC = () => {
 					className="item"
 					onClick={() => handleNotificationClick(item.id)}
 				>
-					<div className="icon admin-badge green">
-						<i className={item.icon || 'adminfont-user-network-icon'} />
-					</div>
+					{/* <div className="icon admin-badge green"> */}
+						<i className={item.icon || 'adminfont-user-network-icon green'} />
+					{/* </div> */}
 					<div className="details">
 						<span className="heading">{item.title}</span>
 						<span className="message">{item.message}</span>
