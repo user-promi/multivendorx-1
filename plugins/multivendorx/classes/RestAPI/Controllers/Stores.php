@@ -296,9 +296,9 @@ class Stores extends \WP_REST_Controller {
             if ( ! empty( $filters ) ) {
                 $args['orderBy'] = $filters['sort'] ?? $args['orderBy'] ?? '';
                 $args['order']   = $filters['order'] ?? '';
-                $lat    = isset($filters['location_lat']) ? floatval($filters['location_lat']) : 0;
-                $lng    = isset($filters['location_lng']) ? floatval($filters['location_lng']) : 0;
-                $radius = isset($filters['distance']) ? floatval($filters['distance']) : 0;
+                $lat    = !empty($filters['location_lat']) ? floatval($filters['location_lat']) : 0;
+                $lng    = !empty($filters['location_lng']) ? floatval($filters['location_lng']) : 0;
+                $radius = !empty($filters['distance']) ? floatval($filters['distance']) : 0;
                 $unit   = $filters['miles'] ?? 'km';
 
                 switch ($unit) {
@@ -312,11 +312,11 @@ class Stores extends \WP_REST_Controller {
                         $earth_radius = 6371;
                 }                
 
-                if ( isset( $filters['limit'] ) && is_numeric( $filters['limit'] ) ) {
+                if ( !empty( $filters['limit'] ) && is_numeric( $filters['limit'] ) ) {
                     $args['limit'] = absint( $filters['limit'] );
                 }
 
-                if ( isset( $filters['offset'] ) && is_numeric( $filters['offset'] ) ) {
+                if ( !empty( $filters['offset'] ) && is_numeric( $filters['offset'] ) ) {
                     $args['offset'] = absint( $filters['offset'] );
                 }
 
