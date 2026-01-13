@@ -351,8 +351,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									</div>
 									<div className="icon-wrapper">
 										<i
-											onClick={() => handleEdit(method)}
-											className="adminfont-edit"
+											onClick={() => handleEdit(method)} className="adminfont-edit"
 										></i>
 										<i
 											onClick={() =>
@@ -403,6 +402,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					open={addShipping}
 					width="31.25rem"
 					height="60%"
+					onClose= {setAddShipping(false)}
 					header={{
 						icon: 'shipping',
 						title: `${isEditing

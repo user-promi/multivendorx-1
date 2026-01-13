@@ -78,8 +78,6 @@ const VisitorsMap: React.FC<VisitorsMapProps> = ({ dateRange }) => {
 
     return (
         <>
-            {loading && <p>Loading visitor map…</p>}
-
             {!loading && data && (
                 <div style={{ position: 'relative' }}>
 

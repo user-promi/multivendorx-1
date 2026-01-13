@@ -63,6 +63,11 @@ const stockStatusOptions = [
 	{ key: 'outofstock', name: 'Out of Stock' },
 	{ key: 'onbackorder', name: 'On Backorder' },
 ];
+const StatusOptions = [
+	{ key: '', name: 'Status' },
+	{ key: 'instock', name: 'Published' },
+	{ key: 'outofstock', name: 'Draft' },
+];
 const productTypeOptions = [
 	{ key: '', name: 'Product Type' },
 	{ key: 'simple', name: 'Simple Product' },
@@ -150,11 +155,10 @@ const AllProduct: React.FC = () => {
 						className="product-wrapper"
 					>
 						{row.original.image ? (
-							// <img
-							// 	src={row.original.image}
-							// 	alt={row.original.name}
-							// />
-							<></>
+							<img
+								src={row.original.image}
+								alt={row.original.name}
+							/>
 						) : (
 							<i className="item-icon adminfont-multi-product"></i>
 						)}
@@ -356,6 +360,30 @@ const AllProduct: React.FC = () => {
 						className="basic-select"
 					>
 						{stockStatusOptions?.map((s: any) => (
+							<option key={s.key} value={s.key}>
+								{s.name}
+							</option>
+						))}
+					</select>
+				</div>
+			),
+		},
+		{
+			name: 'status',
+			render: (
+				updateFilter: (key: string, value: string) => void,
+				filterValue: string | undefined
+			) => (
+				<div className="group-field">
+					<select
+						name="status"
+						onChange={(e) =>
+							updateFilter(e.target.name, e.target.value)
+						}
+						value={filterValue || ''}
+						className="basic-select"
+					>
+						{StatusOptions?.map((s: any) => (
 							<option key={s.key} value={s.key}>
 								{s.name}
 							</option>

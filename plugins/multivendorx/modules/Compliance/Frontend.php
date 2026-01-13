@@ -64,10 +64,10 @@ class Frontend
         if (apply_filters('mvx_show_report_abuse_link', true, $product)) {
             $report_abuse_text = apply_filters('mvx_report_abuse_text', __('Report Abuse', 'multivendorx'), $product);
             ?>
-            <div class="mvx-report-abuse-wrapper">
-                <a href="javascript:void(0);" class="open-report-abuse"><?php echo esc_html($report_abuse_text); ?></a>
+            <div class="multivendorx-report-abuse-wrapper">
+                <a href="javascript:void(0);" class="open-popup open-report-abuse"><?php echo esc_html($report_abuse_text); ?></a>
                 <div class="report-abuse-form multivendorx-popup" style="display:none;">
-                    <form class="woocommerce-form woocommerce-form-login login">
+                    <form class="woocommerce-form woocommerce-form-login login multivendorx-popup-content">
                         <span class="popup-close"><i class="dashicons dashicons-no-alt"></i></span>
                         <h3>
                             <?php

@@ -307,7 +307,7 @@ const BusinessAddress = () => {
 					<BasicInput
 						name="location_address"
 						value={addressData.location_address}
-						 
+
 						descClass="settings-metabox-description"
 						onChange={handleAddressChange}
 					/>
@@ -317,7 +317,7 @@ const BusinessAddress = () => {
 					<BasicInput
 						name="city"
 						value={addressData.city}
-						 
+
 						descClass="settings-metabox-description"
 						onChange={handleAddressChange}
 					/>
@@ -328,7 +328,7 @@ const BusinessAddress = () => {
 					<BasicInput
 						name="zip"
 						value={addressData.zip}
-						 
+
 						descClass="settings-metabox-description"
 						onChange={handleAddressChange}
 					/>
@@ -355,22 +355,21 @@ const BusinessAddress = () => {
 						onChange={handleStateChange}
 					/>
 				</FormGroup>
+				
+				{/* Map Component */}
+				{renderMapComponent()}
+				{/* Hidden coordinates */}
+				<input
+					type="hidden"
+					name="location_lat"
+					value={addressData.location_lat}
+				/>
+				<input
+					type="hidden"
+					name="location_lng"
+					value={addressData.location_lng}
+				/>
 			</FormGroupWrapper>
-
-
-			{/* Map Component */}
-			{renderMapComponent()}
-			{/* Hidden coordinates */}
-			<input
-				type="hidden"
-				name="location_lat"
-				value={addressData.location_lat}
-			/>
-			<input
-				type="hidden"
-				name="location_lng"
-				value={addressData.location_lng}
-			/>
 		</>
 	);
 };

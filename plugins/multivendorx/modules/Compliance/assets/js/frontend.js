@@ -17,22 +17,14 @@ jQuery(function ($) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	}
 
-	// Fetch reasons dynamically on form open
+	// Fetch reasons dynamically (expects popup already open)
 	$(document).on('click', '.open-report-abuse', function (e) {
 		e.preventDefault();
-		e.stopPropagation();
 
 		var $form = $(this).siblings('.report-abuse-form');
-
-		// Close other open popups (optional but recommended)
-		$('.report-abuse-form').not($form).fadeOut(200);
-
-		// Toggle current popup
-		$form.fadeToggle(200);
-
 		var $wrapper = $form.find('.report-abuse-reasons-wrapper');
 
-		// If not already loaded, fetch reasons
+		// Fetch reasons only once
 		if ($wrapper.children().length === 0) {
 			$.ajax({
 				url: reportAbuseFrontend.ajaxurl,
@@ -61,33 +53,13 @@ jQuery(function ($) {
 		}
 	});
 
-	// Close popup on X click
-	$(document).on('click', '.popup-close', function (e) {
-		e.preventDefault();
-		e.stopPropagation();
-		$(this).closest('.report-abuse-form').fadeOut(200);
-	});
-
-	// Prevent closing when clicking inside the form
-	$(document).on(
-		'click',
-		'.woocommerce-form.woocommerce-form-login.login',
-		function (e) {
-			e.stopPropagation();
-		}
-	);
-
-	// Close popup when clicking outside
-	$(document).on('click', function () {
-		$('.report-abuse-form').fadeOut(200);
-	});
-
 	// Show/hide custom message textarea if "Other" is selected
 	$(document).on(
 		'change',
 		'.report-abuse-reasons-wrapper input[type=radio]',
 		function () {
 			var $form = $(this).closest('.report-abuse-form');
+
 			if ($(this).val().toLowerCase() === 'other') {
 				$form.find('.report-abuse-custom-msg').show();
 			} else {
@@ -99,10 +71,9 @@ jQuery(function ($) {
 	// Submit abuse report
 	$(document).on('click', '.submit-report-abuse', function (e) {
 		e.preventDefault();
+
 		var $btn = $(this);
-		if ($btn.prop('disabled')) {
-			return;
-		}
+		if ($btn.prop('disabled')) return;
 
 		var $form = $btn.closest('.report-abuse-form');
 		var name = $form.find('.report-abuse-name').val().trim();
@@ -110,17 +81,17 @@ jQuery(function ($) {
 		var reason = $form
 			.find('.report-abuse-reasons-wrapper input[type=radio]:checked')
 			.val();
+
 		var msg =
 			reason === 'Other'
 				? $form.find('.report-abuse-msg').val().trim()
 				: reason;
+
 		var pid = $form.find('.report_abuse_product_id').val();
 		var $msgBox = $form.find('.report-abuse-msg-box');
 
-		// Clear previous messages
 		$msgBox.empty();
 
-		// Simple email regex validation
 		var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 		if (!name || !email || !reason || !msg) {
@@ -153,46 +124,76 @@ jQuery(function ($) {
 					$msgBox.html(
 						'<div class="wc-block-components-notice-banner is-success">' +
 						'<div class="wc-block-components-notice-banner__content">' +
-						'<strong>Success:</strong> ' + res.data +
-						'</div>' +
-						'</div>'
+						'<strong>Success:</strong> ' +
+						res.data +
+						'</div></div>'
 					);
 
-					// Hide the form after success
 					setTimeout(function () {
-						$form.slideUp(function () {
-							$form.find('.report-abuse-msg-box').empty();
-						});
+						$form.find('.report-abuse-msg-box').empty();
 					}, 1000);
 
-					// Reset form fields
 					$form
 						.find('input[type=text], input[type=email], textarea')
 						.val('');
 					$form.find('input[type=radio]').prop('checked', false);
 					$form.find('.report-abuse-custom-msg').hide();
-
-					// Reset button
-					$btn.prop('disabled', false);
-					$btn.find('.btn-text').show();
-					$btn.find('.btn-spinner').hide();
 				} else {
-					$msgBox.html(
-						'<span style="color:red;">' + res.data + '</span>'
-					);
-					$btn.prop('disabled', false);
-					$btn.find('.btn-text').show();
-					$btn.find('.btn-spinner').hide();
+					showThemeNotice($msgBox, 'error', res.data);
 				}
+
+				$btn.prop('disabled', false);
+				$btn.find('.btn-text').show();
+				$btn.find('.btn-spinner').hide();
 			},
 			error: function () {
-				$msgBox.html(
-					'<span style="color:red;">Something went wrong. Try again.</span>'
+				showThemeNotice(
+					$msgBox,
+					'error',
+					'Something went wrong. Try again.'
 				);
+
 				$btn.prop('disabled', false);
 				$btn.find('.btn-text').show();
 				$btn.find('.btn-spinner').hide();
 			},
 		});
 	});
+
+
+
+
+
+	// OPEN popup
+	$(document).on('click', '.open-popup', function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		var $popup = $(this).siblings('.multivendorx-popup');
+
+		// Close other popups
+		$('.multivendorx-popup').not($popup).fadeOut(200);
+
+		// Fade in popup
+		$popup.fadeIn(200);
+	});
+
+	// CLOSE via close icon
+	$(document).on('click', '.multivendorx-popup .popup-close', function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		$(this).closest('.multivendorx-popup').fadeOut(200);
+	});
+
+	// PREVENT close when clicking inside content
+	$(document).on('click', '.multivendorx-popup-content', function (e) {
+		e.stopPropagation();
+	});
+
+	// CLOSE when clicking outside content (overlay)
+	$(document).on('click', '.multivendorx-popup', function () {
+		$(this).fadeOut(200);
+	});
+
 });
