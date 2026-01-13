@@ -643,8 +643,6 @@ export const Announcements: React.FC = () => {
 			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
-						wrapperClass=""
-						inputClass=""
 						onChange={(range: DateRange) => {
 							updateFilter('date', {
 								start_date: range.startDate,

@@ -232,7 +232,7 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
     };
     return (
         <>
-            <div className={ props.wrapperClass }>
+            <div className={ `form-group-color-setting ${ props.wrapperClass || '' }`}>
                 { /* Toggle Mode */ }
                 { ! selectedImage && (
                     <>
@@ -330,8 +330,8 @@ const ColorSettingInput: React.FC< ColorSettingProps > = ( props ) => {
                                 return (
                                     <div key={ option.key } className="palette">
                                         <input
-                                            className={ props.inputClass }
-                                            id={ `${ props.idPrefix }-${ option.key }` }
+                                            className={`setting-form-input ${ props.inputClass || '' }`}
+                                            id={ `color-setting-${ option.key }` }
                                             type="radio"
                                             name="vendor_color_scheme_picker"
                                             checked={ checked }

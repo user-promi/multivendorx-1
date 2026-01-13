@@ -363,8 +363,6 @@ const AllProduct: React.FC = () => {
 			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
-						wrapperClass=""
-						inputClass=""
 						onChange={(range: any) => {
 							updateFilter('date', {
 								start_date: range.startDate,

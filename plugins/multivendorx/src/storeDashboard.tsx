@@ -23,6 +23,8 @@ const Dashboard = () => {
 	const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
 	const [isMenuMinmize, setisMenuMinmize] = useState(false);
 	const { modules } = useModules();
+	const [activeType, setActiveType] = useState<'notification' | 'activity'>('notification');
+
 	const location = useLocation();
 	const navigate = useNavigate();
 
@@ -519,7 +521,7 @@ const Dashboard = () => {
 									}
 								>
 									<div
-										className={`adminfont-icon dark-icon ${isDarkMode
+										className={`adminfont-icon admin-icon dark-icon ${isDarkMode
 											? 'adminfont-light'
 											: 'adminfont-moon'
 											}`}
@@ -527,16 +529,16 @@ const Dashboard = () => {
 								</li>
 
 								<li className="tooltip-wrapper bottom">
-									<i className="adminfont-icon adminfont-product-addon"></i>
+									<i className="admin-icon adminfont-product-addon"></i>
 									<span className="tooltip-name">
 										Add product
 									</span>
 								</li>
 								<li className="tooltip-wrapper bottom">
-									<i className="adminfont-icon adminfont-storefront"></i>
+									<i className="admin-icon adminfont-storefront"></i>
 									<span className="tooltip-name">view storefront</span>
 								</li>
-								<li className="tooltip-wrapper bottom">
+								{/* <li className="tooltip-wrapper bottom">
 									<i
 										className="adminfont-icon notification adminfont-notification"
 										onClick={toggleNotifications}
@@ -546,50 +548,128 @@ const Dashboard = () => {
 									</span>
 
 									{showNotifications && <Notifications type="notification" />}
+								</li> */}
+								<li className="tooltip-wrapper bottom">
+								<Popover
+									template="tab"
+									width="24rem"
+									toggleIcon="adminfont-notification"
+									toggleContent={<><span className="count">0</span> <span className="tooltip-name">Notification</span></>}
+									onTabChange={(tabId) => {
+										setActiveType(
+											tabId === 'activities' ? 'activity' : 'notification'
+										);
+									}}
+									header={
+										<div className="title">
+											{__('Notifications', 'multivendorx')}
+											{/* {notifications?.length > 0 && (
+												<span className="admin-badge yellow">
+													{notifications?.length} {__('New', 'multivendorx')}
+												</span>
+											)} */}
+										</div>
+									}
+									tabs={[
+										{
+											id: 'notifications',
+											label: __("Notifications", 'multivendorx'),
+											icon: 'adminfont-notification',
+											content: (
+
+												<ul className="notification-list">
+													{/* {renderContent()} */}
+												</ul>
+											)
+										},
+										{
+											id: 'activities',
+											label: __("Activities", 'multivendorx'),
+											icon: 'adminfont-activity',
+											content: (
+												<ul className="notification-list">
+													{/* {renderContent()} */}
+												</ul>
+											)
+										},
+									]}
+									footer={
+										<div className="footer">
+											{/* {activeType == 'notification' ? (
+
+												<a
+													href={`?page=multivendorx#&tab=notifications&subtab=notifications`}
+													className="admin-btn btn-purple"
+													onClick={() => setIsDropdownOpen(false)}
+												>
+													<i className="adminfont-eye"></i>
+													{__('View all notifications', 'multivendorx')}
+												</a>
+											) : (
+												<a
+													href={`?page=multivendorx#&tab=notifications&subtab=activities`}
+													className="admin-btn btn-purple"
+													onClick={() => setIsDropdownOpen(false)}
+												>
+													<i className="adminfont-eye"></i>
+													{__('View all activities', 'multivendorx')}
+												</a>
+											)} */}
+											<a
+													href={`?page=multivendorx#&tab=notifications&subtab=activities`}
+													className="admin-btn btn-purple"
+													// onClick={() => setIsDropdownOpen(false)}
+												>
+													<i className="adminfont-eye"></i>
+													{__('View all activities', 'multivendorx')}
+												</a>
+										</div>
+									}
+								/>
 								</li>
 								<li className="tooltip-wrapper bottom">
-									<Popover
-										toggleIcon="adminfont-announcement"
-										toggleContent={<span className="tooltip-name">Announcements</span>}
-										template="notification"
-										width="20rem"
-										className="tooltip-wrapper bottom"
-										items={announcement?.length
-											? announcement.map((item, index) => ({
-												title: item.title,
-												desc: item.content,
-												time: formatTimeAgo(item.date),
-												icon: `adminfont-user-network-icon admin-badge admin-color${index + 1}`,
-												action: () => {
-													// optional: handle click on individual announcement
-													// handleNotificationClick(item.id)
-												},
-											}))
-											: []}
-										header={
-											<div className="title">
-												{__('Announcements', 'multivendorx')}
-												{announcement && announcement.length > 0 && (
-													<span className="admin-badge green">
-														{announcement.length} {__('New', 'multivendorx')}
-													</span>
-												)}
-											</div>
-										}
-										footer={
-											<a
-												href={
-													appLocalizer.permalink_structure
-														? `${appLocalizer.site_url.replace(/\/$/, '')}/${appLocalizer.dashboard_slug}/view-notifications/#subtab=announcements`
-														: `${appLocalizer.site_url.replace(/\/$/, '')}/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=announcements`
-												}
-												className="admin-btn btn-purple"
-											>
-												<i className="adminfont-eye"></i>
-												{__('View all announcements', 'multivendorx')}
-											</a>
-										}
-									/>
+								<Popover
+									toggleIcon="adminfont-announcement"
+									toggleContent={<span className="tooltip-name">Announcements</span>}
+									template="notification"
+									width="20rem"
+									className="tooltip-wrapper bottom"
+									items={announcement?.length
+										? announcement.map((item, index) => ({
+											title: item.title,
+											desc: item.content,
+											time: formatTimeAgo(item.date),
+											icon: `adminfont-user-network-icon admin-color${index + 1}`,
+											action: () => {
+												// optional: handle click on individual announcement
+												// handleNotificationClick(item.id)
+											},
+										}))
+										: []}
+									header={
+										<div className="title">
+											{__('Announcements', 'multivendorx')}
+											{announcement && announcement.length > 0 && (
+												<span className="admin-badge green">
+													{announcement.length} {__('New', 'multivendorx')}
+												</span>
+											)}
+										</div>
+									}
+									footer={
+										<a
+											href={
+												appLocalizer.permalink_structure
+													? `${appLocalizer.site_url.replace(/\/$/, '')}/${appLocalizer.dashboard_slug}/view-notifications/#subtab=announcements`
+													: `${appLocalizer.site_url.replace(/\/$/, '')}/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=announcements`
+											}
+											className="admin-btn btn-purple"
+										>
+											<i className="adminfont-eye"></i>
+											{__('View all announcements', 'multivendorx')}
+										</a>
+									}
+								/>
 								</li>
 
 								<li
@@ -597,7 +677,7 @@ const Dashboard = () => {
 									onClick={toggleFullscreen}
 									className="tooltip-wrapper bottom"
 								>
-									<i className="adminfont-icon adminfont-crop-free"></i>
+									<i className="admin-icon adminfont-crop-free"></i>
 									<span className="tooltip-name">
 										Full Screen
 									</span>
@@ -610,7 +690,7 @@ const Dashboard = () => {
 										className="avatar-wrapper"
 										onClick={toggleUserDropdown}
 									>
-										<i className="adminfont-icon adminfont-person"></i>
+										<i className="admin-icon adminfont-person"></i>
 									</div>
 									{showUserDropdown && (
 										<div className="dropdown-menu" ref={userDropdownRef}>
