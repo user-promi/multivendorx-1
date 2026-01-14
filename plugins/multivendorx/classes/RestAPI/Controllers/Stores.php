@@ -363,43 +363,30 @@ class Stores extends \WP_REST_Controller {
             // Fetch & format stores.
             $stores = StoreUtil::get_store_information( $args );
             if ( $lat && $lng && $radius ) {
-
                 $stores = array_filter( $stores, function ( $store ) use ( $lat, $lng, $radius, $earth_radius ) {
-            
                     $store_id   = (int) $store['ID'];
                     $store_meta = Store::get_store( $store_id );
-            
                     $store_lat = floatval( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['location_lat'] ] ?? 0 );
                     $store_lng = floatval( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['location_lng'] ] ?? 0 );
-            
                     if ( ! $store_lat || ! $store_lng ) {
                         return false;
                     }
-            
-                    // Haversine
-                    $dLat = deg2rad( $store_lat - $lat );
-                    $dLng = deg2rad( $store_lng - $lng );
-            
-                    $a = sin($dLat / 2) ** 2 +
+                    $delta_latitude = deg2rad( $store_lat - $lat );
+                    $delta_longitude = deg2rad( $store_lng - $lng );
+                    $haversine = sin($delta_latitude / 2) ** 2 +
                          cos(deg2rad($lat)) * cos(deg2rad($store_lat)) *
-                         sin($dLng / 2) ** 2;
-            
-                    $distance = $earth_radius * ( 2 * atan2( sqrt($a), sqrt(1 - $a) ) );
+                         sin($delta_longitude / 2) ** 2;
+                    $distance = $earth_radius * ( 2 * atan2( sqrt($haversine), sqrt(1 - $haversine) ) );
                     return $distance <= $radius;
                 });
-            
-                // Reindex array for JSON
                 $stores = array_values( $stores );
             }            
             $formatted_stores = array();
-
             foreach ( $stores as $store ) {
                 $store_id   = (int) $store['ID'];
                 $store_meta = Store::get_store( $store_id );
-
                 $owner_id = StoreUtil::get_primary_owner( $store_id );
                 $owner    = get_userdata( $owner_id );
-
                 $formatted_stores[] = apply_filters(
                     'multivendorx_stores',
                     array(
