@@ -71,39 +71,29 @@ const MultiCalendarInput: React.FC< CalendarInputProps > = ( props ) => {
         setOpenDatePicker( ( prev ) => ! prev );
     };
     
-    const normalizeRangeToUTC = (start: Date, end: Date) => {
-        const startLocal = new Date(start);
-        startLocal.setHours(0, 0, 0, 0);
-    
-        const endLocal = new Date(end);
-        endLocal.setHours(23, 59, 59, 999);
-    
-        return {
-            startDate: startLocal.toISOString(),
-            endDate: endLocal.toISOString(),
-        };
-    };
-    
     const handleDateChange = (ranges: RangeKeyDict) => {
         const selection = ranges.selection;
         if (!selection?.startDate || !selection?.endDate) return;
     
-        const { startDate, endDate } = normalizeRangeToUTC(
-            selection.startDate,
-            selection.endDate
-        );
+        // Normalize to LOCAL day boundaries
+        const start = new Date(selection.startDate);
+        start.setHours(0, 0, 0, 0);
+    
+        const end = new Date(selection.endDate);
+        end.setHours(23, 59, 59, 999);
     
         setSelectedRange([
             {
-                startDate: new Date(startDate),
-                endDate: new Date(endDate),
+                startDate: start,
+                endDate: end,
                 key: 'selection',
             },
         ]);
     
+        // Return LOCAL Date objects only
         props.onChange?.({
-            startDate,
-            endDate,
+            startDate: start,
+            endDate: end,
         });
     
         closeTimeoutRef.current = window.setTimeout(() => {
