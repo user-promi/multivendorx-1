@@ -98,6 +98,15 @@ export const Announcements: React.FC = () => {
 		pageSize: 10,
 	});
 
+	const [dateFilter, setDateFilter] = useState<FilterDate>({
+		start_date: new Date(
+			new Date().getFullYear(),
+			new Date().getMonth() - 1,
+			1
+		),
+		end_date: new Date(),
+	});
+
 	const [pageCount, setPageCount] = useState(0);
 	const [error, setError] = useState<string | null>(null);
 	const bulkSelectRef = useRef<HTMLSelectElement>(null);
@@ -395,7 +404,7 @@ export const Announcements: React.FC = () => {
 		currentPage = 1,
 		categoryFilter = '',
 		searchField = '',
-		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
+		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date()
 	) {
 		setData(null);
@@ -643,18 +652,26 @@ export const Announcements: React.FC = () => {
 			render: (updateFilter) => (
 				<div className="right">
 					<MultiCalendarInput
+						value={{
+							startDate: dateFilter.start_date!,
+							endDate: dateFilter.end_date!,
+						}}
 						onChange={(range: DateRange) => {
-							updateFilter('date', {
+							const next = {
 								start_date: range.startDate,
 								end_date: range.endDate,
-							});
+							};
+
+							setDateFilter(next);
+							updateFilter('date', next);
 						}}
 					/>
 				</div>
 			),
 		},
 	];
-	
+
+
 	return (
 		<>
 			<Dialog
@@ -821,7 +838,7 @@ export const Announcements: React.FC = () => {
 						</FormGroup>
 						<FormGroup label={__('Status', 'multivendorx')} htmlFor="status">
 							<ToggleSetting
-								 
+
 								descClass="settings-metabox-description"
 								description={__(
 									'Select the status of the announcement.',

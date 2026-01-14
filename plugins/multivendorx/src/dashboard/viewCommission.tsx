@@ -29,13 +29,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 	commissionId,
 }) => {
 	const [details, setDetails] = useState<CommissionDetails | null>(null);
-	const [loading, setLoading] = useState(false);
 	useEffect(() => {
 		if (!commissionId) {
 			return;
 		}
 
-		setLoading(true);
 		axios({
 			method: 'GET',
 			url: getApiLink(appLocalizer, `commission/${commissionId}`),
@@ -43,11 +41,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 		})
 			.then((res) => {
 				setDetails(res.data);
+				console.log(res.data);
 			})
 			.catch(() => {
 				setDetails(null);
 			})
-			.finally(() => setLoading(false));
 	}, [commissionId]);
 
 	if (!open) {
@@ -70,9 +68,8 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			}}
 
 		>
-			{loading && <p>{__('Loading...', 'multivendorx')}</p>}
 
-			{!loading && details && (
+			{ details && (
 				<>
 					<div className="heading">
 						{__('Order Overview', 'multivendorx')}

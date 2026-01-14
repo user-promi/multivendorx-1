@@ -243,7 +243,7 @@ class Commissions extends \WP_REST_Controller {
             // Base filter for counts.
             $base_filter = array();
 
-            if ( ! empty( $store_id ) && ! current_user_can( 'manage_options' ) ) {
+            if ( ! empty( $store_id ) ) {
                 $base_filter['store_id'] = (int) $store_id;
             }
 
@@ -270,7 +270,6 @@ class Commissions extends \WP_REST_Controller {
                 }
 
                 $filter['count'] = true;
-
                 $response[ $key ] = CommissionUtil::get_commission_information( $filter );
             }
 
