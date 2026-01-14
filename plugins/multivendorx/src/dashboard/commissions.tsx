@@ -15,7 +15,7 @@ import {
 	RowSelectionState,
 } from '@tanstack/react-table';
 import ViewCommission from './viewCommission';
-import { formatCurrency, formatWcShortDate } from '../services/commonFunction';
+import { formatCurrency, formatLocalDate, formatWcShortDate } from '../services/commonFunction';
 
 export interface RealtimeFilter {
 	name: string;
@@ -111,7 +111,6 @@ const StoreCommission: React.FC = () => {
 		rowsPerPage = 10,
 		currentPage = 1,
 		typeCount = '',
-		store = '',
 		orderBy = '',
 		order = '',
 		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
@@ -129,8 +128,8 @@ const StoreCommission: React.FC = () => {
 				status: typeCount === 'all' ? '' : typeCount,
 				orderBy,
 				order,
-				startDate,
-				endDate,
+				startDate: startDate ? formatLocalDate(startDate) : '',
+				endDate: endDate ? formatLocalDate(endDate) : '',	
 			},
 		})
 			.then((response) => {
@@ -188,7 +187,6 @@ const StoreCommission: React.FC = () => {
 			rowsPerPage,
 			currentPage,
 			filterData?.categoryFilter,
-			filterData?.store,
 			filterData?.orderBy,
 			filterData?.order,
 			filterData?.date?.start_date,

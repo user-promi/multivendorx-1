@@ -159,17 +159,14 @@ class Commissions extends \WP_REST_Controller
             $count      = $request->get_param('count');
             $status     = $request->get_param('status');
 
-            $start_raw = sanitize_text_field($request->get_param('startDate'));
-            $end_raw   = sanitize_text_field($request->get_param('endDate'));
+            $range = Utill::normalize_date_range(
+                $request->get_param('startDate'),
+                $request->get_param('endDate')
+            );
 
-            $start_date = $start_raw ? gmdate('Y-m-d H:i:s', strtotime($start_raw)) : '';
-            $end_date   = $end_raw ? gmdate('Y-m-d H:i:s', strtotime($end_raw)) : '';
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:start from frontend : " . var_export($start_date, true) . "\n", FILE_APPEND);
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:end from frontend: " . var_export($end_date, true) . "\n", FILE_APPEND);
-
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:start : " . var_export($start_date, true) . "\n", FILE_APPEND);
-            file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:end : " . var_export($end_date, true) . "\n", FILE_APPEND);
-
+            $start_date = $range['start_date'];
+            $end_date   = $range['end_date'];
+            
             // Sorting params.
             $order_by = sanitize_text_field($request->get_param('orderBy'));
             $order    = sanitize_text_field($request->get_param('order'));

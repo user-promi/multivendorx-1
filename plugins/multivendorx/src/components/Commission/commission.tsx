@@ -19,7 +19,7 @@ import {
 	PaginationState,
 } from '@tanstack/react-table';
 import ViewCommission from './viewCommission';
-import { formatCurrency, formatWcShortDate } from '../../services/commonFunction';
+import { formatCurrency, formatLocalDate, formatWcShortDate, } from '../../services/commonFunction';
 
 export interface RealtimeFilter {
 	name: string;
@@ -99,12 +99,8 @@ const DownloadCSVButton: React.FC<{
 			// Prepare parameters for CSV download
 			const params: any = {
 				format: 'csv',
-				startDate: filterData?.date?.start_date
-					? filterData.date.start_date.toISOString().split('T')[0]
-					: '',
-				endDate: filterData?.date?.end_date
-					? filterData.date.end_date.toISOString().split('T')[0]
-					: '',
+				startDate:formatLocalDate(filterData.date.start_date ?? ''),
+				endDate:formatLocalDate(filterData.date.end_date??''),
 			};
 
 			// Add filters if present
@@ -248,12 +244,8 @@ const Commission: React.FC = () => {
 				// Prepare parameters for CSV download - NO pagination params
 				const params: any = {
 					format: 'csv',
-					startDate: filterData?.date?.start_date
-						? filterData.date.start_date.toISOString().split('T')[0]
-						: '',
-					endDate: filterData?.date?.end_date
-						? filterData.date.end_date.toISOString().split('T')[0]
-						: '',
+					startDate:formatLocalDate(filterData.date.start_date ?? ''),
+					endDate:formatLocalDate(filterData.date.end_date??''),
 				};
 
 				// Add filters if present
@@ -348,8 +340,6 @@ const Commission: React.FC = () => {
 		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date(),
 	) {
-		console.log('startdate', startDate)
-		console.log('enddate', endDate);
 		setData(null);
 		axios({
 			method: 'GET',
@@ -362,8 +352,8 @@ const Commission: React.FC = () => {
 				store_id: store,
 				orderBy,
 				order,
-				startDate: startDate? startDate.toISOString().split('T')[0]: '',
-				endDate: endDate? endDate.toISOString().split('T')[0]: '',
+				startDate: startDate ? formatLocalDate(startDate) : '',
+				endDate: endDate ? formatLocalDate(endDate) : '',				
 			},
 		})
 			.then((response) => {

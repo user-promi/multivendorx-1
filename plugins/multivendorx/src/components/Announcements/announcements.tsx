@@ -400,8 +400,8 @@ export const Announcements: React.FC = () => {
 
 	// Fetch data from backend.
 	function requestData(
-		rowsPerPage = 10,
-		currentPage = 1,
+		rowsPerPage :number,
+		currentPage :number,
 		categoryFilter = '',
 		searchField = '',
 		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
@@ -535,7 +535,6 @@ export const Announcements: React.FC = () => {
 			),
 		},
 		{
-			id: 'status',
 			header: __('Status', 'multivendorx'),
 			cell: ({ row }) => {
 				return (
@@ -599,7 +598,6 @@ export const Announcements: React.FC = () => {
 			},
 		},
 		{
-			id: 'action',
 			header: __('Action', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
@@ -624,7 +622,6 @@ export const Announcements: React.FC = () => {
 							},
 						],
 					}}
-					children={undefined}
 				/>
 			),
 		},

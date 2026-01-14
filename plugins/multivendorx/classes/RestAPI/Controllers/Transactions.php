@@ -120,26 +120,26 @@ class Transactions extends \WP_REST_Controller {
             $order_by = sanitize_text_field( $request->get_param( 'orderBy' ) ) ?: 'created_at';
             $order    = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) ) ?: 'DESC';            
             $dashboard = $request->get_param( 'dashboard' );
-            $start_date = $request->get_param( 'start_date' );
-            $end_date   = $request->get_param( 'end_date' );
-            $start_date = $start_date ? gmdate( 'Y-m-d H:i:s', strtotime( $start_date ) ) : '';
-            $end_date   = $end_date ? gmdate( 'Y-m-d H:i:s', strtotime( $end_date ) ) : '';
-
+            $dates = Utill::normalize_date_range(
+                $request->get_param( 'startDate' ),
+                $request->get_param( 'endDate' )
+            );
+    
+            // Build args
             $args = array_filter(
                 array(
-					'store_id'         => $store_id ?: null,
-					'status'           => $status ?: null,
-					'start_date'       => $start_date ?: null,
-					'end_date'         => $end_date ?: null,
-					'entry_type'       => $filter_status ?: null,
-					'transaction_type' => $transaction_type ?: null,
-					'limit'            => $limit,
-					'offset'           => $offset,
-					'orderBy'          => $order_by ?: null,
-					'order'            => in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : null,
+                    'store_id'         => $store_id ?: null,
+                    'status'           => $status ?: null,
+                    'start_date'       => $dates['start_date'] ?: null,
+                    'end_date'         => $dates['end_date'] ?: null,
+                    'entry_type'       => $filter_status ?: null,
+                    'transaction_type' => $transaction_type ?: null,
+                    'limit'            => $limit,
+                    'offset'           => $offset,
+                    'orderBy'          => $order_by ?: null,
+                    'order'            => in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : null,
                 )
             );
-
             // Count only
             if ( $count ) {
                 $args['count'] = true;

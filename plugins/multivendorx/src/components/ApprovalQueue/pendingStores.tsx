@@ -68,8 +68,6 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 		end_date: new Date(),
 	});
 
-	const formatDateToISO8601 = (date: Date) => date.toISOString().slice(0, 19);
-
 	// Fetch total rows
 	useEffect(() => {
 		axios({
@@ -105,8 +103,6 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 			status: 'pending',
 		};
 		if (startDate && endDate) {
-			// params.start_date = formatDateToISO8601(startDate);
-			// params.end_date = formatDateToISO8601(endDate);
 			params.start_date = startDate;
 			params.end_date = endDate;
 		}
@@ -268,7 +264,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 							handleSingleAction('active', row.original.id!);
 						}}
 					>
-						<i className="adminfont-check"></i> Approve
+						<i className="adminfont-check"></i> {__('Approve', 'multivendorx')}
 					</span>
 
 					<span
@@ -277,7 +273,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 							handleSingleAction('declined', row.original.id!)
 						}
 					>
-						<i className="adminfont-close"></i> Reject
+						<i className="adminfont-close"></i> {__('Reject', 'multivendorx')}
 					</span>
 				</TableCell>
 			),
@@ -294,8 +290,6 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 						endDate: dateFilter.end_date,
 					}}
 					onChange={(range: { startDate: Date; endDate: Date }) => {
-						console.log('startdate',range.startDate)
-						console.log('enddate',range.endDate)
 						const next = {
 							start_date: range.startDate,
 							end_date: range.endDate,

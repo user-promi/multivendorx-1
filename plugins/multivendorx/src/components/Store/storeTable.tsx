@@ -9,7 +9,7 @@ import {
 	PaginationState,
 } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
-import { formatCurrency } from '../../services/commonFunction';
+import { formatCurrency, formatLocalDate } from '../../services/commonFunction';
 
 type StoreRow = {
 	id?: number;
@@ -117,8 +117,8 @@ const StoreTable: React.FC = () => {
 				searchField,
 				orderBy,
 				order,
-				startDate,
-				endDate,
+				startDate: startDate ? formatLocalDate(startDate) : '',
+				endDate: endDate ? formatLocalDate(endDate) : '',
 			},
 		})
 			.then((response) => {

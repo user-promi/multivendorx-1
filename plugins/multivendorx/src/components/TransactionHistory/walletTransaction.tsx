@@ -23,7 +23,7 @@ import {
 	RowSelectionState,
 	PaginationState,
 } from '@tanstack/react-table';
-import { formatCurrency } from '../../services/commonFunction';
+import { formatCurrency, formatLocalDate } from '../../services/commonFunction';
 import ViewCommission from '../Commission/viewCommission';
 
 type StoreRow = {
@@ -378,51 +378,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 			),
 		},
 	];
-	// 🔹 Helper: get effective date range
-	const getEffectiveDateRange = () => {
-		if (dateRange.startDate && dateRange.endDate) {
-			return dateRange;
-		}
-		const now = new Date();
-		const start = new Date(now.getFullYear(), now.getMonth(), 1); // first day of current month
-		const end = new Date(
-			now.getFullYear(),
-			now.getMonth() + 1,
-			0,
-			23,
-			59,
-			59
-		); // last day of current month
-		return { startDate: start, endDate: end };
-	};
-
-	// 🔹 Fetch total rows on mount or date change
-	useEffect(() => {
-		if (!storeId) {
-			return;
-		}
-
-		const { startDate, endDate } = getEffectiveDateRange();
-
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, 'transaction'),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				count: true,
-				store_id: storeId,
-				start_date: startDate.toISOString().split('T')[0],
-				end_date: endDate.toISOString().split('T')[0],
-			},
-		})
-			.then((response) => {
-				setTotalRows(response.data || 0);
-				setPageCount(
-					Math.ceil((response.data || 0) / pagination.pageSize)
-				);
-			})
-			.catch(() => setData([]));
-	}, [storeId, dateRange, pagination.pageSize]);
 
 	// 🔹 Fetch data from backend
 	function requestData(
@@ -432,15 +387,15 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 		transactionType = '',
 		transactionStatus = '',
 		orderBy = '',
-		order = ''
+		order = '',
+		startDate = new Date( new Date().getFullYear(), new Date().getMonth() - 1, 1),
+		endDate = new Date()
 	) {
 		if (!storeId) {
 			return;
 		}
 
 		setData(null);
-
-		const { startDate, endDate } = getEffectiveDateRange();
 
 		axios({
 			method: 'GET',
@@ -450,8 +405,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 				page: currentPage,
 				row: rowsPerPage,
 				store_id: storeId,
-				start_date: startDate.toISOString().split('T')[0],
-				end_date: endDate.toISOString().split('T')[0],
+				startDate: startDate ? formatLocalDate(startDate) : '',
+				endDate: endDate ? formatLocalDate(endDate) : '',	
 				status: categoryFilter == 'all' ? '' : categoryFilter,
 				transaction_status: transactionStatus,
 				transaction_type: transactionType,
@@ -461,6 +416,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 		})
 			.then((response) => {
 				setData(response.data.transaction || []);
+				setTotalRows(response.data.all || 0);
+				setPageCount(Math.ceil(response.data.all / pagination.pageSize));
 
 				const statuses = [
 					{ key: 'all', name: 'All', count: response.data.all || 0 },
@@ -516,7 +473,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 			filterData?.transactionType,
 			filterData?.transactionStatus,
 			filterData?.orderBy,
-			filterData?.order
+			filterData?.order,
+			filterData?.date?.start_date,
+			filterData?.date?.end_date
 		);
 	};
 
