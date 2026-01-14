@@ -35,14 +35,16 @@ const ShippingCard = ({ product, handleChange }) => {
 	};
 
 	return (
-		<Card
+		<Card contentHeight
 			title={__('Shipping', 'multivendorx')}
 			iconName="adminfont-pagination-right-arrow icon"
 			toggle
 		>
-			{/* Weight & Shipping class */}
+
+			{/* Dimensions */}
 			<FormGroupWrapper>
-				<FormGroup label={__('Weight', 'multivendorx')} htmlFor="Weight">
+			{/* Weight & Shipping class */}
+				<FormGroup cols={2} label={__('Weight (kg)', 'multivendorx')} htmlFor="Weight">
 					<BasicInput
 						name="weight"
 						value={product.weight}
@@ -51,7 +53,7 @@ const ShippingCard = ({ product, handleChange }) => {
 						}
 					/>
 				</FormGroup>
-				<FormGroup label={__('Shipping classes', 'multivendorx')} htmlFor="shipping-classes">
+				<FormGroup cols={2} label={__('Shipping classes', 'multivendorx')} htmlFor="shipping-classes">
 					<SelectInput
 						name="shipping_class"
 						options={shippingClasses}
@@ -61,11 +63,7 @@ const ShippingCard = ({ product, handleChange }) => {
 						}
 					/>
 				</FormGroup>
-			</FormGroupWrapper>
-
-			{/* Dimensions */}
-			<FormGroupWrapper>
-				<FormGroup cols={3} label={`${__('Dimensions', 'multivendorx')} (${appLocalizer.dimension_unit})`} >
+				<FormGroup cols={3} label={`${__('Length', 'multivendorx')} (${appLocalizer.dimension_unit})`} >
 					<BasicInput
 						name="product_length"
 						value={product.product_length}
@@ -76,7 +74,7 @@ const ShippingCard = ({ product, handleChange }) => {
 					/>
 				</FormGroup>
 
-				<FormGroup cols={3}>
+				<FormGroup cols={3} label={`${__('Width', 'multivendorx')} (${appLocalizer.dimension_unit})`}>
 					<BasicInput
 						name="product_width"
 						value={product.product_width}
@@ -87,7 +85,7 @@ const ShippingCard = ({ product, handleChange }) => {
 					/>
 				</FormGroup>
 
-				<FormGroup cols={3}>
+				<FormGroup cols={3} label={`${__('Height', 'multivendorx')} (${appLocalizer.dimension_unit})`}>
 					<BasicInput
 						name="product_height"
 						value={product.product_height}

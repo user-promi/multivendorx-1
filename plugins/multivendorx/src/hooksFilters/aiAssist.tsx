@@ -171,6 +171,7 @@ const AICard = () => {
 
 	return (
 		<Card
+			className="theme-bg"
 			title={__('AI assist', 'multivendorx')}
 			iconName="adminfont-pagination-right-arrow arrow-icon"
 			toggle
@@ -184,7 +185,7 @@ const AICard = () => {
 				)}
 
 				{/* Welcome */}
-				{!hasSuggestions && !isLoading && !error && (
+				{/* {!hasSuggestions && !isLoading && !error && (
 					<div className="assistant-welcome">
 						<div className="welcome-icon">
 							<i className="adminfont-ai"></i>
@@ -193,7 +194,7 @@ const AICard = () => {
 							{__('How can I help?', 'multivendorx')}
 						</div>
 					</div>
-				)}
+				)} */}
 
 				{/* Loading */}
 				{isLoading && (
@@ -337,7 +338,7 @@ const AICard = () => {
 
 				{/* Prompt Input */}
 				<div className="sender-wrapper">
-					<input
+					<textarea
 						type="text"
 						placeholder={__('Write the prompt...', 'multivendorx')}
 						value={userPrompt}
@@ -349,18 +350,17 @@ const AICard = () => {
 						}}
 						disabled={isLoading}
 					/>
-
-					<div className="icon-wrapper">
-						<i className="adminfont-mail"></i>
-						<i
-							className={`adminfont-send ${isLoading ? 'loading' : ''
-								}`}
-							onClick={!isLoading ? handleSendPrompt : undefined}
-							style={{
-								cursor: isLoading ? 'not-allowed' : 'pointer',
-							}}
-						></i>
-					</div>
+				</div>
+				<div className="admin-btn btn-purple-bg" onClick={!isLoading ? handleSendPrompt : undefined}>
+					{/* <i className="adminfont-mail"></i> */}
+					<i
+						className={`adminfont-send ${isLoading ? 'loading' : ''
+							}`}
+						style={{
+							cursor: isLoading ? 'not-allowed' : 'pointer',
+						}}
+					></i>
+					Generate with AI
 				</div>
 			</div>
 		</Card>

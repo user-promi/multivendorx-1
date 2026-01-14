@@ -119,6 +119,10 @@
     &.content-height{
         height: fit-content;
     }
+    &.theme-bg{
+        background: $theme-background-color;
+        
+    }
     &:has(.hide-body) {
         .card-content {
             border: none;

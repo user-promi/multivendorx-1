@@ -92,7 +92,7 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 	};
 
 	return (
-		<Card
+		<Card contentHeight
 			title={__('Downloadable', 'multivendorx')}
 			iconName="adminfont-pagination-right-arrow arrow-icon"
 			toggle
@@ -113,7 +113,7 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 			/>
 
 			<FormGroupWrapper>
-				<FormGroup label={__('Download limit', 'multivendorx')} htmlFor="download_limit">
+				<FormGroup cols={2} label={__('Download limit', 'multivendorx')} htmlFor="download_limit">
 					<BasicInput
 						name="download_limit"
 						type="number"
@@ -128,7 +128,7 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 					/>
 				</FormGroup>
 
-				<FormGroup label={__('Download limit', 'multivendorx')} htmlFor="download_limit">
+				<FormGroup cols={2} label={__('Download limit', 'multivendorx')} htmlFor="download_limit">
 					<BasicInput
 						name="download_expiry"
 						type="number"
@@ -144,7 +144,6 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 				</FormGroup>
 			</FormGroupWrapper>
 		</Card >
-
 	);
 };
 
