@@ -3,8 +3,7 @@
 .card-header {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
+    margin: 1.5rem 1rem 1rem;
     align-items: start;
 
     .icon {
@@ -77,13 +76,13 @@
         border: $border-light-small;
     }
 
-    .card-header {
-        margin: 1.5rem;
-        margin-bottom: 0;
-    }
+    // .card-header {
+    //     margin: 1.5rem;
+    //     margin-bottom: 0;
+    // }
 
     .card-body {
-        padding: 1.5rem;
+        padding: 1rem;
         transition: all 0.5s ease;
         display: flex;
         flex-direction: column;
@@ -99,9 +98,9 @@
         }
 
         .card-header {
-            margin: 0;
+            // margin: 0;
             border-bottom: $border-light-small;
-            margin-bottom: 1rem;
+            // margin-bottom: 1rem;
         }
     }
 
