@@ -162,9 +162,6 @@ class Rewrites {
         return MultiVendorX()->util->get_template( 'store/store.php', array( 'store_id' => $store->get_id() ) );
 
         // $plugin_template = trailingslashit( MultiVendorX()->plugin_path ) . 'templates/store/multivendorx-store.php';
-        // if ( file_exists( $plugin_template ) ) {
-        //     return $plugin_template;
-        // }
     }
 
     function render_context($context) {
@@ -179,6 +176,31 @@ class Rewrites {
         return $context;
     }
 
+    private function should_load_template() {
+        // Check if we're on the store endpoint
+        if ( get_query_var( 'store' ) ) {
+            return true;
+        }
+        
+        // Check if we're in the site editor
+        if ( is_admin() && function_exists( 'get_current_screen' ) ) {
+            $screen = get_current_screen();
+            if ( $screen && $screen->id === 'site-editor' ) {
+                return true;
+            }
+        }
+        
+        
+        // Check if we're editing this specific template
+        if ( isset( $_GET['postType'] ) && $_GET['postType'] === 'wp_template' ) {
+            if ( isset( $_GET['postId'] ) && strpos( $_GET['postId'], 'multivendorx-store' ) !== false ) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
 
     /**
      * Add block template to editor
@@ -189,7 +211,7 @@ class Rewrites {
             return $templates;
         }
 
-        if ( ! get_query_var( 'store' ) && ! is_admin() ) {
+         if ( ! $this->should_load_template() && ! is_admin() ) {
             return $templates;
         }
 
@@ -216,9 +238,9 @@ class Rewrites {
             return $template;
         }
 
-        if ( ! get_query_var( 'store' ) && ! is_admin() ) {
-            return $template;
-        }
+        // if ( ! get_query_var( 'store' ) ) {
+        //     return $template;
+        // }
 
         $slug = 'multivendorx-store';
         $expected_id = get_stylesheet() . '//' . $slug;
@@ -243,20 +265,19 @@ class Rewrites {
             $content = $saved[0]->post_content;
         } else {
             $content = file_get_contents(
-                plugin_dir_path( __FILE__ ) . 'templates/store/store.html'
+                MultiVendorX()->plugin_path . 'templates/store/store.html'
             );
         }
         $template = new \WP_Block_Template();
         $template->id      = get_stylesheet() . '//' . $slug;
-        $template->theme   = 'MultiVendorX';
+        $template->theme   = get_stylesheet();
         $template->slug    = $slug;
         $template->type    = 'wp_template';
         $template->title   = __( 'MultiVendorX Store', 'multivendorx' );
         $template->source  = 'plugin';
         $template->origin  = 'plugin';
         $template->status  = 'publish';
-        $template->content = $content;
-        $template->is_custom = true;     
+        $template->content = $content;    
 
         return $template;
     }
