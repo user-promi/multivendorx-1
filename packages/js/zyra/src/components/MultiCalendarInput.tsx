@@ -70,37 +70,47 @@ const MultiCalendarInput: React.FC< CalendarInputProps > = ( props ) => {
         }
         setOpenDatePicker( ( prev ) => ! prev );
     };
-
-    const handleDateChange = ( ranges: RangeKeyDict ) => {
-        const selection: Range = ranges.selection;
-
-        if ( selection?.endDate instanceof Date ) {
-            // ensure end of day for endDate
-            selection.endDate.setHours( 23, 59, 59, 999 );
-        }
-
-        const newRange = [
-            {
-                startDate: selection.startDate || new Date(),
-                endDate: selection.endDate || new Date(),
-                key: selection.key || 'selection',
-            },
-        ];
-
-        setSelectedRange( newRange );
-        props.onChange?.( {
-            startDate: newRange[ 0 ].startDate!,
-            endDate: newRange[ 0 ].endDate!,
-        } );
-
-        if ( closeTimeoutRef.current ) {
-            window.clearTimeout( closeTimeoutRef.current );
-        }
     
-        closeTimeoutRef.current = window.setTimeout( () => {
-            setOpenDatePicker( false );
-        }, 1500 );
+    const normalizeRangeToUTC = (start: Date, end: Date) => {
+        const startLocal = new Date(start);
+        startLocal.setHours(0, 0, 0, 0);
+    
+        const endLocal = new Date(end);
+        endLocal.setHours(23, 59, 59, 999);
+    
+        return {
+            startDate: startLocal.toISOString(),
+            endDate: endLocal.toISOString(),
+        };
     };
+    
+    const handleDateChange = (ranges: RangeKeyDict) => {
+        const selection = ranges.selection;
+        if (!selection?.startDate || !selection?.endDate) return;
+    
+        const { startDate, endDate } = normalizeRangeToUTC(
+            selection.startDate,
+            selection.endDate
+        );
+    
+        setSelectedRange([
+            {
+                startDate: new Date(startDate),
+                endDate: new Date(endDate),
+                key: 'selection',
+            },
+        ]);
+    
+        props.onChange?.({
+            startDate,
+            endDate,
+        });
+    
+        closeTimeoutRef.current = window.setTimeout(() => {
+            setOpenDatePicker(false);
+        }, 1500);
+    };
+    
 
     const getLabel = () => {
         const start = selectedRange[ 0 ].startDate!;
