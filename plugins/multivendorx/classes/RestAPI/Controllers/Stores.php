@@ -138,9 +138,13 @@ class Stores extends \WP_REST_Controller {
                     return $cached;
                 }
 
-                $start = gmdate( 'Y-m-d H:i:s', strtotime( $request->get_param( 'start_date' ) ) );
-                $end   = gmdate( 'Y-m-d H:i:s', strtotime( $request->get_param( 'end_date' ) ) );
-
+                $dates = Utill::normalize_date_range(
+                    $request->get_param( 'start_date' ),
+                    $request->get_param( 'end_date' )
+                );
+                
+                $start = $dates['start_date'];
+                $end   = $dates['end_date'];
                 global $wpdb;
 
                  $rows = $wpdb->get_results(
@@ -265,19 +269,13 @@ class Stores extends \WP_REST_Controller {
             if ( ! empty( $search ) ) {
                 $args['searchField'] = $search;
             } else {
-                $start = sanitize_text_field( $request->get_param( 'startDate' ) );
-                $end   = sanitize_text_field( $request->get_param( 'endDate' ) );
-
-                if ( $start && $end ) {
-                    $args['start_date'] = gmdate(
-                        'Y-m-d 00:00:00',
-                        strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $start ) ) )
-                    );
-                    $args['end_date']   = gmdate(
-                        'Y-m-d 23:59:59',
-                        strtotime( preg_replace( '/\.\d+Z?$/', '', str_replace( 'T', ' ', $end ) ) )
-                    );
-                }
+                $dates = Utill::normalize_date_range(
+                    $request->get_param( 'startDate' ),
+                    $request->get_param( 'endDate' )
+                );
+                
+                $args['start_date'] = $dates['start_date'];
+                $args['end_date']   = $dates['end_date'];
             }
 
             $status = $request->get_param( 'filter_status' );
