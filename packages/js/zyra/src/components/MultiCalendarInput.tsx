@@ -34,7 +34,16 @@ const MultiCalendarInput: React.FC< CalendarInputProps > = ( props ) => {
         'bottom'
     );
     const dateRef = useRef< HTMLDivElement | null >( null );
+    const closeTimeoutRef = useRef<number | null>(null);
     const [ openDatePicker, setOpenDatePicker ] = useState( false );
+    useEffect(() => {
+        return () => {
+            if (closeTimeoutRef.current) {
+                window.clearTimeout(closeTimeoutRef.current);
+            }
+        };
+    }, []);
+    
     useEffect( () => {
         const handleClickOutside = ( event: MouseEvent ) => {
             if (
@@ -84,7 +93,13 @@ const MultiCalendarInput: React.FC< CalendarInputProps > = ( props ) => {
             endDate: newRange[ 0 ].endDate!,
         } );
 
-        setOpenDatePicker( false );
+        if ( closeTimeoutRef.current ) {
+            window.clearTimeout( closeTimeoutRef.current );
+        }
+    
+        closeTimeoutRef.current = window.setTimeout( () => {
+            setOpenDatePicker( false );
+        }, 1500 );
     };
 
     const getLabel = () => {
