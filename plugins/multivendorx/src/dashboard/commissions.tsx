@@ -15,7 +15,7 @@ import {
 	RowSelectionState,
 } from '@tanstack/react-table';
 import ViewCommission from './viewCommission';
-import { formatCurrency } from '../services/commonFunction';
+import { formatCurrency, formatWcShortDate } from '../services/commonFunction';
 
 export interface RealtimeFilter {
 	name: string;
@@ -398,9 +398,6 @@ const StoreCommission: React.FC = () => {
 			),
 		},
 		{
-			id: 'id',
-			accessorKey: 'id',
-			enableSorting: true,
 			header: __('ID', 'multivendorx'),
 			cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
 		},
@@ -421,9 +418,6 @@ const StoreCommission: React.FC = () => {
 			},
 		},
 		{
-			id: 'totalOrderAmount',
-			accessorKey: 'totalOrderAmount',
-			enableSorting: true,
 			header: __('Order Amount', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
@@ -440,8 +434,6 @@ const StoreCommission: React.FC = () => {
 			),
 		},
 		{
-			id: 'commission-summary',
-			enableSorting: true,
 			header: __('Commission Summary', 'multivendorx'),
 			cell: ({ row }) => {
 				const isExpanded = expandedRows[row.original.id!];
@@ -602,9 +594,6 @@ const StoreCommission: React.FC = () => {
 			},
 		},
 		{
-			id: 'totalEarned',
-			accessorKey: 'totalEarned',
-			enableSorting: true,
 			header: __('Total Earned ', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
@@ -625,38 +614,19 @@ const StoreCommission: React.FC = () => {
 			accessorKey: 'created_at',
 			enableSorting: true,
 			header: __('Date', 'multivendorx'),
-			cell: ({ row }) => {
-				const date = row.original.createdAt;
-				if (!date) {
-					return <TableCell>-</TableCell>;
-				}
-
-				// Format the date for display
-				const formattedDate = new Date(date).toLocaleDateString(
-					'en-US',
-					{
-						year: 'numeric',
-						month: 'short',
-						day: 'numeric',
-					}
-				);
-
-				return (
-					<TableCell title={`${formattedDate}`}>
-						{formattedDate}
-					</TableCell>
-				);
-			},
+			cell: ({ row }) => (
+				<TableCell title={''}>
+					{formatWcShortDate(row.original.createdAt)}
+				</TableCell>
+			),
 		},
 		{
-			id: 'status',
 			header: __('Status', 'multivendorx'),
 			cell: ({ row }) => {
 				return <TableCell type="status" status={row.original.status} />;
 			},
 		},
 		{
-			id: 'action',
 			header: __('Action', 'multivendorx'),
 			cell: ({ row }) => {
 				const isPaid = row.original.status === 'paid';

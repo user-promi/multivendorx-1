@@ -481,9 +481,6 @@ const Commission: React.FC = () => {
 			),
 		},
 		{
-			id: 'id',
-			accessorKey: 'ID',
-			enableSorting: true,
 			header: __('ID', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell title={'id'}>
@@ -532,9 +529,6 @@ const Commission: React.FC = () => {
 			},
 		},
 		{
-			id: 'total_order_amount',
-			accessorKey: 'total_order_amount',
-			enableSorting: true,
 			header: __('Order Amount', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
@@ -549,8 +543,6 @@ const Commission: React.FC = () => {
 			),
 		},
 		{
-			id: 'commission-summary',
-			enableSorting: true,
 			header: __('Commission Summary', 'multivendorx'),
 			cell: ({ row }) => {
 				const isExpanded = expandedRows[row.original.id!];
@@ -708,9 +700,6 @@ const Commission: React.FC = () => {
 			},
 		},
 		{
-			id: 'store_payable',
-			accessorKey: 'store_payable',
-			enableSorting: true,
 			header: __('Store Earning', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell title={''}>
@@ -719,9 +708,6 @@ const Commission: React.FC = () => {
 			),
 		},
 		{
-			id: 'marketplace_payable',
-			accessorKey: 'marketplace_payable',
-			enableSorting: true,
 			header: __('Marketplace Earning', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell title={''}>
@@ -730,7 +716,6 @@ const Commission: React.FC = () => {
 			),
 		},
 		{
-			id: 'status',
 			header: __('Status', 'multivendorx'),
 			cell: ({ row }) => {
 				return <TableCell type="status" status={row.original.status} />;
@@ -748,7 +733,6 @@ const Commission: React.FC = () => {
 			),
 		},
 		{
-			id: 'action',
 			header: __('Action', 'multivendorx'),
 			cell: ({ row }) => (
 				<TableCell
