@@ -339,15 +339,17 @@ const Commission: React.FC = () => {
 
 	// Fetch data from backend.
 	function requestData(
-		rowsPerPage :number,
-		currentPage :number,
+		rowsPerPage: number,
+		currentPage: number,
 		categoryFilter = '',
 		store = '',
 		orderBy = '',
 		order = '',
 		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
-		endDate = new Date()
+		endDate = new Date(),
 	) {
+		console.log('startdate', startDate)
+		console.log('enddate', endDate);
 		setData(null);
 		axios({
 			method: 'GET',
@@ -360,8 +362,8 @@ const Commission: React.FC = () => {
 				store_id: store,
 				orderBy,
 				order,
-				startDate,
-				endDate,
+				startDate: startDate? startDate.toISOString().split('T')[0]: '',
+				endDate: endDate? endDate.toISOString().split('T')[0]: '',
 			},
 		})
 			.then((response) => {

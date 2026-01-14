@@ -56,6 +56,17 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 	const [rejectReason, setRejectReason] = useState('');
 	const [rejectStoreId, setRejectStoreId] = useState<number | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false); // prevent multiple submissions
+	const [dateFilter, setDateFilter] = useState<{
+		start_date: Date;
+		end_date: Date;
+	}>({
+		start_date: new Date(
+			new Date().getFullYear(),
+			new Date().getMonth() - 1,
+			1
+		),
+		end_date: new Date(),
+	});
 
 	const formatDateToISO8601 = (date: Date) => date.toISOString().slice(0, 19);
 
@@ -82,10 +93,10 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 	}, [pagination]);
 
 	const requestData = (
-		rowsPerPage = 10,
-		currentPage = 1,
-		startDate?: Date,
-		endDate?: Date
+		rowsPerPage: number,
+		currentPage: number,
+		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+		endDate = new Date()
 	) => {
 		setData(null);
 		const params: any = {
@@ -94,8 +105,10 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 			status: 'pending',
 		};
 		if (startDate && endDate) {
-			params.start_date = formatDateToISO8601(startDate);
-			params.end_date = formatDateToISO8601(endDate);
+			// params.start_date = formatDateToISO8601(startDate);
+			// params.end_date = formatDateToISO8601(endDate);
+			params.start_date = startDate;
+			params.end_date = endDate;
 		}
 
 		axios({
@@ -113,7 +126,6 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 		currentPage: number,
 		filterData?: FilterData
 	) => {
-		setData(null);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -276,16 +288,23 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 		{
 			name: 'date',
 			render: (updateFilter) => (
-				<div className="right">
-					<MultiCalendarInput
-						onChange={(range: any) =>
-							updateFilter('date', {
-								start_date: range.startDate,
-								end_date: range.endDate,
-							})
-						}
-					/>
-				</div>
+				<MultiCalendarInput
+					value={{
+						startDate: dateFilter.start_date,
+						endDate: dateFilter.end_date,
+					}}
+					onChange={(range: { startDate: Date; endDate: Date }) => {
+						console.log('startdate',range.startDate)
+						console.log('enddate',range.endDate)
+						const next = {
+							start_date: range.startDate,
+							end_date: range.endDate,
+						};
+
+						setDateFilter(next);
+						updateFilter('date', next);
+					}}
+				/>
 			),
 		},
 	];
@@ -305,7 +324,6 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 						onPaginationChange={setPagination}
 						handlePagination={requestApiForData}
 						perPageOption={[10, 25, 50]}
-						typeCounts={[]}
 						totalCounts={totalRows}
 						realtimeFilter={realtimeFilter}
 					/>

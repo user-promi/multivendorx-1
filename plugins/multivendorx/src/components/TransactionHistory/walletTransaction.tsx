@@ -16,6 +16,7 @@ import {
 	FormGroup,
 	AdminButton,
 	MiniCard,
+	MultiCalendarInput,
 } from 'zyra';
 import {
 	ColumnDef,
@@ -61,10 +62,10 @@ type TransactionStatus = {
 type FilterData = {
 	searchAction?: string;
 	searchField?: string;
-	typeCount?: any;
+	categoryFilter?: string;
 	store?: string;
-	order?: any;
-	orderBy?: any;
+	order?: string;
+	orderBy?: string;
 	date?: {
 		start_date: Date;
 		end_date: Date;
@@ -129,8 +130,8 @@ const DownloadTransactionCSVButton: React.FC<{
 			}
 
 			// Add status filter (Cr/Dr)
-			if (filterData?.typeCount && filterData.typeCount !== 'all') {
-				params.filter_status = filterData.typeCount;
+			if (filterData?.categoryFilter && filterData.categoryFilter !== 'all') {
+				params.filter_status = filterData.categoryFilter;
 			}
 
 			// If specific rows are selected, send their IDs
@@ -246,8 +247,8 @@ const ExportAllTransactionCSVButton: React.FC<{
 			}
 
 			// Add status filter (Cr/Dr)
-			if (filterData?.typeCount && filterData.typeCount !== 'all') {
-				params.filter_status = filterData.typeCount;
+			if (filterData?.categoryFilter && filterData.categoryFilter !== 'all') {
+				params.filter_status = filterData.categoryFilter;
 			}
 
 			// Make API request for CSV
@@ -314,7 +315,6 @@ const TransactionBulkActions: React.FC<{
 				filterData={filterData}
 				storeId={storeId}
 			/>
-			{/* Add other bulk actions here if needed */}
 		</div>
 	);
 };
@@ -352,6 +352,17 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 	const [selectedCommissionId, setSelectedCommissionId] = useState<
 		number | null
 	>(null);
+	const [dateFilter, setDateFilter] = useState<{
+		start_date: Date;
+		end_date: Date;
+	}>({
+		start_date: new Date(
+			new Date().getFullYear(),
+			new Date().getMonth() - 1,
+			1
+		),
+		end_date: new Date(),
+	});
 
 	// Add search filter with export button
 	const actionButton: RealtimeFilter[] = [
@@ -417,7 +428,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 	function requestData(
 		rowsPerPage = 10,
 		currentPage = 1,
-		typeCount = '',
+		categoryFilter = '',
 		transactionType = '',
 		transactionStatus = '',
 		orderBy = '',
@@ -441,7 +452,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 				store_id: storeId,
 				start_date: startDate.toISOString().split('T')[0],
 				end_date: endDate.toISOString().split('T')[0],
-				status: typeCount == 'all' ? '' : typeCount,
+				status: categoryFilter == 'all' ? '' : categoryFilter,
 				transaction_status: transactionStatus,
 				transaction_type: transactionType,
 				orderBy,
@@ -501,7 +512,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 		requestData(
 			rowsPerPage,
 			currentPage,
-			filterData?.typeCount,
+			filterData?.categoryFilter,
 			filterData?.transactionType,
 			filterData?.transactionStatus,
 			filterData?.orderBy,
@@ -533,7 +544,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 			cell: ({ row }) => <TableCell>#{row.original.id}</TableCell>,
 		},
 		{
-			id: 'status',
 			header: __('Status', 'multivendorx'),
 			cell: ({ row }) => {
 				return <TableCell type="status" status={row.original.status} />;
@@ -610,6 +620,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 			},
 		},
 		{
+			id: 'date',
+			accessorKey: 'date',
+			enableSorting: true,
 			header: __('Date', 'multivendorx'),
 			cell: ({ row }) => {
 				const rawDate = row.original.date;
@@ -724,6 +737,26 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 						</option>
 					</select>
 				</div>
+			),
+		},
+		{
+			name: 'date',
+			render: (updateFilter) => (
+				<MultiCalendarInput
+					value={{
+						startDate: dateFilter.start_date,
+						endDate: dateFilter.end_date,
+					}}
+					onChange={(range: { startDate: Date; endDate: Date }) => {
+						const next = {
+							start_date: range.startDate,
+							end_date: range.endDate,
+						};
+
+						setDateFilter(next);
+						updateFilter('date', next);
+					}}
+				/>
 			),
 		},
 	];
@@ -963,7 +996,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 													{__('automatically every hour.', 'multivendorx')}
 												</>
 											)}
-											</>
+										</>
 									}
 								/>
 
@@ -1150,7 +1183,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 							onPaginationChange={setPagination}
 							handlePagination={requestApiForData}
 							perPageOption={[10, 25, 50]}
-							typeCounts={transactionStatus as TransactionStatus[]}
+							categoryFilter={transactionStatus as TransactionStatus[]}
 							totalCounts={totalRows}
 							realtimeFilter={realtimeFilter}
 							actionButton={actionButton}

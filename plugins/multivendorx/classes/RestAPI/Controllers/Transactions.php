@@ -117,8 +117,8 @@ class Transactions extends \WP_REST_Controller {
             $filter_status      = $request->get_param( 'filter_status' );
             $transaction_type   = $request->get_param( 'transaction_type' );
             $transaction_status = $request->get_param( 'transaction_status' );
-            $order_by           = sanitize_text_field( $request->get_param( 'orderBy' ) );
-            $order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) );
+            $order_by = sanitize_text_field( $request->get_param( 'orderBy' ) ) ?: 'created_at';
+            $order    = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) ) ?: 'DESC';            
             $dashboard = $request->get_param( 'dashboard' );
             $start_date = $request->get_param( 'start_date' );
             $end_date   = $request->get_param( 'end_date' );
