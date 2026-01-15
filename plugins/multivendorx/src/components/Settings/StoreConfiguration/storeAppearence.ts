@@ -63,6 +63,27 @@ export default {
 			],
 		},
 		{
+			key: 'store_sidebar',
+			type: 'setting-toggle',
+			label: __('Store sidebar', 'multivendorx'),
+			desc: __(
+				'Choose where the sidebar show in shop pages.',
+				'multivendorx'
+			),
+			options: [
+				{
+					key: 'left',
+					label: __('At Left', 'multivendorx'),
+					value: 'left',
+				},
+				{
+					key: 'right',
+					label: __('At Right', 'multivendorx'),
+					value: 'right',
+				}
+			]
+		},
+		{
 			key: 'store_color_settings',
 			type: 'color-setting',
 			label: 'Dashboard color scheme',
