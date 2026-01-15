@@ -19,6 +19,7 @@ import {
 	RowSelectionState,
 	PaginationState,
 } from '@tanstack/react-table';
+import { formatLocalDate, formatWcShortDate } from '@/services/commonFunction';
 export interface RealtimeFilter {
 	name: string;
 	render: (
@@ -87,6 +88,17 @@ const CustomerQuestions: React.FC = () => {
 		pageSize: 10,
 	});
 	const [pageCount, setPageCount] = useState(0);
+	const [dateFilter, setDateFilter] = useState<{
+		start_date: Date;
+		end_date: Date;
+	}>({
+		start_date: new Date(
+			new Date().getFullYear(),
+			new Date().getMonth() - 1,
+			1
+		),
+		end_date: new Date(),
+	});
 
 	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
@@ -97,8 +109,8 @@ const CustomerQuestions: React.FC = () => {
 
 	// Fetch data from backend.
 	function requestData(
-		rowsPerPage = 10,
-		currentPage = 1,
+		rowsPerPage :number,
+		currentPage :number,
 		categoryFilter = 'no_answer',
 		searchField = '',
 		orderBy = '',
@@ -120,8 +132,8 @@ const CustomerQuestions: React.FC = () => {
 				searchField,
 				orderBy,
 				order,
-				startDate,
-				endDate,
+				startDate: startDate ? formatLocalDate(startDate) : '',
+				endDate: endDate ? formatLocalDate(endDate) : '',
 				question_visibility
 			},
 		})
@@ -171,7 +183,11 @@ const CustomerQuestions: React.FC = () => {
 		currentPage: number,
 		filterData: FilterData
 	) => {
-		setData(null);
+		const date = filterData?.date || {
+			start_date: new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+			end_date: new Date(),
+		};
+		setDateFilter(date);
 		requestData(
 			rowsPerPage,
 			currentPage,
@@ -179,8 +195,8 @@ const CustomerQuestions: React.FC = () => {
 			filterData?.searchField,
 			filterData?.orderBy,
 			filterData?.order,
-			filterData?.date?.start_date,
-			filterData?.date?.end_date,
+			date?.start_date,
+			date?.end_date,
 			filterData?.question_visibility
 		);
 	};
@@ -316,16 +332,8 @@ const CustomerQuestions: React.FC = () => {
 				row.question_date ? new Date(row.question_date).getTime() : 0, // numeric timestamp for sorting
 			enableSorting: true,
 			cell: ({ row }) => {
-				const rawDate = row.original.question_date;
-				const formattedDate = rawDate
-					? new Intl.DateTimeFormat('en-US', {
-						month: 'short',
-						day: 'numeric',
-						year: 'numeric',
-					}).format(new Date(rawDate))
-					: '-';
 				return (
-					<TableCell title={formattedDate}>{formattedDate}</TableCell>
+					<TableCell title={''}>{formatWcShortDate(row.original.question_date)}</TableCell>
 				);
 			},
 		},
@@ -401,16 +409,21 @@ const CustomerQuestions: React.FC = () => {
 		{
 			name: 'date',
 			render: (updateFilter) => (
-				<div className="right">
-					<MultiCalendarInput
-						onChange={(range: any) =>
-							updateFilter('date', {
-								start_date: range.startDate,
-								end_date: range.endDate,
-							})
-						}
-					/>
-				</div>
+				<MultiCalendarInput
+					value={{
+						startDate: dateFilter.start_date,
+						endDate: dateFilter.end_date,
+					}}
+					onChange={(range: { startDate: Date; endDate: Date }) => {
+						const next = {
+							start_date: range.startDate,
+							end_date: range.endDate,
+						};
+
+						setDateFilter(next);
+						updateFilter('date', next);
+					}}
+				/>
 			),
 		},
 	];
