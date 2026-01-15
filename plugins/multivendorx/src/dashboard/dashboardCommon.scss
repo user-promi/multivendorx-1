@@ -456,7 +456,7 @@ body.dark {
 }
 
 .add-variant {
-    .select-variations-wrapper {
+    .select-variant-wrapper {
         background: $theme-background-color;
         padding: 0.313rem 0.813rem;
         border-radius: 0.313rem;
@@ -815,75 +815,6 @@ body.dark {
         padding: 1.5rem 0 1rem 0;
     }
 }
-
-
-// checklist start
-.card-wrapper:has(.checklist-wrapper) {
-    height: fit-content;
-    position: sticky !important;
-    top: 5rem;
-}
-
-.checklist-wrapper {
-    .checklist-title {
-        font-size: 1.25rem;
-        color: $text-color;
-        font-weight: 600;
-    }
-
-    ul {
-        margin: 0;
-        list-style-type: none;
-
-        li {
-            margin: 1.125rem 0;
-            font-size: 1rem;
-            font-weight: 500;
-            display: flex;
-            gap: 0.45rem;
-            color: $text-color;
-
-            span {
-                width: 2.125rem;
-                height: 0.95rem;
-                display: inline-block;
-                background: $background-color;
-                border-radius: 50%;
-                position: relative;
-                font-family: adminfonts, sans-serif;
-                padding: 0.063rem;
-            }
-
-            .details {
-                .title {
-                    font-size: 1rem;
-                    font-weight: 600;
-                    margin-bottom: 0.313rem;
-                }
-
-                .des {
-                    font-size: 0.813rem;
-                }
-            }
-
-            &.checked {
-                span {
-                    background: $theme-color;
-
-
-                    &::before {
-                        position: absolute;
-                        content: "\e809";
-                        color: #fff;
-                        font-size: 0.95rem;
-                    }
-                }
-            }
-        }
-    }
-}
-
-// checklist end
 
 // ai assist start
 .ai-assist-wrapper {
@@ -1283,7 +1214,7 @@ body.dark {
 }
 
 // variant style start
-.variations-wrapper {
+.variant-wrapper {
     border-bottom: $border-light-small;
     padding-bottom: 0.625rem;
 
@@ -1301,11 +1232,31 @@ body.dark {
     .admin-btn {
         margin-top: 0.5rem;
     }
+
+    // show variant
+    .variant-show {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        padding: 1rem;
+
+        .attributes {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .variantion-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+    }
 }
 
 .variant-list {
     .header td:first-child {
-        width: 10rem;
+        width: 14rem;
     }
 
     tbody tr {
