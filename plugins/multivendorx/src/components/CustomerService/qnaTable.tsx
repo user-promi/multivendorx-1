@@ -162,7 +162,7 @@ const Qna: React.FC = () => {
 	useEffect(() => {
 		const currentPage = pagination.pageIndex + 1;
 		const rowsPerPage = pagination.pageSize;
-		requestData(rowsPerPage, currentPage, 'no_answer');
+		requestData(rowsPerPage, currentPage,);
 		setPageCount(Math.ceil(totalRows / rowsPerPage));
 	}, [pagination]);
 
@@ -170,7 +170,7 @@ const Qna: React.FC = () => {
 	function requestData(
 		rowsPerPage: number,
 		currentPage: number,
-		categoryFilter = 'no_answer',
+		categoryFilter = '',
 		store = '',
 		searchField = '',
 		orderBy = '',
@@ -214,22 +214,8 @@ const Qna: React.FC = () => {
 				];
 
 				setStatus(statuses.filter((status) => status.count > 0));
-				let totalFiltered = 0;
-				switch (categoryFilter) {
-					case 'all':
-						totalFiltered = response.data.all || 0;
-						break;
-					case 'has_answer':
-						totalFiltered = response.data.answered || 0;
-						break;
-					case 'no_answer':
-					default:
-						totalFiltered = response.data.unanswered || 0;
-				}
-				setTotalRows(totalFiltered);
-
-				// Update pagination pageCount
-				setPageCount(Math.ceil(totalFiltered / rowsPerPage));
+				setTotalRows(response.data.all|| 0)
+				setPageCount(Math.ceil(response.data.all / rowsPerPage));
 			})
 			.catch(() => {
 				setData([]);
@@ -582,7 +568,6 @@ const Qna: React.FC = () => {
 				handlePagination={requestApiForData}
 				categoryFilter={status as Status[]}
 				searchFilter={searchFilter}
-				defaultCounts="no_answer"
 			/>
 
 			{selectedQna && (
