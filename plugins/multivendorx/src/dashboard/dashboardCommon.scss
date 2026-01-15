@@ -483,7 +483,6 @@ body.dark {
         margin: 0;
 
         li {
-            font-size: 1.063rem;
             position: relative;
         }
 
@@ -1230,8 +1229,16 @@ body.dark {
 }
 
 .variant-list {
+    table{
+        border-top: $border-light-small;
+
+
+        thead{
+            background: $background-color;
+        }
+    }
     .header td:first-child {
-        width: 14rem;
+        width: 12rem;
     }
 
     tbody tr {
@@ -1248,5 +1255,7 @@ body.dark {
         }
     }
 }
-
+.variation-title-wrapper{
+    
+}
 // variant style end
