@@ -355,6 +355,14 @@ class FrontendScripts {
 	 * @param string $handle Script handle the data will be attached to.
 	 */
     public static function localize_scripts( $handle ) {
+        if ( isset( $localized[ $handle ] ) ) {
+            return;
+        }
+        
+        if ( ! wp_script_is( $handle, 'enqueued' ) ) {
+            return;
+        }
+        file_put_contents( plugin_dir_path(__FILE__) . "/localize_error.log", date("d/m/Y H:i:s", time()) . ":payments localize_scripts got called: : " . $handle . "\n", FILE_APPEND);
         // Get all tab setting's database value.
         $settings_databases_value = array();
 
