@@ -49,7 +49,7 @@ const ShippingCard = ({ product, handleChange }) => {
 							{
 								key: 'physical',
 								value: 'physical',
-								label: __('Physical product', 'multivendorx'),
+								label: __('Physical', 'multivendorx'),
 							},
 							{
 								key: 'downloadable',
