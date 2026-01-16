@@ -1323,56 +1323,58 @@ const Membership = ({ id }: { id: string }) => {
 											</div>
 										</div>
 									</div>
-									<div className="card-header">
+									{/* <div className="card-header">
 										<div className="left">
 											<div className="title">
 												Trial Period
 											</div>
 											<div className="des">Configure optional trial period for new members</div>
 										</div>
-									</div>
-									<FormGroupWrapper>
-										<FormGroup
-											label="Offer a trial period"
-											htmlFor="trial_period"
-										>
-											<NestedComponent
-												id="trial_period"
-												fields={subscription}
-												value={rules}
-												single={true}
-												addButtonLabel="Add Rule"
-												deleteButtonLabel="Remove"
-												onChange={(val) => setRules(val)}
-											/>
-										</FormGroup>
-									</FormGroupWrapper>
-									<div className="card-header">
-										<div className="left">
-											<div className="title">
-												After Expiry
-											</div>
-											<div className="des">Define what happens when subscription expires</div>
-										</div>
-									</div>
-									<FormGroupWrapper>
-										<FormGroup
-											label="Offer grace period"
-											htmlFor="grace_period"
-										>
-											<NestedComponent
-												id="grace_period"
-												fields={gracePeriod}
-												value={rules}
-												single={true}
-												addButtonLabel="Add Rule"
-												deleteButtonLabel="Remove"
-												onChange={(val) => setRules(val)}
-											/>
-										</FormGroup>
-									</FormGroupWrapper>
+									</div> */}
 								</>
 							)}
+						</Card>
+						<Card contentHeight title={__('Trial Period', 'multivendorx')} desc={__('Configure optional trial period for new members', 'multivendorx')}>
+							<FormGroupWrapper>
+								<FormGroup
+									label="Offer a trial period"
+									htmlFor="trial_period"
+								>
+									<NestedComponent
+										id="trial_period"
+										fields={subscription}
+										value={rules}
+										single={true}
+										addButtonLabel="Add Rule"
+										deleteButtonLabel="Remove"
+										onChange={(val) => setRules(val)}
+									/>
+								</FormGroup>
+							</FormGroupWrapper>
+							{/* <div className="card-header">
+								<div className="left">
+									<div className="title">
+										After Expiry
+									</div>
+									<div className="des">Define what happens when subscription expires</div>
+								</div>
+							</div> */}
+							<FormGroupWrapper>
+								<FormGroup
+									label="Offer grace period"
+									htmlFor="grace_period"
+								>
+									<NestedComponent
+										id="grace_period"
+										fields={gracePeriod}
+										value={rules}
+										single={true}
+										addButtonLabel="Add Rule"
+										deleteButtonLabel="Remove"
+										onChange={(val) => setRules(val)}
+									/>
+								</FormGroup>
+							</FormGroupWrapper>
 						</Card>
 						<Card contentHeight title={__('Commission type', 'multivendorx')}>
 							<FormGroupWrapper>

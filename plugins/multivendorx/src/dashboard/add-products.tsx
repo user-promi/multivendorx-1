@@ -979,8 +979,8 @@ const AddProduct = () => {
 				<Column grid={6}>
 					<Card contentHeight
 						title={__('Variatations', 'multivendorx')}
-						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
-						toggle
+						// iconName="adminfont-keyboard-arrow-down arrow-icon icon"
+						// toggle
 					>
 						<div className="variation-title-wrapper">
 							Variations
@@ -999,10 +999,9 @@ const AddProduct = () => {
 						{variant.map((variation, vIndex) => (
 							<>
 								<div className="variant-wrapper" key={variation.id}>
-
 									{variation.isEditing && (
 										<div className="edit-wrapper">
-											<div className="buttons-wrapper">
+											<div className="edit buttons-wrapper">
 												<div
 													className="admin-btn btn-red"
 													onClick={() => deleteVariation(vIndex)}
@@ -1301,8 +1300,8 @@ const AddProduct = () => {
 					{/* General information */}
 					<Card contentHeight
 						title={__('General information', 'multivendorx')}
-						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
-						toggle
+						// iconName="adminfont-keyboard-arrow-down arrow-icon icon"
+						// toggle
 					>
 						<FormGroupWrapper>
 							{/* Product Name */}
@@ -1344,8 +1343,8 @@ const AddProduct = () => {
 						<>
 							<Card contentHeight
 								title={__('Price', 'multivendorx')}
-								iconName="adminfont-keyboard-arrow-down arrow-icon icon"
-								toggle
+								// iconName="adminfont-keyboard-arrow-down arrow-icon icon"
+								// toggle
 							>
 								<FormGroupWrapper>
 									{/* Regular & Sale Price (Simple Product) */}
@@ -1377,8 +1376,8 @@ const AddProduct = () => {
 					)}
 					<Card contentHeight
 						title={__('Inventory', 'multivendorx')}
-						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
-						toggle
+						// iconName="adminfont-keyboard-arrow-down arrow-icon icon"
+						// toggle
 						action={
 							<>
 								<div className="field-wrapper">
@@ -1535,8 +1534,8 @@ const AddProduct = () => {
 
 					<Card contentHeight
 						title={__('Linked Products', 'multivendorx')}
-						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
-						toggle
+						// iconName="adminfont-keyboard-arrow-down arrow-icon icon"
+						// toggle
 					>
 						<FormGroupWrapper>
 							<FormGroup cols={2} label={__('Upsells', 'multivendorx')}>
@@ -1759,8 +1758,8 @@ const AddProduct = () => {
 
 					<Card contentHeight
 						title={__('Category', 'multivendorx')}
-						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
-						toggle
+						// iconName="adminfont-keyboard-arrow-down arrow-icon icon"
+						// toggle
 					>
 						{appLocalizer.settings_databases_value['product-preferencess']
 							?.category_selection_method === 'yes' ? (
@@ -1932,8 +1931,8 @@ const AddProduct = () => {
 					)}
 					<Card contentHeight
 						title="Product tag"
-						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
-						toggle={true} // enable collapse/expand
+						// iconName="adminfont-keyboard-arrow-down arrow-icon icon"
+						// toggle={true} // enable collapse/expand
 					>
 						<FormGroupWrapper>
 							{/* Selected tags */}
@@ -2000,8 +1999,8 @@ const AddProduct = () => {
 					{/* image upload */}
 					<Card contentHeight
 						title="Upload image"
-						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
-						toggle
+						// iconName="adminfont-keyboard-arrow-down arrow-icon icon"
+						// toggle
 					>
 						{/* Featured Image */}
 						<FormGroupWrapper>
