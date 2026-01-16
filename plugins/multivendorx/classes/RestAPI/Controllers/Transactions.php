@@ -189,6 +189,7 @@ class Transactions extends \WP_REST_Controller
                         'date'             => $row['created_at'],
                         'order_details'    => $row['order_id'],
                         'transaction_type' => $row['transaction_type'],
+                        'narration'         => $row['narration'],
                     );
                 },
                 $transactions
@@ -458,8 +459,8 @@ class Transactions extends \WP_REST_Controller
             $method = $request->get_param('method');
             $note   = $request->get_param('note');
 
-            if ($threshold_amount < $amount) {
-                MultiVendorX()->payments->processor->process_payment($store_id, $amount, null, $method, $note);
+            if ( $threshold_amount < $amount ) {
+                MultiVendorX()->payments->processor->process_payment( $store_id, $amount, null, $method, $note, $disbursement );
                 return rest_ensure_response(
                     array(
                         'success' => true,
