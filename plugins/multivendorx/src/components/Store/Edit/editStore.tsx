@@ -31,11 +31,9 @@ const EditStore = () => {
 	const [data, setData] = useState<any>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [bannerMenu, setBannerMenu] = useState(false);
-	// const [actionMenu, setActionMenu] = useState(false);
 	const [logoMenu, setLogoMenu] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [deleteOption, setDeleteOption] = useState('');
-	const wrapperRef = useRef<HTMLDivElement>(null);
 	const [editName, setEditName] = useState(false);
 	const [editDesc, setEditDesc] = useState(false);
 	const [selectedOwner, setSelectedOwner] = useState<any>(null);
@@ -83,7 +81,6 @@ const EditStore = () => {
 				return;
 			}
 			setBannerMenu(false);
-			setActionMenu(false);
 			setLogoMenu(false);
 		};
 
