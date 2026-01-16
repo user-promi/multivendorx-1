@@ -893,63 +893,69 @@ const Dashboard = () => {
 					</div>
 				</div>
 
+
 				<div className="content-wrapper">
 					{storeData && storeData.status !== 'active' ? (
 						<div className="permission-wrapper">
 							<i className="adminfont-info red"></i>
+
 							<div className="title">
 								{storeData.status === 'pending' ? (
-									appLocalizer.settings_databases_value[
-										'pending'
-									]?.pending_msg
+									appLocalizer.settings_databases_value?.pending?.pending_msg
 								) : storeData.status === 'suspended' ? (
-									appLocalizer.settings_databases_value[
-										'suspended'
-									]?.suspended_msg
+									appLocalizer.settings_databases_value?.suspended?.suspended_msg
 								) : storeData.status === 'under_review' ? (
-									appLocalizer.settings_databases_value[
-										'under-review'
-									]?.under_review_msg
+									appLocalizer.settings_databases_value?.['under-review']
+										?.under_review_msg
 								) : storeData.status === 'rejected' ? (
 									<>
 										{
-											appLocalizer
-												.settings_databases_value[
-												'rejected'
-											]?.rejected_msg
+											appLocalizer.settings_databases_value?.rejected
+												?.rejected_msg
 										}{' '}
 										<a
-											href={
-												appLocalizer.registration_page
-											}
+											href={appLocalizer.registration_page}
 											className="reapply-link"
 											target="__blank"
 										>
-											Click here to reapply.
+											{__('Click here to reapply.', 'multivendorx')}
 										</a>
 									</>
 								) : (
-									'No active store select for this user.'
+									__('You’re almost ready to sell To get started, you need to register your store on the marketplace.', 'multivendorx')
 								)}
 							</div>
-							<div className="admin-btn btn-purple">
-								Contact Admin
-							</div>
+							<a
+								href={appLocalizer.registration_page}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="admin-btn btn-purple"
+							>
+								<div className="admin-btn btn-purple">
+									{__('Create your store', 'multivendorx')}
+								</div>
+							</a>
 						</div>
 					) : noPermission ? (
 						<div className="permission-wrapper">
 							<i className="adminfont-info red"></i>
+
 							<div className="title">
-								You do not have permission to access this page.
+								{__(
+									'You do not have permission to access this page.',
+									'multivendorx'
+								)}
 							</div>
+
 							<div className="admin-btn btn-purple">
-								Contact Admin
+								{__('Contact Admin', 'multivendorx')}
 							</div>
 						</div>
 					) : (
 						loadComponent(currentTab)
 					)}
 				</div>
+
 			</div>
 		</div>
 	);

@@ -190,6 +190,7 @@ class Dashboard extends \WP_REST_Controller {
                         'name'       => 'Store Review',
                         'slug'       => 'store-review',
                         'capability' => array( 'view_store_reviews', 'reply_store_reviews' ),
+                        'module'     => array('store-review'),
                     ),
                 ),
                 'capability' => array( 'view_support_tickets' ),
@@ -218,6 +219,7 @@ class Dashboard extends \WP_REST_Controller {
                         'name'       => 'Documentation',
                         'slug'       => 'documentation',
                         'capability' => array( 'view_documentation' ),
+                        'module'     => array('knowladgebase'),
                     ),
                     array(
                         'key'        => 'tools',
