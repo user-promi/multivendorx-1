@@ -1214,6 +1214,7 @@ body.dark {
 // variant style start
 .variant-wrapper {
     border: $border-light-small;
+    border-radius: $border-radius-small;
     margin: 0.5rem 0;
 
     .variant {
@@ -1275,7 +1276,7 @@ body.dark {
     .edit-wrapper{
         padding: 0.5rem 1rem 1rem;
 
-        .buttons-wrapper{
+        .buttons-wrapper.edit{
             margin-bottom: 0.625rem;
             margin-top: -1.5rem;
             .admin-btn{
@@ -1295,6 +1296,9 @@ body.dark {
 
         thead {
             background: $background-color;
+        }
+        td{
+            padding: 0.313rem;
         }
     }
 
