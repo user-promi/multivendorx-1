@@ -982,46 +982,50 @@ const AddProduct = () => {
 						iconName="adminfont-keyboard-arrow-down arrow-icon icon"
 						toggle
 					>
+						<div className="variation-title-wrapper">
+							Variations
+							<AdminButton
+								wrapperClass="right"
+								buttons={[
+									{
+										icon: 'plus',
+										text: 'Add variants Like size or color',
+										className: 'purple',
+										onClick: addVariation,
+									}
+								]}
+							/>
+						</div>
 						{variant.map((variation, vIndex) => (
 							<>
-								<div className="variation-title-wrapper">
-									Variations
-									<AdminButton
-										wrapperClass="right"
-										buttons={[
-											{
-												icon: 'plus',
-												text: 'Add variants Like size or color',
-												className: 'purple',
-												onClick: addVariation,
-											},
-											{
-												icon: 'plus',
-												text: 'Add variant',
-												className: 'purple',
-												// onClick: props.onConfirm,
-											},
-										]}
-									/>
-								</div>
 								<div className="variant-wrapper" key={variation.id}>
 
 									{variation.isEditing && (
 										<div className="edit-wrapper">
+											<div className="buttons-wrapper">
+												<div
+													className="admin-btn btn-red"
+													onClick={() => deleteVariation(vIndex)}
+													>
+														<i className="adminfont-delete"></i> Delete
+												</div>
+												<div
+													className="admin-btn btn-green"
+													onClick={() => setEditMode(vIndex, false)}
+												>
+													<i className="adminfont-active"></i> Save
+												</div>
+											</div>
 											<div className="variant">
 												<div className="drag-icon">
 													<i className="adminfont-drag"></i>
 												</div>
 												<BasicInput
+													placeholder="Add variant"
 													value={variation.name}
 													onChange={(e) =>
 														updateVariation(vIndex, 'name', e.target.value)
 													}
-												/>
-
-												<span
-													className="admin-badge red adminfont-delete"
-													onClick={() => deleteVariation(vIndex)}
 												/>
 											</div>
 
@@ -1053,49 +1057,39 @@ const AddProduct = () => {
 												))}
 
 												<div className="add-new">
-													<FormGroupWrapper>
-														<FormGroup cols={2}>
-															<div
-																onKeyPress={(e) => {
-																	if (e.key === 'Enter') {
-																		e.preventDefault();
-																		handleAddNewOption(vIndex);
-																	}
-																}}
-															>
-																<BasicInput
-																	placeholder="Add another value"
-																	value={tempOptions[vIndex] || ''}
-																	onChange={(e) =>
-																		handleTempOptionChange(vIndex, e.target.value)
-																	}
-																	onKeyDown={(e) => {
-																		if (e.key === 'Enter') {
-																			e.preventDefault();
-																			handleAddNewOption(vIndex);
-																		}
-																	}}
-																/>
-															</div>
-														</FormGroup>
-														<FormGroup cols={2}>
-															<div
-																className="admin-btn btn-purple"
-																onClick={() => handleAddNewOption(vIndex)}
-															>
-																<i className="adminfont-plus"></i> Add New
-															</div>
-														</FormGroup>
-													</FormGroupWrapper>
-												</div>
-
-												<div className="buttons-wrapper">
-													<div
-														className="admin-btn btn-green"
-														onClick={() => setEditMode(vIndex, false)}
+													<div className="add-input"
+														onKeyPress={(e) => {
+															if (e.key === 'Enter') {
+																e.preventDefault();
+																handleAddNewOption(vIndex);
+															}
+														}}
 													>
-														<i className="adminfont-active"></i> Save
+														<BasicInput
+															placeholder="Add another value"
+															value={tempOptions[vIndex] || ''}
+															onChange={(e) =>
+																handleTempOptionChange(vIndex, e.target.value)
+															}
+															onKeyDown={(e) => {
+																if (e.key === 'Enter') {
+																	e.preventDefault();
+																	handleAddNewOption(vIndex);
+																}
+															}}
+														/>
 													</div>
+
+													<AdminButton
+														buttons={
+															{
+																icon: 'plus',
+																text: "Add New",
+																className: 'purple',
+																onClick: () => handleAddNewOption(vIndex),
+															}
+														}
+													/>
 												</div>
 											</div>
 										</div>
@@ -1105,7 +1099,7 @@ const AddProduct = () => {
 										<div className="variant-show">
 											<div className="left-section">
 												<div className="attributes">
-													{variation.name || __('No variant', 'multivendorx')}
+													{variation.name || __('No variant name', 'multivendorx')}
 												</div>
 
 												<div className="variantion-wrapper">
@@ -1190,7 +1184,7 @@ const AddProduct = () => {
 														<td>
 															<div className="buttons-wrapper">
 																<span
-																	className="admin-badge blue adminfont-edit"
+																	className="admin-badge purple adminfont-edit"
 																	onClick={() => setopenPopup(true)}
 																></span>
 																<span className="admin-badge red adminfont-delete"></span>
@@ -1611,11 +1605,8 @@ const AddProduct = () => {
 									style={{ cursor: 'pointer' }}
 									className="field-wrapper"
 								>
-									<i
-										className={`star-icon ${starFill ? 'adminfont-star' : 'adminfont-star-o'
-											}`}
-									/>
 									{__('Featured product', 'multivendorx')}
+									<i className={`star-icon ${starFill ? 'adminfont-star' : 'adminfont-star-o'}`} />
 								</label>
 							</>
 						}
@@ -1775,20 +1766,26 @@ const AddProduct = () => {
 							?.category_selection_method === 'yes' ? (
 							<>
 								{/* Breadcrumb */}
-								<div className="category-breadcrumb-wrapper">
-									<div className="category-breadcrumb">
-										{printPath()}
-									</div>
+								{(() => {
+									const breadcrumb = printPath();
+									if (!breadcrumb) return null;
+									return (
+										<div className="category-breadcrumb-wrapper">
+											<div className="category-breadcrumb">
+												{breadcrumb}
+											</div>
 
-									{(selectedCat || selectedSub || selectedChild) && (
-										<button
-											onClick={resetSelection}
-											className="admin-btn btn-red"
-										>
-											{__('Reset', 'multivendorx')}
-										</button>
-									)}
-								</div>
+											{(selectedCat || selectedSub || selectedChild) && (
+												<button
+													onClick={resetSelection}
+													className="admin-btn btn-red"
+												>
+													{__('Reset', 'multivendorx')}
+												</button>
+											)}
+										</div>
+									);
+								})()}
 
 								{/* Category tree (custom flow) */}
 								<FormGroupWrapper>
@@ -1940,8 +1937,8 @@ const AddProduct = () => {
 					>
 						<FormGroupWrapper>
 							{/* Selected tags */}
-							<div className="tag-list">
-								{product.tags?.map((tag) => (
+							{product.tags?.map((tag) => (
+								<div className="tag-list">
 									<span className="admin-badge blue" key={tag.id}>
 										{tag.name}
 										<span
@@ -1957,8 +1954,8 @@ const AddProduct = () => {
 											<i className="delete-icon adminfont-delete" />
 										</span>
 									</span>
-								))}
-							</div>
+								</div>
+							))}
 
 							{/* Tag input + dropdown */}
 							<div className="dropdown-field">
