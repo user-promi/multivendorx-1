@@ -23,7 +23,15 @@ interface GoogleMapComponentProps {
     labelSearch: string;
     labelMap: string;
     placeholderSearch: string;
-    stores: { data: any[] } | null;
+    stores: { data: Store[] } | null;
+}
+
+interface Store {
+    id: number;
+    store_name: string;
+    address_1?: string;
+    location_lat?: string;
+    location_lng?: string;
 }
 
 interface ExtractedAddress {
