@@ -806,7 +806,7 @@ const AddProduct = () => {
 			return updated;
 		});
 	};
-
+// variation end
 	return (
 		<>
 			<div className="page-title-wrapper">
@@ -983,7 +983,7 @@ const AddProduct = () => {
 						// toggle
 					>
 						<div className="variation-title-wrapper">
-							Variations
+							{__('Attributes', 'multivendorx')}
 							<AdminButton
 								wrapperClass="right"
 								buttons={[
@@ -1127,7 +1127,7 @@ const AddProduct = () => {
 						{combinations.length > 0 && (
 							<>
 								<div className="variation-title-wrapper">
-									Variations
+									{__('Variations', 'multivendorx')}
 									<AdminButton
 										wrapperClass="right"
 										buttons={[

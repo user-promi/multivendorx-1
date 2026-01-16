@@ -1297,6 +1297,9 @@ body.dark {
         thead {
             background: $background-color;
         }
+        td{
+            padding: 0.313rem;
+        }
     }
 
     .header td:first-child {
