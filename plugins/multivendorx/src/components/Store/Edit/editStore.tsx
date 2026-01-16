@@ -369,7 +369,7 @@ const EditStore = () => {
 			link: `${appLocalizer.store_page_url}${data.slug}`,
 			targetBlank: true,
 		},
-		{
+		data.status != 'pending' && {
 			title: __('Manage status', 'multivendorx'),
 			icon: 'adminfont-form-multi-select',
 			action: () => {
@@ -388,12 +388,12 @@ const EditStore = () => {
 				}, 5000);
 			},
 		},
-		{
+		data.status != 'pending' && {
 			title: __('Products', 'multivendorx'),
 			icon: 'adminfont-single-product',
 			link: `${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`,
 		},
-		{
+		data.status != 'pending' && {
 			title: __('Orders', 'multivendorx'),
 			icon: 'adminfont-order',
 			action: () => {
