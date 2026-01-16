@@ -381,8 +381,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 
 	// 🔹 Fetch data from backend
 	function requestData(
-		rowsPerPage = 10,
-		currentPage = 1,
+		rowsPerPage :number,
+		currentPage :number,
 		categoryFilter = '',
 		transactionType = '',
 		transactionStatus = '',
@@ -465,6 +465,11 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 		currentPage: number,
 		filterData: FilterData
 	) => {
+		const date = filterData?.date || {
+			start_date: new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
+			end_date: new Date(),
+		};
+		setDateFilter(date);
 		setCurrentFilterData(filterData);
 		requestData(
 			rowsPerPage,
@@ -474,8 +479,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({
 			filterData?.transactionStatus,
 			filterData?.orderBy,
 			filterData?.order,
-			filterData?.date?.start_date,
-			filterData?.date?.end_date
+			date?.start_date,
+			date?.end_date
 		);
 	};
 

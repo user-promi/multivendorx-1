@@ -126,7 +126,7 @@ class Dashboard extends \WP_REST_Controller {
                         'name'       => 'Refund',
                         'slug'       => 'refund',
                         'capability' => array( 'view_shop_orders', 'edit_shop_orders' ),
-                        'module'     => 'marketplace-refund',
+                        'module'     => array('marketplace-refund'),
                     ),
                     array(
                         'key'        => 'commissions',
@@ -169,21 +169,21 @@ class Dashboard extends \WP_REST_Controller {
                         'name'       => 'Support Tickets',
                         'slug'       => 'support-tickets',
                         'capability' => array( 'view_support_tickets', 'reply_support_tickets' ),
-                        'module'     => 'customer-support',
+                        'module'     => array('customer-support'),
                     ),
                     array(
                         'key'        => 'customer-questions',
                         'name'       => 'Customer Questions',
                         'slug'       => 'customer-questions',
                         'capability' => array( 'view_customer_questions', 'reply_customer_questions' ),
-                        'module'     => 'question-answer',
+                        'module'     => array('question-answer'),
                     ),
                     array(
                         'key'        => 'store-followers',
                         'name'       => 'Store Followers',
                         'slug'       => 'store-followers',
                         'capability' => array( 'view_store_followers' ),
-                        'module'     => 'follow-store',
+                        'module'     => array('follow-store'),
                     ),
                     array(
                         'key'        => 'store-review',
