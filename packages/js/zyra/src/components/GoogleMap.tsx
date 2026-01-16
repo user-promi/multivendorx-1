@@ -23,7 +23,7 @@ interface GoogleMapComponentProps {
     labelSearch: string;
     labelMap: string;
     placeholderSearch: string;
-    stores: { data: any[] };
+    stores: { data: any[] } | null;
 }
 
 interface ExtractedAddress {
@@ -300,24 +300,23 @@ const GoogleMap = ({
     };
 
     return (
-        <>
-            <FormGroup label={labelSearch}>
-                <div
-                    ref={mapContainerRef}
-                    id="location-map"
-                >
-                    <input
-                        ref={autocompleteInputRef}
-                        id="store-location-autocomplete"
-                        type="text"
-                        className="basic-input"
-                        placeholder={placeholderSearch}
-                        defaultValue={locationAddress}
-                    />
-                </div>
-            </FormGroup>
-        </>
-    );
+        <FormGroup label={labelSearch}>
+            <input
+                ref={autocompleteInputRef}
+                id="store-location-autocomplete"
+                type="text"
+                className="basic-input"
+                placeholder={placeholderSearch}
+                defaultValue={locationAddress}
+                style={{ width: '100%', height: '3rem', marginBottom: '8px' }}
+            />
+            <div
+                ref={mapContainerRef}
+                id="location-map"
+                style={{ height: '400px', width: '100%' }}
+            />
+        </FormGroup>
+    );    
 };
 
 export default GoogleMap;
