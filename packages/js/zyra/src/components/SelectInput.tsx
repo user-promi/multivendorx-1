@@ -38,8 +38,8 @@ interface SelectInputProps {
     proSetting?: boolean;
     description?: string;
     descClass?: string;
-    preText?: string;
-    postText?: string;
+    preText?: React.ReactNode;
+    postText?: React.ReactNode;    
     size?: string;
     menuContent?: React.ReactNode;
     keepMenuOpenOnMenuContentClick?: boolean;
