@@ -2,7 +2,7 @@
  * External dependencies
  */
 import React from 'react';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import type {
     MultiValue,
     SingleValue,
@@ -41,7 +41,41 @@ interface SelectInputProps {
     preText?: string;
     postText?: string;
     size?: string;
+    menuContent?: React.ReactNode;
+    keepMenuOpenOnMenuContentClick?: boolean;
 }
+const CustomMenuList = (props: any) => {
+    const {
+        selectProps: {
+            menuContent,
+            keepMenuOpenOnMenuContentClick,
+        },
+    } = props;
+
+    return (
+        <components.MenuList {...props}>
+            {menuContent && (
+                <div
+                    style={{
+                        padding: '8px',
+                        borderBottom: '1px solid var(--borderColor)',
+                    }}
+                    onMouseDown={(e) => {
+                        if (keepMenuOpenOnMenuContentClick) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    }}
+                >
+                    {menuContent}
+                </div>
+            )}
+
+            {/* Existing options */}
+            {props.children}
+        </components.MenuList>
+    );
+};
 
 const SelectInput: React.FC< SelectInputProps > = ( {
     wrapperClass,
@@ -60,6 +94,8 @@ const SelectInput: React.FC< SelectInputProps > = ( {
     preText,
     postText,
     size,
+    menuContent,
+    keepMenuOpenOnMenuContentClick,
 } ) => {
     const customStyles: StylesConfig< SelectOptions, boolean > = {
         control: ( provided, state ) => ( {
@@ -160,6 +196,11 @@ const SelectInput: React.FC< SelectInputProps > = ( {
                     styles={ customStyles }
                     closeMenuOnSelect={ true }
                     isMulti={ type === 'multi-select' }
+                    components={{ MenuList: CustomMenuList }}
+                    menuContent={menuContent}
+                    keepMenuOpenOnMenuContentClick={
+                        keepMenuOpenOnMenuContentClick
+                    }
                 />
                 { postText && <div className="after">{ postText }</div> }
             </div>
