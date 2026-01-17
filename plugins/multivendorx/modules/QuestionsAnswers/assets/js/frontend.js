@@ -1,7 +1,7 @@
 jQuery(document).ready(function ($) {
 
     let productId = $('#product-qna').data('product');
-    let searchTimeout; // For debouncing
+    let searchTimeout;
 
     // Load all questions on page load
     loadQuestions('');
@@ -12,7 +12,7 @@ jQuery(document).ready(function ($) {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
             loadQuestions(keyword);
-        }, 300); // 300ms debounce
+        }, 300);
     });
 
     // Direct question submission
@@ -54,19 +54,18 @@ jQuery(document).ready(function ($) {
             nonce: qnaFrontend.nonce
         }, function (res) {
             if (!res.success) return;
-
+    
             $('#qna-list').empty().html(res.data.html);
-
-            // Show "Ask now" button only if no questions found
+    
             if (!res.data.has_items && search) {
-                $('#qna-direct-submit')
-                    .data('question', search)
-                    .text('Ask now');
-                $('#qna-direct-submit-wrapper').show();
+                // Show message + button container
+                $('#qna-no-results-container').show();
+                $('#qna-direct-submit').data('question', search);
             } else {
-                $('#qna-direct-submit-wrapper').hide();
+                // Hide if results found
+                $('#qna-no-results-container').hide();
             }
         });
     }
-
+    
 });
