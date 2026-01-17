@@ -23,17 +23,6 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 			});
 	}, []);
 
-	const toggleCard = (cardId) => {
-		const body = document.querySelector(`#${cardId} .card-body`);
-		const arrow = document.querySelector(`#${cardId} .arrow-icon`);
-
-		if (!body || !arrow) {
-			return;
-		}
-
-		body.classList.toggle('hide-body');
-		arrow.classList.toggle('rotate');
-	};
 
 	return (
 		<Card contentHeight
@@ -63,49 +52,63 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 							},
 						]}
 						value={productType}
-						onChange={(val) => setProductType(val)}
+						onChange={(val) => {
+							setProductType(val)
+							if (val == 'physical') {
+								handleChange('virtual', false)
+							}
+							if (val == 'downloadable') {
+								handleChange('downloadable', true)
+							}
+						}}
 					/>
 				</FormGroup>
 				{productType === 'physical' && (
 					<>
 						{/* Weight & Shipping class */}
-						{/* <FormGroup cols={2} label={__('Weight (kg)', 'multivendorx')} htmlFor="Weight">
-					<BasicInput
-						name="weight"
-						value={product.weight}
-						onChange={(e) =>
-							handleChange('weight', e.target.value)
-						}
-					/>
-				</FormGroup>
-				<FormGroup cols={2} label={__('Shipping classes', 'multivendorx')} htmlFor="shipping-classes">
-					<SelectInput
-						name="shipping_class"
-						options={shippingClasses}
-						value={product.shipping_class}
-						onChange={(selected) =>
-							handleChange('shipping_class', selected.value)
-						}
-					/>
-				</FormGroup> */}
+						<FormGroup cols={2} label={__('Weight (kg)', 'multivendorx')} htmlFor="Weight">
+							<BasicInput
+								name="weight"
+								value={product.weight}
+								onChange={(e) => {
+									handleChange('weight', e.target.value)
+								}}
+							/>
+						</FormGroup>
+						<FormGroup cols={2} label={__('Shipping classes', 'multivendorx')} htmlFor="shipping-classes">
+							<SelectInput
+								name="shipping_class"
+								options={shippingClasses}
+								value={product.shipping_class}
+								onChange={(selected) =>
+									handleChange('shipping_class', selected.value)
+								}
+							/>
+						</FormGroup>
 						<FormGroup cols={3} label={`${__('Length', 'multivendorx')} (${appLocalizer.dimension_unit})`} >
 							<BasicInput
 								name="product_length"
-								value={product.product_length}
+								value={product.dimensions?.length || ''}
 								placeholder={__('Length', 'multivendorx')}
 								onChange={(e) =>
-									handleChange('product_length', e.target.value)
+									handleChange('dimensions', {
+									...product.dimensions,
+									length: e.target.value,
+									})
 								}
-							/>
+								/>
 						</FormGroup>
 
 						<FormGroup cols={3} label={`${__('Width', 'multivendorx')} (${appLocalizer.dimension_unit})`}>
 							<BasicInput
 								name="product_width"
-								value={product.product_width}
+								value={product.dimensions?.width}
 								placeholder={__('Width', 'multivendorx')}
 								onChange={(e) =>
-									handleChange('product_width', e.target.value)
+									handleChange('dimensions', {
+										...product.dimensions,
+										width: e.target.value,
+									})
 								}
 							/>
 						</FormGroup>
@@ -113,10 +116,13 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 						<FormGroup cols={3} label={`${__('Height', 'multivendorx')} (${appLocalizer.dimension_unit})`}>
 							<BasicInput
 								name="product_height"
-								value={product.product_height}
+								value={product.dimensions?.height}
 								placeholder={__('Height', 'multivendorx')}
 								onChange={(e) =>
-									handleChange('product_height', e.target.value)
+									handleChange('dimensions', {
+										...product.dimensions,
+										height: e.target.value,
+									})
 								}
 							/>
 						</FormGroup>
