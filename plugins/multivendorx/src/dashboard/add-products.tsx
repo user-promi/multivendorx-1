@@ -33,12 +33,12 @@ const AddProduct = () => {
 
 	const query = new URLSearchParams(location.search);
 	let productId = query.get('context_id');
+
 	if (!productId) {
 		const parts = location.pathname.split('/').filter(Boolean);
-		if (parts.length >= 4) {
-			productId = productId || parts[3];
-		}
+		productId = parts[parts.length - 1];
 	}
+
 	const [product, setProduct] = useState({});
 	const [translation, setTranslation] = useState([]);
 
