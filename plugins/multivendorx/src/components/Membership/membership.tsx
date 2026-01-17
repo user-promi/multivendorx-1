@@ -752,59 +752,65 @@ const Membership = ({ id }: { id: string }) => {
 			<div className="general-wrapper">
 				<Container>
 					<Column>
-						<Card>
-							<div className={`checklist-wrapper row ${isChecklistOpen ? 'hide' : 'show'}`}>
-								<div className="checklist-title">Recommended</div>
+						<div className={`checklist-process-wrapper row ${isChecklistOpen ? 'hide' : 'show'}`}>
+								<div className="checklist-title"><i className="adminfont-star"></i><span> Recommended </span></div>
 								<ul>
 									<li className="checked">
+										<div className="details-wrapper">
 										<div className="check-icon"><span></span></div>
 										<div className="details">
 											<div className="title">Plan Name</div>
-											{/* <div className="des">A clear, descriptive title</div> */}
+											<div className="des">A clear, descriptive title that helps stores identify your plan</div>
+										</div>
 										</div>
 									</li>
 									<li className="checked">
+										<div className="details-wrapper">
 										<div className="check-icon"><span></span></div>
 										<div className="details">
 											<div className="title">Description</div>
-											{/* <div className="des">Explain what this plan </div> */}
+											<div className="des">Explain what this plan offers to stores</div>
+										</div>
 										</div>
 									</li>
-									<li className="checked">
+									<li className="visite">
+										<div className="details-wrapper">
 										<div className="check-icon"><span></span></div>
 										<div className="details">
 											<div className="title">Features</div>
-											{/* <div className="des">Select premium features for this plan	</div> */}
+											<div className="des">Select premium features for this plan</div>
+										</div>
 										</div>
 									</li>
-									<li className="checked">
+									<li className="not-visite">
+										<div className="details-wrapper">
 										<div className="check-icon"><span></span></div>
 										<div className="details">
 											<div className="title">Pricing</div>
-											{/* <div className="des">Set competitive prices including</div> */}
+											<div className="des">Set competitive prices including any sale or discount options</div>
+										</div>
 										</div>
 									</li>
-									<li className="checked">
+									<li className="not-visite">
+										<div className="details-wrapper">
 										<div className="check-icon"><span></span></div>
 										<div className="details">
 											<div className="title">Permissions</div>
-											{/* <div className="des">A clear, descriptive title</div> */}
+											<div className="des">Configure store permissions and limits</div>
+										</div>
 										</div>
 									</li>
 								</ul>
+							<div className="right-arrow checklist-arrow absolute" onClick={() => setIsChecklistOpen((prev) => !prev)}>
+								<i className="adminfont-arrow-right"></i>
 							</div>
-							<div className="checklist-icon" onClick={() => setIsChecklistOpen((prev) => !prev)}>
-								<i className={`adminfont-${isChecklistOpen ? 'cross' : 'cross'}`}></i>
-							</div>
-							{/* {isChecklistOpen && ( */}
-								{/* <> */}
-									<div className="side-ber">
-										<i className="adminfont-module"></i>
-									</div>
-								{/* </>
-							)} */}
-						</Card>
+						</div>
 					</Column>
+					{isChecklistOpen && (
+						<div className="right-arrow checklist-arrow fixed" onClick={() => setIsChecklistOpen((prev) => !prev)}>
+							<i className="adminfont-arrow-left"></i>
+						</div>
+					)}
 					<Column grid={8}>
 						<Card
 							title="Plan details"
