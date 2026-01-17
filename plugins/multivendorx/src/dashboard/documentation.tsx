@@ -187,8 +187,7 @@ const Documentation: React.FC = () => {
 											</a>
 										</>
 									}
-								/>
-							
+								/>						
 						</>
 					))}
 				</div>

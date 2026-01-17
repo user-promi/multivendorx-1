@@ -600,11 +600,8 @@ const Dashboard: React.FC = () => {
 				</Column>
 
 				<Column grid={4}>
-					<Card
-						title={__('Visitors Map', 'multivendorx')}
-					>
+					<Card title={__('Visitors Map', 'multivendorx')}>
 						<VisitorsMap dateRange={dateRange} />
-
 					</Card>
 				</Column>
 
