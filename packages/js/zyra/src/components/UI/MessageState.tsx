@@ -1,4 +1,5 @@
 import React from 'react';
+import "../../styles/web/UI/MessageState.scss";
 
 interface MessageStateProps {
 	icon?: string;
@@ -29,16 +30,14 @@ const MessageState: React.FC<MessageStateProps> = ({
 
 			<div className="title">{title}</div>
 
-			{desc && (
-				<div className="desc">{desc}</div>
-			)}
+			{desc && <div className="description">{desc}</div>}
 
 			{buttonText && (
 				buttonLink ? (
 					<a
 						href={buttonLink}
 						target={buttonTarget}
-						rel={buttonTarget === '_blank' ? 'noopener noreferrer' : ''}
+						rel={buttonTarget === '_blank' ? 'noopener noreferrer' : undefined}
 						className="admin-btn btn-purple"
 					>
 						{buttonText}
