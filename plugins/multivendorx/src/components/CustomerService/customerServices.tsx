@@ -77,7 +77,7 @@ const CustomerServices = () => {
 					'multivendorx'
 				)}
 			/>
-			{tabData.length == 0 ? (
+			{tabData.length > 0 ? (
 				<Tabs
 					tabData={tabData}
 					currentTab={location.get('subtab') as string}
@@ -98,10 +98,8 @@ const CustomerServices = () => {
 				<Container>
 					<Column>
 						<MessageState
-							title={__(
-								'Looks like customer support isn’t set up yet! Turn on a support module to start assisting your customers.',
-								'multivendorx'
-							)}
+							title={__('Looks like customer support isn’t set up yet!', 'multivendorx')}
+							desc={__('Turn on a support module to start assisting your customers.', 'multivendorx')}
 							buttonText={__('Enable Now', 'multivendorx')}
 							buttonLink={appLocalizer.module_page_url}
 						/>
