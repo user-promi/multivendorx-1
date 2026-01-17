@@ -56,10 +56,6 @@ const CustomMenuList = (props: any) => {
         <components.MenuList {...props}>
             {menuContent && (
                 <div
-                    style={{
-                        padding: '8px',
-                        borderBottom: '1px solid var(--borderColor)',
-                    }}
                     onMouseDown={(e) => {
                         if (keepMenuOpenOnMenuContentClick) {
                             e.preventDefault();
@@ -71,7 +67,6 @@ const CustomMenuList = (props: any) => {
                 </div>
             )}
 
-            {/* Existing options */}
             {props.children}
         </components.MenuList>
     );
