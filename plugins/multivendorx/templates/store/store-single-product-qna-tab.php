@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Q&A tab container - all content loaded via AJAX
  */
@@ -23,7 +24,14 @@ $login_url = add_query_arg('redirect_to', $current_url, $myaccount_url);
 
     <!-- Questions List (populated via AJAX) -->
     <ul id="qna-list"></ul>
-
+    <div id="qna-direct-submit-wrapper" style="display:none;">
+        <button
+            type="submit"
+            id="qna-direct-submit"
+            class="woocommerce-button button">
+            Ask now
+        </button>
+    </div>
     <!-- Success Message -->
     <div id="qna-success-message" class="qna-notice" style="display:none;">
         <?php echo esc_html__('Your question has been submitted successfully. It will appear once answered.', 'multivendorx'); ?>
