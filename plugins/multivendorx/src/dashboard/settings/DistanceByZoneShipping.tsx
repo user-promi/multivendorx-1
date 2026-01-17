@@ -79,7 +79,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 	};
 
 	const handleAdd = (zone: Zone) => {
-		console.log('zone',zone);
 		setSelectedZone(zone);
 		setAddShipping(true);
 		setIsEditing(false);
