@@ -543,6 +543,62 @@ const Membership = ({ id }: { id: string }) => {
 			],
 		},
 	];
+	export const usageLimitsConfig = {
+  max_products: {
+    label: __('Max products', 'multivendorx'),
+    type: 'number',
+    default: 500,
+    min: 0,
+  },
+  max_categories: {
+    label: __('Max categories', 'multivendorx'),
+    type: 'number',
+    default: 20,
+    min: 0,
+  },
+  max_storage: {
+    label: __('Max storage', 'multivendorx'),
+    type: 'number',
+    default: 5,
+    min: 0,
+    suffix: 'GB',
+  },
+  max_staff_accounts: {
+    label: __('Max staff accounts', 'multivendorx'),
+    type: 'number',
+    default: 3,
+    min: 0,
+  },
+  max_coupons: {
+    label: __('Max coupons', 'multivendorx'),
+    type: 'number',
+    default: 10,
+    min: 0,
+  },
+  limit_reached_action: {
+    label: __('When limit reached', 'multivendorx'),
+    type: 'radio',
+    default: 'block',
+    options: [
+      {
+        value: 'block',
+        label: __('Block creation', 'multivendorx'),
+        desc: __('Prevent vendors from adding more items.', 'multivendorx'),
+      },
+      {
+        value: 'warn',
+        label: __('Allow but warn', 'multivendorx'),
+        desc: __('Show warning but allow creation.', 'multivendorx'),
+      },
+      {
+        value: 'upgrade_prompt',
+        label: __('Auto-upgrade suggestion', 'multivendorx'),
+        desc: __('Prompt vendor to upgrade plan.', 'multivendorx'),
+      },
+    ],
+  },
+};
+
 	const productUploadSettings = [
 		{
 			key: 'enable_product_limits',
@@ -1328,16 +1384,24 @@ const Membership = ({ id }: { id: string }) => {
 												key: 'free',
 												value: 'free',
 												label: __('Free', 'multivendorx'),
+												desc={__('No charges', 'multivendorx')}
 											},
 											{
 												key: 'paid',
-												value: 'paid',
-												label: __('Paid', 'multivendorx'),
+												value: 'one-time-payment',
+												label: __('One-time Payment', 'multivendorx'),
+									desc={__('Lifetime access', 'multivendorx')}
+											},
+									{
+												key: 'subscription',
+												value: 'subscription',
+												label: __('Subscription', 'multivendorx'),
+									desc={__('Recurring', 'multivendorx')}
 											},
 										]}
 										value={pricingType}
 										onChange={(value: string) =>
-											setPricingType(value as 'free' | 'paid')
+											setPricingType(value as 'free' | 'paid' | 'subscription')
 										}
 									/>
 								</FormGroup>
