@@ -1,116 +1,47 @@
 <?php
+
 namespace MultiVendorX;
 
 use MultiVendorX\Utill;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class Coupon {
+class Coupon
+{
 
-    public function __construct() {
-
-        // Cart-level validity
-        add_filter(
-            'woocommerce_coupon_is_valid',
-            array( $this, 'validate_store_coupon' ),
-            10,
-            2
-        );
-
-        // REMOVE non-store products from coupon scope (KEY FIX)
-        add_filter(
-            'woocommerce_coupon_get_discountable_items',
-            array( $this, 'filter_discountable_items_by_store' ),
-            10,
-            2
-        );
-
-        // Custom error
-        add_filter(
-            'woocommerce_coupon_error',
-            array( $this, 'store_coupon_error_message' ),
-            10,
-            3
-        );
+    public function __construct()
+    {
+        add_filter('woocommerce_coupon_is_valid_for_product', array($this, 'restrict_coupon_by_product_store'), 10, 4);
     }
-
+    
     /**
-     * Coupon is valid only if at least one product
-     * from the same store exists in cart.
+     * Logic: If the product's Store ID does not match the Coupon's Store ID, 
+     * return false so no discount is applied to this item.
      */
-    public function validate_store_coupon( $valid, $coupon ) {
-
-        $coupon_store_id = get_post_meta(
+    public function restrict_coupon_by_product_store($is_valid, $product, $coupon, $values)
+    {
+        // 1. Get the Store ID assigned to the Coupon
+        $coupon_store = get_post_meta(
             $coupon->get_id(),
             Utill::POST_META_SETTINGS['store_id'],
             true
         );
 
-        // Admin coupon
-        if ( empty( $coupon_store_id ) ) {
-            return $valid;
+        if (empty($coupon_store)) {
+            return $is_valid;
         }
 
-        foreach ( WC()->cart->get_cart() as $item ) {
-            $product_store_id = get_post_meta(
-                $item['product_id'],
-                Utill::POST_META_SETTINGS['store_id'],
-                true
-            );
-
-            if ( (int) $product_store_id === (int) $coupon_store_id ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * CRITICAL:
-     * Remove non-store products from coupon calculation scope
-     */
-    public function filter_discountable_items_by_store( $items, $coupon ) {
-
-        $coupon_store_id = get_post_meta(
-            $coupon->get_id(),
+        $product_store = get_post_meta(
+            $product->get_id(),
             Utill::POST_META_SETTINGS['store_id'],
             true
         );
 
-        // Admin coupon → do not filter
-        if ( empty( $coupon_store_id ) ) {
-            return $items;
+        // This ensures the coupon amount is only deducted from matching products.
+        if ((int) $product_store !== (int) $coupon_store) {
+            return false;
         }
 
-        foreach ( $items as $cart_item_key => $item ) {
-
-            $product_store_id = get_post_meta(
-                $item['product_id'],
-                Utill::POST_META_SETTINGS['store_id'],
-                true
-            );
-
-            if ( (int) $product_store_id !== (int) $coupon_store_id ) {
-                unset( $items[ $cart_item_key ] );
-            }
-        }
-
-        return $items;
-    }
-
-    /**
-     * Custom error message
-     */
-    public function store_coupon_error_message( $message, $error_code, $coupon ) {
-
-        if ( $error_code === \WC_Coupon::E_WC_COUPON_NOT_APPLICABLE ) {
-            return __(
-                'This coupon is only applicable to products from the same store.',
-                'multivendorx'
-            );
-        }
-
-        return $message;
+        return $is_valid;
     }
 }
