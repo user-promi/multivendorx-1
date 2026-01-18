@@ -440,8 +440,8 @@ const Dashboard = () => {
 												hasSubmenu
 													? '#'
 													: appLocalizer.permalink_structure
-														? `/${appLocalizer.dashboard_slug}/${key}`
-														: `/?page_id=${appLocalizer.dashboard_page_id}&segment=${key}`
+														? `${appLocalizer.site_url.replace(/\/$/, '')}/${appLocalizer.dashboard_slug}/${key}`
+														: `${appLocalizer.site_url.replace(/\/$/, '')}/?page_id=${appLocalizer.dashboard_page_id}&segment=${key}`
 											}
 											onClick={(e) => {
 												e.preventDefault();
@@ -486,8 +486,8 @@ const Dashboard = () => {
 																// href={`?segment=${sub.key}`}
 																href={
 																	appLocalizer.permalink_structure
-																		? `/${appLocalizer.dashboard_slug}/${sub.key}`
-																		: `/?page_id=${appLocalizer.dashboard_page_id}&segment=${sub.key}`
+																		? `${appLocalizer.site_url.replace(/\/$/, '')}/${appLocalizer.dashboard_slug}/${sub.key}`
+																		: `${appLocalizer.site_url.replace(/\/$/, '')}/?page_id=${appLocalizer.dashboard_page_id}&segment=${sub.key}`
 																}
 																onClick={(
 																	e
