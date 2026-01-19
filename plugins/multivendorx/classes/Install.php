@@ -528,6 +528,7 @@ class Install {
                 4. Certification Upload
                 - Sellers must upload supporting documents for regulated products.
                 ',
+            'legal_document_handling' => 'allow_download_only'
         );
 
         $pending_store_status = array(
@@ -860,6 +861,28 @@ class Install {
         $refund_settings = array(
             'customer_refund_status' => array('completed'),
             'refund_days'     => 7,
+            'refund_reasons' => array(
+                'damaged-or-defective-product' => array(
+                    'label'    => 'Damaged or defective product',
+					'isCustom' => true,
+                ),
+                'wrong-item'                   => array(
+                    'label'    => 'Wrong item delivered',
+					'isCustom' => true,
+                ),
+                'product-not-as-described'     => array(
+                    'label'    => 'Product not as described',
+					'isCustom' => true,
+                ),
+                'late-delivery'                => array(
+                    'label'    => 'Late delivery',
+					'isCustom' => true,
+                ),
+                'changed-mind'                 => array(
+                    'label'    => 'Changed mind',
+					'isCustom' => true,
+                ),
+            ),
         );
         update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $refund_settings );
 
@@ -897,31 +920,6 @@ class Install {
         );
 
         update_option( Utill::MULTIVENDORX_SETTINGS['store-registration-form'], $registration_from_settings );
-
-        $order_settings = array(
-            'refund_reasons' => array(
-                'damaged-or-defective-product' => array(
-                    'label'    => 'Damaged or defective product',
-					'isCustom' => true,
-                ),
-                'wrong-item'                   => array(
-                    'label'    => 'Wrong item delivered',
-					'isCustom' => true,
-                ),
-                'product-not-as-described'     => array(
-                    'label'    => 'Product not as described',
-					'isCustom' => true,
-                ),
-                'late-delivery'                => array(
-                    'label'    => 'Late delivery',
-					'isCustom' => true,
-                ),
-                'changed-mind'                 => array(
-                    'label'    => 'Changed mind',
-					'isCustom' => true,
-                ),
-            ),
-        );
 
         $delivery_settings = array(
             'shipping_stage' => array(
@@ -1017,7 +1015,6 @@ class Install {
 
         // 6. Save back to DB
         update_option( Utill::MULTIVENDORX_SETTINGS['identity-verification'], $settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $order_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['delivery'], $delivery_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['legal-compliance'], $legal_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-compliance'], $product_compliance_settings );
@@ -1172,6 +1169,10 @@ class Install {
 
         if (!empty($previous_dashboard_settings['setup_wizard_introduction'])) {
             $general_settings['setup_wizard_introduction'] = $previous_dashboard_settings['setup_wizard_introduction'];
+        }
+
+        if (!empty($previous_dashboard_settings['mvx_vendor_dashboard_custom_css'])) {
+            $tool_settings['custom_css_product_page'] = $previous_dashboard_settings['mvx_vendor_dashboard_custom_css'];
         }
 
         if (!empty($previous_dashboard_settings['mvx_new_dashboard_site_logo'])) {
@@ -1388,6 +1389,83 @@ class Install {
             'admin_coupon_excluded' => !empty($previous_disbursement_settings['admin_coupon_excluded']) ?? []
         );
 
+        $statuses = [];
+
+        foreach ($previous_disbursement_settings['order_withdrawl_status'] as $status) {
+            if ($status['value'] === 'completed' || $status['value'] === 'processing') {
+                $statuses[] = $status['value'];
+            }
+        }
+
+        $disbursement_settings = array(
+            'commission_lock_period'   => !empty($previous_disbursement_settings['commission_threshold_time']) ?? 0,
+            'disbursement_order_status'   => !empty($previous_disbursement_settings['order_withdrawl_status']) ? $statuses : array( 'completed' ),
+            'payout_threshold_amount'   => !empty($previous_disbursement_settings['commission_threshold']) ?? 0,
+            'payment_schedules' => empty($previous_disbursement_settings['choose_payment_mode_automatic_disbursal']) ? 'mannual' : $previous_disbursement_settings['payment_schedule'],
+            'withdrawals_fees'  => array(
+                array(
+                    'free_withdrawals'  => !empty($previous_disbursement_settings['no_of_orders']) ?? '',
+                    'withdrawal_fixed'  => !empty($previous_disbursement_settings['commission_transfer']) ?? ''
+                )
+            )
+        );
+
+        $previous_refund_settings = get_option( 'mvx_refund_management_tab_settings', [] );
+        $old_reasons = array_map('trim', explode('||', $previous_refund_settings['refund_order_msg'] ?? ''));
+
+        foreach ($old_reasons as $reason) {
+            $key = strtolower(str_replace(' ', '-', $reason));
+
+            $refund_reasons[$key] = [
+                'label'    => $reason,
+                'isCustom' => 1,
+            ];
+        }
+
+        $refund_settings = array(
+            'customer_refund_status'  => !empty($previous_refund_settings['customer_refund_status']) ? $previous_refund_settings['customer_refund_status'] : array(),
+            'refund_days'  => !empty($previous_refund_settings['refund_days']) ? $previous_refund_settings['refund_days'] : '',
+            'refund_reasons' => $refund_reasons
+        );
+
+        $previous_review_settings = get_option( 'mvx_review_management_tab_settings', [] );
+        foreach ($previous_review_settings['mvx_review_categories'] as $item) {
+            if (empty($item['category'])) {
+                continue;
+            }
+
+            $label = trim($item['category']);
+
+            $key = strtolower( preg_replace('/[^a-z0-9]+/', '-', $label) );
+
+             if (!array_key_exists($key, $ratings_parameters)) {
+                $ratings_parameters[$key] = [
+                    'label'    => $label,
+                    'isCustom' => 1,
+                ];
+            }
+        }
+
+        $review_settings = array(
+            'is_storereview_varified'   => !empty($previous_review_settings['is_sellerreview_varified']) ? array('is_storereview_varified') : array(),
+            'ratings_parameters'    => $ratings_parameters
+        );
+
+        $refund_settings = array(
+            'customer_refund_status'  => !empty($previous_refund_settings['customer_refund_status']) ? $previous_refund_settings['customer_refund_status'] : array(),
+            'refund_days'  => !empty($previous_refund_settings['refund_days']) ? $previous_refund_settings['refund_days'] : '',
+            'refund_reasons' => $refund_reasons
+        );
+
+        $previous_policy_settings = get_option( 'mvx_policy_tab_settings', [] );
+        $policy_settings = array(
+            'store_policy'  => !empty($previous_policy_settings['store-policy']) ? $previous_policy_settings['store-policy'] : '',
+            'shipping_policy'  => !empty($previous_policy_settings['shipping_policy']) ? $previous_policy_settings['shipping_policy'] : '',
+            'refund_policy'  => !empty($previous_policy_settings['refund_policy']) ? $previous_policy_settings['refund_policy'] : '',
+            'cancellation_policy'  => !empty($previous_policy_settings['cancellation_policy']) ? $previous_policy_settings['cancellation_policy'] : '',
+        );
+
+        update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $refund_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['store-capability'], $store_permissions );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-preferencess'], $product_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
@@ -1397,6 +1475,10 @@ class Install {
         update_option( Utill::MULTIVENDORX_SETTINGS['geolocation'], $map_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['coupon'], $coupon_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['policy'], $policy_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['review-management'], $review_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursement_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['development-tools'], $tool_settings );
 
     }
 
