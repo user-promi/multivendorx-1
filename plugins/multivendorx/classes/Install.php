@@ -1094,52 +1094,144 @@ class Install {
     }
 
     /**
+     * Migrate old modules 
+     * @return void
+     */
+    public function migrate_old_modules() {
+        $previous_active_modules = get_option('mvx_all_active_module_list', []);
+
+        $shipping_settings['shipping_modules'] = [];
+
+        if (in_array('zone-shipping', $previous_active_modules, true)) {
+            $shipping_settings['shipping_modules']['zone-wise-shipping'] = [
+                'enable' => true
+            ];
+        }
+
+        if (in_array('country-shipping', $previous_active_modules, true)) {
+            $shipping_settings['shipping_modules']['country-wise-shipping'] = [
+                'enable' => true
+            ];
+        }
+
+        if (in_array('distance-shipping', $previous_active_modules, true)) {
+            $shipping_settings['shipping_modules']['distance-wise-shipping'] = [
+                'enable' => true
+            ];
+        }
+
+        $payment_settings['payment_methods'] = [];
+
+        if (in_array('stripe-connect', $previous_active_modules, true)) {
+            $payment_settings['payment_methods']['stripe-connect'] = [
+                'enable' => true,
+            ];
+        }
+
+        if (in_array('bank-payment', $previous_active_modules, true)) {
+            $payment_settings['payment_methods']['bank-transfer'] = [
+                'enable' => true,
+            ];
+        }
+
+        if (in_array('paypal-payout', $previous_active_modules, true)) {
+            $payment_settings['payment_methods']['paypal-payout'] = [
+                'enable' => true,
+            ];
+        }
+
+        if (in_array('stripe-marketplace', $previous_active_modules, true)) {
+            $payment_settings['payment_methods']['stripe-marketplace'] = [
+                'enable' => true,
+            ];
+        }
+        if (in_array('paypal-marketplace', $previous_active_modules, true)) {
+            $payment_settings['payment_methods']['paypal-marketplace'] = [
+                'enable' => true,
+            ];
+        }
+
+        update_option(Utill::MULTIVENDORX_SETTINGS['payment-integration'], $payment_settings);
+        update_option(Utill::MULTIVENDORX_SETTINGS['shipping'], $shipping_settings);
+
+        unset($previous_active_modules['zone-shipping']);
+        unset($previous_active_modules['country-shipping']);
+        unset($previous_active_modules['distance-shipping']);
+        unset($previous_active_modules['stripe-connect']);
+        unset($previous_active_modules['bank-payment']);
+        unset($previous_active_modules['paypal-masspay']);
+
+        $active_modules = get_option( Utill::ACTIVE_MODULES_DB_KEY, [] );
+        update_option( Utill::ACTIVE_MODULES_DB_KEY, array_unique( array_merge( $active_modules, $previous_active_modules ) ) );
+
+    }
+
+    /**
      * Migrate old Multivendorx settings 
      * @return void
      */
     public function migrate_old_settings() {
-         $previous_capability_settings = get_option( 'mvx_products_capability_tab_settings', [] );
+        $previous_capability_settings = get_option( 'mvx_products_capability_tab_settings', [] );
+
+        $store_permissions['products'] = [];
+        $store_permissions['coupons']  = [];
 
         if (!empty($previous_capability_settings['is_submit_product'])) {
-            $store_permissions['products'] = array('read_products', 'add_products');
+            $store_permissions['products'] = array_merge(
+                $store_permissions['products'],
+                ['read_products', 'add_products']
+            );
         }
+
         if (!empty($previous_capability_settings['is_published_product'])) {
-            $store_permissions['products'] = array('publish_products');
+            $store_permissions['products'][] = 'publish_products';
         }
+
         if (!empty($previous_capability_settings['is_edit_delete_published_product'])) {
-            $store_permissions['products'] = array('edit_published_products');
+            $store_permissions['products'][] = 'edit_published_products';
         }
+
         if (!empty($previous_capability_settings['publish_and_submit_products'])) {
-            $store_permissions['products'] = array('edit_approved_products');
+            $store_permissions['products'][] = 'edit_approved_products';
         }
+
         if (!empty($previous_capability_settings['is_upload_files'])) {
-            $store_permissions['products'] = array('upload_files');
+            $store_permissions['products'][] = 'upload_files';
         }
+
         if (!empty($previous_capability_settings['is_submit_coupon'])) {
-            $store_permissions['coupons'] = array('add_shop_coupons', 'read_shop_coupons');
+            $store_permissions['coupons'] = array_merge(
+                $store_permissions['coupons'],
+                ['add_shop_coupons', 'read_shop_coupons']
+            );
         }
+
         if (!empty($previous_capability_settings['is_published_coupon'])) {
-            $store_permissions['coupons'] = array('publish_coupons');
+            $store_permissions['coupons'][] = 'publish_coupons';
         }
+
         if (!empty($previous_capability_settings['is_edit_delete_published_coupon'])) {
-            $store_permissions['coupons'] = array('edit_shop_coupons');
+            $store_permissions['coupons'][] = 'edit_shop_coupons';
         }
 
         $previous_product_settings = get_option( 'mvx_products_tab_settings', [] );
-        $product_settings = array(
-            'type_options'    => !empty($previous_product_settings['type_options']) ? $previous_product_settings['type_options'] : array(),
-            'products_fields' => !empty($previous_product_settings['products_fields']) ? $previous_product_settings['products_fields'] : array(),
-            );
-            
+        if (!empty($previous_product_settings['type_options'])) {
+            $product_settings['type_options'] = $previous_product_settings['type_options'];
+        }
+
+        if (!empty($previous_product_settings['products_fields'])) {
+            $product_settings['products_fields'] = $previous_product_settings['products_fields'];
+        }
+
         $previous_general_settings = get_option( 'mvx_settings_general_tab_settings', [] );
         $general_settings = array(
             'approve_store' => !empty($previous_general_settings['approve_vendor']) ? $previous_general_settings['approve_vendor'] : 'manually',
         );
 
-        $privacy_settings = array(
-            'store_branding_details' => !empty($general_settings['display_product_seller']) ? array('show_store_name', 'show_store_description', 'show_store_logo_next_to_products') : array(),
-            'store_order_display' => !empty($general_settings['display_product_seller']) ? array('group_items_by_store_in_cart') : array(),
-        );
+        if (!empty($general_settings['display_product_seller'])) {
+            $privacy_settings['store_branding_details'] = array('show_store_name', 'show_store_description', 'show_store_logo_next_to_products');
+            $privacy_settings['store_order_display'] = array('group_items_by_store_in_cart');
+        }
 
         $previous_store_settings = get_option( 'mvx_store_tab_settings', [] );
 
@@ -1384,10 +1476,27 @@ class Install {
             }
         }
 
-        $coupon_settings = array(
-            'commission_include_coupon' => !empty($previous_disbursement_settings['commission_include_coupon']) ? 'store' : '',
-            'admin_coupon_excluded' => !empty($previous_disbursement_settings['admin_coupon_excluded']) ?? []
-        );
+        if (!empty($previous_commission_settings['default_gateway_charge_value'])) {
+            $data = array_column($previous_commission_settings['default_gateway_charge_value'], 'value', 'key');
+
+            $fixed_direct_bank   = $data['fixed_gayeway_amount_direct_bank'] ?? '';
+            $percent_direct_bank = $data['percent_gayeway_amount_direct_bank'] ?? '';
+
+            $commission_settings['gateway_fees'] = array(
+                array(
+                    'bacs_fixed' => $fixed_direct_bank,
+                    'bacs_percentage' => $percent_direct_bank
+                )
+            );
+        }
+
+        if (!empty($previous_disbursement_settings['commission_include_coupon'])) {
+            $coupon_settings['commission_include_coupon'] = 'store';
+        }
+
+        if (!empty($previous_disbursement_settings['admin_coupon_excluded'])) {
+            $coupon_settings['admin_coupon_excluded'] = $previous_disbursement_settings['admin_coupon_excluded'];
+        }
 
         $statuses = [];
 
@@ -1412,20 +1521,21 @@ class Install {
 
         $previous_refund_settings = get_option( 'mvx_refund_management_tab_settings', [] );
         $old_reasons = array_map('trim', explode('||', $previous_refund_settings['refund_order_msg'] ?? ''));
-
-        foreach ($old_reasons as $reason) {
-            $key = strtolower(str_replace(' ', '-', $reason));
-
-            $refund_reasons[$key] = [
-                'label'    => $reason,
-                'isCustom' => 1,
-            ];
+        if (!empty($old_reasons)) {
+            foreach ($old_reasons as $reason) {
+                $key = strtolower(str_replace(' ', '-', $reason));
+    
+                $refund_reasons[$key] = [
+                    'label'    => $reason,
+                    'isCustom' => 1,
+                ];
+            }
+            $refund_settings['refund_reasons'] = $refund_reasons;
         }
 
         $refund_settings = array(
-            'customer_refund_status'  => !empty($previous_refund_settings['customer_refund_status']) ? $previous_refund_settings['customer_refund_status'] : array(),
-            'refund_days'  => !empty($previous_refund_settings['refund_days']) ? $previous_refund_settings['refund_days'] : '',
-            'refund_reasons' => $refund_reasons
+            'customer_refund_status'  => !empty($previous_refund_settings['customer_refund_status']) ? $previous_refund_settings['customer_refund_status'] : array('completed'),
+            'refund_days'  => !empty($previous_refund_settings['refund_days']) ? $previous_refund_settings['refund_days'] : 7,
         );
 
         $previous_review_settings = get_option( 'mvx_review_management_tab_settings', [] );
@@ -1446,15 +1556,12 @@ class Install {
             }
         }
 
+        if (!empty($ratings_parameters)) {
+            $review_settings['ratings_parameters'] = $ratings_parameters;
+        }
+
         $review_settings = array(
             'is_storereview_varified'   => !empty($previous_review_settings['is_sellerreview_varified']) ? array('is_storereview_varified') : array(),
-            'ratings_parameters'    => $ratings_parameters
-        );
-
-        $refund_settings = array(
-            'customer_refund_status'  => !empty($previous_refund_settings['customer_refund_status']) ? $previous_refund_settings['customer_refund_status'] : array(),
-            'refund_days'  => !empty($previous_refund_settings['refund_days']) ? $previous_refund_settings['refund_days'] : '',
-            'refund_reasons' => $refund_reasons
         );
 
         $previous_policy_settings = get_option( 'mvx_policy_tab_settings', [] );
@@ -1464,6 +1571,27 @@ class Install {
             'refund_policy'  => !empty($previous_policy_settings['refund_policy']) ? $previous_policy_settings['refund_policy'] : '',
             'cancellation_policy'  => !empty($previous_policy_settings['cancellation_policy']) ? $previous_policy_settings['cancellation_policy'] : '',
         );
+
+        if (!empty($previous_disbursement_settings['give_shipping'])) {
+            $active_modules = get_option( Utill::ACTIVE_MODULES_DB_KEY, [] );
+            update_option( Utill::ACTIVE_MODULES_DB_KEY, array_unique( array_merge( $active_modules, ['store-shipping'] ) ) );
+        }
+
+        $previous_stripe_settings = get_option( 'mvx_payment_stripe_connect_tab_settings', [] );
+        $payment_settings['payment_methods']['stripe-connect'] = [
+            'payment_mode'  => !empty($previous_stripe_settings['testmode']) ? 'test' : '',
+            'test_client_id' => !empty($previous_stripe_settings['test_client_id']) ?? '',
+            'test_secret_key' => !empty($previous_stripe_settings['test_secret_key']) ?? '',
+            'live_client_id' => !empty($previous_stripe_settings['live_client_id']) ?? '',
+            'live_secret_key' => !empty($previous_stripe_settings['live_secret_key']) ?? '',
+        ];
+
+        $previous_paypal_settings = get_option( 'mvx_payment_payout_tab_settings', [] );
+        $payment_settings['payment_methods']['paypal-payout'] = [
+            'payment_mode'  => !empty($previous_paypal_settings['is_testmode']) ? 'sandbox' : '',
+            'client_id' => !empty($previous_paypal_settings['client_id']) ?? '',
+            'client_secret' => !empty($previous_paypal_settings['client_secret']) ?? '',
+        ];
 
         update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $refund_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['store-capability'], $store_permissions );
@@ -1479,6 +1607,7 @@ class Install {
         update_option( Utill::MULTIVENDORX_SETTINGS['review-management'], $review_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursement_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['development-tools'], $tool_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['payment-integration'], $payment_settings );
 
     }
 
