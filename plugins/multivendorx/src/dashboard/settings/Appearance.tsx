@@ -59,7 +59,8 @@ const Appearance = () => {
 	}, [appLocalizer.store_id]);
 
 	const runUploader = (key: string) => {
-		if (settings.includes('store_images')) {
+		console.log('yes')
+		if (!settings.includes('store_images')) {
 			return;
 		}
 		const frame = (window as any).wp.media({
@@ -129,7 +130,7 @@ const Appearance = () => {
 						openUploader={__('Upload Image', 'multivendorx')}
 						imageSrc={imagePreviews.image}
 						onRemove={() => {
-							if (settings.includes('store_images')) return;
+							if (!settings.includes('store_images')) return;
 
 							const updated = { ...formData, image: '' };
 							setFormData(updated);
@@ -148,7 +149,7 @@ const Appearance = () => {
 						options={storeOptions}
 						value={formData.banner_type || ''}
 						onChange={(newValue: any) => {
-							if (settings.includes('store_images')) return;
+							if (!settings.includes('store_images')) return;
 
 							const updated = {
 								...formData,
@@ -177,7 +178,7 @@ const Appearance = () => {
 							openUploader={__('Upload Banner', 'multivendorx')}
 							imageSrc={imagePreviews.banner}
 							onRemove={() => {
-								if (settings.includes('store_images')) return;
+								if (!settings.includes('store_images')) return;
 
 								const updated = { ...formData, banner: '' };
 								setFormData(updated);
@@ -214,7 +215,7 @@ const Appearance = () => {
 								setFormData(updated);
 								autoSave(updated);
 							}}
-							readOnly={settings.includes('store_images')}
+							readOnly={!settings.includes('store_images')}
 						/>
 					</FormGroup>
 				)}
