@@ -35,6 +35,11 @@ $rating_value = $overall_reviews ? number_format((float) $overall_reviews, 1) : 
 $review_count = is_array($reviews) ? count($reviews) : 0;
 $banner_type = $meta_data['banner_type'] ?? 'static_image';
 $banner_video = $meta_data['banner_video'] ?? '';
+$banner_slider = $meta_data['banner_slider'] ?? [];
+if (is_string($banner_slider)) {
+    $banner_slider = json_decode($banner_slider, true) ?: [];
+}
+
 ?>
 
 <div class="multivendorx-banner <?php echo esc_attr($selected_template); ?>">
@@ -50,9 +55,8 @@ $banner_video = $meta_data['banner_video'] ?? '';
     <?php elseif ($banner_type === 'slider_image'): ?>
         <div class="banner-slider">
             <?php
-            $slides = $meta_data['slider_images'] ?? [];
-            if (!empty($slides) && is_array($slides)):
-                foreach ($slides as $slide):
+            if (!empty($banner_slider)):
+                foreach ($banner_slider as $slide):
                     echo '<div class="slide"><img src="' . esc_url($slide) . '" alt=""></div>';
                 endforeach;
             else: ?>
