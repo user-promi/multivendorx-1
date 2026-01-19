@@ -43,7 +43,6 @@ interface SelectInputProps {
     size?: string;
     menuContent?: React.ReactNode;
     keepMenuOpenOnMenuContentClick?: boolean;
-    menuAlwaysOpen?: boolean;
     noOptionsText?: string;
 }
 const CustomMenuList = (props: any) => {
@@ -108,7 +107,6 @@ const SelectInput: React.FC<SelectInputProps> = ({
     size,
     menuContent,
     keepMenuOpenOnMenuContentClick,
-    menuAlwaysOpen
 }) => {
     const customStyles: StylesConfig<SelectOptions, boolean> = {
         control: (provided, state) => ({
@@ -212,12 +210,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
                     isMulti={type === 'multi-select'}
                     components={{ MenuList: CustomMenuList, NoOptionsMessage: CustomNoOptionsMessage, }}
                     menuContent={menuContent}
-                    // keepMenuOpenOnMenuContentClick={
-                    //     keepMenuOpenOnMenuContentClick
-                    // }
-                    menuIsOpen={menuAlwaysOpen ? true : undefined}
-                    closeMenuOnSelect={menuAlwaysOpen ? false : true}
-                    blurInputOnSelect={menuAlwaysOpen ? false : true}
+                    keepMenuOpenOnMenuContentClick={
+                        keepMenuOpenOnMenuContentClick
+                    }
                 />
                 {postText && <div className="after">{postText}</div>}
             </div>
