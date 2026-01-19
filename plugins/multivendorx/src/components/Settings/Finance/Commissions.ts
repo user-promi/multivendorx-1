@@ -248,35 +248,6 @@ export default {
 			),
 		},
 		{
-			key: 'store_rating_page',
-			type: 'blocktext',
-			label: __(' ', 'multivendorx'),
-			blocktext: __(
-				'To allow each store to set up and manage its own shipping methods, zones, and rates, please enable the <a href="' +
-				appLocalizer.site_url +
-				'/wp-admin/admin.php?page=multivendorx#&tab=modules"> "Shipping module".</a></b>',
-				'multivendorx'
-			),
-		},
-		{
-			key: 'taxable',
-			label: __('Tax on shipping', 'multivendorx'),
-			settingDescription: __(
-				'Shipping charges will be treated as taxable items during checkout. Otherwise shipping costs will be tax-free.',
-				'multivendorx'
-			),
-			desc: __('', 'multivendorx'),
-			type: 'checkbox',
-			moduleEnabled: 'store-shipping',
-			options: [
-				{
-					key: 'taxable',
-					value: 'taxable',
-				},
-			],
-			look: 'toggle',
-		},
-		{
 			key: 'give_tax',
 			type: 'setting-toggle',
 			label: __('Tax amount', 'multivendorx'),
@@ -308,6 +279,35 @@ export default {
 					value: 'commision_based_tax',
 				},
 			],
+		},
+		{
+			key: 'store_rating_page',
+			type: 'blocktext',
+			label: __(' ', 'multivendorx'),
+			blocktext: __(
+				'To allow each store to set up and manage its own shipping methods, zones, and rates, please enable the <a href="' +
+				appLocalizer.site_url +
+				'/wp-admin/admin.php?page=multivendorx#&tab=modules"> "Shipping module".</a></b>',
+				'multivendorx'
+			),
+		},
+		{
+			key: 'taxable',
+			label: __('Tax on shipping', 'multivendorx'),
+			settingDescription: __(
+				'Shipping charges will be treated as taxable items during checkout. Otherwise shipping costs will be tax-free.',
+				'multivendorx'
+			),
+			desc: __('', 'multivendorx'),
+			type: 'checkbox',
+			moduleEnabled: 'store-shipping',
+			options: [
+				{
+					key: 'taxable',
+					value: 'taxable',
+				},
+			],
+			look: 'toggle',
 		},
 		{
 			key: 'separator_content',

@@ -27,6 +27,7 @@ class Install {
         $this->create_database_table();
         $this->create_database_triggers();
         $this->plugin_create_pages();
+        $this->set_default_modules();
         $this->set_default_settings();
 
         update_option( 'dc_product_vendor_plugin_db_version', MULTIVENDORX_PLUGIN_VERSION );
@@ -395,130 +396,140 @@ class Install {
     }
 
     /**
+     * Set default modules
+     * @return void
+     */
+    public static function set_default_modules() {            
+        // Enable module by default
+        $active_modules = get_option( Utill::ACTIVE_MODULES_DB_KEY, [] );
+        $default_modules = array(
+            'announcement', 'knowladgebase', 'simple'
+        );
+        update_option( Utill::ACTIVE_MODULES_DB_KEY, array_unique( array_merge( $active_modules, $default_modules ) ) );
+    }
+
+    /**
      * Set default settings for the plugin or module.
      *
      * @return void
      */
     private function set_default_settings() {
-        // 1. Get the existing option from DB
-        $settings = get_option( 'multivendorx_identity_verification_settings', array() );
-
-        // 2. Modify only what you need
-        $settings['all_verification_methods']['ID']['verification_methods'] = array(
-
-            array(
-                'label'    => 'National Id',
-                'required' => true,
-                'active'   => true,
-            ),
-            array(
-                'label'    => 'Voter Id',
-                'required' => true,
-                'active'   => false,
-            ),
+        $settings = array(
+            'badge_img' => 'adminfont-verification1',
+            'all_verification_methods' => array( 
+                'google-connect' => [
+                    'enable' => true
+                ]
+            )
         );
 
         $legal_settings              = array(
-            'seller_agreement'        => 'This Seller Agreement (“Agreement”) is entered into between Marketplace (“Platform”) and the Seller (“You” or “Seller”) upon registration on the Platform. By submitting this agreement and uploading the required documents, you agree to comply with all rules, policies, and guidelines of the Platform.
+            'seller_agreement'        => 
+                'This Seller Agreement (“Agreement”) is entered into between Marketplace (“Platform”) and the Seller (“You” or “Seller”) upon registration on the Platform. By submitting this agreement and uploading the required documents, you agree to comply with all rules, policies, and guidelines of the Platform.
 
-1. Eligibility and Registration
-   - Seller must be at least 18 years old and legally eligible to operate a business.
-   - All business registration documents must be submitted and verified.
+                1. Eligibility and Registration
+                - Seller must be at least 18 years old and legally eligible to operate a business.
+                - All business registration documents must be submitted and verified.
 
-2. Product Listing Rules
-   - Only products allowed under prohibited/restricted categories may be listed.
-   - Product descriptions, images, and certifications must be accurate and truthful.
-   - Counterfeit or illegal products are prohibited.
+                2. Product Listing Rules
+                - Only products allowed under prohibited/restricted categories may be listed.
+                - Product descriptions, images, and certifications must be accurate and truthful.
+                - Counterfeit or illegal products are prohibited.
 
-3. Order Fulfillment
-   - Orders must be fulfilled on time.
-   - Inventory must be accurately maintained.
+                3. Order Fulfillment
+                - Orders must be fulfilled on time.
+                - Inventory must be accurately maintained.
 
-4. Payments & Commissions
-   - Commissions deducted as per agreed rates.
-   - Payouts only for verified sellers.
+                4. Payments & Commissions
+                - Commissions deducted as per agreed rates.
+                - Payouts only for verified sellers.
 
-5. Legal Compliance
-   - Compliance with tax, consumer protection, and intellectual property laws.
-   - Anti-counterfeit and copyright regulations must be followed.
+                5. Legal Compliance
+                - Compliance with tax, consumer protection, and intellectual property laws.
+                - Anti-counterfeit and copyright regulations must be followed.
 
-6. Refunds & Returns
-   - Must follow platform policies.
+                6. Refunds & Returns
+                - Must follow platform policies.
 
-7. Termination
-   - Platform may suspend or terminate accounts for violations.
+                7. Termination
+                - Platform may suspend or terminate accounts for violations.
 
-8. Amendments
-   - Platform may update this agreement. Sellers will be notified.
+                8. Amendments
+                - Platform may update this agreement. Sellers will be notified.
 
-By signing and submitting, the Seller accepts all terms above.
-',
-            'terms_conditions'        => '1. General
-   - Use of the Platform constitutes agreement to these Terms & Conditions.
-   - Sellers must act with honesty, transparency, and integrity.
+                By signing and submitting, the Seller accepts all terms above.
+                ',
+            'terms_conditions'        => 
+                '1. General
+                - Use of the Platform constitutes agreement to these Terms & Conditions.
+                - Sellers must act with honesty, transparency, and integrity.
 
-2. Account Responsibility
-   - Keep account credentials secure.
-   - No falsification of information.
+                2. Account Responsibility
+                - Keep account credentials secure.
+                - No falsification of information.
 
-3. Product Guidelines
-   - Products must be legal, safe, and comply with guidelines.
-   - Prohibited or counterfeit products are forbidden.
+                3. Product Guidelines
+                - Products must be legal, safe, and comply with guidelines.
+                - Prohibited or counterfeit products are forbidden.
 
-4. Fees & Payments
-   - Commission and transaction fees apply.
-   - Payouts require verification of bank and tax details.
+                4. Fees & Payments
+                - Commission and transaction fees apply.
+                - Payouts require verification of bank and tax details.
 
-5. Dispute Resolution
-   - Platform mediates disputes; sellers must comply with resolutions.
+                5. Dispute Resolution
+                - Platform mediates disputes; sellers must comply with resolutions.
 
-6. Modification of Terms
-   - Terms may be updated; sellers will be notified via dashboard.
-',
-            'privacy_policy'          => '1. Data Collection
-   - Platform collects personal and business info for order processing and compliance.
+                6. Modification of Terms
+                - Terms may be updated; sellers will be notified via dashboard.
+                ',
+            'privacy_policy'          => 
+                '1. Data Collection
+                - Platform collects personal and business info for order processing and compliance.
 
-2. Data Usage
-   - Information used for communication, compliance, and service improvement.
-   - Data not shared with third parties without consent or legal obligation.
+                2. Data Usage
+                - Information used for communication, compliance, and service improvement.
+                - Data not shared with third parties without consent or legal obligation.
 
-3. Data Security
-   - Secure storage with encryption and access controls.
-   - Sellers must keep passwords confidential.
+                3. Data Security
+                - Secure storage with encryption and access controls.
+                - Sellers must keep passwords confidential.
 
-4. Consent
-   - By accepting, sellers consent to collection, storage, and processing.
-   - Withdrawal of consent may limit Platform access.
-',
-            'refund_return_policy'    => '1. Eligibility
-   - Products must meet condition and timeline requirements.
-   - Requests must be submitted within 14 days.
+                4. Consent
+                - By accepting, sellers consent to collection, storage, and processing.
+                - Withdrawal of consent may limit Platform access.
+                ',
+            'refund_return_policy'    => 
+                '1. Eligibility
+                - Products must meet condition and timeline requirements.
+                - Requests must be submitted within 14 days.
 
-2. Return Process
-   - Buyers submit requests through the Platform.
-   - Sellers must acknowledge requests within 48 hours.
+                2. Return Process
+                - Buyers submit requests through the Platform.
+                - Sellers must acknowledge requests within 48 hours.
 
-3. Refund Process
-   - Refunds issued within 7 business days after verification.
-   - Refunds processed via original payment method.
+                3. Refund Process
+                - Refunds issued within 7 business days after verification.
+                - Refunds processed via original payment method.
 
-4. Seller Obligations
-   - Provide accurate descriptions and images.
-   - Follow Platform refund rules.
-',
-            'anti_counterfeit_policy' => '1. Product Authenticity
-   - All products must be authentic; certificates must be provided for branded items.
+                4. Seller Obligations
+                - Provide accurate descriptions and images.
+                - Follow Platform refund rules.
+                ',
+            'anti_counterfeit_policy' => 
+                '1. Product Authenticity
+                - All products must be authentic; certificates must be provided for branded items.
 
-2. Copyright Compliance
-   - All images, descriptions, and logos must be original or licensed.
+                2. Copyright Compliance
+                - All images, descriptions, and logos must be original or licensed.
 
-3. Violations
-   - Non-compliance may result in account suspension or termination.
+                3. Violations
+                - Non-compliance may result in account suspension or termination.
 
-4. Certification Upload
-   - Sellers must upload supporting documents for regulated products.
-',
+                4. Certification Upload
+                - Sellers must upload supporting documents for regulated products.
+                ',
         );
+
         $pending_store_status = array(
             'pending_msg' => 'Your store is awaiting approval and will be activated soon.',
         );
@@ -547,17 +558,60 @@ By signing and submitting, the Seller accepts all terms above.
 			'products' =>
 				array(
 					'read_products',
-					'edit_products',
-					'delete_products',
+					'add_products',
+					'edit_published_products',
+					'edit_approved_products',
 					'publish_products',
 					'upload_files',
 				),
 			'orders'   =>
 				array(
-					'read_shop_orders',
 					'view_shop_orders',
 					'edit_shop_orders',
 					'delete_shop_orders',
+					'add_shop_orders_note',
+				),
+			'coupons'   =>
+				array(
+					'add_shop_coupons',
+					'edit_shop_coupons',
+					'read_shop_coupons',
+					'publish_coupons',
+				),
+			'analytics'   =>
+				array(
+					'read_shop_report',
+				),
+			'inventory'   =>
+				array(
+					'read_inventory',
+					'edit_inventory',
+				),
+			'commission'   =>
+				array(
+					'read_shop_earning',
+					'edit_withdrawl_request',
+					'view_commission_history',
+					'view_transactions',
+				),
+			'store_support'   =>
+				array(
+					'view_support_tickets',
+					'reply_support_tickets',
+					'view_customer_questions',
+					'reply_customer_questions',
+					'view_store_followers',
+					'view_store_reviews',
+					'reply_store_reviews',
+				),
+			'resources'   =>
+				array(
+					'view_documentation',
+					'access_tools',
+				),
+			'settings'   =>
+				array(
+					'manage_store_settings',
 				),
         );
 
@@ -567,14 +621,36 @@ By signing and submitting, the Seller accepts all terms above.
             'store_owner' =>
                 array(
                     'read_products',
-                    'edit_products',
-                    'delete_products',
-                    'publish_products',
-                    'upload_files',
-                    'read_shop_orders',
+					'add_products',
+					'edit_published_products',
+					'edit_approved_products',
+					'publish_products',
+					'upload_files',
                     'view_shop_orders',
-                    'edit_shop_orders',
-                    'delete_shop_orders',
+					'edit_shop_orders',
+					'delete_shop_orders',
+					'add_shop_orders_note',
+                    'add_shop_coupons',
+					'edit_shop_coupons',
+					'read_shop_coupons',
+					'publish_coupons',
+					'read_shop_report',
+                    'read_inventory',
+					'edit_inventory',
+                    'read_shop_earning',
+					'edit_withdrawl_request',
+					'view_commission_history',
+					'view_transactions',
+                    'view_support_tickets',
+					'reply_support_tickets',
+					'view_customer_questions',
+					'reply_customer_questions',
+					'view_store_followers',
+					'view_store_reviews',
+					'reply_store_reviews',
+                    'view_documentation',
+					'access_tools',
+					'manage_store_settings',
 				),
 		);
 
@@ -582,7 +658,8 @@ By signing and submitting, the Seller accepts all terms above.
 
         $disbursment_settings = array(
             'disbursement_order_status' => array( 'completed' ),
-            'payment_schedules'         => 'mannual',
+            'payment_schedules'         => 'hourly',
+            'disbursement_hourly'       => 1,
             'withdraw_type'             => 'manual',
 		);
 
@@ -688,12 +765,30 @@ By signing and submitting, the Seller accepts all terms above.
             'store_registration_page' => $store_registration_page_id,
             'store_dashboard_page'    => $store_dashboard_page_id,
             'store_url'               => 'store',
+            'display_customer_order'  => 'mainorder'
         );
         update_option( Utill::MULTIVENDORX_SETTINGS['marketplace'], $marketplace_settings );
 
         $general_settings = array(
             'approve_store' => 'manually',
-            'store_selling_mode' => 'default',
+            'disable_setup_wizard' => 'enable_guided_setup',
+            'onboarding_steps_configuration' => [
+                'store_profile_setup',
+                'payment_information',
+                'shipping_configuration',
+                'first_product_upload',
+                'store_policies'
+            ],
+            'setup_wizard_introduction' => 
+                    "Welcome!
+
+                    Let's get your store ready.
+                    Please follow the Setup Wizard to quickly complete the basic store settings and start selling.
+
+                    It only takes a few minutes, and you can update everything later anything.
+
+                    Start setup!",
+            'store_selling_mode' => MultiVendorX()->modules->is_active( 'spmv' ) ? 'single_product_multiple_vendor' : 'default',
             'spmv_show_order' => 'min_price',
             'more_offers_display_position' => 'after',
         );
@@ -721,6 +816,61 @@ By signing and submitting, the Seller accepts all terms above.
             'products_fields' => array( 'general', 'inventory', 'linked_product', 'attribute', 'advanced', 'policies', 'product_tag', 'GTIN' ),
         );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-preferencess'], $product_settings );
+
+        $map_settings = array(
+            'radius_search_unit'    => 'both',
+            'radius_search_distance' => array(
+                array(
+                    'radius_search_min_distance' => 1,
+                    'radius_search_max_distance' => 500,
+                    'radius_search_unit'         => 'kilometers',
+                ),
+            ),
+        );
+        update_option( Utill::MULTIVENDORX_SETTINGS['geolocation'], $map_settings );
+
+        $inventory_settings = array(
+            'low_stock_notifications' => array(
+                array(
+                    'low_stock_alert' => array( 'low_stock_alert' ),
+                    'low_stock_alert_threshold' => 5,
+                ),
+            ),
+
+            'out_of_stock_notifications' => array(
+                array(
+                    'out_of_stock_alert' => array( 'out_of_stock_alert' ),
+                    'out_of_stock_alert_threshold' => 1,
+                ),
+            ),
+        );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-inventory'], $inventory_settings );
+
+        $commission_settings = array(
+            'give_tax'    => 'no_tax',
+        );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
+
+        $coupon_settings = array(
+            'commission_include_coupon' => 'seperate',
+            'admin_coupon_excluded'     => array('admin_coupon_excluded'),
+        );
+        update_option( Utill::MULTIVENDORX_SETTINGS['coupon'], $coupon_settings );
+
+        $refund_settings = array(
+            'customer_refund_status' => array('completed'),
+            'refund_days'     => 7,
+        );
+        update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $refund_settings );
+
+        $privacy_settings = array(
+            'store_branding_details' => array('show_store_name', 'show_store_description', 'show_store_logo_next_to_products', 'show_store_ratings'),
+            'store_contact_details' => array('show_store_owner_info', 'show_store_phone', 'show_store_email'),
+            'store_order_display' =>  array('group_items_by_store_in_cart'),
+            'store_policy_override' =>  array('store', 'shipping', 'refund', 'cancellation_return'),
+            'customer_information_access' =>  array('name', 'email_address', 'phone_number', 'shipping_address', 'order_notes'),
+        );
+        update_option( Utill::MULTIVENDORX_SETTINGS['privacy'], $privacy_settings );
 
         $registration_form = array(
             array(
@@ -833,7 +983,7 @@ By signing and submitting, the Seller accepts all terms above.
                 'isCustom' => true,
             ),
         );
-        $product_compliance_settings['who_can_report'] ='anyone';
+        $product_compliance_settings['who_can_report'] ='logged_in';
         $product_compliance_settings['prohibited_product_categories'] = array(
             'weapons-&-ammunition' => array(
                 'label'    => 'Weapons & ammunition',
@@ -848,6 +998,23 @@ By signing and submitting, the Seller accepts all terms above.
                 'isCustom' => true,
             ),
         );
+
+        $compliance_settings = array(
+            'store_compliance_management' => array(
+                'seller-verification' => array(
+                    'enable'                              => true,
+                    'enable_advertisement_in_subscription'=> true,
+                    'display_advertised_product_on_top'   => true,
+                    'out_of_stock_visibility'             => true,
+                    'required_tasks' => array(
+                        'block_dashboard_access',
+                        'hide_store_from_view',
+                        'disable_product',
+                    ),
+                ),
+            ),
+        );
+
         // 6. Save back to DB
         update_option( Utill::MULTIVENDORX_SETTINGS['identity-verification'], $settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['order-actions-refunds'], $order_settings );
@@ -855,6 +1022,7 @@ By signing and submitting, the Seller accepts all terms above.
         update_option( Utill::MULTIVENDORX_SETTINGS['legal-compliance'], $legal_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-compliance'], $product_compliance_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['review-management'], $review_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['non-compliance'], $compliance_settings );
     }
 
     /**
