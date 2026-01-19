@@ -74,12 +74,12 @@ export default {
 				{
 					key: 'left',
 					label: __('At Left', 'multivendorx'),
-					value: 'At Left',
+					value: 'left',
 				},
 				{
 					key: 'right',
 					label: __('At Right', 'multivendorx'),
-					value: 'At Right',
+					value: 'right',
 				}
 			]
 		},
