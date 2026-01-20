@@ -2,6 +2,7 @@
  * External dependencies
  */
 import React from 'react';
+import '../styles/web/BlockText.scss';
 
 // Types
 interface BlockTextProps {

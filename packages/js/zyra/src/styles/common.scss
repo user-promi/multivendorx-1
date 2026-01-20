@@ -31,7 +31,8 @@ a {
     }
 
     .select-menu-content {
-     padding: 0.25rem 0.313rem 0;
+      padding: 0.25rem 0.313rem 0;
+
       .admin-btn {
         width: 100%;
       }
@@ -43,7 +44,7 @@ a {
       // width: 13rem;
     }
 
-    .no-options{
+    .no-options {
       font-size: 0.95rem;
     }
   }
@@ -787,8 +788,7 @@ $index: 1;
 
 // admin save notice popup end
 .settings-input-content {
-  width: 72%;
-
+  width: 100%;
   .after {
     font-size: 0.95rem;
     color: #0000009c;
@@ -858,13 +858,10 @@ $index: 1;
   // add new btn end
 }
 
-.settings-input-content:has(.grid-table),
-.settings-input-content:has(.registration-from-wrapper) {
-  width: 100%;
-}
-
-.settings-input-content:has(.payment-tabs-component) {
-  width: 60%;
+.form-group:has(.settings-form-label) {
+  .settings-input-content {
+    width: 72%;
+  }
 }
 
 .select-deselect-trigger {
