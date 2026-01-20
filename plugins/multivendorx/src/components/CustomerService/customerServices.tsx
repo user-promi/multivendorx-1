@@ -66,6 +66,11 @@ const CustomerServices = () => {
 				return <div></div>;
 		}
 	};
+	const link =
+    typeof appLocalizer?.module_page_url === 'string' &&
+    appLocalizer.module_page_url.trim().length > 0
+        ? appLocalizer.module_page_url
+        : undefined;
 
 	return (
 		<>
