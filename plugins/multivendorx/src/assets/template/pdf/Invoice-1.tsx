@@ -23,7 +23,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows }) => {
   const styles = StyleSheet.create({
     page: { fontSize: 12, fontFamily: "Helvetica", backgroundColor: "#fff"},
     container: {overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" },
-    header: { backgroundColor: "#2563eb", padding: 20, flexDirection: "row", justifyContent: "space-between", color: "#fff" },
+    header: { backgroundColor: "#2563eb", padding: 20, display:"flex" , flexDirection: "row", justifyContent: "space-between", color: "#fff" },
     headerTitle: { fontSize: 24, color: "#fff" },
     headerCompany: { fontSize: 12, textAlign: "right", color: "#fff" },
     body: { padding: 20 },
