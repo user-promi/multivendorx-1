@@ -106,6 +106,7 @@ class Utill
         'admin_email'         => 'admin_email',
         'default_role'        => 'default_role',
         'revenue_mode_store'  => 'revenue_mode_store',
+        'payment_gateway_charge'  => 'payment_gateway_charge',
     );
 
     const WOO_SETTINGS = array(
