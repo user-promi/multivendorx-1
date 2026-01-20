@@ -7,6 +7,7 @@ import {
     ReactNode,
 } from 'react';
 import DisplayButton from './DisplayButton';
+import SelectInput from './SelectInput';
 
 interface InputFeedback {
     type: string;
@@ -34,7 +35,7 @@ interface BasicInputProps {
     placeholder?: string;
     min?: number;
     max?: number;
-    onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+    onChange?: any;
     onClick?: (e: MouseEvent<HTMLInputElement>) => void;
     onMouseOver?: (e: MouseEvent<HTMLInputElement>) => void;
     onMouseOut?: (e: MouseEvent<HTMLInputElement>) => void;
@@ -147,6 +148,38 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
 
             return <>{content}</>;
         };
+        const renderAddon = (addon: any, parentValue: any) => {
+            if (!addon) return null;
+
+            if (typeof addon === 'string' || typeof addon !== 'object') {
+                return typeof addon === 'string' ? <span dangerouslySetInnerHTML={{ __html: addon }} /> : addon;
+            }
+
+            if (addon.type === 'select' && addon.options?.length) {
+                return (
+                    <SelectInput
+                        wrapperClass=""
+                        name={addon.key || ''}
+                        options={addon.options.map((opt: any) => ({
+                            value: opt.value,
+                            label: opt.label || opt.value,
+                        }))}
+                        value={parentValue?.[addon.key] || addon.value || ''}
+                        size={addon.size || undefined}
+                        onChange={(newValue) => {
+                            if (typeof onChange === 'function') {
+                                onChange({
+                                    ...parentValue,          // preserve other keys
+                                    [addon.key]: newValue.value // set selected key
+                                });
+                            }
+                        }}
+                    />
+                );
+            }
+
+            return null;
+        };
 
         return (
             <>
@@ -186,7 +219,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                         <>
                             {preText && (
                                 <span className="before">
-                                    {renderNode(preText)}
+                                    {renderAddon(preText, value)}
                                 </span>
                             )}
                             <div
@@ -195,7 +228,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                             >
                                 {preInsideText && (
                                     <span className="pre">
-                                        {renderNode(preInsideText)}
+                                        {renderAddon(preInsideText, value)}
                                     </span>
                                 )}
                                 <input
@@ -208,7 +241,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                     type={type}
                                     name={name}
                                     placeholder={placeholder}
-                                    value={value ?? ''}
+                                    // value={value ?? ''}
                                     min={
                                         ['number', 'range'].includes(type)
                                             ? min
@@ -219,7 +252,15 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                             ? max
                                             : undefined
                                     }
-                                    onChange={onChange}
+                                    // onChange={onChange}
+                                    value={value?.value ?? value ?? ''} // main input value from object
+                                    onChange={(e) => {
+                                        onChange({
+                                            ...value,            // preserve other keys
+                                            value: e.target.value // set main input value
+                                        });
+                                    }}
+
                                     onClick={onClick}
                                     onMouseOver={onMouseOver}
                                     onMouseOut={onMouseOut}
@@ -235,7 +276,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
 
                                 {postInsideText && (
                                     <span className="parameter">
-                                        {renderNode(postInsideText)}
+                                        {renderAddon(postInsideText, value)}
                                     </span>
                                 )}
 
@@ -298,7 +339,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                             </div>
                             {postText && (
                                 <span className="after">
-                                    {renderNode(postText)}
+                                    {renderAddon(postText, value)}
                                 </span>
                             )}
                         </>

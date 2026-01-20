@@ -247,7 +247,7 @@ const AdminDashboard = () => {
 			title: 'Product & store tools',
 			features: [
 				{
-					name: 'Multiple vendors per product (SPMV)',
+					name: 'Multiple vendors per product',
 					free: true,
 					pro: true,
 				},
@@ -375,7 +375,7 @@ const AdminDashboard = () => {
 	const Modules: Module[] = [
 		{
 			id: 'spmv',
-			name: 'Single product multiple vendor',
+			name: 'Shared listing',
 			iconClass: 'adminfont-spmv',
 			pro: false,
 		},
