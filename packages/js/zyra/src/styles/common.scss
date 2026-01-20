@@ -154,46 +154,6 @@ body:has(.admin-main-wrapper) {
   }
 }
 
-// button style start
-.buttons-wrapper {
-  display: flex;
-  justify-content: end;
-  align-items: end;
-  gap: 0.625rem;
-  flex-wrap: wrap;
-
-  &.center {
-    justify-content: center;
-  }
-
-  &.left {
-    justify-content: start;
-  }
-}
-
-.admin-btn {
-  outline: none;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  text-align: center;
-  padding: 0.5rem 1.5rem;
-  border-radius: $border-radius-small;
-  font-size: 0.85rem;
-  transition: all 0.3s linear;
-  width: fit-content;
-  gap: 0.5rem;
-  border: none;
-  font-weight: 500;
-  color: $text-color;
-
-  &.btn-preview {
-    padding: 0;
-  }
-}
-
 .admin-badge {
   font-size: 0.813rem;
   font-weight: 600;
@@ -823,57 +783,6 @@ $index: 1;
   align-items: center;
   border: none;
   cursor: pointer;
-}
-
-// admin save notice popup
-.admin-notice-wrapper {
-  display: flex;
-  justify-content: flex-start;
-  gap: 0.875rem;
-  padding: 0.85rem 6rem 0.85rem 0.85rem;
-  font-weight: 400;
-  position: fixed;
-  z-index: 99999;
-  background: $background-white;
-  box-shadow: $box-shadow;
-  right: 1.85rem;
-  top: 7rem;
-  animation: noticeslide 7s ease-in-out forwards;
-
-  &.notice-error {
-    i {
-      color: $accent-color;
-    }
-  }
-
-  .title {
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.313;
-  }
-
-  i {
-    color: #008000;
-    font-size: 1.4rem;
-  }
-}
-
-@keyframes noticeslide {
-  0% {
-    transform: translateX(120%);
-  }
-
-  10% {
-    transform: translateX(0);
-  }
-
-  80% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(120%);
-  }
 }
 
 // admin save notice popup end
