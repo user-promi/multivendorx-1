@@ -279,7 +279,6 @@ export default {
 		{
 			key: 'store_rating_page',
 			type: 'blocktext',
-			label: __(' ', 'multivendorx'),
 			blocktext: __(
 				'Allow each store to manage its own shipping methods, zones, and rates, and to pass shipping amounts to vendors, please enable the <a href="' +
 				appLocalizer.site_url +

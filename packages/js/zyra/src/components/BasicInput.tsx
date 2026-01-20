@@ -278,7 +278,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                                 value: newVal,
                                             });
                                         } else {
-                                            onChange(newVal);
+                                            onChange(e);
                                         }
                                     }}
                                     onClick={onClick}
