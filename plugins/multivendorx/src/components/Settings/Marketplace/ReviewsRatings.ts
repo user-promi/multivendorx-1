@@ -58,11 +58,6 @@ export default {
 						label: 'Parameters',
 						placeholder: 'Enter parameters',
 					},
-					{
-						key: 'required',
-						type: 'checkbox',
-						label: 'Required',
-					},
 				],
 			},
 			modal: [],
