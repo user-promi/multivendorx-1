@@ -96,12 +96,12 @@ export default {
 				'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
 			templates: [
 				{
-				  key: 'dashbord',
-				  label: __('dashbord', 'mvx-pro'),
-				  preview: DashboardTemplate,
-				  component: DashboardTemplate,
-				}			  
-			  ],
+					key: 'dashbord',
+					label: __('dashbord', 'mvx-pro'),
+					preview: DashboardTemplate,
+					component: DashboardTemplate,
+				}
+			],
 			predefinedOptions: [
 				{
 					key: 'orchid_bloom',

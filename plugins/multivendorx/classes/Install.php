@@ -393,9 +393,9 @@ class Install {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $wpdb->query( $sql );
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
+        // if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+        //     MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        // }
     }
 
     /**
@@ -1750,18 +1750,45 @@ class Install {
             '_vendor_video'  => 'banner_video',
             '_vendor_slider'  => 'banner_slider',
             'shipping_class_id'  => 'shipping_class_id',
-            '_vendor_shipping_policy'   => '',
-            '_vendor_refund_policy'   => '',
-            '_vendor_cancellation_policy'   => '',
-            '_vendor_payment_mode'   => '',
-            '_vendor_bank_account_type'   => '',
-            '_vendor_bank_name'   => '',
-            '_vendor_bank_address'   => '',
-            '_vendor_account_holder_name'   => '',
-            '_vendor_bank_account_number'   => '',
-            '_vendor_aba_routing_number'   => '',
-            '_vendor_destination_currency'   => '',
-            '_vendor_iban'   => '',
+            'vendor_shipping_options'  => 'shipping_options',
+            '_vendor_shipping_policy'   => 'shipping_policy',
+            '_vendor_refund_policy'   => 'refund_policy',
+            '_vendor_cancellation_policy'   => 'cancellation_policy',
+            '_vendor_payment_mode'   => 'payment_method',
+            '_vendor_bank_account_type'   => 'account_type',
+            '_vendor_bank_name'   => 'bank_name',
+            '_vendor_bank_address'   => 'bank_address',
+            '_vendor_account_holder_name'   => 'account_holder_name',
+            '_vendor_bank_account_number'   => 'account_number',
+            '_vendor_aba_routing_number'   => 'routing_number',
+            '_vendor_destination_currency'   => 'destination_currency',
+            '_vendor_iban'   => 'iban',
+            '_vendor_paypal_email'  => 'paypal_email',
+            '_vendor_country'  => '',
+            '_vendor_state'  => '',
+            '_vendor_profile_image'  => '',
+            'vendor_connected'  => '',
+            'admin_client_id'  => '',
+            'stripe_user_id'  => 'stripe_account_id',
+            'access_token'  => 'stripe_access_token',
+            'stripe_publishable_key'  => 'stripe_publishable_key',
+            'refresh_token'  => 'stripe_refresh_token',
+            '_vendor_external_store_url'  => 'store_external_store_url',
+            '_vendor_external_store_label'  => 'store_external_store_label',
+            'refresh_token'  => 'stripe_refresh_token',
+            '_vendor_term_id'  =>  '',
+            '_vendor_page_title'  =>  '',
+            '_vendor_page_slug'  =>  '',
+            '_vendor_csd_return_address1'  =>  '',
+            '_vendor_csd_return_address2'  =>  '',
+            '_vendor_csd_return_country'  =>  '',
+            '_vendor_csd_return_state'  =>  '',
+            '_vendor_csd_return_city'  =>  '',
+            '_vendor_csd_return_zip'  =>  '',
+            '_vendor_customer_phone'  =>  '',
+            '_vendor_customer_email'  =>  '',
+            '_vendor_turn_off'  =>  '',
+            '_dismiss_to_do_list'  =>  '',
         ];
         return $map_meta;
     }
@@ -1807,6 +1834,7 @@ class Install {
                 $status = 'suspended';
             }
 
+            // Store create.
             $store = new Store();
             $store->set( 'name', $term->name );
             $store->set( 'slug', $term->slug );
@@ -1815,6 +1843,7 @@ class Install {
             $store->set( 'description', get_user_meta($user_id, '_vendor_description', true) ?? '' );
             $store_id = $store->save();
 
+            // primary owner set and add store-users table.
             StoreUtil::set_primary_owner( $user_id, $store_id );
             update_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['active_store'], $store_id);
             StoreUtil::add_store_users(
@@ -1824,11 +1853,13 @@ class Install {
                         'role_id'  => 'store_owner',
                     )
                 );
+
+            // add meta in store-meta table.
             $store->update_meta( 'primary_email', $user->email );
             $store->update_meta( 'emails', [$user->email] );
 
             foreach ($user_meta as $meta_key => $meta_values) {
-                // Skip meta keys that are not mapped
+                // Skip meta keys that are not mapped.
                 if (!isset($map_meta[$meta_key])) {
                     continue;
                 }
@@ -1844,5 +1875,57 @@ class Install {
             }
 
         }
+
+        // Announcement table migrate.
+        $args = [
+            'post_type'      => 'mvx_vendor_notice',
+            'post_status'    => 'any',
+            'fields'         => 'ids',
+        ];
+
+        $announcements = get_posts($args);
+
+        foreach ($announcements as $post_id) {
+
+            wp_update_post([
+                'ID'        => $post_id,
+                'post_type' => 'multivendorx_an',
+            ]);
+
+            $vendors = get_post_meta( $post_id, '_mvx_vendor_notices_vendors', true );
+
+            $stores = [];
+
+            foreach ($vendors as $vendor_id) {
+                $active_store = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+
+                if (!empty($active_store)) {
+                    $stores[] = (int) $active_store;
+                }
+            }
+
+            
+            update_post_meta( $post_id, 'multivendorx_announcement_stores', array_unique($stores) );
+
+            delete_post_meta( $post_id, '_mvx_vendor_notices_vendors' );
+        }
+
+        // Knowledgebase table migrate.
+        $args = [
+            'post_type'      => 'mvx_university',
+            'post_status'    => 'any',
+            'fields'         => 'ids',
+        ];
+
+        $knowledgebase = get_posts($args);
+
+        foreach ($knowledgebase as $post_id) {
+
+            wp_update_post([
+                'ID'        => $post_id,
+                'post_type' => 'multivendorx_kb',
+            ]);
+        }
+
     }
 }

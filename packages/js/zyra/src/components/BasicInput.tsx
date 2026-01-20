@@ -14,6 +14,24 @@ interface InputFeedback {
     message: string;
 }
 
+interface SelectOption {
+    value: string;
+    label: string;
+}
+
+type Addon =
+    | string
+    | ReactNode
+    | {
+          type: 'select';
+          key: string;
+          options: SelectOption[];
+          value?: string;
+          size?: string;
+      };
+
+type InputValue = string | Record<string, string>;
+
 interface BasicInputProps {
     wrapperClass?: string;
     inputLabel?: string;
@@ -35,7 +53,7 @@ interface BasicInputProps {
     placeholder?: string;
     min?: number;
     max?: number;
-    onChange?: any;
+    onChange?: (value: InputValue) => void;
     onClick?: (e: MouseEvent<HTMLInputElement>) => void;
     onMouseOver?: (e: MouseEvent<HTMLInputElement>) => void;
     onMouseOut?: (e: MouseEvent<HTMLInputElement>) => void;
@@ -139,16 +157,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             }
         };
 
-        const renderNode = (content?: string | React.ReactNode) => {
-            if (!content) return null;
-
-            if (typeof content === 'string') {
-                return <span dangerouslySetInnerHTML={{ __html: content }} />;
-            }
-
-            return <>{content}</>;
-        };
-        const renderAddon = (addon: any, parentValue: any) => {
+        const renderAddon = (addon: Addon, parentValue: string | Record<string, string>) => {
             if (!addon) return null;
 
             if (typeof addon === 'string' || typeof addon !== 'object') {
@@ -160,7 +169,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                     <SelectInput
                         wrapperClass=""
                         name={addon.key || ''}
-                        options={addon.options.map((opt: any) => ({
+                        options={addon.options.map((opt: SelectOption) => ({
                             value: opt.value,
                             label: opt.label || opt.value,
                         }))}
@@ -197,7 +206,6 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                             wraperClass={
                                 inputClass || 'admin-btn default-btn'
                             }
-                            // onClick={(e) => onClick && onClick(e as any)}
                             onClick={(e) => {
                                 e.preventDefault();
 
@@ -252,15 +260,27 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                             ? max
                                             : undefined
                                     }
-                                    // onChange={onChange}
-                                    value={value?.value ?? value ?? ''} // main input value from object
+                                    value={typeof value === 'object' ? value.value ?? '' : value ?? ''}
                                     onChange={(e) => {
-                                        onChange({
-                                            ...value,            // preserve other keys
-                                            value: e.target.value // set main input value
-                                        });
-                                    }}
+                                        const newVal = e.target.value;
 
+                                        const hasObjectAddon =
+                                            (preText && typeof preText === 'object') ||
+                                            (postText && typeof postText === 'object') ||
+                                            (postInsideText && typeof postInsideText === 'object') ||
+                                            (preInsideText && typeof preInsideText === 'object');
+
+                                        if (hasObjectAddon) {
+                                            // Save as object with main value
+                                            const base = typeof value === 'object' ? value : { value: typeof value === 'string' ? value : '' };
+                                            onChange({
+                                                ...base,
+                                                value: newVal,
+                                            });
+                                        } else {
+                                            onChange(newVal);
+                                        }
+                                    }}
                                     onClick={onClick}
                                     onMouseOver={onMouseOver}
                                     onMouseOut={onMouseOut}
