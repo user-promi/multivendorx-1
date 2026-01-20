@@ -139,15 +139,6 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             }
         };
 
-        const renderNode = (content?: string | React.ReactNode) => {
-            if (!content) return null;
-
-            if (typeof content === 'string') {
-                return <span dangerouslySetInnerHTML={{ __html: content }} />;
-            }
-
-            return <>{content}</>;
-        };
         const renderAddon = (addon: any, parentValue: any) => {
             if (!addon) return null;
 
@@ -252,15 +243,27 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                                             ? max
                                             : undefined
                                     }
-                                    // onChange={onChange}
-                                    value={value?.value ?? value ?? ''} // main input value from object
+                                    value={typeof value === 'object' ? value.value ?? '' : value ?? ''}
                                     onChange={(e) => {
-                                        onChange({
-                                            ...value,            // preserve other keys
-                                            value: e.target.value // set main input value
-                                        });
+                                        const newVal = e.target.value;
+                                    
+                                        const hasObjectAddon =
+                                            (preText && typeof preText === 'object') ||
+                                            (postText && typeof postText === 'object')||
+                                            (postInsideText && typeof postInsideText === 'object') ||
+                                            (preInsideText && typeof preInsideText === 'object');
+                                    
+                                        if (hasObjectAddon) {
+                                            // Save as object with main value
+                                            const base = typeof value === 'object' ? value : { value: typeof value === 'string' ? value : '' };
+                                            onChange({
+                                                ...base,
+                                                value: newVal,
+                                            });
+                                        } else {
+                                            onChange(newVal);
+                                        }
                                     }}
-
                                     onClick={onClick}
                                     onMouseOver={onMouseOver}
                                     onMouseOut={onMouseOut}
