@@ -20,7 +20,6 @@ const BlockText: React.FC< BlockTextProps > = ( {
             <div className={ blockTextClass }>
                 <div className="metabox-note-wrapper">
                     <i className="adminfont-info"></i>
-
                     <div className="details">
                         <div className="title">{ title }</div>
                         <p dangerouslySetInnerHTML={ { __html: value } }></p>
