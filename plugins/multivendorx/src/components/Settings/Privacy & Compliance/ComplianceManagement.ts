@@ -14,16 +14,16 @@ export default {
 		{
 			key: 'store_compliance_management',
 			type: 'expandable-panel',
+			proSetting: true,
 			modal: [
 				{
 					id: 'seller-verification',
 					icon: 'adminfont-seller-verification',
 					label: 'Seller verification',
 					connected: true,
-					disableBtn: true,					 
+					disableBtn: true,
 					desc: 'Verify store identity and business legitimacy',
 					moduleEnabled: 'marketplace-compliance',
-					proSetting: true,
 					formFields: [
 						{
 							key: 'enable_advertisement_in_subscription',
@@ -50,7 +50,7 @@ export default {
 							key: 'required_tasks',
 							type: 'multi-checkbox',
 							label: __('Non-Compliance action', 'multivendorx'),
-							 
+
 							options: [
 								{
 									key: 'block_dashboard_access',
@@ -134,7 +134,7 @@ export default {
 							key: 'non_compliance_action',
 							type: 'multi-checkbox',
 							label: __('Non-Compliance action', 'multivendorx'),
-							 
+
 							options: [
 								{
 									key: 'disable_product',
@@ -218,7 +218,7 @@ export default {
 							key: 'non_compliance_action',
 							type: 'multi-checkbox',
 							label: __('Non-Compliance action', 'multivendorx'),
-							 
+
 							options: [
 								{
 									key: 'block_store_access',
@@ -288,7 +288,7 @@ export default {
 							key: 'non_compliance_action',
 							type: 'multi-checkbox',
 							label: __('Non-Compliance action', 'multivendorx'),
-							 
+
 							options: [
 								{
 									key: 'disable_payouts',

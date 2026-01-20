@@ -95,7 +95,7 @@ const CustomerServices = () => {
 					menuIcon={true}
 				/>
 			) : (
-				<Container>
+				<Container general>
 					<Column>
 						<MessageState
 							title={__('Looks like customer support isn’t set up yet!', 'multivendorx')}

@@ -406,7 +406,7 @@ class Install {
         // Enable module by default
         $active_modules = get_option( Utill::ACTIVE_MODULES_DB_KEY, [] );
         $default_modules = array(
-            'announcement', 'knowladgebase', 'simple'
+            'announcement', 'knowledgebase', 'simple'
         );
         update_option( Utill::ACTIVE_MODULES_DB_KEY, array_unique( array_merge( $active_modules, $default_modules ) ) );
     }
