@@ -393,9 +393,9 @@ class Install {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $wpdb->query( $sql );
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
+        // if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+        //     MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+        // }
     }
 
     /**
