@@ -33,6 +33,16 @@ export default {
 				'The phone number that will receive SMS notifications. Use country code followed by phone number. Example: +44 – 7123456789, +91 – 9000012345',
 				'multivendorx'
 			),
+			preText: {
+				type: 'select',
+				key: 'store_base',
+				size: '90px',
+				options: [
+					{ label: '+91', value: 'store' },
+					{ label: '+92', value: 'shop' },
+					{ label: '+93', value: 'vendor' },
+				],
+			},
 		},
 		{
 			key: 'sms_section',
