@@ -10,7 +10,7 @@ import {
 	Tooltip,
 } from 'recharts';
 import { __ } from '@wordpress/i18n';
-import { Analytics, Card, Column, Container, getApiLink, InfoItem, MultiCalendarInput, Table, TableCell } from 'zyra';
+import { Analytics, Card, Column, Container, getApiLink, InfoItem, MessageState, MultiCalendarInput, Table, TableCell } from 'zyra';
 import axios from 'axios';
 import {
 	PaginationState,
@@ -563,8 +563,7 @@ const ProductReport: React.FC = () => {
 		<>
 			<Container>
 				{/* Keep entire top dashboard layout */}
-				<Column row>
-				
+				<Column row>				
 					<Analytics
 						template="template-2"
 						data={overview.map((item, idx) => ({
@@ -573,6 +572,7 @@ const ProductReport: React.FC = () => {
 							number: <Counter value={item.count} />,
 							text: __(item.label, 'multivendorx'),
 						}))}
+						// isLoading={true}
 					/>
 
 					<Card title="Revenue & Sales Comparison">
@@ -605,12 +605,7 @@ const ProductReport: React.FC = () => {
 								</BarChart>
 							</ResponsiveContainer>
 						) : (
-							<p>
-								{__(
-									'No product sales data found.',
-									'multivendorx'
-								)}
-							</p>
+							<MessageState title={__('No product sales data found.', 'multivendorx')}/>
 						)}
 					</Card>
 				</Column>
@@ -734,12 +729,7 @@ const ProductReport: React.FC = () => {
 								</div>
 							))
 						) : (
-							<p>
-								{__(
-									'No reviewed products found.',
-									'multivendorx'
-								)}
-							</p>
+							<MessageState title={__('No reviewed products found.', 'multivendorx')}/>
 						)}
 					</Card>
 					<Card title="Top Selling Products">
@@ -764,12 +754,7 @@ const ProductReport: React.FC = () => {
 								)
 							)
 						) : (
-							<p>
-								{__(
-									'No top selling products found.',
-									'multivendorx'
-								)}
-							</p>
+							<MessageState title={__('No top selling products found.', 'multivendorx')}/>
 						)}
 					</Card>
 				</Column>
