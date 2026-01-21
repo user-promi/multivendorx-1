@@ -1054,6 +1054,15 @@ const Membership = ({ id }: { id: string }) => {
 												postInsideText="Monthly"
 												value={formData.recurring_price}
 												onChange={handleChange}
+												preText={
+													<SelectInput
+														type="select"
+														name="store_base"
+														options={[
+															{ label: '+91', value: '+91' },
+														]}
+													/>
+												}
 											/>
 										</FormGroup>
 									</FormGroupWrapper>
@@ -1308,7 +1317,7 @@ const Membership = ({ id }: { id: string }) => {
 					</Column>
 					<Column>
 						<Section
-						 wrapperClass='divider-wrapper'
+							wrapperClass='divider-wrapper'
 							hint={__('Commission type', 'multivendorx')}
 						// hint={ inputField.hint } 
 						/>
