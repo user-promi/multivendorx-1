@@ -66,6 +66,8 @@ const ProductReport: React.FC = () => {
 	const [inStockCount, setInStockCount] = useState(0);
 	const [outOfStockCount, setOutOfStockCount] = useState(0);
 	const [onBackorderCount, setOnBackorderCount] = useState(0);
+	const [isLoading, setIsLoading] = useState(true);
+	
 
 	const toggleReviewedCard = (key: string) => {
 		setOpenReviewedCards((prev) => ({
@@ -103,6 +105,7 @@ const ProductReport: React.FC = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			setIsLoading(true);
 			try {
 				// 1. Fetch store list
 				axios
@@ -110,6 +113,7 @@ const ProductReport: React.FC = () => {
 						headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					})
 					.then((response) => setStore(response.data.stores || []))
+					.finally(() => {setIsLoading(false);})
 					.catch(() => {
 						setError(__('Failed to load stores', 'multivendorx'));
 						setStore([]);
@@ -128,6 +132,7 @@ const ProductReport: React.FC = () => {
 						setTotalRows(total);
 						setPageCount(Math.ceil(total / pagination.pageSize));
 					})
+					.finally(() => {setIsLoading(false);})
 					.catch(() =>
 						setError(
 							__('Failed to load total rows', 'multivendorx')
@@ -154,6 +159,7 @@ const ProductReport: React.FC = () => {
 							}));
 						setChartData(data);
 					})
+					.finally(() => {setIsLoading(false);})
 					.catch(() => setError('Failed to load product sales data'));
 
 				// 4. Top reviewed products
@@ -176,6 +182,7 @@ const ProductReport: React.FC = () => {
 							)
 						)
 					)
+					.finally(() => {setIsLoading(false);})
 					.catch((error) =>
 						console.error(
 							'Error fetching top reviewed products:',
@@ -203,6 +210,7 @@ const ProductReport: React.FC = () => {
 							)
 						)
 					)
+					.finally(() => {setIsLoading(false);})
 					.catch((error) =>
 						console.error(
 							'Error fetching top selling products:',
@@ -234,6 +242,7 @@ const ProductReport: React.FC = () => {
 								setOnBackorderCount(count);
 							}
 						})
+					    .finally(() => {setIsLoading(false);})
 						.catch((error) =>
 							console.error(
 								`Error fetching ${status} count:`,
@@ -572,7 +581,7 @@ const ProductReport: React.FC = () => {
 							number: <Counter value={item.count} />,
 							text: __(item.label, 'multivendorx'),
 						}))}
-						// isLoading={true}
+						isLoading={isLoading}	
 					/>
 
 					<Card title="Revenue & Sales Comparison">

@@ -679,49 +679,6 @@
         }
     }
 }
-.task-list-wrapper {
-    .task-list {
-        li {
-            padding: 0.5rem 0;
-            border-bottom: $border-light-small;
-            display: flex;
-            gap: 0.625rem;
-
-            span {
-                font-size: 0.95rem;
-                line-height: 1.4rem;
-            }
-
-            .add-mode {
-                margin-top: 1rem;
-                border: 0;
-            }
-
-            input {
-                margin: 0;
-            }
-
-            &:has(input:checked) span {
-                text-decoration: line-through;
-                color: #00000075;
-            }
-
-            .delete-icon {
-                display: none;
-                font-size: 1.25rem;
-                color: #e35047;
-                cursor: pointer;
-            }
-
-            &:hover {
-                .delete-icon {
-                    display: block;
-                }
-            }
-        }
-    }
-}
-
 // dropdown menu style (table action, icon action)  remove
 .icon-wrapper {
     position: relative;
