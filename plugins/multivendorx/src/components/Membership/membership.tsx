@@ -420,6 +420,27 @@ const Membership = ({ id }: { id: string }) => {
 			prev.map((f, i) => (i === index ? value : f))
 		);
 	};
+	const handleFeatureKeyDown = (
+		e: React.KeyboardEvent<HTMLInputElement>,
+		index: number
+	) => {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			if (!features[index].trim()) return;
+
+			addFeature();
+		}
+	};
+	const removeFeature = (index: number) => {
+		setFeatures((prev) => {
+			if (prev.length === 1) {
+				return [''];
+			}
+
+			return prev.filter((_, i) => i !== index);
+		});
+	};
+
 
 	const clearAll = () => {
 		setFeatures(['']);
@@ -824,7 +845,7 @@ const Membership = ({ id }: { id: string }) => {
 						</div>
 					)}
 					<Column grid={8}>
-						<Card
+						<Card contentHeight
 							title="Plan details"
 							action={
 								<>
@@ -982,7 +1003,9 @@ const Membership = ({ id }: { id: string }) => {
 														onChange={(e) =>
 															updateFeature(index, e.target.value)
 														}
+														onKeyDown={(e) => handleFeatureKeyDown(e, index)}
 													/>
+													<div className="admin-badge red" onClick={() => removeFeature(index)}><i className="adminfont-delete"></i></div>
 												</div>
 											))}
 										</div>
@@ -1054,15 +1077,15 @@ const Membership = ({ id }: { id: string }) => {
 												postInsideText="Monthly"
 												value={formData.recurring_price}
 												onChange={handleChange}
-												preText={
-													<SelectInput
-														type="select"
-														name="store_base"
-														options={[
-															{ label: '+91', value: '+91' },
-														]}
-													/>
-												}
+												postInsideText={{
+													type: 'select',
+													key: 'store_base',
+													size: '7rem',
+													options: [
+														{ 'value': 'Monthly', 'label': 'Monthly' },
+														{ 'value': 'Day', 'label': 'Day' }
+													],
+												}}
 											/>
 										</FormGroup>
 									</FormGroupWrapper>
@@ -1093,6 +1116,15 @@ const Membership = ({ id }: { id: string }) => {
 											postInsideText="Monthly"
 											value={formData.recurring_price}
 											onChange={handleChange}
+											postInsideText={{
+												type: 'select',
+												key: 'store_base',
+												size: '7rem',
+												options: [
+													{ 'value': 'Monthly', 'label': 'Monthly' },
+													{ 'value': 'Day', 'label': 'Day' }
+												],
+											}}
 										/>
 									</FormGroup>
 									<label
@@ -1169,6 +1201,7 @@ const Membership = ({ id }: { id: string }) => {
 											postInsideText="days"
 										/>
 									</FormGroup>
+									<FormGroup cols={2}></FormGroup>
 								</FormGroupWrapper>
 							)}
 							{/* <div className="card-header">
