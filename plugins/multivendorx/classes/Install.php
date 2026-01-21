@@ -1802,6 +1802,16 @@ class Install {
                 update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_fixed_value );
                 update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_percentage_value );
             }
+
+            // Migrate product vendor.
+            $author_id = (int) get_post_field( 'post_author', $product_id );
+            $user = get_user_by( 'id', $author_id );
+
+            // Check if user is a vendor and update post meta.
+            if ( in_array( 'dc_vendor', (array) $user->roles, true ) ) {
+                $active_store = get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+                update_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], $active_store );
+            }
         }
 
         $terms = get_terms( [
@@ -1857,6 +1867,21 @@ class Install {
     
                 update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_fixed_value );
                 update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_percentage_value );
+            }
+        }
+
+        //Migrate coupon vendor.
+        $coupons = wc_get_coupons( array(
+            'return' => 'ids',
+        ) );
+
+        foreach ( $coupons as $coupon_id ) {
+            $author_id = (int) get_post_field( 'post_author', $coupon_id );
+            $user = get_user_by( 'id', $author_id );
+
+            if ( in_array( 'dc_vendor', (array) $user->roles, true ) ) {
+                $active_store = get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+                update_post_meta( $coupon_id, Utill::POST_META_SETTINGS['store_id'], $active_store );
             }
         }
 
@@ -2073,7 +2098,7 @@ class Install {
             if ( is_array( $followed ) ) {
                 foreach ( $followed as $item ) {
                     if ( ! empty( $item['user_id'] ) ) {
-                        $store_id = get_user_meta( $item['user_id'], 'multivendorx_store_id', true );
+                        $store_id = get_user_meta( $item['user_id'], Utill::USER_SETTINGS_KEYS['active_store'], true );
 
                         if ( $store_id ) {
                             $results[] = (int) $store_id;
@@ -2214,7 +2239,22 @@ class Install {
             $order->save();
         }
 
+        // Fetch all refund orders.
+        $refund_ids = wc_get_orders( array(
+            'type'   => 'shop_order_refund',
+            'status' => array_keys( wc_get_order_statuses() ),
+            'return' => 'ids',
+        ) );
 
+        foreach ( $refund_ids as $refund_id ) {
+            $refund = wc_get_order($refund_id);
+            $parent_order_id = $refund->get_parent_id();
+            $parent_order = wc_get_order( $parent_order_id );
+
+            $store_id = $parent_order->get_meta( 'multivendorx_store_id', true );
+            $refund->update_meta_data( 'multivendorx_store_id', $store_id );
+            $refund->save();
+        }
 
     }
 }
