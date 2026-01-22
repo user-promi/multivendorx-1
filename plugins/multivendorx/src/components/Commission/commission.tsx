@@ -20,6 +20,7 @@ import {
 } from '@tanstack/react-table';
 import ViewCommission from './viewCommission';
 import { formatCurrency, formatLocalDate, formatWcShortDate, } from '../../services/commonFunction';
+import TableCardDemo from '../table/TableCardDemo';
 
 export interface RealtimeFilter {
 	name: string;
@@ -867,7 +868,8 @@ const Commission: React.FC = () => {
 					'multivendorx'
 				)}
 			/>
-			<Container general>
+			<TableCardDemo/>
+			{/* <Container general>
 				<Column>
 					<Table
 						data={data}
@@ -903,7 +905,7 @@ const Commission: React.FC = () => {
 					onClose={() => setViewCommission(false)}
 					commissionId={selectedCommissionId}
 				/>
-			)}
+			)} */}
 		</>
 	);
 };

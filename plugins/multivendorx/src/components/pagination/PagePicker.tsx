@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './pagination.scss';
 
 interface PagePickerProps {
 	currentPage: number;

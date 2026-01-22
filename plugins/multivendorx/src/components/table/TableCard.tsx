@@ -4,6 +4,7 @@ import TableSummary, { TableSummaryPlaceholder } from './summary';
 import Pagination from '../pagination/Pagination';
 import { TableCardProps, TableRow } from './types';
 import TablePlaceholder from './TablePlaceholder';
+import './table.scss';
 
 /**
  * Default no-op handlers
@@ -172,7 +173,7 @@ const TableCard: React.FC<TableCardProps> = ({
 
 				{isLoading ? (
 					<Fragment>
-						<span className="screen-reader-text">
+						<span className="">
 							Loading data
 						</span>
 						<TablePlaceholder

@@ -5,6 +5,7 @@ import React, {
 	useState,
 } from 'react';
 import { TableProps, TableRow } from './types';
+import './table.scss';
 
 const ASC = 'asc';
 const DESC = 'desc';

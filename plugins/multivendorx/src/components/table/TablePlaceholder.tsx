@@ -1,6 +1,7 @@
 import React from 'react';
 import { TableHeader, QueryProps } from './types';
 import Table from './table';
+import './table.scss';
 
 interface TablePlaceholderProps {
 	/** Query parameters */
