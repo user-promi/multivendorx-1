@@ -20,6 +20,7 @@ import {
 } from '@tanstack/react-table';
 import ViewCommission from './viewCommission';
 import { formatCurrency, formatLocalDate, formatWcShortDate, } from '../../services/commonFunction';
+import TableTest from './woocomTable';
 
 export interface RealtimeFilter {
 	name: string;
@@ -99,8 +100,8 @@ const DownloadCSVButton: React.FC<{
 			// Prepare parameters for CSV download
 			const params: any = {
 				format: 'csv',
-				startDate:formatLocalDate(filterData.date.start_date ?? ''),
-				endDate:formatLocalDate(filterData.date.end_date??''),
+				startDate: formatLocalDate(filterData.date.start_date ?? ''),
+				endDate: formatLocalDate(filterData.date.end_date ?? ''),
 			};
 
 			// Add filters if present
@@ -244,8 +245,8 @@ const Commission: React.FC = () => {
 				// Prepare parameters for CSV download - NO pagination params
 				const params: any = {
 					format: 'csv',
-					startDate:formatLocalDate(filterData.date.start_date ?? ''),
-					endDate:formatLocalDate(filterData.date.end_date??''),
+					startDate: formatLocalDate(filterData.date.start_date ?? ''),
+					endDate: formatLocalDate(filterData.date.end_date ?? ''),
 				};
 
 				// Add filters if present
@@ -339,8 +340,8 @@ const Commission: React.FC = () => {
 		order = '',
 		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
 		endDate = new Date(),
-		searchAction ='',
-		searchValue ='',
+		searchAction = '',
+		searchValue = '',
 	) {
 		setData(null);
 		axios({
@@ -355,9 +356,9 @@ const Commission: React.FC = () => {
 				orderBy,
 				order,
 				startDate: startDate ? formatLocalDate(startDate) : '',
-				endDate: endDate ? formatLocalDate(endDate) : '',	
+				endDate: endDate ? formatLocalDate(endDate) : '',
 				searchAction,
-				searchValue,			
+				searchValue,
 			},
 		})
 			.then((response) => {
@@ -855,6 +856,56 @@ const Commission: React.FC = () => {
 			),
 		},
 	];
+	const headers: TableHeader[] = [
+		{
+			key: 'name',
+			label: 'Name',
+			isSortable: true,
+			defaultSort: true,
+			defaultOrder: 'asc',
+			isLeftAligned: true,
+		},
+		{
+			key: 'orders',
+			label: 'Orders',
+			isSortable: true,
+			isNumeric: true,
+		},
+		{
+			key: 'revenue',
+			label: 'Revenue',
+			isSortable: true,
+			isNumeric: true,
+			screenReaderLabel: 'Revenue in dollars',
+		},
+	];
+
+	const rows = [
+		[
+			{ display: 'January', value: 1 },
+			{ display: 10, value: 10 },
+			{ display: '$530.00', value: 530 },
+		],
+		[
+			{ display: 'February', value: 2 },
+			{ display: 13, value: 13 },
+			{ display: '$675.00', value: 675 },
+		],
+		[
+			{ display: 'March', value: 3 },
+			{ display: 9, value: 9 },
+			{ display: '$460.00', value: 460 },
+		],
+	];
+	const [query, setQuery] = useState({
+		orderby: 'name',
+		order: 'asc',
+	});
+	const handleSort = (key: string, direction: string) => {
+		console.log(key,direction)
+		setQuery({ orderby: key, order: direction });
+	};
+
 	return (
 		<>
 			<AdminBreadcrumbs
@@ -865,7 +916,8 @@ const Commission: React.FC = () => {
 					'multivendorx'
 				)}
 			/>
-			<Container general>
+			<TableTest rows={rows} headers={headers} query={query} onSort={handleSort} />
+			{/* <Container general>
 				<Column>
 					<Table
 						data={data}
@@ -901,7 +953,7 @@ const Commission: React.FC = () => {
 					onClose={() => setViewCommission(false)}
 					commissionId={selectedCommissionId}
 				/>
-			)}
+			)} */}
 		</>
 	);
 };
