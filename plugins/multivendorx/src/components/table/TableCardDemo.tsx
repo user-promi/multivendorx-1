@@ -79,10 +79,6 @@ const TableCardDemo: React.FC = () => {
 			const mappedRows: TableRow[][] = response.data.map(
 				(product: any) => [
 					{
-						display: product.id,
-						value: product.id, 
-					},
-					{
 						display: (
 							<a
 								href={`/wp-admin/post.php?post=${product.id}&action=edit`}
@@ -92,7 +88,7 @@ const TableCardDemo: React.FC = () => {
 								{product.name}
 							</a>
 						),
-						value: product.name,
+						value: product.id, 
 					},
 					{
 						display: product.sku || '—',

@@ -31,7 +31,7 @@ const Table: React.FC<TableProps> = ({
 	emptyMessage,
 	classNames,
 }) => {
-	const [allSelected, setAllSelected] = useState(false);
+	const allSelected = ids.length > 0 && ids.every((id) => selectedIds.includes(id));
 	const [tabIndex, setTabIndex] = useState<number | undefined>();
 	const [isScrollableRight, setIsScrollableRight] = useState(false);
 	const [isScrollableLeft, setIsScrollableLeft] = useState(false);
@@ -106,17 +106,15 @@ const Table: React.FC<TableProps> = ({
 		.join(' ');
 
 	const toggleAllRows = () => {
-		const newState = !allSelected;
-		setAllSelected(newState);
-		onSelectAll?.(newState);
+	  const newState = !allSelected;
+	  onSelectAll?.(newState);
 	};
-
+  
 	const toggleRow = (index: number) => {
-		const id = ids[index];
-		const isSelected = selectedIds.includes(id);
-		onSelectRow?.(id, !isSelected);
+	  const id = ids[index];
+	  const isSelected = selectedIds.includes(id);
+	  onSelectRow?.(id, !isSelected);
 	};
-
 	return (
 		<div
 			ref={containerRef}
@@ -139,10 +137,16 @@ const Table: React.FC<TableProps> = ({
 				</caption>
 
 				<tbody>
-					<th>
-						<input type="checkbox" checked={allSelected} onChange={toggleAllRows} />
-					</th>
 					<tr>
+						{selectedIds.length > 0 || allSelected ? (
+							<th>
+								<input type="checkbox" checked={allSelected} onChange={toggleAllRows} />
+							</th>
+						) : (
+							<th>
+								<input type="checkbox" checked={allSelected} onChange={toggleAllRows} />
+							</th>
+						)}
 						{headers.map((header, i) => {
 							const {
 								key,

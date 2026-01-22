@@ -5,6 +5,7 @@ import Pagination from '../pagination/Pagination';
 import { TableCardProps, TableRow } from './types';
 import TablePlaceholder from './TablePlaceholder';
 import './table.scss';
+import BulkActionDropdown from './BulkActionDropdown';
 
 /**
  * Default no-op handlers
@@ -27,7 +28,7 @@ const TableCard: React.FC<TableCardProps> = ({
 	hasSearch,
 	tablePreface,
 	headers = [],
-	ids=[],
+	ids = [],
 	isLoading = false,
 	onQueryChange = defaultOnQueryChange,
 	onColumnsChange = defaultOnColumnsChange,
@@ -209,22 +210,13 @@ const TableCard: React.FC<TableCardProps> = ({
 				) : (
 					<>
 						{bulkActions.length > 0 && (
-							<div className="table-card__bulk-actions">
-								<select
-									onChange={(e) => handleBulkApply(e.target.value)}
-									value=""
-								>
-									<option value="" disabled>
-										Bulk Actions
-									</option>
-									{bulkActions.map((action) => (
-										<option key={action.value} value={action.value}>
-											{action.label}
-										</option>
-									))}
-								</select>
-							</div>
+							<BulkActionDropdown
+								actions={bulkActions}
+								selectedIds={selectedIds}
+								onApply={handleBulkApply}
+							/>
 						)}
+
 						<Table
 							rows={visibleRows}
 							headers={visibleHeaders}
