@@ -1113,37 +1113,11 @@ const Membership = ({ id }: { id: string }) => {
 					<Column>
 						<Section
 							wrapperClass='divider-wrapper'
-							hint={__('Commission type', 'multivendorx')}
+							hint={__('What stores can do with this plan', 'multivendorx')}
 						// hint={ inputField.hint } 
 						/>
 					</Column>
 					<Column grid={8}>
-						<Card title={__('Usage limits', 'multivendorx')}
-						// desc={'Select which premium features stores can access with this plan.'}
-						>
-							<FormGroupWrapper>
-								<FormGroup label="When limit reached" htmlFor="trial_period">
-									<MultiCheckBox
-										wrapperClass="checkbox-list-side-by-side"
-										// description={whenLimitReached.desc}
-										inputWrapperClass="toggle-checkbox-header"
-										inputInnerWrapperClass="default-checkbox"
-										inputClass={whenLimitReached.class}
-										idPrefix={whenLimitReached.key}
-										selectDeselect
-										options={whenLimitReached.options}
-										value={normalizeValue(whenLimitReached.key)}
-										onChange={handleMultiCheckboxChange(whenLimitReached.key)}
-										onMultiSelectDeselectChange={() =>
-											handleSelectDeselect(whenLimitReached)
-										}
-										proSetting={false}
-										moduleChange={() => { }}
-										modules={[]}
-									/>
-								</FormGroup>
-							</FormGroupWrapper>
-						</Card>
 						<Card title={__('What stores can sell', 'multivendorx')}
 							desc={__('Decide what kind of items stores are allowed to list on your marketplace.', 'multivendorx')}
 						>
