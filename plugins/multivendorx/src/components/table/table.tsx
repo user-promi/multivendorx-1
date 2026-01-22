@@ -20,13 +20,18 @@ const Table: React.FC<TableProps> = ({
 	ariaHidden,
 	caption,
 	className,
-	onSort = () => {},
+	onSort = () => { },
 	query = {},
 	rowHeader,
 	rowKey,
+	ids = [],
+	selectedIds = [],
+	onSelectRow,
+	onSelectAll,
 	emptyMessage,
 	classNames,
 }) => {
+	const [allSelected, setAllSelected] = useState(false);
 	const [tabIndex, setTabIndex] = useState<number | undefined>();
 	const [isScrollableRight, setIsScrollableRight] = useState(false);
 	const [isScrollableLeft, setIsScrollableLeft] = useState(false);
@@ -100,6 +105,18 @@ const Table: React.FC<TableProps> = ({
 		.filter(Boolean)
 		.join(' ');
 
+	const toggleAllRows = () => {
+		const newState = !allSelected;
+		setAllSelected(newState);
+		onSelectAll?.(newState);
+	};
+
+	const toggleRow = (index: number) => {
+		const id = ids[index];
+		const isSelected = selectedIds.includes(id);
+		onSelectRow?.(id, !isSelected);
+	};
+
 	return (
 		<div
 			ref={containerRef}
@@ -122,6 +139,9 @@ const Table: React.FC<TableProps> = ({
 				</caption>
 
 				<tbody>
+					<th>
+						<input type="checkbox" checked={allSelected} onChange={toggleAllRows} />
+					</th>
 					<tr>
 						{headers.map((header, i) => {
 							const {
@@ -188,7 +208,15 @@ const Table: React.FC<TableProps> = ({
 
 					{hasData ? (
 						rows.map((row, rowIndex) => (
+
 							<tr key={getRowKey(row, rowIndex)}>
+								<td>
+									<input
+										type="checkbox"
+										checked={selectedIds.includes(ids[rowIndex])}
+										onChange={() => toggleRow(rowIndex)}
+									/>
+								</td>
 								{row.map((cell, colIndex) => {
 									const header = headers[colIndex];
 									const isHeaderCell = rowHeader === colIndex;

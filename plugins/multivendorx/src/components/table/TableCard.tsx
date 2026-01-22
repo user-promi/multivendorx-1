@@ -11,12 +11,12 @@ import './table.scss';
  */
 const defaultOnQueryChange =
 	(param: string) =>
-	(value?: string, direction?: string): void => {};
+		(value?: string, direction?: string): void => { };
 
 const defaultOnColumnsChange = (
 	showCols: string[],
 	key?: string
-): void => {};
+): void => { };
 
 /**
  * Pure React TableCard
@@ -27,13 +27,15 @@ const TableCard: React.FC<TableCardProps> = ({
 	hasSearch,
 	tablePreface,
 	headers = [],
-	ids,
+	ids=[],
 	isLoading = false,
 	onQueryChange = defaultOnQueryChange,
 	onColumnsChange = defaultOnColumnsChange,
 	onSort,
 	query = {},
 	rowHeader = 0,
+	bulkActions = [],
+	onBulkActionApply,
 	rows = [],
 	rowsPerPage = 10,
 	showMenu = true,
@@ -44,6 +46,26 @@ const TableCard: React.FC<TableCardProps> = ({
 	emptyMessage,
 	...props
 }) => {
+	const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+	// Toggle single row
+	const handleSelectRow = (id: number, selected: boolean) => {
+		setSelectedIds((prev) =>
+			selected ? [...prev, id] : prev.filter((x) => x !== id)
+		);
+	};
+
+	// Toggle all rows
+	const handleSelectAll = (selected: boolean) => {
+		setSelectedIds(selected ? [...ids] : []);
+	};
+
+	// Handle bulk action apply
+	const handleBulkApply = (action: string) => {
+		onBulkActionApply?.(action, selectedIds);
+		// optional: clear selection after apply
+		setSelectedIds([]);
+	};
 	/**
 	 * Determine default visible columns
 	 */
@@ -185,23 +207,48 @@ const TableCard: React.FC<TableCardProps> = ({
 						/>
 					</Fragment>
 				) : (
-					<Table
-						rows={visibleRows}
-						headers={visibleHeaders}
-						rowHeader={rowHeader}
-						caption={title}
-						query={query}
-						onSort={
-							onSort ||
-							(onQueryChange('sort') as (
-								key: string,
-								direction: string
-							) => void)
-						}
-						rowKey={rowKey}
-						emptyMessage={emptyMessage}
-					/>
+					<>
+						{bulkActions.length > 0 && (
+							<div className="table-card__bulk-actions">
+								<select
+									onChange={(e) => handleBulkApply(e.target.value)}
+									value=""
+								>
+									<option value="" disabled>
+										Bulk Actions
+									</option>
+									{bulkActions.map((action) => (
+										<option key={action.value} value={action.value}>
+											{action.label}
+										</option>
+									))}
+								</select>
+							</div>
+						)}
+						<Table
+							rows={visibleRows}
+							headers={visibleHeaders}
+							rowHeader={rowHeader}
+							caption={title}
+							query={query}
+							onSort={
+								onSort ||
+								(onQueryChange('sort') as (
+									key: string,
+									direction: string
+								) => void)
+							}
+							rowKey={rowKey}
+							emptyMessage={emptyMessage}
+							ids={ids}
+							selectedIds={selectedIds}
+							onSelectRow={handleSelectRow}
+							onSelectAll={handleSelectAll}
+						/>
+					</>
+
 				)}
+
 			</div>
 
 			{/* FOOTER */}

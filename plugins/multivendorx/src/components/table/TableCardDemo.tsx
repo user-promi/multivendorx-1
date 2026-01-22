@@ -79,6 +79,10 @@ const TableCardDemo: React.FC = () => {
 			const mappedRows: TableRow[][] = response.data.map(
 				(product: any) => [
 					{
+						display: product.id,
+						value: product.id, 
+					},
+					{
 						display: (
 							<a
 								href={`/wp-admin/post.php?post=${product.id}&action=edit`}
@@ -108,7 +112,7 @@ const TableCardDemo: React.FC = () => {
 					},
 				]
 			);
-			
+
 
 			setRows(mappedRows);
 
@@ -175,6 +179,15 @@ const TableCardDemo: React.FC = () => {
 						Data loaded from WooCommerce REST API.
 					</div>
 				}
+				ids={rows.map((row, i) => String(row[0]?.value))}
+				bulkActions={[
+					{ label: 'Delete Selected', value: 'delete' },
+					{ label: 'Mark as Featured', value: 'feature' },
+				]}
+				onBulkActionApply={(action, selectedIds) => {
+					console.log('Action:', action, 'Selected IDs:', selectedIds);
+					// Perform your API call or state update here
+				}}
 			/>
 		</div>
 	);

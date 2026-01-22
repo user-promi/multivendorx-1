@@ -123,6 +123,10 @@ export type TableProps = CommonTableProps & {
 	 * Additional classnames
 	 */
 	classNames?: string | Record< string, string >;
+	ids?: Array< number >;
+	selectedIds?: Array< number >;
+	onSelectRow?: (id: number, selected: boolean) => void;
+	onSelectAll?: (selected: boolean) => void; 
 };
 
 export type TableSummaryProps = {
@@ -193,4 +197,6 @@ export type TableCardProps = CommonTableProps & {
 	 * The total number of rows (across all pages).
 	 */
 	totalRows: number;
+	bulkActions?: Array<{ label: string; value: string }>;
+	onBulkActionApply?: (action: string, selectedIds: number[]) => void;
 };
