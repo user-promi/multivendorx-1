@@ -201,7 +201,7 @@ export default {
 			label: 'Store Management',
 		},
 		{
-			id: 'spmv',
+			id: 'shared-listing',
 			name: __('Shared listing', 'multivendorx'),
 			desc: 'Allows more than one store to sell the same product with their own price and stock.',
 			icon: 'adminfont-spmv',

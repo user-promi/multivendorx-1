@@ -374,7 +374,7 @@ const AdminDashboard = () => {
 
 	const Modules: Module[] = [
 		{
-			id: 'spmv',
+			id: 'shared-listing',
 			name: 'Shared listing',
 			iconClass: 'adminfont-spmv',
 			pro: false,
