@@ -264,25 +264,25 @@ const ProductReport: React.FC = () => {
 			id: 'sales',
 			label: 'Total Products',
 			count: totalRows,
-			icon: 'adminfont-single-product',
+			icon: 'single-product',
 		},
 		{
 			id: 'earnings',
 			label: 'In Stock',
 			count: inStockCount,
-			icon: 'adminfont-per-product-shipping',
+			icon: 'per-product-shipping',
 		},
 		{
 			id: 'Vendors',
 			label: 'On backorder',
 			count: onBackorderCount,
-			icon: 'adminfont-multi-product',
+			icon: 'multi-product',
 		},
 		{
 			id: 'free',
 			label: 'Out of Stock',
 			count: outOfStockCount,
-			icon: 'adminfont-out-of-stock',
+			icon: 'out-of-stock',
 		},
 	];
 
@@ -574,7 +574,7 @@ const ProductReport: React.FC = () => {
 				{/* Keep entire top dashboard layout */}
 				<Column row>				
 					<Analytics
-						template="template-2"
+						cols={2}
 						data={overview.map((item, idx) => ({
 							icon: item.icon,
 							iconClass: `admin-color${idx + 2}`,

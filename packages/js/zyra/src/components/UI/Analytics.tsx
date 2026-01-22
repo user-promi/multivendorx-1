@@ -12,30 +12,23 @@ type AnalyticsItem = {
 
 type AnalyticsProps = {
 	data: AnalyticsItem[];
-	template?: 'template-1' | 'template-2' | 'template-3';
-	col3?: boolean;
+	variant?: 'default' | 'small' | 'dashboard';
+	cols?: number;
 	isLoading?: boolean;
 };
 
 const Analytics: React.FC<AnalyticsProps> = ({
 	data,
-	template = 'template-1',
-	col3 = false,
+	variant = 'default',
+	cols,
 	isLoading = false,
 }) => {
-	const containerClass =
-		template === 'template-3'
-			? 'analytics-container dashboard'
-			: template === 'template-2'
-				? 'analytics-container report'
-				: 'analytics-container';
-
 	const skeletonItems = Array.from({ length: data.length || 4 });
 
 	return (
 		<div
-			className={`${containerClass} ${col3 && template === 'template-2' ? 'col-3' : ''
-				}`}
+			className={`analytics-container ${cols ? `flex-wrap` : ''}`}
+			data-template={variant}
 		>
 			{isLoading
 				? skeletonItems.map((_, idx) => (
@@ -50,7 +43,7 @@ const Analytics: React.FC<AnalyticsProps> = ({
 							<div className="text">
 								<Skeleton variant="text" width={100} height={18} />
 							</div>
-							{template === 'template-3' && (
+							{variant === 'dashboard' && (
 								<div className="report">
 									<Skeleton variant="text" width={60} height={16} />
 								</div>
@@ -61,17 +54,17 @@ const Analytics: React.FC<AnalyticsProps> = ({
 				: data.map((item, idx) => (
 					<div
 						key={idx}
-						className={`analytics-item ${item.colorClass || ''}`}
+						className={`analytics-item ${cols ? `col-${cols}` : ''} ${item.colorClass || ''}`}
 					>
 						{item.icon && (
 							<div className="analytics-icon">
-								<i className={`${item.icon} ${item.iconClass || ''}`} />
+								<i className={`adminfont-${item.icon} ${item.iconClass || ''}`} />
 							</div>
 						)}
 						<div className="details">
 							<div className="number">{item.number}</div>
 							<div className="text">{item.text}</div>
-							{template === 'template-3' && item.extra && (
+							{variant === 'dashboard' && item.extra && (
 								<div className="report">{item.extra}</div>
 							)}
 						</div>

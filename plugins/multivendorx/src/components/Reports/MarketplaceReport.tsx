@@ -92,14 +92,14 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						label: 'Total Order Amount',
 						count: Number(data.total_order_amount),
 						formatted: formatCurrency(data.total_order_amount),
-						icon: 'adminfont-order',
+						icon: 'order',
 					},
 					{
 						id: 'facilitator_fee',
 						label: 'Facilitator Fee',
 						count: Number(data.facilitator_fee),
 						formatted: formatCurrency(data.facilitator_fee),
-						icon: 'adminfont-facilitator',
+						icon: 'facilitator',
 						module: 'facilitator',
 					},
 					{
@@ -107,7 +107,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						label: 'Gateway Fee',
 						count: Number(data.gateway_fee),
 						formatted: formatCurrency(data.gateway_fee),
-						icon: 'adminfont-credit-card',
+						icon: 'credit-card',
 						condition: false,
 					},
 					{
@@ -115,7 +115,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						label: 'Shipping Amount',
 						count: Number(data.shipping_amount),
 						formatted: formatCurrency(data.shipping_amount),
-						icon: 'adminfont-shipping',
+						icon: 'shipping',
 						module: 'store-shipping',
 					},
 					{
@@ -123,7 +123,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						label: 'Tax Amount',
 						count: Number(data.tax_amount),
 						formatted: formatCurrency(data.tax_amount),
-						icon: 'adminfont-tax-compliance',
+						icon: 'tax-compliance',
 						module: 'store-shipping',
 					},
 					{
@@ -131,7 +131,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						label: 'Shipping Tax Amount',
 						count: Number(data.shipping_tax_amount),
 						formatted: formatCurrency(data.shipping_tax_amount),
-						icon: 'adminfont-per-product-shipping',
+						icon: 'per-product-shipping',
 						module: 'store-shipping',
 					},
 					{
@@ -139,14 +139,14 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 						label: 'Commission Total',
 						count: Number(data.commission_total),
 						formatted: formatCurrency(data.commission_total),
-						icon: 'adminfont-commission',
+						icon: 'commission',
 					},
 					{
 						id: 'commission_refunded',
 						label: 'Commission Refunded',
 						count: Number(data.commission_refunded),
 						formatted: formatCurrency(data.commission_refunded),
-						icon: 'adminfont-marketplace-refund',
+						icon: 'marketplace-refund',
 						module: 'marketplace-refund'
 					},
 				].filter(
@@ -313,8 +313,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 			<Container>
 				<Column>
 					<Analytics
-						template="template-2"
-						col3
+						cols={4}
 						isLoading={isLoading}
 						data={commissionDetails.map((item, idx) => ({
 							icon: item.icon,
