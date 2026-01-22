@@ -924,7 +924,7 @@ const Membership = ({ id }: { id: string }) => {
 								</FormGroup>
 							</FormGroupWrapper>
 						</Card>
-						<Card contentHeight title={__('Plan Highlights', 'multivendorx')}>
+						<Card contentHeight title={__('Plan highlights', 'multivendorx')}>
 							<FormGroupWrapper>
 								<FormGroup cols={3}>
 									<FileInput
@@ -1107,7 +1107,7 @@ const Membership = ({ id }: { id: string }) => {
 							)}
 						</Card>
 						<Card
-							contentHeight title={__('Trial Period', 'multivendorx')}
+							contentHeight title={__('Trial period', 'multivendorx')}
 							desc={__('Configure optional trial period for new members', 'multivendorx')}
 							action={
 								<>
@@ -1188,7 +1188,7 @@ const Membership = ({ id }: { id: string }) => {
 							</FormGroupWrapper> */}
 						</Card>
 						<Card
-							contentHeight title={__('After Expiry', 'multivendorx')}
+							contentHeight title={__('After expiry', 'multivendorx')}
 							desc={__('Define what happens when subscription expires', 'multivendorx')}
 							action={
 								<>
@@ -1287,7 +1287,7 @@ const Membership = ({ id }: { id: string }) => {
 								</>
 							)}
 						</Card>
-						<Card contentHeight title={__('Commission type', 'multivendorx')}>
+						<Card contentHeight title={__('What this plan includes', 'multivendorx')}>
 							<FormGroupWrapper>
 								<FormGroup
 									label="Include All Add-ons"
@@ -1314,7 +1314,7 @@ const Membership = ({ id }: { id: string }) => {
 						/>
 					</Column>
 					<Column grid={8}>
-						<Card title={__('Usage Limits', 'multivendorx')}
+						<Card title={__('Usage limits', 'multivendorx')}
 						// desc={'Select which premium features stores can access with this plan.'}
 						>
 							<FormGroupWrapper>
@@ -1649,7 +1649,7 @@ const Membership = ({ id }: { id: string }) => {
 						</Card>
 					</Column>
 					<Column grid={4}>
-						<Card contentHeight title={__('Membership Perks', 'multivendorx')}>
+						<Card contentHeight title={__('Membership perks', 'multivendorx')}>
 							<FormGroupWrapper>
 								<FormGroup cols={2} label="Products" htmlFor="trial_period">
 									<BasicInput
