@@ -405,7 +405,7 @@ const AdminDashboard = () => {
 		},
 		{
 			id: 'min-max-quantities',
-			name: 'Min/Max quantities',
+			name: 'Min max',
 			iconClass: 'adminfont-min-max',
 			pro: false,
 		},
