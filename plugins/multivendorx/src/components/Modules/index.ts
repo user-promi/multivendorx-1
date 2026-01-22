@@ -207,7 +207,7 @@ export default {
 			icon: 'adminfont-spmv',
 			doc_link:
 				'https://multivendorx.com/docs/knowledgebase/single-product-multiple-vendors-spmv',
-			settings_link: `${appLocalizer.plugin_url}settings&subtab=single-product-multiple-store`,
+			settings_link: `${appLocalizer.plugin_url}settings&subtab=general`,
 			pro_module: false,
 			category: 'store_management',
 		},
@@ -538,7 +538,7 @@ export default {
 			icon: 'adminfont-franchises-module',
 			doc_link: 'https://multivendorx.com/docs/knowledgebase/NA',
 			settings_link: `${appLocalizer.plugin_url}settings&subtab=franchises`,
-			pro_module: false,
+			pro_module: true,
 			category: ['store_management', 'marketplace_boosters'],
 		},
 
@@ -612,7 +612,7 @@ export default {
 			id: 'knowledgebase',
 			name: __('Knowledgebase', 'multivendorx'),
 			desc: 'Guides, tutorials, and FAQs shared with stores by the admin.',
-			icon: 'adminfont-knowledgebase',
+			icon: 'adminfont-book',
 			doc_link:
 				'https://multivendorx.com/docs/knowledgebase/knowledgebase/',
 			pro_module: false,
