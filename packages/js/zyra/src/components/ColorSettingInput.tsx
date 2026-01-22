@@ -312,7 +312,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                     </div>
                 )}
             </div>
-            
+
             {props.predefinedOptions && (
                 <div className="color-setting">
                     <div className="color-palette-wrapper">
@@ -399,8 +399,8 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                             </div>
                         )}
                     </div>
-                    <div className="preview-wrapper">
-                        {activeTemplate && (
+                    {activeTemplate && (
+                        <div className="preview-wrapper">
                             <activeTemplate.component
                                 colors={{
                                     colorPrimary: selectedColors.colorPrimary ?? customColors.colorPrimary,
@@ -410,8 +410,8 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                                 }}
                                 isPreview
                             />
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
             )}
 
