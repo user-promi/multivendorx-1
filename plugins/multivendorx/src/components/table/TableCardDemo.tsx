@@ -57,6 +57,7 @@ const TableCardDemo: React.FC = () => {
 		setIsLoading(true);
 
 		try {
+			console.log(query)
 			const response = await axios({
 				method: 'GET',
 				url: `${appLocalizer.apiUrl}/wc/v3/products`,
@@ -183,6 +184,14 @@ const TableCardDemo: React.FC = () => {
 				onBulkActionApply={(action, selectedIds) => {
 					console.log('Action:', action, 'Selected IDs:', selectedIds);
 					// Perform your API call or state update here
+				}}
+				search={{
+					placeholder: 'Search Products...',
+					// options: [
+					// 	{ label: 'All', value: '' },
+					// 	{ label: 'Published', value: 'publish' },
+					// 	{ label: 'Draft', value: 'draft' },
+					// ],
 				}}
 			/>
 		</div>

@@ -6,6 +6,7 @@ import { TableCardProps, TableRow } from './types';
 import TablePlaceholder from './TablePlaceholder';
 import './table.scss';
 import BulkActionDropdown from './BulkActionDropdown';
+import TableSearch, { SearchOption } from './TableSearch';
 
 /**
  * Default no-op handlers
@@ -25,6 +26,7 @@ const defaultOnColumnsChange = (
 const TableCard: React.FC<TableCardProps> = ({
 	actions,
 	className,
+	search,
 	hasSearch,
 	tablePreface,
 	headers = [],
@@ -160,7 +162,21 @@ const TableCard: React.FC<TableCardProps> = ({
 						{actions}
 					</div>
 				)}
-
+				{search && (
+					<div className="table-card__search">
+						<TableSearch
+							placeholder={search.placeholder}
+							options={search.options}
+							onSearch={(text, option) => {
+								// Update query dynamically
+								onQueryChange('search')(text);
+								if (option) {
+									onQueryChange('filter')(String(option));
+								}
+							}}
+						/>
+					</div>
+				)}
 				{showMenu && (
 					<div className="table-card__column-menu">
 						<strong>Columns</strong>

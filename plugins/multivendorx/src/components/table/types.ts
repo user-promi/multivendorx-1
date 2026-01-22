@@ -1,3 +1,5 @@
+import { SearchOption } from "./TableSearch";
+
 export type QueryProps = {
 	orderby?: string;
 	order?: string;
@@ -199,4 +201,9 @@ export type TableCardProps = CommonTableProps & {
 	totalRows: number;
 	bulkActions?: Array<{ label: string; value: string }>;
 	onBulkActionApply?: (action: string, selectedIds: number[]) => void;
+	search?: {
+		placeholder?: string;
+		options?: SearchOption[];
+	};
+
 };
