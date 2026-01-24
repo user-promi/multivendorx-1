@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import Invoice1 from '../../../assets/template/invoicePdf/Invoice-1';
 import CustomerInvoice1 from '../../../assets/template/customerInvoice/Invoice-1';
+import MarketplaceInvoice1 from '../../../assets/template/marketplaceInvoice/Invoice-1';
 
 export default {
 	id: 'store-invoice',
@@ -20,6 +21,13 @@ export default {
 			moduleEnabled: 'invoice',
 			showPdfButton: true,
 			templates: [
+				{
+					key: 'marketplace_invoice',
+					label: __('Marketplace Invoice', 'multivendorx'),
+					preview: MarketplaceInvoice1,
+					component: MarketplaceInvoice1,
+					pdf: MarketplaceInvoice1,
+				},
 				{
 					key: 'customer_invoice1',
 					label: __('Customer Invoice', 'multivendorx'),
