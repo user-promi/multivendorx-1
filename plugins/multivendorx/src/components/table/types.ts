@@ -9,6 +9,7 @@ export type QueryProps = {
 	 * Allowing string for backward compatibility
 	 */
 	paged?: number | string;
+	filter?: Record<string, string | string[]>;
 };
 
 export type TableHeader = {
@@ -206,4 +207,17 @@ export type TableCardProps = CommonTableProps & {
 		options?: SearchOption[];
 	};
 	onQueryUpdate?: (query: QueryProps) => void;
+	filters?: RealtimeFilterConfig[];
+};
+
+export type FilterOption = {
+	label: string;
+	value: string;
+};
+
+export type RealtimeFilterConfig = {
+	key: string;          // maps to query.filter[key]
+	label: string;
+	multiple?: boolean;   // true = multi select
+	options: FilterOption[];
 };

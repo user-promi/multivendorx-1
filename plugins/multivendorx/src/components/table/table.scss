@@ -271,3 +271,21 @@ $transition: 0.2s ease;
 	color: $muted-text;
 	font-size: 0.75rem;
 }
+.realtime-filter {
+	display: flex;
+	gap: 16px;
+	padding: 12px 0;
+	flex-wrap: wrap;
+}
+
+.realtime-filter__item {
+	display: flex;
+	flex-direction: column;
+	min-width: 180px;
+}
+
+.realtime-filter__item label {
+	font-size: 12px;
+	font-weight: 600;
+	margin-bottom: 4px;
+}

@@ -7,6 +7,7 @@ import TablePlaceholder from './TablePlaceholder';
 import './table.scss';
 import BulkActionDropdown from './BulkActionDropdown';
 import TableSearch from './TableSearch';
+import RealtimeFilter from './RealtimeFilter';
 
 const defaultOnColumnsChange = (
 	showCols: string[],
@@ -38,6 +39,7 @@ const TableCard: React.FC<TableCardProps> = ({
 	totalRows = 0,
 	rowKey,
 	emptyMessage,
+	filters = [],
 	...props
 }) => {
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -70,6 +72,16 @@ const TableCard: React.FC<TableCardProps> = ({
 							: prev.orderby,
 				}));
 			};
+
+	const onFilterChange = (
+		nextFilter: Record<string, string | string[]>
+	) => {
+		setQuery((prev) => ({
+			...prev,
+			paged: 1, // reset page
+			filter: nextFilter,
+		}));
+	};
 
 	useEffect(() => {
 		props.onQueryUpdate?.(query);
@@ -281,6 +293,13 @@ const TableCard: React.FC<TableCardProps> = ({
 				)}
 
 			</div>
+			{rows.length > 0 && filters.length > 0 && (
+				<RealtimeFilter
+					filters={filters}
+					value={query.filter || {}}
+					onChange={onFilterChange}
+				/>
+			)}
 
 			{/* FOOTER */}
 			<div className="table-card__footer">

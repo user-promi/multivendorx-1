@@ -119,7 +119,25 @@ const TableCardDemo: React.FC = () => {
 			setIsLoading(false);
 		}
 	};
-
+	const filters = [
+		{
+			key: 'status',
+			label: 'Status',
+			options: [
+				{ label: 'Published', value: 'publish' },
+				{ label: 'Draft', value: 'draft' },
+			],
+		},
+		{
+			key: 'category',
+			label: 'Category',
+			multiple: true,
+			options: [
+				{ label: 'Books', value: 'books' },
+				{ label: 'Music', value: 'music' },
+			],
+		},
+	];
 	return (
 		<div style={{ padding: 20 }}>
 			<h1>TableCard API Demo</h1>
@@ -130,7 +148,6 @@ const TableCardDemo: React.FC = () => {
 				rows={rows}
 				totalRows={totalRows}
 				isLoading={isLoading}
-				rowKey={(row) => String(row[0]?.value)}
 				onQueryUpdate={fetchData}
 				tablePreface={
 					<div>
@@ -154,6 +171,7 @@ const TableCardDemo: React.FC = () => {
 						{ label: 'Draft', value: 'draft' },
 					],
 				}}
+				filters={filters}
 			/>
 		</div>
 	);
