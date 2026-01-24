@@ -205,5 +205,5 @@ export type TableCardProps = CommonTableProps & {
 		placeholder?: string;
 		options?: SearchOption[];
 	};
-
+	onQueryUpdate?: (query: QueryProps) => void;
 };

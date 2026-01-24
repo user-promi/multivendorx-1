@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import TableCard from './TableCard';
-import { TableHeader, TableRow } from './types';
+import { QueryProps, TableHeader, TableRow } from './types';
 import './table.scss';
 
 /**
@@ -43,21 +43,14 @@ const TableCardDemo: React.FC = () => {
 	const [totalRows, setTotalRows] = useState(0);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const [query, setQuery] = useState({
-		orderby: 'date',
-		order: 'desc',
-		paged: 1,
-		per_page: 20,
-	});
-
 	/**
 	 * Fetch data from API
 	 */
-	const fetchData = async () => {
+	const fetchData = async (query: QueryProps) => {
+		console.log("query",query)
 		setIsLoading(true);
 
 		try {
-			console.log(query)
 			const response = await axios({
 				method: 'GET',
 				url: `${appLocalizer.apiUrl}/wc/v3/products`,
@@ -127,36 +120,6 @@ const TableCardDemo: React.FC = () => {
 		}
 	};
 
-	/**
-	 * Refetch when query changes
-	 */
-	useEffect(() => {
-		fetchData();
-	}, [query]);
-
-	/**
-	 * TableCard query handler
-	 */
-	const onQueryChange =
-		(param: string) =>
-			(value?: string, direction?: string) => {
-				setQuery((prev) => ({
-					...prev,
-					[param]:
-						param === 'paged' || param === 'per_page'
-							? Number(value)
-							: value,
-					order:
-						param === 'sort'
-							? direction
-							: prev.order,
-					orderby:
-						param === 'sort'
-							? value
-							: prev.orderby,
-				}));
-			};
-
 	return (
 		<div style={{ padding: 20 }}>
 			<h1>TableCard API Demo</h1>
@@ -166,11 +129,9 @@ const TableCardDemo: React.FC = () => {
 				headers={headers}
 				rows={rows}
 				totalRows={totalRows}
-				rowsPerPage={query.per_page}
-				query={query}
 				isLoading={isLoading}
-				onQueryChange={onQueryChange}
 				rowKey={(row) => String(row[0]?.value)}
+				onQueryUpdate={fetchData}
 				tablePreface={
 					<div>
 						Data loaded from WooCommerce REST API.
@@ -187,11 +148,11 @@ const TableCardDemo: React.FC = () => {
 				}}
 				search={{
 					placeholder: 'Search Products...',
-					// options: [
-					// 	{ label: 'All', value: '' },
-					// 	{ label: 'Published', value: 'publish' },
-					// 	{ label: 'Draft', value: 'draft' },
-					// ],
+					options: [
+						{ label: 'All', value: '' },
+						{ label: 'Published', value: 'publish' },
+						{ label: 'Draft', value: 'draft' },
+					],
 				}}
 			/>
 		</div>

@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Table from './table';
 import TableSummary, { TableSummaryPlaceholder } from './summary';
 import Pagination from '../pagination/Pagination';
-import { TableCardProps, TableRow } from './types';
+import { QueryProps, TableCardProps, TableRow } from './types';
 import TablePlaceholder from './TablePlaceholder';
 import './table.scss';
 import BulkActionDropdown from './BulkActionDropdown';
@@ -32,10 +32,8 @@ const TableCard: React.FC<TableCardProps> = ({
 	headers = [],
 	ids = [],
 	isLoading = false,
-	onQueryChange = defaultOnQueryChange,
 	onColumnsChange = defaultOnColumnsChange,
 	onSort,
-	query = {},
 	rowHeader = 0,
 	bulkActions = [],
 	onBulkActionApply,
@@ -50,6 +48,39 @@ const TableCard: React.FC<TableCardProps> = ({
 	...props
 }) => {
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+	const [query, setQuery] = useState<QueryProps>({
+		orderby: 'date',
+		order: 'desc',
+		paged: 1,
+		per_page: 10,
+	});
+	/**
+	 * TableCard query handler
+	 */
+	const onQueryChange =
+		(param: string) =>
+			(value?: string, direction?: string) => {
+				setQuery((prev) => ({
+					...prev,
+					[param]:
+						param === 'paged' || param === 'per_page'
+							? Number(value)
+							: value,
+					order:
+						param === 'sort'
+							? direction
+							: prev.order,
+					orderby:
+						param === 'sort'
+							? value
+							: prev.orderby,
+				}));
+			};
+
+	useEffect(() => {
+		props.onQueryUpdate?.(query);
+	}, [query]);
 
 	// Toggle single row
 	const handleSelectRow = (id: number, selected: boolean) => {
@@ -268,7 +299,7 @@ const TableCard: React.FC<TableCardProps> = ({
 						<Pagination
 							key={Number(query.paged) || 1}
 							page={Number(query.paged) || 1}
-							perPage={rowsPerPage}
+							perPage={Number(query.paged) || 10}
 							total={totalRows}
 							onPageChange={onPageChange}
 							onPerPageChange={(perPage) =>
