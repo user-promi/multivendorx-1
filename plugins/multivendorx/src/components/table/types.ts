@@ -1,5 +1,7 @@
 import { SearchOption } from "./TableSearch";
 
+export type FilterValue = string | string[] | { startDate: Date; endDate: Date };
+
 export type QueryProps = {
 	orderby?: string;
 	order?: string;
@@ -9,7 +11,7 @@ export type QueryProps = {
 	 * Allowing string for backward compatibility
 	 */
 	paged?: number | string;
-	filter?: Record<string, string | string[]>;
+	filter?: Record<string, FilterValue>;
 };
 
 export type TableHeader = {
@@ -216,8 +218,9 @@ export type FilterOption = {
 };
 
 export type RealtimeFilterConfig = {
-	key: string;          // maps to query.filter[key]
+	key: string;           
 	label: string;
-	multiple?: boolean;   // true = multi select
-	options: FilterOption[];
+	type: 'select' | 'date'; 
+	multiple?: boolean;   
+	options?: FilterOption[];
 };

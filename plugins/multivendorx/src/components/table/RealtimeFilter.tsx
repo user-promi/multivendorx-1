@@ -1,85 +1,81 @@
 import React from 'react';
-import './table.scss';
+import Select, { MultiValue, SingleValue } from 'react-select';
 import { RealtimeFilterConfig } from './types';
+import { MultiCalendarInput } from 'zyra';
 
-type Props = {
+interface RealtimeFiltersProps {
 	filters: RealtimeFilterConfig[];
-	value: Record<string, string | string[]>;
-	onChange: (value: Record<string, string | string[]>) => void;
-};
+	query: Record<string, any>;
+	onFilterChange: (key: string, value: any) => void;
+}
 
-const RealtimeFilter: React.FC<Props> = ({
+const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
 	filters,
-	value,
-	onChange,
+	query,
+	onFilterChange,
 }) => {
-	const update = (
-		key: string,
-		val?: string | string[]
-	) => {
-		const next = { ...value };
-
-		if (
-			val === undefined ||
-			(Array.isArray(val) && val.length === 0)
-		) {
-			delete next[key];
-		} else {
-			next[key] = val;
-		}
-
-		onChange(next);
-	};
+	if (!filters || filters.length === 0) return null;
 
 	return (
-		<div className="realtime-filter">
-			{filters.map((f) => (
-				<div
-					key={f.key}
-					className="realtime-filter__item"
-				>
-					<label>{f.label}</label>
+		<div className="realtime-filters">
+			{filters.map((filter) => {
+				const value = query[filter.key];
 
-					<select
-						multiple={f.multiple}
-						value={
-							f.multiple
-								? (value[f.key] as string[]) || []
-								: (value[f.key] as string) || ''
-						}
-						onChange={(e) => {
-							if (f.multiple) {
-								update(
-									f.key,
-									Array.from(
-										e.target.selectedOptions
-									).map((o) => o.value)
-								);
-							} else {
-								update(
-									f.key,
-									e.target.value || undefined
-								);
-							}
-						}}
-					>
-						{!f.multiple && (
-							<option value="">All</option>
-						)}
+				// Date filter
+				if (filter.type === 'date') {
+					return (
+						<div key={filter.key} className="filter-item">
+							<label>{filter.label}</label>
+							<MultiCalendarInput
+								value={value as { startDate: Date; endDate: Date } | undefined}
+								onChange={(range) => onFilterChange(filter.key, range)}
+								showLabel
+							/>
+						</div>
+					);
+				}
 
-						{f.options.map((o) => (
-							<option
-								key={o.value}
-								value={o.value}
-							>
-								{o.label}
-							</option>
-						))}
-					</select>
-				</div>
-			))}
+				// React select options
+				const options = filter.options?.map((opt) => ({ label: opt.label, value: opt.value })) || [];
+
+				// Single select
+				if (!filter.multiple) {
+					const selectedOption = options.find((o) => o.value === value) || null;
+					return (
+						<div key={filter.key} className="filter-item">
+							<label>{filter.label}</label>
+							<Select
+								options={options}
+								value={selectedOption}
+								onChange={(option) => onFilterChange(filter.key, option?.value || '')}
+								isClearable
+								placeholder={`Select ${filter.label}`}
+							/>
+						</div>
+					);
+				}
+
+				// Multi-select
+				const selectedOptions = options.filter((o) =>
+					Array.isArray(value) ? value.includes(o.value) : false
+				);
+
+				return (
+					<div key={filter.key} className="filter-item">
+						<label>{filter.label}</label>
+						<Select
+							options={options}
+							value={selectedOptions}
+							onChange={(option) => onFilterChange(filter.key, option.map((o) => o.value))}
+							isMulti
+							placeholder={`Select ${filter.label}`}
+						/>
+					</div>
+				);
+			})}
+
 		</div>
 	);
 };
 
-export default RealtimeFilter;
+export default RealtimeFilters;

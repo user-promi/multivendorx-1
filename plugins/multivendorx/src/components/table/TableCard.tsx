@@ -8,6 +8,7 @@ import './table.scss';
 import BulkActionDropdown from './BulkActionDropdown';
 import TableSearch from './TableSearch';
 import RealtimeFilter from './RealtimeFilter';
+import RealtimeFilters from './RealtimeFilter';
 
 const defaultOnColumnsChange = (
 	showCols: string[],
@@ -73,15 +74,17 @@ const TableCard: React.FC<TableCardProps> = ({
 				}));
 			};
 
-	const onFilterChange = (
-		nextFilter: Record<string, string | string[]>
-	) => {
+	const onFilterChange = (key: string, value: string | string[] | { startDate: Date; endDate: Date }) => {
 		setQuery((prev) => ({
 			...prev,
-			paged: 1, // reset page
-			filter: nextFilter,
+			paged: 1, // reset to first page
+			filter: {
+				...prev.filter,
+				[key]: value,
+			},
 		}));
 	};
+
 
 	useEffect(() => {
 		props.onQueryUpdate?.(query);
@@ -294,10 +297,10 @@ const TableCard: React.FC<TableCardProps> = ({
 
 			</div>
 			{rows.length > 0 && filters.length > 0 && (
-				<RealtimeFilter
+				<RealtimeFilters
 					filters={filters}
-					value={query.filter || {}}
-					onChange={onFilterChange}
+					query={query.filter || {}}
+					onFilterChange={onFilterChange}
 				/>
 			)}
 

@@ -119,10 +119,12 @@ const TableCardDemo: React.FC = () => {
 			setIsLoading(false);
 		}
 	};
+	
 	const filters = [
 		{
 			key: 'status',
 			label: 'Status',
+			type: 'select',           // single select
 			options: [
 				{ label: 'Published', value: 'publish' },
 				{ label: 'Draft', value: 'draft' },
@@ -131,13 +133,21 @@ const TableCardDemo: React.FC = () => {
 		{
 			key: 'category',
 			label: 'Category',
-			multiple: true,
+			type: 'select',
+			multiple: true,           // multi-select
 			options: [
 				{ label: 'Books', value: 'books' },
 				{ label: 'Music', value: 'music' },
 			],
 		},
+		{
+			key: 'created_at',          // date filter
+			label: 'Created Date',
+			type: 'date',
+		},
 	];
+	
+	
 	return (
 		<div style={{ padding: 20 }}>
 			<h1>TableCard API Demo</h1>
