@@ -52,7 +52,7 @@ const PageArrows: React.FC<PageArrowsProps> = ({
 					onClick={previousPage}
 					aria-label="Previous Page"
 				>
-					<i className="icon-chevron-left"></i>
+					<i className="adminfont-previous"></i>
 				</button>
 
 				<button
@@ -61,7 +61,7 @@ const PageArrows: React.FC<PageArrowsProps> = ({
 					onClick={nextPage}
 					aria-label="Next Page"
 				>
-					<i className="icon-chevron-right"></i>
+					<i className="adminfont-next"></i>
 				</button>
 			</div>
 		</div>

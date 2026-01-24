@@ -6,14 +6,7 @@ import { QueryProps, TableCardProps, TableRow } from './types';
 import TablePlaceholder from './TablePlaceholder';
 import './table.scss';
 import BulkActionDropdown from './BulkActionDropdown';
-import TableSearch, { SearchOption } from './TableSearch';
-
-/**
- * Default no-op handlers
- */
-const defaultOnQueryChange =
-	(param: string) =>
-		(value?: string, direction?: string): void => { };
+import TableSearch from './TableSearch';
 
 const defaultOnColumnsChange = (
 	showCols: string[],
@@ -297,9 +290,8 @@ const TableCard: React.FC<TableCardProps> = ({
 				) : (
 					<Fragment>
 						<Pagination
-							key={Number(query.paged) || 1}
-							page={Number(query.paged) || 1}
-							perPage={Number(query.paged) || 10}
+							page={Number(query.paged)}
+							perPage={Number(query.per_page)}
 							total={totalRows}
 							onPageChange={onPageChange}
 							onPerPageChange={(perPage) =>
