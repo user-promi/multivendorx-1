@@ -7,7 +7,6 @@ import TablePlaceholder from './TablePlaceholder';
 import './table.scss';
 import BulkActionDropdown from './BulkActionDropdown';
 import TableSearch from './TableSearch';
-import RealtimeFilter from './RealtimeFilter';
 import RealtimeFilters from './RealtimeFilter';
 
 const defaultOnColumnsChange = (
@@ -50,6 +49,7 @@ const TableCard: React.FC<TableCardProps> = ({
 		order: 'desc',
 		paged: 1,
 		per_page: 10,
+		filter:{}
 	});
 	/**
 	 * TableCard query handler
@@ -296,11 +296,13 @@ const TableCard: React.FC<TableCardProps> = ({
 				)}
 
 			</div>
-			{rows.length > 0 && filters.length > 0 && (
+			{filters.length > 0 && (
 				<RealtimeFilters
 					filters={filters}
 					query={query.filter || {}}
 					onFilterChange={onFilterChange}
+					rows={rows}
+					onResetFilters={() => setQuery((prev) => ({ ...prev, filter: {}, paged: 1 }))}
 				/>
 			)}
 

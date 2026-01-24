@@ -224,3 +224,10 @@ export type RealtimeFilterConfig = {
 	multiple?: boolean;   
 	options?: FilterOption[];
 };
+interface RealtimeFiltersProps {
+    filters: RealtimeFilterConfig[];
+    query: Record<string, any>;
+    onFilterChange: (key: string, value: any) => void;
+    rows: TableRow[][];
+    onResetFilters: () => void;
+}

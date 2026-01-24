@@ -43,82 +43,54 @@ const TableCardDemo: React.FC = () => {
 	const [totalRows, setTotalRows] = useState(0);
 	const [isLoading, setIsLoading] = useState(false);
 
-	/**
-	 * Fetch data from API
-	 */
 	const fetchData = async (query: QueryProps) => {
-		console.log("query",query)
 		setIsLoading(true);
-
+	
 		try {
-			const response = await axios({
-				method: 'GET',
-				url: `${appLocalizer.apiUrl}/wc/v3/products`,
-				headers: {
-					'X-WP-Nonce': appLocalizer.nonce,
-				},
-				params: {
-					meta_key: 'multivendorx_store_id',
-					per_page: query.per_page,
-					page: query.paged,
-					orderby: query.orderby,
-					order: query.order,
-				},
+			// Base params for API
+			const params: Record<string, any> = {
+				meta_key: 'multivendorx_store_id',
+				per_page: query.per_page,
+				page: query.paged,
+				orderby: query.orderby,
+				order: query.order,
+			};
+	
+			// Add filters dynamically (only non-empty values)
+			if (query.filter) {
+				for (const [key, value] of Object.entries(query.filter)) {
+					if (value || (Array.isArray(value) && value.length > 0)) {
+						params[key] = value;
+					}
+				}
+			}
+	
+			// Fetch data from WooCommerce
+			const response = await axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params,
 			});
-
-			/**
-			 * Transform API response → TableRow[][]
-			 * Adjust mapping based on actual API payload
-			 */
-			const mappedRows: TableRow[][] = response.data.map(
-				(product: any) => [
-					{
-						display: (
-							<a
-								href={`/wp-admin/post.php?post=${product.id}&action=edit`}
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{product.name}
-							</a>
-						),
-						value: product.id, 
-					},
-					{
-						display: product.sku || '—',
-						value: product.sku || '',
-					},
-					{
-						display: `$${product.price}`,
-						value: Number(product.price),
-					},
-					{
-						display: product.total_sales,
-						value: product.total_sales,
-					},
-					{
-						display: product.status,
-						value: product.status,
-					},
-				]
-			);
-
-
+	
+			// Map API response into TableRow[][]
+			const mappedRows: TableRow[][] = response.data.map((product: any) => [
+				{ display: <a href={`/wp-admin/post.php?post=${product.id}&action=edit`} target="_blank" rel="noopener noreferrer">{product.name}</a>, value: product.id },
+				{ display: product.sku || '—', value: product.sku || '' },
+				{ display: `$${product.price}`, value: Number(product.price) },
+				{ display: product.total_sales, value: product.total_sales },
+				{ display: product.status, value: product.status },
+			]);
+	
 			setRows(mappedRows);
-
-			/**
-			 * WooCommerce sends total count via headers
-			 */
-			setTotalRows(
-				Number(response.headers['x-wp-total']) || 0
-			);
+			setTotalRows(Number(response.headers['x-wp-total']) || 0);
 		} catch (error) {
 			console.error('Failed to fetch table data', error);
 			setRows([]);
+			setTotalRows(0);
 		} finally {
 			setIsLoading(false);
 		}
 	};
+	
 	
 	const filters = [
 		{
