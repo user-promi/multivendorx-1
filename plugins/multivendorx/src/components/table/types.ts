@@ -12,6 +12,7 @@ export type QueryProps = {
 	 */
 	paged?: number | string;
 	filter?: Record<string, FilterValue>;
+	categoryFilter?: string;
 };
 
 export type TableHeader = {
@@ -80,7 +81,7 @@ type CommonTableProps = {
 	 * The rowKey used for the key value on each row, a function that returns the key.
 	 * Defaults to index.
 	 */
-	rowKey?: ( row: TableRow[], index: number ) => number;
+	rowKey?: (row: TableRow[], index: number) => number;
 	/**
 	 * Customize the message to show when there are no rows in the table.
 	 */
@@ -97,11 +98,11 @@ type CommonTableProps = {
 	/**
 	 * An array of column headers (see `Table` props).
 	 */
-	headers?: Array< TableHeader >;
+	headers?: Array<TableHeader>;
 	/**
 	 * An array of arrays of display/value object pairs (see `Table` props).
 	 */
-	rows?: Array< Array< TableRow > >;
+	rows?: Array<Array<TableRow>>;
 	/**
 	 * Additional CSS classes.
 	 */
@@ -109,7 +110,7 @@ type CommonTableProps = {
 	/**
 	 * A function called when sortable table headers are clicked, gets the `header.key` as argument.
 	 */
-	onSort?: ( key: string, direction: string ) => void;
+	onSort?: (key: string, direction: string) => void;
 };
 
 export type TableProps = CommonTableProps & {
@@ -127,26 +128,26 @@ export type TableProps = CommonTableProps & {
 	/**
 	 * Additional classnames
 	 */
-	classNames?: string | Record< string, string >;
-	ids?: Array< number >;
-	selectedIds?: Array< number >;
+	classNames?: string | Record<string, string>;
+	ids?: Array<number>;
+	selectedIds?: Array<number>;
 	onSelectRow?: (id: number, selected: boolean) => void;
-	onSelectAll?: (selected: boolean) => void; 
+	onSelectAll?: (selected: boolean) => void;
 };
 
 export type TableSummaryProps = {
 	// An array of objects with `label` & `value` properties, which display on a single line.
-	data: Array< {
+	data: Array<{
 		label: string;
 		value: boolean | number | string | React.ReactNode;
-	} >;
+	}>;
 };
 
 export type TableCardProps = CommonTableProps & {
 	/**
 	 * An array of custom React nodes that is placed at the top right corner.
 	 */
-	actions?: Array< React.ReactNode >;
+	actions?: Array<React.ReactNode>;
 	/**
 	 * If a search is provided in actions and should reorder actions on mobile.
 	 */
@@ -158,7 +159,7 @@ export type TableCardProps = CommonTableProps & {
 	/**
 	 * A list of IDs, matching to the row list so that ids[ 0 ] contains the object ID for the object displayed in row[ 0 ].
 	 */
-	ids?: Array< number >;
+	ids?: Array<number>;
 	/**
 	 * Defines if the table contents are loading.
 	 * It will display `TablePlaceholder` component instead of `Table` if that's the case.
@@ -169,11 +170,11 @@ export type TableCardProps = CommonTableProps & {
 	 */
 	// Allowing any for backward compatibitlity
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	onQueryChange?: ( param: string ) => ( ...props: any ) => void;
+	onQueryChange?: (param: string) => (...props: any) => void;
 	/**
 	 * A function which returns a callback function which is called upon the user changing the visibility of columns.
 	 */
-	onColumnsChange?: ( showCols: Array< string >, key?: string ) => void;
+	onColumnsChange?: (showCols: Array<string>, key?: string) => void;
 	/**
 	 * A callback function that is invoked when the current page is changed.
 	 */
@@ -193,7 +194,7 @@ export type TableCardProps = CommonTableProps & {
 	 * An array of objects with `label` & `value` properties, which display in a line under the table.
 	 * Optional, can be left off to show no summary.
 	 */
-	summary?: TableSummaryProps[ 'data' ];
+	summary?: TableSummaryProps['data'];
 	/**
 	 * The title used in the card header, also used as the caption for the content in this table.
 	 */
@@ -210,6 +211,9 @@ export type TableCardProps = CommonTableProps & {
 	};
 	onQueryUpdate?: (query: QueryProps) => void;
 	filters?: RealtimeFilterConfig[];
+	categoryCounts?: { label: string; value: string; count: number }[];
+	activeCategory?: string; // optional
+	onCategoryClick?: (value: string) => void;
 };
 
 export type FilterOption = {
@@ -218,16 +222,16 @@ export type FilterOption = {
 };
 
 export type RealtimeFilterConfig = {
-	key: string;           
+	key: string;
 	label: string;
-	type: 'select' | 'date'; 
-	multiple?: boolean;   
+	type: 'select' | 'date';
+	multiple?: boolean;
 	options?: FilterOption[];
 };
 interface RealtimeFiltersProps {
-    filters: RealtimeFilterConfig[];
-    query: Record<string, any>;
-    onFilterChange: (key: string, value: any) => void;
-    rows: TableRow[][];
-    onResetFilters: () => void;
+	filters: RealtimeFilterConfig[];
+	query: Record<string, any>;
+	onFilterChange: (key: string, value: any) => void;
+	rows: TableRow[][];
+	onResetFilters: () => void;
 }

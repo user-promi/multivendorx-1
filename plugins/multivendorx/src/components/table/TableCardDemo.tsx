@@ -44,6 +44,7 @@ const TableCardDemo: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const fetchData = async (query: QueryProps) => {
+		console.log('query',query)
 		setIsLoading(true);
 	
 		try {
@@ -154,6 +155,13 @@ const TableCardDemo: React.FC = () => {
 					],
 				}}
 				filters={filters}
+				categoryCounts={[
+					{ label: 'All', value: 'all', count: 15 },
+					{ label: 'Published', value: 'publish', count: 10 },
+					{ label: 'Draft', value: 'draft', count: 5 },
+					{ label: 'Trash', value: 'trash', count: 0 }
+				]}
+				activeCategory="all"
 			/>
 		</div>
 	);

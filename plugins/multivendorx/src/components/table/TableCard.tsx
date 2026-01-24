@@ -8,6 +8,7 @@ import './table.scss';
 import BulkActionDropdown from './BulkActionDropdown';
 import TableSearch from './TableSearch';
 import RealtimeFilters from './RealtimeFilter';
+import CategoryFilter from './CategoryFilter';
 
 const defaultOnColumnsChange = (
 	showCols: string[],
@@ -39,6 +40,8 @@ const TableCard: React.FC<TableCardProps> = ({
 	totalRows = 0,
 	rowKey,
 	emptyMessage,
+	categoryCounts,
+	activeCategory,
 	filters = [],
 	...props
 }) => {
@@ -49,7 +52,7 @@ const TableCard: React.FC<TableCardProps> = ({
 		order: 'desc',
 		paged: 1,
 		per_page: 10,
-		filter:{}
+		filter: {},
 	});
 	/**
 	 * TableCard query handler
@@ -246,6 +249,20 @@ const TableCard: React.FC<TableCardProps> = ({
 					<div className="table-card__preface">
 						{tablePreface}
 					</div>
+				)}
+
+				{categoryCounts && categoryCounts.length > 0 && (
+					<CategoryFilter
+						categories={categoryCounts}
+						activeCategory={query.categoryFilter || activeCategory}
+						onCategoryClick={(value) => {
+							setQuery((prev) => ({
+								...prev,
+								paged: 1,
+								categoryFilter: value
+							}));
+						}}
+					/>
 				)}
 
 				{isLoading ? (

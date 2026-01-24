@@ -289,3 +289,24 @@ $transition: 0.2s ease;
 	font-weight: 600;
 	margin-bottom: 4px;
 }
+.category-filter-bar {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    .category-item {
+        padding: 0.4rem 0.8rem;
+        border: 1px solid #ccc;
+        background: #f7f7f7;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+
+        &.active {
+            background: #007cba;
+            color: white;
+            border-color: #007cba;
+        }
+    }
+}
