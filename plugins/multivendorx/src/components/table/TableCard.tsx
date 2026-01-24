@@ -192,10 +192,9 @@ const TableCard: React.FC<TableCardProps> = ({
 							placeholder={search.placeholder}
 							options={search.options}
 							onSearch={(text, option) => {
-								// Update query dynamically
-								onQueryChange('search')(text);
-								if (option) {
-									onQueryChange('filter')(String(option));
+								onQueryChange('searchvalue')(text);
+								if (option !== undefined) {
+									onQueryChange('searchaction')(String(option));
 								}
 							}}
 						/>
