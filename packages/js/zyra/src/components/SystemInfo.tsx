@@ -110,7 +110,6 @@ const SystemInfo: React.FC<SystemInfoProps> = ({
 
     return (
         <div className="system-info">
-            { /* Copy Button */}
             <div className="buttons-wrapper">
                 <div
                     className="admin-btn btn-purple"
@@ -170,7 +169,7 @@ const SystemInfo: React.FC<SystemInfoProps> = ({
                 </div>
             ))}
         </div>
-    );
+    )   ;
 };
 
 export default SystemInfo;
