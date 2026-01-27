@@ -369,7 +369,7 @@ const TableCard: React.FC<TableCardProps> = ({
 						/>
 					)}
 
-					{selectedIds.length > 0 && bulkActions.length > 0 && (
+					{selectedIds.length > 2 && bulkActions.length > 0 && (
 						<BulkActionDropdown
 							actions={bulkActions}
 							selectedIds={selectedIds}
