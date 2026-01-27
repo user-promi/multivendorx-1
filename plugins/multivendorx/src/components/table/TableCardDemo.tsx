@@ -1,9 +1,38 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import TableCard from './TableCard';
-import { QueryProps, TableHeader, TableRow } from './types';
-import './table.scss';
 
+import { TableCard } from 'zyra';
+
+type FilterValue = string | string[] | { startDate: Date; endDate: Date };
+
+type QueryProps = {
+	orderby?: string;
+	order?: string;
+	page?: string;
+	per_page?: number;
+	paged?: number | string;
+	filter?: Record<string, FilterValue>;
+	categoryFilter?: string;
+};
+
+ type TableHeader = {
+	defaultSort?: boolean;
+	defaultOrder?: string;
+	isLeftAligned?: boolean;
+	isNumeric?: boolean;
+	isSortable?: boolean;
+	key: string;
+	label?: React.ReactNode;
+	required?: boolean;
+	screenReaderLabel?: string;
+	cellClassName?: string;
+	visible?: boolean;
+};
+
+type TableRow = {
+	display?: React.ReactNode;
+	value?: string | number | boolean;
+};
 /**
  * Table headers
  */
@@ -141,7 +170,7 @@ const TableCardDemo: React.FC = () => {
 					{ label: 'Delete Selected', value: 'delete' },
 					{ label: 'Mark as Featured', value: 'feature' },
 				]}
-				onBulkActionApply={(action, selectedIds) => {
+				onBulkActionApply={(action: string, selectedIds: []) => {
 					console.log('Action:', action, 'Selected IDs:', selectedIds);
 					// Perform your API call or state update here
 				}}
