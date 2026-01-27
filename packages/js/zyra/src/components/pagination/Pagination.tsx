@@ -27,8 +27,8 @@ const Pagination: React.FC<PaginationProps> = ({
 	page,
 	perPage,
 	total,
-	onPageChange = () => {},
-	onPerPageChange = () => {},
+	onPageChange = () => { },
+	onPerPageChange = () => { },
 	showPagePicker = true,
 	showPerPagePicker = true,
 	showPageArrowsLabel = true,
@@ -65,17 +65,10 @@ const Pagination: React.FC<PaginationProps> = ({
 		<div className={classes}>
 			<PageArrows
 				currentPage={page}
-				pageCount={pageCount}
 				showPageArrowsLabel={showPageArrowsLabel}
-				setCurrentPage={onPageChange}
+				perPage={perPage}
+				total={total}
 			/>
-			{showPagePicker && (
-				<PagePicker
-					currentPage={page}
-					pageCount={pageCount}
-					setCurrentPage={onPageChange}
-				/>
-			)}
 			{showPerPagePicker && (
 				<PageSizePicker
 					currentPage={page}
@@ -84,6 +77,13 @@ const Pagination: React.FC<PaginationProps> = ({
 					total={total}
 					setPerPageChange={onPerPageChange}
 					perPageOptions={perPageOptions}
+				/>
+			)}
+			{showPagePicker && (
+				<PagePicker
+					currentPage={page}
+					pageCount={pageCount}
+					setCurrentPage={onPageChange}
 				/>
 			)}
 		</div>

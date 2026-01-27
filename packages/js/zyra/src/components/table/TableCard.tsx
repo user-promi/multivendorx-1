@@ -135,6 +135,9 @@ const TableCard: React.FC<TableCardProps> = ({
 		const isVisible = showCols.includes(key);
 
 		if (isVisible) {
+			if (showCols.length <= 1) {
+				return; // do nothing if it's the last visible column
+			}
 			// Reset sorting if hiding sorted column
 			if (query.orderby === key) {
 				const defaultSort =
@@ -344,7 +347,7 @@ const TableCard: React.FC<TableCardProps> = ({
 						onResetFilters={() => setQuery((prev) => ({ ...prev, filter: {}, paged: 1 }))}
 					/>
 				)}
-				{bulkActions.length < 0 && (
+				{bulkActions.length > 0 && (
 					<BulkActionDropdown
 						actions={bulkActions}
 						selectedIds={selectedIds}

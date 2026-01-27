@@ -8,7 +8,26 @@ interface PagePickerProps {
 }
 
 const PagePicker: React.FC<PagePickerProps> = ({ currentPage, pageCount, setCurrentPage }) => {
+	
 	const [inputValue, setInputValue] = useState<number>(currentPage);
+	const previousPage = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.stopPropagation();
+		if (currentPage > 1) {
+			setCurrentPage(currentPage - 1, 'previous');
+		}
+	};
+
+	const nextPage = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.stopPropagation();
+		if (currentPage < pageCount) {
+			setCurrentPage(currentPage + 1, 'next');
+		}
+	};
+
+	if (pageCount <= 1) return null;
+
+	const isPreviousActive = currentPage > 1;
+	const isNextActive = currentPage < pageCount;
 
 	const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setInputValue(Number(event.currentTarget.value));
@@ -33,6 +52,26 @@ const PagePicker: React.FC<PagePickerProps> = ({ currentPage, pageCount, setCurr
 
 	return (
 		<div className="pagination-page-picker pagination-number-wrapper">
+
+			<div className="pagination-arrow">
+				<button
+					className={`pagination-link ${isPreviousActive ? 'is-active' : ''}`}
+					disabled={!isPreviousActive}
+					onClick={previousPage}
+					aria-label="Previous Page"
+				>
+					<i className="adminfont-previous"></i>
+				</button>
+
+				<button
+					className={`pagination-link ${isNextActive ? 'is-active' : ''}`}
+					disabled={!isNextActive}
+					onClick={nextPage}
+					aria-label="Next Page"
+				>
+					<i className="adminfont-next"></i>
+				</button>
+			</div>
 			<label className="show-section">
 				Go to page
 				<input
