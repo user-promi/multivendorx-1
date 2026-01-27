@@ -4,7 +4,6 @@ import TableSummary, { TableSummaryPlaceholder } from './summary';
 import Pagination from '../pagination/Pagination';
 import { QueryProps, TableCardProps, TableRow } from './types';
 import TablePlaceholder from './TablePlaceholder';
-import './table.scss';
 import BulkActionDropdown from './BulkActionDropdown';
 import TableSearch from './TableSearch';
 import RealtimeFilters from './RealtimeFilter';
