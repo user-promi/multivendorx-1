@@ -26,7 +26,7 @@ registerBlockType('multivendorx/store-description', {
 			<div
 				{...blockProps}
 				className="multivendorx-store-description"
-				data-wp-interactive="mvx/store"
+				data-wp-interactive="multivendorx/store"
 			>
 				<h2>
 					<span data-wp-text="state.storeName" />

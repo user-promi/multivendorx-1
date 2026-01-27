@@ -17,7 +17,7 @@ registerBlockType('multivendorx/store-name', {
         return (
             <h2
                 {...blockProps}
-                data-wp-interactive="mvx/store"
+                data-wp-interactive="multivendorx/store"
                 data-wp-text="state.storeName"
             />
         );

@@ -36,9 +36,9 @@ class Rewrites {
 
         add_action( 'init', array( $this, 'register_rule' ) );
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
-        // add_filter( 'template_include', array( $this, 'store_template' ), 10 );
         add_action( 'wp', array( $this, 'flash_rewrite_rules' ), 99 );
-        // add_action( 'pre_get_posts', array( $this, 'store_query_filter' ) );
+        // For PHP template query of products.
+        add_action( 'pre_get_posts', array( $this, 'store_query_filter' ) );
 
         add_filter( 'get_block_templates', [ $this, 'register_block_template' ], 10, 3 );
         add_filter( 'pre_get_block_file_template', [ $this, 'resolve_template_by_id' ], 10, 3 );
@@ -57,6 +57,10 @@ class Rewrites {
      */
     public function store_query_filter( $query ) {
         if ( is_admin() || ! $query->is_main_query() ) {
+            return;
+        }
+        
+        if ( wp_is_block_theme() ) {
             return;
         }
 
@@ -143,27 +147,6 @@ class Rewrites {
         return apply_filters( 'multivendorx_query_vars', $vars, $this );
     }
 
-    /**
-     * Load store template
-     *
-     * @param string $template Template path.
-     * @return string Modified template path.
-     */
-    // public function store_template( $template ) {
-    //     $store_name = get_query_var( $this->custom_store_url );
-
-    //     if ( ! empty( $store_name ) ) {
-    //         $store = Store::get_store( $store_name, 'slug' );
-
-    //         if ( $store ) {
-    //             MultiVendorX()->util->get_template( 'store/store.php', array( 'store_id' => $store->get_id() ) );
-    //             exit;
-    //         }
-    //     }
-
-    //     return $template;
-    // }
-
     private function should_load_template() {
         if ( get_query_var( $this->custom_store_url ) ) return true;
         if ( is_admin() && function_exists( 'get_current_screen' ) ) {
@@ -234,7 +217,7 @@ class Rewrites {
         }
 
         wp_interactivity_state(
-            'mvx/store',
+            'multivendorx/store',
             [
                 'storeName' => 'Store 1',
                 'storeDescription' => 'This is the live store description shown on the frontend.',

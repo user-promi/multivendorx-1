@@ -1,6 +1,6 @@
 import { store } from '@wordpress/interactivity';
 
-store('mvx/store', {
+store('multivendorx/store', {
     state: {
         storeName: '',
         storeSlug: '',
