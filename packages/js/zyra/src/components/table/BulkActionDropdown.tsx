@@ -25,24 +25,28 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 	};
 
 	return (
-		<div className="bulk-action-dropdown">
-			<select
-				onChange={handleChange}
-				value=""
-				disabled={selectedIds.length === 0}
-			>
-				<option value="" disabled>
-					Bulk Actions
-				</option>
-				{actions.map((action) => (
-					<option key={action.value} value={action.value}>
-						{action.label}
-					</option>
-				))}
-			</select>
-			<span style={{ marginLeft: 8 }}>
-				{selectedIds.length} selected
+		<div className="wrap-bulk-all-date bulk">
+			<span className="action-item count">
+				{selectedIds.length} Rows selected
+				<i className="adminfont-close"/>
 			</span>
+			<div className="action">
+				<i className="adminfont-form" />
+				<select
+					onChange={handleChange}
+					value=""
+					disabled={selectedIds.length === 0}
+				>
+					<option value="" disabled>
+						Bulk Actions
+					</option>
+					{actions.map((action) => (
+						<option key={action.value} value={action.value}>
+							{action.label}
+						</option>
+					))}
+				</select>
+			</div>
 		</div>
 	);
 };

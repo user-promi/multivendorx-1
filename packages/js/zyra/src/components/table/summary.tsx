@@ -1,5 +1,4 @@
 import React from 'react';
-import './table.scss';
 
 export interface TableSummaryItem {
 	label: string;

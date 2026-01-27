@@ -5,7 +5,6 @@ import React, {
 	useState,
 } from 'react';
 import { TableProps, TableRow } from './types';
-import './table.scss';
 
 const ASC = 'asc';
 const DESC = 'desc';
@@ -96,7 +95,7 @@ const Table: React.FC<TableProps> = ({
 	};
 
 	const rootClassName = [
-		'table-container',
+		'table-wrapper',
 		className,
 		classNames,
 		isScrollableLeft ? 'scroll-left' : '',
@@ -121,11 +120,10 @@ const Table: React.FC<TableProps> = ({
 			className={rootClassName}
 			tabIndex={tabIndex}
 			aria-hidden={ariaHidden}
-			// aria-labelledby={`caption-${instanceId}`}
 			role="group"
 			onScroll={updateScrollState}
 		>
-			<table className="table">
+			<table className="admin-table">
 				<caption
 					// id={`caption-${instanceId}`}
 					className="table-caption screen-reader-only"
@@ -135,15 +133,14 @@ const Table: React.FC<TableProps> = ({
 						<small>(scroll to see more)</small>
 					)}
 				</caption>
-
-				<tbody>
-					<tr>
+				<thead className="admin-table-header">
+					<tr className="header-row">
 						{selectedIds.length > 0 || allSelected ? (
-							<th>
+							<th className="header-col select">
 								<input type="checkbox" checked={allSelected} onChange={toggleAllRows} />
 							</th>
 						) : (
-							<th>
+							<th className="header-col select">
 								<input type="checkbox" checked={allSelected} onChange={toggleAllRows} />
 							</th>
 						)}
@@ -161,7 +158,7 @@ const Table: React.FC<TableProps> = ({
 							const isSorted = sortedBy === key;
 
 							const thClass = [
-								'table-header',
+								'header-col',
 								cellClassName,
 								isSortable ? 'sortable' : '',
 								isSorted ? 'sorted' : '',
@@ -186,13 +183,12 @@ const Table: React.FC<TableProps> = ({
 									}
 								>
 									{isSortable ? (
-										<button
-											type="button"
+										<span
 											onClick={hasData ? sortBy(key) : undefined}
 											className="sort-button"
 										>
 											{label}
-										</button>
+										</span>
 									) : (
 										<Fragment>
 											<span aria-hidden={!!screenReaderLabel}>
@@ -209,12 +205,12 @@ const Table: React.FC<TableProps> = ({
 							);
 						})}
 					</tr>
-
+				</thead>
+				<tbody className="admin-table-body">
 					{hasData ? (
 						rows.map((row, rowIndex) => (
-
-							<tr key={getRowKey(row, rowIndex)}>
-								<td>
+							<tr className="admin-row" key={getRowKey(row, rowIndex)}>
+								<td className="admin-column select">
 									<input
 										type="checkbox"
 										checked={selectedIds.includes(ids[rowIndex])}
@@ -227,7 +223,7 @@ const Table: React.FC<TableProps> = ({
 									const CellTag = isHeaderCell ? 'th' : 'td';
 
 									const cellClass = [
-										'table-cell',
+										'admin-column',
 										header.cellClassName,
 										header.isNumeric ? 'numeric' : '',
 										header.isLeftAligned || !header.isNumeric
@@ -251,7 +247,7 @@ const Table: React.FC<TableProps> = ({
 							</tr>
 						))
 					) : (
-						<tr>
+						<tr className="admin-row">
 							<td
 								colSpan={headers.length}
 								className="table-empty"

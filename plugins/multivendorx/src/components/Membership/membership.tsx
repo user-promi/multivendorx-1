@@ -1155,7 +1155,7 @@ const Membership = ({ id }: { id: string }) => {
 					<Column>
 						<Section
 							wrapperClass='divider-wrapper'
-							hint={__('What stores can do with this plan', 'multivendorx')}
+							hint={__('Plan access & permissions', 'multivendorx')}
 						// hint={ inputField.hint } 
 						/>
 					</Column>
@@ -1523,11 +1523,11 @@ const Membership = ({ id }: { id: string }) => {
 								<FormGroup cols={2}></FormGroup>
 							</FormGroupWrapper>
 						</Card>
-						<Card contentHeight title={__('Additional resource pricing', 'multivendorx')}
-						desc={__('Define the cost per unit when stores want to add more resources beyond their limits', 'multivendorx')}
+						<Card contentHeight title={__('Plan top-up', 'multivendorx')}
+						desc={__('Stores can purchase extra products, storage, or staff if plan limits are reached.', 'multivendorx')}
 						>
 							<FormGroupWrapper>
-								<FormGroup cols={2} label="Fixed addon price" htmlFor="trial_period">
+								<FormGroup cols={2} label="Fixed top-up price" htmlFor="trial_period">
 									<BasicInput
 										name="name"
 										// value={formData.name}
@@ -1536,7 +1536,7 @@ const Membership = ({ id }: { id: string }) => {
 										size="10rem"
 									/>
 								</FormGroup>
-								<FormGroup label="What this addon includes" htmlFor="trial_period">
+								<FormGroup label="What this top-up includes" htmlFor="trial_period">
 									<MultiCheckBox
 										wrapperClass="checkbox-list-side-by-side"
 										inputWrapperClass="toggle-checkbox-header"
@@ -1580,21 +1580,6 @@ const Membership = ({ id }: { id: string }) => {
 										modules={[]}
 									/>
 								</FormGroup>
-							</FormGroupWrapper>
-						</Card>
-						<Card contentHeight title={__('Additional resource pricing', 'multivendorx')} desc={__('Define the cost per unit when stores want to add more resources beyond their limits', 'multivendorx')}
-						// desc={'Select which premium features stores can access with this plan.'}
-						>
-							<FormGroupWrapper>
-								<FormGroup cols={2} label="Additional Products" htmlFor="trial_period">
-									<BasicInput
-										name="name"
-										value={formData.name}
-										onChange={handleChange}
-										preInsideText="$"
-									/>
-								</FormGroup>
-								<FormGroup cols={2} ></FormGroup>
 							</FormGroupWrapper>
 						</Card>
 						<Card contentHeight title={__('AI tools available to stores', 'multivendorx')}

@@ -34,7 +34,7 @@ const PageSizePicker: React.FC<PageSizePickerProps> = ({
 
 	return (
 		<div className="pagination-per-page-picker">
-			<label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+			<label>
 				{label}
 				<select value={perPage} onChange={handlePerPageChange}>
 					{perPageOptions.map((option) => (
