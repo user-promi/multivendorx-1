@@ -34,7 +34,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	const [total, setTotal] = useState(0);
 	const { modules } = useModules();
 	const [apiKey, setApiKey] = useState('');
-	const [viewMode, setViewMode] = useState<'list' | 'split'>('list');
+	const [viewMode, setViewMode] = useState<'list' | 'split' | 'map'>('list');
 
 	const storesList = (window as any).storesList;
 	const settings = storesList.settings_databases_value;
@@ -314,6 +314,12 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 								onClick={() => setViewMode('split')}
 							>
 								Split
+							</li>
+							<li
+								className={viewMode === 'map' ? 'active' : ''}
+								onClick={() => setViewMode('map')}
+							>
+								Map
 							</li>
 						</ul>
 
