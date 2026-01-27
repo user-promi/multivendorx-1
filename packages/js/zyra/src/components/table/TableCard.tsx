@@ -4,7 +4,6 @@ import TableSummary, { TableSummaryPlaceholder } from './summary';
 import Pagination from '../pagination/Pagination';
 import { QueryProps, TableCardProps, TableRow } from './types';
 import TablePlaceholder from './TablePlaceholder';
-import './table.scss';
 import BulkActionDropdown from './BulkActionDropdown';
 import TableSearch from './TableSearch';
 import RealtimeFilters from './RealtimeFilter';
@@ -43,9 +42,11 @@ const TableCard: React.FC<TableCardProps> = ({
 	categoryCounts,
 	activeCategory,
 	filters = [],
+	showColumnToggleIcon = true,
 	...props
 }) => {
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
+	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
 	const [query, setQuery] = useState<QueryProps>({
 		orderby: 'date',
@@ -76,6 +77,8 @@ const TableCard: React.FC<TableCardProps> = ({
 							: prev.orderby,
 				}));
 			};
+
+	const togglePopover = () => setIsPopoverOpen((prev) => !prev);
 
 	const onFilterChange = (key: string, value: string | string[] | { startDate: Date; endDate: Date }) => {
 		setQuery((prev) => ({
@@ -240,38 +243,40 @@ const TableCard: React.FC<TableCardProps> = ({
 							/>
 						</div>
 					)}
-					{showMenu && (
+					{showMenu && showColumnToggleIcon && (
 						<div className="popover-wrapper">
-							<div className="popover-toggle">
+							<div className="popover-toggle" onClick={togglePopover} >
 								<i className="popover-icon adminfont-more-vertical"></i>
 							</div>
-							<div className="popover popover-action checkbox">
-								<div className="popover-body">
-									<ul>
-										{headers.map(({ key, label, required }) => {
-											if (required) return null;
+							{isPopoverOpen && (
+								<div className="popover popover-action checkbox">
+									<div className="popover-body">
+										<ul>
+											{headers.map(({ key, label, required }) => {
+												if (required) return null;
 
-											return (
-												<li key={key}>
-													<label>
-														<input
-															type="checkbox"
-															checked={showCols.includes(key)}
-															onChange={onColumnToggle(key)}
-														/>
-														{label}
-													</label>
-												</li>
-											);
-										})}
-									</ul>
+												return (
+													<li key={key}>
+														<label>
+															<input
+																type="checkbox"
+																checked={showCols.includes(key)}
+																onChange={onColumnToggle(key)}
+															/>
+															{label}
+														</label>
+													</li>
+												);
+											})}
+										</ul>
+									</div>
 								</div>
-							</div>
+							)}
+
 						</div>
 					)}
 				</div>
 			</div>
-
 
 			{isLoading ? (
 				<Fragment>

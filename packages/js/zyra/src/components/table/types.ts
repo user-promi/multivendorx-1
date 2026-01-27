@@ -212,6 +212,7 @@ export type TableCardProps = CommonTableProps & {
 	categoryCounts?: { label: string; value: string; count: number }[];
 	activeCategory?: string; // optional
 	onCategoryClick?: (value: string) => void;
+	showColumnToggleIcon?: boolean;
 };
 
 export type FilterOption = {
