@@ -43,42 +43,41 @@ const Pagination: React.FC<PaginationProps> = ({
 		return children({ pageCount });
 	}
 
-	const classes = classNames('pagination', className);
 
 	// If only a per-page picker should show
 	if (pageCount <= 1) {
 		return total > perPageOptions[0] ? (
-			<div className={classes}>
-				<PageSizePicker
-					currentPage={page}
-					perPage={perPage}
-					setCurrentPage={onPageChange}
-					total={total}
-					setPerPageChange={onPerPageChange}
-					perPageOptions={perPageOptions}
-				/>
-			</div>
+			<PageSizePicker
+				currentPage={page}
+				perPage={perPage}
+				setCurrentPage={onPageChange}
+				total={total}
+				setPerPageChange={onPerPageChange}
+				perPageOptions={perPageOptions}
+			/>
 		) : null;
 	}
 
 	return (
-		<div className={classes}>
-			<PageArrows
-				currentPage={page}
-				showPageArrowsLabel={showPageArrowsLabel}
-				perPage={perPage}
-				total={total}
-			/>
-			{showPerPagePicker && (
-				<PageSizePicker
+		<>
+			<div className="pagination-number-wrapper">
+				<PageArrows
 					currentPage={page}
+					showPageArrowsLabel={showPageArrowsLabel}
 					perPage={perPage}
-					setCurrentPage={onPageChange}
 					total={total}
-					setPerPageChange={onPerPageChange}
-					perPageOptions={perPageOptions}
 				/>
-			)}
+				{showPerPagePicker && (
+					<PageSizePicker
+						currentPage={page}
+						perPage={perPage}
+						setCurrentPage={onPageChange}
+						total={total}
+						setPerPageChange={onPerPageChange}
+						perPageOptions={perPageOptions}
+					/>
+				)}
+			</div>
 			{showPagePicker && (
 				<PagePicker
 					currentPage={page}
@@ -86,7 +85,7 @@ const Pagination: React.FC<PaginationProps> = ({
 					setCurrentPage={onPageChange}
 				/>
 			)}
-		</div>
+		</>
 	);
 };
 

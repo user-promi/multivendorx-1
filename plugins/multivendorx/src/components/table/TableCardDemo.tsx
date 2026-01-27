@@ -149,12 +149,12 @@ const TableCardDemo: React.FC = () => {
 	const rowActions = [
 		{
 			label: 'Edit',
-			icon: <i className="adminfont-edit" />,
+			icon: 'edit',
 			onClick: (id) => console.log('Edit row:', id),
 		},
 		{
 			label: 'Delete',
-			icon: <i className="adminfont-delete" />,
+			icon: 'delete',
 			onClick: (id) => console.log('Delete row:', id),
 			className: 'danger',
 		},

@@ -4,8 +4,8 @@ import './pagination.scss';
 interface PageArrowsProps {
 	currentPage: number;
 	showPageArrowsLabel?: boolean;
-	perPage:number;
-	total:number
+	perPage: number;
+	total: number
 }
 
 const PageArrows: React.FC<PageArrowsProps> = ({
@@ -18,7 +18,7 @@ const PageArrows: React.FC<PageArrowsProps> = ({
 	const endIndex = Math.min(currentPage * perPage, total);
 
 	return (
-		<div className="pagination-number-wrapper">
+		<>
 			{showPageArrowsLabel && (
 				<span
 					className="show-section"
@@ -28,8 +28,7 @@ const PageArrows: React.FC<PageArrowsProps> = ({
 					Showing {startIndex} to {endIndex} of {total} entries.
 				</span>
 			)}
-
-		</div>
+		</>
 	);
 };
 

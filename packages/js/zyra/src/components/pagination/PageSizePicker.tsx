@@ -18,7 +18,7 @@ const PageSizePicker: React.FC<PageSizePickerProps> = ({
 	currentPage,
 	total,
 	setCurrentPage,
-	setPerPageChange = () => {},
+	setPerPageChange = () => { },
 	perPageOptions = DEFAULT_PER_PAGE_OPTIONS,
 	label = 'Rows per page',
 }) => {
@@ -33,17 +33,16 @@ const PageSizePicker: React.FC<PageSizePickerProps> = ({
 	};
 
 	return (
-		<div className="pagination-per-page-picker">
-			<label>
-				{label}
-				<select value={perPage} onChange={handlePerPageChange}>
-					{perPageOptions.map((option) => (
-						<option key={option} value={option}>
-							{option}
-						</option>
-					))}
-				</select>
-			</label>
+		<div className="showing-number">
+			Show
+			<select value={perPage} onChange={handlePerPageChange}>
+				{perPageOptions.map((option) => (
+					<option key={option} value={option}>
+						{option}
+					</option>
+				))}
+			</select>
+			entries
 		</div>
 	);
 };
