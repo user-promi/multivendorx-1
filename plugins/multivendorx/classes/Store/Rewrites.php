@@ -206,7 +206,7 @@ class Rewrites {
     }
 
     public function register_store_state() {
-        $store_slug = get_query_var( 'store' );
+        $store_slug = get_query_var( $this->custom_store_url );
 
         if ( ! $store_slug ) {
             return;
