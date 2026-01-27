@@ -5,7 +5,6 @@ import React, {
 	useState,
 } from 'react';
 import { TableProps, TableRow } from './types';
-import './table.scss';
 
 const ASC = 'asc';
 const DESC = 'desc';
@@ -121,7 +120,6 @@ const Table: React.FC<TableProps> = ({
 			className={rootClassName}
 			tabIndex={tabIndex}
 			aria-hidden={ariaHidden}
-			// aria-labelledby={`caption-${instanceId}`}
 			role="group"
 			onScroll={updateScrollState}
 		>

@@ -275,9 +275,6 @@ const TableCard: React.FC<TableCardProps> = ({
 
 			{isLoading ? (
 				<Fragment>
-					<span className="">
-						Loading data
-					</span>
 					<TablePlaceholder
 						numberOfRows={rowsPerPage}
 						headers={visibleHeaders}
