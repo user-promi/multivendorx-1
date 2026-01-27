@@ -1,3 +1,4 @@
+import { ActionItem } from "./TableRowActions";
 import { SearchOption } from "./TableSearch";
 
 export type FilterValue = string | string[] | { startDate: Date; endDate: Date };
@@ -133,6 +134,7 @@ export type TableProps = CommonTableProps & {
 	selectedIds?: Array<number>;
 	onSelectRow?: (id: number, selected: boolean) => void;
 	onSelectAll?: (selected: boolean) => void;
+	rowActions?: ActionItem[]; 
 };
 
 export type TableSummaryProps = {
@@ -213,6 +215,7 @@ export type TableCardProps = CommonTableProps & {
 	activeCategory?: string; // optional
 	onCategoryClick?: (value: string) => void;
 	showColumnToggleIcon?: boolean;
+	rowActions?: ActionItem[];
 };
 
 export type FilterOption = {

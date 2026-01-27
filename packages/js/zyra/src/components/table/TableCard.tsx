@@ -43,6 +43,7 @@ const TableCard: React.FC<TableCardProps> = ({
 	activeCategory,
 	filters = [],
 	showColumnToggleIcon = true,
+	rowActions,
 	...props
 }) => {
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -312,6 +313,7 @@ const TableCard: React.FC<TableCardProps> = ({
 						selectedIds={selectedIds}
 						onSelectRow={handleSelectRow}
 						onSelectAll={handleSelectAll}
+						rowActions={rowActions}
 					/>
 				</>
 

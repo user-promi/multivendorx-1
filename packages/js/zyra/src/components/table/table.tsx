@@ -5,6 +5,7 @@ import React, {
 	useState,
 } from 'react';
 import { TableProps, TableRow } from './types';
+import TableRowActions from './TableRowActions';
 
 const ASC = 'asc';
 const DESC = 'desc';
@@ -29,6 +30,7 @@ const Table: React.FC<TableProps> = ({
 	onSelectAll,
 	emptyMessage,
 	classNames,
+	rowActions
 }) => {
 	const allSelected = ids.length > 0 && ids.every((id) => selectedIds.includes(id));
 	const [tabIndex, setTabIndex] = useState<number | undefined>();
@@ -209,48 +211,60 @@ const Table: React.FC<TableProps> = ({
 				<tbody className="admin-table-body">
 					{hasData ? (
 						rows.map((row, rowIndex) => (
-							<tr className="admin-row" key={getRowKey(row, rowIndex)}>
-								<td className="admin-column select">
-									<input
-										type="checkbox"
-										checked={selectedIds.includes(ids[rowIndex])}
-										onChange={() => toggleRow(rowIndex)}
-									/>
-								</td>
-								{row.map((cell, colIndex) => {
-									const header = headers[colIndex];
-									const isHeaderCell = rowHeader === colIndex;
-									const CellTag = isHeaderCell ? 'th' : 'td';
-									const displayValue = getDisplay(cell);
-									const safeValue =
-										displayValue !== null && displayValue !== undefined
-											? String(displayValue).replace(/\s+/g, '-').toLowerCase()
-											: '';
+							<>
+								<tr className="admin-row" key={getRowKey(row, rowIndex)}>
+									<td className="admin-column select">
+										<input
+											type="checkbox"
+											checked={selectedIds.includes(ids[rowIndex])}
+											onChange={() => toggleRow(rowIndex)}
+										/>
+									</td>
+									{row.map((cell, colIndex) => {
+										const header = headers[colIndex];
+										const isHeaderCell = rowHeader === colIndex;
+										const CellTag = isHeaderCell ? 'th' : 'td';
+										const displayValue = getDisplay(cell);
+										const safeValue =
+											displayValue !== null && displayValue !== undefined
+												? String(displayValue).replace(/\s+/g, '-').toLowerCase()
+												: '';
 
-									const cellClass = [
-										'admin-column',
-										header.cellClassName,
-										header.isNumeric ? 'numeric' : '',
-										header.isLeftAligned || !header.isNumeric
-											? 'left'
-											: '',
-										sortedBy === header.key ? 'sorted' : '',
-										safeValue ? `cell-${safeValue}` : '',
-									]
-										.filter(Boolean)
-										.join(' ');
+										const cellClass = [
+											'admin-column',
+											header.cellClassName,
+											header.isNumeric ? 'numeric' : '',
+											header.isLeftAligned || !header.isNumeric
+												? 'left'
+												: '',
+											sortedBy === header.key ? 'sorted' : '',
+											safeValue ? `cell-${safeValue}` : '',
+										]
+											.filter(Boolean)
+											.join(' ');
 
-									return (
-										<CellTag
-											key={`${getRowKey(row, rowIndex)}-${colIndex}`}
-											scope={isHeaderCell ? 'row' : undefined}
-											className={cellClass}
-										>
-											{getDisplay(cell)}
-										</CellTag>
-									);
-								})}
-							</tr>
+										return (
+											<CellTag
+												key={`${getRowKey(row, rowIndex)}-${colIndex}`}
+												scope={isHeaderCell ? 'row' : undefined}
+												className={cellClass}
+											>
+												{getDisplay(cell)}
+											</CellTag>
+										);
+									})}
+									{rowActions && (
+										<td className="admin-column actions">
+											<TableRowActions
+												rowId={ids[rowIndex]}
+												rowData={row}
+												rowActions={rowActions}
+											/>
+										</td>
+									)}
+								</tr>
+							</>
+
 						))
 					) : (
 						<tr className="admin-row">
