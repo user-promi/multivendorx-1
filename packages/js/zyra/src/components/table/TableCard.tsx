@@ -183,7 +183,7 @@ const TableCard: React.FC<TableCardProps> = ({
 	 * Root className (manual)
 	 */
 	const rootClassName = [
-		'table-card',
+		'admin-table-wrapper table-card',
 		className,
 		actions ? 'has-actions' : '',
 		showMenu ? 'has-menu' : '',
@@ -197,59 +197,15 @@ const TableCard: React.FC<TableCardProps> = ({
 			{/* HEADER */}
 			<div className="table-card__header">
 				<h2 className="table-card__title">{title}</h2>
-
-				{actions && (
-					<div className="table-card__actions">
-						{actions}
-					</div>
-				)}
-				{search && (
-					<div className="table-card__search">
-						<TableSearch
-							placeholder={search.placeholder}
-							options={search.options}
-							onSearch={(text, option) => {
-								onQueryChange('searchvalue')(text);
-								if (option !== undefined) {
-									onQueryChange('searchaction')(String(option));
-								}
-							}}
-						/>
-					</div>
-				)}
-				{showMenu && (
-					<div className="table-card__column-menu">
-						<strong>Columns</strong>
-						<ul>
-							{headers.map(({ key, label, required }) => {
-								if (required) return null;
-
-								return (
-									<li key={key}>
-										<label>
-											<input
-												type="checkbox"
-												checked={showCols.includes(key)}
-												onChange={onColumnToggle(key)}
-											/>
-											{label}
-										</label>
-									</li>
-								);
-							})}
-						</ul>
-					</div>
-				)}
 			</div>
 
 			{/* BODY */}
-			<div className="table-card__body">
-				{tablePreface && (
-					<div className="table-card__preface">
-						{tablePreface}
-					</div>
-				)}
-
+			{tablePreface && (
+				<div className="table-card__preface">
+					{tablePreface}
+				</div>
+			)}
+			<div className="admin-top-filter">
 				{categoryCounts && categoryCounts.length > 0 && (
 					<CategoryFilter
 						categories={categoryCounts}
@@ -264,66 +220,99 @@ const TableCard: React.FC<TableCardProps> = ({
 					/>
 				)}
 
-				{isLoading ? (
-					<Fragment>
-						<span className="">
-							Loading data
-						</span>
-						<TablePlaceholder
-							numberOfRows={rowsPerPage}
-							headers={visibleHeaders}
-							rowHeader={rowHeader}
-							caption={title}
-							query={query}
-						/>
-					</Fragment>
-				) : (
-					<>
-						{bulkActions.length > 0 && (
-							<BulkActionDropdown
-								actions={bulkActions}
-								selectedIds={selectedIds}
-								onApply={handleBulkApply}
+				<div className="table-action-wrapper">
+					{actions && (
+						<div className="action-wrapper">
+							{actions}
+						</div>
+					)}
+					{search && (
+						<div className="search-field">
+							<TableSearch
+								placeholder={search.placeholder}
+								options={search.options}
+								onSearch={(text, option) => {
+									onQueryChange('searchvalue')(text);
+									if (option !== undefined) {
+										onQueryChange('searchaction')(String(option));
+									}
+								}}
 							/>
-						)}
+						</div>
+					)}
+					{showMenu && (
+						<div className="popover-wrapper">
+							<div className="popover-toggle">
+								<i className="popover-icon adminfont-more-vertical"></i>
+							</div>
+							<div className="popover popover-action checkbox">
+								<div className="popover-body">
+									<ul>
+										{headers.map(({ key, label, required }) => {
+											if (required) return null;
 
-						<Table
-							rows={visibleRows}
-							headers={visibleHeaders}
-							rowHeader={rowHeader}
-							caption={title}
-							query={query}
-							onSort={
-								onSort ||
-								(onQueryChange('sort') as (
-									key: string,
-									direction: string
-								) => void)
-							}
-							rowKey={rowKey}
-							emptyMessage={emptyMessage}
-							ids={ids}
-							selectedIds={selectedIds}
-							onSelectRow={handleSelectRow}
-							onSelectAll={handleSelectAll}
-						/>
-					</>
-
-				)}
-
+											return (
+												<li key={key}>
+													<label>
+														<input
+															type="checkbox"
+															checked={showCols.includes(key)}
+															onChange={onColumnToggle(key)}
+														/>
+														{label}
+													</label>
+												</li>
+											);
+										})}
+									</ul>
+								</div>
+							</div>
+						</div>
+					)}
+				</div>
 			</div>
-			{filters.length > 0 && (
-				<RealtimeFilters
-					filters={filters}
-					query={query.filter || {}}
-					onFilterChange={onFilterChange}
-					rows={rows}
-					onResetFilters={() => setQuery((prev) => ({ ...prev, filter: {}, paged: 1 }))}
-				/>
-			)}
 
-			{/* FOOTER */}
-			<div className="table-card__footer">
+
+			{isLoading ? (
+				<Fragment>
+					<span className="">
+						Loading data
+					</span>
+					<TablePlaceholder
+						numberOfRows={rowsPerPage}
+						headers={visibleHeaders}
+						rowHeader={rowHeader}
+						caption={title}
+						query={query}
+					/>
+				</Fragment>
+			) : (
+				<>
+					<Table
+						rows={visibleRows}
+						headers={visibleHeaders}
+						rowHeader={rowHeader}
+						caption={title}
+						query={query}
+						onSort={
+							onSort ||
+							(onQueryChange('sort') as (
+								key: string,
+								direction: string
+							) => void)
+						}
+						rowKey={rowKey}
+						emptyMessage={emptyMessage}
+						ids={ids}
+						selectedIds={selectedIds}
+						onSelectRow={handleSelectRow}
+						onSelectAll={handleSelectAll}
+					/>
+				</>
+
+			)}
+			{/* pagination */}
+			<div className="admin-pagination">
 				{isLoading ? (
 					<TableSummaryPlaceholder />
 				) : (
@@ -340,6 +329,25 @@ const TableCard: React.FC<TableCardProps> = ({
 
 						{summary && <TableSummary data={summary} />}
 					</Fragment>
+				)}
+			</div>
+
+			<div className="admin-filter-wrapper">
+				{filters.length > 0 && (
+					<RealtimeFilters
+						filters={filters}
+						query={query.filter || {}}
+						onFilterChange={onFilterChange}
+						rows={rows}
+						onResetFilters={() => setQuery((prev) => ({ ...prev, filter: {}, paged: 1 }))}
+					/>
+				)}
+				{bulkActions.length < 0 && (
+					<BulkActionDropdown
+						actions={bulkActions}
+						selectedIds={selectedIds}
+						onApply={handleBulkApply}
+					/>
 				)}
 			</div>
 		</div>

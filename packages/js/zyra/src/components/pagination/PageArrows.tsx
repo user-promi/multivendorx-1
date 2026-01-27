@@ -34,18 +34,18 @@ const PageArrows: React.FC<PageArrowsProps> = ({
 	const isNextActive = currentPage < pageCount;
 
 	return (
-		<div className="pagination-page-arrows">
+		<div className="pagination-number-wrapper">
 			{showPageArrowsLabel && (
 				<span
-					className="pagination-page-arrows-label"
+					className="show-section"
 					role="status"
 					aria-live="polite"
 				>
-					Page {currentPage} of {pageCount}
+					Showing {currentPage} to {pageCount} of 12 entries.
 				</span>
 			)}
 
-			<div className="pagination-buttons">
+			<div className="pagination-arrow">
 				<button
 					className={`pagination-link ${isPreviousActive ? 'is-active' : ''}`}
 					disabled={!isPreviousActive}

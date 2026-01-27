@@ -32,8 +32,8 @@ const PagePicker: React.FC<PagePickerProps> = ({ currentPage, pageCount, setCurr
 	const isError = currentPage < 1 || currentPage > pageCount;
 
 	return (
-		<div className="pagination-page-picker">
-			<label className="pagination-page-picker-label">
+		<div className="pagination-page-picker pagination-number-wrapper">
+			<label className="show-section">
 				Go to page
 				<input
 					type="number"
