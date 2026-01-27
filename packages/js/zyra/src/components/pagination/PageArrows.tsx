@@ -3,35 +3,19 @@ import './pagination.scss';
 
 interface PageArrowsProps {
 	currentPage: number;
-	pageCount: number;
 	showPageArrowsLabel?: boolean;
-	setCurrentPage: (page: number, action?: 'previous' | 'next' | 'goto') => void;
+	perPage:number;
+	total:number
 }
 
 const PageArrows: React.FC<PageArrowsProps> = ({
 	currentPage,
-	pageCount,
 	showPageArrowsLabel = true,
-	setCurrentPage,
+	perPage,
+	total
 }) => {
-	const previousPage = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.stopPropagation();
-		if (currentPage > 1) {
-			setCurrentPage(currentPage - 1, 'previous');
-		}
-	};
-
-	const nextPage = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.stopPropagation();
-		if (currentPage < pageCount) {
-			setCurrentPage(currentPage + 1, 'next');
-		}
-	};
-
-	if (pageCount <= 1) return null;
-
-	const isPreviousActive = currentPage > 1;
-	const isNextActive = currentPage < pageCount;
+	const startIndex = (currentPage - 1) * perPage + 1;
+	const endIndex = Math.min(currentPage * perPage, total);
 
 	return (
 		<div className="pagination-number-wrapper">
@@ -41,29 +25,10 @@ const PageArrows: React.FC<PageArrowsProps> = ({
 					role="status"
 					aria-live="polite"
 				>
-					Showing {currentPage} to {pageCount} of 12 entries.
+					Showing {startIndex} to {endIndex} of {total} entries.
 				</span>
 			)}
 
-			<div className="pagination-arrow">
-				<button
-					className={`pagination-link ${isPreviousActive ? 'is-active' : ''}`}
-					disabled={!isPreviousActive}
-					onClick={previousPage}
-					aria-label="Previous Page"
-				>
-					<i className="adminfont-previous"></i>
-				</button>
-
-				<button
-					className={`pagination-link ${isNextActive ? 'is-active' : ''}`}
-					disabled={!isNextActive}
-					onClick={nextPage}
-					aria-label="Next Page"
-				>
-					<i className="adminfont-next"></i>
-				</button>
-			</div>
 		</div>
 	);
 };

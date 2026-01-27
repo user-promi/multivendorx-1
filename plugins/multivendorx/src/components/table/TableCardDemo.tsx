@@ -15,7 +15,7 @@ type QueryProps = {
 	categoryFilter?: string;
 };
 
- type TableHeader = {
+type TableHeader = {
 	defaultSort?: boolean;
 	defaultOrder?: string;
 	isLeftAligned?: boolean;
@@ -40,9 +40,7 @@ const headers: TableHeader[] = [
 	{
 		key: 'name',
 		label: 'Product',
-		isSortable: true,
 		isLeftAligned: true,
-		defaultSort: true,
 	},
 	{
 		key: 'sku',
@@ -148,8 +146,21 @@ const TableCardDemo: React.FC = () => {
 		},
 	];
 
+	const rowActions = [
+		{
+			label: 'Edit',
+			icon: <i className="adminfont-edit" />,
+			onClick: (id) => console.log('Edit row:', id),
+		},
+		{
+			label: 'Delete',
+			icon: <i className="adminfont-delete" />,
+			onClick: (id) => console.log('Delete row:', id),
+			className: 'danger',
+		},
+	];
 
-	return (	
+	return (
 		<Container general>
 			<Column>
 				<TableCard
@@ -189,6 +200,7 @@ const TableCardDemo: React.FC = () => {
 						{ label: 'Trash', value: 'trash', count: 0 }
 					]}
 					activeCategory="all"
+					rowActions={rowActions}
 				/>
 			</Column>
 		</Container>
