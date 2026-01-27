@@ -340,7 +340,7 @@ const TableCard: React.FC<TableCardProps> = ({
 			</div>
 
 			<div className="admin-filter-wrapper">
-				{filters.length > 0 && (
+				{/* {filters.length > 0 && (
 					<RealtimeFilters
 						filters={filters}
 						query={query.filter || {}}
@@ -355,7 +355,29 @@ const TableCard: React.FC<TableCardProps> = ({
 						selectedIds={selectedIds}
 						onApply={handleBulkApply}
 					/>
-				)}
+				)} */}
+				<div className="admin-filter-wrapper">
+					{selectedIds.length <= 2 && filters.length > 0 && (
+						<RealtimeFilters
+							filters={filters}
+							query={query.filter || {}}
+							onFilterChange={onFilterChange}
+							rows={rows}
+							onResetFilters={() =>
+								setQuery((prev) => ({ ...prev, filter: {}, paged: 1 }))
+							}
+						/>
+					)}
+
+					{selectedIds.length > 0 && bulkActions.length > 0 && (
+						<BulkActionDropdown
+							actions={bulkActions}
+							selectedIds={selectedIds}
+							onApply={handleBulkApply}
+						/>
+					)}
+				</div>
+
 			</div>
 		</div>
 	);
