@@ -8,7 +8,7 @@ export interface CategoryItem {
 
 interface CategoryFilterProps {
     categories: CategoryItem[];
-    activeCategory?: string; // currently selected category
+    activeCategory?: string;
     onCategoryClick: (value: string) => void;
 }
 

@@ -108,7 +108,6 @@ const TableCard: React.FC<TableCardProps> = ({
 	// Handle bulk action apply
 	const handleBulkApply = (action: string) => {
 		onBulkActionApply?.(action, selectedIds);
-		// optional: clear selection after apply
 		setSelectedIds([]);
 	};
 	/**

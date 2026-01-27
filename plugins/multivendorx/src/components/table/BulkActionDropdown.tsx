@@ -20,7 +20,7 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const action = e.target.value;
-		setSelectedAction(''); // reset dropdown after apply
+		setSelectedAction('');
 		onApply(action);
 	};
 

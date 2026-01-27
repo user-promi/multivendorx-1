@@ -168,8 +168,6 @@ export type TableCardProps = CommonTableProps & {
 	/**
 	 * A function which returns a callback function to update the query string for a given `param`.
 	 */
-	// Allowing any for backward compatibitlity
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	onQueryChange?: (param: string) => (...props: any) => void;
 	/**
 	 * A function which returns a callback function which is called upon the user changing the visibility of columns.
@@ -228,10 +226,3 @@ export type RealtimeFilterConfig = {
 	multiple?: boolean;
 	options?: FilterOption[];
 };
-interface RealtimeFiltersProps {
-	filters: RealtimeFilterConfig[];
-	query: Record<string, any>;
-	onFilterChange: (key: string, value: any) => void;
-	rows: TableRow[][];
-	onResetFilters: () => void;
-}

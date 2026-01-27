@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import TableCard from './TableCard';
 import { QueryProps, TableHeader, TableRow } from './types';
@@ -44,9 +44,8 @@ const TableCardDemo: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const fetchData = async (query: QueryProps) => {
-		console.log('query',query)
 		setIsLoading(true);
-	
+
 		try {
 			// Base params for API
 			const params: Record<string, any> = {
@@ -56,7 +55,7 @@ const TableCardDemo: React.FC = () => {
 				orderby: query.orderby,
 				order: query.order,
 			};
-	
+
 			// Add filters dynamically (only non-empty values)
 			if (query.filter) {
 				for (const [key, value] of Object.entries(query.filter)) {
@@ -65,13 +64,13 @@ const TableCardDemo: React.FC = () => {
 					}
 				}
 			}
-	
+
 			// Fetch data from WooCommerce
 			const response = await axios.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params,
 			});
-	
+
 			// Map API response into TableRow[][]
 			const mappedRows: TableRow[][] = response.data.map((product: any) => [
 				{ display: <a href={`/wp-admin/post.php?post=${product.id}&action=edit`} target="_blank" rel="noopener noreferrer">{product.name}</a>, value: product.id },
@@ -80,7 +79,7 @@ const TableCardDemo: React.FC = () => {
 				{ display: product.total_sales, value: product.total_sales },
 				{ display: product.status, value: product.status },
 			]);
-	
+
 			setRows(mappedRows);
 			setTotalRows(Number(response.headers['x-wp-total']) || 0);
 		} catch (error) {
@@ -91,8 +90,8 @@ const TableCardDemo: React.FC = () => {
 			setIsLoading(false);
 		}
 	};
-	
-	
+
+
 	const filters = [
 		{
 			key: 'status',
@@ -119,8 +118,8 @@ const TableCardDemo: React.FC = () => {
 			type: 'date',
 		},
 	];
-	
-	
+
+
 	return (
 		<div style={{ padding: 20 }}>
 			<h1>TableCard API Demo</h1>

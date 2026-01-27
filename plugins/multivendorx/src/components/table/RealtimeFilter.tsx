@@ -3,10 +3,19 @@ import Select from 'react-select';
 import { MultiCalendarInput } from 'zyra';
 import { RealtimeFilterConfig, TableRow } from './types';
 
+export type FilterValue =
+    | string
+    | string[]
+    | {
+        startDate: Date;
+        endDate: Date;
+    };
+
+
 interface RealtimeFiltersProps {
     filters: RealtimeFilterConfig[];
-    query: Record<string, any>;
-    onFilterChange: (key: string, value: any) => void;
+    query: Record<string, FilterValue | undefined>;
+    onFilterChange: (key: string, value: FilterValue) => void;
     rows: TableRow[][];
     onResetFilters: () => void;
 }
