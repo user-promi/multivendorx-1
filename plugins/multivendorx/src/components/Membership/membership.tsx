@@ -214,6 +214,48 @@ const whenLimitReached = {
 		{ key: 'shipping_management', value: 'shipping_management', label: __('Allow but warn', 'multivendorx'), desc: __('Show warning but allow creation', 'multivendorx') },
 		{ key: 'import_export_tools', value: 'import_export_tools', label: __('Auto-upgrade suggestion', 'multivendorx'), desc: __('Prompt to upgrade plan', 'multivendorx') },],
 };
+const addonIncludes = {
+	key: 'addon_includes',
+	look: 'checkbox',
+	selectDeselect: true,
+	options: [
+	{
+		key: 'products',
+		value: 'products',
+		label: __('Products (+50 items)', 'multivendorx'),
+	},
+	{
+		key: 'categories',
+		value: 'categories',
+		label: __('Categories (+10 max)', 'multivendorx'),
+	},
+	{
+		key: 'storage',
+		value: 'storage',
+		label: __('Storage (+5 GB)', 'multivendorx'),
+	},
+	{
+		key: 'staff_accounts',
+		value: 'staff_accounts',
+		label: __('Staff Accounts (+2 users)', 'multivendorx'),
+	},
+	{
+		key: 'coupons',
+		value: 'coupons',
+		label: __('Coupons (+10 active)', 'multivendorx'),
+	},
+	{
+		key: 'images_per_listing',
+		value: 'images_per_listing',
+		label: __('Images per Listing (+5 images)', 'multivendorx'),
+	},
+	{
+		key: 'ai_credits',
+		value: 'ai_credits',
+		label: __('AI Credits (+100 credits)', 'multivendorx'),
+	},
+]
+};
 const orderEmailInfoField = {
 	key: 'order_email_information',
 	look: 'checkbox',
@@ -1113,7 +1155,7 @@ const Membership = ({ id }: { id: string }) => {
 					<Column>
 						<Section
 							wrapperClass='divider-wrapper'
-							hint={__('What stores can do with this plan', 'multivendorx')}
+							hint={__('Plan access & permissions', 'multivendorx')}
 						// hint={ inputField.hint } 
 						/>
 					</Column>
@@ -1481,6 +1523,39 @@ const Membership = ({ id }: { id: string }) => {
 								<FormGroup cols={2}></FormGroup>
 							</FormGroupWrapper>
 						</Card>
+						<Card contentHeight title={__('Plan top-up', 'multivendorx')}
+						desc={__('Stores can purchase extra products, storage, or staff if plan limits are reached.', 'multivendorx')}
+						>
+							<FormGroupWrapper>
+								<FormGroup cols={2} label="Fixed top-up price" htmlFor="trial_period">
+									<BasicInput
+										name="name"
+										// value={formData.name}
+										// onChange={handleChange}
+										preInsideText="$"
+										size="10rem"
+									/>
+								</FormGroup>
+								<FormGroup label="What this top-up includes" htmlFor="trial_period">
+									<MultiCheckBox
+										wrapperClass="checkbox-list-side-by-side"
+										inputWrapperClass="toggle-checkbox-header"
+										inputInnerWrapperClass="default-checkbox"
+										idPrefix={addonIncludes.key}
+										selectDeselect
+										options={addonIncludes.options}
+										value={normalizeValue(addonIncludes.key)}
+										onChange={handleMultiCheckboxChange(addonIncludes.key)}
+										onMultiSelectDeselectChange={() =>
+											handleSelectDeselect(addonIncludes)
+										}
+										proSetting={false}
+										moduleChange={() => { }}
+										modules={[]}
+									/>
+								</FormGroup>
+							</FormGroupWrapper>
+						</Card>
 						<Card contentHeight title={__('Usage Limits', 'multivendorx')}
 						// desc={'Select which premium features stores can access with this plan.'}
 						>
@@ -1505,21 +1580,6 @@ const Membership = ({ id }: { id: string }) => {
 										modules={[]}
 									/>
 								</FormGroup>
-							</FormGroupWrapper>
-						</Card>
-						<Card contentHeight title={__('Additional resource pricing', 'multivendorx')} desc={__('Define the cost per unit when stores want to add more resources beyond their limits', 'multivendorx')}
-						// desc={'Select which premium features stores can access with this plan.'}
-						>
-							<FormGroupWrapper>
-								<FormGroup cols={2} label="Additional Products" htmlFor="trial_period">
-									<BasicInput
-										name="name"
-										value={formData.name}
-										onChange={handleChange}
-										preInsideText="$"
-									/>
-								</FormGroup>
-								<FormGroup cols={2} ></FormGroup>
 							</FormGroupWrapper>
 						</Card>
 						<Card contentHeight title={__('AI tools available to stores', 'multivendorx')}

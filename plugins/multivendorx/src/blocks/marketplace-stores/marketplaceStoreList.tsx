@@ -248,7 +248,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 
 	return (
 		<>
-			{renderMapComponent()}
 			<div className="">
 				{/* Filter Bar */}
 				<form className="woocommerce-form woocommerce-form-login login">
@@ -392,7 +391,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 						))}
 				</div>
 
-
+				{renderMapComponent()}
 				<div className="pagination">
 					<button
 						disabled={page === 1}

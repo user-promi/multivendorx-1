@@ -1,10 +1,10 @@
 import React, { ChangeEvent, useState, useEffect, useMemo } from 'react';
 import '../styles/web/ColorSettingInput.scss';
 import ToggleSetting from './ToggleSetting';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import FormGroup from './UI/FormGroup';
 import SelectInput from './SelectInput';
+import PdfDownloadButton from './PdfDownloadButton';
 
 interface CustomColors {
     colorPrimary: string;
@@ -476,21 +476,10 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
             )}
 
             {props.showPdfButton && ActivePdf && (
-                <PDFDownloadLink
-                    document={
-                        <ActivePdf
-                            colors={{
-                                colorPrimary: customColors.colorPrimary ?? '#FF5959',
-                                colorSecondary: customColors.colorSecondary ?? '#FADD3A',
-                                colorAccent: customColors.colorAccent ?? '#49BEB6',
-                                colorSupport: customColors.colorSupport ?? '#075F63',
-                            }}
-                        />
-                    }
+                <PdfDownloadButton
+                    PdfComponent={() => <ActivePdf colors={selectedColors as CustomColors} />}
                     fileName={`invoice-${templateKey}.pdf`}
-                >
-                    {({ loading }) => (loading ? 'Generating PDF…' : 'Download PDF')}
-                </PDFDownloadLink>
+                />
             )}
         </>
     );
