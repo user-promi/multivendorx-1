@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { TableCard } from 'zyra';
+import { Column, Container, TableCard } from 'zyra';
 
 type FilterValue = string | string[] | { startDate: Date; endDate: Date };
 
@@ -149,49 +149,49 @@ const TableCardDemo: React.FC = () => {
 	];
 
 
-	return (
-		<div style={{ padding: 20 }}>
-			<h1>TableCard API Demo</h1>
-
-			<TableCard
-				title="Revenue Report"
-				headers={headers}
-				rows={rows}
-				totalRows={totalRows}
-				isLoading={isLoading}
-				onQueryUpdate={fetchData}
-				tablePreface={
-					<div>
-						Data loaded from WooCommerce REST API.
-					</div>
-				}
-				ids={rows.map((row, i) => String(row[0]?.value))}
-				bulkActions={[
-					{ label: 'Delete Selected', value: 'delete' },
-					{ label: 'Mark as Featured', value: 'feature' },
-				]}
-				onBulkActionApply={(action: string, selectedIds: []) => {
-					console.log('Action:', action, 'Selected IDs:', selectedIds);
-					// Perform your API call or state update here
-				}}
-				search={{
-					placeholder: 'Search Products...',
-					options: [
-						{ label: 'All', value: '' },
-						{ label: 'Published', value: 'publish' },
-						{ label: 'Draft', value: 'draft' },
-					],
-				}}
-				filters={filters}
-				categoryCounts={[
-					{ label: 'All', value: 'all', count: 15 },
-					{ label: 'Published', value: 'publish', count: 10 },
-					{ label: 'Draft', value: 'draft', count: 5 },
-					{ label: 'Trash', value: 'trash', count: 0 }
-				]}
-				activeCategory="all"
-			/>
-		</div>
+	return (	
+		<Container general>
+			<Column>
+				<TableCard
+					// title="Revenue Report"
+					headers={headers}
+					rows={rows}
+					totalRows={totalRows}
+					isLoading={isLoading}
+					onQueryUpdate={fetchData}
+					// tablePreface={
+					// 	<div>
+					// 		Data loaded from WooCommerce REST API.
+					// 	</div>
+					// }
+					ids={rows.map((row, i) => String(row[0]?.value))}
+					bulkActions={[
+						{ label: 'Delete Selected', value: 'delete' },
+						{ label: 'Mark as Featured', value: 'feature' },
+					]}
+					onBulkActionApply={(action: string, selectedIds: []) => {
+						console.log('Action:', action, 'Selected IDs:', selectedIds);
+						// Perform your API call or state update here
+					}}
+					search={{
+						placeholder: 'Search Products...',
+						options: [
+							{ label: 'All', value: '' },
+							{ label: 'Published', value: 'publish' },
+							{ label: 'Draft', value: 'draft' },
+						],
+					}}
+					filters={filters}
+					categoryCounts={[
+						{ label: 'All', value: 'all', count: 15 },
+						{ label: 'Published', value: 'publish', count: 100 },
+						{ label: 'Draft', value: 'draft', count: 5 },
+						{ label: 'Trash', value: 'trash', count: 0 }
+					]}
+					activeCategory="all"
+				/>
+			</Column>
+		</Container>
 	);
 };
 

@@ -32,15 +32,19 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
     const showResetButton = rows.length === 0 && Object.keys(query).length > 0;
 
     return (
-        <div className="realtime-filters">
+        <div className="wrap-bulk-all-date filter">
+            <span className="title">
+                <i className="adminfont-filter"/>
+                Filter
+            </span>
+
             {filters.map((filter) => {
                 const value = query[filter.key];
 
                 // Date filter
                 if (filter.type === 'date') {
                     return (
-                        <div key={filter.key} className="filter-item">
-                            <label>{filter.label}</label>
+                        <div key={filter.key} className="group-field">
                             <MultiCalendarInput
                                 value={value as { startDate: Date; endDate: Date } | undefined}
                                 onChange={(range) => onFilterChange(filter.key, range)}
@@ -57,8 +61,7 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
                 if (!filter.multiple) {
                     const selectedOption = options.find((o) => o.value === value) || null;
                     return (
-                        <div key={filter.key} className="filter-item">
-                            <label>{filter.label}</label>
+                        <div key={filter.key} className="group-field">
                             <Select
                                 options={options}
                                 value={selectedOption}
@@ -76,8 +79,7 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
                 );
 
                 return (
-                    <div key={filter.key} className="filter-item">
-                        <label>{filter.label}</label>
+                    <div key={filter.key} className="group-field">
                         <Select
                             options={options}
                             value={selectedOptions}
@@ -91,9 +93,11 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
 
             {/* Reset button */}
             {showResetButton && (
-                <button className="reset-filters-btn" onClick={onResetFilters}>
-                    Reset
-                </button>
+                <div className="reset-btn">
+                    <button className="admin-badge red" onClick={onResetFilters}>
+                        <i className="adminfont-refresh" />Reset
+                    </button>
+                </div>
             )}
         </div>
     );

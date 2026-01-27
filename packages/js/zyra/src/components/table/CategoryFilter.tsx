@@ -23,15 +23,15 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
     if (visibleCategories.length === 0) return null;
 
     return (
-        <div className="category-filter-bar">
+        <div className="filter-wrapper">
             {visibleCategories.map(({ label, value, count }) => (
-                <button
+                <div
                     key={value}
-                    className={`category-item ${activeCategory === value ? 'active' : ''}`}
+                    className={`filter-item ${activeCategory === value ? 'active' : ''}`}
                     onClick={() => onCategoryClick(value)}
                 >
                     {label} ({count})
-                </button>
+                </div>
             ))}
         </div>
     );

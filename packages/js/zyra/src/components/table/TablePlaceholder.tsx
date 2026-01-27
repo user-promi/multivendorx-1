@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableHeader, QueryProps } from './types';
 import Table from './table';
-import './table.scss';
+import Skeleton from '../UI/Skeleton';
 
 interface TablePlaceholderProps {
 	/** Query parameters */
@@ -29,14 +29,13 @@ const TablePlaceholder: React.FC<TablePlaceholderProps> = ({
 	// Create placeholder rows
 	const rows = Array.from({ length: numberOfRows }).map(() =>
 		headers.map(() => ({
-			display: <span className="is-placeholder" />,
+			display: <Skeleton width={"100%"} />,
 		}))
 	);
 
 	return (
 		<Table
 			ariaHidden={true}
-			className="is-loading"
 			headers={headers}
 			rows={rows}
 			rowHeader={typeof rowHeader === 'number' ? rowHeader : 0}

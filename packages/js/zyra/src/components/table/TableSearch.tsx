@@ -62,21 +62,12 @@ const TableSearch: React.FC<TableSearchProps> = ({
   );
 
   return (
-    <div className="table-search">
-      <div className="table-search-wrapper">
-        <input
-          type="text"
-          value={text}
-          onChange={handleInputChange}
-          placeholder={placeholder}
-          className="table-search-input"
-        />
-
-        {options && options.length > 0 && (
+    <>
+      {options && options.length > 0 && (
+        <div className="search-action">
           <select
             value={selectedOption}
             onChange={handleOptionChange}
-            className="table-search-select"
           >
             <option value="">All</option>
             {options.map((opt) => (
@@ -85,9 +76,19 @@ const TableSearch: React.FC<TableSearchProps> = ({
               </option>
             ))}
           </select>
-        )}
+        </div>
+      )}
+      <div className="search-section">
+        <input
+          type="text"
+          value={text}
+          onChange={handleInputChange}
+          placeholder={placeholder}
+          className="table-search-input"
+        />
+        <i className="adminfont-search" />
       </div>
-    </div>
+    </>
   );
 };
 

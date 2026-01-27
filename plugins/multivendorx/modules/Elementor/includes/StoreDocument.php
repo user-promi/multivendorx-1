@@ -1,9 +1,12 @@
 <?php
+
+namespace MultiVendorX\Elementor;
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class MVX_Store_Document extends \Elementor\Core\Base\Document {
+class StoreDocument extends \Elementor\Core\Base\Document {
 
     /**
      * Get document properties
@@ -20,7 +23,7 @@ class MVX_Store_Document extends \Elementor\Core\Base\Document {
      * Get document name
      */
     public function get_name() {
-        return 'mvx-store';
+        return 'multivendorx-store';
     }
 
     /**
