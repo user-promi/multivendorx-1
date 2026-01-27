@@ -164,6 +164,11 @@ class Modules
                         'module_file'  => MultiVendorX()->plugin_path . 'modules/MinMax/Module.php',
                         'module_class' => 'MultiVendorX\MinMax\Module',
                     ),
+                    'elementor'                => array(
+                        'id'           => 'elementor',
+                        'module_file'  => MultiVendorX()->plugin_path . 'modules/Elementor/Module.php',
+                        'module_class' => 'MultiVendorX\Elementor\Module',
+                    ),
                     'invoice'                => array(
                         'id'           => 'invoice',
                         'module_file'  => MultiVendorX()->plugin_path . 'modules/Invoice/Module.php',
