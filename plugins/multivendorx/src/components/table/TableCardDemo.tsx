@@ -40,9 +40,7 @@ const headers: TableHeader[] = [
 	{
 		key: 'name',
 		label: 'Product',
-		isSortable: true,
 		isLeftAligned: true,
-		defaultSort: true,
 	},
 	{
 		key: 'sku',
