@@ -2,7 +2,6 @@ import React from 'react';
 import PageArrows from './PageArrows';
 import PagePicker from './PagePicker';
 import PageSizePicker, { DEFAULT_PER_PAGE_OPTIONS } from './PageSizePicker';
-import './pagination.scss';
 
 export type PaginationProps = {
 	page: number;

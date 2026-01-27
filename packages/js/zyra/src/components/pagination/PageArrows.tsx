@@ -1,5 +1,4 @@
 import React from 'react';
-import './pagination.scss';
 
 interface PageArrowsProps {
 	currentPage: number;
