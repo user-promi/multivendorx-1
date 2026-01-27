@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './pagination.scss';
 
 interface PagePickerProps {
   currentPage: number;
@@ -78,59 +77,57 @@ const PagePicker: React.FC<PagePickerProps> = ({
   const pages = getVisiblePages();
 
   return (
-    <div className="pagination-page-picker pagination-number-wrapper">
+    <div className="pagination-number-wrapper">
       <div className="pagination-arrow">
-        <button
-          className={`pagination-link ${currentPage > 1 ? 'is-active' : ''}`}
-          disabled={currentPage <= 1}
+        <span
+          className={`${currentPage <= 1 ? 'pagination-button-disabled' : ''}`}
           onClick={firstPage}
           aria-label="First Page"
         >
-          <i className="adminfont-first"></i>
-        </button>
+          <i className="admin-font adminfont-pagination-prev-arrow"></i>
+        </span>
 
-        <button
-          className={`pagination-link ${currentPage > 1 ? 'is-active' : ''}`}
-          disabled={currentPage <= 1}
+        <span
+          className={`${currentPage <= 1 ? 'pagination-button-disabled' : ''}`}
           onClick={previousPage}
           aria-label="Previous Page"
         >
-          <i className="adminfont-previous"></i>
-        </button>
+          <i className="admin-font adminfont-pagination-left-arrow"></i>
+        </span>
 
-        {pages.map((page, idx) =>
-          typeof page === 'number' ? (
-            <button
-              key={idx}
-              className={`pagination-link ${currentPage === page ? 'active' : ''}`}
-              onClick={() => goToPage(page)}
-            >
-              {page}
-            </button>
-          ) : (
-            <span key={idx} className="pagination-ellipsis">
-              {page}
-            </span>
-          )
-        )}
+        <div className="pagination">
+          {pages.map((page, idx) =>
+            typeof page === 'number' ? (
+              <button
+                key={idx}
+                className={`number-btn ${currentPage === page ? 'active' : ''}`}
+                onClick={() => goToPage(page)}
+              >
+                {page}
+              </button>
+            ) : (
+              <span key={idx} className="pagination-ellipsis">
+                {page}
+              </span>
+            )
+          )}
+        </div>
 
-        <button
-          className={`pagination-link ${currentPage < pageCount ? 'is-active' : ''}`}
-          disabled={currentPage >= pageCount}
+        <span
+          className={`${currentPage >= pageCount ? 'pagination-button-disabled' : ''}`}
           onClick={nextPage}
           aria-label="Next Page"
         >
-          <i className="adminfont-next"></i>
-        </button>
+          <i className="admin-font adminfont-pagination-right-arrow"></i>
+        </span>
 
-        <button
-          className={`pagination-link ${currentPage < pageCount ? 'is-active' : ''}`}
-          disabled={currentPage >= pageCount}
+        <span
+          className={`${currentPage >= pageCount ? 'pagination-button-disabled' : ''}`}
           onClick={lastPage}
           aria-label="Last Page"
         >
-          <i className="adminfont-last"></i>
-        </button>
+          <i className="admin-font adminfont-pagination-next-arrow"></i>
+        </span>
       </div>
 
       <label className="show-section">
