@@ -46,18 +46,30 @@ const PagePicker: React.FC<PagePickerProps> = ({
 
   const selectInputValue = (e: React.MouseEvent<HTMLInputElement>) => e.currentTarget.select();
 
-  // Determine visible page numbers
+  // Determine visible page numbers with ellipsis
   const getVisiblePages = () => {
-    const pages: number[] = [];
-    let start = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
-    let end = start + maxPageButtons - 1;
+    const pages: (number | string)[] = [];
+    const totalNumbers = maxPageButtons;
+    const totalBlocks = totalNumbers + 2; // first + last pages
 
-    if (end > pageCount) {
-      end = pageCount;
-      start = Math.max(1, end - maxPageButtons + 1);
+    if (pageCount <= totalBlocks) {
+      // Show all pages if total pages are less than limit
+      for (let i = 1; i <= pageCount; i++) pages.push(i);
+    } else {
+      const left = Math.max(currentPage - Math.floor(totalNumbers / 2), 2);
+      const right = Math.min(currentPage + Math.floor(totalNumbers / 2), pageCount - 1);
+
+      pages.push(1); // First page
+
+      if (left > 2) pages.push('...'); // Left ellipsis
+
+      for (let i = left; i <= right; i++) pages.push(i);
+
+      if (right < pageCount - 1) pages.push('...'); // Right ellipsis
+
+      pages.push(pageCount); // Last page
     }
 
-    for (let i = start; i <= end; i++) pages.push(i);
     return pages;
   };
 
@@ -86,15 +98,21 @@ const PagePicker: React.FC<PagePickerProps> = ({
           <i className="adminfont-previous"></i>
         </button>
 
-        {pages.map((page) => (
-          <button
-            key={page}
-            className={`pagination-link ${currentPage === page ? 'active' : ''}`}
-            onClick={() => goToPage(page)}
-          >
-            {page}
-          </button>
-        ))}
+        {pages.map((page, idx) =>
+          typeof page === 'number' ? (
+            <button
+              key={idx}
+              className={`pagination-link ${currentPage === page ? 'active' : ''}`}
+              onClick={() => goToPage(page)}
+            >
+              {page}
+            </button>
+          ) : (
+            <span key={idx} className="pagination-ellipsis">
+              {page}
+            </span>
+          )
+        )}
 
         <button
           className={`pagination-link ${currentPage < pageCount ? 'is-active' : ''}`}
