@@ -120,7 +120,7 @@ const HeaderNotifications: React.FC = () => {
 				template="tab"
 				width="24rem"
 				toggleIcon="adminfont-notification"
-				toggleContent={<span className="count">{notifications?.length ?? 0}</span>}
+				toggleContent={notifications?.length > 0 && ( <span className="count">{notifications?.length}</span> )}
 				onTabChange={(tabId) => {
 					setActiveType(
 						tabId === 'activities' ? 'activity' : 'notification'

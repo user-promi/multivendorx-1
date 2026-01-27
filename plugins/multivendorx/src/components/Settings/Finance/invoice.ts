@@ -169,7 +169,7 @@ export default {
 		},
 		{
 			key: 'company_logo',
-			// classes: 'vertical',
+			classes: 'vertical',
 			type: 'file',
 			label: __('Company logo', 'multivendorx'),
 			desc: __('Upload your company logo for invoices', 'multivendorx'),
@@ -179,7 +179,7 @@ export default {
 		},
 		{
 			key: 'company_logo',
-			// classes: 'vertical',
+			classes: 'vertical',
 			type: 'file',
 			label: __('Signature', 'multivendorx'),
 			// desc: __('Upload your company logo for invoices', 'multivendorx'),
@@ -199,6 +199,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
+			classes: 'vertical w-50',
 			label: __('Invoice generation timing', 'multivendorx'),
 			desc: __(
 				'Choose the page size for generated invoice PDFs',
@@ -232,6 +233,7 @@ export default {
 			key: 'type_options',
 			type: 'checkbox',
 			label: __('Enable invoices for', 'multivendorx'),
+			classes: 'vertical w-50',
 			// settingDescription: __(
 			// 	'Select the product/listing fields stores can configure when adding or managing their products/listings.',
 			// 	'multivendorx'
@@ -272,7 +274,7 @@ export default {
 		{
 			key: 'multivendorx_tinymce_api_section',
 			type: 'text',
-			// classes: 'vertical w-50',
+			classes: 'vertical w-50',
 			label: __('Invoice number format', 'multivendorx'),
 			// placeholder: 'Enter GST registration number',
 			moduleEnabled: 'invoice',
@@ -282,7 +284,7 @@ export default {
 		{
 			key: 'multivendorx_tinymce_api_section',
 			type: 'text',
-			// classes: 'vertical w-50',
+			classes: 'vertical w-50',
 			label: __('Starting invoice number', 'multivendorx'),
 			// placeholder: 'Enter GST registration number',
 			size: '25rem',
@@ -292,6 +294,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
+			classes: 'vertical w-50',
 			label: __('Invoice numbering mode', 'multivendorx'),
 			moduleEnabled: 'invoice',
 			options: [
@@ -319,6 +322,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
+			classes: 'vertical w-50',
 			label: __('Tax display mode', 'multivendorx'),
 			moduleEnabled: 'invoice',
 			options: [
@@ -342,6 +346,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
+			classes: 'vertical w-50',
 			label: __('Tax breakdown visibility', 'multivendorx'),
 			moduleEnabled: 'invoice',
 			options: [
@@ -365,6 +370,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
+			classes: 'vertical w-50',
 			label: __('Tax identity on invoice', 'multivendorx'),
 			moduleEnabled: 'invoice',
 			options: [
@@ -397,6 +403,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
+			classes: 'vertical w-50',
 			label: __('Page size', 'multivendorx'),
 			moduleEnabled: 'invoice',
 			options: [
@@ -420,6 +427,7 @@ export default {
 		{
 			key: 'commission_type',
 			type: 'setting-toggle',
+			classes: 'vertical w-50',
 			label: __('Orientation', 'multivendorx'),
 			moduleEnabled: 'invoice',
 			options: [
@@ -447,7 +455,7 @@ export default {
 		{
 			key: 'type_options',
 			type: 'checkbox',
-			// classes: 'vertical',
+			classes: 'vertical',
 			label: __('Automatic email delivery', 'multivendorx'),
 
 			desc: __(
@@ -502,11 +510,13 @@ export default {
 		{
 			key: 'seller_agreement',
 			type: 'textarea',
+			classes: 'vertical w-50',
 			label: __('Invoice footer text', 'multivendorx'),
 		},
 		{
 			key: 'seller_agreement',
 			type: 'textarea',
+			classes: 'vertical w-50',
 			label: __('Terms and conditions', 'multivendorx'),
 		},
 		{
