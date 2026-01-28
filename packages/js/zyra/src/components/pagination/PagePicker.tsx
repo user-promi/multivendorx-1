@@ -78,6 +78,19 @@ const PagePicker: React.FC<PagePickerProps> = ({
 
   return (
     <div className="pagination-number-wrapper">
+      <label className="show-section">
+        Go to page
+        <input
+          type="number"
+          min={1}
+          max={pageCount}
+          value={inputValue}
+          onClick={selectInputValue}
+          onChange={onInputChange}
+          onBlur={onInputBlur}
+          className={`pagination-page-picker-input`}
+        />
+      </label>
       <div className="pagination-arrow">
         <span
           className={`${currentPage <= 1 ? 'pagination-button-disabled' : ''}`}
@@ -130,19 +143,7 @@ const PagePicker: React.FC<PagePickerProps> = ({
         </span>
       </div>
 
-      <label className="show-section">
-        Go to page
-        <input
-          type="number"
-          min={1}
-          max={pageCount}
-          value={inputValue}
-          onClick={selectInputValue}
-          onChange={onInputChange}
-          onBlur={onInputBlur}
-          className={`pagination-page-picker-input`}
-        />
-      </label>
+
     </div>
   );
 };
