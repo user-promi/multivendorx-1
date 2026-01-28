@@ -3,10 +3,10 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'notification-configuration',
 	priority: 1,
-	name: 'Events delivery',
+	name: 'Events Delivery',
 	tabTitle: 'Email & SMS delivery',
 	desc: __(
-		'Define who receives notification messages from the marketplace.',
+		'Get notified about important updates. Choose how you want to receive notifications from your marketplace - by email, text message, or both.',
 		'multivendorx'
 	),
 	icon: 'adminfont-notification',

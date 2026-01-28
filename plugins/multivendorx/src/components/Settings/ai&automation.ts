@@ -153,6 +153,10 @@ export default {
 				'Choose which AI provider to use for image enhancement.',
 				'multivendorx'
 			),
+			settingDescription: __(
+				'Select the AI service that will enhance and improve images across your marketplace.',
+				'multivendorx'
+			),
 
 			options: [
 				{

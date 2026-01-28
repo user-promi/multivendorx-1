@@ -15,8 +15,8 @@ export default {
 			key: 'financial_tax_required_uploads',
 			type: 'checkbox',
 			label: __('Required store uploads', 'multivendorx'),
-			desc: __(
-				'Select which financial or tax-related documents stores must upload for compliance verification.',
+			settingDescription: __(
+				'Specify which financial or tax-related documents stores must upload for compliance verification.',
 				'multivendorx'
 			),
 			options: [
