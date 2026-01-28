@@ -15,11 +15,11 @@ export const renderCell = (cell: TableRow) => {
 						/>
 					)}
 					<i className="item-icon adminfont-store-inventory" />
-					<div className="details">
+					<span className="details">
 						<span className="title">{name}</span>
 						{sku && <span className="des">SKU: {sku}</span>}
 						{id && <div className="id">#{id}</div>}
-					</div>
+					</span>
 				</a>
 			);
 		}
