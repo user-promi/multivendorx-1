@@ -16,7 +16,7 @@ import {
 	Tabs,
 	useModules,
 } from 'zyra';
-import ShowProPopup from '../Popup/popup';
+import ShowProPopup from '../Popup/Popup';
 import { useLocation, Link } from 'react-router-dom';
 import Notifications from './Notification/Notification';
 import StoreStatus from './StoreConfiguration/StoreStatus.tsx';
