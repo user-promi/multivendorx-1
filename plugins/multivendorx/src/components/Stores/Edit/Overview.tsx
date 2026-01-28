@@ -4,8 +4,8 @@ import { __ } from '@wordpress/i18n';
 import axios from 'axios';
 import { Analytics, Card, Column, Container, getApiLink, InfoItem, useModules, Skeleton } from 'zyra';
 import { formatCurrency } from '../../../services/commonFunction';
-import LatestReview from './latestReview';
-import LatestRefundRequest from './latestRefundRequest';
+import LatestReview from './LatestReview';
+import LatestRefundRequest from './LatestRefundRequest';
 
 interface OverviewProps {
 	id: string | null;

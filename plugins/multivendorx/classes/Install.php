@@ -1804,7 +1804,7 @@ class Install {
         update_option( Utill::MULTIVENDORX_SETTINGS['policy'], $policy_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['review-management'], $review_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursement_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['development-tools'], $tool_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['developer-tools'], $tool_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['payment-integration'], $payment_settings );
 
     }

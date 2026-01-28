@@ -1,17 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
-const productTypes = [
-    { key: 'simple', label: 'Simple (Default)', value: 'simple' },
-    { key: 'booking', label: 'Booking', value: 'booking', pro: true },
-    { key: 'rental', label: 'Rental', value: 'rental', pro: true },
-    { key: 'auction', label: 'Auction', value: 'auction', pro: true },
-    { key: 'appointment', label: 'Appointment', value: 'appointment', pro: true },
-    { key: 'bundle', label: 'Bundle', value: 'bundle', pro: true },
-    { key: 'subscription', label: 'Subscription', value: 'subscription', pro: true },
-    { key: 'gift_card', label: 'Gift Card', value: 'gift_card', pro: true },
-];
 export default {
-    id: 'development-tools',
+    id: 'developer-tools',
     priority: 3,
     name: __('Developer Tools', 'multivendorx'),
     tabTitle: 'Dashboard Caching',
