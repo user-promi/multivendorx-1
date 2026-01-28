@@ -262,7 +262,14 @@ const Table: React.FC<TableProps> = ({
 											key={`${getRowKey(row, rowIndex)}-${colIndex}`}
 											className={cellClass}
 										>
-											<span className={`tag-${columnClass}`}>
+											<span
+												className={columnClass ? `admin-badge tag-${columnClass}` : ''}
+												onClick={
+													header.isEditable && !isEditing
+														? () => setEditingCell({ id: rowId, key: header.key })
+														: undefined
+												}
+											>
 												{header.isEditable ? (
 													renderEditableCell({
 														header,
@@ -270,7 +277,7 @@ const Table: React.FC<TableProps> = ({
 														isEditing,
 														onEditStart: () =>
 															setEditingCell({ id: rowId, key: header.key }),
-														onSave: handleSave
+														onSave: handleSave,
 													})
 												) : (
 													renderCell(cell)
