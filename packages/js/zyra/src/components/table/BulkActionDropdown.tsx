@@ -8,9 +8,11 @@ export type BulkAction = {
 interface BulkActionDropdownProps {
 	actions: BulkAction[];
 	selectedIds: number[];
+	totalIds: number[];
 	onApply: (action: string) => void;
 	onClearSelection: () => void;
 	onSelectCsvDownloadApply?: (selectedIds: number[]) => void;
+	onToggleSelectAll: (select: boolean) => void;
 }
 
 const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
@@ -18,8 +20,14 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 	selectedIds,
 	onApply,
 	onClearSelection,
-	onSelectCsvDownloadApply
+	onSelectCsvDownloadApply,
+	onToggleSelectAll,
+	totalIds,
 }) => {
+
+	const allSelected =
+		totalIds.length > 0 && selectedIds.length === totalIds.length;
+
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const action = e.target.value;
 		onApply(action);
@@ -31,6 +39,13 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 				{selectedIds.length} Rows selected
 				<i onClick={onClearSelection} className="adminfont-close" />
 			</span>
+			<button
+				type="button"
+				className="link-btn"
+				onClick={() => onToggleSelectAll(!allSelected)}
+			>
+				{allSelected ? 'Deselect All' : 'Select All'}
+			</button>
 			<div className="action">
 				<i className="adminfont-form" />
 				<select

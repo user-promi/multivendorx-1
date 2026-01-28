@@ -370,6 +370,10 @@ const TableCard: React.FC<TableCardProps> = ({
 							onApply={handleBulkApply}
 							onClearSelection={() => setSelectedIds([])}
 							onSelectCsvDownloadApply={onSelectCsvDownloadApply}
+							totalIds={ids}
+							onToggleSelectAll={(select) =>
+								setSelectedIds(select ? [...ids] : [])
+							}
 						/>
 					)}
 				</div>

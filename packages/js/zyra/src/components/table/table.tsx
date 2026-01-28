@@ -224,10 +224,10 @@ const Table: React.FC<TableProps> = ({
 									const isHeaderCell = rowHeader === colIndex;
 									const CellTag = isHeaderCell ? 'th' : 'td';
 									const displayValue = getDisplay(cell);
-									const safeValue =
-										displayValue !== null && displayValue !== undefined
-											? String(displayValue).replace(/\s+/g, '-').toLowerCase()
-											: '';
+									const columnClass =
+									header.key === 'status'
+									  ? String(displayValue)
+									  : '';
 
 									const cellClass = [
 										'admin-column',
@@ -237,7 +237,7 @@ const Table: React.FC<TableProps> = ({
 											? 'left'
 											: '',
 										sortedBy === header.key ? 'sorted' : '',
-										safeValue ? `cell-${safeValue}` : '',
+										columnClass ? columnClass : '',
 									]
 										.filter(Boolean)
 										.join(' ');
