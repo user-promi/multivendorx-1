@@ -492,6 +492,15 @@ export default {
 			label: 'Marketplace Boosters',
 		},
 		{
+			id: 'marketplace-intelligence',
+			name: __('Intelligence', 'multivendorx'),
+			desc: 'Let stores create high-converting product descriptions and images instantly using AI.',
+			icon: 'adminfont-marketplace-intelligence',
+			doc_link:
+				'https://multivendorx.com/docs/knowledgebase/marketplace-intelligence',
+			category: 'marketplace_boosters',
+		},
+		{
 			id: 'marketplace-compliance',
 			name: __('Compliance', 'multivendorx'),
 			desc: 'Ensure stores meet marketplace requirements with automated policy checks.',
@@ -511,6 +520,7 @@ export default {
 			pro_module: true,
 			category: 'marketplace_boosters',
 		},
+		
 		{
 			id: 'facilitator',
 			name: __('Facilitator', 'multivendorx'),
