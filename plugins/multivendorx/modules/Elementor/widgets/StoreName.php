@@ -7,7 +7,7 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use MultiVendorX\Elementor\StoreHelper;
 
-class Store_Name extends \Widget_Base {
+class Store_Name extends Widget_Base {
 	use StoreHelper;
 
 	public function get_name() {

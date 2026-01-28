@@ -29,7 +29,7 @@ class Admin {
      * Register custom Elementor document type
      */
     public function register_elementor_document_type( $documents_manager ) {
-        $documents_manager->register_document_type( 'multivendorx-store', 'StoreDocument' );
+        $documents_manager->register_document_type( 'multivendorx-store', StoreDocument::class );
     }
 
     public function elementor_template_filter( $template ) {
