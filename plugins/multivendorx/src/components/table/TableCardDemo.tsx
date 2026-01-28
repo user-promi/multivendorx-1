@@ -236,7 +236,6 @@ const TableCardDemo: React.FC = () => {
 					onCellEdit={(data)=>{
 						console.log('edit',data);
 					}}
-					rowHeader={2}
 				/>
 			</Column>
 		</Container>
