@@ -26,7 +26,7 @@ import {
 	RowSelectionState,
 	PaginationState,
 } from '@tanstack/react-table';
-import './announcements.scss';
+import './Announcements.scss';
 import { formatLocalDate, formatWcShortDate, truncateText } from '@/services/commonFunction';
 import { Dialog } from '@mui/material';
 

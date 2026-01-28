@@ -202,6 +202,13 @@ const TableCardDemo: React.FC = () => {
 			},
 		},
 		{
+			label: 'Import',
+			icon: 'download',
+			onClickWithQuery: (query) => {
+				console.log('Import clicked',query);
+			},
+		},
+		{
 			label: 'Refresh',
 			icon: 'refresh',
 			onClick: () => {

@@ -1,17 +1,23 @@
 import React from 'react';
+import { QueryProps } from './types';
 
 export type ButtonAction = {
 	label: string;
 	icon?: string;
 	onClick: () => void;
 	className?: string;
+	onClickWithQuery?:( query:QueryProps) => void;
 };
 
 type ButtonActionsProps = {
 	actions?: ButtonAction[];
+	query?: QueryProps;
 };
 
-const ButtonActions: React.FC<ButtonActionsProps> = ({ actions = [] }) => {
+const ButtonActions: React.FC<ButtonActionsProps> = ({
+	actions = [],
+	query,
+}) => {
 	if (!actions.length) return null;
 
 	return (
@@ -20,7 +26,13 @@ const ButtonActions: React.FC<ButtonActionsProps> = ({ actions = [] }) => {
 				<button
 					key={index}
 					className={`admin-badge ${action.className || ''}`}
-					onClick={action.onClick}
+					onClick={() => {
+						if (action.onClickWithQuery && query) {
+							action.onClickWithQuery(query);
+						} else {
+							action.onClick?.();
+						}
+					}}
 				>
 					{action.icon && <i className={`adminfont-${action.icon}`} />}
 					{action.label}
@@ -31,3 +43,4 @@ const ButtonActions: React.FC<ButtonActionsProps> = ({ actions = [] }) => {
 };
 
 export default ButtonActions;
+

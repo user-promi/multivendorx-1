@@ -6,18 +6,18 @@ import { AdminHeader, Banner, CommonPopup, DoActionBtn, FormGroup, FormGroupWrap
 import Settings from './components/Settings/Settings';
 import Modules from './components/Modules/modules';
 import Store from './components/Store/store';
-import AdminDashboard from './components/AdminDashboard/adminDashboard';
+import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import StatusAndTools from './components/StatusAndTools/statusAndTools';
-import CustomerServices from './components/CustomerService/customerServices';
+import CustomerSupport from './components/CustomerSupport/CustomerSupport';
 import Brand from './assets/images/multivendorx-logo.png';
 import { searchIndex, SearchItem } from './searchIndex';
 import { __ } from '@wordpress/i18n';
-import Announcements from './components/Announcements/announcements';
-import Knowledgebase from './components/Knowledgebase/knowledgebase';
-import Commission from './components/Commission/commission';
+import Announcements from './components/Announcements/Announcements';
+import Knowledgebase from './components/Knowledgebase/Knowledgebase';
+import Commission from './components/Commission/Commission';
 import Analytics from './components/Reports/Reports';
 import HelpSupport from './components/HelpSupport/HelpSupport';
-import ApprovalQueue from './components/ApprovalQueue/approvalQueue';
+import ApprovalQueue from './components/ApprovalQueue/ApprovalQueue';
 import HeaderNotification from './components/Notifications/HeaderNotifications';
 import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
@@ -105,7 +105,7 @@ const Route = () => {
 			{tab === 'modules' && <Modules />}
 			{tab === 'stores' && <Store />}
 			{tab === 'commissions' && <Commission />}
-			{tab === 'customer-support' && <CustomerServices />}
+			{tab === 'customer-support' && <CustomerSupport />}
 			{tab === 'approval-queue' && <ApprovalQueue />}
 			{tab === 'dashboard' && <AdminDashboard />}
 			{tab === 'announcement' && <Announcements />}
