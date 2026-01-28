@@ -75,11 +75,9 @@ export const formatLocalDate = (date: Date): string => {
     return `${y}-${m}-${d}`;
 };
 
-export function printDivById(divId: string) {
-	const source = document.getElementById(divId);
-	if (!source) return;
-	const printWindow = window.open('', '_blank');
-	if (!printWindow) return;
+export function printContent(divId: string) {
+	const source = document.getElementById(divId) as HTMLElement;
+	const printWindow = window.open('', '_blank') as Window;
 	const cloned = source.cloneNode(true) as HTMLElement;
 	printWindow.document.write(cloned.innerHTML);
 	printWindow.focus();
