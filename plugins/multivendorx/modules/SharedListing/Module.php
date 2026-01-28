@@ -5,12 +5,10 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\GatewayFee;
-
-use MultiVendorX\Utill;
+namespace MultiVendorX\SharedListing;
 
 /**
- * MultiVendorX Marketplace Fee Module class
+ * MultiVendorX SharedListing Module class
  *
  * @class       Module class
  * @version     PRODUCT_VERSION
@@ -32,7 +30,7 @@ class Module {
     private static $instance = null;
 
     /**
-     * Simple class constructor function
+     * SharedListing class constructor function
      */
     public function __construct() {
         // Init helper classes.
@@ -45,7 +43,8 @@ class Module {
      * @return void
      */
     public function init_classes() {
-        $this->container['admin'] = new Admin();
+        $this->container['rest'] = new Rest();
+        $this->container['frontend'] = new Frontend();
     }
 
     /**
@@ -74,7 +73,7 @@ class Module {
     }
 
     /**
-     * Initializes Simple class.
+     * Initializes class.
      * Checks for an existing instance
      * And if it doesn't find one, create it.
      *

@@ -5,14 +5,14 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\SPMV;
+namespace MultiVendorX\SharedListing;
 
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX REST API SPMV controller.
+ * MultiVendorX REST API SharedListing controller.
  *
  * @class       Module class
  * @version     PRODUCT_VERSION

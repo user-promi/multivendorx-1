@@ -7,7 +7,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\GatewayFee;
+namespace MultiVendorX\MarketplaceGateway;
 
 use MultiVendorX\Commission\CommissionUtil;
 use MultiVendorX\Utill;

@@ -5,10 +5,10 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\Invoice;
+namespace MultiVendorX\MarketplaceGateway;
 
 /**
- * MultiVendorX Store Review Module class
+ * MultiVendorX Marketplace Fee Module class
  *
  * @class       Module class
  * @version     PRODUCT_VERSION
@@ -43,6 +43,7 @@ class Module {
      * @return void
      */
     public function init_classes() {
+        $this->container['admin'] = new Admin();
     }
 
     /**
