@@ -34,6 +34,7 @@ class Frontend {
             'announcement' => array(
                 'name'   => __( 'Announcement', 'multivendorx' ),
                 'subtab' => '',
+                'priority' => 92
             ),
         );
 
