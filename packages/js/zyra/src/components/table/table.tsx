@@ -6,12 +6,10 @@ import React, {
 } from 'react';
 import { TableProps, TableRow } from './types';
 import TableRowActions from './TableRowActions';
+import { renderCell } from './Utill';
 
 const ASC = 'asc';
 const DESC = 'desc';
-
-const getDisplay = (cell: { display?: React.ReactNode }) =>
-	cell?.display ?? null;
 
 const Table: React.FC<TableProps> = ({
 	// instanceId,
@@ -223,7 +221,7 @@ const Table: React.FC<TableProps> = ({
 									const header = headers[colIndex];
 									const isHeaderCell = rowHeader === colIndex;
 									const CellTag = isHeaderCell ? 'th' : 'td';
-									const displayValue = getDisplay(cell);
+									const displayValue = renderCell(cell);
 									const columnClass =
 									header.key === 'status'
 									  ? String(displayValue)
@@ -248,7 +246,7 @@ const Table: React.FC<TableProps> = ({
 											scope={isHeaderCell ? 'row' : undefined}
 											className={cellClass}
 										>
-											{getDisplay(cell)}
+											{renderCell(cell)}
 										</CellTag>
 									);
 								})}

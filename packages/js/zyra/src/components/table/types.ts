@@ -61,18 +61,32 @@ export type TableHeader = {
 	 * Boolean value to control visibility of a header
 	 */
 	visible?: boolean;
+	type?: string;
 };
 
 export type TableRow = {
 	/**
-	 * Display value, used for rendering- strings or elements are best here.
+	 * Display value (optional if rendered via type + data)
 	 */
 	display?: React.ReactNode;
+
 	/**
-	 * "Real" value used for sorting, and should be a string or number. A column with `false` value will not be sortable.
+	 * Real value used for sorting
 	 */
 	value?: string | number | boolean;
+
+	/**
+	 * Cell rendering type
+	 * e.g. 'product', 'price', 'status'
+	 */
+	type?: string;
+
+	/**
+	 * Extra payload used by renderer based on `type`
+	 */
+	data?: Record<string, string | number>;
 };
+
 
 /**
  * Props shared between TableProps and TableCardProps.
