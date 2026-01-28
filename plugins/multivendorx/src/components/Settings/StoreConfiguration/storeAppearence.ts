@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import template1 from '../../../assets/images/template/store/template1.jpg';
 import template2 from '../../../assets/images/template/store/template2.jpg';
 import template3 from '../../../assets/images/template/store/template3.jpg';
-import DashboardTemplate from '../../../assets/template/Dashbord';
+import DashboardTemplate from '../../../assets/template/Dashboard';
 
 export default {
 	id: 'store-appearance',
