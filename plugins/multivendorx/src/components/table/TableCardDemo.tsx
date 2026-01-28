@@ -38,14 +38,13 @@ type TableRow = {
  */
 const headers: TableHeader[] = [
 	{
-		key: 'name',
+		key: 'id',
 		label: 'Product',
 		isLeftAligned: true,
 	},
 	{
 		key: 'sku',
 		label: 'SKU',
-		isSortable: true,
 	},
 	{
 		key: 'price',
@@ -104,7 +103,18 @@ const TableCardDemo: React.FC = () => {
 
 			// Map API response into TableRow[][]
 			const mappedRows: TableRow[][] = response.data.map((product: any) => [
-				{ display: <a href={`/wp-admin/post.php?post=${product.id}&action=edit`} target="_blank" rel="noopener noreferrer">{product.name}</a>, value: product.id },
+				{
+					type: 'product',
+					value: product.id,
+					data: {
+						id: product.id,
+						name: product.name,
+						sku: product.sku,
+						image: product.images?.[0]?.src,
+						status: product.status,
+					},
+					display:product.name
+				},
 				{ display: product.sku || '—', value: product.sku || '' },
 				{ display: `$${product.price}`, value: Number(product.price) },
 				{ display: product.total_sales, value: product.total_sales },
@@ -205,11 +215,11 @@ const TableCardDemo: React.FC = () => {
 					]}
 					activeCategory="all"
 					rowActions={rowActions}
-					onSelectCsvDownloadApply={(selectedIds: [])=>{
-						console.log('csv select',selectedIds)
+					onSelectCsvDownloadApply={(selectedIds: []) => {
+						console.log('csv select', selectedIds)
 					}}
-					onFilterCsvDownloadApply={(query: QueryProps)=>{
-						console.log('csv filter query',query)
+					onFilterCsvDownloadApply={(query: QueryProps) => {
+						console.log('csv filter query', query)
 					}}
 				/>
 			</Column>
