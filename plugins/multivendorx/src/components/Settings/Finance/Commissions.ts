@@ -50,7 +50,7 @@ export default {
 	id: 'store-commissions',
 	priority: 1,
 	name: __('Commissions', 'multivendorx'),
-	tabTitle: 'Commission share from the seller’s product/listing:',
+	tabTitle: 'Commission share from the seller’s product/listing',
 	desc: __(
 		'Decide how your marketplace takes commission from sales.',
 		'multivendorx'
