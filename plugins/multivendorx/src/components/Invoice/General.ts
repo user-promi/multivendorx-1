@@ -42,7 +42,7 @@ export default {
             key: 'type_options',
             type: 'checkbox',
             label: __('Who receives invoices?', 'multivendorx'),
-            classes: 'vertical w-50',
+            classes: 'vertical',
             // desc: __(
             //     'Select which invoices your marketplace should generate. Most stores only need the first option.',
             //     'multivendorx'
@@ -84,7 +84,7 @@ export default {
         {
             key: 'display_customer_order',
             type: 'setting-toggle',
-            classes: 'vertical w-50 full-width',
+            classes: 'vertical full-width',
             label: __('Customers will see information for', 'multivendorx'),
             custom: true,
             options: [
