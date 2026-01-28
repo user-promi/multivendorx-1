@@ -332,16 +332,7 @@ export default {
 					preInsideText: __('$', 'multivendorx'),
 					size: '8rem',
 					preText: 'Charge a fixed',
-					postText: '+',
-					// postInsideText: {
-					// 	type: 'select',
-					// 	key: 'store_base',
-					// 	size: '7rem',
-					// 	options: [
-					// 		{ 'value': 'Monthly', 'label': 'Monthly' },
-					// 		{ 'value': 'Day', 'label': 'Day' }
-					// 	]
-					// }
+					postText: '+'
 				},
 				{
 					key: 'commission_percentage',
