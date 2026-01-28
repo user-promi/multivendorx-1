@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import CustomerInvoice1 from '../../assets/template/customerInvoice/Invoice-1';
-
+import { applyFilters } from '@wordpress/hooks';
 
 export default {
     id: 'customer-invoice',
@@ -18,15 +18,18 @@ export default {
             label: __('Templates and design', 'multivendorx'),
             moduleEnabled: 'invoice',
             showPdfButton: true,
-            templates: [
-               {
-                    key: 'customer_invoice1',
-                    label: __('Customer Invoice', 'multivendorx'),
-                    preview: CustomerInvoice1,
-                    component: CustomerInvoice1,
-                    pdf: CustomerInvoice1,
-                },
-            ],
+            templates: applyFilters(
+                'multivendorx_invoice_templates',
+                [
+                    {
+                        key: 'customer_invoice1',
+                        label: __('Customer Invoice', 'multivendorx'),
+                        preview: CustomerInvoice1,
+                        component: CustomerInvoice1,
+                        pdf: CustomerInvoice1,
+                    },
+                ]
+            ),
             predefinedOptions: [
                 {
                     key: 'orchid_bloom',

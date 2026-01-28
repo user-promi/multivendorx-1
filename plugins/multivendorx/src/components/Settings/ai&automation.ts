@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'ai-automation',
+	id: 'intelligence',
 	priority: 10,
 	name: 'Intelligence',
 	tabTitle: 'API Keys',

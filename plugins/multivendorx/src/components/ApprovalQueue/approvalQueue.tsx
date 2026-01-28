@@ -2,13 +2,13 @@ import { AdminBreadcrumbs, getApiLink, Tabs, useModules } from 'zyra';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useLocation, Link } from 'react-router-dom';
-import PendingStores from './pendingStores';
-import PendingProducts from './pendingProducts';
-import PendingCoupons from './pendingCoupons';
-import PendingRefund from './pendingRefund';
-import PendingReportAbuse from './pendingAbuseReports';
-import PendingWithdrawal from './pendingWithdrawalRequests';
-import PendingDeactivateRequests from './pendingDeactivateRequests';
+import PendingStores from './PendingStores';
+import PendingProducts from './PendingProducts';
+import PendingCoupons from './PendingCoupons';
+import PendingRefund from './PendingRefund';
+import PendingReportAbuse from './PendingAbuseReports';
+import PendingWithdrawal from './PendingWithdrawalRequests';
+import PendingDeactivateRequests from './PendingDeactivateRequests';
 
 const ApprovalQueue = () => {
 	const [storeCount, setStoreCount] = useState<number>(0);
