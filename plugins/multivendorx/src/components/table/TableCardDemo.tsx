@@ -63,6 +63,10 @@ const headers: TableHeader[] = [
 		key: 'status',
 		label: 'Status',
 	},
+	{
+		key: 'action',
+		label: 'Action',
+	},
 ];
 
 const TableCardDemo: React.FC = () => {
@@ -201,6 +205,12 @@ const TableCardDemo: React.FC = () => {
 					]}
 					activeCategory="all"
 					rowActions={rowActions}
+					onSelectCsvDownloadApply={(selectedIds: [])=>{
+						console.log('csv select',selectedIds)
+					}}
+					onFilterCsvDownloadApply={(query: QueryProps)=>{
+						console.log('csv filter query',query)
+					}}
 				/>
 			</Column>
 		</Container>
