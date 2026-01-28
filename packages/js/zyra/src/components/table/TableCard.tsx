@@ -8,6 +8,7 @@ import BulkActionDropdown from './BulkActionDropdown';
 import TableSearch from './TableSearch';
 import RealtimeFilters from './RealtimeFilter';
 import CategoryFilter from './CategoryFilter';
+import ButtonActions from './ButtonActions';
 
 const defaultOnColumnsChange = (
 	showCols: string[],
@@ -46,6 +47,7 @@ const TableCard: React.FC<TableCardProps> = ({
 	onSelectCsvDownloadApply,
 	onFilterCsvDownloadApply,
 	onCellEdit,
+	buttonActions,
 	...props
 }) => {
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -230,6 +232,8 @@ const TableCard: React.FC<TableCardProps> = ({
 				)}
 
 				<div className="table-action-wrapper">
+					{buttonActions && <ButtonActions actions={buttonActions} />}
+
 					{onFilterCsvDownloadApply && (
 						<button
 							className="admin-badge csv"
