@@ -19,6 +19,7 @@ import {
 	FormGroup,
 	AdminButton,
 	ProPopup,
+	TableCard,
 } from 'zyra';
 
 import {
@@ -400,8 +401,8 @@ export const Announcements: React.FC = () => {
 
 	// Fetch data from backend.
 	function requestData(
-		rowsPerPage :number,
-		currentPage :number,
+		rowsPerPage: number,
+		currentPage: number,
 		categoryFilter = '',
 		searchField = '',
 		startDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1),
@@ -862,6 +863,16 @@ export const Announcements: React.FC = () => {
 			</CommonPopup>
 
 			<Container general>
+				<Column>
+					<TableCard
+						// title="Revenue Report"
+						headers={headers}
+						rows={rows}
+						totalRows={totalRows}
+						isLoading={isLoading}
+						onQueryUpdate={fetchData}
+					/>
+				</Column>
 				<Column>
 					<Table
 						data={data}
