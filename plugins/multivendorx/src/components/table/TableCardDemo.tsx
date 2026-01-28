@@ -72,10 +72,6 @@ const headers: TableHeader[] = [
 			{ label: 'Draft', value: 'draft' },
 		],
 	},
-	{
-		key: 'action',
-		label: 'Action',
-	},
 ];
 
 const TableCardDemo: React.FC = () => {
@@ -240,6 +236,7 @@ const TableCardDemo: React.FC = () => {
 					onCellEdit={(data)=>{
 						console.log('edit',data);
 					}}
+					rowHeader={2}
 				/>
 			</Column>
 		</Container>
