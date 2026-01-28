@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TextArea, getApiLink, SuccessNotice, Container, Column, Card, FormGroupWrapper, FormGroup, AdminButton, Skeleton } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import React from 'react';
+import { printDivById } from '@/services/commonFunction';
 
 const StoreRegistration = ({ id }: { id: string | null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
@@ -107,23 +108,6 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 			}
 		});
 	};
-	const printRef = useRef<HTMLDivElement>(null);
-
-	const handlePrint = () => {
-		if (!printRef.current) return;
-
-		const printWindow = window.open('', '_blank');
-		if (!printWindow) return;
-
-		printWindow.document.write(`
-			${printRef.current.innerHTML}
-		`);
-
-		printWindow.document.close();
-		printWindow.focus();
-		printWindow.print();
-		printWindow.close();
-	};
 
 	return (
 		<>
@@ -192,13 +176,13 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 										{
 											text: __('Print', 'multivendorx'),
 											className: 'blue',
-											onClick: handlePrint,
+											onClick: () => printDivById('archive-section'),
 										},
 									]}
 								/>
 							</div>
 						</div>
-						<div className="card-body" ref={printRef}>
+						<div className="card-body" id="archive-section">
 							{/* Registration Data */}
 							{formData.registration_data &&
 								Object.keys(formData.registration_data).length >
