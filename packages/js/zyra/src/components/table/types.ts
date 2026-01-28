@@ -62,6 +62,9 @@ export type TableHeader = {
 	 */
 	visible?: boolean;
 	type?: string;
+	isEditable?: boolean;
+	editType?: string;
+	options?: { label: string; value: string | number }[];
 };
 
 export type TableRow = {
@@ -149,6 +152,11 @@ export type TableProps = CommonTableProps & {
 	onSelectRow?: (id: number, selected: boolean) => void;
 	onSelectAll?: (selected: boolean) => void;
 	rowActions?: ActionItem[]; 
+	onCellEdit?: (data: {
+		id: string | number;
+		key: string;
+		value: string | number | boolean;
+	}) => void;
 };
 
 export type TableSummaryProps = {
@@ -232,6 +240,11 @@ export type TableCardProps = CommonTableProps & {
 	rowActions?: ActionItem[];
 	onSelectCsvDownloadApply?: (selectedIds: number[]) => void;
 	onFilterCsvDownloadApply ?: (query: QueryProps) => void;
+	onCellEdit?: (data: {
+		id: string | number;
+		key: string;
+		value: string | number | boolean;
+	}) => void;
 };
 
 export type FilterOption = {

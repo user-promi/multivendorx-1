@@ -46,6 +46,7 @@ const TableCard: React.FC<TableCardProps> = ({
 	rowActions,
 	onSelectCsvDownloadApply,
 	onFilterCsvDownloadApply,
+	onCellEdit,
 	...props
 }) => {
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -324,6 +325,7 @@ const TableCard: React.FC<TableCardProps> = ({
 						onSelectRow={handleSelectRow}
 						onSelectAll={handleSelectAll}
 						rowActions={rowActions}
+						onCellEdit={onCellEdit}
 					/>
 				</>
 

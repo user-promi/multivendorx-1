@@ -7,6 +7,7 @@ import React, {
 import { TableProps, TableRow } from './types';
 import TableRowActions from './TableRowActions';
 import { renderCell } from './Utill';
+import { renderEditableCell } from './renderEditableCell';
 
 const ASC = 'asc';
 const DESC = 'desc';
@@ -28,12 +29,17 @@ const Table: React.FC<TableProps> = ({
 	onSelectAll,
 	emptyMessage,
 	classNames,
-	rowActions
+	rowActions,
+	onCellEdit,
 }) => {
 	const allSelected = ids.length > 0 && ids.every((id) => selectedIds.includes(id));
 	const [tabIndex, setTabIndex] = useState<number | undefined>();
 	const [isScrollableRight, setIsScrollableRight] = useState(false);
 	const [isScrollableLeft, setIsScrollableLeft] = useState(false);
+	const [editingCell, setEditingCell] = useState<{
+		id: string | number;
+		key: string;
+	} | null>(null);
 
 	const containerRef = useRef<HTMLDivElement>(null);
 
@@ -223,9 +229,9 @@ const Table: React.FC<TableProps> = ({
 									const CellTag = isHeaderCell ? 'th' : 'td';
 									const displayValue = renderCell(cell);
 									const columnClass =
-									header.key === 'status'
-									  ? String(displayValue)
-									  : '';
+										header.key === 'status'
+											? String(displayValue)
+											: '';
 
 									const cellClass = [
 										'admin-column',
@@ -239,14 +245,37 @@ const Table: React.FC<TableProps> = ({
 									]
 										.filter(Boolean)
 										.join(' ');
+									const rowId = ids[rowIndex];
+									const isEditing =
+										editingCell?.id === rowId &&
+										editingCell?.key === header.key;
 
+									const handleSave = (value: string) => {
+										setEditingCell(null);
+										onCellEdit?.({
+											id: rowId,
+											key: header.key,
+											value,
+										});
+									};
 									return (
 										<CellTag
 											key={`${getRowKey(row, rowIndex)}-${colIndex}`}
 											scope={isHeaderCell ? 'row' : undefined}
 											className={cellClass}
 										>
-											{renderCell(cell)}
+											{header.isEditable ? (
+												renderEditableCell({
+													header,
+													cell,
+													isEditing,
+													onEditStart: () =>
+														setEditingCell({ id: rowId, key: header.key }),
+													onSave: handleSave,
+												})
+											) : (
+												renderCell(cell)
+											)}
 										</CellTag>
 									);
 								})}
