@@ -60,7 +60,7 @@ interface BasicInputProps {
     onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
     generate?: string;
     clickBtnName?: string;
-    feedback?: InputFeedback;
+    msg?: InputFeedback;
     onclickCallback?: (e: MouseEvent<HTMLButtonElement>) => void;
     proSetting?: boolean;
     description?: string;
@@ -101,7 +101,7 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
             generate,
             clickBtnName,
             onclickCallback,
-            feedback,
+            msg,
             description,
             rangeUnit,
             disabled = false,
@@ -372,8 +372,8 @@ const BasicInput = forwardRef<HTMLInputElement, BasicInputProps>(
                         dangerouslySetInnerHTML={{ __html: description }}
                     />
                 )}
-                {feedback && (
-                    <div className={feedback.type}>{feedback.message}</div>
+                {msg && (
+                    <div className={msg.type}>{msg.message}</div>
                 )}
             </>
         );
