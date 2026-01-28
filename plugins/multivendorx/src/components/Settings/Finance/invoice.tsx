@@ -19,7 +19,7 @@ const Invoice: React.FC = () => {
 	const initialTab = location.get('tabId') || 'general';
 
 	const settingsArray: SettingItem[] = getAvailableSettings(
-		getTemplateData('Invoice'),
+		getTemplateData('invoice'),
 		[]
 	);
 

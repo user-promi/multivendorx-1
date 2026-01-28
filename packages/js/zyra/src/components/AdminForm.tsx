@@ -1829,8 +1829,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     ] );
 
             const fieldContent =
-                inputField.type === 'section' ||
-                inputField.label === 'no_label' ? (
+                inputField.type === 'section' ? (
                     <>{ input }</>
                 ) : (
                     <div
