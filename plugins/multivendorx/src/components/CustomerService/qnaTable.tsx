@@ -609,8 +609,6 @@ const Qna: React.FC = () => {
 								<BasicInput
 									name="phone"
 									value={qna}
-
-									descClass="settings-metabox-description"
 									onChange={(e) => setQna(e.target.value)}
 								/>
 							</FormGroup>

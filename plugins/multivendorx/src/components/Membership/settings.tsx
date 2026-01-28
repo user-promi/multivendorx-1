@@ -188,8 +188,6 @@ const Settings = ({ id }: { id: string }) => {
 							<FormGroup label={__('Stripe Webhook URL', 'multivendorx')}>
 								<BasicInput
 									name="name"
-									 
-									descClass="settings-metabox-description"
 									value={formData.name}
 									onChange={handleChange}
 								/>
