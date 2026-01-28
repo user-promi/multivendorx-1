@@ -30,7 +30,7 @@ class Admin {
         // admin pages manu and submenu.
         add_action( 'admin_menu', array( $this, 'add_menus' ), 10 );
         // admin script and style.
-        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_script' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_script' ), 20 );
 
         // Allow URL.
         add_filter( 'allowed_redirect_hosts', array( $this, 'allow_multivendorx_redirect_host' ) );
