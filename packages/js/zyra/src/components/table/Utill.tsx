@@ -6,7 +6,7 @@ export const renderCell = (cell: TableRow) => {
 		case 'product': {
 			const { id, name, image, link, sku } = cell.data || {};
 			return (
-				<div className="product-cell">
+				<a href={link} className="product-wrapper">
 					{image && (
 						<img
 							src={image}
@@ -14,14 +14,13 @@ export const renderCell = (cell: TableRow) => {
 							className="product-image"
 						/>
 					)}
-					<div className="product-info">
-						<a href={link} target="_blank" rel="noreferrer">
-							<strong>{name}</strong>
-						</a>
-						{sku && <div className="sku">SKU: {sku}</div>}
+					<i className="item-icon adminfont-store-inventory" />
+					<div className="details">
+						<span className="title">{name}</span>
+						{sku && <span className="des">SKU: {sku}</span>}
 						{id && <div className="id">#{id}</div>}
 					</div>
-				</div>
+				</a>
 			);
 		}
 
