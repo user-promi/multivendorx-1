@@ -27,6 +27,9 @@ type TableHeader = {
 	screenReaderLabel?: string;
 	cellClassName?: string;
 	visible?: boolean;
+	isEditable?: boolean;
+	editType?: string;
+	options?: { label: string; value: string | number }[];
 };
 
 type TableRow = {
@@ -57,10 +60,17 @@ const headers: TableHeader[] = [
 		label: 'Total Sales',
 		isSortable: true,
 		isNumeric: true,
+		isEditable: true,
 	},
 	{
 		key: 'status',
 		label: 'Status',
+		isEditable: true,
+		editType: 'select',
+		options: [
+			{ label: 'Publish', value: 'publish' },
+			{ label: 'Draft', value: 'draft' },
+		],
 	},
 	{
 		key: 'action',
@@ -172,6 +182,12 @@ const TableCardDemo: React.FC = () => {
 			onClick: (id) => console.log('Delete row:', id),
 			className: 'danger',
 		},
+		{
+			label: 'Update',
+			icon: 'delete',
+			onClick: (id) => console.log('Delete row:', id),
+			className: 'danger',
+		},
 	];
 
 	return (
@@ -220,6 +236,9 @@ const TableCardDemo: React.FC = () => {
 					}}
 					onFilterCsvDownloadApply={(query: QueryProps) => {
 						console.log('csv filter query', query)
+					}}
+					onCellEdit={(data)=>{
+						console.log('edit',data);
 					}}
 				/>
 			</Column>
