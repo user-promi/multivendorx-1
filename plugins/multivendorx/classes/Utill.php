@@ -93,7 +93,7 @@ class Utill
         'delivery'                      => 'multivendorx_delivery_settings',
         'notification-configuration'    => 'multivendorx_notification_configuration_settings',
         'non-compliance'                => 'multivendorx_non_compliance_settings',
-        'development-tools'             => 'multivendorx_development_tools_settings',
+        'developer-tools'               => 'multivendorx_developer_tools_settings',
     );
 
     const MULTIVENDORX_OTHER_SETTINGS = array(

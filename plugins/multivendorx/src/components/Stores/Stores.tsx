@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import StoreTable from './storeTable';
-import EditStore from './Edit/editStore';
+import StoreTable from './StoreTable';
+import EditStore from './Edit/EditStore';
 import {
 	AdminBreadcrumbs,
 	AdminButton,
@@ -18,7 +18,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
-const Store = () => {
+const Stores = () => {
 	const location = useLocation();
 	const [addStore, setaddStore] = useState(false);
 	const [formData, setFormData] = useState<Record<string, string>>({});
@@ -423,4 +423,4 @@ const Store = () => {
 	);
 };
 
-export default Store;
+export default Stores;
