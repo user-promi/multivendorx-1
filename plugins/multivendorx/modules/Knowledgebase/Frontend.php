@@ -31,6 +31,7 @@ class Frontend {
             'knowledgebase' => array(
                 'name'   => __( 'Knowledgebase', 'multivendorx' ),
                 'subtab' => '',
+                'priority' => 95
             ),
         );
 

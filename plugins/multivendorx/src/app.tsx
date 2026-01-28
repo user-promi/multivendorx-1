@@ -33,19 +33,63 @@ interface Products {
 
 const products: Products[] = [
 	{
-		title: __('Double Opt-In', 'multivendorx'),
-		description: __(
-			'Experience the power of Double Opt-In for our Stock Alert Form!',
-			'multivendorx'
-		),
-	},
-	{
-		title: __('Your Subscription Hub', 'multivendorx'),
-		description: __(
-			'Easily monitor and download lists of out-of-stock subscribers.',
-			'multivendorx'
-		),
-	},
+	title: __('Marketplace monetization', 'multivendorx'),
+	description: __(
+		'Create flexible membership plans that let you charge stores for access, features, and growth opportunities.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Built-in tax compliance', 'multivendorx'),
+	description: __(
+		'Automatically generate tax-ready invoices for orders, commissions, and payouts to keep your marketplace compliant.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Franchise-ready scaling', 'multivendorx'),
+	description: __(
+		'Run multiple regional or franchise marketplaces with centralized control and consistent branding.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Recurring revenue engine', 'multivendorx'),
+	description: __(
+		'Enable subscription-based selling so your marketplace benefits from predictable, recurring income.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Service and booking sales', 'multivendorx'),
+	description: __(
+		'Allow stores to sell bookings for services, appointments, rentals, and experiences on your platform.',
+		'multivendorx'
+	),
+},
+{
+	title: __('High-value rentals', 'multivendorx'),
+	description: __(
+		'Launch rental marketplace with date-based availability and higher order values.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Verified stores', 'multivendorx'),
+	description: __(
+		'Verify store identities using documents and badges to build trust and reduce risk on your marketplace.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Vacation mode', 'multivendorx'),
+	description: __(
+		'Allow stores to temporarily pause their shop during vacations while keeping their listings intact.',
+		'multivendorx'
+	),
+},
+
+
 ];
 
 const Route = () => {

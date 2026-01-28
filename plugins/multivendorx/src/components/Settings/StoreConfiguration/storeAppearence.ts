@@ -97,7 +97,7 @@ export default {
 			templates: [
 				{
 					key: 'dashboard',
-					label: __('dashboard', 'mvx-pro'),
+					label: __('dashboard', 'multivendorx'),
 					preview: DashboardTemplate,
 					component: DashboardTemplate,
 				}
