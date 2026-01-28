@@ -663,6 +663,7 @@
             padding: 0.5rem;
             border: $border-light-small;
             position: relative;
+            flex-direction: column;
 
             .feature-name {
                 font-size: 1rem;
@@ -695,7 +696,7 @@
             }
 
             .textarea-input {
-                width: 70%;
+                width: 65%;
             }
 
             &:hover{
@@ -703,6 +704,10 @@
                     opacity: 1;
                 }
             }
+        }
+        .feature-row:last-child{
+            border: none;
+            padding: 0;
         }
     }
 }

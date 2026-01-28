@@ -23,6 +23,7 @@ export default {
 		{
 			key: 'role_access_table',
 			type: 'multi-checkbox-table',
+			classes: 'full-width',
 			columns: columns,
 			rows: appLocalizer?.capabilities || {},
 		},
