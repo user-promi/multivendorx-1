@@ -61,18 +61,35 @@ export type TableHeader = {
 	 * Boolean value to control visibility of a header
 	 */
 	visible?: boolean;
+	type?: string;
+	isEditable?: boolean;
+	editType?: string;
+	options?: { label: string; value: string | number }[];
 };
 
 export type TableRow = {
 	/**
-	 * Display value, used for rendering- strings or elements are best here.
+	 * Display value (optional if rendered via type + data)
 	 */
 	display?: React.ReactNode;
+
 	/**
-	 * "Real" value used for sorting, and should be a string or number. A column with `false` value will not be sortable.
+	 * Real value used for sorting
 	 */
 	value?: string | number | boolean;
+
+	/**
+	 * Cell rendering type
+	 * e.g. 'product', 'price', 'status'
+	 */
+	type?: string;
+
+	/**
+	 * Extra payload used by renderer based on `type`
+	 */
+	data?: Record<string, string | number>;
 };
+
 
 /**
  * Props shared between TableProps and TableCardProps.
@@ -91,11 +108,6 @@ type CommonTableProps = {
 	 * The query string represented in object form
 	 */
 	query?: QueryProps;
-	/**
-	 * Which column should be the row header, defaults to the first item (`0`) (but could be set to `1`, if the first col
-	 * is checkboxes, for example). Set to false to disable row headers.
-	 */
-	rowHeader?: number | false;
 	/**
 	 * An array of column headers (see `Table` props).
 	 */
@@ -135,6 +147,11 @@ export type TableProps = CommonTableProps & {
 	onSelectRow?: (id: number, selected: boolean) => void;
 	onSelectAll?: (selected: boolean) => void;
 	rowActions?: ActionItem[]; 
+	onCellEdit?: (data: {
+		id: string | number;
+		key: string;
+		value: string | number | boolean;
+	}) => void;
 };
 
 export type TableSummaryProps = {
@@ -216,6 +233,13 @@ export type TableCardProps = CommonTableProps & {
 	onCategoryClick?: (value: string) => void;
 	showColumnToggleIcon?: boolean;
 	rowActions?: ActionItem[];
+	onSelectCsvDownloadApply?: (selectedIds: number[]) => void;
+	onFilterCsvDownloadApply ?: (query: QueryProps) => void;
+	onCellEdit?: (data: {
+		id: string | number;
+		key: string;
+		value: string | number | boolean;
+	}) => void;
 };
 
 export type FilterOption = {

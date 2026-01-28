@@ -6,12 +6,11 @@ import React, {
 } from 'react';
 import { TableProps, TableRow } from './types';
 import TableRowActions from './TableRowActions';
+import { renderCell } from './Utill';
+import { renderEditableCell } from './renderEditableCell';
 
 const ASC = 'asc';
 const DESC = 'desc';
-
-const getDisplay = (cell: { display?: React.ReactNode }) =>
-	cell?.display ?? null;
 
 const Table: React.FC<TableProps> = ({
 	// instanceId,
@@ -22,7 +21,6 @@ const Table: React.FC<TableProps> = ({
 	className,
 	onSort = () => { },
 	query = {},
-	rowHeader,
 	rowKey,
 	ids = [],
 	selectedIds = [],
@@ -30,12 +28,17 @@ const Table: React.FC<TableProps> = ({
 	onSelectAll,
 	emptyMessage,
 	classNames,
-	rowActions
+	rowActions,
+	onCellEdit,
 }) => {
 	const allSelected = ids.length > 0 && ids.every((id) => selectedIds.includes(id));
 	const [tabIndex, setTabIndex] = useState<number | undefined>();
 	const [isScrollableRight, setIsScrollableRight] = useState(false);
 	const [isScrollableLeft, setIsScrollableLeft] = useState(false);
+	const [editingCell, setEditingCell] = useState<{
+		id: string | number;
+		key: string;
+	} | null>(null);
 
 	const containerRef = useRef<HTMLDivElement>(null);
 
@@ -206,6 +209,9 @@ const Table: React.FC<TableProps> = ({
 								</th>
 							);
 						})}
+						{rowActions && (
+							<th className=" header-col admin-column actions">Action</th>
+						)}
 					</tr>
 				</thead>
 				<tbody className="admin-table-body">
@@ -221,12 +227,10 @@ const Table: React.FC<TableProps> = ({
 								</td>
 								{row.map((cell, colIndex) => {
 									const header = headers[colIndex];
-									const isHeaderCell = rowHeader === colIndex;
-									const CellTag = isHeaderCell ? 'th' : 'td';
-									const displayValue = getDisplay(cell);
-									const safeValue =
-										displayValue !== null && displayValue !== undefined
-											? String(displayValue).replace(/\s+/g, '-').toLowerCase()
+									const displayValue = renderCell(cell);
+									const columnClass =
+										header.key === 'status'
+											? String(displayValue)
 											: '';
 
 									const cellClass = [
@@ -237,19 +241,42 @@ const Table: React.FC<TableProps> = ({
 											? 'left'
 											: '',
 										sortedBy === header.key ? 'sorted' : '',
-										safeValue ? `cell-${safeValue}` : '',
 									]
 										.filter(Boolean)
 										.join(' ');
+									const rowId = ids[rowIndex];
+									const isEditing =
+										editingCell?.id === rowId &&
+										editingCell?.key === header.key;
 
+									const handleSave = (value: string) => {
+										setEditingCell(null);
+										onCellEdit?.({
+											id: rowId,
+											key: header.key,
+											value,
+										});
+									};
 									return (
-										<CellTag
+										<td
 											key={`${getRowKey(row, rowIndex)}-${colIndex}`}
-											scope={isHeaderCell ? 'row' : undefined}
 											className={cellClass}
 										>
-											{getDisplay(cell)}
-										</CellTag>
+											<span className={`tag-${columnClass}`}>
+												{header.isEditable ? (
+													renderEditableCell({
+														header,
+														cell,
+														isEditing,
+														onEditStart: () =>
+															setEditingCell({ id: rowId, key: header.key }),
+														onSave: handleSave
+													})
+												) : (
+													renderCell(cell)
+												)}
+											</span>
+										</td>
 									);
 								})}
 								{rowActions && (

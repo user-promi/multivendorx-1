@@ -10,8 +10,6 @@ interface TablePlaceholderProps {
 	caption: string;
 	/** Number of placeholder rows */
 	numberOfRows?: number;
-	/** Which column should be the row header, defaults to 0 */
-	rowHeader?: number | false;
 	/** Table headers */
 	headers: TableHeader[];
 }
@@ -24,7 +22,6 @@ const TablePlaceholder: React.FC<TablePlaceholderProps> = ({
 	caption,
 	headers,
 	numberOfRows = 5,
-	rowHeader,
 }) => {
 	// Create placeholder rows
 	const rows = Array.from({ length: numberOfRows }).map(() =>
@@ -38,7 +35,6 @@ const TablePlaceholder: React.FC<TablePlaceholderProps> = ({
 			ariaHidden={true}
 			headers={headers}
 			rows={rows}
-			rowHeader={typeof rowHeader === 'number' ? rowHeader : 0}
 			query={query}
 			caption={caption}
 		/>

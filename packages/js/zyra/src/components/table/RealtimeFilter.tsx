@@ -29,12 +29,15 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
 }) => {
     if (!rows || rows.length === 0 && Object.keys(query).length === 0) return null;
 
-    const showResetButton = rows.length === 0 && Object.keys(query).length > 0;
-
+    const showResetButton = Object.values(query || {}).some((value) => {
+        if (Array.isArray(value)) return value.length > 0;
+        return value !== undefined && value !== null && value !== '';
+      });
+      
     return (
         <div className="wrap-bulk-all-date filter">
             <span className="title">
-                <i className="adminfont-filter"/>
+                <i className="adminfont-filter" />
                 Filter
             </span>
 

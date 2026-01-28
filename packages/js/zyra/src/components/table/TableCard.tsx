@@ -28,7 +28,6 @@ const TableCard: React.FC<TableCardProps> = ({
 	isLoading = false,
 	onColumnsChange = defaultOnColumnsChange,
 	onSort,
-	rowHeader = 0,
 	bulkActions = [],
 	onBulkActionApply,
 	rows = [],
@@ -44,6 +43,9 @@ const TableCard: React.FC<TableCardProps> = ({
 	filters = [],
 	showColumnToggleIcon = true,
 	rowActions,
+	onSelectCsvDownloadApply,
+	onFilterCsvDownloadApply,
+	onCellEdit,
 	...props
 }) => {
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -228,6 +230,14 @@ const TableCard: React.FC<TableCardProps> = ({
 				)}
 
 				<div className="table-action-wrapper">
+					{onFilterCsvDownloadApply && (
+						<button
+							className="admin-badge csv"
+							onClick={() => onFilterCsvDownloadApply(query)}
+						>
+							<i className="adminfont-download" /> CSV
+						</button>
+					)}
 					{actions && (
 						<div className="action-wrapper">
 							{actions}
@@ -287,7 +297,6 @@ const TableCard: React.FC<TableCardProps> = ({
 					<TablePlaceholder
 						numberOfRows={rowsPerPage}
 						headers={visibleHeaders}
-						rowHeader={rowHeader}
 						caption={title}
 						query={query}
 					/>
@@ -297,7 +306,6 @@ const TableCard: React.FC<TableCardProps> = ({
 					<Table
 						rows={visibleRows}
 						headers={visibleHeaders}
-						rowHeader={rowHeader}
 						caption={title}
 						query={query}
 						onSort={
@@ -314,6 +322,7 @@ const TableCard: React.FC<TableCardProps> = ({
 						onSelectRow={handleSelectRow}
 						onSelectAll={handleSelectAll}
 						rowActions={rowActions}
+						onCellEdit={onCellEdit}
 					/>
 				</>
 
@@ -340,22 +349,6 @@ const TableCard: React.FC<TableCardProps> = ({
 			</div>
 
 			<div className="admin-filter-wrapper">
-				{/* {filters.length > 0 && (
-					<RealtimeFilters
-						filters={filters}
-						query={query.filter || {}}
-						onFilterChange={onFilterChange}
-						rows={rows}
-						onResetFilters={() => setQuery((prev) => ({ ...prev, filter: {}, paged: 1 }))}
-					/>
-				)}
-				{bulkActions.length > 0 && (
-					<BulkActionDropdown
-						actions={bulkActions}
-						selectedIds={selectedIds}
-						onApply={handleBulkApply}
-					/>
-				)} */}
 				<div className="admin-filter-wrapper">
 					{selectedIds.length <= 2 && filters.length > 0 && (
 						<RealtimeFilters
@@ -374,6 +367,12 @@ const TableCard: React.FC<TableCardProps> = ({
 							actions={bulkActions}
 							selectedIds={selectedIds}
 							onApply={handleBulkApply}
+							onClearSelection={() => setSelectedIds([])}
+							onSelectCsvDownloadApply={onSelectCsvDownloadApply}
+							totalIds={ids}
+							onToggleSelectAll={(select) =>
+								setSelectedIds(select ? [...ids] : [])
+							}
 						/>
 					)}
 				</div>
