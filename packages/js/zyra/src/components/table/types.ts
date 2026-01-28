@@ -1,3 +1,4 @@
+import { ButtonAction } from "./ButtonActions";
 import { ActionItem } from "./TableRowActions";
 import { SearchOption } from "./TableSearch";
 
@@ -108,11 +109,6 @@ type CommonTableProps = {
 	 * The query string represented in object form
 	 */
 	query?: QueryProps;
-	/**
-	 * Which column should be the row header, defaults to the first item (`0`) (but could be set to `1`, if the first col
-	 * is checkboxes, for example). Set to false to disable row headers.
-	 */
-	rowHeader?: number | false;
 	/**
 	 * An array of column headers (see `Table` props).
 	 */
@@ -245,6 +241,7 @@ export type TableCardProps = CommonTableProps & {
 		key: string;
 		value: string | number | boolean;
 	}) => void;
+	buttonActions?:ButtonAction[];
 };
 
 export type FilterOption = {

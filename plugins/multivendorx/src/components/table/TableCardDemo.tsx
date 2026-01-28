@@ -72,10 +72,6 @@ const headers: TableHeader[] = [
 			{ label: 'Draft', value: 'draft' },
 		],
 	},
-	{
-		key: 'action',
-		label: 'Action',
-	},
 ];
 
 const TableCardDemo: React.FC = () => {
@@ -190,6 +186,30 @@ const TableCardDemo: React.FC = () => {
 		},
 	];
 
+	const buttonActions = [
+		{
+			label: 'Add Product',
+			icon: 'plus',
+			onClick: () => {
+				console.log('Add product clicked');
+			},
+		},
+		{
+			label: 'Export',
+			icon: 'download',
+			onClick: () => {
+				console.log('Export clicked');
+			},
+		},
+		{
+			label: 'Refresh',
+			icon: 'refresh',
+			onClick: () => {
+				fetchData({ page: 1 });
+			},
+		},
+	];
+	
 	return (
 		<Container general>
 			<Column>
@@ -231,6 +251,7 @@ const TableCardDemo: React.FC = () => {
 					]}
 					activeCategory="all"
 					rowActions={rowActions}
+					buttonActions={buttonActions}
 					onSelectCsvDownloadApply={(selectedIds: []) => {
 						console.log('csv select', selectedIds)
 					}}

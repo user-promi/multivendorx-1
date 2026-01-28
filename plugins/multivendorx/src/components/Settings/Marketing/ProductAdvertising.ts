@@ -67,7 +67,7 @@ export default {
 			key: 'store_advertisement_advanced_settings',
 			type: 'checkbox',
 			label: __('Advanced advertising settings', 'multivendorx'),
-			 
+			settingDescription: __( 'Manage how promoted products appear. Control featured status, catalog placement, subscription inclusion, and out-of-stock visibility for advertised items.', 'multivendorx' ),
 			options: [
 				{
 					key: 'enable_advertisement_in_subscription',

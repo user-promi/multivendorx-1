@@ -44,8 +44,8 @@ export default {
 			key: 'required_store_uploads',
 			type: 'checkbox',
 			label: __('Required store uploads', 'multivendorx'),
-			desc: __(
-				'Select which documents or files stores must upload for compliance verification.',
+			settingDescription: __(
+				'Specify the documents or files stores must provide to ensure their products comply with marketplace rules.',
 				'multivendorx'
 			),
 			moduleEnabled: 'marketplace-compliance',
