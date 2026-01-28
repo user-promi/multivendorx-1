@@ -38,7 +38,7 @@ const CustomerSupport = () => {
 		},
 		{
 			type: 'file',
-			module: 'customer-support',
+			module: 'store-support',
 			content: {
 				id: 'support-ticket',
 				name: 'Support Ticket',
@@ -76,7 +76,7 @@ const CustomerSupport = () => {
 		<>
 			<AdminBreadcrumbs
 				activeTabIcon="adminfont-customer-service"
-				tabTitle={__('Customer Service', 'multivendorx')}
+				tabTitle={__('Customer Support', 'multivendorx')}
 				description={__(
 					'Manage store reviews, support requests, financial transactions, and reported issues.',
 					'multivendorx'
