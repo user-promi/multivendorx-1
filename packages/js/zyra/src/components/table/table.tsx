@@ -5,6 +5,7 @@ import React, {
 	useState,
 } from 'react';
 import { TableProps, TableRow } from './types';
+import TableRowActions from './TableRowActions';
 
 const ASC = 'asc';
 const DESC = 'desc';
@@ -29,6 +30,7 @@ const Table: React.FC<TableProps> = ({
 	onSelectAll,
 	emptyMessage,
 	classNames,
+	rowActions
 }) => {
 	const allSelected = ids.length > 0 && ids.every((id) => selectedIds.includes(id));
 	const [tabIndex, setTabIndex] = useState<number | undefined>();
@@ -105,14 +107,14 @@ const Table: React.FC<TableProps> = ({
 		.join(' ');
 
 	const toggleAllRows = () => {
-	  const newState = !allSelected;
-	  onSelectAll?.(newState);
+		const newState = !allSelected;
+		onSelectAll?.(newState);
 	};
-  
+
 	const toggleRow = (index: number) => {
-	  const id = ids[index];
-	  const isSelected = selectedIds.includes(id);
-	  onSelectRow?.(id, !isSelected);
+		const id = ids[index];
+		const isSelected = selectedIds.includes(id);
+		onSelectRow?.(id, !isSelected);
 	};
 	return (
 		<div
@@ -221,6 +223,11 @@ const Table: React.FC<TableProps> = ({
 									const header = headers[colIndex];
 									const isHeaderCell = rowHeader === colIndex;
 									const CellTag = isHeaderCell ? 'th' : 'td';
+									const displayValue = getDisplay(cell);
+									const safeValue =
+										displayValue !== null && displayValue !== undefined
+											? String(displayValue).replace(/\s+/g, '-').toLowerCase()
+											: '';
 
 									const cellClass = [
 										'admin-column',
@@ -230,6 +237,7 @@ const Table: React.FC<TableProps> = ({
 											? 'left'
 											: '',
 										sortedBy === header.key ? 'sorted' : '',
+										safeValue ? `cell-${safeValue}` : '',
 									]
 										.filter(Boolean)
 										.join(' ');
@@ -244,6 +252,15 @@ const Table: React.FC<TableProps> = ({
 										</CellTag>
 									);
 								})}
+								{rowActions && (
+									<td className="admin-column actions">
+										<TableRowActions
+											rowId={ids[rowIndex]}
+											rowData={row}
+											rowActions={rowActions}
+										/>
+									</td>
+								)}
 							</tr>
 						))
 					) : (

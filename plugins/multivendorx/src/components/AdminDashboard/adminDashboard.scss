@@ -1112,47 +1112,6 @@
 
 // membership checklist end
 
-// move to color settings
-.form-group-color-setting {
-    display: flex;
-    margin-bottom: 0.75rem;
-    justify-content: space-between;
-
-    .form-group-wrapper {
-        .form-group {
-            padding: 0;
-            gap: 0;
-
-            label {
-                width: 100%;
-            }
-        }
-    }
-
-    .form-group-setting-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 0.45rem;
-
-        label {
-            font-size: 1rem;
-            padding-bottom: 0.625rem;
-        }
-    }
-
-    .admin-btn {
-        background: transparent;
-    }
-
-    .admin-btn:first-child {
-        border-radius: 0.313rem 0 0 0.313rem;
-    }
-
-    .admin-btn:last-child {
-        border-radius: 0.313rem 0 0 0.313rem;
-    }
-}
-
 // invoice styles start
 #invoice-table-wrapper {
 
