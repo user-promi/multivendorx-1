@@ -72,10 +72,6 @@ const headers: TableHeader[] = [
 			{ label: 'Draft', value: 'draft' },
 		],
 	},
-	{
-		key: 'action',
-		label: 'Action',
-	},
 ];
 
 const TableCardDemo: React.FC = () => {

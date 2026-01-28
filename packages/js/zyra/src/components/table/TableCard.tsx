@@ -28,7 +28,6 @@ const TableCard: React.FC<TableCardProps> = ({
 	isLoading = false,
 	onColumnsChange = defaultOnColumnsChange,
 	onSort,
-	rowHeader = 0,
 	bulkActions = [],
 	onBulkActionApply,
 	rows = [],
@@ -298,7 +297,6 @@ const TableCard: React.FC<TableCardProps> = ({
 					<TablePlaceholder
 						numberOfRows={rowsPerPage}
 						headers={visibleHeaders}
-						rowHeader={rowHeader}
 						caption={title}
 						query={query}
 					/>
@@ -308,7 +306,6 @@ const TableCard: React.FC<TableCardProps> = ({
 					<Table
 						rows={visibleRows}
 						headers={visibleHeaders}
-						rowHeader={rowHeader}
 						caption={title}
 						query={query}
 						onSort={

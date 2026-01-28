@@ -21,7 +21,6 @@ const Table: React.FC<TableProps> = ({
 	className,
 	onSort = () => { },
 	query = {},
-	rowHeader,
 	rowKey,
 	ids = [],
 	selectedIds = [],
@@ -210,6 +209,9 @@ const Table: React.FC<TableProps> = ({
 								</th>
 							);
 						})}
+						{rowActions && (
+							<th className=" header-col admin-column actions">Action</th>
+						)}
 					</tr>
 				</thead>
 				<tbody className="admin-table-body">
@@ -225,8 +227,6 @@ const Table: React.FC<TableProps> = ({
 								</td>
 								{row.map((cell, colIndex) => {
 									const header = headers[colIndex];
-									const isHeaderCell = rowHeader === colIndex;
-									const CellTag = isHeaderCell ? 'th' : 'td';
 									const displayValue = renderCell(cell);
 									const columnClass =
 										header.key === 'status'
@@ -241,7 +241,6 @@ const Table: React.FC<TableProps> = ({
 											? 'left'
 											: '',
 										sortedBy === header.key ? 'sorted' : '',
-										columnClass ? columnClass : '',
 									]
 										.filter(Boolean)
 										.join(' ');
@@ -259,24 +258,25 @@ const Table: React.FC<TableProps> = ({
 										});
 									};
 									return (
-										<CellTag
+										<td
 											key={`${getRowKey(row, rowIndex)}-${colIndex}`}
-											scope={isHeaderCell ? 'row' : undefined}
 											className={cellClass}
 										>
-											{header.isEditable ? (
-												renderEditableCell({
-													header,
-													cell,
-													isEditing,
-													onEditStart: () =>
-														setEditingCell({ id: rowId, key: header.key }),
-													onSave: handleSave,
-												})
-											) : (
-												renderCell(cell)
-											)}
-										</CellTag>
+											<span className={`tag-${columnClass}`}>
+												{header.isEditable ? (
+													renderEditableCell({
+														header,
+														cell,
+														isEditing,
+														onEditStart: () =>
+															setEditingCell({ id: rowId, key: header.key }),
+														onSave: handleSave
+													})
+												) : (
+													renderCell(cell)
+												)}
+											</span>
+										</td>
 									);
 								})}
 								{rowActions && (
