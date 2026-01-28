@@ -1107,7 +1107,6 @@ class Install {
     public function old_new_map_module_id() {
         $map_modules = [
             'spmv'  =>  'shared-listing',
-            'store-support'  =>  'customer-support',
             'report-abuse'  =>  'marketplace-compliance',
             'identity-verification'  =>  'marketplace-compliance',
             'store-location'  =>  'geo-location',

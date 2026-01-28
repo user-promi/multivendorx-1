@@ -421,8 +421,8 @@ export default {
 			category: 'customer_experience',
 		},
 		{
-			id: 'customer-support',
-			name: __('Customer Support', 'multivendorx'),
+			id: 'store-support',
+			name: __('Store Support', 'multivendorx'),
 			desc: 'Built-in ticketing system for customers to raise and track support requests.',
 			icon: 'adminfont-customer-support',
 			doc_link:

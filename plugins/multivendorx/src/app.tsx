@@ -4,7 +4,7 @@ import { applyFilters } from '@wordpress/hooks';
 import { AdminHeader, Banner, CommonPopup, DoActionBtn, FormGroup, FormGroupWrapper, TourSetup } from 'zyra';
 
 import Settings from './components/Settings/Settings';
-import Modules from './components/Modules/modules';
+import Modules from './components/Modules/Modules';
 import Store from './components/Store/store';
 import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import StatusAndTools from './components/StatusAndTools/statusAndTools';
@@ -20,8 +20,8 @@ import HelpSupport from './components/HelpSupport/HelpSupport';
 import ApprovalQueue from './components/ApprovalQueue/ApprovalQueue';
 import HeaderNotification from './components/Notifications/HeaderNotifications';
 import Notifications from './components/Notifications/Notifications';
-import TransactionHistory from './components/TransactionHistory/transactionHistory';
-import { getTourSteps } from './components/Tour/tourSteps';
+import TransactionHistory from './components/TransactionHistory/TransactionHistory';
+import { getTourSteps } from './components/Tour/TourSteps';
 import TableCardDemo from './components/table/TableCardDemo';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
@@ -108,7 +108,7 @@ const Route = () => {
 			{tab === 'customer-support' && <CustomerSupport />}
 			{tab === 'approval-queue' && <ApprovalQueue />}
 			{tab === 'dashboard' && <AdminDashboard />}
-			{tab === 'announcement' && <Announcements />}
+			{tab === 'announcements' && <Announcements />}
 			{tab === 'knowledgebase' && <Knowledgebase />}
 			{tab === 'transaction-history' && <TransactionHistory />}
 			{tab === 'reports' && <Analytics />}

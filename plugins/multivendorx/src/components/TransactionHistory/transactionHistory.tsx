@@ -5,7 +5,7 @@ import { __ } from '@wordpress/i18n';
 import '../Announcements/Announcements.scss';
 import { AdminBreadcrumbs, getApiLink, SelectInput, Tabs } from 'zyra';
 import axios from 'axios';
-import WalletTransaction from './walletTransaction';
+import WalletTransaction from './WalletTransaction';
 import { applyFilters } from '@wordpress/hooks';
 
 export const TransactionHistory: React.FC = () => {

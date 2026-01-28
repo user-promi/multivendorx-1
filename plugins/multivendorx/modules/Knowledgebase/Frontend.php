@@ -35,17 +35,6 @@ class Frontend {
             ),
         );
 
-        $ordered = array();
-        foreach ( $submenus as $key => $menu ) {
-            // Copy existing menu.
-            $ordered[ $key ] = $menu;
-
-            // Insert advertisement right after "status-tools".
-            if ( 'announcement' === $key || 'status-tools' === $key ) {
-                $ordered = array_merge( $ordered, $new_item );
-            }
-        }
-
-        return $ordered;
+        return array_merge( $submenus, $new_item );;
     }
 }
