@@ -5,7 +5,6 @@ const contexts: Record<string, __WebpackModuleApi.RequireContext> = {
 	settings: require.context('../components/Settings', true, /\.ts$/),
 	tools: require.context('../components/StatusAndTools', true, /\.ts$/),
 	storeStatus: require.context('../components/StoreStatus', true, /\.ts$/),
-	membership: require.context('../components/Membership', true, /\.ts$/),
 };
 
 type SettingNode = {
@@ -122,7 +121,7 @@ const importAll = (
 };
 
 const getTemplateData = (
-	type: 'settings' | 'tools' | 'storeStatus' | 'membership'
+	type: 'settings' | 'tools' | 'storeStatus'
 ): SettingNode[] => {
 	const ctx = contexts[type];
 

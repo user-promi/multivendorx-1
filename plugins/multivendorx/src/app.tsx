@@ -1,5 +1,6 @@
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 import { AdminHeader, Banner, CommonPopup, DoActionBtn, FormGroup, FormGroupWrapper, TourSetup } from 'zyra';
 
 import Settings from './components/Settings/Settings';
@@ -15,14 +16,12 @@ import Announcements from './components/Announcements/announcements';
 import Knowledgebase from './components/Knowledgebase/knowledgebase';
 import Commission from './components/Commission/commission';
 import Analytics from './components/Reports/Reports';
-import Advertisement from './components/Advertisement/Advertisement';
 import HelpSupport from './components/HelpSupport/HelpSupport';
 import ApprovalQueue from './components/ApprovalQueue/approvalQueue';
 import HeaderNotification from './components/Notifications/HeaderNotifications';
 import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
 import { getTourSteps } from './components/Tour/tourSteps';
-import AddMemberships from './components/Membership/add-membership';
 import TableCardDemo from './components/table/TableCardDemo';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
@@ -50,13 +49,14 @@ const products: Products[] = [
 ];
 
 const Route = () => {
+	const location = useLocation();
+	const navigate = useNavigate();
 	const currentTab = new URLSearchParams(useLocation().hash);
 	const tab = currentTab.get('tab') || 'dashboard';
 
 	return (
 		<>
 			{tab === 'settings' && <Settings id="settings" />}
-			{tab === 'memberships' && <AddMemberships />}
 			{tab === 'status-tools' && <StatusAndTools id="status-tools" />}
 			{tab === 'modules' && <Modules />}
 			{tab === 'stores' && <Store />}
@@ -68,10 +68,20 @@ const Route = () => {
 			{tab === 'knowledgebase' && <Knowledgebase />}
 			{tab === 'transaction-history' && <TransactionHistory />}
 			{tab === 'reports' && <Analytics />}
-			{tab === 'advertisement' && <Advertisement />}
 			{tab === 'help-support' && <HelpSupport />}
 			{tab === 'notifications' && <Notifications />}
 			{tab === 'table-card' && <TableCardDemo />}
+			
+			{applyFilters(
+				'multivendorx_admin_submenu_render',
+				null,
+				{
+					tab,
+					location,
+					Link,
+					navigate
+				}
+			)}
 		</>
 	);
 };
