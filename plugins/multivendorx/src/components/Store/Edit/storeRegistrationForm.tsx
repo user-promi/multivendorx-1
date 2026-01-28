@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { TextArea, getApiLink, SuccessNotice, Container, Column, Card, FormGroupWrapper, FormGroup, AdminButton, Skeleton } from 'zyra';
 import { __ } from '@wordpress/i18n';
@@ -107,6 +107,23 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 			}
 		});
 	};
+	const printRef = useRef<HTMLDivElement>(null);
+
+	const handlePrint = () => {
+		if (!printRef.current) return;
+
+		const printWindow = window.open('', '_blank');
+		if (!printWindow) return;
+
+		printWindow.document.write(`
+			${printRef.current.innerHTML}
+		`);
+
+		printWindow.document.close();
+		printWindow.focus();
+		printWindow.print();
+		printWindow.close();
+	};
 
 	return (
 		<>
@@ -169,8 +186,19 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 										: __('Archive data', 'multivendorx')}
 								</div>
 							</div>
+							<div className="right">
+								<AdminButton
+									buttons={[
+										{
+											text: __('Print', 'multivendorx'),
+											className: 'blue',
+											onClick: handlePrint,
+										},
+									]}
+								/>
+							</div>
 						</div>
-						<div className="card-body">
+						<div className="card-body" ref={printRef}>
 							{/* Registration Data */}
 							{formData.registration_data &&
 								Object.keys(formData.registration_data).length >
