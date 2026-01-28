@@ -181,8 +181,8 @@ export default {
             key: 'company_logo',
             classes: 'vertical',
             type: 'file',
-            label: __('Signature', 'multivendorx'),
-            // desc: __('Upload your company logo for invoices', 'multivendorx'),
+            label: __('Invoice signature', 'multivendorx'),
+            desc: __('Optional signature image that adds authenticity to your invoices.', 'multivendorx'),
             size: 'small',
             proSetting: true,
             moduleEnabled: 'invoice',
@@ -191,40 +191,65 @@ export default {
             key: 'separator_content',
             type: 'section',
             desc: __(
-                'Decide at which order stage invoices should be created or whether they should be generated manually.',
+                'Control when invoices are automatically created based on order status.',
                 'multivendorx'
             ),
-            hint: __('Invoice generation rules', 'multivendorx'),
+            hint: __('Automatic invoice generation', 'multivendorx'),
         },
         {
             key: 'commission_type',
             type: 'setting-toggle',
             classes: 'vertical w-50',
-            label: __('Invoice generation timing', 'multivendorx'),
+            label: __('Create invoices when order status is', 'multivendorx'),
             desc: __(
-                'Choose the page size for generated invoice PDFs',
+                'Select one or more order statuses that should trigger automatic invoice creation. Most stores use "Processing" or "Completed".',
                 'multivendorx'
             ),
             moduleEnabled: 'invoice',
             options: [
                 {
                     key: 'per_transaction',
-                    label: __('Order is created', 'multivendorx'),
+                    label: __('Completed', 'multivendorx'),
                     value: 'per_transaction',
+                    desc: __(
+						'Order is delivered and customer has received all items.',
+						'multivendorx'
+					),
                 },
                 {
                     key: 'per_unit',
-                    label: __('Order is paid', 'multivendorx'),
+                    label: __('Processing', 'multivendorx'),
+                    desc: __(
+						'Payment received and order is being prepared for shipment.',
+						'multivendorx'
+					),
                     value: 'per_unit',
                 },
                 {
                     key: 'per_store',
-                    label: __('Order is completed', 'multivendorx'),
+                    label: __('Paid', 'multivendorx'),
+                    desc: __(
+						'Payment has been confirmed.',
+						'multivendorx'
+					),
                     value: 'per_store',
                 },
                 {
                     key: 'per_store',
-                    label: __('Manual only', 'multivendorx'),
+                    label: __('On Hold', 'multivendorx'),
+                    desc: __(
+						'Order placed on hold pending verification.',
+						'multivendorx'
+					),
+                    value: 'per_store',
+                },
+                {
+                    key: 'per_store',
+                    label: __('Pending Payment', 'multivendorx'),
+                    desc: __(
+						'Order created but awaiting payment (useful for bank transfers, checks)',
+						'multivendorx'
+					),
                     value: 'per_store',
                 },
             ],
@@ -232,17 +257,17 @@ export default {
         {
             key: 'type_options',
             type: 'checkbox',
-            label: __('Enable invoices for', 'multivendorx'),
+            label: __('Who receives invoices?', 'multivendorx'),
             classes: 'vertical w-50',
             // settingDescription: __(
             // 	'Select the product/listing fields stores can configure when adding or managing their products/listings.',
             // 	'multivendorx'
             // ),
 
-            // desc: __(
-            // 	'<ul><li>Virtual - Choose this option for products/listing that don’t have a physical form (e.g., services, memberships). <li>Downloadable - Use this option for products/listing that customers can download (e.g., software, eBooks).</li><ul>',
-            // 	'multivendorx'
-            // ),
+            desc: __(
+            	'Select which invoices your marketplace should generate. Most stores only need the first option.',
+            	'multivendorx'
+            ),
             options: [
                 {
                     key: 'virtual',
@@ -266,16 +291,20 @@ export default {
             key: 'separator_content',
             type: 'section',
             desc: __(
-                'Add legal details and tax information to invoices',
+                'Set up how your invoice numbers are formatted. This helps with organization and makes invoices easier to track for accounting.',
                 'multivendorx'
             ),
-            hint: __('Invoice numbering and structure', 'multivendorx'),
+            hint: __('Invoice numbering', 'multivendorx'),
         },
         {
             key: 'multivendorx_tinymce_api_section',
             type: 'text',
             classes: 'vertical w-50',
-            label: __('Invoice number format', 'multivendorx'),
+            label: __('Numbering format', 'multivendorx'),
+            desc: __(
+                'Choose how invoice numbers increase over time.',
+                'multivendorx'
+            ),
             // placeholder: 'Enter GST registration number',
             moduleEnabled: 'invoice',
             size: '25rem',
@@ -285,120 +314,50 @@ export default {
             key: 'multivendorx_tinymce_api_section',
             type: 'text',
             classes: 'vertical w-50',
-            label: __('Starting invoice number', 'multivendorx'),
-            // placeholder: 'Enter GST registration number',
+            label: __('Starting number', 'multivendorx'),
+            placeholder: 'The first invoice number (usually 1 or 1000)',
             size: '25rem',
             moduleEnabled: 'invoice',
             proSetting: true,
         },
         {
-            key: 'commission_type',
-            type: 'setting-toggle',
+            key: 'multivendorx_tinymce_api_section',
+            type: 'text',
             classes: 'vertical w-50',
-            label: __('Invoice numbering mode', 'multivendorx'),
+            label: __('Invoice prefix', 'multivendorx'),
+            placeholder: 'Text that appears before the number. Example results: INV-2026-0001, INV-MVX-0001',
+            size: '25rem',
             moduleEnabled: 'invoice',
-            options: [
-                {
-                    key: 'per_transaction',
-                    label: __('Global (marketplace-wide)', 'multivendorx'),
-                    value: 'per_transaction',
-                },
-                {
-                    key: 'per_unit',
-                    label: __('Per store (separate sequences)', 'multivendorx'),
-                    value: 'per_unit',
-                }
-            ],
+            proSetting: true,
         },
+        // {
+        //     key: 'commission_type',
+        //     type: 'setting-toggle',
+        //     classes: 'vertical w-50',
+        //     label: __('Invoice numbering mode', 'multivendorx'),
+        //     moduleEnabled: 'invoice',
+        //     options: [
+        //         {
+        //             key: 'per_transaction',
+        //             label: __('Global (marketplace-wide)', 'multivendorx'),
+        //             value: 'per_transaction',
+        //         },
+        //         {
+        //             key: 'per_unit',
+        //             label: __('Per store (separate sequences)', 'multivendorx'),
+        //             value: 'per_unit',
+        //         }
+        //     ],
+        // },
+        
         {
             key: 'separator_content',
             type: 'section',
-            // desc: __(
-            // 	'Add legal details and tax information to invoices',
-            // 	'multivendorx'
-            // ),
-            hint: __('Tax Handling', 'multivendorx'),
-        },
-        {
-            key: 'commission_type',
-            type: 'setting-toggle',
-            classes: 'vertical w-50',
-            label: __('Tax display mode', 'multivendorx'),
-            moduleEnabled: 'invoice',
-            options: [
-                {
-                    key: 'per_transaction',
-                    label: __('Inclusive', 'multivendorx'),
-                    value: 'per_transaction',
-                },
-                {
-                    key: 'per_unit',
-                    label: __('Exclusive', 'multivendorx'),
-                    value: 'per_unit',
-                },
-                {
-                    key: 'per_unit',
-                    label: __('Both', 'multivendorx'),
-                    value: 'per_unit',
-                }
-            ],
-        },
-        {
-            key: 'commission_type',
-            type: 'setting-toggle',
-            classes: 'vertical w-50',
-            label: __('Tax breakdown visibility', 'multivendorx'),
-            moduleEnabled: 'invoice',
-            options: [
-                {
-                    key: 'per_transaction',
-                    label: __('Per line item', 'multivendorx'),
-                    value: 'per_transaction',
-                },
-                {
-                    key: 'per_unit',
-                    label: __('Summary only', 'multivendorx'),
-                    value: 'per_unit',
-                },
-                {
-                    key: 'per_unit',
-                    label: __('Hide tax details', 'multivendorx'),
-                    value: 'per_unit',
-                }
-            ],
-        },
-        {
-            key: 'commission_type',
-            type: 'setting-toggle',
-            classes: 'vertical w-50',
-            label: __('Tax identity on invoice', 'multivendorx'),
-            moduleEnabled: 'invoice',
-            options: [
-                {
-                    key: 'per_transaction',
-                    label: __('Marketplace tax details', 'multivendorx'),
-                    value: 'per_transaction',
-                },
-                {
-                    key: 'per_unit',
-                    label: __('Store tax details', 'multivendorx'),
-                    value: 'per_unit',
-                },
-                {
-                    key: 'per_unit',
-                    label: __('Auto', 'multivendorx'),
-                    value: 'per_unit',
-                }
-            ],
-        },
-        {
-            key: 'separator_content',
-            type: 'section',
-            // desc: __(
-            // 	'Add legal details and tax information to invoices',
-            // 	'multivendorx'
-            // ),
-            hint: __('PDF Settings', 'multivendorx'),
+            desc: __(
+            	'A4 is standard internationally, Letter is standard in North America',
+            	'multivendorx'
+            ),
+            hint: __('PDF format', 'multivendorx'),
         },
         {
             key: 'commission_type',
@@ -433,12 +392,12 @@ export default {
             options: [
                 {
                     key: 'per_transaction',
-                    label: __('portrait', 'multivendorx'),
+                    label: __('Portrait (Vertical)', 'multivendorx'),
                     value: 'per_transaction',
                 },
                 {
                     key: 'per_unit',
-                    label: __('landscape', 'multivendorx'),
+                    label: __('Landscape (Horizontal)', 'multivendorx'),
                     value: 'per_unit',
                 }
             ],
@@ -446,17 +405,17 @@ export default {
         {
             key: 'separator_content',
             type: 'section',
-            // desc: __(
-            // 	'Add legal details and tax information to invoices',
-            // 	'multivendorx'
-            // ),
-            hint: __('Automatic Email Delivery', 'multivendorx'),
+            desc: __(
+            	'Choose when and how invoices are automatically emailed to customers and vendors.',
+            	'multivendorx'
+            ),
+            hint: __('Invoice delivery via email', 'multivendorx'),
         },
         {
             key: 'type_options',
             type: 'checkbox',
             classes: 'vertical',
-            label: __('Automatic email delivery', 'multivendorx'),
+            label: __('When to send invoice emails  ', 'multivendorx'),
 
             desc: __(
                 'Choose how invoices are automatically sent to customers and stores',
@@ -467,10 +426,10 @@ export default {
                 {
                     key: 'virtual',
                     label: __(
-                        'Attach to order emails',
+                        'Attach to order confirmation email',
                         'multivendorx'
                     ),
-                    desc: __('Include PDF in order confirmation', 'multivendorx'),
+                    desc: __('Include invoice PDF with the order confirmation customers already receive.', 'multivendorx'),
                     value: 'virtual',
                 },
                 {
@@ -485,13 +444,13 @@ export default {
                         'Notify stores',
                         'multivendorx'
                     ),
-                    desc: __('Email store owners', 'multivendorx'),
+                    desc: __('Send a copy to the vendor when their sale generates an invoice.', 'multivendorx'),
                     value: 'downloadable',
                 },
                 {
                     key: 'Generate Packing Slips',
-                    label: __('Generate packing slips', 'multivendorx'),
-                    desc: __('Create packing slips', 'multivendorx'),
+                    label: __('Include packing slip', 'multivendorx'),
+                    desc: __('Also generate and attach a packing slip with the invoice.', 'multivendorx'),
                     value: 'downloadable',
                 },
             ],
@@ -519,44 +478,7 @@ export default {
             classes: 'vertical w-50',
             label: __('Terms and conditions', 'multivendorx'),
         },
-        {
-            key: 'type_options',
-            type: 'checkbox',
-            // classes: 'vertical',
-            label: __('Resend Controls', 'multivendorx'),
-            desc: __(
-                'Choose how invoices are automatically sent to customers and stores',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'virtual',
-                    label: __(
-                        'Allow admin to regenerate',
-                        'multivendorx'
-                    ),
-                    desc: __('Admins can recreate invoices', 'multivendorx'),
-                    value: 'virtual',
-                },
-                {
-                    key: 'Send Separate Invoice Email',
-                    label: __('Allow stores to resend', 'multivendorx'),
-                    desc: __('Store owners can resend', 'multivendorx'),
-                    value: 'downloadable',
-                },
-                {
-                    key: 'Notify Stores of Invoice Generation',
-                    label: __(
-                        'Lock after generation',
-                        'multivendorx'
-                    ),
-                    desc: __('Prevent tampering (audit safety)', 'multivendorx'),
-                    value: 'downloadable',
-                },
-            ],
-            proSetting: true,
-            selectDeselect: true,
-        },
+       
         {
             key: 'customer_access',
             type: 'checkbox',
@@ -568,13 +490,13 @@ export default {
             options: [
                 {
                     key: 'my_account_download',
-                    label: __('Allow download from My Account', 'multivendorx'),
+                    label: __('Allow download from "My Account"', 'multivendorx'),
                     desc: __('Customers can access invoices from their dashboard', 'multivendorx'),
                     value: 'my_account_download',
                 },
                 {
                     key: 'order_confirmation_download',
-                    label: __('Allow download from order confirmation', 'multivendorx'),
+                    label: __('Allow download from order list', 'multivendorx'),
                     desc: __('Include invoice link on the order confirmation page', 'multivendorx'),
                     value: 'order_confirmation_download',
                 },
@@ -582,64 +504,7 @@ export default {
             proSetting: true,
             selectDeselect: true,
         },
-        {
-            key: 'credit_notes',
-            type: 'checkbox',
-            label: __('Credit Notes and Refunds', 'multivendorx'),
-            desc: __(
-                'Settings related to credit note generation and compliance',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'auto_credit_note',
-                    label: __('Generate credit note on refund', 'multivendorx'),
-                    desc: __('Automatically create a credit note when a refund is issued', 'multivendorx'),
-                    value: 'auto_credit_note',
-                },
-                {
-                    key: 'link_original_invoice',
-                    label: __('Link to original invoice', 'multivendorx'),
-                    desc: __('Show invoice reference on credit note for audit trail', 'multivendorx'),
-                    value: 'link_original_invoice',
-                },
-            ],
-            proSetting: true,
-            selectDeselect: true,
-        },
-        {
-            key: 'credit_notes',
-            type: 'checkbox',
-            label: __('Credit Notes and Refunds', 'multivendorx'),
-            desc: __(
-                'Settings related to credit note generation and compliance',
-                'multivendorx'
-            ),
-            options: [
-                {
-                    key: 'auto_credit_note',
-                    label: __('Generate credit note on refund', 'multivendorx'),
-                    desc: __('Automatically create a credit note when a refund is issued', 'multivendorx'),
-                    value: 'auto_credit_note',
-                },
-                {
-                    key: 'link_original_invoice',
-                    label: __('Link to original invoice', 'multivendorx'),
-                    desc: __('Show invoice reference on credit note for audit trail', 'multivendorx'),
-                    value: 'link_original_invoice',
-                },
-            ],
-            proSetting: true,
-            selectDeselect: true,
-        },
-        {
-            key: 'credit_note_format',
-            type: 'text',
-            label: __('Credit note format', 'multivendorx'),
-            desc: __('Example: CN-{YYYY}-{NUMBER}', 'multivendorx'),
-            placeholder: 'CN-{YYYY}-{NUMBER}',
-            proSetting: true,
-        },
+        
         {
             key: 'packing_slips',
             type: 'checkbox',
@@ -671,7 +536,7 @@ export default {
             key: 'separator_content',
             type: 'section',
             desc: __(
-                'Add legal details and tax information to invoices',
+                'Add your business registration numbers and tax IDs that must appear on invoices.',
                 'multivendorx'
             ),
             hint: __('Legal and tax information', 'multivendorx'),
@@ -680,8 +545,9 @@ export default {
             key: 'multivendorx_tinymce_api_section',
             type: 'number',
             classes: 'vertical w-50',
-            label: __('GST number', 'multivendorx'),
-            placeholder: 'Enter GST registration number',
+            label: __('VAT / Tax number', 'multivendorx'),
+            placeholder: 'e.g., GB123456789, DE987654321',
+            desc: __('Your VAT registration (Europe) or tax ID number.', 'multivendorx'),
             moduleEnabled: 'invoice',
             proSetting: true,
         },
@@ -689,8 +555,29 @@ export default {
             key: 'multivendorx_tinymce_api_section',
             type: 'number',
             classes: 'vertical w-50',
-            label: __('Tax ID number', 'multivendorx'),
-            placeholder: 'Enter tax ID number',
+            label: __('Additional Tax ID', 'multivendorx'),
+            placeholder: 'e.g., EIN, ABN, GST Number',
+            desc: __('Other tax IDs: EIN (US), ABN (Australia), GST (India), etc.', 'multivendorx'),
+            moduleEnabled: 'invoice',
+            proSetting: true,
+        },
+         {
+            key: 'multivendorx_tinymce_api_section',
+            type: 'number',
+            classes: 'vertical w-50',
+            label: __('Company registration number', 'multivendorx'),
+            placeholder: 'e.g., Company No. 12345678',
+            desc: __('Your official company registration number.', 'multivendorx'),
+            moduleEnabled: 'invoice',
+            proSetting: true,
+        },
+         {
+            key: 'multivendorx_tinymce_api_section',
+            type: 'number',
+            classes: 'vertical w-50',
+            label: __('Trade License Number', 'multivendorx'),
+            placeholder: 'e.g., License No. ABC-2024-12345',
+            desc: __('Business license or permit number (if required).', 'multivendorx'),
             moduleEnabled: 'invoice',
             proSetting: true,
         },
