@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { AdminButton, AdminHeader, Banner, CommonPopup, DoActionBtn, FormGroup, FormGroupWrapper, TourSetup } from 'zyra';
+import { AdminHeader, Banner, CommonPopup, DoActionBtn, FormGroup, FormGroupWrapper, TourSetup } from 'zyra';
 
 import Settings from './components/Settings/Settings';
 import Modules from './components/Modules/modules';
@@ -8,8 +8,6 @@ import Store from './components/Store/store';
 import AdminDashboard from './components/AdminDashboard/adminDashboard';
 import StatusAndTools from './components/StatusAndTools/statusAndTools';
 import CustomerServices from './components/CustomerService/customerServices';
-import Memberships from './components/Membership/membership';
-
 import Brand from './assets/images/multivendorx-logo.png';
 import { searchIndex, SearchItem } from './searchIndex';
 import { __ } from '@wordpress/i18n';
