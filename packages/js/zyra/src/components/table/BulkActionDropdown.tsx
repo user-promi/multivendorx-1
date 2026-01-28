@@ -9,18 +9,19 @@ interface BulkActionDropdownProps {
 	actions: BulkAction[];
 	selectedIds: number[];
 	onApply: (action: string) => void;
+	onClearSelection: () => void;
+	onSelectCsvDownloadApply?: (selectedIds: number[]) => void;
 }
 
 const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 	actions,
 	selectedIds,
 	onApply,
+	onClearSelection,
+	onSelectCsvDownloadApply
 }) => {
-	const [selectedAction, setSelectedAction] = useState('');
-
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const action = e.target.value;
-		setSelectedAction('');
 		onApply(action);
 	};
 
@@ -28,7 +29,7 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 		<div className="wrap-bulk-all-date bulk">
 			<span className="action-item count">
 				{selectedIds.length} Rows selected
-				<i className="adminfont-close"/>
+				<i onClick={onClearSelection} className="adminfont-close" />
 			</span>
 			<div className="action">
 				<i className="adminfont-form" />
@@ -47,6 +48,15 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 					))}
 				</select>
 			</div>
+			{onSelectCsvDownloadApply && (
+				<button
+					className="admin-badge csv"
+					disabled={selectedIds.length === 0}
+					onClick={() => onSelectCsvDownloadApply(selectedIds)}
+				>
+					<i className="adminfont-download" /> CSV
+				</button>
+			)}
 		</div>
 	);
 };

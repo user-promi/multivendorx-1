@@ -216,6 +216,8 @@ export type TableCardProps = CommonTableProps & {
 	onCategoryClick?: (value: string) => void;
 	showColumnToggleIcon?: boolean;
 	rowActions?: ActionItem[];
+	onSelectCsvDownloadApply?: (selectedIds: number[]) => void;
+	onFilterCsvDownloadApply ?: (query: QueryProps) => void;
 };
 
 export type FilterOption = {
