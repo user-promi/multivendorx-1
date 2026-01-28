@@ -96,8 +96,8 @@ export default {
 				'Choose a dashboard color scheme from predefined sets or customize your own. Each scheme defines the button style, and hover effects for a consistent look.',
 			templates: [
 				{
-					key: 'dashbord',
-					label: __('dashbord', 'mvx-pro'),
+					key: 'dashboard',
+					label: __('dashboard', 'multivendorx'),
 					preview: DashboardTemplate,
 					component: DashboardTemplate,
 				}

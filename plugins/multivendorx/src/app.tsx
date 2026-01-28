@@ -1,5 +1,6 @@
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 import { AdminHeader, Banner, CommonPopup, DoActionBtn, FormGroup, FormGroupWrapper, TourSetup } from 'zyra';
 
 import Settings from './components/Settings/Settings';
@@ -15,14 +16,12 @@ import Announcements from './components/Announcements/announcements';
 import Knowledgebase from './components/Knowledgebase/knowledgebase';
 import Commission from './components/Commission/commission';
 import Analytics from './components/Reports/Reports';
-import Advertisement from './components/Advertisement/Advertisement';
 import HelpSupport from './components/HelpSupport/HelpSupport';
 import ApprovalQueue from './components/ApprovalQueue/approvalQueue';
 import HeaderNotification from './components/Notifications/HeaderNotifications';
 import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/transactionHistory';
 import { getTourSteps } from './components/Tour/tourSteps';
-import AddMemberships from './components/Membership/add-membership';
 import TableCardDemo from './components/table/TableCardDemo';
 
 localStorage.setItem('force_multivendorx_context_reload', 'true');
@@ -34,29 +33,74 @@ interface Products {
 
 const products: Products[] = [
 	{
-		title: __('Double Opt-In', 'multivendorx'),
-		description: __(
-			'Experience the power of Double Opt-In for our Stock Alert Form!',
-			'multivendorx'
-		),
-	},
-	{
-		title: __('Your Subscription Hub', 'multivendorx'),
-		description: __(
-			'Easily monitor and download lists of out-of-stock subscribers.',
-			'multivendorx'
-		),
-	},
+	title: __('Marketplace monetization', 'multivendorx'),
+	description: __(
+		'Create flexible membership plans that let you charge stores for access, features, and growth opportunities.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Built-in tax compliance', 'multivendorx'),
+	description: __(
+		'Automatically generate tax-ready invoices for orders, commissions, and payouts to keep your marketplace compliant.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Franchise-ready scaling', 'multivendorx'),
+	description: __(
+		'Run multiple regional or franchise marketplaces with centralized control and consistent branding.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Recurring revenue engine', 'multivendorx'),
+	description: __(
+		'Enable subscription-based selling so your marketplace benefits from predictable, recurring income.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Service and booking sales', 'multivendorx'),
+	description: __(
+		'Allow stores to sell bookings for services, appointments, rentals, and experiences on your platform.',
+		'multivendorx'
+	),
+},
+{
+	title: __('High-value rentals', 'multivendorx'),
+	description: __(
+		'Launch rental marketplace with date-based availability and higher order values.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Verified stores', 'multivendorx'),
+	description: __(
+		'Verify store identities using documents and badges to build trust and reduce risk on your marketplace.',
+		'multivendorx'
+	),
+},
+{
+	title: __('Vacation mode', 'multivendorx'),
+	description: __(
+		'Allow stores to temporarily pause their shop during vacations while keeping their listings intact.',
+		'multivendorx'
+	),
+},
+
+
 ];
 
 const Route = () => {
+	const location = useLocation();
+	const navigate = useNavigate();
 	const currentTab = new URLSearchParams(useLocation().hash);
 	const tab = currentTab.get('tab') || 'dashboard';
 
 	return (
 		<>
 			{tab === 'settings' && <Settings id="settings" />}
-			{tab === 'memberships' && <AddMemberships />}
 			{tab === 'status-tools' && <StatusAndTools id="status-tools" />}
 			{tab === 'modules' && <Modules />}
 			{tab === 'stores' && <Store />}
@@ -68,10 +112,20 @@ const Route = () => {
 			{tab === 'knowledgebase' && <Knowledgebase />}
 			{tab === 'transaction-history' && <TransactionHistory />}
 			{tab === 'reports' && <Analytics />}
-			{tab === 'advertisement' && <Advertisement />}
 			{tab === 'help-support' && <HelpSupport />}
 			{tab === 'notifications' && <Notifications />}
 			{tab === 'table-card' && <TableCardDemo />}
+			
+			{applyFilters(
+				'multivendorx_admin_submenu_render',
+				null,
+				{
+					tab,
+					location,
+					Link,
+					navigate
+				}
+			)}
 		</>
 	);
 };

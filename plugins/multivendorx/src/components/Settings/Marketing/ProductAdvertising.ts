@@ -3,10 +3,10 @@ import { __ } from '@wordpress/i18n';
 export default {
 	id: 'advertising',
 	priority: 1,
-	name: __('Product Advertising', 'mvx-pro'),
+	name: __('Product Advertising', 'multivendorx'),
 	desc: __(
 		'Let stores promote their top products or unique offerings in site-wide placements.',
-		'mvx-pro'
+		'multivendorx'
 	),
 	icon: 'adminfont-advertise-product',
 	submitUrl: 'settings',
@@ -52,7 +52,7 @@ export default {
 		{
 			key: 'expire_after_days',
 			type: 'number',
-			label: __('Promotion duration', 'mvx-pro'),
+			label: __('Promotion duration', 'multivendorx'),
 			settingDescription: __(
 				'Set the maximum number of days a product can be promoted.',
 				'multivendorx'
