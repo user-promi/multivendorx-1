@@ -45,7 +45,6 @@ const TableCard: React.FC<TableCardProps> = ({
 	showColumnToggleIcon = true,
 	rowActions,
 	onSelectCsvDownloadApply,
-	onFilterCsvDownloadApply,
 	onCellEdit,
 	buttonActions,
 	...props
@@ -232,16 +231,7 @@ const TableCard: React.FC<TableCardProps> = ({
 				)}
 
 				<div className="table-action-wrapper">
-					{buttonActions && <ButtonActions actions={buttonActions} />}
-
-					{onFilterCsvDownloadApply && (
-						<button
-							className="admin-badge csv"
-							onClick={() => onFilterCsvDownloadApply(query)}
-						>
-							<i className="adminfont-download" /> CSV
-						</button>
-					)}
+					{buttonActions && <ButtonActions actions={buttonActions} query={query} />}
 					{actions && (
 						<div className="action-wrapper">
 							{actions}
