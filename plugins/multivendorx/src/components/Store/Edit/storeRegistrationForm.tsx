@@ -3,6 +3,7 @@ import axios from 'axios';
 import { TextArea, getApiLink, SuccessNotice, Container, Column, Card, FormGroupWrapper, FormGroup, AdminButton, Skeleton } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import React from 'react';
+import { printContent } from '@/services/commonFunction';
 
 const StoreRegistration = ({ id }: { id: string | null }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
@@ -169,8 +170,19 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 										: __('Archive data', 'multivendorx')}
 								</div>
 							</div>
+							<div className="right">
+								<AdminButton
+									buttons={[
+										{
+											text: __('Print', 'multivendorx'),
+											className: 'blue',
+											onClick: () => printContent('registration-archive'),
+										},
+									]}
+								/>
+							</div>
 						</div>
-						<div className="card-body">
+						<div className="card-body" id="registration-archive">
 							{/* Registration Data */}
 							{formData.registration_data &&
 								Object.keys(formData.registration_data).length >
