@@ -235,7 +235,6 @@ export type TableCardProps = CommonTableProps & {
 	showColumnToggleIcon?: boolean;
 	rowActions?: ActionItem[];
 	onSelectCsvDownloadApply?: (selectedIds: number[]) => void;
-	onFilterCsvDownloadApply ?: (query: QueryProps) => void;
 	onCellEdit?: (data: {
 		id: string | number;
 		key: string;
