@@ -863,7 +863,7 @@ export const Announcements: React.FC = () => {
 			</CommonPopup>
 
 			<Container general>
-				<Column>
+				{/* <Column>
 					<TableCard
 						// title="Revenue Report"
 						headers={headers}
@@ -872,7 +872,7 @@ export const Announcements: React.FC = () => {
 						isLoading={isLoading}
 						onQueryUpdate={fetchData}
 					/>
-				</Column>
+				</Column> */}
 				<Column>
 					<Table
 						data={data}

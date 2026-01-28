@@ -263,7 +263,7 @@ const Table: React.FC<TableProps> = ({
 											className={cellClass}
 										>
 											<span
-												className={columnClass ? `admin-badge tag-${columnClass}` : ''}
+												className={columnClass ? `admin-badge badge-${columnClass}` : ''}
 												onClick={
 													header.isEditable && !isEditing
 														? () => setEditingCell({ id: rowId, key: header.key })
