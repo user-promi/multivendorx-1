@@ -14,6 +14,7 @@ export default {
         {
 			key: 'store_registration_from',
 			type: 'email-template',
+			classes: 'full-width',
 			desc: 'Customise personalised store registration form for marketplace.',
 		},
     ]

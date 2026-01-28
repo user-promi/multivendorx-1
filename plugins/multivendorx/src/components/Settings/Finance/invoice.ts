@@ -4,7 +4,10 @@ export default {
 	id: 'store-invoice',
 	priority: 6,
 	name: __('Invoices', 'multivendorx'),
+	desc: __(
+		'Set up when and how invoices are generated in your marketplace.',
+		'multivendorx'
+	),
 	icon: 'adminfont-invoice',
-	hideTabHeader: true,
 	submitUrl: 'settings',
 };
