@@ -1,3 +1,4 @@
+import { ButtonAction } from "./ButtonActions";
 import { ActionItem } from "./TableRowActions";
 import { SearchOption } from "./TableSearch";
 
@@ -240,6 +241,7 @@ export type TableCardProps = CommonTableProps & {
 		key: string;
 		value: string | number | boolean;
 	}) => void;
+	buttonActions?:ButtonAction[];
 };
 
 export type FilterOption = {
