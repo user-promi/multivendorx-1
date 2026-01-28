@@ -101,8 +101,8 @@ class Modules
                     ),
                     'shared-listing'         => array(
                         'id'           => 'shared-listing',
-                        'module_file'  => MultiVendorX()->plugin_path . 'modules/SPMV/Module.php',
-                        'module_class' => 'MultiVendorX\SPMV\Module',
+                        'module_file'  => MultiVendorX()->plugin_path . 'modules/SharedListing/Module.php',
+                        'module_class' => 'MultiVendorX\SharedListing\Module',
                     ),
                     'follow-store'           => array(
                         'id'           => 'follow-store',
@@ -156,8 +156,8 @@ class Modules
                     ),
                     'marketplace-gateway'    => array(
                         'id'           => 'marketplace-gateway',
-                        'module_file'  => MultiVendorX()->plugin_path . 'modules/GatewayFee/Module.php',
-                        'module_class' => 'MultiVendorX\GatewayFee\Module',
+                        'module_file'  => MultiVendorX()->plugin_path . 'modules/MarketplaceGateway/Module.php',
+                        'module_class' => 'MultiVendorX\MarketplaceGateway\Module',
                     ),
                     'min-max'                => array(
                         'id'           => 'min-max',
@@ -168,11 +168,6 @@ class Modules
                         'id'           => 'elementor',
                         'module_file'  => MultiVendorX()->plugin_path . 'modules/Elementor/Module.php',
                         'module_class' => 'MultiVendorX\Elementor\Module',
-                    ),
-                    'invoice'                => array(
-                        'id'           => 'invoice',
-                        'module_file'  => MultiVendorX()->plugin_path . 'modules/Invoice/Module.php',
-                        'module_class' => 'MultiVendorX\Invoice\Module',
                     ),
                     'wpml'                => array(
                         'id'           => 'wpml',

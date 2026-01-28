@@ -6,7 +6,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\SPMV;
+namespace MultiVendorX\SharedListing;
 
 use MultiVendorX\Utill;
 use MultiVendorX\StoreReview\Util;
@@ -15,7 +15,7 @@ use MultiVendorX\FrontendScripts;
 defined('ABSPATH') || exit;
 
 /**
- * MultiVendorX Frontend SPMV controller.
+ * MultiVendorX Frontend SharedListing controller.
  *
  * @class       Frontend class
  * @version     PRODUCT_VERSION
