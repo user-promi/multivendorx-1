@@ -21,7 +21,6 @@ const Table: React.FC<TableProps> = ({
 	className,
 	onSort = () => { },
 	query = {},
-	rowHeader,
 	rowKey,
 	ids = [],
 	selectedIds = [],
