@@ -4,9 +4,10 @@ namespace MultiVendorX\Elementor\Widgets;
 defined( 'ABSPATH' ) || exit;
 
 use Elementor\Widget_Base;
+use Elementor\Controls_Manager;
 use MultiVendorX\Elementor\StoreHelper;
 
-class Store_Description extends \Widget_Base {
+class Store_Description extends Widget_Base {
 
 	use StoreHelper;
 
@@ -27,7 +28,23 @@ class Store_Description extends \Widget_Base {
 	}
 
 	protected function register_controls() {
+		$this->start_controls_section(
+			'content',
+			[
+				'label' => __( 'Content', 'multivendorx' ),
+			]
+		);
 
+		$this->add_control(
+			'empty_text',
+			[
+				'label' => __( 'Empty Description Text', 'multivendorx' ),
+				'type' => Controls_Manager::TEXT,
+				'default' => __( 'No store description available.', 'multivendorx' ),
+			]
+		);
+
+		$this->end_controls_section();
 	}
 
 	protected function render() {

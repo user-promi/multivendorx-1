@@ -139,10 +139,6 @@ class Admin {
                         'name'   => __( 'Help & Support', 'multivendorx' ),
                         'subtab' => '',
                     ),
-                    // 'notifications'       => array(
-                    // 'name'   => '',
-                    // 'subtab' => '',
-                    // ),
                 )
             );
 

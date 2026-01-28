@@ -23,13 +23,13 @@ class WidgetLoader {
 	public function register_widgets( $widgets_manager ) {
 
 		$widgets = [
-			'store-name'        => 'MultiVendorX\Elementor\Widgets\Store_Name',
-			'store-description' => 'MultiVendorX\Elementor\Widgets\Store_Description',
+			'StoreName'        => 'MultiVendorX\Elementor\Widgets\Store_Name',
+			'StoreDescription' => 'MultiVendorX\Elementor\Widgets\Store_Description',
 		];
 
 		foreach ( $widgets as $file => $class ) {
 
-			$path = MultiVendorX()->plugin_path . 'widgets/' . $file . '.php';
+			$path = MultiVendorX()->plugin_path . 'modules/Elementor/widgets/' . $file . '.php';
 
 			if ( file_exists( $path ) ) {
 				require_once $path;

@@ -212,20 +212,6 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
     return (
         <>
         <div className="color-settings-wrapper">
-            <div className="tabs-item">
-                <div className="tab active-tab">
-                    <div className="tab-name">Packing Slip</div>
-                </div>
-                <div className="tab">
-                    <div className="tab-name">Admin</div>
-                </div>
-                <div className="tab">
-                    <div className="tab-name">Subscription</div>
-                </div>
-                <div className="tab">
-                    <div className="tab-name">Marketplace</div>
-                </div>
-            </div>
             {(props.templates?.length ?? 0) > 1 && (
                 <div className={props.wrapperClass}>
                     <div className="form-group-setting-wrapper">
@@ -256,7 +242,7 @@ const ColorSettingInput: React.FC<ColorSettingProps> = (props) => {
                         {!selectedImage && (
                             <>
                                 <div className="form-group-setting-wrapper">
-                                    <label>Select Color</label>
+                                    <label>Color Palette</label>
                                     <ToggleSetting
                                         options={[
                                             {
