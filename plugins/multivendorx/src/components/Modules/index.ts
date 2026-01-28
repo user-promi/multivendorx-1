@@ -461,7 +461,7 @@ export default {
 			icon: 'adminfont-marketplace-refund',
 			doc_link:
 				'https://multivendorx.com/docs/knowledgebase/marketplace-refund',
-			settings_link: `${appLocalizer.plugin_url}settings&subtab=order-actions-refunds`,
+			settings_link: `${appLocalizer.plugin_url}settings&subtab=refunds`,
 			pro_module: false,
 			category: ['store_management', 'customer_experience'],
 		},

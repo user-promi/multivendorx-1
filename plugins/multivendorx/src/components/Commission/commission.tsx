@@ -18,7 +18,7 @@ import {
 	RowSelectionState,
 	PaginationState,
 } from '@tanstack/react-table';
-import ViewCommission from './viewCommission';
+import ViewCommission from './ViewCommission';
 import { formatCurrency, formatLocalDate, formatWcShortDate, } from '../../services/commonFunction';
 
 export interface RealtimeFilter {

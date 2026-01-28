@@ -1,12 +1,12 @@
 import { AdminBreadcrumbs, getApiLink, useModules, Tabs, Container, Column, MessageState } from 'zyra';
-import './customerServices.scss';
-import '../AdminDashboard/adminDashboard.scss';
-import Qna from './qnaTable';
-import StoreReviews from './storeReviews ';
+import './CustomerSupport.scss';
+import '../AdminDashboard/AdminDashboard.scss';
+import Qna from './QnATable';
+import StoreReviews from './StoreReviews';
 import { useLocation, Link } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 
-const CustomerServices = () => {
+const CustomerSupport = () => {
 	const { modules } = useModules();
 
 	const location = new URLSearchParams(useLocation().hash.substring(1));
@@ -115,4 +115,4 @@ const CustomerServices = () => {
 	);
 };
 
-export default CustomerServices;
+export default CustomerSupport;

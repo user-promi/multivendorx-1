@@ -26,7 +26,7 @@ interface WPPlugin {
 	status?: string;
 }
 
-import './adminDashboard.scss';
+import './AdminDashboard.scss';
 import '../dashboard.scss';
 import { useEffect, useState } from 'react';
 import { Card, Column, Container, getApiLink, MiniCard, sendApiResponse, SuccessNotice, useModules } from 'zyra';
