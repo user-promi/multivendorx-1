@@ -125,6 +125,8 @@ class Rest extends \WP_REST_Controller
      */
     public function get_items($request)
     {
+        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: small: " . var_export($request, true) . "\n", FILE_APPEND);
+
         // ----- Nonce Check -----
         $nonce = $request->get_header('X-WP-Nonce');
         if (! wp_verify_nonce($nonce, 'wp_rest')) {
@@ -145,14 +147,13 @@ class Rest extends \WP_REST_Controller
             $status_param = sanitize_key($request->get_param('status'));
             $searchvalue  = sanitize_text_field($request->get_param('searchvalue'));
             $store_id     = (int) $request->get_param('store_id');
-    
+            $site    = $request->get_header('sec_fetch_site');
+            $ref    = $request->get_header('referer');
+
             $dates = Utill::normalize_date_range(
                 $request->get_param('startDate'),
                 $request->get_param('endDate')
             );
-    
-            $start_date = isset($dates['start_date']) ? $dates['start_date'] : null;
-            $end_date   = isset($dates['end_date']) ? $dates['end_date'] : null;
     
             $base_args = array(
                 'post_type'      => Utill::POST_TYPES['announcement'],
@@ -178,7 +179,13 @@ class Rest extends \WP_REST_Controller
             }
     
             $response = rest_ensure_response(array());
-    
+
+            // if ($site && $ref) {
+            //     if (get_transient('multivendorx_announcement_data_' . $store_id)) {
+            //         return get_transient('multivendorx_announcement_data_' . $store_id);
+            //     }
+            // }
+
             foreach (array('any', 'publish', 'pending', 'draft') as $status) {
                 $base_args['post_status'] = $status;
     
@@ -207,7 +214,7 @@ class Rest extends \WP_REST_Controller
             $base_args['posts_per_page'] = $limit;
             $base_args['offset']         = $offset;
     
-            if ($start_date || $end_date) {
+            if (!empty($dates['start_date']) &&  !empty($dates['end_date'])) {
                 $date_query = array('inclusive' => true);
     
                 if ($start_date) {
@@ -255,6 +262,15 @@ class Rest extends \WP_REST_Controller
             }
     
             $response->set_data($items);
+
+            // if ($site && $ref) {
+            //     set_transient(
+            //         'multivendorx_announcement_data_' . $store_id,
+            //         $response,
+            //         DAY_IN_SECONDS
+            //     );
+            // }
+
             return $response;
     
         } catch (\Exception $e) {

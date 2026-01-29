@@ -69,7 +69,7 @@ class Dashboard extends \WP_REST_Controller {
                     'icon'       => '',
                     'slug'       => 'view-notifications',
                     'submenu'    => array(),
-                    'capability' => array( 'edit_products' ),
+                    'capability' => array( 'read_products' ),
                     'filename'   => 'view-notifications',
                 ),
             )
