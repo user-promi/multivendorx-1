@@ -49,102 +49,16 @@ export default {
 				'multivendorx'
 			),
 			addNewBtn: true,
-			buttonEnable: true,
-			modal: [	
-				{
-					id: 'zone-wise-shipping',
-					icon: 'adminfont-zone-wise-shipping',
-					label: 'Products',
-					disableBtn: true,
-					isCustom: true,
-					moduleEnabled: 'store-shipping',
-					desc: 'Add more products to your store',
-				},
-				{
-					id: 'zone-wise',
-					icon: 'adminfont-zone-wise-shipping',
-					label: 'Product',
-					// disableBtn: true,
-					isCustom: true,
-					moduleEnabled: 'store-shipping',
-					desc: 'Add more products to your',
-				},
-				{
-					id: 'country-wise-shipping',
-					icon: 'adminfont-country-shipping',
-					label: 'Categories',
-					moduleEnabled: 'store-shipping',
-					disableBtn: true,
-					desc: 'Organize with additional categories',
-					formFields: [
-						{
-							key: 'country_shipping_method_name',
-							type: 'text',
-							label: 'Method name',
-							placeholder: 'Enter Name',
-						},
-					],
-				},
-				{
-					id: 'distance-based-shipping',
-					icon: 'adminfont-store-shipping',
-					label: 'Storage',
-					disableBtn: true,
-					moduleEnabled: 'store-shipping',
-					desc: 'Expand your storage capacity',
-					formFields: [
-						{
-							key: 'distance_shipping_method_name',
-							type: 'text',
-							label: 'Method name',
-							placeholder: 'Enter Name',
-						},
-					],
-				},
-			],
 			addNewTemplate: {
 				label: 'New Rating Parameters',
-				desc: 'Enter a descripton',
-				disableBtn: true,
-				// formFields: [
-				// 	{
-				// 		key: 'label',
-				// 		type: 'text',
-				// 		label: 'Parameters',
-				// 		placeholder: 'Enter parameters',
-				// 	},
-				// ],
+				editableFields: {
+					title: true,
+					description: false,
+				},
 			},
+			modal: [],
 			proSetting: false,
 			moduleEnabled: 'store-review',
 		},
-		// {
-		// 	key: 'ratings_parameters',
-		// 	type: 'expandable-panel',
-		// 	label: __('Rating parameters', 'multivendorx'),
-		// 	settingDescription: __(
-		// 		'Define the key factors customers will use to evaluate each store.',
-		// 		'multivendorx'
-		// 	),
-		// 	desc: __(
-		// 		'Give customers a fair way to share feedback! Define what they rate, like product/listing quality, delivery, or service. You’ll start with five default parameters that can be edited or removed, but make sure at least three stay active for balanced, detailed reviews.',
-		// 		'multivendorx'
-		// 	),
-		// 	addNewBtn: true,
-		// 	addNewTemplate: {
-		// 		label: 'New Rating Parameters',
-		// 		formFields: [
-		// 			{
-		// 				key: 'label',
-		// 				type: 'text',
-		// 				label: 'Parameters',
-		// 				placeholder: 'Enter parameters',
-		// 			},
-		// 		],
-		// 	},
-		// 	modal: [],
-		// 	proSetting: false,
-		// 	moduleEnabled: 'store-review',
-		// },
 	],
 };

@@ -95,6 +95,7 @@ interface ExpandablePanelMethod {
     label: string;
     connected: boolean;
     disableBtn?: boolean; // for enabled and disable show with settings btn 
+    hideDeleteBtn?: boolean; // hide delete btn and show error text
     countBtn?: boolean;
     desc: string;
     formFields?: PanelFormField[];
@@ -661,7 +662,26 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         }
         return true;
     };
+    // price field editable 
+    const getPriceFieldValue = (methodId: string) => {
+        const methodValue = value[methodId] || {};
+        const price = methodValue.price;
+        const unit = methodValue.unit;
 
+        // Return null if no price field exists or price is empty
+        if (price === undefined || price === null || price === '') {
+            return null;
+        }
+
+        // Format the price display
+        const priceDisplay = typeof price === 'number'
+            ? `$${price.toFixed(2)}`
+            : `$${price}`;
+
+        const unitDisplay = unit ? `${unit}` : '';
+
+        return { price: priceDisplay, unit: unitDisplay };
+    };
     const renderField = (methodId: string, field: PanelFormField) => {
         const fieldValue = value[methodId]?.[field.key];
 
@@ -1259,6 +1279,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                     if (isWizardMode && index > wizardIndex) {
                         return null;
                     }
+                    const priceField = getPriceFieldValue(method.id);
                     const currentTitle = (value?.[method.id]?.title as string) || method.label;
                     const currentDescription = (value?.[method.id]?.description as string) || method.desc;
                     const isEditingThisMethod = editingMethodId === method.id;
@@ -1432,10 +1453,38 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                 </div>
 
                                 <div className="right-section" ref={menuRef}>
+                                    {priceField && (
+                                        <span className="price-field">
+                                            {priceField.price}
+                                            {priceField.unit && (
+                                                <span className="desc">{priceField.unit}</span>
+                                            )}
+                                        </span>
+                                    )}
                                     <ul className="settings-btn">
+                                        {method.isCustom && (
+                                            <>
+                                                {!method.hideDeleteBtn && (
+                                                    <li
+                                                        onClick={() => {
+                                                            handleDeleteMethod(
+                                                                method.id
+                                                            );
+                                                        }}
+                                                    >
+                                                        <span className="admin-btn red-color">
+                                                            <i className="adminfont-delete"></i>
+                                                            Delete
+                                                        </span>
+                                                    </li>
+                                                )}
+                                                {method.hideDeleteBtn && (
+                                                    <span className="delete-text red-color">Not Deletable</span>
+                                                )}
+                                            </>
+                                        )}
                                         {method.disableBtn ? (
                                             <>
-                                                {/* <li><span className="admin-bage green ">$0.5</span></li> */}
                                                 {isEnabled ? (
                                                     <>
                                                         {method.formFields &&
@@ -1551,22 +1600,6 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                         Hide
                                                     </div>
                                                 </li>
-                                            )}
-                                        {method.isCustom && (
-                                            <>
-                                                <li
-                                                    onClick={() => {
-                                                        handleDeleteMethod(
-                                                            method.id
-                                                        );
-                                                    }}
-                                                >
-                                                    <span className="admin-btn red-color">
-                                                        <i className="adminfont-delete"></i>
-                                                        Delete
-                                                    </span>
-                                                </li>
-                                            </>
                                         )}
                                     </ul>
                                     { /* show dropdown */}
