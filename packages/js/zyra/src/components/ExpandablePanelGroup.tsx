@@ -44,7 +44,6 @@ interface PanelFormField {
     | 'number'
     | 'checkbox'
     | 'textarea'
-    | 'expandable-panel'
     | 'multi-checkbox'
     | 'check-list'
     | 'description'
@@ -114,7 +113,13 @@ interface AddNewTemplate {
     icon?: string;
     label?: string;
     desc?: string;
-    formFields: PanelFormField[];
+    formFields?: PanelFormField[];
+    disableBtn?: boolean;
+    editableFields?: {
+        title?: boolean;
+        description?: boolean;
+        icon?: boolean;
+    };
 }
 interface ExpandablePanelGroupProps {
     name: string;
@@ -164,7 +169,13 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
     const [iconDropdownOpen, setIconDropdownOpen] = useState<string | null>(
         null
     );
-
+    // State for inline editing
+    const [editingMethodId, setEditingMethodId] = useState<string | null>(null);
+    const [editingField, setEditingField] = useState<'title' | 'description' | null>(null);
+    const [tempTitle, setTempTitle] = useState('');
+    const [tempDescription, setTempDescription] = useState('');
+    const titleInputRef = useRef<HTMLInputElement>(null);
+    const descTextareaRef = useRef<HTMLTextAreaElement>(null);
     const [ExpandablePanelMethods, setExpandablePanelMethods] = useState<
         ExpandablePanelMethod[]
     >(() =>
@@ -189,6 +200,51 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
             };
         })
     );
+
+    // Effect to focus input when editing starts
+    useEffect(() => {
+        if (editingMethodId && editingField === 'title' && titleInputRef.current) {
+            titleInputRef.current.focus();
+            titleInputRef.current.select();
+        }
+        if (editingMethodId && editingField === 'description' && descTextareaRef.current) {
+            descTextareaRef.current.focus();
+            descTextareaRef.current.select();
+        }
+    }, [editingMethodId, editingField]);
+
+    // Effect to handle click outside for inline editing
+    useEffect(() => {
+        const handleClickOutsideEdit = (event: MouseEvent) => {
+            if (editingMethodId && editingField) {
+                const isTitleInput = titleInputRef.current?.contains(event.target as Node);
+                const isDescTextarea = descTextareaRef.current?.contains(event.target as Node);
+
+                if (!isTitleInput && !isDescTextarea) {
+                    saveEdit();
+                }
+            }
+        };
+
+        // Effect to handle Escape key
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && editingMethodId && editingField) {
+                cancelEdit();
+            }
+            if (event.key === 'Enter' && editingMethodId && editingField && event.ctrlKey) {
+                saveEdit();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutsideEdit);
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutsideEdit);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [editingMethodId, editingField, tempTitle, tempDescription]);
+
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -261,9 +317,12 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
 
             // override / add from value
             valueMethods.forEach((method) => {
+                const existingMethod = methodMap.get(method.id);
                 methodMap.set(method.id, {
-                    ...methodMap.get(method.id),
+                    ...existingMethod,
                     ...method,
+                    // Preserve disableBtn from original method or template
+                    disableBtn: method.disableBtn ?? existingMethod?.disableBtn ?? false,
                 });
             });
 
@@ -291,8 +350,47 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                 };
             });
         });
-    }, [value]);
+    }, [value, addNewTemplate]);
 
+    // Inline editing functions
+    const startEditing = (methodId: string, field: 'title' | 'description') => {
+        const method = ExpandablePanelMethods.find(m => m.id === methodId);
+
+        // Only allow editing for custom items and if canEdit returns true
+        if (!method?.isCustom || !canEdit()) {
+            return;
+        }
+
+        setEditingMethodId(methodId);
+        setEditingField(field);
+
+        const methodValue = value[methodId] || {};
+
+        if (field === 'title') {
+            setTempTitle((methodValue.title as string) || method.label || '');
+        } else if (field === 'description') {
+            setTempDescription((methodValue.description as string) || method.desc || '');
+        }
+    };
+
+    const saveEdit = () => {
+        if (editingMethodId && editingField) {
+            if (editingField === 'title' && tempTitle.trim() !== '') {
+                handleInputChange(editingMethodId, 'title', tempTitle.trim());
+            } else if (editingField === 'description') {
+                handleInputChange(editingMethodId, 'description', tempDescription);
+            }
+        }
+
+        cancelEdit();
+    };
+
+    const cancelEdit = () => {
+        setEditingMethodId(null);
+        setEditingField(null);
+        setTempTitle('');
+        setTempDescription('');
+    };
     // add new
     const createNewExpandablePanelMethod = (): ExpandablePanelMethod => {
         if (!addNewTemplate) {
@@ -311,12 +409,13 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
             id,
             icon: addNewTemplate.icon || '',
             label: addNewTemplate.label || 'New Item',
-            desc: addNewTemplate.desc || '',
+            desc: addNewTemplate.desc || 'Enter ',
             connected: false,
             isCustom: true,
-            formFields: addNewTemplate.formFields.map((field) => ({
+            disableBtn: addNewTemplate.disableBtn || false, // Add disableBtn
+            formFields: addNewTemplate.formFields ? addNewTemplate.formFields.map((field) => ({
                 ...field,
-            })),
+            })) : [],
         };
     };
 
@@ -330,10 +429,25 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
             label: newMethod.label,
             desc: newMethod.desc,
             required: newMethod.required ?? false,
+            title: newMethod.label,
+            description: newMethod.desc,
         };
 
+        if (newMethod.disableBtn) {
+            initialValues.enable = false; // Default to disabled when disableBtn is true
+        }
+
+        // Always include icon if it's in the template
+        if (addNewTemplate?.icon) {
+            initialValues.icon = newMethod.icon;
+        }
+
+        // Handle additional form fields
         newMethod.formFields?.forEach((field) => {
             if (field.type === 'iconlibrary') {
+                initialValues[field.key] = '';
+            } else {
+                // Set default empty value for other field types
                 initialValues[field.key] = '';
             }
         });
@@ -345,7 +459,6 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
 
         setActiveTabs((prev) => [...prev, newMethod.id]);
     };
-
     const handleDeleteMethod = (methodId: string) => {
         setExpandablePanelMethods((prev) =>
             prev.filter((m) => m.id !== methodId)
@@ -628,7 +741,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                         { /* Render bottom button */}
                         {field.button?.label && (
                             <AdminButton
-                            wrapperClass='left'
+                                wrapperClass='left'
                                 buttons={[
                                     {
                                         icon: 'plus',
@@ -1110,7 +1223,6 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                     </div>
                 );
             }
-
             default:
                 return (
                     <>
@@ -1147,7 +1259,20 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                     if (isWizardMode && index > wizardIndex) {
                         return null;
                     }
+                    const currentTitle = (value?.[method.id]?.title as string) || method.label;
+                    const currentDescription = (value?.[method.id]?.description as string) || method.desc;
+                    const isEditingThisMethod = editingMethodId === method.id;
+                    const getIsEditable = (field: 'title' | 'description' | 'icon'): boolean => {
+                        if (!method.isCustom) return false;
 
+                        if (!addNewTemplate?.editableFields) {
+                            return field !== 'icon' || canEdit();
+                        }
+
+                        const fieldConfig = addNewTemplate.editableFields[field];
+                        if (fieldConfig === false) return false;
+                        return field !== 'icon' || canEdit();
+                    };
                     return (
                         <div
                             key={method.id}
@@ -1224,82 +1349,177 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                         <div className="expandable-header-info">
                                             <div className="title-wrapper">
                                                 <span className="title">
-                                                    {(value?.[method.id]
-                                                        ?.title as string) ||
-                                                        method.label}
-                                                </span>
-                                                <div className="panel-badges">
-                                                    {method.disableBtn && (
-                                                        <div
-                                                            className={`admin-badge ${isEnabled
-                                                                ? 'green'
-                                                                : 'red'
-                                                                }`}
+                                                    {isEditingThisMethod && editingField === 'title' && getIsEditable('title') ? (
+                                                        <input
+                                                            ref={titleInputRef}
+                                                            type="text"
+                                                            className="inline-edit-input title-edit"
+                                                            value={tempTitle}
+                                                            onChange={(e) => setTempTitle(e.target.value)}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter') {
+                                                                    saveEdit();
+                                                                }
+                                                            }}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        />
+                                                    ) : (
+                                                        <span
+                                                            className={`title ${getIsEditable('title') ? 'editable-title' : ''}`}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                if (getIsEditable('title')) {
+                                                                    startEditing(method.id, 'title');
+                                                                }
+                                                            }}
+                                                            title={getIsEditable('title') ? "Click to edit" : ""}
                                                         >
-                                                            {isEnabled
-                                                                ? 'Active'
-                                                                : 'Inactive'}
-                                                        </div>
+                                                            {currentTitle}
+                                                            {getIsEditable('title') && <i className="adminfont-edit inline-edit-icon"></i>}
+                                                        </span>
                                                     )}
-                                                </div>
+                                                    <div className="panel-badges">
+                                                        {method.disableBtn && (
+                                                            <div
+                                                                className={`admin-badge ${isEnabled
+                                                                    ? 'green'
+                                                                    : 'red'
+                                                                    }`}
+                                                            >
+                                                                {isEnabled
+                                                                    ? 'Active'
+                                                                    : 'Inactive'}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </span>
                                             </div>
                                             <div className="panel-description">
-                                                <p
-                                                    dangerouslySetInnerHTML={{
-                                                        __html:
-                                                            (value?.[
-                                                                method.id
-                                                            ]
-                                                                ?.description as string) ||
-                                                            method.desc,
-                                                    }}
-                                                />
+                                                {isEditingThisMethod && editingField === 'description' && getIsEditable('description') ? (
+                                                    <textarea
+                                                        ref={descTextareaRef}
+                                                        className="inline-edit-textarea description-edit"
+                                                        value={tempDescription}
+                                                        onChange={(e) => setTempDescription(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter' && e.ctrlKey) {
+                                                                saveEdit();
+                                                            }
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        rows={3}
+                                                    />
+                                                ) : (
+                                                    <p
+                                                        className={getIsEditable('description') ? "editable-description" : ""}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            if (getIsEditable('description')) {
+                                                                startEditing(method.id, 'description');
+                                                            }
+                                                        }}
+                                                        title={getIsEditable('description') ? "Click to edit" : ""}
+                                                    >
+                                                        <span dangerouslySetInnerHTML={{
+                                                            __html: currentDescription,
+                                                        }} />
+                                                        {getIsEditable('description') && <i className="adminfont-edit inline-edit-icon"></i>}
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="right-section" ref={menuRef}>
-                                    {method.disableBtn ? (
-                                        <ul>
-                                            {isEnabled ? (
-                                                <>
-                                                    {method.formFields &&
-                                                        method.formFields
-                                                            .length > 0 && (
-                                                            <li
-                                                                onClick={() => {
-                                                                    if (
-                                                                        method.proSetting &&
-                                                                        !appLocalizer?.khali_dabba
-                                                                    ) {
-                                                                        proChanged?.();
-                                                                        return;
-                                                                    } else if (
-                                                                        method.moduleEnabled &&
-                                                                        !modules.includes(
-                                                                            method.moduleEnabled
-                                                                        )
-                                                                    ) {
-                                                                        moduleChange?.(
-                                                                            method.moduleEnabled
-                                                                        );
-                                                                        return;
-                                                                    } else {
-                                                                        toggleActiveTab(
-                                                                            method.id
-                                                                        );
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <span className="admin-btn btn-purple">
-                                                                    <i className="adminfont-setting"></i>
-                                                                    Settings
-                                                                </span>
-                                                            </li>
-                                                        )}
-                                                </>
-                                            ) : (
+                                    <ul className="settings-btn">
+                                        {method.disableBtn ? (
+                                            <>
+                                                {/* <li><span className="admin-bage green ">$0.5</span></li> */}
+                                                {isEnabled ? (
+                                                    <>
+                                                        {method.formFields &&
+                                                            method.formFields
+                                                                .length > 0 && (
+                                                                <li
+                                                                    onClick={() => {
+                                                                        if (
+                                                                            method.proSetting &&
+                                                                            !appLocalizer?.khali_dabba
+                                                                        ) {
+                                                                            proChanged?.();
+                                                                            return;
+                                                                        } else if (
+                                                                            method.moduleEnabled &&
+                                                                            !modules.includes(
+                                                                                method.moduleEnabled
+                                                                            )
+                                                                        ) {
+                                                                            moduleChange?.(
+                                                                                method.moduleEnabled
+                                                                            );
+                                                                            return;
+                                                                        } else {
+                                                                            toggleActiveTab(
+                                                                                method.id
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <span className="admin-btn btn-purple">
+                                                                        <i className="adminfont-setting"></i>
+                                                                        Settings
+                                                                    </span>
+                                                                </li>
+                                                            )}
+                                                    </>
+                                                ) : (
+                                                    <li
+                                                        onClick={() => {
+                                                            if (
+                                                                method.proSetting &&
+                                                                !appLocalizer?.khali_dabba
+                                                            ) {
+                                                                proChanged?.();
+                                                                return;
+                                                            } else if (
+                                                                method.moduleEnabled &&
+                                                                !modules.includes(
+                                                                    method.moduleEnabled
+                                                                )
+                                                            ) {
+                                                                moduleChange?.(
+                                                                    method.moduleEnabled
+                                                                );
+                                                                return;
+                                                            } else {
+                                                                toggleEnable(
+                                                                    method.id,
+                                                                    true
+                                                                );
+                                                            }
+                                                        }}
+                                                    >
+                                                        <span className="admin-btn btn-purple-bg">
+                                                            <i className="adminfont-eye"></i>{' '}
+                                                            {method.isCustom ? 'Show' : 'Enable'}
+                                                        </span>
+                                                    </li>
+                                                )}
+                                            </>
+                                        ) : method.countBtn && method.formFields?.length > 0 && (() => {
+                                            const countableFields = method.formFields.filter(
+                                                (field) => field.type !== 'buttons' && field.type !== 'blocktext'
+                                            );
+
+                                            return (
+                                                <div className="admin-badge red">
+                                                    {fieldProgress[index] || 0}/{countableFields.length}
+                                                </div>
+                                            );
+                                        })()}
+                                        {isEnabled &&
+                                            method.isCustom && (
                                                 <li
                                                     onClick={() => {
                                                         if (
@@ -1321,46 +1541,36 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                         } else {
                                                             toggleEnable(
                                                                 method.id,
-                                                                true
+                                                                false
                                                             );
                                                         }
                                                     }}
                                                 >
-                                                    <span className="admin-btn btn-purple-bg">
-                                                        <i className="adminfont-eye"></i>{' '}
-                                                        Enable
-                                                    </span>
+                                                    <div className="admin-btn btn-purple">
+                                                        <i className="adminfont-eye-blocked"></i>
+                                                        Hide
+                                                    </div>
                                                 </li>
                                             )}
-                                        </ul>
-                                    ) : method.countBtn && method.formFields?.length > 0 && (() => {
-                                        const countableFields = method.formFields.filter(
-                                            (field) => field.type !== 'buttons' && field.type !== 'blocktext'
-                                        );
-
-                                        return (
-                                            <div className="admin-badge red">
-                                                {fieldProgress[index] || 0}/{countableFields.length}
-                                            </div>
-                                        );
-                                    })()}
-                                    {method.isCustom && (
-                                        <>
-                                            <div
-                                                onClick={() => {
-                                                    toggleActiveTab(
-                                                        method.id
-                                                    );
-                                                }}
-                                                className="admin-btn btn-purple"
-                                            >
-                                                <i className="adminfont-edit"></i>
-                                                Edit
-                                            </div>
-                                        </>
-                                    )}
+                                        {method.isCustom && (
+                                            <>
+                                                <li
+                                                    onClick={() => {
+                                                        handleDeleteMethod(
+                                                            method.id
+                                                        );
+                                                    }}
+                                                >
+                                                    <span className="admin-btn red-color">
+                                                        <i className="adminfont-delete"></i>
+                                                        Delete
+                                                    </span>
+                                                </li>
+                                            </>
+                                        )}
+                                    </ul>
                                     { /* show dropdown */}
-                                    {(isEnabled || method.isCustom) && (
+                                    {isEnabled && !method.isCustom && (
                                         <div
                                             className="icon-wrapper"
                                             ref={wrapperRef}
@@ -1386,7 +1596,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                 >
                                                     <div className="dropdown-body">
                                                         <ul>
-                                                            {method.disableBtn && !method.isCustom ? (
+                                                            {method.disableBtn && !method.isCustom && (
                                                                 <>
                                                                     {isEnabled ? (
                                                                         <>
@@ -1461,8 +1671,8 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                                         </li>
                                                                     )}
                                                                 </>
-                                                            ) : null}
-                                                            {(method.isCustom ||
+                                                            )}
+                                                            {/* {(method.isCustom ||
                                                                 method.required) && (
                                                                     <>
                                                                         <li
@@ -1491,7 +1701,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
                                                                             </div>
                                                                         </li>
                                                                     </>
-                                                                )}
+                                                                )} */}
                                                             {isEnabled &&
                                                                 !method.isCustom && (
                                                                     <li

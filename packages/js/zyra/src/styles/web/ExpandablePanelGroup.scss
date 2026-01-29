@@ -116,7 +116,10 @@
             .right-section {
                 display: flex;
                 align-items: center;
-
+                .settings-btn{
+                    display: flex;
+                    gap: 0.5rem;
+                }
                 .disable-icon {
                     color: gray;
                 }
