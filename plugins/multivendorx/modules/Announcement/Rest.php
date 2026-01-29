@@ -147,9 +147,8 @@ class Rest extends \WP_REST_Controller
             $status_param = sanitize_key($request->get_param('status'));
             $searchvalue  = sanitize_text_field($request->get_param('searchvalue'));
             $store_id     = (int) $request->get_param('store_id');
-            //for transient
-            $site    = $request->get_header('sec_fetch_site');
-            $ref    = $request->get_header('referer');
+            $sec_fetch_site    = $request->get_header('sec_fetch_site');
+            $referer           = $request->get_header('referer');
 
             $dates = Utill::normalize_date_range(
                 $request->get_param('startDate'),
@@ -181,11 +180,9 @@ class Rest extends \WP_REST_Controller
     
             $response = rest_ensure_response(array());
 
-            // if ($site && $ref) {
-            //     if (get_transient('multivendorx_announcement_data_' . $store_id)) {
-            //         return get_transient('multivendorx_announcement_data_' . $store_id);
-            //     }
-            // }
+            if ($sec_fetch_site === 'same-origin' && preg_match('#/dashboard/?$#', $referer) && get_transient('multivendorx_announcement_data_' . $store_id)) {
+                return get_transient( Utill::MULTIVENDORX_OTHER_SETTINGS['announcement_transient'] . $store_id);
+            }
 
             foreach (array('any', 'publish', 'pending', 'draft') as $status) {
                 $base_args['post_status'] = $status;
@@ -214,17 +211,11 @@ class Rest extends \WP_REST_Controller
             $base_args['order']          = 'DESC';
             $base_args['posts_per_page'] = $limit;
             $base_args['offset']         = $offset;
-    
+
             if (!empty($dates['start_date']) &&  !empty($dates['end_date'])) {
                 $date_query = array('inclusive' => true);
-    
-                if ($start_date) {
-                    $date_query['after'] = $start_date;
-                }
-                if ($end_date) {
-                    $date_query['before'] = $end_date;
-                }
-    
+                $date_query['after'] = $dates['start_date'];
+                $date_query['before'] = $$dates['end_date'];
                 $base_args['date_query'] = array($date_query);
             }
     
@@ -234,7 +225,7 @@ class Rest extends \WP_REST_Controller
     
             $posts = get_posts($base_args);
             $items = array();
-    
+
             foreach ($posts as $post) {
                 $store_ids = (array) get_post_meta(
                     $post->ID,
@@ -263,14 +254,13 @@ class Rest extends \WP_REST_Controller
             }
     
             $response->set_data($items);
-
-            // if ($site && $ref) {
-            //     set_transient(
-            //         'multivendorx_announcement_data_' . $store_id,
-            //         $response,
-            //         DAY_IN_SECONDS
-            //     );
-            // }
+            if ($sec_fetch_site === 'same-origin' && preg_match('#/dashboard/?$#', $referer)) {
+                set_transient(
+                    Utill::MULTIVENDORX_OTHER_SETTINGS['announcement_transient'] . $store_id,
+                    $response,
+                    DAY_IN_SECONDS
+                );
+            }
 
             return $response;
     
@@ -284,8 +274,6 @@ class Rest extends \WP_REST_Controller
             );
         }
     }
-    
-    
 
     /**
      * Create a single item.

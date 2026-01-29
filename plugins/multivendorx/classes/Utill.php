@@ -106,6 +106,7 @@ class Utill
         'default_role'        => 'default_role',
         'revenue_mode_store'  => 'revenue_mode_store',
         'payment_gateway_charge'  => 'payment_gateway_charge',
+        'announcement_transient'  => 'multivendorx_announcement_data_',
     );
 
     const WOO_SETTINGS = array(
