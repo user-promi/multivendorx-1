@@ -96,7 +96,7 @@ export const Announcements: React.FC = () => {
 	};
 
 	const [announcementStatus, setAnnouncementStatus] = useState<
-	categoryCounts[] | null
+		categoryCounts[] | null
 	>(null);
 	const [storeOptions, setStoreOptions] = useState<
 		{ value: string; label: string }[]
@@ -109,10 +109,6 @@ export const Announcements: React.FC = () => {
 	} | null>(null);
 	const [confirmOpen, setConfirmOpen] = useState(false);
 
-	const handleDeleteClick = (id :number) => {
-		setSelectedAn({id: id});
-		setConfirmOpen(true);
-	};
 	const handleConfirmDelete = async () => {
 		if (!selectedAn) {
 			return;
@@ -190,7 +186,7 @@ export const Announcements: React.FC = () => {
 		}
 	};
 
-	const handleBulkAction = async (action:string, selectedIds : []) => {
+	const handleBulkAction = async (action: string, selectedIds: []) => {
 		if (!selectedIds.length) {
 			return;
 		}
@@ -289,7 +285,7 @@ export const Announcements: React.FC = () => {
 		}
 	};
 
-    const bulkActions = [
+	const bulkActions = [
 		{ label: 'Published', value: 'publish' },
 		{ label: 'Pending', value: 'pending' },
 		{ label: 'Delete', value: 'delete' },
@@ -303,27 +299,30 @@ export const Announcements: React.FC = () => {
 		{ key: 'date', label: 'Date' },
 		{
 			key: 'action',
-			type:'action',
+			type: 'action',
 			label: 'Action',
 			actions: [
-			  {
-				label: __('Edit', 'multivendorx'),
-				icon: 'edit',
-				onClick: (id: number) => handleEdit(id),
-			  },
-			  {
-				label: __('Delete', 'multivendorx'),
-				icon: 'delete',
-				onClick: (id: number) => handleDeleteClick(id),
-				className: 'danger',
-			  },
+				{
+					label: __('Edit', 'multivendorx'),
+					icon: 'edit',
+					onClick: (id: number) => handleEdit(id),
+				},
+				{
+					label: __('Delete', 'multivendorx'),
+					icon: 'delete',
+					onClick: (id: number) => {
+						setSelectedAn({ id: id });
+						setConfirmOpen(true);
+					},
+					className: 'danger',
+				},
 			],
-		  },
+		},
 	];
 
 	const fetchData = async (query: QueryProps) => {
 		setIsLoading(true);
-	
+
 		try {
 			const response = await axios.get(getApiLink(appLocalizer, 'announcement'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce, withCredentials: true },
@@ -337,7 +336,7 @@ export const Announcements: React.FC = () => {
 				},
 			});
 			const items = response.data || [];
-	
+
 			// Map API response into TableRow[][]
 			const mappedRows: any[][] = items.map((ann: any) => [
 				{
@@ -355,7 +354,7 @@ export const Announcements: React.FC = () => {
 				{
 					display: ann.store_name
 						? ann.store_name.split(',').slice(0, 2).join(',') +
-						  (ann.store_name.split(',').length > 2 ? ', ...' : '')
+						(ann.store_name.split(',').length > 2 ? ', ...' : '')
 						: 'All Stores',
 					value: ann.store_name || '',
 				},
@@ -621,7 +620,7 @@ export const Announcements: React.FC = () => {
 						filters={filters}
 						bulkActions={bulkActions}
 						onBulkActionApply={(action: string, selectedIds: []) => {
-							handleBulkAction(action,selectedIds)
+							handleBulkAction(action, selectedIds)
 						}}
 					/>
 				</Column>
