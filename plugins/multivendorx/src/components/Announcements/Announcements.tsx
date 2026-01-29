@@ -43,13 +43,7 @@ interface StoreOption {
 	label: string;
 }
 
-const headers = [
-	{ key: 'title', label: 'Title' },
-	{ key: 'content', label: 'Content' },
-	{ key: 'status', label: 'Status' },
-	{ key: 'recipients', label: 'Recipients' },
-	{ key: 'date', label: 'Date' },
-];
+
 
 export const Announcements: React.FC = () => {
 	const [rows, setRows] = useState<any[][]>([]);
@@ -301,22 +295,30 @@ export const Announcements: React.FC = () => {
 		{ label: 'Delete', value: 'delete' },
 	];
 
-	const rowActions = [
+	const headers = [
+		{ key: 'title', label: 'Title' },
+		{ key: 'content', label: 'Content' },
+		{ key: 'status', label: 'Status' },
+		{ key: 'recipients', label: 'Recipients' },
+		{ key: 'date', label: 'Date' },
 		{
-			label: __('Edit', 'multivendorx'),
-			icon: 'edit',
-			onClick: (id: number) => {
-				handleEdit(id);
-			},
-		},
-		{
-			label: __('Delete', 'multivendorx'),
-			icon: 'delete',
-			onClick: (id: number) => {
-				handleDeleteClick(id);
-			},
-			className: 'danger',
-		}
+			key: 'action',
+			type:'action',
+			label: 'Action',
+			actions: [
+			  {
+				label: __('Edit', 'multivendorx'),
+				icon: 'edit',
+				onClick: (id: number) => handleEdit(id),
+			  },
+			  {
+				label: __('Delete', 'multivendorx'),
+				icon: 'delete',
+				onClick: (id: number) => handleDeleteClick(id),
+				className: 'danger',
+			  },
+			],
+		  },
 	];
 
 	const fetchData = async (query: QueryProps) => {
@@ -388,7 +390,7 @@ export const Announcements: React.FC = () => {
 
 			setAnnouncementStatus(statuses);
 			setTotalRows(Number(response.headers['x-wp-total']));
-
+			setIsLoading(false);
 		} catch (error) {
 			console.error('Failed to fetch announcements', error);
 			setError(__('Failed to load announcements', 'multivendorx'));
@@ -621,7 +623,6 @@ export const Announcements: React.FC = () => {
 						onBulkActionApply={(action: string, selectedIds: []) => {
 							handleBulkAction(action,selectedIds)
 						}}
-						rowActions={rowActions}
 					/>
 				</Column>
 			</Container>
