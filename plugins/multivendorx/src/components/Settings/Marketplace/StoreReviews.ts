@@ -48,79 +48,26 @@ export default {
 				'Give customers a fair way to share feedback! Define what they rate, like product/listing quality, delivery, or service. You’ll start with five default parameters that can be edited or removed, but make sure at least three stay active for balanced, detailed reviews.',
 				'multivendorx'
 			),
-			// addNewBtn: true,
+			addNewBtn: true,
 			buttonEnable: true,
-			modal: [
-				{
-					id: 'business-registration',
-					label: 'Business registration certificate',
-					required: true,
-					isCustom: true,
-					desc: 'Confirms the store is legally registered as a business entity.',
-					formFields: [
-						{
-							key: 'title',
-							type: 'text',
-							label: 'Method title',
-							placeholder: 'Enter title',
-						},
-						{
-							key: 'description',
-							type: 'textarea',
-							label: 'Description',
-						},
-						{
-							key: 'required',
-							type: 'checkbox',
-							label: 'Required',
-						},
-					],
-				},
-				{
-					id: 'trade-license',
-					label: 'Trade license or permit',
-					disableBtn: true,
-					desc: 'Validates that the store is authorized to operate and conduct business legally.',
-					formFields: [
-						{
-							key: 'title',
-							type: 'text',
-							label: 'Method title',
-							placeholder: 'Enter title',
-						},
-						{
-							key: 'description',
-							type: 'textarea',
-							label: 'Description',
-						},
-						{
-							key: 'required',
-							type: 'checkbox',
-							label: 'Required',
-						},
-					]
-				},
+			modal: [	
 				{
 					id: 'zone-wise-shipping',
 					icon: 'adminfont-zone-wise-shipping',
 					label: 'Products',
 					disableBtn: true,
-					isCustom:true,
+					isCustom: true,
 					moduleEnabled: 'store-shipping',
 					desc: 'Add more products to your store',
-					formFields: [
-						{
-							key: 'title',
-							type: 'text',
-							label: 'Method title',
-							placeholder: 'Enter title',
-						},
-						{
-							key: 'description',
-							type: 'textarea',
-							label: 'Description',
-						},
-					],
+				},
+				{
+					id: 'zone-wise',
+					icon: 'adminfont-zone-wise-shipping',
+					label: 'Product',
+					// disableBtn: true,
+					isCustom: true,
+					moduleEnabled: 'store-shipping',
+					desc: 'Add more products to your',
 				},
 				{
 					id: 'country-wise-shipping',
@@ -157,14 +104,16 @@ export default {
 			],
 			addNewTemplate: {
 				label: 'New Rating Parameters',
-				formFields: [
-					{
-						key: 'label',
-						type: 'text',
-						label: 'Parameters',
-						placeholder: 'Enter parameters',
-					},
-				],
+				desc: 'Enter a descripton',
+				disableBtn: true,
+				// formFields: [
+				// 	{
+				// 		key: 'label',
+				// 		type: 'text',
+				// 		label: 'Parameters',
+				// 		placeholder: 'Enter parameters',
+				// 	},
+				// ],
 			},
 			proSetting: false,
 			moduleEnabled: 'store-review',
