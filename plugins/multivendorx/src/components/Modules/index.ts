@@ -279,7 +279,7 @@ export default {
 			icon: 'adminfont-staff-manager',
 			doc_link:
 				'https://multivendorx.com/docs/knowledgebase/staff-manager',
-			settings_link: `${appLocalizer.plugin_url}settings&subtab=user-capability`,
+			settings_link: `${appLocalizer.plugin_url}settings&subtab=user-permissions`,
 			pro_module: true,
 			category: 'store_management',
 		},

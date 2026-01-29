@@ -627,7 +627,7 @@ class Install {
                 )
         );
 
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-capability'], $store_permissions );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'], $store_permissions );
 
         $user_permissions = array(
             'store_owner' =>
@@ -666,7 +666,7 @@ class Install {
 				),
 		);
 
-        update_option( Utill::MULTIVENDORX_SETTINGS['user-capability'], $user_permissions );
+        update_option( Utill::MULTIVENDORX_SETTINGS['user-permissions'], $user_permissions );
 
         $disbursment_settings = array(
             'disbursement_order_status' => array( 'completed' ),
@@ -1792,7 +1792,7 @@ class Install {
         }
 
         update_option( Utill::MULTIVENDORX_SETTINGS['refunds'], $refund_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-capability'], $store_permissions );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'], $store_permissions );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-preferencess'], $product_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['onboarding'], $general_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['privacy'], $privacy_settings );

@@ -146,12 +146,12 @@ const Settings: React.FC<SettingsProps> = () => {
 			}
 
 			const storeCapability =
-				appLocalizer.settings_databases_value['store-capability'];
+				appLocalizer.settings_databases_value['store-permissions'];
 
 			if (storeCapability) {
 				setStoreTabSetting(storeCapability);
 				const userCapability =
-					appLocalizer.settings_databases_value['user-capability'] ||
+					appLocalizer.settings_databases_value['user-permissions'] ||
 					{};
 
 				// all capability arrays into one
@@ -172,7 +172,7 @@ const Settings: React.FC<SettingsProps> = () => {
 					}
 				});
 
-				appLocalizer.settings_databases_value['user-capability'] = {
+				appLocalizer.settings_databases_value['user-permissions'] = {
 					...userCapability,
 					...result,
 				};
