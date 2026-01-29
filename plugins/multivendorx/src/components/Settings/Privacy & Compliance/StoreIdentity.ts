@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'identity-verification',
+	id: 'store-identity',
 	priority: 3,
 	name: __('Store Identity', 'multivendorx'),
 	desc: __(

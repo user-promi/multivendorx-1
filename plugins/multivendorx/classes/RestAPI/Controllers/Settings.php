@@ -122,9 +122,9 @@ class Settings extends \WP_REST_Controller {
                         'disbursement_order_status' => $value['commission_setup']['disbursement_order_status'] ?? array( 'completed' ),
                     );
     
-                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
-                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
-                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
+                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['onboarding'], $general_settings );
+                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['commissions'], $commission_settings );
+                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['payouts'], $disbursment_settings );
                 }
                 
                 return;
@@ -181,7 +181,7 @@ class Settings extends \WP_REST_Controller {
                 }
             }
 
-            if ( 'store-commissions' === $settingsname ) {
+            if ( 'commissions' === $settingsname ) {
                 if ( get_option(Utill::MULTIVENDORX_OTHER_SETTINGS['revenue_mode_store']) ) {
                     delete_option(Utill::MULTIVENDORX_OTHER_SETTINGS['revenue_mode_store']);
                 }

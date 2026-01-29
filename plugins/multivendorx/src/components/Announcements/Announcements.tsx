@@ -766,7 +766,7 @@ export const Announcements: React.FC = () => {
 								usePlainText={false}
 								tinymceApiKey={
 									appLocalizer.settings_databases_value[
-									'marketplace'
+									'overview'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>

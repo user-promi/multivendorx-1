@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'store-registration-form',
+	id: 'registration',
 	priority: 2,
 	name: 'Registration',
 	desc: __(

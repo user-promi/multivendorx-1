@@ -18,9 +18,9 @@ import {
 } from 'zyra';
 import ShowProPopup from '../Popup/Popup';
 import { useLocation, Link } from 'react-router-dom';
-import Notifications from './Notification/Notification';
+import EventRules from './Notification/EventRules.tsx';
 import StoreStatus from './StoreConfiguration/StoreStatus.tsx';
-import Invoice from './Finance/invoice.tsx';
+import Invoice from './Finance/Invoices.tsx';
 
 // Types
 type SettingItem = Record<string, any>;
@@ -180,13 +180,13 @@ const Settings: React.FC<SettingsProps> = () => {
 		}, [setting, settingName, currentTab]);
 
 		// Special component
-		if (currentTab === 'notifications') {
-			return <Notifications />;
+		if (currentTab === 'event-rules') {
+			return <EventRules />;
 		}
-		if (currentTab === 'store-status-control') {
+		if (currentTab === 'store-status') {
 			return <StoreStatus />;
 		}
-		if (currentTab === 'store-invoice') {
+		if (currentTab === 'invoices') {
 			return <Invoice />;
 		}
 

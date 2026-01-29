@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'menu-manager',
+	id: 'dashboard-menu',
 	priority: 4,
 	name: __('Dashboard Menu', 'multivendorx'),
 	desc: __(

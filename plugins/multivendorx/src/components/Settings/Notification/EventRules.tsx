@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import './Notifications.scss';
+import './EventRules.scss';
 import { CommonPopup, getApiLink, TextArea, BasicInput, AdminButton, FormGroupWrapper, FormGroup } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
@@ -57,7 +57,7 @@ const RecipientBadge: React.FC<RecipientBadgeProps> = ({
 };
 
 // ------------------ Notification Component ------------------
-const Notification: React.FC = () => {
+const EventRules: React.FC = () => {
 	// Keep notifications as an array to avoid null checks everywhere
 	const [notifications, setNotifications] = useState<any[]>([]);
 	const [systemTags, setSystemTags] = useState<string[]>([]);
@@ -981,4 +981,4 @@ const Notification: React.FC = () => {
 	);
 };
 
-export default Notification;
+export default EventRules;

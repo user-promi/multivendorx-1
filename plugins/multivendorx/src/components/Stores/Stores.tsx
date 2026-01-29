@@ -353,7 +353,7 @@ const Stores = () => {
 										tinymceApiKey={
 											appLocalizer
 												.settings_databases_value[
-											'marketplace'
+											'overview'
 											]['tinymce_api_section'] ?? ''
 										}
 									/>
