@@ -73,7 +73,7 @@ const staticOptions = [
 const modalOptions = [...capabilityOptions, ...staticOptions];
 
 export default {
-	id: 'store-capability',
+	id: 'store-permissions',
 	priority: 2,
 	name: __('Store Permissions', 'multivendorx'),
 	desc: __(

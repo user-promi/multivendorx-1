@@ -10,7 +10,7 @@ const columns = appLocalizer?.custom_roles
 		}))
 	: [];
 export default {
-	id: 'user-capability',
+	id: 'user-permissions',
 	priority: 3,
 	name: __('User Capabilities', 'multivendorx'),
 	desc: __(
