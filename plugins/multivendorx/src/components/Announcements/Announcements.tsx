@@ -23,7 +23,7 @@ import {
 import './Announcements.scss';
 import { formatLocalDate, formatWcShortDate, truncateText } from '@/services/commonFunction';
 import { Dialog } from '@mui/material';
-import { categoryCounts, QueryProps } from '@/services/type';
+import { categoryCounts, QueryProps, TableRow } from '@/services/type';
 
 
 type AnnouncementForm = {
@@ -46,7 +46,7 @@ interface StoreOption {
 
 
 export const Announcements: React.FC = () => {
-	const [rows, setRows] = useState<any[][]>([]);
+	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [submitting, setSubmitting] = useState(false);
