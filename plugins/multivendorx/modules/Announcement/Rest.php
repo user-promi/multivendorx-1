@@ -131,7 +131,7 @@ class Rest extends \WP_REST_Controller
             $error = new \WP_Error(
                 'invalid_nonce',
                 __('Invalid nonce', 'multivendorx'),
-                ['status' => 403]
+                array('status' => 403)
             );
     
             MultiVendorX()->util->log($error);
@@ -139,51 +139,47 @@ class Rest extends \WP_REST_Controller
         }
     
         try {
-            // ----- Input Handling -----
             $limit        = max(10, (int) $request->get_param('row'));
             $page         = max(1, (int) $request->get_param('page'));
             $offset       = ($page - 1) * $limit;
             $status_param = sanitize_key($request->get_param('status'));
-            $searchvalue = sanitize_text_field($request->get_param('searchvalue'));
+            $searchvalue  = sanitize_text_field($request->get_param('searchvalue'));
             $store_id     = (int) $request->get_param('store_id');
+    
             $dates = Utill::normalize_date_range(
                 $request->get_param('startDate'),
                 $request->get_param('endDate')
             );
     
-            $start_date = $dates['start_date'] ?? null;
-            $end_date   = $dates['end_date'] ?? null;
+            $start_date = isset($dates['start_date']) ? $dates['start_date'] : null;
+            $end_date   = isset($dates['end_date']) ? $dates['end_date'] : null;
     
-            // ----- Base Query Args (for counts) -----
-            $base_args = [
+            $base_args = array(
                 'post_type'      => Utill::POST_TYPES['announcement'],
                 'posts_per_page' => 1,
                 'fields'         => 'ids',
                 'no_found_rows'  => false,
-            ];
+            );
     
-            // ----- Store Filter -----
             if ($store_id > 0) {
-                $base_args['meta_query'] = [
+                $base_args['meta_query'] = array(
                     'relation' => 'OR',
-                    [
+                    array(
                         'key'     => Utill::POST_META_SETTINGS['announcement_stores'],
                         'value'   => ';i:' . $store_id . ';',
                         'compare' => 'LIKE',
-                    ],
-                    [
+                    ),
+                    array(
                         'key'     => Utill::POST_META_SETTINGS['announcement_stores'],
                         'value'   => ';i:0;',
                         'compare' => 'LIKE',
-                    ],
-                ];
+                    ),
+                );
             }
     
-            // ----- RESPONSE OBJECT (must NOT be empty) -----
-            $response = rest_ensure_response([]);
+            $response = rest_ensure_response(array());
     
-            // ----- COUNT HEADERS -----
-            foreach (['any', 'publish', 'pending', 'draft'] as $status) {
+            foreach (array('any', 'publish', 'pending', 'draft') as $status) {
                 $base_args['post_status'] = $status;
     
                 $query = new \WP_Query($base_args);
@@ -191,7 +187,10 @@ class Rest extends \WP_REST_Controller
     
                 if ($status === 'any') {
                     $response->header('X-WP-Total', $count);
-                    $response->header('X-WP-TotalPages', (int) ceil($count / $limit));
+                    $response->header(
+                        'X-WP-TotalPages',
+                        (int) ceil($count / $limit)
+                    );
                 } else {
                     $response->header(
                         'X-WP-Status-' . ucfirst($status),
@@ -200,17 +199,16 @@ class Rest extends \WP_REST_Controller
                 }
             }
     
-            // ----- DATA QUERY -----
             unset($base_args['posts_per_page'], $base_args['fields']);
     
-            $base_args['post_status']    = $status_param ?: 'any';
+            $base_args['post_status']    = $status_param ? $status_param : 'any';
             $base_args['orderby']        = 'date';
             $base_args['order']          = 'DESC';
             $base_args['posts_per_page'] = $limit;
             $base_args['offset']         = $offset;
     
             if ($start_date || $end_date) {
-                $date_query = ['inclusive' => true];
+                $date_query = array('inclusive' => true);
     
                 if ($start_date) {
                     $date_query['after'] = $start_date;
@@ -219,16 +217,15 @@ class Rest extends \WP_REST_Controller
                     $date_query['before'] = $end_date;
                 }
     
-                $base_args['date_query'] = [$date_query];
+                $base_args['date_query'] = array($date_query);
             }
     
             if ($searchvalue) {
                 $base_args['s'] = $searchvalue;
             }
     
-            // ----- Fetch Posts -----
             $posts = get_posts($base_args);
-            $items = [];
+            $items = array();
     
             foreach ($posts as $post) {
                 $store_ids = (array) get_post_meta(
@@ -237,7 +234,7 @@ class Rest extends \WP_REST_Controller
                     true
                 );
     
-                $store_names = [];
+                $store_names = array();
                 foreach ($store_ids as $sid) {
                     $store = MultivendorX()->store->get_store($sid);
                     if ($store) {
@@ -245,7 +242,7 @@ class Rest extends \WP_REST_Controller
                     }
                 }
     
-                $items[] = [
+                $items[] = array(
                     'id'         => $post->ID,
                     'title'      => $post->post_title,
                     'content'    => $post->post_content,
@@ -254,11 +251,10 @@ class Rest extends \WP_REST_Controller
                     'status'     => $post->post_status === 'publish'
                         ? 'published'
                         : $post->post_status,
-                ];
+                );
             }
     
             $response->set_data($items);
-    
             return $response;
     
         } catch (\Exception $e) {
@@ -267,10 +263,11 @@ class Rest extends \WP_REST_Controller
             return new \WP_Error(
                 'server_error',
                 __('Unexpected server error', 'multivendorx'),
-                ['status' => 500]
+                array('status' => 500)
             );
         }
     }
+    
     
 
     /**
