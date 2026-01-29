@@ -125,8 +125,6 @@ class Rest extends \WP_REST_Controller
      */
     public function get_items($request)
     {
-        // file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: small: " . var_export($request, true) . "\n", FILE_APPEND);
-
         // ----- Nonce Check -----
         $nonce = $request->get_header('X-WP-Nonce');
         if (! wp_verify_nonce($nonce, 'wp_rest')) {
