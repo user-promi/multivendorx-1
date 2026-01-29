@@ -145,8 +145,8 @@ const Dashboard: React.FC = () => {
 					row: 5,
 					store_id: appLocalizer.store_id,
 					status: 'publish',
-					startDate: dateRange.startDate,
-					endDate: dateRange.endDate,
+					// startDate: dateRange.startDate,
+					// endDate: dateRange.endDate,
 					// dashboard: true
 				},
 			})
