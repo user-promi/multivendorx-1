@@ -186,9 +186,9 @@ const Settings: React.FC<SettingsProps> = () => {
 		if (currentTab === 'store-status-control') {
 			return <StoreStatus />;
 		}
-		// if (currentTab === 'store-invoice') {
-		// 	return <Invoice />;
-		// }
+		if (currentTab === 'store-invoice') {
+			return <Invoice />;
+		}
 
 		return (
 			<>
