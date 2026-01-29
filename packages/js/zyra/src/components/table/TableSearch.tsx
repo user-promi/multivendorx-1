@@ -30,6 +30,7 @@ const TableSearch: React.FC<TableSearchProps> = ({
 
   const latestOnSearch = useRef(onSearch);
   latestOnSearch.current = onSearch;
+  const hasInteracted = useRef(false);
 
   // Update text if controlledValue changes
   useEffect(() => {
@@ -38,6 +39,7 @@ const TableSearch: React.FC<TableSearchProps> = ({
 
   // Debounced effect for search
   useEffect(() => {
+    if (!hasInteracted.current) return;
     // Only run if text or option changes
     const handler = setTimeout(() => {
       latestOnSearch.current(text, selectedOption || undefined);
@@ -49,6 +51,7 @@ const TableSearch: React.FC<TableSearchProps> = ({
   // Use stable callbacks to avoid unnecessary re-renders in parent
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      hasInteracted.current = true;
       setText(e.target.value);
     },
     []
@@ -56,6 +59,7 @@ const TableSearch: React.FC<TableSearchProps> = ({
 
   const handleOptionChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
+      hasInteracted.current = true;
       setSelectedOption(e.target.value);
     },
     []

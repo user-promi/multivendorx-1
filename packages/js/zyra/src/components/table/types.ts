@@ -66,6 +66,7 @@ export type TableHeader = {
 	isEditable?: boolean;
 	editType?: string;
 	options?: { label: string; value: string | number }[];
+	actions?: ActionItem[];
 };
 
 export type TableRow = {

@@ -8,6 +8,7 @@ import { TableProps, TableRow } from './types';
 import TableRowActions from './TableRowActions';
 import { renderCell } from './Utill';
 import { renderEditableCell } from './renderEditableCell';
+import Skeleton from '../UI/Skeleton';
 
 const ASC = 'asc';
 const DESC = 'desc';
@@ -28,7 +29,6 @@ const Table: React.FC<TableProps> = ({
 	onSelectAll,
 	emptyMessage,
 	classNames,
-	rowActions,
 	onCellEdit,
 }) => {
 	const allSelected = ids.length > 0 && ids.every((id) => selectedIds.includes(id));
@@ -209,9 +209,6 @@ const Table: React.FC<TableProps> = ({
 								</th>
 							);
 						})}
-						{rowActions && (
-							<th className=" header-col admin-column actions">Action</th>
-						)}
 					</tr>
 				</thead>
 				<tbody className="admin-table-body">
@@ -227,6 +224,21 @@ const Table: React.FC<TableProps> = ({
 								</td>
 								{row.map((cell, colIndex) => {
 									const header = headers[colIndex];
+									const rowId = ids[rowIndex];
+									if (header.type === 'action') {
+										return (
+										  <td key={`action-${rowId}`} className="admin-column actions">
+											{ ariaHidden ? (
+											  <Skeleton width="60px" />
+											) : (
+											  <TableRowActions
+												rowId={rowId}
+												rowActions={header.actions}
+											  />
+											)}
+										  </td>
+										);
+									  }
 									const displayValue = renderCell(cell);
 									const columnClass =
 										header.key === 'status'
@@ -244,7 +256,6 @@ const Table: React.FC<TableProps> = ({
 									]
 										.filter(Boolean)
 										.join(' ');
-									const rowId = ids[rowIndex];
 									const isEditing =
 										editingCell?.id === rowId &&
 										editingCell?.key === header.key;
@@ -275,8 +286,6 @@ const Table: React.FC<TableProps> = ({
 														header,
 														cell,
 														isEditing,
-														onEditStart: () =>
-															setEditingCell({ id: rowId, key: header.key }),
 														onSave: handleSave,
 													})
 												) : (
@@ -286,21 +295,12 @@ const Table: React.FC<TableProps> = ({
 										</td>
 									);
 								})}
-								{rowActions && (
-									<td className="admin-column actions">
-										<TableRowActions
-											rowId={ids[rowIndex]}
-											rowData={row}
-											rowActions={rowActions}
-										/>
-									</td>
-								)}
 							</tr>
 						))
 					) : (
 						<tr className="admin-row">
 							<td
-								colSpan={headers.length}
+								colSpan={headers.length+1}
 								className="table-empty"
 							>
 								{emptyMessage ?? 'No data to display'}

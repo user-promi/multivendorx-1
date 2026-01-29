@@ -43,7 +43,6 @@ const TableCard: React.FC<TableCardProps> = ({
 	activeCategory = 'all',
 	filters = [],
 	showColumnToggleIcon = true,
-	rowActions,
 	onSelectCsvDownloadApply,
 	onCellEdit,
 	buttonActions,
@@ -315,7 +314,6 @@ const TableCard: React.FC<TableCardProps> = ({
 						selectedIds={selectedIds}
 						onSelectRow={handleSelectRow}
 						onSelectAll={handleSelectAll}
-						rowActions={rowActions}
 						onCellEdit={onCellEdit}
 					/>
 				</>
