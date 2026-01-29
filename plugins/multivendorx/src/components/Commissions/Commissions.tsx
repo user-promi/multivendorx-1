@@ -582,7 +582,7 @@ const Commission: React.FC = () => {
 										)}
 									</li>
 								)}
-							{row.original?.taxAmount && appLocalizer.settings_databases_value['store-commissions']?.give_tax !== 'no_tax' && (
+							{row.original?.taxAmount && appLocalizer.settings_databases_value['commissions']?.give_tax !== 'no_tax' && (
 								<li>
 									{row.original?.taxAmount && (
 										<div className="item">

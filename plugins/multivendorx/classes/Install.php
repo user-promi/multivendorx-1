@@ -627,7 +627,7 @@ class Install {
                 )
         );
 
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-capability'], $store_permissions );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'], $store_permissions );
 
         $user_permissions = array(
             'store_owner' =>
@@ -666,7 +666,7 @@ class Install {
 				),
 		);
 
-        update_option( Utill::MULTIVENDORX_SETTINGS['user-capability'], $user_permissions );
+        update_option( Utill::MULTIVENDORX_SETTINGS['user-permissions'], $user_permissions );
 
         $disbursment_settings = array(
             'disbursement_order_status' => array( 'completed' ),
@@ -675,7 +675,7 @@ class Install {
             'withdraw_type'             => 'manual',
 		);
 
-        update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['payouts'], $disbursment_settings );
 
         $shipping_provider_settings = array(
             'shipping_providers_options' => array(
@@ -747,7 +747,7 @@ class Install {
             ),
         );
 
-        update_option( Utill::MULTIVENDORX_SETTINGS['payment-integration'], $payment_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], $payment_settings );
 
         $dashboard_page = get_posts(
             array(
@@ -779,7 +779,7 @@ class Install {
             'store_url'               => 'store',
             'display_customer_order'  => 'mainorder'
         );
-        update_option( Utill::MULTIVENDORX_SETTINGS['marketplace'], $marketplace_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['overview'], $marketplace_settings );
 
         $general_settings = array(
             'approve_store' => 'manually',
@@ -804,7 +804,7 @@ class Install {
             'spmv_show_order' => 'min_price',
             'more_offers_display_position' => 'after',
         );
-        update_option( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['onboarding'], $general_settings );
 
         $appearance_settings = array(
             'store_color_settings'  => array(
@@ -821,7 +821,7 @@ class Install {
                 'colors'          => array(),
             ),
         );
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-appearance'], $appearance_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['appearance'], $appearance_settings );
 
         $product_settings = array(
             'type_options'    => array( 'virtual', 'downloadable' ),
@@ -856,18 +856,18 @@ class Install {
                 ),
             ),
         );
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-inventory'], $inventory_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['inventory'], $inventory_settings );
 
         $commission_settings = array(
             'give_tax'    => 'no_tax',
         );
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['commissions'], $commission_settings );
 
         $coupon_settings = array(
             'commission_include_coupon' => 'seperate',
             'admin_coupon_excluded'     => array('admin_coupon_excluded'),
         );
-        update_option( Utill::MULTIVENDORX_SETTINGS['coupon'], $coupon_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['coupons-discounts'], $coupon_settings );
 
         $refund_settings = array(
             'customer_refund_status' => array('completed'),
@@ -930,7 +930,7 @@ class Install {
             ),
         );
 
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-registration-form'], $registration_from_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['registration'], $registration_from_settings );
 
         $delivery_settings = array(
             'shipping_stage' => array(
@@ -1025,12 +1025,12 @@ class Install {
         );
 
         // 6. Save back to DB
-        update_option( Utill::MULTIVENDORX_SETTINGS['identity-verification'], $settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-identity'], $settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['delivery'], $delivery_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['legal-compliance'], $legal_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-compliance'], $product_compliance_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['review-management'], $review_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['non-compliance'], $compliance_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-reviews'], $review_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['compliance'], $compliance_settings );
     }
 
     /**
@@ -1172,7 +1172,7 @@ class Install {
             ];
         }
 
-        update_option(Utill::MULTIVENDORX_SETTINGS['payment-integration'], $payment_settings);
+        update_option(Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], $payment_settings);
         update_option(Utill::MULTIVENDORX_SETTINGS['shipping'], $shipping_settings);
 
          $old_shipping_modules = [
@@ -1788,24 +1788,24 @@ class Install {
                     'selected' => ''
                 ];
             }
-            update_option( Utill::MULTIVENDORX_SETTINGS['store-registration-form'], $newForm );
+            update_option( Utill::MULTIVENDORX_SETTINGS['registration'], $newForm );
         }
 
         update_option( Utill::MULTIVENDORX_SETTINGS['refunds'], $refund_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-capability'], $store_permissions );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'], $store_permissions );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-preferencess'], $product_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['onboarding'], $general_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['privacy'], $privacy_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['marketplace'], $marketplace_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-appearance'], $appearance_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['overview'], $marketplace_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['appearance'], $appearance_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['geolocation'], $map_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['coupon'], $coupon_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['policy'], $policy_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['review-management'], $review_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursement_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['development-tools'], $tool_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['payment-integration'], $payment_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['commissions'], $commission_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['coupons-discounts'], $coupon_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['policies'], $policy_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-reviews'], $review_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['payouts'], $disbursement_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['developer-tools'], $tool_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], $payment_settings );
 
     }
 

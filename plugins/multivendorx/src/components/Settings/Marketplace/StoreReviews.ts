@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'review-management',
+	id: 'store-reviews',
 	priority: 4,
 	name: __('Store Reviews', 'multivendorx'),
 	desc: __(

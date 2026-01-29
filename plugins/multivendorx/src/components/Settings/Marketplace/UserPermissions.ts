@@ -10,7 +10,7 @@ const columns = appLocalizer?.custom_roles
 		}))
 	: [];
 export default {
-	id: 'user-capability',
+	id: 'user-permissions',
 	priority: 3,
 	name: __('User Capabilities', 'multivendorx'),
 	desc: __(
@@ -23,6 +23,7 @@ export default {
 		{
 			key: 'role_access_table',
 			type: 'multi-checkbox-table',
+			classes: 'full-width',
 			columns: columns,
 			rows: appLocalizer?.capabilities || {},
 		},

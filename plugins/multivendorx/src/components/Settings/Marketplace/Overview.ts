@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'marketplace',
+	id: 'overview',
 	priority: 1,
 	name: __('Overview', 'multivendorx'),
 	tabTitle: 'Marketplace pages configuration',
@@ -75,49 +75,44 @@ export default {
 			options: [
 				{
 					key: 'mainorder',
-					label: __('Main order (Show one combined order)', 'multivendorx'),
-					desc: __('Customer receives separate emails and sees individual store orders', 'multivendorx'),
+					label: __('Main Order (Combined)', 'multivendorx'),
+					desc: __('Sends a single order and invoice for the entire purchase', 'multivendorx'),
 					icon: 'adminfont-cart',
 					value: 'mainorder',
 					customHtml: `<div class="toggle-notice">
-									<ul>
-										<li>Customer gets one email about their purchase</li>
-										<li>One order shows in "My Account"</li>
-										<li>One receipt for everything</li>
-										<li>One receipt issued by Your Marketplace with Your business tax details</li>
-									</ul>
-								</div>`
+					<p><strong>What it does:</strong> Sends a single order and invoice for the entire purchase.</p>
+					<p><strong>Email/Invoice:</strong> One email, one receipt with your marketplace tax details.</p>
+					<p><strong>My Account:</strong> Shows one combined order.</p>
+					<p><strong>Use this if:</strong> You want a simplified, all-in-one order view for customers.</p>
+				</div>`
 				},
 				{
-					key: 'suborder',
-					icon: 'adminfont-cart',
-					label: __('Sub-orders Only (Show separate orders by store)', 'multivendorx'),
-					desc: __('Customer receives separate emails and sees individual store orders', 'multivendorx'),
-					value: 'suborder',
+					key: 'suborders',
+					label: __('Sub-Orders (Per Store)', 'multivendorx'),
+					desc: __('Sends separate orders and invoices for each store', 'multivendorx'),
+					icon: 'adminfont-store',
+					value: 'suborders',
 					customHtml: `<div class="toggle-notice">
-									<ul>
-										<li>Separate email from each store</li>
-										<li>Multiple orders show in "My Account" (one per store)</li>
-										<li>Separate receipt from each store</li>
-										<li>Multiple receipts (one from each store) issued by Each Store with Each store's tax details</li>
-									</ul>
-								</div>`					
+					<p><strong>What it does:</strong> Sends separate orders and invoices for each store.</p>
+					<p><strong>Email/Invoice:</strong> Separate emails and receipts with each store’s tax details.</p>
+					<p><strong>My Account:</strong> Shows multiple orders (one per store).</p>
+					<p><strong>Use this if:</strong> You want customers to see individual store orders and receipts.</p>
+				</div>`
 				},
 				{
-					key: 'mainnsub',
-					icon: 'adminfont-cart',
-					label: __('Main & Sub order together (Show both combined + separate)', 'multivendorx'),
-					desc: __('Customer receives multiple emails and sees all order versions', 'multivendorx'),
-					value: '',
+					key: 'main_sub',
+					label: __('Main + Sub Orders (Combined + Separate)', 'multivendorx'),
+					desc: __('Sends both a combined order and separate store orders with invoices', 'multivendorx'),
+					icon: 'adminfont-repeat',
+					value: 'main_sub',
 					customHtml: `<div class="toggle-notice">
-									<ul>
-										<li>One email for complete order + separate emails per store</li>
-										<li>Multiple orders in "My Account" (combined + individual)</li>
-										<li>Multiple receipts (one from you + one from each store)</li>
-										<li>Multiple receipts (yours + all stores) issued by Your Marketplace + All Stores with Your and each store's tax details</li>
-									</ul>
-								</div>`
+					<p><strong>What it does:</strong> Sends both a combined order and separate store orders with invoices.</p>
+					<p><strong>Email/Invoice:</strong> One email for the full order + separate emails per store; multiple receipts with marketplace and store tax details.</p>
+					<p><strong>My Account:</strong> Shows combined + individual orders.</p>
+					<p><strong>Use this if:</strong> You want full transparency for both marketplace and individual store orders.</p>
+				</div>`
 				},
+
 			],
 		},
 		{

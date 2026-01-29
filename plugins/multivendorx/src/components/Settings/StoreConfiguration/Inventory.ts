@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'store-inventory',
+	id: 'inventory',
 	priority: 6,
 	name: __('Inventory', 'multivendorx'),
 	tabTitle: 'Store Inventory Notifications',

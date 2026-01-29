@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'policy',
+	id: 'policies',
 	priority: 9,
 	name: __('Policies', 'multivendorx'),
 	desc: __(

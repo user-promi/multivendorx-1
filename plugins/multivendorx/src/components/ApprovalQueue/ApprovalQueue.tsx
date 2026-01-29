@@ -40,7 +40,7 @@ const ApprovalQueue = () => {
 
 		// Product Count (only if can publish products)
 		if (
-			!settings?.['store-capability']?.products?.includes(
+			!settings?.['store-permissions']?.products?.includes(
 				'publish_products'
 			)
 		) {
@@ -62,7 +62,7 @@ const ApprovalQueue = () => {
 
 		//Coupon Count (only if can publish coupons)
 		if (
-			settings?.['store-capability']?.coupons?.includes('publish_coupons')
+			settings?.['store-permissions']?.coupons?.includes('publish_coupons')
 		) {
 			axios
 				.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
@@ -171,7 +171,7 @@ const ApprovalQueue = () => {
 		{
 			type: 'file',
 			condition:
-				!settings?.['store-capability']?.products?.includes(
+				!settings?.['store-permissions']?.products?.includes(
 					'publish_products'
 				),
 			content: {
@@ -187,7 +187,7 @@ const ApprovalQueue = () => {
 		{
 			type: 'file',
 			condition:
-				settings?.['store-capability']?.coupons?.includes(
+				settings?.['store-permissions']?.coupons?.includes(
 					'publish_coupons'
 				),
 			content: {

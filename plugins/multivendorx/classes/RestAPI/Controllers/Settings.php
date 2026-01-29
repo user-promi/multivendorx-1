@@ -122,9 +122,9 @@ class Settings extends \WP_REST_Controller {
                         'disbursement_order_status' => $value['commission_setup']['disbursement_order_status'] ?? array( 'completed' ),
                     );
     
-                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['general'], $general_settings );
-                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['store-commissions'], $commission_settings );
-                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['disbursement'], $disbursment_settings );
+                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['onboarding'], $general_settings );
+                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['commissions'], $commission_settings );
+                    MultiVendorX()->setting->update_setting( Utill::MULTIVENDORX_SETTINGS['payouts'], $disbursment_settings );
                 }
                 
                 return;
@@ -142,9 +142,9 @@ class Settings extends \WP_REST_Controller {
 
             $all_details['error'] = __( 'Settings Saved', 'multivendorx' );
 
-            if ( 'store_capability' === $settingsname || 'user_capability' === $settingsname ) {
-                $store_cap = MultiVendorX()->setting->get_option( Utill::MULTIVENDORX_SETTINGS['store-capability'] );
-                $user_cap  = MultiVendorX()->setting->get_option( Utill::MULTIVENDORX_SETTINGS['user-capability'] );
+            if ( 'store_permissions' === $settingsname || 'user_permissions' === $settingsname ) {
+                $store_cap = MultiVendorX()->setting->get_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'] );
+                $user_cap  = MultiVendorX()->setting->get_option( Utill::MULTIVENDORX_SETTINGS['user-permissions'] );
 
                 $store_owner_caps = array();
                 foreach ( $store_cap as $caps ) {
@@ -164,7 +164,7 @@ class Settings extends \WP_REST_Controller {
                     }
                 }
 
-                MultiVendorX()->setting->update_option( Utill::MULTIVENDORX_SETTINGS['user-capability'], array_merge( $user_cap, $result ) );
+                MultiVendorX()->setting->update_option( Utill::MULTIVENDORX_SETTINGS['user-permissions'], array_merge( $user_cap, $result ) );
 
                 $role = get_role( 'store_owner' );
 
@@ -181,7 +181,7 @@ class Settings extends \WP_REST_Controller {
                 }
             }
 
-            if ( 'store-commissions' === $settingsname ) {
+            if ( 'commissions' === $settingsname ) {
                 if ( get_option(Utill::MULTIVENDORX_OTHER_SETTINGS['revenue_mode_store']) ) {
                     delete_option(Utill::MULTIVENDORX_OTHER_SETTINGS['revenue_mode_store']);
                 }

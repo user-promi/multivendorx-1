@@ -58,7 +58,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 		selectedProvider?.fields || selectedProvider?.formFields || [];
 
 	const bankDetails =
-		appLocalizer.settings_databases_value['payment-integration']
+		appLocalizer.settings_databases_value['withdrawal-methods']
 			?.payment_methods?.['bank-transfer']?.['bank_details'];
 
 	useEffect(() => {
@@ -185,7 +185,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 													'You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.',
 													'multivendorx'
 												),
-												'?page=multivendorx#&tab=settings&subtab=payment-integration'
+												'?page=multivendorx#&tab=settings&subtab=withdrawal-methods'
 											)
 											: ''
 									}

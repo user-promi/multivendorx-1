@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'general',
+	id: 'onboarding',
 	priority: 1,
 	name: __('Onboarding', 'multivendorx'),
 	tabTitle: 'Approval process for new stores',
@@ -110,7 +110,7 @@ export default {
 					),
 					value: 'identity_verification',
 					proSetting: true,
-					moduleEnabled: 'identity-verification',
+					moduleEnabled: 'marketplace-compliance',
 				},
 				{
 					key: 'store_policies',

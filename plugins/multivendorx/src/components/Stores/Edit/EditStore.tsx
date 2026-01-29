@@ -15,16 +15,16 @@ import {
 	Skeleton
 } from 'zyra';
 
-import StoreSettings from './storeSettings';
-import PaymentSettings from './paymentSettings';
-import StoreSquad from './storeStaff';
-import PolicySettings from './policySettings';
-import ShippingSettings from './shippingSettings';
-import StoreRegistration from './storeRegistrationForm';
-import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import StoreSettings from './StoreSettings';
+import PaymentSettings from './PaymentSettings';
+import StoreSquad from './StoreStaff';
+import PolicySettings from './PolicySettings';
+import ShippingSettings from './ShippingSettings';
+import StoreRegistration from './StoreRegistrationForm';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
-import Overview from './overview';
-import '../viewStore.scss';
+import Overview from './Overview';
+import '../ViewStore.scss';
 import { applyFilters } from '@wordpress/hooks';
 
 const EditStore = () => {

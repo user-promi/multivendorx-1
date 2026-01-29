@@ -35,6 +35,6 @@ class Frontend {
             ),
         );
 
-        return array_merge( $submenus, $new_item );;
+        return array_merge( $submenus, $new_item );
     }
 }

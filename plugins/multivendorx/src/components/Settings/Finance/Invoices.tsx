@@ -73,7 +73,7 @@ const Invoice: React.FC = () => {
 				// hideTabHeader: true,
 				icon: 'in-progress',
 			},
-		},	
+		},
 		{
 			type: 'file',
 			content: {
@@ -93,7 +93,7 @@ const Invoice: React.FC = () => {
 				// hideTabHeader: true,
 				icon: 'in-progress',
 			},
-		},		
+		},
 	];
 
 	const GetForm = (currentTab: string | null): JSX.Element | null => {
@@ -139,20 +139,22 @@ const Invoice: React.FC = () => {
 
 	return (
 		<SettingProvider>
-			<Tabs
-				tabData={tabData as any}
-				currentTab={initialTab}
-				getForm={GetForm}
-				prepareUrl={(subTab: string) =>
-					`?page=multivendorx#&tab=settings&subtab=${subTab}`
-				}
-				appLocalizer={appLocalizer}
-				supprot={[]}
-				Link={Link}
-				hideTitle={true}
-				hideBreadcrumb={true}
-				premium={false}
-			/>
+			<div className="horizontal-tabs">
+				<Tabs
+					tabData={tabData as any}
+					currentTab={initialTab}
+					getForm={GetForm}
+					prepareUrl={(tabid: string) =>
+						`?page=multivendorx#&tab=settings&subtab=invoice&tabId=${tabid}`
+					}
+					appLocalizer={appLocalizer}
+					settingName="Settings"
+					supprot={[]}
+					Link={Link}
+					submenuRender={true}
+					menuIcon={true}
+				/>
+			</div>
 		</SettingProvider>
 	);
 };

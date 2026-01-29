@@ -1351,9 +1351,7 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                     input = (
                         <Section
                             key={ `${ inputField.key }` }
-                            wrapperClass={
-                                inputField.wrapperClass || 'divider-wrapper'
-                            }
+                            wrapperClass={ inputField.wrapperClass}
                             value={ inputField.label } //Optional main heading/title of the section.
                             hint={ inputField.hint } //Optional hint or subtext below the title, can include HTML.
                             description={ inputField.desc } //Optional descriptive text displayed below the hint.

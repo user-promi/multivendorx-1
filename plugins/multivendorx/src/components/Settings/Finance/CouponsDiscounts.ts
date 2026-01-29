@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'coupon',
+	id: 'coupons-discounts',
 	priority: 4,
 	name: __('Coupons & Discounts', 'multivendorx'),
 	desc: __(
