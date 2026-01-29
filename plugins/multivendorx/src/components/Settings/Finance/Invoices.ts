@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'store-invoice',
+	id: 'invoices',
 	priority: 6,
 	name: __('Invoices', 'multivendorx'),
 	desc: __(

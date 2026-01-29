@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'notifications',
+	id: 'event-rules',
 	priority: 2,
 	name: 'Event Rules',
 	desc: __(

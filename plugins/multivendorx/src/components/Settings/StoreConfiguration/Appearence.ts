@@ -5,7 +5,7 @@ import template3 from '../../../assets/images/template/store/template3.jpg';
 import DashboardTemplate from '../../../assets/template/Dashboard';
 
 export default {
-	id: 'store-appearance',
+	id: 'appearance',
 	priority: 5,
 	name: __('Appearance', 'multivendorx'),
 	tabTitle: 'Marketplace Branding',

@@ -68,7 +68,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 								tinymceApiKey={
 									appLocalizer
 										.settings_databases_value[
-									'marketplace'
+									'overview'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
@@ -84,7 +84,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 								tinymceApiKey={
 									appLocalizer
 										.settings_databases_value[
-									'marketplace'
+									'overview'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
@@ -102,7 +102,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 								tinymceApiKey={
 									appLocalizer
 										.settings_databases_value[
-									'marketplace'
+									'overview'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
@@ -118,7 +118,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 								tinymceApiKey={
 									appLocalizer
 										.settings_databases_value[
-									'marketplace'
+									'overview'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>
