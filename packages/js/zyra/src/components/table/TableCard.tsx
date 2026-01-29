@@ -315,6 +315,7 @@ const TableCard: React.FC<TableCardProps> = ({
 						onSelectRow={handleSelectRow}
 						onSelectAll={handleSelectAll}
 						onCellEdit={onCellEdit}
+						enableBulkSelect={bulkActions.length > 0}
 					/>
 				</>
 

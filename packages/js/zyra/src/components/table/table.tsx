@@ -30,6 +30,7 @@ const Table: React.FC<TableProps> = ({
 	emptyMessage,
 	classNames,
 	onCellEdit,
+	enableBulkSelect = false,
 }) => {
 	const allSelected = ids.length > 0 && ids.every((id) => selectedIds.includes(id));
 	const [tabIndex, setTabIndex] = useState<number | undefined>();
@@ -140,13 +141,13 @@ const Table: React.FC<TableProps> = ({
 				</caption>
 				<thead className="admin-table-header">
 					<tr className="header-row">
-						{selectedIds.length > 0 || allSelected ? (
+						{enableBulkSelect && (
 							<th className="header-col select">
-								<input type="checkbox" checked={allSelected} onChange={toggleAllRows} />
-							</th>
-						) : (
-							<th className="header-col select">
-								<input type="checkbox" checked={allSelected} onChange={toggleAllRows} />
+								<input
+									type="checkbox"
+									checked={allSelected}
+									onChange={toggleAllRows}
+								/>
 							</th>
 						)}
 						{headers.map((header, i) => {
@@ -215,30 +216,33 @@ const Table: React.FC<TableProps> = ({
 					{hasData ? (
 						rows.map((row, rowIndex) => (
 							<tr className="admin-row" key={getRowKey(row, rowIndex)}>
-								<td className="admin-column select">
-									<input
-										type="checkbox"
-										checked={selectedIds.includes(ids[rowIndex])}
-										onChange={() => toggleRow(rowIndex)}
-									/>
-								</td>
+								{enableBulkSelect && (
+									<td className="admin-column select">
+										<input
+											type="checkbox"
+											checked={selectedIds.includes(ids[rowIndex])}
+											onChange={() => toggleRow(rowIndex)}
+										/>
+									</td>
+								)}
+
 								{row.map((cell, colIndex) => {
 									const header = headers[colIndex];
 									const rowId = ids[rowIndex];
 									if (header.type === 'action') {
 										return (
-										  <td key={`action-${rowId}`} className="admin-column actions">
-											{ ariaHidden ? (
-											  <Skeleton width="60px" />
-											) : (
-											  <TableRowActions
-												rowId={rowId}
-												rowActions={header.actions}
-											  />
-											)}
-										  </td>
+											<td key={`action-${rowId}`} className="admin-column actions">
+												{ariaHidden ? (
+													<Skeleton width="60px" />
+												) : (
+													<TableRowActions
+														rowId={rowId}
+														rowActions={header.actions}
+													/>
+												)}
+											</td>
 										);
-									  }
+									}
 									const displayValue = renderCell(cell);
 									const columnClass =
 										header.key === 'status'
@@ -300,7 +304,7 @@ const Table: React.FC<TableProps> = ({
 					) : (
 						<tr className="admin-row">
 							<td
-								colSpan={headers.length+1}
+								colSpan={headers.length + (enableBulkSelect ? 1 : 0)}
 								className="table-empty"
 							>
 								{emptyMessage ?? 'No data to display'}
