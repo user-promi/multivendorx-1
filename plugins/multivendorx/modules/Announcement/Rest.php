@@ -147,6 +147,7 @@ class Rest extends \WP_REST_Controller
             $status_param = sanitize_key($request->get_param('status'));
             $searchvalue  = sanitize_text_field($request->get_param('searchvalue'));
             $store_id     = (int) $request->get_param('store_id');
+            //for transient
             $site    = $request->get_header('sec_fetch_site');
             $ref    = $request->get_header('referer');
 
