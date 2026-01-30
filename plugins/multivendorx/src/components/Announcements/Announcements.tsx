@@ -332,7 +332,7 @@ export const Announcements: React.FC = () => {
 					page: query.paged || 1,
 					row: query.per_page || 10,
 					status: query.categoryFilter || '',
-					searchvalue: query.searchvalue || '',
+					searchValue: query.searchValue || '',
 					startDate: query.filter?.created_at?.startDate
 						? formatLocalDate(query.filter.created_at.startDate)
 						: '',

@@ -8,7 +8,7 @@ export type QueryProps = {
     paged?: number | string;
     filter?: Record<string, FilterValue>;
     categoryFilter?: string;
-    searchvalue?: string;
+    searchValue?: string;
 };
 
 export type TableHeader = {

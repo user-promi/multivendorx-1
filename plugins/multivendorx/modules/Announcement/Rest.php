@@ -143,7 +143,7 @@ class Rest extends \WP_REST_Controller
             $page         = max(1, (int) $request->get_param('page'));
             $offset       = ($page - 1) * $limit;
             $status_param = sanitize_key($request->get_param('status'));
-            $searchvalue  = sanitize_text_field($request->get_param('searchvalue'));
+            $search_value  = sanitize_text_field($request->get_param('searchValue'));
             $store_id     = (int) $request->get_param('store_id');
             $sec_fetch_site    = $request->get_header('sec_fetch_site');
             $referer           = $request->get_header('referer');
@@ -153,7 +153,7 @@ class Rest extends \WP_REST_Controller
                 $request->get_param('endDate')
             );
     
-            $base_args = array(
+            $args = array(
                 'post_type'      => Utill::POST_TYPES['announcement'],
                 'posts_per_page' => 1,
                 'fields'         => 'ids',
@@ -161,7 +161,7 @@ class Rest extends \WP_REST_Controller
             );
     
             if ($store_id > 0) {
-                $base_args['meta_query'] = array(
+                $args['meta_query'] = array(
                     'relation' => 'OR',
                     array(
                         'key'     => Utill::POST_META_SETTINGS['announcement_stores'],
@@ -179,13 +179,13 @@ class Rest extends \WP_REST_Controller
             $response = rest_ensure_response(array());
 
             if ($sec_fetch_site === 'same-origin' && preg_match('#/dashboard/?$#', $referer) && get_transient('multivendorx_announcement_data_' . $store_id)) {
-                return get_transient( Utill::MULTIVENDORX_OTHER_SETTINGS['announcement_transient'] . $store_id);
+                return get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['announcement_transient'] . $store_id);
             }
 
             foreach (array('any', 'publish', 'pending', 'draft') as $status) {
-                $base_args['post_status'] = $status;
+                $args['post_status'] = $status;
     
-                $query = new \WP_Query($base_args);
+                $query = new \WP_Query($args);
                 $count = (int) $query->found_posts;
     
                 if ($status === 'any') {
@@ -202,26 +202,26 @@ class Rest extends \WP_REST_Controller
                 }
             }
     
-            unset($base_args['posts_per_page'], $base_args['fields']);
+            unset($args['posts_per_page'], $args['fields']);
     
-            $base_args['post_status']    = $status_param ? $status_param : 'any';
-            $base_args['orderby']        = 'date';
-            $base_args['order']          = 'DESC';
-            $base_args['posts_per_page'] = $limit;
-            $base_args['offset']         = $offset;
+            $args['post_status']    = $status_param ? $status_param : 'any';
+            $args['orderby']        = 'date';
+            $args['order']          = 'DESC';
+            $args['posts_per_page'] = $limit;
+            $args['offset']         = $offset;
 
             if (!empty($dates['start_date']) &&  !empty($dates['end_date'])) {
                 $date_query = array('inclusive' => true);
                 $date_query['after'] = $dates['start_date'];
                 $date_query['before'] = $dates['end_date'];
-                $base_args['date_query'] = array($date_query);
+                $args['date_query'] = array($date_query);
             }
     
-            if ($searchvalue) {
-                $base_args['s'] = $searchvalue;
+            if ($search_value) {
+                $args['s'] = $search_value;
             }
     
-            $posts = get_posts($base_args);
+            $posts = get_posts($args);
             $items = array();
 
             foreach ($posts as $post) {
@@ -254,7 +254,7 @@ class Rest extends \WP_REST_Controller
             $response->set_data($items);
             if ($sec_fetch_site === 'same-origin' && preg_match('#/dashboard/?$#', $referer)) {
                 set_transient(
-                    Utill::MULTIVENDORX_OTHER_SETTINGS['announcement_transient'] . $store_id,
+                    Utill::MULTIVENDORX_TRANSIENT_KEYS['announcement_transient'] . $store_id,
                     $response,
                     DAY_IN_SECONDS
                 );
