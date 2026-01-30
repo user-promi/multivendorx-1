@@ -3,7 +3,6 @@ import Table from './table';
 import TableSummary, { TableSummaryPlaceholder } from './summary';
 import Pagination from '../pagination/Pagination';
 import { QueryProps, TableCardProps, TableRow } from './types';
-import TablePlaceholder from './TablePlaceholder';
 import BulkActionDropdown from './BulkActionDropdown';
 import TableSearch from './TableSearch';
 import RealtimeFilters from './RealtimeFilter';
@@ -285,41 +284,28 @@ const TableCard: React.FC<TableCardProps> = ({
 				</div>
 			</div>
 
-			{isLoading ? (
-				<Fragment>
-					<TablePlaceholder
-						numberOfRows={rowsPerPage}
-						headers={visibleHeaders}
-						caption={title}
-						query={query}
-					/>
-				</Fragment>
-			) : (
-				<>
-					<Table
-						rows={visibleRows}
-						headers={visibleHeaders}
-						caption={title}
-						query={query}
-						onSort={
-							onSort ||
-							(onQueryChange('sort') as (
-								key: string,
-								direction: string
-							) => void)
-						}
-						rowKey={rowKey}
-						emptyMessage={emptyMessage}
-						ids={ids}
-						selectedIds={selectedIds}
-						onSelectRow={handleSelectRow}
-						onSelectAll={handleSelectAll}
-						onCellEdit={onCellEdit}
-						enableBulkSelect={bulkActions.length > 0}
-					/>
-				</>
-
-			)}
+			<Table
+				rows={visibleRows}
+				headers={visibleHeaders}
+				caption={title}
+				query={query}
+				onSort={
+					onSort ||
+					(onQueryChange('sort') as (
+						key: string,
+						direction: string
+					) => void)
+				}
+				rowKey={rowKey}
+				emptyMessage={emptyMessage}
+				ids={ids}
+				selectedIds={selectedIds}
+				onSelectRow={handleSelectRow}
+				onSelectAll={handleSelectAll}
+				onCellEdit={onCellEdit}
+				enableBulkSelect={bulkActions.length > 0}
+				isLoading={isLoading}
+			/>
 			{/* pagination */}
 			<div className="admin-pagination">
 				{isLoading ? (

@@ -154,6 +154,7 @@ export type TableProps = CommonTableProps & {
 		key: string;
 		value: string | number | boolean;
 	}) => void;
+	isLoading?:boolean;
 	enableBulkSelect?: boolean; 
 };
 
