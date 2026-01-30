@@ -37,6 +37,7 @@ class Block {
         add_action( 'init', array( $this, 'register_blocks' ) );
         // Localize the script for block.
         add_action( 'enqueue_block_assets', array( $this, 'enqueue_all_block_assets' ) );
+        add_filter( 'allowed_block_types_all', array( $this, 'restrict_block_types' ), 10, 2 );
     }
 
     /**
@@ -90,6 +91,43 @@ class Block {
         }
     }
 
+    public function restrict_block_types($allowed_blocks, $editor_context) {
+            $restricted_category = 'multivendorx-shop';
+
+            $allowed_template_slug = 'multivendorx-store';
+            $is_allowed_context = false;
+
+            $p = urldecode( wp_unslash( $_GET['p'] ) ); 
+            $parts = explode( '/', $p );
+            $template_slug = end( $parts ); 
+
+           
+            if ( $template_slug === $allowed_template_slug ) {
+                $is_allowed_context = true;
+            }
+           
+            $registry = \WP_Block_Type_Registry::get_instance();
+            $all_blocks = $registry->get_all_registered();
+
+            $allowed = [];
+
+            foreach ( $all_blocks as $block_name => $block_type ) {
+
+                $category = $block_type->category ?? '';
+                if ( $category === $restricted_category ) {
+                    if ( $is_allowed_context ) {
+                        $allowed[] = $block_name;
+                    }
+
+                    continue;
+                }
+
+                $allowed[] = $block_name;
+            }
+
+            return $allowed;
+       }
+
     /**
      * Register MultiVendorX block category in the block editor.
      *
@@ -101,6 +139,11 @@ class Block {
         $categories[] = array(
             'slug'  => 'multivendorx',
             'title' => 'MultiVendorX',
+        );
+
+        $categories[] = array(
+            'slug'  => 'multivendorx-shop',
+            'title' => 'MultiVendorX Shop Blocks',
         );
         return $categories;
     }
