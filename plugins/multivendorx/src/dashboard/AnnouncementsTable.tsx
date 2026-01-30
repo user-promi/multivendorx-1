@@ -18,50 +18,46 @@ const AnnouncementsTable = (React.FC = () => {
         { key: 'status', label: 'Status' },
         { key: 'date', label: 'Date' },
     ];
-    const fetchData = async (query: QueryProps) => {
+    const fetchData = (query: QueryProps) => {
         setIsLoading(true);
-
-        try {
-            const response = await axios.get(getApiLink(appLocalizer, 'announcement'), {
+    
+        axios
+            .get(getApiLink(appLocalizer, 'announcement'), {
                 headers: { 'X-WP-Nonce': appLocalizer.nonce, withCredentials: true },
                 params: {
                     page: query.paged,
-                    row: query.per_page ,
+                    row: query.per_page,
                     status: 'publish',
                     store_id: appLocalizer?.store_id,
                 },
+            })
+            .then((response) => {
+                const items = response.data || [];
+    
+                const mappedRows: any[][] = items.map((ann: any) => [
+                    { display: ann.title, value: ann.id },
+                    {
+                        display: truncateText(ann.content || '', 50),
+                        value: ann.content || '',
+                    },
+                    { display: ann.status, value: ann.status },
+                    {
+                        display: formatWcShortDate(ann.date),
+                        value: ann.date,
+                    },
+                ]);
+    
+                setRows(mappedRows);
+                setTotalRows(Number(response.headers['x-wp-total']) || 0);
+                setIsLoading(false);
+            })
+            .catch(() => {
+                setRows([]);
+                setTotalRows(0);
+                setIsLoading(false);
             });
-            const items = response.data || [];
-
-            // Map API response into TableRow[][]
-            const mappedRows: any[][] = items.map((ann: any) => [
-                {
-                    display: ann.title,
-                    value: ann.id,
-                },
-                {
-                    display: truncateText(ann.content || '', 50),
-                    value: ann.content || '',
-                },
-                {
-                    display: ann.status,
-                    value: ann.status,
-                },
-                {
-                    display: formatWcShortDate(ann.date),
-                    value: ann.date,
-                },
-            ]);
-            setRows(mappedRows);
-            setTotalRows(Number(response.headers['x-wp-total']));
-            setIsLoading(false);
-        } catch (error) {
-            setRows([]);
-            setTotalRows(0);
-        } finally {
-            setIsLoading(false);
-        }
     };
+    
 
     return (
         <>

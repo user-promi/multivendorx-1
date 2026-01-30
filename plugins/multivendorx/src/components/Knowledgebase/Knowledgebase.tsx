@@ -34,6 +34,7 @@ export const KnowledgeBase: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
+	const [rowIds, setRowIds] = useState<number[]>([]);
 	const [categoryCounts, setCategoryCounts] = useState<
 		categoryCounts[] | null
 	>(null);
@@ -56,28 +57,26 @@ export const KnowledgeBase: React.FC = () => {
 	const [confirmOpen, setConfirmOpen] = useState(false);
 
 
-	const handleConfirmDelete = async () => {
-		if (!selectedKb) {
-			return;
-		}
+	const handleConfirmDelete = () => {
+		if (!selectedKb) return;
 
-		try {
-			await axios({
-				method: 'DELETE',
-				url: getApiLink(
-					appLocalizer,
-					`knowledge/${selectedKb.id}`
-				),
-				headers: {
-					'X-WP-Nonce':
-						appLocalizer.nonce,
-				},
-			});
-			fetchData({});
-		} finally {
+		const closeConfirm = () => {
 			setConfirmOpen(false);
 			setSelectedKb(null);
-		}
+		};
+
+		axios({
+			method: 'DELETE',
+			url: getApiLink(appLocalizer, `knowledge/${selectedKb.id}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		})
+			.then(() => {
+				fetchData({});
+				closeConfirm();
+			})
+			.catch(() => {
+				closeConfirm();
+			});
 	};
 
 	const validateForm = () => {
@@ -117,8 +116,7 @@ export const KnowledgeBase: React.FC = () => {
 		}
 	};
 
-	const handleBulkAction = async (action: string, selectedIds = []) => {
-
+	const handleBulkAction = (action: string, selectedIds: any[] = []) => {
 		if (!selectedIds.length) {
 			return;
 		}
@@ -127,30 +125,30 @@ export const KnowledgeBase: React.FC = () => {
 			return;
 		}
 
-		try {
-			await axios({
-				method: 'PUT',
-				url: getApiLink(appLocalizer, 'knowledge'),
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				data: { bulk: true, action, ids: selectedIds },
+		axios({
+			method: 'PUT',
+			url: getApiLink(appLocalizer, 'knowledge'),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: { bulk: true, action, ids: selectedIds },
+		})
+			.then(() => {
+				fetchData({});
+			})
+			.catch(() => {
+				console.log(__('Failed to perform bulk action', 'multivendorx'));
 			});
-
-			fetchData({});
-		} catch (err) {
-			console.log(__('Failed to perform bulk action', 'multivendorx'));
-		}
 	};
 
-	// Open edit modal
-	const handleEdit = async (id: number) => {
-		try {
-			const response = await axios.get(
+
+	const handleEdit = (id: number) => {
+		axios
+			.get(
 				getApiLink(appLocalizer, `knowledge/${id}`),
 				{
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				}
-			);
-			if (response.data) {
+			)
+			.then((response) => {
 				setFormData({
 					title: response.data.title || '',
 					content: response.data.content || '',
@@ -158,47 +156,46 @@ export const KnowledgeBase: React.FC = () => {
 				});
 				setEditId(id);
 				setAddEntry(true);
-			}
-		} catch {
-			console.log(__('Failed to load entry', 'multivendorx'));
-		}
+			})
+			.catch(() => {
+				console.log(__('Failed to load entry', 'multivendorx'));
+			});
 	};
+
 
 	// Submit form
-	const handleSubmit = async (status: 'publish' | 'pending' | 'draft') => {
-		if (submitting) {
-			return;
-		}
-		if (!validateForm()) {
-			return; // Stop submission if errors exist
-		}
+	const handleSubmit = (status: 'publish' | 'pending' | 'draft') => {
+		if (submitting) return;
+		if (!validateForm()) return;
+
 		setSubmitting(true);
 
-		try {
-			const endpoint = editId
-				? getApiLink(appLocalizer, `knowledge/${editId}`)
-				: getApiLink(appLocalizer, 'knowledge');
+		const endpoint = editId
+			? getApiLink(appLocalizer, `knowledge/${editId}`)
+			: getApiLink(appLocalizer, 'knowledge');
 
-			const method = editId ? 'PUT' : 'POST';
-			const payload = { ...formData, status };
+		const method = editId ? 'PUT' : 'POST';
+		const payload = { ...formData, status };
 
-			const response = await axios({
-				method,
-				url: endpoint,
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				data: payload,
+		axios({
+			method,
+			url: endpoint,
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: payload,
+		})
+			.then((response) => {
+				if (response.data?.success) {
+					handleCloseForm();
+					fetchData({});
+				}
+				setSubmitting(false);
+			})
+			.catch(() => {
+				console.log(__('Failed to save entry', 'multivendorx'));
+				setSubmitting(false);
 			});
-
-			if (response.data.success) {
-				handleCloseForm();
-				fetchData({});
-			}
-		} catch {
-			console.log(__('Failed to save entry', 'multivendorx'));
-		} finally {
-			setSubmitting(false);
-		}
 	};
+
 
 	const headers = [
 		{
@@ -242,76 +239,62 @@ export const KnowledgeBase: React.FC = () => {
 		},
 	];
 
-	const fetchData = async (query: QueryProps) => {
+	const fetchData = (query: QueryProps) => {
 		setIsLoading(true);
 
-		try {
-			const response = await axios.get(getApiLink(appLocalizer, 'knowledge'), {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce, withCredentials: true },
+		axios
+			.get(getApiLink(appLocalizer, 'knowledge'), {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				withCredentials: true,
 				params: {
 					page: query.paged || 1,
 					row: query.per_page || 10,
 					status: query.categoryFilter || '',
 					searchvalue: query.searchvalue || '',
-					startDate: query.filter?.created_at?.startDate ? formatLocalDate(query.filter.created_at.startDate) : '',
-					endDate: query.filter?.created_at?.endDate ? formatLocalDate(query.filter.created_at.endDate) : '',
+					startDate: query.filter?.created_at?.startDate
+						? formatLocalDate(query.filter.created_at.startDate)
+						: '',
+					endDate: query.filter?.created_at?.endDate
+						? formatLocalDate(query.filter.created_at.endDate)
+						: '',
 				},
+			})
+			.then((response) => {
+				const items = response.data || [];
+
+				const ids = items
+					.filter((kb: any) => kb?.id != null)
+					.map((kb: any) => kb.id);
+
+				setRowIds(ids);
+
+				const mappedRows = items.map((kb: any) => [
+					{ display: kb.title, value: kb.id },
+					{ display: truncateText(kb.content || '', 50), value: kb.content || '' },
+					{ display: formatWcShortDate(kb.date), value: kb.date },
+					{ display: kb.status, value: kb.status },
+				]);
+
+				setRows(mappedRows);
+
+				setCategoryCounts([
+					{ value: 'all', label: 'All', count: Number(response.headers['x-wp-total']) || 0 },
+					{ value: 'publish', label: 'Published', count: Number(response.headers['x-wp-status-publish']) || 0 },
+					{ value: 'pending', label: 'Pending', count: Number(response.headers['x-wp-status-pending']) || 0 },
+					{ value: 'draft', label: 'Draft', count: Number(response.headers['x-wp-status-draft']) || 0 },
+				]);
+
+				setTotalRows(Number(response.headers['x-wp-total']) || 0);
+			})
+			.catch(() => {
+				setRows([]);
+				setTotalRows(0);
+			})
+			.then(() => {
+				setIsLoading(false);
 			});
-			const items = response.data || [];
-
-			// Map API response into TableRow[][]
-			const mappedRows = items.map((kb: any) => [
-				{
-					display: kb.title,
-					value: kb.id,
-				},
-				{
-					display: truncateText(kb.content || '', 50),
-					value: kb.content || '',
-				},
-				{
-					display: formatWcShortDate(kb.date),
-					value: kb.date,
-				},
-				{
-					display: kb.status,
-					value: kb.status,
-				}
-			]);
-			setRows(mappedRows);
-			const statuses = [
-				{
-					value: 'all',
-					label: 'All',
-					count: Number(response.headers['x-wp-total']) || 0,
-				},
-				{
-					value: 'publish',
-					label: 'Published',
-					count: Number(response.headers['x-wp-status-publish']) || 0,
-				},
-				{
-					value: 'pending',
-					label: 'Pending',
-					count: Number(response.headers['x-wp-status-pending']) || 0,
-				},
-				{
-					value: 'draft',
-					label: 'Draft',
-					count: Number(response.headers['x-wp-status-draft']) || 0,
-				},
-			];
-
-			setCategoryCounts(statuses);
-			setTotalRows(Number(response.headers['x-wp-total']));
-			setIsLoading(false);
-		} catch (error) {
-			setRows([]);
-			setTotalRows(0);
-		} finally {
-			setIsLoading(false);
-		}
 	};
+
 	const filters = [
 		{
 			key: 'created_at',
@@ -489,7 +472,7 @@ export const KnowledgeBase: React.FC = () => {
 						totalRows={totalRows}
 						isLoading={isLoading}
 						onQueryUpdate={fetchData}
-						ids={rows.map((row, i) => String(row[0]?.value))}
+						ids={rowIds}
 						categoryCounts={categoryCounts}
 						search={{}}
 						filters={filters}
