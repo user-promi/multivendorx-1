@@ -131,65 +131,65 @@ class Rest extends \WP_REST_Controller {
             $offset = ( $page - 1 ) * $limit;
 
             $status_param = $request->get_param( 'status' );
-            $search_value  = sanitize_text_field($request->get_param('searchValue'));
+            $search_value = sanitize_text_field( $request->get_param( 'searchValue' ) );
 
             $dates = Utill::normalize_date_range(
-                $request->get_param('startDate'),
-                $request->get_param('endDate')
+                $request->get_param( 'startDate' ),
+                $request->get_param( 'endDate' )
             );
-    
+
             $args = array(
                 'post_type'      => Utill::POST_TYPES['knowledge'],
                 'posts_per_page' => 1,
                 'fields'         => 'ids',
                 'no_found_rows'  => false,
             );
-    
-            $response = rest_ensure_response(array());
 
-            foreach (array('any', 'publish', 'pending', 'draft') as $status) {
+            $response = rest_ensure_response( array() );
+
+            foreach ( array( 'any', 'publish', 'pending', 'draft' ) as $status ) {
                 $args['post_status'] = $status;
-    
-                $query = new \WP_Query($args);
+
+                $query = new \WP_Query( $args );
                 $count = (int) $query->found_posts;
-    
-                if ($status === 'any') {
-                    $response->header('X-WP-Total', $count);
+
+                if ( $status === 'any' ) {
+                    $response->header( 'X-WP-Total', $count );
                     $response->header(
                         'X-WP-TotalPages',
-                        (int) ceil($count / $limit)
+                        (int) ceil( $count / $limit )
                     );
                 } else {
                     $response->header(
-                        'X-WP-Status-' . ucfirst($status),
+                        'X-WP-Status-' . ucfirst( $status ),
                         $count
                     );
                 }
             }
-            unset($args['posts_per_page'], $args['fields']);
-    
+            unset( $args['posts_per_page'], $args['fields'] );
+
             $args['post_status']    = $status_param ? $status_param : 'any';
             $args['orderby']        = 'date';
             $args['order']          = 'DESC';
             $args['posts_per_page'] = $limit;
             $args['offset']         = $offset;
 
-            if (!empty($dates['start_date']) &&  !empty($dates['end_date'])) {
-                $date_query = array('inclusive' => true);
-                $date_query['after'] = $dates['start_date'];
+            if ( ! empty( $dates['start_date'] ) && ! empty( $dates['end_date'] ) ) {
+                $date_query           = array( 'inclusive' => true );
+                $date_query['after']  = $dates['start_date'];
                 $date_query['before'] = $dates['end_date'];
-                $args['date_query'] = array($date_query);
+                $args['date_query']   = array( $date_query );
             }
-    
-            if ($search_value) {
+
+            if ( $search_value ) {
                 $args['s'] = $search_value;
             }
-    
-            $posts = get_posts($args);
+
+            $posts = get_posts( $args );
             $items = array();
 
             foreach ( $posts as $post ) {
-                $status = $post->post_status === 'publish' ? 'published' : $post->post_status;
+                $status  = $post->post_status === 'publish' ? 'published' : $post->post_status;
                 $items[] = array(
                     'id'      => $post->ID,
                     'title'   => $post->post_title,
@@ -199,7 +199,7 @@ class Rest extends \WP_REST_Controller {
                 );
             }
 
-            $response->set_data($items);
+            $response->set_data( $items );
             return $response;
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );

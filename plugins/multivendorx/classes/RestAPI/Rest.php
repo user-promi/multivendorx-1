@@ -57,7 +57,6 @@ class Rest {
         add_filter( 'woocommerce_rest_pre_insert_shop_coupon_object', array( $this, 'pre_insert_shop_coupon_fix_status' ), 10, 3 );
         add_filter( 'woocommerce_analytics_products_query_args', array( $this, 'analytics_products_filter_low_stock_meta' ), 10, 1 );
         add_action( 'woocommerce_rest_insert_product_object', array( $this, 'generate_sku_data_in_product' ), 10, 3 );
-
     }
 
     /**
@@ -417,15 +416,13 @@ class Rest {
         );
 
         if ( ! empty( $response->data['refunds'] ) ) {
-
             foreach ( $response->data['refunds'] as &$refund_data ) {
-        
                 $refund = wc_get_order( $refund_data['id'] );
                 if ( ! $refund ) {
                     continue;
                 }
                 $username = get_the_author_meta( 'user_login', $refund->get_refunded_by() );
-        
+
                 $refund_data['label'] = sprintf(
                     /* translators: 1: refund id, 2: date, 3: user */
                     __( 'Refund #%1$s - %2$s by %3$s', 'multivendorx' ),
@@ -435,7 +432,7 @@ class Rest {
                 );
             }
         }
-        
+
         return $response;
     }
 
@@ -639,16 +636,16 @@ class Rest {
      */
     public function init_classes() {
         $this->container = array(
-            'settings'      => new Settings(),
-            'dashboard'     => new Dashboard(),
-            'store'         => new Stores(),
-            'commission'    => new Commissions(),
-            'status'        => new Status(),
-            'transaction'   => new Transactions(),
-            'notifications' => new Notifications(),
-            'tour'          => new Tour(),
-            'logs'          => new Logs(),
-            'ai_assistant'  => new AI(),
+            'settings'          => new Settings(),
+            'dashboard'         => new Dashboard(),
+            'store'             => new Stores(),
+            'commission'        => new Commissions(),
+            'status'            => new Status(),
+            'transaction'       => new Transactions(),
+            'notifications'     => new Notifications(),
+            'tour'              => new Tour(),
+            'logs'              => new Logs(),
+            'ai_assistant'      => new AI(),
             'import_dummy_data' => new ImportDummyData(),
         );
     }
