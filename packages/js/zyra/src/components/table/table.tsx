@@ -121,6 +121,10 @@ const Table: React.FC<TableProps> = ({
 		const isSelected = selectedIds.includes(id);
 		onSelectRow?.(id, !isSelected);
 	};
+	const getSortIcon = (isSorted: boolean) => {
+		if (!isSorted) return '↕';
+		return sortDir === ASC ? '↑' : '↓';
+	};
 	return (
 		<div
 			ref={containerRef}
@@ -194,7 +198,10 @@ const Table: React.FC<TableProps> = ({
 											onClick={hasData ? sortBy(key) : undefined}
 											className="sort-button"
 										>
-											{label}
+											<span className="sort-label">{label}</span>
+											<span className="sort-icon">
+												{getSortIcon(isSorted)}
+											</span>
 										</span>
 									) : (
 										<Fragment>
