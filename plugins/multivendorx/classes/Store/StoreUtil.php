@@ -666,6 +666,9 @@ class StoreUtil {
 
     public static function get_specific_store_info() {
         $store_slug = get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
+        if ( empty($store_slug) ) {
+            return;
+        }
         $store_obj = Store::get_store( $store_slug, 'slug' );
         $info = [
             'storeName' => $store_obj->get('name'),

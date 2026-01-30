@@ -28,9 +28,10 @@ class Widgets
 
     public function frontend_scripts()
     {
-        FrontendScripts::load_scripts();
-        FrontendScripts::enqueue_script('multivendorx-store-shop-product-script');
-        FrontendScripts::localize_scripts('multivendorx-store-shop-product-script');
+        // FrontendScripts::load_scripts();
+        // FrontendScripts::enqueue_script('multivendorx-store-products-script');
+        // FrontendScripts::enqueue_script('multivendorx-store-provider-script');
+        // FrontendScripts::localize_scripts('multivendorx-store-provider-script');
         // FrontendScripts::enqueue_script('multivendorx-store-coupons-script');
         // FrontendScripts::localize_scripts('multivendorx-marketplace-coupons-script');
         // FrontendScripts::enqueue_script('multivendorx-stores-script');

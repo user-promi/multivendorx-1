@@ -5,5 +5,5 @@
 	"category": "widgets",
 	"icon": "products",
     "editorScript": "file:./index.js",
-    "viewScriptModule": "file:./view.js"
+    "script": "file:./index.js"
 }
