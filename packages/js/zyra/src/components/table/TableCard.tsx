@@ -241,9 +241,9 @@ const TableCard: React.FC<TableCardProps> = ({
 								placeholder={search.placeholder}
 								options={search.options}
 								onSearch={(text, option) => {
-									onQueryChange('searchvalue')(text);
+									onQueryChange('searchValue')(text);
 									if (option !== undefined) {
-										onQueryChange('searchaction')(String(option));
+										onQueryChange('searchAction')(String(option));
 									}
 								}}
 							/>
