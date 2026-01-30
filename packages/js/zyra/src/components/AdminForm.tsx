@@ -237,7 +237,6 @@ interface InputField {
     label?: string;
     classes?: string;
     single?: boolean;
-    buttonEnable?: boolean;
     nestedFields?: {
         key: string;
         type: 'number' | 'select';
@@ -1771,7 +1770,6 @@ const AdminForm: React.FC< AdminFormProps > = ( {
                             apilink={ String( inputField.apiLink ) } //API endpoint used for communication with backend.
                             appLocalizer={ appLocalizer }
                             methods={ inputField.modal ?? [] } //Array of available payment methods/options.
-                            buttonEnable={ inputField.buttonEnable } //Flag to enable/disable action buttons in the UI.
                             addNewBtn={ inputField.addNewBtn }
                             addNewTemplate={ inputField.addNewTemplate ?? [] }
                             iconEnable={ inputField.iconEnable }
