@@ -213,7 +213,7 @@ class Rest extends \WP_REST_Controller
             if (!empty($dates['start_date']) &&  !empty($dates['end_date'])) {
                 $date_query = array('inclusive' => true);
                 $date_query['after'] = $dates['start_date'];
-                $date_query['before'] = $$dates['end_date'];
+                $date_query['before'] = $dates['end_date'];
                 $base_args['date_query'] = array($date_query);
             }
     
