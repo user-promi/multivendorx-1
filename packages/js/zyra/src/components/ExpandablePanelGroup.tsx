@@ -202,6 +202,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         })
     );
 
+    // Effect to focus input when editing starts
     useEffect(() => {
         if (editingMethodId && editingField === 'title' && titleInputRef.current) {
             titleInputRef.current.focus();
@@ -213,6 +214,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         }
     }, [editingMethodId, editingField]);
 
+    // Effect to handle click outside for inline editing
     useEffect(() => {
         const handleClickOutsideEdit = (event: MouseEvent) => {
             if (editingMethodId && editingField) {
@@ -309,19 +311,23 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         setExpandablePanelMethods((prev) => {
             const methodMap = new Map<string, ExpandablePanelMethod>();
 
+            // existing state
             prev.forEach((method) => {
                 methodMap.set(method.id, method);
             });
 
+            // override / add from value
             valueMethods.forEach((method) => {
                 const existingMethod = methodMap.get(method.id);
                 methodMap.set(method.id, {
                     ...existingMethod,
                     ...method,
+                    // Preserve disableBtn from original method or template
                     disableBtn: method.disableBtn ?? existingMethod?.disableBtn ?? false,
                 });
             });
 
+            // merge formFields
             return Array.from(methodMap.values()).map((method) => {
                 if (!method.isCustom) {
                     return method;
@@ -347,6 +353,7 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         });
     }, [value, addNewTemplate]);
 
+    // Inline editing functions
     const startEditing = (methodId: string, field: 'title' | 'description') => {
         const method = ExpandablePanelMethods.find(m => m.id === methodId);
 
@@ -428,17 +435,20 @@ const ExpandablePanelGroup: React.FC<ExpandablePanelGroupProps> = ({
         };
 
         if (newMethod.disableBtn) {
-            initialValues.enable = false; 
+            initialValues.enable = false; // Default to disabled when disableBtn is true
         }
 
+        // Always include icon if it's in the template
         if (addNewTemplate?.icon) {
             initialValues.icon = newMethod.icon;
         }
 
+        // Handle additional form fields
         newMethod.formFields?.forEach((field) => {
             if (field.type === 'iconlibrary') {
                 initialValues[field.key] = '';
             } else {
+                // Set default empty value for other field types
                 initialValues[field.key] = '';
             }
         });
