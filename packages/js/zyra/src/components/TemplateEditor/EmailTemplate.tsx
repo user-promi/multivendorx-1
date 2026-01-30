@@ -195,200 +195,387 @@ const StyleControls = ({
   style?: any;
   onChange: (style: any) => void;
   includeTextStyles?: boolean;
-}) => (
-  <>
-    {/* Background Group */}
-    <div className="setting-group">
-      <h4>Background</h4>
-      <div className="edit-field-wrapper">
-        <label>Background Color</label>
-        <input
-          type="color"
-          className="basic-input"
-          value={style.backgroundColor || '#ffffff'}
-          onChange={(e) =>
-            onChange({ ...style, backgroundColor: e.target.value })
-          }
-        />
-      </div>
-    </div>
+}) => {
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+    background: true,
+    spacing: false,
+    border: false,
+    text: false,
+  });
 
-    {/* Padding & Margin Group */}
-    <div className="setting-group">
-      <h4>Spacing</h4>
-      <PaddingMarginControls style={style} onChange={onChange} />
-    </div>
+  const toggleGroup = (groupName: string) => {
+    setExpandedGroups(prev => ({
+      ...prev,
+      [groupName]: !prev[groupName]
+    }));
+  };
 
-    {/* Border Group */}
-    <div className="setting-group">
-      <h4>Border</h4>
-      <div className="edit-field-wrapper">
-        <label>Border Width (px)</label>
-        <input
-          type="number"
-          min={0}
-          value={style.borderWidth ?? 0}
-          className="basic-input"
-          onChange={(e) =>
-            onChange({ ...style, borderWidth: Number(e.target.value) })
-          }
-        />
-      </div>
-      <div className="edit-field-wrapper">
-        <label>Border Color</label>
-        <input
-          type="color"
-          value={style.borderColor || '#000000'}
-          className="basic-input"
-          onChange={(e) =>
-            onChange({ ...style, borderColor: e.target.value })
-          }
-        />
-      </div>
-      <div className="edit-field-wrapper">
-        <label>Border Style</label>
-        <select
-          value={style.borderStyle || 'solid'}
-          className="basic-input"
-          onChange={(e) =>
-            onChange({ ...style, borderStyle: e.target.value })
-          }
-        >
-          <option value="solid">Solid</option>
-          <option value="dashed">Dashed</option>
-          <option value="dotted">Dotted</option>
-          <option value="double">Double</option>
-          <option value="none">None</option>
-        </select>
-      </div>
-      <div className="edit-field-wrapper">
-        <label>Border Radius (px)</label>
-        <input
-          type="number"
-          min={0}
-          value={style.borderRadius ?? 0}
-          className="basic-input"
-          onChange={(e) =>
-            onChange({ ...style, borderRadius: Number(e.target.value) })
-          }
-        />
-      </div>
-    </div>
+  return (
+    <>
+      {/* Text Styles - Conditionally included */}
+      {includeTextStyles && (
+        <div className="setting-group">
+          <div className="setting-group-header" onClick={() => toggleGroup('text')}>
+            <h4>
+              Text
+            </h4>
+            <i className={` adminfont-${expandedGroups.text ? 'pagination-right-arrow' : 'keyboard-arrow-down'}`} />
+          </div>
+          {expandedGroups.text && (
+            <div className="setting-group-content">
 
-    {/* Text Styles - Conditionally included */}
-    {includeTextStyles && (
+              {/* text align */}
+              <div className="field-wrapper">
+                <label>Text Align</label>
+                <ToggleSetting
+                  options={[
+                    {
+                      key: 'left',
+                      value: 'left',
+                      icon: 'adminfont-left-align'
+                    },
+                    {
+                      key: 'center',
+                      value: 'center',
+                      icon: 'adminfont-center-align'
+                    },
+                    {
+                      key: 'right',
+                      value: 'right',
+                      icon: 'adminfont-right-align'
+                    },
+                    {
+                      key: 'justify',
+                      value: 'justify',
+                      icon: 'adminfont-justify-align'
+                    },
+                  ]}
+                  value={style.textAlign || 'left'}
+                  onChange={(value) =>
+                    onChange({ ...style, textAlign: value as 'left' | 'center' | 'right' | 'justify' })
+                  }
+                />
+              </div>
+
+              {/* font-size */}
+              <div className="field-group">
+                <div className="field-wrapper">
+                  <label>Font Size (px)</label>
+                  <input
+                    type="number"
+                    min={8}
+                    max={72}
+                    value={style.fontSize || 16}
+                    className="basic-input"
+                    onChange={(e) =>
+                      onChange({ ...style, fontSize: Number(e.target.value) })
+                    }
+                  />
+                </div>
+                <div className="field-wrapper">
+                  <label>Line Height</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={3}
+                    step={0.1}
+                    value={style.lineHeight || 1.5}
+                    className="basic-input"
+                    onChange={(e) =>
+                      onChange({ ...style, lineHeight: Number(e.target.value) })
+                    }
+                  />
+                </div>
+              </div>
+
+              {/*  font weighe and  family*/}
+              <div className="field-group">
+                <div className="field-wrapper">
+                  <label>Font Weight</label>
+                  <select
+                    value={style.fontWeight || 'normal'}
+                    className="basic-input"
+                    onChange={(e) =>
+                      onChange({ ...style, fontWeight: e.target.value })
+                    }
+                  >
+                    <option value="300">Light (300)</option>
+                    <option value="normal">Normal (400)</option>
+                    <option value="500">Medium (500)</option>
+                    <option value="600">Semibold (600)</option>
+                    <option value="bold">Bold (700)</option>
+                  </select>
+                </div>
+                {/* <div className="field-wrapper">
+                  <label>Font Family</label>
+                  <input
+                    type="text"
+                    value={style.fontFamily || 'Arial'}
+                    className="basic-input"
+                    onChange={(e) =>
+                      onChange({ ...style, fontFamily: e.target.value })
+                    }
+                  />
+                </div> */}
+                <div className="field-wrapper">
+                  <label>Text Decoration</label>
+                  <select
+                    value={style.textDecoration || 'none'}
+                    className="basic-input"
+                    onChange={(e) =>
+                      onChange({ ...style, textDecoration: e.target.value })
+                    }
+                  >
+                    <option value="none">None</option>
+                    <option value="underline">Underline</option>
+                    <option value="overline">Overline</option>
+                    <option value="line-through">Line Through</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      {/* Background Group */}
       <div className="setting-group">
-        <h4>Text</h4>
-        <div className="edit-field-wrapper">
-          <label>Font Size (px)</label>
-          <input
-            type="number"
-            min={8}
-            max={72}
-            value={style.fontSize || 16}
-            className="basic-input"
-            onChange={(e) =>
-              onChange({ ...style, fontSize: Number(e.target.value) })
-            }
-          />
+        <div className="setting-group-header" onClick={() => toggleGroup('background')}>
+          <h4>
+            Color
+          </h4>
+          <i className={` adminfont-${expandedGroups.background ? 'pagination-right-arrow' : 'keyboard-arrow-down'}`} />
         </div>
-        <div className="edit-field-wrapper">
-          <label>Font Family</label>
-          <input
-            type="text"
-            value={style.fontFamily || 'Arial'}
-            className="basic-input"
-            onChange={(e) =>
-              onChange({ ...style, fontFamily: e.target.value })
-            }
-          />
-        </div>
-        <div className="edit-field-wrapper">
-          <label>Text Color</label>
-          <input
-            type="color"
-            value={style.color || '#000000'}
-            className="basic-input"
-            onChange={(e) =>
-              onChange({ ...style, color: e.target.value })
-            }
-          />
-        </div>
-        <div className="edit-field-wrapper">
-          <label>Line Height</label>
-          <input
-            type="number"
-            min={1}
-            max={3}
-            step={0.1}
-            value={style.lineHeight || 1.5}
-            className="basic-input"
-            onChange={(e) =>
-              onChange({ ...style, lineHeight: Number(e.target.value) })
-            }
-          />
-        </div>
-        <div className="edit-field-wrapper">
-          <label>Font Weight</label>
-          <select
-            value={style.fontWeight || 'normal'}
-            className="basic-input"
-            onChange={(e) =>
-              onChange({ ...style, fontWeight: e.target.value })
-            }
-          >
-            <option value="300">Light (300)</option>
-            <option value="normal">Normal (400)</option>
-            <option value="500">Medium (500)</option>
-            <option value="600">Semibold (600)</option>
-            <option value="bold">Bold (700)</option>
-          </select>
-        </div>
-        <div className="edit-field-wrapper">
-          <label>Text Align</label>
-          <ToggleSetting
-            options={[
-              {
-                key: 'left',
-                value: 'left',
-                label: 'Left',
-              },
-              {
-                key: 'center',
-                value: 'center',
-                label: 'Center',
-              },
-              {
-                key: 'right',
-                value: 'right',
-                label: 'Right',
-              },
-            ]}
-            value={style.textAlign || 'left'}
-            onChange={(value) =>
-              onChange({ ...style, textAlign: value as 'left' | 'center' | 'right' })
-            }
-          />
-        </div>
-        <div className="edit-field-wrapper">
-          <label>Text Decoration</label>
-          <select
-            value={style.textDecoration || 'none'}
-            className="basic-input"
-            onChange={(e) =>
-              onChange({ ...style, textDecoration: e.target.value })
-            }
-          >
-            <option value="none">None</option>
-            <option value="underline">Underline</option>
-            <option value="overline">Overline</option>
-            <option value="line-through">Line Through</option>
-          </select>
-        </div>
+
+        {expandedGroups.background && (
+          <div className="setting-group-content">
+            <div className="field-group">
+              <div className="field-wrapper">
+                <label>Background Color</label>
+                <input
+                  type="color"
+                  className="basic-input"
+                  value={style.backgroundColor || '#ffffff'}
+                  onChange={(e) =>
+                    onChange({ ...style, backgroundColor: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="field-wrapper">
+                <label>Text Color</label>
+                <input
+                  type="color"
+                  value={style.color || '#000000'}
+                  className="basic-input"
+                  onChange={(e) =>
+                    onChange({ ...style, color: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
-    )}
-  </>
-);
+
+      {/* Padding & Margin Group */}
+      <div className="setting-group">
+        <div className="setting-group-header" onClick={() => toggleGroup('spacing')}>
+          <h4>
+            Spacing
+          </h4>
+          <i className={` adminfont-${expandedGroups.spacing ? 'pagination-right-arrow' : 'keyboard-arrow-down'}`} />
+        </div>
+        {expandedGroups.spacing && (
+          <div className="setting-group-content">
+            <div className="spacing-grid">
+              {/* Padding */}
+              <div className="spacing-section">
+                <h5>Padding</h5>
+                <div className="spacing-controls">
+                  <div className="spacing-input">
+                    <input
+                      type="number"
+                      min={0}
+                      value={style.paddingTop ?? 0}
+                      className="basic-input"
+                      onChange={(e) =>
+                        onChange({ ...style, paddingTop: Number(e.target.value) })
+                      }
+                    />
+                    <label>Top</label>
+                  </div>
+                  <div className="spacing-input">
+                    <input
+                      type="number"
+                      min={0}
+                      value={style.paddingRight ?? 0}
+                      className="basic-input"
+                      onChange={(e) =>
+                        onChange({ ...style, paddingRight: Number(e.target.value) })
+                      }
+                    />
+                    <label>Right</label>
+                  </div>
+                  <div className="spacing-input">
+                    <input
+                      type="number"
+                      min={0}
+                      value={style.paddingBottom ?? 0}
+                      className="basic-input"
+                      onChange={(e) =>
+                        onChange({ ...style, paddingBottom: Number(e.target.value) })
+                      }
+                    />
+                    <label>Bottom</label>
+                  </div>
+                  <div className="spacing-input">
+                    <input
+                      type="number"
+                      min={0}
+                      value={style.paddingLeft ?? 0}
+                      className="basic-input"
+                      onChange={(e) =>
+                        onChange({ ...style, paddingLeft: Number(e.target.value) })
+                      }
+                    />
+                    <label>Left</label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Margin */}
+              <div className="spacing-section">
+                <h5>Margin</h5>
+                <div className="spacing-controls">
+                  <div className="spacing-input">
+                    <input
+                      type="number"
+                      min={0}
+                      value={style.marginTop ?? 0}
+                      className="basic-input"
+                      onChange={(e) =>
+                        onChange({ ...style, marginTop: Number(e.target.value) })
+                      }
+                    />
+                    <label>Top</label>
+                  </div>
+                  <div className="spacing-input">
+                    <input
+                      type="number"
+                      min={0}
+                      value={style.marginRight ?? 0}
+                      className="basic-input"
+                      onChange={(e) =>
+                        onChange({ ...style, marginRight: Number(e.target.value) })
+                      }
+                    />
+                    <label>Right</label>
+                  </div>
+                  <div className="spacing-input">
+
+                    <input
+                      type="number"
+                      min={0}
+                      value={style.marginBottom ?? 0}
+                      className="basic-input"
+                      onChange={(e) =>
+                        onChange({ ...style, marginBottom: Number(e.target.value) })
+                      }
+                    />
+                    <label>Bottom</label>
+                  </div>
+                  <div className="spacing-input">
+                    <input
+                      type="number"
+                      min={0}
+                      value={style.marginLeft ?? 0}
+                      className="basic-input"
+                      onChange={(e) =>
+                        onChange({ ...style, marginLeft: Number(e.target.value) })
+                      }
+                    />
+                    <label>Left</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Border Group */}
+      <div className="setting-group">
+        <div className="setting-group-header" onClick={() => toggleGroup('border')}>
+          <h4>
+            Border
+          </h4>
+          <i className={` adminfont-${expandedGroups.border ? 'pagination-right-arrow' : 'keyboard-arrow-down'}`} />
+        </div>
+        {expandedGroups.border && (
+          <div className="setting-group-content">
+            <div className="field-group">
+              <div className="field-wrapper">
+                <label>Border Width (px)</label>
+                <input
+                  type="number"
+                  min={0}
+                  value={style.borderWidth ?? 0}
+                  className="basic-input"
+                  onChange={(e) =>
+                    onChange({ ...style, borderWidth: Number(e.target.value) })
+                  }
+                />
+              </div>
+              <div className="field-wrapper">
+                <label>Border Radius (px)</label>
+                <input
+                  type="number"
+                  min={0}
+                  value={style.borderRadius ?? 0}
+                  className="basic-input"
+                  onChange={(e) =>
+                    onChange({ ...style, borderRadius: Number(e.target.value) })
+                  }
+                />
+              </div>
+            </div>
+            <div className="field-group">
+              <div className="field-wrapper">
+                <label>Border Style</label>
+                <select
+                  value={style.borderStyle || 'solid'}
+                  className="basic-input"
+                  onChange={(e) =>
+                    onChange({ ...style, borderStyle: e.target.value })
+                  }
+                >
+                  <option value="solid">Solid</option>
+                  <option value="dashed">Dashed</option>
+                  <option value="dotted">Dotted</option>
+                  <option value="double">Double</option>
+                  <option value="none">None</option>
+                </select>
+              </div>
+              <div className="field-wrapper">
+                <label>Border Color</label>
+                <input
+                  type="color"
+                  value={style.borderColor || '#000000'}
+                  className="basic-input"
+                  onChange={(e) =>
+                    onChange({ ...style, borderColor: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+    </>
+  );
+};
 
 // padding setttings
 const PaddingMarginControls = ({
@@ -399,7 +586,7 @@ const PaddingMarginControls = ({
   onChange: (style: any) => void;
 }) => (
   <>
-    <div className="edit-field-wrapper">
+    <div className="field-wrapper">
       <label>Padding Top (px)</label>
       <input
         type="number"
@@ -411,7 +598,7 @@ const PaddingMarginControls = ({
         }
       />
     </div>
-    <div className="edit-field-wrapper">
+    <div className="field-wrapper">
       <label>Padding Right (px)</label>
       <input
         type="number"
@@ -423,7 +610,7 @@ const PaddingMarginControls = ({
         }
       />
     </div>
-    <div className="edit-field-wrapper">
+    <div className="field-wrapper">
       <label>Padding Bottom (px)</label>
       <input
         type="number"
@@ -435,7 +622,7 @@ const PaddingMarginControls = ({
         }
       />
     </div>
-    <div className="edit-field-wrapper">
+    <div className="field-wrapper">
       <label>Padding Left (px)</label>
       <input
         type="number"
@@ -448,7 +635,7 @@ const PaddingMarginControls = ({
       />
     </div>
 
-    <div className="edit-field-wrapper">
+    <div className="field-wrapper">
       <label>Margin Top (px)</label>
       <input
         type="number"
@@ -460,7 +647,7 @@ const PaddingMarginControls = ({
         }
       />
     </div>
-    <div className="edit-field-wrapper">
+    <div className="field-wrapper">
       <label>Margin Right (px)</label>
       <input
         type="number"
@@ -472,7 +659,7 @@ const PaddingMarginControls = ({
         }
       />
     </div>
-    <div className="edit-field-wrapper">
+    <div className="field-wrapper">
       <label>Margin Bottom (px)</label>
       <input
         type="number"
@@ -484,7 +671,7 @@ const PaddingMarginControls = ({
         }
       />
     </div>
-    <div className="edit-field-wrapper">
+    <div className="field-wrapper">
       <label>Margin Left (px)</label>
       <input
         type="number"
@@ -504,6 +691,9 @@ const EmailBlockSettings: React.FC<EmailBlockSettingsProps> = ({
   block,
   onChange,
 }) => {
+  const [expandedContentGroup, setExpandedContentGroup] = useState(true);
+  const [expandedLayoutGroup, setExpandedLayoutGroup] = useState(false);
+
   switch (block.type) {
     case 'text':
       return (
@@ -518,41 +708,51 @@ const EmailBlockSettings: React.FC<EmailBlockSettingsProps> = ({
       return (
         <>
           <div className="setting-group">
-            <h4>Heading Content</h4>
-            <div className="edit-field-wrapper">
-              <label>Heading Text</label>
-              <input
-                value={block.text}
-                onChange={(e) => onChange({ text: e.target.value })}
-                className="basic-input"
-              />
+            <div className="setting-group-header" onClick={() => setExpandedContentGroup(!expandedContentGroup)}>
+              <h4>
+
+                Heading Content
+              </h4>
+              <i className={` adminfont-${expandedContentGroup ? 'pagination-right-arrow' : 'keyboard-arrow-down'}`} />
             </div>
-            <div className="edit-field-wrapper">
-              <label>Heading Level</label>
-              <ToggleSetting
-                options={[
-                  {
-                    key: 'h1',
-                    value: 1,
-                    label: 'H1',
-                  },
-                  {
-                    key: 'h2',
-                    value: 2,
-                    label: 'H2',
-                  },
-                  {
-                    key: 'h3',
-                    value: 3,
-                    label: 'H3',
-                  },
-                ]}
-                value={block.level}
-                onChange={(value) =>
-                  onChange({ level: value as 1 | 2 | 3 })
-                }
-              />
-            </div>
+            {expandedContentGroup && (
+              <div className="setting-group-content">
+                <div className="field-wrapper">
+                  <label>Heading Text</label>
+                  <input
+                    value={block.text}
+                    onChange={(e) => onChange({ text: e.target.value })}
+                    className="basic-input"
+                  />
+                </div>
+                <div className="field-wrapper">
+                  <label>Heading Level</label>
+                  <ToggleSetting
+                    options={[
+                      {
+                        key: 'h1',
+                        value: 1,
+                        label: 'H1',
+                      },
+                      {
+                        key: 'h2',
+                        value: 2,
+                        label: 'H2',
+                      },
+                      {
+                        key: 'h3',
+                        value: 3,
+                        label: 'H3',
+                      },
+                    ]}
+                    value={block.level}
+                    onChange={(value) =>
+                      onChange({ level: value as 1 | 2 | 3 })
+                    }
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <StyleControls
             style={block.style}
@@ -566,23 +766,33 @@ const EmailBlockSettings: React.FC<EmailBlockSettingsProps> = ({
       return (
         <>
           <div className="setting-group">
-            <h4>Image</h4>
-            <div className="edit-field-wrapper">
-              <label>Image URL</label>
-              <input
-                value={block.src}
-                onChange={(e) => onChange({ src: e.target.value })}
-                className="basic-input"
-              />
+            <div className="setting-group-header" onClick={() => setExpandedContentGroup(!expandedContentGroup)}>
+              <h4>
+
+                Image
+              </h4>
+              <i className={` adminfont-${expandedContentGroup ? 'pagination-right-arrow' : 'keyboard-arrow-down'}`} />
             </div>
-            <div className="edit-field-wrapper">
-              <label>Alt Text</label>
-              <input
-                value={block.alt || ''}
-                onChange={(e) => onChange({ alt: e.target.value })}
-                className="basic-input"
-              />
-            </div>
+            {expandedContentGroup && (
+              <div className="setting-group-content">
+                <div className="field-wrapper">
+                  <label>Image URL</label>
+                  <input
+                    value={block.src}
+                    onChange={(e) => onChange({ src: e.target.value })}
+                    className="basic-input"
+                  />
+                </div>
+                <div className="field-wrapper">
+                  <label>Alt Text</label>
+                  <input
+                    value={block.alt || ''}
+                    onChange={(e) => onChange({ alt: e.target.value })}
+                    className="basic-input"
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <StyleControls
             style={block.style}
@@ -596,23 +806,33 @@ const EmailBlockSettings: React.FC<EmailBlockSettingsProps> = ({
       return (
         <>
           <div className="setting-group">
-            <h4>Button Content</h4>
-            <div className="edit-field-wrapper">
-              <label>Button Text</label>
-              <input
-                value={block.text}
-                onChange={(e) => onChange({ text: e.target.value })}
-                className="basic-input"
-              />
+            <div className="setting-group-header" onClick={() => setExpandedContentGroup(!expandedContentGroup)}>
+              <h4>
+
+                Button Content
+              </h4>
+              <i className={` adminfont-${expandedContentGroup ? 'pagination-right-arrow' : 'keyboard-arrow-down'}`} />
             </div>
-            <div className="edit-field-wrapper">
-              <label>Button URL</label>
-              <input
-                value={block.url || ''}
-                onChange={(e) => onChange({ url: e.target.value })}
-                className="basic-input"
-              />
-            </div>
+            {expandedContentGroup && (
+              <div className="setting-group-content">
+                <div className="field-wrapper">
+                  <label>Button Text</label>
+                  <input
+                    value={block.text}
+                    onChange={(e) => onChange({ text: e.target.value })}
+                    className="basic-input"
+                  />
+                </div>
+                <div className="field-wrapper">
+                  <label>Button URL</label>
+                  <input
+                    value={block.url || ''}
+                    onChange={(e) => onChange({ url: e.target.value })}
+                    className="basic-input"
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <StyleControls
             style={block.style}
@@ -635,32 +855,41 @@ const EmailBlockSettings: React.FC<EmailBlockSettingsProps> = ({
       return (
         <>
           <div className="setting-group">
-            <h4>Layout</h4>
-            <div className="edit-field-wrapper">
-              <label>Column Layout</label>
-              <select
-                value={block.layout}
-                onChange={(e) => {
-                  const newLayout = e.target.value as ColumnsBlock['layout'];
-                  const count = getColumnCount(newLayout);
-
-                  const newColumns = Array.from({ length: count }, (_, i) =>
-                    block.columns[i] || []
-                  );
-
-                  onChange({
-                    layout: newLayout,
-                    columns: newColumns,
-                  });
-                }}
-              >
-                <option value="1">1 Column</option>
-                <option value="2-50">50 / 50</option>
-                <option value="2-66">66 / 34</option>
-                <option value="3">3 Columns</option>
-                <option value="4">4 Columns</option>
-              </select>
+            <div className="setting-group-header" onClick={() => setExpandedLayoutGroup(!expandedLayoutGroup)}>
+              <h4>
+                Layout
+              </h4>
+              <i className={` adminfont-${expandedLayoutGroup ? 'pagination-right-arrow' : 'keyboard-arrow-down'}`} />
             </div>
+            {expandedLayoutGroup && (
+              <div className="setting-group-content">
+                <div className="field-wrapper">
+                  <label>Column Layout</label>
+                  <select
+                    value={block.layout}
+                    onChange={(e) => {
+                      const newLayout = e.target.value as ColumnsBlock['layout'];
+                      const count = getColumnCount(newLayout);
+
+                      const newColumns = Array.from({ length: count }, (_, i) =>
+                        block.columns[i] || []
+                      );
+
+                      onChange({
+                        layout: newLayout,
+                        columns: newColumns,
+                      });
+                    }}
+                  >
+                    <option value="1">1 Column</option>
+                    <option value="2-50">50 / 50</option>
+                    <option value="2-66">66 / 34</option>
+                    <option value="3">3 Columns</option>
+                    <option value="4">4 Columns</option>
+                  </select>
+                </div>
+              </div>
+            )}
           </div>
           <StyleControls
             style={block.style}
@@ -676,12 +905,12 @@ const EmailBlockSettings: React.FC<EmailBlockSettingsProps> = ({
 };
 
 const EMAIL_BLOCKS = [
-  { id: 'heading', icon: 'adminfont-heading', value: 'heading', label: 'Heading' },
-  { id: 'text', icon: 'adminfont-text', value: 'text', label: 'Text' },
-  { id: 'image', icon: 'adminfont-experiment-results', value: 'image', label: 'Image' },
-  { id: 'button', icon: 'adminfont-button-appearance', value: 'button', label: 'Button' },
+  { id: 'heading', icon: 'adminfont-form-textarea', value: 'heading', label: 'Heading' },
+  { id: 'text', icon: 'adminfont-t-letter-bold', value: 'text', label: 'Text' },
+  { id: 'image', icon: 'adminfont-image', value: 'image', label: 'Image' },
+  { id: 'button', icon: 'adminfont-button', value: 'button', label: 'Button' },
   { id: 'divider', icon: 'adminfont-divider', value: 'divider', label: 'Divider' },
-  { id: 'columns', icon: 'adminfont-right-sidebar', value: 'columns', label: 'Columns' },
+  { id: 'columns', icon: 'adminfont-blocks', value: 'columns', label: 'Columns' },
 ];
 
 const createBlock = (type: string): EmailBlock => {
@@ -1225,7 +1454,7 @@ const EmailTemplate: React.FC = () => {
           className="email-canvas-sortable"
         >
           {activeTemplate.blocks.map((block, index) => (
-            <div className="edit-field-wrapper" key={block.id}>
+            <div className="field-wrapper" key={block.id}>
               <BlockRenderer
                 key={block.id}
                 block={block}
@@ -1251,6 +1480,22 @@ const EmailTemplate: React.FC = () => {
         {openBlock && (
           <div className="registration-edit-form">
             <div className='meta-setting-modal-content'>
+              {/* Block Type Header */}
+              <div className="block-type-header">
+                <div className="block-type-title">
+                  <h3>
+                    {openBlock.type.charAt(0).toUpperCase() + openBlock.type.slice(1)} Settings
+                  </h3>
+                </div>
+                {/* <button
+                  className="close-settings-btn"
+                  onClick={() => setOpenBlock(null)}
+                  title="Close settings"
+                >
+                  <i className="adminfont-close"></i>
+                </button> */}
+              </div>
+
               <EmailBlockSettings
                 block={openBlock}
                 onChange={(patch) => {
