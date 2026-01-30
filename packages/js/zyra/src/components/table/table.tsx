@@ -266,16 +266,29 @@ const Table: React.FC<TableProps> = ({
 
 										const displayValue = renderCell(cell);
 
+										const isStatusColumn = header.key === 'status';
+
+										const statusClass =
+											isStatusColumn && cell?.value
+												? `admin-badge badge-${String(cell.value).toLowerCase()}`
+												: '';
+
 										return (
 											<td key={`${getRowKey(row, rowIndex)}-${colIndex}`} className="admin-column">
-												{header.isEditable
-													? renderEditableCell({
+												{isStatusColumn ? (
+													<span className={statusClass}>
+														{displayValue}
+													</span>
+												) : header.isEditable ? (
+													renderEditableCell({
 														header,
 														cell,
 														isEditing: false,
 														onSave: () => { },
 													})
-													: displayValue}
+												) : (
+													displayValue
+												)}
 											</td>
 										);
 									})}
