@@ -95,10 +95,17 @@ class Block {
     }
 
     public function enqueue_scripts() {
+        global $post;
         FrontendScripts::load_scripts();
         foreach ( $this->blocks as $block_script ) {
-            FrontendScripts::enqueue_script( $block_script['textdomain'] . '-' . $block_script['name'] . '-script' );
-            FrontendScripts::localize_scripts( $block_script['textdomain'] . '-' . $block_script['name'] . '-script' );
+            $block_name = $block_script['textdomain'] . '/' . $block_script['name'];
+            
+            if ( has_block( $block_name, $post ) ) {
+                $handle = $block_script['textdomain'] . '-' . $block_script['name'] . '-script';
+
+                FrontendScripts::enqueue_script( $handle );
+                FrontendScripts::localize_scripts( $handle );
+            }
         }
     }
 
