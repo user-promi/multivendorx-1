@@ -9,7 +9,7 @@ const StoreCouponList = ({
 	orderby = 'date',
 	order = 'DESC',
 }) => {
-	const [coupons, setCoupons] = useState<any[]>([]);
+	const [coupons, setCoupons] = useState([]);
 	const [page, setPage] = useState(1);
 	const [total, setTotal] = useState(0);
 
