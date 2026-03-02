@@ -83,8 +83,8 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 							<BasicInputUI
 								name="weight"
 								value={product.weight}
-								onChange={(e) => {
-									handleChange('weight', e.target.value);
+								onChange={(value) => {
+									handleChange('weight', value);
 								}}
 							/>
 						</FormGroup>
@@ -113,10 +113,10 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 								name="product_length"
 								value={product.dimensions?.length || ''}
 								placeholder={__('Length', 'multivendorx')}
-								onChange={(e) =>
+								onChange={(value) =>
 									handleChange('dimensions', {
 										...product.dimensions,
-										length: e.target.value,
+										length: value,
 									})
 								}
 							/>
@@ -130,10 +130,10 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 								name="product_width"
 								value={product.dimensions?.width}
 								placeholder={__('Width', 'multivendorx')}
-								onChange={(e) =>
+								onChange={(value) =>
 									handleChange('dimensions', {
 										...product.dimensions,
-										width: e.target.value,
+										width: value,
 									})
 								}
 							/>
@@ -147,10 +147,10 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 								name="product_height"
 								value={product.dimensions?.height}
 								placeholder={__('Height', 'multivendorx')}
-								onChange={(e) =>
+								onChange={(value) =>
 									handleChange('dimensions', {
 										...product.dimensions,
-										height: e.target.value,
+										height: value,
 									})
 								}
 							/>
@@ -170,14 +170,15 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 						product,
 						setProduct,
 						handleChange
-					)}
+					)
+				}
 			</FormGroupWrapper>
 		</Card>
 	);
 };
 
 addFilter(
-    'multivendorx_product_after_price_section',
+    'multivendorx_add_product_middle_section',
     'multivendorx/shipping',
     (content, product, setProduct, handleChange) => {
         return (
@@ -193,5 +194,5 @@ addFilter(
             </>
         );
     },
-    10
+    50
 );

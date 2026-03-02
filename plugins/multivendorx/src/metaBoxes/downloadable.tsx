@@ -1,10 +1,8 @@
 import { addFilter } from '@wordpress/hooks';
 import {
 	BasicInputUI,
-	Card,
 	DynamicRowSetting,
 	FormGroup,
-	FormGroupWrapper,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
@@ -98,8 +96,8 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 					name="download_limit"
 					type="number"
 					value={product.download_limit}
-					onChange={(e) =>
-						handleChange('download_limit', e.target.value)
+					onChange={(value) =>
+						handleChange('download_limit', value)
 					}
 				/>
 			</FormGroup>
@@ -113,8 +111,8 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 					name="download_expiry"
 					type="number"
 					value={product.download_expiry}
-					onChange={(e) =>
-						handleChange('download_expiry', e.target.value)
+					onChange={(value) =>
+						handleChange('download_expiry', value)
 					}
 				/>
 			</FormGroup>

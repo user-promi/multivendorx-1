@@ -14,6 +14,7 @@ import {
 	BasicInputUI,
 	SelectInputUI,
 	Notice,
+	CountryCodes
 } from 'zyra';
 import { useLocation } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
@@ -299,47 +300,45 @@ const StoreSettings = ({
 		if (name === 'slug') {
 			const cleanValue = value.toLowerCase().replace(/[^a-z0-9-]/g, '');
 
-			const updated = { ...formData, slug: cleanValue };
-			setFormData(updated);
-
 			if (cleanValue !== value.toLowerCase()) {
 				setErrorMsg((prev) => ({
 					...prev,
-					slug: __(
-						'Special characters are not allowed.',
-						'multivendorx'
-					),
+					slug: __('Special characters are not allowed.', 'multivendorx'),
 				}));
 				return;
 			}
 
 			(async () => {
-				const trimmedValue = cleanValue.trim();
-				if (!trimmedValue) {
+				if (!cleanValue.trim()) {
 					setErrorMsg((prev) => ({
 						...prev,
 						slug: __('Slug cannot be blank', 'multivendorx'),
 					}));
 					return;
 				}
-				const exists = await checkSlugExists(trimmedValue);
+
+				const exists = await checkSlugExists(cleanValue);
 
 				if (exists) {
 					setErrorMsg((prev) => ({
 						...prev,
-						slug: `Slug "${trimmedValue}" already exists.`,
+						slug: `Slug "${cleanValue}" already exists.`,
 					}));
 					return;
 				}
+
 				setErrorMsg((prev) => ({ ...prev, slug: '' }));
 				autoSave(updated);
-				onUpdate({ slug: trimmedValue });
+				onUpdate({ slug: cleanValue });
 			})();
 
 			return;
-		} else if (name === 'phone') {
-			const isValidPhone = /^\+?[0-9\s\-]{7,15}$/.test(value);
-			if (isValidPhone || value == '') {
+		}
+
+		if (name === 'phone') {
+			const isValidPhone = /^[0-9]{6,15}$/.test(value);
+
+			if (isValidPhone || value === '') {
 				autoSave(updated);
 				setErrorMsg((prev) => ({ ...prev, phone: '' }));
 			} else {
@@ -348,9 +347,11 @@ const StoreSettings = ({
 					phone: __('Invalid phone number', 'multivendorx'),
 				}));
 			}
-		} else if (name !== 'email') {
-			autoSave(updated);
+
+			return;
 		}
+
+		autoSave(updated);
 	};
 
 	// Then update your autoSave function:
@@ -450,11 +451,18 @@ const StoreSettings = ({
 						</FormGroup>
 
 						<FormGroup label={__('Phone', 'multivendorx')}>
+							<SelectInputUI
+								type='single-select'
+								name="country_code"
+								value={formData.country_code}
+								options={CountryCodes}
+								onChange={(selected) => handleChange('country_code', selected)}
+							/>
 							<BasicInputUI
 								name="phone"
 								type="number"
 								value={formData.phone}
-								onChange={(val) => handleChange('phone', val)}
+								onChange={(value) => handleChange('phone', value)}
 							/>
 							{errorMsg.phone && (
 								<p className="invalid-massage">
