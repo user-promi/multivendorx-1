@@ -160,7 +160,7 @@ const FreeProFormCustomizer: React.FC<FreeProFormCustomizerProps> = ({
         () => setting?.freefromsetting || []
     );
     
-    const [activeTab, setActiveTab] = useState<string>('free');
+    const [currentTab, setcurrentTab] = useState<string>('free');
     
     // Track changes for auto-save
     const settingChange = useRef<boolean>(false);
@@ -182,7 +182,6 @@ const FreeProFormCustomizer: React.FC<FreeProFormCustomizerProps> = ({
         }
     }, [formFieldsData, onChange]);
 
-    // Define tabs for TabsUI
     const tabs = [
         {
             key: 'free',
@@ -214,8 +213,8 @@ const FreeProFormCustomizer: React.FC<FreeProFormCustomizerProps> = ({
     return (
         <TabsUI 
             tabs={tabs} 
-            activeKey={activeTab}
-            onTabChange={setActiveTab}
+            activeKey={currentTab}
+            onTabChange={setcurrentTab}
         />
     );
 };
