@@ -45,11 +45,6 @@ const EditBlock = (props) => {
 						onChange={(value) => setAttributes({ category: value })}
 					/>
 					<TextControl
-						label="Store ID"
-						value={attributes.store_id || ''}
-						onChange={(value) => setAttributes({ store_id: value })}
-					/>
-					<TextControl
 						label="Store Slug"
 						value={attributes.store_slug || ''}
 						onChange={(value) =>
@@ -75,7 +70,6 @@ const EditBlock = (props) => {
 				orderby={attributes.orderby}
 				order={attributes.order}
 				category={attributes.category}
-				store_id={attributes.store_id}
 				store_slug={attributes.store_slug}
 				perPage={attributes.perPage}
 			/>
@@ -96,7 +90,6 @@ registerBlockType('multivendorx/marketplace-products', {
 		order: { type: 'string', default: 'asc' },
 		category: { type: 'string', default: '' },
 		perPage: { type: 'number', default: 12 },
-		store_id: { type: 'string', default: '' },
 		store_slug: { type: 'string', default: '' },
 	},
 

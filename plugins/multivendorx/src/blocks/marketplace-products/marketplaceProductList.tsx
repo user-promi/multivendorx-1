@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
-import { store } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 
 interface Product {
@@ -14,7 +13,7 @@ interface MarketplaceProductListProps {
 	perPage?: number;
 	orderby?: string;
 	order?: 'asc' | 'desc';
-	category?: string; // comma-separated slugs
+	category?: string;
 	operator?: string;
 	product_visibility?: string;
 	store_id?: string;
@@ -29,7 +28,6 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 	category = '',
 	operator = 'IN',
 	product_visibility = '',
-	store_id = '',
 	store_slug = '',
 }) => {
 	const [products, setProducts] = useState<Product[]>([]);
@@ -53,7 +51,7 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 						operator,
 						product_visibility,
 						meta_key: 'multivendorx_store_id',
-						value: store_id,
+						value: '',
 						store_slug,
 					},
 				}

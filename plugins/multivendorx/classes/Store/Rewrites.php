@@ -42,7 +42,7 @@ class Rewrites {
         add_action( 'pre_get_posts', array( $this, 'make_endpoint_virtual_page' ) );
 
         // Load correct template
-        add_action( 'template_redirect', array( $this, 'load_store_template' ) );
+        add_filter( 'template_include', array( $this, 'load_store_template' ) );
         // For PHP template query of products.
         // add_action( 'pre_get_posts', array( $this, 'store_query_filter' ) );
         add_filter( 'body_class', array( $this, 'add_sidebar_class_for_block_template' ), 10 );
@@ -166,8 +166,7 @@ class Rewrites {
     }
 
     // Load template
-    public function load_store_template() {
-
+    public function load_store_template( $template ) {
         $store_name = get_query_var( $this->custom_store_url );
 
         if ( ! empty( $store_name ) ) {
@@ -175,33 +174,23 @@ class Rewrites {
             $filtered_template = apply_filters( 'multivendorx_store_elementor_template', '' );
 
             if ( $filtered_template && file_exists( $filtered_template ) ) {
-                include $filtered_template;
-                exit;
+                return $filtered_template;
             }
 
             // Path to plugin block template
             $plugin_template = MultiVendorX()->plugin_path . 'templates/store/store.html';
 
             if ( file_exists( $plugin_template ) ) {
-                include MultiVendorX()->plugin_path . 'templates/store/store-wrapper.php';
-                exit;
+                // Use a temporary PHP wrapper to render the block template
+                return MultiVendorX()->plugin_path . 'templates/store/store-wrapper.php';
             }
 
             // Classic PHP fallback
             $store = Store::get_store( $store_name, 'slug' );
-
-            if ( $store ) {
-                $template = MultiVendorX()->util->get_template(
-                    'store/store.php',
-                    array( 'store_id' => $store->get_id() )
-                );
-
-                if ( $template && file_exists( $template ) ) {
-                    include $template;
-                    exit;
-                }
-            }
+            return MultiVendorX()->util->get_template( 'store/store.php', array( 'store_id' => $store->get_id() ) );
         }
+
+        return $template;
     }
     
 
