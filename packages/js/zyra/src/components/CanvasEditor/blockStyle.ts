@@ -152,13 +152,6 @@ export const BLOCK_STYLE_PRESETS = {
         borderRadius: 5,
         align: 'center' as const,
     },
-    divider: {
-        backgroundColor: '#000000ff',
-        height: '1px',
-        marginTop: 20,
-        marginBottom: 20,
-        width: '100%',
-    },
     image: {
         align: 'center' as const,
     },
