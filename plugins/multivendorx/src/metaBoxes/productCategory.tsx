@@ -8,8 +8,13 @@ import {
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const ProductCategorysection = ({ product, setProduct, selectedCats, setSelectedCats, selectedChild, setSelectedChild, selectedSub, setSelectedSub, selectedCat, setSelectedCat }) => {
+const ProductCategorysection = ({ product, setProduct }) => {
 	const [categories, setCategories] = useState([]);
+	const [selectedCats, setSelectedCats] = useState([]);
+	const [selectedCat, setSelectedCat] = useState(null);
+	const [selectedSub, setSelectedSub] = useState(null);
+	const [selectedChild, setSelectedChild] = useState(null);
+
 	const isPyramidEnabled =
 		appLocalizer.settings_databases_value['product-preferencess']
 		?.category_selection_method === 'yes';
@@ -186,11 +191,21 @@ const ProductCategorysection = ({ product, setProduct, selectedCats, setSelected
 	}, [product]);
 
 	const toggleCategory = (id) => {
-		setSelectedCats((prev) =>
-			prev.includes(id)
-				? prev.filter((item) => item !== id)
-				: [...prev, id]
-		);
+		setSelectedCats((prev) => {
+			const updated =
+				prev.includes(id)
+					? prev.filter((item) => item !== id)
+					: [...prev, id];
+
+			setProduct((prevProduct) => ({
+				...prevProduct,
+				categories: updated.map((catId) => ({
+					id: Number(catId),
+				})),
+			}));
+
+			return updated;
+		});
 	};
 
 	const buildCategoryTree = (categories) => {
@@ -422,14 +437,13 @@ const ProductCategorysection = ({ product, setProduct, selectedCats, setSelected
 };
 
 addFilter(
-	'product_category_section',
+	'multivendorx_product_right_section',
 	'multivendorx/product_category',
-	(content, product, setProduct, selectedCats, setSelectedCats, selectedChild, setSelectedChild, selectedSub, setSelectedSub, selectedCat, setSelectedCat) => {
+	(content, product, setProduct ) => {
 		return (
 			<>
 				{content}
-				<ProductCategorysection product={product} setProduct={setProduct} selectedCats={selectedCats} setSelectedCats={setSelectedCats} 
-					selectedChild={selectedChild} setSelectedChild={setSelectedChild} selectedSub={selectedSub} setSelectedSub={setSelectedSub} selectedCat={selectedCat} setSelectedCat={setSelectedCat}/>
+				<ProductCategorysection product={product} setProduct={setProduct} />
 			</>
 		);
 	},

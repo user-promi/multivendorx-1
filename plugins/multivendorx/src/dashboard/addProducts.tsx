@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
 	useModules,
 	Card,
@@ -19,29 +19,15 @@ import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
 const AddProduct = () => {
-	const location = useLocation();
 	const { modules } = useModules();
 	const navigate = useNavigate();
-	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
-	const basePath = siteUrl.replace(window.location.origin, '');
-
-	const query = new URLSearchParams(location.search);
-	let productId = query.get('context_id');
-
-	if (!productId) {
-		const parts = location.pathname.split('/').filter(Boolean);
-		productId = parts[parts.length - 1];
-	}
+	const { context_id } = useParams();
+	const productId = context_id;
 
 	const [product, setProduct] = useState({});
 	const [translation, setTranslation] = useState([]);
 	const [featuredImage, setFeaturedImage] = useState(null);
 	const [galleryImages, setGalleryImages] = useState([]);
-	const [starFill, setstarFill] = useState(false);
-	const [selectedCats, setSelectedCats] = useState([]);
-	const [selectedCat, setSelectedCat] = useState(null);
-	const [selectedSub, setSelectedSub] = useState(null);
-	const [selectedChild, setSelectedChild] = useState(null);
 
 	useEffect(() => {
 		if (!productId) {
@@ -61,7 +47,6 @@ const AddProduct = () => {
 
 				setGalleryImages(images.slice(1));
 				setProduct(res.data);
-				setstarFill(res.data.featured);
 			})
 			.catch((error) => {
 				console.error('Error fetching product:', error);
@@ -82,11 +67,15 @@ const AddProduct = () => {
 		}
 	}, [productId]);
 
-	const typeOptions = [
+	const defaultTypeOptions = [
 		{ label: 'Select product type', value: '' },
 		{ label: 'Simple Product', value: 'simple' },
-		{ label: 'Variable Product', value: 'variable' },
 	];
+
+	const typeOptions = applyFilters(
+		'multivendorx_product_type_options',
+		defaultTypeOptions
+	);
 
 	const handleChange = (field, value) => {
 		setProduct((prev) => ({
@@ -106,23 +95,9 @@ const AddProduct = () => {
 			imagePayload.push({ id: img.id });
 		});
 
-		const finalCategories =
-			appLocalizer.settings_databases_value['product-preferencess']
-				?.category_selection_method == 'yes'
-				? [
-					{
-						id: Number(
-							selectedChild || selectedSub || selectedCat
-						),
-					},
-				]
-				: selectedCats.map((id) => ({ id }));
-
 		const payload = {
 			...product,
-			featured: starFill,
 			images: imagePayload,
-			categories: finalCategories,
 			meta_data: [
 				...product.meta_data,
 				{
@@ -544,19 +519,11 @@ const AddProduct = () => {
 
 				<Column grid={3}>
 					{applyFilters(
-						'multivendorx_product_before_image_section',
+						'multivendorx_product_right_section',
 						null,
 						product,
 						setProduct,
 						handleChange,
-						modules,
-						starFill,
-						setstarFill,
-					)}
-
-					{applyFilters(
-						'product_category_section',
-						null, product, setProduct, selectedCats, setSelectedCats, selectedChild, setSelectedChild, selectedSub, setSelectedSub, selectedCat, setSelectedCat
 					)}
 
 					{modules.includes('wpml') && (

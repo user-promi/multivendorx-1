@@ -432,7 +432,7 @@ const AICard = ({ product, setProduct }) => {
 
 // Modified filter to use React component
 addFilter(
-	'multivendorx_product_before_image_section',
+	'multivendorx_product_right_section',
 	'multivendorx/ai-assist-card',
 	(content, product, setProduct) => {
 		return (

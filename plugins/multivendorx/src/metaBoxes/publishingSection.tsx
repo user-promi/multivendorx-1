@@ -1,5 +1,5 @@
 import { addFilter } from '@wordpress/hooks';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import {
 	SelectInputUI,
 	Card,
@@ -9,10 +9,22 @@ import {
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const PublishingSection = ({ product, setProduct, starFill, setstarFill, handleChange }) => {
+const PublishingSection = ({ product, setProduct, handleChange }) => {
 	const [isEditingVisibility, setIsEditingVisibility] = useState(false);
 	const [isEditingStatus, setIsEditingStatus] = useState(false);
 	const visibilityRef = useRef<HTMLDivElement | null>(null);
+	const [starFill, setstarFill] = useState(false);
+
+	useEffect(() => {
+		setstarFill(product.featured);
+	}, []);
+
+	useEffect(() => {
+		setProduct((prev) => ({
+			...prev,
+			featured: starFill
+		}));
+	}, [starFill]);
 
 	const VISIBILITY_LABELS: Record<string, string> = {
 		visible: 'Shop and search results',
@@ -200,13 +212,13 @@ const PublishingSection = ({ product, setProduct, starFill, setstarFill, handleC
 };
 
 addFilter(
-	'multivendorx_product_before_image_section',
+	'multivendorx_product_right_section',
 	'multivendorx/publishing_section',
-	(content,product,setProduct,handleChange,modules,starFill,setstarFill,) => {
+	(content,product,setProduct,handleChange) => {
 		return (
 			<>
 				{content}
-				<PublishingSection product={product} setProduct={setProduct} starFill={starFill} setstarFill={setstarFill} handleChange={handleChange} />
+				<PublishingSection product={product} setProduct={setProduct} handleChange={handleChange} />
 			</>
 		);
 	},

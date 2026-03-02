@@ -11,7 +11,7 @@ import {
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
-import './hooksFilters';
+import './metaBoxes';
 import { getDashboardRoutes } from './dashboardConfig';
 
 /**
