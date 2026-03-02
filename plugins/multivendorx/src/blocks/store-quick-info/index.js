@@ -71,7 +71,7 @@ registerBlockType('multivendorx/store-quick-info', {
 	},
 
 	save: () => {
-		return <div className="" id="multivendorx-store-quick-info"></div>;
+		return <div id="multivendorx-store-quick-info"></div>;
 	},
 });
 document.addEventListener('DOMContentLoaded', () => {
