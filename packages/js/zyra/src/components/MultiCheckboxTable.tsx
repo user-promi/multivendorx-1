@@ -14,12 +14,49 @@ interface Option {
     label: string;
 }
 
+/**
+ * Value stored at setting[`${column.key}_${row.key}`] when column.type === 'shift'.
+ * Represents a single shift slot — start and end time as "HH:mm" strings.
+ */
+export interface ShiftTimeValue {
+    start: string;
+    end: string;
+}
+
+const DEFAULT_SHIFT_TIME: ShiftTimeValue = { start: '', end: '' };
+
 interface Column {
     key: string;
     label: string;
-    type?: 'checkbox' | 'description';
+    /**
+     * Cell type:
+     *  - 'checkbox'    → default (string[] at setting[column.key])
+     *  - 'description' → read-only text from row.description
+     *  - 'shift'       → inline start/end time pickers
+     */
+    type?: 'checkbox' | 'description' | 'shift';
     moduleEnabled?: string;
     proSetting?: string;
+    /**
+     * Mark a shift column as the "split shift" column.
+     * It is hidden until the user enables the split shift toggle.
+     * Only meaningful when type === 'shift'.
+     */
+    isSplitShift?: boolean;
+}
+
+/**
+ * When provided, renders a "Split Shift" toggle above the table.
+ * Toggling it shows/hides every column marked `isSplitShift: true`.
+ *
+ * key   → setting key where the boolean is persisted  (e.g. 'split_shift')
+ * label → label shown next to the toggle              (e.g. 'Split Shift (2 Time Slots)')
+ * icon  → optional adminfont icon class suffix        (e.g. 'split-shift')
+ */
+interface SplitShiftToggle {
+    key: string;
+    label: string;
+    icon?: string;
 }
 
 interface Row {
@@ -27,9 +64,11 @@ interface Row {
     label: string;
     description?: string;
     options?: Option[];
-    // When set, the label cell shows a toggle checkbox.
-    // setting[enabledKey] is a string[] of active row.key values;
-    // unchecked rows have all their cells disabled.
+    /**
+     * When set, the label cell shows a toggle checkbox.
+     * setting[enabledKey] is a string[] of active row.key values.
+     * Disabled rows grey-out all cells including shift inputs.
+     */
     enabledKey?: string;
 }
 
@@ -41,24 +80,41 @@ interface CapabilityGroup {
 
 type GroupedRows = Record<string, CapabilityGroup>;
 
-// Keys: `${column.key}_${row.key}` → Option[]  (select-cell rows)
-//       `${column.key}`            → string[]  (checkbox rows)
-type FieldSetting = Record<string, string[] | Option[]>;
+// Flat setting bag:
+//   shift columns    → ShiftTimeValue  at key `${column.key}_${row.key}`
+//   select columns   → Option[]        at key `${column.key}_${row.key}`
+//   checkbox columns → string[]        at key `${column.key}`
+//   split toggle     → boolean         at key splitShiftToggle.key
+type FieldSetting = Record<string, string[] | Option[] | ShiftTimeValue | boolean>;
 
 interface MultiCheckboxTableUIProps {
     rows: Row[] | GroupedRows;
     columns: Column[];
-    onChange: (subKey: string, value: string[] | Option[]) => void;
+    onChange: (subKey: string, value: string[] | Option[] | ShiftTimeValue | boolean) => void;
     setting: FieldSetting;
     proSetting?: boolean;
     modules: string[];
     storeTabSetting: Record<string, string[]>;
     khali_dabba: boolean;
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
+    /** When provided, a split-shift toggle is rendered above the table. */
+    splitShiftToggle?: SplitShiftToggle;
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const normalizeShiftTime = (raw: unknown): ShiftTimeValue => {
+    if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+        const r = raw as Partial<ShiftTimeValue>;
+        return {
+            start: typeof r.start === 'string' ? r.start : '',
+            end:   typeof r.end   === 'string' ? r.end   : '',
+        };
+    }
+    return { ...DEFAULT_SHIFT_TIME };
+};
+
 // ─── TableCheckbox ────────────────────────────────────────────────────────────
-// label + input pair ensures the CSS pseudo-element tick always renders.
 
 interface TableCheckboxProps {
     id: string;
@@ -80,16 +136,38 @@ const TableCheckbox: React.FC<TableCheckboxProps> = ({ id, checked, disabled = f
     </div>
 );
 
+// ─── SplitShiftToggleBar ──────────────────────────────────────────────────────
+// The toggle row shown above the table, matching the design's
+// "Split Shift (2 Time Slots)" pill with a toggle switch.
+
+interface SplitShiftToggleBarProps {
+    config: SplitShiftToggle;
+    enabled: boolean;
+    onChange: (val: boolean) => void;
+}
+
+const SplitShiftToggleBar: React.FC<SplitShiftToggleBarProps> = ({ config, enabled, onChange }) => (
+    <div className={`split-shift-bar ${enabled ? 'split-shift-bar--active' : ''}`}>
+        {config.icon && <i className={`adminfont-${config.icon}`} />}
+        <span className="split-shift-bar__label">{config.label}</span>
+        {/* Reuse the existing toggle-checkbox pattern from the codebase */}
+        <div className="toggle-checkbox split-shift-bar__toggle">
+            <input
+                type="checkbox"
+                id="split-shift-toggle"
+                checked={enabled}
+                onChange={(e) => onChange(e.target.checked)}
+            />
+            <label htmlFor="split-shift-toggle" className="checkbox-label" />
+        </div>
+    </div>
+);
+
 // ─── TableCellSelect ──────────────────────────────────────────────────────────
-// Multi-select cell for rows that have an options pool.
-//
-// Compact view: shows maxVisibleItems=2 chips + "+N" overflow badge.
-// Overflow click: opens a PopupUI lightbox with the full uncapped select,
-//                 so the user can review / add / remove all selections.
 
 interface TableCellSelectProps {
     settingKey: string;
-    rowLabel: string;       // used as popup header title
+    rowLabel: string;
     rowOptions: Option[];
     currentValue: Option[];
     onChange: (key: string, value: Option[]) => void;
@@ -108,8 +186,7 @@ const TableCellSelect: React.FC<TableCellSelectProps> = ({
 }) => {
     const [popupOpen, setPopupOpen] = useState(false);
 
-    // EnhancedSelectInputUI works with string[], so we convert both ways.
-    const optionStrings = rowOptions.map((o) => ({ value: String(o.value), label: o.label }));
+    const optionStrings   = rowOptions.map((o) => ({ value: String(o.value), label: o.label }));
     const selectedStrings = currentValue.map((v) => String(v.value));
 
     const handleChange = (raw: string | string[]) => {
@@ -133,15 +210,12 @@ const TableCellSelect: React.FC<TableCellSelectProps> = ({
 
     return (
         <>
-            {/* Compact cell view — 2 chips max, +N badge opens popup */}
             <SelectInputUI
                 {...sharedSelectProps}
                 maxVisibleItems={2}
                 onOverflowClick={() => setPopupOpen(true)}
                 wrapperClass="table-cell-select"
             />
-
-            {/* Lightbox popup — full expanded view of the same select */}
             <PopupUI
                 position="lightbox"
                 open={popupOpen}
@@ -160,6 +234,50 @@ const TableCellSelect: React.FC<TableCellSelectProps> = ({
     );
 };
 
+// ─── TableCellShift ───────────────────────────────────────────────────────────
+// Inline [HH:MM] – [HH:MM] time pickers rendered directly in the cell.
+
+interface TableCellShiftProps {
+    settingKey: string;
+    value: ShiftTimeValue;
+    onChange: (key: string, value: ShiftTimeValue) => void;
+    isBlocked: () => boolean;
+    disabled?: boolean;
+}
+
+const TableCellShift: React.FC<TableCellShiftProps> = ({
+    settingKey,
+    value,
+    onChange,
+    isBlocked,
+    disabled = false,
+}) => {
+    const handleChange = (field: keyof ShiftTimeValue, newVal: string) => {
+        if (isBlocked() || disabled) return;
+        onChange(settingKey, { ...value, [field]: newVal });
+    };
+
+    return (
+        <div className={`shift-time-cell${disabled ? ' shift-time-cell--disabled' : ''}`}>
+            <input
+                type="time"
+                className="shift-time-cell__input"
+                value={value.start}
+                disabled={disabled}
+                onChange={(e) => handleChange('start', e.target.value)}
+            />
+            <span className="shift-time-cell__sep">–</span>
+            <input
+                type="time"
+                className="shift-time-cell__input"
+                value={value.end}
+                disabled={disabled}
+                onChange={(e) => handleChange('end', e.target.value)}
+            />
+        </div>
+    );
+};
+
 // ─── MultiCheckboxTableUI ─────────────────────────────────────────────────────
 
 export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
@@ -172,6 +290,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
     modules,
     onBlocked,
     khali_dabba,
+    splitShiftToggle,
 }) => {
     const [openGroup, setOpenGroup] = useState<string | null>(() => {
         if (!Array.isArray(rows) && rows && Object.keys(rows).length > 0) {
@@ -180,7 +299,20 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         return null;
     });
 
-    // Returns true (and fires onBlocked) if the column is gated
+    // ── Split shift state ─────────────────────────────────────────────────────
+    // Read from setting so it persists across renders/saves.
+    const splitShiftEnabled = splitShiftToggle
+        ? Boolean(setting[splitShiftToggle.key])
+        : false;
+
+    // Filter visible columns: always show non-split columns;
+    // show isSplitShift columns only when the toggle is on.
+    const visibleColumns = columns.filter(
+        (col) => !col.isSplitShift || splitShiftEnabled
+    );
+
+    // ── Block checker ─────────────────────────────────────────────────────────
+
     const makeBlockChecker = (column: Column) => (): boolean => {
         if (column.proSetting && !khali_dabba) { onBlocked?.('pro'); return true; }
         if (column.moduleEnabled && !modules.includes(column.moduleEnabled)) {
@@ -195,11 +327,88 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         onChange(column.key, checked ? [...current, rowKey] : current.filter((k) => k !== rowKey));
     };
 
+    // ── Unified cell renderer ─────────────────────────────────────────────────
+
+    const renderCell = (
+        column: Column,
+        rowKey: string,
+        rowLabel: string,
+        rowOptions: Option[] | undefined,
+        isRowActive: boolean,
+    ) => {
+        const isBlocked = makeBlockChecker(column);
+
+        // Description column
+        if (column.type === 'description') {
+            const row = Array.isArray(rows)
+                ? (rows as Row[]).find((r) => r.key === rowKey)
+                : undefined;
+            return <td key={`desc_${rowKey}`}>{row?.description || '—'}</td>;
+        }
+
+        // Shift column — inline time pickers
+        if (column.type === 'shift') {
+            const cellKey = `${column.key}_${rowKey}`;
+            return (
+                <td key={cellKey} className="shift-td">
+                    <TableCellShift
+                        settingKey={cellKey}
+                        value={normalizeShiftTime(setting[cellKey])}
+                        onChange={(key, val) => {
+                            if (isBlocked()) return;
+                            onChange(key, val);
+                        }}
+                        isBlocked={isBlocked}
+                        disabled={!isRowActive}
+                    />
+                </td>
+            );
+        }
+
+        // Select column (row has an options pool)
+        if (rowOptions?.length) {
+            const cellKey = `${column.key}_${rowKey}`;
+            const rawVal  = setting[cellKey];
+            const cellValue: Option[] = Array.isArray(rawVal)
+                ? (rawVal as any[]).filter((v) => v && typeof v === 'object' && 'value' in v)
+                : [];
+
+            return (
+                <td key={cellKey}>
+                    <TableCellSelect
+                        settingKey={cellKey}
+                        rowLabel={rowLabel}
+                        rowOptions={rowOptions}
+                        currentValue={cellValue}
+                        onChange={onChange}
+                        isBlocked={isBlocked}
+                        disabled={!isRowActive}
+                    />
+                </td>
+            );
+        }
+
+        // Default: checkbox column
+        const isChecked =
+            Array.isArray(setting[column.key]) &&
+            (setting[column.key] as string[]).includes(rowKey);
+
+        return (
+            <td key={`${column.key}_${rowKey}`}>
+                <TableCheckbox
+                    id={`chk_${column.key}_${rowKey}`}
+                    checked={isChecked}
+                    disabled={!isRowActive}
+                    onChange={(checked) => handleCheckboxChange(column, rowKey, checked)}
+                />
+            </td>
+        );
+    };
+
     // ── Flat rows ─────────────────────────────────────────────────────────────
 
     const renderFlatRows = (flatRows: Row[]) =>
         flatRows.map((row) => {
-            // Row-level active state — derived from setting, no local state needed.
             const isRowActive = row.enabledKey
                 ? (setting[row.enabledKey] as string[] | undefined)?.includes(row.key) ?? false
                 : true;
@@ -213,7 +422,6 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
 
             return (
                 <tr key={row.key} className={row.enabledKey && !isRowActive ? 'row-disabled' : ''}>
-                    {/* Label cell — shows a toggle checkbox when enabledKey is set */}
                     <td>
                         {row.enabledKey ? (
                             <div className="row-label-toggle">
@@ -228,52 +436,9 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                             row.label
                         )}
                     </td>
-
-                    {columns.map((column) => {
-                        // Description column
-                        if (column.type === 'description') {
-                            return <td key={`desc_${row.key}`}>{row.description || '—'}</td>;
-                        }
-
-                        // Select cell
-                        if (row.options?.length) {
-                            const cellKey = `${column.key}_${row.key}`;
-                            const rawVal = setting[cellKey];
-                            const cellValue: Option[] = Array.isArray(rawVal)
-                                ? (rawVal as any[]).filter((v) => v && typeof v === 'object' && 'value' in v)
-                                : [];
-
-                            return (
-                                <td key={`${column.key}_${row.key}`}>
-                                    <TableCellSelect
-                                        settingKey={cellKey}
-                                        rowLabel={row.label}
-                                        rowOptions={row.options}
-                                        currentValue={cellValue}
-                                        onChange={onChange}
-                                        isBlocked={makeBlockChecker(column)}
-                                        disabled={!isRowActive}
-                                    />
-                                </td>
-                            );
-                        }
-
-                        // Checkbox cell
-                        const isChecked =
-                            Array.isArray(setting[column.key]) &&
-                            (setting[column.key] as string[]).includes(row.key);
-
-                        return (
-                            <td key={`${column.key}_${row.key}`}>
-                                <TableCheckbox
-                                    id={`chk_${column.key}_${row.key}`}
-                                    checked={isChecked}
-                                    disabled={!isRowActive}
-                                    onChange={(checked) => handleCheckboxChange(column, row.key, checked)}
-                                />
-                            </td>
-                        );
-                    })}
+                    {visibleColumns.map((col) =>
+                        renderCell(col, row.key, row.label, row.options, isRowActive)
+                    )}
                 </tr>
             );
         });
@@ -281,7 +446,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
     // ── Grouped rows ──────────────────────────────────────────────────────────
 
     const renderGroupedRows = (groupedRows: GroupedRows) => {
-        const totalCols = columns.length + 1;
+        const totalCols = visibleColumns.length + 1;
         return Object.entries(groupedRows).map(([groupKey, group]) => {
             const isOpen = openGroup === groupKey;
             return (
@@ -308,22 +473,9 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                         return (
                             <tr key={capKey}>
                                 <td>{capLabel}</td>
-                                {columns.map((column) => {
-                                    const isChecked =
-                                        Array.isArray(setting[column.key]) &&
-                                        (setting[column.key] as string[]).includes(capKey);
-
-                                    return (
-                                        <td key={`${column.key}_${capKey}`}>
-                                            <TableCheckbox
-                                                id={`chk_${column.key}_${capKey}`}
-                                                checked={isChecked}
-                                                disabled={!hasExists}
-                                                onChange={(checked) => handleCheckboxChange(column, capKey, checked)}
-                                            />
-                                        </td>
-                                    );
-                                })}
+                                {visibleColumns.map((col) =>
+                                    renderCell(col, capKey, capLabel, undefined, hasExists)
+                                )}
                             </tr>
                         );
                     })}
@@ -341,11 +493,21 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                     <i className="adminfont-pro-tag" /> Pro
                 </span>
             )}
+
+            {/* Split shift toggle bar — only shown when configured */}
+            {splitShiftToggle && (
+                <SplitShiftToggleBar
+                    config={splitShiftToggle}
+                    enabled={splitShiftEnabled}
+                    onChange={(val) => onChange(splitShiftToggle.key, val)}
+                />
+            )}
+
             <table className="grid-table">
                 <thead>
                     <tr>
                         <th />
-                        {columns.map((column) => (
+                        {visibleColumns.map((column) => (
                             <th key={column.key}>
                                 {column.label}
                                 {column?.proSetting && !khali_dabba && (
@@ -368,10 +530,6 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
 };
 
 // ─── FieldComponent wrapper ───────────────────────────────────────────────────
-//
-// `value`    — FieldSetting object keyed by sub-setting keys (e.g. "catalog_exclusion_userroles_list").
-//              Falls back to `settings` (global store) when not yet field-scoped.
-// `onChange` — called with the full merged FieldSetting so no sub-key is lost.
 
 const MultiCheckboxTable: FieldComponent = {
     render: ({ field, value, onChange, canAccess, appLocalizer, modules, settings, onBlocked, storeTabSetting }) => {
@@ -380,7 +538,7 @@ const MultiCheckboxTable: FieldComponent = {
                 ? (value as FieldSetting)
                 : (settings as FieldSetting) ?? {};
 
-        const handleChange = (subKey: string, subVal: string[] | Option[]) => {
+        const handleChange = (subKey: string, subVal: string[] | Option[] | ShiftTimeValue | boolean) => {
             if (!canAccess) return;
             onChange({ ...currentSetting, [subKey]: subVal });
         };
@@ -396,6 +554,7 @@ const MultiCheckboxTable: FieldComponent = {
                 modules={modules ?? []}
                 onBlocked={onBlocked}
                 onChange={handleChange}
+                splitShiftToggle={field.splitShiftToggle}
             />
         );
     },
