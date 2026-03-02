@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 // Internal dependencies
-import SubTabSection, { MenuItem } from './SubTabSection';
 import ProForm from './FormRenderer';
 import '../styles/web/FreeProFormCustomizer.scss';
 import '../styles/web/RegistrationForm.scss';
+import { TabsUI } from './Tabs';
 
 // Types
 interface FormField {
@@ -36,11 +36,6 @@ const FORM_FIELDS_CONFIG = [
     { key: 'fileupload', desc: 'File upload' },
     { key: 'filesize-limit', desc: 'File upload size limit (in MB)' },
     { key: 'captcha', desc: 'Captcha' },
-];
-
-const MENU_ITEMS: MenuItem[] = [
-    { name: 'Free', link: 'hi', id: '2', icon: 'adminfont-info' },
-    { name: 'Pro', link: 'hi', id: '1', icon: 'adminfont-cart' },
 ];
 
 // Helper function to get field from array
@@ -165,7 +160,7 @@ const FreeProFormCustomizer: React.FC<FreeProFormCustomizerProps> = ({
         () => setting?.freefromsetting || []
     );
     
-    const [currentTab, setCurrentTab] = useState<MenuItem>(MENU_ITEMS[0]);
+    const [activeTab, setActiveTab] = useState<string>('free');
     
     // Track changes for auto-save
     const settingChange = useRef<boolean>(false);
@@ -186,29 +181,42 @@ const FreeProFormCustomizer: React.FC<FreeProFormCustomizerProps> = ({
             settingChange.current = false;
         }
     }, [formFieldsData, onChange]);
-    
-    return (
-        <>
-            <SubTabSection
-                menuitem={MENU_ITEMS}
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
-            />
-            {currentTab.id === '1' ? (
+
+    // Define tabs for TabsUI
+    const tabs = [
+        {
+            key: 'free',
+            label: 'Free',
+            icon: 'adminfont-info',
+            content: (
+                <FreeFormTab
+                    fieldsData={formFieldsData}
+                    onChange={handleFormFieldsChange}
+                    isModuleEnabled={isModuleEnabled}
+                />
+            ),
+        },
+        {
+            key: 'pro',
+            label: 'Pro',
+            icon: 'adminfont-cart',
+            content: (
                 <ProForm
                     setting={setting}
                     name="formsettings"
                     proSettingChange={proSettingChange}
                     onChange={(value) => onChange('formsettings', value)}
                 />
-            ) : (
-                <FreeFormTab
-                    fieldsData={formFieldsData}
-                    onChange={handleFormFieldsChange}
-                    isModuleEnabled={isModuleEnabled}
-                />
-            )}
-        </>
+            ),
+        },
+    ];
+
+    return (
+        <TabsUI 
+            tabs={tabs} 
+            activeKey={activeTab}
+            onTabChange={setActiveTab}
+        />
     );
 };
 
