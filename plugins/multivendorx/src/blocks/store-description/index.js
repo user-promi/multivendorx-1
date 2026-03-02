@@ -6,7 +6,6 @@ import {
 	AlignmentToolbar,
 } from '@wordpress/block-editor';
 
-const TEXT_DOMAIN = 'multivendorx';
 
 registerBlockType('multivendorx/store-description', {
 	edit: ({ attributes, setAttributes }) => {
@@ -29,8 +28,7 @@ registerBlockType('multivendorx/store-description', {
 					{__(
 						`Lorem Ipsum is simply dummy text of the printing and
 typesetting industry. Lorem Ipsum has been the industry's
-standard dummy text ever since the 1500s`,
-						TEXT_DOMAIN
+standard dummy text ever since the 1500s`, 'multivendorx'
 					)}
 				</p>
 			</>
@@ -44,7 +42,6 @@ standard dummy text ever since the 1500s`,
 			<p
 				{...blockProps}
 				className="multivendorx-store-description"
-				data-store-description=""
 			></p>
 		);
 	},

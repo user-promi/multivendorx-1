@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { getApiLink, HeaderSearch } from 'zyra';
+import { getApiLink } from 'zyra';
 
 const ProductsTab: React.FC = () => {
 	const [html, setHtml] = useState('');
@@ -24,16 +24,19 @@ const ProductsTab: React.FC = () => {
 	}, [search]);
 
 	return (
-		<div>
-			<HeaderSearch
-				variant="mini-search"
-				search={{ placeholder: 'Search .....' }}
-				onQueryUpdate={(e) => {
-					setSearch(e.searchValue);
-				}}
-			/>
+		<>
+			<form className="woocommerce-ordering">
+				<input
+					type="search"
+					placeholder="Search ....."
+					value={search}
+					onChange={(e) => {
+					setSearch(e.target.value);
+					}}
+				/>
+			</form>
 			<div dangerouslySetInnerHTML={{ __html: html }} />
-		</div>
+		</>
 	);
 };
 

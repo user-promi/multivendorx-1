@@ -7,6 +7,7 @@ import { FieldComponent } from './types';
 import { SelectInputUI } from './SelectInput';
 import { PopupUI } from './Popup';
 import { BasicInputUI } from './BasicInput';
+import { MultiCheckBoxUI } from './MultiCheckbox';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -93,7 +94,6 @@ interface MultiCheckboxTableUIProps {
     columns: Column[];
     onChange: (subKey: string, value: string[] | Option[] | ShiftTimeValue | boolean) => void;
     setting: FieldSetting;
-    proSetting?: boolean;
     modules: string[];
     storeTabSetting: Record<string, string[]>;
     khali_dabba: boolean;
@@ -118,20 +118,37 @@ const normalizeShiftTime = (raw: unknown): ShiftTimeValue => {
 // ─── TableCheckbox ────────────────────────────────────────────────────────────
 
 interface TableCheckboxProps {
-    id: string;
     checked: boolean;
     disabled?: boolean;
     onChange: (checked: boolean) => void;
 }
 
-const TableCheckbox: React.FC<TableCheckboxProps> = ({ id, checked, disabled = false, onChange }) => (
-    <div className="default-checkbox table-checkbox">
-        <input
-            type="checkbox"
-            id={id}
-            checked={checked}
-            disabled={disabled}
-            onChange={(e) => onChange(e.target.checked)}
+// const TableCheckbox: React.FC<TableCheckboxProps> = ({ id, checked, disabled = false, onChange }) => (
+//     <div className="default-checkbox table-checkbox">
+//         <input
+//             type="checkbox"
+//             id={id}
+//             checked={checked}
+//             disabled={disabled}
+//             onChange={(e) => onChange(e.target.checked)}
+//         />
+//         <label htmlFor={id} className="checkbox-label" />
+//     </div>
+// );
+const TableCheckbox: React.FC<TableCheckboxProps> = ({ checked, disabled = false, onChange }) => {
+    const value = checked ? ['yes'] : [];
+
+    const handleChange = (newValues: string[]) => {
+        onChange(newValues.length > 0);
+    };
+    
+    return (
+        <MultiCheckBoxUI
+            options={[
+                { value: 'yes', label: '' }
+            ]}
+            value={value}
+            onChange={handleChange}
         />
         <label htmlFor={id} className="checkbox-label" />
     </div>
@@ -215,20 +232,17 @@ const TableCellSelect: React.FC<TableCellSelectProps> = ({
                 {...sharedSelectProps}
                 maxVisibleItems={2}
                 onOverflowClick={() => setPopupOpen(true)}
-                wrapperClass="table-cell-select"
             />
             <PopupUI
                 position="lightbox"
                 open={popupOpen}
                 onClose={() => setPopupOpen(false)}
                 showBackdrop
-                width="28rem"
-                height="fit-content"
+                width={28}
                 header={{ title: rowLabel, showCloseButton: true }}
             >
                 <SelectInputUI
                     {...sharedSelectProps}
-                    wrapperClass="table-cell-select-popup"
                 />
             </PopupUI>
         </>
@@ -285,7 +299,6 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
     onChange,
     setting,
     storeTabSetting,
-    proSetting,
     modules,
     onBlocked,
     khali_dabba,
@@ -423,14 +436,13 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                 <tr key={row.key} className={row.enabledKey && !isRowActive ? 'row-disabled' : ''}>
                     <td>
                         {row.enabledKey ? (
-                            <div className="row-label-toggle">
+                            <>
                                 <TableCheckbox
-                                    id={`row-toggle_${row.key}`}
                                     checked={isRowActive}
                                     onChange={handleRowToggle}
                                 />
                                 <span>{row.label}</span>
-                            </div>
+                            </>
                         ) : (
                             row.label
                         )}
@@ -450,19 +462,15 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
             const isOpen = openGroup === groupKey;
             return (
                 <React.Fragment key={groupKey}>
-                    <tr className="toggle-header-row">
-                        <td colSpan={totalCols}>
-                            <div
-                                className="toggle-header"
-                                onClick={() => setOpenGroup(isOpen ? null : groupKey)}
-                            >
-                                <div className="header-title">
-                                    {group.label}
-                                    <i className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`} />
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                    <div
+                        className="toggle-header"
+                        onClick={() => setOpenGroup(isOpen ? null : groupKey)}
+                    >
+                        <div className="header-title">
+                            {group.label}
+                            <i className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`} />
+                        </div>
+                    </div>
 
                     {isOpen && Object.entries(group.capability).map(([capKey, capLabel]) => {
                         const hasExists =
@@ -549,7 +557,6 @@ const MultiCheckboxTable: FieldComponent = {
                 columns={field.columns ?? []}
                 setting={currentSetting}
                 storeTabSetting={storeTabSetting ?? {}}
-                proSetting={field.proSetting ?? false}
                 modules={modules ?? []}
                 onBlocked={onBlocked}
                 onChange={handleChange}
