@@ -35,6 +35,7 @@ class Frontend {
         add_filter( 'multivendorx_localize_scripts', array( $this, 'localize_scripts' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'woocommerce_order_item_meta_end', array( $this, 'multivendorx_add_store_review_button' ), 10, 3 );
+        add_filter( 'multivendorx_store_frontend_localize_scripts', array( $this, 'multivendorx_store_frontend_localize_scripts' ) );
     }
 
     public function register_script( $scripts ) {
@@ -161,5 +162,50 @@ class Frontend {
             . esc_html__( 'Leave a Review', 'multivendorx' ) .
             '</a>';
         echo '</div>';
+    }
+
+    public function multivendorx_store_frontend_localize_scripts( $item ) {
+        $store_id      = isset( $item['storeDetails']['storeId'] )
+            ? absint( $item['storeDetails']['storeId'] )
+            : 0;
+
+        $user_id       = ! empty( $item['currentUserId'] )
+            ? absint( $item['currentUserId'] )
+            : 0;
+
+        $is_logged_in  = $user_id > 0;
+
+        $myaccount_url = wc_get_page_permalink( 'myaccount' );
+
+        $item['loginUrl'] = add_query_arg('redirect_to',urlencode( get_permalink() ),$myaccount_url);
+
+        $storereview            = MultiVendorX()->setting->get_setting(
+            'is_storereview_varified',
+            array()
+        );
+
+        $is_verified_buyer_only = reset( $storereview ) ?? false;
+
+        $item['isVerifiedBuyerOnly'] = (bool) $is_verified_buyer_only;
+
+        $item['reviewStatus']     = '';
+        $item['isVerifiedBuyer']  = false;
+        if ( $is_logged_in && $store_id ) {
+
+            // Get review status
+            $item['reviewStatus'] = Util::get_user_review_status( $store_id,
+                    $user_id
+                );
+            // If verified-only enabled → check verified buyer
+            if ( $is_verified_buyer_only ) {
+
+                $item['isVerifiedBuyer'] =Util::is_verified_buyer(
+                        $store_id,
+                        $user_id
+                    );
+            }
+        }
+
+        return $item;
     }
 }

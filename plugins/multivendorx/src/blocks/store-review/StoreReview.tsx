@@ -40,8 +40,6 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 					page: 1,
 					row: reviewsToShow,
 					storeId: StoreInfo.storeDetails.storeId,
-					orderBy: 'date_created',
-					order: sortOrder,
 					status: 'approved',
 				},
 			})

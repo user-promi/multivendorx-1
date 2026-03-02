@@ -19,7 +19,7 @@ import Popup from '../../../src/components/Popup/Popup';
 import { formatLocalDate } from '@/services/commonFunction';
 
 type Review = {
-	review_id: number;
+	id: number;
 	store_id: number;
 	customer_id: number;
 	customer_name: string;
@@ -104,7 +104,7 @@ const StoreReviews: React.FC = () => {
 
 		axios({
 			method: 'PUT',
-			url: getApiLink(appLocalizer, `review/${selectedReview.review_id}`),
+			url: getApiLink(appLocalizer, `review/${selectedReview.id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				reply: replyText,

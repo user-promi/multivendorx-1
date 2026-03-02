@@ -1,47 +1,61 @@
 import { __ } from '@wordpress/i18n';
+
 const PolicyTab = () => {
-	const policies = StoreInfo.storeDetails || {};
+	const policies = StoreInfo.store_policies || {};
+
+	const hasValue = (value) =>
+		value && value.toString().trim() !== '';
 
 	return (
 		<div className="multivendorx-policies-accordion">
-			<div className="accordion-item">
-				<div className="accordion-header">
-					{__('Store Policy', 'multivendorx')}
-				</div>
-				<div className="accordion-body">
-					<p>{policies['storePolicy']}</p>
-				</div>
-			</div>
 
-			<div className="accordion-item">
-				<div className="accordion-header">
-					{__('Shipping Policy', 'multivendorx')}
+			{hasValue(policies.store_policy) && (
+				<div className="accordion-item">
+					<div className="accordion-header">
+						{__('Store Policy', 'multivendorx')}
+					</div>
+					<div className="accordion-body">
+						<p>{policies.store_policy}</p>
+					</div>
 				</div>
-				<div className="accordion-body">
-					<p>{policies['shippingPolicy']}</p>
-				</div>
-			</div>
+			)}
 
-			<div className="accordion-item">
-				<div className="accordion-header">
-					{__('Refund Policy', 'multivendorx')}
+			{hasValue(policies.shipping_policy) && (
+				<div className="accordion-item">
+					<div className="accordion-header">
+						{__('Shipping Policy', 'multivendorx')}
+					</div>
+					<div className="accordion-body">
+						<p>{policies.shipping_policy}</p>
+					</div>
 				</div>
-				<div className="accordion-body">
-					<p>{policies['refundPolicy']}</p>
-				</div>
-			</div>
+			)}
 
-			<div className="accordion-item">
-				<div className="accordion-header">
-					{__(
-						'Cancellation / Return / Exchange Policy',
-						'multivendorx'
-					)}
+			{hasValue(policies.refund_policy) && (
+				<div className="accordion-item">
+					<div className="accordion-header">
+						{__('Refund Policy', 'multivendorx')}
+					</div>
+					<div className="accordion-body">
+						<p>{policies.refund_policy}</p>
+					</div>
 				</div>
-				<div className="accordion-body">
-					<p>{policies['refundPolicy']}</p>
+			)}
+
+			{hasValue(policies.cancellation_policy) && (
+				<div className="accordion-item">
+					<div className="accordion-header">
+						{__(
+							'Cancellation / Return / Exchange Policy',
+							'multivendorx'
+						)}
+					</div>
+					<div className="accordion-body">
+						<p>{policies.cancellation_policy}</p>
+					</div>
 				</div>
-			</div>
+			)}
+
 		</div>
 	);
 };

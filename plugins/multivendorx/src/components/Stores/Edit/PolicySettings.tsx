@@ -18,13 +18,10 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!id) {
-			return;
-		}
 		if (data) {
 			setFormData(data);
 		}
-	}, [id]);
+	}, [data]);
 
 	useEffect(() => {
 		if (successMsg) {
@@ -32,7 +29,6 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 			return () => clearTimeout(timer);
 		}
 	}, [successMsg]);
-
 	const handleChange = (key: string, value: string) => {
 		setFormData((prev) => {
 			const updated = {

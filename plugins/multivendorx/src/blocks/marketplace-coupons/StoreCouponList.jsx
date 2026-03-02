@@ -9,11 +9,17 @@ const StoreCouponList = ({
 	orderby = 'date',
 	order = 'DESC',
 }) => {
-	const [coupons, setCoupons] = useState([]);
+	const [coupons, setCoupons] = useState<any[]>([]);
 	const [page, setPage] = useState(1);
 	const [total, setTotal] = useState(0);
 
-	const totalPages = Math.ceil(total / perPage);
+	// Always keep minimum page count = 1
+	const totalPages = Math.max(1, Math.ceil(total / perPage));
+
+	// Reset page when filters change
+	useEffect(() => {
+		setPage(1);
+	}, [store_id, store_slug, perPage, orderby, order]);
 
 	const fetchCoupons = useCallback(async () => {
 		try {
@@ -27,9 +33,11 @@ const StoreCouponList = ({
 						per_page: perPage,
 						page,
 						orderby,
-						order,
+						order: order?.toLowerCase() === 'asc' ? 'asc' : 'desc',
+
+						// Filter meta query style (WooCommerce REST doesn't always support direct meta filters)
 						meta_key: 'multivendorx_store_id',
-						value: store_id,
+						meta_value: store_id,
 						store_slug,
 					},
 				}
@@ -59,26 +67,31 @@ const StoreCouponList = ({
 				</div>
 			))}
 
-			<div className="pagination">
-				<button
-					disabled={page === 1}
-					onClick={() => setPage((p) => p - 1)}
-				>
-					{__('Previous', 'multivendorx')}
-				</button>
+			{/* Show pagination only when needed */}
+			{total > perPage && (
+				<div className="pagination">
+					<button
+						disabled={page === 1}
+						onClick={() => setPage((p) => Math.max(1, p - 1))}
+					>
+						{__('Previous', 'multivendorx')}
+					</button>
 
-				<span>
-					{__('Page', 'multivendorx')} {page}{' '}
-					{__('of', 'multivendorx')} {totalPages}
-				</span>
+					<span>
+						{__('Page', 'multivendorx')} {page}{' '}
+						{__('of', 'multivendorx')} {totalPages}
+					</span>
 
-				<button
-					disabled={page >= totalPages}
-					onClick={() => setPage((p) => p + 1)}
-				>
-					{__('Next', 'multivendorx')}
-				</button>
-			</div>
+					<button
+						disabled={page >= totalPages}
+						onClick={() =>
+							setPage((p) => Math.min(totalPages, p + 1))
+						}
+					>
+						{__('Next', 'multivendorx')}
+					</button>
+				</div>
+			)}
 		</div>
 	);
 };

@@ -30,6 +30,7 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
 
         // add_filter( 'template_include', [ $this, 'store_policy_template' ] );
+        add_filter( 'multivendorx_store_frontend_localize_scripts', array( $this, 'multivendorx_store_frontend_localize_scripts' ) );
     }
 
     public function register_script( $scripts ) {
@@ -143,5 +144,12 @@ class Frontend {
      */
     public function woocommerce_product_policies_tab() {
         MultiVendorX()->util->get_template( 'store/store-single-product-policy-tab.php' );
+    }
+    public function multivendorx_store_frontend_localize_scripts( $item ) {
+        $store_id      = isset( $item['storeDetails']['storeId'] )
+            ? absint( $item['storeDetails']['storeId'] )
+            : 0;
+        $item['store_policies'] = Util::get_store_policies( $store_id );
+        return $item;
     }
 }
