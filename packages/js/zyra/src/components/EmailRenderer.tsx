@@ -33,7 +33,7 @@ const EMAIL_BLOCK_GROUPS = [{
         { id: 'richtext', icon: 't-letter-bold', value: 'richtext', label: 'Text', fixedName: 'email-text', placeholder: '<p>Enter your text content here</p>' },
         { id: 'image', icon: 'image', value: 'image', label: 'Image', fixedName: 'email-image', placeholder: '' },
         { id: 'button', icon: 'button', value: 'button', label: 'Button', fixedName: 'email-button', placeholder: 'Click me' },
-        { id: 'divider', icon: 'divider', value: 'divider', label: 'Divider', fixedName: 'email-divider' },
+        { id: 'section', icon: 'section', value: 'section', label: 'section', fixedName: 'email-section' },
         { id: 'columns', icon: 'blocks', value: 'columns', label: 'Columns', fixedName: 'email-columns' },
     ]
 }];

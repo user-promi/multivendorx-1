@@ -5,7 +5,6 @@ import CalendarInput from './CalendarInput';
 import ClickableList from './ClickableList';
 import ColorSettingInput from './ColorSettingInput';
 import Content from './Content';
-import Divider from './Divider';
 import EmailTemplate from './EmailRenderer';
 import EndpointEditor from './EndpointEditor';
 import EventCalendar from './EventCalendar';
@@ -95,7 +94,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   address: AddressField,
 
-  divider: Divider,
+  divider: Section,
 
   'color-setting': ColorSettingInput,
 
