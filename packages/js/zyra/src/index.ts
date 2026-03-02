@@ -29,7 +29,6 @@ export { SelectInputUI } from './components/SelectInput';
 export { default as ShortCodeTable } from './components/ShortCodeTable';
 export { default as Tabs } from './components/Tabs';
 export { TabsUI } from './components/Tabs';
-export { default as Support } from './components/Support';
 export { default as DropDownMapping } from './components/DropDownMapping';
 export { default as SequentialTaskExecutor } from './components/SequentialTaskExecutor';
 export { default as SettingsNavigator } from './components/SettingsNavigator';
