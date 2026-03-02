@@ -587,11 +587,11 @@ class FrontendScripts {
                     'use_settings'    => true,
                     'use_rest'    => true,
                 ),
-                // 'multivendorx-marketplace-products-editor-script' => array(
-                //     'object_name' => 'productList',
-                //     'use_rest'    => true,
-                //     'use_settings' => true,
-                // ),
+                'multivendorx-marketplace-products-editor-script' => array(
+                    'object_name' => 'productList',
+                    'use_rest'    => true,
+                    'use_settings' => true,
+                ),
                 'multivendorx-marketplace-products-script' => array(
                     'object_name' => 'productList',
                     'use_rest'    => true,
