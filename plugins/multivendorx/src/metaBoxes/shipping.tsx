@@ -62,7 +62,6 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 						]}
 						value={productType}
 						onChange={(val) => {
-							console.log('val', val)
 							setProductType(val);
 							if (val == 'physical') {
 								handleChange('virtual', false);
