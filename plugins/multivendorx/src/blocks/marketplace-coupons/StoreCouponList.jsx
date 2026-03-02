@@ -27,7 +27,7 @@ const StoreCouponList = ({
 						per_page: perPage,
 						page,
 						orderby,
-						order,
+						order: order?.toLowerCase() === 'asc' ? 'asc' : 'desc',
 						meta_key: 'multivendorx_store_id',
 						value: store_id,
 						store_slug,

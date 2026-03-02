@@ -323,9 +323,9 @@ class FrontendScripts {
             return;
         }
 
-        if ( ! wp_script_is( $handle, 'enqueued' ) ) {
-            return;
-        }
+        // if ( ! wp_script_is( $handle, 'enqueued' ) ) {
+        //     return;
+        // }
         // Get all tab setting's database value.
         $settings_databases_value = array();
 
@@ -587,11 +587,11 @@ class FrontendScripts {
                     'use_settings'    => true,
                     'use_rest'    => true,
                 ),
-                'multivendorx-marketplace-products-editor-script' => array(
-                    'object_name' => 'productList',
-                    'use_rest'    => true,
-                    'use_settings' => true,
-                ),
+                // 'multivendorx-marketplace-products-editor-script' => array(
+                //     'object_name' => 'productList',
+                //     'use_rest'    => true,
+                //     'use_settings' => true,
+                // ),
                 'multivendorx-marketplace-products-script' => array(
                     'object_name' => 'productList',
                     'use_rest'    => true,
