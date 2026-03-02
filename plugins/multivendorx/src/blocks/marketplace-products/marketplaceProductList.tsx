@@ -5,6 +5,7 @@ import { __ } from '@wordpress/i18n';
 interface Product {
 	id: number;
 	name: string;
+	permalink?: string;
 	images?: { src: string }[];
 }
 
@@ -34,7 +35,13 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 	const [page, setPage] = useState(1);
 	const [total, setTotal] = useState(0);
 
-	const totalPages = Math.ceil(total / perPage);
+
+	const totalPages = Math.max(1, Math.ceil(total / perPage));
+
+	// ✅ Reset page when filters change
+	useEffect(() => {
+		setPage(1);
+	}, [perPage, orderby, order, category, product_visibility, store_slug]);
 
 	const fetchProducts = useCallback(async () => {
 		try {
@@ -47,11 +54,18 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 						page,
 						orderby,
 						order,
+
+						// Category filter
 						cat: category,
 						operator,
+
+						// Visibility filter
 						product_visibility,
+
+						// Vendor filter (if backend supports it)
 						meta_key: 'multivendorx_store_id',
-						value: '',
+						meta_value: '',
+
 						store_slug,
 					},
 				}
@@ -62,7 +76,16 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 		} catch (error) {
 			console.error('Error fetching products:', error);
 		}
-	}, [page, perPage, orderby, order, category]);
+	}, [
+		page,
+		perPage,
+		orderby,
+		order,
+		category,
+		operator,
+		product_visibility,
+		store_slug,
+	]);
 
 	useEffect(() => {
 		fetchProducts();
@@ -93,26 +116,31 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 				))}
 			</div>
 
-			<div>
-				<button
-					disabled={page === 1}
-					onClick={() => setPage((p) => p - 1)}
-				>
-					{__('Previous', 'multivendorx')}
-				</button>
+			{/* Pagination only when needed */}
+			{total > perPage && (
+				<div>
+					<button
+						disabled={page === 1}
+						onClick={() => setPage((p) => Math.max(1, p - 1))}
+					>
+						{__('Previous', 'multivendorx')}
+					</button>
 
-				<span>
-					{__('Page', 'multivendorx')} {page}{' '}
-					{__('of', 'multivendorx')} {totalPages}
-				</span>
+					<span>
+						{__('Page', 'multivendorx')} {page}{' '}
+						{__('of', 'multivendorx')} {totalPages}
+					</span>
 
-				<button
-					disabled={page >= totalPages}
-					onClick={() => setPage((p) => p + 1)}
-				>
-					{__('Next', 'multivendorx')}
-				</button>
-			</div>
+					<button
+						disabled={page >= totalPages}
+						onClick={() =>
+							setPage((p) => Math.min(totalPages, p + 1))
+						}
+					>
+						{__('Next', 'multivendorx')}
+					</button>
+				</div>
+			)}
 		</>
 	);
 };
