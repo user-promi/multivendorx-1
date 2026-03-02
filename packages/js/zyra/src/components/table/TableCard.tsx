@@ -11,6 +11,7 @@ import { useOutsideClick } from '../useOutsideClick';
 import HeaderSearch from '../HeaderSearch';
 import Skeleton from '../UI/Skeleton';
 import { PopupUI } from '../Popup';
+import '../../styles/web/Table.scss';
 
 const defaultOnColumnsChange = (
 	showCols: string[],

@@ -22,7 +22,6 @@ interface GoogleMapComponentProps {
         country?: string;
         zip?: string;
     }) => void;
-    labelSearch: string;
     placeholderSearch: string;
     stores: { data: Store[] } | null;
 }
@@ -50,7 +49,6 @@ const GoogleMap = ({
     locationLng,
     isUserLocation,
     onLocationUpdate,
-    labelSearch,
     placeholderSearch,
     stores,
 }: GoogleMapComponentProps) => {
@@ -308,22 +306,20 @@ const GoogleMap = ({
     };
 
     return (
-        <FormGroup label={labelSearch}>
+        <div className="map-wrapper">
             <input
                 ref={autocompleteInputRef}
-                id="store-location-autocomplete"
                 type="text"
                 className="basic-input"
                 placeholder={placeholderSearch}
                 defaultValue={locationAddress}
-                style={{ width: '100%', height: '3rem', marginBottom: '8px' }}
             />
             <div
                 ref={mapContainerRef}
                 id="location-map"
                 style={{ height: '400px', width: '100%' }}
             />
-        </FormGroup>
+        </div>
     );    
 };
 
