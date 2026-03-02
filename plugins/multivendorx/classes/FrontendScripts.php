@@ -323,9 +323,9 @@ class FrontendScripts {
             return;
         }
 
-        if ( ! wp_script_is( $handle, 'enqueued' ) ) {
-            return;
-        }
+        // if ( ! wp_script_is( $handle, 'enqueued' ) ) {
+        //     return;
+        // }
         // Get all tab setting's database value.
         $settings_databases_value = array();
 
@@ -606,10 +606,13 @@ class FrontendScripts {
                     'object_name' => 'StoreInfo',
                     'use_settings'    => true,
                     'use_rest'    => true,
-                    'data'        => array(
-                        'storeDetails'             => StoreUtil::get_specific_store_info(),
-                        'activeModules'            => MultiVendorX()->modules->get_active_modules(),
-                        'currentUserId'            => get_current_user_id(),
+                    'data'         => apply_filters(
+                        'multivendorx_store_frontend_localize_scripts',
+                        array(
+                            'storeDetails'  => StoreUtil::get_specific_store_info(),
+                            'activeModules' => MultiVendorX()->modules->get_active_modules(),
+                            'currentUserId' => get_current_user_id(),
+                        )
                     ),
                 ),
 			);

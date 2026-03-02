@@ -34,9 +34,8 @@ const BLOCK_GROUPS = [
             { id: 'heading', icon: 'form-textarea', value: 'heading', label: 'Heading' },
             { id: 'image', icon: 'image', value: 'image', label: 'Image' },
             { id: 'button', icon: 'button', value: 'button', placeholder: 'Click me' },
-            { id: 'divider', icon: 'divider', value: 'divider', },
             { id: 'columns', icon: 'blocks', value: 'columns',  },
-            { id: 'section', icon: 'form-section', value: 'section', label: 'Section' },
+            { id: 'section', icon: 'form-section', value: 'section', },
             { id: 'recaptcha', icon: 'captcha-automatic-code', value: 'recaptcha', label: 'reCaptcha v3' },
         ]
     },

@@ -1,5 +1,4 @@
 // /* global appLocalizer */
-import Brand from '../../assets/images/multivendorx-logo.png';
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
 // Context
@@ -10,8 +9,6 @@ import { getTemplateData } from '../../services/templateService';
 import {
 	getAvailableSettings,
 	getSettingById,
-	Support,
-	Banner,
 	useModules,
 	SettingsNavigator,
 	RenderComponent,
@@ -25,52 +22,6 @@ type SettingItem = Record<string, any>;
 interface SettingsProps {
 	id: string;
 }
-const faqs = [
-	{
-		question: __(
-			'Why am I not receiving any emails when a customer subscribes for an out-of-stock product?',
-			'multivendorx'
-		),
-		answer: __(
-			'Please install a plugin like Email Log and perform a test subscription.',
-			'multivendorx'
-		),
-		open: true,
-	},
-	{
-		question: __(
-			'Why is the out-of-stock form not appearing?',
-			'multivendorx'
-		),
-		answer: __(
-			'There might be a theme conflict issue. To troubleshoot, switch to a default theme like Twenty Twenty-Four and check if the form appears.',
-			'multivendorx'
-		),
-		open: false,
-	},
-	{
-		question: __(
-			'Does Notifima support product variations?',
-			'multivendorx'
-		),
-		answer: __(
-			'Yes, product variations are fully supported and editable from the Inventory Manager. Notifima handles variable products with ease and uses an expandable feature to make managing variations clear and straightforward.',
-			'multivendorx'
-		),
-		open: false,
-	},
-	{
-		question: __(
-			'Do you support Google reCaptcha for the out-of-stock form?',
-			'multivendorx'
-		),
-		answer: __(
-			'Yes, <a href="https://notifima.com/pricing/?utm_source=wpadmin&utm_medium=pluginsettings&utm_campaign=notifima" target="_blank">Notifima Pro</a> has support for reCaptcha.',
-			'multivendorx'
-		),
-		open: false,
-	},
-];
 
 const StatusAndTools: React.FC<SettingsProps> = () => {
 	const settingsArray: SettingItem[] = getAvailableSettings(
@@ -139,18 +90,6 @@ const StatusAndTools: React.FC<SettingsProps> = () => {
 				};
 			}
 		}, [setting, settingName, currentTab]);
-
-		// Special component
-		if (currentTab === 'faq') {
-			return (
-				<Support
-					title="Thank you for using Notifima"
-					subTitle="We want to help you enjoy a wonderful experience with all of our products."
-					url="https://www.youtube.com/embed/cgfeZH5z2dM?si=3zjG13RDOSiX2m1b"
-					faqData={faqs}
-				/>
-			);
-		}
 
 		return (
 			<>

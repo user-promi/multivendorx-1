@@ -1,7 +1,7 @@
 {
     "apiVersion": 2,
 	"name": "multivendorx/highlighted-store-products",
-	"title": "Highlighted Store Products(widgets)",
+	"title": "Highlighted Store Products",
 	"category": "multivendorx",
 	"icon": "products",
     "editorScript": "file:./index.js",

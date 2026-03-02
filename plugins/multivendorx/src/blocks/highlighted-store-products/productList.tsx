@@ -76,7 +76,6 @@ const ProductList: React.FC<ProductListProps> = ({
 
 		fetchProductList();
 	}, [productType, limit, isEditor]);
-
 	// Render products using the WooCommerce ul/li design
 	return (
 		<>
@@ -84,8 +83,6 @@ const ProductList: React.FC<ProductListProps> = ({
 				<p>{__('Loading products...', 'multivendorx')}</p>
 			) : (
 				<div className="woocommerce">
-					<h2>{__('Product By Rating', 'multivendorx')}</h2>
-
 					<ul className="product_list_widget">
 						{products.length > 0 ? (
 							products.map((product) => (
@@ -94,8 +91,7 @@ const ProductList: React.FC<ProductListProps> = ({
 										<img
 											className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
 											src={
-												product.images?.[0]?.src ||
-												placeholderImage // Changed this line (line 15)
+												product.images?.[0]?.src
 											}
 											alt={product.name}
 										/>

@@ -70,15 +70,19 @@ const StoreQuickInfo: React.FC<{}> = () => {
 
 		fetchTotalProducts();
 	}, [storeDetails.storeId]);
+
 	const renderStars = (rating: number | null) => {
 		if (!rating) return null;
 
-		const stars = Array.from({ length: 5 }, (_, index) => {
-			return index < Math.round(rating) ? '★' : '☆';
-		});
-
-		return <span className="stars">{stars.join('')}</span>;
+		return (
+			<div className="star-rating" role="img" aria-label={`Rated ${rating.toFixed(1)} out of 5`}>
+				<span style={{ width: `${(rating / 5) * 100}%` }}>
+					<strong className="rating">{rating.toFixed(1)}</strong> {__('out of 5', 'multivendorx')}
+				</span>
+			</div>
+		);
 	};
+
 	return (
 		<div className="store-card">
 			<div className="store-header">
@@ -86,7 +90,7 @@ const StoreQuickInfo: React.FC<{}> = () => {
 					{storeDetails.storeLogo ? (
 						<img src={storeDetails.storeLogo} alt="Store Avatar" />
 					) : storeDetails.storeName ? (
-						<span>
+						<span className="placeholder">
 							{storeDetails.storeName.slice(0, 2).toUpperCase()}
 						</span>
 					) : null}
@@ -97,14 +101,19 @@ const StoreQuickInfo: React.FC<{}> = () => {
 						<h3 className="store-name">{storeDetails.storeName}</h3>
 					)}
 					{storeDetails.storeEmail && (
-						<p className="store-email">{storeDetails.storeEmail}</p>
+						<p> <span className="dashicons dashicons-email"></span> {storeDetails.storeEmail}</p>
 					)}
 
 					<div className="store-rating">
 						{renderStars(rating)}
-						<span className="rating-number">{rating}</span>
+						{ratingCount !== null && (
+							<span className="rating-count">
+								{ratingCount > 0 
+									? `(${ratingCount} ${ratingCount === 1 ? __('review', 'multivendorx') : __('reviews', 'multivendorx')})`
+									: __('(0 reviews)', 'multivendorx')}
+							</span>
+						)}
 					</div>
-
 				</div>
 			</div>
 
@@ -116,10 +125,9 @@ const StoreQuickInfo: React.FC<{}> = () => {
 					</div>
 				)}
 
-
 				<div className="stat-item">
-					<div className="stat-number">{ratingCount}</div>
-					<div className="stat-label">{__('Rating', 'multivendorx')}</div>
+					<div className="stat-number">{ratingCount || 0}</div>
+					<div className="stat-label">{__('Reviews', 'multivendorx')}</div>
 				</div>
 			</div>
 		</div>

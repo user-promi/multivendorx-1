@@ -1,7 +1,7 @@
 {
 	"apiVersion": 2,
 	"name": "multivendorx/marketplace-coupons",
-	"title": "Store Coupons",
+	"title": "Classic Store Coupons",
 	"category": "multivendorx",
 	"icon": "tickets-alt",
 	"description": "Display store coupons",
