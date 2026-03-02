@@ -507,7 +507,7 @@ const AddProduct = () => {
 						</Card>
 					)}
 					{applyFilters(
-						'multivendorx_product_after_price_section',
+						'multivendorx_add_product_middle_section',
 						null,
 						product,
 						setProduct,
@@ -519,7 +519,7 @@ const AddProduct = () => {
 
 				<Column grid={3}>
 					{applyFilters(
-						'multivendorx_product_right_section',
+						'multivendorx_add_product_right_section',
 						null,
 						product,
 						setProduct,

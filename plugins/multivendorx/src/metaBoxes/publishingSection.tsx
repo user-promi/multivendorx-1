@@ -212,7 +212,7 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 };
 
 addFilter(
-	'multivendorx_product_right_section',
+	'multivendorx_add_product_right_section',
 	'multivendorx/publishing_section',
 	(content,product,setProduct,handleChange) => {
 		return (

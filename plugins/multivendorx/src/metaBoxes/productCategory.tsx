@@ -437,7 +437,7 @@ const ProductCategorysection = ({ product, setProduct }) => {
 };
 
 addFilter(
-	'multivendorx_product_right_section',
+	'multivendorx_add_product_right_section',
 	'multivendorx/product_category',
 	(content, product, setProduct ) => {
 		return (
