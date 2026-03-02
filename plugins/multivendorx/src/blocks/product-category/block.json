@@ -1,7 +1,7 @@
 {
   "apiVersion": 2,
   "name": "multivendorx/product-category",
-  "title": "Product Category(w)",
+  "title": "Product Category",
   "category": "multivendorx",
   "icon": "screenoptions",
   "description": "Allow customers to filter and browse store products by category.",

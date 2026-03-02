@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 
 registerBlockType('multivendorx/marketplace-coupons', {
 	apiVersion: 2,
-	title: 'Store Coupons',
+	title: 'Classic Store Coupons',
 	icon: 'tickets-alt',
 	category: 'multivendorx',
 

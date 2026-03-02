@@ -80,7 +80,7 @@ const EditBlock = (props) => {
 // Register the Block
 registerBlockType('multivendorx/marketplace-products', {
 	apiVersion: 2,
-	title: 'Marketplace Products',
+	title: 'Classic Marketplace Products',
 	icon: 'products',
 	category: 'multivendorx',
 	supports: { html: false },
