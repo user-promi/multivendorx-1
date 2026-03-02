@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getApiLink, GoogleMap, Mapbox } from 'zyra';
 import { __ } from '@wordpress/i18n';
-import Select from 'react-select';
 
 interface StoreRow {
 	id: number;
