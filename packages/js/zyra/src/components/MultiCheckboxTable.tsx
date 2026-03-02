@@ -6,6 +6,7 @@ import '../styles/web/MultiCheckboxTable.scss';
 import { FieldComponent } from './types';
 import { SelectInputUI } from './SelectInput';
 import { PopupUI } from './Popup';
+import { BasicInputUI } from './BasicInput';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -259,20 +260,18 @@ const TableCellShift: React.FC<TableCellShiftProps> = ({
 
     return (
         <div className={`shift-time-cell${disabled ? ' shift-time-cell--disabled' : ''}`}>
-            <input
+            <BasicInputUI
                 type="time"
-                className="shift-time-cell__input"
                 value={value.start}
                 disabled={disabled}
-                onChange={(e) => handleChange('start', e.target.value)}
+                onChange={(value) => handleChange('start', value)}
             />
             <span className="shift-time-cell__sep">–</span>
-            <input
+            <BasicInputUI
                 type="time"
-                className="shift-time-cell__input"
                 value={value.end}
                 disabled={disabled}
-                onChange={(e) => handleChange('end', e.target.value)}
+                onChange={(value) => handleChange('end', value)}
             />
         </div>
     );
