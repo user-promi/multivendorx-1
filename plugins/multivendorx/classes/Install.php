@@ -1995,11 +1995,11 @@ class Install {
         }
 
         // Migrate coupon vendor.
-        $coupons = wc_get_coupons(
-            array(
-				'return' => 'ids',
-            )
-        );
+        $coupons = get_posts( array(
+            'post_type'      => 'shop_coupon',
+            'post_status'    => 'publish',
+            'fields'         => 'ids',
+        ) );
 
         foreach ( $coupons as $coupon_id ) {
             $author_id = (int) get_post_field( 'post_author', $coupon_id );
