@@ -47,10 +47,7 @@
     text-transform: uppercase;
     letter-spacing: 0.0.313rem;
 }
-
 // store quick info end
-
-
 
 // store review block start
 // .multivendorx-review-list {
@@ -198,27 +195,27 @@
 
 
 #marketplace-stores {
-    .view-tabs {
-        display: flex;
-        gap: 1rem;
-        list-style-type: none;
-        margin: 0;
-        padding: 0.5rem;
-        border-radius: 0.313rem;
-        background: var(--primary);
+    // .view-tabs {
+    //     display: flex;
+    //     gap: 1rem;
+    //     list-style-type: none;
+    //     margin: 0;
+    //     padding: 0.5rem;
+    //     border-radius: 0.313rem;
+    //     background: var(--primary);
 
-        li {
-            cursor: pointer;
-            padding: 0 0.45rem;
-            color: #fff;
+    //     li {
+    //         cursor: pointer;
+    //         padding: 0 0.45rem;
+    //         color: #fff;
 
-            &.active {
-                background: #fff;
-                color: var(--primary);
-                border-radius: 0.313rem;
-            }
-        }
-    }
+    //         &.active {
+    //             background: #fff;
+    //             color: var(--primary);
+    //             border-radius: 0.313rem;
+    //         }
+    //     }
+    // }
 
     .store-list-wrapper {
         // display: flex;
@@ -227,6 +224,7 @@
 
         .store-list {
             width: 100%;
+            padding: 2rem 0;
 
             .store {
                 border: 0.063rem solid #eee;
@@ -278,7 +276,6 @@
         }
     }
 }
-
 
 //  product list style start
 .top-products-inner {
