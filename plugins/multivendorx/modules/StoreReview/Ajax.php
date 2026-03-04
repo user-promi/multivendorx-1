@@ -134,7 +134,7 @@ class Ajax {
                                 <p class="meta">
                                     <strong class="woocommerce-review__author"><?php echo esc_html( $reviewer_name ); ?></strong>
                                     <span class="woocommerce-review__dash">–</span>
-                                    <time class="woocommerce-review__published-date"><?php echo human_time_diff( strtotime( $review->created_at ), current_time( 'timestamp' ) ) . ' ' . __( 'ago', 'multivendorx' ); ?></time>
+                                    <time class="woocommerce-review__published-date">1 day ago(pkoro)</time>
                                 </p>
                                 
                                 <div class="description">
