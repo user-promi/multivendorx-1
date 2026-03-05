@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 
 registerBlockType('multivendorx/marketplace-coupons', {
 	apiVersion: 2,
-	title: 'Store Coupons',
+	title: __('Store Coupons', 'multivendorx'),
 	icon: 'tickets-alt',
 	category: 'multivendorx',
 
@@ -53,11 +53,11 @@ registerBlockType('multivendorx/marketplace-coupons', {
 							label={__('Order By', 'multivendorx')}
 							value={attributes.orderby}
 							options={[
-								{ label: 'Date', value: 'date' },
-								{ label: 'ID', value: 'id' },
-								{ label: 'Title', value: 'title' },
-								{ label: 'Code', value: 'code' },
-								{ label: 'Modified', value: 'modified' },
+								{ label: __('Date', 'multivendorx'), value: 'date' },
+								{ label: __('ID', 'multivendorx'), value: 'id' },
+								{ label: __('Title', 'multivendorx'), value: 'title' },
+								{ label: __('Code', 'multivendorx'), value: 'code' },
+								{ label: __('Modified', 'multivendorx'), value: 'modified' },
 							]}
 							onChange={(value) =>
 								setAttributes({ orderby: value })
@@ -68,8 +68,8 @@ registerBlockType('multivendorx/marketplace-coupons', {
 							label={__('Order', 'multivendorx')}
 							value={attributes.order}
 							options={[
-								{ label: 'Descending', value: 'DESC' },
-								{ label: 'Ascending', value: 'ASC' },
+								{ label: __('Descending', 'multivendorx'), value: 'DESC' },
+								{ label: __('Ascending', 'multivendorx'), value: 'ASC' },
 							]}
 							onChange={(value) =>
 								setAttributes({ order: value })
@@ -79,7 +79,6 @@ registerBlockType('multivendorx/marketplace-coupons', {
 					</PanelBody>
 				</InspectorControls>
 
-				{/* Editor preview placeholder */}
 				<div style={{ padding: '20px', background: '#f7f7f7' }}>
 					<strong>{__('Store Coupons Preview', 'multivendorx')}</strong>
 					<p>
