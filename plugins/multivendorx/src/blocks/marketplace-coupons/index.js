@@ -8,19 +8,11 @@ import { __ } from '@wordpress/i18n';
 
 registerBlockType('multivendorx/marketplace-coupons', {
 	apiVersion: 2,
-	title: 'Classic Store Coupons',
+	title: 'Store Coupons',
 	icon: 'tickets-alt',
 	category: 'multivendorx',
 
 	attributes: {
-		store_id: {
-			type: 'string',
-			default: '',
-		},
-		store_slug: {
-			type: 'string',
-			default: '',
-		},
 		perPage: {
 			type: 'number',
 			default: 10,
@@ -42,22 +34,6 @@ edit({ attributes, setAttributes }) {
 		<div {...blockProps}>
 			<InspectorControls>
 				<PanelBody title={__('Coupon Settings', 'multivendorx')} initialOpen={true}>
-					<TextControl
-						label={__('Store ID', 'multivendorx')}
-						value={attributes.store_id}
-						onChange={(value) =>
-							setAttributes({ store_id: value })
-						}
-					/>
-
-					<TextControl
-						label={__('Store Slug', 'multivendorx')}
-						value={attributes.store_slug}
-						onChange={(value) =>
-							setAttributes({ store_slug: value })
-						}
-					/>
-
 					<TextControl
 						label={__('Coupons Per Page', 'multivendorx')}
 						type="number"
