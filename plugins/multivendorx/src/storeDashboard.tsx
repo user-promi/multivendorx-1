@@ -66,6 +66,11 @@ const Dashboard = () => {
 	const userDropdownRef = useRef<HTMLDivElement>(null);
 	const { modules }     = useModules();
 
+	useEffect(() => {
+		if (!modules?.length) return;
+		localStorage.setItem('active_modules', JSON.stringify(modules));
+	}, [modules]);
+	
 	const DEFAULT_TAB = 'dashboard';
 
 	const hasCapability = (capability: any): boolean => {
