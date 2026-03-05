@@ -404,7 +404,7 @@ const StoreSettings = ({
 				return null;
 		}
 	};
-console.log('emails', emails)
+
 	return (
 		<>
 			<Notice
