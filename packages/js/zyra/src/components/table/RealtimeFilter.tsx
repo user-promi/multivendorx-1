@@ -85,9 +85,9 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
                             multiple={filter.multiple}
                             onChange={(selected) => {
                                 if (filter.multiple && Array.isArray(selected)) {
-                                    onFilterChange(filter.key, selected.map(s => s.value));
+                                    onFilterChange(filter.key, selected.map(s => s));
                                 } else if (!Array.isArray(selected)) {
-                                    onFilterChange(filter.key, selected?.value || '');
+                                    onFilterChange(filter.key, selected || '');
                                 }
                             }}
                         />
