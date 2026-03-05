@@ -233,7 +233,7 @@ const Modules: React.FC<ModuleProps> = ({
                 {/* FILTER SECTION */}
                 {variant === 'default' && (
                     <div className="filter-wrapper">
-<div className="category-filter">
+                        <div className="category-filter">
                             {modulesArray.category && categories.length > 1 &&
                                 categories.map((category) => (
                                     <span
