@@ -19,7 +19,7 @@ import {
 import { formatLocalDate } from '@/services/commonFunction';
 
 type Review = {
-	review_id: number;
+	id: number;
 	store_id: number;
 	customer_id: number;
 	customer_name: string;
@@ -59,7 +59,7 @@ const StoreReview: React.FC = () => {
 				.put(
 					getApiLink(
 						appLocalizer,
-						`review/${selectedReview.review_id}`
+						`review/${selectedReview.id}`
 					),
 					{
 						reply: replyText,
@@ -161,7 +161,7 @@ const StoreReview: React.FC = () => {
 				params: {
 					page: query.paged || 1,
 					row: query.per_page || 10,
-					status: query.categoryFilter || '',
+					status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
 					search_value: query.searchValue || '',
 					store_id: appLocalizer.store_id,
 					start_date: query.filter?.created_at?.startDate
