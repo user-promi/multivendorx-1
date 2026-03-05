@@ -100,7 +100,7 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 								onChange={(selected) =>
 									handleChange(
 										'shipping_class',
-										selected.value
+										selected
 									)
 								}
 							/>
