@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, TextControl } from '@wordpress/components';
+import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
 import { render } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
 import StoreCouponList from './StoreCouponList';
@@ -27,48 +27,68 @@ registerBlockType('multivendorx/marketplace-coupons', {
 		},
 	},
 
-edit({ attributes, setAttributes }) {
-	const blockProps = useBlockProps();
+	edit({ attributes, setAttributes }) {
+		const blockProps = useBlockProps();
 
-	return (
-		<div {...blockProps}>
-			<InspectorControls>
-				<PanelBody title={__('Coupon Settings', 'multivendorx')} initialOpen={true}>
-					<TextControl
-						label={__('Coupons Per Page', 'multivendorx')}
-						type="number"
-						value={attributes.perPage}
-						onChange={(value) =>
-							setAttributes({
-								perPage: parseInt(value, 10) || 10,
-							})
-						}
-					/>
+		return (
+			<div {...blockProps}>
+				<InspectorControls>
+					<PanelBody
+						title={__('Coupon Settings', 'multivendorx')}
+						initialOpen={true}
+					>
 
-					<TextControl
-						label={__('Order By', 'multivendorx')}
-						help={__('date, id, title, code, modified', 'multivendorx')}
-						value={attributes.orderby}
-						onChange={(value) =>
-							setAttributes({ orderby: value })
-						}
-					/>
+						<TextControl
+							label={__('Coupons Per Page', 'multivendorx')}
+							type="number"
+							value={attributes.perPage}
+							onChange={(value) =>
+								setAttributes({
+									perPage: parseInt(value, 10) || 10,
+								})
+							}
+						/>
 
-					<TextControl
-						label={__('Order', 'multivendorx')}
-						help={__('ASC or DESC', 'multivendorx')}
-						value={attributes.order}
-						onChange={(value) =>
-							setAttributes({ order: value })
-						}
-					/>
-				</PanelBody>
-			</InspectorControls>
+						<SelectControl
+							label={__('Order By', 'multivendorx')}
+							value={attributes.orderby}
+							options={[
+								{ label: 'Date', value: 'date' },
+								{ label: 'ID', value: 'id' },
+								{ label: 'Title', value: 'title' },
+								{ label: 'Code', value: 'code' },
+								{ label: 'Modified', value: 'modified' },
+							]}
+							onChange={(value) =>
+								setAttributes({ orderby: value })
+							}
+						/>
 
-			<StoreCouponList {...attributes} />
-		</div>
-	);
-},
+						<SelectControl
+							label={__('Order', 'multivendorx')}
+							value={attributes.order}
+							options={[
+								{ label: 'Descending', value: 'DESC' },
+								{ label: 'Ascending', value: 'ASC' },
+							]}
+							onChange={(value) =>
+								setAttributes({ order: value })
+							}
+						/>
+
+					</PanelBody>
+				</InspectorControls>
+
+				{/* Editor preview placeholder */}
+				<div style={{ padding: '20px', background: '#f7f7f7' }}>
+					<strong>{__('Store Coupons Preview', 'multivendorx')}</strong>
+					<p>
+						{__('Coupons will render on the frontend.', 'multivendorx')}
+					</p>
+				</div>
+			</div>
+		);
+	},
 
 	save({ attributes }) {
 		return (
@@ -80,7 +100,6 @@ edit({ attributes, setAttributes }) {
 	},
 });
 
-// Frontend render
 document.addEventListener('DOMContentLoaded', () => {
 	const element = document.getElementById('marketplace-coupons');
 
