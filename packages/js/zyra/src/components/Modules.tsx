@@ -267,7 +267,7 @@ const Modules: React.FC<ModuleProps> = ({
                                 value={selectedFilter}
                                 size="8rem"
                                 onChange={(newValue) =>
-                                    setSelectedFilter(newValue.value)
+                                    setSelectedFilter(newValue)
                                 }
                             />
                         </div>
