@@ -43,7 +43,7 @@ const FormGroup: React.FC<FormGroupProps> = ({
 				{notice && (
 					<Notice
 						type={noticeType}
-						position="inline"
+						displayPosition="inline"
 						message={notice}
 					/>
 				)}

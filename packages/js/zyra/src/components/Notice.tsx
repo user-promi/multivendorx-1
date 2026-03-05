@@ -9,7 +9,7 @@ export interface NoticeProps {
     title?: string;
     message?: string | string[];
     type?: 'info' | 'success' | 'warning' | 'error' | 'banner';
-    position?: 'inline' | NoticePosition;
+    displayPosition?: 'inline' | NoticePosition;
     actionLabel?: string;
     onAction?: () => void;
     validity?: number | 'lifetime';
@@ -20,7 +20,7 @@ export const Notice: React.FC<NoticeProps> = ({
     title,
     message,
     type = 'success',
-    position = 'notice',
+    displayPosition = 'notice',
     actionLabel,
     onAction,
     validity = 'lifetime',
@@ -28,17 +28,17 @@ export const Notice: React.FC<NoticeProps> = ({
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        if (position === 'inline') return;
+        if (displayPosition === 'inline') return;
 
         addNotice(
-            { uniqueKey, title, message, type, position, actionLabel, onAction },
+            { uniqueKey, title, message, type, displayPosition, actionLabel, onAction },
             validity
         );
         setIsVisible(false);
     }, []);
 
     // INLINE rendering
-    if (position !== 'inline') return null;
+    if (displayPosition !== 'inline') return null;
     if (!isVisible) return null;
     if (!title && !message) return null;
 
@@ -54,7 +54,7 @@ export const Notice: React.FC<NoticeProps> = ({
     };
 
     return (
-        <div className={`ui-notice type-${type} display-${position}`}>
+        <div className={`ui-notice type-${type} display-${displayPosition}`}>
             {renderNoticeContent(item, () => setIsVisible(false))}
         </div>
     );
