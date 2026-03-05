@@ -48,11 +48,11 @@ export default {
 		// 		},
 		// 	],
 		// },
-		// {
-		// 	key: 'rejected_msg',
-		// 	label: __('Message shown to rejected stores', 'multivendorx'),
-		// 	type: 'textarea',
-		// 	des: __('What rejected stores can do', 'multivendorx'),
-		// },
+		{
+			key: 'rejected_msg',
+			label: __('Message shown to rejected stores', 'multivendorx'),
+			type: 'textarea',
+			des: __('What rejected stores can do', 'multivendorx'),
+		},
 	],
 };

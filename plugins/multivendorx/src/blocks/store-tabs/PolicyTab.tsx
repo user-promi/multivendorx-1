@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 const PolicyTab = () => {
 	const policies = StoreInfo.store_policies || {};
+
 	const hasValue = (value) =>
 		value && value.toString().trim() !== '';
 

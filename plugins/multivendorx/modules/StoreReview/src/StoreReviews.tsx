@@ -221,7 +221,7 @@ const StoreReviews: React.FC = () => {
 				params: {
 					page: query.paged || 1,
 					row: query.per_page || 10,
-					status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
+					status: query.categoryFilter || '',
 					search_value: query.searchValue || '',
 					store_id: query?.filter?.storeId,
 					start_date: query.filter?.created_at?.startDate
@@ -247,7 +247,7 @@ const StoreReviews: React.FC = () => {
 
 				setCategoryCounts([
 					{
-						value: 'all',
+						value: '',
 						label: 'All',
 						count: Number(response.headers['x-wp-total']) || 0,
 					},

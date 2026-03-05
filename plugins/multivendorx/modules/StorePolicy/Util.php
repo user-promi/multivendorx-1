@@ -27,35 +27,30 @@ class Util {
      * @return array
      */
     public static function get_store_policies( $store_id = 0, $product_id = 0 ) {
-
         $policies = array();
 
         // Global defaults
-        $values = array(
-            'store_policy'        => MultiVendorX()->setting->get_setting( 'store_policy', '' ),
-            'shipping_policy'     => MultiVendorX()->setting->get_setting( 'shipping_policy', '' ),
-            'refund_policy'       => MultiVendorX()->setting->get_setting( 'refund_policy', '' ),
-            'cancellation_policy' => MultiVendorX()->setting->get_setting( 'cancellation_policy', '' ),
-        );
+        $store_policy        = MultiVendorX()->setting->get_setting( 'store_policy', array() );
+        $shipping_policy     = MultiVendorX()->setting->get_setting( 'shipping_policy', array() );
+        $refund_policy       = MultiVendorX()->setting->get_setting( 'refund_policy', array() );
+        $cancellation_policy = MultiVendorX()->setting->get_setting( 'cancellation_policy', array() );
 
         /**
-         * Product override
+         * Product-level override
          */
         if ( $product_id ) {
+            $shipping_override     = get_post_meta( $product_id, Utill::POST_META_SETTINGS['shipping_policy'], true );
+            $refund_override       = get_post_meta( $product_id, Utill::POST_META_SETTINGS['refund_policy'], true );
+            $cancellation_override = get_post_meta( $product_id, Utill::POST_META_SETTINGS['cancellation_policy'], true );
 
-            $product_meta = array(
-                'shipping_policy'     => Utill::POST_META_SETTINGS['shipping_policy'],
-                'refund_policy'       => Utill::POST_META_SETTINGS['refund_policy'],
-                'cancellation_policy' => Utill::POST_META_SETTINGS['cancellation_policy'],
-            );
-
-            foreach ( $product_meta as $key => $meta_key ) {
-
-                $override = get_post_meta( $product_id, $meta_key, true );
-
-                if ( ! empty( $override ) ) {
-                    $values[ $key ] = $override;
-                }
+            if ( ! empty( $shipping_override ) ) {
+                $shipping_policy = $shipping_override;
+            }
+            if ( ! empty( $refund_override ) ) {
+                $refund_policy = $refund_override;
+            }
+            if ( ! empty( $cancellation_override ) ) {
+                $cancellation_policy = $cancellation_override;
             }
 
             if ( ! $store_id ) {
@@ -64,53 +59,40 @@ class Util {
         }
 
         /**
-         * Store override
+         * Store-level override
          */
-        $allowed = array();
-
         if ( $store_id ) {
+            $store                     = new Store( $store_id );
+            $privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
+            if ( in_array( 'store', $privacy_override_settings, true ) ) {
+                $store_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_policy'] );
+            }
 
-            $store   = new Store( $store_id );
-            $allowed = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
+            if ( in_array( 'shipping', $privacy_override_settings, true ) ) {
+                $shipping_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['shipping_policy'] );
+            }
 
-            $store_meta = array(
-                'store_policy'        => Utill::STORE_SETTINGS_KEYS['store_policy'],
-                'shipping_policy'     => Utill::STORE_SETTINGS_KEYS['shipping_policy'],
-                'refund_policy'       => Utill::STORE_SETTINGS_KEYS['refund_policy'],
-                'cancellation_policy' => Utill::STORE_SETTINGS_KEYS['cancellation_policy'],
-            );
-
-            foreach ( $store_meta as $key => $meta_key ) {
-
-                $type = str_replace( '_policy', '', $key );
-
-                if ( ! in_array( $type, $allowed, true ) ) {
-                    continue;
-                }
-
-                $override = $store->get_meta( $meta_key );
-
-                if ( ! empty( $override ) ) {
-                    $values[ $key ] = $override;
-                }
+            if ( in_array( 'refund', $privacy_override_settings, true ) ) {
+                $refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['refund_policy'] );
+            }
+            
+            if ( in_array( 'cancellation_return', $privacy_override_settings, true ) ) {
+                $cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['cancellation_policy'] );
             }
         }
 
-        /**
-         * Normalize response
-         */
-
-        foreach ( $values as $key => $value ) {
-
-            $type = str_replace( '_policy', '', $key );
-
-            if ( $store_id && ! in_array( $type, $allowed, true ) ) {
-                continue;
-            }
-
-            if ( ! empty( $value ) ) {
-                $policies[ $key ] = $value;
-            }
+        // Normalize response
+        if ( ! empty( $store_policy ) ) {
+            $policies['store_policy'] = $store_policy;
+        }
+        if ( ! empty( $shipping_policy ) ) {
+            $policies['shipping_policy'] = $shipping_policy;
+        }
+        if ( ! empty( $refund_policy ) ) {
+            $policies['refund_policy'] = $refund_policy;
+        }
+        if ( ! empty( $cancellation_policy ) ) {
+            $policies['cancellation_policy'] = $cancellation_policy;
         }
 
         return $policies;

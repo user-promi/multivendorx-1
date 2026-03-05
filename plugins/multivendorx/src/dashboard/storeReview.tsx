@@ -161,7 +161,7 @@ const StoreReview: React.FC = () => {
 				params: {
 					page: query.paged || 1,
 					row: query.per_page || 10,
-					status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
+					status: query.categoryFilter || '',
 					search_value: query.searchValue || '',
 					store_id: appLocalizer.store_id,
 					start_date: query.filter?.created_at?.startDate
@@ -187,7 +187,7 @@ const StoreReview: React.FC = () => {
 
 				setCategoryCounts([
 					{
-						value: 'all',
+						value: '',
 						label: __('All', 'multivendorx'),
 						count: Number(response.headers['x-wp-total']) || 0,
 					},
