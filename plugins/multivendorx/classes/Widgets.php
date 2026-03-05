@@ -8,7 +8,6 @@ class Widgets {
     public function __construct() {
         add_action( 'widgets_init', array( $this, 'register_sidebar' ) );
         add_filter( 'register_block_type_args', array( $this, 'attach_sidebar_render_callback' ), 10, 2 );
-        add_filter( 'block_categories_all', array( $this, 'filter_store_block_category' ), 10, 2 );
     }
 
     /**
@@ -54,24 +53,5 @@ class Widgets {
         </aside>
         <?php
         return ob_get_clean();
-    }
-
-    /**
-     * Hide MultiVendorX block category everywhere except store page
-     */
-    public function filter_store_block_category( $categories, $editor_context ) {
-        // If this is the store page/editor allow category
-        if ( Utill::is_store_page() ) {
-            return $categories;
-        }
-
-        // Otherwise remove the category
-        foreach ( $categories as $key => $category ) {
-            if ( $category['slug'] === 'multivendorx-store-shop' ) {
-                unset( $categories[ $key ] );
-            }
-        }
-
-        return $categories;
     }
 }
