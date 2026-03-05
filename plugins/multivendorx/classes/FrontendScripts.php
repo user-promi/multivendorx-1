@@ -402,6 +402,12 @@ class FrontendScripts {
                 'prosetting' => true,
                 'module'     => 'store-inventory',
             ),
+            'view_support_tickets'=> array(
+                'prosetting' => true,
+            ),
+            'reply_support_tickets'=> array(
+                'prosetting' => true,
+            ),
         );
 
         $store_ids = array();
