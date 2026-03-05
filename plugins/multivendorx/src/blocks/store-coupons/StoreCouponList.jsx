@@ -128,7 +128,6 @@ const StoreCouponList = ({
 									{coupon.code}
 
 									{copiedCode === coupon.code ? (
-										// Show check icon when copied
 										<svg
 											width="16"
 											height="16"
