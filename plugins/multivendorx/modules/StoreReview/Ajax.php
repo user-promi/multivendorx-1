@@ -25,8 +25,7 @@ class Ajax
     /**
      * Constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         add_action('wp_ajax_multivendorx_store_review_submit', array($this, 'submit_review'));
         add_action('wp_ajax_nopriv_multivendorx_store_review_submit', array($this, 'submit_review'));
 
@@ -40,8 +39,7 @@ class Ajax
     /**
      * Submit a review.
      */
-    public function submit_review()
-    {
+    public function submit_review() {
         check_ajax_referer('multivendorx-review-frontend-script', 'nonce');
 
         $data = filter_input_array(
@@ -200,8 +198,7 @@ class Ajax
     /**
      * Get average ratings for a store.
      */
-    public function get_avg_ratings()
-    {
+    public function get_avg_ratings() {
         $store_id   = filter_input(INPUT_POST, 'store_id', FILTER_SANITIZE_NUMBER_INT);
         $parameters = MultiVendorX()->setting->get_setting('ratings_parameters', array());
 
