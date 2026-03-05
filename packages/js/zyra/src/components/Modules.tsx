@@ -263,8 +263,8 @@ const Modules: React.FC<ModuleProps> = ({
                                 options={statusOptions}
                                 value={selectedFilter}
                                 size="8rem"
-                                onChange={(newValue) =>
-                                    setSelectedFilter(newValue)
+                                onChange={(value) =>
+                                    setSelectedFilter(value)
                                 }
                             />
                         </div>
