@@ -55,7 +55,6 @@ class Block {
             'marketplace-stores',
             'marketplace-products',
             'registration-form',
-            'store-coupons',
             'store-tabs',
             'contact-info',
             'store-name',
