@@ -417,6 +417,7 @@ class FrontendScripts {
 
                 if ( ! empty( $first_store['id'] ) ) {
                     update_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], $first_store['id'] );
+                    MultiVendorX()->active_store = $first_store['id'];
                 }
             }
         }
