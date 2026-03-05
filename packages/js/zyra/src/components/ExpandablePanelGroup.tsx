@@ -7,7 +7,6 @@ import { FIELD_REGISTRY } from './FieldRegistry';
 import FormGroup from './UI/FormGroup';
 import { AdminButtonUI } from './AdminButton';
 import FormGroupWrapper from './UI/FormGroupWrapper';
-import { useOutsideClick } from './useOutsideClick';
 
 interface AppLocalizer {
     khali_dabba?: boolean;
@@ -35,6 +34,7 @@ interface PanelFormField {
     | 'multi-select'
     | 'button'
     | 'nested';
+
     label: string;
     placeholder?: string;
     des?: string;
@@ -173,22 +173,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
             )
     );
 
-    // Replace all click outside handlers with useOutsideClick
-    useOutsideClick(wrapperRef, () => setOpenDropdownId(null));
-    
-    useOutsideClick(iconPickerRef, () => {
-        if (iconDropdownOpen) setIconDropdownOpen(null);
-    });
-
-    // Combined outside click for inline editing
-    useOutsideClick(titleInputRef, () => {
-        if (editingMethodId && editingField === 'title') saveEdit();
-    });
-
-    useOutsideClick(descTextareaRef, () => {
-        if (editingMethodId && editingField === 'description') saveEdit();
-    });
-
+    // Helpers
     const isFilled = (val: any): boolean => {
         if (val === undefined || val === null) return false;
         if (typeof val === 'string') return val.trim() !== '';
@@ -226,26 +211,59 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
 
     // Close inline edit on outside click or Escape / Ctrl+Enter
     useEffect(() => {
+        const handleClickOutsideEdit = (event: MouseEvent) => {
+            if (editingMethodId && editingField) {
+                const isTitleInput = titleInputRef.current?.contains(event.target as Node);
+                const isDescTextarea = descTextareaRef.current?.contains(event.target as Node);
+                if (!isTitleInput && !isDescTextarea) saveEdit();
+            }
+        };
+
         const handleKeyDown = (event: KeyboardEvent) => {
             if (!editingMethodId || !editingField) return;
             if (event.key === 'Escape') cancelEdit();
             if (event.key === 'Enter' && event.ctrlKey) saveEdit();
         };
 
+        document.addEventListener('mousedown', handleClickOutsideEdit);
         document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutsideEdit);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
     }, [editingMethodId, editingField, tempTitle, tempDescription]);
 
-    // Close icon picker on Escape
+    // Close the right-section dropdown on outside click
     useEffect(() => {
-        const handleEscKey = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && iconDropdownOpen) {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+                setOpenDropdownId(null);
+            }
+        };
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+
+    // Close the icon picker on outside click or Escape
+    useEffect(() => {
+        if (!iconDropdownOpen) return;
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (iconPickerRef.current && !iconPickerRef.current.contains(event.target as Node)) {
                 setIconDropdownOpen(null);
             }
         };
 
+        const handleEscKey = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setIconDropdownOpen(null);
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
         document.addEventListener('keydown', handleEscKey);
-        return () => document.removeEventListener('keydown', handleEscKey);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleEscKey);
+        };
     }, [iconDropdownOpen]);
 
     // Recalculate wizard field progress when value changes
@@ -279,9 +297,12 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                 methodMap.set(method.id, {
                     ...existingMethod,
                     ...method,
+                    // Preserve disableBtn from original method or template
                     disableBtn: method.disableBtn ?? existingMethod?.disableBtn ?? false,
-                    iconEnable: method.iconEnable ?? existingMethod?.iconEnable ?? (method.isCustom ? addNewTemplate?.iconEnable : false),
-                    iconOptions: method.iconOptions ?? existingMethod?.iconOptions ?? (method.isCustom ? addNewTemplate?.iconOptions : []),
+                    // iconEnable / iconOptions are not persisted to backend value,
+                    // so after a refresh they must be restored from the template config
+                    iconEnable: method.iconEnable ?? existingMethod?.iconEnable ?? (method.isCustom ? addNewTemplate?.iconEnable : undefined),
+                    iconOptions: method.iconOptions ?? existingMethod?.iconOptions ?? (method.isCustom ? addNewTemplate?.iconOptions : undefined),
                 });
             });
 
@@ -343,7 +364,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
             icon: addNewTemplate.icon || '',
             label: addNewTemplate.label || 'New Item',
             desc: addNewTemplate.desc || '',
-            iconEnable: addNewTemplate.iconEnable || false,
+            iconEnable: addNewTemplate.iconEnable || '',
             iconOptions: addNewTemplate.iconOptions || [],
             connected: false,
             isCustom: true,
@@ -412,7 +433,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     const handleInputChange = (
         methodKey: string,
         fieldKey: string,
-        fieldValue: string | string[] | number | boolean 
+        fieldValue: string | string[] | number | boolean | undefined
     ) => {
         if (fieldKey === 'wizardButtons') return;
 
@@ -659,9 +680,11 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                 {method.formFields && method.formFields.length > 0 && (
                                     <div className="toggle-icon">
                                         <i
-                                            className={`adminfont-${isActive
+                                            className={`adminfont-${isActive && isEnabled
                                                     ? 'keyboard-arrow-down'
-                                                    : 'pagination-right-arrow'
+                                                    : isActive && method.isCustom && isWizardMode
+                                                        ? 'keyboard-arrow-down'
+                                                        : 'pagination-right-arrow'
                                                 }`}
                                             onClick={() => canAccess && setTabActive(method.id)}
                                         />
@@ -940,7 +963,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                                 <FormGroup
                                                     row
                                                     key={field.key}
-                                                    label={field.type !== 'notice' ? field.label : ''}
+                                                    label={field.type !== 'notice' ? field.label : undefined}
                                                     desc={field.desc}
                                                     htmlFor={field.name}
                                                 >
@@ -982,7 +1005,7 @@ const ExpandablePanelGroup: FieldComponent = {
             appLocalizer={appLocalizer}
             methods={field.modal ?? []} // Array of available payment methods/options.
             addNewBtn={field.addNewBtn}
-            addNewTemplate={field.addNewTemplate}
+            addNewTemplate={field.addNewTemplate ?? []}
             iconEnable={field.iconEnable}
             iconOptions={field.iconOptions || []}
             value={value || {}}
@@ -994,7 +1017,9 @@ const ExpandablePanelGroup: FieldComponent = {
         />
     ),
 
-    validate: () => null,
+    validate: (field, value) => {
+        return null;
+    },
 };
 
 export default ExpandablePanelGroup;
