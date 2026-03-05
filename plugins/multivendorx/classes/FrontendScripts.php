@@ -176,7 +176,6 @@ class FrontendScripts {
             'store-policy',
             'product-category',
             'store-quick-info',
-            'highlighted-store-products',
         ];
 
         $register_scripts = apply_filters(
@@ -602,7 +601,10 @@ class FrontendScripts {
                 'multivendorx-marketplace-products-script' => array(
                     'object_name' => 'productList',
                     'use_rest'    => true,
-                    'use_settings'    => true,
+                    'use_settings'=> true,
+                    'data'        => array(
+                        'storeDetails'  => StoreUtil::get_specific_store_info(),
+                    )
                 ),
                 'multivendorx-marketplace-coupons-script'  => array(
                     'object_name' => 'couponList',

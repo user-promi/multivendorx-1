@@ -69,7 +69,6 @@ class Block {
             'store-description',
             'store-review',
             'store-policy',
-            'highlighted-store-products',
             'product-category',
             'store-quick-info',
             'store-sidebar',
