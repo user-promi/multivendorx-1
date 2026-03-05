@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { addNotice, NoticePosition, renderNoticeContent, NoticeItem } from './NoticeReceiver';
 import "../styles/web/Notice.scss";
+import { FieldComponent } from './types';
 
 export interface NoticeProps {
     uniqueKey?: string; // deduplication key — notices with the same key won't stack
@@ -59,3 +60,22 @@ export const Notice: React.FC<NoticeProps> = ({
         </div>
     );
 };
+
+const NoticeField: FieldComponent = {
+    render: ({ field }) => {        
+        return (
+            <Notice
+                type={field.noticeType || field.type || "info"}
+                displayPosition={field.displayPosition}
+                title={field.title}
+                message={field.message}
+                actionLabel={field.actionLabel}
+                onAction={field.onAction}
+                validity={field.validity}
+                uniqueKey={field.uniqueKey}
+            />
+        );
+    },
+};
+
+export default NoticeField;

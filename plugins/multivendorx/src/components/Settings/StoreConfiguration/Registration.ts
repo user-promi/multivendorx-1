@@ -19,7 +19,7 @@ export default {
 				'multivendorx'
 			),
 			noticeType: 'info',
-			display: 'notice',
+			displayPosition: 'notice',
 		},
 		{
 			key: 'store_registration_from',

@@ -283,16 +283,13 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 										{__('Nautical miles', 'multivendorx')}
 									</option>
 								</select>
-							</form>
-
-							<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 								<button
 									className="woocommerce-button button wp-element-button"
 									onClick={requestUserLocation}
 								>
 									{__('Use My Current Location', 'multivendorx')}
 								</button>
-							</p>
+							</form>
 						</>
 					)}
 
@@ -398,7 +395,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 											</div>
 
 											<div className="store-details">
-												<h2>{store.store_name}</h2>
+												<h4>{store.store_name}</h4>
 
 												<div className="contact-wrapper">
 													{store.phone && (
