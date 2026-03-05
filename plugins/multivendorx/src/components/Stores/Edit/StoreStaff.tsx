@@ -70,12 +70,10 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 								type="multi-select"
 								value={formData.store_owners || []}
 								onChange={(selected: any) => {
-									console.log('selected', selected)
 									const store_owners =
 										(selected || []).map((option: any) =>
 											typeof option === 'object' ? option.value : option
 										);
-									console.log('store_owners', store_owners)
 									
 									const updated = {
 										...formData,
