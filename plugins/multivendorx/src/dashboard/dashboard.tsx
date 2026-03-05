@@ -517,7 +517,7 @@ const Dashboard: React.FC = () => {
 			color: themeColors[2],
 		},
 	];
-console.log('store', store)
+
 	return (
 		<>
 			<NavigatorHeader
