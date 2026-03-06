@@ -9,18 +9,6 @@ import {
 import { __ } from '@wordpress/i18n';
 
 const MinMax = ({ product, setProduct }) => {
-	const toggleCard = (cardId) => {
-		const body = document.querySelector(`#${cardId} .card-body`);
-		const arrow = document.querySelector(`#${cardId} .arrow-icon`);
-
-		if (!body || !arrow) {
-			return;
-		}
-
-		body.classList.toggle('hide-body');
-		arrow.classList.toggle('rotate');
-	};
-
 	const [minMaxMeta, setMinMaxMeta] = useState({
 		min_quantity: null,
 		max_quantity: null,
@@ -99,8 +87,8 @@ const MinMax = ({ product, setProduct }) => {
 						type="number"
 						preText={__('Min', 'multivendorx')}
 						value={minMaxMeta.min_quantity}
-						onChange={(e) =>
-							handleQuantityChange('min_quantity', e.target.value)
+						onChange={(value) =>
+							handleQuantityChange('min_quantity', value)
 						}
 					/>
 
@@ -109,8 +97,8 @@ const MinMax = ({ product, setProduct }) => {
 						type="number"
 						preText={__('Max', 'multivendorx')}
 						value={minMaxMeta.max_quantity}
-						onChange={(e) =>
-							handleQuantityChange('max_quantity', e.target.value)
+						onChange={(value) =>
+							handleQuantityChange('max_quantity', value)
 						}
 					/>
 				</FormGroup>
@@ -122,8 +110,8 @@ const MinMax = ({ product, setProduct }) => {
 						type="number"
 						preText={__('Min', 'multivendorx')}
 						value={minMaxMeta.min_amount}
-						onChange={(e) =>
-							handleQuantityChange('min_amount', e.target.value)
+						onChange={(value) =>
+							handleQuantityChange('min_amount', value)
 						}
 					/>
 
@@ -132,8 +120,8 @@ const MinMax = ({ product, setProduct }) => {
 						type="number"
 						preText={__('Max', 'multivendorx')}
 						value={minMaxMeta.max_amount}
-						onChange={(e) =>
-							handleQuantityChange('max_amount', e.target.value)
+						onChange={(value) =>
+							handleQuantityChange('max_amount', value)
 						}
 					/>
 				</FormGroup>

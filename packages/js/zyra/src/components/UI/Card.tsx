@@ -12,7 +12,6 @@ export type CardProps = {
   onIconClick?: () => void;
   action?: React.ReactNode;
   transparent?: boolean;
-  fullHeight?: boolean;
   contentWidth?: boolean;
   toggle?: boolean;
   badges?: {
@@ -32,7 +31,6 @@ const Card = ({
   onIconClick,
   action,
   transparent = false,
-  fullHeight = false,
   contentWidth = false,
   toggle = false,
   badges = [],
@@ -42,7 +40,7 @@ const Card = ({
   const [bodyVisible, setBodyVisible] = useState(true);
 
   return (
-    <div {...(id ? { id } : {})} className={`card-content ${transparent ? 'transparent' : ''} ${fullHeight ? 'full-height' : ''} ${contentWidth ? 'content-width' : ''} ${className ? className : ''}`}>
+    <div {...(id ? { id } : {})} className={`card-content ${transparent ? 'transparent' : ''} ${contentWidth ? 'content-width' : ''} ${className ? className : ''}`}>
       {isLoading ? (
         <>
           <div className="card-header">

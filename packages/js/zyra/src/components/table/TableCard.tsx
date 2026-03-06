@@ -185,7 +185,7 @@ const TableCard: React.FC<TableCardProps> = ({
 		<div className="admin-table-wrapper">
 			{/* HEADER */}
 			<div className="table-card-header">
-				<div className="table-card-title">{title}</div>
+				<div className="title">{title}</div>
 			</div>
 
 			{/* BODY */}
@@ -258,7 +258,7 @@ const TableCard: React.FC<TableCardProps> = ({
 			<Table
 				rows={rows}
 				headers={visibleHeaders}
-				caption={title}
+				// caption={title}
 				query={query}
 				onSort={
 					onSort ||

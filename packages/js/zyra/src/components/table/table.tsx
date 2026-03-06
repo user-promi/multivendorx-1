@@ -19,7 +19,7 @@ const DESC = 'desc';
 const Table: React.FC<TableProps> = ({
     headers = {},
     rows = [],
-    caption,
+    // caption,
     className,
     onSort = () => { },
     query = {},
@@ -143,12 +143,12 @@ const Table: React.FC<TableProps> = ({
             onScroll={updateScrollState}
         >
             <table className="admin-table">
-                {caption && (
+                {/* {caption && (
                     <caption className="table-caption screen-reader-only">
                         {caption}
                         {tabIndex === 0 && <small>(scroll to see more)</small>}
                     </caption>
-                )}
+                )} */}
 
                 <thead className="admin-table-header">
                     <tr className="header-row">
