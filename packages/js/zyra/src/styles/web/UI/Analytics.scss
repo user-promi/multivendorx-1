@@ -13,13 +13,13 @@
         background: $background-white;
         padding: 1rem;
         width: 100%;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         box-shadow: $box-shadow;
         box-sizing: border-box;
 
         .analytics-icon {
             i {
-                border-radius: 0.313rem;
+                border-radius: $border-radius-small;
                 font-size: 2.5rem;
                 padding: 0.625rem;
                 line-height: 1.5;
@@ -89,7 +89,7 @@
                 i {
                     padding: 0.5rem;
                     font-size: 1.5rem;
-                    border-radius: 0.313rem;
+                    border-radius: $border-radius-small;
                     color: #fff;
                     margin-top: 0.625rem;
                 }

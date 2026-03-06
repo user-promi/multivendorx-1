@@ -9,7 +9,7 @@
 
 .admin-filter-wrapper {
     display: flex;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
     background: transparent;
     justify-content: center;
     width: 100%;
@@ -22,14 +22,14 @@
         gap: 0.313rem;
         align-items: center;
         background: $theme-background-color;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
 
         .title {
             height: 100%;
             display: flex;
             align-items: center;
             padding: 0 0.5rem;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
             color: #fff;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
@@ -74,7 +74,7 @@
             .action-item {
                 padding: 0.45rem;
                 transition: all 0.3s ease;
-                border-radius: 0.313rem;
+                border-radius: $border-radius-small;
                 display: flex;
 
                 .admin-btn {
@@ -138,13 +138,13 @@
     font-size: 0.875rem;
     background: #fff;
     padding: 0.45rem;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
     width: fit-content;
     gap: 0.313rem;
 
     .filter-item {
         cursor: pointer;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         padding: 0.313rem 0.625rem;
         font-weight: 600;
         color: #000000af;
@@ -261,7 +261,7 @@
             img {
                 width: 2.5rem;
                 height: 2.5rem;
-                border-radius: 0.313rem;
+                border-radius: $border-radius-small;
                 object-fit: cover;
             }
 
@@ -275,7 +275,7 @@
                 background: $theme-background-color;
                 color: $theme-color;
                 font-size: 1.313rem;
-                border-radius: 0.313rem;
+                border-radius: $border-radius-small;
             }
 
             &:hover {
@@ -383,7 +383,7 @@
                             font-size: 0.813rem;
                             padding: 0.125rem 0.5rem;
                             color: $theme-color;
-                            border-radius: 0.313rem;
+                            border-radius: $border-radius-small;
                         }
 
                         &.overflow {
