@@ -30,6 +30,7 @@ class Frontend {
         // Load scripts.
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
         add_action( 'wp_footer', array( $this, 'render_login_modal' ) );
+        add_filter( 'multivendorx_store_info', array( $this, 'multivendorx_add_follower_count_to_store_info' ), 10, 2 );
     }
 
     public function register_script( $scripts ) {
@@ -112,5 +113,31 @@ class Frontend {
         .multivendorx-close { position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px; }
         </style>
         <?php
+    }
+
+    public function multivendorx_add_follower_count_to_store_info( $info, $store_obj ) {
+
+        $followers = maybe_unserialize(
+            $store_obj->meta_data[ \MultiVendorX\Utill::STORE_SETTINGS_KEYS['followers'] ] ?? array()
+        );
+
+        if ( ! is_array( $followers ) ) {
+            $followers = array();
+        }
+
+        // Normalize legacy format [1,2,3]
+        if ( isset( $followers[0] ) && is_int( $followers[0] ) ) {
+            $followers = array_map(
+                fn( $uid ) => array(
+                    'id'   => $uid,
+                    'date' => '',
+                ),
+                $followers
+            );
+        }
+
+        $info['followerCount'] = count( $followers );
+
+        return $info;
     }
 }

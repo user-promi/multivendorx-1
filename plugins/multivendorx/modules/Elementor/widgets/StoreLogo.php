@@ -89,8 +89,16 @@ class Store_Logo extends Widget_Image {
 
 		// Get logo from existing structure
 		$logo = $store['storeLogo'] ?? '';
+		$store_name = $store['storeName'] ?? '';
 
 		if ( empty( $logo ) ) {
+
+			$initials = ! empty( $store_name ) ? strtoupper( mb_substr( trim( $store_name ), 0, 2 ) ) : '';
+
+			echo '<div class="multivendorx-store-logo-fallback">';
+			echo esc_html( $initials );
+			echo '</div>';
+
 			return;
 		}
 
