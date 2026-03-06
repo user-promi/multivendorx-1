@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback, ReactNode } from 'react';
+import React, { useEffect, useRef, useState, ReactNode } from 'react';
 import '../styles/web/ExpandablePanelGroup.scss';
 import { getApiLink } from '../utils/apiService';
 import axios from 'axios';
@@ -7,9 +7,11 @@ import { FIELD_REGISTRY } from './FieldRegistry';
 import FormGroup from './UI/FormGroup';
 import { AdminButtonUI } from './AdminButton';
 import FormGroupWrapper from './UI/FormGroupWrapper';
-import { useOutsideClick } from './useOutsideClick';
+
+// ── Interfaces ────────────────────────────────────────────────────────────────
 
 interface AppLocalizer {
+    nonce?: string;        // Required by handleSaveSetupWizard
     khali_dabba?: boolean;
     site_url?: string;
 }
@@ -27,21 +29,21 @@ interface FieldOption {
 interface PanelFormField {
     key: string;
     type:
-    | 'text'
-    | 'checkbox'
-    | 'setting-toggle'
-    | 'clickable-list'
-    | 'notice'
-    | 'multi-select'
-    | 'button'
-    | 'nested';
+        | 'text'
+        | 'checkbox'
+        | 'setting-toggle'
+        | 'clickable-list'
+        | 'notice'
+        | 'multi-select'
+        | 'button'
+        | 'nested';
     label: string;
     placeholder?: string;
     des?: string;
     class?: string;
     desc?: string;
-    // rowNumber?: number;
-    // colNumber?: number;
+    rowNumber?: number;
+    colNumber?: number;
     options?: FieldOption[];
     modal?: ExpandablePanelMethod[];
     look?: string;
@@ -49,13 +51,13 @@ interface PanelFormField {
     rightContent?: string;
     proSetting?: boolean;
     moduleEnabled?: string;
-    // dependentSetting?: string;
-    // dependentPlugin?: string;
+    dependentSetting?: string;
+    dependentPlugin?: string;
     title?: string;
     link?: string;
-    // check?: boolean;
-    // hideCheckbox?: boolean;
-    // edit?: boolean;
+    check?: boolean;
+    hideCheckbox?: boolean;
+    edit?: boolean;
     iconEnable?: boolean;
     iconOptions?: string[];
     beforeElement?: string | ReactNode;
@@ -66,17 +68,17 @@ interface ExpandablePanelMethod {
     id: string;
     label: string;
     connected: boolean;
-    disableBtn?: boolean; // for enabled and disable show with settings btn
-    hideDeleteBtn?: boolean; // hide delete btn and show error text
+    disableBtn?: boolean;    // Show enable/disable + settings button instead of the toggle arrow
+    hideDeleteBtn?: boolean; // Hide delete button and show "Not Deletable" error text
     countBtn?: boolean;
     desc: string;
     formFields?: PanelFormField[];
     wrapperClass?: string;
     openForm?: boolean;
-    // single?: boolean;
-    // rowClass?: string;
+    single?: boolean;
+    rowClass?: string;
     edit?: boolean;
-    isCustom?: boolean; // for show edit and delete btn
+    isCustom?: boolean;      // User-created item — shows edit/delete controls
     required?: boolean;
     iconEnable?: boolean;
     iconOptions?: string[];
@@ -108,8 +110,11 @@ interface ExpandablePanelGroupProps {
     canAccess: boolean;
     addNewBtn?: boolean;
     addNewTemplate?: AddNewTemplate;
+    /** Minimum number of custom panels that must remain (cannot delete below this count). */
     min?: number;
 }
+
+// ── Pure helpers (defined outside component to avoid re-creation) ─────────────
 
 /** Fields that count toward wizard progress (excludes UI-only types). */
 const isCountableField = (f: PanelFormField) =>
@@ -117,7 +122,7 @@ const isCountableField = (f: PanelFormField) =>
 
 /**
  * Merge template formFields into a method without overwriting existing keys.
- * Used both in the initial state and in the value-sync effect.
+ * Used both for the initial state and in the value-sync effect.
  */
 const mergeTemplateFormFields = (
     method: ExpandablePanelMethod,
@@ -134,7 +139,8 @@ const mergeTemplateFormFields = (
     };
 };
 
-// Component
+// ── Component ─────────────────────────────────────────────────────────────────
+
 export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     methods,
     value,
@@ -159,37 +165,118 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     const [tempTitle, setTempTitle] = useState('');
     const [tempDescription, setTempDescription] = useState('');
 
-    const wrapperRef = useRef<HTMLDivElement>(null);
     const iconPickerRef = useRef<HTMLDivElement>(null);
     const titleInputRef = useRef<HTMLInputElement>(null);
     const descTextareaRef = useRef<HTMLTextAreaElement>(null);
 
     const templateFields = addNewTemplate?.formFields ?? [];
 
-    const [ExpandablePanelMethods, setExpandablePanelMethods] = useState<ExpandablePanelMethod[]>(
-        () =>
-            methods.map((method) =>
-                method.isCustom ? mergeTemplateFormFields(method, templateFields) : method
-            )
-    );
+    const expandableMethods = useMemo(() => {
+   const methodMap = new Map();
 
-    // Replace all click outside handlers with useOutsideClick
-    useOutsideClick(wrapperRef, () => setOpenDropdownId(null));
-    
-    useOutsideClick(iconPickerRef, () => {
-        if (iconDropdownOpen) setIconDropdownOpen(null);
-    });
+   methods.forEach(m => methodMap.set(m.id, m));
 
-    // Combined outside click for inline editing
-    useOutsideClick(titleInputRef, () => {
-        if (editingMethodId && editingField === 'title') saveEdit();
-    });
+   Object.entries(value).forEach(([id, method]) => {
+       const existing = methodMap.get(id);
 
-    useOutsideClick(descTextareaRef, () => {
-        if (editingMethodId && editingField === 'description') saveEdit();
-    });
+       methodMap.set(id, {
+           ...existing,
+           ...method
+       });
+   });
 
-    const isFilled = (val: any): boolean => {
+   return Array.from(methodMap.values()).map(m =>
+       m.isCustom ? mergeTemplateFormFields(m, templateFields) : m
+   );
+
+}, [methods, value, templateFields]);
+
+    // ── Effects ───────────────────────────────────────────────────────────────
+
+    // Focus the inline-edit input as soon as editing begins
+    useEffect(() => {
+        if (editingMethodId && editingField === 'title') {
+            titleInputRef.current?.focus();
+            titleInputRef.current?.select();
+        } else if (editingMethodId && editingField === 'description') {
+            descTextareaRef.current?.focus();
+            descTextareaRef.current?.select();
+        }
+    }, [editingMethodId, editingField]);
+
+    // Close inline edit on outside click (mousedown) or keyboard shortcut
+    useEffect(() => {
+        if (!editingMethodId || !editingField) return;
+
+        const handleMouseDown = (e: MouseEvent) => {
+            const target = e.target as Node;
+            const insideTitle = titleInputRef.current?.contains(target);
+            const insideDesc = descTextareaRef.current?.contains(target);
+            if (!insideTitle && !insideDesc) saveEdit();
+        };
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') cancelEdit();
+            if (e.key === 'Enter' && e.ctrlKey) saveEdit();
+        };
+
+        document.addEventListener('mousedown', handleMouseDown);
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('mousedown', handleMouseDown);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    // saveEdit / cancelEdit read state via closure; re-register when temp values change
+    }, [editingMethodId, editingField, tempTitle, tempDescription]);
+
+    // Close the right-section dropdown on any outside click.
+    // FIX: Previously used a single wrapperRef inside a .map() — only the last
+    // rendered element held the ref, breaking outside-click detection for all
+    // other rows. Now we listen on the document only while a dropdown is open,
+    // relying on stopPropagation inside the dropdown to keep it alive.
+    useEffect(() => {
+        if (!openDropdownId) return;
+        const close = () => setOpenDropdownId(null);
+        document.addEventListener('click', close);
+        return () => document.removeEventListener('click', close);
+    }, [openDropdownId]);
+
+    // Close the icon picker on outside click or Escape
+    useEffect(() => {
+        if (!iconDropdownOpen) return;
+
+        const handleClickOutside = (e: MouseEvent) => {
+            if (iconPickerRef.current && !iconPickerRef.current.contains(e.target as Node)) {
+                setIconDropdownOpen(null);
+            }
+        };
+        const handleEsc = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setIconDropdownOpen(null);
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleEsc);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleEsc);
+        };
+    }, [iconDropdownOpen]);
+
+    // Recalculate wizard field progress when value changes
+    useEffect(() => {
+        if (!isWizardMode || !methods?.length) return;
+
+        const updatedProgress = methods.map((method) => {
+            const countableFields = method.formFields?.filter(isCountableField) ?? [];
+            return countableFields.filter((f) => isFilled(value?.[method.id]?.[f.key])).length;
+        });
+
+        setFieldProgress(updatedProgress);
+    }, [methods, value, isWizardMode]);
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    const isFilled = (val: unknown): boolean => {
         if (val === undefined || val === null) return false;
         if (typeof val === 'string') return val.trim() !== '';
         if (Array.isArray(val)) return val.length > 0;
@@ -197,8 +284,8 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     };
 
     /**
-     * Whether a given header field (title / description / icon) is inline-editable.
-     * Only custom items are editable; respects the optional editableFields config.
+     * Returns true if the given header field is inline-editable for this method.
+     * Only custom items support editing; respects the optional editableFields config.
      */
     const getIsEditable = (
         method: ExpandablePanelMethod,
@@ -206,99 +293,38 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     ): boolean => {
         if (!method.isCustom) return false;
         if (!addNewTemplate?.editableFields) return field !== 'icon';
-        const fieldConfig = addNewTemplate.editableFields[field];
-        if (fieldConfig === false) return false;
-        return field !== 'icon';
+        return addNewTemplate.editableFields[field] !== false && field !== 'icon';
     };
 
-    // Effects 
-    // Focus the correct input whenever inline editing begins
-    useEffect(() => {
-        if (editingMethodId && editingField === 'title') {
-            titleInputRef.current?.focus();
-            titleInputRef.current?.select();
-        }
-        if (editingMethodId && editingField === 'description') {
-            descTextareaRef.current?.focus();
-            descTextareaRef.current?.select();
-        }
-    }, [editingMethodId, editingField]);
+    const getPriceFieldValue = (methodId: string) => {
+        const methodValue = value[methodId] ?? {};
+        const price = methodValue.price;
+        const unit  = methodValue.unit;
 
-    // Close inline edit on outside click or Escape / Ctrl+Enter
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (!editingMethodId || !editingField) return;
-            if (event.key === 'Escape') cancelEdit();
-            if (event.key === 'Enter' && event.ctrlKey) saveEdit();
-        };
+        if (price === undefined || price === null || price === '') return null;
 
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [editingMethodId, editingField, tempTitle, tempDescription]);
+        const priceDisplay = typeof price === 'number' ? `$${price.toFixed(2)}` : `$${price}`;
+        return { price: priceDisplay, unit: unit ? String(unit) : '' };
+    };
 
-    // Close icon picker on Escape
-    useEffect(() => {
-        const handleEscKey = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && iconDropdownOpen) {
-                setIconDropdownOpen(null);
-            }
-        };
+    // ── Min / delete helpers ──────────────────────────────────────────────────
 
-        document.addEventListener('keydown', handleEscKey);
-        return () => document.removeEventListener('keydown', handleEscKey);
-    }, [iconDropdownOpen]);
-
-    // Recalculate wizard field progress when value changes
-    useEffect(() => {
-        if (!isWizardMode && !methods?.length) return;
-
-        const initialProgress = methods.map((method) => {
-            const countableFields = method.formFields?.filter(isCountableField) || [];
-            return countableFields.filter((field) => isFilled(value?.[method.id]?.[field.key])).length;
-        });
-
-        setFieldProgress(initialProgress);
-    }, [methods, value, isWizardMode]);
-
-    // Sync ExpandablePanelMethods whenever the persisted value or template changes
-    useEffect(() => {
-        const valueMethods: ExpandablePanelMethod[] = Object.entries(value).map(
-            ([id, method]) => ({ id, ...(method as any) })
-        );
-
-        setExpandablePanelMethods((prev) => {
-            const methodMap = new Map<string, ExpandablePanelMethod>();
-
-            // Seed with current in-memory state
-            prev.forEach((method) => methodMap.set(method.id, method));
-
-            // Merge persisted value on top, restoring config-only props that are
-            // never saved to the backend (disableBtn, iconEnable, iconOptions)
-            valueMethods.forEach((method) => {
-                const existingMethod = methodMap.get(method.id);
-                methodMap.set(method.id, {
-                    ...existingMethod,
-                    ...method,
-                    disableBtn: method.disableBtn ?? existingMethod?.disableBtn ?? false,
-                    iconEnable: method.iconEnable ?? existingMethod?.iconEnable ?? (method.isCustom ? addNewTemplate?.iconEnable : false),
-                    iconOptions: method.iconOptions ?? existingMethod?.iconOptions ?? (method.isCustom ? addNewTemplate?.iconOptions : []),
-                });
-            });
-
-            // Merge template formFields into every custom method
-            return Array.from(methodMap.values()).map((method) =>
-                method.isCustom ? mergeTemplateFormFields(method, templateFields) : method
-            );
-        });
-    }, [value, addNewTemplate]);
+    /**
+     * Returns true when deleting this method would keep the custom count at or
+     * above `min`. When `min` is undefined every custom method is deletable.
+     */
+    const canDeleteMethod = (): boolean => {
+        if (min === undefined) return true;
+        return expandableMethods.filter((m) => m.isCustom).length > min;
+    };
 
     // ── Inline-editing functions ──────────────────────────────────────────────
 
     const startEditing = (methodId: string, field: 'title' | 'description') => {
-        const method = ExpandablePanelMethods.find((m) => m.id === methodId);
+        const method = expandableMethods.find((m) => m.id === methodId);
         if (!method?.isCustom) return;
 
-        const methodValue = value[methodId] || {};
+        const methodValue = value[methodId] ?? {};
         setEditingMethodId(methodId);
         setEditingField(field);
 
@@ -329,56 +355,52 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
 
     // ── CRUD functions ────────────────────────────────────────────────────────
 
-    const createNewExpandablePanelMethod = (): ExpandablePanelMethod => {
+    const createNewMethod = (): ExpandablePanelMethod => {
         if (!addNewTemplate) {
             throw new Error('addNewTemplate is required when addNewBtn is true');
         }
 
         const id =
-            addNewTemplate.label.trim().toLowerCase().replace(/\s+/g, '_') +
+            (addNewTemplate.label ?? 'item').trim().toLowerCase().replace(/\s+/g, '_') +
             Math.floor(Math.random() * 10000);
 
         return {
             id,
-            icon: addNewTemplate.icon || '',
-            label: addNewTemplate.label || 'New Item',
-            desc: addNewTemplate.desc || '',
-            iconEnable: addNewTemplate.iconEnable || false,
+            icon:        addNewTemplate.icon        || '',
+            label:       addNewTemplate.label       || 'New Item',
+            desc:        addNewTemplate.desc        || '',
+            iconEnable:  addNewTemplate.iconEnable  || false,
             iconOptions: addNewTemplate.iconOptions || [],
-            connected: false,
-            isCustom: true,
-            disableBtn: addNewTemplate.disableBtn || false,
-            formFields: addNewTemplate.formFields
-                ? addNewTemplate.formFields.map((field) => ({ ...field }))
-                : [],
+            connected:   false,
+            isCustom:    true,
+            disableBtn:  addNewTemplate.disableBtn  || false,
+            formFields:  addNewTemplate.formFields?.map((f) => ({ ...f })) ?? [],
         };
     };
 
     const handleAddNewMethod = () => {
-        if(!canAccess) { return;}
-        const newMethod = createNewExpandablePanelMethod();
-        setExpandablePanelMethods((prev) => [...prev, newMethod]);
+        if (!canAccess) return;
+
+        const newMethod = createNewMethod();
 
         const initialValues: Record<string, unknown> = {
-            isCustom: true,
-            label: newMethod.label,
-            desc: newMethod.desc,
-            required: newMethod.required ?? false,
-            title: newMethod.label,
+            isCustom:    true,
+            label:       newMethod.label,
+            desc:        newMethod.desc,
+            required:    newMethod.required ?? false,
+            title:       newMethod.label,
             description: newMethod.desc,
         };
 
         if (newMethod.disableBtn) {
-            initialValues.enable = false; // Default to disabled when disableBtn is true
+            initialValues.enable    = false;
             initialValues.disableBtn = true;
         }
 
-        // Always include icon if it's in the template
         if (addNewTemplate?.icon) {
             initialValues.icon = addNewTemplate.icon;
         }
 
-        // Handle additional form fields
         newMethod.formFields?.forEach((field) => {
             initialValues[field.key] = '';
         });
@@ -388,12 +410,8 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     };
 
     const handleDeleteMethod = (methodId: string) => {
-        if (min !== undefined) {
-            const customMethods = ExpandablePanelMethods.filter((m) => m.isCustom);
-            if (customMethods.length <= min) return;
-        }
-
-        setExpandablePanelMethods((prev) => prev.filter((m) => m.id !== methodId));
+        // Guard: respect the minimum custom-panel count
+        if (!canDeleteMethod()) return;
 
         const updatedValue = { ...value };
         delete updatedValue[methodId];
@@ -402,17 +420,12 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
         setActiveTabs((prev) => prev.filter((id) => id !== methodId));
     };
 
-    const canDeleteMethod = (methodId: string): boolean => {
-        if (min === undefined) return true;
-        return ExpandablePanelMethods.filter((m) => m.isCustom).length > min;
-    };
-
     // ── Core update function ──────────────────────────────────────────────────
 
     const handleInputChange = (
         methodKey: string,
         fieldKey: string,
-        fieldValue: string | string[] | number | boolean 
+        fieldValue: string | string[] | number | boolean | undefined
     ) => {
         if (fieldKey === 'wizardButtons') return;
 
@@ -425,27 +438,24 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
         };
 
         if (isWizardMode) {
-            const prevValue = value?.[methodKey]?.[fieldKey];
-            const wasFilled = isFilled(prevValue);
-            const nowFilled = isFilled(fieldValue);
+            const prevValue  = value?.[methodKey]?.[fieldKey];
+            const wasFilled  = isFilled(prevValue);
+            const nowFilled  = isFilled(fieldValue);
 
-            // Only update progress if fill-state changed
             if (wasFilled !== nowFilled) {
                 const methodIndex = methods.findIndex((m) => m.id === methodKey);
 
                 if (methodIndex !== -1) {
                     setFieldProgress((prev) => {
-                        const updatedProgress = [...prev];
-                        const maxFields =
-                            methods[methodIndex]?.formFields?.filter(isCountableField).length || 0;
+                        const next = [...prev];
+                        const maxFields = methods[methodIndex]?.formFields?.filter(isCountableField).length ?? 0;
 
-                        updatedProgress[methodIndex] += nowFilled ? 1 : -1;
+                        next[methodIndex] = Math.min(
+                            Math.max(next[methodIndex] + (nowFilled ? 1 : -1), 0),
+                            maxFields
+                        );
 
-                        // Clamp value safely
-                        if (updatedProgress[methodIndex] < 0) updatedProgress[methodIndex] = 0;
-                        if (updatedProgress[methodIndex] > maxFields) updatedProgress[methodIndex] = maxFields;
-
-                        return updatedProgress;
+                        return next;
                     });
                 }
             }
@@ -454,55 +464,42 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
         onChange(updated);
     };
 
-    // Toggle helpers
+    // ── Toggle helpers ────────────────────────────────────────────────────────
 
     const toggleEnable = (methodId: string, enable: boolean) => {
         handleInputChange(methodId, 'enable', enable);
         if (enable) {
+            // Close the settings panel when re-enabling so the user clicks Settings explicitly
             setActiveTabs((prev) => prev.filter((id) => id !== methodId));
         }
     };
 
     const toggleActiveTab = (methodId: string) => {
         if (isWizardMode) {
-            // In wizard mode, only allow one active tab at a time
             setActiveTabs([methodId]);
         } else {
-            // In normal mode, toggle as before
             setActiveTabs((prev) => (prev[0] === methodId ? [] : [methodId]));
         }
     };
 
-    const enableMethod = useCallback(
-        (id: string) => toggleEnable(id, true),
-        [toggleEnable]
-    );
-
-    const disableMethod = useCallback(
-        (id: string) => toggleEnable(id, false),
-        [toggleEnable]
-    );
-
-    const setTabActive = useCallback(
-        (id: string) => toggleActiveTab(id),
-        [toggleActiveTab]
-    );
+    // Plain functions — no useCallback needed (dependencies are recreated each render anyway)
+    const enableMethod  = (id: string) => toggleEnable(id, true);
+    const disableMethod = (id: string) => toggleEnable(id, false);
+    const setTabActive  = (id: string) => toggleActiveTab(id);
 
     // ── Wizard helpers ────────────────────────────────────────────────────────
 
     const handleSaveSetupWizard = () => {
         axios({
-            url: getApiLink(appLocalizer, apilink),
-            method: 'POST',
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
-            data: { setupWizard: true, value },
-        }).then((res) => {
-            console.log(res);
-        });
+            url:     getApiLink(appLocalizer, apilink),
+            method:  'POST',
+            headers: { 'X-WP-Nonce': appLocalizer?.nonce },
+            data:    { setupWizard: true, value },
+        }).then((res) => console.log(res));
     };
 
     const renderWizardButtons = () => {
-        const step = ExpandablePanelMethods[wizardIndex];
+        const step = expandableMethods[wizardIndex];
         const buttonField = step?.formFields?.find((f) => f.key === 'wizardButtons');
         if (!buttonField) return null;
         return renderField(step.id, buttonField);
@@ -510,44 +507,28 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
 
     // ── Dependent-field helpers ───────────────────────────────────────────────
 
-    // const isContain = (
-    //     key: string,
-    //     methodId: string,
-    //     valuee: string | number | boolean | null = null
-    // ): boolean => {
-    //     const settingValue = value[methodId]?.[key];
+    const isContain = (
+        key: string,
+        methodId: string,
+        match: string | number | boolean | null = null
+    ): boolean => {
+        const settingValue = value[methodId]?.[key];
 
-    //     if (Array.isArray(settingValue)) {
-    //         if (valuee === null) return settingValue.length > 0;
-    //         return settingValue.includes(valuee);
-    //     }
+        if (Array.isArray(settingValue)) {
+            return match === null ? settingValue.length > 0 : settingValue.includes(match);
+        }
 
-    //     if (valuee === null) return Boolean(settingValue);
-    //     return settingValue === valuee;
-    // };
-
-    // const shouldRender = (dependent: any, methodId: string): boolean => {
-    //     if (dependent.set === true && !isContain(dependent.key, methodId)) return false;
-    //     if (dependent.set === false && isContain(dependent.key, methodId)) return false;
-    //     if (dependent.value !== undefined && !isContain(dependent.key, methodId, dependent.value)) return false;
-    //     return true;
-    // };
-
-    // ── Price display helper ──────────────────────────────────────────────────
-
-    const getPriceFieldValue = (methodId: string) => {
-        const methodValue = value[methodId] || {};
-        const price = methodValue.price;
-        const unit = methodValue.unit;
-
-        if (price === undefined || price === null || price === '') return null;
-
-        const priceDisplay = typeof price === 'number' ? `$${price.toFixed(2)}` : `$${price}`;
-
-        return { price: priceDisplay, unit: unit ? `${unit}` : '' };
+        return match === null ? Boolean(settingValue) : settingValue === match;
     };
 
-    // Field renderer
+    const shouldRender = (dependent: any, methodId: string): boolean => {
+        if (dependent.set === true  && !isContain(dependent.key, methodId)) return false;
+        if (dependent.set === false &&  isContain(dependent.key, methodId)) return false;
+        if (dependent.value !== undefined && !isContain(dependent.key, methodId, dependent.value)) return false;
+        return true;
+    };
+
+    // ── Field renderer ────────────────────────────────────────────────────────
 
     const renderField = (methodId: string, field: PanelFormField): JSX.Element | null => {
         const fieldComponent = FIELD_REGISTRY[field.type];
@@ -558,15 +539,18 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
         const handleInternalChange = (val: any) => handleInputChange(methodId, field.key, val);
 
         if (field.type === 'button' && isWizardMode && Array.isArray(field.options)) {
-            const wizardSteps = methods.map((m, i) => ({ ...m, index: i })).filter((m) => m.isWizardMode);
-            const isLastMethod = wizardIndex === wizardSteps.length - 1;
+            // FIX: Previously filtered by `m.isWizardMode` (a non-existent per-method
+            // property), making wizardSteps always empty and breaking wizard navigation.
+            // Now we use all methods, indexed by their position.
+            const wizardSteps   = methods.map((m, i) => ({ ...m, index: i }));
             const isFirstMethod = wizardIndex === 0;
+            const isLastMethod  = wizardIndex === wizardSteps.length - 1;
 
             const resolvedButtons = field.options.map((btn) => {
                 if (btn.action === 'back') {
                     return {
                         ...btn,
-                        text: btn.label,
+                        text:  btn.label,
                         color: 'red',
                         onClick: () => {
                             if (isFirstMethod) return;
@@ -580,7 +564,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                 if (btn.action === 'next') {
                     return {
                         ...btn,
-                        text: btn.label,
+                        text:  btn.label,
                         color: 'purple',
                         onClick: () => {
                             handleSaveSetupWizard();
@@ -598,11 +582,11 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                 if (btn.action === 'skip') {
                     return {
                         ...btn,
-                        text: btn.label,
+                        text:  btn.label,
                         color: 'blue',
                         onClick: () => {
                             setWizardIndex(methods.length);
-                            window.open(appLocalizer.site_url, '_self');
+                            window.open(appLocalizer?.site_url, '_self');
                         },
                     };
                 }
@@ -621,7 +605,6 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
             );
         }
 
-        // NORMAL FIELDS
         return (
             <Render
                 field={field}
@@ -633,49 +616,52 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
         );
     };
 
-    // Render
+    // ── Render ────────────────────────────────────────────────────────────────
 
     return (
         <>
             <div className="expandable-panel-group">
-                {ExpandablePanelMethods.map((method, index) => {
+                {expandableMethods.map((method, index) => {
                     if (isWizardMode && index > wizardIndex) return null;
 
-                    const isEnabled = value?.[method.id]?.enable ?? false;
-                    const isActive = activeTabs.includes(method.id);
-                    const headerIcon = (value?.[method.id]?.icon as string) || method.icon;
-                    const priceField = getPriceFieldValue(method.id);
-                    const currentTitle = (value?.[method.id]?.title as string) || method.label;
+                    const isEnabled          = Boolean(value?.[method.id]?.enable);
+                    const isActive           = activeTabs.includes(method.id);
+                    const headerIcon         = (value?.[method.id]?.icon as string) || method.icon;
+                    const priceField         = getPriceFieldValue(method.id);
+                    const currentTitle       = (value?.[method.id]?.title as string) || method.label;
                     const currentDescription = (value?.[method.id]?.description as string) || method.desc;
-                    const isEditingThisMethod = editingMethodId === method.id;
+                    const isEditingThis      = editingMethodId === method.id;
+                    const hasFields          = Boolean(method.formFields?.length);
 
                     return (
                         <div
                             key={method.id}
-                            className={`expandable-item ${method.disableBtn && !isEnabled ? 'disable' : ''} ${method.openForm ? 'open' : ''} `}
+                            className={`expandable-item ${method.disableBtn && !isEnabled ? 'disable' : ''} ${method.openForm ? 'open' : ''}`}
                         >
-                            {/* Header */}
+                            {/* ── Header ─────────────────────────────────────── */}
                             <div className="expandable-header">
-                                {method.formFields && method.formFields.length > 0 && (
+
+                                {/* Toggle arrow */}
+                                {hasFields && (
                                     <div className="toggle-icon">
                                         <i
-                                            className={`adminfont-${isActive
-                                                    ? 'keyboard-arrow-down'
-                                                    : 'pagination-right-arrow'
-                                                }`}
+                                            className={`adminfont-${isActive ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`}
                                             onClick={() => canAccess && setTabActive(method.id)}
                                         />
                                     </div>
                                 )}
 
+                                {/* Title / description */}
                                 <div
                                     className="details"
                                     onClick={() => canAccess && setTabActive(method.id)}
                                 >
                                     <div className="details-wrapper">
+
+                                        {/* Icon picker */}
                                         {headerIcon && (
                                             <div
-                                                className={`expandable-header-icon`}
+                                                className="expandable-header-icon"
                                                 ref={iconDropdownOpen === method.id ? iconPickerRef : null}
                                                 onClick={(e) => {
                                                     if (!method.iconEnable || !canAccess) return;
@@ -714,9 +700,10 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                         )}
 
                                         <div className="expandable-header-info">
+                                            {/* Inline-editable title */}
                                             <div className="title-wrapper">
                                                 <span className="title">
-                                                    {isEditingThisMethod && editingField === 'title' && getIsEditable(method, 'title') ? (
+                                                    {isEditingThis && editingField === 'title' && getIsEditable(method, 'title') ? (
                                                         <input
                                                             ref={titleInputRef}
                                                             type="text"
@@ -741,6 +728,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                                             )}
                                                         </span>
                                                     )}
+
                                                     <div className="panel-badges">
                                                         {method.disableBtn && !method.isCustom && (
                                                             <div className={`admin-badge ${isEnabled ? 'green' : 'red'}`}>
@@ -751,8 +739,9 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                                 </span>
                                             </div>
 
+                                            {/* Inline-editable description */}
                                             <div className="panel-description">
-                                                {isEditingThisMethod && editingField === 'description' && getIsEditable(method, 'description') ? (
+                                                {isEditingThis && editingField === 'description' && getIsEditable(method, 'description') ? (
                                                     <textarea
                                                         ref={descTextareaRef}
                                                         className="description-edit"
@@ -793,50 +782,42 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                     )}
 
                                     <ul className="settings-btn">
-                                        {method.isCustom && (
-                                            <>
-                                                {!method.hideDeleteBtn && canDeleteMethod(method.id) ? (
-                                                    <AdminButtonUI
-                                                        buttons={[{
-                                                            icon: 'delete',
-                                                            text: 'Delete',
-                                                            color: 'red-color',
-                                                            onClick: () => handleDeleteMethod(method.id),
-                                                        }]}
-                                                    />
-                                                ) : (
-                                                    <span className="delete-text red-color">Not Deletable</span>
-                                                )}
-                                            </>
+                                        {/* Delete / min controls (custom panels only) */}
+                                        {method.isCustom && !method.hideDeleteBtn && canDeleteMethod() && (
+                                            <AdminButtonUI
+                                                buttons={[{
+                                                    icon: 'delete',
+                                                    text: 'Delete',
+                                                    color: 'red-color',
+                                                    onClick: () => handleDeleteMethod(method.id),
+                                                }]}
+                                            />
                                         )}
 
+                                        {/* Enable / disable / settings controls */}
                                         {method.disableBtn ? (
-                                            <>
-                                                {isEnabled ? (
-                                                    <>
-                                                        {method.formFields && method.formFields.length > 0 && (
-                                                            <AdminButtonUI
-                                                                buttons={[{
-                                                                    icon: 'setting',
-                                                                    text: 'Settings',
-                                                                    color: 'purple',
-                                                                    onClick: () => canAccess && setTabActive(method.id),
-                                                                }]}
-                                                            />
-                                                        )}
-                                                    </>
-                                                ) : (
-                                                    <li onClick={() => canAccess && enableMethod(method.id)}>
-                                                        <span className="admin-btn btn-purple-bg">
-                                                            <i className="adminfont-eye" />{' '}
-                                                            {method.isCustom ? 'Show' : 'Enable'}
-                                                        </span>
-                                                    </li>
-                                                )}
-                                            </>
+                                            isEnabled ? (
+                                                hasFields && (
+                                                    <AdminButtonUI
+                                                        buttons={[{
+                                                            icon:    'setting',
+                                                            text:    'Settings',
+                                                            color:   'purple',
+                                                            onClick: () => canAccess && setTabActive(method.id),
+                                                        }]}
+                                                    />
+                                                )
+                                            ) : (
+                                                <li onClick={() => canAccess && enableMethod(method.id)}>
+                                                    <span className="admin-btn btn-purple-bg">
+                                                        <i className="adminfont-eye" />{' '}
+                                                        {method.isCustom ? 'Show' : 'Enable'}
+                                                    </span>
+                                                </li>
+                                            )
                                         ) : (
-                                            method.countBtn && method.formFields?.length > 0 && (() => {
-                                                const countableFields = method.formFields.filter(isCountableField);
+                                            method.countBtn && (method.formFields?.length ?? 0) > 0 && (() => {
+                                                const countableFields = method.formFields!.filter(isCountableField);
                                                 return (
                                                     <div className="admin-badge red">
                                                         {fieldProgress[index] || 0}/{countableFields.length}
@@ -848,18 +829,22 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                         {isEnabled && method.isCustom && (
                                             <AdminButtonUI
                                                 buttons={[{
-                                                    icon: 'eye-blocked',
-                                                    text: 'Hide',
-                                                    color: 'purple',
+                                                    icon:    'eye-blocked',
+                                                    text:    'Hide',
+                                                    color:   'purple',
                                                     onClick: () => canAccess && disableMethod(method.id),
                                                 }]}
                                             />
                                         )}
                                     </ul>
 
-                                    {/* Right-section dropdown (non-custom methods only) */}
+                                    {/* Right-section dropdown (non-custom, enabled methods only) */}
                                     {isEnabled && !method.isCustom && (
-                                        <div className="icon-wrapper" ref={wrapperRef}>
+                                        // FIX: Previously ref={wrapperRef} was placed inside the map loop,
+                                        // causing only the last rendered element to hold the ref.
+                                        // Now the dropdown closes via a document-level click listener
+                                        // (added in useEffect above) + stopPropagation inside the dropdown.
+                                        <div className="icon-wrapper">
                                             <i
                                                 className="admin-icon adminfont-more-vertical"
                                                 onClick={(e) => {
@@ -877,27 +862,22 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                                     <div className="dropdown-body">
                                                         <ul>
                                                             {method.disableBtn && !method.isCustom && (
-                                                                <>
-                                                                    {isEnabled ? (
-                                                                        <>
-                                                                            {method.formFields && method.formFields.length > 0 && (
-                                                                                <li onClick={() => canAccess && setTabActive(method.id)}>
-                                                                                    <span className="item">
-                                                                                        <i className="adminfont-setting" />
-                                                                                        Settings
-                                                                                    </span>
-                                                                                </li>
-                                                                            )}
-                                                                        </>
-                                                                    ) : (
-                                                                        <li onClick={() => canAccess && enableMethod(method.id)}>
+                                                                isEnabled ? (
+                                                                    hasFields && (
+                                                                        <li onClick={() => canAccess && setTabActive(method.id)}>
                                                                             <span className="item">
-                                                                                <i className="adminfont-eye" />{' '}
-                                                                                Enable
+                                                                                <i className="adminfont-setting" />
+                                                                                Settings
                                                                             </span>
                                                                         </li>
-                                                                    )}
-                                                                </>
+                                                                    )
+                                                                ) : (
+                                                                    <li onClick={() => canAccess && enableMethod(method.id)}>
+                                                                        <span className="item">
+                                                                            <i className="adminfont-eye" /> Enable
+                                                                        </span>
+                                                                    </li>
+                                                                )
                                                             )}
                                                             {isEnabled && !method.isCustom && (
                                                                 <li
@@ -919,32 +899,38 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                 </div>
                             </div>
 
-                            {method.formFields && method.formFields.length > 0 && (
+                            {/* ── Expandable form body ────────────────────────── */}
+                            {hasFields && (
                                 <div
-                                    className={`${method.wrapperClass || ''} expandable-panel ${(isActive && isEnabled) || (isActive && (method.isCustom || method.openForm)) ? 'open' : ''
-                                        } ${method.openForm ? 'open' : ''}`}
+                                    className={[
+                                        method.wrapperClass || '',
+                                        'expandable-panel',
+                                        (isActive && isEnabled) || (isActive && (method.isCustom || method.openForm)) || method.openForm
+                                            ? 'open'
+                                            : '',
+                                    ].join(' ').trim()}
                                 >
                                     <FormGroupWrapper>
                                         {method.formFields.map((field) => {
                                             if (isWizardMode && field.key === 'wizardButtons') return null;
 
-                                            // const shouldShowField = Array.isArray(field.dependent)
-                                            //     ? field.dependent.every((dep) => shouldRender(dep, method.id))
-                                            //     : field.dependent
-                                            //         ? shouldRender(field.dependent, method.id)
-                                            //         : true;
+                                            const shouldShowField = Array.isArray(field.dependent)
+                                                ? field.dependent.every((dep) => shouldRender(dep, method.id))
+                                                : field.dependent
+                                                    ? shouldRender(field.dependent, method.id)
+                                                    : true;
 
-                                            // if (!shouldShowField) return null;
+                                            if (!shouldShowField) return null;
 
                                             return (
                                                 <FormGroup
                                                     row
                                                     key={field.key}
-                                                    label={field.type !== 'notice' ? field.label : ''}
+                                                    label={field.type !== 'notice' ? field.label : undefined}
                                                     desc={field.desc}
                                                     htmlFor={field.name}
                                                 >
-                                                    {field.beforeElement && renderField(method.id, field.beforeElement)}
+                                                    {field.beforeElement && renderField(method.id, field.beforeElement as PanelFormField)}
                                                     {renderField(method.id, field)}
                                                 </FormGroup>
                                             );
@@ -959,32 +945,33 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                 {addNewBtn && (
                     <AdminButtonUI
                         buttons={[{
-                            icon: 'plus',
-                            text: 'Add New',
-                            color: 'purple',
+                            icon:    'plus',
+                            text:    'Add New',
+                            color:   'purple',
                             onClick: handleAddNewMethod,
                         }]}
                     />
                 )}
             </div>
 
-            {isWizardMode && ( renderWizardButtons() )}
+            {isWizardMode && renderWizardButtons()}
         </>
     );
 };
+
+// ── FieldComponent wrapper ────────────────────────────────────────────────────
 
 const ExpandablePanelGroup: FieldComponent = {
     render: ({ field, value, onChange, canAccess, appLocalizer }) => (
         <ExpandablePanelGroupUI
             key={field.key}
             name={field.key}
-            apilink={String(field.apiLink)} // API endpoint used for communication with backend.
+            apilink={String(field.apiLink)}
             appLocalizer={appLocalizer}
-            methods={field.modal ?? []} // Array of available payment methods/options.
+            methods={field.modal ?? []}
             addNewBtn={field.addNewBtn}
             addNewTemplate={field.addNewTemplate}
-            iconEnable={field.iconEnable}
-            iconOptions={field.iconOptions || []}
+            min={field.min}
             value={value || {}}
             onChange={(val) => {
                 if (!canAccess) return;
