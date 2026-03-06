@@ -218,7 +218,7 @@ const DashboardTab: React.FC<{}> = () => {
         <>
             <Container general>
                 <Column grid={8}>
-                    <Card contentHeight>
+                    <Card >
                         <div className="pro-banner-wrapper">
                             <div className="content">
                                 <div className="heading">
@@ -315,7 +315,7 @@ const DashboardTab: React.FC<{}> = () => {
                         </Card>
                     )}
                     <Card
-                        contentHeight
+                        
                         title={__('Modules', 'multivendorx')}
                         action={
                             <AdminButtonUI
@@ -351,7 +351,7 @@ const DashboardTab: React.FC<{}> = () => {
                 {/* Right Side */}
                 <Column grid={4}>
                     <Card
-                        contentHeight
+                        
                         title={__('Extend your website', 'multivendorx')}
                     >
                         <Column row>
@@ -569,7 +569,7 @@ const DashboardTab: React.FC<{}> = () => {
 
                     {/* Quick Links */}
                     <Card
-                        contentHeight
+                        
                         title={__(
                             'Need help getting started?',
                             'multivendorx'

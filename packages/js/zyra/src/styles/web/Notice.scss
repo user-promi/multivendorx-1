@@ -138,6 +138,11 @@
     }
 
     &.display-inline {
+        gap: 0.25rem;
+
+        i{
+            font-size: 1rem;
+        }
         &.type-success {
             .notice-desc {
                 color: green;

@@ -37,7 +37,6 @@ const AdminDashboard = () => {
 
 	return (
 		<TabsUI tabs={tabs} headerExtra={upgradeButton} />
-
 	);
 };
 
