@@ -56,7 +56,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 
 				setFormData((prev) => ({ ...prev, ...data }));
 			});
-	}, [id]);
+	}, [id, data]);
 
 	const handleChange = (key: string, value: string) => {
 		const updated = { ...formData, [key]: value };
