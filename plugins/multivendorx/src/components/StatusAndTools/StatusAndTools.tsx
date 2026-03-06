@@ -123,6 +123,7 @@ const StatusAndTools: React.FC<SettingsProps> = () => {
 				appLocalizer={appLocalizer}
 				Link={Link}
 				settingName={'Status & Tools'}
+				className="admin-settings"
 			/>
 		</SettingProvider>
 	);

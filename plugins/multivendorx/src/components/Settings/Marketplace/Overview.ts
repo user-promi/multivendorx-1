@@ -169,7 +169,6 @@ export default {
 				'Description',
 				'Arguments',
 			],
-			icon: 'adminfont-general-tab',
 			options: [
 				{
 					key: 'marketplace_registration',
