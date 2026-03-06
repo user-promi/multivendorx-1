@@ -65,6 +65,10 @@ const Modules: React.FC<ModuleProps> = ({
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [selectedFilter, setSelectedFilter] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
+    const [requirePopup, setRequirePopup] = useState<{
+        moduleName: string;
+        plugins: { name: string; slug: string; link: string }[];
+    } | null>(null);
 
     const { modules, insertModule, removeModule } = useModules();
 
@@ -111,7 +115,10 @@ const Modules: React.FC<ModuleProps> = ({
 
         if (module.reqPluging?.some(
             plugin => !appLocalizer.active_plugins?.includes(plugin.slug)
-        )) return;
+        )) {
+            openRequirePopup(module);
+            return;
+        }
 
         const action = event.length > 0 ? 'activate' : 'deactivate';
 
@@ -138,6 +145,15 @@ const Modules: React.FC<ModuleProps> = ({
                 setSuccessMsg(`Error: Failed to ${action} module`);
                 setTimeout(() => setSuccessMsg(''), 2000);
             });
+    };
+
+    const openRequirePopup = (module: Module) => {
+        if (!module.reqPluging?.length) return;
+
+        setRequirePopup({
+            moduleName: module.name,
+            plugins: module.reqPluging
+        });
     };
 
     const filteredModules = useMemo(() => {
@@ -207,6 +223,36 @@ const Modules: React.FC<ModuleProps> = ({
 
     return (
         <>
+            {requirePopup && (
+                <PopupUI
+                    position="lightbox"
+                    open={true}
+                    onClose={() => setRequirePopup(null)}
+                    width={28}
+                    height="auto"
+                    header={{
+                        title: `Required Plugin`,
+                        description: `This module requires the following plugin(s)`
+                    }}
+                >
+                    <div className="required-plugin-popup">
+                        {requirePopup.plugins.map((plugin, idx) => (
+                            <div key={idx} className="required-plugin-item">
+                                <span>{plugin.name}</span>
+
+                                <a
+                                    href={plugin.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="install-link"
+                                >
+                                    Install
+                                </a>
+                            </div>
+                        ))}
+                    </div>
+                </PopupUI>
+            )}
             {modelOpen && (
                 <PopupUI
                     position="lightbox"
@@ -358,19 +404,12 @@ const Modules: React.FC<ModuleProps> = ({
                                                 <div className="requires-title">
                                                     Requires:
                                                 </div>
-                                                {requiredPlugins.map((plugin, idx) => (
-                                                    <span key={idx}>
-                                                        <a
-                                                            href={plugin.link}
-                                                            className="link-item"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            {plugin.name}
-                                                        </a>
-                                                        {idx < requiredPlugins.length - 1 ? ', ' : ''}
-                                                    </span>
-                                                ))}
+                                                <span
+                                                    className="link-item"
+                                                    onClick={() => openRequirePopup(module)}
+                                                >
+                                                    {requiredPlugins.map((plugin) => plugin.name).join(', ')}
+                                                </span>
                                             </div>
                                         )}
 
