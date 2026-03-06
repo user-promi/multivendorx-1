@@ -94,6 +94,8 @@ class Utill {
         'events-delivery'               => 'multivendorx_events_delivery_settings',
         'compliance'                    => 'multivendorx_compliance_settings',
         'developer-tools'               => 'multivendorx_developer_tools_settings',
+        'invoices'                      => 'multivendorx_invoices_settings',
+        'tax-information'               => 'multivendorx_tax_information_settings',
     );
 
     const MULTIVENDORX_OTHER_SETTINGS = array(
