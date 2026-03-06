@@ -46,62 +46,64 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
 	};
 
     return (
-        <div className="wrap-bulk-all-date filter">
-            <span className="title">
-                <i className="adminfont-filter" />
-                Filter
-            </span>
+        <div className="table-filter-wrapper">
+            <div className="table-filter filter">
+                <span className="title">
+                    <i className="adminfont-filter" />
+                    Filter
+                </span>
 
-            {filters.map((filter) => {
-                const value = query[filter.key];
+                {filters.map((filter) => {
+                    const value = query[filter.key];
 
-                if (filter.type === 'date') {
-                    const range =
-						(value as CalendarRange) || getDefaultDateRange();
+                    if (filter.type === 'date') {
+                        const range =
+                            (value as CalendarRange) || getDefaultDateRange();
+                        return (
+                        <div key={filter.key} className="group-field">
+                            <CalendarInputUI
+                            value={range}
+                            onChange={(newRange) => {
+                                onFilterChange(filter.key, newRange as { startDate: Date; endDate: Date });
+                            }}
+                            format={format}
+                            />
+                        </div>
+                        );
+                    }                  
+
+                    const options = filter.options?.map((opt) => ({ 
+                        label: opt.label, 
+                        value: String(opt.value) 
+                    })) || [];
+
                     return (
-                      <div key={filter.key} className="group-field">
-                        <CalendarInputUI
-                          value={range}
-                          onChange={(newRange) => {
-                            onFilterChange(filter.key, newRange as { startDate: Date; endDate: Date });
-                          }}
-                          format={format}
-                        />
-                      </div>
+                        <div key={filter.key} className="group-field">
+                            <SelectInputUI
+                                type={filter.multiple ? 'multi-select' : 'single-select'}
+                                options={options}
+                                value={value}
+                                placeholder={`Select ${filter.label}`}
+                                onChange={(selected) => {
+                                    onFilterChange(filter.key, selected);
+                                }}
+                            />
+                        </div>
                     );
-                }                  
+                })}
 
-                const options = filter.options?.map((opt) => ({ 
-                    label: opt.label, 
-                    value: String(opt.value) 
-                })) || [];
-
-                return (
-                    <div key={filter.key} className="group-field">
-                        <SelectInputUI
-                            type={filter.multiple ? 'multi-select' : 'single-select'}
-                            options={options}
-                            value={value}
-                            placeholder={`Select ${filter.label}`}
-                            onChange={(selected) => {
-                                onFilterChange(filter.key, selected);
+                {showResetButton && (
+                    <div className="reset-btn">
+                        <AdminButtonUI
+                            buttons={{
+                                text: "Reset",
+                                icon: "refresh",
+                                onClick: onResetFilters,
                             }}
                         />
                     </div>
-                );
-            })}
-
-            {showResetButton && (
-                <div className="reset-btn">
-                    <AdminButtonUI
-                        buttons={{
-                            text: "Reset",
-                            icon: "refresh",
-                            onClick: onResetFilters,
-                        }}
-                    />
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 };

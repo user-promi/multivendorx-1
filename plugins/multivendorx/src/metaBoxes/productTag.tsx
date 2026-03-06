@@ -23,7 +23,7 @@ const ProductTag = ({ product, setProduct }) => {
 
 	return (
 		<Card
-			contentHeight
+			
 			title={__('Product tag', 'multivendorx')}
 		>
 			{/* <FormGroupWrapper>

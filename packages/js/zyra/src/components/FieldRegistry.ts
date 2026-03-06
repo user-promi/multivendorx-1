@@ -16,6 +16,7 @@ import Log from './Log';
 import MultiCheckBox from './MultiCheckbox';
 import MultiCheckboxTable from './MultiCheckboxTable';
 import NestedComponent from './NestedComponent';
+import NoticeField from './Notice';
 import PrePostText from './PrePostText';
 import RadioInput from './RadioInput';
 import Recaptcha from './Recaptcha';
@@ -103,4 +104,6 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
   'shortcode-table': ShortCodeTable,
 
   itemlist: ItemList,
+
+  'notice': NoticeField,
 };

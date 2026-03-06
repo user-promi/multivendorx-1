@@ -247,7 +247,6 @@ const Stores = () => {
 										{
 											icon: 'save',
 											text: __('Submit', 'multivendorx'),
-											color: 'purple',
 											onClick: handleSubmit,
 										},
 									]}

@@ -419,7 +419,7 @@ const AddProduct = () => {
 
 				<Column grid={6}>
 					<Card
-						contentHeight
+						
 						title={__('General information', 'multivendorx')}
 					>
 						<FormGroupWrapper>
@@ -476,7 +476,7 @@ const AddProduct = () => {
 					</Card>
 
 					{product?.type === 'simple' && (
-						<Card contentHeight title={__('Price', 'multivendorx')}>
+						<Card  title={__('Price', 'multivendorx')}>
 							<FormGroupWrapper>
 								<FormGroup
 									cols={2}
@@ -568,7 +568,7 @@ const AddProduct = () => {
 					)}
 
 					<Card
-						contentHeight
+						
 						title={__('Upload image', 'multivendorx')}
 					>
 						<FormGroupWrapper>

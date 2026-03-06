@@ -126,7 +126,7 @@
 //             padding: 0.625rem;
 //             background: #8f8f8f1f;
 //             margin-top: 0.5rem;
-//             border-radius: 0.313rem;
+//             border-radius: $border-radius-small;
 
 //             p {
 //                 margin: 0;
@@ -159,7 +159,7 @@
 .multivendorx-policies-accordion {
     .accordion-item {
         border: 0.063rem solid #ddd;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         margin-bottom: 0.625rem;
         overflow: hidden;
 
@@ -201,7 +201,7 @@
     //     list-style-type: none;
     //     margin: 0;
     //     padding: 0.5rem;
-    //     border-radius: 0.313rem;
+    //     border-radius: $border-radius-small;
     //     background: var(--primary);
 
     //     li {
@@ -212,7 +212,7 @@
     //         &.active {
     //             background: #fff;
     //             color: var(--primary);
-    //             border-radius: 0.313rem;
+    //             border-radius: $border-radius-small;
     //         }
     //     }
     // }
@@ -228,7 +228,7 @@
 
             .store {
                 border: 0.063rem solid #eee;
-                border-radius: 0.313rem;
+                border-radius: $border-radius-small;
                 display: flex;
                 gap: 0.5rem;
                 padding: 0.5rem;
@@ -244,7 +244,7 @@
                     justify-content: center;
                     align-items: center;
                     font-size: 1.813rem;
-                    border-radius: 0.313rem;
+                    border-radius: $border-radius-small;
                     color: #fff;
                 }
 
@@ -307,7 +307,7 @@
     .coupon-card {
         padding: 1rem;
         border: 0.063rem dashed;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         margin-bottom: 0.813rem;
         width: fit-content;
 

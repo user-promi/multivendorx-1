@@ -105,32 +105,33 @@ export const renderNoticeContent = (
     onClose?: () => void
 ) => {
     return (
-        <>
-            {item.title && <div className="notice-text">{item.title}</div>}
+        <>        
+            <i className={`admin-font adminfont-${item.type}`} />
 
-            {Array.isArray(item.message)
-                ? item.message.map((msg, i) => (
-                      <div key={i} className="notice-desc">{msg}</div>
-                  ))
-                : item.message && (
-                      <div className="notice-desc">{item.message}</div>
-                  )
-            }
+            <div className="notice-details">
+                {item.title && <div className="notice-text">{item.title}</div>}
 
-            {item.actionLabel && (
-                <button className="notice-action" onClick={item.onAction}>
-                    {item.actionLabel}
-                </button>
-            )}
-
-            {onClose && (
-                <button
-                    className="notice-close"
-                    onClick={onClose}
-                >
-                    ×
-                </button>
-            )}
+                {Array.isArray(item.message)
+                    ? item.message.map((msg, i) => (
+                        <>
+                        <div key={i} className="notice-desc">
+                            {msg}
+                            {item.actionLabel && (
+                                <button className="notice-action" onClick={item.onAction}>
+                                    {item.actionLabel}
+                                </button>
+                            )}
+                        </div>
+                        {onClose && (
+                            <i className="close-icon adminfont-close" onClick={onClose} />
+                        )}
+                        </>
+                    ))
+                    : item.message && (
+                        <div className="notice-desc">{item.message}</div>
+                    )
+                }
+            </div>
         </>
     );
 };
@@ -159,7 +160,7 @@ export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({ position }) => {
     return (
         <div className={`receiver receiver-${position}`}>
             {items.map(item => (
-                <div key={item.uniqueKey} className={`ui-notice type-${item.type} display-${position}`}>
+                <div key={item.uniqueKey} className={`ui-notice type-${item.type} display-${item.position}`}>
                     {renderNoticeContent(item, () => removeNotice(item.uniqueKey))}
                 </div>
             ))}

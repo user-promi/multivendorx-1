@@ -43,7 +43,7 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 
 	return (
 		<Card
-			contentHeight
+			
 			title={__('Publishing', 'multivendorx')}
 			action={
 				<>

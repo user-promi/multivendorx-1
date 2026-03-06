@@ -11,7 +11,7 @@ const RelatedList = ({ product, setProduct, handleChange }) => {
 
 	return (
 		<Card
-			contentHeight
+			
 			title={__('Related listings', 'multivendorx')}
 		>
 			<FormGroupWrapper>

@@ -11,6 +11,8 @@ import {
 	InfoItem,
 	useModules,
 	Skeleton,
+	FormGroupWrapper,
+	FormGroup,
 } from 'zyra';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './LatestReview';
@@ -294,64 +296,35 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					<Card
 						title={__('Store information', 'multivendorx')}
 						iconName="external icon"
-						contentHeight
+						
 						onIconClick={() => {
 							navigate(
 								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`
 							);
 						}}
 					>
-						<div className="overview-wrapper">
-							<div className="items">
-								<div className="title">
-									{__('Created on', 'multivendorx')}
-								</div>
-								<div className="details">
-									<div className="sku">
-										{storeData.create_time}
-										<a
-											className="sku"
-											onClick={() => {
-												navigate(
-													`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`
-												);
-											}}
-										>
-											{__(
-												'Application Data',
-												'multivendorx'
-											)}
-										</a>
-									</div>
-								</div>
-							</div>
-							<div className="items">
-								<div className="title">
-									{__('Lifetime earnings', 'multivendorx')}
-								</div>
-								<div className="details">
-									<div className="sku">
-										{formatCurrency(
-											storeData.commission
-												?.commission_total ?? 0
-										)}
-									</div>
-								</div>
-							</div>
+						<FormGroupWrapper>
+							<FormGroup row label={__('Created on', 'multivendorx')}>
+								{storeData.create_time}
+								<a
+									className="sku"
+									onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`); }}
+								>
+									{__('Application Data', 'multivendorx')}
+								</a>
+							</FormGroup>
+							<FormGroup row label={__('Lifetime earnings', 'multivendorx')}>
+								{formatCurrency(
+									storeData.commission
+										?.commission_total ?? 0
+								)}
+							</FormGroup>
 							{appLocalizer.khali_dabba && (
-								<div className="items">
-									<div className="title">
-										{__('Vacation mode', 'multivendorx')}
-									</div>
-									<div className="details">
-										<span className="admin-badge red">
-											{__('Inactive', 'multivendorx')}
-										</span>
-									</div>
-								</div>
-							)}
-							{appLocalizer.khali_dabba && (
-								<div className="description-wrapper">
+								<>
+									<FormGroup row label={__('Vacation mode', 'multivendorx')}>
+										<span className="admin-badge red"> {__('Inactive', 'multivendorx')}</span>
+									</FormGroup>
+
 									<div className="title">
 										<i className="adminfont-error"></i>
 										{__('Gold plan', 'multivendorx')}
@@ -365,15 +338,15 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 											'multivendorx'
 										)}
 									</div>
-								</div>
+								</>
 							)}
-						</div>
+						</FormGroupWrapper>
 					</Card>
 
 					<Card
 						title={__('Store staff', 'multivendorx')}
 						iconName="external icon"
-						contentHeight
+						
 						onIconClick={() => {
 							navigate(
 								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`

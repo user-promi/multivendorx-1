@@ -25,7 +25,7 @@ const Inventory = ({ product, setProduct, handleChange }) => {
 
 	return (
 		<Card
-			contentHeight
+			
 			title={__('Inventory', 'multivendorx')}
 			action={
 				<>

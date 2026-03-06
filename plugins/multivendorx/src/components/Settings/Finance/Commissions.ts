@@ -82,7 +82,7 @@ export default {
 				'multivendorx'
 			),
 			noticeType: 'info',
-			display: 'notice',
+			displayPosition: 'notice',
 		},
 		{
 			key: 'commission_type',
