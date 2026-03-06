@@ -32,12 +32,14 @@ const EmailsInput = forwardRef<HTMLInputElement, EmailsInputProps>(
         const [primaryEmail, setPrimaryEmail] = useState<string>(
             enablePrimary ? primary : ''
         );
-
         const [inputValue, setInputValue] = useState('');
 
         const inputRef = useRef<HTMLInputElement>(null);
 
-        // Sync when parent updates props
+        const isMultiple = mode === 'multiple';
+        const hasEmail = emails.length > 0;
+
+        // Sync with parent props
         useEffect(() => {
             setEmails(value);
         }, [value]);
@@ -46,11 +48,10 @@ const EmailsInput = forwardRef<HTMLInputElement, EmailsInputProps>(
             setPrimaryEmail(enablePrimary ? primary : '');
         }, [primary, enablePrimary]);
 
-        // expose inputRef externally
         useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
         const isValidEmail = useCallback((email: string) =>
-            /^\S+@\S+\.\S+$/.test(email), []);
+            /^\S+@\S+\.([a-zA-Z]{2,})$/.test(email), []);
 
         const addEmail = useCallback(
             (email: string) => {
@@ -68,89 +69,71 @@ const EmailsInput = forwardRef<HTMLInputElement, EmailsInputProps>(
                 const updated = [...emails, email];
                 setEmails(updated);
 
-                const newPrimary = enablePrimary ? primaryEmail || email : '';
+                let newPrimary = primaryEmail;
 
-                if (enablePrimary && !primaryEmail) {
+                if (enablePrimary && isMultiple && updated.length === 1) {
                     setPrimaryEmail(email);
+                    newPrimary = email;
                 }
 
                 setInputValue('');
                 onChange?.(updated, newPrimary);
             },
-            [emails, max, isValidEmail, enablePrimary, primaryEmail, onChange]
+            [emails, max, isValidEmail, enablePrimary, isMultiple, primaryEmail, onChange]
         );
 
         const removeEmail = useCallback(
             (email: string) => {
                 const updated = emails.filter((e) => e !== email);
 
-                let newPrimary = primaryEmail;
-
                 if (enablePrimary && primaryEmail === email) {
-                    newPrimary = updated[0] || '';
-                    setPrimaryEmail(newPrimary);
+                    setPrimaryEmail(updated[0] || '');
                 }
 
                 setEmails(updated);
-                onChange?.(updated, enablePrimary ? newPrimary : '');
+                onChange?.(updated, enablePrimary ? (updated[0] || '') : '');
             },
             [emails, primaryEmail, enablePrimary, onChange]
         );
 
         const togglePrimary = useCallback(
             (email: string) => {
-                if (!enablePrimary || mode === 'single') return;
-
+                if (!enablePrimary || !isMultiple) return;
                 setPrimaryEmail(email);
                 onChange?.(emails, email);
             },
-            [enablePrimary, mode, emails, onChange]
+            [enablePrimary, isMultiple, emails, onChange]
         );
 
-        const handleKeyDown = (
-            e: React.KeyboardEvent<HTMLInputElement>
-        ) => {
+        const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
             if (['Enter', ',', ' '].includes(e.key)) {
                 e.preventDefault();
                 addEmail(inputValue);
             }
         };
 
-        // SINGLE MODE
-        if (mode === 'single') {
-            return (
-                <BasicInputUI
-                    type="email"
-                    value={emails[0] || ''}
-                    placeholder={placeholder}
-                    onChange={(val) => {
-                        const v = String(val).trim();
-                        const updated = isValidEmail(v) ? [v] : [];
-                        setEmails(updated);
-                        onChange?.(updated, '');
-                    }}
-                />
-            );
-        }
+        const isInputReadOnly = !isMultiple && hasEmail;
+        const trimmedInput = inputValue.trim();
 
-        // MULTI MODE
+        const canShowSuggestion =
+            !isInputReadOnly &&
+            trimmedInput &&
+            isValidEmail(trimmedInput) &&
+            (!isMultiple || !emails.includes(trimmedInput));
+
         return (
             <div
                 className="emails-section"
-                onClick={() => inputRef.current?.focus()}
+                onClick={() => !isInputReadOnly && inputRef.current?.focus()}
             >
                 {emails.map((email) => (
                     <div
-                        className={`email ${enablePrimary && primaryEmail === email
-                            ? 'primary'
-                            : ''
-                            }`}
+                        className={`email ${enablePrimary && primaryEmail === email ? 'primary' : ''}`}
                         key={email}
                     >
-                        {enablePrimary && (
+                        {enablePrimary && isMultiple && (
                             <i
-                                className={`stat-icon adminfont-star${primaryEmail === email ? ' primary' : '-o'
-                                    }`}
+                                className={`stat-icon adminfont-star${primaryEmail === email ? ' primary' : '-o'}`}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     togglePrimary(email);
@@ -171,28 +154,23 @@ const EmailsInput = forwardRef<HTMLInputElement, EmailsInputProps>(
                 <div className="input-wrapper">
                     <BasicInputUI
                         ref={inputRef}
-                        type="text"
-                        inputClass={"email-input"}
+                        type='email'
+                        inputClass="email-input"
                         value={inputValue}
-                        placeholder={emails.length === 0 ? placeholder : ''}
+                        placeholder={placeholder}
                         onChange={(val) => setInputValue(String(val))}
                         onKeyDown={handleKeyDown}
+                        readOnly={isInputReadOnly}
                     />
 
-                    { /* MAGIC INLINE SUGGESTION */}
-                    {inputValue &&
-                        !inputValue.endsWith(' ') &&
-                        !inputValue.endsWith(',') &&
-                        isValidEmail(inputValue) &&
-                        !emails.includes(inputValue.trim()) && (
-                            <div
-                                className="inline-suggestion"
-                                onClick={() => addEmail(inputValue.trim())}
-                            >
-                                <i className="adminfont-mail orange"></i>{' '}
-                                {inputValue.trim()}
-                            </div>
-                        )}
+                    {canShowSuggestion && (
+                        <div
+                            className="inline-suggestion"
+                            onClick={() => addEmail(trimmedInput)}
+                        >
+                            <i className="adminfont-mail orange"></i> {trimmedInput}
+                        </div>
+                    )}
                 </div>
             </div>
         );
