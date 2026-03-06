@@ -570,16 +570,10 @@ const ProductReport: React.FC = () => {
 				</Column>
 			</Container>
 
-			<div className="card-header admin-pt-2">
-				<div className="left">
-					<div className="title">
-						{__('Revenue Distribution', 'multivendorx')}
-					</div>
-				</div>
-			</div>
 			<TableCard
 				headers={headers}
 				rows={rows}
+				title={__('Revenue Distribution', 'multivendorx')}
 				totalRows={totalRows}
 				isLoading={isTableLoading}
 				onQueryUpdate={doRefreshTableData}
