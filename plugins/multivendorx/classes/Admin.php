@@ -135,11 +135,6 @@ class Admin {
                         'subtab'   => '',
                         'priority' => 110,
                     ),
-                    'table-card'          => array(
-                        'name'     => __( 'Table Card', 'multivendorx' ),
-                        'subtab'   => '',
-                        'priority' => 120,
-                    ),
                 )
             );
 

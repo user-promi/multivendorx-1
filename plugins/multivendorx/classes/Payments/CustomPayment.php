@@ -49,6 +49,12 @@ class CustomPayment {
                     'label'       => 'Gateway name',
                     'placeholder' => 'Enter Name',
                 ),
+                array(
+                    'key'         => 'client_secret',
+                    'type'        => 'text',
+                    'label'       => 'Client secret key',
+                    'placeholder' => 'Enter Secret Key',
+                ),
             ),
         );
     }

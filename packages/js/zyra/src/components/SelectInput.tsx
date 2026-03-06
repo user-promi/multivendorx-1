@@ -253,7 +253,7 @@ export const SelectInputUI: React.FC<SelectProps> = ({
     return (
         <div
             className={`form-select-field-wrapper ${wrapperClass ?? ''}`}
-            style={{ width: size ?? '100%' }}
+            style={{ width: size ?? '' }}
         >
             {selectDeselect && (
                 <AdminButtonUI

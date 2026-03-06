@@ -115,7 +115,7 @@ export default {
 		{
 			key: 'separator_content',
 			type: 'section',
-			wrapperClass: 'divider-wrapper red',
+			wrapperClass: 'red',
 			title: __('Notification Events Handling', 'multivendorx'),
 			desc: __('', 'multivendorx'),
 		},
