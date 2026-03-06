@@ -243,7 +243,7 @@ const CustomerQuestions: React.FC = () => {
 						icon: 'question',
 						title: __('Answer Question', 'multivendorx'),
 						description: __(
-							'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+							'Ensure unanswered customer questions are addressed and helpful information is available to buyers.',
 							'multivendorx'
 						),
 					}}
