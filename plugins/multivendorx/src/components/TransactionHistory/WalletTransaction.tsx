@@ -419,7 +419,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 		<>
 			<Container>
 				<Column grid={6}>
-					<Card title="Recent payouts">
+					<Card fullHeight title="Recent payouts">
 						{recentDebits.length > 0 ? (
 							<>
 								{recentDebits.slice(0, 5).map((txn) => {
@@ -699,8 +699,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 									type="number"
 									name="amount"
 									value={amount}
-									onChange={(e: any) =>
-										AmountChange(Number(e.target.value))
+									onChange={(value) =>
+										AmountChange(Number(value))
 									}
 								/>
 
@@ -760,9 +760,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 								<TextAreaUI
 									name="note"
 									value={note}
-									onChange={(
-										e: React.ChangeEvent<HTMLTextAreaElement>
-									) => setNote(e.target.value)}
+									onChange={(value) => setNote(value)}
 								/>
 							</FormGroup>
 						</FormGroupWrapper>
