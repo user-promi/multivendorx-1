@@ -253,7 +253,7 @@ const StoreReview: React.FC = () => {
 						icon: 'store-review',
 						title: `${__('Reply to Review', 'multivendorx')} – ${selectedReview?.store_name}`,
 						description: __(
-							'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+							'View customer reviews and respond to feedback to build trust with shoppers.',
 							'multivendorx'
 						),
 					}}
