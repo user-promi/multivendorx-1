@@ -699,9 +699,10 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 									type="number"
 									name="amount"
 									value={amount}
-									onChange={(e: any) =>
-										AmountChange(Number(e.target.value))
-									}
+									onChange={(value) => {
+										console.log('value', value)
+										AmountChange(Number(value))
+									}}
 								/>
 
 								<div className="free-wrapper">
@@ -760,9 +761,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 								<TextAreaUI
 									name="note"
 									value={note}
-									onChange={(
-										e: React.ChangeEvent<HTMLTextAreaElement>
-									) => setNote(e.target.value)}
+									onChange={(value) => setNote(value)}
 								/>
 							</FormGroup>
 						</FormGroupWrapper>
