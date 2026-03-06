@@ -50,9 +50,6 @@ const StoreSettings = ({
 	const [apiKey, setApiKey] = useState('');
 	const appLocalizer = (window as any).appLocalizer;
 	const { modules } = useModules();
-	// === ADD THESE STATES (replace old ones) ===
-	const [emails, setEmails] = useState<string[]>([]); // All emails
-	const [primaryEmail, setPrimaryEmail] = useState<string>(''); // Which one is starred
 	const settings = appLocalizer.settings_databases_value;
 	const [newAddress, setNewAddress] = useState<any>(null);
 
@@ -78,23 +75,6 @@ const StoreSettings = ({
 		applyLocation(resolvedLocation);
 		setNewAddress(null);
 	}, [stateOptions]);
-
-	// === LOAD EMAILS FROM BACKEND ===
-	useEffect(() => {
-		let parsedEmails = [];
-
-		try {
-			parsedEmails = data.emails ? JSON.parse(data.emails) : [];
-		} catch (e) {
-			console.error('Invalid email JSON', e);
-			parsedEmails = [];
-		}
-
-		if (Array.isArray(parsedEmails)) {
-			setEmails(parsedEmails);
-			setPrimaryEmail(data.primary_email || parsedEmails[0] || '');
-		}
-	}, [data]);
 
 	// === SAVE FUNCTION ===
 	const saveEmails = (emailList: string[], primary: string) => {
@@ -434,8 +414,8 @@ const StoreSettings = ({
 								}
 							>
 								<EmailsInput
-									value={emails}
-									primary={primaryEmail}
+									value={[data.emails]}
+									primary={data.primary_email}
 									enablePrimary={true}
 									onChange={(list, primary) => 
 										saveEmails(list, primary)
