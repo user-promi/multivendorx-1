@@ -143,7 +143,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 
 		// Submit request
 		axios({
-			method: 'POST',
+			method: 'PUT',
 			url: getApiLink(appLocalizer, `transaction/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
@@ -155,7 +155,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			},
 		})
 			.then((res) => {
-				console.log(res);
 				if (res.data.success) {
 					setRequestWithdrawal(false);
 					setTimeout(() => {
