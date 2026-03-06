@@ -33,8 +33,10 @@ const FormGroup: React.FC<FormGroupProps> = ({
 			data-cols={cols}
 		>
 			{label && <label className="settings-form-label" htmlFor={htmlFor}>
-				{icon && <i className={`adminfont-${icon}`}></i> }
-				<div className="title">{label}</div>
+				<div className="title">
+					{icon && <i className={`adminfont-${icon} form-icon`}></i> } 
+					{label}
+				</div>
 				{labelDes && <div className="settings-metabox-description">{labelDes}</div>}
 			</label>}
 			<div className="settings-input-content">

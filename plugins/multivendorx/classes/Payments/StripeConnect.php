@@ -146,7 +146,7 @@ class StripeConnect {
             $badge_class       = ( $stripe_account_id ) ? 'green' : 'red';
             $fields            = array(
                 array(
-                    'type' => 'blocktext',
+                    'type' => 'text',
                     'title' => __( 'Stripe Status:', 'multivendorx' ),
                     'blocktext' =>  $onboarding_status,
                 ),

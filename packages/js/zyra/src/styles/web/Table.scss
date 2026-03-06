@@ -7,7 +7,7 @@
     justify-content: space-between;
 }
 
-.admin-filter-wrapper {
+.table-filter-wrapper {
     display: flex;
     border-radius: $border-radius-small;
     background: transparent;
@@ -17,12 +17,15 @@
     bottom: 1rem;
     gap: 0.5rem;
 
-    .wrap-bulk-all-date {
+    .table-filter {
         display: flex;
-        gap: 0.313rem;
+        border-radius: $border-radius-small;
+        justify-content: center;
+        position: sticky;
+        bottom: 1rem;
+        gap: 0.5rem;
         align-items: center;
         background: $theme-background-color;
-        border-radius: $border-radius-small;
 
         .title {
             height: 100%;
