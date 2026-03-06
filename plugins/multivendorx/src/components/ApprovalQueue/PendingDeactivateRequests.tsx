@@ -21,7 +21,7 @@ const PendingDeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { deactivate: true, action, id: storeId },

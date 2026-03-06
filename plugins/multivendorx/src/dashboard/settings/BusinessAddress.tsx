@@ -259,7 +259,7 @@ const BusinessAddress = () => {
 		const formattedData = { ...updatedData };
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: formattedData,

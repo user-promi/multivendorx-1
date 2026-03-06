@@ -38,7 +38,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 
 	const autoSave = (updatedData: { [key: string]: any }) => {
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {

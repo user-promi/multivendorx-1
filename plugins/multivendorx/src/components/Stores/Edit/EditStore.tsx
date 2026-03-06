@@ -88,7 +88,7 @@ const EditStore = () => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${editId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
@@ -161,7 +161,7 @@ const EditStore = () => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${editId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: payload,
