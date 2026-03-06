@@ -6,16 +6,18 @@ type ColumnProps = {
   className?: string;
   children: React.ReactNode;
   row?: boolean;
+   fullHeight?: boolean;
 };
 
 const Column: React.FC<ColumnProps> = ({
   grid = 12,
   className = '',
   children,
+  fullHeight = false,
   row = false,
 }) => {
 
-  return <div className={`card-wrapper ${row ? 'row' : ''} ${className}`}
+  return <div className={`card-wrapper ${row ? 'row' : ''} ${className} ${fullHeight ? 'full-height' : ''}`}
               data-cols={grid}
           >
             {children}

@@ -417,7 +417,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 	return (
 		<>
 			<Container>
-				<Column grid={6}>
+				<Column fullHeight grid={6}>
 					<Card title="Recent payouts">
 						{recentDebits.length > 0 ? (
 							<>
@@ -486,7 +486,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 					</Card>
 				</Column>
 
-				<Column grid={6}>
+				<Column fullHeight grid={6}>
 					<Card>
 						<div className="payout-card-wrapper">
 							<div className="price-wrapper">
