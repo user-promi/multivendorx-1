@@ -91,12 +91,7 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
                                 tabIndex={ 0 }
                                 key={ option.key }
                                 className="toggle-option"
-                                onClick={ () =>
-                                    handleChange(
-                                        option.value,
-                                        option
-                                    )
-                                }
+                                
                             >
                                 <input
                                     className="toggle-setting-form-input"
@@ -106,6 +101,7 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
                                     value={ option.value }
                                     checked={ isChecked }
                                     readOnly
+                                    onClick={ () => handleChange(option.value,option) }
                                 />
                                 <label htmlFor={ option.key }>
                                     <span>
@@ -169,16 +165,10 @@ const ToggleSetting: FieldComponent = {
                 field.multiSelect
                     ? Array.isArray(value)
                         ? value
-                        : [
-                                String(
-                                    value ??
-                                        field.defaultValue ??
-                                        ''
-                                ),
-                            ]
-                    : String(
-                            value ?? field.defaultValue ?? ''
-                        )
+                        : value
+                            ? [String(value)]
+                            : []
+                    : String(value ?? field.defaultValue ?? '')
             }
             onChange={(val) => {
                 if (!canAccess) return;
