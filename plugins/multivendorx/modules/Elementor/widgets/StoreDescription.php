@@ -68,7 +68,7 @@ class Store_Description extends Widget_Heading{
 
 		$description = ! empty( $store['storeDescription'] )
 			? $store['storeDescription']
-			: ( $settings['empty_text'] ?? '' );
+			: ( $settings['title'] ?? '' );
 
 		if ( empty( $description ) ) {
 			return;

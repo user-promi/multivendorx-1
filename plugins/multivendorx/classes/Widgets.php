@@ -8,6 +8,7 @@ class Widgets {
     public function __construct() {
         add_action( 'widgets_init', array( $this, 'register_sidebar' ) );
         add_filter( 'register_block_type_args', array( $this, 'attach_sidebar_render_callback' ), 10, 2 );
+        add_filter( 'block_categories_all', array( $this, 'filter_store_block_category' ), 10, 2 );
     }
 
     /**
@@ -53,5 +54,31 @@ class Widgets {
         </aside>
         <?php
         return ob_get_clean();
+    }
+
+    /**
+     * Hide MultiVendorX block category everywhere except store page
+     */
+    public function filter_store_block_category( $categories, $editor_context ) {
+
+        $store_page = get_page_by_path( 'store' );
+
+        if ( ! $store_page ) {
+            return $categories;
+        }
+
+        $store_page_id = $store_page->ID;
+
+        $current_page_id = ( $editor_context->post instanceof \WP_Post )
+            ? $editor_context->post->ID
+            : get_queried_object_id();
+
+        if ( $current_page_id !== $store_page_id ) {
+            $categories = array_filter( $categories, function( $category ) {
+                return $category['slug'] !== 'multivendorx-store-shop';
+            });
+        }
+
+        return array_values( $categories );
     }
 }

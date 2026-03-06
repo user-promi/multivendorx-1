@@ -714,9 +714,8 @@ class StoreUtil {
          * Filter store info before returning.
          *
          * @param array $info
-         * @param int   $store_id
          * @param object $store_obj
          */
-        return apply_filters('multivendorx_store_info',$info,$store_obj->get_id());
+        return apply_filters('multivendorx_store_info',$info,$store_obj);
     }
 }
