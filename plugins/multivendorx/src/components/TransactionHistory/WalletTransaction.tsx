@@ -231,7 +231,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 	};
 
 	const doRefreshTableData = (query: QueryProps) => {
-		console.log(query);
 		setIsLoading(true);
 		axios
 			.get(getApiLink(appLocalizer, 'transaction'), {
@@ -699,9 +698,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 									type="number"
 									name="amount"
 									value={amount}
-									onChange={(value) =>
+									onChange={(value) => {
 										AmountChange(Number(value))
-									}
+									}}
 								/>
 
 								<div className="free-wrapper">
