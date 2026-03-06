@@ -36,9 +36,6 @@ $review_count      = is_array( $reviews ) ? count( $reviews ) : 0;
 $banner_type       = $meta_data['banner_type'] ?? 'static_image';
 $banner_video      = $meta_data['banner_video'] ?? '';
 $banner_slider     = $meta_data['banner_slider'] ?? array();
-if ( is_string( $banner_slider ) ) {
-    $banner_slider = json_decode( $banner_slider, true ) ?: array();
-}
 
 ?>
 
