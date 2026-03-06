@@ -41,6 +41,7 @@ $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array
         // Store banner & vendor info.
         do_action( 'mvx_archive_description' );
         MultiVendorX()->util->get_template( 'store/store-banner-info.php', array( 'store_id' => $store_id ) );
+        do_action( 'multivendorx_after_store_banner', $store_id );
         ?>
     </header>
     <div class="multivendorx-store-wrapper">
