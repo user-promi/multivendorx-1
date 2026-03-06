@@ -10,6 +10,8 @@
  * @author      MultiVendorX
  */
 
+use MultiVendorX\Utill;
+
 if (! defined('ABSPATH')) {
 	exit;
 }
@@ -81,12 +83,27 @@ foreach ($store_tabs as $key => $tab) {
 				'paged'          => $paged,
 				'author'         => $store_id,
 				'post_status'    => 'publish',
+				'meta_query'     => array(
+					array(
+						'key'     => Utill::POST_META_SETTINGS['store_id'],
+						'value'   => $store_id,
+						'compare' => '='
+					)
+				)
 			);
 
 			if (! empty($search_keyword)) {
 				$args['s'] = $search_keyword;
 			}
 
+			$args = apply_filters(
+				'multivendorx_store_product_query_args',
+				$args,
+				$store_id,
+				$search_keyword,
+				$paged
+			);
+			
 			$products = new WP_Query($args);
 	?>
 		<div class="panel entry-content wc-tab">
