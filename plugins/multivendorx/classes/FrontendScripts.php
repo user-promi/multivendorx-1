@@ -160,7 +160,6 @@ class FrontendScripts {
             'contact-info',
             'marketplace-products',
             'marketplace-coupons',
-            'store-coupons',
             'store-name',
             'store-description',
             'store-tabs',
@@ -610,6 +609,9 @@ class FrontendScripts {
                     'object_name' => 'couponList',
                     'use_rest'    => true,
                     'use_settings'    => true,
+                    'data'        => array(
+                        'storeDetails'  => StoreUtil::get_specific_store_info(),
+                    )
                 ),
                 'multivendorx-store-provider-script'       => array(
                     'object_name' => 'StoreInfo',

@@ -216,7 +216,6 @@ class Rewrites {
         FrontendScripts::enqueue_script( 'multivendorx-product-category-script' );
         FrontendScripts::enqueue_script( 'multivendorx-store-tabs-script' );
         FrontendScripts::enqueue_script( 'multivendorx-store-provider-script' );
-        FrontendScripts::enqueue_script( 'multivendorx-store-coupons-script' );
         FrontendScripts::localize_scripts( 'multivendorx-store-provider-script' );
         FrontendScripts::enqueue_style( 'multivendorx-store-tabs-style' );
     }
