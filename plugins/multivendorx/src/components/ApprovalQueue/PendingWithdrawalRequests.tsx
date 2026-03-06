@@ -22,7 +22,7 @@ const PendingWithdrawal: React.FC<Props> = ({ onUpdated }) => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `transaction/${row.id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {

@@ -143,7 +143,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 
 		// Submit request
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `transaction/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {

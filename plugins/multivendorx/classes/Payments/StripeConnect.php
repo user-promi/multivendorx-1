@@ -447,7 +447,7 @@ class StripeConnect {
             'timeout' => 30,
         );
 
-        if ( ( 'POST' === $method || 'PUT' === $method ) && ! empty( $data ) ) {
+        if ( ( 'POST' === $method ) && ! empty( $data ) ) {
             $args['body'] = http_build_query( $data );
         }
 

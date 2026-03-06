@@ -122,7 +122,7 @@ export const KnowledgeBase: React.FC = () => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, 'knowledge'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { bulk: true, action, ids: selectedIds },

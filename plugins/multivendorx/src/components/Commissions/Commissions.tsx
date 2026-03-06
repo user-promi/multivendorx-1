@@ -40,7 +40,7 @@ const Commission: React.FC = () => {
 			return;
 		}
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `commission/${row.id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { action, orderId: row.orderId },

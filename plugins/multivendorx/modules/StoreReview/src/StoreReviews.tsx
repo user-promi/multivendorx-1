@@ -103,7 +103,7 @@ const StoreReviews: React.FC = () => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `review/${selectedReview.id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {

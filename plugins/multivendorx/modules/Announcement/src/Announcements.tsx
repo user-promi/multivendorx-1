@@ -178,7 +178,7 @@ export const Announcements: React.FC = () => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, 'announcement'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { bulk: true, action, ids: selectedIds },

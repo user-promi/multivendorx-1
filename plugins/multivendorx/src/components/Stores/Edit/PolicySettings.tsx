@@ -42,7 +42,7 @@ const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
 
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
