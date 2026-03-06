@@ -22,7 +22,7 @@
             line-height: 1.2;
             margin: 0;
             align-items: start;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
             flex-direction: column;
 
             .input-header {
@@ -45,7 +45,7 @@
                     color: $theme-color;
                     padding: 0.313rem;
                     background: $theme-background-color;
-                    border-radius: 0.313rem;
+                    border-radius: $border-radius-small;
                 }
 
                 .title {

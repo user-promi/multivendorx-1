@@ -50,7 +50,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
     margin-top: 2rem;
 
     .text {
@@ -85,7 +85,7 @@
         img {
             height: 2.5rem;
             width: 2.5rem;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
             border: $border-light-small;
             padding-right: 0.5rem;
         }
@@ -99,7 +99,7 @@
             .analytics-item {
                 border: $border-light-small;
                 padding: 0.313rem;
-                border-radius: 0.313rem;
+                border-radius: $border-radius-small;
             }
         }
     }
@@ -148,7 +148,7 @@
             font-size: 1.8rem;
             color: $theme-color;
             background: #5007aa26;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
         }
     }
 }
@@ -167,7 +167,7 @@
 
     .cards {
         padding: 0.85rem;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         background: transparent;
         border: $border-light-small;
 
@@ -237,7 +237,7 @@
         padding: 0.313rem;
         margin-bottom: 0.5rem;
         transition: all 0.5s ease;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
 
         .icon {
             font-size: 1.125rem;
@@ -485,7 +485,7 @@
         i {
             font-size: 1.25rem;
             margin-bottom: 0.5rem;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
         }
 
         h3 {
@@ -528,7 +528,7 @@
         width: 33%;
         padding: 1rem;
         border: $border-light-small;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
 
         iframe {
             width: 100%;
@@ -587,7 +587,7 @@
         .feature-row {
             display: flex;
             gap: 0.5rem;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
             align-items: start;
             padding: 0.5rem;
             border: $border-light-small;
@@ -672,7 +672,7 @@
         min-width: 14rem;
         right: 0;
         background: #fff;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         transition: all 0.3s ease;
         z-index: 9999;
 
@@ -863,7 +863,7 @@
                     width: 1.5rem;
                     height: 1.5rem;
                     background: $background-color;
-                    border-radius: 0.313rem;
+                    border-radius: $border-radius-small;
                     position: relative;
                     font-family: adminfonts, sans-serif;
                     padding: 0.063rem;
@@ -959,7 +959,7 @@
     color: #fff;
     padding: 0.5rem;
     font-size: 1rem;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
     cursor: pointer;
     z-index: 99;
     width: 1rem;
@@ -1005,7 +1005,7 @@
         font-weight: 400;
         cursor: pointer;
         border: 0.063rem solid transparent;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         padding: 0.313rem;
 
         .template-image-wrapper {
@@ -1014,7 +1014,7 @@
             padding: 0.625rem;
             box-sizing: border-box;
             margin-top: 0.313rem;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
 
             .template-image {
                 display: flex;
@@ -1075,7 +1075,7 @@
 // Setting Groups
 .setting-group {
     margin-bottom: 0.813rem;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
     border: $border-light-small;
     overflow: hidden;
 
@@ -1150,7 +1150,7 @@
         background: $theme-background-color;
         font-size: 0.95rem;
         font-weight: 500;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         color: $theme-color;
         border: 0.063rem solid $theme-color;
     }
@@ -1161,7 +1161,7 @@
 // transaction popup style start
 .available-balance {
     font-size: 1rem;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
     color: #0000006e;
     font-weight: 500;
     text-align: center;
@@ -1222,7 +1222,7 @@
             font-size: 1rem;
             // padding: 0.625rem 0;
             // background: $theme-background-color;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
             color: #0000006e;
             font-weight: 500;
             text-align: center;
@@ -1280,7 +1280,7 @@
     .details-wrapper {
         display: flex;
         border: $border-light-small;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         padding: 1rem;
         margin-bottom: 1.125rem;
         gap: 1rem;

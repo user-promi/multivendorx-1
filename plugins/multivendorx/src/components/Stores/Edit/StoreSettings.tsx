@@ -416,67 +416,69 @@ const StoreSettings = ({
 				<Column grid={8}>
 					{/* Contact Information */}
 					<Card title={__('Contact information', 'multivendorx')}>
-						<FormGroup
-							label={__('Store email(s)', 'multivendorx')}
-							desc={
-								<>
-									<b>{__('Tip:', 'multivendorx')}</b>
-									{__(
-										'You can add multiple email addresses. All added emails will receive notifications.',
-										'multivendorx'
-									)}
-									<br />
-									<b>
-										{__('Primary email:', 'multivendorx')}
-									</b>
-									{__(
-										'Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.',
-										'multivendorx'
-									)}
-								</>
-							}
-						>
-							<EmailsInput
-								value={emails}
-								primary={primaryEmail}
-								enablePrimary={true}
-								onChange={(list, primary) => 
-									saveEmails(list, primary)
+						<FormGroupWrapper>
+							<FormGroup
+								label={__('Store email(s)', 'multivendorx')}
+								desc={
+									<>
+										<b>{__('Tip:', 'multivendorx')}</b>
+										{__(
+											'You can add multiple email addresses. All added emails will receive notifications.',
+											'multivendorx'
+										)}
+										<br />
+										<b>
+											{__('Primary email:', 'multivendorx')}
+										</b>
+										{__(
+											'Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.',
+											'multivendorx'
+										)}
+									</>
 								}
-							/>
-						</FormGroup>
+							>
+								<EmailsInput
+									value={emails}
+									primary={primaryEmail}
+									enablePrimary={true}
+									onChange={(list, primary) => 
+										saveEmails(list, primary)
+									}
+								/>
+							</FormGroup>
 
-						<FormGroup label={__('Phone', 'multivendorx')}>
-							<SelectInputUI
-								type='single-select'
-								name="country_code"
-								value={formData.country_code}
-								options={CountryCodes}
-								onChange={(selected) => handleChange('country_code', selected)}
+							<FormGroup label={__('Phone', 'multivendorx')}>
+								<SelectInputUI
+									type='single-select'
+									name="country_code"
+									value={formData.country_code}
+									options={CountryCodes}
+									onChange={(selected) => handleChange('country_code', selected)}
+								/>
+								<BasicInputUI
+									name="phone"
+									type="number"
+									value={formData.phone}
+									onChange={(value) => handleChange('phone', value)}
+								/>
+								{errorMsg.phone && (
+									<p className="invalid-massage">
+										{errorMsg.phone}
+									</p>
+								)}
+							</FormGroup>
+							{/* Hidden coordinates */}
+							<input
+								type="hidden"
+								name="location_lat"
+								value={addressData.location_lat}
 							/>
-							<BasicInputUI
-								name="phone"
-								type="number"
-								value={formData.phone}
-								onChange={(value) => handleChange('phone', value)}
+							<input
+								type="hidden"
+								name="location_lng"
+								value={addressData.location_lng}
 							/>
-							{errorMsg.phone && (
-								<p className="invalid-massage">
-									{errorMsg.phone}
-								</p>
-							)}
-						</FormGroup>
-						{/* Hidden coordinates */}
-						<input
-							type="hidden"
-							name="location_lat"
-							value={addressData.location_lat}
-						/>
-						<input
-							type="hidden"
-							name="location_lng"
-							value={addressData.location_lng}
-						/>
+						</FormGroupWrapper>
 					</Card>
 					{/* Communication Address */}
 					<Card title={__('Communication address', 'multivendorx')}>
@@ -541,7 +543,9 @@ const StoreSettings = ({
 								/>
 							</FormGroup>
 							{/* Map Component */}
-							{renderMapComponent()}
+							<FormGroup>
+								{renderMapComponent()}
+							</FormGroup>
 						</FormGroupWrapper>
 						{/* Hidden coordinates */}
 						<input
@@ -637,21 +641,20 @@ const StoreSettings = ({
 							'instagram',
 							'pinterest',
 						].map((network) => {
-							const iconClass = `adminfont-${network} ${network}`;
+							const iconClass = `${network} ${network}`;
 							const defaultUrl = `https://${network === 'twitter' ? 'x' : network}.com/`;
 
 							return (
 								<FormGroupWrapper>
-									<div className="form-group">
-										<label htmlFor={network}>
-											<i className={iconClass}></i>
-											{network === 'twitter'
+									<FormGroup 
+										icon={iconClass}
+										label={network === 'twitter'
 												? 'X'
 												: network
 													.charAt(0)
 													.toUpperCase() +
 												network.slice(1)}
-										</label>
+									>
 										<BasicInputUI
 											name={network}
 											value={
@@ -660,7 +663,7 @@ const StoreSettings = ({
 											}
 											onChange={(val) => handleChange(network, val)}
 										/>
-									</div>
+									</FormGroup>
 								</FormGroupWrapper>
 							);
 						})}

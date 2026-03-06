@@ -5,6 +5,7 @@ import { LinkProps } from 'react-router-dom';
 import '../styles/web/SettingsNavigator.scss';
 import { SectionUI } from './Section';
 import { AdminButtonUI } from './AdminButton';
+import Container from './UI/Container';
 
 type Content = {
     id: string;
@@ -27,6 +28,7 @@ type BreadcrumbItem = { name: string; id: string; type: string };
 
 type SettingsNavigatorProps = {
     settingContent: SettingContent[];
+    className?: string;
     currentSetting: string;
     getForm: (settingId: string) => ReactNode;
     prepareUrl: (settingId: string) => string;
@@ -165,6 +167,7 @@ const isFolder = (item: SettingContent): item is SettingContent & { content: Set
 
 const SettingsNavigator: React.FC<SettingsNavigatorProps> = ({
     settingContent,
+    className,
     currentSetting,
     getForm,
     prepareUrl,
@@ -362,7 +365,7 @@ const SettingsNavigator: React.FC<SettingsNavigatorProps> = ({
 
     return (
         <>
-            <div className="settings-wrapper" data-template={variant}>
+            <div className={`settings-wrapper ${className}`} data-template={variant}>
                 {settingTitleSection && <>{settingTitleSection}</>}
 
                 <NavigatorHeader
@@ -379,7 +382,7 @@ const SettingsNavigator: React.FC<SettingsNavigatorProps> = ({
                     action={action}
                     customContent={customContent}
                 />
-                <div className="general-wrapper admin-settings">
+                <Container general>
                     {HeaderSection && <HeaderSection />}
 
                     {showSubmenu && (
@@ -394,7 +397,7 @@ const SettingsNavigator: React.FC<SettingsNavigatorProps> = ({
                         {renderSettingHeaderInfo()}
                         {getForm(activeSetting)}
                     </div>
-                </div>
+                </Container>
             </div>
         </>
     );

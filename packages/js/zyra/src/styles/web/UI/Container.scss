@@ -37,3 +37,19 @@
     [data-cols='11'] {  flex: 1 1 calc(91.6667% - 1rem); }
     [data-cols='12'] {  flex: 1 1 calc(100%     - 1rem); }
 }
+
+// for settings panel
+.admin-settings {
+    .container-wrapper,
+    .form-group-wrapper{
+        gap: 0;
+
+        .tabs-wrapper{
+            width: 100%;
+        }
+        .form-group {
+            background: $background-white;
+            padding: 1rem;
+        }
+    }
+}

@@ -99,7 +99,7 @@
             min-width: 14rem;
             right: 0;
             background: #fff;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
             transition: all 0.3s ease;
             z-index: 9999;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -183,7 +183,7 @@
         &[data-position^="slide-"] {
             display: flex;
             flex-direction: column;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
 
             .popup-body {
                 padding: 1rem;

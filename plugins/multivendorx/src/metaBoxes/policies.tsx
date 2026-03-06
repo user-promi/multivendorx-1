@@ -35,7 +35,7 @@ const Policies = ({ product, setProduct, handleChange }) => {
 	}, [product?.meta_data]);
 
 	return (
-		<Card contentHeight title={__('Policies', 'multivendorx')}>
+		<Card  title={__('Policies', 'multivendorx')}>
 			<FormGroupWrapper>
 				<FormGroup
 					label={__('Shipping Policy', 'multivendorx')}

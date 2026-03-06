@@ -1,5 +1,4 @@
 // /* global appLocalizer */
-import Brand from '../../assets/images/multivendorx-logo.png';
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
 // Context
@@ -11,7 +10,6 @@ import {
 	getAvailableSettings,
 	getSettingById,
 	RenderComponent,
-	Banner,
 	useModules,
 	SettingsNavigator,
 } from 'zyra';
@@ -138,6 +136,7 @@ const Settings: React.FC<SettingsProps> = () => {
 				appLocalizer={appLocalizer}
 				Link={Link}
 				settingName={'Settings'}
+				className="admin-settings"
 			/>
 		</SettingProvider>
 	);

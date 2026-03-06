@@ -428,7 +428,7 @@ const AddOrder = () => {
 			/>
 			<Container>
 				<Column grid={8}>
-					<Card contentHeight>
+					<Card >
 						<div className="table-wrapper view-order-table">
 							<table className="admin-table">
 								<thead className="admin-table-header">

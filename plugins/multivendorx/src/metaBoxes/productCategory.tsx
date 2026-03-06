@@ -272,7 +272,7 @@ const ProductCategorysection = ({ product, setProduct }) => {
 	};
 
 	return (
-		<Card contentHeight title={__('Category', 'multivendorx')}>
+		<Card  title={__('Category', 'multivendorx')}>
 			{appLocalizer.settings_databases_value[
 				'product-preferencess'
 			]?.category_selection_method === 'yes' ? (

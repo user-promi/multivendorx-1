@@ -1,7 +1,7 @@
 // FreeVsProTab.tsx
 
 import React from 'react';
-import { Card, Column } from 'zyra';
+import { Card, Column, Container } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import freePro from '../../assets/images/dashboard-1.png';
 interface Feature {
@@ -146,7 +146,7 @@ const FreeVsProTab: React.FC<{}> = () => {
     };
 
     return (
-        <>
+        <Container general>
             <Column grid={8}>
                 <Card
                     title={__('Free vs Pro comparison', 'multivendorx')}
@@ -301,7 +301,7 @@ const FreeVsProTab: React.FC<{}> = () => {
                     </div>
                 </Card>
             </Column>
-        </>
+        </Container>
     );
 };
 

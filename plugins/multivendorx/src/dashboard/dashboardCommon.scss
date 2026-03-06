@@ -619,14 +619,14 @@ body.dark {
 //     margin: 0.625rem 0;
 //     background: #fff0e1e3;
 //     color: #ff9f43;
-//     border-radius: 0.313rem;
+//     border-radius: $border-radius-small;
 
 //     i {
 //         font-size: 1.063rem;
 //         padding: 0.25rem;
 //         color: #fff;
 //         background: #ff9f43;
-//         border-radius: 0.313rem;
+//         border-radius: $border-radius-small;
 //     }
 
 //     p {
@@ -646,7 +646,7 @@ body.dark {
     width: 50%;
     padding: 0.625rem;
     border: $border-light-small;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
     margin-bottom: 0.5rem;
 
     .left {
@@ -808,7 +808,7 @@ body.dark {
         padding: 1rem;
         border: $border-light-small;
         box-sizing: border-box;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
 
         .name-wrapper {
             display: flex;
@@ -854,7 +854,7 @@ body.dark {
     margin: auto;
     background: $background-white;
     padding: 2.5rem;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
 
     .header {
         width: 70%;
@@ -903,7 +903,7 @@ body.dark {
             width: 32%;
             box-sizing: border-box;
             padding: 1rem;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
             display: flex;
             flex-direction: column;
             cursor: pointer;
@@ -957,7 +957,7 @@ body.dark {
             //     align-items: center;
             //     display: none;
             //     transition: all 0.4s ease;
-            //     border-radius: 0.313rem;
+            //     border-radius: $border-radius-small;
             //     gap: 0.45rem;
 
             //     .admin-btn {

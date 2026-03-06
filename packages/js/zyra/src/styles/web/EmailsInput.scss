@@ -4,7 +4,7 @@
 .emails-section {
     padding: 0 0.313rem;
     border: $border-light-small;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -63,7 +63,7 @@
             padding: 0.625rem 0.813rem;
             font-size: 1.063rem;
             line-height: 1.125rem;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
             min-width: 18rem;
             z-index: 9;
             display: flex;

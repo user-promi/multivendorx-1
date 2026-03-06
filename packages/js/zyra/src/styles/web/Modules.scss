@@ -36,7 +36,7 @@
         .module-list-item {
             box-sizing: border-box;
             border: $border-light-small;
-            border-radius: 0.5rem;
+            border-radius: $border-radius-small;
             background: #fff;
             padding: 1.2rem;
             display: flex;
