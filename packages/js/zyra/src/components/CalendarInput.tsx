@@ -19,7 +19,7 @@ interface CalendarInputProps {
   showInput?: boolean;
   numberOfMonths?: number;
   fullYear?: boolean;
-  maxDateSelect?: number; // New prop: number of months from today
+  maxFutureMonths?: number; // New prop: number of months from today
 }
 
 const convertToDateObjectRange = (
@@ -39,10 +39,10 @@ const convertToDateObjectRange = (
     new DateObject({ date: range.endDate, format }),
   ];
 };
-const calculateMaxDate = (maxDateSelect?: number): Date => {
-  if (maxDateSelect !== undefined) {
+const calculateMaxDate = (maxFutureMonths?: number): Date => {
+  if (maxFutureMonths !== undefined) {
     const date = new Date();
-    date.setMonth(date.getMonth() + maxDateSelect);
+    date.setMonth(date.getMonth() + maxFutureMonths);
     return date;
   }
   return new Date();
@@ -136,10 +136,10 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
   showInput = true,
   numberOfMonths = 1,
   fullYear,
-  maxDateSelect, // New prop
+  maxFutureMonths, // New prop
 }) => {
   const pickerRef = useRef<DatePickerRef>(null);
-  const maxDate = calculateMaxDate(maxDateSelect);
+  const maxDate = calculateMaxDate(maxFutureMonths);
 
   const [internalValue, setInternalValue] =
     useState<DateObject[] | DateObject | null>(convertToDateObjectRange(value, format));
@@ -239,7 +239,7 @@ const CalendarInput: FieldComponent = {
       fullYear={field.fullYear}
       value={value}
       onChange={onChange}
-      maxDateSelect={field.maxDateSelect} // Pass the new prop
+      maxFutureMonths={field.maxFutureMonths} // Pass the new prop
     />
   ),
 };
