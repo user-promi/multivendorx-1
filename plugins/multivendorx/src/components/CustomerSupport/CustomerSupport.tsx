@@ -44,6 +44,7 @@ const CustomerSupport = () => {
 					appLocalizer={appLocalizer}
 					Link={Link}
 					variant={'compact'}
+					menuIcon={true}
 					headerIcon="customer-service"
 					headerTitle={__('Customer Support', 'multivendorx')}
 					headerDescription={__(
