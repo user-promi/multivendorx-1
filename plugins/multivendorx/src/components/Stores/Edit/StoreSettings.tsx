@@ -226,38 +226,34 @@ const StoreSettings = ({
 	};
 
 	// Handle country select change (from old code)
-	const handleCountryChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) {
+	const handleCountryChange = (value) => {
+		if (!value) {
 			return;
 		}
 
 		const updated = {
 			...formData,
-			country: newValue.value,
-			state: '', // reset state when country changes
+			country: value,
+			state: '', 
 		};
 
 		setFormData(updated);
-		setAddressData((prev) => ({ ...prev, country: newValue.label }));
-
 		autoSave(updated);
-		fetchStatesByCountry(newValue.value);
+		fetchStatesByCountry(value);
 	};
 
 	// Handle state select change (from old code)
-	const handleStateChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) {
+	const handleStateChange = (value) => {
+		if (!value ) {
 			return;
 		}
 
 		const updated = {
 			...formData,
-			state: newValue.value,
+			state: value,
 		};
 
 		setFormData(updated);
-		setAddressData((prev) => ({ ...prev, state: newValue.label }));
-
 		autoSave(updated);
 	};
 
