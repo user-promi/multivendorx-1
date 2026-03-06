@@ -68,7 +68,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 		if (data) {
 			setFormData(data);
 		}
-	}, [id]);
+	}, [id, data]);
 
 	useEffect(() => {
 		if (successMsg) {
