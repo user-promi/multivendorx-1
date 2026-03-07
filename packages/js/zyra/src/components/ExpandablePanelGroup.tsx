@@ -429,6 +429,7 @@ const PanelHeader: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <PanelControls />
         </div>
     );
 };
@@ -634,7 +635,6 @@ const PanelItem: React.FC<{ method: ExpandablePanelMethod; idx: number }> = ({ m
                 ].filter(Boolean).join(' ')}
             >
                 <PanelHeader />
-                <PanelControls />
                 <PanelBody />
             </div>
         </PanelItemContext.Provider>
