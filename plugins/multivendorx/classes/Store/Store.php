@@ -232,6 +232,10 @@ class Store {
         return $meta;
     }
 
+    public function get_data() {
+        return $this->data;
+    }
+
     /**
      * Update store meta value.
      *
