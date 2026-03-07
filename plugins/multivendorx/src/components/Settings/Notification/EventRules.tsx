@@ -650,7 +650,6 @@ const EventRules: React.FC = () => {
 										htmlFor="email-subject"
 									>
 										<BasicInputUI
-											type="text"
 											name="email_subject"
 											value={formData.email_subject || ''}
 											onClick={(e) =>

@@ -87,7 +87,6 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
             <>
                 <p>{field.label}</p>
                 <BasicInputUI
-                    type= "text"
                     placeholder= {field.placeholder}
                 />
             </>

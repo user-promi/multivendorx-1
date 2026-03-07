@@ -730,7 +730,7 @@ const AddOrder = () => {
 
 							{showAddTax && (
 								<div className="tax-wrapper">
-									<h2>{__('Add tax', 'multivendorx')}</h2>
+									<div className="title">{__('Add tax', 'multivendorx')}</div>
 
 									{taxRates.length > 0 ? (
 										<>
@@ -758,7 +758,7 @@ const AddOrder = () => {
 											/>
 										</>
 									) : (
-										<div>
+										<div className="desc">
 											{__(
 												'No tax rates set. Contact admin.',
 												'multivendorx'
@@ -961,6 +961,7 @@ const AddOrder = () => {
 									htmlFor="phone-number"
 								>
 									<BasicInputUI
+										type= "number"
 										name="phone"
 										value={newCustomer.phone}
 										onChange={(value) =>

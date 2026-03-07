@@ -9,6 +9,7 @@ import {
 	TableRow,
 	QueryProps,
 	CategoryCount,
+	NavigatorHeader,
 } from 'zyra';
 import OrderDetails from './orderDetails';
 import AddOrder from './addOrder';
@@ -437,38 +438,27 @@ const Orders: React.FC = () => {
 		<>
 			{!isViewOrder && !isAddOrder && !selectedOrder && (
 				<>
-					<div className="page-title-wrapper">
-						<div className="page-title">
-							<div className="title">
-								{__('Orders', 'multivendorx')}
-							</div>
-							<div className="des">
-								{__(
-									'Manage your store information and preferences',
-									'multivendorx'
-								)}
-							</div>
-						</div>
-						<div className="buttons-wrapper">
-							<div
-								className="admin-btn btn-purple-bg"
-								onClick={exportAllOrders}
-							>
-								<i className="adminfont-export"></i>
-								{__('Export', 'multivendorx')}
-							</div>
-							<div
-								className="admin-btn btn-purple-bg"
-								onClick={() => {
+					<NavigatorHeader
+						headerTitle={__('Orders', 'multivendorx')}
+						headerDescription={__(
+							'Manage your store information and preferences',
+							'multivendorx'
+						)}
+						buttons={[
+							{
+								label: __('Export', 'multivendorx'),
+								icon: 'export',
+								onClick: exportAllOrders,
+							},
+							{
+								label: __('Add New', 'multivendorx'),
+								icon: 'plus',
+								onClick: () => {
 									window.location.hash = `add`;
-								}}
-							>
-								<i className="adminfont-plus"></i>
-								{__('Add New', 'multivendorx')}
-							</div>
-						</div>
-					</div>
-
+								},
+							}
+						]}
+					/>
 					<TableCard
 						headers={headers}
 						rows={rows}

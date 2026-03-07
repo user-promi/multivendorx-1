@@ -114,7 +114,6 @@ const InputField: React.FC<{
 }> = ({ label, type = 'text', value, onChange, className, readonly = false, placeholder }) => (
     <FieldWrapper label={label} className={className}>
         <BasicInputUI
-            type="text"
             value={value || ''}
             onChange={(value) => onChange(value)}
             readOnly={readonly}
@@ -192,7 +191,6 @@ const OptionEditor: React.FC<{ options: Option[]; onChange: (options: Option[]) 
                             </div>
                             <div className="option-label">
                                 <BasicInputUI
-                                    type="text"
                                     value={opt.label}
                                     onChange={(value) => updateOption(index, { label: value })}
                                 />

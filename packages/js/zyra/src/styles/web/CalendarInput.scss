@@ -1,8 +1,10 @@
 @use '../../global.scss' as *;
 
 .settings-calender {
-    width: 100%;
     
+    &:has(.calendar-wrapper){
+        width: 100%;
+    }
     // without input calendar start
     .calendar-wrapper{
     .rmdp-top-class{
