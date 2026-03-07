@@ -1,7 +1,7 @@
  @import url(https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css);
 
  // Variables
-
+@use './config.scss' as *;
  $border-light-small: 0.063rem solid #e0e4e9;
  $star-color: #d49c00;
 
@@ -10,7 +10,6 @@
      --text-color: var(--wp--preset--color--contrast, #222);
      --text-color-light: var(--wp--preset--color--secondary, #777);
  }
-
 // common style 
 .store-card{
     h3,h4,h5,p{

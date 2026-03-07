@@ -1,0 +1,106 @@
+:root {
+    /* Primary Color - for main accents */
+    --theme-primary: 
+        var(--wp--preset--color--primary,      /* WordPress 6+ */
+        var(--global-palette1,                  /* Kadence */
+        var(--ast-global-color-0,                /* Astra */
+        var(--e-global-color-primary,            /* Elementor */
+        var(--kadence-primary,                   /* Kadence (alt) */
+        var(--generate-primary,                  /* GeneratePress */
+        var(--ocean-primary-color,               /* OceanWP */
+        var(--neve-primary-color,                 /* Neve */
+        var(--blocksy-primary,                    /* Blocksy */
+        var(--primary-color,                       /* Common */
+        var(--color-primary,                        /* Common */
+        var(--wc-primary,                            /* WooCommerce */
+        var(--storefront-color-primary,               /* Storefront */
+        var(--hello-elementor-primary,                 /* Hello Elementor */
+        var(--theme-palette-color-1,                    /* Blocksy (alt) */
+        var(--fl-primary-color,                          /* Flatsome */
+        var(--porto-primary-color,                       /* Porto */
+        var(--woodmart-primary-color,                    /* Woodmart */
+        var(--basel-primary-color,                       /* Basel */
+        var(--xstore-primary-color,                      /* XStore */
+        var(--the7-primary-color,                        /* The7 */
+        var(--betheme-primary-color,                     /* Betheme */
+        var(--avada-primary-color,                       /* Avada */
+        var(--bridge-primary-color,                      /* Bridge */
+        var(--enfold-primary-color,                      /* Enfold */
+        var(--jupiter-primary-color,                     /* Jupiter */
+        var(--salient-primary-color,                     /* Salient */
+        var(--divi-primary-color,                        /* Divi */
+        var(--ultra-primary-color,                       /* Ultra */
+        var(--zakra-primary-color,                       /* Zakra */
+        var(--shopisle-primary-color,                    /* ShopIsle */
+        var(--electro-primary-color,                     /* Electro */
+        var(--martfury-primary-color,                    /* Martfury */
+        var(--techno-primary-color,                      /* Techno */
+        var(--marketify-primary-color,                   /* Marketify */
+        var(--jobify-primary-color,                      /* Jobify */
+        var(--listingpro-primary-color,                  /* ListingPro */
+        var(--mylisting-primary-color,                   /* MyListing */
+        #5007aa))))))))))))))))))))))))))))))))))))));  /* Default Purple */
+
+    /* Secondary Color - for buttons and accents */
+    --theme-secondary: 
+        var(--wp--preset--color--secondary,
+        var(--global-palette2,
+        var(--ast-global-color-1,
+        var(--e-global-color-accent,
+        var(--kadence-secondary,
+        var(--generate-secondary,
+        var(--ocean-secondary-color,
+        var(--neve-secondary-color,
+        var(--blocksy-secondary,
+        var(--button-color,
+        var(--wc-secondary,
+        var(--storefront-color-button,
+        var(--hello-elementor-button,
+        var(--theme-palette-color-2,
+        var(--fl-accent-color,
+        var(--porto-secondary-color,
+        var(--woodmart-secondary-color,
+        var(--basel-secondary-color,
+        var(--xstore-secondary-color,
+        var(--the7-secondary-color,
+        var(--betheme-secondary-color,
+        var(--avada-secondary-color,
+        var(--bridge-secondary-color,
+        var(--enfold-secondary-color,
+        var(--jupiter-secondary-color,
+        var(--salient-secondary-color,
+        var(--divi-secondary-color,
+        var(--ultra-secondary-color,
+        var(--zakra-secondary-color,
+        var(--shopisle-secondary-color,
+        var(--electro-secondary-color,
+        var(--martfury-secondary-color,
+        var(--techno-secondary-color,
+        #5007aa)))))))))))))))))))))))))))))))));
+    
+    --theme-secondary-rgb:
+        var(--wp--preset--color--secondary-rgb,
+        var(--global-palette2-rgb,
+        var(--ast-global-color-1-rgb,
+        var(--e-global-color-accent-rgb,
+        var(--kadence-secondary-rgb,
+        var(--generate-secondary-rgb,
+        var(--ocean-secondary-color-rgb,
+        var(--neve-secondary-color-rgb,
+        var(--blocksy-secondary-rgb,
+        var(--wc-secondary-rgb,
+        var(--storefront-color-button-rgb,
+        var(--hello-elementor-button-rgb,
+        var(--theme-palette-color-2-rgb,
+        var(--fl-accent-color-rgb,
+        var(--porto-secondary-color-rgb,
+        var(--woodmart-secondary-color-rgb,
+        var(--basel-secondary-color-rgb,
+        var(--xstore-secondary-color-rgb,
+        var(--the7-secondary-color-rgb,
+        var(--betheme-secondary-color-rgb,
+        var(--avada-secondary-color-rgb,
+        var(--bridge-secondary-color-rgb,
+        var(--enfold-secondary-color-rgb,
+        80, 7, 170)))))))))))))))))))))));
+}

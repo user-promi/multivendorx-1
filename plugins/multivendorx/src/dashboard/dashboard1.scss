@@ -25,6 +25,11 @@ body:has(#store-dashboard) input {
     line-height: 0.95rem;
 
     #store-dashboard.collapsed {
+        .tab-wrapper,
+        .top-navbar {
+            margin-left: 4rem;
+        }
+        
         &.minimize {
             .dashboard-tabs-wrapper {
                 width: 4rem;
@@ -64,11 +69,6 @@ body:has(#store-dashboard) input {
                         }
                     }
                 }
-            }
-
-            .tab-wrapper,
-            .top-navbar {
-                margin-left: 4rem;
             }
         }
     }

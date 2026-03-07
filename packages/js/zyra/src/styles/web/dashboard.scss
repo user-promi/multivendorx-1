@@ -273,6 +273,9 @@
                 background-color: $background-color;
             }
         }
+        li:last-child{
+            margin: 0;
+        }
     }
 }
 

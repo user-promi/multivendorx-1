@@ -97,8 +97,11 @@ const Modules: React.FC<ModuleProps> = ({
             .map(item => ({ id: item.id, label: item.label })),
     ];
 
-    const isModuleAvailable = (module: Module) =>
-        module.proModule ? appLocalizer.khali_dabba ?? false : true;
+    const isModuleAvailable = (module: Module) => {
+        if (!module.proModule) return true;
+        
+        return appLocalizer.khali_dabba === true;
+    };
 
     const handleOnChange = (
         event: string[],
@@ -113,9 +116,12 @@ const Modules: React.FC<ModuleProps> = ({
             return;
         }
 
-        if (module.reqPluging?.some(
-            plugin => !appLocalizer.active_plugins?.includes(plugin.slug)
-        )) {
+        if (module.reqPluging?.some(plugin => {
+            if (!Array.isArray(appLocalizer.active_plugins)) {
+                return true;
+            }
+            return !appLocalizer.active_plugins.includes(plugin.slug);
+        })) {
             openRequirePopup(module);
             return;
         }
