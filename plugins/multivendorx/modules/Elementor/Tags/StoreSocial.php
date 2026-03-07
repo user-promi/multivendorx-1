@@ -1,5 +1,6 @@
 <?php
 namespace MultiVendorX\Elementor\Tags;
+
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
 use MultiVendorX\Elementor\StoreHelper;
@@ -14,7 +15,7 @@ class StoreSocial extends Tag {
      *
      * @param array $data
      */
-    public function __construct( $data = [] ) {
+    public function __construct( $data = array() ) {
         parent::__construct( $data );
     }
 
@@ -45,7 +46,7 @@ class StoreSocial extends Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return array( Module::TEXT_CATEGORY );
     }
 
     /**
@@ -56,18 +57,17 @@ class StoreSocial extends Tag {
      * @return void
      */
     public function render() {
-        $links       = [];
-        $network_map = [
-                'fb'        => 'fab fa-facebook',
-                'gplus'     => 'fab fa-google-plus',
-                'twitter'   => 'fab fa-twitter',
-                'linkedin'  => 'fab fa-linkedin',
-                'youtube'   => 'fab fa-youtube',
-                'instagram' => 'fab fa-instagram',
-                'pinterest'	=> 'fab fa-pinterest'
-			];
+        $links       = array();
+        $network_map = array(
+			'fb'        => 'fab fa-facebook',
+			'gplus'     => 'fab fa-google-plus',
+			'twitter'   => 'fab fa-twitter',
+			'linkedin'  => 'fab fa-linkedin',
+			'youtube'   => 'fab fa-youtube',
+			'instagram' => 'fab fa-instagram',
+			'pinterest' => 'fab fa-pinterest',
+		);
 
-     
         $social_info = $this->get_social_profiles();
 
         foreach ( $network_map as $mvx_name => $elementor_name ) {
@@ -80,15 +80,14 @@ class StoreSocial extends Tag {
     }
 
     protected function get_social_profiles() {
-        $store = $this->get_store_data();
-        $store_infos = array();
-        $store_infos['fb'] = $store['facebook'];  
-        $store_infos['twitter'] = $store['twitter'];
-        $store_infos['linkedin'] = $store['linkedin'];
-        $store_infos['youtube'] = $store['youtube'];
+        $store                    = $this->get_store_data();
+        $store_infos              = array();
+        $store_infos['fb']        = $store['facebook'];
+        $store_infos['twitter']   = $store['twitter'];
+        $store_infos['linkedin']  = $store['linkedin'];
+        $store_infos['youtube']   = $store['youtube'];
         $store_infos['instagram'] = $store['instagram'];
         $store_infos['pinterest'] = $store['pinterest'];
         return $store_infos;
     }
-
 }

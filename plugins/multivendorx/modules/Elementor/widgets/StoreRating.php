@@ -25,61 +25,61 @@ class Store_Rating extends Widget_Base {
     }
 
     public function get_categories() {
-        return [ 'multivendorx' ];
+        return array( 'multivendorx' );
     }
 
     public function get_keywords() {
-        return [ 'multivendorx', 'store', 'rating', 'stars', 'reviews' ];
+        return array( 'multivendorx', 'store', 'rating', 'stars', 'reviews' );
     }
 
     protected function register_controls() {
         // Content Section
         $this->start_controls_section(
             'section_content',
-            [
+            array(
                 'label' => __( 'Content', 'multivendorx' ),
                 'tab'   => Controls_Manager::TAB_CONTENT,
-            ]
+            )
         );
 
         $this->add_control(
             'rating',
-            [
-                'label' => __( 'Rating', 'multivendorx' ),
-                'type' => Controls_Manager::NUMBER,
-                'min' => 0,
-                'max' => 5,
-                'step' => 0.1,
+            array(
+                'label'   => __( 'Rating', 'multivendorx' ),
+                'type'    => Controls_Manager::NUMBER,
+                'min'     => 0,
+                'max'     => 5,
+                'step'    => 0.1,
                 'default' => 0,
-                'dynamic' => [
-                    'active' => true,
-                    'default' => '{{multivendorx-store-rating-tag}}'
-                ],
-            ]
+                'dynamic' => array(
+                    'active'  => true,
+                    'default' => '{{multivendorx-store-rating-tag}}',
+                ),
+            )
         );
 
         $this->add_control(
             'rating_scale',
-            [
-                'label' => __( 'Rating Scale', 'multivendorx' ),
-                'type' => Controls_Manager::SELECT,
-                'options' => [
+            array(
+                'label'   => __( 'Rating Scale', 'multivendorx' ),
+                'type'    => Controls_Manager::SELECT,
+                'options' => array(
                     '5' => '0 - 5',
-                ],
+                ),
                 'default' => '5',
-            ]
+            )
         );
 
         $this->add_control(
             'show_rating_text',
-            [
-                'label' => __( 'Show Rating Text', 'multivendorx' ),
-                'type' => Controls_Manager::SWITCHER,
-                'label_on' => __( 'Show', 'multivendorx' ),
-                'label_off' => __( 'Hide', 'multivendorx' ),
+            array(
+                'label'        => __( 'Show Rating Text', 'multivendorx' ),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => __( 'Show', 'multivendorx' ),
+                'label_off'    => __( 'Hide', 'multivendorx' ),
                 'return_value' => 'yes',
-                'default' => 'yes',
-            ]
+                'default'      => 'yes',
+            )
         );
 
         $this->end_controls_section();
@@ -87,155 +87,155 @@ class Store_Rating extends Widget_Base {
         // Style Section
         $this->start_controls_section(
             'section_style',
-            [
+            array(
                 'label' => __( 'Style', 'multivendorx' ),
                 'tab'   => Controls_Manager::TAB_STYLE,
-            ]
+            )
         );
 
         $this->add_control(
             'star_color',
-            [
-                'label' => __( 'Star Color', 'multivendorx' ),
-                'type' => Controls_Manager::COLOR,
-                'default' => '#ffcc00',
-                'selectors' => [
+            array(
+                'label'     => __( 'Star Color', 'multivendorx' ),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#ffcc00',
+                'selectors' => array(
                     '{{WRAPPER}} .star-rating span' => 'color: {{VALUE}};',
-                ],
-            ]
+                ),
+            )
         );
 
         $this->add_control(
             'unmarked_star_color',
-            [
-                'label' => __( 'Unmarked Star Color', 'multivendorx' ),
-                'type' => Controls_Manager::COLOR,
-                'default' => '#d3ced2',
-                'selectors' => [
+            array(
+                'label'     => __( 'Unmarked Star Color', 'multivendorx' ),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#d3ced2',
+                'selectors' => array(
                     '{{WRAPPER}} .star-rating::before' => 'color: {{VALUE}};',
-                ],
-            ]
+                ),
+            )
         );
 
         $this->add_control(
             'star_size',
-            [
-                'label' => __( 'Star Size', 'multivendorx' ),
-                'type' => Controls_Manager::SLIDER,
-                'range' => [
-                    'px' => [
+            array(
+                'label'     => __( 'Star Size', 'multivendorx' ),
+                'type'      => Controls_Manager::SLIDER,
+                'range'     => array(
+                    'px' => array(
                         'min' => 10,
                         'max' => 50,
-                    ],
-                ],
-                'default' => [
+                    ),
+                ),
+                'default'   => array(
                     'unit' => 'px',
                     'size' => 16,
-                ],
-                'selectors' => [
-                    '{{WRAPPER}} .star-rating' => 'font-size: {{SIZE}}{{UNIT}};',
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .star-rating'      => 'font-size: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .star-rating span' => 'padding-top: {{SIZE}}{{UNIT}};',
-                ],
-            ]
+                ),
+            )
         );
 
         $this->add_responsive_control(
             'stars_spacing',
-            [
-                'label' => __( 'Stars Spacing', 'multivendorx' ),
-                'type' => Controls_Manager::SLIDER,
-                'range' => [
-                    'px' => [
+            array(
+                'label'     => __( 'Stars Spacing', 'multivendorx' ),
+                'type'      => Controls_Manager::SLIDER,
+                'range'     => array(
+                    'px' => array(
                         'min' => 0,
                         'max' => 20,
-                    ],
-                ],
-                'default' => [
+                    ),
+                ),
+                'default'   => array(
                     'unit' => 'px',
                     'size' => 2,
-                ],
-                'selectors' => [
-                    '{{WRAPPER}} .star-rating' => 'letter-spacing: {{SIZE}}{{UNIT}};',
+                ),
+                'selectors' => array(
+                    '{{WRAPPER}} .star-rating'      => 'letter-spacing: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}} .star-rating span' => 'letter-spacing: {{SIZE}}{{UNIT}};',
-                ],
-            ]
+                ),
+            )
         );
 
         $this->add_group_control(
             Group_Control_Typography::get_type(),
-            [
-                'name' => 'text_typography',
-                'label' => __( 'Text Typography', 'multivendorx' ),
-                'selector' => '{{WRAPPER}} .star-rating-text',
-                'condition' => [
+            array(
+                'name'      => 'text_typography',
+                'label'     => __( 'Text Typography', 'multivendorx' ),
+                'selector'  => '{{WRAPPER}} .star-rating-text',
+                'condition' => array(
                     'show_rating_text' => 'yes',
-                ],
-            ]
+                ),
+            )
         );
 
         $this->add_control(
             'text_color',
-            [
-                'label' => __( 'Text Color', 'multivendorx' ),
-                'type' => Controls_Manager::COLOR,
-                'default' => '#333333',
-                'selectors' => [
+            array(
+                'label'     => __( 'Text Color', 'multivendorx' ),
+                'type'      => Controls_Manager::COLOR,
+                'default'   => '#333333',
+                'selectors' => array(
                     '{{WRAPPER}} .star-rating-text' => 'color: {{VALUE}};',
-                ],
-                'condition' => [
+                ),
+                'condition' => array(
                     'show_rating_text' => 'yes',
-                ],
-            ]
+                ),
+            )
         );
 
         $this->add_responsive_control(
             'text_spacing',
-            [
-                'label' => __( 'Text Spacing', 'multivendorx' ),
-                'type' => Controls_Manager::SLIDER,
-                'range' => [
-                    'px' => [
+            array(
+                'label'     => __( 'Text Spacing', 'multivendorx' ),
+                'type'      => Controls_Manager::SLIDER,
+                'range'     => array(
+                    'px' => array(
                         'min' => 0,
                         'max' => 20,
-                    ],
-                ],
-                'default' => [
+                    ),
+                ),
+                'default'   => array(
                     'unit' => 'px',
                     'size' => 5,
-                ],
-                'selectors' => [
+                ),
+                'selectors' => array(
                     '{{WRAPPER}} .multivendorx-store-rating' => 'gap: {{SIZE}}{{UNIT}};',
-                ],
-                'condition' => [
+                ),
+                'condition' => array(
                     'show_rating_text' => 'yes',
-                ],
-            ]
+                ),
+            )
         );
 
         $this->add_responsive_control(
             'alignment',
-            [
-                'label' => __( 'Alignment', 'multivendorx' ),
-                'type' => Controls_Manager::CHOOSE,
-                'options' => [
-                    'left' => [
+            array(
+                'label'     => __( 'Alignment', 'multivendorx' ),
+                'type'      => Controls_Manager::CHOOSE,
+                'options'   => array(
+                    'left'   => array(
                         'title' => __( 'Left', 'multivendorx' ),
-                        'icon' => 'eicon-text-align-left',
-                    ],
-                    'center' => [
+                        'icon'  => 'eicon-text-align-left',
+                    ),
+                    'center' => array(
                         'title' => __( 'Center', 'multivendorx' ),
-                        'icon' => 'eicon-text-align-center',
-                    ],
-                    'right' => [
+                        'icon'  => 'eicon-text-align-center',
+                    ),
+                    'right'  => array(
                         'title' => __( 'Right', 'multivendorx' ),
-                        'icon' => 'eicon-text-align-right',
-                    ],
-                ],
-                'default' => 'left',
-                'selectors' => [
+                        'icon'  => 'eicon-text-align-right',
+                    ),
+                ),
+                'default'   => 'left',
+                'selectors' => array(
                     '{{WRAPPER}} .multivendorx-store-rating' => 'justify-content: {{VALUE}};',
-                ],
-            ]
+                ),
+            )
         );
 
         $this->end_controls_section();
@@ -243,23 +243,23 @@ class Store_Rating extends Widget_Base {
 
     protected function render() {
         $settings = $this->get_settings_for_display();
-        $store = $this->get_store_data();
-        
+        $store    = $this->get_store_data();
+
         // Get rating from settings (dynamic tag will populate this)
         $rating = isset( $settings['rating'] ) ? floatval( $settings['rating'] ) : 0;
-        
+
         // Ensure rating is between 0 and 5
-        $rating = max(0, min(5, $rating));
-        
+        $rating = max( 0, min( 5, $rating ) );
+
         // Calculate width percentage for stars
         $width = ( $rating / 5 ) * 100;
-        
+
         $show_text = isset( $settings['show_rating_text'] ) && $settings['show_rating_text'] === 'yes';
-        
+
         // WooCommerce star rating structure
         ?>
         <div class="multivendorx-store-rating">
-            <div class="star-rating" role="img" aria-label="<?php echo sprintf( __( 'Rated %s out of 5', 'multivendorx' ), number_format( $rating, 1 ) ); ?>">
+            <div class="star-rating" role="img" aria-label="<?php printf( __( 'Rated %s out of 5', 'multivendorx' ), number_format( $rating, 1 ) ); ?>">
                 <span style="width: <?php echo esc_attr( $width ); ?>%;">
                     <strong class="rating"><?php echo esc_html( number_format( $rating, 1 ) ); ?></strong> <?php esc_html_e( 'out of 5', 'multivendorx' ); ?>
                 </span>

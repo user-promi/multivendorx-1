@@ -677,9 +677,9 @@ class StoreUtil {
         if ( empty( $store_slug ) ) {
             return;
         }
-        $store_obj = Store::get_store( $store_slug, 'slug' );
+        $store_obj  = Store::get_store( $store_slug, 'slug' );
         $phone_meta = $store_obj->get_meta( 'phone' );
-    
+
         $store_phone = '';
         if ( is_serialized( $phone_meta ) ) {
             $phone_data = maybe_unserialize( $phone_meta );
@@ -689,7 +689,7 @@ class StoreUtil {
         } else {
             $store_phone = $phone_meta;
         }
-        $info      = array(
+        $info = array(
             'storeName'          => $store_obj->get( 'name' ),
             'storeDescription'   => $store_obj->get( 'description' ),
             'storeSlug'          => $store_slug,
@@ -716,6 +716,6 @@ class StoreUtil {
          * @param array $info
          * @param object $store_obj
          */
-        return apply_filters('multivendorx_store_info',$info,$store_obj);
+        return apply_filters( 'multivendorx_store_info', $info, $store_obj );
     }
 }

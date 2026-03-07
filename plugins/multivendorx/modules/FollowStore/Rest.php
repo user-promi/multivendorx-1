@@ -115,7 +115,7 @@ class Rest extends \WP_REST_Controller {
             // Get store object.
             $store = new Store( $store_id );
 
-            $followers = is_array($store->meta_data[Utill::STORE_SETTINGS_KEYS['followers']] ?? []) ? $store->meta_data[Utill::STORE_SETTINGS_KEYS['followers']] : [];
+            $followers = is_array( $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] ?? array() ) ? $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] : array();
 
             // Convert to new format with id + empty date.
             if ( ! empty( $followers[0] ) && is_int( $followers[0] ) ) {
@@ -166,10 +166,10 @@ class Rest extends \WP_REST_Controller {
                     }
 
                     $formatted_followers[] = array(
-                        'id'            => $user_id,
-                        'name'          => $full_name,
-                        'email'         => $user->user_email,
-                        'date_followed' => Utill::multivendorx_rest_prepare_date_response( $follow_date ),
+                        'id'                => $user_id,
+                        'name'              => $full_name,
+                        'email'             => $user->user_email,
+                        'date_followed'     => Utill::multivendorx_rest_prepare_date_response( $follow_date ),
                         'date_followed_gmt' => Utill::multivendorx_rest_prepare_date_response( $follow_date, true ),
                     );
                 }

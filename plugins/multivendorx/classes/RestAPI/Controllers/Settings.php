@@ -184,7 +184,7 @@ class Settings extends \WP_REST_Controller {
             }
 
             return array(
-                'type' => 'success',
+                'type'    => 'success',
                 'message' => __( 'Settings Saved', 'multivendorx' ),
             );
         } catch ( \Exception $e ) {

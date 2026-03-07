@@ -24,11 +24,11 @@ class Store_Info extends Widget_Icon_List {
     }
 
     public function get_categories() {
-        return [ 'multivendorx' ];
+        return array( 'multivendorx' );
     }
 
     public function get_keywords() {
-        return [ 'multivendorx', 'store', 'info', 'address', 'location', 'phone', 'email' ];
+        return array( 'multivendorx', 'store', 'info', 'address', 'location', 'phone', 'email' );
     }
 
     protected function register_controls() {
@@ -38,63 +38,63 @@ class Store_Info extends Widget_Icon_List {
         // Hide the icon_list control
         $this->update_control(
             'icon_list',
-            [
-                'type' => Controls_Manager::HIDDEN,
-                'default' => [],
-            ]
+            array(
+                'type'    => Controls_Manager::HIDDEN,
+                'default' => array(),
+            )
         );
 
         // Update section label
         $this->update_control(
             'section_icon',
-            [
+            array(
                 'label' => __( 'Store Info Details', 'multivendorx' ),
-            ]
+            )
         );
 
         // Start new section for store info visibility
         $this->start_controls_section(
             'store_info_settings',
-            [
+            array(
                 'label' => __( 'Store Info Visibility', 'multivendorx' ),
-                'tab' => Controls_Manager::TAB_CONTENT,
-            ]
+                'tab'   => Controls_Manager::TAB_CONTENT,
+            )
         );
 
         $this->add_control(
             'show_address',
-            [
-                'label' => __( 'Show Address', 'multivendorx' ),
-                'type' => Controls_Manager::SWITCHER,
-                'label_on' => __( 'Show', 'multivendorx' ),
-                'label_off' => __( 'Hide', 'multivendorx' ),
+            array(
+                'label'        => __( 'Show Address', 'multivendorx' ),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => __( 'Show', 'multivendorx' ),
+                'label_off'    => __( 'Hide', 'multivendorx' ),
                 'return_value' => 'yes',
-                'default' => 'yes',
-            ]
+                'default'      => 'yes',
+            )
         );
 
         $this->add_control(
             'show_email',
-            [
-                'label' => __( 'Show Email', 'multivendorx' ),
-                'type' => Controls_Manager::SWITCHER,
-                'label_on' => __( 'Show', 'multivendorx' ),
-                'label_off' => __( 'Hide', 'multivendorx' ),
+            array(
+                'label'        => __( 'Show Email', 'multivendorx' ),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => __( 'Show', 'multivendorx' ),
+                'label_off'    => __( 'Hide', 'multivendorx' ),
                 'return_value' => 'yes',
-                'default' => 'yes',
-            ]
+                'default'      => 'yes',
+            )
         );
 
         $this->add_control(
             'show_phone',
-            [
-                'label' => __( 'Show Phone', 'multivendorx' ),
-                'type' => Controls_Manager::SWITCHER,
-                'label_on' => __( 'Show', 'multivendorx' ),
-                'label_off' => __( 'Hide', 'multivendorx' ),
+            array(
+                'label'        => __( 'Show Phone', 'multivendorx' ),
+                'type'         => Controls_Manager::SWITCHER,
+                'label_on'     => __( 'Show', 'multivendorx' ),
+                'label_off'    => __( 'Hide', 'multivendorx' ),
                 'return_value' => 'yes',
-                'default' => 'yes',
-            ]
+                'default'      => 'yes',
+            )
         );
 
         $this->end_controls_section();
@@ -105,57 +105,57 @@ class Store_Info extends Widget_Icon_List {
      */
     private function get_store_info_items() {
         $store_data = $this->get_store_data();
-        if (empty($store_data)) {
-            return [];
+        if ( empty( $store_data ) ) {
+            return array();
         }
 
         $settings = $this->get_settings_for_display();
-        $items = [];
+        $items    = array();
 
         // Address
-        if ($settings['show_address'] === 'yes' && !empty($store_data['storeAddress'])) {
-            $items[] = [
-                'text' => $store_data['storeAddress'],
-                'icon' => 'fa fa-map-marker', // Using simpler icon class
-                'icon_advanced' => [
-                    'value' => 'fas fa-map-marker-alt',
+        if ( $settings['show_address'] === 'yes' && ! empty( $store_data['storeAddress'] ) ) {
+            $items[] = array(
+                'text'          => $store_data['storeAddress'],
+                'icon'          => 'fa fa-map-marker', // Using simpler icon class
+                'icon_advanced' => array(
+                    'value'   => 'fas fa-map-marker-alt',
                     'library' => 'fa-solid',
-                ],
-                'link' => false,
-                '_id' => uniqid('address_'), // Add unique ID for each item
-            ];
+                ),
+                'link'          => false,
+                '_id'           => uniqid( 'address_' ), // Add unique ID for each item
+            );
         }
 
         // Email
-        if ($settings['show_email'] === 'yes' && !empty($store_data['storeEmail'])) {
-            $items[] = [
-                'text' => $store_data['storeEmail'],
-                'icon' => 'fa fa-envelope', // Using simpler icon class
-                'icon_advanced' => [
-                    'value' => 'fas fa-envelope',
+        if ( $settings['show_email'] === 'yes' && ! empty( $store_data['storeEmail'] ) ) {
+            $items[] = array(
+                'text'          => $store_data['storeEmail'],
+                'icon'          => 'fa fa-envelope', // Using simpler icon class
+                'icon_advanced' => array(
+                    'value'   => 'fas fa-envelope',
                     'library' => 'fa-solid',
-                ],
-                'link' => [
+                ),
+                'link'          => array(
                     'url' => 'mailto:' . $store_data['storeEmail'],
-                ],
-                '_id' => uniqid('email_'), // Add unique ID for each item
-            ];
+                ),
+                '_id'           => uniqid( 'email_' ), // Add unique ID for each item
+            );
         }
 
         // Phone
-        if ($settings['show_phone'] === 'yes' && !empty($store_data['storePhone'])) {
-            $items[] = [
-                'text' => $store_data['storePhone'],
-                'icon' => 'fa fa-phone', // Using simpler icon class
-                'icon_advanced' => [
-                    'value' => 'fas fa-phone-alt',
+        if ( $settings['show_phone'] === 'yes' && ! empty( $store_data['storePhone'] ) ) {
+            $items[] = array(
+                'text'          => $store_data['storePhone'],
+                'icon'          => 'fa fa-phone', // Using simpler icon class
+                'icon_advanced' => array(
+                    'value'   => 'fas fa-phone-alt',
                     'library' => 'fa-solid',
-                ],
-                'link' => [
-                    'url' => 'tel:' . preg_replace("/\s+/", "", $store_data['storePhone']),
-                ],
-                '_id' => uniqid('phone_'), // Add unique ID for each item
-            ];
+                ),
+                'link'          => array(
+                    'url' => 'tel:' . preg_replace( '/\s+/', '', $store_data['storePhone'] ),
+                ),
+                '_id'           => uniqid( 'phone_' ), // Add unique ID for each item
+            );
         }
 
         return $items;
@@ -164,28 +164,29 @@ class Store_Info extends Widget_Icon_List {
     protected function render() {
         $items = $this->get_store_info_items();
 
-        if (empty($items)) {
+        if ( empty( $items ) ) {
             return;
         }
 
         // Set inline layout class
         $this->add_render_attribute( 'wrapper', 'class', 'elementor-icon-list-items elementor-inline-items' );
-        
+
         // Get current settings
         $settings = $this->get_settings_for_display();
-        
+
         // Override the icon_list with our items
         $settings['icon_list'] = $items;
-        $this->set_settings($settings);
-        
+        $this->set_settings( $settings );
+
         // Manually render the icon list
         ?>
         <div class="elementor-icon-list-wrapper">
             <ul <?php echo $this->get_render_attribute_string( 'wrapper' ); ?>>
-                <?php foreach ( $items as $index => $item ) : 
+                <?php
+                foreach ( $items as $index => $item ) :
                     $repeater_setting_key = $this->get_repeater_setting_key( 'text', 'icon_list', $index );
                     $this->add_render_attribute( $repeater_setting_key, 'class', 'elementor-icon-list-text' );
-                    
+
                     // Add item class
                     $item_class = 'elementor-icon-list-item elementor-inline-item';
                     $this->add_render_attribute( 'item-' . $index, 'class', $item_class );
@@ -218,7 +219,7 @@ class Store_Info extends Widget_Icon_List {
     protected function content_template() {
         ?>
         <#
-        var storeData = <?php echo json_encode($this->get_store_data()); ?>;
+        var storeData = <?php echo json_encode( $this->get_store_data() ); ?>;
         var items = [];
 
         if (settings.show_address === 'yes' && storeData.storeAddress) {

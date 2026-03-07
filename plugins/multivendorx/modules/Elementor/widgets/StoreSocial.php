@@ -2,76 +2,71 @@
 
 namespace MultiVendorX\Elementor\Widgets;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 use Elementor\Widget_Social_Icons;
 use MultiVendorX\Elementor\StoreHelper;
 
-class Store_Social extends Widget_Social_Icons
-{
+class Store_Social extends Widget_Social_Icons {
+
 
 	use StoreHelper;
 
-	public function get_name()
-	{
+	public function get_name() {
 		return 'multivendorx_store_social';
 	}
 
-	public function get_title()
-	{
-		return __('Store Social', 'multivendorx');
+	public function get_title() {
+		return __( 'Store Social', 'multivendorx' );
 	}
 
-	public function get_icon()
-	{
+	public function get_icon() {
 		return 'eicon-social-icons';
 	}
 
-	public function get_categories()
-	{
-		return ['multivendorx'];
+	public function get_categories() {
+		return array( 'multivendorx' );
 	}
 
-	protected function register_controls()
-	{
+	protected function register_controls() {
 		parent::register_controls();
 
 		$this->update_control(
 			'social_icon_list',
-			[
-				'default' => [
-					[
-						'social_icon' => [
-							'value' => 'fab fa-facebook',
+			array(
+				'default' => array(
+					array(
+						'social_icon' => array(
+							'value'   => 'fab fa-facebook',
 							'library' => 'fa-brands',
-						],
-					],
-					[
-						'social_icon' => [
-							'value' => 'fab fa-twitter',
+						),
+					),
+					array(
+						'social_icon' => array(
+							'value'   => 'fab fa-twitter',
 							'library' => 'fa-brands',
-						],
-					],
-					[
-						'social_icon' => [
-							'value' => 'fab fa-instagram',
+						),
+					),
+					array(
+						'social_icon' => array(
+							'value'   => 'fab fa-instagram',
 							'library' => 'fa-brands',
-						],
-					],
-					[
-						'social_icon' => [
-							'value' => 'fab fa-youtube',
+						),
+					),
+					array(
+						'social_icon' => array(
+							'value'   => 'fab fa-youtube',
 							'library' => 'fa-brands',
-						],
-					],
-					[
-						'social_icon' => [
-							'value' => 'fab fa-pinterest',
+						),
+					),
+					array(
+						'social_icon' => array(
+							'value'   => 'fab fa-pinterest',
 							'library' => 'fa-brands',
-						],
-					],
-				],
-			]
+						),
+					),
+				),
+			)
 		);
 	}
 
@@ -80,18 +75,18 @@ class Store_Social extends Widget_Social_Icons
 		if ( ! $store ) {
 			return;
 		}
-		
+
 		// -------------------------------
 		// Render Dynamic Social Icons
 		// -------------------------------
-		$social_platforms = [
+		$social_platforms = array(
 			'facebook'  => 'fab fa-facebook',
 			'twitter'   => 'fab fa-twitter',
 			'instagram' => 'fab fa-instagram',
 			'youtube'   => 'fab fa-youtube',
 			'pinterest' => 'fab fa-pinterest',
 			'linkedin'  => 'fab fa-linkedin',
-		];
+		);
 
 		echo '<div class="multivendorx-store-social-icons">';
 

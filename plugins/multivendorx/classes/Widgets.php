@@ -74,9 +74,12 @@ class Widgets {
             : get_queried_object_id();
 
         if ( $current_page_id !== $store_page_id ) {
-            $categories = array_filter( $categories, function( $category ) {
-                return $category['slug'] !== 'multivendorx-store-shop';
-            });
+            $categories = array_filter(
+                $categories,
+                function ( $category ) {
+					return $category['slug'] !== 'multivendorx-store-shop';
+				}
+            );
         }
 
         return array_values( $categories );

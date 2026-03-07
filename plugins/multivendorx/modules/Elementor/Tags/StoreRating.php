@@ -15,7 +15,7 @@ class StoreRating extends Tag {
      *
      * @param array $data
      */
-    public function __construct( $data = [] ) {
+    public function __construct( $data = array() ) {
         parent::__construct( $data );
     }
 
@@ -46,7 +46,7 @@ class StoreRating extends Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return array( Module::TEXT_CATEGORY );
     }
 
     /**
@@ -57,7 +57,7 @@ class StoreRating extends Tag {
      * @return void
      */
     public function render() {
-        $store = $this->get_store_data();
+        $store  = $this->get_store_data();
         $rating = ! empty( $store['storeRating'] ) ? $store['storeRating'] : 0;
         echo esc_html( $rating );
     }
