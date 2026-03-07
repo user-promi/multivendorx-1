@@ -7,6 +7,7 @@ import { FIELD_REGISTRY } from './FieldRegistry';
 import FormGroup from './UI/FormGroup';
 import { AdminButtonUI } from './AdminButton';
 import FormGroupWrapper from './UI/FormGroupWrapper';
+import { useOutsideClick } from './useOutsideClick';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -124,6 +125,444 @@ const canEditField = (
     return !tpl?.editableFields || tpl.editableFields[field] !== false;
 };
 
+interface BasePanelProps {
+    method: ExpandablePanelMethod
+    methodValue: Record<string, unknown>
+    isOpen: boolean
+    isOn: boolean
+    hasFields: boolean
+    icon: string
+    title: string
+    desc: string
+    canAccess: boolean
+    toggleTab: (id: string) => void
+    handleChange: (methodId: string, key: string, val: unknown) => void
+}
+
+interface PanelHeaderProps extends BasePanelProps {
+    editing: boolean
+    editField: 'title' | 'description' | null
+    iconDropdown: string | null
+    setIconDropdown: React.Dispatch<React.SetStateAction<string | null>>
+    iconPicker: React.RefObject<HTMLDivElement>
+    titleRef: React.RefObject<HTMLInputElement>
+    descRef: React.RefObject<HTMLTextAreaElement>
+    startEdit: (id: string, field: 'title' | 'description') => void
+    commitEdit: () => void
+    addNewTemplate?: AddNewTemplate
+}
+
+const PanelHeader: React.FC<PanelHeaderProps> = ({
+    method,
+    isOpen,
+    editing,
+    editField,
+    iconDropdown,
+    setIconDropdown,
+    icon,
+    hasFields,
+    isOn,
+    title,
+    desc,
+    iconPicker,
+    titleRef,
+    descRef,
+    startEdit,
+    commitEdit,
+    handleChange,
+    toggleTab,
+    canAccess,
+    addNewTemplate,
+}) => {
+
+    return (
+        <div className="expandable-header">
+
+            {hasFields && (
+                <div className="toggle-icon">
+                    <i
+                        className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`}
+                        onClick={() => canAccess && toggleTab(method.id)}
+                    />
+                </div>
+            )}
+
+            <div
+                className="details"
+                onClick={() => canAccess && toggleTab(method.id)}
+            >
+                <div className="details-wrapper">
+
+                    {icon && (
+                        <div
+                            className="expandable-header-icon"
+                            ref={iconDropdown === method.id ? iconPicker : null}
+                            onClick={e => {
+                                if (!method.iconEnable || !canAccess) return;
+                                e.stopPropagation();
+                                setIconDropdown(p => p === method.id ? null : method.id);
+                            }}
+                        >
+                            <i className={`adminfont-${icon} icon`} />
+
+                            {method.iconEnable && iconDropdown !== method.id && (
+                                <i className="adminfont-edit edit-icon" />
+                            )}
+
+                            {method.iconEnable && iconDropdown === method.id && (
+                                <div
+                                    className="icon-options-list"
+                                    onClick={e => e.stopPropagation()}
+                                >
+                                    {(method.iconOptions ?? addNewTemplate?.iconOptions ?? []).map(cls => (
+                                        <button
+                                            key={cls}
+                                            type="button"
+                                            className={`icon-option ${icon === cls ? 'selected' : ''}`}
+                                            onClick={() => {
+                                                handleChange(method.id, 'icon', cls);
+                                                setIconDropdown(null);
+                                            }}
+                                            title={cls}
+                                        >
+                                            <i className={`adminfont-${cls}`} />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    <div className="expandable-header-info">
+
+                        {/* TITLE */}
+                        <div className="title-wrapper">
+                            <span className="title">
+
+                                {editing && editField === 'title' && canEditField(method, 'title', addNewTemplate) ? (
+                                    <input
+                                        ref={titleRef}
+                                        type="text"
+                                        defaultValue={title}
+                                        className="inline-edit-input title-edit"
+                                        onKeyDown={e => e.key === 'Enter' && commitEdit()}
+                                        onClick={e => e.stopPropagation()}
+                                    />
+                                ) : (
+                                    <span
+                                        className={`title ${canEditField(method, 'title', addNewTemplate) ? 'editable-title' : ''}`}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            if (canEditField(method, 'title', addNewTemplate))
+                                                startEdit(method.id, 'title');
+                                        }}
+                                    >
+                                        {title}
+                                        {canEditField(method, 'title', addNewTemplate) && (
+                                            <i className="adminfont-edit inline-edit-icon" />
+                                        )}
+                                    </span>
+                                )}
+
+                                {method.disableBtn && !method.isCustom && (
+                                    <div className="panel-badges">
+                                        <div className={`admin-badge ${isOn ? 'green' : 'red'}`}>
+                                            {isOn ? 'Active' : 'Inactive'}
+                                        </div>
+                                    </div>
+                                )}
+
+                            </span>
+                        </div>
+
+                        {/* DESCRIPTION */}
+                        <div className="panel-description">
+
+                            {editing && editField === 'description' && canEditField(method, 'description', addNewTemplate) ? (
+                                <textarea
+                                    ref={descRef}
+                                    defaultValue={desc}
+                                    className="description-edit"
+                                    rows={3}
+                                    onKeyDown={e => e.key === 'Enter' && e.ctrlKey && commitEdit()}
+                                    onClick={e => e.stopPropagation()}
+                                />
+                            ) : (
+                                <p
+                                    className={canEditField(method, 'description', addNewTemplate) ? 'editable-description' : undefined}
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        if (canEditField(method, 'description', addNewTemplate))
+                                            startEdit(method.id, 'description');
+                                    }}
+                                >
+                                    <span dangerouslySetInnerHTML={{ __html: desc }} />
+                                    {canEditField(method, 'description', addNewTemplate) && (
+                                        <i className="adminfont-edit inline-edit-icon" />
+                                    )}
+                                </p>
+                            )}
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+interface PanelControlsProps extends BasePanelProps {
+    price: { price: string; unit: string } | null
+    cntFlds: PanelFormField[]
+    progress: number[]
+    idx: number
+    openDropdown: string | null
+    setOpenDropdown: React.Dispatch<React.SetStateAction<string | null>>
+    dropdownRef: React.RefObject<HTMLDivElement>
+    handleDelete: (methodId: string) => void
+    canDelete: () => boolean
+}
+
+const PanelControls: React.FC<PanelControlsProps> = ({
+    method,
+    isOn,
+    isOpen,
+    hasFields,
+    price,
+    cntFlds,
+    progress,
+    idx,
+    openDropdown,
+    setOpenDropdown,
+    dropdownRef,
+    canAccess,
+    handleChange,
+    handleDelete,
+    canDelete,
+    setActiveTab,
+}) => {
+
+    return (
+        <div className="right-section">
+
+            {/* Price */}
+            {price && (
+                <span className="price-field">
+                    {price.price}
+                    {price.unit && <span className="desc">{price.unit}</span>}
+                </span>
+            )}
+
+            {/* Buttons */}
+            <ul className="settings-btn">
+
+                {/* Delete */}
+                {method.isCustom && !method.hideDeleteBtn && canDelete() && (
+                    <AdminButtonUI
+                        buttons={[{
+                            icon: 'delete',
+                            text: 'Delete',
+                            color: 'red-color',
+                            onClick: () => handleDelete(method.id),
+                        }]}
+                    />
+                )}
+
+                {/* Predefined methods */}
+                {method.disableBtn && !method.isCustom && (
+
+                    isOn ? (
+
+                        hasFields && (
+                            <AdminButtonUI
+                                buttons={[{
+                                    icon: 'setting',
+                                    text: 'Settings',
+                                    color: 'purple',
+                                    onClick: () =>
+                                        canAccess &&
+                                        setActiveTab(isOpen ? null : method.id),
+                                }]}
+                            />
+                        )
+
+                    ) : (
+
+                        <li onClick={() => canAccess && handleChange(method.id, 'enable', true)}>
+                            <span className="admin-btn btn-purple-bg">
+                                <i className="adminfont-eye" /> Enable
+                            </span>
+                        </li>
+
+                    )
+
+                )}
+
+                {/* Custom methods */}
+                {method.isCustom && method.disableBtn && (
+
+                    isOn ? (
+
+                        <AdminButtonUI
+                            buttons={[{
+                                icon: 'eye-blocked',
+                                text: 'Hide',
+                                color: 'purple',
+                                onClick: () =>
+                                    canAccess &&
+                                    handleChange(method.id, 'enable', false),
+                            }]}
+                        />
+
+                    ) : (
+
+                        <li onClick={() => canAccess && handleChange(method.id, 'enable', true)}>
+                            <span className="admin-btn btn-purple-bg">
+                                <i className="adminfont-eye" /> Show
+                            </span>
+                        </li>
+
+                    )
+
+                )}
+
+                {/* Progress */}
+                {!method.disableBtn && method.countBtn && cntFlds.length > 0 && (
+                    <div className="admin-badge red">
+                        {progress[idx] || 0}/{cntFlds.length}
+                    </div>
+                )}
+
+            </ul>
+
+            {/* Dropdown */}
+            {!method.isCustom && isOn && (
+                <div ref={dropdownRef} className="icon-wrapper">
+
+                    <i
+                        className="admin-icon adminfont-more-vertical"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setOpenDropdown(p =>
+                                p === method.id ? null : method.id
+                            );
+                        }}
+                    />
+
+                    {openDropdown === method.id && (
+
+                        <div className="dropdown" onClick={(e) => e.stopPropagation()}>
+
+                            <div className="dropdown-body">
+
+                                <ul>
+
+                                    {method.disableBtn && hasFields && (
+                                        <li
+                                            onClick={() => {
+                                                canAccess &&
+                                                setActiveTab(isOpen ? null : method.id);
+                                                setOpenDropdown(null);
+                                            }}
+                                        >
+                                            <span className="item">
+                                                <i className="adminfont-setting" />
+                                                Settings
+                                            </span>
+                                        </li>
+                                    )}
+
+                                    <li
+                                        className="delete"
+                                        onClick={() => {
+                                            canAccess &&
+                                            handleChange(method.id, 'enable', false);
+                                            setOpenDropdown(null);
+                                        }}
+                                    >
+                                        <div className="item">
+                                            <i className="adminfont-eye-blocked" />
+                                            Disable
+                                        </div>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+                    )}
+
+                </div>
+            )}
+
+        </div>
+    );
+};
+
+interface PanelBodyProps {
+    method: ExpandablePanelMethod;
+    isOpen: boolean;
+    isOn: boolean;
+    isWizardMode: boolean;
+    renderField: (methodId: string, field: PanelFormField) => JSX.Element | null;
+}
+
+const PanelBody: React.FC<PanelBodyProps> = ({
+    method,
+    isOpen,
+    isOn,
+    isWizardMode,
+    renderField,
+}) => {
+
+    const hasFields = Boolean(method.formFields?.length);
+
+    if (!hasFields) return null;
+
+    const shouldOpen =
+        method.openForm ||
+        (isOpen && (isOn || method.isCustom));
+
+    if (!shouldOpen) return null;
+
+    return (
+        <div className={`${method.wrapperClass ?? ''} expandable-panel open`.trim()}>
+
+            <FormGroupWrapper>
+
+                {method.formFields!.map(field => {
+
+                    if (isWizardMode && field.key === 'wizardButtons')
+                        return null;
+
+                    return (
+                        <FormGroup
+                            row
+                            key={field.key}
+                            label={field.type !== 'notice' ? field.label : undefined}
+                            desc={field.desc}
+                            htmlFor={field.name}
+                        >
+                            {field.beforeElement &&
+                                renderField(method.id, field.beforeElement as PanelFormField)
+                            }
+
+                            {renderField(method.id, field)}
+
+                        </FormGroup>
+                    );
+
+                })}
+
+            </FormGroupWrapper>
+
+        </div>
+    );
+};
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
@@ -153,13 +592,12 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     // Inline editing
     const [editId,    setEditId]    = useState<string | null>(null);
     const [editField, setEditField] = useState<'title' | 'description' | null>(null);
-    const [editTitle, setEditTitle] = useState('');
-    const [editDesc,  setEditDesc]  = useState('');
 
     // ── Refs ──────────────────────────────────────────────────────────────────
     const titleRef   = useRef<HTMLInputElement>(null);
     const descRef    = useRef<HTMLTextAreaElement>(null);
     const iconPicker = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     // ── Core handler ──────────────────────────────────────────────────────────
 
@@ -174,33 +612,29 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     // ── Inline editing ────────────────────────────────────────────────────────
 
     const startEdit = (methodId: string, field: 'title' | 'description') => {
-        const methodValue = value[methodId] ?? {};
-        const m  = methods.find(x => x.id === methodId);
         setEditId(methodId);
         setEditField(field);
-        if (field === 'title') {
-            setEditTitle((methodValue.title as string) || m?.label || '');
-        } else {
-            setEditDesc((methodValue.description as string) || m?.desc || '');
-        }
     };
 
     const commitEdit = () => {
-        if (editId && editField === 'title' && editTitle.trim())
-            handleChange(editId, 'title', editTitle.trim());
-        if (editId && editField === 'description')
-            handleChange(editId, 'description', editDesc);
+        if (!editId) return;
+
+        if (editField === 'title') {
+            const val = titleRef.current?.value.trim();
+            if (val) handleChange(editId, 'title', val);
+        }
+
+        if (editField === 'description') {
+            const val = descRef.current?.value ?? '';
+            handleChange(editId, 'description', val);
+        }
         setEditId(null);
         setEditField(null);
-        setEditTitle('');
-        setEditDesc('');
     };
 
     const cancelEdit = () => {
         setEditId(null);
         setEditField(null);
-        setEditTitle('');
-        setEditDesc('');
     };
 
     // ── CRUD ──────────────────────────────────────────────────────────────────
@@ -335,6 +769,25 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
 
     // ── Effects ───────────────────────────────────────────────────────────────
 
+    // Click outside commits the edit
+    useOutsideClick(titleRef, () => {
+        if (editId && editField === 'title') commitEdit();
+    });
+
+    useOutsideClick(descRef, () => {
+        if (editId && editField === 'description') commitEdit();
+    });
+
+    // Close 3-dot dropdown on outside click
+    useOutsideClick(dropdownRef, () => {
+        if (openDropdown) setOpenDropdown(null);
+    });
+
+    // Close icon picker on outside click or Escape
+    useOutsideClick(iconPicker, () => {
+        if (iconDropdown) setIconDropdown(null);
+    });
+
     // Focus the active edit input
     useEffect(() => {
         if (editField === 'title') { titleRef.current?.focus(); titleRef.current?.select(); }
@@ -351,42 +804,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
         };
         document.addEventListener('keydown', handler);
         return () => document.removeEventListener('keydown', handler);
-    }, [editId, editField, editTitle, editDesc]);
-
-    // Click outside commits the edit
-    useEffect(() => {
-        if (!editId) return;
-        const handler = (e: MouseEvent) => {
-            const t = e.target as Node;
-            if (!titleRef.current?.contains(t) && !descRef.current?.contains(t)) commitEdit();
-        };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, [editId, editField, editTitle, editDesc]);
-
-    // Close 3-dot dropdown on outside click
-    useEffect(() => {
-        if (!openDropdown) return;
-        const close = () => setOpenDropdown(null);
-        document.addEventListener('click', close);
-        return () => document.removeEventListener('click', close);
-    }, [openDropdown]);
-
-    // Close icon picker on outside click or Escape
-    useEffect(() => {
-        if (!iconDropdown) return;
-        const onMouse = (e: MouseEvent) => {
-            if (iconPicker.current && !iconPicker.current.contains(e.target as Node))
-                setIconDropdown(null);
-        };
-        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIconDropdown(null); };
-        document.addEventListener('mousedown', onMouse);
-        document.addEventListener('keydown', onKey);
-        return () => {
-            document.removeEventListener('mousedown', onMouse);
-            document.removeEventListener('keydown', onKey);
-        };
-    }, [iconDropdown]);
+    }, [editId, editField]);
 
     // Wizard: recalculate field-fill progress
     useEffect(() => {
@@ -433,309 +851,93 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     return (
         <>
             <div className="expandable-panel-group">
+
                 {visible.map((method, idx) => {
-                    const methodValue      = value[method.id] ?? {};
-                    const isOn    = method.isCustom ? methodValue.enable !== false : Boolean(methodValue.enable);
-                    const isOpen  = activeTab === method.id;
-                    const hasFields    = Boolean(method.formFields?.length);
-                    const icon    = (methodValue.icon as string) || method.icon;
-                    const price   = formatPrice(methodValue);
-                    const title   = (methodValue.title       as string) || method.label;
-                    const desc    = (methodValue.description as string) || method.desc;
+
+                    const methodValue = value[method.id] ?? {};
+                    const isOn = method.isCustom ? methodValue.enable !== false : Boolean(methodValue.enable);
+                    const isOpen = activeTab === method.id;
+                    const hasFields = Boolean(method.formFields?.length);
+
+                    const icon = (methodValue.icon as string) || method.icon;
+                    const price = formatPrice(methodValue);
+
+                    const title = (methodValue.title as string) || method.label;
+                    const desc = (methodValue.description as string) || method.desc;
+
                     const editing = editId === method.id;
-                    const cntFlds = method.formFields?.filter(isCountableField) ?? [];
+
+                    /* 🔧 CHANGE */
+                    const cntFlds = (method.formFields ?? []).filter(isCountableField);
 
                     return (
-                        <div
-                            key={method.id}
-                            className={[
-                                'expandable-item',
-                                method.disableBtn && !isOn ? 'disable' : '',
-                                method.openForm ? 'open' : '',
-                            ].filter(Boolean).join(' ')}
-                        >
-                            {/* ── Header ──────────────────────────────────── */}
-                            <div className="expandable-header">
+                        <div key={method.id} className="expandable-item">
 
-                                {hasFields && (
-                                    <div className="toggle-icon">
-                                        <i
-                                            className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`}
-                                            onClick={() => canAccess && setActiveTab(isOpen ? null : method.id)}
-                                        />
-                                    </div>
-                                )}
+                            <PanelHeader
+                                method={method}
+                                isOpen={isOpen}
+                                isOn={isOn}
+                                hasFields={hasFields}
+                                icon={icon}
+                                title={title}
+                                desc={desc}
+                                editing={editing}
+                                editField={editField}
+                                iconDropdown={iconDropdown}
+                                setIconDropdown={setIconDropdown}
+                                iconPicker={iconPicker}
+                                titleRef={titleRef}
+                                descRef={descRef}
+                                startEdit={startEdit}
+                                commitEdit={commitEdit}
+                                handleChange={handleChange}
+                                canAccess={canAccess}
+                                addNewTemplate={addNewTemplate}
+                                setActiveTab={setActiveTab}
+                            />
 
-                                <div
-                                    className="details"
-                                    onClick={() => canAccess && setActiveTab(isOpen ? null : method.id)}
-                                >
-                                    <div className="details-wrapper">
+                            <PanelControls
+                                method={method}
+                                isOn={isOn}
+                                isOpen={isOpen}
+                                hasFields={hasFields}
+                                price={price}
+                                cntFlds={cntFlds}
+                                progress={progress}
+                                idx={idx}
+                                openDropdown={openDropdown}
+                                setOpenDropdown={setOpenDropdown}
+                                dropdownRef={dropdownRef}
+                                canAccess={canAccess}
+                                handleChange={handleChange}
+                                handleDelete={handleDelete}
+                                canDelete={canDelete}
+                                setActiveTab={setActiveTab}
+                            />
 
-                                        {/* Icon picker */}
-                                        {icon && (
-                                            <div
-                                                className="expandable-header-icon"
-                                                ref={iconDropdown === method.id ? iconPicker : null}
-                                                onClick={e => {
-                                                    if (!method.iconEnable || !canAccess) return;
-                                                    e.stopPropagation();
-                                                    setIconDropdown(p => p === method.id ? null : method.id);
-                                                }}
-                                            >
-                                                <i className={`adminfont-${icon} icon`} />
-                                                {method.iconEnable && iconDropdown !== method.id && (
-                                                    <i className="adminfont-edit edit-icon" />
-                                                )}
-                                                {method.iconEnable && iconDropdown === method.id && (
-                                                    <div
-                                                        className="icon-options-list"
-                                                        onClick={e => e.stopPropagation()}
-                                                    >
-                                                        {(method.iconOptions ?? addNewTemplate?.iconOptions ?? []).map(cls => (
-                                                            <button
-                                                                key={cls} type="button"
-                                                                className={`icon-option ${icon === cls ? 'selected' : ''}`}
-                                                                onClick={() => { handleChange(method.id, 'icon', cls); setIconDropdown(null); }}
-                                                                title={cls}
-                                                            >
-                                                                <i className={`adminfont-${cls}`} />
-                                                            </button>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
+                            <PanelBody
+                                method={method}
+                                isOpen={isOpen}
+                                isOn={isOn}
+                                isWizardMode={isWizardMode}
+                                renderField={renderField}
+                            />
 
-                                        <div className="expandable-header-info">
-
-                                            {/* Title (inline-editable for custom) */}
-                                            <div className="title-wrapper">
-                                                <span className="title">
-                                                    {editing && editField === 'title' && canEditField(method, 'title', addNewTemplate) ? (
-                                                        <input
-                                                            ref={titleRef} type="text"
-                                                            className="inline-edit-input title-edit"
-                                                            value={editTitle}
-                                                            onChange={e => setEditTitle(e.target.value)}
-                                                            onKeyDown={e => e.key === 'Enter' && commitEdit()}
-                                                            onClick={e => e.stopPropagation()}
-                                                        />
-                                                    ) : (
-                                                        <span
-                                                            className={`title ${canEditField(method, 'title', addNewTemplate) ? 'editable-title' : ''}`}
-                                                            onClick={e => {
-                                                                e.stopPropagation();
-                                                                if (canEditField(method, 'title', addNewTemplate))
-                                                                    startEdit(method.id, 'title');
-                                                            }}
-                                                            title={canEditField(method, 'title', addNewTemplate) ? 'Click to edit' : undefined}
-                                                        >
-                                                            {title}
-                                                            {canEditField(method, 'title', addNewTemplate) && (
-                                                                <i className="adminfont-edit inline-edit-icon" />
-                                                            )}
-                                                        </span>
-                                                    )}
-
-                                                    {/* Active/Inactive badge — predefined disableBtn methods only */}
-                                                    {method.disableBtn && !method.isCustom && (
-                                                        <div className="panel-badges">
-                                                            <div className={`admin-badge ${isOn ? 'green' : 'red'}`}>
-                                                                {isOn ? 'Active' : 'Inactive'}
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </span>
-                                            </div>
-
-                                            {/* Description (inline-editable for custom) */}
-                                            <div className="panel-description">
-                                                {editing && editField === 'description' && canEditField(method, 'description', addNewTemplate) ? (
-                                                    <textarea
-                                                        ref={descRef}
-                                                        className="description-edit"
-                                                        value={editDesc}
-                                                        onChange={e => setEditDesc(e.target.value)}
-                                                        onKeyDown={e => e.key === 'Enter' && e.ctrlKey && commitEdit()}
-                                                        onClick={e => e.stopPropagation()}
-                                                        rows={3}
-                                                    />
-                                                ) : (
-                                                    <p
-                                                        className={canEditField(method, 'description', addNewTemplate) ? 'editable-description' : undefined}
-                                                        onClick={e => {
-                                                            e.stopPropagation();
-                                                            if (canEditField(method, 'description', addNewTemplate))
-                                                                startEdit(method.id, 'description');
-                                                        }}
-                                                        title={canEditField(method, 'description', addNewTemplate) ? 'Click to edit' : undefined}
-                                                    >
-                                                        <span dangerouslySetInnerHTML={{ __html: desc }} />
-                                                        {canEditField(method, 'description', addNewTemplate) && (
-                                                            <i className="adminfont-edit inline-edit-icon" />
-                                                        )}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* ── Right section ────────────────────────── */}
-                                <div className="right-section">
-                                    {price && (
-                                        <span className="price-field">
-                                            {price.price}
-                                            {price.unit && <span className="desc">{price.unit}</span>}
-                                        </span>
-                                    )}
-
-                                    <ul className="settings-btn">
-
-                                        {/* Delete — custom only, respects minimum count */}
-                                        {method.isCustom && !method.hideDeleteBtn && canDelete() && (
-                                            <AdminButtonUI buttons={[{
-                                                icon: 'delete', text: 'Delete', color: 'red-color',
-                                                onClick: () => handleDelete(method.id),
-                                            }]} />
-                                        )}
-
-                                        {/*
-                                         * PREDEFINED (disableBtn, non-custom):
-                                         *   Disabled → Enable button
-                                         *   Enabled  → Settings button
-                                         *
-                                         * CUSTOM (isCustom):
-                                         *   Enabled  → Hide button
-                                         *   Hidden   → Show button
-                                         *
-                                         * These two branches are mutually exclusive by design.
-                                         * A method is either predefined OR custom, never both.
-                                         */}
-
-                                        {method.disableBtn && !method.isCustom && (
-                                            isOn ? (
-                                                hasFields && (
-                                                    <AdminButtonUI buttons={[{
-                                                        icon: 'setting', text: 'Settings', color: 'purple',
-                                                        onClick: () => canAccess && setActiveTab(isOpen ? null : method.id),
-                                                    }]} />
-                                                )
-                                            ) : (
-                                                <li onClick={() => canAccess && handleChange(method.id, 'enable', true)}>
-                                                    <span className="admin-btn btn-purple-bg">
-                                                        <i className="adminfont-eye" /> Enable
-                                                    </span>
-                                                </li>
-                                            )
-                                        )}
-
-                                        {method.isCustom && method.disableBtn && (
-                                            isOn ? (
-                                                <AdminButtonUI buttons={[{
-                                                    icon: 'eye-blocked',
-                                                    text: 'Hide',
-                                                    color: 'purple',
-                                                    onClick: () => canAccess && handleChange(method.id, 'enable', false),
-                                                }]} />
-                                            ) : (
-                                                <li onClick={() => canAccess && handleChange(method.id, 'enable', true)}>
-                                                    <span className="admin-btn btn-purple-bg">
-                                                        <i className="adminfont-eye" /> Show
-                                                    </span>
-                                                </li>
-                                            )
-                                        )}
-
-                                        {/* Progress counter (non-disableBtn methods only) */}
-                                        {!method.disableBtn && method.countBtn && cntFlds.length > 0 && (
-                                            <div className="admin-badge red">
-                                                {progress[idx] || 0}/{cntFlds.length}
-                                            </div>
-                                        )}
-                                    </ul>
-
-                                    {/* 3-dot dropdown — non-custom, enabled methods */}
-                                    {!method.isCustom && isOn && (
-                                        <div className="icon-wrapper">
-                                            <i
-                                                className="admin-icon adminfont-more-vertical"
-                                                onClick={e => {
-                                                    e.stopPropagation();
-                                                    setOpenDropdown(p => p === method.id ? null : method.id);
-                                                }}
-                                            />
-                                            {openDropdown === method.id && (
-                                                <div className="dropdown" onClick={e => e.stopPropagation()}>
-                                                    <div className="dropdown-body">
-                                                        <ul>
-                                                            {method.disableBtn && hasFields && (
-                                                                <li onClick={() => {
-                                                                    canAccess && setActiveTab(isOpen ? null : method.id);
-                                                                    setOpenDropdown(null);
-                                                                }}>
-                                                                    <span className="item">
-                                                                        <i className="adminfont-setting" /> Settings
-                                                                    </span>
-                                                                </li>
-                                                            )}
-                                                            <li className="delete" onClick={() => {
-                                                                canAccess && handleChange(method.id, 'enable', false);
-                                                                setOpenDropdown(null);
-                                                            }}>
-                                                                <div className="item">
-                                                                    <i className="adminfont-eye-blocked" /> Disable
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* ── Form body ────────────────────────────────── */}
-                            {hasFields && (method.openForm || (isOpen && (isOn || method.isCustom))) && (
-                                <div className={`${method.wrapperClass ?? ''} expandable-panel open`.trim()}>
-                                    <FormGroupWrapper>
-                                        {method.formFields!.map(field => {
-                                            if (isWizardMode && field.key === 'wizardButtons') return null;
-                                            return (
-                                                <FormGroup
-                                                    row key={field.key}
-                                                    label={field.type !== 'notice' ? field.label : undefined}
-                                                    desc={field.desc}
-                                                    htmlFor={field.name}
-                                                >
-                                                    {field.beforeElement && renderField(method.id, field.beforeElement as PanelFormField)}
-                                                    {renderField(method.id, field)}
-                                                </FormGroup>
-                                            );
-                                        })}
-                                    </FormGroupWrapper>
-                                </div>
-                            )}
                         </div>
                     );
                 })}
 
                 {addNewBtn && (
                     <AdminButtonUI buttons={[{
-                        icon: 'plus', text: 'Add New', color: 'purple',
+                        icon: 'plus',
+                        text: 'Add New',
+                        color: 'purple',
                         onClick: handleAddNew,
-                    }]} />
+                    }]}
+                    />
                 )}
-            </div>
 
-            {/* Wizard navigation buttons (rendered outside the panel list) */}
-            {isWizardMode && (() => {
-                const step = methods[wizardIndex];
-                const btn  = step?.formFields?.find(f => f.key === 'wizardButtons');
-                return btn ? renderField(step.id, btn) : null;
-            })()}
+            </div>
         </>
     );
 };
