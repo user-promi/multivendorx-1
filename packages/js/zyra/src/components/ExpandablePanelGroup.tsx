@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useReducer, useCallback } from 'react';
+import React, { useEffect, useRef, useReducer, useCallback, useContext, createContext } from 'react';
 import '../styles/web/ExpandablePanelGroup.scss';
 import { getApiLink } from '../utils/apiService';
 import axios from 'axios';
@@ -109,6 +109,60 @@ type PanelAction =
     | { type: 'ADD_METHOD'; method: ExpandablePanelMethod }
     | { type: 'DELETE_METHOD'; id: string };
 
+// ── Context Types ─────────────────────────────────────────────────────────────
+
+interface PanelContextType {
+    state: PanelState;
+    dispatch: React.Dispatch<PanelAction>;
+    value: Record<string, Record<string, unknown>>;
+    isWizardMode: boolean;
+    canAccess: boolean;
+    appLocalizer?: AppLocalizer;
+    addNewTemplate?: AddNewTemplate;
+    tplFields: PanelFormField[];
+    titleRef: React.RefObject<HTMLInputElement>;
+    descRef: React.RefObject<HTMLTextAreaElement>;
+    iconPicker: React.RefObject<HTMLDivElement>;
+    handleChange: (methodId: string, key: string, val: unknown) => void;
+    handleDelete: (methodId: string) => void;
+    canDelete: () => boolean;
+    renderField: (methodId: string, field: PanelFormField) => JSX.Element | null;
+    commitEdit: () => void;
+}
+
+interface PanelItemContextType {
+    method: ExpandablePanelMethod;
+    methodValue: Record<string, unknown>;
+    idx: number;
+    isOn: boolean;
+    isOpen: boolean;
+    hasFields: boolean;
+    icon: string;
+    title: string;
+    desc: string;
+    price: { price: string; unit: string } | null;
+    cntFlds: PanelFormField[];
+}
+
+// ── Context Creation ──────────────────────────────────────────────────────────
+
+const PanelContext = createContext<PanelContextType | null>(null);
+const PanelItemContext = createContext<PanelItemContextType | null>(null);
+
+// ── Custom Hooks ─────────────────────────────────────────────────────────────
+
+const usePanel = () => {
+    const context = useContext(PanelContext);
+    if (!context) throw new Error('usePanel must be used within PanelProvider');
+    return context;
+};
+
+const usePanelItem = () => {
+    const context = useContext(PanelItemContext);
+    if (!context) throw new Error('usePanelItem must be used within PanelItemProvider');
+    return context;
+};
+
 // ── Reducer ───────────────────────────────────────────────────────────────────
 
 const panelReducer = (state: PanelState, action: PanelAction): PanelState => {
@@ -138,13 +192,6 @@ const panelReducer = (state: PanelState, action: PanelAction): PanelState => {
         case 'UPDATE_EDIT_DESC':
             return { ...state, editDesc: action.desc };
         case 'COMMIT_EDIT':
-            return {
-                ...state,
-                editId: null,
-                editField: null,
-                editTitle: '',
-                editDesc: '',
-            };
         case 'CANCEL_EDIT':
             return {
                 ...state,
@@ -217,75 +264,49 @@ const canEditField = (
 
 // ── Sub-Components ────────────────────────────────────────────────────────────
 
-interface PanelHeaderProps {
-    method: ExpandablePanelMethod;
-    methodValue: Record<string, unknown>;
-    isOpen: boolean;
-    isOn: boolean;
-    hasFields: boolean;
-    icon: string;
-    title: string;
-    desc: string;
-    editing: boolean;
-    editField: 'title' | 'description' | null;
-    editTitle: string;
-    editDesc: string;
-    iconDropdown: string | null;
-    canAccess: boolean;
-    addNewTemplate?: AddNewTemplate;
-    titleRef: React.RefObject<HTMLInputElement>;
-    descRef: React.RefObject<HTMLTextAreaElement>;
-    iconPicker: React.RefObject<HTMLDivElement>;
-    onToggleTab: (id: string | null) => void;
-    onSetIconDropdown: (id: string | null) => void;
-    onStartEdit: (id: string, field: 'title' | 'description', title?: string, desc?: string) => void;
-    onUpdateEditTitle: (title: string) => void;
-    onUpdateEditDesc: (desc: string) => void;
-    onCommitEdit: () => void;
-    onHandleChange: (methodId: string, key: string, val: unknown) => void;
-}
+const PanelHeader: React.FC = () => {
+    const {
+        state,
+        dispatch,
+        addNewTemplate,
+        titleRef,
+        descRef,
+        iconPicker,
+        handleChange,
+        commitEdit
+    } = usePanel();
+    
+    const {
+        method,
+        methodValue,
+        isOpen,
+        isOn,
+        hasFields,
+        icon,
+        title,
+        desc
+    } = usePanelItem();
 
-const PanelHeader: React.FC<PanelHeaderProps> = ({
-    method,
-    methodValue,
-    isOpen,
-    isOn,
-    hasFields,
-    icon,
-    title,
-    desc,
-    editing,
-    editField,
-    editTitle,
-    editDesc,
-    iconDropdown,
-    canAccess,
-    addNewTemplate,
-    titleRef,
-    descRef,
-    iconPicker,
-    onToggleTab,
-    onSetIconDropdown,
-    onStartEdit,
-    onUpdateEditTitle,
-    onUpdateEditDesc,
-    onCommitEdit,
-    onHandleChange,
-}) => {
+    const editing = state.editId === method.id;
+    const editField = state.editField;
+    const editTitle = state.editTitle;
+    const editDesc = state.editDesc;
+    const iconDropdown = state.iconDropdown;
+
     return (
         <div className="expandable-header">
             {hasFields && (
                 <div className="toggle-icon">
                     <i
                         className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`}
-                        onClick={() => canAccess && onToggleTab(isOpen ? null : method.id)}
+                        onClick={() => dispatch({ type: 'SET_ACTIVE_TAB', id: isOpen ? null : method.id })}
                     />
                 </div>
             )}
 
             <div
                 className="details"
-                onClick={() => canAccess && onToggleTab(isOpen ? null : method.id)}
+                onClick={() => dispatch({ type: 'SET_ACTIVE_TAB', id: isOpen ? null : method.id })}
             >
                 <div className="details-wrapper">
                     {/* Icon picker */}
@@ -294,9 +315,9 @@ const PanelHeader: React.FC<PanelHeaderProps> = ({
                             className="expandable-header-icon"
                             ref={iconDropdown === method.id ? iconPicker : null}
                             onClick={e => {
-                                if (!method.iconEnable || !canAccess) return;
+                                if (!method.iconEnable) return;
                                 e.stopPropagation();
-                                onSetIconDropdown(iconDropdown === method.id ? null : method.id);
+                                dispatch({ type: 'SET_ICON_DROPDOWN', id: iconDropdown === method.id ? null : method.id });
                             }}
                         >
                             <i className={`adminfont-${icon} icon`} />
@@ -312,7 +333,7 @@ const PanelHeader: React.FC<PanelHeaderProps> = ({
                                         <button
                                             key={cls} type="button"
                                             className={`icon-option ${icon === cls ? 'selected' : ''}`}
-                                            onClick={() => { onHandleChange(method.id, 'icon', cls); onSetIconDropdown(null); }}
+                                            onClick={() => { handleChange(method.id, 'icon', cls); dispatch({ type: 'SET_ICON_DROPDOWN', id: null }); }}
                                             title={cls}
                                         >
                                             <i className={`adminfont-${cls}`} />
@@ -332,8 +353,8 @@ const PanelHeader: React.FC<PanelHeaderProps> = ({
                                         ref={titleRef} type="text"
                                         className="inline-edit-input title-edit"
                                         value={editTitle}
-                                        onChange={e => onUpdateEditTitle(e.target.value)}
-                                        onKeyDown={e => e.key === 'Enter' && onCommitEdit()}
+                                        onChange={e => dispatch({ type: 'UPDATE_EDIT_TITLE', title: e.target.value })}
+                                        onKeyDown={e => e.key === 'Enter' && commitEdit()}
                                         onClick={e => e.stopPropagation()}
                                     />
                                 ) : (
@@ -342,13 +363,12 @@ const PanelHeader: React.FC<PanelHeaderProps> = ({
                                         onClick={e => {
                                             e.stopPropagation();
                                             if (canEditField(method, 'title', addNewTemplate)) {
-                                                const methodVal = methodValue;
-                                                onStartEdit(
-                                                    method.id,
-                                                    'title',
-                                                    (methodVal.title as string) || method.label || '',
-                                                    undefined
-                                                );
+                                                dispatch({
+                                                    type: 'START_EDIT',
+                                                    id: method.id,
+                                                    field: 'title',
+                                                    title: (methodValue.title as string) || method.label || '',
+                                                });
                                             }
                                         }}
                                         title={canEditField(method, 'title', addNewTemplate) ? 'Click to edit' : undefined}
@@ -378,8 +398,8 @@ const PanelHeader: React.FC<PanelHeaderProps> = ({
                                     ref={descRef}
                                     className="description-edit"
                                     value={editDesc}
-                                    onChange={e => onUpdateEditDesc(e.target.value)}
-                                    onKeyDown={e => e.key === 'Enter' && e.ctrlKey && onCommitEdit()}
+                                    onChange={e => dispatch({ type: 'UPDATE_EDIT_DESC', desc: e.target.value })}
+                                    onKeyDown={e => e.key === 'Enter' && e.ctrlKey && commitEdit()}
                                     onClick={e => e.stopPropagation()}
                                     rows={3}
                                 />
@@ -389,13 +409,12 @@ const PanelHeader: React.FC<PanelHeaderProps> = ({
                                     onClick={e => {
                                         e.stopPropagation();
                                         if (canEditField(method, 'description', addNewTemplate)) {
-                                            const methodVal = methodValue;
-                                            onStartEdit(
-                                                method.id,
-                                                'description',
-                                                undefined,
-                                                (methodVal.description as string) || method.desc || ''
-                                            );
+                                            dispatch({
+                                                type: 'START_EDIT',
+                                                id: method.id,
+                                                field: 'description',
+                                                desc: (methodValue.description as string) || method.desc || '',
+                                            });
                                         }
                                     }}
                                     title={canEditField(method, 'description', addNewTemplate) ? 'Click to edit' : undefined}
@@ -414,44 +433,25 @@ const PanelHeader: React.FC<PanelHeaderProps> = ({
     );
 };
 
-interface PanelControlsProps {
-    method: ExpandablePanelMethod;
-    methodValue: Record<string, unknown>;
-    isOn: boolean;
-    isOpen: boolean;
-    hasFields: boolean;
-    price: { price: string; unit: string } | null;
-    cntFlds: PanelFormField[];
-    progress: number[];
-    idx: number;
-    openDropdown: string | null;
-    canAccess: boolean;
-    addNewTemplate?: AddNewTemplate;
-    onSetActiveTab: (id: string | null) => void;
-    onSetOpenDropdown: (id: string | null) => void;
-    onHandleChange: (methodId: string, key: string, val: unknown) => void;
-    onHandleDelete: (methodId: string) => void;
-    onCanDelete: () => boolean;
-}
+const PanelControls: React.FC = () => {
+    const {
+        state,
+        dispatch,
+        handleChange,
+        handleDelete,
+        canDelete
+    } = usePanel();
+    
+    const {
+        method,
+        isOn,
+        isOpen,
+        hasFields,
+        price,
+        cntFlds,
+        idx
+    } = usePanelItem();
 
-const PanelControls: React.FC<PanelControlsProps> = ({
-    method,
-    isOn,
-    isOpen,
-    hasFields,
-    price,
-    cntFlds,
-    progress,
-    idx,
-    openDropdown,
-    canAccess,
-    addNewTemplate,
-    onSetActiveTab,
-    onSetOpenDropdown,
-    onHandleChange,
-    onHandleDelete,
-    onCanDelete,
-}) => {
     return (
         <div className="right-section">
             {price && (
@@ -463,36 +463,24 @@ const PanelControls: React.FC<PanelControlsProps> = ({
 
             <ul className="settings-btn">
                 {/* Delete — custom only, respects minimum count */}
-                {method.isCustom && !method.hideDeleteBtn && onCanDelete() && (
+                {method.isCustom && !method.hideDeleteBtn && canDelete() && (
                     <AdminButtonUI buttons={[{
                         icon: 'delete', text: 'Delete', color: 'red-color',
-                        onClick: () => onHandleDelete(method.id),
+                        onClick: () => handleDelete(method.id),
                     }]} />
                 )}
 
-                {/*
-                 * PREDEFINED (disableBtn, non-custom):
-                 *   Disabled → Enable button
-                 *   Enabled  → Settings button
-                 *
-                 * CUSTOM (isCustom):
-                 *   Enabled  → Hide button
-                 *   Hidden   → Show button
-                 *
-                 * These two branches are mutually exclusive by design.
-                 * A method is either predefined OR custom, never both.
-                 */}
-
+                {/* PREDEFINED (disableBtn, non-custom) */}
                 {method.disableBtn && !method.isCustom && (
                     isOn ? (
                         hasFields && (
                             <AdminButtonUI buttons={[{
                                 icon: 'setting', text: 'Settings', color: 'purple',
-                                onClick: () => canAccess && onSetActiveTab(isOpen ? null : method.id),
+                                onClick: () => dispatch({ type: 'SET_ACTIVE_TAB', id: isOpen ? null : method.id }),
                             }]} />
                         )
                     ) : (
-                        <li onClick={() => canAccess && onHandleChange(method.id, 'enable', true)}>
+                        <li onClick={() => handleChange(method.id, 'enable', true)}>
                             <span className="admin-btn btn-purple-bg">
                                 <i className="adminfont-eye" /> Enable
                             </span>
@@ -500,16 +488,17 @@ const PanelControls: React.FC<PanelControlsProps> = ({
                     )
                 )}
 
+                {/* CUSTOM (isCustom) */}
                 {method.isCustom && method.disableBtn && (
                     isOn ? (
                         <AdminButtonUI buttons={[{
                             icon: 'eye-blocked',
                             text: 'Hide',
                             color: 'purple',
-                            onClick: () => canAccess && onHandleChange(method.id, 'enable', false),
+                            onClick: () => handleChange(method.id, 'enable', false),
                         }]} />
                     ) : (
-                        <li onClick={() => canAccess && onHandleChange(method.id, 'enable', true)}>
+                        <li onClick={() => handleChange(method.id, 'enable', true)}>
                             <span className="admin-btn btn-purple-bg">
                                 <i className="adminfont-eye" /> Show
                             </span>
@@ -520,7 +509,7 @@ const PanelControls: React.FC<PanelControlsProps> = ({
                 {/* Progress counter (non-disableBtn methods only) */}
                 {!method.disableBtn && method.countBtn && cntFlds.length > 0 && (
                     <div className="admin-badge red">
-                        {progress[idx] || 0}/{cntFlds.length}
+                        {state.progress[idx] || 0}/{cntFlds.length}
                     </div>
                 )}
             </ul>
@@ -532,17 +521,17 @@ const PanelControls: React.FC<PanelControlsProps> = ({
                         className="admin-icon adminfont-more-vertical"
                         onClick={e => {
                             e.stopPropagation();
-                            onSetOpenDropdown(openDropdown === method.id ? null : method.id);
+                            dispatch({ type: 'SET_OPEN_DROPDOWN', id: state.openDropdown === method.id ? null : method.id });
                         }}
                     />
-                    {openDropdown === method.id && (
+                    {state.openDropdown === method.id && (
                         <div className="dropdown" onClick={e => e.stopPropagation()}>
                             <div className="dropdown-body">
                                 <ul>
                                     {method.disableBtn && hasFields && (
                                         <li onClick={() => {
-                                            canAccess && onSetActiveTab(isOpen ? null : method.id);
-                                            onSetOpenDropdown(null);
+                                            dispatch({ type: 'SET_ACTIVE_TAB', id: isOpen ? null : method.id });
+                                            dispatch({ type: 'SET_OPEN_DROPDOWN', id: null });
                                         }}>
                                             <span className="item">
                                                 <i className="adminfont-setting" /> Settings
@@ -550,8 +539,8 @@ const PanelControls: React.FC<PanelControlsProps> = ({
                                         </li>
                                     )}
                                     <li className="delete" onClick={() => {
-                                        canAccess && onHandleChange(method.id, 'enable', false);
-                                        onSetOpenDropdown(null);
+                                        handleChange(method.id, 'enable', false);
+                                        dispatch({ type: 'SET_OPEN_DROPDOWN', id: null });
                                     }}>
                                         <div className="item">
                                             <i className="adminfont-eye-blocked" /> Disable
@@ -567,31 +556,18 @@ const PanelControls: React.FC<PanelControlsProps> = ({
     );
 };
 
-interface PanelBodyProps {
-    method: ExpandablePanelMethod;
-    methodId: string;
-    isOpen: boolean;
-    isOn: boolean;
-    isWizardMode: boolean;
-    canAccess: boolean;
-    appLocalizer?: AppLocalizer;
-    value: Record<string, Record<string, unknown>>;
-    onHandleChange: (methodId: string, key: string, val: unknown) => void;
-    renderField: (methodId: string, field: PanelFormField) => JSX.Element | null;
-}
+const PanelBody: React.FC = () => {
+    const {
+        isWizardMode,
+        renderField
+    } = usePanel();
+    
+    const {
+        method,
+        isOpen,
+        isOn
+    } = usePanelItem();
 
-const PanelBody: React.FC<PanelBodyProps> = ({
-    method,
-    methodId,
-    isOpen,
-    isOn,
-    isWizardMode,
-    canAccess,
-    appLocalizer,
-    value,
-    onHandleChange,
-    renderField,
-}) => {
     const hasFields = Boolean(method.formFields?.length);
     
     if (!hasFields) return null;
@@ -609,8 +585,8 @@ const PanelBody: React.FC<PanelBodyProps> = ({
                             desc={field.desc}
                             htmlFor={field.name}
                         >
-                            {field.beforeElement && renderField(methodId, field.beforeElement as PanelFormField)}
-                            {renderField(methodId, field)}
+                            {field.beforeElement && renderField(method.id, field.beforeElement as PanelFormField)}
+                            {renderField(method.id, field)}
                         </FormGroup>
                     );
                 })}
@@ -619,43 +595,9 @@ const PanelBody: React.FC<PanelBodyProps> = ({
     );
 };
 
-interface PanelItemProps {
-    method: ExpandablePanelMethod;
-    idx: number;
-    value: Record<string, Record<string, unknown>>;
-    isWizardMode: boolean;
-    canAccess: boolean;
-    appLocalizer?: AppLocalizer;
-    addNewTemplate?: AddNewTemplate;
-    state: PanelState;
-    dispatch: React.Dispatch<PanelAction>;
-    onHandleChange: (methodId: string, key: string, val: unknown) => void;
-    onHandleDelete: (methodId: string) => void;
-    onCanDelete: () => boolean;
-    renderField: (methodId: string, field: PanelFormField) => JSX.Element | null;
-    titleRef: React.RefObject<HTMLInputElement>;
-    descRef: React.RefObject<HTMLTextAreaElement>;
-    iconPicker: React.RefObject<HTMLDivElement>;
-}
-
-const PanelItem: React.FC<PanelItemProps> = ({
-    method,
-    idx,
-    value,
-    isWizardMode,
-    canAccess,
-    appLocalizer,
-    addNewTemplate,
-    state,
-    dispatch,
-    onHandleChange,
-    onHandleDelete,
-    onCanDelete,
-    renderField,
-    titleRef,
-    descRef,
-    iconPicker,
-}) => {
+const PanelItem: React.FC<{ method: ExpandablePanelMethod; idx: number }> = ({ method, idx }) => {
+    const { state, value } = usePanel();
+    
     // Cache methodValue once - KEY OPTIMIZATION
     const methodValue = value[method.id] ?? {};
     
@@ -666,94 +608,36 @@ const PanelItem: React.FC<PanelItemProps> = ({
     const price = formatPrice(methodValue);
     const title = (methodValue.title as string) || method.label;
     const desc = (methodValue.description as string) || method.desc;
-    const editing = state.editId === method.id;
     const cntFlds = method.formFields?.filter(isCountableField) ?? [];
 
+    const itemContextValue: PanelItemContextType = {
+        method,
+        methodValue,
+        idx,
+        isOn,
+        isOpen,
+        hasFields,
+        icon,
+        title,
+        desc,
+        price,
+        cntFlds
+    };
+
     return (
-        <div
-            className={[
-                'expandable-item',
-                method.disableBtn && !isOn ? 'disable' : '',
-                method.openForm ? 'open' : '',
-            ].filter(Boolean).join(' ')}
-        >
-            <PanelHeader
-                method={method}
-                methodValue={methodValue}
-                isOpen={isOpen}
-                isOn={isOn}
-                hasFields={hasFields}
-                icon={icon}
-                title={title}
-                desc={desc}
-                editing={editing}
-                editField={state.editField}
-                editTitle={state.editTitle}
-                editDesc={state.editDesc}
-                iconDropdown={state.iconDropdown}
-                canAccess={canAccess}
-                addNewTemplate={addNewTemplate}
-                titleRef={titleRef}
-                descRef={descRef}
-                iconPicker={iconPicker}
-                onToggleTab={(id) => dispatch({ type: 'SET_ACTIVE_TAB', id })}
-                onSetIconDropdown={(id) => dispatch({ type: 'SET_ICON_DROPDOWN', id })}
-                onStartEdit={(id, field, title, desc) => {
-                    const methodVal = value[id] ?? {};
-                    const m = state.methods.find(x => x.id === id);
-                    dispatch({
-                        type: 'START_EDIT',
-                        id,
-                        field,
-                        title: title !== undefined ? title : (methodVal.title as string) || m?.label || '',
-                        desc: desc !== undefined ? desc : (methodVal.description as string) || m?.desc || '',
-                    });
-                }}
-                onUpdateEditTitle={(title) => dispatch({ type: 'UPDATE_EDIT_TITLE', title })}
-                onUpdateEditDesc={(desc) => dispatch({ type: 'UPDATE_EDIT_DESC', desc })}
-                onCommitEdit={() => {
-                    if (state.editId && state.editField === 'title' && state.editTitle.trim())
-                        onHandleChange(state.editId, 'title', state.editTitle.trim());
-                    if (state.editId && state.editField === 'description')
-                        onHandleChange(state.editId, 'description', state.editDesc);
-                    dispatch({ type: 'COMMIT_EDIT' });
-                }}
-                onHandleChange={onHandleChange}
-            />
-
-            <PanelControls
-                method={method}
-                methodValue={methodValue}
-                isOn={isOn}
-                isOpen={isOpen}
-                hasFields={hasFields}
-                price={price}
-                cntFlds={cntFlds}
-                progress={state.progress}
-                idx={idx}
-                openDropdown={state.openDropdown}
-                canAccess={canAccess}
-                addNewTemplate={addNewTemplate}
-                onSetActiveTab={(id) => dispatch({ type: 'SET_ACTIVE_TAB', id })}
-                onSetOpenDropdown={(id) => dispatch({ type: 'SET_OPEN_DROPDOWN', id })}
-                onHandleChange={onHandleChange}
-                onHandleDelete={onHandleDelete}
-                onCanDelete={onCanDelete}
-            />
-
-            <PanelBody
-                method={method}
-                methodId={method.id}
-                isOpen={isOpen}
-                isOn={isOn}
-                isWizardMode={isWizardMode}
-                canAccess={canAccess}
-                appLocalizer={appLocalizer}
-                value={value}
-                onHandleChange={onHandleChange}
-                renderField={renderField}
-            />
-        </div>
+        <PanelItemContext.Provider value={itemContextValue}>
+            <div
+                className={[
+                    'expandable-item',
+                    method.disableBtn && !isOn ? 'disable' : '',
+                    method.openForm ? 'open' : '',
+                ].filter(Boolean).join(' ')}
+            >
+                <PanelHeader />
+                <PanelControls />
+                <PanelBody />
+            </div>
+        </PanelItemContext.Provider>
     );
 };
 
@@ -800,6 +684,15 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
             [methodId]: { ...(value[methodId] ?? {}), [key]: val },
         });
     }, [onChange, value]);
+
+    // ── Helper to commit edit ─────────────────────────────────────────────────
+    const commitEdit = useCallback(() => {
+        if (state.editId && state.editField === 'title' && state.editTitle.trim())
+            handleChange(state.editId, 'title', state.editTitle.trim());
+        if (state.editId && state.editField === 'description')
+            handleChange(state.editId, 'description', state.editDesc);
+        dispatch({ type: 'COMMIT_EDIT' });
+    }, [state.editId, state.editField, state.editTitle, state.editDesc, handleChange]);
 
     // ── CRUD helpers ──────────────────────────────────────────────────────────
     const canDelete = useCallback(() => 
@@ -875,33 +768,37 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
 
             const buttonOptions = field.options.map(btn => {
                 switch (btn.action) {
-                    case 'back': return {
-                        ...btn, text: btn.label, color: 'red',
-                        onClick: () => {
-                            if (isFirst) return;
-                            const i = state.wizardIndex - 1;
-                            dispatch({ type: 'SET_WIZARD_INDEX', index: i });
-                            dispatch({ type: 'SET_ACTIVE_TAB', id: state.methods[i].id });
-                        },
-                    };
-                    case 'next': return {
-                        ...btn, text: btn.label, color: 'purple',
-                        onClick: () => {
-                            saveWizard();
-                            if (!isLast) {
-                                const i = state.wizardIndex + 1;
+                    case 'back':
+                        return {
+                            ...btn, text: btn.label, color: 'red',
+                            onClick: () => {
+                                if (isFirst) return;
+                                const i = state.wizardIndex - 1;
                                 dispatch({ type: 'SET_WIZARD_INDEX', index: i });
                                 dispatch({ type: 'SET_ACTIVE_TAB', id: state.methods[i].id });
-                            } else if (btn.redirect) {
-                                window.open(btn.redirect, '_self');
-                            }
-                        },
-                    };
-                    case 'skip': return {
-                        ...btn, text: btn.label, color: 'blue',
-                        onClick: () => window.open(appLocalizer?.site_url, '_self'),
-                    };
-                    default: return btn;
+                            },
+                        };
+                    case 'next':
+                        return {
+                            ...btn, text: btn.label, color: 'purple',
+                            onClick: () => {
+                                saveWizard();
+                                if (!isLast) {
+                                    const i = state.wizardIndex + 1;
+                                    dispatch({ type: 'SET_WIZARD_INDEX', index: i });
+                                    dispatch({ type: 'SET_ACTIVE_TAB', id: state.methods[i].id });
+                                } else if (btn.redirect) {
+                                    window.open(btn.redirect, '_self');
+                                }
+                            },
+                        };
+                    case 'skip':
+                        return {
+                            ...btn, text: btn.label, color: 'blue',
+                            onClick: () => window.open(appLocalizer?.site_url, '_self'),
+                        };
+                    default:
+                        return btn;
                 }
             });
 
@@ -944,16 +841,12 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                 return;
             }
             if (e.key === 'Enter' && (state.editField === 'title' || e.ctrlKey)) {
-                if (state.editId && state.editField === 'title' && state.editTitle.trim())
-                    handleChange(state.editId, 'title', state.editTitle.trim());
-                if (state.editId && state.editField === 'description')
-                    handleChange(state.editId, 'description', state.editDesc);
-                dispatch({ type: 'COMMIT_EDIT' });
+                commitEdit();
             }
         };
         document.addEventListener('keydown', handler);
         return () => document.removeEventListener('keydown', handler);
-    }, [state.editId, state.editField, state.editTitle, state.editDesc, handleChange]);
+    }, [state.editId, state.editField, commitEdit]);
 
     // Click outside commits the edit
     useEffect(() => {
@@ -961,16 +854,12 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
         const handler = (e: MouseEvent) => {
             const t = e.target as Node;
             if (!titleRef.current?.contains(t) && !descRef.current?.contains(t)) {
-                if (state.editId && state.editField === 'title' && state.editTitle.trim())
-                    handleChange(state.editId, 'title', state.editTitle.trim());
-                if (state.editId && state.editField === 'description')
-                    handleChange(state.editId, 'description', state.editDesc);
-                dispatch({ type: 'COMMIT_EDIT' });
+                commitEdit();
             }
         };
         document.addEventListener('mousedown', handler);
         return () => document.removeEventListener('mousedown', handler);
-    }, [state.editId, state.editField, state.editTitle, state.editDesc, handleChange]);
+    }, [state.editId, commitEdit]);
 
     // Close 3-dot dropdown on outside click
     useEffect(() => {
@@ -1037,34 +926,37 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
         }
     }, [value, addNewTemplate, tplFields]);
 
+    // ── Context Value ─────────────────────────────────────────────────────────
+
+    const contextValue: PanelContextType = {
+        state,
+        dispatch,
+        value,
+        isWizardMode,
+        canAccess,
+        appLocalizer,
+        addNewTemplate,
+        tplFields,
+        titleRef,
+        descRef,
+        iconPicker,
+        handleChange,
+        handleDelete,
+        canDelete,
+        renderField,
+        commitEdit,
+    };
+
     // ── Render ────────────────────────────────────────────────────────────────
 
     // Wizard mode: only show steps up to current index
     const visible = isWizardMode ? state.methods.slice(0, state.wizardIndex + 1) : state.methods;
 
     return (
-        <>
+        <PanelContext.Provider value={contextValue}>
             <div className="expandable-panel-group">
                 {visible.map((method, idx) => (
-                    <PanelItem
-                        key={method.id}
-                        method={method}
-                        idx={idx}
-                        value={value}
-                        isWizardMode={isWizardMode}
-                        canAccess={canAccess}
-                        appLocalizer={appLocalizer}
-                        addNewTemplate={addNewTemplate}
-                        state={state}
-                        dispatch={dispatch}
-                        onHandleChange={handleChange}
-                        onHandleDelete={handleDelete}
-                        onCanDelete={canDelete}
-                        renderField={renderField}
-                        titleRef={titleRef}
-                        descRef={descRef}
-                        iconPicker={iconPicker}
-                    />
+                    <PanelItem key={method.id} method={method} idx={idx} />
                 ))}
 
                 {addNewBtn && (
@@ -1081,7 +973,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                 const btn = step?.formFields?.find(f => f.key === 'wizardButtons');
                 return btn ? renderField(step.id, btn) : null;
             })()}
-        </>
+        </PanelContext.Provider>
     );
 };
 
