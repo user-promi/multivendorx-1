@@ -331,7 +331,7 @@ class ImportDummyData extends \WP_REST_Controller {
 						'post_excerpt' => wp_kses_post( (string) $product->short_description ),
 						'post_status'  => (string) $product->status ?: 'publish',
 						'post_type'    => 'product',
-						'post_author'  => get_current_user_id(),
+						'post_author'  => MultiVendorX()->current_user_id,
                     )
                 );
 
@@ -404,7 +404,7 @@ class ImportDummyData extends \WP_REST_Controller {
 								'post_status' => 'publish',
 								'post_parent' => $product_id,
 								'post_type'   => 'product_variation',
-								'post_author' => get_current_user_id(),
+								'post_author' => MultiVendorX()->current_user_id,
                             )
                         );
 

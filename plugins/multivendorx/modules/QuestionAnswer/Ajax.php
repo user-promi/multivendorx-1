@@ -35,7 +35,7 @@ class Ajax {
             wp_send_json_error( array( 'message' => 'You must log in to submit a question.' ) );
         }
 
-        $user_id    = get_current_user_id();
+        $user_id    = MultiVendorX()->current_user_id;
         $question   = sanitize_textarea_field( filter_input( INPUT_POST, 'question', FILTER_UNSAFE_RAW ) );
         $product_id = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT );
 
@@ -129,7 +129,7 @@ class Ajax {
             wp_send_json_error( array( 'message' => 'You must be logged in to vote.' ) );
         }
 
-        $user_id = get_current_user_id();
+        $user_id = MultiVendorX()->current_user_id;
         $qna_id  = filter_input( INPUT_POST, 'qna_id', FILTER_VALIDATE_INT );
         $type    = ( filter_input( INPUT_POST, 'type', FILTER_UNSAFE_RAW ) === 'up' ) ? 1 : -1;
 

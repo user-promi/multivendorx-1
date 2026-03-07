@@ -79,7 +79,7 @@ class Roles {
         if ( is_user_logged_in() ) {
             $allcaps['create_stores'] = true;
 
-            $user = wp_get_current_user();
+            $user = MultiVendorX()->current_user;
 
             if ( in_array( 'store_owner', (array) $user->roles, true ) ) {
                 $allcaps['edit_posts'] = true;

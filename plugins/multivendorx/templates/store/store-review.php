@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $store_id               = $args['store_id'] ?? 0;
 $is_logged_in           = is_user_logged_in();
-$user                   = wp_get_current_user();
+$user                   = MultiVendorX()->current_user;
 $parameters             = MultiVendorX()->setting->get_setting( 'ratings_parameters', array() );
 $review_status          = '';
 $is_verified_buyer      = 0;
