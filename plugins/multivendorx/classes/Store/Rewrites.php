@@ -185,8 +185,7 @@ class Rewrites {
             }
 
             // Classic PHP fallback
-            $store = Store::get_store( $store_name, 'slug' );
-            return MultiVendorX()->util->get_template( 'store/store.php', array( 'store_id' => $store->get_id() ) );
+            return MultiVendorX()->plugin_path . 'templates/store/store.php';
         }
 
         return $template;

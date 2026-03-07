@@ -224,12 +224,15 @@ class Store {
         foreach ( $rows as $row ) {
             $meta[ $row['meta_key'] ] = maybe_unserialize( $row['meta_value'] );
         }
-
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
             MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
         }
 
         return $meta;
+    }
+
+    public function get_data() {
+        return $this->data;
     }
 
     /**
