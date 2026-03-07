@@ -32,8 +32,8 @@ class Frontend {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
         $scripts['multivendorx-report-abuse-frontend-script'] = array(
-            'src'     => $base_url . 'modules/Compliance/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
-            'deps'    => array( 'jquery' ),
+            'src'  => $base_url . 'modules/Compliance/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+            'deps' => array( 'jquery' ),
         );
 
         return $scripts;

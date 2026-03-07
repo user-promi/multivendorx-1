@@ -42,8 +42,8 @@ class Frontend {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
         $scripts['multivendorx-review-frontend-script'] = array(
-            'src'     => $base_url . 'modules/StoreReview/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
-            'deps'    => array( 'jquery' ),
+            'src'  => $base_url . 'modules/StoreReview/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+            'deps' => array( 'jquery' ),
         );
 
         return $scripts;
@@ -165,21 +165,21 @@ class Frontend {
     }
 
     public function multivendorx_store_frontend_localize_scripts( $item ) {
-        $store_id      = isset( $item['storeDetails']['storeId'] )
+        $store_id = isset( $item['storeDetails']['storeId'] )
             ? absint( $item['storeDetails']['storeId'] )
             : 0;
 
-        $user_id       = ! empty( $item['currentUserId'] )
+        $user_id = ! empty( $item['currentUserId'] )
             ? absint( $item['currentUserId'] )
             : 0;
 
-        $is_logged_in  = $user_id > 0;
+        $is_logged_in = $user_id > 0;
 
         $myaccount_url = wc_get_page_permalink( 'myaccount' );
 
-        $item['loginUrl'] = add_query_arg('redirect_to',urlencode( get_permalink() ),$myaccount_url);
+        $item['loginUrl'] = add_query_arg( 'redirect_to', urlencode( get_permalink() ), $myaccount_url );
 
-        $storereview            = MultiVendorX()->setting->get_setting(
+        $storereview = MultiVendorX()->setting->get_setting(
             'is_storereview_varified',
             array()
         );
@@ -188,21 +188,21 @@ class Frontend {
 
         $item['isVerifiedBuyerOnly'] = (bool) $is_verified_buyer_only;
 
-        $item['reviewStatus']     = '';
-        $item['isVerifiedBuyer']  = false;
+        $item['reviewStatus']    = '';
+        $item['isVerifiedBuyer'] = false;
         if ( $is_logged_in && $store_id ) {
 
             // Get review status
-            $item['reviewStatus'] = Util::get_user_review_status( $store_id,
-                    $user_id
-                );
+            $item['reviewStatus'] = Util::get_user_review_status(
+                $store_id,
+                $user_id
+            );
             // If verified-only enabled → check verified buyer
             if ( $is_verified_buyer_only ) {
-
-                $item['isVerifiedBuyer'] =Util::is_verified_buyer(
-                        $store_id,
-                        $user_id
-                    );
+                $item['isVerifiedBuyer'] = Util::is_verified_buyer(
+                    $store_id,
+                    $user_id
+                );
             }
         }
 

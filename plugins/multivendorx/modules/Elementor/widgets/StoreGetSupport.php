@@ -23,36 +23,36 @@ class Store_Get_Support extends Widget_Button {
     }
 
     public function get_categories() {
-        return [ 'multivendorx' ];
+        return array( 'multivendorx' );
     }
 
     protected function register_controls() {
         parent::register_controls();
-       
+
         $this->update_control(
             'text',
-            [
-                'dynamic'   => [
+            array(
+                'dynamic'   => array(
                     'default' => \Elementor\Plugin::instance()
 											->dynamic_tags
-											->tag_data_to_tag_text(null, 'multivendorx-store-get-support-tag'),
+											->tag_data_to_tag_text( null, 'multivendorx-store-get-support-tag' ),
                     'active'  => true,
-                ],
-                'selectors' => [
+                ),
+                'selectors' => array(
                     '{{WRAPPER}} > .elementor-widget-container > .elementor-button-wrapper > .mvx-store-get-support-btn' => 'width: auto; margin: 0;',
-                ]
-            ]
+                ),
+            )
         );
     }
 
     protected function render() {
         $store = $this->get_store_data();
-        if (!$store) {
+        if ( ! $store ) {
             return;
         }
 
         echo '<button>';
-        echo esc_html(__('Get Support', 'multivendorx'));
+        echo esc_html( __( 'Get Support', 'multivendorx' ) );
         echo '</button>';
     }
 }

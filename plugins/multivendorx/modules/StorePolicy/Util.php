@@ -73,9 +73,9 @@ class Util {
             }
 
             if ( in_array( 'refund', $privacy_override_settings, true ) ) {
-                $refund_policy       = $store->get_meta( Utill::STORE_SETTINGS_KEYS['refund_policy'] );
+                $refund_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['refund_policy'] );
             }
-            
+
             if ( in_array( 'cancellation_return', $privacy_override_settings, true ) ) {
                 $cancellation_policy = $store->get_meta( Utill::STORE_SETTINGS_KEYS['cancellation_policy'] );
             }

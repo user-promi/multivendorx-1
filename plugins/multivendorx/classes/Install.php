@@ -34,7 +34,7 @@ class Install {
         $this->set_default_modules();
         $this->set_default_settings();
 
-        if (get_option( 'dc_product_vendor_plugin_db_version')) {
+        if ( get_option( 'dc_product_vendor_plugin_db_version' ) ) {
             $this->migrate_mvx_to_multivendorx();
         }
 
@@ -577,7 +577,7 @@ class Install {
 					'edit_approved_products',
 					'publish_products',
 					'upload_files',
-                    'edit_products'
+                    'edit_products',
 				),
 			'orders'                     =>
 				array(
@@ -1112,8 +1112,7 @@ class Install {
         $this->migrate_product_category_settings();
         $this->migrate_tables();
 
-        delete_option('dc_product_vendor_plugin_db_version');
-
+        delete_option( 'dc_product_vendor_plugin_db_version' );
     }
     /**
      * Create pages dynamically based on provided data.
@@ -1676,7 +1675,7 @@ class Install {
         );
 
         $previous_review_settings = get_option( 'mvx_review_management_tab_settings', array() );
-        $ratings_parameters = [];
+        $ratings_parameters       = array();
         foreach ( $previous_review_settings['mvx_review_categories'] as $item ) {
             if ( empty( $item['category'] ) ) {
                 continue;
@@ -1995,11 +1994,13 @@ class Install {
         }
 
         // Migrate coupon vendor.
-        $coupons = get_posts( array(
-            'post_type'      => 'shop_coupon',
-            'post_status'    => 'publish',
-            'fields'         => 'ids',
-        ) );
+        $coupons = get_posts(
+            array(
+				'post_type'   => 'shop_coupon',
+				'post_status' => 'publish',
+				'fields'      => 'ids',
+            )
+        );
 
         foreach ( $coupons as $coupon_id ) {
             $author_id = (int) get_post_field( 'post_author', $coupon_id );

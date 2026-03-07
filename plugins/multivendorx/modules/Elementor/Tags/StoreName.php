@@ -21,7 +21,7 @@ class StoreName extends Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return array( Module::TEXT_CATEGORY );
     }
 
     public function render() {
@@ -31,7 +31,7 @@ class StoreName extends Tag {
         }
 
         $settings = $this->get_settings_for_display();
-        
+
         $name = ! empty( $store['storeName'] ) ? $store['storeName'] : $settings['title'];
         echo $name;
     }

@@ -191,7 +191,7 @@ $banner_slider     = $meta_data['banner_slider'] ?? array();
                         $rating_value > 0
                     ) :
                         ?>
-                       <div class="star-rating" role="img" aria-label="<?php echo sprintf( __( 'Rated %s out of 5', 'multivendorx' ), $rating_value ); ?>">
+                        <div class="star-rating" role="img" aria-label="<?php printf( __( 'Rated %s out of 5', 'multivendorx' ), $rating_value ); ?>">
                             <span style="width: <?php echo ( floatval( $rating_value ) / 5 ) * 100; ?>%;">
                                 <strong class="rating"><?php echo esc_html( $rating_value ); ?></strong> <?php esc_html_e( 'out of 5', 'multivendorx' ); ?>
                             </span>

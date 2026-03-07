@@ -11,18 +11,18 @@ trait StoreHelper {
 			return array(
 				'storeName'        => __( 'Demo Store', 'multivendorx' ),
 				'storeDescription' => __( 'This is a sample store description shown only in Elementor editor preview.', 'multivendorx' ),
-				'banner'          => [
-						'id'  => 0,
-						'url' => \Elementor\Utils::get_placeholder_image_src(),
-				],
-				'logo'          => [
-						'id'  => 0,
-						'url' => \Elementor\Utils::get_placeholder_image_src(),
-				],
-				'storeAddress'         => 'Kolkata, India (IN)',
-				'storePhone'           => '888-888-8888',
-				'storeEmail'           => 'multivendorx@dualcube.com',
-				'storeRating'          => '5 rating from 50 reviews',
+				'banner'           => array(
+					'id'  => 0,
+					'url' => \Elementor\Utils::get_placeholder_image_src(),
+				),
+				'logo'             => array(
+					'id'  => 0,
+					'url' => \Elementor\Utils::get_placeholder_image_src(),
+				),
+				'storeAddress'     => 'Kolkata, India (IN)',
+				'storePhone'       => '888-888-8888',
+				'storeEmail'       => 'multivendorx@dualcube.com',
+				'storeRating'      => '5 rating from 50 reviews',
 			);
 		}
 
@@ -42,10 +42,8 @@ trait StoreHelper {
 
 		// Fallback check (for edge cases)
 		if ( empty( $is_edit_mode ) && empty( $is_preview_mode ) ) {
-
 			if ( ! empty( $_REQUEST['action'] ) && ! empty( $_REQUEST['editor_post_id'] ) ) {
 				$is_edit_mode = true;
-
 			} elseif (
 				! empty( $_REQUEST['preview'] )
 				&& ! empty( $_REQUEST['theme_template_id'] )

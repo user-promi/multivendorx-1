@@ -23,38 +23,36 @@ class Store_Chat_Button extends Widget_Button {
 	}
 
 	public function get_categories() {
-		return [ 'multivendorx' ];
+		return array( 'multivendorx' );
 	}
 
 	protected function _register_controls() {
-    	  
+
         parent::_register_controls();
-        
+
         $this->update_control(
             'text',
-            [
-                'dynamic'   => [
+            array(
+                'dynamic'   => array(
                     'default' => \Elementor\Plugin::instance()
 											->dynamic_tags
 											->tag_data_to_tag_text( null, 'multivendorx-store-chat-tag' ),
                     'active'  => true,
-                ],
-                'selectors' => [
+                ),
+                'selectors' => array(
                     '{{WRAPPER}} > .elementor-widget-container > .elementor-button-wrapper > .mvx-store-chat-btn' => 'width: auto; margin: 0;',
-                ]
-            ]
+                ),
+            )
         );
-        
     }
 
 	protected function render() {
 		$store = $this->get_store_data();
-		if (!$store || !isset($store['storeId'])) {
+		if ( ! $store || ! isset( $store['storeId'] ) ) {
 			return;
 		}
 
 		// do_action('multivendorx_render_livechat_button', $store['storeId'], $store['storeName']);
 		parent::render();
 	}
-
 }

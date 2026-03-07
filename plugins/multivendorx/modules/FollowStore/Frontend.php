@@ -36,8 +36,8 @@ class Frontend {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
         $scripts['multivendorx-follow-store-frontend-script'] = array(
-            'src'     => $base_url . 'modules/FollowStore/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
-            'deps'    => array( 'jquery' ),
+            'src'  => $base_url . 'modules/FollowStore/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+            'deps' => array( 'jquery' ),
         );
 
         return $scripts;
