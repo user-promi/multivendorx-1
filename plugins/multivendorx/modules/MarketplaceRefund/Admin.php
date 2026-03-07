@@ -107,7 +107,7 @@ class Admin {
                 // Comment note for suborder.
                 $comment_id = $order->add_order_note( __( 'Site admin ', 'multivendorx' ) . $order_status . __( ' refund request for order #', 'multivendorx' ) . $order_id . ' .' );
                 // user info.
-                $user_info = get_userdata( get_current_user_id() );
+                $user_info = get_userdata( MultiVendorX()->current_user_id );
                 wp_update_comment(
                     array(
 						'comment_ID'           => $comment_id,

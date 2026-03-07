@@ -74,7 +74,7 @@ class Frontend {
             return;
         }
 
-        $current_user_id = get_current_user_id();
+        $current_user_id = MultiVendorX()->current_user_id;
 
         $html  = '<div class="follow-wrapper"> <button class="follow-btn woocommerce-button button" 
                     data-store-id="' . esc_attr( $store_id ) . '" 

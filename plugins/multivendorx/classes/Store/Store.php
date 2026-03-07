@@ -364,7 +364,7 @@ class Store {
 
                 case 'primary_owner':
                     $status = sanitize_text_field( $value );
-                    $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", get_current_user_id(), $status ), ARRAY_A );
+                    $stores = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table WHERE who_created = %d AND status = %s", MultiVendorX()->current_user_id, $status ), ARRAY_A );
                     return $stores ? $stores : array();
 
                 case 'user':

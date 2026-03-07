@@ -78,7 +78,7 @@ class StoreOrder {
             return false;
         }
         if ( $current_store ) {
-            return get_current_user_id() === $this->store_id;
+            return MultiVendorX()->current_user_id === $this->store_id;
         }
         return true;
     }

@@ -55,8 +55,8 @@ class Ajax {
             )
         );
 
-        $store_id       = intval( $data['store_id'] ?? 0 );
-        $user_id        = get_current_user_id();
+        $store_id       = intval($data['store_id'] ?? 0);
+        $user_id        = MultiVendorX()->current_user_id;
         $review_title   = $data['review_title'] ?? '';
         $review_content = $data['review_content'] ?? '';
         $ratings        = $data['rating'] ?? array();

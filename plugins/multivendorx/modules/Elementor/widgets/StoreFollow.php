@@ -54,7 +54,7 @@ class Store_Follow_Button extends Widget_Button {
 
         $store_id = ! empty( $store['storeId'] ) ? $store['storeId'] : '';
 
-        $current_user_id = get_current_user_id();
+        $current_user_id = MultiVendorX()->current_user_id;
 
         /**
          * Follow status snapshot (initial render only)
