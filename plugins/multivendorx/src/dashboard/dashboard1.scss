@@ -253,46 +253,44 @@ a {
                 }
             }
 
-            .navbar-rightside {
-                .navbar-right {
-                    display: flex;
-                    gap: 0.313rem;
-                    align-items: center;
-                    list-style-type: none;
-                    margin: 0;
+            .navbar-right {
+                display: flex;
+                gap: 0.313rem;
+                align-items: center;
+                list-style-type: none;
+                margin: 0;
 
-                    li {
-                        position: relative;
-                        cursor: pointer;
+                li {
+                    position: relative;
+                    cursor: pointer;
 
-                            &.dark-icon {
-                                font-size: 1.625rem;
-                            }
-                    }
+                        &.dark-icon {
+                            font-size: 1.625rem;
+                        }
+                }
 
-                    // user dropdown start
-                    .dropdown {
-                        position: relative;
+                // user dropdown start
+                .dropdown {
+                    position: relative;
 
-                        .avatar-wrapper {
-                            background: $theme-color;
-                            border-radius: 50%;
-                            width: 2rem;
-                            height: 2rem;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
+                    .avatar-wrapper {
+                        background: $theme-color;
+                        border-radius: 50%;
+                        width: 2rem;
+                        height: 2rem;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        color: #fff;
+
+                        i {
+                            font-size: 1.2rem;
                             color: #fff;
-
-                            i {
-                                font-size: 1.2rem;
-                                color: #fff;
-                            }
                         }
                     }
-
-                    // user dropdown end
                 }
+
+                // user dropdown end
             }
         }
     }
@@ -301,22 +299,9 @@ a {
         min-height: 100vh;
         padding: 7rem 3rem;
 
-        // .title-wrapper {
-        //     display: flex;
-        //     justify-content: space-between;
-        //     padding-bottom: 1.75rem;
-
-        //     h2 {
-        //         font-size: 2rem;
-        //         font-weight: 700;
-        //         color: #364a63;
-        //     }
-
-        //     .action-wrapper {
-        //         display: flex;
-        //         gap: 0.625rem;
-        //     }
-        // }
+        .title-section{
+            margin: 0 0 2rem;
+        }
     }
 }
 

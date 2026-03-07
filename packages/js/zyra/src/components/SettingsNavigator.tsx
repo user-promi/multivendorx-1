@@ -51,6 +51,7 @@ type SettingsNavigatorProps = {
     headerIcon?: string;
     showPremiumLink?: boolean;
     customContent?: React.ReactNode;
+    headerCustomContent?: React.ReactNode;
 };
 
 interface button {
@@ -66,6 +67,7 @@ interface NavigatorHeaderProps {
     headerDescription?: string;
     showPremiumLink?: string;
     buttons?: button[];
+    headerCustomContent?: React.ReactNode; 
 }
 
 export const NavigatorHeader: React.FC<NavigatorHeaderProps> = ({
@@ -74,6 +76,7 @@ export const NavigatorHeader: React.FC<NavigatorHeaderProps> = ({
     headerDescription,
     showPremiumLink,
     buttons = [],
+    headerCustomContent,
 }) => {
     if (!headerTitle && !headerDescription) return null;
 
@@ -102,6 +105,7 @@ export const NavigatorHeader: React.FC<NavigatorHeaderProps> = ({
                         }))}
                     />
                 )}
+                {headerCustomContent && ( headerCustomContent )}
             </div>
 
             {headerDescription && (

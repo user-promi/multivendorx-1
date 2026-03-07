@@ -697,8 +697,8 @@ body.dark {
 }
 
 .tax-wrapper {
-    h2 {
-        padding: 1.5rem 0 1rem 0;
+    .title {
+        padding: 1.5rem 0 0.625rem 0;
     }
 }
 
@@ -1138,6 +1138,8 @@ body.dark {
     width: 100% !important;
 }
 
+
+// remove after multicheckbox table use
 .nested-wrapper:has(.nested-time) {
     width: 100%;
 

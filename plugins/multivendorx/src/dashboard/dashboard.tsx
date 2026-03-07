@@ -26,6 +26,7 @@ import {
 	useModules,
 	TableCard,
 	NavigatorHeader,
+	CalendarInputUI,
 } from 'zyra';
 import { TableRow } from '@/services/type';
 import axios from 'axios';
@@ -172,18 +173,18 @@ const Dashboard: React.FC = () => {
 		// Reviews
 		axios.get(
 			getApiLink(appLocalizer, 'review'), {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					page: 1,
-					row: 4,
-					store_id: appLocalizer.store_id,
-					orderBy: 'date_created',
-					order: 'desc',
-					startDate: dateRange.startDate,
-					endDate: dateRange.endDate,
-					dashboard: true,
-				},
-			})
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				page: 1,
+				row: 4,
+				store_id: appLocalizer.store_id,
+				orderBy: 'date_created',
+				order: 'desc',
+				startDate: dateRange.startDate,
+				endDate: dateRange.endDate,
+				dashboard: true,
+			},
+		})
 			.then((response) => {
 				const items = response.data.items || [];
 				setReview(items);
@@ -195,19 +196,19 @@ const Dashboard: React.FC = () => {
 		// Pending Refunds
 		axios.get(
 			`${appLocalizer.apiUrl}/wc/v3/orders`, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					meta_key: 'multivendorx_store_id',
-					value: appLocalizer.store_id,
-					status: 'refund-requested',
-					page: 1,
-					per_page: 4,
-					orderby: 'date',
-					order: 'desc',
-					after: dateRange.startDate.toISOString().replace('Z', ''),
-					before: dateRange.endDate.toISOString().replace('Z', ''),
-				},
-			})
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				meta_key: 'multivendorx_store_id',
+				value: appLocalizer.store_id,
+				status: 'refund-requested',
+				page: 1,
+				per_page: 4,
+				orderby: 'date',
+				order: 'desc',
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
+			},
+		})
 			.then((response) => {
 				const items = response.data || [];
 				const formatData = items.map((order) => ({
@@ -229,15 +230,15 @@ const Dashboard: React.FC = () => {
 		// Announcements
 		if (modules.includes('announcement')) {
 			axios.get(
-					getApiLink(appLocalizer, 'announcement'), {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					params: {
-						page: 1,
-						row: 5,
-						store_id: appLocalizer.store_id,
-						status: 'publish',
-					},
-				})
+				getApiLink(appLocalizer, 'announcement'), {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					page: 1,
+					row: 5,
+					store_id: appLocalizer.store_id,
+					status: 'publish',
+				},
+			})
 				.then((response) => {
 					setAnnouncement(response.data || []);
 				})
@@ -249,17 +250,17 @@ const Dashboard: React.FC = () => {
 		// Top Products
 		axios.get(
 			`${appLocalizer.apiUrl}/wc/v3/products`, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					per_page: 5,
-					meta_key: 'multivendorx_store_id',
-					orderby: 'popularity',
-					order: 'desc',
-					value: appLocalizer.store_id,
-					after: dateRange.startDate.toISOString().replace('Z', ''),
-					before: dateRange.endDate.toISOString().replace('Z', ''),
-				},
-			})
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				per_page: 5,
+				meta_key: 'multivendorx_store_id',
+				orderby: 'popularity',
+				order: 'desc',
+				value: appLocalizer.store_id,
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
+			},
+		})
 			.then((response) => {
 				const products = response.data;
 				const maxSales = Math.max(
@@ -285,17 +286,17 @@ const Dashboard: React.FC = () => {
 		// Recent Orders
 		axios.get(
 			`${appLocalizer.apiUrl}/wc/v3/orders`, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					per_page: 5,
-					order: 'desc',
-					orderby: 'date',
-					meta_key: 'multivendorx_store_id',
-					value: appLocalizer.store_id,
-					after: dateRange.startDate.toISOString().replace('Z', ''),
-					before: dateRange.endDate.toISOString().replace('Z', ''),
-				},
-			})
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				per_page: 5,
+				order: 'desc',
+				orderby: 'date',
+				meta_key: 'multivendorx_store_id',
+				value: appLocalizer.store_id,
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
+			},
+		})
 			.then((response) => {
 				const orders = response.data.map((order) => ({
 					id: order.id,
@@ -333,15 +334,15 @@ const Dashboard: React.FC = () => {
 		// Total Orders
 		axios.get(
 			`${appLocalizer.apiUrl}/wc/v3/orders`, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					per_page: 1,
-					meta_key: 'multivendorx_store_id',
-					value: appLocalizer.store_id,
-					after: dateRange.startDate.toISOString().replace('Z', ''),
-					before: dateRange.endDate.toISOString().replace('Z', ''),
-				},
-			})
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				per_page: 1,
+				meta_key: 'multivendorx_store_id',
+				value: appLocalizer.store_id,
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
+			},
+		})
 			.then((response) => {
 				const totalOrders =
 					parseInt(response.headers['x-wp-total']) || 0;
@@ -354,20 +355,20 @@ const Dashboard: React.FC = () => {
 		// Last Withdrawals - keep using InfoItem (no TableCard needed)
 		axios.get(
 			getApiLink(appLocalizer, 'transaction'), {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					page: 1,
-					row: 5,
-					store_id: appLocalizer.store_id,
-					transaction_type: 'Withdrawal',
-					transaction_status: 'Completed',
-					orderBy: 'created_at',
-					order: 'DESC',
-					start_date: dateRange.startDate,
-					end_date: dateRange.endDate,
-					dashboard: true,
-				},
-			})
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				page: 1,
+				row: 5,
+				store_id: appLocalizer.store_id,
+				transaction_type: 'Withdrawal',
+				transaction_status: 'Completed',
+				orderBy: 'created_at',
+				order: 'DESC',
+				start_date: dateRange.startDate,
+				end_date: dateRange.endDate,
+				dashboard: true,
+			},
+		})
 			.then((response) => {
 				const withdrawals = response.data.transaction || [];
 				setLastWithdraws(withdrawals);
@@ -377,16 +378,16 @@ const Dashboard: React.FC = () => {
 		// Customers - keep using InfoItem (no TableCard needed)
 		axios.get(
 			`${appLocalizer.apiUrl}/wc/v3/orders`, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					per_page: 50,
-					status: ['completed', 'processing'],
-					meta_key: 'multivendorx_store_id',
-					meta_value: appLocalizer.store_id,
-					after: dateRange.startDate.toISOString().replace('Z', ''),
-					before: dateRange.endDate.toISOString().replace('Z', ''),
-				},
-			})
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				per_page: 50,
+				status: ['completed', 'processing'],
+				meta_key: 'multivendorx_store_id',
+				meta_value: appLocalizer.store_id,
+				after: dateRange.startDate.toISOString().replace('Z', ''),
+				before: dateRange.endDate.toISOString().replace('Z', ''),
+			},
+		})
 			.then((response) => {
 				const customersMap = {};
 
@@ -423,15 +424,15 @@ const Dashboard: React.FC = () => {
 		// Activities
 		axios.get(
 			getApiLink(appLocalizer, 'notifications'), {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					page: 1,
-					row: 5,
-					store_id: appLocalizer?.store_id,
-					start_date: dateRange.startDate,
-					end_date: dateRange.endDate,
-				},
-			})
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				page: 1,
+				row: 5,
+				store_id: appLocalizer?.store_id,
+				start_date: dateRange.startDate,
+				end_date: dateRange.endDate,
+			},
+		})
 			.then((response) => {
 				setActivities(response.data || []);
 			})
@@ -445,15 +446,15 @@ const Dashboard: React.FC = () => {
 		// Revenue Data
 		axios.get(
 			getApiLink(appLocalizer, 'commission'), {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					format: 'reports',
-					store_id: appLocalizer.store_id,
-					dashboard: true,
-					start_date: dateRange.startDate,
-					end_date: dateRange.endDate,
-				},
-			})
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				format: 'reports',
+				store_id: appLocalizer.store_id,
+				dashboard: true,
+				start_date: dateRange.startDate,
+				end_date: dateRange.endDate,
+			},
+		})
 			.then((response) => {
 				setRevenueData(Array.isArray(response.data.data) ? response.data.data : []);
 			});
@@ -531,22 +532,17 @@ const Dashboard: React.FC = () => {
 						</b>
 					</>
 				}
-				buttons={[
-					{
-						// custom: (
-						// 	<CalendarInput
-						// 		onChange={(range: DateRange) => {
-						// 			setDateRange({
-						// 				startDate: range.startDate,
-						// 				endDate: range.endDate,
-						// 			});
-						// 		}}
-						// 	/>
-						// ),
-					},
-				]}
+				headerCustomContent={
+					<CalendarInputUI
+						onChange={(range: DateRange) => {
+							setDateRange({
+								startDate: range.startDate,
+								endDate: range.endDate,
+							});
+						}}
+					/>
+				}
 			/>
-
 			<Container>
 				<Column>
 					<Analytics
@@ -581,7 +577,7 @@ const Dashboard: React.FC = () => {
 					/>
 				</Column>
 
-				<Column grid={8}>
+				<Column fullHeight grid={8}>
 					<Card title={__('Sales Overview', 'multivendorx')}>
 						{revenueData && revenueData.length > 0 ? (
 							<ResponsiveContainer width="100%" height={250}>
@@ -639,7 +635,7 @@ const Dashboard: React.FC = () => {
 					</Card>
 				</Column>
 
-				<Column grid={4}>
+				<Column fullHeight grid={4}>
 					<Card title={__('Last Withdrawal', 'multivendorx')}>
 						<div className="top-customer-wrapper">
 							{lastWithdraws && lastWithdraws.length > 0 ? (
@@ -698,13 +694,13 @@ const Dashboard: React.FC = () => {
 					</Card>
 				</Column>
 
-				<Column grid={4}>
+				<Column fullHeight grid={4}>
 					<Card title={__('Visitors Map', 'multivendorx')}>
 						<VisitorsMap dateRange={dateRange} />
 					</Card>
 				</Column>
 
-				<Column grid={8}>
+				<Column fullHeight grid={8}>
 					<Card
 						title={__('Recent Orders', 'multivendorx')}
 						iconName="external icon"
@@ -747,7 +743,7 @@ const Dashboard: React.FC = () => {
 				</Column>
 
 				{/* Best-Selling Products */}
-				<Column grid={6}>
+				<Column fullHeight grid={6}>
 					<Card
 						title={__('Best-Selling Products', 'multivendorx')}
 						iconName="external icon"
@@ -780,7 +776,7 @@ const Dashboard: React.FC = () => {
 				</Column>
 
 				{/* Commission Overview */}
-				<Column grid={6}>
+				<Column fullHeight grid={6}>
 					<Card
 						title={__('Commission Overview', 'multivendorx')}
 						iconName="external icon"
@@ -836,7 +832,7 @@ const Dashboard: React.FC = () => {
 				</Column>
 				{/* Admin Announcements */}
 				{modules.includes('announcement') && (
-					<Column grid={4}>
+					<Column fullHeight grid={4}>
 						<Card title={__('Admin Announcements', 'multivendorx')}>
 							<div className="notification-wrapper">
 								{Array.isArray(announcement) && announcement.length > 0 ? (
@@ -877,7 +873,7 @@ const Dashboard: React.FC = () => {
 					</Column>
 				)}
 				{modules.includes('marketplace-refund') && (
-					<Column grid={4}>
+					<Column fullHeight grid={4}>
 						<Card
 							title={__('Pending Refunds', 'multivendorx')}
 							iconName="external icon"
@@ -923,7 +919,7 @@ const Dashboard: React.FC = () => {
 				{modules.includes('privacy') &&
 					Array.isArray(access) &&
 					access.includes('name') && (
-						<Column grid={4}>
+						<Column fullHeight grid={4}>
 							<Card title={__('Top Customers', 'multivendorx')}>
 								{customers && customers.length > 0 ? (
 									customers.map((customer, index) => (
@@ -958,7 +954,7 @@ const Dashboard: React.FC = () => {
 							</Card>
 						</Column>
 					)}
-				<Column grid={4}>
+				<Column fullHeight grid={4}>
 					<Card title={__('Store Activity', 'multivendorx')}>
 						<div className="activity-log">
 							{Array.isArray(activities) && activities.length > 0 ? (
@@ -978,7 +974,7 @@ const Dashboard: React.FC = () => {
 					</Card>
 				</Column>
 				{modules.includes('store-review') && (
-					<Column grid={4}>
+					<Column fullHeight grid={4}>
 						<Card
 							title={__('Latest Reviews', 'multivendorx')}
 							iconName="external icon"

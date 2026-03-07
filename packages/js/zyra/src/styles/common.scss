@@ -88,7 +88,7 @@ a {
   .basic-select,
   .textarea-input,
   .rmdp-input {
-    // min-height: 2.213rem !important; // for overwrite wordpress style
+    min-height: 2.213rem !important; // for overwrite wordpress style
   }
 
   input[type="color"] {
@@ -187,10 +187,23 @@ a {
   transform: rotate(-45deg);
 }
 
+// .admin-icon {
+//   padding: 0.313rem 1rem;
+//   border-radius: $border-radius-small;
+//   font-size: 1.313rem;
+// }
+
+.popup-icon,
 .admin-icon {
-  padding: 0.313rem 1rem;
-  border-radius: $border-radius-small;
-  font-size: 1.313rem;
+  font-size: 1.125rem;
+  padding: 0.4rem;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    background: #e7e6e6cf;
+  }
 }
 
 // all colors loop
@@ -298,6 +311,7 @@ $index: 1;
     }
   }
 }
+
 // copy btn end
 
 
@@ -352,50 +366,50 @@ $index: 1;
     position: relative;
   }
 
-    &.input-wrapper {
-      display: flex;
-      border: $border-light-small;
-      border-radius: $border-radius-small;
-      align-items: center;
-      background: $background-white;
-      padding: 0 0.5rem;
-      gap: 0.5rem;
-      width: 100%;
+  &.input-wrapper {
+    display: flex;
+    border: $border-light-small;
+    border-radius: $border-radius-small;
+    align-items: center;
+    background: $background-white;
+    padding: 0 0.5rem;
+    gap: 0.5rem;
+    width: 100%;
 
-      input {
-        border: none !important;
-        padding: 0;
+    input {
+      border: none !important;
+      padding: 0;
+
+      /* for overwrite common style */
+
+      &:focus {
+        box-shadow: none !important;
 
         /* for overwrite common style */
-
-        &:focus {
-          box-shadow: none !important;
-
-          /* for overwrite common style */
-        }
-      }
-
-      .pre {
-        padding-right: 0.313rem;
-        border-right: $border-light-small;
-      }
-
-      .parameter {
-        padding-left: 0.313rem;
-        border-left: $border-light-small;
       }
     }
 
-    &:has(.select-wrapper) {
-      .input-wrapper {
-        padding-right: 0;
-      }
-
-      .parameter {
-        padding-left: 0;
-      }
+    .pre {
+      padding-right: 0.313rem;
+      border-right: $border-light-small;
     }
-  
+
+    .parameter {
+      padding-left: 0.313rem;
+      border-left: $border-light-small;
+    }
+  }
+
+  &:has(.select-wrapper) {
+    .input-wrapper {
+      padding-right: 0;
+    }
+
+    .parameter {
+      padding-left: 0;
+    }
+  }
+
 
   &.input-button {
     .input-wrapper {
@@ -1221,7 +1235,7 @@ $index: 1;
     max-height: 20rem;
     overflow: auto;
     box-shadow: $box-shadow;
-    border-radius: $border-radius-small;    
+    border-radius: $border-radius-small;
   }
 }
 
@@ -1411,6 +1425,7 @@ $index: 1;
     color: #fff;
   }
 }
+
 // avatar style start
 
 
@@ -1490,16 +1505,19 @@ $index: 1;
     }
   }
 }
+
 // pagination end
 
 // tour start
-.tour-content{
-  .title{
+.tour-content {
+  .title {
     font-size: 1.25rem;
     padding-bottom: 0.5rem;
   }
-  .buttons-wrapper{
+
+  .buttons-wrapper {
     padding-top: 1.25rem;
   }
 }
+
 // tour end

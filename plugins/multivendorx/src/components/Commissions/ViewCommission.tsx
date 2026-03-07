@@ -1,7 +1,7 @@
 /* global appLocalizer */
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, PopupUI, TableCard } from 'zyra';
+import { FormGroup, FormGroupWrapper, getApiLink, PopupUI, SectionUI, TableCard } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../../services/commonFunction';
 import { TableRow } from '@/services/type';
@@ -84,7 +84,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							// store refund map
 							setRefundMap(refundMap);
 						})
-						.catch(() => {});
+						.catch(() => { });
 
 					axios({
 						method: 'GET',
@@ -202,9 +202,8 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 									href={`${appLocalizer.site_url.replace(
 										/\/$/,
 										''
-									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
-										storeData.id
-									}`}
+									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${storeData.id
+										}`}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="store-link"
@@ -226,169 +225,106 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						</div>
 					</div>
 
-					<div className="popup-divider"></div>
 
-					<div className="heading">
-						{__('Order Details', 'multivendorx')}
-					</div>
+					<SectionUI title={__('Order Details', 'multivendorx')} />
 					<TableCard headers={popupColumns} rows={orderItems} />
+
 					{Array.isArray(shippingItems) &&
 						shippingItems.length > 0 && (
-							<>
-								<div className="heading">
-									{__('Shipping', 'multivendorx')}
-								</div>
-
-								<TableCard
-									headers={shippingColumns}
-									rows={shippingItems}
-								/>
-							</>
+							<TableCard
+								headers={shippingColumns}
+								rows={shippingItems}
+								title={__('Shipping', 'multivendorx')}
+							/>
 						)}
 				</div>
 
 				<div className="section right">
-					<div className="heading">
-						{__('Order Overview', 'multivendorx')}
-					</div>
-					<div className="commission-details">
-						<div className="items">
-							<div className="text">
-								{__('Associated Order', 'multivendorx')}
-							</div>
-							<div className="value">
-								{commissionData?.order_id ? (
-									<a
-										href={`${appLocalizer.site_url.replace(
-											/\/$/,
-											''
-										)}/wp-admin/post.php?post=${
-											commissionData.order_id
+					<FormGroupWrapper>
+
+						<SectionUI title={__('Order Overview', 'multivendorx')} />
+
+						<FormGroup row label={__('Associated Order', 'multivendorx')}>
+							{commissionData?.order_id ? (
+								<a
+									href={`${appLocalizer.site_url.replace(
+										/\/$/,
+										''
+									)}/wp-admin/post.php?post=${commissionData.order_id
 										}&action=edit`}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="link-item"
-									>
-										#{commissionData.order_id}
-									</a>
-								) : (
-									'-'
-								)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Order Status', 'multivendorx')}
-							</div>
-							<div className="value">
-								<span className="admin-badge blue">
-									{orderData?.status
-										? orderData.status
-												.replace(/^wc-/, '') // remove 'wc-' prefix if exists
-												.replace(/_/g, ' ') // replace underscores with spaces
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase()
-												) // capitalize first letter of each word
-										: ''}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div className="popup-divider"></div>
-
-					<div className="heading">
-						{__('Commission Overview', 'multivendorx')}
-					</div>
-
-					<div className="commission-details">
-						<div className="items">
-							<div className="text">
-								{__('Commission Status', 'multivendorx')}
-							</div>
-							<div className="value">
-								<span
-									className={`admin-badge ${
-										commissionData?.status === 'paid'
-											? 'green'
-											: 'red'
-									}`}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="link-item"
 								>
-									{commissionData?.status
-										? commissionData.status
-												.replace(/^wc-/, '') // remove any prefix like 'wc-'
-												.replace(/_/g, ' ') // replace underscores with spaces
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase()
-												) // capitalize each word
-										: ''}
-								</span>
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Commission Amount', 'multivendorx')}
-							</div>
-							<div className="value">
-								{formatCurrency(
-									parseFloat(commissionData?.total ?? 0) +
-										parseFloat(
-											commissionData?.commission_refunded ??
-												0
-										)
-								)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Shipping', 'multivendorx')}
-							</div>
-							<div className="value">
-								{formatCurrency(commissionData?.shipping)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Tax', 'multivendorx')}
-							</div>
-							<div className="value">
-								{formatCurrency(
-									Number(commissionData?.tax || 0) +
-										Number(
-											commissionData?.shipping_tax_amount ||
-												0
-										)
-								)}
-							</div>
-						</div>
-						{commissionData?.commission_refunded > 0 && (
-							<div className="items">
-								<div className="text">
-									{__('Commission refund', 'multivendorx')}
-								</div>
-								<div className="value">
-									{formatCurrency(
-										commissionData.commission_refunded
-									)}
-								</div>
-							</div>
-						)}
-						<div className="items">
-							<div className="text">
-								{__('Total', 'multivendorx')}
-							</div>
-							<div className="value">
-								{formatCurrency(commissionData?.total)}
-							</div>
-						</div>
-					</div>
+									#{commissionData.order_id}
+								</a>
+							) : (
+								'-'
+							)}
+						</FormGroup>
 
-					<div className="popup-divider"></div>
+						<FormGroup row label={__('Order Status', 'multivendorx')}>
+							<span className="admin-badge blue">
+								{orderData?.status
+									? orderData.status
+										.replace(/^wc-/, '') // remove 'wc-' prefix if exists
+										.replace(/_/g, ' ') // replace underscores with spaces
+										.replace(/\b\w/g, (c) =>
+											c.toUpperCase()
+										) // capitalize first letter of each word
+									: ''}
+							</span>
+						</FormGroup>
+
+						<SectionUI title={__('Commission Overview', 'multivendorx')} />
+
+						<FormGroup row label={__('Commission Status', 'multivendorx')}>
+							<span
+								className={`admin-badge ${commissionData?.status === 'paid' ? 'green' : 'red'
+									}`}
+							>
+								{commissionData?.status
+									? commissionData.status
+										.replace(/^wc-/, '') // remove any prefix like 'wc-'
+										.replace(/_/g, ' ') // replace underscores with spaces
+										.replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+									: ''}
+							</span>
+						</FormGroup>
+
+						<FormGroup row label={__('Commission Amount', 'multivendorx')}>
+							{formatCurrency(
+								parseFloat(commissionData?.total ?? 0) +
+								parseFloat(commissionData?.commission_refunded ?? 0)
+							)}
+						</FormGroup>
+
+						<FormGroup row label={__('Shipping', 'multivendorx')}>
+							{formatCurrency(commissionData?.shipping)}
+						</FormGroup>
+
+						<FormGroup row label={__('Tax', 'multivendorx')}>
+							{formatCurrency(
+								Number(commissionData?.tax || 0) +
+								Number(commissionData?.shipping_tax_amount || 0)
+							)}
+						</FormGroup>
+
+						{commissionData?.commission_refunded > 0 && (
+							<FormGroup row label={__('Commission refund', 'multivendorx')}>
+								{formatCurrency(commissionData.commission_refunded)}
+							</FormGroup>
+						)}
+
+						<FormGroup row label={__('Total', 'multivendorx')}>
+							{formatCurrency(commissionData?.total)}
+						</FormGroup>
+					</FormGroupWrapper>
+
 
 					{commissionData?.note && (
 						<>
-							<div className="heading">
-								{__('Commission Notes', 'multivendorx')}
-							</div>
+							<SectionUI title={__('Commission Notes', 'multivendorx')} />
 							<div className="settings-metabox-note">
 								<i className="adminfont-info"></i>
 								<p>{commissionData?.note}</p>

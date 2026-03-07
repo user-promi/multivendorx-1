@@ -109,9 +109,7 @@ export const PopupUI = forwardRef<HTMLDivElement, PopupProps>(
                         text="Menu"
                         position="bottom"
                     >
-                        <div className="popup-toggle" onClick={handleToggle}>
-                            <i className={toggleIcon} />
-                        </div>
+                        <i onClick={handleToggle} className={`popup-icon adminfont-${toggleIcon}`} />
                     </Tooltip>
                 )}
 

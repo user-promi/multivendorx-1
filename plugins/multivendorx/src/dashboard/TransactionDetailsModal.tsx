@@ -1,6 +1,6 @@
 import React from 'react';
 import { __ } from '@wordpress/i18n';
-import { PopupUI } from 'zyra';
+import { FormGroup, FormGroupWrapper, PopupUI, SectionUI } from 'zyra';
 import { formatCurrency } from '@/services/commonFunction';
 
 type TransactionRow = {
@@ -26,7 +26,7 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 			<PopupUI
 				open={open}
 				onClose={onClose}
-				width={31.25}
+				width={33}
 				height="70%"
 				header={{
 					icon: 'wallet-in',
@@ -38,23 +38,14 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 				}}
 			>
 				<>
-					<div className="heading">
-						{__('Order Overview', 'multivendorx')}
-					</div>
+					<SectionUI title={__('Order Overview', 'multivendorx')} />
 
-					<div className="commission-details">
-						<div className="items">
-							<div className="text">
-								{__('Date', 'multivendorx')}
-							</div>
-							<div className="value">{transaction.date}</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Order Details', 'multivendorx')}
-							</div>
-							<div className="value">
-								{transaction.order_details ? (
+					<FormGroupWrapper>
+						<FormGroup row label={__('Date', 'multivendorx')}>
+							{transaction.date}
+						</FormGroup>
+						<FormGroup row label={__('Order Details', 'multivendorx')}>
+							{transaction.order_details ? (
 									<a
 										href={`/dashboard/orders/#view/${transaction.order_details}`}
 									>
@@ -63,54 +54,24 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 								) : (
 									'-'
 								)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Transaction Type', 'multivendorx')}
-							</div>
-							<div className="value">
-								{transaction.transaction_type}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Payment Mode', 'multivendorx')}
-							</div>
-							<div className="value">
-								{transaction.payment_mode}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Credit', 'multivendorx')}
-							</div>
-							<div className="value">
-								{formatCurrency(transaction.credit)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Debit', 'multivendorx')}
-							</div>
-							<div className="value">
-								{formatCurrency(transaction.debit)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Balance', 'multivendorx')}
-							</div>
-							<div className="value">
-								{formatCurrency(transaction.balance)}
-							</div>
-						</div>
-						<div className="items">
-							<div className="text">
-								{__('Status', 'multivendorx')}
-							</div>
-							<div className="value">
-								<span
+						</FormGroup>
+						<FormGroup row label={__('Transaction Type', 'multivendorx')}>
+							{transaction.transaction_type}
+						</FormGroup>
+						<FormGroup row label={__('Payment Mode', 'multivendorx')}>
+							{transaction.payment_mode}
+						</FormGroup>
+						<FormGroup row label={__('Credit', 'multivendorx')}>
+							{formatCurrency(transaction.credit)}
+						</FormGroup>
+						<FormGroup row label={__('Debit', 'multivendorx')}>
+							{formatCurrency(transaction.debit)}
+						</FormGroup>
+						<FormGroup row label={__('Balance', 'multivendorx')}>
+							{formatCurrency(transaction.balance)}
+						</FormGroup>
+						<FormGroup row label={__('Status', 'multivendorx')}>
+							<span
 									className={`admin-badge ${
 										transaction.status === 'Completed'
 											? 'green'
@@ -126,9 +87,8 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 												) // capitalize
 										: ''}
 								</span>
-							</div>
-						</div>
-					</div>
+						</FormGroup>
+					</FormGroupWrapper>
 				</>
 			</PopupUI>
 		</>
