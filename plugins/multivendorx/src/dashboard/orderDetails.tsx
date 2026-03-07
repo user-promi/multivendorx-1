@@ -11,25 +11,45 @@ import {
 	InfoItem,
 	Notice,
 	SelectInputUI,
-	
 	TextAreaUI,
 	getApiLink,
 	useModules,
+	NavigatorHeader
 } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
+import { useParams, useNavigate } from 'react-router-dom';
 
-interface OrderDetailsProps {
-	order?: any; // optionally pass order data
-	onBack?: () => void; // optional back button
-}
+const buildPath = (segments: string[]): string =>
+	`/${segments.filter(Boolean).join('/')}`;
 
-const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
+const sanitize = (value: string) =>
+	value.replace(/[^a-zA-Z0-9_-]/g, '');
+
+const updatePlainPermalinkUrl = (segments: string[]) => {
+	const [segment = '', element = '', context_id = ''] = segments;
+
+	const params = new URLSearchParams({
+		page_id: appLocalizer.dashboard_page_id,
+		segment: sanitize(segment),
+		...(element ? { element: sanitize(element) } : {}),
+		...(context_id ? { context_id: sanitize(context_id) } : {}),
+	});
+
+	window.history.pushState(
+		{},
+		'',
+		`${window.location.pathname}?${params.toString()}`
+	);
+};
+
+const OrderDetails: React.FC = () => {
 	const [isRefundLoading, setIsRefundLoading] = useState(false);
 	const [refundError, setRefundError] = useState('');
-	const [orderData, setOrderData] = useState<any>(order || null);
+	const [orderData, setOrderData] = useState<any>(null);
 	const [customerData, setCustomerData] = useState<any>();
-	const orderId = order?.id;
+	const { context_id } = useParams();
+	const orderId = context_id;
 
 	const [statusSelect, setStatusSelect] = useState(false);
 	const [isRefund, setIsRefund] = useState(false);
@@ -54,6 +74,18 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
 	const selected_shipping_providers =
 		appLocalizer.settings_databases_value['shipping'].shipping_providers;
+
+	const navigate = useNavigate();
+
+	// dashNavigate — single helper for all navigation (pretty + plain)
+	const dashNavigate = (segments: string[]) => {
+		const path = buildPath(segments);
+		if (!appLocalizer.permalink_structure) {
+			updatePlainPermalinkUrl(segments);
+		}
+		navigate(path);
+	};
+
 
 	// const filteredShippingProviders = shipping_providers_options.filter(
 	// 	(option) => selected_shipping_providers.includes(option.value)
@@ -429,7 +461,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 							{
 								label: __('Back to Orders', 'multivendorx'),
 								icon: 'arrow-right',
-								onClick: () => onBack(),
+								onClick: () => dashNavigate(['orders']),
 							},
 						]}
 					/>
