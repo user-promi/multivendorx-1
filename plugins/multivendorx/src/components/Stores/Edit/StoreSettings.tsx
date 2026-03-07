@@ -111,7 +111,7 @@ const StoreSettings = ({
 			setApiKey(settings.geolocation.mapbox_api_key || '');
 		}
 	}, [settings]);
-
+	
 	// Load store data
 	useEffect(() => {
 		if (!id || !appLocalizer) {
@@ -120,7 +120,12 @@ const StoreSettings = ({
 		}
 
 		// Set all form data
-		setFormData((prev) => ({ ...prev, ...data }));
+		setFormData((prev) => ({
+			...prev,
+			...data,
+			country_code: data.phone?.country_code || '',
+			phone: data.phone?.phone || '',
+		}));
 
 		// Set address-specific data
 		setAddressData({
@@ -307,11 +312,16 @@ const StoreSettings = ({
 			return;
 		}
 
-		if (name === 'phone') {
-			const isValidPhone = /^[0-9]{6,15}$/.test(value);
+		if (name === 'phone' || name === 'country_code') {
+			const phoneData = {
+				country_code: updated.country_code,
+				phone: updated.phone,
+			};
 
-			if (isValidPhone || value === '') {
-				autoSave(updated);
+			const isValidPhone = /^[0-9]{6,15}$/.test(updated.phone);
+
+			if (isValidPhone || updated.phone === '') {
+				autoSave({ phone: phoneData });
 				setErrorMsg((prev) => ({ ...prev, phone: '' }));
 			} else {
 				setErrorMsg((prev) => ({

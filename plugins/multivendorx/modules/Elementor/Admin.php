@@ -54,8 +54,7 @@ class Admin {
 			}
         );
 
-        $canvas = MultiVendorX()->util->get_template( 'elementor-canvas.php' );
-
+        $canvas = MultiVendorX()->plugin_path . 'templates/elementor-canvas.php';
         return file_exists( $canvas ) ? $canvas : $template;
     }
 
