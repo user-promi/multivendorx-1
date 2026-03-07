@@ -408,13 +408,13 @@ class FrontendScripts {
             ),
         );
 
-        $store_ids = array();
+        $store_ids = $all_meta = array();
         if ( ! is_admin() ) {
             $store_ids    = Store::get_store( MultiVendorX()->current_user_id, 'user' );
             $active_store = MultiVendorX()->active_store;
 
             $store    = new Store( $active_store );
-            $all_meta = $store->get_all_meta();
+            $all_meta = array_merge($store->get_data(), $store->get_all_meta());
 
             if ( empty( $active_store ) && ! empty( $store_ids ) ) {
                 $first_store = reset( $store_ids );

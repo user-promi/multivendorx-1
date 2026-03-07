@@ -31,7 +31,7 @@ const filteredStorePayment = Object.fromEntries(
 );
 
 const paymentOptions = Object.values(filteredStorePayment).map((p) => ({
-	id: p.id,
+	key: p.id,
 	value: p.id,
 	label: p.label,
 }));
@@ -44,7 +44,7 @@ const generateAllPaymentFields = () => {
 		if (provider.fields && Array.isArray(provider.fields)) {
 			const providerFields = provider.fields.map((field) => ({
 				...field,
-				key: `${provider.id}_${field.key}`, // Make key unique by prefixing with provider ID
+				key: `${field.key}`, // Make key unique by prefixing with provider ID
 				dependent: {
 					key: 'payment_method',
 					value: provider.id, // Only show when this payment method is selected
