@@ -171,25 +171,12 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
 
     const templateFields = addNewTemplate?.formFields ?? [];
 
-    const expandableMethods = useMemo(() => {
-   const methodMap = new Map();
-
-   methods.forEach(m => methodMap.set(m.id, m));
-
-   Object.entries(value).forEach(([id, method]) => {
-       const existing = methodMap.get(id);
-
-       methodMap.set(id, {
-           ...existing,
-           ...method
-       });
-   });
-
-   return Array.from(methodMap.values()).map(m =>
-       m.isCustom ? mergeTemplateFormFields(m, templateFields) : m
-   );
-
-}, [methods, value, templateFields]);
+    const [expandableMethods, setExpandableMethods] = useState<ExpandablePanelMethod[]>(
+        () =>
+            methods.map((method) =>
+                method.isCustom ? mergeTemplateFormFields(method, templateFields) : method
+            )
+    );
 
     // ── Effects ───────────────────────────────────────────────────────────────
 
@@ -273,6 +260,38 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
 
         setFieldProgress(updatedProgress);
     }, [methods, value, isWizardMode]);
+
+    // Sync expandableMethods whenever the persisted value or template changes
+    useEffect(() => {
+        const valueMethods: ExpandablePanelMethod[] = Object.entries(value).map(
+            ([id, method]) => ({ id, ...(method as any) })
+        );
+
+        setExpandableMethods((prev) => {
+            const methodMap = new Map<string, ExpandablePanelMethod>();
+
+            // Seed with current in-memory state
+            prev.forEach((m) => methodMap.set(m.id, m));
+
+            // Merge persisted value on top, restoring config-only props that are
+            // never saved to the backend (disableBtn, iconEnable, iconOptions)
+            valueMethods.forEach((method) => {
+                const existing = methodMap.get(method.id);
+                methodMap.set(method.id, {
+                    ...existing,
+                    ...method,
+                    disableBtn:  method.disableBtn  ?? existing?.disableBtn  ?? false,
+                    iconEnable:  method.iconEnable  ?? existing?.iconEnable  ?? (method.isCustom ? addNewTemplate?.iconEnable  : undefined),
+                    iconOptions: method.iconOptions ?? existing?.iconOptions ?? (method.isCustom ? addNewTemplate?.iconOptions : undefined),
+                });
+            });
+
+            // Merge template formFields into every custom method
+            return Array.from(methodMap.values()).map((m) =>
+                m.isCustom ? mergeTemplateFormFields(m, templateFields) : m
+            );
+        });
+    }, [value, addNewTemplate]);
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
@@ -382,6 +401,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
         if (!canAccess) return;
 
         const newMethod = createNewMethod();
+        setExpandableMethods((prev) => [...prev, newMethod]);
 
         const initialValues: Record<string, unknown> = {
             isCustom:    true,
@@ -412,6 +432,8 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
     const handleDeleteMethod = (methodId: string) => {
         // Guard: respect the minimum custom-panel count
         if (!canDeleteMethod()) return;
+
+        setExpandableMethods((prev) => prev.filter((m) => m.id !== methodId));
 
         const updatedValue = { ...value };
         delete updatedValue[methodId];
@@ -507,26 +529,26 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
 
     // ── Dependent-field helpers ───────────────────────────────────────────────
 
-    const isContain = (
-        key: string,
-        methodId: string,
-        match: string | number | boolean | null = null
-    ): boolean => {
-        const settingValue = value[methodId]?.[key];
+    // const isContain = (
+    //     key: string,
+    //     methodId: string,
+    //     match: string | number | boolean | null = null
+    // ): boolean => {
+    //     const settingValue = value[methodId]?.[key];
 
-        if (Array.isArray(settingValue)) {
-            return match === null ? settingValue.length > 0 : settingValue.includes(match);
-        }
+    //     if (Array.isArray(settingValue)) {
+    //         return match === null ? settingValue.length > 0 : settingValue.includes(match);
+    //     }
 
-        return match === null ? Boolean(settingValue) : settingValue === match;
-    };
+    //     return match === null ? Boolean(settingValue) : settingValue === match;
+    // };
 
-    const shouldRender = (dependent: any, methodId: string): boolean => {
-        if (dependent.set === true  && !isContain(dependent.key, methodId)) return false;
-        if (dependent.set === false &&  isContain(dependent.key, methodId)) return false;
-        if (dependent.value !== undefined && !isContain(dependent.key, methodId, dependent.value)) return false;
-        return true;
-    };
+    // const shouldRender = (dependent: any, methodId: string): boolean => {
+    //     if (dependent.set === true  && !isContain(dependent.key, methodId)) return false;
+    //     if (dependent.set === false &&  isContain(dependent.key, methodId)) return false;
+    //     if (dependent.value !== undefined && !isContain(dependent.key, methodId, dependent.value)) return false;
+    //     return true;
+    // };
 
     // ── Field renderer ────────────────────────────────────────────────────────
 
@@ -771,6 +793,7 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                     </div>
                                 </div>
 
+                                {/* ── Right section ──────────────────────────── */}
                                 <div className="right-section">
                                     {priceField && (
                                         <span className="price-field">
@@ -914,13 +937,13 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
                                         {method.formFields.map((field) => {
                                             if (isWizardMode && field.key === 'wizardButtons') return null;
 
-                                            const shouldShowField = Array.isArray(field.dependent)
-                                                ? field.dependent.every((dep) => shouldRender(dep, method.id))
-                                                : field.dependent
-                                                    ? shouldRender(field.dependent, method.id)
-                                                    : true;
+                                            // const shouldShowField = Array.isArray(field.dependent)
+                                            //     ? field.dependent.every((dep) => shouldRender(dep, method.id))
+                                            //     : field.dependent
+                                            //         ? shouldRender(field.dependent, method.id)
+                                            //         : true;
 
-                                            if (!shouldShowField) return null;
+                                            // if (!shouldShowField) return null;
 
                                             return (
                                                 <FormGroup
