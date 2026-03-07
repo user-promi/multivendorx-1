@@ -321,7 +321,7 @@ const Dashboard = () => {
 			<div
 				className="dashboard-tabs-wrapper"
 				onMouseEnter={() => setisMenuMinmize(false)}
-				onMouseOut={()   => setisMenuMinmize(true)}
+				onMouseLeave={()   => setisMenuMinmize(true)}
 			>
 				<div className="logo-wrapper">
 					{store_dashboard_logo ? (
@@ -393,14 +393,14 @@ const Dashboard = () => {
 				)}
 			</div>
 
-			{/* Main content area                                                 */}
+			{/* Main content area */}
 			<div className="dashboard-content tab-wrapper">
 				{/* Top Navbar */}
 				<div className="top-navbar-wrapper">
 					<div className="top-navbar">
 						<div className="navbar-leftside">
 							<i
-								className="adminfont-menu toggle-menu-icon"
+								className={`adminfont-${isMenuCollapsed ? 'menu' : 'arrow-left'} toggle-menu-icon`}
 								onClick={() => {
 									setIsMenuCollapsed((prev) => {
 										const next = !prev;
@@ -411,259 +411,257 @@ const Dashboard = () => {
 							></i>
 						</div>
 
-						<div className="navbar-rightside">
-							<ul className="navbar-right">
-								{/* Dark mode toggle */}
-								<li onClick={() => setIsDarkMode((prev) => !prev)}>
-									<div
-										className={`adminfont-icon admin-icon dark-icon adminfont-${
-											isDarkMode ? 'light' : 'moon'
-										}`}
-									></div>
-								</li>
+						<ul className="navbar-right">
+							{/* Dark mode toggle */}
+							<li onClick={() => setIsDarkMode((prev) => !prev)}>
+								<div
+									className={`adminfont-icon admin-icon dark-icon adminfont-${
+										isDarkMode ? 'light' : 'moon'
+									}`}
+								></div>
+							</li>
 
-								{/* Add product */}
-								<Tooltip text={__('Add product', 'multivendorx')}>
-									<li
-										onClick={() => {
-											if (modules.includes('shared-listing')) {
-												dashNavigate(['products', 'add']);
-											} else {
-												createAutoDraftProduct();
-											}
+							{/* Add product */}
+							<Tooltip position="bottom" text={__('Add product', 'multivendorx')}>
+								<li
+									onClick={() => {
+										if (modules.includes('shared-listing')) {
+											dashNavigate(['products', 'add']);
+										} else {
+											createAutoDraftProduct();
+										}
+									}}
+								>
+									<i className="admin-icon adminfont-product-addon"></i>
+								</li>
+							</Tooltip>
+
+							{/* View storefront */}
+							<Tooltip position="bottom" text={__('View storefront', 'multivendorx')}>
+								<li onClick={() => window.open(storefrontUrl, '_blank')}>
+									<i className="admin-icon adminfont-storefront"></i>
+								</li>
+							</Tooltip>
+
+							{/* Notifications */}
+							<Tooltip position="bottom" text={__('Notifications', 'multivendorx')}>
+								<li>
+									<PopupUI
+										position="menu-dropdown"
+										toggleIcon="notification"
+										width={24}
+										header={{
+											title: __('Notifications', 'multivendorx')
 										}}
 									>
-										<i className="admin-icon adminfont-product-addon"></i>
-									</li>
-								</Tooltip>
+										<TabsUI
+											tabs={[
+												{
+													id: 'notifications',
+													label: __('Notifications', 'multivendorx'),
+													icon: 'adminfont-notification',
+													content: <ul className="notification-list"></ul>,
+													footer: {
+														url: tabHref('view-notifications') + '#subtab=notifications',
+														icon: 'adminfont-eye',
+														text: __('View all notifications', 'multivendorx'),
+													},
+												},
+												{
+													id: 'activities',
+													label: __('Activities', 'multivendorx'),
+													icon: 'adminfont-activity',
+													content: <ul className="notification-list"></ul>,
+													footer: {
+														url: tabHref('view-notifications') + '#subtab=activity',
+														icon: 'adminfont-eye',
+														text: __('View all activities', 'multivendorx'),
+													},
+												},
+											]}
+										/>
+									</PopupUI>
+								</li>
+							</Tooltip>
 
-								{/* View storefront */}
-								<Tooltip text={__('View storefront', 'multivendorx')}>
-									<li onClick={() => window.open(storefrontUrl, '_blank')}>
-										<i className="admin-icon adminfont-storefront"></i>
-									</li>
-								</Tooltip>
-
-								{/* Notifications */}
-								<Tooltip text={__('Notifications', 'multivendorx')}>
+							{/* Announcements */}
+							{modules.includes('announcement') && (
+								<Tooltip position="bottom" text={__('Announcement', 'multivendorx')}>
 									<li>
-										<PopupUI
-											position="menu-dropdown"
-											toggleIcon="adminfont-notification"
-											width={24}
-											header={{
-												title: __('Notifications', 'multivendorx')
-											}}
+										<a
+											href={tabHref('view-notifications') + '#subtab=announcements'}
 										>
-											<TabsUI
-												tabs={[
-													{
-														id: 'notifications',
-														label: __('Notifications', 'multivendorx'),
-														icon: 'adminfont-notification',
-														content: <ul className="notification-list"></ul>,
-														footer: {
-															url: tabHref('view-notifications') + '#subtab=notifications',
-															icon: 'adminfont-eye',
-															text: __('View all notifications', 'multivendorx'),
-														},
-													},
-													{
-														id: 'activities',
-														label: __('Activities', 'multivendorx'),
-														icon: 'adminfont-activity',
-														content: <ul className="notification-list"></ul>,
-														footer: {
-															url: tabHref('view-notifications') + '#subtab=activity',
-															icon: 'adminfont-eye',
-															text: __('View all activities', 'multivendorx'),
-														},
-													},
-												]}
-											/>
-										</PopupUI>
+											<i className="admin-icon adminfont-announcement"></i>
+										</a>
 									</li>
 								</Tooltip>
+							)}
 
-								{/* Announcements */}
-								{modules.includes('announcement') && (
-									<Tooltip text={__('Announcement', 'multivendorx')}>
-										<li>
-											<a
-												href={tabHref('view-notifications') + '#subtab=announcements'}
-											>
-												<i className="adminfont adminfont-announcement"></i>
-											</a>
-										</li>
-									</Tooltip>
-								)}
+							{/* Fullscreen */}
+							<Tooltip position="bottom" text={__('Full Screen', 'multivendorx')}>
+								<li id="fullscreenToggle" onClick={toggleFullscreen}>
+									<i className="admin-icon adminfont-crop-free"></i>
+								</li>
+							</Tooltip>
 
-								{/* Fullscreen */}
-								<Tooltip text={__('Full Screen', 'multivendorx')}>
-									<li id="fullscreenToggle" onClick={toggleFullscreen}>
-										<i className="admin-icon adminfont-crop-free"></i>
-									</li>
-								</Tooltip>
+							{/* User dropdown */}
+							<Tooltip position="bottom" text={__('Settings', 'multivendorx')}>
+								<li className="dropdown login-user">
+									<div className="avatar-wrapper" onClick={toggleUserDropdown}>
+										<i className="admin-icon adminfont-person"></i>
+									</div>
 
-								{/* User dropdown */}
-								<Tooltip text={__('Settings', 'multivendorx')}>
-									<li className="dropdown login-user">
-										<div className="avatar-wrapper" onClick={toggleUserDropdown}>
-											<i className="admin-icon adminfont-person"></i>
-										</div>
-
-										{showUserDropdown && (
-											<div className="dropdown-menu" ref={userDropdownRef}>
-												<div className="dropdown-header">
-													<div className="user-card">
-														<div className="user-avatar">
-															<img
-																src={appLocalizer.current_user_image}
-																alt={appLocalizer.current_user?.data?.display_name}
-																width={48}
-																height={48}
-															/>
-														</div>
-														<div className="user-info">
-															<span className="user-name">
-																{appLocalizer.current_user?.data?.display_name}
-															</span>
-															<span className="user-email">
-																{appLocalizer.current_user?.data?.user_email}
-															</span>
-														</div>
+									{showUserDropdown && (
+										<div className="dropdown-menu" ref={userDropdownRef}>
+											<div className="dropdown-header">
+												<div className="user-card">
+													<div className="user-avatar">
+														<img
+															src={appLocalizer.current_user_image}
+															alt={appLocalizer.current_user?.data?.display_name}
+															width={48}
+															height={48}
+														/>
+													</div>
+													<div className="user-info">
+														<span className="user-name">
+															{appLocalizer.current_user?.data?.display_name}
+														</span>
+														<span className="user-email">
+															{appLocalizer.current_user?.data?.user_email}
+														</span>
 													</div>
 												</div>
+											</div>
 
-												<div className="dropdown-body">
-													<ul>
-														<li>
-															<a href="#">
-																<i className="adminfont-person"></i>
-																My Profile
-															</a>
-														</li>
-														<li>
-															<a href="#">
-																<i className="adminfont-setting"></i>
-																Account Setting
-															</a>
-														</li>
-														{availableStores.length >
-															0 && (
-															<li className="switch-store-wrapper">
-																<a
-																	href="#"
-																	onClick={(
-																		e
-																	) => {
-																		e.preventDefault();
-																		setShowStoreList(
-																			(
-																				prev
-																			) =>
-																				!prev
-																		);
-																	}}
-																>
-																	<i className="adminfont-switch-store"></i>
-																	Switch
-																	stores
-																	{firstTwoStores.length >
-																		0 && (
-																		<span className="switch-store-preview">
-																			{!showStoreList && (
-																				<>
-																					{firstTwoStores.map((store, index) => (
-																							<span
-																								className={`store-icon admin-color${index + 2}`}
-																								key={
-																									store.id
-																								}
-																							>
-																								{store.name
-																									.charAt(
-																										0
-																									)
-																									.toUpperCase()}
-																							</span>
-																						)
-																					)}
-
-																					{availableStores.length >
-																						2 && (
-																						<span className="store-icon number">
-																							+
-																							{availableStores.length -
-																								2}
-																						</span>
-																					)}
-																				</>
-																			)}
-																			<span className="adminfont-keyboard-arrow-down arrow-icon"></span>
-																		</span>
-																	)}
-																</a>
-
-																{showStoreList && (
-																	<div className="switch-store-list">
-																		{availableStores.map(
-																			(
-																				store,
-																				index
-																			) => (
-																				<div
-																					className="store"
-																					key={ store.id }
-																				>
-																					<a
-																						href="#"
-																						className="switch-store"
-																						onClick={( e ) => {
-																							e.preventDefault();
-																							switchStore(
-																								store.id
-																							);
-																						}}
-																					>
+											<div className="dropdown-body">
+												<ul>
+													<li>
+														<a href="#">
+															<i className="adminfont-person"></i>
+															My Profile
+														</a>
+													</li>
+													<li>
+														<a href="#">
+															<i className="adminfont-setting"></i>
+															Account Setting
+														</a>
+													</li>
+													{availableStores.length >
+														0 && (
+														<li className="switch-store-wrapper">
+															<a
+																href="#"
+																onClick={(
+																	e
+																) => {
+																	e.preventDefault();
+																	setShowStoreList(
+																		(
+																			prev
+																		) =>
+																			!prev
+																	);
+																}}
+															>
+																<i className="adminfont-switch-store"></i>
+																Switch
+																stores
+																{firstTwoStores.length >
+																	0 && (
+																	<span className="switch-store-preview">
+																		{!showStoreList && (
+																			<>
+																				{firstTwoStores.map((store, index) => (
 																						<span
 																							className={`store-icon admin-color${index + 2}`}
+																							key={
+																								store.id
+																							}
 																						>
 																							{store.name
-																								.charAt( 0 ) .toUpperCase()}
+																								.charAt(
+																									0
+																								)
+																								.toUpperCase()}
 																						</span>
-																						<div className="details-wrapper">
-																							<div className="store-name">
-																								{
-																									store.name
-																								}
-																							</div>
-																						</div>
-																					</a>
-																				</div>
-																			)
-																		)}
-																	</div>
-																)}
-															</li>
-														)}
-													</ul>
-												</div>
+																					)
+																				)}
 
-												<div className="footer">
-													<a
-														className="admin-btn btn-red"
-														href={appLocalizer.user_logout_url}
-													>
-														<i className="adminfont-import"></i> Sign Out
-													</a>
-												</div>
+																				{availableStores.length >
+																					2 && (
+																					<span className="store-icon number">
+																						+
+																						{availableStores.length -
+																							2}
+																					</span>
+																				)}
+																			</>
+																		)}
+																		<span className="adminfont-keyboard-arrow-down arrow-icon"></span>
+																	</span>
+																)}
+															</a>
+
+															{showStoreList && (
+																<div className="switch-store-list">
+																	{availableStores.map(
+																		(
+																			store,
+																			index
+																		) => (
+																			<div
+																				className="store"
+																				key={ store.id }
+																			>
+																				<a
+																					href="#"
+																					className="switch-store"
+																					onClick={( e ) => {
+																						e.preventDefault();
+																						switchStore(
+																							store.id
+																						);
+																					}}
+																				>
+																					<span
+																						className={`store-icon admin-color${index + 2}`}
+																					>
+																						{store.name
+																							.charAt( 0 ) .toUpperCase()}
+																					</span>
+																					<div className="details-wrapper">
+																						<div className="store-name">
+																							{
+																								store.name
+																							}
+																						</div>
+																					</div>
+																				</a>
+																			</div>
+																		)
+																	)}
+																</div>
+															)}
+														</li>
+													)}
+												</ul>
 											</div>
-										)}
-									</li>
-								</Tooltip>
-							</ul>
-						</div>
+
+											<div className="footer">
+												<a
+													className="admin-btn btn-red"
+													href={appLocalizer.user_logout_url}
+												>
+													<i className="adminfont-import"></i> Sign Out
+												</a>
+											</div>
+										</div>
+									)}
+								</li>
+							</Tooltip>
+						</ul>
 					</div>
 				</div>
 

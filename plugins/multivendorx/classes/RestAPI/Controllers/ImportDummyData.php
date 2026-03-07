@@ -59,15 +59,15 @@ class ImportDummyData extends \WP_REST_Controller {
             $error = new \WP_Error( 'invalid_nonce', __( 'Invalid nonce', 'multivendorx' ), array( 'status' => 403 ) );
 
             if ( is_wp_error( $error ) ) {
-                 MultiVendorX()->util->log( $error );
+                MultiVendorX()->util->log( $error );
             }
 
             return $error;
         }
-            
-        $action    = $request->get_param( 'action' );
 
-        if (method_exists( $this, $action ) ) {
+        $action = $request->get_param( 'action' );
+
+        if ( method_exists( $this, $action ) ) {
             return $this->$action( $request );
         }
 
@@ -81,8 +81,8 @@ class ImportDummyData extends \WP_REST_Controller {
      * Get current status
      */
     public function get_status( $request ) {
-        $task = $request->get_param( 'task' );
-        $status    = get_transient( 'multivendorx_import_status_' . $task ) ?: array();
+        $task   = $request->get_param( 'task' );
+        $status = get_transient( 'multivendorx_import_status_' . $task ) ?: array();
 
         return array(
             'success' => true,
@@ -91,7 +91,7 @@ class ImportDummyData extends \WP_REST_Controller {
         );
     }
 
-    public function import_store_owners( ) {
+    public function import_store_owners() {
         $xml = $this->load_dummy_xml( 'store_owners' );
 
         $store_owners = array();
@@ -150,15 +150,15 @@ class ImportDummyData extends \WP_REST_Controller {
         }
 
             $response_data = array(
-            'success' => true,
-            'data'    => $store_owners,
-            'message' => __( 'Store owners imported successfully.', 'multivendorx' )
-        );
-        
-        $response = rest_ensure_response( $response_data );
-        $response->header( 'X-WP-Total', count( $store_owners ) );
-        
-        return $response;
+				'success' => true,
+				'data'    => $store_owners,
+				'message' => __( 'Store owners imported successfully.', 'multivendorx' ),
+			);
+
+			$response = rest_ensure_response( $response_data );
+			$response->header( 'X-WP-Total', count( $store_owners ) );
+
+			return $response;
     }
 
     private function load_dummy_xml( string $filename ) {
@@ -198,8 +198,8 @@ class ImportDummyData extends \WP_REST_Controller {
         $created_store_ids = array();
 
         foreach ( $xml->store as $store ) {
-            $params = $request->get_json_params();
-            $store_owners = $params['responseData'] ;
+            $params       = $request->get_json_params();
+            $store_owners = $params['responseData'];
             $owner_index  = (int) $store->owner_index;
             $owner_id     = $store_owners[ $owner_index ] ?? 0;
 
@@ -265,7 +265,7 @@ class ImportDummyData extends \WP_REST_Controller {
         $response_data = array(
             'success' => true,
             'data'    => $created_store_ids,
-            'message' => __( 'Stores imported successfully.', 'multivendorx' )
+            'message' => __( 'Stores imported successfully.', 'multivendorx' ),
         );
 
         $response = rest_ensure_response( $response_data );
@@ -300,10 +300,10 @@ class ImportDummyData extends \WP_REST_Controller {
 
             foreach ( $xml->product as $product ) {
                 $store_index = (int) $product->store_index;
-                $params = $request->get_json_params();
-                $store_ids   = $params['responseData'] ;
+                $params      = $request->get_json_params();
+                $store_ids   = $params['responseData'];
                 $store_id    = $store_ids[ $store_index ] ?? 0;
-                $sku = (string) $product->sku;
+                $sku         = (string) $product->sku;
 
                 if ( ! empty( $sku ) ) {
                     $existing_id = wc_get_product_id_by_sku( $sku );
@@ -434,7 +434,7 @@ class ImportDummyData extends \WP_REST_Controller {
         $response_data = array(
             'success' => true,
             'data'    => $created_products,
-            'message' => __( 'Products imported successfully.', 'multivendorx' )
+            'message' => __( 'Products imported successfully.', 'multivendorx' ),
         );
 
         $response = rest_ensure_response( $response_data );
@@ -443,7 +443,7 @@ class ImportDummyData extends \WP_REST_Controller {
         return $response;
     }
 
-    public function import_commissions( ) {
+    public function import_commissions() {
 
         $xml = $this->load_dummy_xml( 'commissions' );
 
@@ -520,11 +520,10 @@ class ImportDummyData extends \WP_REST_Controller {
 
         $response_data = array(
             'success' => true,
-            'message' => __( 'Commissions imported successfully.', 'multivendorx' )
+            'message' => __( 'Commissions imported successfully.', 'multivendorx' ),
         );
-        
+
         $response = rest_ensure_response( $response_data );
-        
 
         return $response;
     }
@@ -558,7 +557,7 @@ class ImportDummyData extends \WP_REST_Controller {
 
             // Add products
             foreach ( $order_xml->items->item as $item ) {
-                $params = $request->get_json_params();
+                $params      = $request->get_json_params();
                 $product_ids = $params['responseData'];
                 $product_id  = (int) $product_ids[ (int) $item->product_index ] ?? 0;
 
@@ -609,17 +608,16 @@ class ImportDummyData extends \WP_REST_Controller {
         $response_data = array(
             'success' => true,
             'data'    => $order,
-            'message' => __( 'Orders imported successfully.', 'multivendorx' )
+            'message' => __( 'Orders imported successfully.', 'multivendorx' ),
         );
-        
+
         $response = rest_ensure_response( $response_data );
         return $response;
-
     }
 
     public function import_reviews( $request ) {
 
-        $params = $request->get_json_params();
+        $params      = $request->get_json_params();
         $product_ids = $params['responseData'];
 
         if ( empty( $product_ids ) || ! is_array( $product_ids ) ) {
@@ -692,11 +690,11 @@ class ImportDummyData extends \WP_REST_Controller {
         $response_data = array(
             'success' => true,
             'data'    => $comment_id,
-            'message' => __( 'Reviews imported successfully.', 'multivendorx' )
+            'message' => __( 'Reviews imported successfully.', 'multivendorx' ),
         );
-        
+
         $response = rest_ensure_response( $response_data );
-        
+
         return $response;
     }
 }

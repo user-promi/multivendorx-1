@@ -53,9 +53,9 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 							value={""}
 							placeholder="Bulk Actions"
 							disabled={selectedIds.length === 0}
-							onChange={(selected) => {
-								if (selected?.value) {
-									onApply(String(selected.value));
+							onChange={(value) => {
+								if (value) {
+									onApply(String(value));
 								}
 							}}
 						/>

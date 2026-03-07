@@ -53,7 +53,7 @@ export default {
 		// Section UI
 		{
 			type: 'section',
-			hint: 'Deactivation',
+			title: 'Deactivation',
 		},
 
 		// Enable Deactivation Toggle

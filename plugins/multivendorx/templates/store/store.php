@@ -67,7 +67,7 @@ $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array
 
         // right sidebar
         if ( in_array( $sidebar_position, array( 'right' ), true ) ) {
-        ?>
+			?>
         <aside class="multivendorx-store-sidebar-<?php echo esc_attr( $sidebar_position ); ?>">
             <?php
             if ( is_active_sidebar( 'multivendorx-store-sidebar' ) ) {
@@ -75,8 +75,8 @@ $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array
             }
             ?>
         </aside>
-        <?php
-    }
+			<?php
+		}
         ?>
     </div>
 

@@ -153,11 +153,6 @@
       .divider-section {
         padding: 1rem 1rem .5rem;
         background: $background-white;
-
-        // background color like card header 
-        &.bg-color {
-          background: #f7f7f7;
-        }
       }
     }
   }
@@ -375,6 +370,11 @@
       .tab-content {
         box-sizing: border-box;
       }
+    }
+
+    .divider-section {
+      padding: 1rem 1rem .5rem;
+      background: $background-white;
     }
   }
 }

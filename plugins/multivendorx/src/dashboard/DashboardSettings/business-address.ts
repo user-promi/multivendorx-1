@@ -46,18 +46,6 @@ export default {
 				set: true,
 			},
         },
-        {
-            type: 'calendar-input', // Checking purpose
-            key: "calendar",
-            label: __('Business Holidays', 'multivendorx'),
-            mulitple: true,
-            showInput: false
-        },
-        {
-            type: 'event-calendar', // Checking purpose
-            key: 'events',
-            label: __('Business Hours', 'multivendorx'),
-        }
         //map component load 
 	],
 };

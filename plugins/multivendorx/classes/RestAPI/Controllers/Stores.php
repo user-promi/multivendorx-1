@@ -839,8 +839,8 @@ class Stores extends \WP_REST_Controller {
                 'description'        => $store->get( Utill::STORE_SETTINGS_KEYS['description'] ),
                 'who_created'        => $store->get( Utill::STORE_SETTINGS_KEYS['who_created'] ),
                 'status'             => $store->get( Utill::STORE_SETTINGS_KEYS['status'] ),
-                'create_time'         => Utill::multivendorx_rest_prepare_date_response( Utill::STORE_SETTINGS_KEYS['create_time'] ),
-                'create_time_gmt'     => Utill::multivendorx_rest_prepare_date_response( Utill::STORE_SETTINGS_KEYS['create_time'], true ),
+                'create_time'        => Utill::multivendorx_rest_prepare_date_response( Utill::STORE_SETTINGS_KEYS['create_time'] ),
+                'create_time_gmt'    => Utill::multivendorx_rest_prepare_date_response( Utill::STORE_SETTINGS_KEYS['create_time'], true ),
                 'commission'         => $commission,
                 'transactions'       => $transactions,
                 'primary_owner_info' => $primary_owner_info,
@@ -1421,11 +1421,11 @@ class Stores extends \WP_REST_Controller {
 
             if ( ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_reason'] ] ) ) {
                 $stores_deactivate_requests[] = array(
-                    'id'         => (int) $store['ID'],
-                    'store_name' => $store['name'],
-                    'reason'     => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_reason'] ],
-                    'deactivation_request_date'         => Utill::multivendorx_rest_prepare_date_response( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_request_date'] ] ),
-                    'deactivation_request_date_gmt'     => Utill::multivendorx_rest_prepare_date_response( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_request_date'] ] , true ),
+                    'id'                            => (int) $store['ID'],
+                    'store_name'                    => $store['name'],
+                    'reason'                        => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_reason'] ],
+                    'deactivation_request_date'     => Utill::multivendorx_rest_prepare_date_response( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_request_date'] ] ),
+                    'deactivation_request_date_gmt' => Utill::multivendorx_rest_prepare_date_response( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_request_date'] ], true ),
                 );
             }
         }

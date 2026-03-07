@@ -404,7 +404,6 @@ export const KnowledgeBase: React.FC = () => {
 								htmlFor="Title"
 							>
 								<BasicInputUI
-									type="text"
 									name="title"
 									value={formData.title}
 									onChange={(val) =>

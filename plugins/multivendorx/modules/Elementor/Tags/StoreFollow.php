@@ -1,5 +1,6 @@
 <?php
 namespace MultiVendorX\Elementor\Tags;
+
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
 use MultiVendorX\Elementor\StoreHelper;
@@ -14,7 +15,7 @@ class StoreFollow extends Tag {
      *
      * @param array $data
      */
-    public function __construct( $data = [] ) {
+    public function __construct( $data = array() ) {
         parent::__construct( $data );
     }
 
@@ -45,7 +46,7 @@ class StoreFollow extends Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return array( Module::TEXT_CATEGORY );
     }
 
     /**
@@ -56,7 +57,7 @@ class StoreFollow extends Tag {
      * @return void
      */
     public function render() {
-    	$store = $this->get_store_data();
+    	$store    = $this->get_store_data();
         $store_id = ! empty( $store['storeId'] ) ? $store['storeId'] : '';
         
         if ( !empty($store_id) ) {

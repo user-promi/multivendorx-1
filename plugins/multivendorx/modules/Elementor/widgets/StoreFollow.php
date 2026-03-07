@@ -23,25 +23,25 @@ class Store_Follow_Button extends Widget_Button {
 	}
 
 	public function get_categories() {
-		return [ 'multivendorx' ];
+		return array( 'multivendorx' );
 	}
 
 	protected function register_controls() {
 		parent::register_controls();
-    
+
         $this->update_control(
             'text',
-            [
-                'dynamic'   => [
+            array(
+                'dynamic'   => array(
                     'default' => \Elementor\Plugin::instance()
 											->dynamic_tags
 											->tag_data_to_tag_text( null, 'multivendorx-store-follow-tag' ),
                     'active'  => true,
-                ],
-                'selectors' => [
+                ),
+                'selectors' => array(
                     '{{WRAPPER}} > .elementor-widget-container > .elementor-button-wrapper > .multivendorx-store-follow-btn' => 'width: auto; margin: 0;',
-                ]
-            ]
+                ),
+            )
         );
 	}
 

@@ -459,7 +459,6 @@ export const Announcements: React.FC = () => {
 						htmlFor="title"
 					>
 						<BasicInputUI
-							type="text"
 							name="title"
 							value={formData.title}
 							onChange={(val) =>

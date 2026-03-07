@@ -1,5 +1,6 @@
 <?php
 namespace MultiVendorX\Elementor\Tags;
+
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
 
@@ -12,7 +13,7 @@ class StoreChat extends Tag {
      *
      * @param array $data
      */
-    public function __construct( $data = [] ) {
+    public function __construct( $data = array() ) {
         parent::__construct( $data );
     }
 
@@ -43,7 +44,7 @@ class StoreChat extends Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return array( Module::TEXT_CATEGORY );
     }
 
 
@@ -59,6 +60,6 @@ class StoreChat extends Tag {
             esc_html_e( 'Chat module is not active', 'multivendorx' );
             return;
         }
-        return esc_html_e('Chat Now', 'multivendorx');
+        return esc_html_e( 'Chat Now', 'multivendorx' );
     }
 }

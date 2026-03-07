@@ -195,7 +195,7 @@ class Dashboard extends \WP_REST_Controller {
                 ),
                 'capability' => array( 'view_support_tickets' ),
             ),
-            
+
             'reports'       => array(
                 'name'       => 'Stats / Report',
                 'slug'       => 'reports',
@@ -237,7 +237,7 @@ class Dashboard extends \WP_REST_Controller {
                 'icon'       => 'setting',
                 'capability' => array( 'manage_store_settings' ),
             ),
-            'appointment'       => array(
+            'appointment'   => array(
                 'name'       => 'Appointment (Pro)',
                 'slug'       => 'appointment',
                 'icon'       => 'report',

@@ -1,5 +1,6 @@
 <?php
 namespace MultiVendorX\Elementor\Tags;
+
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
 
@@ -12,7 +13,7 @@ class StoreGetSupport extends Tag {
      *
      * @param array $data
      */
-    public function __construct( $data = [] ) {
+    public function __construct( $data = array() ) {
         parent::__construct( $data );
     }
 
@@ -32,7 +33,7 @@ class StoreGetSupport extends Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return array( Module::TEXT_CATEGORY );
     }
 
     /**
@@ -43,7 +44,7 @@ class StoreGetSupport extends Tag {
      * @return string
      */
     public function get_title() {
-        return __('Store Get Support Button', 'multivendorx');
+        return __( 'Store Get Support Button', 'multivendorx' );
     }
 
     /**
@@ -54,8 +55,8 @@ class StoreGetSupport extends Tag {
      * @return void
      */
     public function render() {
-        if (get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) )) {
-        	echo esc_html_e('Get Support', 'multivendorx');
+        if ( get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ) ) {
+        	echo esc_html_e( 'Get Support', 'multivendorx' );
         } else {
             return;
         }

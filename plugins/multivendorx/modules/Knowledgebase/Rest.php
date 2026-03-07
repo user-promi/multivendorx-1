@@ -449,12 +449,12 @@ class Rest extends \WP_REST_Controller {
     public function prepare_item_for_response( $post, $request ) {
 
         return array(
-            'id'           => $post->ID,
-            'title'        => $post->post_title,
-            'content'      => $post->post_content,
-            'status'       => $post->post_status,
-            'status_label' => get_post_status_object( $post->post_status )->label,
-            'date_created' => Utill::multivendorx_rest_prepare_date_response( get_post_timestamp( $post ) ),
+            'id'               => $post->ID,
+            'title'            => $post->post_title,
+            'content'          => $post->post_content,
+            'status'           => $post->post_status,
+            'status_label'     => get_post_status_object( $post->post_status )->label,
+            'date_created'     => Utill::multivendorx_rest_prepare_date_response( get_post_timestamp( $post ) ),
             'date_created_gmt' => Utill::multivendorx_rest_prepare_date_response( get_post_timestamp( $post ), true ),
 
         );

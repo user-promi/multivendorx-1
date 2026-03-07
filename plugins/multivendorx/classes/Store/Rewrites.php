@@ -170,7 +170,6 @@ class Rewrites {
         $store_name = get_query_var( $this->custom_store_url );
 
         if ( ! empty( $store_name ) ) {
-
             $filtered_template = apply_filters( 'multivendorx_store_elementor_template', '' );
 
             if ( $filtered_template && file_exists( $filtered_template ) ) {
@@ -191,7 +190,7 @@ class Rewrites {
 
         return $template;
     }
-    
+
 
     public function register_store_state() {
         $store_slug = get_query_var( $this->custom_store_url );

@@ -69,7 +69,7 @@ class Block {
             'product-category',
             'store-quick-info',
             'store-sidebar',
-            'marketplace-coupons'
+            'marketplace-coupons',
         );
 
         $textdomain = 'multivendorx';
