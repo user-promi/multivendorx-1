@@ -156,7 +156,7 @@ $banner_slider     = $meta_data['banner_slider'] ?? array();
             <div class="container">
                 <div class="contact-details">
                     <?php if ( in_array( 'show_store_name', $branding_settings, true ) ) : ?>
-                        <div class="heading"><?php echo esc_html( $store_name ); ?></div>
+                        <h2><?php echo esc_html( $store_name ); ?></h2>
                     <?php endif; ?>
                     <div class="row">
                         <?php

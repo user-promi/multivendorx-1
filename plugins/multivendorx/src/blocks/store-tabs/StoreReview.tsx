@@ -25,6 +25,7 @@ const StoreReview: React.FC<{}> = ({ }) => {
 	const [images, setImages] = useState<File[]>([]);
 	const [overview, setOverview] = useState<any>(null);
 	const [status, setStatus] = useState<'idle' | 'submitting' | 'submitted'>('idle');
+
 	useEffect(() => {
 		axios
 			.get(getApiLink(StoreInfo, 'review'), {
@@ -38,7 +39,7 @@ const StoreReview: React.FC<{}> = ({ }) => {
 			})
 			.then((response) => {
 				setReviews(Array.isArray(response.data) ? response.data : []);
-			})
+			});
 	}, []);
 
 	useEffect(() => {
@@ -59,7 +60,6 @@ const StoreReview: React.FC<{}> = ({ }) => {
 	}, []);
 
 	const handleSubmit = () => {
-
 		if (!reviewTitle.trim() || !reviewContent.trim()) {
 			alert(__('Title and review content are required.', 'multivendorx'));
 			return;
@@ -87,25 +87,18 @@ const StoreReview: React.FC<{}> = ({ }) => {
 		});
 
 		axios
-			.post(
-				getApiLink(StoreInfo, 'review'),
-				formData,
-				{
-					headers: {
-						'X-WP-Nonce': StoreInfo.nonce,
-					},
-				}
-			)
+			.post(getApiLink(StoreInfo, 'review'), formData, {
+				headers: {
+					'X-WP-Nonce': StoreInfo.nonce,
+				},
+			})
 			.then(() => {
-
 				setStatus('submitted');
-
 				setReviewTitle('');
 				setReviewContent('');
 				setRatings({});
 				setImages([]);
 				setShowForm(false);
-
 			})
 			.catch((error: any) => {
 				console.log(error);
@@ -125,196 +118,167 @@ const StoreReview: React.FC<{}> = ({ }) => {
 
 	return (
 		<>
-
 			{overview && (
-				<div className="woocommerce-Reviews">
-					<div className="review-overview">
+				<div className="review-overview">
+					<h3>
+						{__('Overall Rating', 'multivendorx')} : {overview.overall}
+					</h3>
 
-						<h3 className="woocommerce-Reviews-title">
-							{__('Overall Rating', 'multivendorx')} : {overview.overall}
-						</h3>
+					<p> {overview.total_reviews} {__('reviews', 'multivendorx')}</p>
 
-						<p className="woocommerce-review-count">
-							{overview.total_reviews} {__('reviews', 'multivendorx')}
-						</p>
-
-						<div className="rating-breakdown">
-							{[5, 4, 3, 2, 1].map((star) => (
-								<div key={star} className="rating-breakdown-row">
-									<span className="rating-star">{star} :</span>
-									<span className="rating-count">{overview.breakdown?.[star] || 0}</span>
-								</div>
-							))}
-						</div>
-
+					<div className="rating-breakdown">
+						{[5, 4, 3, 2, 1].map((star) => (
+							<div key={star} className="rating-breakdown-row">
+								<span className="rating-star">{star} :</span>
+								<span className="rating-count">{overview.breakdown?.[star] || 0}</span>
+							</div>
+						))}
 					</div>
 				</div>
 			)}
 
 			<div className="multivendorx-review-form-wrapper">
-
 				{status === 'submitted' && (
 					<p className="woocommerce-message">
 						{__('Review submitted successfully and awaiting approval.', 'multivendorx')}
 					</p>
 				)}
 
-				{StoreInfo.currentUserId === "0" ? (
-
+				{StoreInfo.currentUserId === '0' ? (
 					<p className="woocommerce-info">
 						{__('Please login to submit a review.', 'multivendorx')}{' '}
 						<a href={StoreInfo.loginUrl}>{__('Login', 'multivendorx')}</a>
 					</p>
-
-				) : StoreInfo.reviewStatus === 'pending' ||
-					StoreInfo.reviewStatus === 'rejected' ? (
-
+				) : StoreInfo.reviewStatus === 'pending' || StoreInfo.reviewStatus === 'rejected' ? (
 					<p className="woocommerce-info">
 						{__('You have already submitted a review for this store.', 'multivendorx')}
 					</p>
+				) : StoreInfo.reviewStatus ? null : StoreInfo.isVerifiedBuyerOnly && !StoreInfo.isVerifiedBuyer ? (
+					<p className="woocommerce-info">
+						{__('Only verified buyers can leave a review for this store.', 'multivendorx')}
+					</p>
+				) : (
+					<>
+						{!showForm && status !== 'submitted' && (
+							<button onClick={() => setShowForm(true)} className="button">
+								{__('Write a review', 'multivendorx')}
+							</button>
+						)}
 
-				) : StoreInfo.reviewStatus ? null :
+						{showForm && (
+							<div className="review-form woocommerce-Reviews">
+								<div id="review_form_wrapper">
+									<div id="review_form">
+										<div className="comment-form">
+											<p className="comment-form-title">
+												<input
+													type="text"
+													placeholder={__('Review Title', 'multivendorx')}
+													value={reviewTitle}
+													onChange={(e) => setReviewTitle(e.target.value)}
+													className="input-text"
+												/>
+											</p>
 
-					StoreInfo.isVerifiedBuyerOnly &&
-						!StoreInfo.isVerifiedBuyer ? (
+											<p className="comment-form-comment">
+												<textarea
+													placeholder={__('Your Review', 'multivendorx')}
+													value={reviewContent}
+													onChange={(e) => setReviewContent(e.target.value)}
+													className="input-text"
+													rows={5}
+												/>
+											</p>
 
-						<p className="woocommerce-info">
-							{__('Only verified buyers can leave a review for this store.', 'multivendorx')}
-						</p>
+											{/* WooCommerce Stars */}
+											{Object.entries(
+												StoreInfo?.settings_databases_value?.['store-reviews']?.ratings_parameters || {}
+											).map(([key, param]: any) => {
+												const label = param?.label;
+												if (!label) return null;
 
-					) : (
-
-						<>
-
-							{!showForm && status !== 'submitted' && (
-								<button
-									onClick={() => setShowForm(true)}
-									className="button"
-								>
-									{__('Write a review', 'multivendorx')}
-								</button>
-							)}
-
-							{showForm && (
-
-								<div className="review-form woocommerce-Reviews">
-									<div className="comment-form">
-
-										<p className="comment-form-title">
-											<input
-												type="text"
-												placeholder={__('Review Title', 'multivendorx')}
-												value={reviewTitle}
-												onChange={(e) => setReviewTitle(e.target.value)}
-												className="input-text"
-											/>
-										</p>
-
-										<p className="comment-form-comment">
-											<textarea
-												placeholder={__('Your Review', 'multivendorx')}
-												value={reviewContent}
-												onChange={(e) => setReviewContent(e.target.value)}
-												className="input-text"
-												rows={5}
-											/>
-										</p>
-
-										{Object.entries(
-											StoreInfo?.settings_databases_value?.['store-reviews']?.ratings_parameters || {}
-										).map(([key, param]: any) => {
-
-											const label = param?.label;
-											if (!label) return null;
-
-											return (
-												<div key={key} className="comment-form-rating">
-
-													<label>{label}</label>
-
-													<div className="stars-rating-form">
-														<div className="star-rating-selector">
-
-															{[1, 2, 3, 4, 5].map((num) => (
-
-																<span
-																	key={num}
-																	className={`star ${(ratings[key] || 0) >= num ? 'selected' : ''}`}
-																	onClick={() => handleRatingClick(key, num)}
-																	role="button"
-																	tabIndex={0}
-																>
-																	★
-																</span>
-
-															))}
-
-														</div>
+												return (
+													<div key={key} className="comment-form-rating">
+														<label>{label}</label>
+														
+														<p className="stars">
+															<span role="group">
+																{[5, 4, 3, 2, 1].map((num) => {
+																	const isSelected = ratings[key] === num;
+																	
+																	return (
+																		<a
+																			key={num}
+																			className={`star-${num} ${isSelected ? 'active' : ''}`}
+																			onClick={(e) => {
+																				e.preventDefault();
+																				handleRatingClick(key, num);
+																			}}
+																			onKeyDown={(e) => {
+																				if (e.key === 'Enter' || e.key === ' ') {
+																					e.preventDefault();
+																					handleRatingClick(key, num);
+																				}
+																			}}
+																			role="radio"
+																			tabIndex={0}
+																			aria-checked={isSelected}
+																			href="#"
+																		>
+																			<span className="screen-reader-text">
+																				{num} {__('out of 5 stars', 'multivendorx')}
+																			</span>
+																		</a>
+																	);
+																})}
+															</span>
+														</p>
 													</div>
+												);
+											})}
 
-												</div>
-											);
+											<p className="comment-form-images">
+												<label htmlFor="review-images">
+													{__('Upload Images (optional)', 'multivendorx')}
+												</label>
+												<input
+													type="file"
+													id="review-images"
+													multiple
+													accept="image/*"
+													onChange={handleImageChange}
+													className="input-text"
+												/>
+											</p>
 
-										})}
-
-										<p className="comment-form-images">
-
-											<label htmlFor="review-images">
-												{__('Upload Images (optional)', 'multivendorx')}
-											</label>
-
-											<input
-												type="file"
-												id="review-images"
-												multiple
-												accept="image/*"
-												onChange={handleImageChange}
-												className="input-text"
-											/>
-
-										</p>
-
-										<p className="form-submit">
-
-											<button
-												onClick={handleSubmit}
-												disabled={status === 'submitting'}
-												className="button alt"
-											>
-
-												{status === 'submitting'
-													? __('Submitting...', 'multivendorx')
-													: __('Submit Review', 'multivendorx')}
-
-											</button>
-
-										</p>
-
+											<p className="form-submit">
+												<button
+													onClick={handleSubmit}
+													disabled={status === 'submitting'}
+													className="button alt"
+													name="submit"
+												>
+													{status === 'submitting'
+														? __('Submitting...', 'multivendorx')
+														: __('Submit Review', 'multivendorx')}
+												</button>
+											</p>
+										</div>
 									</div>
 								</div>
-
-							)}
-
-						</>
-
-					)}
-
+							</div>
+						)}
+					</>
+				)}
 			</div>
 
 			<div id="reviews" className="woocommerce-Reviews">
-
 				<div id="comments">
-
 					<ol className="commentlist">
-
 						{reviews.map((review) => (
-
-							<li key={review.id} className="review">
-
-								<div className="comment_container">
-
+							<li key={review.id} className="review byuser comment-author-admin bypostauthor even thread-even depth-1" id={`li-comment-${review.id}`}>
+								<div id={`comment-${review.id}`} className="comment_container">
 									{review.avatar_url ? (
-
 										<img
 											alt={`Avatar of ${review.customer_name}`}
 											src={review.avatar_url}
@@ -323,107 +287,62 @@ const StoreReview: React.FC<{}> = ({ }) => {
 											width="60"
 											loading="lazy"
 										/>
-
 									) : (
-
 										<div className="avatar avatar-60 photo avatar-placeholder">
 											{review.customer_name.charAt(0)}
 										</div>
-
 									)}
 
 									<div className="comment-text">
-
-										<div className="star-rating">
-
+										<div className="star-rating" role="img" aria-label={`Rated ${review.overall_rating} out of 5`}>
 											<span style={{ width: `${(review.overall_rating / 5) * 100}%` }}>
-												<strong className="rating">
-													{review.overall_rating.toFixed(1)}
-												</strong>
-												{__(' out of 5', 'multivendorx')}
+												<strong className="rating">{review.overall_rating.toFixed(1)}</strong> {__('out of 5', 'multivendorx')}
 											</span>
-
 										</div>
 
 										<p className="meta">
-
-											<strong className="woocommerce-review__author">
-												{review.customer_name}
-											</strong>
-
+											<strong className="woocommerce-review__author">{review.customer_name}</strong>
+											<em className="woocommerce-review__verified verified">{__('Verified', 'multivendorx')}</em>
 											<span className="woocommerce-review__dash">–</span>
-
-											<time className="woocommerce-review__published-date">
+											<time className="woocommerce-review__published-date" dateTime={review.date_created}>
 												{review.date_created}
 											</time>
-
 										</p>
 
 										<div className="description">
-
-											<h4 className="woocommerce-review__title">
-												{review.review_title}
-											</h4>
-
+											<h4 className="woocommerce-review__title">{review.review_title}</h4>
 											<p>{review.review_content}</p>
-
 										</div>
 
+										{review.images?.length ? (
+											<div className="review-images">
+												{review.images.map((img, i) => (
+													<a
+														key={i}
+														href={img}
+														target="_blank"
+														rel="noopener noreferrer"
+														className="review-image-link"
+													>
+														<img src={img} alt={__('Review Image', 'multivendorx')} />
+													</a>
+												))}
+											</div>
+										) : null}
 									</div>
-
 								</div>
 
-								{review.images?.length ? (
-
-									<div className="review-images">
-
-										{review.images.map((img, i) => (
-
-											<a
-												key={i}
-												href={img}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="review-image-link"
-											>
-
-												<img
-													src={img}
-													alt={__('Review Image', 'multivendorx')}
-												/>
-
-											</a>
-
-										))}
-
-									</div>
-
-								) : null}
-
 								{review.reply && (
-
 									<div className="multivendorx-review-reply">
-
-										<strong>
-											{__('Admin reply:', 'multivendorx')}
-										</strong>
-
+										<strong>{__('Store reply:', 'multivendorx')}</strong>
 										<p>{review.reply}</p>
-
 									</div>
-
 								)}
-
 							</li>
-
 						))}
-
 					</ol>
-
 				</div>
-
 			</div>
-
 		</>
 	);
 };

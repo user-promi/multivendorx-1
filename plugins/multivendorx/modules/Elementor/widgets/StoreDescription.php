@@ -31,17 +31,8 @@ class Store_Description extends Widget_Heading {
 	protected function register_controls() {
 		parent::register_controls();
 
-		$this->update_control(
-			'title',
-			array(
-				'label'   => __( 'Default Description', 'multivendorx' ),
-				'type'    => Controls_Manager::TEXTAREA,
-				'default' => __( 'No store description available.', 'multivendorx' ),
-				'dynamic' => array(
-					'active' => true,
-				),
-			)
-		);
+		$this->remove_control( 'title' );
+		$this->remove_control( 'link' );
 
 		$this->update_control(
 			'header_size',
@@ -49,8 +40,6 @@ class Store_Description extends Widget_Heading {
 				'default' => 'p',
 			)
 		);
-
-		$this->remove_control( 'link' );
 	}
 
 	protected function render() {
@@ -60,11 +49,9 @@ class Store_Description extends Widget_Heading {
 			return;
 		}
 
-		$settings = $this->get_settings_for_display();
-
 		$description = ! empty( $store['storeDescription'] )
 			? $store['storeDescription']
-			: ( $settings['title'] ?? '' );
+			: __( 'No store description available.', 'multivendorx' );
 
 		if ( empty( $description ) ) {
 			return;

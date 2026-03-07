@@ -94,9 +94,9 @@ class Store_Logo extends Widget_Image {
 		if ( empty( $logo ) ) {
 			$initials = ! empty( $store_name ) ? strtoupper( mb_substr( trim( $store_name ), 0, 2 ) ) : '';
 
-			echo '<div class="multivendorx-store-logo-fallback">';
+			echo '<div class="multivendorx-store-logo-container"> <div class="placeholder">';
 			echo esc_html( $initials );
-			echo '</div>';
+			echo '</div></div>';
 
 			return;
 		}
