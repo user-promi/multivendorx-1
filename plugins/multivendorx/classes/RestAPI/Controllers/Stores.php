@@ -552,7 +552,7 @@ class Stores extends \WP_REST_Controller {
             $registrations = (bool) $request->get_header( 'registrations' );
             $store_data    = (array) $request->get_param( 'formData' );
             $file_data     = $request->get_file_params();
-            $current_user  = wp_get_current_user();
+            $current_user  = MultiVendorX()->current_user;
 
             $core_fields = array(
                 Utill::STORE_SETTINGS_KEYS['name'],
@@ -761,7 +761,7 @@ class Stores extends \WP_REST_Controller {
 
             if ( $id && 'switch' === $action ) {
                 update_user_meta(
-                    get_current_user_id(),
+                    MultiVendorX()->current_user_id,
                     Utill::USER_SETTINGS_KEYS['active_store'],
                     $id
                 );

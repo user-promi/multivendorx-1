@@ -264,7 +264,7 @@ class Frontend {
      * @return string
      */
     public function store_dashboard_template( $template ) {
-        if ( is_user_logged_in() && Utill::is_store_dashboard() && in_array( 'administrator', wp_get_current_user()->roles, true ) ) {
+        if ( is_user_logged_in() && Utill::is_store_dashboard() && in_array( 'administrator', MultiVendorX()->current_user->roles, true ) ) {
             wp_safe_redirect( admin_url() );
             exit;
         }
@@ -282,7 +282,7 @@ class Frontend {
      * @return string
      */
     public function redirect_store_dashboard( $redirect ) {
-        if ( in_array( 'store_owner', wp_get_current_user()->roles, true ) && MultiVendorX()->active_store ) {
+        if ( in_array( 'store_owner', MultiVendorX()->current_user->roles, true ) && MultiVendorX()->active_store ) {
             return get_permalink( MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) );
         }
         return $redirect;
@@ -293,7 +293,7 @@ class Frontend {
      */
     public function set_multivendorx_user_cookies() {
         if ( is_product() || Utill::is_store_page() ) {
-            $current_user_id = get_current_user_id();
+            $current_user_id = MultiVendorX()->current_user_id;
             $cookie_id       = '_multivendorx_user_cookie_' . $current_user_id;
 
             if ( ! headers_sent() ) {
@@ -327,7 +327,7 @@ class Frontend {
             $product_store = Utill::is_store_page();
         }
 
-        $user_id     = get_current_user_id();
+        $user_id     = MultiVendorX()->current_user_id;
         $user_cookie = filter_input( INPUT_COOKIE, '_multivendorx_user_cookie_' . $user_id );
 
         if ( $product_store && $user_cookie ) {

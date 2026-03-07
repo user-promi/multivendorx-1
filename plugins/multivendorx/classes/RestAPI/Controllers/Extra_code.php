@@ -64,7 +64,7 @@ register_rest_route(
 					return new \WP_Error( 'invalid_params', __( 'Missing required parameters', 'multivendorx' ), array( 'status' => 400 ) );
 				}
 
-				$user_id = get_current_user_id();
+				$user_id = MultiVendorX()->current_user_id;
 				if ( ! $user_id ) {
 					return new \WP_Error( 'unauthorized', __( 'You must be logged in', 'multivendorx' ), array( 'status' => 401 ) );
 				}
@@ -106,7 +106,7 @@ register_rest_route(
 		 */
 		public function get_social_profiles( $request ) {
 			try {
-				$user_id             = get_current_user_id();
+				$user_id             = MultiVendorX()->current_user_id;
 				$social_verification = $this->get_social_verification();
 				$profiles            = $social_verification->get_social_profiles( $user_id );
 
@@ -169,7 +169,7 @@ register_rest_route(
 					return new \WP_Error( 'missing_provider', __( 'Provider is required', 'multivendorx' ), array( 'status' => 400 ) );
 				}
 
-				$user_id             = get_current_user_id();
+				$user_id             = MultiVendorX()->current_user_id;
 				$social_verification = $this->get_social_verification();
 				$success             = $social_verification->disconnect_social_profile( $user_id, $provider );
 

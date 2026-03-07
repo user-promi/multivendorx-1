@@ -410,7 +410,7 @@ class FrontendScripts {
 
         $store_ids = array();
         if ( ! is_admin() ) {
-            $store_ids    = Store::get_store( get_current_user_id(), 'user' );
+            $store_ids    = Store::get_store( MultiVendorX()->current_user_id, 'user' );
             $active_store = MultiVendorX()->active_store;
 
             $store    = new Store( $active_store );
@@ -420,7 +420,7 @@ class FrontendScripts {
                 $first_store = reset( $store_ids );
 
                 if ( ! empty( $first_store['id'] ) ) {
-                    update_user_meta( get_current_user_id(), Utill::USER_SETTINGS_KEYS['active_store'], $first_store['id'] );
+                    update_user_meta( MultiVendorX()->current_user_id, Utill::USER_SETTINGS_KEYS['active_store'], $first_store['id'] );
                     MultiVendorX()->active_store = $first_store['id'];
                 }
             }
@@ -529,8 +529,8 @@ class FrontendScripts {
                             'shipping_methods'       => apply_filters( 'multivendorx_store_shipping_options', array() ),
                             'all_store_meta'         => $all_meta,
                             'site_name'              => get_bloginfo( 'name' ),
-                            'current_user'           => wp_get_current_user(),
-                            'current_user_image'     => get_avatar_url( get_current_user_id(), array( 'size' => 48 ) ),
+                            'current_user'           => MultiVendorX()->current_user,
+                            'current_user_image'     => get_avatar_url( MultiVendorX()->current_user_id, array( 'size' => 48 ) ),
                             'user_logout_url'        => esc_url(
                                 wp_logout_url(
                                     get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) )
@@ -622,7 +622,7 @@ class FrontendScripts {
                         array(
                             'storeDetails'  => StoreUtil::get_specific_store_info(),
                             'activeModules' => MultiVendorX()->modules->get_active_modules(),
-                            'currentUserId' => get_current_user_id(),
+                            'currentUserId' => MultiVendorX()->current_user_id,
                         )
                     ),
                 ),

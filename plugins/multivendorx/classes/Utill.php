@@ -441,12 +441,22 @@ class Utill {
     }
 
     public static function is_store_page() {
-        $store_name = get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
-
-        if ( ! empty( $store_name ) ) {
-            $store = Store::get_store( $store_name, 'slug' );
+        // Admin edit page check.
+        if ( is_admin() ) {
+            $page = get_page_by_path( 'store' );
+            $post_id = filter_input( INPUT_GET, 'post', FILTER_VALIDATE_INT );
+            if ( $page && $post_id && intval( $post_id ) === intval( $page->ID ) ) {
+                return true;
+            }
         }
-        return $store ?? false;
+
+        $store_name = get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
+        // Frontend store page.
+        if ( ! empty( $store_name ) ) {
+            return Store::get_store( $store_name, 'slug' );
+        }
+
+        return false;
     }
 
     /**

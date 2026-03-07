@@ -246,9 +246,6 @@ class Rest extends \WP_REST_Controller {
             );
         }
 
-        $current_user_id = get_current_user_id();
-        $current_user    = wp_get_current_user();
-
         $id = absint( $request->get_param( 'id' ) );
         if ( ! $id ) {
             return new \WP_Error( 'invalid_id', __( 'Invalid ID', 'multivendorx' ), array( 'status' => 400 ) );
@@ -352,7 +349,7 @@ class Rest extends \WP_REST_Controller {
             }
 
             // Add answer_by (current user ID).
-            $current_user_id = get_current_user_id();
+            $current_user_id = MultiVendorX()->current_user_id;
             if ( $current_user_id ) {
                 $data_to_update['answer_by'] = $current_user_id;
             }
