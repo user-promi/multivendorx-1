@@ -106,7 +106,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			},
 		})
 			.then((response) => {
-				setRecentDebits(response.data.transaction || []);
+				setRecentDebits(response.data || []);
 			})
 			.finally(() => {
 				setWalletLoading(false);
