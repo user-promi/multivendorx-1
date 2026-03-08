@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, DateObject } from 'react-multi-date-picker';
 import { FieldComponent } from './types';
 import { PopupUI } from './Popup';
-import { ExpandablePanelGroupUI } from './ExpandablePanelGroup';
+import { ExpandablePanelUI } from './ExpandablePanel';
 import '../styles/web/EventCalendar.scss';
 
 export interface CalendarEvent {
@@ -136,7 +136,7 @@ export const EventCalendarUI: React.FC<EventCalendarProps> = ({
         width={45}
       >
         {selectedDate && (
-          <ExpandablePanelGroupUI
+          <ExpandablePanelUI
             key={selectedDate.toString()}
             name="calendar-events"
             apilink="calendar-events"

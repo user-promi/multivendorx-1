@@ -17,8 +17,8 @@ export default {
 			key: 'store_registration_from',
 			type: 'email-template',
 			classes: 'full-width',
-			desc: 'Customise personalised store registration form for marketplace.',
-			// Add templates configuration with proper content
+			// desc: 'Customise personalised store registration form for marketplace.',
+			// // Add templates configuration with proper content
 			templates: [temp1, temp2],
 			defaultTemplateId: 'store-registration',
 		},

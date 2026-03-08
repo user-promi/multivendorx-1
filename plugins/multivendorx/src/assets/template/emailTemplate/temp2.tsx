@@ -12,7 +12,6 @@ export const temp2 = {
 			id: 1,
 			type: 'heading',
 			name: 'email-heading',
-			label: 'Order Heading',
 			text: __('New Order Received!', 'multivendorx'),
 			level: 2,
 			style: {
@@ -30,9 +29,8 @@ export const temp2 = {
 			id: 2,
 			type: 'richtext',
 			name: 'email-text',
-			label: 'Order Notification',
 			html: __(
-				'<p>You have received a new order from a customer. Here are the quick details:</p><div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin: 15px 0;"><p><strong>Order ID:</strong> #ORD-2024-00123</p><p><strong>Customer:</strong> John Doe</p><p><strong>Total Amount:</strong> $149.99</p><p><strong>Order Date:</strong> January 15, 2024</p></div><p>Please process this order as soon as possible to ensure timely delivery.</p>',
+				'You have received a new order from a customer. Here are the quick details:</p><div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin: 15px 0;"><p><strong>Order ID:</strong> #ORD-2024-00123</p><p><strong>Customer:</strong> John Doe</p><p><strong>Total Amount:</strong> $149.99</p><p><strong>Order Date:</strong> January 15, 2024</p></div><p>Please process this order as soon as possible to ensure timely delivery.</p>',
 				'multivendorx'
 			),
 			style: {
@@ -48,7 +46,6 @@ export const temp2 = {
 			id: 3,
 			type: 'columns',
 			name: 'email-columns',
-			label: 'Action Buttons',
 			layout: '2-50',
 			columns: [
 				[
@@ -56,7 +53,6 @@ export const temp2 = {
 						id: 31,
 						type: 'button',
 						name: 'email-button',
-						label: 'View Order',
 						text: __('View Order Details', 'multivendorx'),
 						url: '#',
 						style: {
@@ -79,7 +75,6 @@ export const temp2 = {
 						id: 32,
 						type: 'button',
 						name: 'email-button',
-						label: 'Process Order',
 						text: __('Process Order', 'multivendorx'),
 						url: '#',
 						style: {

@@ -29,12 +29,12 @@ const EMAIL_BLOCK_GROUPS = [{
     id: 'email',
     label: 'Email Blocks',
     blocks: [
+        { id: 'columns', icon: 'blocks', value: 'columns', label: 'Columns', fixedName: 'email-columns' },
         { id: 'heading', icon: 'form-textarea', value: 'heading', label: 'Heading', fixedName: 'email-heading', placeholder: 'Enter your heading here' },
         { id: 'richtext', icon: 't-letter-bold', value: 'richtext', label: 'Text', fixedName: 'email-text', placeholder: '<p>Enter your text content here</p>' },
         { id: 'image', icon: 'image', value: 'image', label: 'Image', fixedName: 'email-image', placeholder: '' },
         { id: 'button', icon: 'button', value: 'button', label: 'Button', fixedName: 'email-button', placeholder: 'Click me' },
-        { id: 'section', icon: 'section', value: 'section', label: 'section', fixedName: 'email-section' },
-        { id: 'columns', icon: 'blocks', value: 'columns', label: 'Columns', fixedName: 'email-columns' },
+        { id: 'section', icon: 'section', value: 'section', label: 'section', fixedName: 'email-section' },            
     ]
 }];
 

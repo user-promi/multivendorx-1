@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
 import 'zyra/build/index.css';
-import { ExpandablePanelGroupUI } from 'zyra';
+import { ExpandablePanelUI } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import img from '../../assets/images/multivendorx-logo.png';
 
 const SetupWizard: React.FC = () => {
-	// Required state for ExpandablePanelGroup
+	// Required state for ExpandablePanel
 	const [value, setValue] = useState({
 		marketplace_setup: {
 			store_selling_mode: 'default',
@@ -465,7 +465,7 @@ const SetupWizard: React.FC = () => {
 				</div>
 			</div>
 
-			<ExpandablePanelGroupUI
+			<ExpandablePanelUI
 				key={inputField.key}
 				name={inputField.key}
 				apilink={String(inputField.apiLink)}

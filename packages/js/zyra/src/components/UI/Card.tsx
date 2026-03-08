@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../../styles/web/UI/Card.scss";
 import Skeleton from './Skeleton';
-
 
 export type CardProps = {
   title?: React.ReactNode;
@@ -14,6 +13,7 @@ export type CardProps = {
   transparent?: boolean;
   contentWidth?: boolean;
   toggle?: boolean;
+  defaultExpanded?: boolean;  // New prop to set default state
   badges?: {
     text: string;
     color?: string;
@@ -33,11 +33,22 @@ const Card = ({
   transparent = false,
   contentWidth = false,
   toggle = false,
+  defaultExpanded = true,  // Default to true for backward compatibility
   badges = [],
   children,
   isLoading
 }: CardProps) => {
-  const [bodyVisible, setBodyVisible] = useState(true);
+  const [bodyVisible, setBodyVisible] = useState(defaultExpanded);
+
+  // Update bodyVisible if defaultExpanded changes
+  useEffect(() => {
+    setBodyVisible(defaultExpanded);
+  }, [defaultExpanded]);
+
+  const getToggleIcon = () => {
+    if (iconName) return iconName; 
+    return bodyVisible ? "pagination-right-arrow" : "keyboard-arrow-down"; 
+  };
 
   return (
     <div {...(id ? { id } : {})} className={`card-content ${transparent ? 'transparent' : ''} ${contentWidth ? 'content-width' : ''} ${className ? className : ''}`}>
@@ -63,7 +74,7 @@ const Card = ({
         </>
       ) : (
         <>
-          {(title || iconName || action) && (
+          {(title || iconName || action || toggle) && (
             <div className="card-header">
               <div className="left">
                 {title && (
@@ -82,13 +93,21 @@ const Card = ({
               <div className="right">
                 {action}
 
-                {iconName && !action && (
+                {toggle && !action && (
                   <i
-                    className={`adminfont-${iconName}`}
+                    className={`adminfont-${getToggleIcon()}`}
                     onClick={() => {
-                      if (toggle) setBodyVisible(!bodyVisible);
+                      setBodyVisible(!bodyVisible);
                       onIconClick?.();
                     }}
+                  />
+                )}
+
+                {iconName && !toggle && !action && (
+                  <i
+                    className={`adminfont-${iconName}`}
+                    onClick={() => onIconClick?.()}
+                    style={{ cursor: onIconClick ? 'pointer' : 'default' }}
                   />
                 )}
               </div>
@@ -101,7 +120,6 @@ const Card = ({
         </>
       )}
     </div>
-
   );
 };
 

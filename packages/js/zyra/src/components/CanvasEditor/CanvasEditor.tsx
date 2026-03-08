@@ -284,42 +284,41 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                 />
             </div>
 
-            <div className="canvas-editor">
-                <ReactSortable
-                    list={blocks}
-                    setList={handleCanvasSetList}
-                    group={{ name: groupName, pull: true, put: true }}
-                    handle=".drag-handle"
-                    animation={150}
-                >
-                    {blocks.map((block, index) =>
-                        block.type === 'columns' ? (
-                            <ColumnRenderer
-                                key={block.id}
-                                block={block as ColumnsBlock}
-                                parentIndex={index}
-                                isActive={openBlock?.id === block.id}
-                                groupName={groupName}
-                                openBlock={openBlock}
-                                setOpenBlock={setOpenBlock}
-                                onColumnSetList={handleColumnSetList}
-                                onChildMutate={(updated) => handleChildMutate(index, updated)}
-                                onSelect={() => { setOpenBlock(block); columnManager.clearSelection(); }}
-                                onDelete={() => deleteBlock(index)}
-                            />
-                        ) : (
-                            <BlockRenderer
-                                key={block.id}
-                                block={block}
-                                isActive={openBlock?.id === block.id}
-                                onSelect={() => { setOpenBlock(block); columnManager.clearSelection(); }}
-                                onChange={(patch) => updateBlock(index, patch)}
-                                onDelete={(e) => deleteBlock(index, e)}
-                            />
-                        )
-                    )}
-                </ReactSortable>
-            </div>
+            <ReactSortable
+                list={blocks}
+                setList={handleCanvasSetList}
+                group={{ name: groupName, pull: true, put: true }}
+                handle=".drag-handle"
+                className="canvas-editor"
+                animation={150}
+            >
+                {blocks.map((block, index) =>
+                    block.type === 'columns' ? (
+                        <ColumnRenderer
+                            key={block.id}
+                            block={block as ColumnsBlock}
+                            parentIndex={index}
+                            isActive={openBlock?.id === block.id}
+                            groupName={groupName}
+                            openBlock={openBlock}
+                            setOpenBlock={setOpenBlock}
+                            onColumnSetList={handleColumnSetList}
+                            onChildMutate={(updated) => handleChildMutate(index, updated)}
+                            onSelect={() => { setOpenBlock(block); columnManager.clearSelection(); }}
+                            onDelete={() => deleteBlock(index)}
+                        />
+                    ) : (
+                        <BlockRenderer
+                            key={block.id}
+                            block={block}
+                            isActive={openBlock?.id === block.id}
+                            onSelect={() => { setOpenBlock(block); columnManager.clearSelection(); }}
+                            onChange={(patch) => updateBlock(index, patch)}
+                            onDelete={(e) => deleteBlock(index, e)}
+                        />
+                    )
+                )}
+            </ReactSortable>
 
             <div className="settings-panel-wrapper">
                 {openBlock && (
