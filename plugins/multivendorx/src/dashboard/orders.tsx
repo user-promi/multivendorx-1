@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 import {
 	PopupUI,
@@ -11,13 +11,34 @@ import {
 	CategoryCount,
 	NavigatorHeader,
 } from 'zyra';
-import OrderDetails from './orderDetails';
-import AddOrder from './addOrder';
 import {
 	downloadCSV,
 	formatLocalDate,
 	toWcIsoDate,
 } from '../services/commonFunction';
+
+const buildPath = (segments: string[]): string =>
+	`/${segments.filter(Boolean).join('/')}`;
+
+const sanitize = (value: string) =>
+	value.replace(/[^a-zA-Z0-9_-]/g, '');
+
+const updatePlainPermalinkUrl = (segments: string[]) => {
+	const [segment = '', element = '', context_id = ''] = segments;
+
+	const params = new URLSearchParams({
+		page_id: appLocalizer.dashboard_page_id,
+		segment: sanitize(segment),
+		...(element ? { element: sanitize(element) } : {}),
+		...(context_id ? { context_id: sanitize(context_id) } : {}),
+	});
+
+	window.history.pushState(
+		{},
+		'',
+		`${window.location.pathname}?${params.toString()}`
+	);
+};
 
 const Orders: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -27,55 +48,23 @@ const Orders: React.FC = () => {
 	const [categoryCounts, setCategoryCounts] = useState<
 		CategoryCount[] | null
 	>(null);
-	const [orderLookup, setOrderLookup] = useState<Record<number, any>>({});
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [message, setMessage] = useState('');
 	const { modules } = useModules();
 	const location = useLocation();
+	const navigate = useNavigate();
 
-	const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
-	const hash = location.hash.replace(/^#/, '') || '';
-
-	const isViewOrder = hash.includes('view');
-	const isAddOrder = hash.includes('add');
-
-	const fetchOrderById = (orderId: string | number) => {
-		axios
-			.get(`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					meta_key: 'multivendorx_store_id',
-					value: appLocalizer.store_id,
-				},
-			})
-			.then((res) => {
-				const order = res.data;
-				setSelectedOrder(order);
-			})
-			.catch(() => {
-				setSelectedOrder(null);
-			});
+	// dashNavigate — single helper for all navigation (pretty + plain)
+	const dashNavigate = (segments: string[]) => {
+		const path = buildPath(segments);
+		if (!appLocalizer.permalink_structure) {
+			updatePlainPermalinkUrl(segments);
+		}
+		navigate(path);
 	};
 
-	useEffect(() => {
-		if (!isViewOrder) {
-			setSelectedOrder(null);
-			return;
-		}
+	const hash = location.hash.replace(/^#/, '') || '';
 
-		const orderId = hash.split('view/')[1];
-		if (!orderId) {
-			return;
-		}
-
-		const foundOrder = orderLookup[orderId];
-
-		if (foundOrder) {
-			setSelectedOrder(foundOrder);
-		} else {
-			fetchOrderById(orderId);
-		}
-	}, [hash]);
 
 	const exportAllOrders = () => {
 		let allOrders: any[] = [];
@@ -271,8 +260,7 @@ const Orders: React.FC = () => {
 							label: __('View', 'multivendorx'),
 							icon: 'eye',
 							onClick: (row) => {
-								setSelectedOrder(row);
-								window.location.hash = `view/${row.id}`;
+								dashNavigate(['orders', 'view', String(row.id)]);
 							},
 						},
 					]
@@ -340,7 +328,6 @@ const Orders: React.FC = () => {
 					lookup[order.id] = order;
 				});
 
-				setOrderLookup(lookup);
 				setRows(orders);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
 				setIsLoading(false);
@@ -436,7 +423,7 @@ const Orders: React.FC = () => {
 
 	return (
 		<>
-			{!isViewOrder && !isAddOrder && !selectedOrder && (
+			
 				<>
 					<NavigatorHeader
 						headerTitle={__('Orders', 'multivendorx')}
@@ -454,7 +441,7 @@ const Orders: React.FC = () => {
 								label: __('Add New', 'multivendorx'),
 								icon: 'plus',
 								onClick: () => {
-									window.location.hash = `add`;
+									dashNavigate(['orders', 'add']);
 								},
 							}
 						]}
@@ -499,18 +486,6 @@ const Orders: React.FC = () => {
 						}}
 					/>
 				</>
-			)}
-
-			{isAddOrder && <AddOrder />}
-			{isViewOrder && (
-				<OrderDetails
-					order={selectedOrder}
-					onBack={() => {
-						setSelectedOrder(null);
-						window.location.hash = '';
-					}}
-				/>
-			)}
 
 			<PopupUI
 				position="lightbox"
