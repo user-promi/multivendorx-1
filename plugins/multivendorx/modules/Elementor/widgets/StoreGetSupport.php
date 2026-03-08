@@ -19,7 +19,7 @@ class Store_Get_Support extends Widget_Button {
     }
 
     public function get_icon() {
-        return 'eicon-help-solid';
+        return 'eicon-button';
     }
 
     public function get_categories() {

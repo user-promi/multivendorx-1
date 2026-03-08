@@ -18,7 +18,7 @@ class Store_Name extends Widget_Heading {
     }
 
     public function get_icon() {
-        return 'eicon-store';
+        return 'eicon-heading';
     }
 
     public function get_categories() {

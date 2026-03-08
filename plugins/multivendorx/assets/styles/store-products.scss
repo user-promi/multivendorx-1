@@ -1,15 +1,9 @@
  @import url(https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css);
 
  // Variables
+@use './config.scss' as *;
 
- $border-light-small: 0.063rem solid #e0e4e9;
  $star-color: #d49c00;
-
- :root {
-     --primary: var(--wp--preset--color--primary, #5007aa);
-     --text-color: var(--wp--preset--color--contrast, #222);
-     --text-color-light: var(--wp--preset--color--secondary, #777);
- }
 
 // common style 
 .store-card{
@@ -138,13 +132,13 @@
          }
      }
 
-     .details {
-         .heading {
-             font-size: 1.313rem;
-             font-weight: 600;
-             line-height: 1;
-         }
-     }
+    //  .details {
+    //      .heading {
+    //          font-size: 1.313rem;
+    //          font-weight: 600;
+    //          line-height: 1;
+    //      }
+    //  }
 
      .store-details {
          img {
@@ -283,7 +277,7 @@
          li {
              list-style-type: none;
              padding: 1rem;
-             border: $border-light-small;
+             border: 0.063rem solid #e0e4e9;
              border-radius: 0.313rem;
              margin-bottom: 0.813rem;
 
@@ -336,7 +330,7 @@
  .product-store-info {
      width: fit-content;
      padding: 1.313rem;
-     border: $border-light-small;
+     border: 0.063rem solid #e0e4e9;
      background: #f9f9f9;
 
      .header {
@@ -490,7 +484,7 @@
                              content: "";
                              width: 50%;
                              height: 0.625rem;
-                             background: var(--primary);
+                             background: var(--theme-primary);
                              border-top-left-radius: 0.313rem;
                              border-bottom-left-radius: 0.313rem;
                          }

@@ -56,10 +56,10 @@ class StoreChat extends Tag {
      * @return void
      */
     public function render() {
-        if ( ! MultiVendorX()->modules->is_active( 'live-chat' ) ) {
-            esc_html_e( 'Chat module is not active', 'multivendorx' );
-            return;
-        }
+        // if ( ! MultiVendorX()->modules->is_active( 'live-chat' ) ) {
+        //     esc_html_e( 'Chat module is not active', 'multivendorx' );
+        //     return;
+        // }
         return esc_html_e( 'Chat Now', 'multivendorx' );
     }
 }
