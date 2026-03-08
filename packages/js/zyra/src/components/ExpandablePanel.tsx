@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useReducer, useCallback, useContext, createContext } from 'react';
-import '../styles/web/ExpandablePanelGroup.scss';
+import '../styles/web/ExpandablePanel.scss';
 import { getApiLink } from '../utils/apiService';
 import axios from 'axios';
 import { FieldComponent } from './types';
@@ -65,7 +65,7 @@ interface AddNewTemplate {
     };
 }
 
-interface ExpandablePanelGroupProps {
+interface ExpandablePanelProps {
     name: string;
     apilink?: string;
     appLocalizer?: AppLocalizer;
@@ -643,7 +643,7 @@ const PanelItem: React.FC<{ method: ExpandablePanelMethod; idx: number }> = ({ m
 
 // ── Main Component ────────────────────────────────────────────────────────────
 
-export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
+export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
     methods: initialMethods,
     value,
     onChange,
@@ -979,9 +979,9 @@ export const ExpandablePanelGroupUI: React.FC<ExpandablePanelGroupProps> = ({
 
 // ── FieldComponent wrapper ────────────────────────────────────────────────────
 
-const ExpandablePanelGroup: FieldComponent = {
+const ExpandablePanel: FieldComponent = {
     render: ({ field, value, onChange, canAccess, appLocalizer }) => (
-        <ExpandablePanelGroupUI
+        <ExpandablePanelUI
             key={field.key}
             name={field.key}
             apilink={String(field.apiLink)}
@@ -998,4 +998,4 @@ const ExpandablePanelGroup: FieldComponent = {
     validate: () => null,
 };
 
-export default ExpandablePanelGroup;
+export default ExpandablePanel;

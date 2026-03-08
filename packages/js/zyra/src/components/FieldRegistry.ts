@@ -8,7 +8,7 @@ import Content from './Content';
 import EmailTemplate from './EmailRenderer';
 import EndpointEditor from './EndpointEditor';
 import EventCalendar from './EventCalendar';
-import ExpandablePanelGroup from './ExpandablePanelGroup';
+import ExpandablePanel from './ExpandablePanel';
 import FileInput from './FileInput';
 import RegistrationForm from './FormRenderer';
 import ItemList from './ItemList';
@@ -71,7 +71,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'multi-checkbox-table': MultiCheckboxTable,
 
-  'expandable-panel': ExpandablePanelGroup,
+  'expandable-panel': ExpandablePanel,
 
   'setting-toggle': ToggleSetting,
 
