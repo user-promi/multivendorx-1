@@ -43,11 +43,11 @@ export const formatSpacing = (
     type: 'padding' | 'margin',
     style: BlockStyle
 ): string => {
-    const top    = style[`${type}Top`]    ?? 0;
-    const right  = style[`${type}Right`]  ?? 0;
-    const bottom = style[`${type}Bottom`] ?? 0;
-    const left   = style[`${type}Left`]   ?? 0;
-    return `${top}px ${right}px ${bottom}px ${left}px`;
+    const top    = style[`${type}Top`]    ?? 10;
+    const right  = style[`${type}Right`]  ?? 10;
+    const bottom = style[`${type}Bottom`] ?? 10;
+    const left   = style[`${type}Left`]   ?? 10;
+    return `${top}rem ${right}rem ${bottom}rem ${left}rem`;
 };
 
 // Generate CSS properties for color styles
@@ -72,10 +72,10 @@ export const generateSpacingStyles = (style?: BlockStyle): React.CSSProperties =
 export const generateBorderStyles = (style?: BlockStyle): React.CSSProperties => {
     if (!style) return {};
     return {
-        borderWidth:  style.borderWidth  !== undefined ? `${style.borderWidth}px`  : undefined,
+        borderWidth:  style.borderWidth  !== undefined ? `${style.borderWidth}rem`  : undefined,
         borderColor:  style.borderColor,
         borderStyle:  style.borderStyle,
-        borderRadius: style.borderRadius !== undefined ? `${style.borderRadius}px` : undefined,
+        borderRadius: style.borderRadius !== undefined ? `${style.borderRadius}rem` : undefined,
     };
 };
 
@@ -84,7 +84,7 @@ export const generateTextStyles = (style?: BlockStyle): React.CSSProperties => {
     if (!style) return {};
     return {
         textAlign:      style.textAlign,
-        fontSize:       style.fontSize      !== undefined ? `${style.fontSize}px` : undefined,
+        fontSize:       style.fontSize      !== undefined ? `${style.fontSize}rem` : undefined,
         fontFamily:     style.fontFamily,
         lineHeight:     style.lineHeight,
         fontWeight:     style.fontWeight,

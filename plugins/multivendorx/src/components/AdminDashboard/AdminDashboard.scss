@@ -1463,11 +1463,6 @@
                 border-radius: $border-radius-small;
                 display: flex;
 
-                p {
-                    width: 30%;
-                    font-size: 0.9rem;
-                }
-
                 .setting-form-input {
                     width: 100%;
                 }
@@ -1608,11 +1603,23 @@
                 }
             }
         }
+
+        // email 
+        .email-text,
+        .email-text p{
+            width: 100%;
+        }
     }
 
     // right side
     .settings-panel-wrapper {
         width: 25%;
+        position: sticky;
+        top: 3rem;
+        height: calc(100% - 6rem);
+        overflow: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #abaaac57 #f1f1f1;
 
         .setting-panel {
             background: $background-white;
@@ -1636,8 +1643,16 @@
                 width: 100%;
             }
 
+            .form-group-wrapper {
+                gap: 1rem;
+            }
+
             .form-group {
                 padding: 0;
+
+                .settings-form-label {
+                    width: 100%;
+                }
             }
         }
     }
@@ -1675,30 +1690,4 @@
 .recaptcha {
     border: 0.063rem solid $accent-color;
     padding: 0.5rem;
-}
-
-.email-image {
-    min-height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.email-image img {
-    display: block;
-    transition: opacity 0.2s ease;
-}
-
-.email-image img:hover {
-    opacity: 0.9;
-}
-
-.email-image input[type="file"] {
-    padding: 20px;
-    border: 2px dashed #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    max-width: 300px;
 }

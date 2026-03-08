@@ -4,6 +4,7 @@ import { ToggleSettingUI } from './ToggleSetting';
 import Card from './UI/Card';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import FormGroup from './UI/FormGroup';
+import { BasicInputUI } from './BasicInput';
 
 interface StyleControlsProps {
   style?: any;
@@ -56,27 +57,28 @@ const StyleControls: React.FC<StyleControlsProps> = ({
 
             {/* font-size */}
             <FormGroup cols={2} label="Font Size (rem)">
-              <input
+              <BasicInputUI
                 type="number"
-                value={style.fontSize || 16}
-                className="basic-input"
-                onChange={(e) =>
-                  onChange({ ...style, fontSize: Number(e.target.value) })
-                }
+                minNumber={0.5}
+                maxNumber={5}
+                value={style.fontSize ?? 1}
+                inputClass="basic-input"
+                onChange={(val) => {
+                  onChange({ ...style, fontSize: Number(val) });
+                }}
               />
             </FormGroup>
 
             <FormGroup cols={2} label="Line Height">
-              <input
+              <BasicInputUI
                 type="number"
-                min={1}
-                max={3}
-                step={0.1}
-                value={style.lineHeight || 1.5}
-                className="basic-input"
-                onChange={(e) =>
-                  onChange({ ...style, lineHeight: Number(e.target.value) })
-                }
+                minNumber={1}
+                maxNumber={3}
+                value={style.lineHeight ?? 1.5}
+                inputClass="basic-input"
+                onChange={(val) => {
+                  onChange({ ...style, lineHeight: Number(val) });
+                }}
               />
             </FormGroup>
 
@@ -118,24 +120,22 @@ const StyleControls: React.FC<StyleControlsProps> = ({
       {/* Background Group */}
       <Card toggle defaultExpanded={true} title="Color">
         <FormGroupWrapper>
-          <FormGroup label="Background Color">
-            <input
+          <FormGroup cols={2} label="Background Color">
+            <BasicInputUI
               type="color"
-              className="basic-input"
               value={style.backgroundColor || '#ffffff'}
-              onChange={(e) =>
-                onChange({ ...style, backgroundColor: e.target.value })
-              }
+              onChange={(val) => {
+                onChange({ ...style, backgroundColor: val });
+              }}
             />
           </FormGroup>
-          <FormGroup label="Text Color">
-            <input
+          <FormGroup cols={2} label="Text Color">
+            <BasicInputUI
               type="color"
               value={style.color || '#000000'}
-              className="basic-input"
-              onChange={(e) =>
-                onChange({ ...style, color: e.target.value })
-              }
+              onChange={(val) => {
+                onChange({ ...style, color: val });
+              }}
             />
           </FormGroup>
         </FormGroupWrapper>
@@ -147,108 +147,46 @@ const StyleControls: React.FC<StyleControlsProps> = ({
           {/* Padding */}
           <FormGroup label="Padding">
             <div className="spacing-controls">
-              <div className="spacing-input">
-                <input
-                  type="number"
-                  min={0}
-                  value={style.paddingTop ?? 0}
-                  className="basic-input"
-                  onChange={(e) =>
-                    onChange({ ...style, paddingTop: Number(e.target.value) })
-                  }
-                />
-                <label>Top</label>
-              </div>
-              <div className="spacing-input">
-                <input
-                  type="number"
-                  min={0}
-                  value={style.paddingRight ?? 0}
-                  className="basic-input"
-                  onChange={(e) =>
-                    onChange({ ...style, paddingRight: Number(e.target.value) })
-                  }
-                />
-                <label>Right</label>
-              </div>
-              <div className="spacing-input">
-                <input
-                  type="number"
-                  min={0}
-                  value={style.paddingBottom ?? 0}
-                  className="basic-input"
-                  onChange={(e) =>
-                    onChange({ ...style, paddingBottom: Number(e.target.value) })
-                  }
-                />
-                <label>Bottom</label>
-              </div>
-              <div className="spacing-input">
-                <input
-                  type="number"
-                  min={0}
-                  value={style.paddingLeft ?? 0}
-                  className="basic-input"
-                  onChange={(e) =>
-                    onChange({ ...style, paddingLeft: Number(e.target.value) })
-                  }
-                />
-                <label>Left</label>
-              </div>
+              {['Top', 'Right', 'Bottom', 'Left'].map((position) => (
+                <div className="spacing-input" key={`padding-${position}`}>
+                  <BasicInputUI
+                    type="number"
+                    minNumber={0}
+                    value={style[`padding${position}`] ?? 0}
+                    inputClass="basic-input"
+                    onChange={(val) => {
+                      onChange({
+                        ...style,
+                        [`padding${position}`]: Number(val)
+                      });
+                    }}
+                  />
+                  <label>{position}</label>
+                </div>
+              ))}
             </div>
           </FormGroup>
 
           {/* Margin */}
           <FormGroup label="Margin">
             <div className="spacing-controls">
-              <div className="spacing-input">
-                <input
-                  type="number"
-                  min={0}
-                  value={style.marginTop ?? 0}
-                  className="basic-input"
-                  onChange={(e) =>
-                    onChange({ ...style, marginTop: Number(e.target.value) })
-                  }
-                />
-                <label>Top</label>
-              </div>
-              <div className="spacing-input">
-                <input
-                  type="number"
-                  min={0}
-                  value={style.marginRight ?? 0}
-                  className="basic-input"
-                  onChange={(e) =>
-                    onChange({ ...style, marginRight: Number(e.target.value) })
-                  }
-                />
-                <label>Right</label>
-              </div>
-              <div className="spacing-input">
-                <input
-                  type="number"
-                  min={0}
-                  value={style.marginBottom ?? 0}
-                  className="basic-input"
-                  onChange={(e) =>
-                    onChange({ ...style, marginBottom: Number(e.target.value) })
-                  }
-                />
-                <label>Bottom</label>
-              </div>
-              <div className="spacing-input">
-                <input
-                  type="number"
-                  min={0}
-                  value={style.marginLeft ?? 0}
-                  className="basic-input"
-                  onChange={(e) =>
-                    onChange({ ...style, marginLeft: Number(e.target.value) })
-                  }
-                />
-                <label>Left</label>
-              </div>
+              {['Top', 'Right', 'Bottom', 'Left'].map((position) => (
+                <div className="spacing-input" key={`margin-${position}`}>
+                  <BasicInputUI
+                    type="number"
+                    minNumber={0}
+                    value={style[`margin${position}`] ?? 0}
+                    inputClass="basic-input"
+                    onChange={(val) => {
+                      onChange({
+                        ...style,
+                        [`margin${position}`]: Number(val)
+                      });
+                    }}
+                  />
+                  <label>{position}</label>
+                </div>
+              ))}
             </div>
           </FormGroup>
         </FormGroupWrapper>
@@ -257,28 +195,32 @@ const StyleControls: React.FC<StyleControlsProps> = ({
       {/* Border Group */}
       <Card toggle defaultExpanded={true} title="Border">
         <FormGroupWrapper>
+          {/* Border Width */}
           <FormGroup label="Border Width (rem)">
-            <input
+            <BasicInputUI
               type="number"
-              min={0}
+              minNumber={0}
               value={style.borderWidth ?? 0}
-              className="basic-input"
-              onChange={(e) =>
-                onChange({ ...style, borderWidth: Number(e.target.value) })
-              }
+              inputClass="basic-input"
+              onChange={(val) => {
+                onChange({ ...style, borderWidth: Number(val) });
+              }}
             />
           </FormGroup>
+
+          {/* Border Radius */}
           <FormGroup label="Border Radius (rem)">
-            <input
+            <BasicInputUI
               type="number"
-              min={0}
+              minNumber={0}
               value={style.borderRadius ?? 0}
-              className="basic-input"
-              onChange={(e) =>
-                onChange({ ...style, borderRadius: Number(e.target.value) })
-              }
+              inputClass="basic-input"
+              onChange={(val) => {
+                onChange({ ...style, borderRadius: Number(val) });
+              }}
             />
           </FormGroup>
+
           <FormGroup label="Border Style">
             <select
               value={style.borderStyle || 'solid'}
@@ -294,14 +236,16 @@ const StyleControls: React.FC<StyleControlsProps> = ({
               <option value="none">None</option>
             </select>
           </FormGroup>
+
+          {/* Border Color */}
           <FormGroup label="Border Color">
-            <input
+            <BasicInputUI
               type="color"
               value={style.borderColor || '#000000'}
-              className="basic-input"
-              onChange={(e) =>
-                onChange({ ...style, borderColor: e.target.value })
-              }
+              inputClass="basic-input"
+              onChange={(val) => {
+                onChange({ ...style, borderColor: val });
+              }}
             />
           </FormGroup>
         </FormGroupWrapper>

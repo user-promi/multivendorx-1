@@ -130,7 +130,7 @@ const FormFieldSelect: React.FC<{
     </FormGroup>
 );
 
-const ContentGroup: React.FC<{ title: string; expanded: boolean; onToggle: () => void; children: React.ReactNode }> =
+const ContentGroup: React.FC<{ title: string; children: React.ReactNode }> =
     ({ title, children }) => (
         <Card toggle defaultExpanded={false} title={title}>
             <FormGroupWrapper>
@@ -244,9 +244,9 @@ const createFieldRenderers = (): Record<string, React.FC<{
     ),
 
     // Content blocks
-    richtext: ({ formField, onChange, expandedGroups, toggleGroup }) => (
+    richtext: ({ formField, onChange}) => (
         <>
-            <ContentGroup title="Content" expanded={expandedGroups.content} onToggle={() => toggleGroup('content')}>
+            <ContentGroup title="Content">
                 <FormGroup label="HTML Content">
                     <textarea
                         value={formField.html || ''}
@@ -261,8 +261,8 @@ const createFieldRenderers = (): Record<string, React.FC<{
         </>
     ),
 
-    heading: ({ formField, onChange, expandedGroups, toggleGroup }) => (
-        <ContentGroup title="Heading Content" expanded={expandedGroups.content} onToggle={() => toggleGroup('content')}>
+    heading: ({ formField, onChange}) => (
+        <ContentGroup title="Heading Content">
             <InputField
                 label="Heading Text"
                 value={formField.text || ''}
@@ -279,18 +279,18 @@ const createFieldRenderers = (): Record<string, React.FC<{
         </ContentGroup>
     ),
 
-    image: ({ formField, onChange, expandedGroups, toggleGroup }) => (
+    image: ({ formField, onChange }) => (
         <>
-            <ContentGroup title="Image" expanded={expandedGroups.content} onToggle={() => toggleGroup('content')}>
+            <ContentGroup title="Image">
                 <InputField label="Image URL" value={formField.src || ''} onChange={(v) => onChange('src', v)} />
                 <InputField label="Alt Text" value={formField.alt || ''} onChange={(v) => onChange('alt', v)} />
             </ContentGroup>
         </>
     ),
 
-    button: ({ formField, onChange, expandedGroups, toggleGroup }) => (
+    button: ({ formField, onChange }) => (
         <>
-            <ContentGroup title="Button Content" expanded={expandedGroups.content} onToggle={() => toggleGroup('content')}>
+            <ContentGroup title="Button Content">
                 <InputField label="Button Text" value={formField.text || formField.placeholder || ''} onChange={(v) => onChange('text', v)} />
                 <InputField label="Button URL" value={formField.url || ''} onChange={(v) => onChange('url', v)} />
             </ContentGroup>
@@ -299,9 +299,10 @@ const createFieldRenderers = (): Record<string, React.FC<{
 
     divider: () => null, // Divider has no content settings, only style
 
-    columns: ({ formField, onChange, expandedGroups, toggleGroup }) => (
+    columns: ({ formField, onChange }) => (
         <>
-            <ContentGroup title="Layout" expanded={expandedGroups.layout} onToggle={() => toggleGroup('layout')}>
+            <ContentGroup title="Layout" >
+                
                 <div className="field-wrapper">
                     <label>Column Layout</label>
                     <select value={formField.layout || '2-50'} className="basic-input" onChange={(e) => onChange('layout', e.target.value)}>
