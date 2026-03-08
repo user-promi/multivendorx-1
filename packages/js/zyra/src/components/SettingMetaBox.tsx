@@ -302,15 +302,13 @@ const createFieldRenderers = (): Record<string, React.FC<{
     columns: ({ formField, onChange }) => (
         <>
             <ContentGroup title="Layout" >
-                
-                <div className="field-wrapper">
-                    <label>Column Layout</label>
+                <FormGroup label="Column Layout">
                     <select value={formField.layout || '2-50'} className="basic-input" onChange={(e) => onChange('layout', e.target.value)}>
                         {LAYOUT_OPTIONS.map(({ value, label }) => (
                             <option key={value} value={value}>{label}</option>
                         ))}
                     </select>
-                </div>
+                </FormGroup>
             </ContentGroup>
         </>
     ),
