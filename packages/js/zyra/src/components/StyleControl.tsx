@@ -62,7 +62,6 @@ const StyleControls: React.FC<StyleControlsProps> = ({
                 minNumber={0.5}
                 maxNumber={5}
                 value={style.fontSize ?? 1}
-                inputClass="basic-input"
                 onChange={(val) => {
                   onChange({ ...style, fontSize: Number(val) });
                 }}
@@ -75,7 +74,6 @@ const StyleControls: React.FC<StyleControlsProps> = ({
                 minNumber={1}
                 maxNumber={3}
                 value={style.lineHeight ?? 1.5}
-                inputClass="basic-input"
                 onChange={(val) => {
                   onChange({ ...style, lineHeight: Number(val) });
                 }}
@@ -153,7 +151,6 @@ const StyleControls: React.FC<StyleControlsProps> = ({
                     type="number"
                     minNumber={0}
                     value={style[`padding${position}`] ?? 0}
-                    inputClass="basic-input"
                     onChange={(val) => {
                       onChange({
                         ...style,
@@ -176,7 +173,6 @@ const StyleControls: React.FC<StyleControlsProps> = ({
                     type="number"
                     minNumber={0}
                     value={style[`margin${position}`] ?? 0}
-                    inputClass="basic-input"
                     onChange={(val) => {
                       onChange({
                         ...style,
@@ -201,7 +197,6 @@ const StyleControls: React.FC<StyleControlsProps> = ({
               type="number"
               minNumber={0}
               value={style.borderWidth ?? 0}
-              inputClass="basic-input"
               onChange={(val) => {
                 onChange({ ...style, borderWidth: Number(val) });
               }}
@@ -214,7 +209,6 @@ const StyleControls: React.FC<StyleControlsProps> = ({
               type="number"
               minNumber={0}
               value={style.borderRadius ?? 0}
-              inputClass="basic-input"
               onChange={(val) => {
                 onChange({ ...style, borderRadius: Number(val) });
               }}
@@ -242,7 +236,6 @@ const StyleControls: React.FC<StyleControlsProps> = ({
             <BasicInputUI
               type="color"
               value={style.borderColor || '#000000'}
-              inputClass="basic-input"
               onChange={(val) => {
                 onChange({ ...style, borderColor: val });
               }}

@@ -16,10 +16,10 @@ export const temp1 = {
 			layout: '1',
 			style: {
 				backgroundColor: '#f8f9fa',
-				paddingTop: 30,
-				paddingBottom: 30,
-				paddingLeft: 40,
-				paddingRight: 40,
+				paddingTop: 1.875,
+				paddingBottom: 1.875,
+				paddingLeft: 2.5,
+				paddingRight: 2.5,
 			},
 		},
 		{
@@ -29,7 +29,7 @@ export const temp1 = {
 			src: '{{marketplace_logo}}',
 			alt: __('Marketplace Logo', 'multivendorx'),
 			style: {
-				width: 150,
+				width: 9.375,
 				height: 'auto',
 				marginTop: 0,
 				marginBottom: 0,
@@ -38,8 +38,6 @@ export const temp1 = {
 				display: 'block',
 			},
 		},
-
-		// Main Content Section
 		{
 			id: 3,
 			type: 'section',
@@ -47,10 +45,10 @@ export const temp1 = {
 			layout: '1',
 			style: {
 				backgroundColor: '#ffffff',
-				paddingTop: 40,
-				paddingBottom: 40,
-				paddingLeft: 40,
-				paddingRight: 40,
+				paddingTop: 2.5,
+				paddingBottom: 2.5,
+				paddingLeft: 2.5,
+				paddingRight: 2.5,
 			},
 		},
 		{
@@ -62,10 +60,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#1a1a1a',
-				fontSize: 32,
+				fontSize: 2,
 				fontWeight: '700',
 				textAlign: 'center',
-				marginBottom: 20,
+				marginBottom: 1.25,
 			},
 		},
 		{
@@ -77,9 +75,9 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
-				fontSize: 18,
+				fontSize: 1.125,
 				fontWeight: 'normal',
-				marginBottom: 15,
+				marginBottom: 0.9375,
 			},
 		},
 		{
@@ -93,9 +91,9 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#2d3748',
-				fontSize: 16,
+				fontSize: 1,
 				lineHeight: 1.7,
-				marginBottom: 20,
+				marginBottom: 1.25,
 			},
 		},
 		{
@@ -107,13 +105,11 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#1a1a1a',
-				fontSize: 18,
+				fontSize: 1.125,
 				fontWeight: '600',
-				marginBottom: 15,
+				marginBottom: 0.9375,
 			},
 		},
-
-		// Steps Section - Using columns for each step
 		{
 			id: 8,
 			type: 'columns',
@@ -121,15 +117,14 @@ export const temp1 = {
 			layout: '3',
 			style: {
 				backgroundColor: '#f8fafc',
-				paddingTop: 30,
-				paddingBottom: 30,
-				paddingLeft: 20,
-				paddingRight: 20,
-				borderRadius: 12,
-				marginBottom: 30,
+				paddingTop: 1.875,
+				paddingBottom: 1.875,
+				paddingLeft: 1.25,
+				paddingRight: 1.25,
+				borderRadius: 0.75,
+				marginBottom: 1.875,
 			},
 		},
-		// Step 1
 		{
 			id: 9,
 			type: 'heading',
@@ -139,10 +134,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#007cba',
-				fontSize: 18,
+				fontSize: 1.125,
 				fontWeight: '600',
 				textAlign: 'center',
-				marginBottom: 10,
+				marginBottom: 0.625,
 			},
 		},
 		{
@@ -153,11 +148,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
-				fontSize: 14,
+				fontSize: 0.875,
 				textAlign: 'center',
 			},
 		},
-		// Step 2
 		{
 			id: 11,
 			type: 'heading',
@@ -167,10 +161,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#007cba',
-				fontSize: 18,
+				fontSize: 1.125,
 				fontWeight: '600',
 				textAlign: 'center',
-				marginBottom: 10,
+				marginBottom: 0.625,
 			},
 		},
 		{
@@ -181,11 +175,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
-				fontSize: 14,
+				fontSize: 0.875,
 				textAlign: 'center',
 			},
 		},
-		// Step 3
 		{
 			id: 13,
 			type: 'heading',
@@ -195,10 +188,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#007cba',
-				fontSize: 18,
+				fontSize: 1.125,
 				fontWeight: '600',
 				textAlign: 'center',
-				marginBottom: 10,
+				marginBottom: 0.625,
 			},
 		},
 		{
@@ -209,12 +202,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
-				fontSize: 14,
+				fontSize: 0.875,
 				textAlign: 'center',
 			},
 		},
-
-		// Call to Action Section
 		{
 			id: 15,
 			type: 'section',
@@ -222,10 +213,10 @@ export const temp1 = {
 			layout: '1',
 			style: {
 				backgroundColor: '#ffffff',
-				paddingTop: 20,
-				paddingBottom: 40,
-				paddingLeft: 40,
-				paddingRight: 40,
+				paddingTop: 1.25,
+				paddingBottom: 2.5,
+				paddingLeft: 2.5,
+				paddingRight: 2.5,
 				textAlign: 'center',
 			},
 		},
@@ -238,21 +229,19 @@ export const temp1 = {
 			style: {
 				backgroundColor: '#007cba',
 				color: '#ffffff',
-				fontSize: 18,
+				fontSize: 1.125,
 				fontWeight: '600',
-				paddingTop: 15,
-				paddingRight: 35,
-				paddingBottom: 15,
-				paddingLeft: 35,
-				borderRadius: 50,
+				paddingTop: 0.9375,
+				paddingRight: 2.1875,
+				paddingBottom: 0.9375,
+				paddingLeft: 2.1875,
+				borderRadius: 3.125,
 				textAlign: 'center',
 				display: 'inline-block',
-				marginTop: 20,
-				marginBottom: 20,
+				marginTop: 1.25,
+				marginBottom: 1.25,
 			},
 		},
-
-		// Benefits Section
 		{
 			id: 17,
 			type: 'heading',
@@ -262,10 +251,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#1a1a1a',
-				fontSize: 24,
+				fontSize: 1.5,
 				fontWeight: '600',
 				textAlign: 'center',
-				marginBottom: 30,
+				marginBottom: 1.875,
 			},
 		},
 		{
@@ -275,13 +264,12 @@ export const temp1 = {
 			layout: '2-50',
 			style: {
 				backgroundColor: '#ffffff',
-				paddingTop: 20,
-				paddingBottom: 30,
-				paddingLeft: 40,
-				paddingRight: 40,
+				paddingTop: 1.25,
+				paddingBottom: 1.875,
+				paddingLeft: 2.5,
+				paddingRight: 2.5,
 			},
 		},
-		// Left Column Benefits
 		{
 			id: 19,
 			type: 'richtext',
@@ -290,8 +278,8 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#2d3748',
-				fontSize: 16,
-				marginBottom: 10,
+				fontSize: 1,
+				marginBottom: 0.625,
 			},
 		},
 		{
@@ -302,11 +290,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#2d3748',
-				fontSize: 16,
-				marginBottom: 10,
+				fontSize: 1,
+				marginBottom: 0.625,
 			},
 		},
-		// Right Column Benefits
 		{
 			id: 21,
 			type: 'richtext',
@@ -315,8 +302,8 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#2d3748',
-				fontSize: 16,
-				marginBottom: 10,
+				fontSize: 1,
+				marginBottom: 0.625,
 			},
 		},
 		{
@@ -327,11 +314,9 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#2d3748',
-				fontSize: 16,
+				fontSize: 1,
 			},
 		},
-
-		// FAQ Section
 		{
 			id: 23,
 			type: 'section',
@@ -339,10 +324,10 @@ export const temp1 = {
 			layout: '1',
 			style: {
 				backgroundColor: '#f8f9fa',
-				paddingTop: 40,
-				paddingBottom: 40,
-				paddingLeft: 40,
-				paddingRight: 40,
+				paddingTop: 2.5,
+				paddingBottom: 2.5,
+				paddingLeft: 2.5,
+				paddingRight: 2.5,
 			},
 		},
 		{
@@ -354,13 +339,12 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#1a1a1a',
-				fontSize: 24,
+				fontSize: 1.5,
 				fontWeight: '600',
 				textAlign: 'center',
-				marginBottom: 30,
+				marginBottom: 1.875,
 			},
 		},
-		// FAQ 1
 		{
 			id: 25,
 			type: 'heading',
@@ -370,9 +354,9 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#007cba',
-				fontSize: 16,
+				fontSize: 1,
 				fontWeight: '600',
-				marginBottom: 5,
+				marginBottom: 0.3125,
 			},
 		},
 		{
@@ -383,11 +367,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
-				fontSize: 15,
-				marginBottom: 20,
+				fontSize: 0.9375,
+				marginBottom: 1.25,
 			},
 		},
-		// FAQ 2
 		{
 			id: 27,
 			type: 'heading',
@@ -397,9 +380,9 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#007cba',
-				fontSize: 16,
+				fontSize: 1,
 				fontWeight: '600',
-				marginBottom: 5,
+				marginBottom: 0.3125,
 			},
 		},
 		{
@@ -410,11 +393,10 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
-				fontSize: 15,
-				marginBottom: 20,
+				fontSize: 0.9375,
+				marginBottom: 1.25,
 			},
 		},
-		// FAQ 3
 		{
 			id: 29,
 			type: 'heading',
@@ -424,9 +406,9 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#007cba',
-				fontSize: 16,
+				fontSize: 1,
 				fontWeight: '600',
-				marginBottom: 5,
+				marginBottom: 0.3125,
 			},
 		},
 		{
@@ -437,11 +419,9 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
-				fontSize: 15,
+				fontSize: 0.9375,
 			},
 		},
-
-		// Footer Section
 		{
 			id: 31,
 			type: 'section',
@@ -449,10 +429,10 @@ export const temp1 = {
 			layout: '1',
 			style: {
 				backgroundColor: '#2d3748',
-				paddingTop: 40,
-				paddingBottom: 30,
-				paddingLeft: 40,
-				paddingRight: 40,
+				paddingTop: 2.5,
+				paddingBottom: 1.875,
+				paddingLeft: 2.5,
+				paddingRight: 2.5,
 				textAlign: 'center',
 			},
 		},
@@ -463,10 +443,9 @@ export const temp1 = {
 			layout: '3',
 			style: {
 				backgroundColor: 'transparent',
-				marginBottom: 20,
+				marginBottom: 1.25,
 			},
 		},
-		// Help Center Link
 		{
 			id: 33,
 			type: 'button',
@@ -476,13 +455,12 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#a0aec0',
-				fontSize: 14,
+				fontSize: 0.875,
 				fontWeight: 'normal',
 				textDecoration: 'none',
 				padding: 0,
 			},
 		},
-		// Terms Link
 		{
 			id: 34,
 			type: 'button',
@@ -492,13 +470,12 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#a0aec0',
-				fontSize: 14,
+				fontSize: 0.875,
 				fontWeight: 'normal',
 				textDecoration: 'none',
 				padding: 0,
 			},
 		},
-		// Privacy Link
 		{
 			id: 35,
 			type: 'button',
@@ -508,7 +485,7 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#a0aec0',
-				fontSize: 14,
+				fontSize: 0.875,
 				fontWeight: 'normal',
 				textDecoration: 'none',
 				padding: 0,
@@ -522,9 +499,9 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#718096',
-				fontSize: 13,
+				fontSize: 0.8125,
 				textAlign: 'center',
-				marginTop: 20,
+				marginTop: 1.25,
 			},
 		},
 		{
@@ -533,8 +510,8 @@ export const temp1 = {
 			name: 'email-divider-footer',
 			style: {
 				borderTop: '1px solid #4a5568',
-				marginTop: 20,
-				marginBottom: 20,
+				marginTop: 1.25,
+				marginBottom: 1.25,
 			},
 		},
 		{
@@ -545,9 +522,9 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#718096',
-				fontSize: 13,
+				fontSize: 0.8125,
 				textAlign: 'center',
-				marginBottom: 20,
+				marginBottom: 1.25,
 			},
 		},
 		{
@@ -559,7 +536,7 @@ export const temp1 = {
 			style: {
 				backgroundColor: 'transparent',
 				color: '#a0aec0',
-				fontSize: 12,
+				fontSize: 0.75,
 				fontWeight: 'normal',
 				textDecoration: 'underline',
 				padding: 0,

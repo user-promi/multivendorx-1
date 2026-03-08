@@ -43,10 +43,10 @@ export const formatSpacing = (
     type: 'padding' | 'margin',
     style: BlockStyle
 ): string => {
-    const top    = style[`${type}Top`]    ?? 10;
-    const right  = style[`${type}Right`]  ?? 10;
-    const bottom = style[`${type}Bottom`] ?? 10;
-    const left   = style[`${type}Left`]   ?? 10;
+    const top    = style[`${type}Top`]    ?? 0.85;
+    const right  = style[`${type}Right`]  ?? 0.85;
+    const bottom = style[`${type}Bottom`] ?? 0.85;
+    const left   = style[`${type}Left`]   ?? 0.85;
     return `${top}rem ${right}rem ${bottom}rem ${left}rem`;
 };
 
