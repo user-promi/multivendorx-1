@@ -18,14 +18,14 @@ export default {
             label: __( 'Attachment', 'multivendorx' ),
             classes: 'gridTable',
             rows: [
-                { key: 'allow_download_pdf',  label: __( 'Download as PDF',   'multivendorx' ) },
-                { key: 'attach_pdf_to_email', label: __( 'Attach with Email', 'multivendorx' ) },
+                { key: 'allow_download_pdf', type: 'checkbox', label: __( 'Download as PDF',   'multivendorx' ) },
+                { key: 'attach_pdf_to_email', type: 'checkbox', label: __( 'Attach with Email', 'multivendorx' ) },
             ],
             columns: [
-                { key: 'enquiry_pdf_permission', label: __( 'Enquiry', 'multivendorx' ), moduleEnabled: 'enquiry' },
-                { key: 'quote_pdf_permission',   label: __( 'Quote',   'multivendorx' ), moduleEnabled: 'quote'   },
+                { key: 'enquiry_pdf_permission', type: 'checkbox', label: __( 'Enquiry', 'multivendorx' ), moduleEnabled: 'enquiry' },
+                { key: 'quote_pdf_permission',   type: 'checkbox', label: __( 'Quote',   'multivendorx' ), moduleEnabled: 'quote'   },
             ],
-            proSetting: true,
+            proSetting: false,
         },
 
         // ─── Business Hours ───────────────────────────────────────────────────
@@ -41,65 +41,74 @@ export default {
         //   isLunchBreak  → column visible only when lunch_break is ON
         //   isSplitShift  → column visible only when split_shift is ON
         {
-            key:   'business_hours',
-            type:  'multi-checkbox-table',
-            label: __( 'Shop Open & Close Timings', 'multivendorx' ),
+  key: 'business_hours',
+  type: 'multi-checkbox-table',
+  label: __('Shop Open & Close Timings', 'multivendorx'),
 
-            // ── Row 1: master toggles ──────────────────────────────────────
-            headerToggles: [
-                {
-                    key:        'enable_store_time',
-                    label:      __( 'Enable Store Time', 'multivendorx' ),
-                    icon:       'clock',
-                    hidesTable: true,   // table hidden when this is OFF
-                },
-            ],
+  toggles: [
+    {
+      key: 'enable_store_time',
+      label: __('Enable Store Time', 'multivendorx'),
+      icon: 'clock',
+      group: 1,
+      effects: {
+        hideTable: true
+      }
+    },
+    {
+      key: 'enable_lunch_break',
+      label: __('Enable Lunch Break', 'multivendorx'),
+      icon: 'coffee',
+      group: 2
+    },
+    {
+      key: 'enable_split_shift',
+      label: __('Split Shift (2 Time Slots)', 'multivendorx'),
+      icon: 'split-shift',
+      group: 2
+    }
+  ],
 
-            // ── Row 2: column toggles (mutually exclusive) ─────────────────
-            lunchBreakToggle: {
-                key:   'lunch_break',
-                label: __( 'Enable Lunch Break', 'multivendorx' ),
-                icon:  'coffee',
-            },
-            splitShiftToggle: {
-                key:   'split_shift',
-                label: __( 'Split Shift (2 Time Slots)', 'multivendorx' ),
-                icon:  'split-shift',
-            },
+  rows: [
+    { key: 'sunday', label: __('Sunday','multivendorx'), enabledKey:'active_days', inactiveMessage: __('Store closed on Sunday','multivendorx') },
+    { key: 'monday', label: __('Monday','multivendorx'), enabledKey:'active_days' },
+    { key: 'tuesday', label: __('Tuesday','multivendorx'), enabledKey:'active_days' },
+    { key: 'wednesday', label: __('Wednesday','multivendorx'), enabledKey:'active_days' },
+    { key: 'thursday', label: __('Thursday','multivendorx'), enabledKey:'active_days' },
+    { key: 'friday', label: __('Friday','multivendorx'), enabledKey:'active_days' },
+    { key: 'saturday', label: __('Saturday','multivendorx'), enabledKey:'active_days' }
+  ],
 
-            // ── Days ───────────────────────────────────────────────────────
-            rows: [
-                { key: 'sunday',    label: __( 'Sunday',    'multivendorx' ), enabledKey: 'active_days' },
-                { key: 'monday',    label: __( 'Monday',    'multivendorx' ), enabledKey: 'active_days' },
-                { key: 'tuesday',   label: __( 'Tuesday',   'multivendorx' ), enabledKey: 'active_days' },
-                { key: 'wednesday', label: __( 'Wednesday', 'multivendorx' ), enabledKey: 'active_days' },
-                { key: 'thursday',  label: __( 'Thursday',  'multivendorx' ), enabledKey: 'active_days' },
-                { key: 'friday',    label: __( 'Friday',    'multivendorx' ), enabledKey: 'active_days' },
-                { key: 'saturday',  label: __( 'Saturday',  'multivendorx' ), enabledKey: 'active_days' },
-            ],
-
-            // ── Columns ────────────────────────────────────────────────────
-            columns: [
-                {
-                    key:   'shift1',
-                    label: __( 'First Shift', 'multivendorx' ),
-                    type:  'shift',
-                    // No flag → always visible
-                },
-                {
-                    key:          'lunch_break',
-                    label:        __( 'Lunch Break', 'multivendorx' ),
-                    type:         'shift',
-                    isLunchBreak: true,   // hidden until lunch_break toggle is ON
-                },
-                {
-                    key:          'shift2',
-                    label:        __( 'Second Shift', 'multivendorx' ),
-                    type:         'shift',
-                    isSplitShift: true,   // hidden until split_shift toggle is ON
-                },
-            ],
-        },
+  columns: [
+    {
+      key: 'user_role',
+      label: __('User Role','catalogx'),
+      type: 'multi-select',
+      options: [
+        { value: 'administrator', label: __( 'Administrator', 'catalogx' ) },
+                        { value: 'editor',        label: __( 'Editor',        'catalogx' ) },
+                        { value: 'author',        label: __( 'Author',        'catalogx' ) },
+      ]
+    },
+    {
+      key: 'shift1',
+      label: __('First Shift','multivendorx'),
+      type: 'time'
+    },
+    {
+      key: 'lunch_break',
+      label: __('Lunch Break','multivendorx'),
+      type: 'time',
+      visibleWhen: 'enable_lunch_break'
+    },
+    {
+      key: 'shift2',
+      label: __('Second Shift','multivendorx'),
+      type: 'time',
+      visibleWhen: 'enable_split_shift'
+    }
+  ]
+},
 
         // ─── Existing field (unchanged) ───────────────────────────────────────
         {
