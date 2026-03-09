@@ -170,19 +170,19 @@ class Rewrites {
         $store_name = get_query_var( $this->custom_store_url );
 
         if ( ! empty( $store_name ) ) {
-            // $filtered_template = apply_filters( 'multivendorx_store_elementor_template', '' );
+            $filtered_template = apply_filters( 'multivendorx_store_elementor_template', '' );
 
-            // if ( $filtered_template && file_exists( $filtered_template ) ) {
-            //     return $filtered_template;
-            // }
+            if ( $filtered_template && file_exists( $filtered_template ) ) {
+                return $filtered_template;
+            }
 
             // Path to plugin block template
-            // $plugin_template = MultiVendorX()->plugin_path . 'templates/store/store.html';
+            $plugin_template = MultiVendorX()->plugin_path . 'templates/store/store.html';
 
-            // if ( file_exists( $plugin_template ) ) {
-            //     // Use a temporary PHP wrapper to render the block template
-            //     return MultiVendorX()->plugin_path . 'templates/store/store-wrapper.php';
-            // }
+            if ( file_exists( $plugin_template ) ) {
+                // Use a temporary PHP wrapper to render the block template
+                return MultiVendorX()->plugin_path . 'templates/store/store-wrapper.php';
+            }
 
             // Classic PHP fallback
             return MultiVendorX()->plugin_path . 'templates/store/store.php';
