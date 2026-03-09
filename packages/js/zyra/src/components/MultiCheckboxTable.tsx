@@ -65,6 +65,7 @@ interface Row {
     description?: string;
     options?: Option[];
     enabledKey?: string;
+    inactiveMessage?: string
 }
 
 interface CapabilityGroup {
@@ -297,7 +298,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                         value={normalizeShiftTime(setting[cellKey])}
                         onChange={(key, val) => { if (!isBlocked()) onChange(key, val); }}
                         isBlocked={isBlocked}
-                        disabled={!isRowActive || isColDisabled}
+                        disabled={isColDisabled}
                     />
                 </td>
             );
@@ -366,7 +367,17 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                             </div>
                         ) : row.label}
                     </td>
-                    {visibleColumns.map((col) => renderCell(col, row.key, row.label, row.options, isRowActive))}
+                    {!isRowActive ? (
+                        <td colSpan={visibleColumns.length}>
+                            <span className="row-inactive-message">
+                                {row.inactiveMessage ?? "Inactive"}
+                            </span>
+                        </td>
+                    ) : (
+                        visibleColumns.map((col) =>
+                            renderCell(col, row.key, row.label, row.options, true),
+                        )
+                    )}
                 </tr>
             );
         });
