@@ -31,16 +31,9 @@ export interface Column {
     key: string;
     label: string;
     type?: string;
-    options?: Option[];
     moduleEnabled?: string;
     proSetting?: string;
     visibleWhen?: string;
-    maxVisibleItems?: number; // For select inputs: how many options to show before collapsing into "X more"
-    onOverflowClick?: () => void; // Optional callback for when "X more" is clicked
-    className?: string; // Optional class for the input element
-    wrapperClass?: string; // Optional class for the input wrapper
-    placeholder?: string; // Optional placeholder text for inputs
-    isClearable?: boolean; // For select inputs, whether the selection can be cleared
 }
 
 // ── Toggle ────────────────────────────────────────────────────────────────────
@@ -63,7 +56,6 @@ interface Row {
     key: string;
     label: string;
     description?: string;
-    options?: Option[];
     enabledKey?: string;
     inactiveMessage?: string;
 }
@@ -121,7 +113,6 @@ interface TableCellProps {
     rowKey: string
     column: Column
     rowLabel: string
-    rowOptions?: Option[]
     value: SettingValue
     disabled?: boolean
     onChange: (key: string, value: SettingValue) => void
@@ -136,7 +127,6 @@ export const TableCell: React.FC<TableCellProps> = ({
     rowKey,
     column,
     rowLabel,
-    rowOptions,
     value,
     disabled,
     onChange,
@@ -144,7 +134,6 @@ export const TableCell: React.FC<TableCellProps> = ({
     appLocalizer,
     onBlocked
 }) => {
-
     const comp = FIELD_REGISTRY[type];
 
     if (!comp) {
@@ -153,45 +142,40 @@ export const TableCell: React.FC<TableCellProps> = ({
 
     const Render = comp.render;
 
-    // Normalize options to match SelectInput expectations
-    const options = (column.options ?? rowOptions ?? []).map(opt => ({
-        value: String(opt.value),
-        label: opt.label ?? String(opt.value)
-    }));
-
-    const field = {
+    // Pass EVERYTHING through - no hardcoded props
+    const fieldConfig = {
         key: fieldKey,
         type: type,
         label: column.label ?? rowLabel,
-        options: options.length
-            ? options
-            : [
-                {
-                    value: rowKey,
-                    label: ''
-                }
-            ],
-        maxVisibleItems: column.maxVisibleItems ?? 2,
-        onOverflowClick: column.onOverflowClick,
-        className: column.className,
-        wrapperClass: column.wrapperClass,
-        placeholder: column.placeholder,
-        isClearable: column.isClearable
+        ...column,           // All column props pass through
+        rowKey: rowKey,       // Row context
+        rowLabel: rowLabel,
+        disabled: disabled,
     };
+
+    // Only special-case the checkbox value transformation
+    let fieldValue = value;
+    if (type === 'checkbox') {
+        fieldValue = value ? [rowKey] : [];
+    }
 
     return (
         <td key={fieldKey}>
             <Render
-                field={field}
-                value={value ? [rowKey] : []}
+                field={fieldConfig}
+                value={fieldValue}
                 modules={modules}
                 appLocalizer={appLocalizer}
                 onBlocked={onBlocked}
                 canAccess={!disabled}
-                onChange={(val: string[]) => {
-    const checked = val.includes(rowKey)
-    onChange(fieldKey, checked)
-}}
+                onChange={(newValue: any) => {
+                    if (type === 'checkbox') {
+                        const checked = Array.isArray(newValue) ? newValue.includes(rowKey) : Boolean(newValue);
+                        onChange(fieldKey, checked);
+                    } else {
+                        onChange(fieldKey, newValue);
+                    }
+                }}
             />
         </td>
     );
