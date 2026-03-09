@@ -21,30 +21,22 @@ import { __ } from '@wordpress/i18n';
 
 const AddOrder = () => {
 	const [rowIds, setRowIds] = useState<number[]>([]);
-
 	const [showAddProduct, setShowAddProduct] = useState(false);
 	const [allProducts, setAllProducts] = useState([]);
 	const [customers, setCustomers] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
-
 	const [shippingAddress, setShippingAddress] = useState({});
 	const [billingAddress, setBillingAddress] = useState({});
 	const [paymentMethods, setPaymentMethods] = useState([]);
 	const [selectedPayment, setSelectedPayment] = useState(null);
-
 	const [addedProducts, setAddedProducts] = useState([]);
 	const [showAddressEdit, setShowAddressEdit] = useState(false);
-	const [showShippingAddressEdit, setShowShippingAddressEdit] =
-		useState(false);
-
+	const [showShippingAddressEdit, setShowShippingAddressEdit] = useState(false);
 	const [showCreateCustomer, setShowCreateCustomer] = useState(false);
-
 	const addressEditRef = useRef(null);
 	const shippingAddressEditRef = useRef(null);
 	const [shippingLines, setShippingLines] = useState([]);
-	const [availableShippingMethods, setAvailableShippingMethods] = useState(
-		[]
-	);
+	const [availableShippingMethods, setAvailableShippingMethods] = useState( [] );
 
 	useOutsideClick(addressEditRef, () => {
 		const payload = {
@@ -73,6 +65,7 @@ const AddOrder = () => {
 
 		setShowAddressEdit(false);
 	});
+
 	useOutsideClick(shippingAddressEditRef, () => {
 		const payload = {
 			shipping: {
@@ -138,7 +131,6 @@ const AddOrder = () => {
 			})
 			.then((res) => {
 				const products = res.data;
-
 				const filtered = products.filter((p) => {
 					const storeId = p.meta_data?.find(
 						(m) => m.key === 'multivendorx_store_id'
@@ -241,10 +233,8 @@ const AddOrder = () => {
 	const createOrder = async () => {
 		const orderData = {
 			customer_id: selectedCustomer?.id || 0,
-
 			billing: billingAddress,
 			shipping: shippingAddress,
-
 			line_items: addedProducts.map((item) => {
 				const qty = item.qty || 1;
 				const subtotal = item.price * qty;
@@ -255,25 +245,21 @@ const AddOrder = () => {
 					quantity: qty,
 					subtotal: subtotal.toFixed(2),
 					total: subtotal.toFixed(2),
-
 					// Tax
 					subtotal_tax: tax.toFixed(2),
 					total_tax: tax.toFixed(2),
-
 					// Required for tax mapping
 					taxes: item.tax_rate_id
 						? [{ id: item.tax_rate_id, total: tax.toFixed(2) }]
 						: [],
 				};
 			}),
-
 			// Shipping
 			shipping_lines: shippingLines.map((s) => ({
 				method_id: s.method_id,
 				method_title: s.name,
 				total: Number(s.cost).toFixed(2),
 			})),
-
 			// Payment
 			payment_method: selectedPayment?.value || '',
 			payment_method_title: selectedPayment?.method_title || '',
@@ -333,18 +319,14 @@ const AddOrder = () => {
 			})
 			.then((res) => {
 				const customer = res.data;
-
 				// Add to dropdown immediately
 				setCustomers((prev) => [...prev, customer]);
-
 				// Select this customer automatically
 				setSelectedCustomer(customer);
 				setBillingAddress(customer.billing);
 				setShippingAddress(customer.shipping);
-
 				// Close create form
 				setShowCreateCustomer(false);
-
 				// Clear form
 				setNewCustomer({
 					first_name: '',
@@ -428,7 +410,7 @@ const AddOrder = () => {
 			/>
 			<Container>
 				<Column grid={8}>
-					<Card >
+					<Card>
 						<div className="table-wrapper view-order-table">
 							<table className="admin-table">
 								<thead className="admin-table-header">
@@ -459,11 +441,7 @@ const AddOrder = () => {
 													<div className="item-details">
 														<div className="image">
 															<img
-																src={
-																	item
-																		?.images?.[0]
-																		?.src
-																}
+																src={ item ?.images?.[0] ?.src }
 																width={40}
 																alt={item.name}
 															/>
@@ -499,17 +477,8 @@ const AddOrder = () => {
 														onChange={(value) => {
 															const qty = +value;
 															setAddedProducts(
-																(prev) =>
-																	prev.map(
-																		(p) =>
-																			p.id ===
-																			item.id
-																				? {
-																						...p,
-																						qty,
-																					}
-																				: p
-																	)
+																(prev) => prev.map((p) => 
+																	p.id === item.id ? { ...p, qty } : p )
 															);
 														}}
 													/>
@@ -546,37 +515,26 @@ const AddOrder = () => {
 
 														<SelectInputUI
 															name="shipping_method"
-															options={
-																availableShippingMethods
-															}
+															type="single-select"
+															options={availableShippingMethods}
 															value={availableShippingMethods.find(
-																(o) =>
-																	o.value ===
-																	ship.method_id
+																(o) => o.value === ship.method_id
 															)}
-															onChange={(
-																selected
-															) => {
-																const method_id =
-																	selected.value;
-																const method_title =
-																	selected.label;
-
-																setShippingLines(
-																	(prev) =>
-																		prev.map(
-																			(
-																				s
-																			) =>
-																				s.id ===
-																				ship.id
-																					? {
-																							...s,
-																							method_id,
-																							name: method_title,
-																						}
-																					: s
-																		)
+															onChange={(value) => {
+																const selectedOption = availableShippingMethods.find(
+																	(o) => o.value === value
+																);
+																const method_title = selectedOption?.label || '';
+																setShippingLines((prev) =>
+																	prev.map((s) =>
+																		s.id === ship.id
+																			? {
+																					...s,
+																					value,
+																					name: method_title,
+																			}
+																			: s
+																	)
 																);
 															}}
 														/>
@@ -593,9 +551,7 @@ const AddOrder = () => {
 													min="0"
 													value={ship.cost}
 													onChange={(value) => {
-														const cost =
-															parseFloat(value) ||
-															0;
+														const cost = parseFloat(value) || 0;
 														setShippingLines(
 															(prev) =>
 																prev.map((s) =>
@@ -692,6 +648,7 @@ const AddOrder = () => {
 									>
 										<SelectInputUI
 											name="product_select"
+											type="single-select"
 											options={[
 												{
 													label: __(
@@ -706,13 +663,13 @@ const AddOrder = () => {
 												})),
 											]}
 											onChange={(selected) => {
-												if (!selected?.value) {
+												if (!selected) {
 													return;
 												}
 
 												const prod = allProducts.find(
 													(p) =>
-														p.id == selected.value
+														p.id == selected
 												);
 												if (prod) {
 													setAddedProducts((prev) => [
@@ -730,7 +687,9 @@ const AddOrder = () => {
 
 							{showAddTax && (
 								<div className="tax-wrapper">
-									<div className="title">{__('Add tax', 'multivendorx')}</div>
+									<div className="title">
+										{__('Add tax', 'multivendorx')}
+									</div>
 
 									{taxRates.length > 0 ? (
 										<>
@@ -782,11 +741,12 @@ const AddOrder = () => {
 							>
 								<SelectInputUI
 									name="payment_method"
+									type="single-select"
 									options={paymentOptions}
 									value={selectedPayment?.value}
 									onChange={(value) => {
 										const method = paymentMethods.find(
-											(m) => m.value === value.value
+											(m) => m.value === value
 										);
 										setSelectedPayment(method || null);
 									}}
@@ -808,22 +768,17 @@ const AddOrder = () => {
 									>
 										<SelectInputUI
 											name="new_owner"
+											type="single-select"
 											options={customerOptions}
 											onChange={(value) => {
 												const customer = customers.find(
-													(c) => c.id == value.value
+													(c) => c.id == value
 												);
 												setSelectedCustomer(customer);
 												if (customer) {
-													setShippingAddress(
-														customer.shipping
-													);
-													setBillingAddress(
-														customer.billing
-													);
-													setShowCreateCustomer(
-														false
-													);
+													setShippingAddress( customer.shipping );
+													setBillingAddress( customer.billing );
+													setShowCreateCustomer( false );
 												}
 											}}
 										/>
@@ -860,10 +815,7 @@ const AddOrder = () => {
 										<div className="name">
 											{selectedCustomer
 												? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
-												: __(
-														'Guest Customer',
-														'multivendorx'
-													)}
+												: __( 'Guest Customer', 'multivendorx' )}
 										</div>
 
 										{selectedCustomer && (
@@ -961,7 +913,7 @@ const AddOrder = () => {
 									htmlFor="phone-number"
 								>
 									<BasicInputUI
-										type= "number"
+										type="number"
 										name="phone"
 										value={newCustomer.phone}
 										onChange={(value) =>
@@ -1085,6 +1037,7 @@ const AddOrder = () => {
 									>
 										<SelectInputUI
 											name="country"
+											type="single-select"
 											value={shippingAddress.country}
 											options={
 												appLocalizer.country_list || []
@@ -1092,11 +1045,9 @@ const AddOrder = () => {
 											onChange={(selected) => {
 												setShippingAddress((prev) => ({
 													...prev,
-													country: selected.value,
+													country: selected,
 												}));
-												fetchStatesByCountry(
-													selected.value
-												);
+												fetchStatesByCountry( selected );
 											}}
 										/>
 									</FormGroup>
@@ -1110,12 +1061,13 @@ const AddOrder = () => {
 									>
 										<SelectInputUI
 											name="state"
+											type="single-select"
 											value={shippingAddress.state}
 											options={stateOptions}
 											onChange={(selected) =>
 												setShippingAddress((prev) => ({
 													...prev,
-													state: selected.value,
+													state: selected,
 												}))
 											}
 										/>
@@ -1227,6 +1179,7 @@ const AddOrder = () => {
 									>
 										<SelectInputUI
 											name="country"
+											type="single-select"
 											value={billingAddress.country}
 											options={
 												appLocalizer.country_list || []
@@ -1234,11 +1187,9 @@ const AddOrder = () => {
 											onChange={(selected) => {
 												setBillingAddress((prev) => ({
 													...prev,
-													country: selected.value,
+													country: selected,
 												}));
-												fetchStatesByCountry(
-													selected.value
-												);
+												fetchStatesByCountry( selected );
 											}}
 										/>
 									</FormGroup>
@@ -1252,12 +1203,13 @@ const AddOrder = () => {
 									>
 										<SelectInputUI
 											name="state"
+											type="single-select"
 											value={billingAddress.state}
 											options={stateOptions}
 											onChange={(selected) => {
 												setBillingAddress((prev) => ({
 													...prev,
-													state: selected.value,
+													state: selected,
 												}));
 											}}
 										/>

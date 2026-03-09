@@ -179,7 +179,7 @@ class Rewrites {
             // Path to plugin block template
             $plugin_template = MultiVendorX()->plugin_path . 'templates/store/store.html';
 
-            if ( file_exists( $plugin_template ) ) {
+            if ( file_exists( $plugin_template ) && (wp_is_block_theme() || file_exists( get_theme_file_path( 'theme.json' ) ))) {
                 // Use a temporary PHP wrapper to render the block template
                 return MultiVendorX()->plugin_path . 'templates/store/store-wrapper.php';
             }

@@ -13,38 +13,7 @@ import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import './metaBoxes';
 import { getDashboardRoutes } from './dashboardConfig';
-
-/**
- * Builds a navigable path string.
- *
- * Pretty permalinks  → relative path used with react-router navigate()
- *                      e.g.  "/products/edit/123"
- *
- * Plain permalinks   → also a relative path for MemoryRouter navigate(),
- *                      AND separately updates window.history so the browser
- *                      URL bar reflects the correct query-param URL.
- */
-const buildPath = (segments: string[]): string => `/${segments.filter(Boolean).join('/')}`;
-
-const sanitize = (value: string) =>
-	value.replace(/[^a-zA-Z0-9_-]/g, '');
-
-const updatePlainPermalinkUrl = (segments: string[]) => {
-	const [segment = '', element = '', context_id = ''] = segments;
-
-	const params = new URLSearchParams({
-		page_id: appLocalizer.dashboard_page_id,
-		segment: sanitize(segment),
-		...(element ? { element: sanitize(element) } : {}),
-		...(context_id ? { context_id: sanitize(context_id) } : {}),
-	});
-
-	window.history.pushState(
-		{},
-		'',
-		`${window.location.pathname}?${params.toString()}`
-	);
-};
+import { dashNavigate } from './services/commonFunction';
 
 const Dashboard = () => {
 	const { tab: urlTab, element, context_id } = useParams();
@@ -80,25 +49,6 @@ const Dashboard = () => {
 		return requiredModules.some((m: string) => modules.includes(m));
 	};
 
-	/**
-	 * Navigate within the dashboard.
-	 * Handles both permalink modes transparently.
-	 *
-	 * @param segments  e.g. ['products'], ['products', 'edit'], ['products', 'edit', '123']
-	 */
-	const dashNavigate = (segments: string[]) => {
-		const ALLOWED_SEGMENTS = ['products', 'orders', 'dashboard'];
-
-		if (!ALLOWED_SEGMENTS.includes(segments)) {
-			return;
-		}
-		const path = buildPath(segments);
-		if (!appLocalizer.permalink_structure) {
-			updatePlainPermalinkUrl(segments);
-		}
-		navigate(path);
-	};
-
 	const storefrontUrl = `${appLocalizer.store_page_url}${storeData?.slug}`;
 
 	const createAutoDraftProduct = () => {
@@ -114,7 +64,7 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		if (!newProductId) return;
-		dashNavigate(['products', 'edit', String(newProductId)]);
+		dashNavigate(navigate, ['products', 'edit', String(newProductId)]);
 	}, [newProductId]);
 
 
@@ -426,7 +376,7 @@ const Dashboard = () => {
 								<li
 									onClick={() => {
 										if (modules.includes('shared-listing')) {
-											dashNavigate(['products', 'add']);
+											dashNavigate(navigate, ['products', 'add']);
 										} else {
 											createAutoDraftProduct();
 										}
