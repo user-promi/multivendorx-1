@@ -46,7 +46,7 @@ export interface ToggleConfig {
     label: string;
     icon?: string;
     /** 1 = always-visible header row, 2 = secondary row (hidden while table is hidden). */
-    row?: 1 | 2;
+    group?: number
     effects?: {
         /** When this toggle is OFF the table and row-2 toggles are hidden. */
         hideTable?: boolean;
@@ -240,8 +240,12 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
 
     // ── Derived toggle state ───────────────────────────────────────────────
 
-    const row1Toggles = toggles.filter((t) => (t.row ?? 1) === 1);
-    const row2Toggles = toggles.filter((t) => t.row === 2);
+    const toggleGroups = toggles.reduce((groups, toggle) => {
+        const group = toggle.group ?? 1
+        if (!groups[group]) groups[group] = []
+        groups[group].push(toggle)
+        return groups
+    }, {} as Record<number, ToggleConfig[]>)
 
     const tableHidden = toggles.some((t) => t.effects?.hideTable && !Boolean(setting[t.key]));
 
@@ -399,8 +403,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                         </td>
                     </tr>
                     {isOpen && Object.entries(group.capability).map(([capKey, capLabel]) => {
-                        const hasExists = storeTabSetting &&
-                            Object.values(storeTabSetting).some((arr) => arr?.includes(capKey));
+                        const hasExists = Object.values(storeTabSetting).some((arr) => arr?.includes(capKey));
                         return (
                             <tr key={capKey}>
                                 <td>{capLabel}</td>
@@ -421,32 +424,19 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                 <span className="admin-pro-tag"><i className="adminfont-pro-tag" /> Pro</span>
             )}
 
-            {row1Toggles.length > 0 && (
-                <div className="inline-toggle-bar-row">
-                    {row1Toggles.map((t) => (
-                        <InlineToggleBar
-                            key={t.key}
-                            config={t}
-                            enabled={Boolean(setting[t.key])}
-                            onChange={(val) => handleToggleChange(t, val)}
-                        />
-                    ))}
-                </div>
-            )}
-
-            {!tableHidden && row2Toggles.length > 0 && (
-                <div className="inline-toggle-bar-row">
-                    {row2Toggles.map((t) => (
-                        <InlineToggleBar
-                            key={t.key}
-                            config={t}
-                            enabled={Boolean(setting[t.key])}
-                            disabled={(t.effects?.mutuallyExclusiveWith ?? []).some((k) => Boolean(setting[k]))}
-                            onChange={(val) => handleToggleChange(t, val)}
-                        />
-                    ))}
-                </div>
-            )}
+            {Object.entries(toggleGroups).map(([group, groupToggles]) => (
+            <div className="inline-toggle-bar-row" key={group}>
+                {groupToggles.map((t) => (
+                    <InlineToggleBar
+                        key={t.key}
+                        config={t}
+                        enabled={Boolean(setting[t.key])}
+                        disabled={(t.effects?.mutuallyExclusiveWith ?? []).some((k) => Boolean(setting[k]))}
+                        onChange={(val) => handleToggleChange(t, val)}
+                    />
+                ))}
+            </div>
+            ))}
 
             {!tableHidden && (
                 <table className="grid-table">
