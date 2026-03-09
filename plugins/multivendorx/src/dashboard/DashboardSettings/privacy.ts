@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-
+const settings =appLocalizer.settings_databases_value['privacy'].store_policy_override;
 export default {
 	id: 'privacy',
 	priority: 8,
@@ -18,6 +18,7 @@ export default {
 			label: __('Store policy', 'multivendorx'),
 			usePlainText: false,
 			moduleEnabled: 'privacy',
+			readOnly: !settings.includes('store'),
 		},
 
 		// Shipping Policy
@@ -27,6 +28,7 @@ export default {
 			label: __('Shipping policy', 'multivendorx'),
 			usePlainText: false,
 			moduleEnabled: 'privacy',
+			readOnly: !settings.includes('shipping'),
 		},
 
 		// Refund Policy
@@ -36,6 +38,7 @@ export default {
 			label: __('Refund policy', 'multivendorx'),
 			usePlainText: false,
 			moduleEnabled: 'privacy',
+			readOnly: !settings.includes('refund'),
 		},
 
 		// Cancellation Policy
@@ -48,6 +51,7 @@ export default {
 			),
 			usePlainText: false,
 			moduleEnabled: 'privacy',
+			readOnly: !settings.includes('cancellation_return'),
 		},
 
 		// Section UI
