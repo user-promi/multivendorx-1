@@ -3,31 +3,32 @@ import React from 'react';
 
 // Internal dependencies
 import { FieldComponent } from './types';
+import '../styles/web/Section.scss';
 
 // Types
 interface SectionProps {
     wrapperClass?: string;
     title?: string;
     desc?: string;
+    withoutBorder?: boolean; 
 }
 
 export const SectionUI : React.FC<SectionProps> = ( {
     wrapperClass='',
     title,
     desc,
+    withoutBorder = false
 } ) => {
     return (
-            <div className={`divider-wrapper ${wrapperClass}`}>
-                <div className="divider-section">
-                    { title && (
-                        <p
-                            className="title"
-                            dangerouslySetInnerHTML={ { __html: title } }
-                        ></p>
-                    ) }
-                    { desc && <span className="desc">{ desc }</span> }
-                </div>
-            </div>
+        <div className={`divider-section ${!title ? 'border-only' : ''} ${withoutBorder ? 'without-border' : ''} ${wrapperClass}`}>
+            { title && (
+                <p
+                    className="title"
+                    dangerouslySetInnerHTML={ { __html: title } }
+                ></p>
+            ) }
+            { desc && <span className="desc">{ desc }</span> }
+        </div>
     );
 };
 
@@ -37,6 +38,7 @@ const Section: FieldComponent = {
             wrapperClass={field.wrapperClass}
             title={field.title}
             desc={field.desc}
+            withoutBorder={field.withoutBorder}
         />
     ),
     validate: () => null,

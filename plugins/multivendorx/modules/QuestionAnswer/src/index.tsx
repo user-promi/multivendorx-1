@@ -12,6 +12,8 @@ addFilter(
 			content: {
 				id: 'questions',
 				headerTitle: __('Questions', 'multivendorx'),
+				settingTitle: __('Product questions in queue', 'multivendorx'),
+				settingSubTitle: __('Waiting for your response','multivendorx'),
 				headerIcon: 'question',
 			},
 		});

@@ -1,7 +1,7 @@
 @use '../../global.scss' as *;
 
 .general-wrapper {
-  border-radius: 0.313rem;
+  border-radius: $border-radius-small;
   margin: 2.5rem 1rem 1rem;
 
   &:has(.container-wrapper) {
@@ -12,18 +12,19 @@
 
 // breadcrumbs style start
 .breadcrumbs {
-    span {
-      a {
-        color: $theme-color;
-      }
+  span {
+    a {
+      color: $theme-color;
+    }
 
-      &:last-child {
-        a {
-          color: #0000007a;
-        }
+    &:last-child {
+      a {
+        color: #0000007a;
       }
     }
   }
+}
+
 // breadcrumbs style end
 
 // tabs style start
@@ -100,6 +101,7 @@
   border-bottom: $border-light-small;
   margin: 0 1rem;
 }
+
 // tabs style end
 .settings-wrapper {
   &[data-template="default"] {
@@ -148,16 +150,9 @@
         }
       }
 
-      .divider-wrapper {
+      .divider-section {
+        padding: 1rem 1rem .5rem;
         background: $background-white;
-
-        .divider-section {
-          margin: 0 1rem;
-        }
-
-        &.bg-color {
-          background: #f7f7f7;
-        }
       }
     }
   }
@@ -212,12 +207,9 @@
       }
     }
 
-    .divider-wrapper {
-      margin-bottom: 1.5rem;
-
-      .divider-section {
-        padding-top: 0;
-      }
+    .divider-section {
+      padding-top: 0;
+      padding-bottom: 1.5rem;
     }
   }
 
@@ -237,7 +229,7 @@
         box-sizing: border-box;
         padding: 1rem 1.313rem;
         background: #fff;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         border: 0.063rem solid transparent;
         flex-direction: column;
         gap: 0;
@@ -260,7 +252,7 @@
         i {
           padding: 0.5rem;
           font-size: 1.45rem;
-          border-radius: 0.313rem;
+          border-radius: $border-radius-small;
         }
 
         .des {
@@ -309,6 +301,7 @@
       width: 25%;
       height: auto;
       padding: 0;
+      border: none;
 
       .tabs-item {
         display: flex;
@@ -319,7 +312,7 @@
         .tab {
           padding: 0.813rem;
           transition: all 0.3s ease;
-          border-radius: 0.313rem;
+          border-radius: $border-radius-small;
           cursor: pointer;
           margin: 0;
 
@@ -368,7 +361,7 @@
       background: $background-white;
       border: $border-light-small;
       margin: 0 1rem 1rem;
-      border-radius: 0.313rem;
+      border-radius: $border-radius-small;
       border: none;
 
       .card-content {
@@ -376,17 +369,13 @@
       }
 
       .tab-content {
-        // padding: 0.5rem;
         box-sizing: border-box;
-
-        // .divider-wrapper:first-child {
-        //   .divider-section {
-        //     margin: 0;
-        //     padding: 0 1rem 1rem;
-        //     margin-bottom: 1rem;
-        //   }
-        // }
       }
+    }
+
+    .divider-section {
+      padding: 1rem 1rem .5rem;
+      background: $background-white;
     }
   }
 }
@@ -518,7 +507,7 @@
 .general-wrapper:has(.tab-bg) {
   border: none;
 
-  .divider-wrapper {
+  .divider-section {
     display: none;
   }
 }
@@ -668,47 +657,3 @@
   padding: 1.5rem 1.5rem .5rem 0;
   border-bottom: $border-light-small;
 }
-
-// section divider start
-.divider-wrapper {
-  margin-top: 1rem;
-  width: 100%;
-
-  .divider-section {
-    border-bottom: $border-light-small;
-    padding: 1rem 0 0.5rem;
-
-
-    .title {
-      font-size: 1.15rem;
-      line-height: 1.813rem;
-      width: auto;
-    }
-
-    // span {
-    //   font-size: 1rem;
-    //   font-weight: 500;
-    //   line-height: 1rem;
-    // }
-
-    .desc {
-      a {
-        color: $theme-color;
-      }
-    }
-  }
-
-  &.red .title {
-    color: $accent-color;
-  }
-}
-
-.divider-wrapper:first-child {
-  margin: 0;
-}
-
-.divider-wrapper:not(:first-child) {
-  width: 100%;
-}
-
-// section divider end

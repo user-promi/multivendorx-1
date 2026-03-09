@@ -15,6 +15,7 @@
 }
 
 .form-group-wrapper {
+    width: 100%;
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
@@ -48,6 +49,8 @@
                 font-size: 0.95rem;
                 color: $text-color;
                 line-height: 1.125;
+                display: flex;
+                gap: 0.313rem;
             }
         }
 
@@ -153,12 +156,12 @@
             align-items: start;
 
             .settings-form-label {
-                width: 22%;
+                width: 25%;
                 overflow-wrap: break-word;
             }
 
             .settings-input-content {
-                width: 72%;
+                width: 75%;
             }
         }
 
@@ -206,17 +209,5 @@
     .form-group.bg-light-white {
         background: #f7f7f7;
         padding: 1rem;
-    }
-}
-
-// for settings panel
-.admin-settings {
-    .form-group-wrapper {
-        gap: 0;
-
-        .form-group {
-            background: $background-white;
-            padding: 1rem;
-        }
     }
 }

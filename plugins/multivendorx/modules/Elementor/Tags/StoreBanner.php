@@ -1,5 +1,6 @@
 <?php
 namespace MultiVendorX\Elementor\Tags;
+
 use Elementor\Controls_Manager;
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
@@ -15,7 +16,7 @@ class StoreBanner extends Tag {
      *
      * @param array $data
      */
-    public function __construct( $data = [] ) {
+    public function __construct( $data = array() ) {
         parent::__construct( $data );
     }
 
@@ -53,7 +54,7 @@ class StoreBanner extends Tag {
      * @return array
      */
     public function get_categories() {
-        return [ Module::IMAGE_CATEGORY ];
+        return array( Module::IMAGE_CATEGORY );
     }
 
     /**
@@ -69,17 +70,17 @@ class StoreBanner extends Tag {
         $banner = ! empty( $store['storeBanner'] ) ? $store['storeBanner'] : '';
 
         if ( is_numeric( $banner ) ) {
-            return [
+            return array(
                 'id'  => (int) $banner,
                 'url' => wp_get_attachment_url( $banner ),
-            ];
+            );
         }
 
         if ( ! empty( $banner ) ) {
-            return [
+            return array(
                 'id'  => 0,
                 'url' => $banner,
-            ];
+            );
         }
 
         // Elementor fallback image
@@ -89,7 +90,7 @@ class StoreBanner extends Tag {
             return $settings['fallback'];
         }
 
-        return [];
+        return array();
     }
 
     /**
@@ -100,16 +101,16 @@ class StoreBanner extends Tag {
      * @return void
      */
     protected function _register_controls() {
-    	  
+
         $this->add_control(
             'fallback',
-            [
-                'label' => __( 'Fallback', 'multivendorx' ),
-                'type' => Controls_Manager::MEDIA,
-                'default' => [
+            array(
+                'label'   => __( 'Fallback', 'multivendorx' ),
+                'type'    => Controls_Manager::MEDIA,
+                'default' => array(
                     'url' => '',
-                ]
-            ]
+                ),
+            )
         );
     }
 }

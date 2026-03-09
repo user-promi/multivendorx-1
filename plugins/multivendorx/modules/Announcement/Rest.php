@@ -649,20 +649,20 @@ class Rest extends \WP_REST_Controller {
         }
 
         return array(
-            'id'           => $post->ID,
-            'title'        => $post->post_title,
-            'content'      => $post->post_content,
-            'status'       => $post->post_status,
-            'status'       => $post->post_status,
-            'status_label' => ucfirst( get_post_status_object( $post->post_status )->label ),
-            'stores'       => $store_ids,
-            'store_name'   => ! empty( $store_names ) ? implode( ', ', $store_names ) : 'All Stores',
-            'url'          => get_post_meta(
+            'id'               => $post->ID,
+            'title'            => $post->post_title,
+            'content'          => $post->post_content,
+            'status'           => $post->post_status,
+            'status'           => $post->post_status,
+            'status_label'     => ucfirst( get_post_status_object( $post->post_status )->label ),
+            'stores'           => $store_ids,
+            'store_name'       => ! empty( $store_names ) ? implode( ', ', $store_names ) : 'All Stores',
+            'url'              => get_post_meta(
                 $post->ID,
                 Utill::POST_META_SETTINGS['announcement_url'],
                 true
             ),
-            'date_created' => Utill::multivendorx_rest_prepare_date_response( get_post_timestamp( $post ) ),
+            'date_created'     => Utill::multivendorx_rest_prepare_date_response( get_post_timestamp( $post ) ),
             'date_created_gmt' => Utill::multivendorx_rest_prepare_date_response( get_post_timestamp( $post ), true ),
         );
     }

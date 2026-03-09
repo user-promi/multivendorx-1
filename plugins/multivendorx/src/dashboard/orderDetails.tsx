@@ -11,25 +11,23 @@ import {
 	InfoItem,
 	Notice,
 	SelectInputUI,
-	
 	TextAreaUI,
 	getApiLink,
 	useModules,
+	NavigatorHeader
 } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
+import { useParams, useNavigate } from 'react-router-dom';
+import { dashNavigate } from '../services/commonFunction';
 
-interface OrderDetailsProps {
-	order?: any; // optionally pass order data
-	onBack?: () => void; // optional back button
-}
-
-const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
+const OrderDetails: React.FC = () => {
 	const [isRefundLoading, setIsRefundLoading] = useState(false);
 	const [refundError, setRefundError] = useState('');
-	const [orderData, setOrderData] = useState<any>(order || null);
+	const [orderData, setOrderData] = useState<any>(null);
 	const [customerData, setCustomerData] = useState<any>();
-	const orderId = order?.id;
+	const { context_id } = useParams();
+	const orderId = context_id;
 
 	const [statusSelect, setStatusSelect] = useState(false);
 	const [isRefund, setIsRefund] = useState(false);
@@ -54,6 +52,8 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 
 	const selected_shipping_providers =
 		appLocalizer.settings_databases_value['shipping'].shipping_providers;
+
+	const navigate = useNavigate();
 
 	// const filteredShippingProviders = shipping_providers_options.filter(
 	// 	(option) => selected_shipping_providers.includes(option.value)
@@ -407,6 +407,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 									<div className="status-edit">
 										<SelectInputUI
 											name="status"
+											type="single-select"
 											options={[
 												{ label: __('Processing', 'multivendorx'), value: 'processing' },
 												{ label: __('On Hold', 'multivendorx'), value: 'on-hold' },
@@ -429,14 +430,14 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order, onBack }) => {
 							{
 								label: __('Back to Orders', 'multivendorx'),
 								icon: 'arrow-right',
-								onClick: () => onBack(),
+								onClick: () => dashNavigate(navigate, ['orders']),
 							},
 						]}
 					/>
 
 					<Container>
 						<Column grid={8}>
-							<Card contentHeight>
+							<Card >
 								<div className="table-wrapper view-order-table">
 									<table className="admin-table">
 										<thead className="admin-table-header">

@@ -68,7 +68,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 		if (data) {
 			setFormData(data);
 		}
-	}, [id]);
+	}, [id, data]);
 
 	useEffect(() => {
 		if (successMsg) {
@@ -124,11 +124,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 		}
 	}, [formData.dashboard_access, formData.payment_method]);
 
-	const handleChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		const { name, value } = e.target;
-
+	const handleChange = (name, value) => {
 		setFormData((prev) => {
 			const updated = {
 				...(prev || {}),
@@ -152,7 +148,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
@@ -285,7 +281,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 													: ''
 											}
 											value={formData[field.key]}
-											onChange={handleChange}
+											onChange={(value) => handleChange(field.key, value)}
 										/>
 									</FormGroup>
 								);
@@ -323,7 +319,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 										postText: '+',
 									}}
 									value={formData.commission_fixed}
-									onChange={handleChange}
+									onChange={(value) => handleChange('commission_fixed', value)}
 								/>
 							</FormGroup>
 							<FormGroup
@@ -335,7 +331,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 									postText="%"
 									name="commission_percentage"
 									value={formData.commission_percentage}
-									onChange={handleChange}
+									onChange={(value) => handleChange('commission_percentage', value)}
 								/>
 							</FormGroup>
 						</FormGroupWrapper>

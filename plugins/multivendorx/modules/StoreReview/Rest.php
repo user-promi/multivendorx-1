@@ -130,8 +130,8 @@ class Rest extends \WP_REST_Controller {
             return $error;
         }
         try {
-            $store_id       = $request->get_param( 'store_id' );
-            if( $request->get_param( 'overview' ) ){
+            $store_id = $request->get_param( 'store_id' );
+            if ( $request->get_param( 'overview' ) ) {
                 return rest_ensure_response( $this->calculate_store_rating_summary( intval( $store_id ) ) );
             }
             $limit          = intval( $request->get_param( 'row' ) ) ?: 0;
@@ -306,7 +306,7 @@ class Rest extends \WP_REST_Controller {
         }
 
         try {
-            $user_id = get_current_user_id();
+            $user_id = MultiVendorX()->current_user_id;
 
             $store_id       = absint( $request->get_param( 'store_id' ) );
             $review_title   = sanitize_text_field( $request->get_param( 'review_title' ) );
@@ -388,7 +388,6 @@ class Rest extends \WP_REST_Controller {
             $response->set_status( 201 );
 
             return $response;
-
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 
@@ -564,24 +563,24 @@ class Rest extends \WP_REST_Controller {
         $store_obj     = MultivendorX()->store->get_store( (int) $review['store_id'] );
 
         return array(
-            'id'             => (int) $review['review_id'],
-            'store_id'       => (int) $review['store_id'],
-            'store_name'     => $store_obj->get( 'name' ),
-            'customer_id'    => (int) $review['customer_id'],
-            'customer_name'  => $customer_name,
-            'order_id'       => (int) $review['order_id'],
-            'overall_rating' => round( floatval( $review['overall_rating'] ), 2 ),
-            'review_title'   => sanitize_text_field( $review['review_title'] ),
-            'review_content' => wp_strip_all_tags( $review['review_content'] ),
-            'status'         => ucfirst( sanitize_text_field( $review['status'] ) ),
-            'reported'       => (int) $review['reported'],
-            'reply'          => $review['reply'] ?? '',
-            'reply_date'     => Utill::multivendorx_rest_prepare_date_response( $review['reply_date'] ) ?? '',
-            'date_created'   => Utill::multivendorx_rest_prepare_date_response( $review['date_created'] ),
-            'date_modified'  => Utill::multivendorx_rest_prepare_date_response( $review['date_modified'] ),
-            'reply_date_gmt'     => Utill::multivendorx_rest_prepare_date_response( $review['reply_date'], true ) ?? '',
-            'date_created_gmt'   => Utill::multivendorx_rest_prepare_date_response( $review['date_created'], true ),
-            'date_modified_gmt'  => Utill::multivendorx_rest_prepare_date_response( $review['date_modified'], true ),
+            'id'                => (int) $review['review_id'],
+            'store_id'          => (int) $review['store_id'],
+            'store_name'        => $store_obj->get( 'name' ),
+            'customer_id'       => (int) $review['customer_id'],
+            'customer_name'     => $customer_name,
+            'order_id'          => (int) $review['order_id'],
+            'overall_rating'    => round( floatval( $review['overall_rating'] ), 2 ),
+            'review_title'      => sanitize_text_field( $review['review_title'] ),
+            'review_content'    => wp_strip_all_tags( $review['review_content'] ),
+            'status'            => ucfirst( sanitize_text_field( $review['status'] ) ),
+            'reported'          => (int) $review['reported'],
+            'reply'             => $review['reply'] ?? '',
+            'reply_date'        => Utill::multivendorx_rest_prepare_date_response( $review['reply_date'] ) ?? '',
+            'date_created'      => Utill::multivendorx_rest_prepare_date_response( $review['date_created'] ),
+            'date_modified'     => Utill::multivendorx_rest_prepare_date_response( $review['date_modified'] ),
+            'reply_date_gmt'    => Utill::multivendorx_rest_prepare_date_response( $review['reply_date'], true ) ?? '',
+            'date_created_gmt'  => Utill::multivendorx_rest_prepare_date_response( $review['date_created'], true ),
+            'date_modified_gmt' => Utill::multivendorx_rest_prepare_date_response( $review['date_modified'], true ),
         );
     }
 
@@ -611,7 +610,6 @@ class Rest extends \WP_REST_Controller {
         );
 
         foreach ( $reviews as $review ) {
-
             $rating = (int) round( floatval( $review->overall_rating ) );
 
             if ( $rating < 1 ) {
@@ -620,7 +618,7 @@ class Rest extends \WP_REST_Controller {
                 $rating = 5;
             }
 
-            $breakdown[ $rating ]++;
+            ++$breakdown[ $rating ];
         }
 
         return array(

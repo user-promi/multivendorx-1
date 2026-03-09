@@ -36,8 +36,8 @@ class Frontend {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
         $scripts['multivendorx-follow-store-frontend-script'] = array(
-            'src'     => $base_url . 'modules/FollowStore/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
-            'deps'    => array( 'jquery' ),
+            'src'  => $base_url . 'modules/FollowStore/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+            'deps' => array( 'jquery' ),
         );
 
         return $scripts;
@@ -74,7 +74,7 @@ class Frontend {
             return;
         }
 
-        $current_user_id = get_current_user_id();
+        $current_user_id = MultiVendorX()->current_user_id;
 
         $html  = '<div class="follow-wrapper"> <button class="follow-btn woocommerce-button button" 
                     data-store-id="' . esc_attr( $store_id ) . '" 

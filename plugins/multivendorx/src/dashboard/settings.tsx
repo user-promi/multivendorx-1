@@ -126,6 +126,7 @@ const settings: React.FC<SettingsProps> = () => {
 					variant="settings"
 					Link={SimpleLink}
 					menuIcon={true}
+					className="admin-settings"
 				/>
 			</SettingProvider>
 		</>

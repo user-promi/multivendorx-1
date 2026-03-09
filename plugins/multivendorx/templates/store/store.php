@@ -9,11 +9,15 @@
  * @author      MultiVendorX
  */
 
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-$store_id = $args['store_id'];
+$store_slug = get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
+$store = MultiVendorX\Store\Store::get_store( $store_slug, 'slug' );
+$store_id = $store->get_id();
+
 if ( ! $store_id ) {
     wp_safe_redirect( wc_get_page_permalink( 'shop' ) );
     exit();
@@ -41,6 +45,7 @@ $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array
         // Store banner & vendor info.
         do_action( 'mvx_archive_description' );
         MultiVendorX()->util->get_template( 'store/store-banner-info.php', array( 'store_id' => $store_id ) );
+        do_action( 'multivendorx_after_store_banner', $store_id );
         ?>
     </header>
     <div class="multivendorx-store-wrapper">
@@ -62,7 +67,7 @@ $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array
 
         // right sidebar
         if ( in_array( $sidebar_position, array( 'right' ), true ) ) {
-        ?>
+			?>
         <aside class="multivendorx-store-sidebar-<?php echo esc_attr( $sidebar_position ); ?>">
             <?php
             if ( is_active_sidebar( 'multivendorx-store-sidebar' ) ) {
@@ -70,8 +75,8 @@ $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array
             }
             ?>
         </aside>
-        <?php
-    }
+			<?php
+		}
         ?>
     </div>
 

@@ -170,7 +170,6 @@ class Rewrites {
         $store_name = get_query_var( $this->custom_store_url );
 
         if ( ! empty( $store_name ) ) {
-
             $filtered_template = apply_filters( 'multivendorx_store_elementor_template', '' );
 
             if ( $filtered_template && file_exists( $filtered_template ) ) {
@@ -180,19 +179,18 @@ class Rewrites {
             // Path to plugin block template
             $plugin_template = MultiVendorX()->plugin_path . 'templates/store/store.html';
 
-            if ( file_exists( $plugin_template ) ) {
+            if ( file_exists( $plugin_template ) && (wp_is_block_theme() || file_exists( get_theme_file_path( 'theme.json' ) ))) {
                 // Use a temporary PHP wrapper to render the block template
                 return MultiVendorX()->plugin_path . 'templates/store/store-wrapper.php';
             }
 
             // Classic PHP fallback
-            $store = Store::get_store( $store_name, 'slug' );
-            return MultiVendorX()->util->get_template( 'store/store.php', array( 'store_id' => $store->get_id() ) );
+            return MultiVendorX()->plugin_path . 'templates/store/store.php';
         }
 
         return $template;
     }
-    
+
 
     public function register_store_state() {
         $store_slug = get_query_var( $this->custom_store_url );
@@ -211,13 +209,11 @@ class Rewrites {
         FrontendScripts::enqueue_script( 'multivendorx-store-banner-script' );
         FrontendScripts::enqueue_script( 'multivendorx-store-policy-script' );
         FrontendScripts::enqueue_script( 'multivendorx-store-review-script' );
-        FrontendScripts::enqueue_script( 'multivendorx-highlighted-store-products-script' );
         FrontendScripts::enqueue_script( 'multivendorx-store-address-script' );
         FrontendScripts::enqueue_script( 'multivendorx-store-quick-info-script' );
         FrontendScripts::enqueue_script( 'multivendorx-product-category-script' );
         FrontendScripts::enqueue_script( 'multivendorx-store-tabs-script' );
         FrontendScripts::enqueue_script( 'multivendorx-store-provider-script' );
-        FrontendScripts::enqueue_script( 'multivendorx-store-coupons-script' );
         FrontendScripts::localize_scripts( 'multivendorx-store-provider-script' );
         FrontendScripts::enqueue_style( 'multivendorx-store-tabs-style' );
     }

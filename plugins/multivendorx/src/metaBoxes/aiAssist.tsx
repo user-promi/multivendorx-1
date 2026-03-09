@@ -207,7 +207,7 @@ const AICard = ({ product, setProduct }) => {
 
 	return (
 		<Card
-			contentHeight
+			
 			className="theme-bg"
 			title={__('AI assist', 'multivendorx')}
 			desc={__('Get help creating your product listing', 'multivendorx')}

@@ -173,21 +173,21 @@ class Dashboard extends \WP_REST_Controller {
                     ),
                     array(
                         'key'        => 'customer-questions',
-                        'name'       => 'Customer Questions',
+                        'name'       => 'Product Questions',
                         'slug'       => 'customer-questions',
                         'capability' => array( 'view_customer_questions', 'reply_customer_questions' ),
                         'module'     => array( 'question-answer' ),
                     ),
                     array(
                         'key'        => 'store-followers',
-                        'name'       => 'Store Followers',
+                        'name'       => 'Followers',
                         'slug'       => 'store-followers',
                         'capability' => array( 'view_store_followers' ),
                         'module'     => array( 'follow-store' ),
                     ),
                     array(
                         'key'        => 'store-review',
-                        'name'       => 'Store Review',
+                        'name'       => 'Customer Reviews',
                         'slug'       => 'store-review',
                         'capability' => array( 'view_store_reviews', 'reply_store_reviews' ),
                         'module'     => array( 'store-review' ),
@@ -195,7 +195,7 @@ class Dashboard extends \WP_REST_Controller {
                 ),
                 'capability' => array( 'view_support_tickets' ),
             ),
-            
+
             'reports'       => array(
                 'name'       => 'Stats / Report',
                 'slug'       => 'reports',
@@ -237,7 +237,7 @@ class Dashboard extends \WP_REST_Controller {
                 'icon'       => 'setting',
                 'capability' => array( 'manage_store_settings' ),
             ),
-            'appointment'       => array(
+            'appointment'   => array(
                 'name'       => 'Appointment (Pro)',
                 'slug'       => 'appointment',
                 'icon'       => 'report',

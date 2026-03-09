@@ -100,7 +100,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 
 			//Update order status + meta
 			await axios({
-				method: 'PUT',
+				method: 'POST',
 				url: `${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				data: {

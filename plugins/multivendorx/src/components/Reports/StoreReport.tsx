@@ -228,47 +228,37 @@ const StoreReport: React.FC = () => {
 
 	return (
 		<>
-			<Column>
+			<Column row>
 				<Analytics
+					cols={2}
 					data={overviewData.map((item) => ({
 						icon: item.icon,
 						number: <Counter value={item.count} />,
 						text: __(item.label, 'multivendorx'),
 					}))}
 				/>
+				<Card title={__('Top revenue generating stores', 'multivendorx')}>
+					<ResponsiveContainer width="100%" height={300}>
+						<PieChart>
+							{pieData.length > 0 && (
+								<Pie
+									data={pieData}
+									cx="50%"
+									cy="50%"
+									outerRadius={100}
+									dataKey="value"
+								/>
+							)}
+							<Tooltip formatter={(value) => formatCurrency(value)} />
+							<Legend />
+						</PieChart>
+					</ResponsiveContainer>
+				</Card>
 			</Column>
-
-			<Card title={__('Top revenue-generating stores', 'multivendorx')}>
-				<ResponsiveContainer width="100%" height={300}>
-					<PieChart>
-						{pieData.length > 0 && (
-							<Pie
-								data={pieData}
-								cx="50%"
-								cy="50%"
-								outerRadius={100}
-								dataKey="value"
-							/>
-						)}
-						<Tooltip formatter={(value) => formatCurrency(value)} />
-						<Legend />
-					</PieChart>
-				</ResponsiveContainer>
-			</Card>
-
-			<div className="card-header admin-pt-2">
-				<div className="left">
-					<div className="title">
-						{__('Account Overview', 'multivendorx')}
-					</div>
-				</div>
-				<div className="right">
-					<span>{__('Updated 1 month ago (p)', 'multivendorx')}</span>
-				</div>
-			</div>
 
 			<TableCard
 				headers={headers}
+				title={__('Account Overview', 'multivendorx')}
 				rows={rows}
 				totalRows={totalRows}
 				isLoading={isLoading}

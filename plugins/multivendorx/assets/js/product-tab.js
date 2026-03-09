@@ -22,3 +22,15 @@ jQuery(document).ready(function ($) {
 		allowClear: true,
 	});
 });
+
+const root = document.documentElement;
+
+if (!getComputedStyle(root).getPropertyValue('--theme-primary')) {
+
+    const btn = document.querySelector('button, .button, .btn');
+
+    if (btn) {
+        const color = getComputedStyle(btn).backgroundColor;
+        root.style.setProperty('--theme-primary', color);
+    }
+}

@@ -72,8 +72,6 @@ export const addNotice = (
     // If same uniqueKey already exists → do nothing
     if (notices.some(n => n.uniqueKey === uniqueKey)) return;
 
-    const id = notice.uniqueKey || Date.now().toString();
-
     const expiresAt =
         validity === 'lifetime' ? undefined : Date.now() + validity;
 
@@ -81,6 +79,10 @@ export const addNotice = (
     notify();
 };
 
+export const removeNotice = (uniqueKey: string) => {
+    notices = notices.filter(n => n.uniqueKey !== uniqueKey);
+    notify();
+};
 
 export const flushExpired = () => {
     const now = Date.now();
@@ -95,6 +97,43 @@ export const flushExpired = () => {
 export const clearSessionNotices = () => {
     notices = notices.filter(n => typeof n.expiresAt === 'number');
     notify();
+};
+
+// Shared render function for notice content
+export const renderNoticeContent = (
+    item: NoticeItem,
+    onClose?: () => void
+) => {
+    return (
+        <>        
+            <i className={`admin-font adminfont-${item.type}`} />
+
+            <div className="notice-details">
+                {item.title && <div className="notice-text">{item.title}</div>}
+
+                {Array.isArray(item.message)
+                    ? item.message.map((msg, i) => (
+                        <>
+                        <div key={i} className="notice-desc">
+                            {msg}
+                            {item.actionLabel && (
+                                <button className="notice-action" onClick={item.onAction}>
+                                    {item.actionLabel}
+                                </button>
+                            )}
+                        </div>
+                        {onClose && (
+                            <i className="close-icon adminfont-close" onClick={onClose} />
+                        )}
+                        </>
+                    ))
+                    : item.message && (
+                        <div className="notice-desc">{item.message}</div>
+                    )
+                }
+            </div>
+        </>
+    );
 };
 
 interface NoticeReceiverProps {
@@ -121,32 +160,8 @@ export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({ position }) => {
     return (
         <div className={`receiver receiver-${position}`}>
             {items.map(item => (
-                <div key={item.id} className={`ui-notice type-${item.type} display-${position}`}>
-                        {item.title && (
-                            <div className="notice-text">{item.title}</div>
-                        )}
-
-                        {Array.isArray(item.message)
-                            ? item.message.map((msg, i) => (
-                                  <div key={i} className="notice-desc">{msg}</div>
-                              ))
-                            : item.message && (
-                                  <div className="notice-desc">{item.message}</div>
-                              )
-                        }
-
-                        {item.actionLabel && (
-                            <button className="notice-action" onClick={item.onAction}>
-                                {item.actionLabel}
-                            </button>
-                        )}
-
-                        <button
-                            className="notice-close"
-                            onClick={() => removeNotice(item.id)}
-                        >
-                            ×
-                        </button>
+                <div key={item.uniqueKey} className={`ui-notice type-${item.type} display-${item.position}`}>
+                    {renderNoticeContent(item, () => removeNotice(item.uniqueKey))}
                 </div>
             ))}
         </div>

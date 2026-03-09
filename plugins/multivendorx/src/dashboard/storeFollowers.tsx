@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, NavigatorHeader, TableCard } from 'zyra';
-import { QueryProps, TableRow } from '@/services/type';
+import { getApiLink, NavigatorHeader, QueryProps, TableCard, TableRow } from 'zyra';
 
 const StoreFollower: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -28,7 +27,7 @@ const StoreFollower: React.FC = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'followers'), {
+			.get(getApiLink(appLocalizer, 'follow-store'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					store_id: appLocalizer.store_id,

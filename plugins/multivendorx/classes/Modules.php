@@ -69,113 +69,113 @@ class Modules {
      * @return array
      */
     // public function get_all_modules() {
-    //     if ( ! $this->modules ) {
-    //         $this->modules = apply_filters(
-    //             'multivendorx_modules',
-    //             array(
-    //                 'simple'                 => array(
-    //                     'id'           => 'simple',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/Simple/Module.php',
-    //                     'module_class' => 'MultiVendorX\Simple\Module',
-    //                 ),
-    //                 'store-policy'           => array(
-    //                     'id'           => 'store-policy',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/StorePolicy/Module.php',
-    //                     'module_class' => 'MultiVendorX\StorePolicy\Module',
-    //                 ),
-    //                 'store-review'           => array(
-    //                     'id'           => 'store-review',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/StoreReview/Module.php',
-    //                     'module_class' => 'MultiVendorX\StoreReview\Module',
-    //                 ),
-    //                 'question-answer'        => array(
-    //                     'id'           => 'question-answer',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/QuestionAnswers/Module.php',
-    //                     'module_class' => 'MultiVendorX\QuestionsAnswers\Module',
-    //                 ),
-    //                 'marketplace-refund'     => array(
-    //                     'id'           => 'marketplace-refund',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/MarketplaceRefund/Module.php',
-    //                     'module_class' => 'MultiVendorX\Refund\Module',
-    //                 ),
-    //                 'shared-listing'         => array(
-    //                     'id'           => 'shared-listing',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/SharedListing/Module.php',
-    //                     'module_class' => 'MultiVendorX\SharedListing\Module',
-    //                 ),
-    //                 'follow-store'           => array(
-    //                     'id'           => 'follow-store',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/FollowStore/Module.php',
-    //                     'module_class' => 'MultiVendorX\FollowStore\Module',
-    //                 ),
-    //                 'marketplace-compliance' => array(
-    //                     'id'           => 'marketplace-compliance',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/Compliance/Module.php',
-    //                     'module_class' => 'MultiVendorX\Compliance\Module',
-    //                 ),
-    //                 'geo-location'           => array(
-    //                     'id'           => 'geo-location',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/GeoLocation/Module.php',
-    //                     'module_class' => 'MultiVendorX\GeoLocation\Module',
-    //                 ),
-    //                 'store-shipping'         => array(
-    //                     'id'           => 'store-shipping',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/StoreShipping/Module.php',
-    //                     'module_class' => 'MultiVendorX\StoreShipping\Module',
-    //                 ),
-    //                 'announcement'           => array(
-    //                     'id'           => 'announcement',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/Announcement/Module.php',
-    //                     'module_class' => 'MultiVendorX\Announcement\Module',
-    //                 ),
-    //                 'knowledgebase'          => array(
-    //                     'id'           => 'knowledgebase',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/Knowledgebase/Module.php',
-    //                     'module_class' => 'MultiVendorX\Knowledgebase\Module',
-    //                 ),
-    //                 'privacy'                => array(
-    //                     'id'           => 'privacy',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/Privacy/Module.php',
-    //                     'module_class' => 'MultiVendorX\Privacy\Module',
-    //                 ),
-    //                 'marketplace-gateway'    => array(
-    //                     'id'           => 'marketplace-gateway',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/MarketplaceGateway/Module.php',
-    //                     'module_class' => 'MultiVendorX\MarketplaceGateway\Module',
-    //                 ),
-    //                 'min-max'                => array(
-    //                     'id'           => 'min-max',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/MinMax/Module.php',
-    //                     'module_class' => 'MultiVendorX\MinMax\Module',
-    //                 ),
-    //                 'elementor'              => array(
-    //                     'id'           => 'elementor',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/Elementor/Module.php',
-    //                     'module_class' => 'MultiVendorX\Elementor\Module',
-    //                     'requires'     => array(
-    //                         'plugin' => array(
-    //                             'elementor/elementor.php',
-    //                             'elementor-pro/elementor-pro.php',
-    //                         ),
-    //                     ),
-    //                 ),
-    //                 'wpml'                   => array(
-    //                     'id'           => 'wpml',
-    //                     'module_file'  => MultiVendorX()->plugin_path . 'modules/WPML/Module.php',
-    //                     'module_class' => 'MultiVendorX\WPML\Module',
-    //                     'requires'     => array(
-    //                         'plugin' => array(
-    //                             'sitepress-multilingual-cms/sitepress.php',
-    //                             'wpml-string-translation/plugin.php',
-    //                             'woocommerce-multilingual/wpml-woocommerce.php',
-    //                         ),
-    //                     ),
-    //                 ),
-    //             )
-    //         );
-    //     }
+    // if ( ! $this->modules ) {
+    // $this->modules = apply_filters(
+    // 'multivendorx_modules',
+    // array(
+    // 'simple'                 => array(
+    // 'id'           => 'simple',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Simple/Module.php',
+    // 'module_class' => 'MultiVendorX\Simple\Module',
+    // ),
+    // 'store-policy'           => array(
+    // 'id'           => 'store-policy',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/StorePolicy/Module.php',
+    // 'module_class' => 'MultiVendorX\StorePolicy\Module',
+    // ),
+    // 'store-review'           => array(
+    // 'id'           => 'store-review',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/StoreReview/Module.php',
+    // 'module_class' => 'MultiVendorX\StoreReview\Module',
+    // ),
+    // 'question-answer'        => array(
+    // 'id'           => 'question-answer',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/QuestionAnswers/Module.php',
+    // 'module_class' => 'MultiVendorX\QuestionsAnswers\Module',
+    // ),
+    // 'marketplace-refund'     => array(
+    // 'id'           => 'marketplace-refund',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/MarketplaceRefund/Module.php',
+    // 'module_class' => 'MultiVendorX\Refund\Module',
+    // ),
+    // 'shared-listing'         => array(
+    // 'id'           => 'shared-listing',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/SharedListing/Module.php',
+    // 'module_class' => 'MultiVendorX\SharedListing\Module',
+    // ),
+    // 'follow-store'           => array(
+    // 'id'           => 'follow-store',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/FollowStore/Module.php',
+    // 'module_class' => 'MultiVendorX\FollowStore\Module',
+    // ),
+    // 'marketplace-compliance' => array(
+    // 'id'           => 'marketplace-compliance',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Compliance/Module.php',
+    // 'module_class' => 'MultiVendorX\Compliance\Module',
+    // ),
+    // 'geo-location'           => array(
+    // 'id'           => 'geo-location',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/GeoLocation/Module.php',
+    // 'module_class' => 'MultiVendorX\GeoLocation\Module',
+    // ),
+    // 'store-shipping'         => array(
+    // 'id'           => 'store-shipping',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/StoreShipping/Module.php',
+    // 'module_class' => 'MultiVendorX\StoreShipping\Module',
+    // ),
+    // 'announcement'           => array(
+    // 'id'           => 'announcement',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Announcement/Module.php',
+    // 'module_class' => 'MultiVendorX\Announcement\Module',
+    // ),
+    // 'knowledgebase'          => array(
+    // 'id'           => 'knowledgebase',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Knowledgebase/Module.php',
+    // 'module_class' => 'MultiVendorX\Knowledgebase\Module',
+    // ),
+    // 'privacy'                => array(
+    // 'id'           => 'privacy',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Privacy/Module.php',
+    // 'module_class' => 'MultiVendorX\Privacy\Module',
+    // ),
+    // 'marketplace-gateway'    => array(
+    // 'id'           => 'marketplace-gateway',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/MarketplaceGateway/Module.php',
+    // 'module_class' => 'MultiVendorX\MarketplaceGateway\Module',
+    // ),
+    // 'min-max'                => array(
+    // 'id'           => 'min-max',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/MinMax/Module.php',
+    // 'module_class' => 'MultiVendorX\MinMax\Module',
+    // ),
+    // 'elementor'              => array(
+    // 'id'           => 'elementor',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Elementor/Module.php',
+    // 'module_class' => 'MultiVendorX\Elementor\Module',
+    // 'requires'     => array(
+    // 'plugin' => array(
+    // 'elementor/elementor.php',
+    // 'elementor-pro/elementor-pro.php',
+    // ),
+    // ),
+    // ),
+    // 'wpml'                   => array(
+    // 'id'           => 'wpml',
+    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/WPML/Module.php',
+    // 'module_class' => 'MultiVendorX\WPML\Module',
+    // 'requires'     => array(
+    // 'plugin' => array(
+    // 'sitepress-multilingual-cms/sitepress.php',
+    // 'wpml-string-translation/plugin.php',
+    // 'woocommerce-multilingual/wpml-woocommerce.php',
+    // ),
+    // ),
+    // ),
+    // )
+    // );
+    // }
 
-    //     return $this->modules;
+    // return $this->modules;
     // }
 
     private function camel_to_kebab( string $string ): string {
@@ -195,16 +195,15 @@ class Modules {
 
         $sources = apply_filters(
             'multivendorx_module_sources',
-            [
-                [
+            array(
+                array(
                     'path'      => trailingslashit( MultiVendorX()->plugin_path . 'modules' ),
                     'namespace' => 'MultiVendorX',
-                ],
-            ]
+                ),
+            )
         );
 
         foreach ( $sources as $source ) {
-
             $base_path = $source['path'];
             $namespace = $source['namespace'];
 
@@ -215,8 +214,7 @@ class Modules {
             $folders = scandir( $base_path );
 
             foreach ( $folders as $folder ) {
-
-                if ( in_array( $folder, ['.', '..'], true ) ) {
+                if ( in_array( $folder, array( '.', '..' ), true ) ) {
                     continue;
                 }
 
@@ -228,11 +226,11 @@ class Modules {
 
                 $module_id = $this->camel_to_kebab( $folder );
 
-                $this->modules[ $module_id ] = [
+                $this->modules[ $module_id ] = array(
                     'id'           => $module_id,
                     'module_file'  => $module_file,
                     'module_class' => "{$namespace}\\{$folder}\\Module",
-                ];
+                );
             }
         }
 
@@ -266,10 +264,9 @@ class Modules {
         $active_modules = $this->get_active_modules();
         $all_modules    = $this->get_all_modules();
 
-        $validated_active = [];
+        $validated_active = array();
 
         foreach ( $active_modules as $module_id ) {
-
             if ( empty( $all_modules[ $module_id ] ) ) {
                 continue;
             }
@@ -288,9 +285,9 @@ class Modules {
             require_once $module['module_file'];
 
             try {
-                $class = $module['module_class'];
+                $class                         = $module['module_class'];
                 $this->container[ $module_id ] = new $class();
-                $validated_active[] = $module_id;
+                $validated_active[]            = $module_id;
             } catch ( \Throwable $e ) {
                 MultiVendorX()->util->log( $e );
                 continue;
@@ -350,7 +347,7 @@ class Modules {
      * @return array
      */
     public function get_available_modules(): array {
-        $available      = [];
+        $available = array();
 
         foreach ( $this->get_all_modules() as $id => $module ) {
             if ( $this->is_module_available( $module ) ) {

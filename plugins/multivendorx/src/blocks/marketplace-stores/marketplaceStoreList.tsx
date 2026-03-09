@@ -244,215 +244,255 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	return (
 		<>
 			<div className="woocommerce multivendorx-store">
-				<main className="site-main">
+				<div className="view-tabs-wrapper">
+					<ul className="view-tabs">
+						<li
+							className={viewMode === 'list' ? 'active' : ''}
+							onClick={() => setViewMode('list')}
+						>
+							<a>{__('List', 'multivendorx')}</a>
+						</li>
+
+						<li
+							className={viewMode === 'split' ? 'active' : ''}
+							onClick={() => setViewMode('split')}
+						>
+							<a>{__('Split', 'multivendorx')} </a>
+						</li>
+
+						<li
+							className={viewMode === 'map' ? 'active' : ''}
+							onClick={() => setViewMode('map')}
+						>
+							<a>	{__('Map', 'multivendorx')} </a>
+						</li>
+					</ul>
+				</div>
+
+				<div className="store-filter-wrapper">
 					{apiKey != '' && (
 						<>
-							<form className="filter-wrapper woocommerce-form woocommerce-form-login login">
-								<input
-									type="text"
-									name="address"
-									value={filters.address}
-									onChange={handleInputChange}
-									placeholder={__('Enter Address', 'multivendorx')}
-									className="woocommerce-Input woocommerce-Input--text input-text"
-								/>
+							<input
+								type="text"
+								name="address"
+								value={filters.address}
+								onChange={handleInputChange}
+								placeholder={__('Enter Address', 'multivendorx')}
+								className="woocommerce-Input woocommerce-Input--text input-text"
+							/>
 
-								<select
-									name="distance"
-									value={filters.distance}
-									onChange={handleInputChange}
-								>
-									<option value="">{__('Within', 'multivendorx')}</option>
-									<option value="5">5</option>
-									<option value="10">10</option>
-									<option value="25">25</option>
-								</select>
+							<select
+								name="distance"
+								value={filters.distance}
+								onChange={handleInputChange}
+							>
+								<option value="">{__('Within', 'multivendorx')}</option>
+								<option value="5">5</option>
+								<option value="10">10</option>
+								<option value="25">25</option>
+							</select>
 
-								<select
-									name="miles"
-									value={filters.miles}
-									onChange={handleInputChange}
-								>
-									<option value="miles">
-										{__('Miles', 'multivendorx')}
-									</option>
-									<option value="km">
-										{__('Kilometers', 'multivendorx')}
-									</option>
-									<option value="nm">
-										{__('Nautical miles', 'multivendorx')}
-									</option>
-								</select>
-							</form>
-
-							<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-								<button
-									className="woocommerce-button button wp-element-button"
-									onClick={requestUserLocation}
-								>
-									{__('Use My Current Location', 'multivendorx')}
-								</button>
-							</p>
+							<select
+								name="miles"
+								value={filters.miles}
+								onChange={handleInputChange}
+							>
+								<option value="miles">
+									{__('Miles', 'multivendorx')}
+								</option>
+								<option value="km">
+									{__('Kilometers', 'multivendorx')}
+								</option>
+								<option value="nm">
+									{__('Nautical miles', 'multivendorx')}
+								</option>
+							</select>
+							<button
+								className="woocommerce-button button wp-element-button"
+								onClick={requestUserLocation}
+							>
+								{__('Use My Current Location', 'multivendorx')}
+							</button>
 						</>
 					)}
+					<select
+						name="sort"
+						value={filters.sort}
+						onChange={handleInputChange}
+					>
+						<option value="name">
+							{__('Select', 'multivendorx')}
+						</option>
+						<option value="category">
+							{__('By Category', 'multivendorx')}
+						</option>
+						<option value="shipping">
+							{__('By Shipping', 'multivendorx')}
+						</option>
+					</select>
 
-					<div className="store-toolbar">
-						<div className="product">
-							<div className="woocommerce-tabs wc-tabs-wrapper">
-								<ul className="tabs wc-tabs">
-									<li
-										className={viewMode === 'list' ? 'active' : ''}
-										onClick={() => setViewMode('list')}
-									>
-									<a>{__('List', 'multivendorx')}</a>
-									</li>
-
-									<li
-										className={viewMode === 'split' ? 'active' : ''}
-										onClick={() => setViewMode('split')}
-									>
-										<a>{__('Split', 'multivendorx')} </a>
-									</li>
-
-									<li
-										className={viewMode === 'map' ? 'active' : ''}
-										onClick={() => setViewMode('map')}
-									>
-									<a>	{__('Map', 'multivendorx')} </a>
-									</li>
-								</ul>
-								<p className="woocommerce-result-count">
-									{__('Showing', 'multivendorx')} {data.length}{' '}
-									{__('stores', 'multivendorx')}
-								</p>
-
-								<form className='woocommerce-ordering'>
-									<select
-										name="sort"
-										value={filters.sort}
-										onChange={handleInputChange}
-									>
-										<option value="name">
-											{__('Select', 'multivendorx')}
-										</option>
-										<option value="category">
-											{__('By Category', 'multivendorx')}
-										</option>
-										<option value="shipping">
-											{__('By Shipping', 'multivendorx')}
-										</option>
-									</select>
-
-									{filters.sort == 'category' && (
-										<select
-											name="category"
-											value={filters.category || ''}
-											onChange={handleInputChange}
-										>
-											<option value="">
-												{__('Select Category', 'multivendorx')}
-											</option>
-
-											{categoryList.map((cat) => (
-												<option key={cat.id} value={cat.id}>
-													{cat.name}
-												</option>
-											))}
-										</select>
-									)}
-									<select
-										name="product"
-										value={filters.product || ''}
-										onChange={(e) =>
-											setFilters((prev) => ({
-												...prev,
-												product: e.target.value ? Number(e.target.value) : '',
-											}))
-										}
-									>
-										<option value="">
-											{__('Select Product', 'multivendorx')}
-										</option>
-
-										{product.map((p) => (
-											<option key={p.id} value={p.id}>
-												{p.name}
-											</option>
-										))}
-									</select>
-								</form>
-							</div>
-						</div>
-					</div>
-					<ul className="products columns-3">
-						<div
-							className={`store-list-wrapper ${viewMode === 'split' ? 'is-split' : 'is-list'
-								}`}
+					{filters.sort == 'category' && (
+						<select
+							name="category"
+							value={filters.category || ''}
+							onChange={handleInputChange}
 						>
-							<div className="store-list">
-								{data &&
-									data.map((store) => (
-										<div key={store.id} className="store">
-											<div className="store-image">
-												<img src={store.image} alt="" />
-											</div>
+							<option value="">
+								{__('Select Category', 'multivendorx')}
+							</option>
 
-											<div className="store-details">
-												<h2>{store.store_name}</h2>
+							{categoryList.map((cat) => (
+								<option key={cat.id} value={cat.id}>
+									{cat.name}
+								</option>
+							))}
+						</select>
+					)}
+					<select
+						name="product"
+						value={filters.product || ''}
+						onChange={(e) =>
+							setFilters((prev) => ({
+								...prev,
+								product: e.target.value ? Number(e.target.value) : '',
+							}))
+						}
+					>
+						<option value="">
+							{__('Select Product', 'multivendorx')}
+						</option>
 
-												<div className="contact-wrapper">
-													{store.phone && (
-														<span>
-															<i className="dashicons dashicons-phone" />{' '}
-															{store.phone}
-														</span>
-													)}
-
-													{store.address && (
-														<span>
-															<i className="dashicons dashicons-location" />
-															{store.address}
-														</span>
-													)}
-												</div>
-											</div>
+						{product.map((p) => (
+							<option key={p.id} value={p.id}>
+								{p.name}
+							</option>
+						))}
+					</select>
+				</div>
+				<p>
+					{__('Showing', 'multivendorx')} {data.length}{' '}
+					{__('stores', 'multivendorx')}
+				</p>
+				<div
+					className={`store-list-wrapper is-${viewMode}`}
+				>
+					<div className="store-list">
+						{data &&
+							data.map((store) => (
+								<div key={store.id} className="store">
+									{store.image ? (
+										<div className="store-image">
+											<img src={store.image} alt={store.store_name} />
 										</div>
-									))}
-							</div>
+									) : (
+										<div className="avatar">
+											{store.store_name?.charAt(0).toUpperCase()}
+										</div>
+									)}
 
-							{renderMapComponent()}
-						</div>
-					</ul>
-					<nav className="woocommerce-pagination">
-						<ul className="page-numbers">
-							<li>
-								<button
-									disabled={page === 1}
-									onClick={() => setPage((p) => p - 1)}
-									className="page-numbers"
-								>
-									{__('Previous', 'multivendorx')}
-								</button>
-							</li>
 
-							<li>
-								<span className="page-numbers current">
-									{page}
-								</span>
-							</li>
+									<div className="store-details">
+										<h4>{store.store_name}</h4>
 
-							<li>
-								<button
-									disabled={page >= totalPages}
-									onClick={() => setPage((p) => p + 1)}
-									className="page-numbers"
-								>
-									{__('Next', 'multivendorx')}
-								</button>
-							</li>
-						</ul>
-					</nav>
-				</main>
+										<div className="contact-wrapper">
+											{store.phone && (
+												<span>
+													<i className="dashicons dashicons-phone" />{' '}
+													{store.phone}
+												</span>
+											)}
+
+											{store.address && (
+												<span>
+													<i className="dashicons dashicons-location" />
+													{store.address}
+												</span>
+											)}
+										</div>
+
+										<div className="store-products">
+											<h6 className="woocommerce-products-header__title">
+												{__('Top Products', 'multivendorx')}
+											</h6>
+
+											{/* (pkoro start) */}
+											<ul className="products">
+												<li className="product type-product">
+													<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+														<div className="woocommerce-loop-product__thumbnail">
+															<div className="woocommerce-placeholder">
+																<img
+																	src="https://via.placeholder.com/300x300"
+																	alt="Placeholder"
+																	className="wp-post-image"
+																	width="80"
+																	height="80"
+																/>
+															</div>
+														</div>
+														<h2 className="woocommerce-loop-product__title">
+															Product Name 1 (pkoro)
+														</h2>
+													</a>
+												</li>
+
+												<li className="product type-product">
+													<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+														<div className="woocommerce-loop-product__thumbnail">
+															<div className="woocommerce-placeholder">
+																<img
+																	src="https://via.placeholder.com/300x300"
+																	alt="Placeholder"
+																	className="wp-post-image"
+																	width="80"
+																	height="80"
+																/>
+															</div>
+														</div>
+														<h2 className="woocommerce-loop-product__title">
+															Product Name 2  (pkoro)
+														</h2>
+													</a>
+												</li>
+											</ul> {/* (pkoro end) */}
+										</div>
+									</div>
+								</div>
+							))}
+						<nav className="woocommerce-pagination">
+							<ul className="page-numbers">
+								<li>
+									<button
+										disabled={page === 1}
+										onClick={() => setPage((p) => p - 1)}
+										className="page-numbers"
+									>
+										{__('Previous', 'multivendorx')}
+									</button>
+								</li>
+
+								<li>
+									<span className="page-numbers current">
+										{page}
+									</span>
+								</li>
+
+								<li>
+									<button
+										disabled={page >= totalPages}
+										onClick={() => setPage((p) => p + 1)}
+										className="page-numbers"
+									>
+										{__('Next', 'multivendorx')}
+									</button>
+								</li>
+							</ul>
+						</nav>
+					</div>
+
+					{renderMapComponent()}
+				</div>
+
 			</div>
 		</>
 	);

@@ -39,8 +39,6 @@ class Block {
         add_action( 'enqueue_block_assets', array( $this, 'enqueue_all_block_assets' ) );
         // Localize in frontend.
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-        // Restrict store shop blocks.
-        // add_filter( 'allowed_block_types_all', array( $this, 'restrict_block_types' ) );
     }
 
     /**
@@ -55,7 +53,6 @@ class Block {
             'marketplace-stores',
             'marketplace-products',
             'registration-form',
-            'store-coupons',
             'store-tabs',
             'contact-info',
             'store-name',
@@ -69,11 +66,10 @@ class Block {
             'store-description',
             'store-review',
             'store-policy',
-            'highlighted-store-products',
             'product-category',
             'store-quick-info',
             'store-sidebar',
-            'marketplace-coupons'
+            'marketplace-coupons',
         );
 
         $textdomain = 'multivendorx';
@@ -119,35 +115,6 @@ class Block {
                 FrontendScripts::localize_scripts( $handle );
             }
         }
-    }
-
-    public function restrict_block_types() {
-        $restricted_category   = 'multivendorx-store-shop';
-        $allowed_template_slug = 'multivendorx-store';
-        $template_slug         = '';
-
-        $p = filter_input( INPUT_GET, 'p', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-
-        if ( $p !== '' ) {
-            $template_slug = basename( $p );
-        }
-
-        $is_allowed_context = ( $template_slug === $allowed_template_slug );
-
-        $registry   = \WP_Block_Type_Registry::get_instance();
-        $all_blocks = $registry->get_all_registered();
-        $allowed    = array();
-
-        foreach ( $all_blocks as $block_name => $block_type ) {
-            $category = $block_type->category ?? '';
-            if ( $category === $restricted_category && ! $is_allowed_context ) {
-                continue;
-            }
-
-            $allowed[] = $block_name;
-        }
-
-        return $allowed;
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MultiVendorX AJAX handlers.
  *
@@ -8,7 +9,7 @@
 namespace MultiVendorX\StoreReview;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+    exit;
 }
 
 /**
@@ -19,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author      MultiVendorX
  */
 class Ajax {
+
 
     /**
      * Constructor.
@@ -43,18 +45,18 @@ class Ajax {
         $data = filter_input_array(
             INPUT_POST,
             array(
-				'store_id'       => FILTER_SANITIZE_NUMBER_INT,
-				'review_title'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-				'review_content' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-				'rating'         => array(
-					'filter' => FILTER_DEFAULT,
-					'flags'  => FILTER_REQUIRE_ARRAY,
-				),
-			)
+                'store_id'       => FILTER_SANITIZE_NUMBER_INT,
+                'review_title'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+                'review_content' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+                'rating'         => array(
+                    'filter' => FILTER_DEFAULT,
+                    'flags'  => FILTER_REQUIRE_ARRAY,
+                ),
+            )
         );
 
-        $store_id       = intval( $data['store_id'] ?? 0 );
-        $user_id        = get_current_user_id();
+        $store_id       = intval($data['store_id'] ?? 0);
+        $user_id        = MultiVendorX()->current_user_id;
         $review_title   = $data['review_title'] ?? '';
         $review_content = $data['review_content'] ?? '';
         $ratings        = $data['rating'] ?? array();
@@ -107,68 +109,84 @@ class Ajax {
     public function get_reviews() {
         $store_id = filter_input( INPUT_POST, 'store_id', FILTER_SANITIZE_NUMBER_INT );
         $reviews  = Util::get_reviews_by_store( $store_id );
-
         ob_start();
         if ( $reviews ) {
             echo '<div id="reviews" class="woocommerce-Reviews"> 
                     <div class="comments">
                     <ol class="commentlist">';
             foreach ( $reviews as $review ) {
-                    $user_info     = get_userdata( $review->customer_id );
-                    $reviewer_name = $user_info ? $user_info->display_name : __( 'Anonymous', 'multivendorx' );
-                    $rating_percentage = ( floatval( $review->overall_rating ) / 5 ) * 100;
-                    $rating_rounded = round( floatval( $review->overall_rating ), 1 );
-                    ?>
-                    <li class="review byuser comment-author-admin bypostauthor">
-                        <div class="comment_container">
-                            <div class="avatar avatar-60 photo avatar-placeholder">
-                                <?php echo strtoupper( substr( $reviewer_name, 0, 1 ) ); ?>
-                            </div>
-                            <div class="comment-text">
-                                <div class="star-rating" role="img" aria-label="<?php echo sprintf( __( 'Rated %s out of 5', 'multivendorx' ), $rating_rounded ); ?>">
-                                    <span style="width: <?php echo esc_attr( $rating_percentage ); ?>%;">
-                                        <strong class="rating"><?php echo esc_html( $rating_rounded ); ?></strong> <?php esc_html_e( 'out of 5', 'multivendorx' ); ?>
-                                    </span>
-                                </div>
-                                
-                                <p class="meta">
-                                    <strong class="woocommerce-review__author"><?php echo esc_html( $reviewer_name ); ?></strong>
-                                    <span class="woocommerce-review__dash">–</span>
-                                    <time class="woocommerce-review__published-date">1 day ago(pkoro)</time>
-                                </p>
-                                
-                                <div class="description">
-                                    <?php if ( ! empty( $review->review_title ) ) : ?>
-                                        <h4 class="woocommerce-review__title"><?php echo esc_html( $review->review_title ); ?></h4>
-                                    <?php endif; ?>
-                                    
-                                    <p><?php echo esc_html( $review->review_content ); ?></p>
-                                    
-                                    <?php if ( ! empty( $review->review_images ) ) : 
-                                        $images = json_decode( stripslashes( $review->review_images ), true );
-                                        if ( is_array( $images ) && ! empty( $images ) ) : ?>
-                                            <div class="review-images">
-                                                <?php foreach ( $images as $img_url ) : ?>
-                                                    <a href="<?php echo esc_url( $img_url ); ?>" target="_blank" rel="noopener noreferrer">
-                                                        <img src="<?php echo esc_url( $img_url ); ?>" alt="<?php esc_attr_e( 'Review Image', 'multivendorx' ); ?>" />
-                                                    </a>
-                                                <?php endforeach; ?>
-                                            </div>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                </div>
-                                
-                                <?php if ( ! empty( $review->reply ) ) : ?>
-                                    <div class="multivendorx-review-reply">
-                                        <strong><?php esc_html_e( 'Admin reply:', 'multivendorx' ); ?></strong>
-                                        <p><?php echo esc_html( $review->reply ); ?></p>
-                                    </div>
-                                <?php endif; ?>
+                $user_info         = get_userdata( $review->customer_id );
+                $reviewer_name     = $user_info ? $user_info->display_name : __( 'Anonymous', 'multivendorx' );
+                $rating_percentage = ( floatval( $review->overall_rating ) / 5 ) * 100;
+                $rating_rounded    = round( floatval( $review->overall_rating ), 1 );
+				?>
+                <li class="review byuser comment-author-admin bypostauthor">
+                    <div class="comment_container">
+                        <div class="avatar avatar-60 photo avatar-placeholder">
+                            <div class="avatar avatar-60 photo">
+                                <?php
+                                if ( $user_info ) {
+                                    echo get_avatar( $review->customer_id, 60 );
+                                } else {
+                                    echo get_avatar( 0, 60 );
+                                }
+                                ?>
                             </div>
                         </div>
-                    </li>
-                    <?php
-                }
+                        <div class="comment-text">
+                            <div class="star-rating" role="img" aria-label="<?php printf( __( 'Rated %s out of 5', 'multivendorx' ), $rating_rounded ); ?>">
+                                <span style="width: <?php echo esc_attr( $rating_percentage ); ?>%;">
+                                    <strong class="rating"><?php echo esc_html( $rating_rounded ); ?></strong> <?php esc_html_e( 'out of 5', 'multivendorx' ); ?>
+                                </span>
+                            </div>
+
+                            <p class="meta">
+                                <strong class="woocommerce-review__author"><?php echo esc_html( $reviewer_name ); ?></strong>
+                                <span class="woocommerce-review__dash">–</span>
+                                <?php
+                                $review_time = strtotime( $review->date_created );
+                                $time_diff   = human_time_diff( $review_time, current_time( 'timestamp' ) );
+                                ?>
+
+                                <time class="woocommerce-review__published-date" datetime="<?php echo esc_attr( $review->date_created ); ?>">
+                                    <?php echo esc_html( sprintf( __( '%s ago', 'multivendorx' ), $time_diff ) ); ?>
+                                </time>
+                            </p>
+
+                            <div class="description">
+                                <?php if ( ! empty( $review->review_title ) ) : ?>
+                                    <h4 class="woocommerce-review__title"><?php echo esc_html( $review->review_title ); ?></h4>
+                                <?php endif; ?>
+
+                                <p><?php echo esc_html( $review->review_content ); ?></p>
+
+                                <?php
+                                if ( ! empty( $review->review_images ) ) :
+                                    $images = json_decode( stripslashes( $review->review_images ), true );
+                                    if ( is_array( $images ) && ! empty( $images ) ) :
+										?>
+                                        <div class="review-images">
+                                            <?php foreach ( $images as $img_url ) : ?>
+                                                <a href="<?php echo esc_url( $img_url ); ?>" target="_blank" rel="noopener noreferrer">
+                                                    <img src="<?php echo esc_url( $img_url ); ?>" alt="<?php esc_attr_e( 'Review Image', 'multivendorx' ); ?>" />
+                                                </a>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+
+                            <?php if ( ! empty( $review->reply ) ) : ?>
+                                <div class="multivendorx-review-reply">
+                                    <strong><?php esc_html_e( 'Admin reply:', 'multivendorx' ); ?></strong>
+                                    <p><?php echo esc_html( $review->reply ); ?></p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </li>
+				<?php
+            }
             echo '</ol> 
                 </div>
                 </div>';
@@ -211,10 +229,10 @@ class Ajax {
 
         wp_send_json_success(
             array(
-				'averages'      => $averages,
-				'overall'       => round( $overall, 1 ),
-				'total_reviews' => $total_reviews,
-				'breakdown'     => $breakdown,
+                'averages'      => $averages,
+                'overall'       => round( $overall, 1 ),
+                'total_reviews' => $total_reviews,
+                'breakdown'     => $breakdown,
             )
         );
     }

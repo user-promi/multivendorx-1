@@ -1,4 +1,5 @@
 @use '../../../global.scss' as *;
+// container and column component style
 
 .admin-main-wrapper {
     .container-wrapper {
@@ -15,6 +16,12 @@
 
         &.row {
             flex-direction: row;
+        }
+
+        &.full-height {
+            .card-content {
+                height: 100%;
+            }
         }
     }
     .card-wrapper:has(.transaction) {
@@ -36,4 +43,20 @@
     [data-cols='10'] {  flex: 1 1 calc(83.3333% - 1rem); }
     [data-cols='11'] {  flex: 1 1 calc(91.6667% - 1rem); }
     [data-cols='12'] {  flex: 1 1 calc(100%     - 1rem); }
+}
+
+// for settings panel
+.admin-settings {
+    .container-wrapper,
+    .form-group-wrapper{
+        gap: 0;
+
+        .tabs-wrapper{
+           border: none;
+        }
+        .form-group {
+            background: $background-white;
+            padding: 1rem;
+        }
+    }
 }

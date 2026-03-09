@@ -265,7 +265,7 @@ export const SelectInputUI: React.FC<SelectProps> = ({
     return (
         <div
             className={`form-select-field-wrapper ${wrapperClass ?? ''}`}
-            style={{ width: size ?? '100%' }}
+            style={{ width: size ?? '' }}
         >
             {selectDeselect && (
                 <AdminButtonUI
@@ -280,31 +280,29 @@ export const SelectInputUI: React.FC<SelectProps> = ({
                 />
             )}
 
-            <div className="select-wrapper">
-                <CastComponent
-                    name={name}
-                    placeholder={placeholder}
-                    className={`${inputClass ?? ''} react-select`}
-                    value={resolveValue(value, optionsData, isMulti)}
-                    options={optionsData}
-                    isMulti={isMulti}
-                    isDisabled={disabled}
-                    isClearable={isClearable}
-                    onChange={(raw: any) =>
-                        onChange(extractValue(raw ?? (isMulti ? [] : null), isMulti))
-                    }
-                    styles={buildStyles(isMulti)}
-                    components={CUSTOM_COMPONENTS}
-                    formatCreateLabel={formatCreateLabel}
-                    maxVisibleItems={maxVisibleItems}
-                    onOverflowClick={onOverflowClick}
-                    __isExpanded={isExpanded}
-                    __setIsExpanded={setIsExpanded}
-                    menuContent={menuContent}
-                    keepMenuOpenOnMenuContentClick={keepMenuOpenOnMenuContentClick}
-                    noOptionsText={noOptionsText}
-                />
-            </div>
+            <CastComponent
+                name={name}
+                placeholder={placeholder}
+                className={`${inputClass ?? ''} select-wrapper`}
+                value={resolveValue(value, optionsData, isMulti)}
+                options={optionsData}
+                isMulti={isMulti}
+                isDisabled={disabled}
+                isClearable={isClearable}
+                onChange={(raw: any) =>
+                    onChange(extractValue(raw ?? (isMulti ? [] : null), isMulti))
+                }
+                styles={buildStyles(isMulti)}
+                components={CUSTOM_COMPONENTS}
+                formatCreateLabel={formatCreateLabel}
+                maxVisibleItems={maxVisibleItems}
+                onOverflowClick={onOverflowClick}
+                __isExpanded={isExpanded}
+                __setIsExpanded={setIsExpanded}
+                menuContent={menuContent}
+                keepMenuOpenOnMenuContentClick={keepMenuOpenOnMenuContentClick}
+                noOptionsText={noOptionsText}
+            />
         </div>
     );
 };

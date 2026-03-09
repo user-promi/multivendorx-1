@@ -106,7 +106,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			},
 		})
 			.then((response) => {
-				setRecentDebits(response.data.transaction || []);
+				setRecentDebits(response.data || []);
 			})
 			.finally(() => {
 				setWalletLoading(false);
@@ -143,7 +143,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 
 		// Submit request
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `transaction/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
@@ -231,7 +231,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 	};
 
 	const doRefreshTableData = (query: QueryProps) => {
-		console.log(query);
 		setIsLoading(true);
 		axios
 			.get(getApiLink(appLocalizer, 'transaction'), {
@@ -418,7 +417,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 	return (
 		<>
 			<Container>
-				<Column grid={6}>
+				<Column fullHeight grid={6}>
 					<Card title="Recent payouts">
 						{recentDebits.length > 0 ? (
 							<>
@@ -487,7 +486,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 					</Card>
 				</Column>
 
-				<Column grid={6}>
+				<Column fullHeight grid={6}>
 					<Card>
 						<div className="payout-card-wrapper">
 							<div className="price-wrapper">
@@ -699,9 +698,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 									type="number"
 									name="amount"
 									value={amount}
-									onChange={(e: any) =>
-										AmountChange(Number(e.target.value))
-									}
+									onChange={(value) => {
+										AmountChange(Number(value))
+									}}
 								/>
 
 								<div className="free-wrapper">
@@ -760,9 +759,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 								<TextAreaUI
 									name="note"
 									value={note}
-									onChange={(
-										e: React.ChangeEvent<HTMLTextAreaElement>
-									) => setNote(e.target.value)}
+									onChange={(value) => setNote(value)}
 								/>
 							</FormGroup>
 						</FormGroupWrapper>

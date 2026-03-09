@@ -81,7 +81,7 @@ const Withdrawls: React.FC = () => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(
 				appLocalizer,
 				`transaction/${appLocalizer.store_id}`

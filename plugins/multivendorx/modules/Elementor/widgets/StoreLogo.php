@@ -23,11 +23,11 @@ class Store_Logo extends Widget_Image {
 	}
 
 	public function get_categories() {
-		return [ 'multivendorx' ];
+		return array( 'multivendorx' );
 	}
 
 	public function get_keywords() {
-		return [ 'multivendorx', 'store', 'store', 'logo', 'avatar', 'profile' ];
+		return array( 'multivendorx', 'store', 'logo', 'avatar', 'profile' );
 	}
 
 	protected function register_controls() {
@@ -35,27 +35,49 @@ class Store_Logo extends Widget_Image {
 
 		$this->update_control(
             'section_image',
-            [
+            array(
                 'label' => __( 'Store Logo', 'multivendorx' ),
-            ]
+            )
         );
 
         $this->update_control(
             'image',
-            [
-                'dynamic' => [
+            array(
+                'dynamic' => array(
                     'default' => \Elementor\Plugin::instance()
 											->dynamic_tags
 											->tag_data_to_tag_text( null, 'multivendorx-store-logo' ),
-                ],
-            ],
-            [
+                ),
+            ),
+            array(
                 'recursive' => true,
-            ]
+            )
         );
-        
+
         $this->remove_control( 'caption_source' );
         $this->remove_control( 'caption' );
+
+        // Update width control with 6rem default
+        $this->update_control(
+            'width',
+            array(
+                'default' => array(
+                    'unit' => 'rem',
+                    'size' => 6,
+                ),
+            )
+        );
+
+        // Update max width control with 6rem default
+        $this->update_control(
+            'image_max_width',
+            array(
+                'default' => array(
+                    'unit' => 'rem',
+                    'size' => 6,
+                ),
+            )
+        );
 	}
 
 	protected function render() {
@@ -66,9 +88,16 @@ class Store_Logo extends Widget_Image {
 		}
 
 		// Get logo from existing structure
-		$logo = $store['storeLogo'] ?? '';
+		$logo       = $store['storeLogo'] ?? '';
+		$store_name = $store['storeName'] ?? '';
 
 		if ( empty( $logo ) ) {
+			$initials = ! empty( $store_name ) ? strtoupper( mb_substr( trim( $store_name ), 0, 2 ) ) : '';
+
+			echo '<div class="multivendorx-store-logo-container"> <div class="placeholder">';
+			echo esc_html( $initials );
+			echo '</div></div>';
+
 			return;
 		}
 
@@ -77,12 +106,22 @@ class Store_Logo extends Widget_Image {
 			$logo = wp_get_attachment_url( $logo );
 		}
 
+		// Get settings for width
+		$settings  = $this->get_settings_for_display();
+		$width     = isset( $settings['width']['size'] ) ? $settings['width']['size'] . $settings['width']['unit'] : '6rem';
+		$max_width = isset( $settings['image_max_width']['size'] ) ? $settings['image_max_width']['size'] . $settings['image_max_width']['unit'] : '6rem';
+		$alignment = isset( $settings['align'] ) ? $settings['align'] : 'center';
+
 		printf(
-			'<div class="multivendorx-store-logo">
-				<img class="multivendorx-store-logo-img" src="%1$s" alt="%2$s" />
+			'<div class="multivendorx-store-logo" style="text-align: %4$s;">
+				<img class="multivendorx-store-logo-img" src="%1$s" alt="%2$s" style="width: %5$s; max-width: %6$s;" />
 			</div>',
 			esc_url( $logo ),
-			esc_attr( $store['storeName'] ?? '' )
+			esc_attr( $store['storeName'] ?? '' ),
+			esc_attr( $store['storeName'] ?? '' ),
+			esc_attr( $alignment ),
+			esc_attr( $width ),
+			esc_attr( $max_width )
 		);
 	}
 }

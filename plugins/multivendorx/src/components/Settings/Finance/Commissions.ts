@@ -27,6 +27,7 @@ const gatewayFields = gatewayList.flatMap((gateway) => [
 	{
 		key: 'divider',
 		type: 'divider',
+		withoutBorder : true
 	},
 ]);
 
@@ -58,6 +59,7 @@ const nestedFields = [
 	{
 		key: 'divider',
 		type: 'divider',
+		withoutBorder : true
 	},
 	...gatewayFields,
 ];
@@ -82,7 +84,7 @@ export default {
 				'multivendorx'
 			),
 			noticeType: 'info',
-			display: 'notice',
+			displayPosition: 'notice',
 		},
 		{
 			key: 'commission_type',

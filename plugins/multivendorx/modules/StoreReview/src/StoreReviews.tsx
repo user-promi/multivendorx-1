@@ -103,7 +103,7 @@ const StoreReviews: React.FC = () => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `review/${selectedReview.id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
@@ -247,7 +247,7 @@ const StoreReviews: React.FC = () => {
 
 				setCategoryCounts([
 					{
-						value: 'all',
+						value: '',
 						label: 'All',
 						count: Number(response.headers['x-wp-total']) || 0,
 					},
@@ -332,7 +332,7 @@ const StoreReviews: React.FC = () => {
 						icon: 'store-review',
 						title: `${__('Reply to Review', 'multivendorx')} – ${selectedReview?.store_name}`,
 						description: __(
-							'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+							'Review customer feedback submitted for this store and approve, reject, or keep it under moderation.',
 							'multivendorx'
 						),
 					}}

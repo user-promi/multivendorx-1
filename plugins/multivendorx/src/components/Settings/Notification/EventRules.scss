@@ -145,7 +145,7 @@
     .notification-card {
         border: $border-light-small;
         padding: 1rem;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -232,7 +232,7 @@
         gap: 0.5rem;
         align-items: start;
         background: $theme-background-color;
-        border-radius: 0.313rem;
+        border-radius: $border-radius-small;
         cursor: pointer;
 
         span {

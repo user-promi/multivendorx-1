@@ -249,13 +249,13 @@ class Notifications extends \WP_REST_Controller {
                 $notifications[] = apply_filters(
                     'multivendorx_stores',
                     array(
-                        'store_id'   => (int) $notification['store_id'],
-                        'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                        'type'       => $notification['type'],
-                        'title'      => $notification['title'],
-                        'message'    => $notification['message'],
-                        'created_at'       => Utill::multivendorx_rest_prepare_date_response( $notification['created_at'] ),
-                        'created_at_gmt'   => Utill::multivendorx_rest_prepare_date_response( $notification['created_at'], true )
+                        'store_id'       => (int) $notification['store_id'],
+                        'store_name'     => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'type'           => $notification['type'],
+                        'title'          => $notification['title'],
+                        'message'        => $notification['message'],
+                        'created_at'     => Utill::multivendorx_rest_prepare_date_response( $notification['created_at'] ),
+                        'created_at_gmt' => Utill::multivendorx_rest_prepare_date_response( $notification['created_at'], true ),
                     )
                 );
             }

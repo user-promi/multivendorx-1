@@ -33,8 +33,10 @@ const FormGroup: React.FC<FormGroupProps> = ({
 			data-cols={cols}
 		>
 			{label && <label className="settings-form-label" htmlFor={htmlFor}>
-				{icon && <i className={`adminfont-${icon}`}></i> }
-				<div className="title">{label}</div>
+				<div className="title">
+					{icon && <i className={`adminfont-${icon} form-icon`}></i> } 
+					{label}
+				</div>
 				{labelDes && <div className="settings-metabox-description">{labelDes}</div>}
 			</label>}
 			<div className="settings-input-content">
@@ -49,10 +51,15 @@ const FormGroup: React.FC<FormGroupProps> = ({
 				)}
 				
 				{desc && (
-					<p
-						className="settings-metabox-description"
-						dangerouslySetInnerHTML={{ __html: desc }}
-					/>
+					<div className="settings-metabox-description">
+						{/* Check if desc is a string or React node */}
+						{typeof desc === 'string' ? (
+							<p dangerouslySetInnerHTML={{ __html: desc }} />
+						) : (
+							// Render React nodes directly
+							desc
+						)}
+					</div>
 				)}
 			</div>
 		</div>

@@ -34,7 +34,7 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 
 	return (
 		<Card
-			contentHeight
+			
 			title={__('Product delivery', 'multivendorx')}
 		// iconName="keyboard-arrow-down arrow-icon icon"
 		// toggle
@@ -97,10 +97,10 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 								name="shipping_class"
 								options={shippingClasses}
 								value={product.shipping_class}
-								onChange={(selected) =>
+								onChange={(value) =>
 									handleChange(
 										'shipping_class',
-										selected.value
+										value
 									)
 								}
 							/>

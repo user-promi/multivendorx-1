@@ -8,7 +8,7 @@ import Content from './Content';
 import EmailTemplate from './EmailRenderer';
 import EndpointEditor from './EndpointEditor';
 import EventCalendar from './EventCalendar';
-import ExpandablePanelGroup from './ExpandablePanelGroup';
+import ExpandablePanel from './ExpandablePanel';
 import FileInput from './FileInput';
 import RegistrationForm from './FormRenderer';
 import ItemList from './ItemList';
@@ -16,6 +16,7 @@ import Log from './Log';
 import MultiCheckBox from './MultiCheckbox';
 import MultiCheckboxTable from './MultiCheckboxTable';
 import NestedComponent from './NestedComponent';
+import NoticeField from './Notice';
 import PrePostText from './PrePostText';
 import RadioInput from './RadioInput';
 import Recaptcha from './Recaptcha';
@@ -70,7 +71,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'multi-checkbox-table': MultiCheckboxTable,
 
-  'expandable-panel': ExpandablePanelGroup,
+  'expandable-panel': ExpandablePanel,
 
   'setting-toggle': ToggleSetting,
 
@@ -103,4 +104,6 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
   'shortcode-table': ShortCodeTable,
 
   itemlist: ItemList,
+
+  'notice': NoticeField,
 };

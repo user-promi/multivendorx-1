@@ -437,7 +437,7 @@ class Frontend {
         );
 
         // Add order note with proper escaping.
-        $user_info = get_userdata( get_current_user_id() );
+        $user_info = get_userdata( MultiVendorX()->current_user_id );
 
         $comment_id = $order->add_order_note(
             sprintf(

@@ -124,7 +124,8 @@ class StripeConnect {
                     'type'  => 'copy-text',
                     'label' => __( 'Redirect url', 'multivendorx' ),
                     'title' => $redirect_url,
-                    'desc'  => __( 'Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx' ),
+                    // 'desc'  => __( 'Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx' ),
+                    'desc'  => $redirect_url
                 ),
             ),
         );
@@ -146,9 +147,9 @@ class StripeConnect {
             $badge_class       = ( $stripe_account_id ) ? 'green' : 'red';
             $fields            = array(
                 array(
-                    'type' => 'blocktext',
-                    'title' => __( 'Stripe Status:', 'multivendorx' ),
-                    'blocktext' =>  $onboarding_status,
+                    'type'      => 'text',
+                    'title'     => __( 'Stripe Status:', 'multivendorx' ),
+                    'blocktext' => $onboarding_status,
                 ),
             );
 
@@ -158,7 +159,7 @@ class StripeConnect {
                         'type'   => 'button',
                         'key'    => 'disconnect_account',
                         'label'  => __( 'Disconnect Stripe Account', 'multivendorx' ),
-                        'text'  => __( 'Disconnect', 'multivendorx' ),
+                        'text'   => __( 'Disconnect', 'multivendorx' ),
                         'action' => 'disconnect_stripe_account',
                         'class'  => 'mvx-stripe-disconnect-btn',
                     );
@@ -167,7 +168,7 @@ class StripeConnect {
                         'type'   => 'button',
                         'key'    => 'create_account',
                         'label'  => __( 'Connect with Stripe', 'multivendorx' ),
-                        'text'  => __( 'Connect', 'multivendorx' ),
+                        'text'   => __( 'Connect', 'multivendorx' ),
                         'action' => 'create_stripe_account',
                         'class'  => 'mvx-stripe-connect-btn',
                     );
@@ -447,7 +448,7 @@ class StripeConnect {
             'timeout' => 30,
         );
 
-        if ( ( 'POST' === $method || 'PUT' === $method ) && ! empty( $data ) ) {
+        if ( ( 'POST' === $method ) && ! empty( $data ) ) {
             $args['body'] = http_build_query( $data );
         }
 

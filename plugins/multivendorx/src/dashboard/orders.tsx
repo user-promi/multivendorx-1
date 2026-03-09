@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 import {
 	PopupUI,
@@ -9,14 +9,15 @@ import {
 	TableRow,
 	QueryProps,
 	CategoryCount,
+	NavigatorHeader,
 } from 'zyra';
-import OrderDetails from './orderDetails';
-import AddOrder from './addOrder';
 import {
 	downloadCSV,
 	formatLocalDate,
 	toWcIsoDate,
+	dashNavigate
 } from '../services/commonFunction';
+
 
 const Orders: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -26,55 +27,12 @@ const Orders: React.FC = () => {
 	const [categoryCounts, setCategoryCounts] = useState<
 		CategoryCount[] | null
 	>(null);
-	const [orderLookup, setOrderLookup] = useState<Record<number, any>>({});
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [message, setMessage] = useState('');
 	const { modules } = useModules();
 	const location = useLocation();
-
-	const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+	const navigate = useNavigate();
 	const hash = location.hash.replace(/^#/, '') || '';
-
-	const isViewOrder = hash.includes('view');
-	const isAddOrder = hash.includes('add');
-
-	const fetchOrderById = (orderId: string | number) => {
-		axios
-			.get(`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					meta_key: 'multivendorx_store_id',
-					value: appLocalizer.store_id,
-				},
-			})
-			.then((res) => {
-				const order = res.data;
-				setSelectedOrder(order);
-			})
-			.catch(() => {
-				setSelectedOrder(null);
-			});
-	};
-
-	useEffect(() => {
-		if (!isViewOrder) {
-			setSelectedOrder(null);
-			return;
-		}
-
-		const orderId = hash.split('view/')[1];
-		if (!orderId) {
-			return;
-		}
-
-		const foundOrder = orderLookup[orderId];
-
-		if (foundOrder) {
-			setSelectedOrder(foundOrder);
-		} else {
-			fetchOrderById(orderId);
-		}
-	}, [hash]);
 
 	const exportAllOrders = () => {
 		let allOrders: any[] = [];
@@ -270,8 +228,7 @@ const Orders: React.FC = () => {
 							label: __('View', 'multivendorx'),
 							icon: 'eye',
 							onClick: (row) => {
-								setSelectedOrder(row);
-								window.location.hash = `view/${row.id}`;
+								dashNavigate(navigate, ['orders', 'view', String(row.id)]);
 							},
 						},
 					]
@@ -339,7 +296,6 @@ const Orders: React.FC = () => {
 					lookup[order.id] = order;
 				});
 
-				setOrderLookup(lookup);
 				setRows(orders);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
 				setIsLoading(false);
@@ -435,40 +391,29 @@ const Orders: React.FC = () => {
 
 	return (
 		<>
-			{!isViewOrder && !isAddOrder && !selectedOrder && (
+			
 				<>
-					<div className="page-title-wrapper">
-						<div className="page-title">
-							<div className="title">
-								{__('Orders', 'multivendorx')}
-							</div>
-							<div className="des">
-								{__(
-									'Manage your store information and preferences',
-									'multivendorx'
-								)}
-							</div>
-						</div>
-						<div className="buttons-wrapper">
-							<div
-								className="admin-btn btn-purple-bg"
-								onClick={exportAllOrders}
-							>
-								<i className="adminfont-export"></i>
-								{__('Export', 'multivendorx')}
-							</div>
-							<div
-								className="admin-btn btn-purple-bg"
-								onClick={() => {
-									window.location.hash = `add`;
-								}}
-							>
-								<i className="adminfont-plus"></i>
-								{__('Add New', 'multivendorx')}
-							</div>
-						</div>
-					</div>
-
+					<NavigatorHeader
+						headerTitle={__('Orders', 'multivendorx')}
+						headerDescription={__(
+							'Manage your store information and preferences',
+							'multivendorx'
+						)}
+						buttons={[
+							{
+								label: __('Export', 'multivendorx'),
+								icon: 'export',
+								onClick: exportAllOrders,
+							},
+							{
+								label: __('Add New', 'multivendorx'),
+								icon: 'plus',
+								onClick: () => {
+									dashNavigate(navigate, ['orders', 'add']);
+								},
+							}
+						]}
+					/>
 					<TableCard
 						headers={headers}
 						rows={rows}
@@ -509,18 +454,6 @@ const Orders: React.FC = () => {
 						}}
 					/>
 				</>
-			)}
-
-			{isAddOrder && <AddOrder />}
-			{isViewOrder && (
-				<OrderDetails
-					order={selectedOrder}
-					onBack={() => {
-						setSelectedOrder(null);
-						window.location.hash = '';
-					}}
-				/>
-			)}
 
 			<PopupUI
 				position="lightbox"

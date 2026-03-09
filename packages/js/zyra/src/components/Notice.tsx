@@ -1,15 +1,16 @@
 // Notice.tsx
 
 import React, { useEffect, useState } from 'react';
-import { addNotice, NoticePosition } from './NoticeReceiver';
+import { addNotice, NoticePosition, renderNoticeContent, NoticeItem } from './NoticeReceiver';
 import "../styles/web/Notice.scss";
+import { FieldComponent } from './types';
 
 export interface NoticeProps {
     uniqueKey?: string; // deduplication key — notices with the same key won't stack
     title?: string;
     message?: string | string[];
     type?: 'info' | 'success' | 'warning' | 'error' | 'banner';
-    position?: 'inline' | NoticePosition;
+    displayPosition?: 'inline' | NoticePosition;
     actionLabel?: string;
     onAction?: () => void;
     validity?: number | 'lifetime';
@@ -20,7 +21,7 @@ export const Notice: React.FC<NoticeProps> = ({
     title,
     message,
     type = 'success',
-    position = 'notice',
+    displayPosition = 'notice',
     actionLabel,
     onAction,
     validity = 'lifetime',
@@ -28,43 +29,53 @@ export const Notice: React.FC<NoticeProps> = ({
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        if (position === 'inline') return;
+        if (displayPosition === 'inline') return;
 
         addNotice(
-            { uniqueKey,title, message, type, position, actionLabel, onAction },
+            { uniqueKey, title, message, type, displayPosition, actionLabel, onAction },
             validity
         );
         setIsVisible(false);
     }, []);
 
     // INLINE rendering
-    if (position !== 'inline') return null;
+    if (displayPosition !== 'inline') return null;
     if (!isVisible) return null;
     if (!title && !message) return null;
 
+    // Create a NoticeItem object for the render function
+    const item: NoticeItem = {
+        uniqueKey: uniqueKey || 'inline',
+        title,
+        message,
+        type,
+        position: 'notice', // Default position for inline (not used visually)
+        actionLabel,
+        onAction
+    };
+
     return (
-        <div className={`ui-notice type-${type} display-${position}`}>
-            {title && <div className="notice-text">{title}</div>}
-
-            {Array.isArray(message)
-                ? message.map((msg, i) => (
-                        <div key={i} className="notice-desc">{msg}</div>
-                    ))
-                : message && <div className="notice-desc">{message}</div>
-            }
-
-            {actionLabel && (
-                <button className="notice-action" onClick={onAction}>
-                    {actionLabel}
-                </button>
-            )}
-
-            <button
-                className="notice-close"
-                onClick={() => setIsVisible(false)}
-            >
-                ×
-            </button>
+        <div className={`ui-notice type-${type} display-${displayPosition}`}>
+            {renderNoticeContent(item, () => setIsVisible(false))}
         </div>
     );
 };
+
+const NoticeField: FieldComponent = {
+    render: ({ field }) => {        
+        return (
+            <Notice
+                type={field.noticeType || field.type || "info"}
+                displayPosition={field.displayPosition}
+                title={field.title}
+                message={field.message}
+                actionLabel={field.actionLabel}
+                onAction={field.onAction}
+                validity={field.validity}
+                uniqueKey={field.uniqueKey}
+            />
+        );
+    },
+};
+
+export default NoticeField;

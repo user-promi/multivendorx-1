@@ -8,6 +8,7 @@ class Widgets {
     public function __construct() {
         add_action( 'widgets_init', array( $this, 'register_sidebar' ) );
         add_filter( 'register_block_type_args', array( $this, 'attach_sidebar_render_callback' ), 10, 2 );
+        add_filter( 'allowed_block_types_all', array( $this, 'restrict_store_blocks' ),10,2); 
     }
 
     /**
@@ -53,5 +54,35 @@ class Widgets {
         </aside>
         <?php
         return ob_get_clean();
+    }
+
+    /**
+     * Restrict MultiVendorX store blocks outside store page
+     */
+    public function restrict_store_blocks( $allowed_blocks, $editor_context ) {
+
+        $restricted_category = 'multivendorx-store-shop';
+
+        // If we are on store page → allow everything
+        if ( Utill::is_store_page() ) {
+            return $allowed_blocks;
+        }
+
+        $registry   = \WP_Block_Type_Registry::get_instance();
+        $all_blocks = $registry->get_all_registered();
+        $filtered   = array();
+
+        foreach ( $all_blocks as $block_name => $block_type ) {
+
+            $category = $block_type->category ?? '';
+
+            if ( $category === $restricted_category ) {
+                continue;
+            }
+
+            $filtered[] = $block_name;
+        }
+
+        return $filtered;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 namespace MultiVendorX\Elementor\Tags;
+
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
 use MultiVendorX\Elementor\StoreHelper;
@@ -34,7 +35,7 @@ class StoreInfo extends Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return array( Module::TEXT_CATEGORY );
     }
 
     /**
@@ -45,50 +46,41 @@ class StoreInfo extends Tag {
      * @return void
      */
     protected function get_value() {
-        $store_data = $this->get_store_data();        
+        $store_data = $this->get_store_data();
 
-        $store_info = [
-            [
+        $store_info = array(
+            array(
                 'key'         => 'address',
                 'title'       => __( 'Address', 'multivendorx' ),
                 'text'        => $store_data['storeAddress'],
                 'icon'        => 'mvx-font ico-location-icon',
                 'show'        => true,
-                '__dynamic__' => [
+                '__dynamic__' => array(
                     'text' => $store_data['storeAddress'],
-                ]
-            ],
-            [
+                ),
+            ),
+            array(
                 'key'         => 'email',
                 'title'       => __( 'Email', 'multivendorx' ),
                 'text'        => $store_data['storeEmail'],
                 'icon'        => 'mvx-font ico-mail-icon',
                 'show'        => true,
-                '__dynamic__' => [
+                '__dynamic__' => array(
                     'text' => $store_data['storeEmail'],
-                ]
-            ],
-            [
+                ),
+            ),
+            array(
                 'key'         => 'phone',
                 'title'       => __( 'Phone No', 'multivendorx' ),
                 'text'        => $store_data['storePhone'],
                 'icon'        => 'mvx-font ico-call-icon',
                 'show'        => true,
-                '__dynamic__' => [
+                '__dynamic__' => array(
                     'text' => $store_data['storePhone'],
-                ]
-            ],
-            [
-                'key'         => 'store_description',
-                'title'       => __( 'Store Description', 'multivendorx' ),
-                'text'        => $store_data['storeDescription'],
-                'icon'        => 'mvx-font ico-location-icon',
-                'show'        => true,
-                '__dynamic__' => [
-                    'text' => $store_data['storeDescription'],
-                ]
-            ],
-        ];
+                ),
+            ),
+            // Store description entry removed
+        );
 
         return apply_filters( 'multivendorx_elementor_tags_store_info_value', $store_info );
     }

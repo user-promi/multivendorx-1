@@ -19,7 +19,7 @@ import {
 import { formatLocalDate } from '@/services/commonFunction';
 
 type Review = {
-	review_id: number;
+	id: number;
 	store_id: number;
 	customer_id: number;
 	customer_name: string;
@@ -59,7 +59,7 @@ const StoreReview: React.FC = () => {
 				.put(
 					getApiLink(
 						appLocalizer,
-						`review/${selectedReview.review_id}`
+						`review/${selectedReview.id}`
 					),
 					{
 						reply: replyText,
@@ -187,7 +187,7 @@ const StoreReview: React.FC = () => {
 
 				setCategoryCounts([
 					{
-						value: 'all',
+						value: '',
 						label: __('All', 'multivendorx'),
 						count: Number(response.headers['x-wp-total']) || 0,
 					},
@@ -253,7 +253,7 @@ const StoreReview: React.FC = () => {
 						icon: 'store-review',
 						title: `${__('Reply to Review', 'multivendorx')} – ${selectedReview?.store_name}`,
 						description: __(
-							'Publish important news, updates, or alerts that appear directly in store dashboards, ensuring sellers never miss critical information.',
+							'View customer reviews and respond to feedback to build trust with shoppers.',
 							'multivendorx'
 						),
 					}}

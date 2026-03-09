@@ -131,7 +131,7 @@ const AddInventory = () => {
                 </Column>
 
                 <Column grid={4}>
-                    <Card contentHeight title={__('Configure Day Pricing Plans', 'multivendorx-pro')}>
+                    <Card  title={__('Configure Day Pricing Plans', 'multivendorx-pro')}>
                         <FormGroupWrapper>
                             <FormGroup label={__('Set Hourly Price Type', 'multivendorx-pro')} desc={__('Choose hourly pricing schema for short-term rentals', 'multivendorx-pro')}>
                                 <SelectInputUI
@@ -151,7 +151,7 @@ const AddInventory = () => {
                             </FormGroup>
                         </FormGroupWrapper>
                     </Card>
-                    <Card contentHeight title={__('Configure Hourly Pricing Plans', 'multivendorx-pro')}>
+                    <Card  title={__('Configure Hourly Pricing Plans', 'multivendorx-pro')}>
                         <FormGroupWrapper>
                             <FormGroup label={__('Set Hourly Price Type', 'multivendorx-pro')} desc={__('Choose hourly pricing schema for short-term rentals', 'multivendorx-pro')}>
                                 <SelectInputUI

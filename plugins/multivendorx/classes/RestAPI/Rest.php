@@ -318,7 +318,7 @@ class Rest {
      * @param string $post_type Post type.
      */
     public function grant_woocommerce_rest_permission( $permission, $context, $object_id, $post_type ) {
-        $user_id = get_current_user_id();
+        $user_id = MultiVendorX()->current_user_id;
 
         // Fetch custom user meta.
         $active_store = MultiVendorX()->active_store;
@@ -665,7 +665,7 @@ class Rest {
                 ),
             )
         );
-      
+
         register_meta(
             'comment',
             'store_rating',
@@ -714,30 +714,29 @@ class Rest {
         }
     }
 
-    public function fetch_store_products($request) {
+    public function fetch_store_products( $request ) {
 
         ob_start();
 
         $store_id = $request->get_param( 'storeId' );
         $search   = sanitize_text_field( $request->get_param( 'search' ) );
         // Query products for this store
-        $args = [
-            'post_type'      => 'product',
-            'post_status'    => 'publish',
-            's'              =>  $search,
-            'meta_query'     => [
-                [
+        $args = array(
+            'post_type'   => 'product',
+            'post_status' => 'publish',
+            's'           => $search,
+            'meta_query'  => array(
+                array(
                     'key'     => Utill::POST_META_SETTINGS['store_id'],
                     'value'   => $store_id,
                     'compare' => '=',
-                ],
-            ],
-        ];
+                ),
+            ),
+        );
 
         $custom_query = new \WP_Query( $args );
 
         if ( $custom_query->have_posts() ) {
-
             echo '<div class="woocommerce">';
             woocommerce_product_loop_start();
 
@@ -750,7 +749,6 @@ class Rest {
 
             woocommerce_product_loop_end();
             echo '</div>';
-
         } else {
             do_action( 'woocommerce_no_products_found' );
         }

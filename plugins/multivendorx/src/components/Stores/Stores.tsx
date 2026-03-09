@@ -200,7 +200,7 @@ const Stores = () => {
 				<>
 					<NavigatorHeader
 						headerIcon="storefront"
-						headerTitle="Stores"
+						headerTitle={__('Stores', 'multivendorx')}
 						headerDescription={__(
 							'Manage marketplace stores with ease. Review, edit, or add new stores anytime.',
 							'multivendorx'
@@ -247,7 +247,6 @@ const Stores = () => {
 										{
 											icon: 'save',
 											text: __('Submit', 'multivendorx'),
-											color: 'purple',
 											onClick: handleSubmit,
 										},
 									]}
@@ -261,7 +260,6 @@ const Stores = () => {
 									{...getFieldNotice('name')}
 								>
 									<BasicInputUI
-										type="text"
 										name="name"
 										value={formData.name || ''}
 										onChange={(val) => handleChange('name', val as string)}
@@ -274,7 +272,6 @@ const Stores = () => {
 									{...getFieldNotice('slug')}
 								>
 									<BasicInputUI
-										type="text"
 										name="slug"
 										value={formData.slug || ''}
 										onChange={(val) => handleChange('slug', val as string)}

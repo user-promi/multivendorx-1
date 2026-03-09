@@ -150,7 +150,7 @@ export default {
 			title: __('Invoice delivery via email', 'multivendorx'),
 		},
 		{
-			key: 'type_options',
+			key: 'invoice_delivery',
 			type: 'checkbox',
 			row: false,
 			label: __('When to send invoice emails  ', 'multivendorx'),

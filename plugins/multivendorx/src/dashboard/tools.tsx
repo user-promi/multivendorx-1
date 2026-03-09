@@ -20,6 +20,7 @@ const Tools: React.FC = () => {
 				)}
 			>
 				<AdminButtonUI
+					position='left'
 					buttons={[
 						{
 							icon: 'delete',

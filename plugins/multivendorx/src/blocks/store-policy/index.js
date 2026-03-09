@@ -217,24 +217,40 @@ document.addEventListener('DOMContentLoaded', () => {
 		!window.StoreInfo ||
 		!StoreInfo.activeModules?.includes('store-policy')
 	) {
+		document
+			.querySelectorAll('.multivendorx-store-policy-block')
+			.forEach((block) => block.remove());
 		return;
 	}
 
 	const policies = StoreInfo.storeDetails || {};
 
 	document
-		.querySelectorAll('.multivendorx-store-policy-block .accordion-item')
-		.forEach((item) => {
-			const key = item.dataset.policy;
-			const value = policies[key];
+		.querySelectorAll('.multivendorx-store-policy-block')
+		.forEach((block) => {
 
-			if (!key || !value) {
-				return;
-			}
+			const items = block.querySelectorAll('.accordion-item');
 
-			const p = item.querySelector('.accordion-body p');
-			if (p) {
-				p.textContent = value;
+			items.forEach((item) => {
+				const key = item.dataset.policy;
+				const value = policies[key];
+
+				// If no policy data → remove item
+				if (!key || !value) {
+					item.remove();
+					return;
+				}
+
+				const p = item.querySelector('.accordion-body p');
+
+				if (p) {
+					p.textContent = value;
+				}
+			});
+
+			// If all items removed → remove whole block
+			if (!block.querySelector('.accordion-item')) {
+				block.remove();
 			}
 		});
 });

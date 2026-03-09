@@ -672,13 +672,22 @@ class StoreUtil {
         );
     }
 
+    public static function get_phone( $phone_meta ) {
+        $data = maybe_unserialize( $phone_meta );
+
+        $country = $data['country_code'] ?? '';
+        $phone   = $data['phone'] ?? '';
+
+        return $country . ' ' . $phone;
+    }
+
     public static function get_specific_store_info() {
         $store_slug = get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
         if ( empty( $store_slug ) ) {
             return;
         }
         $store_obj = Store::get_store( $store_slug, 'slug' );
-        $phone_meta = $store_obj->get_meta( 'phone' );
+        $phone_meta = self::get_phone($store_obj->get_meta( 'phone' ));
     
         $store_phone = '';
         if ( is_serialized( $phone_meta ) ) {
@@ -689,7 +698,7 @@ class StoreUtil {
         } else {
             $store_phone = $phone_meta;
         }
-        $info      = array(
+        $info = array(
             'storeName'          => $store_obj->get( 'name' ),
             'storeDescription'   => $store_obj->get( 'description' ),
             'storeSlug'          => $store_slug,
@@ -714,9 +723,8 @@ class StoreUtil {
          * Filter store info before returning.
          *
          * @param array $info
-         * @param int   $store_id
          * @param object $store_obj
          */
-        return apply_filters('multivendorx_store_info',$info,$store_obj->get_id());
+        return apply_filters( 'multivendorx_store_info', $info, $store_obj );
     }
 }

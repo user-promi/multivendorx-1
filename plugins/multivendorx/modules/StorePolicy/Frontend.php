@@ -37,8 +37,8 @@ class Frontend {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
         $scripts['multivendorx-store-policy-frontend-script'] = array(
-            'src'     => $base_url . 'modules/StorePolicy/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
-            'deps'    => array( 'jquery' ),
+            'src'  => $base_url . 'modules/StorePolicy/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
+            'deps' => array( 'jquery' ),
         );
 
         return $scripts;
@@ -146,7 +146,7 @@ class Frontend {
         MultiVendorX()->util->get_template( 'store/store-single-product-policy-tab.php' );
     }
     public function multivendorx_store_frontend_localize_scripts( $item ) {
-        $store_id      = isset( $item['storeDetails']['storeId'] )
+        $store_id               = isset( $item['storeDetails']['storeId'] )
             ? absint( $item['storeDetails']['storeId'] )
             : 0;
         $item['store_policies'] = Util::get_store_policies( $store_id );

@@ -7,6 +7,7 @@ import '../styles/web/CalendarInput.scss';
 export interface CalendarRange {
   startDate: Date;
   endDate: Date;
+  selectedDates?: Date[]; // Array of selected dates for multiple mode
 }
 
 interface CalendarInputProps {
@@ -16,8 +17,9 @@ interface CalendarInputProps {
   onChange?: (range?: CalendarRange) => void;
   multiple?: boolean;
   showInput?: boolean;
-  NumberOfMonth?: number;
+  numberOfMonths?: number;
   fullYear?: boolean;
+  maxFutureMonths?: number; // New prop: number of months from today
 }
 
 const convertToDateObjectRange = (
@@ -26,19 +28,34 @@ const convertToDateObjectRange = (
 ) => {
   if (!range) return null;
 
+  // If we have selectedDates array (multiple mode), convert all dates
+  if (range.selectedDates && range.selectedDates.length > 0) {
+    return range.selectedDates.map(date => new DateObject({ date, format }));
+  }
+
+  // Otherwise use startDate and endDate (range mode)
   return [
     new DateObject({ date: range.startDate, format }),
     new DateObject({ date: range.endDate, format }),
   ];
+};
+const calculateMaxDate = (maxFutureMonths?: number): Date => {
+  if (maxFutureMonths !== undefined) {
+    const date = new Date();
+    date.setMonth(date.getMonth() + maxFutureMonths);
+    return date;
+  }
+  return new Date();
 };
 
 interface PresetsProps {
   setValue: (dates: DateObject[] | DateObject) => void;
   pickerRef: React.RefObject<DatePickerRef>;
   format: string;
+  maxDate?: Date;
 }
 
-const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format }) => {
+const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format, maxDate }) => {
   const now = new Date();
 
   const startOfWeek = (date: Date) => {
@@ -117,10 +134,12 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
   onChange,
   multiple = false,
   showInput = true,
-  NumberOfMonth = 1,
-  fullYear
+  numberOfMonths = 1,
+  fullYear,
+  maxFutureMonths, // New prop
 }) => {
   const pickerRef = useRef<DatePickerRef>(null);
+  const maxDate = calculateMaxDate(maxFutureMonths);
 
   const [internalValue, setInternalValue] =
     useState<DateObject[] | DateObject | null>(convertToDateObjectRange(value, format));
@@ -131,20 +150,34 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
 
   const handleChange = (val: DateObject[] | DateObject | null) => {
     setInternalValue(val);
-    if (Array.isArray(val) && val.length === 2) {
-      const [start, end] = val as DateObject[];
 
-      onChange?.({
-        startDate: start.toDate(),
-        endDate: end.toDate(),
-      });
+    if (multiple) {
+      // Handle multiple selection mode - store all selected dates
+      if (val) {
+        const selectedDates = Array.isArray(val)
+          ? val.map(dateObj => dateObj.toDate())
+          : [val.toDate()];
 
-      pickerRef.current?.closeCalendar();
-    } else if (val instanceof DateObject) {
-      const date = val.toDate();
-      onChange?.({ startDate: date, endDate: date });
-
-      pickerRef.current?.closeCalendar(); 
+        onChange?.({ selectedDates });
+      }
+    }
+    else {
+      // Handle range mode (original behavior)
+      if (Array.isArray(val) && val.length === 2) {
+        const [start, end] = val as DateObject[];
+        onChange?.({
+          startDate: start.toDate(),
+          endDate: end.toDate(),
+        });
+        pickerRef.current?.closeCalendar();
+      } else if (val instanceof DateObject) {
+        const date = val.toDate();
+        onChange?.({
+          startDate: date,
+          endDate: date,
+        });
+        pickerRef.current?.closeCalendar();
+      }
     }
   };
 
@@ -158,6 +191,7 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
         setValue={handleChange}
         pickerRef={pickerRef}
         format={format}
+        maxDate={maxDate} // Pass maxDate to presets
       />
     );
   }
@@ -167,10 +201,10 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
     value: internalValue,
     format,
     range: !multiple,
-    numberOfMonths: { NumberOfMonth },
+    numberOfMonths,
     sort: true,
     onChange: handleChange,
-    maxDate: new Date(),
+    maxDate, // Use calculated maxDate
     multiple,
     plugins,
     fullYear,
@@ -201,10 +235,11 @@ const CalendarInput: FieldComponent = {
       format={field.format}
       multiple={field.multiple ?? field.mulitple ?? false}
       showInput={field.showInput}
-      NumberOfMonth={field.NumberOfMonth}
+      numberOfMonths={field.numberOfMonths}
       fullYear={field.fullYear}
       value={value}
       onChange={onChange}
+      maxFutureMonths={field.maxFutureMonths} // Pass the new prop
     />
   ),
 };

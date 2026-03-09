@@ -136,7 +136,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
@@ -150,7 +150,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 	const handleSubmit = (status: 'approve' | 'rejected') => {
 		const updatedData = { ...formData, status };
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,

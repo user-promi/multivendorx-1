@@ -125,7 +125,7 @@ const Withdrawl: React.FC = () => {
 
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${appLocalizer?.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,

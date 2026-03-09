@@ -8,6 +8,7 @@
 
 namespace MultiVendorX\FollowStore;
 
+use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -27,7 +28,7 @@ class Rest extends \WP_REST_Controller {
      *
      * @var string
      */
-    protected $rest_base = 'followers';
+    protected $rest_base = 'follow-store';
 
     /**
      * Constructor.
@@ -78,7 +79,7 @@ class Rest extends \WP_REST_Controller {
      * @param  object $request Full data about the request.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
     /**
@@ -87,7 +88,7 @@ class Rest extends \WP_REST_Controller {
      * @param  object $request Full data about the request.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'read' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
     }
 
         /**
@@ -114,14 +115,8 @@ class Rest extends \WP_REST_Controller {
             // Get store object.
             $store = new Store( $store_id );
 
-            // Fetch followers from meta_data.
-            $followers_raw = $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] ?? '[]';
-            $followers     = json_decode( $followers_raw, true );
-            if ( ! is_array( $followers ) ) {
-                $followers = array();
-            }
+            $followers = is_array( $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] ?? array() ) ? $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] : array();
 
-            // Handle old format (plain array of user IDs).
             // Convert to new format with id + empty date.
             if ( ! empty( $followers[0] ) && is_int( $followers[0] ) ) {
                 $followers = array_map(
@@ -171,12 +166,11 @@ class Rest extends \WP_REST_Controller {
                     }
 
                     $formatted_followers[] = array(
-                        'id'            => $user_id,
-                        'name'          => $full_name,
-                        'email'         => $user->user_email,
-                        'date_followed' => Utill::multivendorx_rest_prepare_date_response( $follow_date ),
+                        'id'                => $user_id,
+                        'name'              => $full_name,
+                        'email'             => $user->user_email,
+                        'date_followed'     => Utill::multivendorx_rest_prepare_date_response( $follow_date ),
                         'date_followed_gmt' => Utill::multivendorx_rest_prepare_date_response( $follow_date, true ),
-
                     );
                 }
             }

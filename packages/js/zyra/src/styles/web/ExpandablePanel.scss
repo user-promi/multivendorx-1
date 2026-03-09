@@ -16,7 +16,7 @@
             padding: 0.45rem;
             cursor: pointer;
             border: $border-light-small;
-            border-radius: 0.313rem;
+            border-radius: $border-radius-small;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
             position: relative;
@@ -295,7 +295,7 @@
     margin: 2rem auto;
     padding: 1.5rem;
     background: $background-white;
-    border-radius: 0.313rem;
+    border-radius: $border-radius-small;
 
     .welcome-wrapper {
         text-align: center;

@@ -344,7 +344,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 					/>
 				</Column>
 
-				<Column grid={6}>
+				<Column fullHeight row>
 					<Card title={__('Revenue breakdown', 'multivendorx')}>
 						{earningSummary.map((product) => (
 							<InfoItem
@@ -355,9 +355,6 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 							/>
 						))}
 					</Card>
-				</Column>
-
-				<Column grid={6}>
 					<Card title={__('Revenue breakdown', 'multivendorx')}>
 						<div style={{ width: '100%', height: 400 }}>
 							<ResponsiveContainer>
@@ -412,7 +409,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 				</Column>
 
 				{/* Keep categories and brands */}
-				<Column grid={4}>
+				<Column fullHeight row>
 					<Card title={__('Top Selling Coupons', 'multivendorx')}>
 						{topCoupons.length > 0 ? (
 							topCoupons.map((coupon: any, index: number) => (
@@ -492,9 +489,6 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 							/>
 						)}
 					</Card>
-				</Column>
-
-				<Column grid={4}>
 					<Card title={__('Top Customers', 'multivendorx')}>
 						{topCustomers.length > 0 ? (
 							topCustomers.map((customer: any, index: number) => (
@@ -561,9 +555,6 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 							</p>
 						)}
 					</Card>
-				</Column>
-
-				<Column grid={4}>
 					<Card title={__('Top Stores', 'multivendorx')}>
 						{topStores.length > 0 ? (
 							topStores.map((store: any, index: number) => (

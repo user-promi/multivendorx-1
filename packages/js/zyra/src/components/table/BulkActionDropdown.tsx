@@ -31,47 +31,49 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 	const allSelected = totalIds.length > 0 && selectedIds.length === totalIds.length;
 
 	return (
-		<div className="wrap-bulk-all-date bulk">
-			{/* Selected rows count + clear */}
-			<span className="action-item count">
-				{selectedIds.length} Rows selected
-				<i onClick={onClearSelection} className="adminfont-close" />
-			</span>
+		<div className="table-filter-wrapper">
+			<div className="table-filter bulk">
+				{/* Selected rows count + clear */}
+				<span className="action-item count">
+					{selectedIds.length} Rows selected
+					<i onClick={onClearSelection} className="adminfont-close" />
+				</span>
 
-			<AdminButtonUI
-				buttons={{
-					text: allSelected ? 'Deselect All' : 'Select All',
-					onClick: () => onToggleSelectAll(!allSelected),
-				}}
-			/>
-			{/* Conditional Bulk Actions Dropdown */}
-			{showDropdown && actions.length > 0 && onApply && (
-				<div className="action">
-					<SelectInputUI
-						options={actions}
-						value={""}
-						placeholder="Bulk Actions"
-						disabled={selectedIds.length === 0}
-						onChange={(selected) => {
-							if (selected?.value) {
-								onApply(String(selected.value));
-							}
-						}}
-					/>
-				</div>
-			)}
-
-			{/* Conditional CSV button */}
-			{onSelectCsvDownloadApply && (
 				<AdminButtonUI
 					buttons={{
-						text: 'CSV',
-						icon: 'download',
-						disabled: selectedIds.length === 0,
-						onClick: () => onSelectCsvDownloadApply(selectedIds),
+						text: allSelected ? 'Deselect All' : 'Select All',
+						onClick: () => onToggleSelectAll(!allSelected),
 					}}
 				/>
-			)}
+				{/* Conditional Bulk Actions Dropdown */}
+				{showDropdown && actions.length > 0 && onApply && (
+					<div className="action">
+						<SelectInputUI
+							options={actions}
+							value={""}
+							placeholder="Bulk Actions"
+							disabled={selectedIds.length === 0}
+							onChange={(value) => {
+								if (value) {
+									onApply(String(value));
+								}
+							}}
+						/>
+					</div>
+				)}
+
+				{/* Conditional CSV button */}
+				{onSelectCsvDownloadApply && (
+					<AdminButtonUI
+						buttons={{
+							text: 'CSV',
+							icon: 'download',
+							disabled: selectedIds.length === 0,
+							onClick: () => onSelectCsvDownloadApply(selectedIds),
+						}}
+					/>
+				)}
+			</div>
 		</div>
 	);
 };

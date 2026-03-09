@@ -50,9 +50,6 @@ const StoreSettings = ({
 	const [apiKey, setApiKey] = useState('');
 	const appLocalizer = (window as any).appLocalizer;
 	const { modules } = useModules();
-	// === ADD THESE STATES (replace old ones) ===
-	const [emails, setEmails] = useState<string[]>([]); // All emails
-	const [primaryEmail, setPrimaryEmail] = useState<string>(''); // Which one is starred
 	const settings = appLocalizer.settings_databases_value;
 	const [newAddress, setNewAddress] = useState<any>(null);
 
@@ -78,23 +75,6 @@ const StoreSettings = ({
 		applyLocation(resolvedLocation);
 		setNewAddress(null);
 	}, [stateOptions]);
-
-	// === LOAD EMAILS FROM BACKEND ===
-	useEffect(() => {
-		let parsedEmails = [];
-
-		try {
-			parsedEmails = data.emails ? JSON.parse(data.emails) : [];
-		} catch (e) {
-			console.error('Invalid email JSON', e);
-			parsedEmails = [];
-		}
-
-		if (Array.isArray(parsedEmails)) {
-			setEmails(parsedEmails);
-			setPrimaryEmail(data.primary_email || parsedEmails[0] || '');
-		}
-	}, [data]);
 
 	// === SAVE FUNCTION ===
 	const saveEmails = (emailList: string[], primary: string) => {
@@ -131,7 +111,7 @@ const StoreSettings = ({
 			setApiKey(settings.geolocation.mapbox_api_key || '');
 		}
 	}, [settings]);
-
+	
 	// Load store data
 	useEffect(() => {
 		if (!id || !appLocalizer) {
@@ -140,7 +120,12 @@ const StoreSettings = ({
 		}
 
 		// Set all form data
-		setFormData((prev) => ({ ...prev, ...data }));
+		setFormData((prev) => ({
+			...prev,
+			...data,
+			country_code: data.phone?.country_code || '',
+			phone: data.phone?.phone || '',
+		}));
 
 		// Set address-specific data
 		setAddressData({
@@ -189,11 +174,7 @@ const StoreSettings = ({
 		}
 	}, [location.state]);
 
-	const handleAddressChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		const { name, value } = e.target;
-
+	const handleAddressChange = (name, value) => {
 		const newAddressData = {
 			...addressData,
 			[name]: value,
@@ -230,38 +211,34 @@ const StoreSettings = ({
 	};
 
 	// Handle country select change (from old code)
-	const handleCountryChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) {
+	const handleCountryChange = (value) => {
+		if (!value) {
 			return;
 		}
 
 		const updated = {
 			...formData,
-			country: newValue.value,
-			state: '', // reset state when country changes
+			country: value,
+			state: '', 
 		};
 
 		setFormData(updated);
-		setAddressData((prev) => ({ ...prev, country: newValue.label }));
-
 		autoSave(updated);
-		fetchStatesByCountry(newValue.value);
+		fetchStatesByCountry(value);
 	};
 
 	// Handle state select change (from old code)
-	const handleStateChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) {
+	const handleStateChange = (value) => {
+		if (!value ) {
 			return;
 		}
 
 		const updated = {
 			...formData,
-			state: newValue.value,
+			state: value,
 		};
 
 		setFormData(updated);
-		setAddressData((prev) => ({ ...prev, state: newValue.label }));
-
 		autoSave(updated);
 	};
 
@@ -335,11 +312,16 @@ const StoreSettings = ({
 			return;
 		}
 
-		if (name === 'phone') {
-			const isValidPhone = /^[0-9]{6,15}$/.test(value);
+		if (name === 'phone' || name === 'country_code') {
+			const phoneData = {
+				country_code: updated.country_code,
+				phone: updated.phone,
+			};
 
-			if (isValidPhone || value === '') {
-				autoSave(updated);
+			const isValidPhone = /^[0-9]{6,15}$/.test(updated.phone);
+
+			if (isValidPhone || updated.phone === '') {
+				autoSave({ phone: phoneData });
 				setErrorMsg((prev) => ({ ...prev, phone: '' }));
 			} else {
 				setErrorMsg((prev) => ({
@@ -363,7 +345,7 @@ const StoreSettings = ({
 		const formattedData = { ...updatedData };
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: formattedData,
@@ -420,67 +402,69 @@ const StoreSettings = ({
 				<Column grid={8}>
 					{/* Contact Information */}
 					<Card title={__('Contact information', 'multivendorx')}>
-						<FormGroup
-							label={__('Store email(s)', 'multivendorx')}
-							desc={
-								<>
-									<b>{__('Tip:', 'multivendorx')}</b>
-									{__(
-										'You can add multiple email addresses. All added emails will receive notifications.',
-										'multivendorx'
-									)}
-									<br />
-									<b>
-										{__('Primary email:', 'multivendorx')}
-									</b>
-									{__(
-										'Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.',
-										'multivendorx'
-									)}
-								</>
-							}
-						>
-							<EmailsInput
-								value={emails}
-								primary={primaryEmail}
-								enablePrimary={true}
-								onChange={(list, primary) =>
-									saveEmails(list, primary)
+						<FormGroupWrapper>
+							<FormGroup
+								label={__('Store email(s)', 'multivendorx')}
+								desc={
+									<>
+										<b>{__('Tip:', 'multivendorx')}</b>
+										{__(
+											'You can add multiple email addresses. All added emails will receive notifications.',
+											'multivendorx'
+										)}
+										<br />
+										<b>
+											{__('Primary email:', 'multivendorx')}
+										</b>
+										{__(
+											'Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.',
+											'multivendorx'
+										)}
+									</>
 								}
-							/>
-						</FormGroup>
+							>
+								<EmailsInput
+									value={[data.emails]}
+									primary={data.primary_email}
+									enablePrimary={true}
+									onChange={(list, primary) => 
+										saveEmails(list, primary)
+									}
+								/>
+							</FormGroup>
 
-						<FormGroup label={__('Phone', 'multivendorx')}>
-							<SelectInputUI
-								type='single-select'
-								name="country_code"
-								value={formData.country_code}
-								options={CountryCodes}
-								onChange={(selected) => handleChange('country_code', selected)}
+							<FormGroup label={__('Phone', 'multivendorx')}>
+								<SelectInputUI
+									type='single-select'
+									name="country_code"
+									value={formData.country_code}
+									options={CountryCodes}
+									onChange={(selected) => handleChange('country_code', selected)}
+								/>
+								<BasicInputUI
+									name="phone"
+									type="number"
+									value={formData.phone}
+									onChange={(value) => handleChange('phone', value)}
+								/>
+								{errorMsg.phone && (
+									<p className="invalid-massage">
+										{errorMsg.phone}
+									</p>
+								)}
+							</FormGroup>
+							{/* Hidden coordinates */}
+							<input
+								type="hidden"
+								name="location_lat"
+								value={addressData.location_lat}
 							/>
-							<BasicInputUI
-								name="phone"
-								type="number"
-								value={formData.phone}
-								onChange={(value) => handleChange('phone', value)}
+							<input
+								type="hidden"
+								name="location_lng"
+								value={addressData.location_lng}
 							/>
-							{errorMsg.phone && (
-								<p className="invalid-massage">
-									{errorMsg.phone}
-								</p>
-							)}
-						</FormGroup>
-						{/* Hidden coordinates */}
-						<input
-							type="hidden"
-							name="location_lat"
-							value={addressData.location_lat}
-						/>
-						<input
-							type="hidden"
-							name="location_lng"
-							value={addressData.location_lng}
-						/>
+						</FormGroupWrapper>
 					</Card>
 					{/* Communication Address */}
 					<Card title={__('Communication address', 'multivendorx')}>
@@ -492,7 +476,7 @@ const StoreSettings = ({
 								<BasicInputUI
 									name="address"
 									value={addressData.address}
-									onChange={handleAddressChange}
+									onChange={(value) => handleAddressChange('address', value)}
 								/>
 							</FormGroup>
 
@@ -504,7 +488,7 @@ const StoreSettings = ({
 								<BasicInputUI
 									name="city"
 									value={addressData.city}
-									onChange={handleAddressChange}
+									onChange={(value) => handleAddressChange('city', value)}
 								/>
 							</FormGroup>
 							<FormGroup
@@ -515,7 +499,7 @@ const StoreSettings = ({
 								<BasicInputUI
 									name="zip"
 									value={addressData.zip}
-									onChange={handleAddressChange}
+									onChange={(value) => handleAddressChange('zip', value)}
 								/>
 							</FormGroup>
 
@@ -545,7 +529,9 @@ const StoreSettings = ({
 								/>
 							</FormGroup>
 							{/* Map Component */}
-							{renderMapComponent()}
+							<FormGroup>
+								{renderMapComponent()}
+							</FormGroup>
 						</FormGroupWrapper>
 						{/* Hidden coordinates */}
 						<input
@@ -583,9 +569,9 @@ const StoreSettings = ({
 										}
 										const updated = {
 											...formData,
-											status: newValue.value,
+											status: newValue,
 										};
-										onUpdate({ status: newValue.value });
+										onUpdate({ status: newValue });
 										setFormData(updated);
 										autoSave(updated);
 									}}
@@ -641,21 +627,20 @@ const StoreSettings = ({
 							'instagram',
 							'pinterest',
 						].map((network) => {
-							const iconClass = `adminfont-${network} ${network}`;
+							const iconClass = `${network} ${network}`;
 							const defaultUrl = `https://${network === 'twitter' ? 'x' : network}.com/`;
 
 							return (
 								<FormGroupWrapper>
-									<div className="form-group">
-										<label htmlFor={network}>
-											<i className={iconClass}></i>
-											{network === 'twitter'
+									<FormGroup 
+										icon={iconClass}
+										label={network === 'twitter'
 												? 'X'
 												: network
 													.charAt(0)
 													.toUpperCase() +
 												network.slice(1)}
-										</label>
+									>
 										<BasicInputUI
 											name={network}
 											value={
@@ -664,7 +649,7 @@ const StoreSettings = ({
 											}
 											onChange={(val) => handleChange(network, val)}
 										/>
-									</div>
+									</FormGroup>
 								</FormGroupWrapper>
 							);
 						})}

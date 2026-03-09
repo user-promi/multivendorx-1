@@ -1,0 +1,41 @@
+@use '../../global.scss' as *;
+
+.divider-section {
+  margin-top: 1rem;
+  //   width: 100%;
+  border-bottom: $border-light-small;
+  padding: 1rem 0 0.5rem;
+
+  .title {
+    font-size: 1.15rem;
+    line-height: 1.813rem;
+    width: auto;
+  }
+
+  .desc {
+    a {
+      color: $theme-color;
+    }
+  }
+
+  &.red .title {
+    color: $accent-color;
+  }
+
+  &.without-border {
+    border: none;
+  }
+
+  // background color like card header 
+  &.bg-color {
+    background: #f7f7f7;
+  }
+}
+
+.divider-section:first-child {
+  margin: 0;
+}
+
+.divider-section:not(:first-child) {
+  width: 100%;
+}

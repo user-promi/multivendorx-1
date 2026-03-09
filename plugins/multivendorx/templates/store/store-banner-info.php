@@ -11,6 +11,7 @@
  */
 
 use MultiVendorX\store\store;
+use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\StoreReview\Util;
 
 $store_id = $args['store_id'];
@@ -36,9 +37,6 @@ $review_count      = is_array( $reviews ) ? count( $reviews ) : 0;
 $banner_type       = $meta_data['banner_type'] ?? 'static_image';
 $banner_video      = $meta_data['banner_video'] ?? '';
 $banner_slider     = $meta_data['banner_slider'] ?? array();
-if ( is_string( $banner_slider ) ) {
-    $banner_slider = json_decode( $banner_slider, true ) ?: array();
-}
 
 ?>
 
@@ -159,7 +157,7 @@ if ( is_string( $banner_slider ) ) {
             <div class="container">
                 <div class="contact-details">
                     <?php if ( in_array( 'show_store_name', $branding_settings, true ) ) : ?>
-                        <div class="heading"><?php echo esc_html( $store_name ); ?></div>
+                        <h2><?php echo esc_html( $store_name ); ?></h2>
                     <?php endif; ?>
                     <div class="row">
                         <?php
@@ -170,7 +168,7 @@ if ( is_string( $banner_slider ) ) {
 
                         // Show phone if not hidden.
                         if ( in_array( 'show_store_phone', $contact_settings, true ) && ! empty( $meta_data['phone'] ) && ( $meta_data['hidePhone'] ?? 'no' ) === 'no' ) {
-                            echo '<div class="store-phone"> <i class="dashicons dashicons-phone"></i>' . esc_html( $meta_data['phone'] ) . '</div>';
+                            echo '<div class="store-phone"> <i class="dashicons dashicons-phone"></i>' . esc_html( StoreUtil::get_phone($meta_data['phone']) ) . '</div>';
                         }
                         ?>
                     </div>
@@ -194,7 +192,7 @@ if ( is_string( $banner_slider ) ) {
                         $rating_value > 0
                     ) :
                         ?>
-                       <div class="star-rating" role="img" aria-label="<?php echo sprintf( __( 'Rated %s out of 5', 'multivendorx' ), $rating_value ); ?>">
+                        <div class="star-rating" role="img" aria-label="<?php printf( __( 'Rated %s out of 5', 'multivendorx' ), $rating_value ); ?>">
                             <span style="width: <?php echo ( floatval( $rating_value ) / 5 ) * 100; ?>%;">
                                 <strong class="rating"><?php echo esc_html( $rating_value ); ?></strong> <?php esc_html_e( 'out of 5', 'multivendorx' ); ?>
                             </span>

@@ -271,6 +271,7 @@ const ApprovalQueue = () => {
 				`?page=multivendorx#&tab=approval-queue&subtab=${subTab}`
 			}
 			appLocalizer={appLocalizer}
+			menuIcon={true}
 			Link={Link}
 			variant={'card'}
 			headerIcon="approval"

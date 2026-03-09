@@ -2,59 +2,44 @@
 
 namespace MultiVendorX\Elementor\Widgets;
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 use Elementor\Widget_Heading;
 use Elementor\Controls_Manager;
 use MultiVendorX\Elementor\StoreHelper;
 
-class Store_Description extends Widget_Heading{
+class Store_Description extends Widget_Heading {
 
 	use StoreHelper;
 
-	public function get_name()
-	{
+	public function get_name() {
 		return 'multivendorx_store_description';
 	}
 
-	public function get_title()
-	{
-		return __('Store Description', 'multivendorx');
+	public function get_title() {
+		return __( 'Store Description', 'multivendorx' );
 	}
 
-	public function get_icon()
-	{
+	public function get_icon() {
 		return 'eicon-editor-paragraph';
 	}
 
-	public function get_categories()
-	{
-		return array('multivendorx');
+	public function get_categories() {
+		return array( 'multivendorx' );
 	}
 
-	protected function register_controls(){
+	protected function register_controls() {
 		parent::register_controls();
 
-		$this->update_control(
-			'title',
-			[
-				'label'   => __('Default Description', 'multivendorx'),
-				'type'    => Controls_Manager::TEXTAREA,
-				'default' => __('No store description available.', 'multivendorx'),
-				'dynamic' => [
-					'active' => true,
-				],
-			]
-		);
+		$this->remove_control( 'title' );
+		$this->remove_control( 'link' );
 
 		$this->update_control(
 			'header_size',
-			[
-				'default' => 'p', 
-			]
+			array(
+				'default' => 'p',
+			)
 		);
-
-		$this->remove_control('link');
 	}
 
 	protected function render() {
@@ -64,11 +49,9 @@ class Store_Description extends Widget_Heading{
 			return;
 		}
 
-		$settings = $this->get_settings_for_display();
-
 		$description = ! empty( $store['storeDescription'] )
 			? $store['storeDescription']
-			: ( $settings['empty_text'] ?? '' );
+			: __( 'No store description available.', 'multivendorx' );
 
 		if ( empty( $description ) ) {
 			return;

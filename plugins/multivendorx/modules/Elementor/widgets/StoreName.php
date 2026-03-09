@@ -18,7 +18,7 @@ class Store_Name extends Widget_Heading {
     }
 
     public function get_icon() {
-        return 'eicon-store';
+        return 'eicon-heading';
     }
 
     public function get_categories() {
@@ -35,21 +35,21 @@ class Store_Name extends Widget_Heading {
 
         $this->update_control(
             'title',
-            [
-                'dynamic' => [
+            array(
+                'dynamic' => array(
                     'default' => $dynamic_default,
-                ],
-            ],
-            [
+                ),
+            ),
+            array(
                 'recursive' => true,
-            ]
+            )
         );
 
         $this->update_control(
             'header_size',
-            [
+            array(
                 'default' => 'h1',
-            ]
+            )
         );
 
         $this->remove_control( 'link' );
@@ -62,7 +62,7 @@ class Store_Name extends Widget_Heading {
         }
 
         $settings = $this->get_settings_for_display();
-        
+
         // 5. Logic: Use the dynamic store name
         $name = ! empty( $store['storeName'] ) ? $store['storeName'] : $settings['title'];
 

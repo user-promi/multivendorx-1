@@ -185,7 +185,7 @@ const TableCard: React.FC<TableCardProps> = ({
 		<div className="admin-table-wrapper">
 			{/* HEADER */}
 			<div className="table-card-header">
-				<div className="table-card-title">{title}</div>
+				<div className="title">{title}</div>
 			</div>
 
 			{/* BODY */}
@@ -258,7 +258,7 @@ const TableCard: React.FC<TableCardProps> = ({
 			<Table
 				rows={rows}
 				headers={visibleHeaders}
-				caption={title}
+				// caption={title}
 				query={query}
 				onSort={
 					onSort ||
@@ -278,57 +278,55 @@ const TableCard: React.FC<TableCardProps> = ({
 				currency={currency}
 			/>
 			{/* pagination */}
-			<div className="admin-pagination">
-				{isLoading ? (
-					<Skeleton width="100%" />
-				) : (
-					<Fragment>
-						<Pagination
-							page={Number(query.paged)}
-							perPage={Number(query.per_page)}
-							total={derivedTotalRows}
-							onPageChange={onPageChange}
-							onPerPageChange={(perPage) =>
-								onQueryChange('per_page')(String(perPage))
-							}
-						/>
+			{derivedTotalRows > 0 && (
+				<div className="admin-pagination">
+					{isLoading ? (
+						<Skeleton width="100%" />
+					) : (
+						<Fragment>
+							<Pagination
+								page={Number(query.paged)}
+								perPage={Number(query.per_page)}
+								total={derivedTotalRows}
+								onPageChange={onPageChange}
+								onPerPageChange={(perPage) =>
+									onQueryChange('per_page')(String(perPage))
+								}
+							/>
 
-						{summary && <TableSummary data={summary} />}
-					</Fragment>
-				)}
-			</div>
-
-			<div className="admin-filter-wrapper">
-				<div className="admin-filter-wrapper">
-					{selectedIds.length <= 2 && filters.length > 0 && (
-						<RealtimeFilters
-							filters={filters}
-							query={query.filter || {}}
-							onFilterChange={onFilterChange}
-							rows={rows}
-							onResetFilters={() =>
-								setQuery((prev) => ({ ...prev, filter: {}, paged: 1 }))
-							}
-							format={format}
-						/>
-					)}
-
-					{selectedIds.length > 2 && (bulkActions.length > 0 || onSelectCsvDownloadApply) && (
-						<BulkActionDropdown
-							actions={bulkActions}
-							selectedIds={selectedIds}
-							onApply={handleBulkApply}
-							onClearSelection={() => setSelectedIds([])}
-							onSelectCsvDownloadApply={onSelectCsvDownloadApply}
-							totalIds={ids}
-							onToggleSelectAll={(select) =>
-								setSelectedIds(select ? [...ids] : [])
-							}
-							showDropdown={bulkActions.length > 0}
-						/>
+							{summary && <TableSummary data={summary} />}
+						</Fragment>
 					)}
 				</div>
-			</div>
+			)}
+			
+			{selectedIds.length <= 2 && filters.length > 0 && (
+				<RealtimeFilters
+					filters={filters}
+					query={query.filter || {}}
+					onFilterChange={onFilterChange}
+					rows={rows}
+					onResetFilters={() =>
+						setQuery((prev) => ({ ...prev, filter: {}, paged: 1 }))
+					}
+					format={format}
+				/>
+			)}
+
+			{selectedIds.length > 2 && (bulkActions.length > 0 || onSelectCsvDownloadApply) && (
+				<BulkActionDropdown
+					actions={bulkActions}
+					selectedIds={selectedIds}
+					onApply={handleBulkApply}
+					onClearSelection={() => setSelectedIds([])}
+					onSelectCsvDownloadApply={onSelectCsvDownloadApply}
+					totalIds={ids}
+					onToggleSelectAll={(select) =>
+						setSelectedIds(select ? [...ids] : [])
+					}
+					showDropdown={bulkActions.length > 0}
+				/>
+			)}
 		</div>
 	);
 };

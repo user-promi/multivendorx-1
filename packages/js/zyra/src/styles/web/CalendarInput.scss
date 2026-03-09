@@ -1,8 +1,10 @@
 @use '../../global.scss' as *;
 
 .settings-calender {
-    width: 100%;
     
+    &:has(.calendar-wrapper){
+        width: 100%;
+    }
     // without input calendar start
     .calendar-wrapper{
     .rmdp-top-class{
@@ -50,7 +52,7 @@
                         height: 6rem;
 
                         span.sd {
-                            border-radius: 0.313rem;
+                            border-radius: $border-radius-small;
                             font-size: 1.5rem;
 
                             &:hover {
@@ -79,7 +81,7 @@
                     height: 100%;
 
                     span.sd {
-                        border-radius: 0.313rem;
+                        border-radius: $border-radius-small;
                         font-size: 1.25rem;
                     }
 
