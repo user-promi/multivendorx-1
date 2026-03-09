@@ -133,6 +133,7 @@ interface TableCellProps {
 export const TableCell: React.FC<TableCellProps> = ({
     type,
     fieldKey,
+    rowKey,
     column,
     rowLabel,
     rowOptions,
@@ -162,7 +163,14 @@ export const TableCell: React.FC<TableCellProps> = ({
         key: fieldKey,
         type: type,
         label: column.label ?? rowLabel,
-        options: options,
+        options: options.length
+            ? options
+            : [
+                {
+                    value: rowKey,
+                    label: ''
+                }
+            ],
         maxVisibleItems: column.maxVisibleItems ?? 2,
         onOverflowClick: column.onOverflowClick,
         className: column.className,
@@ -175,12 +183,15 @@ export const TableCell: React.FC<TableCellProps> = ({
         <td key={fieldKey}>
             <Render
                 field={field}
-                value={value}
+                value={value ? [rowKey] : []}
                 modules={modules}
                 appLocalizer={appLocalizer}
                 onBlocked={onBlocked}
                 canAccess={!disabled}
-                onChange={(val: SettingValue) => onChange(fieldKey, val)}
+                onChange={(val: string[]) => {
+    const checked = val.includes(rowKey)
+    onChange(fieldKey, checked)
+}}
             />
         </td>
     );
