@@ -201,7 +201,7 @@ const StoreReview: React.FC<{}> = ({ }) => {
 													<div key={key} className="comment-form-rating">
 														<label>{label}</label>
 														
-														<p className="stars">
+														<p className={`stars ${ratings[key] ? 'selected' : ''}`}>
 															<span role="group">
 																{[5, 4, 3, 2, 1].map((num) => {
 																	const isSelected = ratings[key] === num;
