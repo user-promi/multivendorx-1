@@ -28,11 +28,8 @@ class WidgetLoader {
 			'StoreName'        => 'MultiVendorX\Elementor\Widgets\Store_Name',
 			'StoreDescription' => 'MultiVendorX\Elementor\Widgets\Store_Description',
 			'StoreBanner'      => 'MultiVendorX\Elementor\Widgets\Store_Banner',
-			'StoreChat'        => 'MultiVendorX\Elementor\Widgets\Store_Chat_Button',
-			'StoreGetSupport'  => 'MultiVendorX\Elementor\Widgets\Store_Get_Support',
 			'StoreInfo'        => 'MultiVendorX\Elementor\Widgets\Store_Info',
 			'StoreLogo'        => 'MultiVendorX\Elementor\Widgets\Store_Logo',
-			'StoreRating'      => 'MultiVendorX\Elementor\Widgets\Store_Rating',
 			'StoreSocial'      => 'MultiVendorX\Elementor\Widgets\Store_Social',
 			'StoreTab'         => 'MultiVendorX\Elementor\Widgets\Store_Tab',
 		);

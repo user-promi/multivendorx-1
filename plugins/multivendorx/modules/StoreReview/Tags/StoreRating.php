@@ -1,5 +1,5 @@
 <?php
-namespace MultiVendorX\Elementor\Tags;
+namespace MultiVendorX\StoreReview\Tags;
 
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
