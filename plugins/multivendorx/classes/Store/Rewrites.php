@@ -177,12 +177,12 @@ class Rewrites {
             // }
 
             // Path to plugin block template
-            $plugin_template = MultiVendorX()->plugin_path . 'templates/store/store.html';
+            // $plugin_template = MultiVendorX()->plugin_path . 'templates/store/store.html';
 
-            if ( file_exists( $plugin_template ) ) {
-                // Use a temporary PHP wrapper to render the block template
-                return MultiVendorX()->plugin_path . 'templates/store/store-wrapper.php';
-            }
+            // if ( file_exists( $plugin_template ) ) {
+            //     // Use a temporary PHP wrapper to render the block template
+            //     return MultiVendorX()->plugin_path . 'templates/store/store-wrapper.php';
+            // }
 
             // Classic PHP fallback
             return MultiVendorX()->plugin_path . 'templates/store/store.php';

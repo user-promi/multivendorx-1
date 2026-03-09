@@ -32,9 +32,8 @@ jQuery(document).ready(function ($) {
 						</span>
 					</div>`;
 
-					html += `<div class="total-number">${total} Rating${
-								total !== 1 ? 's' : ''
-							}</div>
+					html += `<div class="total-number">${total} Rating${total !== 1 ? 's' : ''
+						}</div>
                          </div>
                          <div class="rating-breakdown">`;
 
@@ -47,8 +46,7 @@ jQuery(document).ready(function ($) {
                         <div class="rating">
                             ${i} <i class="dashicons dashicons-star-filled"></i> 
                             <div class="bar"><span style="width:${percent}%;"></span></div> 
-                            <span>${count} Review${
-								count !== 1 ? 's' : ''
+                            <span>${count} Review${count !== 1 ? 's' : ''
 							}</span>
                         </div>`;
 					}
@@ -56,9 +54,8 @@ jQuery(document).ready(function ($) {
 					html += `</div></div><ul>`;
 
 					for (let p in data.averages) {
-						html += `<li><span>${
-							Math.round(data.averages[p] * 10) / 10
-						}</span> ${p}</li>`;
+						html += `<li><span>${Math.round(data.averages[p] * 10) / 10
+							}</span> ${p}</li>`;
 					}
 
 					html += `</ul></div>`;
@@ -102,12 +99,11 @@ jQuery(document).ready(function ($) {
 		if (!title || !content) {
 			$('#commentform').prepend(`
             <div class="woocommerce-error review-message">
-                ${
-					!title && !content
-						? 'Please enter both the Review Title and Review Content.'
-						: !title
-							? 'Please enter a Review Title.'
-							: 'Please enter your Review Content.'
+                ${!title && !content
+					? 'Please enter both the Review Title and Review Content.'
+					: !title
+						? 'Please enter a Review Title.'
+						: 'Please enter your Review Content.'
 				}
             </div>
         `);
@@ -181,62 +177,65 @@ jQuery(document).ready(function ($) {
 		});
 	});
 
-	// hover star
-	$('.rating i').on('mouseenter', function () {
-		var value = $(this).data('value');
-		var $rating = $(this).closest('.rating');
+	// Star hover
+	$(document).on('mouseenter', '.rating i', function () {
+		const value = $(this).data('value');
+		const $rating = $(this).closest('.rating');
 
-		$rating.find('i').each(function () {
-			// Change to 'dashicons dashicons-star-filled' on hover for the stars up to the hovered value, else 'dashicons dashicons-star-empty'
-			$(this).toggleClass(
-				'dashicons dashicons-star-filled',
-				$(this).data('value') <= value
-			);
-			$(this).toggleClass(
-				'dashicons dashicons-star-empty',
-				$(this).data('value') > value
-			);
-		});
-	});
-
-	$('.rating').on('mouseleave', function () {
-		var $rating = $(this);
-		$rating.find('i').each(function () {
-			// Reset back to 'dashicons dashicons-star-empty' after mouse leaves
-			if ($(this).data('value') > $rating.attr('data-selected')) {
-				$(this)
-					.removeClass('dashicons dashicons-star-filled')
-					.addClass('dashicons dashicons-star-empty');
-			} else {
-				$(this)
-					.addClass('dashicons dashicons-star-filled')
-					.removeClass('dashicons dashicons-star-empty');
-			}
-		});
-	});
-
-	$('.rating i').on('click', function () {
-		var value = $(this).data('value');
-		var $rating = $(this).closest('.rating');
-
-		// Set the selected rating value on click
-		$rating.attr('data-selected', value);
-
-		// Apply the 'dashicons dashicons-star-filled' class for the selected stars
 		$rating.find('i').each(function () {
 			if ($(this).data('value') <= value) {
 				$(this)
-					.addClass('dashicons dashicons-star-filled')
-					.removeClass('dashicons dashicons-star-empty');
+					.removeClass('dashicons-star-empty')
+					.addClass('dashicons-star-filled');
 			} else {
 				$(this)
-					.addClass('dashicons dashicons-star-empty')
-					.removeClass('dashicons dashicons-star-filled');
+					.removeClass('dashicons-star-filled')
+					.addClass('dashicons-star-empty');
+			}
+		});
+	});
+
+	// Reset stars when leaving
+	$(document).on('mouseleave', '.rating', function () {
+		const selected = $(this).attr('data-selected') || 0;
+		const $rating = $(this);
+
+		$rating.find('i').each(function () {
+			if ($(this).data('value') <= selected) {
+				$(this)
+					.removeClass('dashicons-star-empty')
+					.addClass('dashicons-star-filled');
+			} else {
+				$(this)
+					.removeClass('dashicons-star-filled')
+					.addClass('dashicons-star-empty');
+			}
+		});
+	});
+
+	// Star click (selection)
+	$(document).on('click', '.rating i', function () {
+		const value = $(this).data('value');
+		const $rating = $(this).closest('.rating');
+
+		// store selected value
+		$rating.attr('data-selected', value);
+
+		// update UI
+		$rating.find('i').each(function () {
+			if ($(this).data('value') <= value) {
+				$(this)
+					.removeClass('dashicons-star-empty')
+					.addClass('dashicons-star-filled');
+			} else {
+				$(this)
+					.removeClass('dashicons-star-filled')
+					.addClass('dashicons-star-empty');
 			}
 		});
 
-		// Update hidden input value to match the selected rating
-		$rating.find('input[type="hidden"]').val(value);
+		// update hidden field
+		$rating.find('.multivendorx-rating-select').val(value);
 	});
 
 	$(document).on('click', '#write-review-btn', function () {
