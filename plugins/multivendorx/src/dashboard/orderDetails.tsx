@@ -19,29 +19,7 @@ import {
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 import { useParams, useNavigate } from 'react-router-dom';
-
-const buildPath = (segments: string[]): string =>
-	`/${segments.filter(Boolean).join('/')}`;
-
-const sanitize = (value: string) =>
-	value.replace(/[^a-zA-Z0-9_-]/g, '');
-
-const updatePlainPermalinkUrl = (segments: string[]) => {
-	const [segment = '', element = '', context_id = ''] = segments;
-
-	const params = new URLSearchParams({
-		page_id: appLocalizer.dashboard_page_id,
-		segment: sanitize(segment),
-		...(element ? { element: sanitize(element) } : {}),
-		...(context_id ? { context_id: sanitize(context_id) } : {}),
-	});
-
-	window.history.pushState(
-		{},
-		'',
-		`${window.location.pathname}?${params.toString()}`
-	);
-};
+import { dashNavigate } from '../services/commonFunction';
 
 const OrderDetails: React.FC = () => {
 	const [isRefundLoading, setIsRefundLoading] = useState(false);
@@ -76,16 +54,6 @@ const OrderDetails: React.FC = () => {
 		appLocalizer.settings_databases_value['shipping'].shipping_providers;
 
 	const navigate = useNavigate();
-
-	// dashNavigate — single helper for all navigation (pretty + plain)
-	const dashNavigate = (segments: string[]) => {
-		const path = buildPath(segments);
-		if (!appLocalizer.permalink_structure) {
-			updatePlainPermalinkUrl(segments);
-		}
-		navigate(path);
-	};
-
 
 	// const filteredShippingProviders = shipping_providers_options.filter(
 	// 	(option) => selected_shipping_providers.includes(option.value)
@@ -439,6 +407,7 @@ const OrderDetails: React.FC = () => {
 									<div className="status-edit">
 										<SelectInputUI
 											name="status"
+											type="single-select"
 											options={[
 												{ label: __('Processing', 'multivendorx'), value: 'processing' },
 												{ label: __('On Hold', 'multivendorx'), value: 'on-hold' },
@@ -461,7 +430,7 @@ const OrderDetails: React.FC = () => {
 							{
 								label: __('Back to Orders', 'multivendorx'),
 								icon: 'arrow-right',
-								onClick: () => dashNavigate(['orders']),
+								onClick: () => dashNavigate(navigate, ['orders']),
 							},
 						]}
 					/>

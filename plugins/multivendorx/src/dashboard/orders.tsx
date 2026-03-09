@@ -15,30 +15,9 @@ import {
 	downloadCSV,
 	formatLocalDate,
 	toWcIsoDate,
+	dashNavigate
 } from '../services/commonFunction';
 
-const buildPath = (segments: string[]): string =>
-	`/${segments.filter(Boolean).join('/')}`;
-
-const sanitize = (value: string) =>
-	value.replace(/[^a-zA-Z0-9_-]/g, '');
-
-const updatePlainPermalinkUrl = (segments: string[]) => {
-	const [segment = '', element = '', context_id = ''] = segments;
-
-	const params = new URLSearchParams({
-		page_id: appLocalizer.dashboard_page_id,
-		segment: sanitize(segment),
-		...(element ? { element: sanitize(element) } : {}),
-		...(context_id ? { context_id: sanitize(context_id) } : {}),
-	});
-
-	window.history.pushState(
-		{},
-		'',
-		`${window.location.pathname}?${params.toString()}`
-	);
-};
 
 const Orders: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -53,18 +32,7 @@ const Orders: React.FC = () => {
 	const { modules } = useModules();
 	const location = useLocation();
 	const navigate = useNavigate();
-
-	// dashNavigate — single helper for all navigation (pretty + plain)
-	const dashNavigate = (segments: string[]) => {
-		const path = buildPath(segments);
-		if (!appLocalizer.permalink_structure) {
-			updatePlainPermalinkUrl(segments);
-		}
-		navigate(path);
-	};
-
 	const hash = location.hash.replace(/^#/, '') || '';
-
 
 	const exportAllOrders = () => {
 		let allOrders: any[] = [];
@@ -260,7 +228,7 @@ const Orders: React.FC = () => {
 							label: __('View', 'multivendorx'),
 							icon: 'eye',
 							onClick: (row) => {
-								dashNavigate(['orders', 'view', String(row.id)]);
+								dashNavigate(navigate, ['orders', 'view', String(row.id)]);
 							},
 						},
 					]
@@ -441,7 +409,7 @@ const Orders: React.FC = () => {
 								label: __('Add New', 'multivendorx'),
 								icon: 'plus',
 								onClick: () => {
-									dashNavigate(['orders', 'add']);
+									dashNavigate(navigate, ['orders', 'add']);
 								},
 							}
 						]}

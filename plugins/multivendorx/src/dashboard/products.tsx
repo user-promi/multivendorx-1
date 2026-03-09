@@ -11,31 +11,8 @@ import {
 } from 'zyra';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { toWcIsoDate } from '../services/commonFunction';
+import { toWcIsoDate, dashNavigate } from '../services/commonFunction';
 import { applyFilters } from '@wordpress/hooks';
-
-const buildPath = (segments: string[]): string =>
-	`/${segments.filter(Boolean).join('/')}`;
-
-const sanitize = (value: string) =>
-	value.replace(/[^a-zA-Z0-9_-]/g, '');
-
-const updatePlainPermalinkUrl = (segments: string[]) => {
-	const [segment = '', element = '', context_id = ''] = segments;
-
-	const params = new URLSearchParams({
-		page_id: appLocalizer.dashboard_page_id,
-		segment: sanitize(segment),
-		...(element ? { element: sanitize(element) } : {}),
-		...(context_id ? { context_id: sanitize(context_id) } : {}),
-	});
-
-	window.history.pushState(
-		{},
-		'',
-		`${window.location.pathname}?${params.toString()}`
-	);
-};
 
 const STATUS_LABELS: Record<string, string> = {
 	all: __('All', 'multivendorx'),
@@ -58,15 +35,6 @@ const AllProduct: React.FC = () => {
 	const { modules } = useModules();
 	const navigate = useNavigate();
 
-	// dashNavigate — single helper for all navigation (pretty + plain)
-	const dashNavigate = (segments: string[]) => {
-		const path = buildPath(segments);
-		if (!appLocalizer.permalink_structure) {
-			updatePlainPermalinkUrl(segments);
-		}
-		navigate(path);
-	};
-
 	const createAutoDraftProduct = () => {
 		axios
 			.post(
@@ -80,7 +48,7 @@ const AllProduct: React.FC = () => {
 
 	useEffect(() => {
 		if (!newProductId) return;
-		dashNavigate(['products', 'edit', String(newProductId)]);
+		dashNavigate(navigate, ['products', 'edit', String(newProductId)]);
 	}, [newProductId]);
 
 	const fetchCategories = async () => {
@@ -339,7 +307,7 @@ const AllProduct: React.FC = () => {
 						label: __('Edit', 'multivendorx'),
 						icon: 'edit',
 						onClick: (row: any) =>
-							dashNavigate(['products', 'edit', String(row.id)]),
+							dashNavigate(navigate, ['products', 'edit', String(row.id)]),
 					},
 					{
 						label: __('View', 'multivendorx'),
@@ -381,7 +349,7 @@ const AllProduct: React.FC = () => {
 							icon: 'plus',
 							onClick: () => {
 								if (modules.includes('shared-listing')) {
-									dashNavigate(['products', 'add']);
+									dashNavigate(navigate, ['products', 'add']);
 								} else {
 									createAutoDraftProduct();
 								}
@@ -389,7 +357,8 @@ const AllProduct: React.FC = () => {
 						},
 					],
 					modules,
-					dashNavigate
+					dashNavigate,
+					navigate
 				)}
 			/>
 
