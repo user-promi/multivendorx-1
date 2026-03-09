@@ -200,7 +200,7 @@ const updatePlainPermalinkUrl = (segments: string[]) => {
 export const dashNavigate = (navigate: any, segments: string[]) => {
 	const ALLOWED_SEGMENTS = ['products', 'orders', 'dashboard'];
 
-	if (!ALLOWED_SEGMENTS.includes(segments)) {
+	if (!ALLOWED_SEGMENTS.includes(segments[0])) {
 		return;
 	}
 
