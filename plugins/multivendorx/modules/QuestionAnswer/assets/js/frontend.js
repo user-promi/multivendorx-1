@@ -35,13 +35,18 @@ jQuery(document).ready(function ($) {
 			function (res) {
 				if (res.success) {
 					$('#qna-search').val('');
+
+					// Hide "no results" message immediately
+					$('#qna-no-results-container').hide();
+
+					// Show success message
 					$('#qna-success-message')
 						.fadeIn()
 						.delay(2000)
 						.fadeOut(function () {
+							// Reload questions after fade out
 							loadQuestions('');
 							$btn.prop('disabled', false).text('Ask now');
-							$('#qna-direct-submit-wrapper').hide();
 						});
 				} else {
 					alert(res.data.message);
@@ -50,7 +55,6 @@ jQuery(document).ready(function ($) {
 			}
 		);
 	});
-
 	function loadQuestions(search) {
 		$.post(
 			qnaFrontend.ajaxurl,

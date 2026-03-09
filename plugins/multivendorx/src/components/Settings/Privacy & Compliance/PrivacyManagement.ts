@@ -19,7 +19,6 @@ export default {
 				'Decide which details appear with products and on store pages.',
 				'multivendorx'
 			),
-
 			moduleEnabled: 'privacy',
 			options: [
 				{
@@ -30,6 +29,7 @@ export default {
 						'multivendorx'
 					),
 					value: 'show_store_name',
+					dependents: ['show_store_logo_next_to_products', 'show_store_description', 'show_store_ratings'],
 				},
 				{
 					key: 'show_store_logo_next_to_products',

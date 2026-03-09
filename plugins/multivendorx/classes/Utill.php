@@ -219,6 +219,8 @@ class Utill {
         'distance_rules'               => 'distance_rules',
         'shipping_options'             => 'shipping_options',
         'distance_type'                => 'distance_type',
+        'shipping_by_country'          => 'shipping_by_country',
+        'shipping_by_distance'         => 'shipping_by_distance',
     );
 
     const USER_SETTINGS_KEYS = array(
