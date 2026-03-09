@@ -86,8 +86,20 @@ const extractValue = (
         : (raw as SingleValue<SelectOption>)?.value ?? '';
 
 const coerceToString = (v: unknown): string | string[] | undefined => {
-    if (Array.isArray(v)) return v.map(String);
-    if (v != null && v !== '') return String(v);
+    if (Array.isArray(v)) {
+
+        // Handle Option[]
+        if (v.length && typeof v[0] === 'object' && 'value' in v[0]) {
+            return (v as any[]).map(o => String(o.value));
+        }
+
+        return v.map(String);
+    }
+
+    if (v != null && v !== '') {
+        return String(v);
+    }
+
     return undefined;
 };
 

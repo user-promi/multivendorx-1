@@ -232,10 +232,18 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                             group={{ name: groupName, pull: 'clone', put: false }}
                             className="section-container open"
                         >
-                            {palette.map(({ id: bid, icon: bIcon, label: bLabel, value }) => (
-                                <div key={bid || value} className="elements-items">
-                                    <i className={`adminfont-${bIcon}`} />
-                                    <p className="elements-name">{value}</p>
+                            {palette.map((item) => (
+                                <div
+                                    key={item.id || item.value}
+                                    className="elements-items"
+                                    onClick={() => {
+                                        if (proSettingChange()) return;
+                                        setBlocks(prev => [...prev, createBlock(item, context)]);
+                                        markChanged();
+                                    }}
+                                >
+                                    <i className={`adminfont-${item.icon}`} />
+                                    <p className="elements-name">{item.value}</p>
                                 </div>
                             ))}
                         </ReactSortable>
