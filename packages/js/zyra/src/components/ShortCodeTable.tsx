@@ -27,11 +27,13 @@ interface ShortCodeTableProps {
 }
 
 const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
-    const { options, icon } = props;
+    const { options, icon, optionLabel } = props;
 
     const handleCopy = ( text: string ) => {
         navigator.clipboard.writeText( text );
     };
+
+    const headers = optionLabel ;
 
     return (
         <>
@@ -63,10 +65,9 @@ const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
                                 option.arguments.length > 0 && (
                                     <thead>
                                         <tr>
-                                            <th>Attribute</th>
-                                            <th>What it controls</th>
-                                            <th>Available options</th>
-                                            <th>Example</th>
+                                            {headers.map((header, idx) => (
+                                                <th key={idx}>{header}</th>
+                                            ))}
                                         </tr>
                                     </thead>
                                 ) }
@@ -85,7 +86,7 @@ const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
                                     ) )
                                 ) : (
                                     <tr>
-                                        <td colSpan={ 4 } className="no-args">
+                                        <td colSpan={ headers.length } className="no-args">
                                             No arguments required
                                         </td>
                                     </tr>
