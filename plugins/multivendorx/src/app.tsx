@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { applyFilters } from '@wordpress/hooks';
+import { applyFilters, hasFilter } from '@wordpress/hooks';
 import {
 	AdminButtonUI,
 	AdminHeader,
@@ -46,6 +46,29 @@ localStorage.setItem('force_multivendorx_context_reload', 'true');
 const Route = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const [ready, setReady] = useState(false);
+
+	useEffect(() => {
+		const checkFilter = () => {
+			if (
+				hasFilter(
+					'multivendorx_admin_submenu_render',
+					'multivendorx-pro/add-pro-route'
+				)
+			) {
+				setReady(true);
+			} else {
+				setTimeout(checkFilter, 50);
+			}
+		};
+
+		checkFilter();
+	}, []);
+
+	if (!ready) {
+		return null;
+	}
+
 	const currentTab = new URLSearchParams(useLocation().hash);
 	const tab = currentTab.get('tab') || 'dashboard';
 
