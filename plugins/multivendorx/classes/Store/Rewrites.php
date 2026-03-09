@@ -170,11 +170,11 @@ class Rewrites {
         $store_name = get_query_var( $this->custom_store_url );
 
         if ( ! empty( $store_name ) ) {
-            // $filtered_template = apply_filters( 'multivendorx_store_elementor_template', '' );
+            $filtered_template = apply_filters( 'multivendorx_store_elementor_template', '' );
 
-            // if ( $filtered_template && file_exists( $filtered_template ) ) {
-            //     return $filtered_template;
-            // }
+            if ( $filtered_template && file_exists( $filtered_template ) ) {
+                return $filtered_template;
+            }
 
             // Path to plugin block template
             $plugin_template = MultiVendorX()->plugin_path . 'templates/store/store.html';
