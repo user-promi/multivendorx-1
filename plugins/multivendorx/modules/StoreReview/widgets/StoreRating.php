@@ -1,5 +1,5 @@
 <?php
-namespace MultiVendorX\Elementor\Widgets;
+namespace MultiVendorX\StoreReview\Widgets;
 
 defined( 'ABSPATH' ) || exit;
 

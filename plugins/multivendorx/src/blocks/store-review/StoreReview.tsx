@@ -57,7 +57,7 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 		<div className="multivendorx-review-list-wrapper woocommerce">
 			{reviews.length > 0 && (
 				<>
-				<h3>{__('Product Review', 'multivendorx')}</h3>
+				<h3>{__('Store Review', 'multivendorx')}</h3>
 				<div id="reviews" className="woocommerce-Reviews">
 					<div id="comments">					
 							<ol className="commentlist">

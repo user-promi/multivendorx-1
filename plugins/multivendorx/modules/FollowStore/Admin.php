@@ -1,5 +1,5 @@
 <?php
-namespace MultiVendorX\StoreReview;
+namespace MultiVendorX\FollowStore;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,13 +14,13 @@ class Admin {
     }
 
     public function add_follow_store_widget( $widgets, $widgets_manager ) {
-        $widgets['StoreRating'] = 'MultiVendorX\StoreReview\Widgets\Store_Rating';
+        $widgets['StoreFollow'] = 'MultiVendorX\FollowStore\Widgets\Store_Follow_Button';
         return $widgets;
     }
 
     public function override_follow_store_path( $path, $file, $class ) {
-        if ( $file === 'StoreRating' ) {
-            $path = MultiVendorX()->plugin_path . 'modules/StoreReview/widgets/' . $file . '.php';
+        if ( $file === 'StoreFollow' ) {
+            $path = MultiVendorX()->plugin_path . 'modules/FollowStore/widgets/' . $file . '.php';
         }
         return $path;
     }
@@ -32,7 +32,7 @@ class Admin {
      * @return array Modified tag files
      */
     public function add_follow_store_tags( $tag_files ) {
-        $follow_tags_path = MultiVendorX()->plugin_path . 'modules/StoreReview/Tags/';
+        $follow_tags_path = MultiVendorX()->plugin_path . 'modules/FollowStore/Tags/';
 
         if ( is_dir( $follow_tags_path ) ) {
             foreach ( glob( $follow_tags_path . '*.php' ) as $file ) {
@@ -52,8 +52,8 @@ class Admin {
      * @return string Modified class namespace
      */
     public function override_follow_store_tag_class( $full_class, $class_name, $file ) {
-        if ( strpos( $file, 'StoreRating' ) !== false ) {
-            $full_class = '\\MultiVendorX\\StoreReview\\Tags\\' . $class_name;
+        if ( strpos( $file, 'StoreFollow' ) !== false ) {
+            $full_class = '\\MultiVendorX\\FollowStore\\Tags\\' . $class_name;
         }
         return $full_class;
     }
