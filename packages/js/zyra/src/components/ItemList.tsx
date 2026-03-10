@@ -63,7 +63,7 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({items, background, border
                                 {item.img && <img src={item.img} alt={item.title || 'item image'} />}
 
                                 <div className="details">
-                                    <div>{item.title}</div>
+                                    <div className="item-title">{item.title}</div>
                                     {item.value && <div className="value">{item.value}</div>}
                                     {item.desc && <div className="desc">{item.desc}</div>}
                                 </div>

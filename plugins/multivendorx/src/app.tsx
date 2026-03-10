@@ -146,37 +146,37 @@ const App = () => {
 	const profileItems = [
 		{
 			title: __("What's New", 'multivendorx'),
-			icon: 'adminfont-new',
+			icon: 'new',
 			link: 'https://multivendorx.com/latest-release/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion',
 			targetBlank: true,
 		},
 		{
 			title: __('Get Support', 'multivendorx'),
-			icon: 'adminfont-customer-support',
+			icon: 'customer-support',
 			link: 'https://multivendorx.com/support-forum/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion',
 			targetBlank: true,
 		},
 		{
 			title: __('Community', 'multivendorx'),
-			icon: 'adminfont-global-community',
+			icon: 'global-community',
 			link: 'https://multivendorx.com/community/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion',
 			targetBlank: true,
 		},
 		{
 			title: __('Documentation', 'multivendorx'),
-			icon: 'adminfont-book',
+			icon: 'book',
 			link: 'https://multivendorx.com/docs/knowledgebase/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion',
 			targetBlank: true,
 		},
 		{
 			title: __('Request a Feature', 'multivendorx'),
-			icon: 'adminfont-blocks',
+			icon: 'blocks',
 			link: 'https://github.com/multivendorx/multivendorx/issues',
 			targetBlank: true,
 		},
 		{
 			title: __('Import Dummy Data', 'multivendorx'),
-			icon: 'adminfont-import',
+			icon: 'import',
 			action: handleOpenFeaturePopup,
 		},
 	];
@@ -264,23 +264,6 @@ const App = () => {
 						'multivendorx'
 					),
 				}}
-				footer={
-					<AdminButtonUI
-						buttons={[
-							{
-								icon: 'close',
-								text: __('Cancel', 'multivendorx'),
-								color: 'red',
-								// onClick: handleCloseForm,
-							},
-							{
-								icon: 'save',
-								text: __('Save', 'multivendorx'),
-								// onClick: () => handleSubmit(formData.status || 'draft'),
-							},
-						]}
-					/>
-				}
 			>
 				<FormGroupWrapper>
 					<FormGroup
@@ -427,7 +410,6 @@ const App = () => {
 				message={bannerItem}
 				actionLabel="Upgrade Now"
 				onAction={() => handleDismissBanner()}
-				validity={5000}
 			/>
 			<Route />
 		</>

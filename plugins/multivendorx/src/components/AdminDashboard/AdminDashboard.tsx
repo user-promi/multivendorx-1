@@ -23,20 +23,21 @@ const AdminDashboard = () => {
 		{
 			key: 'dashboard',
 			label: __('Dashboard', 'multivendorx'),
+			icon: 'module',
 			content: <DashboardTab />,
 		},
 		{
 			key: 'free-vs-pro',
 			pro: true,
 			label: __('Free vs Pro', 'multivendorx'),
-			icon: 'adminfont-pros-and-cons',
+			icon: 'pros-and-cons',
 			content: <FreeVsProTab />,
 		},
 	].filter(tab => !(appLocalizer?.khali_dabba && tab.pro));
 
 
 	return (
-		<TabsUI tabs={tabs} headerExtra={upgradeButton} />
+		<TabsUI tabs={tabs} className="background" headerExtra={upgradeButton} />
 	);
 };
 

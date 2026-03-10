@@ -31,6 +31,9 @@
 .title-section {
   display: flex;
   justify-content: space-between;
+  margin: 0 1rem;
+  padding: 1.5rem 1.5rem .5rem 0;
+  border-bottom: $border-light-small;
 
   .title-wrapper {
     margin-bottom: 0;
@@ -39,7 +42,7 @@
       font-size: 1.4rem;
       color: $text-color;
       display: flex;
-      justify-content: space-between;
+      align-items: center;
       font-weight: 500;
 
       i {
@@ -443,6 +446,12 @@
       line-height: 1.5rem;
     }
   }
+
+  &.background {
+    background: $background-white;
+    padding: 1rem;
+    border-radius: $border-radius-small;
+  }
 }
 
 .tab-title {
@@ -513,28 +522,6 @@
   .divider-section {
     display: none;
   }
-}
-
-.tabs-wrapper {
-  .brand {
-    padding: 2rem 0 1.5rem;
-    width: fit-content;
-    margin: 0 auto;
-
-    img.logo {
-      width: 10.25rem;
-    }
-
-    .logo-small {
-      display: none; // Hide for desktop
-    }
-
-    p {
-      text-align: end;
-      margin: 0;
-    }
-  }
-
 }
 
 .tabs-item {
@@ -653,10 +640,11 @@
       }
     }
   }
-}
 
-.title-section {
-  margin: 0 1rem;
-  padding: 1.5rem 1.5rem .5rem 0;
-  border-bottom: $border-light-small;
+  &.background {
+    background: $background-white;
+    border: none;
+    border-radius: $border-radius-small;
+    padding: 1rem;
+  }
 }
