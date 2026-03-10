@@ -8,11 +8,6 @@ import { FIELD_REGISTRY } from './FieldRegistry';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface Option {
-    value: string | number;
-    label: string;
-}
-
 export type SettingValue = string[] | boolean;
 export type BatchChanges = Record<string, SettingValue>;
 type FieldSetting = Record<string, SettingValue>;
@@ -158,15 +153,12 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         column: Column,
         rowKey: string,
         rowLabel: string,
-        rowOptions: Option[] | undefined,
         isRowActive: boolean,
     ) => {
 
         const fieldKey = `${column.key}_${rowKey}`
 
-        const type =
-            column.type ??
-            (rowOptions?.length ? 'select' : 'setting-toggle')
+        const type = column.type
 
         if (column.fields) {
             return (
