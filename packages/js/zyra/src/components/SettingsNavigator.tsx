@@ -67,7 +67,7 @@ interface NavigatorHeaderProps {
     headerDescription?: string;
     showPremiumLink?: string;
     buttons?: button[];
-    headerCustomContent?: React.ReactNode; 
+    headerCustomContent?: React.ReactNode;
 }
 
 export const NavigatorHeader: React.FC<NavigatorHeaderProps> = ({
@@ -87,32 +87,31 @@ export const NavigatorHeader: React.FC<NavigatorHeaderProps> = ({
                     {headerIcon && <i className={`adminfont-${headerIcon}`}></i>}
                     {headerTitle}
                 </div>
-
-                {showPremiumLink && (
-                    <a href={showPremiumLink} className="tab pro-btn">
-                        <i className="adminfont-pro-tag"></i>
-                        Upgrade
-                        <i className="adminfont-arrow-right"></i>
-                    </a>
+                {headerDescription && (
+                    <div className="description">
+                        {headerDescription}
+                    </div>
                 )}
-                {buttons.length > 0 && (
-                    <AdminButtonUI
-                        buttons={buttons.map((button) => ({
-                            text: button.label,
-                            icon: button.icon,
-                            color: button.color,
-                            onClick: button.onClick,
-                        }))}
-                    />
-                )}
-                {headerCustomContent && ( headerCustomContent )}
             </div>
-
-            {headerDescription && (
-                <div className="description">
-                    {headerDescription}
-                </div>
+            
+            {showPremiumLink && (
+                <a href={showPremiumLink} className="tab pro-btn">
+                    <i className="adminfont-pro-tag"></i>
+                    Upgrade
+                    <i className="adminfont-arrow-right"></i>
+                </a>
             )}
+            {buttons.length > 0 && (
+                <AdminButtonUI
+                    buttons={buttons.map((button) => ({
+                        text: button.label,
+                        icon: button.icon,
+                        color: button.color,
+                        onClick: button.onClick,
+                    }))}
+                />
+            )}
+            {headerCustomContent && (headerCustomContent)}
         </div>
     );
 };
@@ -171,7 +170,7 @@ const isFolder = (item: SettingContent): item is SettingContent & { content: Set
 
 const SettingsNavigator: React.FC<SettingsNavigatorProps> = ({
     settingContent,
-    className,
+    className = '',
     currentSetting,
     getForm,
     prepareUrl,

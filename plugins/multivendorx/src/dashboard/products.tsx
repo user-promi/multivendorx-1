@@ -323,7 +323,7 @@ const AllProduct: React.FC = () => {
 					},
 					{
 						label: __('Delete', 'multivendorx'),
-						icon: 'adminfont-delete delete',
+						icon: 'delete delete',
 						onClick: (row: any) => handleDelete(row.id),
 					},
 				],

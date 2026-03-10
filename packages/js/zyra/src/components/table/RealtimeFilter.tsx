@@ -36,14 +36,14 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
     );
 
     const getDefaultDateRange = (): CalendarRange => {
-		const start = new Date();
-		start.setMonth(start.getMonth() - 1);
+        const start = new Date();
+        start.setMonth(start.getMonth() - 1);
 
-		return {
-			startDate: start,
-			endDate: new Date(),
-		};
-	};
+        return {
+            startDate: start,
+            endDate: new Date(),
+        };
+    };
 
     return (
         <div className="table-filter-wrapper">
@@ -60,21 +60,21 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
                         const range =
                             (value as CalendarRange) || getDefaultDateRange();
                         return (
-                        <div key={filter.key} className="group-field">
-                            <CalendarInputUI
-                            value={range}
-                            onChange={(newRange) => {
-                                onFilterChange(filter.key, newRange as { startDate: Date; endDate: Date });
-                            }}
-                            format={format}
-                            />
-                        </div>
+                            <div key={filter.key} className="group-field">
+                                <CalendarInputUI
+                                    value={range}
+                                    onChange={(newRange) => {
+                                        onFilterChange(filter.key, newRange as { startDate: Date; endDate: Date });
+                                    }}
+                                    format={format}
+                                />
+                            </div>
                         );
-                    }                  
+                    }
 
-                    const options = filter.options?.map((opt) => ({ 
-                        label: opt.label, 
-                        value: String(opt.value) 
+                    const options = filter.options?.map((opt) => ({
+                        label: opt.label,
+                        value: String(opt.value)
                     })) || [];
 
                     return (
@@ -91,19 +91,17 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
                         </div>
                     );
                 })}
-
-                {showResetButton && (
-                    <div className="reset-btn">
-                        <AdminButtonUI
-                            buttons={{
-                                text: "Reset",
-                                icon: "refresh",
-                                onClick: onResetFilters,
-                            }}
-                        />
-                    </div>
-                )}
             </div>
+            {showResetButton && (
+                <AdminButtonUI
+                    buttons={{
+                        text: "Reset",
+                        icon: "refresh",
+                        color: 'red',
+                        onClick: onResetFilters,
+                    }}
+                />
+            )}
         </div>
     );
 };

@@ -78,6 +78,7 @@ const ViewNotifications = (React.FC = () => {
 				currentSetting={currentTab}
 				getForm={getForm}
 				prepareUrl={prepareUrl}
+				menuIcon={true}
 				appLocalizer={appLocalizer}
 				settingName="Settings"
 				variant={'compact'}

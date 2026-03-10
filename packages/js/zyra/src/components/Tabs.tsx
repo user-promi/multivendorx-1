@@ -11,6 +11,7 @@ interface TabFooter {
 interface Tab {
     label: string;
     content?: React.ReactNode;
+    icon?: string;
     footer?: TabFooter;
     type?: string;
     value?: any;
@@ -19,6 +20,7 @@ interface Tab {
 
 interface TabsProps {
     tabs: Tab[];
+    className: string;
     defaultActiveIndex?: number;
     value?: any;
     onChange?: (value: any) => void;
@@ -29,6 +31,7 @@ interface TabsProps {
 export const TabsUI: React.FC<TabsProps> = ({
     tabs,
     defaultActiveIndex = 0,
+    className = '',
     value,
     onChange,
     canAccess,
@@ -143,7 +146,7 @@ export const TabsUI: React.FC<TabsProps> = ({
 
     return (
         <>
-            <div className="tabs-wrapper">
+            <div className={`tabs-wrapper ${className}`}>
                 <div className="tabs-item">
                     {tabs.map((tab, index) => (
                         <div
@@ -151,7 +154,10 @@ export const TabsUI: React.FC<TabsProps> = ({
                             className={`tab ${index === activeIndex ? 'active-tab' : ''}`}
                             onClick={() => setActiveIndex(index)}
                         >
-                            <span className="tab-name">{tab.label}</span>
+                            <span className="tab-name">
+                                {tab.icon && (<i className={`adminfont-${tab.icon}`} />)}
+                                {tab.label}
+                            </span>
                         </div>
                     ))}
                 </div>
