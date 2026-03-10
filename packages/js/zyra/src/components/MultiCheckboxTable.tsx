@@ -34,7 +34,7 @@ export interface Column {
 
 // ── Toggle ────────────────────────────────────────────────────────────────────
 
-export interface ToggleConfig {
+export interface TableControl {
     key: string;
     label: string;
     icon?: string;
@@ -64,7 +64,7 @@ type GroupedRows = Record<string, CapabilityGroup>;
 export interface MultiCheckboxTableUIProps {
     rows: Row[] | GroupedRows;
     columns: Column[];
-    toggles?: ToggleConfig[];
+    toggles?: TableControl[];
     setting: FieldSetting;
     onChange: (subKeyOrBatch: string | BatchChanges, value?: SettingValue) => void;
     proSetting?: boolean;
@@ -77,10 +77,10 @@ export interface MultiCheckboxTableUIProps {
     appLocalizer?: any; // ✅ FIX
 }
 
-// ─── InlineToggleBar ──────────────────────────────────────────────────────────
+// ─── ControlItem ──────────────────────────────────────────────────────────
 
-const InlineToggleBar: React.FC<{
-    config: ToggleConfig;
+const ControlItem: React.FC<{
+    config: TableControl;
     enabled: boolean;
     disabled?: boolean;
     onChange: (val: boolean) => void;
@@ -187,7 +187,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         if (!groups[group]) groups[group] = [];
         groups[group].push(toggle);
         return groups;
-    }, {} as Record<number, ToggleConfig[]>);
+    }, {} as Record<number, TableControl[]>);
 
     const disabledColumnKeys = new Set(disabledColumns); // ✅ FIX
 
@@ -197,7 +197,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         col.visibleWhen ? Boolean(setting[col.visibleWhen]) : true,
     );
 
-    const handleToggleChange = (toggle: ToggleConfig, val: boolean) => {
+    const handleToggleChange = (toggle: TableControl, val: boolean) => {
         onChange(toggle.key, val); // ✅ FIX (removed effects system)
     };
 
@@ -348,7 +348,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
             {Object.entries(toggleGroups).map(([group, groupToggles]) => (
                 <div className="inline-toggle-bar-row" key={group}>
                     {groupToggles.map((t) => (
-                        <InlineToggleBar
+                        <ControlItem
                             key={t.key}
                             config={t}
                             enabled={Boolean(setting[t.key])}
@@ -416,9 +416,13 @@ const MultiCheckboxTable: FieldComponent = {
             onChange({ ...currentSetting, ...patch });
         };
 
+        const tableHidden = field.tableToggle
+    ? !Boolean(currentSetting[field.tableToggle])
+    : false;
+
         return (
             <MultiCheckboxTableUI
-                tableHidden={!currentSetting[field.tableToggle]} // ✅ FIX
+                tableHidden={tableHidden} // ✅ FIX
                 disabledColumns={[]} // ✅ FIX
                 khali_dabba={appLocalizer?.khali_dabba ?? false}
                 rows={field.rows ?? []}
