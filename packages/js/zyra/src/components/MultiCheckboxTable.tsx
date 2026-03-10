@@ -4,9 +4,6 @@ import React, { useState } from 'react';
 // Internal dependencies
 import '../styles/web/MultiCheckboxTable.scss';
 import { FieldComponent } from './types';
-import { SelectInputUI } from './SelectInput';
-import { PopupUI } from './Popup';
-import { BasicInputUI } from './BasicInput';
 import { FIELD_REGISTRY } from './FieldRegistry';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -153,29 +150,16 @@ export const TableCell: React.FC<TableCellProps> = ({
         disabled: disabled,
     };
 
-    // Only special-case the checkbox value transformation
-    let fieldValue = value;
-    if (type === 'checkbox') {
-        fieldValue = value ? [rowKey] : [];
-    }
-
     return (
         <td key={fieldKey}>
             <Render
                 field={fieldConfig}
-                value={fieldValue}
+                value={value}
                 modules={modules}
                 appLocalizer={appLocalizer}
                 onBlocked={onBlocked}
                 canAccess={!disabled}
-                onChange={(newValue: any) => {
-                    if (type === 'checkbox') {
-                        const checked = Array.isArray(newValue) ? newValue.includes(rowKey) : Boolean(newValue);
-                        onChange(fieldKey, checked);
-                    } else {
-                        onChange(fieldKey, newValue);
-                    }
-                }}
+                onChange={(newValue: any) => {onChange(fieldKey, newValue)}}
             />
         </td>
     );
