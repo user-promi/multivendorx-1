@@ -73,26 +73,23 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
         }
     };
 
-    const isBooleanToggle = !options || options.length === 0;
+    const normalizedOptions =
+    options && options.length
+        ? options
+        : [
+              {
+                  key: key,
+                  value: 'true',
+                  label: '',
+              },
+          ];
 
     return (
         <>
             <div className={`toggle-setting-container ${wrapperClass ? wrapperClass : ''}`}>
-                {isBooleanToggle ? (
-        <div className="toggle-option">
-            <input
-                type="checkbox"
-                id={key}
-                name={key}
-                checked={Boolean(value)}
-                onChange={(e) => onChange(Boolean(e.target.checked))}
-            />
-            <label htmlFor={key}></label>
-        </div>
-    ) : (
 
                 <div className={`toggle-setting-wrapper ${custom ? 'custom' : ''}`}>
-                    { options.map( ( option ) => {
+                    { normalizedOptions.map( ( option ) => {
                         const isChecked = multiSelect
                             ? Array.isArray( value ) &&
                               value.includes( option.value )
@@ -114,8 +111,7 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
                                     name={ key }
                                     value={ option.value }
                                     checked={ isChecked }
-                                    readOnly
-                                    onClick={ () => handleChange(option.value,option) }
+                                    onChange={ () => handleChange(option.value,option) }
                                 />
                                 <label htmlFor={ option.key }>
                                     <span>
@@ -151,7 +147,6 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
                         );
                     } ) }
                 </div>
-    )}
             </div>
         </>
     );
@@ -183,9 +178,7 @@ const ToggleSetting: FieldComponent = {
                         : value
                             ? [String(value)]
                             : []
-                    : field.options && field.options.length > 0
-                        ? String(value ?? field.defaultValue ?? '')
-                        : Boolean(value) 
+                    : String(value ?? field.defaultValue ?? '')
             }
             onChange={(val) => {
                 if (!canAccess) return;
