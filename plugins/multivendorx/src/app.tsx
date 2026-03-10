@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { applyFilters, hasFilter } from '@wordpress/hooks';
 import {
 	AdminButtonUI,
 	AdminHeader,
@@ -32,6 +31,8 @@ import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/TransactionHistory';
 import { getTourSteps } from './components/Tour/TourSteps';
 import NotificationTabContent from './components/Notifications/HeaderNotifications';
+import './routeRegistry';
+
 // Auto-load all modules src folder.
 const modulesContext = require.context(
 	'../modules',
@@ -46,53 +47,41 @@ localStorage.setItem('force_multivendorx_context_reload', 'true');
 const Route = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const [ready, setReady] = useState(false);
+	const [routes, setRoutes] = useState([...window.MVX_ROUTES]);
 
 	useEffect(() => {
-		const checkFilter = () => {
-			if (
-				hasFilter(
-					'multivendorx_admin_submenu_render',
-					'multivendorx-pro/add-pro-route'
-				)
-			) {
-				setReady(true);
-			} else {
-				setTimeout(checkFilter, 50);
-			}
+		const updateRoutes = () => {
+			setRoutes([...window.MVX_ROUTES]);
 		};
 
-		checkFilter();
+		window.addEventListener('mvx-routes-updated', updateRoutes);
+
+		return () =>
+			window.removeEventListener('mvx-routes-updated', updateRoutes);
 	}, []);
 
-	if (!ready) {
-		return null;
-	}
-
-	const currentTab = new URLSearchParams(useLocation().hash);
+	const currentTab = new URLSearchParams(location.hash);
 	const tab = currentTab.get('tab') || 'dashboard';
+
+	const dynamicRoute = routes.find((r) => r.tab === tab);
+	const DynamicComponent = dynamicRoute?.component;
 
 	return (
 		<>
 			{tab === 'settings' && <Settings id="settings" />}
-			{tab === 'status-tools' && <StatusAndTools id="status-tools" />}
-			{tab === 'modules' && <Modules />}
-			{tab === 'stores' && <Stores />}
-			{tab === 'commissions' && <Commissions />}
-			{tab === 'customer-support' && <CustomerSupport />}
-			{tab === 'approval-queue' && <ApprovalQueue />}
-			{tab === 'dashboard' && <AdminDashboard />}
-			{tab === 'transaction-history' && <TransactionHistory />}
-			{tab === 'reports' && <Analytics />}
-			{tab === 'help-support' && <HelpSupport />}
-			{tab === 'notifications' && <Notifications />}
+ 			{tab === 'status-tools' && <StatusAndTools id="status-tools" />}
+ 			{tab === 'modules' && <Modules />}
+ 			{tab === 'stores' && <Stores />}
+ 			{tab === 'commissions' && <Commissions />}
+ 			{tab === 'customer-support' && <CustomerSupport />}
+ 			{tab === 'approval-queue' && <ApprovalQueue />}
+ 			{tab === 'dashboard' && <AdminDashboard />}
+ 			{tab === 'transaction-history' && <TransactionHistory />}
+ 			{tab === 'reports' && <Analytics />}
+ 			{tab === 'help-support' && <HelpSupport />}
+ 			{tab === 'notifications' && <Notifications />}
 
-			{applyFilters('multivendorx_admin_submenu_render', null, {
-				tab,
-				location,
-				Link,
-				navigate,
-			})}
+			{DynamicComponent && <DynamicComponent location={location} Link={Link} navigate={navigate}/>}
 		</>
 	);
 };
