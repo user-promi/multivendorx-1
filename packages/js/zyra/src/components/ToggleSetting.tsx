@@ -73,23 +73,12 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
         }
     };
 
-    const normalizedOptions =
-    options && options.length
-        ? options
-        : [
-              {
-                  key: key,
-                  value: 'true',
-                  label: '',
-              },
-          ];
-
     return (
         <>
             <div className={`toggle-setting-container ${wrapperClass ? wrapperClass : ''}`}>
 
                 <div className={`toggle-setting-wrapper ${custom ? 'custom' : ''}`}>
-                    { normalizedOptions.map( ( option ) => {
+                    { options.map( ( option ) => {
                         const isChecked = multiSelect
                             ? Array.isArray( value ) &&
                               value.includes( option.value )
@@ -111,7 +100,8 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
                                     name={ key }
                                     value={ option.value }
                                     checked={ isChecked }
-                                    onChange={ () => handleChange(option.value,option) }
+                                    readOnly
+                                    onClick={ () => handleChange(option.value,option) }
                                 />
                                 <label htmlFor={ option.key }>
                                     <span>
