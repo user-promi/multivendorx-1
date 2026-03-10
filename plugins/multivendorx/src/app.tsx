@@ -14,24 +14,13 @@ import {
 	ItemListUI,
 } from 'zyra';
 
-import Settings from './components/Settings/Settings';
-import Modules from './components/Modules/Modules';
-import Stores from './components/Stores/Stores';
-import AdminDashboard from './components/AdminDashboard/AdminDashboard';
-import StatusAndTools from './components/StatusAndTools/StatusAndTools';
-import CustomerSupport from './components/CustomerSupport/CustomerSupport';
 import Brand from './assets/images/multivendorx-logo.png';
 import { searchIndex, SearchItem } from './searchIndex';
 import { __ } from '@wordpress/i18n';
-import Commissions from './components/Commissions/Commissions';
-import Analytics from './components/Reports/Reports';
-import HelpSupport from './components/HelpSupport/HelpSupport';
-import ApprovalQueue from './components/ApprovalQueue/ApprovalQueue';
-import Notifications from './components/Notifications/Notifications';
-import TransactionHistory from './components/TransactionHistory/TransactionHistory';
 import { getTourSteps } from './components/Tour/TourSteps';
 import NotificationTabContent from './components/Notifications/HeaderNotifications';
 import './routeRegistry';
+import './routes';
 
 // Auto-load all modules src folder.
 const modulesContext = require.context(
@@ -54,35 +43,26 @@ const Route = () => {
 			setRoutes([...window.MULTIVENDORX_ROUTES]);
 		};
 
-		window.addEventListener('mvx-routes-updated', updateRoutes);
+		window.addEventListener('multivendorx-routes', updateRoutes);
 
 		return () =>
-			window.removeEventListener('mvx-routes-updated', updateRoutes);
+			window.removeEventListener('multivendorx-routes', updateRoutes);
 	}, []);
 
-	const currentTab = new URLSearchParams(location.hash);
-	const tab = currentTab.get('tab') || 'dashboard';
+	const tab = new URLSearchParams(location.hash).get('tab') || 'dashboard';
 
-	const dynamicRoute = routes.find((r) => r.tab === tab);
-	const DynamicComponent = dynamicRoute?.component;
+	const route = routes.find((r) => r.tab === tab);
+	const Component = route?.component;
+
+	if (!Component) return null;
 
 	return (
-		<>
-			{tab === 'settings' && <Settings id="settings" />}
- 			{tab === 'status-tools' && <StatusAndTools id="status-tools" />}
- 			{tab === 'modules' && <Modules />}
- 			{tab === 'stores' && <Stores />}
- 			{tab === 'commissions' && <Commissions />}
- 			{tab === 'customer-support' && <CustomerSupport />}
- 			{tab === 'approval-queue' && <ApprovalQueue />}
- 			{tab === 'dashboard' && <AdminDashboard />}
- 			{tab === 'transaction-history' && <TransactionHistory />}
- 			{tab === 'reports' && <Analytics />}
- 			{tab === 'help-support' && <HelpSupport />}
- 			{tab === 'notifications' && <Notifications />}
-
-			{DynamicComponent && <DynamicComponent location={location} Link={Link} navigate={navigate}/>}
-		</>
+		<Component
+			id={tab}
+			location={location}
+			navigate={navigate}
+			Link={Link}
+		/>
 	);
 };
 

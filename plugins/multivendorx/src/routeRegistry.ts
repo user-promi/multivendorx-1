@@ -13,9 +13,11 @@ declare global {
 
 window.MULTIVENDORX_ROUTES = window.MULTIVENDORX_ROUTES || [];
 
-window.registerMultiVendorXRoute = (route) => {
+export const registerMultiVendorXRoute = (route) => {
 	window.MULTIVENDORX_ROUTES.push(route);
 
 	// notify React
-	window.dispatchEvent(new Event('mvx-routes-updated'));
+	window.dispatchEvent(new Event('multivendorx-routes'));
 };
+
+window.registerMultiVendorXRoute = registerMultiVendorXRoute;
