@@ -32,6 +32,18 @@ interface StoreOption {
 	value: number;
 }
 
+interface StoreApi {
+	id: number;
+	store_name: string;
+}
+
+interface OrderRow extends RefundOrder {
+	store_name?: string;
+	total?: number;
+	commission_amount?: number;
+	date_created?: string;
+}
+
 const EMPTY_ORDER: RefundOrder = {
 	id: 0,
 	meta_data: [],
@@ -59,7 +71,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: any) => ({
+				const options = (response.data || []).map((store: StoreApi) => ({
 					label: store.store_name,
 					value: store.id,
 				}));
@@ -145,7 +157,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 		},
 		reason: {
 			label: __('Refund Reason', 'multivendorx'),
-			render: (row: any) => getMetaValue(row.meta_data, appLocalizer.order_meta.customer_refund_reason),
+			render: (row: OrderRow) => getMetaValue(row.meta_data, appLocalizer.order_meta.customer_refund_reason)
 		},
 		date_created: {
 			label: __('Date', 'multivendorx'),
@@ -159,14 +171,14 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 				{
 					label: __('View Details', 'multivendorx'),
 					icon: 'preview',
-					onClick: (row) => {
+					onClick: (row: OrderRow) => {
 						window.open(`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${row.id}&action=edit`, '_blank');
 					},
 				},
 				{
 					label: __('Reject', 'multivendorx'),
 					icon: 'close',
-					onClick: (row) => {
+					onClick: (row: OrderRow) => {
 						setViewOrder(row);
 						setPopupOpen(true);
 					},
@@ -189,9 +201,9 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 		},
 	];
 
-	const getMetaValue = (metaData: any[] | undefined, key: string) => {
-		if (!metaData || !Array.isArray(metaData)) return '';
-		return metaData.find((m: any) => m.key === key)?.value || '';
+	const getMetaValue = (metaData: OrderMeta[], key: string): string => {
+		const meta = metaData.find((m) => m.key === key);
+		return meta ? meta.value : '';
 	};
 
 	const doRefreshTableData = (query: QueryProps) => {
