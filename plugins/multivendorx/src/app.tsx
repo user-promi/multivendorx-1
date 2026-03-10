@@ -255,7 +255,7 @@ const App = () => {
 				open={openFeaturePopup}
 				onClose={handleCloseFeaturePopup}
 				width={31.25}
-				height={30}
+				height={50}
 				header={{
 					icon: 'book',
 					title: __('Import Dummy Data', 'multivendorx'),

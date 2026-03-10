@@ -3,6 +3,7 @@ import axios from 'axios';
 import { getApiLink } from '../utils/apiService';
 import { AdminButtonUI } from './AdminButton';
 import { ItemListUI } from './ItemList';
+import { Notice } from './Notice';
 
 interface Task {
     action: string;
@@ -139,10 +140,10 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
             const response = await axios.post(
                 getApiLink(appLocalizer, apilink),
                 payload,
-                { 
-                    headers: { 
+                {
+                    headers: {
                         'X-WP-Nonce': appLocalizer.nonce,
-                    } 
+                    }
                 }
             );
 
@@ -205,7 +206,7 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
     };
 
     return (
-        <div className="do-action-wrapper">
+        <>
             <div className="loader-wrapper">
                 <AdminButtonUI
                     buttons={[{
@@ -231,13 +232,14 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
                     className="task-list"
                 />
             )}
-
             {processStatus && (
-                <div className={`fetch-display-output ${processStatus === 'failed' ? 'failed' : 'success'}`}>
-                    {processStatus === 'failed' ? failureMessage : successMessage}
-                </div>
+                <Notice
+                    type={processStatus === 'failed' ? 'error' : 'success'}
+                    displayPosition='notice'
+                    message={processStatus === 'failed' ? failureMessage : successMessage}
+                />
             )}
-        </div>
+        </>
     );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Container, SettingsNavigator } from 'zyra';
+import { SettingsNavigator } from 'zyra';
 import NotificationsTable from './notificationsTable';
 import ActivitiesTable from './activityTable';
 import AnnouncementsTable from './AnnouncementsTable';

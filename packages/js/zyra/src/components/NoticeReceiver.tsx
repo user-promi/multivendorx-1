@@ -151,7 +151,7 @@ export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({ position }) => {
 
     useEffect(() => {
         flushExpired();
-        const interval = setInterval(flushExpired, 1000);
+        const interval = setInterval(flushExpired, 500);
         return () => clearInterval(interval);
     }, []);
 

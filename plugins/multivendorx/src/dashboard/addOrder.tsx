@@ -412,202 +412,206 @@ const AddOrder = () => {
 				<Column grid={8}>
 					<Card>
 						<div className="table-wrapper view-order-table">
-							<table className="admin-table">
-								<thead className="admin-table-header">
-									<tr className="header-row">
-										<td className="header-col">
-											{__('Item', 'multivendorx')}
-										</td>
-										<td className="header-col">
-											{__('Price', 'multivendorx')}
-										</td>
-										<td className="header-col">
-											{__('Qty', 'multivendorx')}
-										</td>
-										<td className="header-col">
-											{__('Total', 'multivendorx')}
-										</td>
-									</tr>
-								</thead>
-
-								<tbody className="admin-table-body">
-									{addedProducts.length > 0 &&
-										addedProducts.map((item) => (
-											<tr
-												key={`added-${item.id}`}
-												className="admin-row simple"
-											>
-												<td className="admin-column">
-													<div className="item-details">
-														<div className="image">
-															<img
-																src={ item ?.images?.[0] ?.src }
-																width={40}
-																alt={item.name}
-															/>
-														</div>
-
-														<div className="detail">
-															<div className="name">
-																{item.name}
-															</div>
-
-															{item?.sku && (
-																<div className="sku">
-																	{__(
-																		'SKU:',
-																		'multivendorx'
-																	)}{' '}
-																	{item.sku}
-																</div>
-															)}
-														</div>
-													</div>
+							{addedProducts.length > 0 && (
+								<>
+									<table className="admin-table">
+										<thead className="admin-table-header">
+											<tr className="header-row">
+												<td className="header-col">
+													{__('Item', 'multivendorx')}
 												</td>
-
-												<td className="admin-column">
-													${item.price}
+												<td className="header-col">
+													{__('Price', 'multivendorx')}
 												</td>
-
-												<td className="admin-column">
-													<BasicInputUI
-														type="number"
-														min="1"
-														value={item.qty || 1}
-														onChange={(value) => {
-															const qty = +value;
-															setAddedProducts(
-																(prev) => prev.map((p) => 
-																	p.id === item.id ? { ...p, qty } : p )
-															);
-														}}
-													/>
+												<td className="header-col">
+													{__('Qty', 'multivendorx')}
 												</td>
-
-												<td className="admin-column">
-													$
-													{(
-														item.price *
-														(item.qty || 1)
-													).toFixed(2)}
+												<td className="header-col">
+													{__('Total', 'multivendorx')}
 												</td>
 											</tr>
-										))}
+										</thead>
 
-									{shippingLines.map((ship) => (
-										<tr
-											key={`ship-${ship.id}`}
-											className="admin-row shipping-row"
-										>
-											<td className="admin-column">
-												<div className="item-details">
-													<div className="icon">
-														<i className="adminfont-cart green"></i>
-													</div>
+										<tbody className="admin-table-body">
+											{addedProducts.length > 0 &&
+												addedProducts.map((item) => (
+													<tr
+														key={`added-${item.id}`}
+														className="admin-row simple"
+													>
+														<td className="admin-column">
+															<div className="item-details">
+																<div className="image">
+																	<img
+																		src={item?.images?.[0]?.src}
+																		width={40}
+																		alt={item.name}
+																	/>
+																</div>
 
-													<div className="detail">
-														<div className="name">
-															{__(
-																'Shipping',
-																'multivendorx'
-															)}
+																<div className="detail">
+																	<div className="name">
+																		{item.name}
+																	</div>
+
+																	{item?.sku && (
+																		<div className="sku">
+																			{__(
+																				'SKU:',
+																				'multivendorx'
+																			)}{' '}
+																			{item.sku}
+																		</div>
+																	)}
+																</div>
+															</div>
+														</td>
+
+														<td className="admin-column">
+															${item.price}
+														</td>
+
+														<td className="admin-column">
+															<BasicInputUI
+																type="number"
+																min="1"
+																value={item.qty || 1}
+																onChange={(value) => {
+																	const qty = +value;
+																	setAddedProducts(
+																		(prev) => prev.map((p) =>
+																			p.id === item.id ? { ...p, qty } : p)
+																	);
+																}}
+															/>
+														</td>
+
+														<td className="admin-column">
+															$
+															{(
+																item.price *
+																(item.qty || 1)
+															).toFixed(2)}
+														</td>
+													</tr>
+												))}
+
+											{shippingLines.map((ship) => (
+												<tr
+													key={`ship-${ship.id}`}
+													className="admin-row shipping-row"
+												>
+													<td className="admin-column">
+														<div className="item-details">
+															<div className="icon">
+																<i className="adminfont-cart green"></i>
+															</div>
+
+															<div className="detail">
+																<div className="name">
+																	{__(
+																		'Shipping',
+																		'multivendorx'
+																	)}
+																</div>
+
+																<SelectInputUI
+																	name="shipping_method"
+																	type="single-select"
+																	options={availableShippingMethods}
+																	value={availableShippingMethods.find(
+																		(o) => o.value === ship.method_id
+																	)}
+																	onChange={(value) => {
+																		const selectedOption = availableShippingMethods.find(
+																			(o) => o.value === value
+																		);
+																		const method_title = selectedOption?.label || '';
+																		setShippingLines((prev) =>
+																			prev.map((s) =>
+																				s.id === ship.id
+																					? {
+																						...s,
+																						value,
+																						name: method_title,
+																					}
+																					: s
+																			)
+																		);
+																	}}
+																/>
+															</div>
 														</div>
+													</td>
 
-														<SelectInputUI
-															name="shipping_method"
-															type="single-select"
-															options={availableShippingMethods}
-															value={availableShippingMethods.find(
-																(o) => o.value === ship.method_id
-															)}
+													<td className="admin-column"></td>
+													<td className="admin-column"></td>
+
+													<td className="admin-column">
+														<BasicInputUI
+															type="number"
+															min="0"
+															value={ship.cost}
 															onChange={(value) => {
-																const selectedOption = availableShippingMethods.find(
-																	(o) => o.value === value
-																);
-																const method_title = selectedOption?.label || '';
-																setShippingLines((prev) =>
-																	prev.map((s) =>
-																		s.id === ship.id
-																			? {
+																const cost = parseFloat(value) || 0;
+																setShippingLines(
+																	(prev) =>
+																		prev.map((s) =>
+																			s.id ===
+																				ship.id
+																				? {
 																					...s,
-																					value,
-																					name: method_title,
-																			}
-																			: s
-																	)
+																					cost,
+																				}
+																				: s
+																		)
 																);
 															}}
 														/>
-													</div>
-												</div>
-											</td>
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
 
-											<td className="admin-column"></td>
-											<td className="admin-column"></td>
+									<div className="total-summary">
+										<div className="row">
+											<span>
+												{__('Subtotal:', 'multivendorx')}
+											</span>
+											<span>${subtotal.toFixed(2)}</span>
+										</div>
 
-											<td className="admin-column">
-												<BasicInputUI
-													type="number"
-													min="0"
-													value={ship.cost}
-													onChange={(value) => {
-														const cost = parseFloat(value) || 0;
-														setShippingLines(
-															(prev) =>
-																prev.map((s) =>
-																	s.id ===
-																	ship.id
-																		? {
-																				...s,
-																				cost,
-																			}
-																		: s
-																)
-														);
-													}}
-												/>
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
+										<div className="row">
+											<span>{__('Tax:', 'multivendorx')}</span>
+											<span>
+												$
+												{addedProducts
+													.reduce(
+														(sum, p) =>
+															sum + (p.tax_amount || 0),
+														0
+													)
+													.toFixed(2)}
+											</span>
+										</div>
 
-							<div className="total-summary">
-								<div className="row">
-									<span>
-										{__('Subtotal:', 'multivendorx')}
-									</span>
-									<span>${subtotal.toFixed(2)}</span>
-								</div>
+										<div className="row">
+											<span>
+												{__('Shipping:', 'multivendorx')}
+											</span>
+											<span>{formatCurrency(totalShipping)}</span>
+										</div>
 
-								<div className="row">
-									<span>{__('Tax:', 'multivendorx')}</span>
-									<span>
-										$
-										{addedProducts
-											.reduce(
-												(sum, p) =>
-													sum + (p.tax_amount || 0),
-												0
-											)
-											.toFixed(2)}
-									</span>
-								</div>
-
-								<div className="row">
-									<span>
-										{__('Shipping:', 'multivendorx')}
-									</span>
-									<span>{formatCurrency(totalShipping)}</span>
-								</div>
-
-								<div className="row total">
-									<strong>
-										{__('Grand Total:', 'multivendorx')}
-									</strong>
-									<strong>${grandTotal.toFixed(2)}</strong>
-								</div>
-							</div>
+										<div className="row total">
+											<strong>
+												{__('Grand Total:', 'multivendorx')}
+											</strong>
+											<strong>${grandTotal.toFixed(2)}</strong>
+										</div>
+									</div>
+								</>
+							)}
 							<FormGroupWrapper>
 								<AdminButtonUI
 									position="left"
@@ -776,9 +780,9 @@ const AddOrder = () => {
 												);
 												setSelectedCustomer(customer);
 												if (customer) {
-													setShippingAddress( customer.shipping );
-													setBillingAddress( customer.billing );
-													setShowCreateCustomer( false );
+													setShippingAddress(customer.shipping);
+													setBillingAddress(customer.billing);
+													setShowCreateCustomer(false);
 												}
 											}}
 										/>
@@ -815,7 +819,7 @@ const AddOrder = () => {
 										<div className="name">
 											{selectedCustomer
 												? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
-												: __( 'Guest Customer', 'multivendorx' )}
+												: __('Guest Customer', 'multivendorx')}
 										</div>
 
 										{selectedCustomer && (
@@ -1047,7 +1051,7 @@ const AddOrder = () => {
 													...prev,
 													country: selected,
 												}));
-												fetchStatesByCountry( selected );
+												fetchStatesByCountry(selected);
 											}}
 										/>
 									</FormGroup>
@@ -1189,7 +1193,7 @@ const AddOrder = () => {
 													...prev,
 													country: selected,
 												}));
-												fetchStatesByCountry( selected );
+												fetchStatesByCountry(selected);
 											}}
 										/>
 									</FormGroup>

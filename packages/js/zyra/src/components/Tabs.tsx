@@ -154,8 +154,10 @@ export const TabsUI: React.FC<TabsProps> = ({
                             className={`tab ${index === activeIndex ? 'active-tab' : ''}`}
                             onClick={() => setActiveIndex(index)}
                         >
-                            {tab.icon && (<i className={`adminfont-${tab.icon}`} />)}
-                            <span className="tab-name">{tab.label}</span>
+                            <span className="tab-name">
+                                {tab.icon && (<i className={`adminfont-${tab.icon}`} />)}
+                                {tab.label}
+                            </span>
                         </div>
                     ))}
                 </div>
