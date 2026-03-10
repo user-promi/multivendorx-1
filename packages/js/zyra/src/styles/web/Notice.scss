@@ -1,5 +1,12 @@
 @use '../../global.scss' as *;
 
+.receiver-float {
+    position: fixed;
+    right: 1.85rem;
+    top: 7rem;
+    z-index: 99999;
+}
+
 .ui-notice {
     display: flex;
     justify-content: flex-start;
@@ -108,13 +115,10 @@
     &.display-float {
         padding: 0.85rem 6rem 0.85rem 0.85rem;
         font-weight: 400;
-        position: fixed;
-        z-index: 99999;
+        margin-bottom: 0.5rem;
         background: $background-white;
         box-shadow: $box-shadow;
-        right: 1.85rem;
-        top: 7rem;
-        animation: noticeslide 7s ease-in-out forwards;
+        animation: noticeslide 5s ease-in-out forwards;
 
         .notice-text {
             font-size: 1rem;
@@ -140,9 +144,10 @@
     &.display-inline {
         gap: 0.25rem;
 
-        i{
+        i {
             font-size: 1rem;
         }
+
         &.type-success {
             .notice-desc {
                 color: green;
@@ -188,16 +193,7 @@
     0% {
         transform: translateX(120%);
     }
-
-    10% {
+    50% {
         transform: translateX(0);
-    }
-
-    80% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(120%);
     }
 }
