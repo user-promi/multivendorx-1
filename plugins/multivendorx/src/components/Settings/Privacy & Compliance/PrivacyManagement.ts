@@ -23,41 +23,27 @@ export default {
 			options: [
 				{
 					key: 'show_store_name',
-					label: __('Name', 'multivendorx'),
-					desc: __(
-						'Include the store name on product listings, archive, checkout, and cart pages.',
-						'multivendorx'
-					),
 					value: 'show_store_name',
-					dependents: ['show_store_logo_next_to_products', 'show_store_description', 'show_store_ratings'],
+					label: __('Name', 'multivendorx'),
 				},
 				{
 					key: 'show_store_logo_next_to_products',
-					label: __('Logo', 'multivendorx'),
-					desc: __(
-						'Place the store logo alongside product details.',
-						'multivendorx'
-					),
 					value: 'show_store_logo_next_to_products',
+					label: __('Logo', 'multivendorx'),
+					dependent: 'show_store_name',
 				},
 				{
 					key: 'show_store_description',
-					label: __('Store description', 'multivendorx'),
-					desc: __(
-						'Present a short store bio on product and store pages.',
-						'multivendorx'
-					),
 					value: 'show_store_description',
+					label: __('Store description', 'multivendorx'),
+					dependent: 'show_store_name',
 				},
 				{
 					key: 'show_store_ratings',
-					label: __('Store ratings', 'multivendorx'),
-					desc: __(
-						'Highlight customer feedback on store and product pages.',
-						'multivendorx'
-					),
 					value: 'show_store_ratings',
-				},
+					label: __('Store ratings', 'multivendorx'),
+					dependent: 'show_store_name',
+				}
 			],
 			selectDeselect: true,
 		},

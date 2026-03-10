@@ -16,6 +16,23 @@ import {
 } from 'zyra';
 import { toWcIsoDate, } from '../../../src/services/commonFunction';
 
+interface OrderMeta {
+	key: string;
+	value: string;
+}
+
+interface RefundOrder {
+	id: number;
+	meta_data: OrderMeta[];
+	refund_images: string[];
+}
+
+const EMPTY_ORDER: RefundOrder = {
+	id: 0,
+	meta_data: [],
+	refund_images: [],
+};
+
 interface Props {
 	onUpdated?: () => void;
 }
@@ -28,7 +45,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 	const [store, setStore] = useState<any[]>([]);
 	const [popupOpen, setPopupOpen] = useState(false);
 	const [formData, setFormData] = useState({ content: '' });
-	const [viewOrder, setViewOrder] = useState<any | null>(null);
+	const [viewOrder, setViewOrder] = useState<RefundOrder>(EMPTY_ORDER);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	useEffect(() => {
@@ -53,7 +70,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 
 	const handleCloseForm = () => {
 		setPopupOpen(false);
-		setViewOrder(null);
+		setViewOrder(EMPTY_ORDER);
 		setFormData({ content: '' });
 	};
 
