@@ -18,7 +18,7 @@ interface Option {
 }
 
 interface ToggleSettingProps {
-    options: Option[];
+    options?: Option[];
     wrapperClass?: string;
     value: string | string[];
     onChange: ( value: string | string[] ) => void;
@@ -73,9 +73,23 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
         }
     };
 
+    const isBooleanToggle = !options || options.length === 0;
+
     return (
         <>
             <div className={`toggle-setting-container ${wrapperClass ? wrapperClass : ''}`}>
+                {isBooleanToggle ? (
+        <div className="toggle-option">
+            <input
+                type="checkbox"
+                id={key}
+                name={key}
+                checked={Boolean(value)}
+                onChange={(e) => onChange(e.target.checked)}
+            />
+            <label htmlFor={key}></label>
+        </div>
+    ) : (
 
                 <div className={`toggle-setting-wrapper ${custom ? 'custom' : ''}`}>
                     { options.map( ( option ) => {
@@ -137,6 +151,7 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
                         );
                     } ) }
                 </div>
+    )}
             </div>
         </>
     );

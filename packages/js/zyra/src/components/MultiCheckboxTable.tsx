@@ -13,12 +13,7 @@ interface Option {
     label: string;
 }
 
-export interface ShiftTimeValue {
-    start: string;
-    end: string;
-}
-
-export type SettingValue = string[] | Option[] | ShiftTimeValue | boolean;
+export type SettingValue = string[] | Option[] | boolean;
 export type BatchChanges = Record<string, SettingValue>;
 type FieldSetting = Record<string, SettingValue>;
 
