@@ -29,15 +29,18 @@
 
 // tabs style start
 .title-section {
+  display: flex;
+  justify-content: space-between;
+
   .title-wrapper {
-    font-weight: 500;
     margin-bottom: 0;
-    color: $text-color;
-    display: flex;
-    justify-content: space-between;
 
     .title {
       font-size: 1.4rem;
+      color: $text-color;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
 
       i {
         margin-right: 0.5rem;

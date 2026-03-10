@@ -46,7 +46,7 @@ const HeaderSearch: React.FC<HeaderSearchProps> = ({
     const hasDropdown = options.length > 0;
 
     const [query, setQuery] = useState('');
-    const [action, setAction] = useState('');
+    const [action, setAction] = useState(hasDropdown && options.length > 0 ? options[0].value : '');
     const [isOpen, setIsOpen] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false); 
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -129,9 +129,9 @@ const HeaderSearch: React.FC<HeaderSearchProps> = ({
                             onResultClick(item);
                             setIsOpen(false);
                             setQuery('');
-                            setAction('');
+                            setAction(hasDropdown && options.length > 0 ? options[0].value : '');
                             setIsExpanded(false);
-                            triggerSearch('', '');
+                            triggerSearch('', hasDropdown && options.length > 0 ? options[0].value : '');
                         }
                     }))}
                 />

@@ -192,7 +192,7 @@ const App = () => {
 ];
 	const utilityListWithTab = [
 		{
-			toggleIcon: 'adminfont-notification',
+			toggleIcon: 'notification',
 			tabs: [
 				{
 					id: 'notifications',
@@ -427,6 +427,7 @@ const App = () => {
 				message={bannerItem}
 				actionLabel="Upgrade Now"
 				onAction={() => handleDismissBanner()}
+				validity={5000}
 			/>
 			<Route />
 		</>

@@ -118,7 +118,7 @@
         margin-bottom: 0.5rem;
         background: $background-white;
         box-shadow: $box-shadow;
-        animation: noticeslide 5s ease-in-out forwards;
+        animation: noticeslide 3s ease-in-out fade;
 
         .notice-text {
             font-size: 1rem;
@@ -193,7 +193,16 @@
     0% {
         transform: translateX(120%);
     }
-    50% {
+
+    10% {
         transform: translateX(0);
+    }
+
+    80% {
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
     }
 }

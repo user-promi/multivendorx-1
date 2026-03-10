@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
-import { SettingsNavigator } from 'zyra';
+import { Container, SettingsNavigator } from 'zyra';
 import NotificationsTable from './notificationsTable';
 import ActivitiesTable from './activityTable';
 import AnnouncementsTable from './AnnouncementsTable';
@@ -78,6 +78,7 @@ const ViewNotifications = (React.FC = () => {
 				currentSetting={currentTab}
 				getForm={getForm}
 				prepareUrl={prepareUrl}
+				menuIcon={true}
 				appLocalizer={appLocalizer}
 				settingName="Settings"
 				variant={'compact'}

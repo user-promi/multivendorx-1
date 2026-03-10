@@ -1,7 +1,10 @@
 @use '../../global.scss' as *;
 
 .settings-calender {
-    
+    .rmdp-container {
+        width: 16.5rem;
+    }
+
     &:has(.calendar-wrapper){
         width: 100%;
     }
