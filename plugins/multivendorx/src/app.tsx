@@ -3,15 +3,12 @@ import { useEffect, useState } from 'react';
 import {
 	AdminButtonUI,
 	AdminHeader,
-	Banner,
 	SequentialTaskExecutor,
 	FormGroup,
 	FormGroupWrapper,
 	PopupUI,
 	TourSetup,
-	Notice,
-	NoticeReceiver,
-	ItemListUI,
+	Notice
 } from 'zyra';
 
 import Brand from './assets/images/multivendorx-logo.png';
