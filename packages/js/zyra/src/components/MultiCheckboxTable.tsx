@@ -19,7 +19,7 @@ type FieldSetting = Record<string, SettingValue>;
 
 // ── Column ────────────────────────────────────────────────────────────────────
 
-export interface Column {
+interface Column {
     key: string;
     label: string;
     type?: string;

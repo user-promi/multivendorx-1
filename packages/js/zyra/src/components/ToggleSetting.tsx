@@ -85,7 +85,7 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
                 id={key}
                 name={key}
                 checked={Boolean(value)}
-                onChange={(e) => onChange(e.target.checked)}
+                onChange={(e) => onChange(Boolean(e.target.checked))}
             />
             <label htmlFor={key}></label>
         </div>
