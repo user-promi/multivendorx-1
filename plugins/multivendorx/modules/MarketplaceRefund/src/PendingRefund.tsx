@@ -9,30 +9,46 @@ import {
 	FormGroupWrapper,
 	getApiLink,
 	PopupUI,
+	QueryProps,
 	TableCard,
+	TableRow,
 	TextAreaUI,
 } from 'zyra';
-import {
-	formatCurrency,
-	toWcIsoDate,
-	truncateText,
-} from '../../../src/services/commonFunction';
-import { QueryProps, TableRow } from '@/services/type';
+import { toWcIsoDate, } from '../../../src/services/commonFunction';
 
-interface StoreRow {
+interface OrderMeta {
+	key: string;
+	value: string;
+}
+
+interface RefundOrder {
+	id: number;
+	meta_data: OrderMeta[];
+	refund_images: string[];
+}
+
+interface StoreOption {
+	label: string;
+	value: number;
+}
+
+interface StoreApi {
 	id: number;
 	store_name: string;
-	store_id?: string;
-	amount: string;
-	commission_amount: string;
-	date: string;
-	status: string;
-	currency_symbol: string;
-	reason?: string;
-	refund_images?: string[];
-	refund_products?: number[];
-	addi_info?: string;
 }
+
+interface OrderRow extends RefundOrder {
+	store_name?: string;
+	total?: number;
+	commission_amount?: number;
+	date_created?: string;
+}
+
+const EMPTY_ORDER: RefundOrder = {
+	id: 0,
+	meta_data: [],
+	refund_images: [],
+};
 
 interface Props {
 	onUpdated?: () => void;
@@ -43,10 +59,10 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [rowIds, setRowIds] = useState<number[]>([]);
-	const [store, setStore] = useState<any[]>([]);
+	const [store, setStore] = useState<StoreOption[]>([]);
 	const [popupOpen, setPopupOpen] = useState(false);
 	const [formData, setFormData] = useState({ content: '' });
-	const [viewOrder, setViewOrder] = useState<StoreRow | null>(null);
+	const [viewOrder, setViewOrder] = useState<RefundOrder>(EMPTY_ORDER);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	useEffect(() => {
@@ -55,7 +71,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: any) => ({
+				const options = (response.data || []).map((store: StoreApi) => ({
 					label: store.store_name,
 					value: store.id,
 				}));
@@ -71,7 +87,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 
 	const handleCloseForm = () => {
 		setPopupOpen(false);
-		setViewOrder(null);
+		setViewOrder(EMPTY_ORDER);
 		setFormData({ content: '' });
 	};
 
@@ -131,7 +147,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 		store_name: {
 			label: __('Store', 'multivendorx'),
 		},
-		amount: {
+		total: {
 			label: __('Amount', 'multivendorx'),
 			type: 'currency',
 		},
@@ -141,12 +157,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 		},
 		reason: {
 			label: __('Refund Reason', 'multivendorx'),
-			render: (row: any) => {
-				getMetaValue(
-					row.meta_data,
-					appLocalizer.order_meta.customer_refund_reason
-				) || '';
-			},
+			render: (row: OrderRow) => getMetaValue(row.meta_data, appLocalizer.order_meta.customer_refund_reason)
 		},
 		date_created: {
 			label: __('Date', 'multivendorx'),
@@ -160,42 +171,43 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 				{
 					label: __('View Details', 'multivendorx'),
 					icon: 'preview',
-					onClick: (row) => {
-						setViewOrder(row);
-						setPopupOpen(true);
+					onClick: (row: OrderRow) => {
+						window.open(`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${row.id}&action=edit`, '_blank');
 					},
 				},
 				{
 					label: __('Reject', 'multivendorx'),
 					icon: 'close',
-					onClick: (row) => {
-						handleSubmit(row.id);
+					onClick: (row: OrderRow) => {
+						setViewOrder(row);
+						setPopupOpen(true);
 					},
 				},
 			],
 		},
 	};
 
-const filters = [
-	{
-		key: 'store_id',
-		label: __('Stores', 'multivendorx'),
-		type: 'select',
-		options: store,
-	},
-	{
-		key: 'created_at',
-		label: __('Created Date', 'multivendorx'),
-		type: 'date',
-	},
-];
+	const filters = [
+		{
+			key: 'store_id',
+			label: __('Stores', 'multivendorx'),
+			type: 'select',
+			options: store,
+		},
+		{
+			key: 'created_at',
+			label: __('Created Date', 'multivendorx'),
+			type: 'date',
+		},
+	];
 
-	const getMetaValue = (metaData: any[], key: string) =>
-		metaData.find((m: any) => m.key === key)?.value;
+	const getMetaValue = (metaData: OrderMeta[], key: string): string => {
+		const meta = metaData.find((m) => m.key === key);
+		return meta ? meta.value : '';
+	};
 
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
-
 		axios
 			.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
 				headers: {
@@ -205,7 +217,7 @@ const filters = [
 					page: query.paged,
 					per_page: query.per_page,
 					search: query.searchValue,
-					orderby: query.orderby,
+					orderby: 'date',
 					order: query.order,
 					meta_key: 'multivendorx_store_id',
 					value: query?.filter?.store_id,
@@ -282,113 +294,116 @@ const filters = [
 								buttons={[
 									{
 										icon: 'external-link',
-										text: __(
-											'View order to release funds',
-											'multivendorx'
-										),
+										text: __('View order to release funds', 'multivendorx'),
 										color: 'yellow-bg',
 										onClick: () => {
-											if (!viewOrder) {
-												return;
-											}
+											if (!viewOrder) return;
 											window.open(
 												`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${viewOrder.id}&action=edit`,
 												'_blank'
 											);
 										},
+										disabled: false,
+										children: null,
+										customStyle: {},
+										style: {},
 									},
 									{
 										icon: 'save',
 										text: __('Reject', 'multivendorx'),
 										onClick: () => {
-											if (!viewOrder) {
-												return;
-											}
+											if (!viewOrder) return;
 											handleSubmit(viewOrder.id);
 										},
 										disabled: isSubmitting,
+										children: null,
+										customStyle: {},
+										style: {},
 									},
 								]}
 							/>
 						}
 					>
-						<FormGroupWrapper>
-							<FormGroup
-								label={__('Refund Reason', 'multivendorx')}
-							>
-								<div className="refund-reason-box">
-									{viewOrder?.reason || '-'}
-								</div>
-							</FormGroup>
-							<FormGroup
-								label={__(
-									'Additional Information',
-									'multivendorx'
-								)}
-							>
-								<div className="refund-additional-info">
-									{viewOrder?.addi_info || '-'}
-								</div>
-							</FormGroup>
-							{viewOrder?.refund_images?.length > 0 && (
+						{viewOrder && (
+							<FormGroupWrapper>
 								<FormGroup
-									label={
-										viewOrder.refund_images.length === 1
-											? 'Attachment'
-											: 'Attachments'
-									}
+									label={__('Refund Reason', 'multivendorx')}
 								>
-									<div className="refund-attachment-list">
-										{viewOrder.refund_images.map(
-											(img, index) => (
-												<a
-													key={index}
-													href={img}
-													target="_blank"
-													rel="noopener noreferrer"
-													className="refund-attachment-item"
-												>
-													<div className="attachment-thumb">
-														<img
-															src={img}
-															alt={__(
-																'Refund attachment',
-																'multivendorx'
-															)}
-														/>
-													</div>
-													<div className="attachment-name">
-														{__(
-															'Attachment',
-															'multivendorx'
-														)}{' '}
-														{index + 1}
-													</div>
-												</a>
-											)
-										)}
+									<div className="refund-reason-box">
+										{getMetaValue(viewOrder.meta_data, appLocalizer.order_meta.customer_refund_reason)}
 									</div>
 								</FormGroup>
-							)}
-							<FormGroup
-								label={__('Reject Message', 'multivendorx')}
-								htmlFor="content"
-							>
-								<TextAreaUI
-									name="content"
-									value={formData.content}
-									onChange={(value: string) =>
-										handleChange('content', value)
-									}
-									usePlainText={false}
-									tinymceApiKey={
-										appLocalizer.settings_databases_value[
-										'overview'
-										]['tinymce_api_section'] ?? ''
-									}
-								/>
-							</FormGroup>
-						</FormGroupWrapper>
+								<FormGroup
+									label={__(
+										'Additional Information',
+										'multivendorx'
+									)}
+								>
+									<div className="refund-additional-info">
+										{getMetaValue(viewOrder.meta_data, appLocalizer.order_meta.multivendorx_customer_refund_addi_info)}
+									</div>
+								</FormGroup>
+								{viewOrder?.refund_images?.length > 0 && (
+									<FormGroup
+										label={
+											viewOrder.refund_images.length === 1
+												? 'Attachment'
+												: 'Attachments'
+										}
+									>
+										<div className="refund-attachment-list">
+											{viewOrder.refund_images.map(
+												(img, index) => (
+													<a
+														key={index}
+														href={img}
+														target="_blank"
+														rel="noopener noreferrer"
+														className="refund-attachment-item"
+													>
+														<div className="attachment-thumb">
+															<img
+																src={img}
+																alt={__(
+																	'Refund attachment',
+																	'multivendorx'
+																)}
+															/>
+														</div>
+														<div className="attachment-name">
+															{__(
+																'Attachment',
+																'multivendorx'
+															)}{' '}
+															{index + 1}
+														</div>
+													</a>
+												)
+											)}
+										</div>
+									</FormGroup>
+								)}
+								<FormGroup
+									label={__('Reject Message', 'multivendorx')}
+									htmlFor="content"
+								>
+									<TextAreaUI
+										name="content"
+										value={formData.content}
+										onChange={(value: string) =>
+											handleChange('content', value)
+										}
+										usePlainText={false}
+										tinymceApiKey={
+											appLocalizer.settings_databases_value[
+											'overview'
+											]['tinymce_api_section'] ?? ''
+										}
+									/>
+								</FormGroup>
+							</FormGroupWrapper>
+						)}
+
 					</PopupUI>
 				</Column>
 			</Container>

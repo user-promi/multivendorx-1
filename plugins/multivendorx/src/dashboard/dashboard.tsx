@@ -833,7 +833,15 @@ const Dashboard: React.FC = () => {
 				{/* Admin Announcements */}
 				{modules.includes('announcement') && (
 					<Column fullHeight grid={4}>
-						<Card title={__('Admin Announcements', 'multivendorx')}>
+						<Card title={__('Admin Announcements', 'multivendorx')}
+							iconName="external icon"
+							onIconClick={() => {
+								const url = appLocalizer.permalink_structure
+									? `${siteUrl}/${appLocalizer.dashboard_slug}/view-notifications#subtab=announcements`
+									: `${siteUrl}/?page_id=${appLocalizer.dashboard_page_id}&segment=view-notifications#subtab=announcements`;
+								window.open(url, '_blank');
+							}}
+						>
 							<div className="notification-wrapper">
 								{Array.isArray(announcement) && announcement.length > 0 ? (
 									<ul>

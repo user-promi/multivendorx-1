@@ -623,6 +623,7 @@ class FrontendScripts {
                             'storeDetails'  => StoreUtil::get_specific_store_info(),
                             'activeModules' => MultiVendorX()->modules->get_active_modules(),
                             'currentUserId' => MultiVendorX()->current_user_id,
+                            'loginUrl'      => wc_get_page_permalink( 'myaccount' ),
                         )
                     ),
                 ),
