@@ -26,6 +26,10 @@ export interface Column {
     moduleEnabled?: string;
     proSetting?: string;
     visibleWhen?: string;
+    fields?: {
+        key: string
+        type: string
+    }[];
 }
 
 // ── Toggle ────────────────────────────────────────────────────────────────────
@@ -207,7 +211,36 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
 
         const type =
             column.type ??
-            (rowOptions?.length ? 'select' : 'checkbox')
+            (rowOptions?.length ? 'select' : 'setting-toggle')
+
+        if (column.fields) {
+        return (
+            <td key={`${column.key}_${rowKey}`}>
+                <div className="multi-field-cell">
+                    {column.fields.map((field) => {
+                        const fieldKey = `${column.key}_${field.key}_${rowKey}`
+
+                        return (
+                            <TableCell
+                                key={fieldKey}
+                                type={field.type}
+                                fieldKey={fieldKey}
+                                rowKey={rowKey}
+                                column={{ ...column, ...field }}
+                                rowLabel={rowLabel}
+                                value={setting[fieldKey]}
+                                disabled={!isRowActive}
+                                onChange={onChange}
+                                modules={modules}
+                                appLocalizer={appLocalizer}
+                                onBlocked={onBlocked}
+                            />
+                        )
+                    })}
+                </div>
+            </td>
+        )
+    }
 
         return (
             <TableCell

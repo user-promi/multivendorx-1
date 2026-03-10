@@ -183,7 +183,9 @@ const ToggleSetting: FieldComponent = {
                         : value
                             ? [String(value)]
                             : []
-                    : String(value ?? field.defaultValue ?? '')
+                    : field.options && field.options.length > 0
+                        ? String(value ?? field.defaultValue ?? '')
+                        : Boolean(value) 
             }
             onChange={(val) => {
                 if (!canAccess) return;
