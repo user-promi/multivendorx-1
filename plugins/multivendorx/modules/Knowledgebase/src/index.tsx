@@ -1,6 +1,6 @@
 import Knowledgebase from './Knowledgebase';
 
-window.registerMVXRoute({
+window.registerMultiVendorXRoute({
 	tab: 'knowledgebase',
 	component: Knowledgebase,
 });

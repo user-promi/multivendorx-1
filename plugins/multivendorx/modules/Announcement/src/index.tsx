@@ -1,6 +1,6 @@
 import Announcements from './Announcements';
 
-window.registerMVXRoute({
+window.registerMultiVendorXRoute({
 	tab: 'announcements',
 	component: Announcements,
 });

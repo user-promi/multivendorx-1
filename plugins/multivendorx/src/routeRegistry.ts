@@ -1,20 +1,20 @@
 declare global {
 	interface Window {
-		MVX_ROUTES: {
+		MULTIVENDORX_ROUTES: {
 			tab: string;
 			component: React.ComponentType<any>;
 		}[];
-		registerMVXRoute: (route: {
+		registerMultiVendorXRoute: (route: {
 			tab: string;
 			component: React.ComponentType<any>;
 		}) => void;
 	}
 }
 
-window.MVX_ROUTES = window.MVX_ROUTES || [];
+window.MULTIVENDORX_ROUTES = window.MULTIVENDORX_ROUTES || [];
 
-window.registerMVXRoute = (route) => {
-	window.MVX_ROUTES.push(route);
+window.registerMultiVendorXRoute = (route) => {
+	window.MULTIVENDORX_ROUTES.push(route);
 
 	// notify React
 	window.dispatchEvent(new Event('mvx-routes-updated'));

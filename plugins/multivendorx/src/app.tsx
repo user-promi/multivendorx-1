@@ -47,11 +47,11 @@ localStorage.setItem('force_multivendorx_context_reload', 'true');
 const Route = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const [routes, setRoutes] = useState([...window.MVX_ROUTES]);
+	const [routes, setRoutes] = useState([...window.MULTIVENDORX_ROUTES]);
 
 	useEffect(() => {
 		const updateRoutes = () => {
-			setRoutes([...window.MVX_ROUTES]);
+			setRoutes([...window.MULTIVENDORX_ROUTES]);
 		};
 
 		window.addEventListener('mvx-routes-updated', updateRoutes);
