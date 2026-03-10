@@ -34,10 +34,9 @@ const FollowStore: React.FC<FollowStoreProps> = ({
 
 	const storeId = StoreInfo.storeDetails.storeId;
 	const userId = StoreInfo.currentUserId;
-
 	useEffect(() => {
 		axios
-			.get(getApiLink(StoreInfo, `followers/${storeId}`), {
+			.get(getApiLink(StoreInfo, `follow-store/${storeId}`), {
 				headers: { 'X-WP-Nonce': StoreInfo.nonce },
 				params: {
 					user_id: userId,
@@ -53,9 +52,15 @@ const FollowStore: React.FC<FollowStoreProps> = ({
 	}, []);
 
 	const handleFollowToggle = () => {
+		if (!StoreInfo.currentUserId || StoreInfo.currentUserId === "0") {
+			const currentUrl = window.location.href;
+			window.location.href = `${StoreInfo.loginUrl}?redirect_to=${encodeURIComponent(currentUrl)}`;
+			return;
+		}
+
 		axios
 			.post(
-				getApiLink(StoreInfo, `followers/${storeId}`),
+				getApiLink(StoreInfo, `follow-store/${storeId}`),
 				{
 					user_id: userId,
 					store_id: storeId,
