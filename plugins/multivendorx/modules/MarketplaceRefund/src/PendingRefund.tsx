@@ -27,6 +27,11 @@ interface RefundOrder {
 	refund_images: string[];
 }
 
+interface StoreOption {
+	label: string;
+	value: number;
+}
+
 const EMPTY_ORDER: RefundOrder = {
 	id: 0,
 	meta_data: [],
@@ -42,7 +47,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [rowIds, setRowIds] = useState<number[]>([]);
-	const [store, setStore] = useState<any[]>([]);
+	const [store, setStore] = useState<StoreOption[]>([]);
 	const [popupOpen, setPopupOpen] = useState(false);
 	const [formData, setFormData] = useState({ content: '' });
 	const [viewOrder, setViewOrder] = useState<RefundOrder>(EMPTY_ORDER);
