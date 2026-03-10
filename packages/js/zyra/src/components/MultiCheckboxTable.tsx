@@ -6,13 +6,18 @@ import '../styles/web/MultiCheckboxTable.scss';
 import { FieldComponent } from './types';
 import { FIELD_REGISTRY } from './FieldRegistry';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 export type SettingValue = string[] | boolean;
-export type BatchChanges = Record<string, SettingValue>;
+export type RowChanges = Record<string, SettingValue>;
 type FieldSetting = Record<string, SettingValue>;
 
-// ── Column ────────────────────────────────────────────────────────────────────
+
+interface Row {
+    key: string;
+    label: string;
+    description?: string;
+    enabledKey?: string;
+    inactiveMessage?: string;
+}
 
 interface Column {
     key: string;
@@ -27,15 +32,6 @@ interface Column {
     }[];
 }
 
-// ── Row ───────────────────────────────────────────────────────────────────────
-
-interface Row {
-    key: string;
-    label: string;
-    description?: string;
-    enabledKey?: string;
-    inactiveMessage?: string;
-}
 
 interface CapabilityGroup {
     label: string;
@@ -54,7 +50,7 @@ export interface MultiCheckboxTableUIProps {
     /** Global settings used for `visibleWhen` column lookups — keys like
      *  `enable_store_time` live here, NOT inside the field's own value. */
     visibilityContext?: FieldSetting;
-    onChange: (subKeyOrBatch: string | BatchChanges, value?: SettingValue) => void;
+    onChange: (subKeyOrBatch: string | RowChanges, value?: SettingValue) => void;
     proSetting?: boolean;
     modules: string[];
     storeTabSetting: Record<string, string[]>;
@@ -243,7 +239,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                         </td>
                     ) : (
                         columns.filter(isColumnVisible).map((col) =>
-                            renderCell(col, row.key, row.label, row.options, true),
+                            renderCell(col, row.key, row.label, true),
                         )
                     )}
                 </tr>
@@ -333,7 +329,7 @@ const MultiCheckboxTable: FieldComponent = {
                 ? (value as FieldSetting)
                 : (settings as FieldSetting) ?? {};
 
-        const handleChange = (subKeyOrBatch: string | BatchChanges, subVal?: SettingValue) => {
+        const handleChange = (subKeyOrBatch: string | RowChanges, subVal?: SettingValue) => {
 
             if (!canAccess) return;
 
