@@ -11,7 +11,7 @@ interface Option {
     moduleEnabled?: string;
     desc?: string;
     edit?: boolean;
-    dependents?: string [],
+    dependent?: string;
 }
 
 interface MultiCheckBoxProps {
@@ -104,16 +104,17 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
 
     const allSelected = value.length === options.length;
 
-    const turnOffDependents = (selected: string[], options: Option[], parentValue: string): string[] => {
-        const parent = options.find(o => o.value === parentValue);
-        if (!parent || !parent.dependents) return selected;
+    const turnOffChildren = (selected: string[], options: Option[], parent: string): string[] => {
 
         let updated = [...selected];
-        parent.dependents.forEach(dep => {
-            updated = updated.filter(v => v !== dep);
-            // recursive for nested dependents
-            updated = turnOffDependents(updated, options, dep);
+
+        const children = options.filter(opt => opt.dependent === parent);
+
+        children.forEach(child => {
+            updated = updated.filter(v => v !== child.value);
+            updated = turnOffChildren(updated, options, child.value);
         });
+
         return updated;
     };
 
@@ -123,7 +124,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
             : [...value, val];
 
         if (value.includes(val)) {
-            updated = turnOffDependents(updated, options, val);
+            updated = turnOffChildren(updated, options, val);
         }
         onChange(updated);
     };
