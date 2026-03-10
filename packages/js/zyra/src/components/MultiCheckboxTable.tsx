@@ -13,7 +13,7 @@ interface Option {
     label: string;
 }
 
-export type SettingValue = string[] | Option[] | boolean;
+export type SettingValue = string[] | boolean;
 export type BatchChanges = Record<string, SettingValue>;
 type FieldSetting = Record<string, SettingValue>;
 
@@ -39,11 +39,6 @@ export interface ToggleConfig {
     label: string;
     icon?: string;
     group?: number;
-    effects?: {
-        hideTable?: boolean;
-        disableColumns?: string[];
-        mutuallyExclusiveWith?: string[];
-    };
 }
 
 // ── Row ───────────────────────────────────────────────────────────────────────
@@ -77,6 +72,9 @@ export interface MultiCheckboxTableUIProps {
     storeTabSetting: Record<string, string[]>;
     khali_dabba: boolean;
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
+    tableHidden?: boolean;
+    disabledColumns?: string[];
+    appLocalizer?: any; // ✅ FIX
 }
 
 // ─── InlineToggleBar ──────────────────────────────────────────────────────────
@@ -165,8 +163,19 @@ export const TableCell: React.FC<TableCellProps> = ({
 };
 
 export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
-    rows, columns, toggles = [], setting, onChange,
-    storeTabSetting, proSetting, modules, onBlocked, khali_dabba,
+    rows,
+    columns,
+    toggles = [],
+    setting,
+    onChange,
+    storeTabSetting,
+    proSetting,
+    modules,
+    onBlocked,
+    khali_dabba,
+    tableHidden = false, // ✅ FIX
+    disabledColumns = [], // ✅ FIX
+    appLocalizer // ✅ FIX
 }) => {
     const [openGroup, setOpenGroup] = useState<string | null>(() => {
         if (!Array.isArray(rows) && Object.keys(rows).length > 0) return Object.keys(rows)[0];
@@ -180,24 +189,18 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         return groups;
     }, {} as Record<number, ToggleConfig[]>);
 
-    const tableHidden = toggles.some((t) => t.effects?.hideTable && !Boolean(setting[t.key]));
+    const disabledColumnKeys = new Set(disabledColumns); // ✅ FIX
 
-    const disabledColumnKeys = new Set<string>(
-        toggles.flatMap((t) => (Boolean(setting[t.key]) ? (t.effects?.disableColumns ?? []) : [])),
-    );
+    if (tableHidden) return null; // ✅ FIX
 
     const visibleColumns = columns.filter((col) =>
         col.visibleWhen ? Boolean(setting[col.visibleWhen]) : true,
     );
 
     const handleToggleChange = (toggle: ToggleConfig, val: boolean) => {
-        const batch: BatchChanges = { [toggle.key]: val };
-        if (val) toggle.effects?.mutuallyExclusiveWith?.forEach((k) => { batch[k] = false; });
-        onChange(batch);
+        onChange(toggle.key, val); // ✅ FIX (removed effects system)
     };
 
-
-    // Layout only: resolve cellKey / type / disabled, then hand off to <TableCell>
     const renderCell = (
         column: Column,
         rowKey: string,
@@ -214,33 +217,33 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
             (rowOptions?.length ? 'select' : 'setting-toggle')
 
         if (column.fields) {
-        return (
-            <td key={`${column.key}_${rowKey}`}>
-                <div className="multi-field-cell">
-                    {column.fields.map((field) => {
-                        const fieldKey = `${column.key}_${field.key}_${rowKey}`
+            return (
+                <td key={`${column.key}_${rowKey}`}>
+                    <div className="multi-field-cell">
+                        {column.fields.map((field) => {
+                            const fieldKey = `${column.key}_${field.key}_${rowKey}`
 
-                        return (
-                            <TableCell
-                                key={fieldKey}
-                                type={field.type}
-                                fieldKey={fieldKey}
-                                rowKey={rowKey}
-                                column={{ ...column, ...field }}
-                                rowLabel={rowLabel}
-                                value={setting[fieldKey]}
-                                disabled={!isRowActive}
-                                onChange={onChange}
-                                modules={modules}
-                                appLocalizer={appLocalizer}
-                                onBlocked={onBlocked}
-                            />
-                        )
-                    })}
-                </div>
-            </td>
-        )
-    }
+                            return (
+                                <TableCell
+                                    key={fieldKey}
+                                    type={field.type}
+                                    fieldKey={fieldKey}
+                                    rowKey={rowKey}
+                                    column={{ ...column, ...field }}
+                                    rowLabel={rowLabel}
+                                    value={setting[fieldKey]}
+                                    disabled={!isRowActive}
+                                    onChange={onChange}
+                                    modules={modules}
+                                    appLocalizer={appLocalizer}
+                                    onBlocked={onBlocked}
+                                />
+                            )
+                        })}
+                    </div>
+                </td>
+            )
+        }
 
         return (
             <TableCell
@@ -249,7 +252,6 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                 rowKey={rowKey}
                 column={column}
                 rowLabel={rowLabel}
-                rowOptions={rowOptions}
                 value={setting[fieldKey]}
                 disabled={disabled}
                 onChange={onChange}
@@ -262,6 +264,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
 
     const renderFlatRows = (flatRows: Row[]) =>
         flatRows.map((row) => {
+
             const isRowActive = row.enabledKey
                 ? (setting[row.enabledKey] as string[] | undefined)?.includes(row.key) ?? false
                 : true;
@@ -297,7 +300,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                         </td>
                     ) : (
                         visibleColumns.map((col) =>
-                            renderCell(col, row.key, row.label, row.options, true, row.description),
+                            renderCell(col, row.key, row.label, row.options, true),
                         )
                     )}
                 </tr>
@@ -325,7 +328,9 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                         return (
                             <tr key={capKey}>
                                 <td>{capLabel}</td>
-                                {visibleColumns.map((col) => renderCell(col, capKey, capLabel, undefined, hasExists))}
+                                {visibleColumns.map((col) =>
+                                    renderCell(col, capKey, capLabel, undefined, hasExists)
+                                )}
                             </tr>
                         );
                     })}
@@ -347,7 +352,6 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                             key={t.key}
                             config={t}
                             enabled={Boolean(setting[t.key])}
-                            disabled={(t.effects?.mutuallyExclusiveWith ?? []).some((k) => Boolean(setting[k]))}
                             onChange={(val) => handleToggleChange(t, val)}
                         />
                     ))}
@@ -355,26 +359,27 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
             ))}
 
             {!tableHidden && (
-                <table className="grid-table">
-                    <thead>
-                        <tr>
-                            <th />
-                            {visibleColumns.map((column) => (
-                                <th key={column.key}>
-                                    {column.label}
-                                    {column.proSetting && !khali_dabba && (
-                                        <span className="admin-pro-tag"><i className="adminfont-pro-tag" /> Pro</span>
-                                    )}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Array.isArray(rows)
-                            ? renderFlatRows(rows as Row[])
-                            : renderGroupedRows(rows as GroupedRows)}
-                    </tbody>
-                </table>
+            <table className="grid-table">
+                <thead>
+                    <tr>
+                        <th />
+                        {visibleColumns.map((column) => (
+                            <th key={column.key}>
+                                {column.label}
+                                {column.proSetting && !khali_dabba && (
+                                    <span className="admin-pro-tag"><i className="adminfont-pro-tag" /> Pro</span>
+                                )}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {Array.isArray(rows)
+                        ? renderFlatRows(rows as Row[])
+                        : renderGroupedRows(rows as GroupedRows)}
+                </tbody>
+            </table>
             )}
         </>
     );
@@ -383,22 +388,38 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
 // ─── FieldComponent wrapper ───────────────────────────────────────────────────
 
 const MultiCheckboxTable: FieldComponent = {
-    render: ({ field, value, onChange, canAccess, appLocalizer, modules, settings, onBlocked, storeTabSetting }) => {
+    render: ({
+        field,
+        value,
+        onChange,
+        canAccess,
+        appLocalizer,
+        modules,
+        settings,
+        onBlocked,
+        storeTabSetting
+    }) => {
+
         const currentSetting: FieldSetting =
             value && typeof value === 'object' && !Array.isArray(value)
                 ? (value as FieldSetting)
                 : (settings as FieldSetting) ?? {};
 
         const handleChange = (subKeyOrBatch: string | BatchChanges, subVal?: SettingValue) => {
+
             if (!canAccess) return;
+
             const patch = typeof subKeyOrBatch === 'object'
                 ? subKeyOrBatch
                 : { [subKeyOrBatch]: subVal };
+
             onChange({ ...currentSetting, ...patch });
         };
 
         return (
             <MultiCheckboxTableUI
+                tableHidden={!currentSetting[field.tableToggle]} // ✅ FIX
+                disabledColumns={[]} // ✅ FIX
                 khali_dabba={appLocalizer?.khali_dabba ?? false}
                 rows={field.rows ?? []}
                 columns={field.columns ?? []}
