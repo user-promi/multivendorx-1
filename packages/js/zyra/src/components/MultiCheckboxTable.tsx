@@ -38,7 +38,6 @@ export interface TableControl {
     key: string;
     label: string;
     icon?: string;
-    group?: number;
 }
 
 // ── Row ───────────────────────────────────────────────────────────────────────
@@ -72,8 +71,6 @@ export interface MultiCheckboxTableUIProps {
     storeTabSetting: Record<string, string[]>;
     khali_dabba: boolean;
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
-    tableHidden?: boolean;
-    disabledColumns?: string[];
     appLocalizer?: any; // ✅ FIX
 }
 
@@ -173,8 +170,6 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
     modules,
     onBlocked,
     khali_dabba,
-    tableHidden = false, // ✅ FIX
-    disabledColumns = [], // ✅ FIX
     appLocalizer // ✅ FIX
 }) => {
     const [openGroup, setOpenGroup] = useState<string | null>(() => {
@@ -182,23 +177,12 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         return null;
     });
 
-    const toggleGroups = toggles.reduce((groups, toggle) => {
-        const group = toggle.group ?? 1;
-        if (!groups[group]) groups[group] = [];
-        groups[group].push(toggle);
-        return groups;
-    }, {} as Record<number, TableControl[]>);
-
-    const disabledColumnKeys = new Set(disabledColumns); // ✅ FIX
-
-    if (tableHidden) return null; // ✅ FIX
-
     const visibleColumns = columns.filter((col) =>
         col.visibleWhen ? Boolean(setting[col.visibleWhen]) : true,
     );
 
     const handleToggleChange = (toggle: TableControl, val: boolean) => {
-        onChange(toggle.key, val); // ✅ FIX (removed effects system)
+        onChange(toggle.key, val);
     };
 
     const renderCell = (
@@ -210,7 +194,6 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
     ) => {
 
         const fieldKey = `${column.key}_${rowKey}`
-        const disabled = !isRowActive || disabledColumnKeys.has(column.key)
 
         const type =
             column.type ??
@@ -253,7 +236,6 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                 column={column}
                 rowLabel={rowLabel}
                 value={setting[fieldKey]}
-                disabled={disabled}
                 onChange={onChange}
                 modules={modules}
                 appLocalizer={appLocalizer}
@@ -339,15 +321,17 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         });
     };
 
+    const primaryToggle = toggles?.[0]?.key;
+    const tableEnabled = primaryToggle ? Boolean(setting[primaryToggle]) : true;
+
     return (
         <>
             {proSetting && (
                 <span className="admin-pro-tag"><i className="adminfont-pro-tag" /> Pro</span>
             )}
 
-            {Object.entries(toggleGroups).map(([group, groupToggles]) => (
-                <div className="inline-toggle-bar-row" key={group}>
-                    {groupToggles.map((t) => (
+                <div className="inline-toggle-bar-row" >
+                    {toggles.map((t) => (
                         <ControlItem
                             key={t.key}
                             config={t}
@@ -356,10 +340,8 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                         />
                     ))}
                 </div>
-            ))}
 
-            {!tableHidden && (
-            <table className="grid-table">
+            {tableEnabled && <table className="grid-table">
                 <thead>
                     <tr>
                         <th />
@@ -379,8 +361,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                         ? renderFlatRows(rows as Row[])
                         : renderGroupedRows(rows as GroupedRows)}
                 </tbody>
-            </table>
-            )}
+            </table>}
         </>
     );
 };
@@ -416,14 +397,8 @@ const MultiCheckboxTable: FieldComponent = {
             onChange({ ...currentSetting, ...patch });
         };
 
-        const tableHidden = field.tableToggle
-    ? !Boolean(currentSetting[field.tableToggle])
-    : false;
-
         return (
             <MultiCheckboxTableUI
-                tableHidden={tableHidden} // ✅ FIX
-                disabledColumns={[]} // ✅ FIX
                 khali_dabba={appLocalizer?.khali_dabba ?? false}
                 rows={field.rows ?? []}
                 columns={field.columns ?? []}
