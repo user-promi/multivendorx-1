@@ -138,9 +138,9 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         return null;
     });
 
-    const ctx = visibilityContext ?? setting;
+    const context = visibilityContext ?? setting;
     const isColumnVisible = (col: Column) =>
-        col.visibleWhen ? Boolean(ctx[col.visibleWhen]) : true;
+        col.visibleWhen ? Boolean(context[col.visibleWhen]) : true;
 
     const visibleColumns = columns.filter(isColumnVisible);
 
@@ -152,53 +152,37 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         isRowActive: boolean,
     ) => {
 
-        const fieldKey = `${column.key}_${rowKey}`
-
-        const type = column.type
-
-        if (column.fields) {
-            return (
-                <td key={`${column.key}_${rowKey}`}>
-                    <div className="multi-field-cell">
-                        {column.fields.map((field) => {
-                            const fieldKey = `${column.key}_${field.key}_${rowKey}`
-
-                            return (
-                                <TableCell
-                                    key={fieldKey}
-                                    type={field.type}
-                                    fieldKey={fieldKey}
-                                    rowKey={rowKey}
-                                    column={column}
-                                    rowLabel={rowLabel}
-                                    value={setting[fieldKey]?? false}
-                                    disabled={!isRowActive}
-                                    onChange={onChange}
-                                    modules={modules}
-                                    appLocalizer={appLocalizer}
-                                    onBlocked={onBlocked}
-                                />
-                            )
-                        })}
-                    </div>
-                </td>
-            )
-        }
+        const fields = column.fields ?? [{ key: column.key, type: column.type }];
 
         return (
-            <TableCell
-                type={type}
-                fieldKey={fieldKey}
-                rowKey={rowKey}
-                column={column}
-                rowLabel={rowLabel}
-                value={setting[fieldKey]}
-                onChange={onChange}
-                modules={modules}
-                appLocalizer={appLocalizer}
-                onBlocked={onBlocked}
-            />
-        )
+            <td key={`${column.key}_${rowKey}`}>
+                <div className="multi-field-cell">
+                    {fields.map((field) => {
+                        const fieldKey =
+                            column.fields
+                                ? `${column.key}_${field.key}_${rowKey}`
+                                : `${column.key}_${rowKey}`;
+
+                        return (
+                            <TableCell
+                                key={fieldKey}
+                                type={field.type}
+                                fieldKey={fieldKey}
+                                rowKey={rowKey}
+                                column={column}
+                                rowLabel={rowLabel}
+                                value={setting[fieldKey] ?? false}
+                                disabled={!isRowActive}
+                                onChange={onChange}
+                                modules={modules}
+                                appLocalizer={appLocalizer}
+                                onBlocked={onBlocked}
+                            />
+                        );
+                    })}
+                </div>
+            </td>
+        );
     };
 
     const renderFlatRows = (flatRows: Row[]) =>
