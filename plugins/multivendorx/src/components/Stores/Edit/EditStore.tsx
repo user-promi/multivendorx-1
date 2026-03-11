@@ -15,6 +15,7 @@ import {
 	useOutsideClick,
 	ItemListUI,
 	Notice,
+	Container,
 } from 'zyra';
 
 import StoreSettings from './StoreSettings';
@@ -346,13 +347,13 @@ const EditStore = () => {
 	const actionItems = [
 		data.status === 'active' && {
 			title: __('View Storefront', 'multivendorx'),
-			icon: 'adminfont-storefront',
+			icon: 'storefront',
 			link: `${appLocalizer.store_page_url}${data.slug}`,
 			targetBlank: true,
 		},
 		data.status != 'pending' && {
 			title: __('Manage status', 'multivendorx'),
-			icon: 'adminfont-form-multi-select',
+			icon: 'form-multi-select',
 			action: () => {
 				navigate(
 					`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
@@ -371,19 +372,19 @@ const EditStore = () => {
 		},
 		data.status != 'pending' && {
 			title: __('Products', 'multivendorx'),
-			icon: 'adminfont-single-product',
+			icon: 'single-product',
 			link: `${appLocalizer.admin_url}edit.php?post_type=product&multivendorx_store_id=${data.id}`,
 		},
 		data.status != 'pending' && {
 			title: __('Orders', 'multivendorx'),
-			icon: 'adminfont-order',
+			icon: 'order',
 			action: () => {
 				navigate(`?page=multivendorx#&tab=reports&subtab=store-orders`);
 			},
 		},
 		{
 			title: __('Delete store', 'multivendorx'),
-			icon: 'adminfont-delete',
+			icon: 'delete',
 			className: 'delete',
 			action: () => {
 				handleStoreDelete();
@@ -405,7 +406,7 @@ const EditStore = () => {
 				appLocalizer={appLocalizer}
 				settingTitleSection={
 					<>
-						<div className="general-wrapper">
+						<Container general>
 							<div className="store-header">
 								<div
 									className="banner"
@@ -954,7 +955,7 @@ const EditStore = () => {
 									</div>
 								</div>
 							</div>
-						</div>
+						</Container>
 					</>
 				}
 				Link={Link}
@@ -962,7 +963,7 @@ const EditStore = () => {
 				action={
 					<PopupUI
 						position="menu-dropdown"
-						toggleIcon="adminfont-more-vertical"
+						toggleIcon="more-vertical"
 					>
 						<ItemListUI items={actionItems} />
 					</PopupUI>

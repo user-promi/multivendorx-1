@@ -2,11 +2,11 @@
 
 // admin tab
 
-.admin-tab {
-    .tabs-item .tab {
-        padding-top: 0;
-    }
-}
+// .admin-tab {
+//     .tabs-item .tab {
+//         padding-top: 0;
+//     }
+// }
 
 // welcome section start
 .pro-banner-wrapper {
@@ -66,44 +66,44 @@
 // pro banner end
 
 // admin dashboard card design start
-.header {
-    padding: 1rem;
-    background: #fff;
-    margin-bottom: 0.625rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+// .header {
+//     padding: 1rem;
+//     background: #fff;
+//     margin-bottom: 0.625rem;
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
 
-    .title-wrapper {
-        .title {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: $text-color;
-        }
+//     .title-wrapper {
+//         .title {
+//             font-size: 1.5rem;
+//             margin-bottom: 0.5rem;
+//             font-weight: 500;
+//             color: $text-color;
+//         }
 
-        img {
-            height: 2.5rem;
-            width: 2.5rem;
-            border-radius: $border-radius-small;
-            border: $border-light-small;
-            padding-right: 0.5rem;
-        }
-    }
+//         img {
+//             height: 2.5rem;
+//             width: 2.5rem;
+//             border-radius: $border-radius-small;
+//             border: $border-light-small;
+//             padding-right: 0.5rem;
+//         }
+//     }
 
-    .right {
-        .analytics-container {
-            padding: 0;
-            gap: 1rem;
+//     .right {
+//         .analytics-container {
+//             padding: 0;
+//             gap: 1rem;
 
-            .analytics-item {
-                border: $border-light-small;
-                padding: 0.313rem;
-                border-radius: $border-radius-small;
-            }
-        }
-    }
-}
+//             .analytics-item {
+//                 border: $border-light-small;
+//                 padding: 0.313rem;
+//                 border-radius: $border-radius-small;
+//             }
+//         }
+//     }
+// }
 
 .cards {
     .title-wrapper {
@@ -185,24 +185,6 @@
         img {
             height: 1.75rem;
             width: auto;
-        }
-    }
-
-    &.plugin {
-        .cards {
-            background: #f8f9fa;
-            border: none;
-            width: 100%;
-        }
-
-        h3 {
-            font-size: 0.95rem;
-        }
-
-        .tag {
-            display: flex;
-            align-items: center;
-            gap: 0.813rem;
         }
     }
 
@@ -288,7 +270,7 @@
 //     }
 // }
 
-// top items start
+// top items start (check product report and delete)
 .top-items {
     .items {
         display: flex;
@@ -641,107 +623,107 @@
 }
 
 // dropdown menu style (table action, icon action)  remove
-.icon-wrapper {
-    position: relative;
+// .icon-wrapper {
+//     position: relative;
 
-    .count {
-        position: absolute;
-        font-size: 0.75rem;
-        right: -0.25rem;
-        top: -0.45rem;
-        padding: 0.125rem;
-        background: $accent-color;
-        border-radius: 50%;
-        width: 0.75rem;
-        height: 0.75rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+//     .count {
+//         position: absolute;
+//         font-size: 0.75rem;
+//         right: -0.25rem;
+//         top: -0.45rem;
+//         padding: 0.125rem;
+//         background: $accent-color;
+//         border-radius: 50%;
+//         width: 0.75rem;
+//         height: 0.75rem;
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//     }
 
-    .dropdown {
-        position: absolute;
-        top: 2rem;
-        overflow: hidden;
-        border: 0.063rem solid #e5e9f2;
-        max-width: 14rem;
-        min-width: 14rem;
-        right: 0;
-        background: #fff;
-        border-radius: $border-radius-small;
-        transition: all 0.3s ease;
-        z-index: 9999;
+//     .dropdown {
+//         position: absolute;
+//         top: 2rem;
+//         overflow: hidden;
+//         border: 0.063rem solid #e5e9f2;
+//         max-width: 14rem;
+//         min-width: 14rem;
+//         right: 0;
+//         background: #fff;
+//         border-radius: $border-radius-small;
+//         transition: all 0.3s ease;
+//         z-index: 9999;
 
-        .dropdown-body {
-            margin: 0;
+//         .dropdown-body {
+//             margin: 0;
 
-            .tabs-wrapper {
-                padding: 0.75rem;
-            }
-        }
+//             .tabs-wrapper {
+//                 padding: 0.75rem;
+//             }
+//         }
 
-        .dropdown-header {
-            .title {
-                padding: 0.75rem;
-                border-bottom: $border-light-small;
-                display: flex;
-                justify-content: space-between;
-                font-size: 1.25rem;
-                align-items: center;
-            }
-        }
+//         .dropdown-header {
+//             .title {
+//                 padding: 0.75rem;
+//                 border-bottom: $border-light-small;
+//                 display: flex;
+//                 justify-content: space-between;
+//                 font-size: 1.25rem;
+//                 align-items: center;
+//             }
+//         }
 
-        ul {
-            list-style: none;
-            margin: 0;
-            padding: 0.5rem 0;
+//         ul {
+//             list-style: none;
+//             margin: 0;
+//             padding: 0.5rem 0;
 
-            li {
-                margin: 0;
+//             li {
+//                 margin: 0;
 
-                .item {
-                    display: flex;
-                    align-items: end;
-                    color: #526484;
-                    font-size: 0.95rem;
-                    line-height: 0.813;
-                    font-weight: 500;
-                    padding: .813rem 1.313rem;
-                    position: relative;
-                    gap: 0.5rem;
-                    cursor: pointer;
+//                 .item {
+//                     display: flex;
+//                     align-items: end;
+//                     color: #526484;
+//                     font-size: 0.95rem;
+//                     line-height: 0.813;
+//                     font-weight: 500;
+//                     padding: .813rem 1.313rem;
+//                     position: relative;
+//                     gap: 0.5rem;
+//                     cursor: pointer;
 
 
-                    i {
-                        font-size: 1.063rem;
-                    }
+//                     i {
+//                         font-size: 1.063rem;
+//                     }
 
-                    &:hover {
-                        color: #854fff;
-                        background: $theme-background-color;
-                    }
-                }
+//                     &:hover {
+//                         color: #854fff;
+//                         background: $theme-background-color;
+//                     }
+//                 }
 
-                &.delete {
+//                 &.delete {
 
-                    .item {
-                        color: $accent-color;
-                        border-top: 0.063rem solid;
+//                     .item {
+//                         color: $accent-color;
+//                         border-top: 0.063rem solid;
 
-                        &:hover {
-                            background: transparent;
-                        }
-                    }
-                }
-            }
-        }
+//                         &:hover {
+//                             background: transparent;
+//                         }
+//                     }
+//                 }
+//             }
+//         }
 
-        .footer {
-            padding: 0.75rem;
-            border: $border-light-small;
-        }
-    }
-}
+//         .footer {
+//             padding: 0.75rem;
+//             border: $border-light-small;
+//         }
+//     }
+// }
 
 // dropdown menu end
 
@@ -1184,7 +1166,7 @@
 
 // commission popup style start
 .content {
-    padding: 1rem 2rem;
+    // padding: 1rem 2rem;
     max-height: 70vh;
 
 

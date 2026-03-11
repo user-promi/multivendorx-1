@@ -1,13 +1,21 @@
 @use './config.scss' as *;
 
+.store-card{
+    h3,h4,h5,p{
+        margin: 0;
+    }
+}
+
 // store quick info start (sidebar)
 .store-header {
     display: flex;
     align-items: center;
     margin-bottom: 1.25rem;
     padding-bottom: 1.25rem;
-    border-bottom: 0.063rem solid #eaeaea;
+    border-bottom: 0.063rem solid var(--theme-border-color);
     width: 100%;
+    gap: 0.75rem;
+    align-items: start;
 
     .store-avatar {
         width: 5rem;
@@ -15,7 +23,7 @@
         border-radius: 50%;
         overflow: hidden;
         margin-right: 0.938rem;
-        border: 0.063rem solid #f0f0f0;
+        border: 0.063rem solid var(--theme-border-color);
 
         img {
             width: 100%;
@@ -29,14 +37,15 @@
     flex: 1;
 }
 
-.store-stats{
+.store-stats {
     display: flex;
 }
+
 .stat-item {
     text-align: center;
     flex: 1;
 }
-    
+
 .stat-number {
     font-size: 1.5rem;
     font-weight: 700;
@@ -74,7 +83,7 @@
 //  store page policy tabs start
 .multivendorx-policies-accordion {
     .accordion-item {
-        border: 0.063rem solid #ddd;
+        border: 0.063rem solid var(--theme-border-color);
         border-radius: 0.313rem;
         margin-bottom: 0.625rem;
         overflow: hidden;
@@ -171,13 +180,10 @@
             margin-bottom: 2rem;
 
             .store {
-                border: 0.063rem solid #eee;
+                border: 0.063rem solid var(--theme-border-color);
                 border-radius: 0.313rem;
-                display: flex;
-                gap: 0.5rem;
-                padding: 0.5rem;
-                align-items: start;
-                box-shadow: 0 0.125rem 0.5rem 0 #c9c7cd6e;
+                padding: 1rem;
+                // box-shadow: 0 0.125rem 0.5rem 0 #c9c7cd6e;
                 box-sizing: border-box;
                 margin-bottom: 1rem;
 
@@ -206,9 +212,19 @@
                 }
 
                 .store-details {
-                    h2 {
+                    flex-direction: column;
+                    align-items: start;
+                    h4 {
                         margin: 0;
                     }
+                }
+
+                .store-footer {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-top: 0.063rem solid var(--theme-border-color);
+                    padding-top: 1rem;
                 }
             }
         }
@@ -221,8 +237,8 @@
             display: flex;
             gap: 2rem;
 
-            .map-wrapper,
-            .store-list {
+            .store-list,
+            .store-map {
                 width: 50%;
             }
         }
@@ -250,8 +266,8 @@
                     margin: 0;
                 }
             }
-
-            .map-wrapper {
+            .map-wrapper,
+            .store-map {
                 width: 100%;
             }
         }
@@ -259,7 +275,6 @@
 
     // product section
     .store-products {
-        padding-top: 1rem;
         .products {
             display: flex;
             gap: 1rem;
@@ -288,9 +303,9 @@
 
 //  store details start
 .store-details {
-    display: 'flex';
-    align-items: 'center';
-    gap: '0.5rem';
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 //  store details end
@@ -300,7 +315,7 @@
 .store-coupon-list {
     .coupon-card {
         padding: 1rem;
-        border: 0.063rem dashed;
+        border: 0.063rem dashed var(--theme-border-color);
         border-radius: 0.313rem;
         margin-bottom: 0.813rem;
         width: fit-content;

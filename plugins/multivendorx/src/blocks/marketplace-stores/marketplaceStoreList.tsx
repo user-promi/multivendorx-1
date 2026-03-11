@@ -272,15 +272,27 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 				<div className="store-filter-wrapper">
 					{apiKey != '' && (
 						<>
-							<input
-								type="text"
-								name="address"
-								value={filters.address}
-								onChange={handleInputChange}
-								placeholder={__('Enter Address', 'multivendorx')}
-								className="woocommerce-Input woocommerce-Input--text input-text"
-							/>
-
+							<div className="woocommerce-widget-layered-nav-list">
+								<div className="woocommerce-product-search" style={{ position: 'relative', marginBottom: '15px' }}>
+									<input
+										type="text"
+										className="search-field"
+										value={filters.address}
+										onChange={handleInputChange}
+										placeholder={__('Enter Address', 'multivendorx')}
+									/>
+									<button
+										type="button"
+										className="button location-button"
+										style={{ position: 'absolute', right: '5px', top: '50%', transform: 'translateY(-50%)' }}
+										onClick={requestUserLocation}
+									>
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3d7a3e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+											<circle cx="12" cy="12" r="3"></circle><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line>
+										</svg>
+									</button>
+								</div>
+							</div>
 							<select
 								name="distance"
 								value={filters.distance}
@@ -307,12 +319,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 									{__('Nautical miles', 'multivendorx')}
 								</option>
 							</select>
-							<button
-								className="woocommerce-button button wp-element-button"
-								onClick={requestUserLocation}
-							>
-								{__('Use My Current Location', 'multivendorx')}
-							</button>
 						</>
 					)}
 					<select
@@ -380,82 +386,106 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 						{data &&
 							data.map((store) => (
 								<div key={store.id} className="store">
-									{store.image ? (
-										<div className="store-image">
-											<img src={store.image} alt={store.store_name} />
+
+									<div className="store-header">
+										{store.image ? (
+											<div className="store-image">
+												<img src={store.image} alt={store.store_name} />
+											</div>
+										) : (
+											<div className="avatar">
+												{store.store_name?.charAt(0).toUpperCase()}
+											</div>
+										)}
+
+										<div className="store-details">
+											<h4>{store.store_name}</h4>
+											<div className="review-rating"><div className="star-rating"><span>Rated <strong className="rating">4.00</strong> out of 5</span></div></div>
+											<div className="contact-wrapper">
+												{store.phone && (
+													<span>
+														<i className="dashicons dashicons-phone" />{' '}
+														{store.phone}
+													</span>
+												)}
+
+												{store.address && (
+													<span>
+														<i className="dashicons dashicons-location" />
+														{store.address}
+													</span>
+												)}
+											</div>
 										</div>
-									) : (
-										<div className="avatar">
-											{store.store_name?.charAt(0).toUpperCase()}
-										</div>
-									)}
+									</div>
 
+									<div className="store-products">
+										<h6 className="woocommerce-products-header__title">
+											{__('Top Products', 'multivendorx')}
+										</h6>
 
-									<div className="store-details">
-										<h4>{store.store_name}</h4>
-
-										<div className="contact-wrapper">
-											{store.phone && (
-												<span>
-													<i className="dashicons dashicons-phone" />{' '}
-													{store.phone}
-												</span>
-											)}
-
-											{store.address && (
-												<span>
-													<i className="dashicons dashicons-location" />
-													{store.address}
-												</span>
-											)}
-										</div>
-
-										<div className="store-products">
-											<h6 className="woocommerce-products-header__title">
-												{__('Top Products', 'multivendorx')}
-											</h6>
-
-											{/* (pkoro start) */}
-											<ul className="products">
-												<li className="product type-product">
-													<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-														<div className="woocommerce-loop-product__thumbnail">
-															<div className="woocommerce-placeholder">
-																<img
-																	src="https://via.placeholder.com/300x300"
-																	alt="Placeholder"
-																	className="wp-post-image"
-																	width="80"
-																	height="80"
-																/>
-															</div>
+										{/* (pkoro start) */}
+										<ul className="products">
+											<li className="product type-product">
+												<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+													<div className="woocommerce-loop-product__thumbnail">
+														<div className="woocommerce-placeholder">
+															<img
+																src="https://via.placeholder.com/300x300"
+																alt="Placeholder"
+																className="wp-post-image"
+																width="30"
+																height="30"
+															/>
 														</div>
-														<h2 className="woocommerce-loop-product__title">
-															Product Name 1 (pkoro)
-														</h2>
-													</a>
-												</li>
-
-												<li className="product type-product">
-													<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-														<div className="woocommerce-loop-product__thumbnail">
-															<div className="woocommerce-placeholder">
-																<img
-																	src="https://via.placeholder.com/300x300"
-																	alt="Placeholder"
-																	className="wp-post-image"
-																	width="80"
-																	height="80"
-																/>
-															</div>
+													</div>
+													<h6 className="woocommerce-loop-product__title">
+														Product Name 1 (pkoro)
+													</h6>
+												</a>
+											</li>
+											<li className="product type-product">
+												<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+													<div className="woocommerce-loop-product__thumbnail">
+														<div className="woocommerce-placeholder">
+															<img
+																src="https://via.placeholder.com/300x300"
+																alt="Placeholder"
+																className="wp-post-image"
+																width="30"
+																height="30"
+															/>
 														</div>
-														<h2 className="woocommerce-loop-product__title">
-															Product Name 2  (pkoro)
-														</h2>
-													</a>
-												</li>
-											</ul> {/* (pkoro end) */}
-										</div>
+													</div>
+													<h6 className="woocommerce-loop-product__title">
+														Product Name 1 (pkoro)
+													</h6>
+												</a>
+											</li>
+											<li className="product type-product">
+												<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+													<div className="woocommerce-loop-product__thumbnail">
+														<div className="woocommerce-placeholder">
+															<img
+																src="https://via.placeholder.com/300x300"
+																alt="Placeholder"
+																className="wp-post-image"
+																width="30"
+																height="30"
+															/>
+														</div>
+													</div>
+													<h6 className="woocommerce-loop-product__title">
+														Product Name 1 (pkoro)
+													</h6>
+												</a>
+											</li>
+										</ul> {/* (pkoro end) */}
+									</div>
+
+									<div className="store-footer">
+										<p> 7 products</p>
+										<button>View Store</button>
 									</div>
 								</div>
 							))}
@@ -489,11 +519,12 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 							</ul>
 						</nav>
 					</div>
-
-					{renderMapComponent()}
+					<div className="store-map">
+						{renderMapComponent()}
+					</div>
 				</div>
 
-			</div>
+			</div >
 		</>
 	);
 };

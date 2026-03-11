@@ -18,7 +18,7 @@ interface Item {
     onReject?: (item: Item) => void;
     desc?: string;
     value?: string;
-    className?: string;
+    className?: string;  // notification | checklist | feature-list | mini-card | price-list
 }
 
 interface ItemListUIProps {
@@ -45,10 +45,10 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({items, background, border
                             <a
                                 href={item.link}
                                 target={item.targetBlank ? "_blank" : "_self"}
-                                className="item"
+                                className={`item ${background ? 'background' : ''} ${border ? 'border' : ''} ${item.className || ''}`}
                                 onClick={handleClick}
                             >
-                                {item.icon && <i className={`item-icon ${item.icon}`}></i>}
+                                {item.icon && <i className={`item-icon adminfont-${item.icon}`}></i>}
                                 {item.title}
                             </a>
                         ) : (
@@ -63,7 +63,7 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({items, background, border
                                 {item.img && <img src={item.img} alt={item.title || 'item image'} />}
 
                                 <div className="details">
-                                    <div className="title">{item.title}</div>
+                                    <div className="item-title">{item.title}</div>
                                     {item.value && <div className="value">{item.value}</div>}
                                     {item.desc && <div className="desc">{item.desc}</div>}
                                 </div>

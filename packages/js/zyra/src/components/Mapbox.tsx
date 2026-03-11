@@ -277,21 +277,9 @@ const Mapbox = ({
     };    
 
     return (
-        <div
-            ref={mapContainerRef}
-            style={{ position: 'relative', height: 400 }}
-        >
             <div
-                style={{
-                    position: 'absolute',
-                    top: 10,
-                    left: 10,
-                    zIndex: 5,
-                    width: 260,
-                    background: '#fff',
-                    borderRadius: 6,
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-                }}
+                ref={mapContainerRef}
+                id="location-map"
             >
                 <input
                     value={query}
@@ -300,28 +288,16 @@ const Mapbox = ({
                         setQuery(e.target.value);
                         fetchSuggestions(e.target.value);
                     }}
-                    style={{
-                        width: '100%',
-                        padding: 8,
-                        border: 'none',
-                        outline: 'none',
-                    }}
                 />
                 {suggestions.map((suggestion) => (
                     <div
                         key={suggestion.mapbox_id}
                         onClick={() => selectSuggestion(suggestion)}
-                        style={{
-                            padding: 8,
-                            cursor: 'pointer',
-                            borderTop: '1px solid #eee',
-                        }}
                     >
                         {suggestion.name}
                     </div>
                 ))}
             </div>
-        </div>
     );
 };
 

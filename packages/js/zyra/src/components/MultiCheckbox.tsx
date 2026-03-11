@@ -281,7 +281,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
                     );
                 })}
             </div>
-
+                <input type="checkbox" onChange={(e) => onChange((e.target.checked))}/>
             {/* Add-new section */}
             {props.addNewBtn && (
                 showNewInput ? (
