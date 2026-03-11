@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { FieldComponent } from './types';
 
-interface GoogleMapComponentProps {
+interface GoogleMapProps {
     apiKey: string;
     locationAddress: string;
     locationLat: string;
@@ -38,7 +38,7 @@ export const GoogleMapUI = ({
     onLocationUpdate,
     placeholderSearch,
     stores,
-}: GoogleMapComponentProps) => {
+}: GoogleMapProps) => {
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [marker, setMarker] = useState<google.maps.Marker | null>(null);
     const [googleLoaded, setGoogleLoaded] = useState<boolean>(false);
@@ -71,7 +71,6 @@ export const GoogleMapUI = ({
         };
 
         place.address_components?.forEach(component => {
-            console.log('Component:', component.long_name, component.types);
             const type = component.types.find(t => typeMap[t]);
             if (type) {
                 if (type === 'street_number' || type === 'route') {
@@ -191,8 +190,6 @@ export const GoogleMapUI = ({
                 fields: ['address_components', 'formatted_address', 'geometry', 'name'],
             }).addListener('place_changed', function (this: google.maps.places.Autocomplete) {
                 const place = this.getPlace();
-                console.log('PLACE OBJECT:', place);
-                console.log('ADDRESS COMPONENTS:', place.address_components);
                 if (place.geometry?.location) {
                     updateLocation(place.geometry.location.lat(), place.geometry.location.lng(), place);
                 }

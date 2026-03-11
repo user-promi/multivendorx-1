@@ -9,7 +9,7 @@ interface Store {
     location_lng?: string;
 }
 
-interface MapboxComponentProps {
+interface MapboxProps {
     apiKey: string;
     locationAddress: string;
     locationLat: string;
@@ -42,7 +42,7 @@ export const MapboxUI = ({
     isUserLocation,
     onLocationUpdate,
     placeholderSearch,
-}: MapboxComponentProps) => {
+}: MapboxProps) => {
 
     const mapRef = useRef<any>(null);
     const markerRef = useRef<any>(null);
