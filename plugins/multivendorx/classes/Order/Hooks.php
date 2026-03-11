@@ -26,8 +26,25 @@ class Hooks {
     public function __construct() {
         add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'add_metadata_for_line_item' ), 10, 4 );
         add_action( 'woocommerce_checkout_create_order_shipping_item', array( $this, 'add_metadate_for_shipping_item' ), 10, 4 );
-        add_action( 'woocommerce_analytics_update_order_stats', array( $this, 'remove_suborder_analytics' ), 10, 1 );
+        // add_action( 'woocommerce_analytics_update_order_stats', array( $this, 'remove_suborder_analytics' ), 10, 1 );
+         if ( is_admin() ) {
+            // Orders & Revenue Tabs
+            add_filter( 'woocommerce_analytics_clauses_where_orders_stats_total', array( $this, 'exclude_suborders_analytics' ) );
+            add_filter( 'woocommerce_analytics_clauses_where_orders_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
+            add_filter( 'woocommerce_analytics_clauses_where_orders_subquery', array( $this, 'exclude_suborders_analytics' ) );
 
+            // Products Tab
+            add_filter( 'woocommerce_analytics_clauses_where_products_stats_total', array( $this, 'exclude_suborders_analytics' ) );
+            add_filter( 'woocommerce_analytics_clauses_where_products_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
+
+            // Variations & Categories
+            add_filter( 'woocommerce_analytics_clauses_where_variations_stats_total', array( $this, 'exclude_suborders_analytics' ) );
+            add_filter( 'woocommerce_analytics_clauses_where_categories_stats_total', array( $this, 'exclude_suborders_analytics' ) );
+        }
+        // Taxes & Coupons
+        add_filter( 'woocommerce_analytics_clauses_where_taxes_stats_total', array( $this, 'exclude_suborders_analytics' ) );
+        add_filter( 'woocommerce_analytics_clauses_where_coupons_stats_total', array( $this, 'exclude_suborders_analytics' ) );
+        
         // Create store order after valid checkout processed.
         add_action( 'woocommerce_checkout_order_processed', array( $this, 'create_store_order' ) );
         add_action( 'woocommerce_store_api_checkout_order_processed', array( $this, 'create_store_order' ) );
@@ -97,6 +114,22 @@ class Hooks {
 
             \WC_Cache_Helper::get_transient_version( 'woocommerce_reports', true );
         }
+    }
+
+    /**
+     * Forces the SQL query to only include top-level parent orders.
+     * * @param array $clauses Existing SQL clauses (where, join, etc.)
+     * @return array Modified clauses
+     */
+    public function exclude_suborders_analytics( $clauses ) {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'wc_order_stats';
+
+        // Inject the constraint: parent_id must be 0
+        $clauses[] = "AND {$table_name}.parent_id = 0";
+
+        return $clauses;
     }
 
     /**
