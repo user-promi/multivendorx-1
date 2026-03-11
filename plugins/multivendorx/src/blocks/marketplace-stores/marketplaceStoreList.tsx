@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getApiLink, GoogleMap, Mapbox } from 'zyra';
+import { getApiLink, GoogleMapUI, MapboxUI } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 interface StoreRow {
@@ -67,9 +67,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 
 		const provider = settings.geolocation.choose_map_api;
 
-		if (provider === 'google_map_set') {
-			setApiKey(settings.geolocation.google_api_key || '');
-		} else if (provider === 'mapbox_api_set') {
+		if (provider === 'google_map') {
+			setApiKey(settings.geolocation.google_map_api_key || '');
+		} else if (provider === 'mapbox') {
 			setApiKey(settings.geolocation.mapbox_api_key || '');
 		}
 	}, [settings]);
@@ -230,11 +230,11 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		};
 
 		switch (settings.geolocation.choose_map_api) {
-			case 'google_map_set':
-				return <GoogleMap {...commonProps} />;
+			case 'google_map':
+				return <GoogleMapUI {...commonProps} />;
 
-			case 'mapbox_api_set':
-				return <Mapbox {...commonProps} />;
+			case 'mapbox':
+				return <MapboxUI {...commonProps} />;
 
 			default:
 				return null;
