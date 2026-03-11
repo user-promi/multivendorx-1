@@ -105,7 +105,7 @@ const Documentation: React.FC = () => {
 			<NavigatorHeader
 				headerTitle={__('Documentation', 'multivendorx')}
 				headerDescription={__(
-					'Everything you need to know about store operations',
+					'Admin-shared guides and documentation for managing your store can be accessed.',
 					'multivendorx'
 				)}
 			/>

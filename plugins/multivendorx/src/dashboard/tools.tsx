@@ -7,15 +7,15 @@ const Tools: React.FC = () => {
 			<NavigatorHeader
 				headerTitle={__('Tools', 'multivendorx')}
 				headerDescription={__(
-					'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis, perferendis.',
+					'Use these tools if your store dashboard is showing outdated or incorrect information.',
 					'multivendorx'
 				)}
 			/>
 
 			<Card
-				title={__('Vendor Dashboard transients', 'multivendorx')}
+				title={__('Refresh store dashboard data', 'multivendorx')}
 				desc={__(
-					'Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, nesciunt?',
+					'Your dashboard stores temporary data (transients) to load faster. If your dashboard shows outdated information or recent changes are not visible, clearing the transients will refresh the data and display the latest updates.',
 					'multivendorx'
 				)}
 			>

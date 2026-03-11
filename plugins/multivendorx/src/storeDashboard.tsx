@@ -39,6 +39,16 @@ const Dashboard = () => {
 
 	const hasCapability = (capability: any): boolean => {
 		if (!capability) return true;
+		const overrideResult = applyFilters(
+			'multivendorx_override_capability',
+			null,
+			capability
+		);
+
+		// If membership handled it → stop here
+		if (overrideResult !== null) {
+			return overrideResult;
+		}
 		const userCaps = appLocalizer.current_user?.allcaps || {};
 		if (Array.isArray(capability)) return capability.some((cap) => userCaps[cap] === true);
 		return userCaps[capability] === true;

@@ -336,7 +336,7 @@ const AllProduct: React.FC = () => {
 		<>
 			<NavigatorHeader
 				headerTitle={__('All Products', 'multivendorx')}
-				headerDescription={__('Manage your store products', 'multivendorx')}
+				headerDescription={__('Products are created, updated, and managed for your store.', 'multivendorx')}
 				buttons={applyFilters(
 					'multivendorx_product_list_header_buttons',
 					[
