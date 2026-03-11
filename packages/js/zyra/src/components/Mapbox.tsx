@@ -29,12 +29,6 @@ interface MapboxProps {
     stores: { data: Store[] } | null;
 }
 
-declare global {
-    interface Window {
-        mapboxgl: any;
-    }
-}
-
 export const MapboxUI = ({
     apiKey,
     locationLat,
@@ -60,14 +54,14 @@ export const MapboxUI = ({
     });
 
     const extractAddress = (feature: any) => {
-        const ctx = feature.properties?.context || {};
+        const context = feature.properties?.context || {};
 
         return {
             address: feature.properties?.full_address,
-            city: ctx.locality?.name || ctx.place?.name,
-            state: ctx.region?.name,
-            country: ctx.country?.country_code,
-            zip: ctx.postcode?.name,
+            city: context.locality?.name || context.place?.name,
+            state: context.region?.name,
+            country: context.country?.country_code,
+            zip: context.postcode?.name,
         };
     };
 
