@@ -1,12 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { useOutsideClick } from '../useOutsideClick';
+import Tooltip from '../UI/Tooltip';
 
 export interface ActionItem {
   label?: string;
   icon?: React.ReactNode;
   onClick: (row?: {}) => void;
   className?: string;
-  type?:string;
+  type?: string;
 }
 
 interface TableRowActionsProps {
@@ -20,7 +21,7 @@ const TableRowActions: React.FC<TableRowActionsProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const showInline = rowActions.length <= 2;
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(containerRef, () => {
@@ -33,21 +34,16 @@ const TableRowActions: React.FC<TableRowActionsProps> = ({
         <div className="inline-actions">
           {showInline ? (
             rowActions.map((action, index) => (
-              <div
-                key={index}
-                className="inline-action-btn tooltip-wrapper"
-                onClick={() => action.onClick(row)}
-              >
-                <i className={`adminfont-${action.icon}`} />
-                <span className="tooltip-name">{action.label}</span>
-              </div>
+                <Tooltip text={action.label}>
+                  <i onClick={() => action.onClick(row)} className={`adminfont-${action.icon}`} />
+                </Tooltip>
             ))
           ) : (
             <>
               <i className="adminfont-more-vertical" onClick={() => setOpen((v) => !v)} />
               <div className={`action-dropdown ${open ? 'show' : 'hover'}`}>
                 <ul>
-                {rowActions.map((action, index) => (
+                  {rowActions.map((action, index) => (
                     <div
                       key={index}
                       onClick={() => {
@@ -59,8 +55,8 @@ const TableRowActions: React.FC<TableRowActionsProps> = ({
                       <span className="tooltip-name">{action.label}</span>
                     </div>
                   ))}
-                  </ul>
-                </div>
+                </ul>
+              </div>
             </>
           )}
         </div>

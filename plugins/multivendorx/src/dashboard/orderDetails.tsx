@@ -46,18 +46,9 @@ const OrderDetails: React.FC = () => {
 	const customer_information_access =
 		appLocalizer.settings_databases_value['privacy']
 			.customer_information_access;
-	const shipping_providers_options =
-		appLocalizer.settings_databases_value['shipping']
-			.shipping_providers_options;
-
-	const selected_shipping_providers =
-		appLocalizer.settings_databases_value['shipping'].shipping_providers;
 
 	const navigate = useNavigate();
 
-	// const filteredShippingProviders = shipping_providers_options.filter(
-	// 	(option) => selected_shipping_providers.includes(option.value)
-	// );
 	// When any item total changes, recalculate refundAmount
 	const handleItemChange = (id, field, value) => {
 		setRefundItems((prev) => {
@@ -314,7 +305,7 @@ const OrderDetails: React.FC = () => {
 				<p>No access to view the order</p>
 			) : (
 				<>
-					{/* <div className="page-title-wrapper">
+					<div className="page-title-wrapper">
 						<div className="page-title">
 							<div className="title">
 								Order #{orderData?.number ?? orderId ?? '—'}
@@ -382,7 +373,7 @@ const OrderDetails: React.FC = () => {
 								</button>
 							)}
 						</div>
-					</div> */}
+					</div>
 
 					<NavigatorHeader
 						headerTitle={
@@ -1304,6 +1295,7 @@ const OrderDetails: React.FC = () => {
 										<div>{orderData?.shipping.country}</div>
 									</Card>
 								)}
+
 							<Card
 								title={__('Shipping Tracking', 'multivendorx')}
 							>
@@ -1315,7 +1307,7 @@ const OrderDetails: React.FC = () => {
 										)}
 										htmlFor="create-shipping"
 									>
-										{/* <SelectInput
+										<SelectInputUI
 											options={filteredShippingProviders}
 											type="single-select"
 											value={shipmentData.provider}
@@ -1325,7 +1317,7 @@ const OrderDetails: React.FC = () => {
 													provider: option.value,
 												}))
 											}
-										/> */}
+										/>
 									</FormGroup>
 									<FormGroup
 										label={__(
@@ -1375,6 +1367,7 @@ const OrderDetails: React.FC = () => {
 									}}
 								/>
 							</Card>
+
 							{modules.includes('privacy') &&
 								Array.isArray(customer_information_access) &&
 								customer_information_access.includes(

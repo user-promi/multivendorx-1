@@ -391,69 +391,66 @@ const Orders: React.FC = () => {
 
 	return (
 		<>
-			
-				<>
-					<NavigatorHeader
-						headerTitle={__('Orders', 'multivendorx')}
-						headerDescription={__(
-							'Manage your store information and preferences',
-							'multivendorx'
-						)}
-						buttons={[
-							{
-								label: __('Export', 'multivendorx'),
-								icon: 'export',
-								onClick: exportAllOrders,
-							},
-							{
-								label: __('Add New', 'multivendorx'),
-								icon: 'plus',
-								onClick: () => {
-									dashNavigate(navigate, ['orders', 'add']);
-								},
-							}
-						]}
-					/>
-					<TableCard
-						headers={headers}
-						rows={rows}
-						totalRows={totalRows}
-						isLoading={isLoading}
-						onQueryUpdate={doRefreshTableData}
-						search={{
-							placeholder: __('Search...', 'multivendorx'),
-							options: [
-								{ label: __('All', 'multivendorx'), value: 'all' },
-								{ label: __('Order Id', 'multivendorx'), value: 'order_id' },
-								{ label: __('Products', 'multivendorx'), value: 'products' },
-								{
-									label: __('Customer Email', 'multivendorx'),
-									value: 'customer_email',
-								},
-								{ label: __('Customer', 'multivendorx'), value: 'customer' },
-							],
-						}}
-						filters={filters}
-						buttonActions={buttonActions}
-						ids={rowIds}
-						categoryCounts={categoryCounts}
-						bulkActions={bulkActions}
-						onBulkActionApply={(
-							action: string,
-							selectedIds: []
-						) => {
-							handleBulkAction(action, selectedIds);
-						}}
-						format={appLocalizer.date_format}
-						currency={{
-							currencySymbol: appLocalizer.currency_symbol,
-							priceDecimals: appLocalizer.price_decimals,
-							decimalSeparator: appLocalizer.decimal_separator,
-							thousandSeparator: appLocalizer.thousand_separator,
-							currencyPosition: appLocalizer.currency_position,
-						}}
-					/>
-				</>
+			<NavigatorHeader
+				headerTitle={__('Orders', 'multivendorx')}
+				headerDescription={__(
+					'Manage your store information and preferences',
+					'multivendorx'
+				)}
+				buttons={[
+					{
+						label: __('Export', 'multivendorx'),
+						icon: 'export',
+						onClick: exportAllOrders,
+					},
+					{
+						label: __('Add New', 'multivendorx'),
+						icon: 'plus',
+						onClick: () => {
+							dashNavigate(navigate, ['orders', 'add']);
+						},
+					}
+				]}
+			/>
+			<TableCard
+				headers={headers}
+				rows={rows}
+				totalRows={totalRows}
+				isLoading={isLoading}
+				onQueryUpdate={doRefreshTableData}
+				search={{
+					placeholder: __('Search...', 'multivendorx'),
+					options: [
+						{ label: __('All', 'multivendorx'), value: 'all' },
+						{ label: __('Order Id', 'multivendorx'), value: 'order_id' },
+						{ label: __('Products', 'multivendorx'), value: 'products' },
+						{
+							label: __('Customer Email', 'multivendorx'),
+							value: 'customer_email',
+						},
+						{ label: __('Customer', 'multivendorx'), value: 'customer' },
+					],
+				}}
+				filters={filters}
+				buttonActions={buttonActions}
+				ids={rowIds}
+				categoryCounts={categoryCounts}
+				bulkActions={bulkActions}
+				onBulkActionApply={(
+					action: string,
+					selectedIds: []
+				) => {
+					handleBulkAction(action, selectedIds);
+				}}
+				format={appLocalizer.date_format}
+				currency={{
+					currencySymbol: appLocalizer.currency_symbol,
+					priceDecimals: appLocalizer.price_decimals,
+					decimalSeparator: appLocalizer.decimal_separator,
+					thousandSeparator: appLocalizer.thousand_separator,
+					currencyPosition: appLocalizer.currency_position,
+				}}
+			/>
 
 			<PopupUI
 				position="lightbox"

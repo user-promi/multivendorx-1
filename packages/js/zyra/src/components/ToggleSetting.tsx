@@ -18,7 +18,7 @@ interface Option {
 }
 
 interface ToggleSettingProps {
-    options: Option[];
+    options?: Option[];
     wrapperClass?: string;
     value: string | string[];
     onChange: ( value: string | string[] ) => void;

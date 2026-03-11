@@ -184,11 +184,14 @@ const TableCard: React.FC<TableCardProps> = ({
 	return (
 		<div className="admin-table-wrapper">
 			{/* HEADER */}
-			<div className="table-card-header">
-				<div className="title">{title}</div>
-			</div>
+			{title && (
+				<div className="table-card-header">
+					<div className="title">{title}</div>
+				</div>
+			)}
 
 			{/* BODY */}
+			{(categoryCounts?.length > 0 || buttonActions || search || (showMenu && showColumnToggleIcon)) && (
 			<div className="admin-top-filter">
 				{categoryCounts && categoryCounts.length > 0 && (
 					<CategoryFilter
@@ -229,7 +232,7 @@ const TableCard: React.FC<TableCardProps> = ({
 					{showMenu && showColumnToggleIcon && (
 						<PopupUI
 							position="menu-dropdown"
-							toggleIcon="adminfont-more-vertical"
+							toggleIcon="more-vertical"
 						>
 							<ul>
 								{Object.entries(headers).map(([key, config]) => {
@@ -254,6 +257,7 @@ const TableCard: React.FC<TableCardProps> = ({
 					)}
 				</div>
 			</div>
+			)}
 
 			<Table
 				rows={rows}

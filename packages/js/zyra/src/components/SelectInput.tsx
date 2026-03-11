@@ -7,6 +7,7 @@ import type { MultiValue, SingleValue, StylesConfig, GroupBase } from 'react-sel
 // Internal dependencies
 import { FieldComponent } from './types';
 import { AdminButtonUI } from './AdminButton';
+import { PopupUI } from './Popup';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -43,6 +44,9 @@ export interface SelectProps {
     onSelectDeselectAll?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     formatCreateLabel?: (inputValue: string) => string;
     disabled?: boolean;
+    enableOverflowPopup?: boolean;   
+    popupTitle?: string;             
+    popupWidth?: number;             
 }
 
 interface TypeConfig {
@@ -86,8 +90,20 @@ const extractValue = (
         : (raw as SingleValue<SelectOption>)?.value ?? '';
 
 const coerceToString = (v: unknown): string | string[] | undefined => {
-    if (Array.isArray(v)) return v.map(String);
-    if (v != null && v !== '') return String(v);
+    if (Array.isArray(v)) {
+
+        // Handle Option[]
+        if (v.length && typeof v[0] === 'object' && 'value' in v[0]) {
+            return (v as any[]).map(o => String(o.value));
+        }
+
+        return v.map(String);
+    }
+
+    if (v != null && v !== '') {
+        return String(v);
+    }
+
     return undefined;
 };
 
@@ -238,8 +254,12 @@ export const SelectInputUI: React.FC<SelectProps> = ({
     onSelectDeselectAll,
     formatCreateLabel = (v) => `Add "${v}"`,
     disabled = false,
+    enableOverflowPopup = false,
+    popupTitle,
+    popupWidth,
 }) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
+    const [popupOpen, setPopupOpen] = React.useState(false);
 
     const { isMulti, Component } = FIELD_TYPE_CONFIG[type] ?? DEFAULT_CONFIG;
     const CastComponent = Component as any;
@@ -249,6 +269,38 @@ export const SelectInputUI: React.FC<SelectProps> = ({
         label: opt.label ?? opt.value,
         index,
     }));
+
+    const handleOverflowClick = () => {
+        if (enableOverflowPopup) {
+            setPopupOpen(true);
+        } else {
+            onOverflowClick?.();
+        }
+    };
+
+    const sharedprops = {
+         name,
+    placeholder,
+    className: `${inputClass ?? ''} select-wrapper`,
+    value: resolveValue(value, optionsData, isMulti),
+    options: optionsData,
+    isMulti,
+    isDisabled: disabled,
+    isClearable,
+    onChange: (raw: any) =>
+        onChange(extractValue(raw ?? (isMulti ? [] : null), isMulti)),
+    styles: buildStyles(isMulti),
+    components: CUSTOM_COMPONENTS,
+    formatCreateLabel,
+    onOverflowClick: handleOverflowClick,
+    __isExpanded: isExpanded,
+    __setIsExpanded: setIsExpanded,
+    menuContent,
+    keepMenuOpenOnMenuContentClick,
+    noOptionsText,
+    }
+
+
 
     return (
         <div
@@ -262,35 +314,29 @@ export const SelectInputUI: React.FC<SelectProps> = ({
                         {
                             text: selectDeselectLabel,
                             color: 'purple',
-                            onClick: (e) => {e.preventDefault(); onSelectDeselectAll?.(e)},
+                            onClick: (e) => { e.preventDefault(); onSelectDeselectAll?.(e) },
                         },
                     ]}
                 />
             )}
-
             <CastComponent
-                name={name}
-                placeholder={placeholder}
-                className={`${inputClass ?? ''} select-wrapper`}
-                value={resolveValue(value, optionsData, isMulti)}
-                options={optionsData}
-                isMulti={isMulti}
-                isDisabled={disabled}
-                isClearable={isClearable}
-                onChange={(raw: any) =>
-                    onChange(extractValue(raw ?? (isMulti ? [] : null), isMulti))
-                }
-                styles={buildStyles(isMulti)}
-                components={CUSTOM_COMPONENTS}
-                formatCreateLabel={formatCreateLabel}
+                {...sharedprops}
                 maxVisibleItems={maxVisibleItems}
-                onOverflowClick={onOverflowClick}
-                __isExpanded={isExpanded}
-                __setIsExpanded={setIsExpanded}
-                menuContent={menuContent}
-                keepMenuOpenOnMenuContentClick={keepMenuOpenOnMenuContentClick}
-                noOptionsText={noOptionsText}
             />
+            {enableOverflowPopup && (
+                <PopupUI
+                    position="lightbox"
+                    open={popupOpen}
+                    onClose={() => setPopupOpen(false)}
+                    showBackdrop
+                    width={popupWidth ?? 28}
+                    header={{ title: popupTitle ?? name ?? 'Selected Items', showCloseButton: true }}
+                >
+                    <CastComponent
+                        {...sharedprops}
+                    />
+                </PopupUI>
+            )}
         </div>
     );
 };
@@ -326,6 +372,9 @@ const SelectInput: FieldComponent = {
                 noOptionsText={field.noOptionsText}
                 formatCreateLabel={field.formatCreateLabel}
                 disabled={!canAccess}
+                enableOverflowPopup={field.enableOverflowPopup}
+                popupTitle={field.popupTitle}
+                popupWidth={field.popupWidth}
             />
         );
     },
