@@ -110,5 +110,5 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
   'notice': NoticeField,
 
   'google_map': GoogleMap,
-  'mapbox': Mapbox,
+  'mapbox': GoogleMap,
 };
