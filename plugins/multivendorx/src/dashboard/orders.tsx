@@ -394,7 +394,7 @@ const Orders: React.FC = () => {
 			<NavigatorHeader
 				headerTitle={__('Orders', 'multivendorx')}
 				headerDescription={__(
-					'Manage your store information and preferences',
+					'View, track, and manage all your store orders and earnings in one place.',
 					'multivendorx'
 				)}
 				buttons={[
