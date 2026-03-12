@@ -70,12 +70,12 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		}
 
 		const provider = settings.geolocation.choose_map_api;
+		setApiKey(settings.geolocation[`${provider}_api_key`] || '');
 
-		if (provider === 'google_map') {
-			setApiKey(settings.geolocation.google_map_api_key || '');
-		} else if (provider === 'mapbox') {
-			setApiKey(settings.geolocation.mapbox_api_key || '');
-		}
+		setMapConfig({
+			provider: provider || null,
+			apiKey: apiKey
+		});
 	}, [settings]);
 
 	const totalPages = Math.ceil(total / perPage);

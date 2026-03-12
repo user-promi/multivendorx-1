@@ -108,13 +108,7 @@ const StoreSettings = ({
 		}
 
 		const provider = settings.geolocation.choose_map_api;
-		let apiKey = '';
-
-		if (provider === 'google_map') {
-			apiKey = settings.geolocation.google_map_api_key || '';
-		} else if (provider === 'mapbox') {
-			apiKey = settings.geolocation.mapbox_api_key || '';
-		}
+		const apiKey = settings.geolocation[`${provider}_api_key`] || '';
 
 		setMapConfig({
 			provider: provider || null,
