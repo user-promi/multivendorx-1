@@ -14,7 +14,7 @@ export default {
 	modal: [
 		{
 			key: 'badge_img',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Verified badge', 'multivendorx'),
 			desc: __(
 				'Select a badge from the list above. Once a store is verified, the chosen badge will appear beside its name.',

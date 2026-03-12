@@ -1144,6 +1144,7 @@ body.dark {
     width: 100%;
 
     .nested-time {
+
         .setting-form-input:first-of-type,
         .setting-form-input:nth-of-type(3),
         >.email-divider-container+.before+.setting-form-input,
@@ -1152,3 +1153,21 @@ body.dark {
         }
     }
 }
+
+
+// membership plan start
+.membership-plan {
+    .plan-name {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.45rem;
+        font-weight: 500;
+
+        i {
+            font-size: 1.625rem;
+        }
+    }
+}
+
+// membership plan end

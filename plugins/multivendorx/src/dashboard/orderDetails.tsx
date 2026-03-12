@@ -305,76 +305,6 @@ const OrderDetails: React.FC = () => {
 				<p>No access to view the order</p>
 			) : (
 				<>
-					<div className="page-title-wrapper">
-						<div className="page-title">
-							<div className="title">
-								Order #{orderData?.number ?? orderId ?? '—'}
-								{!statusSelect && orderData?.status?.trim() && (
-									<div
-										className={statusBadgeClass(
-											orderData?.status
-										)}
-										onClick={() => setStatusSelect(true)}
-									>
-										{(orderData?.status || '')
-											.replace(/-/g, ' ')
-											.replace(/\b\w/g, (c) =>
-												c.toUpperCase()
-											)}
-										<i className="adminfont-keyboard-arrow-down"></i>
-									</div>
-								)}
-								{statusSelect && (
-									<div className="status-edit">
-										<SelectInputUI
-											name="status"
-											options={[
-												{
-													label: 'Processing',
-													value: 'processing',
-												},
-												{
-													label: 'On Hold',
-													value: 'on-hold',
-												},
-												{
-													label: 'Completed',
-													value: 'completed',
-												},
-												{
-													label: 'Cancelled',
-													value: 'cancelled',
-												},
-											]}
-											value={orderData?.status}
-											onChange={(value) => {
-												handleStatusChange(value);
-											}}
-										/>
-									</div>
-								)}
-							</div>
-
-							<div className="des">
-								{formatDateTime(orderData?.date_created)}
-							</div>
-						</div>
-						<div className="buttons-wrapper">
-							{onBack && (
-								<button
-									className="tooltip-btn admin-badge blue"
-									onClick={onBack}
-								>
-									<i className="adminfont-arrow-right"></i>
-									<span className="tooltip">
-										{' '}
-										Back to Orders{' '}
-									</span>
-								</button>
-							)}
-						</div>
-					</div>
-
 					<NavigatorHeader
 						headerTitle={
 							<>
@@ -1307,7 +1237,7 @@ const OrderDetails: React.FC = () => {
 										)}
 										htmlFor="create-shipping"
 									>
-										<SelectInputUI
+										{/* <SelectInputUI
 											options={filteredShippingProviders}
 											type="single-select"
 											value={shipmentData.provider}
@@ -1317,7 +1247,7 @@ const OrderDetails: React.FC = () => {
 													provider: option.value,
 												}))
 											}
-										/>
+										/> */}
 									</FormGroup>
 									<FormGroup
 										label={__(

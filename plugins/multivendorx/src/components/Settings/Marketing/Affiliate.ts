@@ -18,7 +18,7 @@ export default {
 	modal: [
 		{
 			key: 'approve_store',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Who pays affiliate commissions', 'multivendorx'),
 			desc: __(
 				'Select who is responsible for paying affiliate referral commissions:<ul><strong>Example setup:</strong><br>' +

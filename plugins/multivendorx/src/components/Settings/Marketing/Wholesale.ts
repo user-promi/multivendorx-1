@@ -13,7 +13,7 @@ export default {
 	modal: [
 		{
 			key: 'wholesale_buyer_verification',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Wholesale buyer verification', 'multivendorx'),
 			settingDescription: __(
 				'Decide how wholesale buyers are approved before they can access bulk pricing.',
@@ -40,7 +40,7 @@ export default {
 		},
 		{
 			key: 'wholesale_price_access',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Who can see wholesale prices', 'multivendorx'),
 			settingDescription: __(
 				'Choose which users can see wholesale pricing in store catalogs.',
@@ -67,7 +67,7 @@ export default {
 		},
 		{
 			key: 'wholesale_price_display',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('How wholesale prices are shown', 'multivendorx'),
 			settingDescription: __(
 				'Control whether wholesale prices are shown alongside retail prices or separately.',

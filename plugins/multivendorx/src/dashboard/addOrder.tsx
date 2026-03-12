@@ -362,6 +362,127 @@ const AddOrder = () => {
 		}
 	}, [hasCustomer, shippingAddress]);
 
+	// Define headers for the order items table
+	const orderItemsHeaders = {
+		item: {
+			label: __('Item', 'multivendorx'),
+			render: (row) => (
+				<div className="item-details">
+					<div className="image">
+						<img
+							src={row?.images?.[0]?.src}
+							width={40}
+							alt={row.name}
+						/>
+					</div>
+					<div className="detail">
+						<div className="name">{row.name}</div>
+						{row?.sku && (
+							<div className="sku">
+								{__('SKU:', 'multivendorx')} {row.sku}
+							</div>
+						)}
+					</div>
+				</div>
+			),
+		},
+		price: {
+			label: __('Price', 'multivendorx'),
+			render: (row) => `$${row.price}`,
+		},
+		qty: {
+			label: __('Qty', 'multivendorx'),
+			render: (row) => (
+				<BasicInputUI
+					type="number"
+					min="1"
+					value={row.qty || 1}
+					onChange={(value) => {
+						const qty = +value;
+						setAddedProducts((prev) =>
+							prev.map((p) =>
+								p.id === row.id ? { ...p, qty } : p
+							)
+						);
+					}}
+				/>
+			),
+		},
+		total: {
+			label: __('Total', 'multivendorx'),
+			render: (row) => `$${(row.price * (row.qty || 1)).toFixed(2)}`,
+		},
+	};
+
+	// Define headers for shipping lines table
+	const shippingHeaders = {
+		item: {
+			label: __('Item', 'multivendorx'),
+			render: (row) => (
+				<div className="item-details">
+					<div className="icon">
+						<i className="adminfont-cart green"></i>
+					</div>
+					<div className="detail">
+						<div className="name">{__('Shipping', 'multivendorx')}</div>
+						<SelectInputUI
+							name="shipping_method"
+							type="single-select"
+							options={availableShippingMethods}
+							value={availableShippingMethods.find(
+								(o) => o.value === row.method_id
+							)}
+							onChange={(value) => {
+								const selectedOption = availableShippingMethods.find(
+									(o) => o.value === value
+								);
+								const method_title = selectedOption?.label || '';
+								setShippingLines((prev) =>
+									prev.map((s) =>
+										s.id === row.id
+											? {
+													...s,
+													value,
+													name: method_title,
+											  }
+											: s
+									)
+								);
+							}}
+						/>
+					</div>
+				</div>
+			),
+		},
+		price: {
+			label: __('', 'multivendorx'),
+			render: () => null,
+		},
+		qty: {
+			label: __('', 'multivendorx'),
+			render: () => null,
+		},
+		cost: {
+			label: __('Cost', 'multivendorx'),
+			render: (row) => (
+				<BasicInputUI
+					type="number"
+					min="0"
+					value={row.cost}
+					onChange={(value) => {
+						const cost = parseFloat(value) || 0;
+						setShippingLines((prev) =>
+							prev.map((s) =>
+								s.id === row.id ? { ...s, cost } : s
+							)
+						);
+					}}
+				/>
+			),
+		},
+	};
+
+	// Tax headers
 	const headers = {
 		name: {
 			label: __('Rate name', 'multivendorx'),
@@ -383,7 +504,7 @@ const AddOrder = () => {
 					label: __('Click', 'multivendorx'),
 					icon: 'edit',
 					onClick: (row) => {
-						if (tax) {
+						if (row) {
 							setSelectedTaxRate(row);
 						}
 					},
@@ -404,7 +525,7 @@ const AddOrder = () => {
 					{
 						label: __('Create Order', 'multivendorx'),
 						icon: 'plus',
-						onClick: () => createOrder,
+						onClick: () => createOrder(),
 					},
 				]}
 			/>
@@ -414,165 +535,17 @@ const AddOrder = () => {
 						<div className="table-wrapper view-order-table">
 							{addedProducts.length > 0 && (
 								<>
-									<table className="admin-table">
-										<thead className="admin-table-header">
-											<tr className="header-row">
-												<td className="header-col">
-													{__('Item', 'multivendorx')}
-												</td>
-												<td className="header-col">
-													{__('Price', 'multivendorx')}
-												</td>
-												<td className="header-col">
-													{__('Qty', 'multivendorx')}
-												</td>
-												<td className="header-col">
-													{__('Total', 'multivendorx')}
-												</td>
-											</tr>
-										</thead>
+									<TableCard
+										headers={orderItemsHeaders}
+										rows={addedProducts}
+									/>
 
-										<tbody className="admin-table-body">
-											{addedProducts.length > 0 &&
-												addedProducts.map((item) => (
-													<tr
-														key={`added-${item.id}`}
-														className="admin-row simple"
-													>
-														<td className="admin-column">
-															<div className="item-details">
-																<div className="image">
-																	<img
-																		src={item?.images?.[0]?.src}
-																		width={40}
-																		alt={item.name}
-																	/>
-																</div>
-
-																<div className="detail">
-																	<div className="name">
-																		{item.name}
-																	</div>
-
-																	{item?.sku && (
-																		<div className="sku">
-																			{__(
-																				'SKU:',
-																				'multivendorx'
-																			)}{' '}
-																			{item.sku}
-																		</div>
-																	)}
-																</div>
-															</div>
-														</td>
-
-														<td className="admin-column">
-															${item.price}
-														</td>
-
-														<td className="admin-column">
-															<BasicInputUI
-																type="number"
-																min="1"
-																value={item.qty || 1}
-																onChange={(value) => {
-																	const qty = +value;
-																	setAddedProducts(
-																		(prev) => prev.map((p) =>
-																			p.id === item.id ? { ...p, qty } : p)
-																	);
-																}}
-															/>
-														</td>
-
-														<td className="admin-column">
-															$
-															{(
-																item.price *
-																(item.qty || 1)
-															).toFixed(2)}
-														</td>
-													</tr>
-												))}
-
-											{shippingLines.map((ship) => (
-												<tr
-													key={`ship-${ship.id}`}
-													className="admin-row shipping-row"
-												>
-													<td className="admin-column">
-														<div className="item-details">
-															<div className="icon">
-																<i className="adminfont-cart green"></i>
-															</div>
-
-															<div className="detail">
-																<div className="name">
-																	{__(
-																		'Shipping',
-																		'multivendorx'
-																	)}
-																</div>
-
-																<SelectInputUI
-																	name="shipping_method"
-																	type="single-select"
-																	options={availableShippingMethods}
-																	value={availableShippingMethods.find(
-																		(o) => o.value === ship.method_id
-																	)}
-																	onChange={(value) => {
-																		const selectedOption = availableShippingMethods.find(
-																			(o) => o.value === value
-																		);
-																		const method_title = selectedOption?.label || '';
-																		setShippingLines((prev) =>
-																			prev.map((s) =>
-																				s.id === ship.id
-																					? {
-																						...s,
-																						value,
-																						name: method_title,
-																					}
-																					: s
-																			)
-																		);
-																	}}
-																/>
-															</div>
-														</div>
-													</td>
-
-													<td className="admin-column"></td>
-													<td className="admin-column"></td>
-
-													<td className="admin-column">
-														<BasicInputUI
-															type="number"
-															min="0"
-															value={ship.cost}
-															onChange={(value) => {
-																const cost = parseFloat(value) || 0;
-																setShippingLines(
-																	(prev) =>
-																		prev.map((s) =>
-																			s.id ===
-																				ship.id
-																				? {
-																					...s,
-																					cost,
-																				}
-																				: s
-																		)
-																);
-															}}
-														/>
-													</td>
-												</tr>
-											))}
-										</tbody>
-									</table>
+									{shippingLines.length > 0 && (
+										<TableCard
+											headers={shippingHeaders}
+											rows={shippingLines}
+										/>
+									)}
 
 									<div className="total-summary">
 										<div className="row">
@@ -629,8 +602,10 @@ const AddOrder = () => {
 												setShippingLines((prev) => [
 													...prev,
 													{
+														id: Date.now(),
 														name: 'Shipping',
 														cost: 0,
+														method_id: '',
 													},
 												]),
 										},
@@ -851,7 +826,7 @@ const AddOrder = () => {
 
 								<div
 									className="admin-badge blue"
-									onClick={() => setSelectedCustomer(false)}
+									onClick={() => setSelectedCustomer(null)}
 								>
 									<i className="adminfont-edit"></i>
 								</div>
@@ -934,7 +909,7 @@ const AddOrder = () => {
 								buttons={{
 									icon: 'plus',
 									text: __('Create', 'multivendorx'),
-									onClick: () => createCustomer,
+									onClick: () => createCustomer(),
 								}}
 							/>
 						</Card>

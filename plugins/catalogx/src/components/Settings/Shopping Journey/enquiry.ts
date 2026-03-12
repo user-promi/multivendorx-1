@@ -72,7 +72,7 @@ export default {
         },
         {
             key: 'is_disable_popup',
-            type: 'setting-toggle',
+            type: 'choice-toggle',
             label: __( 'Display enquiry form as', 'catalogx' ),
             desc: __(
                 'Select whether the form is displayed directly on the page or in a pop-up window.',

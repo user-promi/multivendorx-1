@@ -8,7 +8,7 @@ import {
 	PopupUI,
 	SelectInputUI,
 	TextAreaUI,
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	TableCard,
 	NavigatorHeader,
 	TableRow,
@@ -321,7 +321,7 @@ const AllCoupon: React.FC = () => {
 							label={__('Allow free shipping', 'multivendorx')}
 							htmlFor="free_shipping"
 						>
-							<ToggleSettingUI
+							<ChoiceToggleUI
 								options={[
 									{
 										key: 'yes',
@@ -468,7 +468,7 @@ const AllCoupon: React.FC = () => {
 							label={__('Individual use only', 'multivendorx')}
 							htmlFor="individual_use"
 						>
-							<ToggleSettingUI
+							<ChoiceToggleUI
 								options={[
 									{
 										key: 'yes',
@@ -495,7 +495,7 @@ const AllCoupon: React.FC = () => {
 							label={__('Exclude sale items', 'multivendorx')}
 							htmlFor="exclude_sale_items"
 						>
-							<ToggleSettingUI
+							<ChoiceToggleUI
 								options={[
 									{
 										key: 'yes',

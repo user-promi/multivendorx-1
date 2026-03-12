@@ -160,7 +160,7 @@ const SetupWizard: React.FC = () => {
 				},
 				{
 					key: 'store_selling_mode',
-					type: 'setting-toggle',
+					type: 'choice-toggle',
 
 					label: __(
 						'How stores sell on your marketplace',
@@ -223,7 +223,7 @@ const SetupWizard: React.FC = () => {
 			formFields: [
 				{
 					key: 'approve_store',
-					type: 'setting-toggle',
+					type: 'choice-toggle',
 
 					label: __(
 						'Store registration approval',
@@ -277,7 +277,7 @@ const SetupWizard: React.FC = () => {
 			formFields: [
 				{
 					key: 'commission_type',
-					type: 'setting-toggle',
+					type: 'choice-toggle',
 					label: __(
 						'How commission is calculated',
 						'multivendorx'

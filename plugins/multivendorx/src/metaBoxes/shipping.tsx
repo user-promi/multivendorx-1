@@ -7,7 +7,7 @@ import {
 	FormGroup,
 	FormGroupWrapper,
 	SelectInputUI,
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	useModules,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
@@ -42,7 +42,7 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 			{/* Dimensions */}
 			<FormGroupWrapper>
 				<FormGroup>
-					<ToggleSettingUI
+					<ChoiceToggleUI
 						options={[
 							{
 								key: 'physical',

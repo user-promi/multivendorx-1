@@ -10,7 +10,7 @@ export default {
     modal: [
         {
             key: 'approve_wholesaler',
-            type: 'setting-toggle',
+            type: 'choice-toggle',
             label: __(
                 'Approval of wholesale users through registration form',
                 'catalogx'
