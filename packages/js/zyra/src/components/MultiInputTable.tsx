@@ -105,6 +105,7 @@ export const TableCell: React.FC<TableCellProps> = ({
         disabled: disabled,
     };
 
+    
     return (
         <Render
             field={fieldConfig}
@@ -169,7 +170,7 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
                             rowKey={rowKey}
                             column={column}
                             rowLabel={rowLabel}
-                            value={setting[fieldKey] ?? false}
+                            value={setting[column.key] ?? false}
                             disabled={!isRowActive}
                             onChange={onChange}
                             modules={modules}
