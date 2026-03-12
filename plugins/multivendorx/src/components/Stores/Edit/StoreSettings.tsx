@@ -377,10 +377,6 @@ const StoreSettings = ({
 				placeholderSearch={__('Search for a location...', 'multivendorx')}
 				stores={null}
 				mapProvider={mapConfig.provider}
-				// Optional Mapbox-specific props if needed
-				mapboxStyle={settings.geolocation.mapbox_style || 'mapbox://styles/mapbox/standard'}
-				// mapboxCountry={settings.geolocation.mapbox_country}
-				// mapboxLanguage={settings.geolocation.mapbox_language}
 			/>
 		);
 	};
