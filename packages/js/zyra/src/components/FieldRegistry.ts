@@ -11,10 +11,9 @@ import EventCalendar from './EventCalendar';
 import ExpandablePanel from './ExpandablePanel';
 import FileInput from './FileInput';
 import RegistrationForm from './FormRenderer';
-import GoogleMap from './GoogleMap';
+import MapProvider from './MapProvider';
 import ItemList from './ItemList';
 import Log from './Log';
-import Mapbox from './Mapbox';
 import MultiCheckBox from './MultiCheckbox';
 import MultiCheckboxTable from './MultiCheckboxTable';
 import NestedComponent from './NestedComponent';
@@ -109,6 +108,6 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'notice': NoticeField,
 
-  'google_map': GoogleMap,
-  'mapbox': GoogleMap,
+  'google_map': MapProvider,
+  'mapbox': MapProvider,
 };

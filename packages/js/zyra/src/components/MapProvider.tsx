@@ -16,7 +16,16 @@ interface MapProviderProps {
   locationLat: string;
   locationLng: string;
   isUserLocation?: boolean;
-  onLocationUpdate: (data: any) => void;
+  onLocationUpdate: (data: {
+        location_address: string;
+        location_lat: string;
+        location_lng: string;
+        address?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+        zip?: string;
+    }) => void;
   placeholderSearch: string;
   stores: { data: Store[] } | null;
   mapProvider: string;
