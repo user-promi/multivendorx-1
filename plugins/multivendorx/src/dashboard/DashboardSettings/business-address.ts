@@ -1,7 +1,6 @@
 import { __ } from '@wordpress/i18n';
 
 const mapType = appLocalizer.settings_databases_value.geolocation.choose_map_api;
-const apiKeyPath = `${mapType}_api_key`;
 
 export default {
 	id: 'business-address',
@@ -53,7 +52,7 @@ export default {
         {
             type: mapType,
             key: 'location',
-            apiKey: appLocalizer.settings_databases_value.geolocation[apiKeyPath],
+            apiKey: appLocalizer.settings_databases_value.geolocation[`${mapType}_api_key`],
             label: __('Set Location on Map', 'multivendorx'),
             description: __('Drag the marker to set your business location accurately.', 'multivendorx'),
             required: true,
