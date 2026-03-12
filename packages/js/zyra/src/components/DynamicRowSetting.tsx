@@ -4,7 +4,7 @@ import React from 'react';
 // Internal dependencies
 import '../styles/web/DynamicRowSetting.scss';
 import { FIELD_REGISTRY } from './FieldRegistry';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 
 // Types
 type FieldType = 'text' | 'number' | 'file' | 'select' | 'button';
@@ -117,7 +117,7 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
                                     renderField(field, row, rowIndex)
                                 ))}
 
-                                <AdminButtonUI
+                                <ButtonInputUI
                                     position="left"
                                     buttons={[
                                         {
@@ -144,7 +144,7 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
                     ))
                 )}
 
-                <AdminButtonUI
+                <ButtonInputUI
                     position="left"
                     buttons={[
                         {

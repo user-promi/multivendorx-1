@@ -1,6 +1,6 @@
 import React from 'react';
 import { QueryProps } from './types';
-import { AdminButtonUI } from '../AdminButton';
+import { ButtonInputUI } from '../ButtonInput';
 
 export type ButtonAction = {
     label: string;
@@ -8,7 +8,7 @@ export type ButtonAction = {
     onClick?: () => void;
     className?: string;
     onClickWithQuery?: (query: QueryProps) => void;
-    color?: string; // Added to support your AdminButtonUI color prop
+    color?: string; // Added to support your ButtonInputUI color prop
 };
 
 type ButtonActionsProps = {
@@ -36,7 +36,7 @@ const ButtonActions: React.FC<ButtonActionsProps> = ({
     }));
 
     return (
-        <AdminButtonUI 
+        <ButtonInputUI 
             buttons={resolvedButtons} 
             position="left" 
         />

@@ -1,5 +1,5 @@
 import AddressField from './AddressField';
-import AdminButton from './AdminButton';
+import ButtonInput from './ButtonInput';
 import BasicInput from './BasicInput';
 import CalendarInput from './CalendarInput';
 import ClickableList from './ClickableList';
@@ -60,7 +60,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   preposttext: PrePostText,
 
-  button: AdminButton,
+  button: ButtonInput,
 
   nested: NestedComponent,
 

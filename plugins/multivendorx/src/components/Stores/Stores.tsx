@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import StoreTable from './StoreTable';
 import EditStore from './Edit/EditStore';
 import {
-	AdminButtonUI,
+	ButtonInputUI,
 	BasicInputUI,
 	EmailsInput,
 	FileInputUI,
@@ -233,7 +233,7 @@ const Stores = () => {
 								),
 							}}
 							footer={
-								<AdminButtonUI
+								<ButtonInputUI
 									buttons={[
 										{
 											icon: 'close',
@@ -276,7 +276,7 @@ const Stores = () => {
 										value={formData.slug || ''}
 										onChange={(val) => handleChange('slug', val as string)}
 									/>
-									<AdminButtonUI
+									<ButtonInputUI
 										buttons={{
 											text: __('Check Slug', 'multivendorx'),
 											onClick: handleSlugCheck,

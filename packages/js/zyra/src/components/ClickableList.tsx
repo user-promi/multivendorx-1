@@ -3,7 +3,7 @@ import { MouseEvent, FC } from 'react';
 
 // Internal Dependencies
 import { FieldComponent } from './types';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 
 
 interface ClickableItem {
@@ -57,7 +57,7 @@ export const ClickableListUI: FC<ClickableListProps> = ({
 
             {/* Bottom Button */}
             {button?.label && (
-                <AdminButtonUI
+                <ButtonInputUI
                     position="left"
                     buttons={[
                         {

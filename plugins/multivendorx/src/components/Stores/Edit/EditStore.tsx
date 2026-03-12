@@ -8,7 +8,7 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	Skeleton,
-	AdminButtonUI,
+	ButtonInputUI,
 	SelectInputUI,
 	SettingsNavigator,
 	PopupUI,
@@ -983,7 +983,7 @@ const EditStore = () => {
 					),
 				}}
 				footer={
-					<AdminButtonUI
+					<ButtonInputUI
 						buttons={[
 							{
 								icon: 'close',

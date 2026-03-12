@@ -1,7 +1,7 @@
 import React from 'react';
 import { RealtimeFilterConfig, TableRow } from './types';
 import { SelectInputUI } from '../SelectInput';
-import { AdminButtonUI } from '../AdminButton';
+import { ButtonInputUI } from '../ButtonInput';
 import { CalendarInputUI, CalendarRange } from '../CalendarInput';
 
 export type FilterValue =
@@ -93,7 +93,7 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
                 })}
             </div>
             {showResetButton && (
-                <AdminButtonUI
+                <ButtonInputUI
                     buttons={{
                         text: "Reset",
                         icon: "refresh",

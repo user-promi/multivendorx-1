@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
-	AdminButtonUI,
+	ButtonInputUI,
 	BasicInputUI,
 	FormGroup,
 	FormGroupWrapper,
@@ -759,7 +759,7 @@ const AllCoupon: React.FC = () => {
 						),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'contact-form',
@@ -870,7 +870,7 @@ const AllCoupon: React.FC = () => {
 					title: __('Are you sure?', 'multivendorx')
 				}}
 				footer={
-					<AdminButtonUI
+					<ButtonInputUI
 						buttons={[
 							{
 								icon: 'close',

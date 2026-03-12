@@ -13,7 +13,7 @@ import {
 	FormGroup,
 	TableCard,
 	BasicInputUI,
-	AdminButtonUI,
+	ButtonInputUI,
 	PopupUI,
 	TableRow,
 	QueryProps,
@@ -377,7 +377,7 @@ export const KnowledgeBase: React.FC = () => {
 						),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',

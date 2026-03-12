@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
-	AdminButtonUI,
+	ButtonInputUI,
 	Card,
 	getApiLink,
 	ComponentStatusView,
@@ -168,7 +168,7 @@ const Documentation: React.FC = () => {
 						title: activeDocument.title,
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',

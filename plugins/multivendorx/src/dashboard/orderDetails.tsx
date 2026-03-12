@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
-	AdminButtonUI,
+	ButtonInputUI,
 	BasicInputUI,
 	Card,
 	Column,
@@ -622,7 +622,7 @@ const OrderDetails: React.FC = () => {
 											'marketplace-refund'
 										) &&
 											(!isRefund ? (
-												<AdminButtonUI
+												<ButtonInputUI
 													buttons={[
 														{
 															text: __(
@@ -638,7 +638,7 @@ const OrderDetails: React.FC = () => {
 													]}
 												/>
 											) : (
-												<AdminButtonUI
+												<ButtonInputUI
 													position="left"
 													buttons={[
 														{
@@ -1158,7 +1158,7 @@ const OrderDetails: React.FC = () => {
 									</FormGroup>
 								</FormGroupWrapper>
 
-								<AdminButtonUI
+								<ButtonInputUI
 									position="left"
 									buttons={{
 										icon: 'plus',

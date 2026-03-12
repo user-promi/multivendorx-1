@@ -10,7 +10,7 @@ import {
 	FormGroup,
 	Skeleton,
 	PdfDownloadButton,
-	AdminButtonUI,
+	ButtonInputUI,
 	TextAreaUI,
 	Notice,
 } from 'zyra';
@@ -405,7 +405,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 												)}
 											</label>
 										</FormGroup>
-										<AdminButtonUI
+										<ButtonInputUI
 											buttons={[
 												{
 													text: __(

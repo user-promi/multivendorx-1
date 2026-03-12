@@ -24,7 +24,7 @@ export const Notice: React.FC<NoticeProps> = ({
     displayPosition = 'notice',
     actionLabel,
     onAction,
-    validity = 'lifetime',
+    validity = 3000,
 }) => {
     const [isVisible, setIsVisible] = useState(true);
 

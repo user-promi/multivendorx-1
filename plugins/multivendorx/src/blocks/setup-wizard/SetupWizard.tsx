@@ -413,7 +413,9 @@ const SetupWizard: React.FC = () => {
 						'Adjust commission rules and payout behavior.',
 						'multivendorx'
 					),
-					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`,
+					onClick: () => {
+						window.open(`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`, '_blank');
+					},
 				},
 				// {
 				// 	key: 'commission_settings',

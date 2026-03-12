@@ -8,7 +8,7 @@ import {
 	FormGroup,
 	TableCard,
 	BasicInputUI,
-	AdminButtonUI,
+	ButtonInputUI,
 	ChoiceToggleUI,
 	TextAreaUI,
 	PopupUI,
@@ -322,7 +322,7 @@ const Qna: React.FC = () => {
 						),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',

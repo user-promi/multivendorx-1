@@ -9,7 +9,7 @@ import { BasicInputUI } from './BasicInput';
 import { SelectInputUI } from './SelectInput';
 import { MultiCheckBoxUI } from './MultiCheckbox';
 import { ChoiceToggleUI } from './ChoiceToggle';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 import Card from './UI/Card';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import FormGroup from './UI/FormGroup';
@@ -198,7 +198,7 @@ const OptionEditor: React.FC<{ options: Option[]; onChange: (options: Option[]) 
                         </div>
                     ))}
                 </ReactSortable>
-                <AdminButtonUI
+                <ButtonInputUI
                     buttons={[
                         {
                             text: 'Add new',

@@ -115,14 +115,26 @@ const AdminButton: FieldComponent = {
             ? field.options.map((btn: any) => ({
                 ...baseConfig,
                 text: btn.label,
-                onClick: btn.onClick,
+                onClick: () => {
+                    if (btn.onClick) {
+                        btn.onClick();
+                    } else if (btn.link) {
+                        window.open(btn.link, '_blank');
+                    }
+                },
                 disabled: btn.disabled,
                 icon: btn.icon,
             }))
             : [{
                 ...baseConfig,
                 text: field.text || field.placeholder || field.name || 'Click',
-                onClick: () => { onChange(true); },
+                onClick: () => {
+                    if (field.link) {
+                        window.open(field.link, '_blank');
+                    } else {
+                        onChange(true);
+                    }
+                },
                 disabled: field.disabled,
                 icon: field.icon,
             }];

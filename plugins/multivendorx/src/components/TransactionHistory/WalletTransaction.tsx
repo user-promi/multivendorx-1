@@ -13,7 +13,7 @@ import {
 	Skeleton,
 	TableCard,
 	BasicInputUI,
-	AdminButtonUI,
+	ButtonInputUI,
 	PopupUI,
 	TextAreaUI,
 	TableRow,
@@ -618,7 +618,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 									]}
 								/>
 							</Column>
-							<AdminButtonUI
+							<ButtonInputUI
 								buttons={{
 									icon: 'wallet',
 									text: __(
@@ -646,7 +646,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 						),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'wallet',

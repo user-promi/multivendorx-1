@@ -4,7 +4,7 @@ import axios from 'axios';
 import {
 	getApiLink,
 	BasicInputUI,
-	AdminButtonUI,
+	ButtonInputUI,
 	ChoiceToggleUI,
 	PopupUI,
 	useModules,
@@ -396,7 +396,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 							} — ${selectedZone.zone_name}`,
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',
