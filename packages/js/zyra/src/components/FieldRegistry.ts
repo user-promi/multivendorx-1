@@ -15,7 +15,7 @@ import MapProvider from './MapProvider';
 import ItemList from './ItemList';
 import Log from './Log';
 import MultiCheckBox from './MultiCheckbox';
-import MultiCheckboxTable from './MultiCheckboxTable';
+import MultiInputTable from './MultiInputTable';
 import NestedComponent from './NestedComponent';
 import NoticeField from './Notice';
 import PrePostText from './PrePostText';
@@ -70,7 +70,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   section: Section,
 
-  'multi-checkbox-table': MultiCheckboxTable,
+  'multi-checkbox-table': MultiInputTable,
 
   'expandable-panel': ExpandablePanel,
 
