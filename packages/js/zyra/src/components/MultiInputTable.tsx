@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 // Internal dependencies
-import '../styles/web/MultiCheckboxTable.scss';
+import '../styles/web/MultiInputTable.scss';
 import { FieldComponent } from './types';
 import { FIELD_REGISTRY } from './FieldRegistry';
 
@@ -43,7 +43,7 @@ type GroupedRows = Record<string, CapabilityGroup>;
 
 // ── Component props ───────────────────────────────────────────────────────────
 
-export interface MultiCheckboxTableUIProps {
+export interface MultiInputTableUIProps {
     rows: Row[] | GroupedRows;
     columns: Column[];
     setting: FieldSetting;
@@ -120,7 +120,7 @@ export const TableCell: React.FC<TableCellProps> = ({
     );
 };
 
-export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
+export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
     rows,
     columns,
     setting,
@@ -295,7 +295,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
 
 // ─── FieldComponent wrapper ───────────────────────────────────────────────────
 
-const MultiCheckboxTable: FieldComponent = {
+const MultiInputTable: FieldComponent = {
     render: ({
         field,
         value,
@@ -325,7 +325,7 @@ const MultiCheckboxTable: FieldComponent = {
         };
 
         return (
-            <MultiCheckboxTableUI
+            <MultiInputTableUI
                 khali_dabba={appLocalizer?.khali_dabba ?? false}
                 rows={field.rows ?? []}
                 columns={field.columns ?? []}
@@ -342,4 +342,4 @@ const MultiCheckboxTable: FieldComponent = {
     validate: () => null,
 };
 
-export default MultiCheckboxTable;
+export default MultiInputTable;
