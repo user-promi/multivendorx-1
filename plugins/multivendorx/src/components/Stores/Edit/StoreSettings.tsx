@@ -5,7 +5,6 @@ import {
 	useModules,
 	EmailsInput,
 	MapProviderUI,
-	// Remove GoogleMapUI and MapboxUI imports
 	Container,
 	Column,
 	Card,

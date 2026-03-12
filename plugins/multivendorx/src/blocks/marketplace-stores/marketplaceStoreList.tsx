@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getApiLink, GoogleMapUI, MapboxUI } from 'zyra';
+import { getApiLink, MapProviderUI } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 interface StoreRow {
@@ -55,6 +55,10 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		location_lat: '',
 		location_lng: '',
 	});
+	const [mapConfig, setMapConfig] = useState<{
+		provider: string | null;
+		apiKey: string;
+	}>({ provider: 'null', apiKey: '' });
 
 	const settings = storesList.settings_databases_value;
 
@@ -209,36 +213,25 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	};
 
 	const renderMapComponent = () => {
-		if (!apiKey) {
+		if (!mapConfig.apiKey || !mapConfig.provider) {
 			return null;
 		}
 
-		const commonProps = {
-			apiKey,
-			locationAddress: addressData.address,
-			locationLat: addressData.location_lat,
-			locationLng: addressData.location_lng,
-			isUserLocation,
-			onLocationUpdate: handleLocationUpdate,
-			labelSearch: __('Search for a location'),
-			labelMap: __('Drag or click on the map to choose a location'),
-			// instructionText: __(
-			// 	'Enter a search term or drag/drop a pin on the map.'
-			// ),
-			placeholderSearch: __('Search for a location...'),
-			stores: { data },
-		};
-
-		switch (settings.geolocation.choose_map_api) {
-			case 'google_map':
-				return <GoogleMapUI {...commonProps} />;
-
-			case 'mapbox':
-				return <MapboxUI {...commonProps} />;
-
-			default:
-				return null;
-		}
+		return (
+			<MapProviderUI
+				apiKey={mapConfig.apiKey}
+				locationAddress={addressData.address}
+				locationLat={addressData.location_lat}
+				locationLng={addressData.location_lng}
+				isUserLocation={false}
+				onLocationUpdate={handleLocationUpdate}
+				placeholderSearch={__('Search for a location...', 'multivendorx')}
+				stores={null}
+				mapProvider={mapConfig.provider}
+				// Optional Mapbox-specific props if needed
+				mapboxStyle={settings.geolocation.mapbox_style || 'mapbox://styles/mapbox/standard'}
+			/>
+		);
 	};
 
 	return (
