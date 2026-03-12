@@ -5,7 +5,7 @@ import { __ } from '@wordpress/i18n';
 import {
 	getApiLink,
 	TableCard,
-	AdminButtonUI,
+	ButtonInputUI,
 	PopupUI,
 	TextAreaUI,
 } from 'zyra';
@@ -246,7 +246,7 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 							title: __('Reason', 'multivendorx'),
 						}}
 						footer={
-							<AdminButtonUI
+							<ButtonInputUI
 								buttons={[
 									{
 										icon: 'close',

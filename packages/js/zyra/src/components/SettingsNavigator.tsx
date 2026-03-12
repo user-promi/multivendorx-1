@@ -4,7 +4,7 @@ import { LinkProps } from 'react-router-dom';
 // Internal Dependencies
 import '../styles/web/SettingsNavigator.scss';
 import { SectionUI } from './Section';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 import Container from './UI/Container';
 
 type Content = {
@@ -102,7 +102,7 @@ export const NavigatorHeader: React.FC<NavigatorHeaderProps> = ({
                 </a>
             )}
             {buttons.length > 0 && (
-                <AdminButtonUI
+                <ButtonInputUI
                     buttons={buttons.map((button) => ({
                         text: button.label,
                         icon: button.icon,

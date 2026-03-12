@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { AdminButtonUI, Card, NavigatorHeader } from 'zyra';
+import { ButtonInputUI, Card, NavigatorHeader } from 'zyra';
 
 const Tools: React.FC = () => {
 	return (
@@ -19,7 +19,7 @@ const Tools: React.FC = () => {
 					'multivendorx'
 				)}
 			>
-				<AdminButtonUI
+				<ButtonInputUI
 					position='left'
 					buttons={[
 						{

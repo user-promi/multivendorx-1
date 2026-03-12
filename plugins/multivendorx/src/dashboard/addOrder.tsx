@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
 	TableRow,
-	AdminButtonUI,
+	ButtonInputUI,
 	BasicInputUI,
 	Card,
 	Column,
@@ -795,7 +795,7 @@ const AddOrder = () => {
 							</>
 						)}
 						<FormGroupWrapper>
-							<AdminButtonUI
+							<ButtonInputUI
 								position="left"
 								buttons={[
 									{
@@ -886,7 +886,7 @@ const AddOrder = () => {
 											rows={taxRates}
 											ids={rowIds}
 										/>
-										<AdminButtonUI
+										<ButtonInputUI
 											buttons={[
 												{
 													text: __(
@@ -969,7 +969,7 @@ const AddOrder = () => {
 									</FormGroup>
 								</FormGroupWrapper>
 
-								<AdminButtonUI
+								<ButtonInputUI
 									buttons={{
 										icon: 'plus',
 										text: __(
@@ -1095,7 +1095,7 @@ const AddOrder = () => {
 								</FormGroup>
 							</FormGroupWrapper>
 
-							<AdminButtonUI
+							<ButtonInputUI
 								buttons={{
 									icon: 'plus',
 									text: __('Create', 'multivendorx'),

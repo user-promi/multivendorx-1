@@ -1,4 +1,4 @@
-import { AdminButtonUI, Analytics, BasicInputUI, Card, Column, Container, DynamicRowSetting, FormGroup, FormGroupWrapper, NavigatorHeader, SelectInputUI, ChoiceToggleUI } from "zyra";
+import { ButtonInputUI, Analytics, BasicInputUI, Card, Column, Container, DynamicRowSetting, FormGroup, FormGroupWrapper, NavigatorHeader, SelectInputUI, ChoiceToggleUI } from "zyra";
 import { __ } from '@wordpress/i18n';
 import { useState } from 'react';
 

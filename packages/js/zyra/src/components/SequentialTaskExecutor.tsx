@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { getApiLink } from '../utils/apiService';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 import { ItemListUI } from './ItemList';
 import { Notice } from './Notice';
 
@@ -208,7 +208,7 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
     return (
         <>
             <div className="loader-wrapper">
-                <AdminButtonUI
+                <ButtonInputUI
                     buttons={[{
                         text: buttonText,
                         color: 'purple-bg',

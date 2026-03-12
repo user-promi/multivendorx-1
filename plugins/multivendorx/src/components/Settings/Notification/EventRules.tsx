@@ -5,7 +5,7 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	BasicInputUI,
-	AdminButtonUI,
+	ButtonInputUI,
 	PopupUI,
 	TextAreaUI,
 	Skeleton,
@@ -573,7 +573,7 @@ const EventRules: React.FC = () => {
 						} - ${editNotification?.event ?? ''}`,
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',
@@ -841,7 +841,7 @@ const EventRules: React.FC = () => {
 								addRecipient(editingNotification)
 							}
 						/>
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'plus',
@@ -919,7 +919,7 @@ const EventRules: React.FC = () => {
 										}
 									)}
 								</div>
-								<AdminButtonUI
+								<ButtonInputUI
 									buttons={[
 										{
 											icon: 'edit',

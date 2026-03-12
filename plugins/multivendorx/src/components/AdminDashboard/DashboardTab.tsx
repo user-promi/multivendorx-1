@@ -1,7 +1,7 @@
 // FreeVsProTab.tsx
 
 import React, { useEffect, useState } from 'react';
-import { AdminButtonUI, Card, Column, Modules ,ItemListUI, Container,} from 'zyra';
+import { ButtonInputUI, Card, Column, Modules ,ItemListUI, Container,} from 'zyra';
 import { __ } from '@wordpress/i18n';
 import { getModuleData } from '../../services/templateService';
 import axios from 'axios';
@@ -318,7 +318,7 @@ const DashboardTab: React.FC<{}> = () => {
                         
                         title={__('Modules', 'multivendorx')}
                         action={
-                            <AdminButtonUI
+                            <ButtonInputUI
                                 buttons={[
                                     {
                                         icon: 'eye',

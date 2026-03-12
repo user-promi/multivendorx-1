@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
-	AdminButtonUI,
+	ButtonInputUI,
 	Column,
 	Container,
 	FormGroup,
@@ -290,7 +290,7 @@ const PendingRefund: React.FC<Props> = ({ onUpdated }) => {
 							),
 						}}
 						footer={
-							<AdminButtonUI
+							<ButtonInputUI
 								buttons={[
 									{
 										icon: 'external-link',

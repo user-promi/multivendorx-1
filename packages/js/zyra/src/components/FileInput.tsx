@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FieldComponent } from './types';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 
 interface FileInputProps {
     wrapperClass?: string;
@@ -138,7 +138,7 @@ export const FileInputUI: React.FC<FileInputProps> = (props) => {
                         />
                         <span className="title">Drag and drop your file here</span>
                         <span>Or</span>
-                        <AdminButtonUI buttons={[{ text: props.openUploader || 'Upload File', color: 'purple', onClick: handleUpload }]} />
+                        <ButtonInputUI buttons={[{ text: props.openUploader || 'Upload File', color: 'purple', onClick: handleUpload }]} />
                     </>
                 ) : (
                     <>
@@ -150,8 +150,8 @@ export const FileInputUI: React.FC<FileInputProps> = (props) => {
                         )}
                         <div className="overlay">
                             <div className="button-wrapper">
-                                <AdminButtonUI buttons={[{ text: 'Remove', color: 'red' , onClick: () => handleRemove(activeIndex) }]} />
-                                <AdminButtonUI buttons={[{ text: 'Replace', color: 'purple', onClick: () => { setIsReplacing(true); handleUpload(); } }]} />
+                                <ButtonInputUI buttons={[{ text: 'Remove', color: 'red' , onClick: () => handleRemove(activeIndex) }]} />
+                                <ButtonInputUI buttons={[{ text: 'Replace', color: 'purple', onClick: () => { setIsReplacing(true); handleUpload(); } }]} />
                             </div>
                         </div>
                     </>

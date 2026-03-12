@@ -11,7 +11,7 @@ import {
 	FormGroup,
 	TableCard,
 	BasicInputUI,
-	AdminButtonUI,
+	ButtonInputUI,
 	ChoiceToggleUI,
 	SelectInputUI,
 	PopupUI,
@@ -436,7 +436,7 @@ export const Announcements: React.FC = () => {
 					),
 				}}
 				footer={
-					<AdminButtonUI
+					<ButtonInputUI
 						buttons={[
 							{
 								icon: 'close',

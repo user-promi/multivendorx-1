@@ -8,7 +8,7 @@ import {
 	Container,
 	Column,
 	TableCard,
-	AdminButtonUI,
+	ButtonInputUI,
 	TextAreaUI,
 	PopupUI,
 } from 'zyra';
@@ -191,7 +191,7 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 						title: __('Reason', 'multivendorx'),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',
