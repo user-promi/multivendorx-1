@@ -52,7 +52,7 @@ export default {
 		},
 		{
 			key: 'email_provider',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Email provider', 'multivendorx'),
 			desc: __(
 				'<ul>Use the WordPress-supported SMTP plugin, which you can find here: <a href="https://wordpress.org/plugins/tags/smtp/" target="_blank">WordPress SMTP Plugins</a>.<br><strong>Important:</strong> <strong>Sender Email Address</strong> configured in your SMTP plugin match the sender email set in your email delivery setup settings.<br>Otherwise, WordPress may fall back to its default mail method.</ul>',
@@ -114,7 +114,7 @@ export default {
 		},
 		{
 			key: 'sms_gateway_selector',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Select SMS gateway', 'multivendorx'),
 			settingDescription: __(
 				'Pick the SMS service your marketplace will use to send text alerts.',

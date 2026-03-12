@@ -7,7 +7,7 @@ import {
 	FormGroupWrapper,
 	Notice,
 	
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	getApiLink,
 } from 'zyra';
 import {
@@ -174,7 +174,7 @@ const Withdrawl: React.FC = () => {
 							: ''
 					}
 				>
-					<ToggleSettingUI
+					<ChoiceToggleUI
 						options={paymentOptions}
 						value={formData.payment_method || ''}
 						onChange={(value) => handleToggleChange(value)}
@@ -298,7 +298,7 @@ const Withdrawl: React.FC = () => {
 									}
 									htmlFor={field.key}
 								>
-									<ToggleSettingUI
+									<ChoiceToggleUI
 										key={field.key}
 										options={
 											Array.isArray(field.options)

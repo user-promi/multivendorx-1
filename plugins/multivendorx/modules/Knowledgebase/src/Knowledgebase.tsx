@@ -6,7 +6,7 @@ import {
 	getApiLink,
 	NavigatorHeader,
 	TextAreaUI,
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	Container,
 	Column,
 	FormGroupWrapper,
@@ -441,7 +441,7 @@ export const KnowledgeBase: React.FC = () => {
 								label={__('Status', 'multivendorx')}
 								htmlFor="status"
 							>
-								<ToggleSettingUI
+								<ChoiceToggleUI
 									value={formData.status}
 									options={[
 										{

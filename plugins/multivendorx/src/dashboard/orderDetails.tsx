@@ -14,7 +14,10 @@ import {
 	TextAreaUI,
 	getApiLink,
 	useModules,
-	NavigatorHeader
+	NavigatorHeader,
+	TableCard,
+	TableRow,
+	ItemListUI
 } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
@@ -294,6 +297,251 @@ const OrderDetails: React.FC = () => {
 			});
 	};
 
+	const tableRows = useMemo(() => {
+		const rows: TableRow[] = [];
+
+		// Add line items
+		if (orderData?.line_items?.length > 0) {
+			orderData.line_items.forEach((item) => {
+				rows.push({
+					...item,
+					rowType: 'line_item',
+					id: `line-${item.id}`,
+				});
+			});
+		}
+
+		// Add shipping lines
+		if (orderData?.shipping_lines?.length > 0) {
+			orderData.shipping_lines.forEach((item) => {
+				rows.push({
+					...item,
+					rowType: 'shipping',
+					id: `shipping-${item.id}`,
+				});
+			});
+		}
+
+		// Add refunds
+		if (orderData?.refunds?.length > 0) {
+			orderData.refunds.forEach((item) => {
+				rows.push({
+					...item,
+					rowType: 'refund',
+					id: `refund-${item.id}`,
+				});
+			});
+		}
+
+		return rows;
+	}, [orderData]);
+
+	// Table headers configuration
+	const tableHeaders = {
+		item: {
+			label: __('Item', 'multivendorx'),
+			render: (row) => {
+				if (row.rowType === 'line_item') {
+					return (
+						<div className="item-details">
+							<div className="image">
+								<img
+									src={row?.image?.src}
+									alt={row?.name}
+									width={40}
+								/>
+							</div>
+							<div className="detail">
+								<div className="name">{row.name}</div>
+								{row?.sku && (
+									<div className="sku">
+										SKU: {row.sku}
+									</div>
+								)}
+							</div>
+						</div>
+					);
+				} else if (row.rowType === 'shipping') {
+					return (
+						<div className="item-details">
+							<div className="icon">
+								<i className="adminfont-cart green"></i>
+							</div>
+							<div className="detail">
+								<div className="name">{row.method_title}</div>
+							</div>
+						</div>
+					);
+				} else {
+					return (
+						<div className="item-details">
+							<div className="icon">
+								<i className="adminfont-cart green"></i>
+							</div>
+							<div>
+								{row.label}
+								{row.reason && (
+									<div className="sub-text">{row.reason}</div>
+								)}
+							</div>
+						</div>
+					);
+				}
+			},
+		},
+		cost: {
+			label: __('Cost', 'multivendorx'),
+			render: (row) => {
+				if (row.rowType === 'line_item') {
+					return `$${parseFloat(row.price).toFixed(2)}`;
+				}
+				return '';
+			},
+		},
+		qty: {
+			label: __('Qty', 'multivendorx'),
+			render: (row) => {
+				if (row.rowType === 'line_item') {
+					return (
+						<div>
+							<div className="price">x {row.quantity}</div>
+							{isRefund && (
+								<BasicInputUI
+									name="refund-amount"
+									type="number"
+									value={
+										refundItems[row.id]?.quantity ?? 0
+									}
+									onChange={(value) =>
+										handleItemChange(
+											row.id,
+											'quantity',
+											+value
+										)
+									}
+								/>
+							)}
+							{refundMap[row.id]?.refunded_line_total !== 0 && (
+								<div>{refundMap[row.id]?.refunded_line_total}</div>
+							)}
+						</div>
+					);
+				}
+				return '';
+			},
+		},
+		total: {
+			label: __('Total', 'multivendorx'),
+			render: (row) => {
+				if (row.rowType === 'line_item') {
+					return (
+						<div>
+							<div className="price">${parseFloat(row.subtotal).toFixed(2)}</div>
+							{isRefund && (
+								<BasicInputUI
+									name="refund-amount"
+									type="number"
+									value={
+										refundItems[row.id]?.total ?? 0
+									}
+									onChange={(value) =>
+										handleItemChange(
+											row.id,
+											'total',
+											value
+										)
+									}
+								/>
+							)}
+						</div>
+					);
+				} else if (row.rowType === 'shipping') {
+					return (
+						<div>
+							{!isRefund ? row.total : (
+								<BasicInputUI
+									name="refund"
+									type="number"
+									value={
+										refundItems[row.id]?.total ?? 0
+									}
+									onChange={(value) =>
+										handleItemChange(
+											row.id,
+											'total',
+											value
+										)
+									}
+								/>
+							)}
+							{refundMap[row.id]?.refunded_shipping !== 0 && (
+								<div>{refundMap[row.id]?.refunded_shipping}</div>
+							)}
+						</div>
+					);
+				} else {
+					return row.total;
+				}
+			},
+		},
+		tax: {
+			label: __('Tax', 'multivendorx'),
+			render: (row) => {
+				if (row.rowType === 'line_item') {
+					return (
+						<div>
+							<div className="price">${parseFloat(row.subtotal_tax).toFixed(2)}</div>
+							{isRefund && (
+								<BasicInputUI
+									name="refund-amount"
+									type="number"
+									value={
+										refundItems[row.id]?.tax ?? 0
+									}
+									onChange={(value) =>
+										handleItemChange(
+											row.id,
+											'tax',
+											value
+										)
+									}
+								/>
+							)}
+							{refundMap[row.id]?.refunded_tax !== 0 && (
+								<div>{refundMap[row.id]?.refunded_tax}</div>
+							)}
+						</div>
+					);
+				} else if (row.rowType === 'shipping') {
+					return (
+						<div>
+							{!isRefund ? row.total_tax : (
+								<BasicInputUI
+									name="refund"
+									type="number"
+									value={
+										refundItems[row.id]?.tax ?? 0
+									}
+									onChange={(value) =>
+										handleItemChange(
+											row.id,
+											'tax',
+											value
+										)
+									}
+								/>
+							)}
+							{refundMap[row.id]?.refunded_shipping_tax !== 0 && (
+								<div>{refundMap[row.id]?.refunded_shipping_tax}</div>
+							)}
+						</div>
+					);
+				}
+				return '';
+			},
+		},
+	};
+
 	return (
 		<>
 			<Notice
@@ -301,80 +549,10 @@ const OrderDetails: React.FC = () => {
 				displayPosition='float'
 				title={__('Great!', 'multivendorx')}
 			/>
-			{!appLocalizer.edit_order_capability ? (
+			{appLocalizer.edit_order_capability ? (
 				<p>No access to view the order</p>
 			) : (
 				<>
-					<div className="page-title-wrapper">
-						<div className="page-title">
-							<div className="title">
-								Order #{orderData?.number ?? orderId ?? '—'}
-								{!statusSelect && orderData?.status?.trim() && (
-									<div
-										className={statusBadgeClass(
-											orderData?.status
-										)}
-										onClick={() => setStatusSelect(true)}
-									>
-										{(orderData?.status || '')
-											.replace(/-/g, ' ')
-											.replace(/\b\w/g, (c) =>
-												c.toUpperCase()
-											)}
-										<i className="adminfont-keyboard-arrow-down"></i>
-									</div>
-								)}
-								{statusSelect && (
-									<div className="status-edit">
-										<SelectInputUI
-											name="status"
-											options={[
-												{
-													label: 'Processing',
-													value: 'processing',
-												},
-												{
-													label: 'On Hold',
-													value: 'on-hold',
-												},
-												{
-													label: 'Completed',
-													value: 'completed',
-												},
-												{
-													label: 'Cancelled',
-													value: 'cancelled',
-												},
-											]}
-											value={orderData?.status}
-											onChange={(value) => {
-												handleStatusChange(value);
-											}}
-										/>
-									</div>
-								)}
-							</div>
-
-							<div className="des">
-								{formatDateTime(orderData?.date_created)}
-							</div>
-						</div>
-						<div className="buttons-wrapper">
-							{onBack && (
-								<button
-									className="tooltip-btn admin-badge blue"
-									onClick={onBack}
-								>
-									<i className="adminfont-arrow-right"></i>
-									<span className="tooltip">
-										{' '}
-										Back to Orders{' '}
-									</span>
-								</button>
-							)}
-						</div>
-					</div>
-
 					<NavigatorHeader
 						headerTitle={
 							<>
@@ -428,362 +606,15 @@ const OrderDetails: React.FC = () => {
 
 					<Container>
 						<Column grid={8}>
-							<Card >
-								<div className="table-wrapper view-order-table">
-									<table className="admin-table">
-										<thead className="admin-table-header">
-											<tr className="header-row">
-												<td className="header-col">{__('Item', 'multivendorx')}</td>
-												<td className="header-col">{__('Cost', 'multivendorx')}</td>
-												<td className="header-col">{__('Qty', 'multivendorx')}</td>
-												<td className="header-col">{__('Total', 'multivendorx')}</td>
-												<td className="header-col">{__('Tax', 'multivendorx')}</td>
-											</tr>
-										</thead>
-
-										<tbody className="admin-table-body">
-											{orderData?.line_items?.length >
-												0 ? (
-												orderData.line_items.map(
-													(item) => (
-														<tr
-															key={item.id}
-															className="admin-row simple"
-														>
-															<td className="admin-column">
-																<div className="item-details">
-																	<div className="image">
-																		<img
-																			src={
-																				item
-																					?.image
-																					?.src
-																			}
-																			alt={
-																				item?.name
-																			}
-																			width={
-																				40
-																			}
-																		/>
-																	</div>
-																	<div className="detail">
-																		<div className="name">
-																			{
-																				item.name
-																			}
-																		</div>
-																		{item?.sku && (
-																			<div className="sku">
-																				SKU:{' '}
-																				{
-																					item.sku
-																				}
-																			</div>
-																		)}
-																	</div>
-																</div>
-															</td>
-															{/* Cost (not editable) */}
-															<td className="admin-column">
-																{`$${parseFloat(
-																	item.price
-																).toFixed(2)}`}
-															</td>
-
-															{/* Qty (editable only in refund mode) */}
-															<td className="admin-column">
-																<div className="price">
-																	{' '}
-																	x{' '}
-																	{
-																		item.quantity
-																	}{' '}
-																</div>
-
-																{isRefund && (
-																	<BasicInputUI
-																		name="refund-amount"
-																		type="number"
-																		value={
-																			refundItems[
-																				item
-																					.id
-																			]
-																				?.quantity ??
-																			0
-																		}
-																		onChange={(
-																			value
-																		) =>
-																			handleItemChange(
-																				item.id,
-																				'quantity',
-																				+value
-																			)
-																		}
-																	/>
-																)}
-															</td>
-
-															{/* Total (editable only in refund mode) */}
-															<td className="admin-column">
-																<div className="price">
-																	{' '}
-																	$
-																	{parseFloat(
-																		item.subtotal
-																	).toFixed(
-																		2
-																	)}{' '}
-																</div>
-																{refundMap[
-																	item.id
-																]
-																	?.refunded_line_total !==
-																	0 && (
-																		<div>
-																			{
-																				refundMap[
-																					item
-																						.id
-																				]
-																					.refunded_line_total
-																			}
-																		</div>
-																	)}
-																{isRefund && (
-																	<BasicInputUI
-																		name="refund-amount"
-																		type="number"
-																		value={
-																			refundItems[
-																				item
-																					.id
-																			]
-																				?.total ??
-																			0
-																		}
-																		onChange={(
-																			value
-																		) =>
-																			handleItemChange(
-																				item.id,
-																				'total',
-																				value
-																			)
-																		}
-																	/>
-																)}
-															</td>
-															<td className="admin-column">
-																<div className="price">
-																	{' '}
-																	$
-																	{parseFloat(
-																		item.subtotal_tax
-																	).toFixed(
-																		2
-																	)}{' '}
-																</div>
-																{refundMap[
-																	item.id
-																]
-																	?.refunded_tax !==
-																	0 && (
-																		<div>
-																			{
-																				refundMap[
-																					item
-																						.id
-																				]
-																					.refunded_tax
-																			}
-																		</div>
-																	)}
-																{isRefund && (
-																	<BasicInputUI
-																		name="refund-amount"
-																		type="number"
-																		value={
-																			refundItems[
-																				item
-																					.id
-																			]
-																				?.tax ??
-																			0
-																		}
-																		onChange={(
-																			value
-																		) =>
-																			handleItemChange(
-																				item.id,
-																				'tax',
-																				value
-																			)
-																		}
-																	/>
-																)}
-															</td>
-														</tr>
-													)
-												)
-											) : (
-												<tr className="admin-row simple">
-													<td colSpan={4}>
-														No items found.
-													</td>
-												</tr>
-											)}
-											{orderData?.shipping_lines?.length >
-												0 &&
-												orderData.shipping_lines.map(
-													(item) => (
-														<tr className="admin-row simple">
-															<td
-																className="admin-column"
-																colSpan={3}
-															>
-																<div className="item-details">
-																	<div className="icon">
-																		<i className="adminfont-cart green"></i>
-																	</div>
-																	<div className="detail">
-																		<div className="name">
-																			{
-																				item.method_title
-																			}
-																		</div>
-																		{/* {item?.meta_data?.map((data) => (
-                                                                        <div className="sub-text" key={data.id}>
-                                                                            <span>{data.display_key || data.key}:</span> {data.display_value || data.value}
-                                                                        </div>
-                                                                    ))} */}
-																		{/* <div className="sub-text"><span>_vendor_order_shipping_item_id:</span> 337</div> */}
-																	</div>
-																</div>
-															</td>
-															<td className="admin-column"></td>
-															<td className="admin-column"></td>
-															<td className="admin-column">
-																{isRefund ? (
-																	<BasicInputUI
-																		name="refund"
-																		type="number"
-																		value={
-																			refundItems[
-																				item
-																					.id
-																			]
-																				?.total ??
-																			0
-																		}
-																		onChange={(
-																			value
-																		) =>
-																			handleItemChange(
-																				item.id,
-																				'total',
-																				value
-																			)
-																		}
-																	/>
-																) : (
-																	item.total
-																)}
-																{refundMap[
-																	item.id
-																]
-																	?.refunded_shipping !==
-																	0 && (
-																		<div>
-																			{
-																				refundMap[
-																					item
-																						.id
-																				]
-																					.refunded_shipping
-																			}
-																		</div>
-																	)}
-															</td>
-															<td className="admin-column">
-																{isRefund ? (
-																	<BasicInputUI
-																		name="refund"
-																		type="number"
-																		value={
-																			refundItems[
-																				item
-																					.id
-																			]
-																				?.tax ??
-																			0
-																		}
-																		onChange={(
-																			value
-																		) =>
-																			handleItemChange(
-																				item.id,
-																				'tax',
-																				value
-																			)
-																		}
-																	/>
-																) : (
-																	item.total_tax
-																)}
-																{refundMap[
-																	item.id
-																]
-																	?.refunded_shipping_tax !==
-																	0 && (
-																		<div>
-																			{
-																				refundMap[
-																					item
-																						.id
-																				]
-																					.refunded_shipping_tax
-																			}
-																		</div>
-																	)}
-															</td>
-														</tr>
-													)
-												)}
-											{orderData?.refunds?.length > 0 &&
-												orderData.refunds.map(
-													(item) => (
-														<tr className="admin-row simple">
-															<td
-																className="admin-column"
-																colSpan={3}
-															>
-																<div className="item-details">
-																	<div className="icon">
-																		<i className="adminfont-cart green"></i>
-																	</div>
-																	{item.label}
-																</div>
-																<div>
-																	{
-																		item.reason
-																	}
-																</div>
-															</td>
-															<td className="admin-column"></td>
-															<td className="admin-column"></td>
-															<td className="admin-column">
-																{item.total}
-															</td>
-															<td className="admin-column"></td>
-														</tr>
-													)
-												)}
-										</tbody>
-									</table>
-								</div>
+							<Card>
+								{tableRows.length > 0 ? (
+									<TableCard
+										headers={tableHeaders}
+										rows={tableRows}
+									/>
+								) : (
+									<p> {__('No items found.', 'multivendorx')}</p>
+								)}
 
 								<div className="coupons-calculation-wrapper">
 									<div className="left">
@@ -890,7 +721,7 @@ const OrderDetails: React.FC = () => {
 														</td>
 														<td>
 															{formatCurrency(
-																orderData.commission_total -
+																orderData?.commission_total -
 																totalRefunded
 															)}
 														</td>
@@ -1027,24 +858,6 @@ const OrderDetails: React.FC = () => {
 										</div>
 									) : (
 										<></>
-										// <table className="refund-table">
-										//     <tbody>
-										//         <tr><td>Amount already refunded:</td><td>-$50</td></tr>
-										//         <tr><td>Total available to refund:</td><td>$60</td></tr>
-										//         <tr>
-										//             <td>Refund amount:</td>
-										//             <td>
-										//                 <input
-										//                     type="number"
-										//                     className="basic-input"
-										//                     value={values.shipping}
-										//                     onChange={(e) => handleChange("shipping", +e.target.value)}
-										//                 />
-										//             </td>
-										//         </tr>
-										//         <tr><td>Reason for refund (optional):</td><td>${values.total.toFixed(2)}</td></tr>
-										//     </tbody>
-										// </table>
 									)}
 								</div>
 							</Card>
@@ -1307,17 +1120,7 @@ const OrderDetails: React.FC = () => {
 										)}
 										htmlFor="create-shipping"
 									>
-										<SelectInputUI
-											options={filteredShippingProviders}
-											type="single-select"
-											value={shipmentData.provider}
-											onChange={(option) =>
-												setShipmentData((prev) => ({
-													...prev,
-													provider: option.value,
-												}))
-											}
-										/>
+
 									</FormGroup>
 									<FormGroup
 										label={__(
@@ -1381,63 +1184,20 @@ const OrderDetails: React.FC = () => {
 									>
 										{orderData?.order_notes &&
 											orderData.order_notes.length > 0 ? (
-											<div className="notification-wrapper">
-												<ul>
-													{orderData.order_notes
-														.slice(0, 5)
-														.map(
-															(
-																note: any,
-																index: number
-															) => (
-																<li key={index}>
-																	<div
-																		className={`icon-wrapper admin-color${index + 2}`}
-																	>
-																		<i
-																			className={
-																				note.is_customer_note
-																					? 'adminfont-mail'
-																					: 'adminfont-contact-form'
-																			}
-																		></i>
-																	</div>
-																	<div className="details">
-																		<div className="notification-title">
-																			{note.author ||
-																				__(
-																					'System Note',
-																					'multivendorx'
-																				)}
-																		</div>
-																		<div
-																			className="des"
-																			dangerouslySetInnerHTML={{
-																				__html:
-																					note.content ||
-																					'',
-																			}}
-																		></div>
-																		<span>
-																			{new Date(
-																				note
-																					.date_created
-																					.date
-																			).toLocaleDateString(
-																				'en-GB',
-																				{
-																					day: '2-digit',
-																					month: 'short',
-																					year: 'numeric',
-																				}
-																			)}
-																		</span>
-																	</div>
-																</li>
-															)
-														)}
-												</ul>
-											</div>
+											<ItemListUI
+												className="notification-wrapper"
+												items={orderData?.order_notes?.slice(0, 5).map((note, index) => ({
+													id: note.id || index,
+													title: note.author || __('System Note', 'multivendorx'),
+													desc: note.content,
+													icon: note.is_customer_note ? 'mail yellow' : 'contact-form blue',
+													value: new Date(note.date_created.date).toLocaleDateString('en-GB', {
+														day: '2-digit',
+														month: 'short',
+														year: 'numeric',
+													}),
+												})) || []}
+											/>
 										) : (
 											<p>
 												{__(

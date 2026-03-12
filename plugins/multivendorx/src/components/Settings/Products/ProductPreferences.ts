@@ -137,7 +137,7 @@ export default {
 		},
 		{
 			key: 'category_selection_method',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Product/listing category selection', 'multivendorx'),
 			settingDescription: __(
 				'Choose whether stores follow a guided category selection flow or freely choose multiple categories.',
@@ -172,7 +172,7 @@ export default {
 		},
 		{
 			key: 'sku_generator',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('SKU management for products/listing', 'multivendorx'),
 			settingDescription: __(
 				'Choose how SKUs for simple, external, or parent products/listing are generated.',
@@ -201,7 +201,7 @@ export default {
 		},
 		{
 			key: 'sku_generator_attribute_spaces',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('SKU space handling', 'multivendorx'),
 			settingDescription: __(
 				'Choose how spaces in attribute names should be handled when generating SKUs.',
@@ -236,7 +236,7 @@ export default {
 		},
 		{
 			key: 'recommendation_source',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Recommendation source', 'multivendorx'),
 			settingDescription: __(
 				'Choose whether related products/listings are shown from the same store only or from the entire marketplace.',

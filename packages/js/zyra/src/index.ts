@@ -20,7 +20,6 @@ export { default as Modules } from './components/Modules';
 export { default as MultiCheckBox } from './components/MultiCheckbox';
 export { MultiCheckBoxUI } from './components/MultiCheckbox';
 export { default as MultiInputTable } from './components/MultiInputTable';
-export { default as RadioInput } from './components/RadioInput';
 export { default as CustomFrom } from './components/FormRenderer';
 export { default as Section } from './components/Section';
 export { SectionUI } from './components/Section';
@@ -34,8 +33,8 @@ export { default as SequentialTaskExecutor } from './components/SequentialTaskEx
 export { default as SettingsNavigator } from './components/SettingsNavigator';
 export { default as TextArea } from './components/TextArea';
 export { TextAreaUI } from './components/TextArea';
-export { default as ToggleSetting } from './components/ToggleSetting';
-export { ToggleSettingUI } from './components/ToggleSetting';
+export { default as ChoiceToggle } from './components/ChoiceToggle';
+export { ChoiceToggleUI } from './components/ChoiceToggle';
 export { default as Tour } from './components/TourSteps';
 export { default as AdminHeader } from './components/AdminHeader';
 export { default as NestedComponent } from './components/NestedComponent';

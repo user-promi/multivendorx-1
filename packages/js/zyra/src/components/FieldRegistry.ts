@@ -19,7 +19,6 @@ import MultiInputTable from './MultiInputTable';
 import NestedComponent from './NestedComponent';
 import NoticeField from './Notice';
 import PrePostText from './PrePostText';
-import RadioInput from './RadioInput';
 import Recaptcha from './Recaptcha';
 import Section from './Section';
 import SelectInput from './SelectInput';
@@ -27,7 +26,7 @@ import ShortCodeTable from './ShortCodeTable';
 import SystemInfo from './SystemInfo';
 import Tabs from './Tabs';
 import TextArea from './TextArea';
-import ToggleSetting from './ToggleSetting';
+import ChoiceToggle from './ChoiceToggle';
 import { FieldComponent } from './types';
 
 export const FIELD_REGISTRY: Record<string, FieldComponent> = {
@@ -59,8 +58,6 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   textarea: TextArea,
 
-  radio: RadioInput,
-
   preposttext: PrePostText,
 
   button: AdminButton,
@@ -74,7 +71,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'expandable-panel': ExpandablePanel,
 
-  'setting-toggle': ToggleSetting,
+  'setting-toggle': ChoiceToggle,
 
   'clickable-list': ClickableList,
 

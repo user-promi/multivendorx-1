@@ -67,7 +67,7 @@ export default {
 		},
 		{
 			key: 'choose_ai_provider',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			defaultValue: 'gemini_api',
 			label: __('Default AI Provider', 'multivendorx'),
 			settingDescription: __(
@@ -147,7 +147,7 @@ export default {
 		},
 		{
 			key: 'image_enhancement_provider',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Image Enhancement Provider', 'multivendorx'),
 			desc: __(
 				'Choose which AI provider to use for image enhancement.',

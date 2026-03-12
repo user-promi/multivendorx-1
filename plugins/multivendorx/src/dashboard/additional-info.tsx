@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { getApiLink, Notice,  TextAreaUI, ToggleSettingUI } from 'zyra';
+import { getApiLink, Notice,  TextAreaUI, ChoiceToggleUI } from 'zyra';
 
 const AdditionalInformation = () => {
 	const id = appLocalizer.store_id;
@@ -123,7 +123,7 @@ const AdditionalInformation = () => {
 								<label>
 									{__('Hide Address', 'multivendorx')}
 								</label>
-								<ToggleSettingUI
+								<ChoiceToggleUI
 									options={[
 										{
 											key: 'yes',
@@ -149,7 +149,7 @@ const AdditionalInformation = () => {
 								<label>
 									{__('Hide Phone', 'multivendorx')}
 								</label>
-								<ToggleSettingUI
+								<ChoiceToggleUI
 									options={[
 										{
 											key: 'yes',
@@ -175,7 +175,7 @@ const AdditionalInformation = () => {
 								<label>
 									{__('Hide Email', 'multivendorx')}
 								</label>
-								<ToggleSettingUI
+								<ChoiceToggleUI
 									options={[
 										{
 											key: 'yes',

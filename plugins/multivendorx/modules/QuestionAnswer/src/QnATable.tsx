@@ -9,7 +9,7 @@ import {
 	TableCard,
 	BasicInputUI,
 	AdminButtonUI,
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	TextAreaUI,
 	PopupUI,
 	TableRow,
@@ -367,7 +367,7 @@ const Qna: React.FC = () => {
 							)}
 							htmlFor="visibility"
 						>
-							<ToggleSettingUI
+							<ChoiceToggleUI
 								options={[
 									{
 										key: 'public',

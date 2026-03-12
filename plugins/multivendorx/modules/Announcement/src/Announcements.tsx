@@ -12,7 +12,7 @@ import {
 	TableCard,
 	BasicInputUI,
 	AdminButtonUI,
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	SelectInputUI,
 	PopupUI,
 	NavigatorHeader,
@@ -552,7 +552,7 @@ export const Announcements: React.FC = () => {
 						)}
 						htmlFor="status"
 					>
-						<ToggleSettingUI
+						<ChoiceToggleUI
 							options={[
 								{
 									key: 'draft',

@@ -10,7 +10,7 @@ import {
 	getApiLink,
 	Notice,
 	
-	ToggleSettingUI,
+	ChoiceToggleUI,
 } from 'zyra';
 import ShippingRatesByCountry from './ShippingRatesByCountry';
 import DistanceByZoneShipping from './DistanceByZoneShipping';
@@ -93,7 +93,7 @@ const ShippingDelivery = () => {
 				displayPosition='float'
 				title={__('Great!', 'multivendorx')}
 			/>
-			{/* Only show ToggleSetting if shipping_methods has options */}
+			{/* Only show ChoiceToggle if shipping_methods has options */}
 			{appLocalizer.shipping_methods &&
 			appLocalizer.shipping_methods.length > 0 ? (
 				<Container>
@@ -107,7 +107,7 @@ const ShippingDelivery = () => {
 									'multivendorx'
 								)}
 							>
-								<ToggleSettingUI
+								<ChoiceToggleUI
 									options={appLocalizer.shipping_methods}
 									value={formData.shipping_options || ''}
 									onChange={(value: any) =>
@@ -374,7 +374,7 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 									>
-										<ToggleSettingUI
+										<ChoiceToggleUI
 											options={[
 												{
 													label: __(
