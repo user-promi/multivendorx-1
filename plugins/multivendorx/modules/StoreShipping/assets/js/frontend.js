@@ -5,9 +5,9 @@ jQuery(document).ready(function ($) {
 		return;
 	}
 
-	if (opts.map_provider === 'google_map_set') {
+	if (opts.map_provider === 'google_map') {
 		initGoogleMap(opts);
-	} else if (opts.map_provider === 'mapbox_api_set') {
+	} else if (opts.map_provider === 'mapbox') {
 		initMapboxMap(opts);
 	}
 

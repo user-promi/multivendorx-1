@@ -4,8 +4,7 @@ import {
 	getApiLink,
 	useModules,
 	EmailsInput,
-	GoogleMap,
-	Mapbox,
+	MapProviderUI,
 	Container,
 	Column,
 	Card,
@@ -46,8 +45,12 @@ const StoreSettings = ({
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({});
 
-	// Map states
-	const [apiKey, setApiKey] = useState('');
+	// Map states - simplified
+	const [mapConfig, setMapConfig] = useState<{
+		provider: string | null;
+		apiKey: string;
+	}>({ provider: 'null', apiKey: '' });
+	
 	const appLocalizer = (window as any).appLocalizer;
 	const { modules } = useModules();
 	const settings = appLocalizer.settings_databases_value;
@@ -98,18 +101,19 @@ const StoreSettings = ({
 		timezone: '',
 	});
 
+	// Load map configuration
 	useEffect(() => {
 		if (!settings?.geolocation) {
 			return;
 		}
 
 		const provider = settings.geolocation.choose_map_api;
+		const apiKey = settings.geolocation[`${provider}_api_key`] || '';
 
-		if (provider === 'google_map_set') {
-			setApiKey(settings.geolocation.google_api_key || '');
-		} else if (provider === 'mapbox_api_set') {
-			setApiKey(settings.geolocation.mapbox_api_key || '');
-		}
+		setMapConfig({
+			provider: provider || null,
+			apiKey: apiKey
+		});
 	}, [settings]);
 	
 	// Load store data
@@ -174,7 +178,7 @@ const StoreSettings = ({
 		}
 	}, [location.state]);
 
-	const handleAddressChange = (name, value) => {
+	const handleAddressChange = (name: string, value: string) => {
 		const newAddressData = {
 			...addressData,
 			[name]: value,
@@ -207,11 +211,10 @@ const StoreSettings = ({
 		if (locationData.country) {
 			fetchStatesByCountry(locationData.country);
 		}
-		return;
 	};
 
-	// Handle country select change (from old code)
-	const handleCountryChange = (value) => {
+	// Handle country select change
+	const handleCountryChange = (value: string) => {
 		if (!value) {
 			return;
 		}
@@ -227,9 +230,9 @@ const StoreSettings = ({
 		fetchStatesByCountry(value);
 	};
 
-	// Handle state select change (from old code)
-	const handleStateChange = (value) => {
-		if (!value ) {
+	// Handle state select change
+	const handleStateChange = (value: string) => {
+		if (!value) {
 			return;
 		}
 
@@ -270,7 +273,7 @@ const StoreSettings = ({
 		}
 	};
 
-	const handleChange = (name, value) => {
+	const handleChange = (name: string, value: string) => {
 		const updated = { ...formData, [name]: value };
 		setFormData(updated);
 
@@ -336,19 +339,16 @@ const StoreSettings = ({
 		autoSave(updated);
 	};
 
-	// Then update your autoSave function:
 	const autoSave = (updatedData: any) => {
 		if (!id) {
 			return;
 		}
-		// Format email data for backend
-		const formattedData = { ...updatedData };
 
 		axios({
 			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			data: formattedData,
+			data: updatedData,
 		})
 			.then((res) => {
 				if (res.data.success) {
@@ -360,35 +360,25 @@ const StoreSettings = ({
 			});
 	};
 
+	// Render map component using the merged provider
 	const renderMapComponent = () => {
-		if (!modules.includes('geo-location') || !apiKey) {
+		if (!modules.includes('geo-location') || !mapConfig.apiKey || !mapConfig.provider) {
 			return null;
 		}
 
-		const commonProps = {
-			apiKey,
-			locationAddress: addressData.address,
-			locationLat: addressData.location_lat,
-			locationLng: addressData.location_lng,
-			onLocationUpdate: handleLocationUpdate,
-			labelSearch: __('Search for a location'),
-			labelMap: __('Drag or click on the map to choose a location'),
-			instructionText: __(
-				'Enter a search term or drag/drop a pin on the map.'
-			),
-			placeholderSearch: __('Search for a location...'),
-		};
-
-		switch (settings.geolocation.choose_map_api) {
-			case 'google_map_set':
-				return <GoogleMap {...commonProps} />;
-
-			case 'mapbox_api_set':
-				return <Mapbox {...commonProps} />;
-
-			default:
-				return null;
-		}
+		return (
+			<MapProviderUI
+				apiKey={mapConfig.apiKey}
+				locationAddress={addressData.address}
+				locationLat={addressData.location_lat}
+				locationLng={addressData.location_lng}
+				isUserLocation={false}
+				onLocationUpdate={handleLocationUpdate}
+				placeholderSearch={__('Search for a location...', 'multivendorx')}
+				stores={null}
+				mapProvider={mapConfig.provider}
+			/>
+		);
 	};
 
 	return (
@@ -631,7 +621,7 @@ const StoreSettings = ({
 							const defaultUrl = `https://${network === 'twitter' ? 'x' : network}.com/`;
 
 							return (
-								<FormGroupWrapper>
+								<FormGroupWrapper key={network}>
 									<FormGroup 
 										icon={iconClass}
 										label={network === 'twitter'
@@ -647,7 +637,7 @@ const StoreSettings = ({
 												formData[network]?.trim() ||
 												defaultUrl
 											}
-											onChange={(val) => handleChange(network, val)}
+											onChange={(val: string) => handleChange(network, val)}
 										/>
 									</FormGroup>
 								</FormGroupWrapper>
