@@ -106,17 +106,15 @@ export const TableCell: React.FC<TableCellProps> = ({
     };
 
     return (
-        <td key={fieldKey}>
-            <Render
-                field={fieldConfig}
-                value={value}
-                modules={modules}
-                appLocalizer={appLocalizer}
-                onBlocked={onBlocked}
-                canAccess={!disabled}
-                onChange={(newValue: any) => { onChange(fieldKey, newValue) }}
-            />
-        </td>
+        <Render
+            field={fieldConfig}
+            value={value}
+            modules={modules}
+            appLocalizer={appLocalizer}
+            onBlocked={onBlocked}
+            canAccess={!disabled}
+            onChange={(newValue: any) => { onChange(fieldKey, newValue) }}
+        />
     );
 };
 
@@ -157,29 +155,29 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
         return (
             <td key={`${column.key}_${rowKey}`}>
                 <div className="multi-field-cell">
-                    {fields.map((field) => {
-                        const fieldKey =
-                            column.fields
-                                ? `${column.key}_${field.key}_${rowKey}`
-                                : `${column.key}_${rowKey}`;
+                {fields.map((field) => {
+                    const fieldKey =
+                        column.fields
+                            ? `${column.key}_${field.key}_${rowKey}`
+                            : `${column.key}_${rowKey}`;
 
-                        return (
-                            <TableCell
-                                key={fieldKey}
-                                type={field.type}
-                                fieldKey={fieldKey}
-                                rowKey={rowKey}
-                                column={column}
-                                rowLabel={rowLabel}
-                                value={setting[fieldKey] ?? false}
-                                disabled={!isRowActive}
-                                onChange={onChange}
-                                modules={modules}
-                                appLocalizer={appLocalizer}
-                                onBlocked={onBlocked}
-                            />
-                        );
-                    })}
+                    return (
+                        <TableCell
+                            key={fieldKey}
+                            type={field.type}
+                            fieldKey={fieldKey}
+                            rowKey={rowKey}
+                            column={column}
+                            rowLabel={rowLabel}
+                            value={setting[fieldKey] ?? false}
+                            disabled={!isRowActive}
+                            onChange={onChange}
+                            modules={modules}
+                            appLocalizer={appLocalizer}
+                            onBlocked={onBlocked}
+                        />
+                    );
+                })}
                 </div>
             </td>
         );
@@ -203,18 +201,15 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
                 <tr key={row.key} className={row.enabledKey && !isRowActive ? 'row-disabled' : ''}>
                     <td>
                         {row.enabledKey ? (
-                            <div className="row-label-toggle">
-                                <div className="default-checkbox table-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        id={`row-toggle_${row.key}`}
-                                        checked={isRowActive}
-                                        onChange={(e) => handleRowToggle(e.target.checked)}
-                                    />
-                                    <label htmlFor={`row-toggle_${row.key}`} className="checkbox-label" />
-                                </div>
+                            <>
+                                <input
+                                    type="checkbox"
+                                    id={`row-toggle_${row.key}`}
+                                    checked={isRowActive}
+                                    onChange={(e) => handleRowToggle(e.target.checked)}
+                                />
                                 <span>{row.label}</span>
-                            </div>
+                            </>
                         ) : row.label}
                     </td>
                     {!isRowActive ? (
@@ -236,16 +231,12 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
             const isOpen = openGroup === groupKey;
             return (
                 <React.Fragment key={groupKey}>
-                    <tr className="toggle-header-row">
-                        <td colSpan={totalCols}>
-                            <div className="toggle-header" onClick={() => setOpenGroup(isOpen ? null : groupKey)}>
-                                <div className="header-title">
-                                    {group.label}
-                                    <i className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`} />
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                    <div className="toggle-header" onClick={() => setOpenGroup(isOpen ? null : groupKey)}>
+                        <div className="header-title">
+                            {group.label}
+                            <i className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`} />
+                        </div>
+                    </div>
                     {isOpen && Object.entries(group.capability).map(([capKey, capLabel]) => {
                         const hasExists = Object.values(storeTabSetting).some((arr) => arr?.includes(capKey));
                         return (

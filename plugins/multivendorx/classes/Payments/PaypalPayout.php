@@ -44,7 +44,7 @@ class PaypalPayout {
             'formFields' => array(
                 array(
                     'key'     => 'payment_mode',
-                    'type'    => 'setting-toggle',
+                    'type'    => 'choice-toggle',
                     'label'   => __( 'Payment mode', 'multivendorx' ),
                     'options' => array(
                         array(

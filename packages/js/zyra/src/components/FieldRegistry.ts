@@ -71,7 +71,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'expandable-panel': ExpandablePanel,
 
-  'setting-toggle': ChoiceToggle,
+  'choice-toggle': ChoiceToggle,
 
   'clickable-list': ClickableList,
 

@@ -45,11 +45,6 @@
         width: 100%;
         border: $border-light-small;
 
-        h1 {
-            font-size: 1.25rem;
-            padding: 0.625rem 0;
-        }
-
         tr {
             display: flex;
             align-items: stretch;
@@ -63,6 +58,12 @@
                 justify-content: center;
                 flex: 1 0 0;
                 padding: 0 1rem;
+                gap: 0.5rem;
+
+                .multi-field-cell{
+                    display: flex;
+                    gap: 0.5rem;
+                }
 
                 &:first-child {
                     max-width: 9.5rem;
