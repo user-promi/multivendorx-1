@@ -14,6 +14,8 @@ import {
 	TextAreaUI,
 	getApiLink,
 	useOutsideClick,
+	EmailsInput,
+	InfoItem,
 } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '@/services/commonFunction';
@@ -36,7 +38,7 @@ const AddOrder = () => {
 	const addressEditRef = useRef(null);
 	const shippingAddressEditRef = useRef(null);
 	const [shippingLines, setShippingLines] = useState([]);
-	const [availableShippingMethods, setAvailableShippingMethods] = useState( [] );
+	const [availableShippingMethods, setAvailableShippingMethods] = useState([]);
 
 	useOutsideClick(addressEditRef, () => {
 		const payload = {
@@ -363,127 +365,163 @@ const AddOrder = () => {
 	}, [hasCustomer, shippingAddress]);
 
 	// Define headers for the order items table
-	const orderItemsHeaders = {
+	const tableRows = [
+		...addedProducts.map(product => ({
+			...product,
+			rowType: 'product',
+			id: `product-${product.id}`
+		})),
+		...shippingLines.map(ship => ({
+			...ship,
+			rowType: 'shipping',
+			id: `shipping-${ship.id}`
+		}))
+	];
+
+	// Single table headers that handle both products and shipping
+	const tableHeaders = {
 		item: {
 			label: __('Item', 'multivendorx'),
-			render: (row) => (
-				<div className="item-details">
-					<div className="image">
-						<img
-							src={row?.images?.[0]?.src}
-							width={40}
-							alt={row.name}
-						/>
-					</div>
-					<div className="detail">
-						<div className="name">{row.name}</div>
-						{row?.sku && (
-							<div className="sku">
-								{__('SKU:', 'multivendorx')} {row.sku}
+			render: (row) => {
+				if (row.rowType === 'product') {
+					return (
+						<div className="item-details">
+							<div className="image">
+								<img
+									src={row?.images?.[0]?.src}
+									width={40}
+									alt={row.name}
+								/>
 							</div>
-						)}
-					</div>
-				</div>
-			),
+							<div className="detail">
+								<div className="name">{row.name}</div>
+								{row?.sku && (
+									<div className="sku">
+										{__('SKU:', 'multivendorx')} {row.sku}
+									</div>
+								)}
+							</div>
+						</div>
+					);
+				} else {
+					return (
+						<div className="item-details">
+							<div className="icon">
+								<i className="adminfont-cart green"></i>
+							</div>
+							<div className="detail">
+								<div className="name">{__('Shipping', 'multivendorx')}</div>
+								<SelectInputUI
+									name="shipping_method"
+									type="single-select"
+									options={availableShippingMethods}
+									value={availableShippingMethods.find(
+										(o) => o.value === row.method_id
+									)}
+									onChange={(value) => {
+										const selectedOption = availableShippingMethods.find(
+											(o) => o.value === value
+										);
+										const method_title = selectedOption?.label || '';
+										setShippingLines((prev) =>
+											prev.map((s) =>
+												s.id === row.id
+													? {
+														...s,
+														method_id: value,
+														name: method_title,
+													}
+													: s
+											)
+										);
+									}}
+								/>
+							</div>
+						</div>
+					);
+				}
+			},
 		},
 		price: {
 			label: __('Price', 'multivendorx'),
-			render: (row) => `$${row.price}`,
+			render: (row) => {
+				if (row.rowType === 'product') {
+					return `$${row.price}`;
+				}
+				return '';
+			},
 		},
 		qty: {
 			label: __('Qty', 'multivendorx'),
-			render: (row) => (
-				<BasicInputUI
-					type="number"
-					min="1"
-					value={row.qty || 1}
-					onChange={(value) => {
-						const qty = +value;
-						setAddedProducts((prev) =>
-							prev.map((p) =>
-								p.id === row.id ? { ...p, qty } : p
-							)
-						);
-					}}
-				/>
-			),
-		},
-		total: {
-			label: __('Total', 'multivendorx'),
-			render: (row) => `$${(row.price * (row.qty || 1)).toFixed(2)}`,
-		},
-	};
-
-	// Define headers for shipping lines table
-	const shippingHeaders = {
-		item: {
-			label: __('Item', 'multivendorx'),
-			render: (row) => (
-				<div className="item-details">
-					<div className="icon">
-						<i className="adminfont-cart green"></i>
-					</div>
-					<div className="detail">
-						<div className="name">{__('Shipping', 'multivendorx')}</div>
-						<SelectInputUI
-							name="shipping_method"
-							type="single-select"
-							options={availableShippingMethods}
-							value={availableShippingMethods.find(
-								(o) => o.value === row.method_id
-							)}
+			render: (row) => {
+				if (row.rowType === 'product') {
+					return (
+						<BasicInputUI
+							type="number"
+							min="1"
+							value={row.qty || 1}
 							onChange={(value) => {
-								const selectedOption = availableShippingMethods.find(
-									(o) => o.value === value
-								);
-								const method_title = selectedOption?.label || '';
-								setShippingLines((prev) =>
-									prev.map((s) =>
-										s.id === row.id
-											? {
-													...s,
-													value,
-													name: method_title,
-											  }
-											: s
+								const qty = +value;
+								setAddedProducts((prev) =>
+									prev.map((p) =>
+										p.id === row.id ? { ...p, qty } : p
 									)
 								);
 							}}
 						/>
-					</div>
-				</div>
-			),
+					);
+				}
+				return '';
+			},
 		},
-		price: {
-			label: __('', 'multivendorx'),
-			render: () => null,
+		total: {
+			label: __('Total', 'multivendorx'),
+			render: (row) => {
+				if (row.rowType === 'product') {
+					return `$${(row.price * (row.qty || 1)).toFixed(2)}`;
+				} else {
+					return (
+						<BasicInputUI
+							type="number"
+							min="0"
+							value={row.cost}
+							onChange={(value) => {
+								const cost = parseFloat(value) || 0;
+								setShippingLines((prev) =>
+									prev.map((s) =>
+										s.id === row.id ? { ...s, cost } : s
+									)
+								);
+							}}
+						/>
+					);
+				}
+			},
 		},
-		qty: {
-			label: __('', 'multivendorx'),
-			render: () => null,
-		},
-		cost: {
-			label: __('Cost', 'multivendorx'),
-			render: (row) => (
-				<BasicInputUI
-					type="number"
-					min="0"
-					value={row.cost}
-					onChange={(value) => {
-						const cost = parseFloat(value) || 0;
-						setShippingLines((prev) =>
-							prev.map((s) =>
-								s.id === row.id ? { ...s, cost } : s
-							)
-						);
-					}}
-				/>
-			),
+		actions: {
+			type: 'action',
+			label: __('Actions', 'multivendorx'),
+			actions: [
+				{
+					icon: 'trash',
+					onClick: (row) => {
+						if (row.rowType === 'product') {
+							setAddedProducts((prev) =>
+								prev.filter(p => p.id !== row.id)
+							);
+						} else {
+							setShippingLines((prev) =>
+								prev.filter(s => s.id !== row.id)
+							);
+						}
+					},
+				},
+			],
 		},
 	};
 
 	// Tax headers
-	const headers = {
+	const taxTableHeaders = {
 		name: {
 			label: __('Rate name', 'multivendorx'),
 		},
@@ -501,8 +539,8 @@ const AddOrder = () => {
 			label: __('Action', 'multivendorx'),
 			actions: [
 				{
-					label: __('Click', 'multivendorx'),
-					icon: 'edit',
+					label: __('Select', 'multivendorx'),
+					icon: 'check',
 					onClick: (row) => {
 						if (row) {
 							setSelectedTaxRate(row);
@@ -511,6 +549,185 @@ const AddOrder = () => {
 				},
 			],
 		},
+	};
+
+	// billing & shipping common card 
+	const renderAddressCard = (
+		title: string,
+		address: any,
+		isEditMode: boolean,
+		setIsEditMode: (value: boolean) => void,
+		editRef: any,
+		type: 'billing' | 'shipping'
+	) => {
+		const hasCustomer = !!selectedCustomer;
+
+		return (
+			<Card
+				title={__(title, 'multivendorx')}
+				iconName={hasCustomer && !isEditMode ? "edit" : ""}
+				onIconClick={() => setIsEditMode(true)}
+			>
+				{!hasCustomer && (
+					<span>
+						{type === 'billing'
+							? __('No billing address found', 'multivendorx')
+							: __('Please Select a customer', 'multivendorx')
+						}
+					</span>
+				)}
+
+				{hasCustomer && !isEditMode && (
+					<FormGroupWrapper>
+						<FormGroup row label={__('Address', 'multivendorx')}>
+							{address.address_1}
+						</FormGroup>
+						<FormGroup row label={__('City', 'multivendorx')}>
+							{address.city}
+						</FormGroup>
+						<FormGroup row label={__('Postcode / ZIP', 'multivendorx')}>
+							{address.postcode}
+						</FormGroup>
+						<FormGroup row label={__('State', 'multivendorx')}>
+							{address.state}
+						</FormGroup>
+						<FormGroup row label={__('Country', 'multivendorx')}>
+							{address.country}
+						</FormGroup>
+					</FormGroupWrapper>
+				)}
+
+				{isEditMode && (
+					<div ref={editRef}>
+						<FormGroupWrapper>
+							<FormGroup
+								label={__('Address', 'multivendorx')}
+								htmlFor={`${type}-address`}
+							>
+								<BasicInputUI
+									name={`${type}_address_1`}
+									value={address.address_1}
+									onChange={(value) => {
+										if (type === 'billing') {
+											setBillingAddress((prev) => ({
+												...prev,
+												address_1: value,
+											}));
+										} else {
+											setShippingAddress((prev) => ({
+												...prev,
+												address_1: value,
+											}));
+										}
+									}}
+								/>
+							</FormGroup>
+
+							<FormGroup
+								cols={2}
+								label={__('City', 'multivendorx')}
+								htmlFor={`${type}-city`}
+							>
+								<BasicInputUI
+									name={`${type}_city`}
+									value={address.city || ''}
+									onChange={(value) => {
+										if (type === 'billing') {
+											setBillingAddress((prev) => ({
+												...prev,
+												city: value,
+											}));
+										} else {
+											setShippingAddress((prev) => ({
+												...prev,
+												city: value,
+											}));
+										}
+									}}
+								/>
+							</FormGroup>
+
+							<FormGroup
+								cols={2}
+								label={__('Postcode / ZIP', 'multivendorx')}
+								htmlFor={`${type}-postcode`}
+							>
+								<BasicInputUI
+									name={`${type}_postcode`}
+									value={address.postcode || ''}
+									onChange={(value) => {
+										if (type === 'billing') {
+											setBillingAddress((prev) => ({
+												...prev,
+												postcode: value,
+											}));
+										} else {
+											setShippingAddress((prev) => ({
+												...prev,
+												postcode: value,
+											}));
+										}
+									}}
+								/>
+							</FormGroup>
+
+							<FormGroup
+								cols={2}
+								label={__('Country / Region', 'multivendorx')}
+								htmlFor={`${type}-country`}
+							>
+								<SelectInputUI
+									name={`${type}_country`}
+									type="single-select"
+									value={address.country}
+									options={appLocalizer.country_list || []}
+									onChange={(selected) => {
+										if (type === 'billing') {
+											setBillingAddress((prev) => ({
+												...prev,
+												country: selected,
+											}));
+										} else {
+											setShippingAddress((prev) => ({
+												...prev,
+												country: selected,
+											}));
+										}
+										fetchStatesByCountry(selected);
+									}}
+								/>
+							</FormGroup>
+
+							<FormGroup
+								cols={2}
+								label={__('State / County', 'multivendorx')}
+								htmlFor={`${type}-state`}
+							>
+								<SelectInputUI
+									name={`${type}_state`}
+									type="single-select"
+									value={address.state}
+									options={stateOptions}
+									onChange={(selected) => {
+										if (type === 'billing') {
+											setBillingAddress((prev) => ({
+												...prev,
+												state: selected,
+											}));
+										} else {
+											setShippingAddress((prev) => ({
+												...prev,
+												state: selected,
+											}));
+										}
+									}}
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+					</div>
+				)}
+			</Card>
+		);
 	};
 
 	return (
@@ -532,190 +749,178 @@ const AddOrder = () => {
 			<Container>
 				<Column grid={8}>
 					<Card>
-						<div className="table-wrapper view-order-table">
-							{addedProducts.length > 0 && (
-								<>
-									<TableCard
-										headers={orderItemsHeaders}
-										rows={addedProducts}
-									/>
-
-									{shippingLines.length > 0 && (
-										<TableCard
-											headers={shippingHeaders}
-											rows={shippingLines}
-										/>
-									)}
-
-									<div className="total-summary">
-										<div className="row">
-											<span>
-												{__('Subtotal:', 'multivendorx')}
-											</span>
-											<span>${subtotal.toFixed(2)}</span>
-										</div>
-
-										<div className="row">
-											<span>{__('Tax:', 'multivendorx')}</span>
-											<span>
-												$
-												{addedProducts
-													.reduce(
-														(sum, p) =>
-															sum + (p.tax_amount || 0),
-														0
-													)
-													.toFixed(2)}
-											</span>
-										</div>
-
-										<div className="row">
-											<span>
-												{__('Shipping:', 'multivendorx')}
-											</span>
-											<span>{formatCurrency(totalShipping)}</span>
-										</div>
-
-										<div className="row total">
-											<strong>
-												{__('Grand Total:', 'multivendorx')}
-											</strong>
-											<strong>${grandTotal.toFixed(2)}</strong>
-										</div>
-									</div>
-								</>
-							)}
-							<FormGroupWrapper>
-								<AdminButtonUI
-									position="left"
-									buttons={[
-										{
-											icon: 'plus',
-											text: 'Add Product',
-											onClick: () =>
-												setShowAddProduct(true),
-										},
-										{
-											icon: 'plus',
-											text: 'Add Shipping',
-											onClick: () =>
-												setShippingLines((prev) => [
-													...prev,
-													{
-														id: Date.now(),
-														name: 'Shipping',
-														cost: 0,
-														method_id: '',
-													},
-												]),
-										},
-										{
-											icon: 'plus',
-											text: 'Add Tax',
-											onClick: () => setShowAddTax(true),
-										},
-									]}
+						{(addedProducts.length > 0 || shippingLines.length > 0) && (
+							<>
+								<TableCard
+									headers={tableHeaders}
+									rows={tableRows}
 								/>
 
-								{showAddProduct && (
-									<FormGroup
-										row
-										label={__(
-											'Select Product',
-											'multivendorx'
-										)}
-									>
-										<SelectInputUI
-											name="product_select"
-											type="single-select"
-											options={[
-												{
-													label: __(
-														'Select a product',
-														'multivendorx'
-													),
-													value: '',
-												},
-												...allProducts.map((p) => ({
-													label: p.name,
-													value: p.id,
-												})),
-											]}
-											onChange={(selected) => {
-												if (!selected) {
-													return;
-												}
-
-												const prod = allProducts.find(
-													(p) =>
-														p.id == selected
-												);
-												if (prod) {
-													setAddedProducts((prev) => [
-														...prev,
-														{ ...prod, qty: 1 },
-													]);
-												}
-
-												setShowAddProduct(false);
-											}}
-										/>
-									</FormGroup>
-								)}
-							</FormGroupWrapper>
-
-							{showAddTax && (
-								<div className="tax-wrapper">
-									<div className="title">
-										{__('Add tax', 'multivendorx')}
+								<div className="total-summary">
+									<div className="row">
+										<span>
+											{__('Subtotal:', 'multivendorx')}
+										</span>
+										<span>${subtotal.toFixed(2)}</span>
 									</div>
 
-									{taxRates.length > 0 ? (
-										<>
-											<TableCard
-												headers={headers}
-												rows={taxRates}
-												ids={rowIds}
-											/>
-											<AdminButtonUI
-												buttons={[
-													{
-														text: __(
-															'Add',
-															'multivendorx'
-														),
-														icon: 'plus',
-														onClick: () => {
-															applyTaxToOrder();
-															setShowAddTax(
-																false
-															);
-														},
-													},
-												]}
-											/>
-										</>
-									) : (
-										<div className="desc">
-											{__(
-												'No tax rates set. Contact admin.',
-												'multivendorx'
-											)}
-										</div>
-									)}
+									<div className="row">
+										<span>{__('Tax:', 'multivendorx')}</span>
+										<span>
+											$
+											{addedProducts
+												.reduce(
+													(sum, p) =>
+														sum + (p.tax_amount || 0),
+													0
+												)
+												.toFixed(2)}
+										</span>
+									</div>
+
+									<div className="row">
+										<span>
+											{__('Shipping:', 'multivendorx')}
+										</span>
+										<span>{formatCurrency(totalShipping)}</span>
+									</div>
+
+									<div className="row total">
+										<strong>
+											{__('Grand Total:', 'multivendorx')}
+										</strong>
+										<strong>${grandTotal.toFixed(2)}</strong>
+									</div>
 								</div>
+							</>
+						)}
+						<FormGroupWrapper>
+							<AdminButtonUI
+								position="left"
+								buttons={[
+									{
+										icon: 'plus',
+										text: 'Add Product',
+										onClick: () =>
+											setShowAddProduct(true),
+									},
+									{
+										icon: 'plus',
+										text: 'Add Shipping',
+										onClick: () =>
+											setShippingLines((prev) => [
+												...prev,
+												{
+													id: Date.now(),
+													name: 'Shipping',
+													cost: 0,
+													method_id: '',
+												},
+											]),
+									},
+									{
+										icon: 'plus',
+										text: 'Add Tax',
+										onClick: () => setShowAddTax(true),
+									},
+								]}
+							/>
+
+							{showAddProduct && (
+								<FormGroup
+									row
+									label={__(
+										'Select Product',
+										'multivendorx'
+									)}
+								>
+									<SelectInputUI
+										name="product_select"
+										type="single-select"
+										options={[
+											{
+												label: __(
+													'Select a product',
+													'multivendorx'
+												),
+												value: '',
+											},
+											...allProducts.map((p) => ({
+												label: p.name,
+												value: p.id,
+											})),
+										]}
+										onChange={(selected) => {
+											if (!selected) {
+												return;
+											}
+
+											const prod = allProducts.find(
+												(p) =>
+													p.id == selected
+											);
+											if (prod) {
+												setAddedProducts((prev) => [
+													...prev,
+													{ ...prod, qty: 1 },
+												]);
+											}
+
+											setShowAddProduct(false);
+										}}
+									/>
+								</FormGroup>
 							)}
-						</div>
+						</FormGroupWrapper>
+
+						{showAddTax && (
+							<div className="tax-wrapper">
+								<div className="title">
+									{__('Add tax', 'multivendorx')}
+								</div>
+
+								{taxRates.length > 0 ? (
+									<>
+										<TableCard
+											headers={taxTableHeaders}
+											rows={taxRates}
+											ids={rowIds}
+										/>
+										<AdminButtonUI
+											buttons={[
+												{
+													text: __(
+														'Apply Tax',
+														'multivendorx'
+													),
+													icon: 'plus',
+													onClick: () => {
+														applyTaxToOrder();
+														setShowAddTax(
+															false
+														);
+													},
+												},
+											]}
+										/>
+									</>
+								) : (
+									<div className="desc">
+										{__(
+											'No tax rates set. Contact admin.',
+											'multivendorx'
+										)}
+									</div>
+								)}
+							</div>
+						)}
 					</Card>
 				</Column>
 				<Column grid={4}>
 					<Card title={__('Payment Method', 'multivendorx')}>
 						<FormGroupWrapper>
-							<FormGroup
-								label={__(
-									'Select Payment Method',
-									'multivendorx'
-								)}
+							<FormGroup row
+								label={__('Payment Method', 'multivendorx')}
 								htmlFor="payment-method"
 							>
 								<SelectInputUI
@@ -738,7 +943,7 @@ const AddOrder = () => {
 						{!selectedCustomer && (
 							<>
 								<FormGroupWrapper>
-									<FormGroup
+									<FormGroup row
 										label={__(
 											'Select Customer',
 											'multivendorx'
@@ -780,57 +985,41 @@ const AddOrder = () => {
 							</>
 						)}
 						{selectedCustomer && (
-							<div className="store-owner-details">
-								<div className="profile">
-									<div className="avatar">
-										<span>
-											{selectedCustomer
-												? selectedCustomer.first_name[0]
-												: __('C', 'multivendorx')}
-										</span>
-									</div>
-
-									<div className="details">
-										<div className="name">
-											{selectedCustomer
-												? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
-												: __('Guest Customer', 'multivendorx')}
-										</div>
-
-										{selectedCustomer && (
+							<InfoItem
+								title={selectedCustomer ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}` : __('Guest Customer', 'multivendorx')}
+								avatar={{
+									text: selectedCustomer ? selectedCustomer.first_name[0] : 'C',
+									iconClass: 'avatar-text'
+								}}
+								descriptions={selectedCustomer ? [
+									{
+										label: __('Customer ID', 'multivendorx'),
+										value: `#${selectedCustomer.id}`,
+										boldLabel: true
+									},
+									{
+										value: (
 											<>
-												<div className="des">
-													{__(
-														'Customer ID:',
-														'multivendorx'
-													)}{' '}
-													#{selectedCustomer.id}
-												</div>
-
-												<div className="des">
-													<i className="adminfont-mail" />
-													{selectedCustomer.email}
-												</div>
-
-												<div className="des">
-													<i className="adminfont-phone" />
-													{
-														selectedCustomer.billing
-															.phone
-													}
-												</div>
+												<i className="adminfont-mail" /> {selectedCustomer.email}
 											</>
-										)}
-									</div>
-								</div>
-
-								<div
-									className="admin-badge blue"
-									onClick={() => setSelectedCustomer(null)}
-								>
-									<i className="adminfont-edit"></i>
-								</div>
-							</div>
+										)
+									},
+									{
+										value: (
+											<>
+												<i className="adminfont-phone" /> {selectedCustomer.billing?.phone}
+											</>
+										)
+									}
+								] : []}
+								badges={[
+									{
+										text: __('Edit', 'multivendorx'),
+										className: 'blue',
+										onClick: () => setSelectedCustomer(null)
+									}
+								]}
+							/>
 						)}
 					</Card>
 
@@ -875,15 +1064,16 @@ const AddOrder = () => {
 									label={__('Email', 'multivendorx')}
 									htmlFor="email"
 								>
-									<BasicInputUI
-										name="email"
-										value={newCustomer.email}
-										onChange={(value) =>
+									<EmailsInput
+										mode="single"
+										value={newCustomer.email ? [newCustomer.email] : []}
+										placeholder={__('Enter email...', 'multivendorx')}
+										onChange={(emails) => {
 											setNewCustomer({
 												...newCustomer,
-												email: value,
-											})
-										}
+												email: emails[0] || '',
+											});
+										}}
 									/>
 								</FormGroup>
 
@@ -915,288 +1105,24 @@ const AddOrder = () => {
 						</Card>
 					)}
 
-					<Card title={__('Shipping address', 'multivendorx')}>
-						{/* No customer selected */}
-						{!hasCustomer && (
-							<div className="address-wrapper">
-								<div className="address">
-									<span>
-										{__(
-											'Please Select a customer',
-											'multivendorx'
-										)}
-									</span>
-								</div>
-							</div>
-						)}
+					{renderAddressCard(
+						'Shipping address',
+						shippingAddress,
+						showShippingAddressEdit,
+						setShowShippingAddressEdit,
+						shippingAddressEditRef,
+						'shipping'
+					)}
 
-						{/* View mode */}
-						{hasCustomer && !showShippingAddressEdit && (
-							<div className="address-wrapper">
-								<div className="address">
-									<span>{shippingAddress.address_1}</span>
-									<span>{shippingAddress.city}</span>
-									<span>
-										{shippingAddress.postcode},{' '}
-										{shippingAddress.state}
-									</span>
-									<span>{shippingAddress.country}</span>
-								</div>
+					{renderAddressCard(
+						'Billing address',
+						billingAddress,
+						showAddressEdit,
+						setShowAddressEdit,
+						addressEditRef,
+						'billing'
+					)}
 
-								<div
-									className="admin-badge blue"
-									onClick={() =>
-										setShowShippingAddressEdit(true)
-									}
-								>
-									<i className="adminfont-edit" />
-								</div>
-							</div>
-						)}
-
-						{/* Edit mode */}
-						{showShippingAddressEdit && (
-							<div ref={shippingAddressEditRef}>
-								<FormGroupWrapper>
-									<FormGroup
-										label={__('Address', 'multivendorx')}
-									>
-										<BasicInputUI
-											name="address_1"
-											value={shippingAddress.address_1}
-											onChange={(value) =>
-												setShippingAddress((prev) => ({
-													...prev,
-													address_1: value,
-												}))
-											}
-										/>
-									</FormGroup>
-									<FormGroup
-										cols={2}
-										label={__('City', 'multivendorx')}
-									>
-										<BasicInputUI
-											name="city"
-											value={shippingAddress.city || ''}
-											onChange={(value) =>
-												setShippingAddress((prev) => ({
-													...prev,
-													city: value,
-												}))
-											}
-										/>
-									</FormGroup>
-									<FormGroup
-										cols={2}
-										label={__(
-											'Postcode / ZIP',
-											'multivendorx'
-										)}
-									>
-										<BasicInputUI
-											name="postcode"
-											value={
-												shippingAddress.postcode || ''
-											}
-											onChange={(value) =>
-												setShippingAddress((prev) => ({
-													...prev,
-													postcode: value,
-												}))
-											}
-										/>
-									</FormGroup>
-									<FormGroup
-										cols={2}
-										label={__(
-											'Country / Region',
-											'multivendorx'
-										)}
-									>
-										<SelectInputUI
-											name="country"
-											type="single-select"
-											value={shippingAddress.country}
-											options={
-												appLocalizer.country_list || []
-											}
-											onChange={(selected) => {
-												setShippingAddress((prev) => ({
-													...prev,
-													country: selected,
-												}));
-												fetchStatesByCountry(selected);
-											}}
-										/>
-									</FormGroup>
-
-									<FormGroup
-										cols={2}
-										label={__(
-											'State / County',
-											'multivendorx'
-										)}
-									>
-										<SelectInputUI
-											name="state"
-											type="single-select"
-											value={shippingAddress.state}
-											options={stateOptions}
-											onChange={(selected) =>
-												setShippingAddress((prev) => ({
-													...prev,
-													state: selected,
-												}))
-											}
-										/>
-									</FormGroup>
-								</FormGroupWrapper>
-							</div>
-						)}
-					</Card>
-
-					<Card title={__('Billing address', 'multivendorx')}>
-						{!hasCustomer && (
-							<div className="address-wrapper">
-								<div className="address">
-									<span>
-										{__(
-											'No billing address found',
-											'multivendorx'
-										)}
-									</span>
-								</div>
-							</div>
-						)}
-
-						{hasCustomer && !showAddressEdit && (
-							<div className="address-wrapper">
-								<div className="address">
-									<span>{billingAddress.address_1}</span>
-									<span>{billingAddress.city}</span>
-									<span>
-										{billingAddress.postcode},{' '}
-										{billingAddress.state}
-									</span>
-									<span>{billingAddress.country}</span>
-								</div>
-
-								<div
-									className="admin-badge blue"
-									onClick={() => setShowAddressEdit(true)}
-								>
-									<i className="adminfont-edit"></i>
-								</div>
-							</div>
-						)}
-
-						{showAddressEdit && (
-							<div ref={addressEditRef}>
-								<FormGroupWrapper>
-									<FormGroup
-										label={__('Address', 'multivendorx')}
-										htmlFor="Address"
-									>
-										<BasicInputUI
-											name="address_1"
-											value={billingAddress.address_1}
-											onChange={(value) =>
-												setBillingAddress((prev) => ({
-													...prev,
-													address_1: value,
-												}))
-											}
-										/>
-									</FormGroup>
-
-									<FormGroup
-										cols={2}
-										label={__('City', 'multivendorx')}
-										htmlFor="city"
-									>
-										<BasicInputUI
-											name="city"
-											value={billingAddress.city || ''}
-											onChange={(value) =>
-												setBillingAddress((prev) => ({
-													...prev,
-													city: value,
-												}))
-											}
-										/>
-									</FormGroup>
-									<FormGroup
-										cols={2}
-										label={__(
-											'Postcode / ZIP',
-											'multivendorx'
-										)}
-										htmlFor="postcode-zip"
-									>
-										<BasicInputUI
-											name="postcode"
-											value={
-												billingAddress.postcode || ''
-											}
-											onChange={(value) =>
-												setBillingAddress((prev) => ({
-													...prev,
-													postcode: value,
-												}))
-											}
-										/>
-									</FormGroup>
-
-									<FormGroup
-										cols={2}
-										label={__(
-											'Country / Region',
-											'multivendorx'
-										)}
-										htmlFor="country-region"
-									>
-										<SelectInputUI
-											name="country"
-											type="single-select"
-											value={billingAddress.country}
-											options={
-												appLocalizer.country_list || []
-											}
-											onChange={(selected) => {
-												setBillingAddress((prev) => ({
-													...prev,
-													country: selected,
-												}));
-												fetchStatesByCountry(selected);
-											}}
-										/>
-									</FormGroup>
-									<FormGroup
-										cols={2}
-										label={__(
-											'State / County',
-											'multivendorx'
-										)}
-										htmlFor="state-county"
-									>
-										<SelectInputUI
-											name="state"
-											type="single-select"
-											value={billingAddress.state}
-											options={stateOptions}
-											onChange={(selected) => {
-												setBillingAddress((prev) => ({
-													...prev,
-													state: selected,
-												}));
-											}}
-										/>
-									</FormGroup>
-								</FormGroupWrapper>
-							</div>
-						)}
-					</Card>
 					<Card title={__('Order note', 'multivendorx')}>
 						<FormGroup>
 							<TextAreaUI

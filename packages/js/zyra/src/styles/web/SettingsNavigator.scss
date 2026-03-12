@@ -43,9 +43,10 @@
       color: $text-color;
       display: flex;
       align-items: center;
+      gap: 0.625rem;
       font-weight: 500;
 
-      i {
+      .title-icon {
         margin-right: 0.5rem;
         color: $theme-color;
         font-size: 1.8rem;
@@ -57,7 +58,6 @@
         font-size: 1rem;
         margin: 0;
       }
-
     }
   }
 

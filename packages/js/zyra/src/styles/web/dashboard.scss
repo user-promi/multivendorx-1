@@ -222,60 +222,52 @@
 
 // notification style start
 .notification-wrapper {
-    ul {
-        margin: 0;
-        padding: 0;
+    .item {
+        display: flex;
+        padding: 0.625rem;
+        border: $border-light-small;
+        align-items: start;
+        cursor: pointer;
+        border-radius: $border-radius-small;
+        margin-bottom: 1rem;
+        gap: 0.5rem;
 
-        li {
-            display: flex;
-            padding: 0.625rem;
-            border: $border-light-small;
-            align-items: start;
-            cursor: pointer;
+        .item-icon {
+            padding: 0.313rem 0;
+            font-size: 1.125rem;
+            padding: 0.313rem;
             border-radius: $border-radius-small;
-            margin-bottom: 1rem;
-            gap: 0.5rem;
-
-            .icon-wrapper {
-                padding: 0.313rem 0;
-
-                i {
-                    font-size: 1.125rem;
-                    padding: 0.313rem;
-                    border-radius: $border-radius-small;
-                }
-            }
-
-            .details {
-                width: 90%;
-                position: relative;
-                flex-direction: column;
-                margin: 0;
-                align-items: start;
-
-                .notification-title {
-                    font-size: 1.063rem;
-                    color: $text-color;
-                    padding-bottom: 0.313rem;
-                }
-
-                span {
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    color: $sub-text-color;
-                    font-weight: 500;
-                }
-
-            }
-
-            &:hover {
-                background-color: $background-color;
-            }
         }
-        li:last-child{
+
+        .details {
+            width: 90%;
+            position: relative;
+            flex-direction: column;
             margin: 0;
+            align-items: start;
+
+            .item-title {
+                font-size: 1.063rem;
+                color: $text-color;
+                padding-bottom: 0.313rem;
+            }
+
+            .value {
+                position: absolute;
+                right: 0;
+                top: 0;
+                color: $sub-text-color;
+                font-weight: 500;
+            }
+
         }
+
+        &:hover {
+            background-color: $background-color;
+        }
+    }
+    .item:last-child{
+        margin: 0;
     }
 }
 
