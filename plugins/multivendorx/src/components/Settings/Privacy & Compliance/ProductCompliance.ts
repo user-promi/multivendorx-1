@@ -80,7 +80,7 @@ export default {
 		},
 		{
 			key: 'who_can_report',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Who can report', 'multivendorx'),
 			settingDescription: __(
 				'Decide if only logged-in customers can submit abuse reports, or if reporting is open to everyone.',

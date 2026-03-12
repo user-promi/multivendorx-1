@@ -393,7 +393,7 @@ export default {
 		},
 		{
 			key: 'commission_type',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			row: false,
 			cols: 2,
 			label: __('Page size', 'multivendorx'),
@@ -418,7 +418,7 @@ export default {
 		},
 		{
 			key: 'commission_type',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			row: false,
 			cols: 2,
 			label: __('Orientation', 'multivendorx'),

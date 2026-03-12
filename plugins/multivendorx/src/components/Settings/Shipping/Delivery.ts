@@ -53,7 +53,7 @@ export default {
 		},
 		{
 			key: 'order-completion-rules',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('When orders are marked complete', 'multivendorx'),
 			settingDescription: __(
 				'Specifies how orders are finalized and transitioned from Delivered to Completed after the package has reached the customer',

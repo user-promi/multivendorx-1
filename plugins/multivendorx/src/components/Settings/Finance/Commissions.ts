@@ -88,7 +88,7 @@ export default {
 		},
 		{
 			key: 'commission_type',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Marketplace commission', 'multivendorx'),
 			settingDescription: __(
 				'Decide how the system should calculate the marketplace commission.',
@@ -124,7 +124,7 @@ export default {
 			nestedFields: [
 				{
 					key: 'rule_type',
-					type: 'choice-toggle',
+					type: 'setting-toggle',
 					label: 'If',
 					options: [
 						{ value: 'price', label: 'Product/listing price' },
@@ -138,7 +138,7 @@ export default {
 				},
 				{
 					key: 'rule',
-					type: 'choice-toggle',
+					type: 'setting-toggle',
 					label: 'is',
 					options: [
 						{ value: 'less_than', label: 'up to' },
@@ -286,7 +286,7 @@ export default {
 		},
 		{
 			key: 'give_tax',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Tax distribution options', 'multivendorx'),
 			wooCheck: 'taxes_enabled',
 			wooLink:
@@ -409,7 +409,7 @@ export default {
 				},
 				{
 					key: 'rule',
-					type: 'choice-toggle',
+					type: 'setting-toggle',
 					label: 'to be',
 					options: [
 						{

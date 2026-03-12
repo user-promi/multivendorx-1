@@ -287,7 +287,7 @@ const Withdrawl: React.FC = () => {
 								</div>
 							);
 						}
-						if (field.type === 'choice-toggle') {
+						if (field.type === 'setting-toggle') {
 							return (
 								<FormGroup
 									label={__(field.label, 'multivendorx')}

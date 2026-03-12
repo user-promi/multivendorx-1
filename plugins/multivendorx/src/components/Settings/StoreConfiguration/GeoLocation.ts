@@ -13,7 +13,7 @@ export default {
 	modal: [
 		{
 			key: 'radius_search_unit',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Show map on', 'multivendorx'),
 			settingDescription: __(
 				'Decide where the store map should appear.',
@@ -128,7 +128,7 @@ export default {
 				},
 				{
 					key: 'radius_search_unit',
-					type: 'choice-toggle',
+					type: 'setting-toggle',
 					options: [
 						{
 							key: 'kilometers',

@@ -224,7 +224,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 								}
 
 								// Render Toggle Settings
-								if (field.type === 'choice-toggle') {
+								if (field.type === 'setting-toggle') {
 									return (
 										<FormGroup
 											label={__(

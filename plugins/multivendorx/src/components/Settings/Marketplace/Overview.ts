@@ -72,7 +72,7 @@ export default {
 		},
 		{
 			key: 'display_customer_order',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Customers will see information for', 'multivendorx'),
 			custom: true,
 			settingDescription: __(

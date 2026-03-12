@@ -14,7 +14,7 @@ export default {
 	modal: [
 		{
 			key: 'approve_store',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('New store registration approval', 'multivendorx'),
 			desc: __(
 				'Decide how you want to approve new stores for your marketplace:<ul><li>Manual approval - Admin reviews each store request and decides whether to approve or reject it before granting access to the marketplace.</li><li>Automatic approval - Stores are instantly approved, gaining dashboard access right away to upload and sell products/listings.</li></ul>',
@@ -40,7 +40,7 @@ export default {
 		},
 		{
 			key: 'disable_setup_wizard',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Guided setup wizard', 'multivendorx'),
 			desc: __(
 				'Help stores set up their store quickly with a guided, step-by-step process after registration. If disabled, the setup wizard will not appear.',
@@ -155,7 +155,7 @@ export default {
 		},
 		{
 			key: 'store_selling_mode',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Product listing model', 'multivendorx'),
 			desc: __(
 				'Decide how stores are allowed to sell products/listings in your marketplace:<ul><li><strong>Own listing</strong> - Stores can sell only their own products, following standard marketplace rules.</li><li><strong>Shared listing</strong> - Stores can copy existing products and sell them alongside new products they create.</li><li><strong>Franchise</strong> - Franchise stores can sell only their own products and products created by the admin.</li>',
@@ -182,7 +182,7 @@ export default {
 		},
 		{
 			key: 'spmv_show_order',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __(
 				'Co-listed product/listings display priority',
 				'multivendorx'
@@ -221,7 +221,7 @@ export default {
 		},
 		{
 			key: 'more_offers_display_position',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('More offers display position', 'multivendorx'),
 			desc: __(
 				'Decide where additional offers by other stores should be displayed on the single product/listings page to make them visible to customers.',
@@ -253,7 +253,7 @@ export default {
 		},
 		{
 			key: 'store_assignment_method',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Franchise store assignment method', 'multivendorx'),
 			desc: __(
 				'Define how customer orders are assigned to franchise stores after checkout:<ul><li><strong>Nearest store</strong> - Orders are automatically assigned to the closest eligible franchise store based on the customer’s delivery address and the store’s configured "location restrictions".Best suited for physical or region-based fulfillment.</li><li><strong>Manual assignment</strong> - Orders are created without a store assignment and must be manually assigned by the admin from the backend.</li></ul>',
@@ -284,7 +284,7 @@ export default {
 		},
 		{
 			key: 'location_restriction',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Location restriction', 'multivendorx'),
 			dependent: {
 				key: 'store_assignment_method',
@@ -311,7 +311,7 @@ export default {
 		},
 		{
 			key: 'products_available_for_franchise_orders',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __(
 				'Products available for franchise orders',
 				'multivendorx'

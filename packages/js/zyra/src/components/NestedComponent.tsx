@@ -22,7 +22,7 @@ interface NestedField {
     key: string;
     type:
         | 'number'
-        | 'choice-toggle'
+        | 'setting-toggle'
         | 'text'
         | 'select'
         | 'time'

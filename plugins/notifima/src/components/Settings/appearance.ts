@@ -95,7 +95,7 @@ export default {
         },
         {
             key: 'lead_time_format',
-            type: 'choice-toggle',
+            type: 'setting-toggle',
             label: __( 'Lead Format', 'notifima' ),
             desc: __(
                 'Choose the lead time format: Either dynamic (set unique lead time text for all out of stock product) or static (apply a default lead time text for out of stock products).',

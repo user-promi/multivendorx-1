@@ -79,7 +79,7 @@ const SetupWizard: React.FC = () => {
 				},
 				{
 					key: 'timezone_mode',
-					type: 'choice-toggle',
+					type: 'setting-toggle',
 					label: __('Timezone', 'multivendorx'),
 					options: [
 						{

@@ -118,7 +118,7 @@ class BankTransfer {
                     ),
                     array(
                         'key'     => 'account_type',
-                        'type'    => 'choice-toggle',
+                        'type'    => 'setting-toggle',
                         'label'   => __( 'Account type', 'multivendorx' ),
                         'options' => array(
                             array(

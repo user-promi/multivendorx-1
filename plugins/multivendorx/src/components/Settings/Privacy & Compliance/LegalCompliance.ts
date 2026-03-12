@@ -49,7 +49,7 @@ export default {
 		},
 		{
 			key: 'legal_document_handling',
-			type: 'choice-toggle',
+			type: 'setting-toggle',
 			label: __('Legal document handling', 'multivendorx'),
 			settingDescription: __(
 				'Control how stores interact with legal document templates. Choose whether stores can only access the pre-defined templates or are allowed to upload their customized versions.',
