@@ -133,7 +133,7 @@ export default {
 		},
 		{
 			key: 'sync_notifications',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Notification events rules', 'multivendorx'),
 			desc: __(
 				'MultiVendorX includes predefined notification events by default. Additional notification events added via custom code are not listed automatically. Select a synchronization rules below to define how notifications are synced, then click Sync.<ul>\

@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState, useEffect, useMemo } from 'react';
 
 // Internal Dependencies
 import '../styles/web/ColorSettingInput.scss';
-import { ToggleSettingUI } from './ToggleSetting';
+import { ChoiceToggleUI } from './ChoiceToggle';
 import { SelectInputUI } from './SelectInput';
 import PdfDownloadButton from './PdfDownloadButton';
 import { FieldComponent } from './types';
@@ -222,7 +222,7 @@ export const ColorSettingInputUI: React.FC<ColorSettingProps> = (props) => {
                         { /* Toggle Mode */}
                         <div className="form-group-setting-wrapper">
                             <label>Color Palette</label>
-                            <ToggleSettingUI
+                            <ChoiceToggleUI
                                 options={[
                                     {
                                         key: 'predefined',

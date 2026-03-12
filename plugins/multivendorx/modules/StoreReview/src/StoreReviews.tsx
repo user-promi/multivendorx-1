@@ -8,7 +8,7 @@ import {
 	FormGroup,
 	TableCard,
 	AdminButtonUI,
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	PopupUI,
 	TextAreaUI,
 	TableRow,
@@ -447,7 +447,7 @@ const StoreReviews: React.FC = () => {
 								)}
 								htmlFor="control"
 							>
-								<ToggleSettingUI
+								<ChoiceToggleUI
 									options={[
 										{
 											key: 'pending',

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { FormViewer, getApiLink, ToggleSetting } from 'zyra';
+import { FormViewer, getApiLink, ChoiceToggle } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
@@ -150,7 +150,7 @@ const RegistrationForm = () => {
 			{stores.length > 0 && (
 				<>
 					<div className="store-selector">
-						<ToggleSetting
+						<ChoiceToggle
 							options={stores}
 							value={selectedStore?.value || ''}
 							onChange={(val: any) => handleStoreChange(val)}

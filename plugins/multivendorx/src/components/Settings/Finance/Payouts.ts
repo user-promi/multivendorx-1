@@ -137,7 +137,7 @@ export default {
 		},
 		{
 			key: 'payment_schedules',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Automatic payout frequency', 'multivendorx'),
 			settingDescription: __(
 				'Define how and when store earnings are automatically released from their wallet.',
@@ -223,7 +223,7 @@ export default {
 			nestedFields: [
 				{
 					key: 'payout_frequency',
-					type: 'setting-toggle',
+					type: 'choice-toggle',
 					label: __('On', 'multivendorx'),
 					// label: __('Payout frequency', 'multivendorx'),
 					options: [
@@ -442,7 +442,7 @@ export default {
 		},
 		{
 			key: 'withdraw_type',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Withdrawal request approval', 'multivendorx'),
 			settingDescription: __(
 				'Control how withdrawl requests are handled when stores initiate withdrawals manually.',

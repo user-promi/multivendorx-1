@@ -13,7 +13,7 @@ export default {
 	modal: [
 		{
 			key: 'product_page_chat',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Chat button position', 'multivendorx'),
 			desc: __(
 				'Choose where the chat button will appear on product/listing pages.',
@@ -41,7 +41,7 @@ export default {
 		},
 		{
 			key: 'chat_provider',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Chat platform integration', 'multivendorx'),
 			desc: __(
 				'Select the chat provider you want to connect with your store.',
@@ -74,7 +74,7 @@ export default {
 		},
 		{
 			key: 'whatsapp_opening_pattern',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('WhatsApp opening pattern', 'multivendorx'),
 			// desc: __(
 			// 	'Choose whether WhatsApp chats open in browser or app.',

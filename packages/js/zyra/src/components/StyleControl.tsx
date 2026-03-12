@@ -1,6 +1,6 @@
 // External dependencies
 import React, { useState } from 'react';
-import { ToggleSettingUI } from './ToggleSetting';
+import { ChoiceToggleUI } from './ChoiceToggle';
 import Card from './UI/Card';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import FormGroup from './UI/FormGroup';
@@ -25,7 +25,7 @@ const StyleControls: React.FC<StyleControlsProps> = ({
         <Card toggle defaultExpanded={true} title="Text">
           <FormGroupWrapper>
             <FormGroup label="Text Align">
-              <ToggleSettingUI
+              <ChoiceToggleUI
                 options={[
                   {
                     key: 'left',

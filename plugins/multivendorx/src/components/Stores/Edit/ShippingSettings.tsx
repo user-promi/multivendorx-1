@@ -14,7 +14,7 @@ import {
 	getApiLink,
 	ComponentStatusView,
 	
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	Notice,
 } from 'zyra';
 
@@ -108,7 +108,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 										'multivendorx'
 									)}
 								>
-									<ToggleSettingUI
+									<ChoiceToggleUI
 										options={appLocalizer.shipping_methods}
 										value={formData.shipping_options || ''}
 										onChange={(value: any) =>
@@ -393,7 +393,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												'multivendorx'
 											)}
 										>
-											<ToggleSettingUI
+											<ChoiceToggleUI
 												options={[
 													{
 														label: 'Kilometers (km)',

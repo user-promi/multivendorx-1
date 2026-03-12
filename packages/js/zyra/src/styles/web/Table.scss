@@ -340,6 +340,10 @@
                         background: transparent;
                         border-color: transparent;
                     }
+                    // for editable field
+                    .setting-form-input{
+                        width: fit-content;
+                    }
 
                     &.select,
                     &.id {

@@ -13,7 +13,7 @@ export default {
 	modal: [
 		{
 			key: 'store_seo_options',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Third-party SEO tools', 'multivendorx'),
 			settingDescription: __(
 				'Let stores manage SEO and boost their visibility using advanced plugins.',

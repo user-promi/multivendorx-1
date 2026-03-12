@@ -192,6 +192,13 @@ class Dashboard extends \WP_REST_Controller {
                         'capability' => array( 'view_store_reviews', 'reply_store_reviews' ),
                         'module'     => array( 'store-review' ),
                     ),
+                     array(
+                        'key'        => 'membership',
+                        'name'       => 'Membership',
+                        'slug'       => 'membership',
+                        'capability' => array( 'view_store_reviews', 'reply_store_reviews' ),
+                        'module'     => array( 'store-review' ),
+                    ),
                 ),
                 'capability' => array( 'view_support_tickets' ),
             ),
