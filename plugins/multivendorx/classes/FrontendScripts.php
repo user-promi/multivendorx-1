@@ -591,6 +591,9 @@ class FrontendScripts {
                     'object_name'  => 'storesList',
                     'use_settings' => true,
                     'use_rest'     => true,
+                    'data'        => array(
+                        'store_page_url'         => get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ? trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ) . '/' : site_url( '/?' . MultiVendorX()->setting->get_setting( 'store_url', 'store' ) . '=' ),
+                    ),
                 ),
                 'multivendorx-marketplace-products-editor-script' => array(
                     'object_name'  => 'productList',

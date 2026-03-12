@@ -6,6 +6,7 @@ import { __ } from '@wordpress/i18n';
 interface StoreRow {
 	id: number;
 	name: string;
+	store_slug:string,
 	topProducts?: string[];
 }
 
@@ -34,6 +35,8 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	const [total, setTotal] = useState(0);
 	const [apiKey, setApiKey] = useState('');
 	const [viewMode, setViewMode] = useState<'list' | 'split' | 'map'>('list');
+	const [storeTopProducts, setStoreTopProducts] = useState<{ [storeId: number]: any[] }>({});
+
 	const [addressData, setAddressData] = useState({
 		location_lat: '',
 		location_lng: '',
@@ -124,6 +127,41 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		}
 	};
 
+	const fetchTopProducts = (storeId: number) => {
+		axios
+			.get(`${storesList.apiUrl}/wc/v3/products`, {
+				headers: { 'X-WP-Nonce': storesList.nonce },
+				params: {
+					per_page: 3,
+					meta_key: 'multivendorx_store_id',
+					value: storeId,
+					orderby: 'date',
+					order: 'desc',
+				},
+			})
+			.then((response) => {
+				// Store the products in state keyed by storeId
+				setStoreTopProducts((prev) => ({
+					...prev,
+					[storeId]: response.data,
+				}));
+			})
+			.catch((error) => {
+				console.error(`Failed to fetch top products for store ${storeId}:`, error);
+				setStoreTopProducts((prev) => ({
+					...prev,
+					[storeId]: [],
+				}));
+			});
+	};
+
+	useEffect(() => {
+		if (data.length) {
+			data.forEach((store) => {
+				fetchTopProducts(store.id);
+			});
+		}
+	}, [data]);
 	useEffect(() => {
 		axios({
 			method: 'GET',
@@ -240,7 +278,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 				return null;
 		}
 	};
-
 	return (
 		<>
 			<div className="woocommerce multivendorx-store">
@@ -419,73 +456,45 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 										</div>
 									</div>
 
-									<div className="store-products">
-										<h6 className="woocommerce-products-header__title">
-											{__('Top Products', 'multivendorx')}
-										</h6>
+									{storeTopProducts[store.id]?.length > 0 && (
+										<div className="store-products">
+											<h6 className="woocommerce-products-header__title">
+												{__('Top Products', 'multivendorx')}
+											</h6>
 
-										{/* (pkoro start) */}
-										<ul className="products">
-											<li className="product type-product">
-												<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-													<div className="woocommerce-loop-product__thumbnail">
-														<div className="woocommerce-placeholder">
-															<img
-																src="https://via.placeholder.com/300x300"
-																alt="Placeholder"
-																className="wp-post-image"
-																width="30"
-																height="30"
-															/>
-														</div>
-													</div>
-													<h6 className="woocommerce-loop-product__title">
-														Product Name 1 (pkoro)
-													</h6>
-												</a>
-											</li>
-											<li className="product type-product">
-												<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-													<div className="woocommerce-loop-product__thumbnail">
-														<div className="woocommerce-placeholder">
-															<img
-																src="https://via.placeholder.com/300x300"
-																alt="Placeholder"
-																className="wp-post-image"
-																width="30"
-																height="30"
-															/>
-														</div>
-													</div>
-													<h6 className="woocommerce-loop-product__title">
-														Product Name 1 (pkoro)
-													</h6>
-												</a>
-											</li>
-											<li className="product type-product">
-												<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-													<div className="woocommerce-loop-product__thumbnail">
-														<div className="woocommerce-placeholder">
-															<img
-																src="https://via.placeholder.com/300x300"
-																alt="Placeholder"
-																className="wp-post-image"
-																width="30"
-																height="30"
-															/>
-														</div>
-													</div>
-													<h6 className="woocommerce-loop-product__title">
-														Product Name 1 (pkoro)
-													</h6>
-												</a>
-											</li>
-										</ul> {/* (pkoro end) */}
-									</div>
+											<ul className="products">
+												{storeTopProducts[store.id]?.map((p) => {
+													return (
+														<li key={p.id} className="product type-product">
+															<a href={p.permalink || '#'} className="woocommerce-LoopProduct-link">
+																<div className="woocommerce-loop-product__thumbnail">
+																	<img
+																		src={p.images?.[0]?.src || storesList.marketplace_site + '/wp-content/plugins/woocommerce/assets/images/placeholder.png'}
+																		alt={p.name}
+																		className="wp-post-image"
+																		width={30}
+																		height={30}
+																	/>
+																</div>
+																<h6 className="woocommerce-loop-product__title">{p.name}</h6>
+																{p.price_html && (
+																	<span
+																		className="price"
+																		dangerouslySetInnerHTML={{ __html: p.price_html }}
+																	/>
+																)}
+															</a>
+														</li>
+													);
+												})}
+											</ul>
+										</div>
+									)}
 
 									<div className="store-footer">
-										<p> 7 products</p>
-										<button>View Store</button>
+										<a href={`${storesList.store_page_url}/${store.store_slug || ''}/`} className="button">
+											{__('View Store', 'multivendorx')}
+										</a>
 									</div>
 								</div>
 							))}
