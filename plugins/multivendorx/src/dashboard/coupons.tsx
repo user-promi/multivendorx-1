@@ -730,8 +730,7 @@ const AllCoupon: React.FC = () => {
 			<NavigatorHeader
 				headerTitle={__('Coupons', 'multivendorx')}
 				headerDescription={__(
-					'Manage your store information and preferences',
-					'multivendorx'
+					'Create, view, and manage all your store coupons from one place.','multivendorx'
 				)}
 				buttons={[
 					{

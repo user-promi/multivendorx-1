@@ -488,6 +488,7 @@ export default {
 				'https://multivendorx.com/docs/knowledgebase/marketplace-memberhsip',
 			proModule: true,
 			category: 'marketplace_boosters',
+			reloadOnChange: true,
 		},
 
 		{
