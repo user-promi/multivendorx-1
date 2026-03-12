@@ -3,12 +3,12 @@ import { __ } from '@wordpress/i18n';
 
 const columns = appLocalizer?.custom_roles
 	? Object.entries(appLocalizer.custom_roles).map(([key, value]) => ({
-		key,
-		label: value,
-		type: 'checkbox',
-		proSetting: key === 'store_owner' ? false : true,
-		moduleEnabled: key != 'store_owner' && 'staff-manager',
-	}))
+			key,
+			label: value,
+			type:'choice-toggle',
+			proSetting: key === 'store_owner' ? false : true,
+			moduleEnabled: key != 'store_owner' && 'staff-manager',
+		}))
 	: [];
 export default {
 	id: 'user-permissions',

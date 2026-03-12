@@ -10,7 +10,7 @@ interface PaymentField {
 	type?: string;
 	label: string;
 	placeholder?: string;
-	options?: Array<{ key: string; label: string; value: string }>; // For setting-toggle type
+	options?: Array<{ key: string; label: string; value: string }>; // For choice-toggle type
 }
 
 interface PaymentProvider {
