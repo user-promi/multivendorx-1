@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldComponent } from "./types";
 
-interface ActionButtonProps {
+interface RandomInputKeyGeneratorProps {
   value?: string;
   length?: number;
   onChange: (value: string) => void;
@@ -14,7 +14,7 @@ const generateRandomKey = (len: number): string =>
     )
   ).join("");
 
-const ActionButtonUI: React.FC<ActionButtonProps> = ({
+const RandomInputKeyGeneratorUI: React.FC<RandomInputKeyGeneratorProps> = ({
   value = "",
   length = 8,
   onChange,
@@ -53,9 +53,9 @@ const ActionButtonUI: React.FC<ActionButtonProps> = ({
   );
 };
 
-const ActionButton: FieldComponent = {
+const RandomInputKeyGenerator: FieldComponent = {
     render: ({ field, value, onChange }) => (
-        <ActionButtonUI
+        <RandomInputKeyGeneratorUI
             value={value}
             length={field.length}
             onChange={onChange}
@@ -63,4 +63,4 @@ const ActionButton: FieldComponent = {
     ),
 };
 
-export default ActionButton;
+export default RandomInputKeyGenerator;

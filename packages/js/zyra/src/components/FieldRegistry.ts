@@ -28,7 +28,7 @@ import Tabs from './Tabs';
 import TextArea from './TextArea';
 import ChoiceToggle from './ChoiceToggle';
 import { FieldComponent } from './types';
-import ActionButton from './ActionButton';
+import RandomInputKeyGenerator from './RandomInputKeyGenerator';
 
 export const FIELD_REGISTRY: Record<string, FieldComponent> = {
   // BasicInput
@@ -108,5 +108,5 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'google_map': MapProvider,
   'mapbox': MapProvider,
-  'action-button': ActionButton,
+  'random-input-key-generator': RandomInputKeyGenerator,
 };
