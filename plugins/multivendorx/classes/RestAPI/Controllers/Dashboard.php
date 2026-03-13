@@ -102,13 +102,13 @@ class Dashboard extends \WP_REST_Controller {
                 'slug'       => 'products',
                 'icon'       => 'single-product',
                 'submenu'    => array(),
-                'capability' => array( 'read_products' ),
+                'capability' => array( 'read_products', 'add_products', 'publish_products', 'edit_published_products', 'upload_files' ),
             ),
             'coupons'       => array(
                 'name'       => 'Coupons',
                 'slug'       => 'coupons',
                 'icon'       => 'coupon',
-                'capability' => array( 'read_shop_coupons' ),
+                'capability' => array( 'read_shop_coupons', 'add_shop_coupons', 'publish_coupons' ),
             ),
             'sales'         => array(
                 'name'       => 'Sales',
