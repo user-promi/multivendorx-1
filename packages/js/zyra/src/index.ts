@@ -8,6 +8,7 @@ export { default as BasicInput } from './components/BasicInput';
 export { BasicInputUI } from './components/BasicInput';
 export { default as CalendarInput } from './components/CalendarInput';
 export { CalendarInputUI } from './components/CalendarInput';
+export type { CalendarRange } from './components/CalendarInput';
 export { default as FileInput } from './components/FileInput';
 export { FileInputUI } from './components/FileInput';
 export { default as FormViewer } from './components/FormViewer';
@@ -71,8 +72,7 @@ export { useModules, initializeModules } from './contexts/ModuleContext';
 export { SettingProvider, useSetting } from './contexts/SettingContext';
 export type { SettingContextType } from './contexts/SettingContext';
 export type { QueryProps, TableRow, CategoryCount } from './components/table/types';
-export { Notice } from './components/Notice';
-export { NoticeReceiver } from './components/NoticeReceiver';
+export { Notice, NoticeReceiver } from './components/Notice';
 
 export { default as TableCard } from './components/table/TableCard';
 export { useOutsideClick } from './components/useOutsideClick';

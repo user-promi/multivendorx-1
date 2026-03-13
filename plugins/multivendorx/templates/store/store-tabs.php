@@ -39,7 +39,7 @@ foreach ( $store_tabs as $key => $tab ) {
 		}
 	}
 }
-
+do_action( 'multivendorx_before_store_tabs', $store_id );
 ?>
 <div class="multivendorx-store-wrapper">
     <!-- left sidebar -->

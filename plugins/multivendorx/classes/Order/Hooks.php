@@ -26,7 +26,32 @@ class Hooks {
     public function __construct() {
         add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'add_metadata_for_line_item' ), 10, 4 );
         add_action( 'woocommerce_checkout_create_order_shipping_item', array( $this, 'add_metadate_for_shipping_item' ), 10, 4 );
-        add_action( 'woocommerce_analytics_update_order_stats', array( $this, 'remove_suborder_analytics' ), 10, 1 );
+
+        if ( current_user_can( 'administrator' ) ) {
+            $analytics_hooks = [
+                // Orders & Revenue
+                'woocommerce_analytics_clauses_where_orders_stats_total',
+                'woocommerce_analytics_clauses_where_orders_stats_interval',
+                'woocommerce_analytics_clauses_where_orders_subquery',
+                // Products
+                'woocommerce_analytics_clauses_where_products_stats_total',
+                'woocommerce_analytics_clauses_where_products_stats_interval',
+                'woocommerce_analytics_clauses_where_products_subquery',
+                // Categories & Taxes
+                'woocommerce_analytics_clauses_where_categories_subquery',
+                'woocommerce_analytics_clauses_where_taxes_stats_total',
+                'woocommerce_analytics_clauses_where_taxes_stats_interval',
+                'woocommerce_analytics_clauses_where_taxes_subquery',
+                // Coupons
+                'woocommerce_analytics_clauses_where_coupons_stats_total',
+                'woocommerce_analytics_clauses_where_coupons_stats_interval',
+                'woocommerce_analytics_clauses_where_coupons_subquery',
+            ];
+
+            foreach ( $analytics_hooks as $hook ) {
+                add_filter( $hook, array( $this, 'exclude_suborders_analytics' ) );
+            }
+        }
 
         add_action( 'woocommerce_order_status_processing', array( $this, 'skip_suborder_sales'), 1 );
         add_action( 'woocommerce_order_status_completed', array( $this, 'skip_suborder_sales'), 1 );
@@ -98,23 +123,19 @@ class Hooks {
     }
 
     /**
-     * Woocommerce admin dashboard restrict dual order report
-     *
-     * @param   int $order_id Parent Order ID.
-     * @return  void
+     * Forces the SQL query to only include top-level parent orders.
+     * * @param array $clauses Existing SQL clauses (where, join, etc.)
+     * @return array Modified clauses
      */
-    public function remove_suborder_analytics( $order_id ) {
+    public function exclude_suborders_analytics( $clauses ) {
         global $wpdb;
-        $order = new StoreOrder( $order_id );
-        if ( $order->is_store_order() ) {
-            $wpdb->delete( $wpdb->prefix . 'wc_order_stats', array( 'order_id' => $order_id ) );
 
-            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-            }
+        $table_name = $wpdb->prefix . 'wc_order_stats';
 
-            \WC_Cache_Helper::get_transient_version( 'woocommerce_reports', true );
-        }
+        // Inject the constraint: parent_id must be 0
+        $clauses[] = "AND {$table_name}.parent_id = 0";
+
+        return $clauses;
     }
 
     /**
