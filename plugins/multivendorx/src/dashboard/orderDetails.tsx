@@ -152,14 +152,6 @@ const OrderDetails: React.FC = () => {
 			});
 	};
 
-	const [values, setValues] = useState({
-		commission: 50,
-		discount: 5,
-		shipping: 0,
-		total: 95,
-		earned: 50,
-	});
-
 	const fetchOrder = () => {
 		axios
 			.get(`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`, {
@@ -549,7 +541,7 @@ const OrderDetails: React.FC = () => {
 				displayPosition='float'
 				title={__('Great!', 'multivendorx')}
 			/>
-			{appLocalizer.edit_order_capability ? (
+			{!appLocalizer.edit_order_capability ? (
 				<p>No access to view the order</p>
 			) : (
 				<>
