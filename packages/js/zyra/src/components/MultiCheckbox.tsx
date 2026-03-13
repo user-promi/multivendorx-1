@@ -32,6 +32,7 @@ interface MultiCheckBoxProps {
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
     modules: string[];
     appLocalizer?: any;
+    field?: any;
 }
 
 function isBlocked(
@@ -94,6 +95,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
         onBlocked,
         onChange,
         onOptionsChange,
+        field
     } = props;
 
     const [showNewInput, setShowNewInput] = useState(false);
@@ -178,8 +180,12 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
             {(!options || options.length === 0) ? (
                 <input
                     type="checkbox"
-                    onChange={(e) => onChange(e.target.checked)}
-                    
+                    checked={value.includes(field.rowKey)}
+                    onChange={(e) => {
+                        if( !isBlocked(field, modules, appLocalizer, onBlocked)) {
+                            onChange(e.target.checked)
+                        }
+                    }}
                 />
             ) : (
                 <div className={props.wrapperClass}>
@@ -353,6 +359,7 @@ const MultiCheckBox: FieldComponent = {
                 value={normalizedValue}
                 appLocalizer={appLocalizer}
                 modules={modules}
+                field={field}
                 onChange={val => { if (canAccess) onChange(val); }}
                 onOptionsChange={opts => { if (canAccess) onOptionsChange?.(opts); }}
                 onBlocked={onBlocked}
