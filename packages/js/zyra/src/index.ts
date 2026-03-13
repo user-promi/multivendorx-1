@@ -35,7 +35,6 @@ export { default as TextArea } from './components/TextArea';
 export { TextAreaUI } from './components/TextArea';
 export { default as ChoiceToggle } from './components/ChoiceToggle';
 export { ChoiceToggleUI } from './components/ChoiceToggle';
-export { default as Tour } from './components/TourSteps';
 export { default as AdminHeader } from './components/AdminHeader';
 export { default as NestedComponent } from './components/NestedComponent';
 export { NestedComponentUI } from './components/NestedComponent';
