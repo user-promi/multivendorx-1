@@ -12,7 +12,6 @@ export type { CalendarRange } from './components/CalendarInput';
 export { default as FileInput } from './components/FileInput';
 export { FileInputUI } from './components/FileInput';
 export { default as FormViewer } from './components/FormViewer';
-export { default as FreeProFormCustomizer } from './components/FreeProFormCustomizer';
 export { MapProviderUI } from './components/MapProvider';
 export { default as InputMailchimpList } from './components/InputMailchimpList';
 export { default as Log } from './components/Log';
