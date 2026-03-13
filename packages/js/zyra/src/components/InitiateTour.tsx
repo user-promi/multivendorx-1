@@ -19,18 +19,16 @@ interface TourContent {
 
 interface TourProps {
     steps: StepType[];
-    forceOpen: boolean | number;
 }
 
 interface InitiateTourProps extends Omit<ProviderProps, 'steps'> {
     steps: StepType[];
-    forceOpen: boolean | number;
 }
 
 /**
  * Main Tour component that handles the guided tour functionality
  */
-const Tour: React.FC<TourProps> = ({  steps, forceOpen }) => {
+const Tour: React.FC<TourProps> = ({  steps }) => {
     const { setIsOpen, setSteps, setCurrentStep } = useTour();
 
     const waitForElement = (selector: string): Promise<Element> =>
@@ -116,11 +114,6 @@ const Tour: React.FC<TourProps> = ({  steps, forceOpen }) => {
     }, [steps]);
 
     useEffect(() => {
-        if (forceOpen) {
-            setSteps(processedSteps);
-            setIsOpen(true);
-            return;
-        }
 
         const fetchTourState = async () => {
             try {
@@ -137,7 +130,7 @@ const Tour: React.FC<TourProps> = ({  steps, forceOpen }) => {
         };
 
         fetchTourState();
-    }, [forceOpen]);
+    }, [processedSteps]);
 
     return null;
 };
@@ -147,7 +140,6 @@ const Tour: React.FC<TourProps> = ({  steps, forceOpen }) => {
  */
 const InitiateTour: React.FC<InitiateTourProps> = ({
     steps,
-    forceOpen = false,
     ...rest
 }) => {
     return (
@@ -178,7 +170,7 @@ const InitiateTour: React.FC<InitiateTourProps> = ({
             }}
             {...rest}
         >
-            <Tour steps={steps} forceOpen={forceOpen} />
+            <Tour steps={steps} />
         </TourProvider>
     );
 };
