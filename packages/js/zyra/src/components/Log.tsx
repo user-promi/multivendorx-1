@@ -8,19 +8,10 @@ import '../styles/web/Log.scss';
 import { FieldComponent } from './types';
 import { ButtonInputUI } from './ButtonInput';
 
-interface AppLocalizer {
-    nonce: string;
-    tab_name: string;
-    apiUrl: string;
-    restUrl: string;
-    [key: string]: string | number | boolean;
-}
-
 // Types
 interface LogProps {
     apiLink: string;
     downloadFileName: string;
-    appLocalizer: AppLocalizer;
     downloadBtnText?: string;
     copyBtnText?: string;
     deleteBtnText?: string;
@@ -29,7 +20,6 @@ interface LogProps {
 export const LogUI: React.FC<LogProps> = ({
     apiLink,
     downloadFileName,
-    appLocalizer,
     downloadBtnText = 'Download',
     copyBtnText = 'Copy',
     deleteBtnText = 'Delete',
@@ -52,7 +42,7 @@ export const LogUI: React.FC<LogProps> = ({
         }).then((response) => {
             setLogData(response.data);
         });
-    }, [apiLink, appLocalizer]);
+    }, [apiLink]);
 
     const handleDownloadLog = (
         event: React.MouseEvent<HTMLButtonElement>
@@ -207,9 +197,8 @@ export const LogUI: React.FC<LogProps> = ({
 };
 
 const Log: FieldComponent = {
-    render: ({ field, value, onChange, canAccess, appLocalizer }) => (
+    render: ({ field }) => (
         <LogUI
-            appLocalizer={appLocalizer}
             apiLink={String(field.apiLink)}
             downloadFileName={String(field.fileName)}
             downloadBtnText={field.downloadBtnText}

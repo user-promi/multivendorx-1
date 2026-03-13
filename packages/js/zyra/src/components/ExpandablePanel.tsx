@@ -9,12 +9,6 @@ import { ButtonInputUI } from './ButtonInput';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-
-interface AppLocalizer {
-    nonce?: string;
-    site_url?: string;
-}
-
 interface FieldOption {
     value: string | number;
     label: string;
@@ -68,7 +62,6 @@ interface AddNewTemplate {
 interface ExpandablePanelProps {
     name: string;
     apilink?: string;
-    appLocalizer?: AppLocalizer;
     methods: ExpandablePanelMethod[];
     value: Record<string, Record<string, unknown>>;
     onChange: (data: Record<string, Record<string, unknown>>) => void;
@@ -117,7 +110,6 @@ interface PanelContextType {
     value: Record<string, Record<string, unknown>>;
     isWizardMode: boolean;
     canAccess: boolean;
-    appLocalizer?: AppLocalizer;
     addNewTemplate?: AddNewTemplate;
     tplFields: PanelFormField[];
     titleRef: React.RefObject<HTMLInputElement>;
@@ -647,7 +639,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
     methods: initialMethods,
     value,
     onChange,
-    appLocalizer,
     apilink,
     isWizardMode = false,
     canAccess,
@@ -751,7 +742,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
             headers: { 'X-WP-Nonce': appLocalizer.nonce },
             data: { setupWizard: true, value },
         }).catch(console.error);
-    }, [apilink, appLocalizer, value]);
+    }, [apilink, value]);
 
     // ── Field renderer ────────────────────────────────────────────────────────
     const renderField = useCallback((methodId: string, field: PanelFormField): JSX.Element | null => {
@@ -830,7 +821,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
                     value={fieldVal}
                     onChange={onChangeF}
                     canAccess={canAccess}
-                    appLocalizer={appLocalizer}
                 />
             );
         }
@@ -841,10 +831,9 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
                 value={fieldVal}
                 onChange={onChangeF}
                 canAccess={canAccess}
-                appLocalizer={appLocalizer}
             />
         );
-    }, [value, handleChange, isWizardMode, state.wizardIndex, state.methods, canAccess, appLocalizer, saveWizard]);
+    }, [value, handleChange, isWizardMode, state.wizardIndex, state.methods, canAccess, saveWizard]);
 
     // ── Effects ───────────────────────────────────────────────────────────────
 
@@ -956,7 +945,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         value,
         isWizardMode,
         canAccess,
-        appLocalizer,
         addNewTemplate,
         tplFields,
         titleRef,
@@ -1002,12 +990,11 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
 // ── FieldComponent wrapper ────────────────────────────────────────────────────
 
 const ExpandablePanel: FieldComponent = {
-    render: ({ field, value, onChange, canAccess, appLocalizer }) => (
+    render: ({ field, value, onChange, canAccess }) => (
         <ExpandablePanelUI
             key={field.key}
             name={field.key}
             apilink={String(field.apiLink)}
-            appLocalizer={appLocalizer}
             methods={field.modal ?? []}
             addNewBtn={field.addNewBtn}
             addNewTemplate={field.addNewTemplate}

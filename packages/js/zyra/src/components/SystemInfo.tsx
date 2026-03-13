@@ -8,16 +8,9 @@ import { getApiLink } from '../utils/apiService';
 import Skeleton from './UI/Skeleton';
 import { FieldComponent } from './types';
 
-interface AppLocalizer {
-    nonce: string;
-    apiUrl: string;
-    restUrl: string;
-}
-
 // Types
 interface SystemInfoProps {
     apiLink: string;
-    appLocalizer: AppLocalizer;
     copyButtonLabel?: string;
     copiedLabel?: string;
 }
@@ -36,7 +29,6 @@ type ApiResponse = Record<string, InfoSection>;
 
 export const SystemInfoUI : React.FC<SystemInfoProps> = ({
     apiLink,
-    appLocalizer,
     copyButtonLabel = 'Copy System Info',
     copiedLabel = 'Copied!',
 }) => {
@@ -53,7 +45,7 @@ export const SystemInfoUI : React.FC<SystemInfoProps> = ({
         }).then((response) => {
             setData(response.data);
         });
-    }, [apiLink, appLocalizer]);
+    }, [apiLink]);
 
     const toggleSection = (key: string) => {
         setOpenKeys((prev) => (prev.includes(key) ? [] : [key]));
@@ -164,10 +156,9 @@ export const SystemInfoUI : React.FC<SystemInfoProps> = ({
 };
         
 const SystemInfo: FieldComponent = {
-    render: ({ field, appLocalizer }) => (
+    render: ({ field }) => (
         <SystemInfoUI
             apiLink={field.apiLink}
-            appLocalizer={appLocalizer}
             copyButtonLabel={field.copyButtonLabel}
             copiedLabel={field.copiedLabel}
         />

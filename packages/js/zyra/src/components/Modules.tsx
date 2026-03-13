@@ -32,19 +32,11 @@ interface Separator {
 
 type ModuleItem = Module | Separator;
 
-interface AppLocalizer {
-    khali_dabba?: boolean;
-    nonce: string;
-    apiUrl: string;
-    restUrl: string;
-    active_plugins?: string[];
-}
 
 interface ModuleProps {
     modulesArray?: { category: boolean; modules: ModuleItem[] };
     apiLink: string;
     pluginName: string;
-    appLocalizer: AppLocalizer;
     proPopupContent?: React.FC;
     variant?: 'default' | 'mini-module';
 }
@@ -53,7 +45,6 @@ const isModule = (item: ModuleItem): item is Module => !('type' in item);
 
 const Modules: React.FC<ModuleProps> = ({
     modulesArray = { category: false, modules: [] },
-    appLocalizer,
     apiLink,
     proPopupContent: ProPopupComponent,
     pluginName,
