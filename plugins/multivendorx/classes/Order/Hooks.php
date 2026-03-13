@@ -28,27 +28,29 @@ class Hooks {
         add_action( 'woocommerce_checkout_create_order_shipping_item', array( $this, 'add_metadate_for_shipping_item' ), 10, 4 );
 
         if ( current_user_can( 'administrator' ) ) {
-            // Orders & Revenue Tabs
-            add_filter( 'woocommerce_analytics_clauses_where_orders_stats_total', array( $this, 'exclude_suborders_analytics' ) );
-            add_filter( 'woocommerce_analytics_clauses_where_orders_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
-            add_filter( 'woocommerce_analytics_clauses_where_orders_subquery', array( $this, 'exclude_suborders_analytics' ) );
+            $analytics_hooks = [
+                // Orders & Revenue
+                'woocommerce_analytics_clauses_where_orders_stats_total',
+                'woocommerce_analytics_clauses_where_orders_stats_interval',
+                'woocommerce_analytics_clauses_where_orders_subquery',
+                // Products
+                'woocommerce_analytics_clauses_where_products_stats_total',
+                'woocommerce_analytics_clauses_where_products_stats_interval',
+                'woocommerce_analytics_clauses_where_products_subquery',
+                // Categories & Taxes
+                'woocommerce_analytics_clauses_where_categories_subquery',
+                'woocommerce_analytics_clauses_where_taxes_stats_total',
+                'woocommerce_analytics_clauses_where_taxes_stats_interval',
+                'woocommerce_analytics_clauses_where_taxes_subquery',
+                // Coupons
+                'woocommerce_analytics_clauses_where_coupons_stats_total',
+                'woocommerce_analytics_clauses_where_coupons_stats_interval',
+                'woocommerce_analytics_clauses_where_coupons_subquery',
+            ];
 
-            // Products Tab
-            add_filter( 'woocommerce_analytics_clauses_where_products_stats_total', array( $this, 'exclude_suborders_analytics' ) );
-            add_filter( 'woocommerce_analytics_clauses_where_products_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
-            add_filter( 'woocommerce_analytics_clauses_where_products_subquery', array( $this, 'exclude_suborders_analytics' ) );
-
-            //Categories
-            add_filter( 'woocommerce_analytics_clauses_where_categories_subquery', array( $this, 'exclude_suborders_analytics' ) );
-            //Coupons
-            add_filter( 'woocommerce_analytics_clauses_where_taxes_stats_total', array( $this, 'exclude_suborders_analytics' ) );
-            add_filter( 'woocommerce_analytics_clauses_where_taxes_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
-            add_filter( 'woocommerce_analytics_clauses_where_taxes_subquery', array( $this, 'exclude_suborders_analytics' ) );
-            // Coupons
-            add_filter( 'woocommerce_analytics_clauses_where_coupons_stats_total', array( $this, 'exclude_suborders_analytics' ) );
-            add_filter( 'woocommerce_analytics_clauses_where_coupons_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
-            add_filter( 'woocommerce_analytics_clauses_where_coupons_subquery', array( $this, 'exclude_suborders_analytics' ) );
-
+            foreach ( $analytics_hooks as $hook ) {
+                add_filter( $hook, array( $this, 'exclude_suborders_analytics' ) );
+            }
         }
 
         add_action( 'woocommerce_order_status_processing', array( $this, 'skip_suborder_sales'), 1 );
