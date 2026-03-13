@@ -233,38 +233,6 @@ $index: 1;
   $index: $index + 1;
 }
 
-
-// button colors loop
-@each $name, $style in $btn-color-palette {
-
-  // light background color btn
-  .btn-#{$name} {
-    background: map-get($style, light-color);
-    color: map-get($style, color);
-
-    &:hover {
-      background: map-get($style, light-color);
-      color: map-get($style, color);
-    }
-  }
-
-  // dark background color btn
-  .btn-#{$name}-bg {
-    background: map-get($style, color);
-    color: #fff;
-
-    &:hover {
-      background: map-get($style, color);
-    }
-  }
-
-  // only text color with transparent background
-  .btn-#{$name}-color {
-    color: map-get($style, color);
-    background: transparent;
-  }
-}
-
 // copy btn start
 .copy-btn {
   width: 2.2rem;
