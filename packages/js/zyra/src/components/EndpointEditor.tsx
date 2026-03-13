@@ -20,14 +20,23 @@ interface Endpoint {
     visible?: boolean;
 }
 
+interface AppLocalizer {
+    nonce: string;
+    apiUrl: string;
+    restUrl: string;
+    [key: string]: string | number | boolean;
+}
+
 interface EndpointEditorProps {
     name: string;
     apilink: string;
+    appLocalizer: AppLocalizer;
     onChange: (data: Record<string, Endpoint>) => void;
 }
 
 const EndpointManagerUI: React.FC<EndpointEditorProps> = ({
     apilink,
+    appLocalizer,
     onChange,
 }) => {
     const [endpoints, setEndpoints] = useState<[string, Endpoint][]>([]);
@@ -52,7 +61,7 @@ const EndpointManagerUI: React.FC<EndpointEditorProps> = ({
 
             setEndpoints(formatted);
         });
-    }, [apilink]);  
+    }, [apilink, appLocalizer]);  
 
     const autoSave = (updated: [string, Endpoint][]) => {
         setEndpoints(updated);
@@ -298,10 +307,11 @@ const EndpointManagerUI: React.FC<EndpointEditorProps> = ({
 };
 
 const EndpointManager: FieldComponent = {
-    render: ({ field, value, onChange, canAccess }) => (
+    render: ({ field, value, onChange, canAccess, appLocalizer }) => (
         <EndpointManagerUI
             name={field.key}
             apilink={String(field.apiLink)}
+            appLocalizer={appLocalizer}
             onChange={(val) => {
                 if (!canAccess) return;
                 onChange(val);

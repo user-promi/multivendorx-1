@@ -2,6 +2,12 @@ import { create } from 'zustand';
 import axios from 'axios';
 import { getApiLink } from '../utils/apiService';
 
+type AppLocalizer = {
+    nonce: string;
+    apiUrl: string;
+    restUrl: string;
+};
+
 // Zustand store
 type ModuleContextType = {
     modules: string[];
@@ -22,6 +28,7 @@ export const useModules = create< ModuleContextType >( ( set ) => ( {
 } ) );
 
 export async function initializeModules(
+    appLocalizer: AppLocalizer,
     pluginName: string,
     pluginSlug: string,
     apiLink: string

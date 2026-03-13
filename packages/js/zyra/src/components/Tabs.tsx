@@ -146,7 +146,6 @@ export const TabsUI: React.FC<TabsProps> = ({
 
     return (
         <>
-        {tabs.length > 1 && (
             <div className={`tabs-wrapper ${className}`}>
                 <div className="tabs-item">
                     {tabs.map((tab, index) => (
@@ -168,7 +167,6 @@ export const TabsUI: React.FC<TabsProps> = ({
                     </div>
                 )}
             </div>
-        )}
 
             {renderTabContent()}
 

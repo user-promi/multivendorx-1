@@ -7,7 +7,7 @@ import {
 	FormGroup,
 	FormGroupWrapper,
 	PopupUI,
-	InitiateTour,
+	TourSetup,
 	Notice
 } from 'zyra';
 
@@ -397,7 +397,7 @@ const App = () => {
 				</FormGroupWrapper>
 			</PopupUI>
 
-			<InitiateTour
+			<TourSetup
 				appLocalizer={appLocalizer}
 				steps={getTourSteps(appLocalizer)}
 			/>
