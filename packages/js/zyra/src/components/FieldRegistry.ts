@@ -28,6 +28,7 @@ import Tabs from './Tabs';
 import TextArea from './TextArea';
 import ChoiceToggle from './ChoiceToggle';
 import { FieldComponent } from './types';
+import ActionButton from './ActionButton';
 
 export const FIELD_REGISTRY: Record<string, FieldComponent> = {
   // BasicInput
@@ -107,4 +108,5 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'google_map': MapProvider,
   'mapbox': MapProvider,
+  'action-button': ActionButton,
 };

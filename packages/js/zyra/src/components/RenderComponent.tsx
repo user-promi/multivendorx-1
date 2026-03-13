@@ -28,7 +28,6 @@ interface InputField {
     placeholder?: string;
     moduleEnabled?: string;
     cols?: number;
-    generate?: string;
     apilink?: string;
     action?: string;
     method?: string;
@@ -370,13 +369,6 @@ const RenderComponent: React.FC<RenderProps> = ({
         setModelOpen(true);
     };
 
-    const randomKey = (len: number): string =>
-            Array.from({ length: len }, () =>
-                'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.charAt(
-                    Math.floor(Math.random() * 62)
-                )
-            ).join('');
-
     const renderFieldInternal = (
         field: InputField,
         parentField: InputField,
@@ -392,20 +384,6 @@ const RenderComponent: React.FC<RenderProps> = ({
         
         const handleInternalChange = (val: any) => {
             if (field.type == 'button') {
-                if (field.generate) {
-                    const generatedValue = randomKey(8);
-                    onChange(field.responseKey, generatedValue);
-                    return;
-                }
-
-                if (field.copy) {
-                    navigator.clipboard.writeText(setting[field.responseKey]);
-                    return;
-                }
-                if (field.delete) {
-                    onChange(field.responseKey, '');
-                    return;
-                }
 
                 if (field.action) {
                     axios
@@ -529,36 +507,6 @@ const RenderComponent: React.FC<RenderProps> = ({
             const currentValue = setting[inputField.key] ?? '';
 
             let computedAfterElement = inputField.afterElement;
-
-            // Special dynamic logic only for generate_key
-            if (inputField.key === 'generate_key') {
-                computedAfterElement = !currentValue
-                    ? [
-                        {
-                            type: 'button',
-                            key: 'generate_button',
-                            name: 'Generate',
-                            generate: true,
-                            responseKey: 'generate_key',
-                        }
-                    ]
-                    : [
-                        {
-                            type: 'button',
-                            key: 'copy_button',
-                            name: 'Copy',
-                            copy: true,
-                            responseKey: 'generate_key',
-                        },
-                        {
-                            type: 'button',
-                            key: 'delete_button',
-                            name: 'Delete',
-                            delete: true,
-                            responseKey: 'generate_key',
-                        }
-                    ];
-            }
 
             const input = (
                 <>
