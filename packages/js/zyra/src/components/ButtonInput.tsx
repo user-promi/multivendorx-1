@@ -112,25 +112,6 @@ const ButtonInput: FieldComponent = {
 
             if (!canAccess) return;
 
-            // WP ajax action
-            if (field.action) {
-                axios
-                    .post(
-                        appLocalizer.ajaxurl,
-                        new URLSearchParams({
-                            action: field.action,
-                            _ajax_nonce: appLocalizer.nonce,
-                        })
-                    )
-                    .then((res) => {
-                        if (res.data.success && res.data.data.onboarding_url) {
-                            window.location.replace(res.data.data.onboarding_url);
-                        }
-                    });
-
-                return;
-            }
-
             // REST API
             if (field.apilink) {
                 axios({
@@ -164,13 +145,11 @@ const ButtonInput: FieldComponent = {
                 text: btn.label,
                 onClick: btn.onClick,
                 disabled: btn.disabled,
-                // onClick: handleClick,
                 icon: btn.icon,
             }))
             : [{
                 ...baseConfig,
                 text: field.text || field.placeholder || field.name || 'Click',
-                // onClick: field.onClick || (() => { onChange(true); }),
                 disabled: field.disabled,
                 onClick: field.onClick || handleClick,
                 icon: field.icon,
