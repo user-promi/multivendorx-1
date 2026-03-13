@@ -728,6 +728,11 @@ class StoreUtil {
         } else {
             $store_phone = $phone_meta;
         }
+
+        ob_start();
+        MultiVendorX()->util->get_template('store/store-tabs.php', array('store_id' => $store_obj->get_id()));
+        $tabs_html = ob_get_clean(); 
+
         $info = array(
             'storeName'          => $store_obj->get( 'name' ),
             'storeDescription'   => $store_obj->get( 'description' ),
@@ -748,6 +753,7 @@ class StoreUtil {
             'refundPolicy'       => $store_obj->get_meta( 'refund_policy' ),
             'cancellationPolicy' => $store_obj->get_meta( 'cancellation_policy' ),
             'storeAddress'       => $store_obj->get_meta( 'address' ),
+            'storeTabs'          => $tabs_html,
         );
         /**
          * Filter store info before returning.
