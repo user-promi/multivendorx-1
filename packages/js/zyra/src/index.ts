@@ -8,6 +8,7 @@ export { default as BasicInput } from './components/BasicInput';
 export { BasicInputUI } from './components/BasicInput';
 export { default as CalendarInput } from './components/CalendarInput';
 export { CalendarInputUI } from './components/CalendarInput';
+export type { CalendarRange } from './components/CalendarInput';
 export { default as FileInput } from './components/FileInput';
 export { FileInputUI } from './components/FileInput';
 export { default as FormViewer } from './components/FormViewer';
