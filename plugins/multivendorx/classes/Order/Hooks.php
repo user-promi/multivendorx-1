@@ -26,8 +26,8 @@ class Hooks {
     public function __construct() {
         add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'add_metadata_for_line_item' ), 10, 4 );
         add_action( 'woocommerce_checkout_create_order_shipping_item', array( $this, 'add_metadate_for_shipping_item' ), 10, 4 );
-        // add_action( 'woocommerce_analytics_update_order_stats', array( $this, 'remove_suborder_analytics' ), 10, 1 );
-         if ( is_admin() ) {
+
+        if ( current_user_can( 'administrator' ) ) {
             // Orders & Revenue Tabs
             add_filter( 'woocommerce_analytics_clauses_where_orders_stats_total', array( $this, 'exclude_suborders_analytics' ) );
             add_filter( 'woocommerce_analytics_clauses_where_orders_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
@@ -36,16 +36,20 @@ class Hooks {
             // Products Tab
             add_filter( 'woocommerce_analytics_clauses_where_products_stats_total', array( $this, 'exclude_suborders_analytics' ) );
             add_filter( 'woocommerce_analytics_clauses_where_products_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
+            add_filter( 'woocommerce_analytics_clauses_where_products_subquery', array( $this, 'exclude_suborders_analytics' ) );
 
-            // Variations & Categories
-            add_filter( 'woocommerce_analytics_clauses_where_variations_stats_total', array( $this, 'exclude_suborders_analytics' ) );
-            add_filter( 'woocommerce_analytics_clauses_where_categories_stats_total', array( $this, 'exclude_suborders_analytics' ) );
+            //Categories
+            add_filter( 'woocommerce_analytics_clauses_where_categories_subquery', array( $this, 'exclude_suborders_analytics' ) );
+            //Coupons
+            add_filter( 'woocommerce_analytics_clauses_where_taxes_stats_total', array( $this, 'exclude_suborders_analytics' ) );
+            add_filter( 'woocommerce_analytics_clauses_where_taxes_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
+            add_filter( 'woocommerce_analytics_clauses_where_taxes_subquery', array( $this, 'exclude_suborders_analytics' ) );
+            // Coupons
+            add_filter( 'woocommerce_analytics_clauses_where_coupons_stats_total', array( $this, 'exclude_suborders_analytics' ) );
+            add_filter( 'woocommerce_analytics_clauses_where_coupons_stats_interval', array( $this, 'exclude_suborders_analytics' ) );
+            add_filter( 'woocommerce_analytics_clauses_where_coupons_subquery', array( $this, 'exclude_suborders_analytics' ) );
+
         }
-        // Taxes & Coupons
-        add_filter( 'woocommerce_analytics_clauses_where_taxes_stats_total', array( $this, 'exclude_suborders_analytics' ) );
-        add_filter( 'woocommerce_analytics_clauses_where_coupons_stats_total', array( $this, 'exclude_suborders_analytics' ) );
-        
-        add_action( 'woocommerce_analytics_update_order_stats', array( $this, 'remove_suborder_analytics' ), 10, 1 );
 
         add_action( 'woocommerce_order_status_processing', array( $this, 'skip_suborder_sales'), 1 );
         add_action( 'woocommerce_order_status_completed', array( $this, 'skip_suborder_sales'), 1 );
@@ -113,26 +117,6 @@ class Hooks {
             $package_qty = array_sum( wp_list_pluck( $package['contents'], 'quantity' ) );
             $item->add_meta_data( 'package_qty', $package_qty, true );
             do_action( 'mvx_add_shipping_package_meta' );
-        }
-    }
-
-    /**
-     * Woocommerce admin dashboard restrict dual order report
-     *
-     * @param   int $order_id Parent Order ID.
-     * @return  void
-     */
-    public function remove_suborder_analytics( $order_id ) {
-        global $wpdb;
-        $order = new StoreOrder( $order_id );
-        if ( $order->is_store_order() ) {
-            $wpdb->delete( $wpdb->prefix . 'wc_order_stats', array( 'order_id' => $order_id ) );
-
-            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-            }
-
-            \WC_Cache_Helper::get_transient_version( 'woocommerce_reports', true );
         }
     }
 
