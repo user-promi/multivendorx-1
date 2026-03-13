@@ -151,48 +151,190 @@ registerBlockType('multivendorx/store-review', {
 				</InspectorControls>
 
 				<div {...blockProps}>
-					<ul className="multivendorx-review-list">
-						<li className="multivendorx-review-item">
-							<div className="header">
-								<div className="details-wrapper">
-									<div className="avatar">{reviewData.avatar}</div>
-									<div className="name">{reviewData.name}</div>
-									<span className="time">{reviewData.time}</span>
-								</div>
-							</div>
-
-							<div className="body">
-								<div className="rating">
-									<span className="stars">
-										{renderStars(reviewData.rating, true)}
-									</span>
-									<span className="title">{reviewData.title}</span>
+					<ul className="wc-block-review-list wc-block-components-review-list">
+						{/* Review 1 - New Product */}
+						<li
+							className="wc-block-review-list-item__item wc-block-components-review-list-item__item wc-block-components-review-list-item__item--has-image"
+							aria-hidden="false"
+						>
+							<div className="wc-block-review-list-item__info wc-block-components-review-list-item__info">
+								<div className="wc-block-review-list-item__image wc-block-components-review-list-item__image">
+									<img
+										aria-hidden="true"
+										alt=""
+										src="https://secure.gravatar.com/avatar/be3221a6fac131657111728b4d912a877ec158b123d5db3afef3bd8a59784ece?s=96&d=mm&r=g"
+									/>
 								</div>
 
-								<div className="content">{reviewData.content}</div>
-							</div>
-
-							{showImages && reviewData.images.length > 0 && (
-								<div className="review-images">
-									{reviewData.images.map((image, index) => (
-										<a
-											key={index}
-											href={image}
-											target="_blank"
-											rel="noopener noreferrer"
+								<div className="wc-block-review-list-item__meta wc-block-components-review-list-item__meta">
+									<div
+										id="review-1"
+										aria-label="new product Rated 4 out of 5"
+										className="wc-block-review-list-item__rating wc-block-components-review-list-item__rating"
+									>
+										<div
+											aria-hidden="true"
+											className="wc-block-review-list-item__rating__stars wc-block-components-review-list-item__rating__stars wc-block-review-list-item__rating__stars--4"
+											role="img"
 										>
-											<img src={image} alt={__('Review Image', 'multivendorx')} />
-										</a>
-									))}
-								</div>
-							)}
+											<span style={{ width: '80%' }}>
+												Rated <strong className="rating">4</strong> out of 5
+											</span>
+										</div>
+									</div>
 
-							{showAdminReply && reviewData.adminReply && (
-								<div className="multivendorx-review-reply">
-									<strong>{__('Admin reply:', 'multivendorx')}</strong>
-									<p>{reviewData.adminReply}</p>
+									<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
+										<a
+											href="http://localhost:8889/product/new-product/"
+											aria-labelledby="review-1"
+										>
+											new product
+										</a>
+									</div>
+
+									<div className="wc-block-review-list-item__author wc-block-components-review-list-item__author">
+										admin
+									</div>
+
+									<time
+										className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
+										dateTime="2026-03-05T13:47:31"
+									>
+										March 5, 2026
+									</time>
 								</div>
-							)}
+							</div>
+
+							<div className="wc-block-review-list-item__text wc-block-components-review-list-item__text">
+								<div>
+									<div>
+										<p>dd</p>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						{/* Review 2 - Hat */}
+						<li
+							className="wc-block-review-list-item__item wc-block-components-review-list-item__item wc-block-components-review-list-item__item--has-image"
+							aria-hidden="false"
+						>
+							<div className="wc-block-review-list-item__info wc-block-components-review-list-item__info">
+								<div className="wc-block-review-list-item__image wc-block-components-review-list-item__image">
+									<img
+										aria-hidden="true"
+										alt=""
+										src="https://secure.gravatar.com/avatar/be3221a6fac131657111728b4d912a877ec158b123d5db3afef3bd8a59784ece?s=96&d=mm&r=g"
+									/>
+								</div>
+
+								<div className="wc-block-review-list-item__meta wc-block-components-review-list-item__meta">
+									<div
+										id="review-2"
+										aria-label="Hat Rated 4 out of 5"
+										className="wc-block-review-list-item__rating wc-block-components-review-list-item__rating"
+									>
+										<div
+											aria-hidden="true"
+											className="wc-block-review-list-item__rating__stars wc-block-components-review-list-item__rating__stars wc-block-review-list-item__rating__stars--4"
+											role="img"
+										>
+											<span style={{ width: '80%' }}>
+												Rated <strong className="rating">4</strong> out of 5
+											</span>
+										</div>
+									</div>
+
+									<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
+										<a
+											href="http://localhost:8889/product/hat/"
+											aria-labelledby="review-2"
+										>
+											Hat
+										</a>
+									</div>
+
+									<div className="wc-block-review-list-item__author wc-block-components-review-list-item__author">
+										admin
+									</div>
+
+									<time
+										className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
+										dateTime="2026-03-02T13:52:43"
+									>
+										March 2, 2026
+									</time>
+								</div>
+							</div>
+
+							<div className="wc-block-review-list-item__text wc-block-components-review-list-item__text">
+								<div>
+									<div>
+										<p>dgdggdd</p>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						{/* Review 3 - T-shirt (New Static Review) */}
+						<li
+							className="wc-block-review-list-item__item wc-block-components-review-list-item__item wc-block-components-review-list-item__item--has-image"
+							aria-hidden="false"
+						>
+							<div className="wc-block-review-list-item__info wc-block-components-review-list-item__info">
+								<div className="wc-block-review-list-item__image wc-block-components-review-list-item__image">
+									<img
+										aria-hidden="true"
+										alt=""
+										src="https://secure.gravatar.com/avatar/1b8d7f9e3a2c4d5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0?s=96&d=mm&r=g"
+									/>
+								</div>
+
+								<div className="wc-block-review-list-item__meta wc-block-components-review-list-item__meta">
+									<div
+										id="review-3"
+										aria-label="T-shirt Rated 5 out of 5"
+										className="wc-block-review-list-item__rating wc-block-components-review-list-item__rating"
+									>
+										<div
+											aria-hidden="true"
+											className="wc-block-review-list-item__rating__stars wc-block-components-review-list-item__rating__stars wc-block-review-list-item__rating__stars--5"
+											role="img"
+										>
+											<span style={{ width: '100%' }}>
+												Rated <strong className="rating">5</strong> out of 5
+											</span>
+										</div>
+									</div>
+
+									<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
+										<a
+											aria-labelledby="review-3"
+										>
+											T-shirt
+										</a>
+									</div>
+
+									<div className="wc-block-review-list-item__author wc-block-components-review-list-item__author">
+										johndoe
+									</div>
+
+									<time
+										className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
+										dateTime="2026-03-10T09:15:22"
+									>
+										March 10, 2026
+									</time>
+								</div>
+							</div>
+
+							<div className="wc-block-review-list-item__text wc-block-components-review-list-item__text">
+								<div>
+									<div>
+										<p>Great quality t-shirt, fits perfectly and the material is super comfortable! Highly recommended.</p>
+									</div>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</div>

@@ -49,7 +49,7 @@ class Widgets {
 
         ob_start();
         ?>
-        <aside class="multivendorx-store-sidebar multivendorx-store-sidebar-<?php echo esc_attr( $sidebar_position ); ?>">
+        <aside class="multivendorx-store-sidebar <?php echo esc_attr( $sidebar_position ); ?>">
             <?php dynamic_sidebar( 'multivendorx-store-sidebar' ); ?>
         </aside>
         <?php

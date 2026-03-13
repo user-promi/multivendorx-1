@@ -6,6 +6,7 @@ import { __ } from '@wordpress/i18n';
 interface StoreRow {
 	id: number;
 	name: string;
+	store_slug: string,
 	topProducts?: string[];
 }
 
@@ -34,6 +35,8 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	const [total, setTotal] = useState(0);
 	const [apiKey, setApiKey] = useState('');
 	const [viewMode, setViewMode] = useState<'list' | 'split' | 'map'>('list');
+	const [storeTopProducts, setStoreTopProducts] = useState<{ [storeId: number]: any[] }>({});
+
 	const [addressData, setAddressData] = useState({
 		location_lat: '',
 		location_lng: '',
@@ -128,6 +131,41 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		}
 	};
 
+	const fetchTopProducts = (storeId: number) => {
+		axios
+			.get(`${storesList.apiUrl}/wc/v3/products`, {
+				headers: { 'X-WP-Nonce': storesList.nonce },
+				params: {
+					per_page: 3,
+					meta_key: 'multivendorx_store_id',
+					value: storeId,
+					orderby: 'date',
+					order: 'desc',
+				},
+			})
+			.then((response) => {
+				// Store the products in state keyed by storeId
+				setStoreTopProducts((prev) => ({
+					...prev,
+					[storeId]: response.data,
+				}));
+			})
+			.catch((error) => {
+				console.error(`Failed to fetch top products for store ${storeId}:`, error);
+				setStoreTopProducts((prev) => ({
+					...prev,
+					[storeId]: [],
+				}));
+			});
+	};
+
+	useEffect(() => {
+		if (data.length) {
+			data.forEach((store) => {
+				fetchTopProducts(store.id);
+			});
+		}
+	}, [data]);
 	useEffect(() => {
 		axios({
 			method: 'GET',
@@ -231,7 +269,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			/>
 		);
 	};
-
 	return (
 		<>
 			<div className="woocommerce multivendorx-store">
@@ -264,7 +301,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 					{apiKey != '' && (
 						<>
 							<div className="woocommerce-widget-layered-nav-list">
-								<div className="woocommerce-product-search" style={{ position: 'relative', marginBottom: '15px' }}>
+								<div className="woocommerce-product-search">
 									<input
 										type="text"
 										className="search-field"
@@ -275,7 +312,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 									<button
 										type="button"
 										className="button location-button"
-										style={{ position: 'absolute', right: '5px', top: '50%', transform: 'translateY(-50%)' }}
 										onClick={requestUserLocation}
 									>
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3d7a3e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -377,106 +413,122 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 						{data &&
 							data.map((store) => (
 								<div key={store.id} className="store">
+									<div className="store-body">
+										<div className="store-header">
+											{store.image ? (
+												<div className="store-image">
+													<img src={store.image} alt={store.store_name} />
+												</div>
+											) : (
+												<div className="avatar">
+													{store.store_name?.charAt(0).toUpperCase()}
+												</div>
+											)}
 
-									<div className="store-header">
-										{store.image ? (
-											<div className="store-image">
-												<img src={store.image} alt={store.store_name} />
-											</div>
-										) : (
-											<div className="avatar">
-												{store.store_name?.charAt(0).toUpperCase()}
-											</div>
-										)}
+											<div className="store-details">
+												<h4>{store.store_name}</h4>
+												<div className="review-rating"><div className="star-rating"><span>Rated <strong className="rating">4.00</strong> out of 5</span></div></div>
+												{store.phone && store.address && (
+													<div className="contact-wrapper">
+														{store.phone && (
+															<span>
+																<i className="dashicons dashicons-phone" />{' '}
+																{store.phone}
+															</span>
+														)}
 
-										<div className="store-details">
-											<h4>{store.store_name}</h4>
-											<div className="review-rating"><div className="star-rating"><span>Rated <strong className="rating">4.00</strong> out of 5</span></div></div>
-											<div className="contact-wrapper">
-												{store.phone && (
-													<span>
-														<i className="dashicons dashicons-phone" />{' '}
-														{store.phone}
-													</span>
-												)}
-
-												{store.address && (
-													<span>
-														<i className="dashicons dashicons-location" />
-														{store.address}
-													</span>
+														{store.address && (
+															<span>
+																<i className="dashicons dashicons-location" />
+																{store.address}
+															</span>
+														)}
+													</div>
 												)}
 											</div>
 										</div>
+
+										<div className="store-products">
+											<h4> {__('Top Products', 'multivendorx')} </h4>
+											{/* amit optimize site url  */}
+											{storeTopProducts[store.id]?.length > 0 ? (
+												<ul className="products columns-3">
+													{storeTopProducts[store.id]?.map((p) => {
+														const siteDomain = storesList?.site_url || '';
+														const getProductImage = (imageUrl) => {
+															if (!imageUrl) {
+																return siteDomain
+																	? `${siteDomain}/wp-content/uploads/woocommerce-placeholder.webp`
+																	: '/wp-content/uploads/woocommerce-placeholder.webp';
+															}
+															if (imageUrl.includes('placeholder')) return imageUrl;
+															return imageUrl.replace(/\.(jpg|jpeg|png|gif|webp)$/i, '-420x420.$1');
+														};
+
+														const getSrcSet = (imageUrl) => {
+															if (!imageUrl || imageUrl.includes('placeholder')) {
+																const basePlaceholder = siteDomain
+																	? `${siteDomain}/wp-content/uploads/woocommerce-placeholder`
+																	: '/wp-content/uploads/woocommerce-placeholder';
+
+																// Return placeholder srcset with site domain
+																return `${basePlaceholder}.webp 1200w, ${basePlaceholder}-300x300.webp 300w, ${basePlaceholder}-1024x1024.webp 1024w, ${basePlaceholder}-150x150.webp 150w, ${basePlaceholder}-768x768.webp 768w`;
+															}
+
+															return `${getProductImage(imageUrl)} 420w, ${imageUrl.replace(/\.(jpg|jpeg|png|gif|webp)$/i, '-150x150.$1')} 150w, ${imageUrl.replace(/\.(jpg|jpeg|png|gif|webp)$/i, '-100x100.$1')} 100w, ${imageUrl.replace(/\.(jpg|jpeg|png|gif|webp)$/i, '-300x300.$1')} 300w`;
+														};
+
+														return (
+															<li key={p.id} className={`product type-product post-${p.id} status-publish first instock product_cat-${p.categories?.[0]?.slug || 'uncategorized'} has-post-thumbnail shipping-taxable purchasable product-type-simple`}>
+																<a href={p.permalink || '#'} className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+																	<img
+																		width="324"
+																		height="324"
+																		src={getProductImage(p.images?.[0]?.src)}
+																		srcSet={getSrcSet(p.images?.[0]?.src)}
+																		sizes="(max-width: 324px) 100vw, 324px"
+																		className={p.images?.[0]?.src
+																			? 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail'
+																			: 'woocommerce-placeholder wp-post-image'
+																		}
+																		alt={p.name}
+																		decoding="async"
+																		loading="lazy"
+																	/>
+																	<h2 className="woocommerce-loop-product__title">{p.name}</h2>
+
+																	{/* Add star rating if available */}
+																	{p.average_rating > 0 && (
+																		<div className="star-rating" role="img" aria-label={`Rated ${p.average_rating} out of 5`}>
+																			<span style={{ width: `${(p.average_rating / 5) * 100}%` }}>
+																				Rated <strong className="rating">{p.average_rating}</strong> out of 5
+																			</span>
+																		</div>
+																	)}
+
+																	{/* Price HTML */}
+																	{p.price_html && (
+																		<span
+																			className="price"
+																			dangerouslySetInnerHTML={{ __html: p.price_html }}
+																		/>
+																	)}
+																</a>
+															</li>
+														);
+													})}
+												</ul>
+											) : (
+												<div className="no-products-found">
+													<p>No products found</p>
+												</div>
+											)}
+										</div>
 									</div>
-
-									<div className="store-products">
-										<h6 className="woocommerce-products-header__title">
-											{__('Top Products', 'multivendorx')}
-										</h6>
-
-										{/* (pkoro start) */}
-										<ul className="products">
-											<li className="product type-product">
-												<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-													<div className="woocommerce-loop-product__thumbnail">
-														<div className="woocommerce-placeholder">
-															<img
-																src="https://via.placeholder.com/300x300"
-																alt="Placeholder"
-																className="wp-post-image"
-																width="30"
-																height="30"
-															/>
-														</div>
-													</div>
-													<h6 className="woocommerce-loop-product__title">
-														Product Name 1 (pkoro)
-													</h6>
-												</a>
-											</li>
-											<li className="product type-product">
-												<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-													<div className="woocommerce-loop-product__thumbnail">
-														<div className="woocommerce-placeholder">
-															<img
-																src="https://via.placeholder.com/300x300"
-																alt="Placeholder"
-																className="wp-post-image"
-																width="30"
-																height="30"
-															/>
-														</div>
-													</div>
-													<h6 className="woocommerce-loop-product__title">
-														Product Name 1 (pkoro)
-													</h6>
-												</a>
-											</li>
-											<li className="product type-product">
-												<a href="#" className="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-													<div className="woocommerce-loop-product__thumbnail">
-														<div className="woocommerce-placeholder">
-															<img
-																src="https://via.placeholder.com/300x300"
-																alt="Placeholder"
-																className="wp-post-image"
-																width="30"
-																height="30"
-															/>
-														</div>
-													</div>
-													<h6 className="woocommerce-loop-product__title">
-														Product Name 1 (pkoro)
-													</h6>
-												</a>
-											</li>
-										</ul> {/* (pkoro end) */}
-									</div>
-
 									<div className="store-footer">
-										<p> 7 products</p>
-										<button>View Store</button>
+										<a href={`${storesList.store_page_url}/${store.store_slug || ''}/`} className="button">
+											{__('View Store', 'multivendorx')}
+										</a>
 									</div>
 								</div>
 							))}
