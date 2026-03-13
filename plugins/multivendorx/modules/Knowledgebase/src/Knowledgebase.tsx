@@ -6,14 +6,14 @@ import {
 	getApiLink,
 	NavigatorHeader,
 	TextAreaUI,
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	Container,
 	Column,
 	FormGroupWrapper,
 	FormGroup,
 	TableCard,
 	BasicInputUI,
-	AdminButtonUI,
+	ButtonInputUI,
 	PopupUI,
 	TableRow,
 	QueryProps,
@@ -377,7 +377,7 @@ export const KnowledgeBase: React.FC = () => {
 						),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',
@@ -441,7 +441,7 @@ export const KnowledgeBase: React.FC = () => {
 								label={__('Status', 'multivendorx')}
 								htmlFor="status"
 							>
-								<ToggleSettingUI
+								<ChoiceToggleUI
 									value={formData.status}
 									options={[
 										{

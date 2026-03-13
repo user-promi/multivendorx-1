@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	getApiLink,
 	Container,
 	Column,
@@ -185,7 +185,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 										: ''
 								}
 							>
-								<ToggleSettingUI
+								<ChoiceToggleUI
 									options={paymentOptions}
 									value={formData.payment_method || ''}
 									onChange={(value) =>
@@ -224,7 +224,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 								}
 
 								// Render Toggle Settings
-								if (field.type === 'setting-toggle') {
+								if (field.type === 'choice-toggle') {
 									return (
 										<FormGroup
 											label={__(
@@ -234,7 +234,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 											desc={__(field.desc || '')}
 											htmlFor={field.key}
 										>
-											<ToggleSettingUI
+											<ChoiceToggleUI
 												key={field.key}
 												options={
 													Array.isArray(field.options)

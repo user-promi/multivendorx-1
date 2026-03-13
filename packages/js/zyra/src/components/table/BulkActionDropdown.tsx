@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminButtonUI } from '../AdminButton';
+import { ButtonInputUI } from '../ButtonInput';
 import { SelectInputUI } from '../SelectInput';
 
 export type BulkAction = {
@@ -39,7 +39,7 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 					<i onClick={onClearSelection} className="adminfont-close" />
 				</span>
 
-				<AdminButtonUI
+				<ButtonInputUI
 					buttons={{
 						text: allSelected ? 'Deselect All' : 'Select All',
 						onClick: () => onToggleSelectAll(!allSelected),
@@ -64,7 +64,7 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 
 				{/* Conditional CSV button */}
 				{onSelectCsvDownloadApply && (
-					<AdminButtonUI
+					<ButtonInputUI
 						buttons={{
 							text: 'CSV',
 							icon: 'download',

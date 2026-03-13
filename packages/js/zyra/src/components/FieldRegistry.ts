@@ -1,5 +1,5 @@
 import AddressField from './AddressField';
-import AdminButton from './AdminButton';
+import ButtonInput from './ButtonInput';
 import BasicInput from './BasicInput';
 import CalendarInput from './CalendarInput';
 import ClickableList from './ClickableList';
@@ -11,14 +11,14 @@ import EventCalendar from './EventCalendar';
 import ExpandablePanel from './ExpandablePanel';
 import FileInput from './FileInput';
 import RegistrationForm from './FormRenderer';
+import MapProvider from './MapProvider';
 import ItemList from './ItemList';
 import Log from './Log';
 import MultiCheckBox from './MultiCheckbox';
-import MultiCheckboxTable from './MultiCheckboxTable';
+import MultiInputTable from './MultiInputTable';
 import NestedComponent from './NestedComponent';
 import NoticeField from './Notice';
 import PrePostText from './PrePostText';
-import RadioInput from './RadioInput';
 import Recaptcha from './Recaptcha';
 import Section from './Section';
 import SelectInput from './SelectInput';
@@ -26,7 +26,7 @@ import ShortCodeTable from './ShortCodeTable';
 import SystemInfo from './SystemInfo';
 import Tabs from './Tabs';
 import TextArea from './TextArea';
-import ToggleSetting from './ToggleSetting';
+import ChoiceToggle from './ChoiceToggle';
 import { FieldComponent } from './types';
 
 export const FIELD_REGISTRY: Record<string, FieldComponent> = {
@@ -58,22 +58,20 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   textarea: TextArea,
 
-  radio: RadioInput,
-
   preposttext: PrePostText,
 
-  button: AdminButton,
+  button: ButtonInput,
 
   nested: NestedComponent,
 
 
   section: Section,
 
-  'multi-checkbox-table': MultiCheckboxTable,
+  'multi-checkbox-table': MultiInputTable,
 
   'expandable-panel': ExpandablePanel,
 
-  'setting-toggle': ToggleSetting,
+  'choice-toggle': ChoiceToggle,
 
   'clickable-list': ClickableList,
 
@@ -106,4 +104,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
   itemlist: ItemList,
 
   'notice': NoticeField,
+
+  'google_map': MapProvider,
+  'mapbox': MapProvider,
 };

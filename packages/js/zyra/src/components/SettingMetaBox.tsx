@@ -8,8 +8,8 @@ import { BlockStyle } from './CanvasEditor/blockStyle';
 import { BasicInputUI } from './BasicInput';
 import { SelectInputUI } from './SelectInput';
 import { MultiCheckBoxUI } from './MultiCheckbox';
-import { ToggleSettingUI } from './ToggleSetting';
-import { AdminButtonUI } from './AdminButton';
+import { ChoiceToggleUI } from './ChoiceToggle';
+import { ButtonInputUI } from './ButtonInput';
 import Card from './UI/Card';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import FormGroup from './UI/FormGroup';
@@ -142,7 +142,7 @@ const ContentGroup: React.FC<{ title: string; children: React.ReactNode }> =
 const VisibilityToggle: React.FC<{ disabled?: boolean; onChange: (disabled: boolean) => void }> =
     ({ disabled = false, onChange }) => (
         <FormGroup label="Visibility">
-            <ToggleSettingUI
+            <ChoiceToggleUI
                 options={[
                     { key: 'visible', value: "Visible", label: 'Visible', },
                     { key: 'hidden', value: "Hidden", label: 'Hidden', },
@@ -198,7 +198,7 @@ const OptionEditor: React.FC<{ options: Option[]; onChange: (options: Option[]) 
                         </div>
                     ))}
                 </ReactSortable>
-                <AdminButtonUI
+                <ButtonInputUI
                     buttons={[
                         {
                             text: 'Add new',
@@ -270,7 +270,7 @@ const createFieldRenderers = (): Record<string, React.FC<{
                 placeholder="Enter heading text"
             />
             <FormGroup label="Heading Level">
-                <ToggleSettingUI
+                <ChoiceToggleUI
                     options={HEADING_LEVELS}
                     value={formField.level || 2}
                     onChange={(val) => onChange('level', Number(val) as 1 | 2 | 3 | 4 | 5 | 6)}

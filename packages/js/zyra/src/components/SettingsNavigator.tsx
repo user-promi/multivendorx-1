@@ -4,7 +4,7 @@ import { LinkProps } from 'react-router-dom';
 // Internal Dependencies
 import '../styles/web/SettingsNavigator.scss';
 import { SectionUI } from './Section';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 import Container from './UI/Container';
 
 type Content = {
@@ -84,7 +84,7 @@ export const NavigatorHeader: React.FC<NavigatorHeaderProps> = ({
         <div className="title-section">
             <div className="title-wrapper">
                 <div className="title">
-                    {headerIcon && <i className={`adminfont-${headerIcon}`}></i>}
+                    {headerIcon && <i className={`title-icon adminfont-${headerIcon}`}></i>}
                     {headerTitle}
                 </div>
                 {headerDescription && (
@@ -102,7 +102,7 @@ export const NavigatorHeader: React.FC<NavigatorHeaderProps> = ({
                 </a>
             )}
             {buttons.length > 0 && (
-                <AdminButtonUI
+                <ButtonInputUI
                     buttons={buttons.map((button) => ({
                         text: button.label,
                         icon: button.icon,

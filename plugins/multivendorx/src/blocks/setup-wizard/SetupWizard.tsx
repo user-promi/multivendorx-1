@@ -160,7 +160,7 @@ const SetupWizard: React.FC = () => {
 				},
 				{
 					key: 'store_selling_mode',
-					type: 'setting-toggle',
+					type: 'choice-toggle',
 
 					label: __(
 						'How stores sell on your marketplace',
@@ -223,7 +223,7 @@ const SetupWizard: React.FC = () => {
 			formFields: [
 				{
 					key: 'approve_store',
-					type: 'setting-toggle',
+					type: 'choice-toggle',
 
 					label: __(
 						'Store registration approval',
@@ -277,7 +277,7 @@ const SetupWizard: React.FC = () => {
 			formFields: [
 				{
 					key: 'commission_type',
-					type: 'setting-toggle',
+					type: 'choice-toggle',
 					label: __(
 						'How commission is calculated',
 						'multivendorx'
@@ -413,7 +413,9 @@ const SetupWizard: React.FC = () => {
 						'Adjust commission rules and payout behavior.',
 						'multivendorx'
 					),
-					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`,
+					onClick: () => {
+						window.open(`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`, '_blank');
+					},
 				},
 				// {
 				// 	key: 'commission_settings',

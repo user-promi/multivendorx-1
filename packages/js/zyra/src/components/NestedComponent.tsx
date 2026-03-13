@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/web/NestedComponent.scss';
 import { FieldComponent } from './types';
 import { FIELD_REGISTRY } from './FieldRegistry';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 import ItemList from './ItemList';
 
 type RowType = Record< string, string | number | boolean | string[] >;
@@ -22,7 +22,7 @@ interface NestedField {
     key: string;
     type:
         | 'number'
-        | 'setting-toggle'
+        | 'choice-toggle'
         | 'text'
         | 'select'
         | 'time'
@@ -230,7 +230,7 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
                         <div className="button-wrapper">
                             { /* Add button only on last row */ }
                             { rowIndex === rows.length - 1 && (
-                                <AdminButtonUI
+                                <ButtonInputUI
                                     buttons={[
                                         {
                                             icon: 'plus',
@@ -245,7 +245,7 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
 
                             { /* Delete button on all rows except row 0 */ }
                             { rows.length > 1 && rowIndex > 0 && (
-                                <AdminButtonUI
+                                <ButtonInputUI
                                     buttons={[
                                         {
                                             icon: 'delete',

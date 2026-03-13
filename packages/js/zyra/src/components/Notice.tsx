@@ -24,7 +24,7 @@ export const Notice: React.FC<NoticeProps> = ({
     displayPosition = 'notice',
     actionLabel,
     onAction,
-    validity = 'lifetime',
+    validity = 3000,
 }) => {
     const [isVisible, setIsVisible] = useState(true);
 
@@ -62,18 +62,21 @@ export const Notice: React.FC<NoticeProps> = ({
 };
 
 const NoticeField: FieldComponent = {
-    render: ({ field }) => {        
+    render: ({ field }) => {
+        const item: NoticeItem = {
+            uniqueKey: field.uniqueKey || field.key,
+            title: field.title,
+            message: field.message,
+            type: field.noticeType || 'info',
+            position: 'notice',
+            actionLabel: field.actionLabel,
+            onAction: field.onAction,
+        };
+
         return (
-            <Notice
-                type={field.noticeType || field.type || "info"}
-                displayPosition={field.displayPosition}
-                title={field.title}
-                message={field.message}
-                actionLabel={field.actionLabel}
-                onAction={field.onAction}
-                validity={field.validity}
-                uniqueKey={field.uniqueKey}
-            />
+            <div className={`ui-notice type-${item.type} display-${item.position}`}>
+                {renderNoticeContent(item)}
+            </div>
         );
     },
 };

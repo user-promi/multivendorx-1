@@ -1,14 +1,14 @@
 import { __ } from '@wordpress/i18n';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-	ToggleSettingUI,
+	ChoiceToggleUI,
 	getApiLink,
 	useModules,
 
 	FormGroupWrapper,
 	FormGroup,
 	Skeleton,
-	AdminButtonUI,
+	ButtonInputUI,
 	SelectInputUI,
 	SettingsNavigator,
 	PopupUI,
@@ -983,7 +983,7 @@ const EditStore = () => {
 					),
 				}}
 				footer={
-					<AdminButtonUI
+					<ButtonInputUI
 						buttons={[
 							{
 								icon: 'close',
@@ -1011,7 +1011,7 @@ const EditStore = () => {
 							label={__('Deletion method', 'multivendorx')}
 							htmlFor="deletion-method"
 						>
-							<ToggleSettingUI
+							<ChoiceToggleUI
 								options={[
 									{
 										value: 'set_store_owner',

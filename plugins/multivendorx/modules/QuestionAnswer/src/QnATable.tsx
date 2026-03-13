@@ -8,8 +8,8 @@ import {
 	FormGroup,
 	TableCard,
 	BasicInputUI,
-	AdminButtonUI,
-	ToggleSettingUI,
+	ButtonInputUI,
+	ChoiceToggleUI,
 	TextAreaUI,
 	PopupUI,
 	TableRow,
@@ -322,7 +322,7 @@ const Qna: React.FC = () => {
 						),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',
@@ -367,7 +367,7 @@ const Qna: React.FC = () => {
 							)}
 							htmlFor="visibility"
 						>
-							<ToggleSettingUI
+							<ChoiceToggleUI
 								options={[
 									{
 										key: 'public',

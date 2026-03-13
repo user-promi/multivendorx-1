@@ -158,7 +158,7 @@ const RenderComponent: React.FC<RenderProps> = ({
                                     type: apiResponse.type,
                                     position: 'float',
                                 },
-                                50000
+                                5000
                             );
                         }
 

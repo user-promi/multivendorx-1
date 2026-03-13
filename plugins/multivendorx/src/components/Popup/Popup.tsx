@@ -1,6 +1,6 @@
 /* global appLocalizer */
 import React, { useState } from 'react';
-import { AdminButtonUI } from 'zyra';
+import { ButtonInputUI } from 'zyra';
 import { __, sprintf } from '@wordpress/i18n';
 import '../Popup/Popup.scss';
 
@@ -161,7 +161,7 @@ const ShowProPopup: React.FC<PopupProps> = (props) => {
 					<i className="popup-icon adminfont-suspended admin-badge red"></i>
 					<div className="title">{props.title || 'Confirmation'}</div>
 					<p className="desc">{props.confirmMessage}</p>
-					<AdminButtonUI
+					<ButtonInputUI
 						position="center"
 						buttons={[
 							{
@@ -200,7 +200,7 @@ const ShowProPopup: React.FC<PopupProps> = (props) => {
 							)}
 						</p>
 
-						<AdminButtonUI
+						<ButtonInputUI
 							position="center"
 							buttons={[
 								{

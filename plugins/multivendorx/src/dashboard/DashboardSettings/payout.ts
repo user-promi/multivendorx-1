@@ -10,7 +10,7 @@ interface PaymentField {
 	type?: string;
 	label: string;
 	placeholder?: string;
-	options?: Array<{ key: string; label: string; value: string }>; // For setting-toggle type
+	options?: Array<{ key: string; label: string; value: string }>; // For choice-toggle type
 }
 
 interface PaymentProvider {
@@ -70,7 +70,7 @@ export default {
 	modal: [
 		{
 			key: 'payment_method',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Payment Method', 'multivendorx'),
 			options: paymentOptions, // Use paymentOptions directly, not with nested fields
 		},

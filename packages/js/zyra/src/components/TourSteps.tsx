@@ -5,7 +5,7 @@ import { StepType, useTour } from '@reactour/tour';
 
 // Internal dependencies
 import { getApiLink } from '../utils/apiService';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 
 interface AppLocalizer {
     enquiry_form_settings_url?: string;
@@ -136,7 +136,7 @@ const Tour: React.FC< TourProps > = ( { appLocalizer, steps, forceOpen } ) => {
                         <div className="tour-box">
                             <div className="title">{content.title}</div>
                             <div className="desc">{content.description}</div>
-                            <AdminButtonUI buttons={buttons} />
+                            <ButtonInputUI buttons={buttons} />
                         </div>
                     );
                 },

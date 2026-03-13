@@ -45,6 +45,12 @@ class Hooks {
         add_filter( 'woocommerce_analytics_clauses_where_taxes_stats_total', array( $this, 'exclude_suborders_analytics' ) );
         add_filter( 'woocommerce_analytics_clauses_where_coupons_stats_total', array( $this, 'exclude_suborders_analytics' ) );
         
+        add_action( 'woocommerce_analytics_update_order_stats', array( $this, 'remove_suborder_analytics' ), 10, 1 );
+
+        add_action( 'woocommerce_order_status_processing', array( $this, 'skip_suborder_sales'), 1 );
+        add_action( 'woocommerce_order_status_completed', array( $this, 'skip_suborder_sales'), 1 );
+        add_action( 'woocommerce_order_status_on-hold',array( $this, 'skip_suborder_sales'), 1 );
+
         // Create store order after valid checkout processed.
         add_action( 'woocommerce_checkout_order_processed', array( $this, 'create_store_order' ) );
         add_action( 'woocommerce_store_api_checkout_order_processed', array( $this, 'create_store_order' ) );
@@ -57,6 +63,20 @@ class Hooks {
         add_action( 'woocommerce_order_status_changed', array( $this, 'store_order_to_parent_order_status_sync' ), 10, 4 );
 
         add_action( 'woocommerce_order_status_changed', array( $this, 'trigger_order_status_notifications' ), 50, 4 );
+    }
+
+    public function skip_suborder_sales( $order_id ) {
+        $order = wc_get_order( $order_id );
+
+        if ( ! $order ) {
+            return;
+        }
+
+        // If this order is a suborder
+        if ( $order->get_parent_id() ) {
+            // Reset recorded sales flag so WooCommerce skips counting
+            $order->get_data_store()->set_recorded_sales( $order, true );
+        }
     }
 
     /**

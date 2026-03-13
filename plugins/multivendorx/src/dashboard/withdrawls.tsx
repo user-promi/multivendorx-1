@@ -9,7 +9,7 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	BasicInputUI,
-	AdminButtonUI,
+	ButtonInputUI,
 	PopupUI,
 	NavigatorHeader,
 	ItemListUI,
@@ -159,7 +159,7 @@ const Withdrawls: React.FC = () => {
 							</div>
 						)}
 
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={{
 								icon: 'eye',
 								text: __(
@@ -295,7 +295,7 @@ const Withdrawls: React.FC = () => {
 								)}
 							</Column>
 
-							<AdminButtonUI
+							<ButtonInputUI
 								buttons={{
 									icon: 'withdraw',
 									text: __(
@@ -321,7 +321,7 @@ const Withdrawls: React.FC = () => {
 						title: __('Request Withdrawal', 'multivendorx'),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={{
 								icon: 'withdraw',
 								text: __('Disburse', 'multivendorx'),

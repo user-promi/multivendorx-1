@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BasicInputUI } from '../BasicInput';
-import { AdminButtonUI } from '../AdminButton';
+import { ButtonInputUI } from '../ButtonInput';
 
 interface PagePickerProps {
   currentPage: number;
@@ -114,7 +114,7 @@ const PagePicker: React.FC<PagePickerProps> = ({
         <div className="pagination">
           {pages.map((page, idx) =>
             typeof page === 'number' ? (
-              <AdminButtonUI
+              <ButtonInputUI
                 buttons={{
                   text: String(page),
                   color: currentPage === page ? 'purple' : 'white',

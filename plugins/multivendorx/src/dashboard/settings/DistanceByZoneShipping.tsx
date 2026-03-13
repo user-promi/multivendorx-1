@@ -4,8 +4,8 @@ import axios from 'axios';
 import {
 	getApiLink,
 	BasicInputUI,
-	AdminButtonUI,
-	ToggleSettingUI,
+	ButtonInputUI,
+	ChoiceToggleUI,
 	PopupUI,
 	useModules,
 } from 'zyra';
@@ -396,7 +396,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 							} — ${selectedZone.zone_name}`,
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',
@@ -420,7 +420,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 							<label>
 								{__('Shipping Method', 'multivendorx')}
 							</label>
-							<ToggleSettingUI
+							<ChoiceToggleUI
 								value={formData.shippingMethod}
 								onChange={(val: string) => {
 									if (!isEditing) {
@@ -487,7 +487,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 						{formData.shippingMethod === 'free_shipping' && (
 							<>
 								<div className="form-group">
-									<ToggleSettingUI
+									<ChoiceToggleUI
 										value={formData.freeShippingType}
 										onChange={(val: string) =>
 											handleChange(
@@ -577,7 +577,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									<label className="font-medium">
 										{__('Calculation Type', 'multivendorx')}
 									</label>
-									<ToggleSettingUI
+									<ChoiceToggleUI
 										value={formData.flatRateCalculationType}
 										onChange={(val: string) =>
 											handleChange(

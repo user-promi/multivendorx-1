@@ -1,4 +1,4 @@
-import "../styles/web/UI/AdminButton.scss";
+import "../styles/web/UI/ButtonInput.scss";
 import React, { useState } from "react";
 import { FieldComponent } from './types';
 import { BlockStyle } from './CanvasEditor/blockStyle';
@@ -30,7 +30,7 @@ type ButtonConfig = {
     style: BlockStyle;
 };
 
-type AdminButtonProps = {
+type ButtonInputProps = {
     buttons: ButtonConfig | ButtonConfig[];
     wrapperClass: string;
     position: 'left' | 'right' | 'center';
@@ -48,7 +48,7 @@ const mapBlockStyleToCustomStyle = (style: BlockStyle): Partial<CustomStyle> => 
     button_margin: style.marginTop,
 });
 
-export const AdminButtonUI: React.FC<AdminButtonProps> = ({
+export const ButtonInputUI: React.FC<ButtonInputProps> = ({
     buttons,
     wrapperClass = "",
     position = ""
@@ -103,7 +103,7 @@ export const AdminButtonUI: React.FC<AdminButtonProps> = ({
     return <div className={wrapperClasses} data-position={position}>{renderedButtons}</div>;
 };
 
-const AdminButton: FieldComponent = {
+const ButtonInput: FieldComponent = {
     render: ({ field, onChange, canAccess }) => {
         const baseConfig = {
             color: field.color || 'purple-bg',
@@ -122,13 +122,13 @@ const AdminButton: FieldComponent = {
             : [{
                 ...baseConfig,
                 text: field.text || field.placeholder || field.name || 'Click',
-                onClick: () => { onChange(true); },
+                onClick: field.onClick || (() => { onChange(true); }),
                 disabled: field.disabled,
                 icon: field.icon,
             }];
 
         return (
-            <AdminButtonUI
+            <ButtonInputUI
                 wrapperClass={field.wrapperClass || ''}
                 buttons={resolvedButtons}
                 position={field.position || 'left'}
@@ -142,4 +142,4 @@ const AdminButton: FieldComponent = {
     },
 };
 
-export default AdminButton;
+export default ButtonInput;

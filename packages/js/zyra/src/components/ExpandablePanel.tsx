@@ -5,7 +5,7 @@ import axios from 'axios';
 import { FieldComponent } from './types';
 import { FIELD_REGISTRY } from './FieldRegistry';
 import FormGroup from './UI/FormGroup';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -465,7 +465,7 @@ const PanelControls: React.FC = () => {
             <ul className="settings-btn">
                 {/* Delete — custom only, respects minimum count */}
                 {method.isCustom && !method.hideDeleteBtn && canDelete() && (
-                    <AdminButtonUI buttons={[{
+                    <ButtonInputUI buttons={[{
                         icon: 'delete', text: 'Delete', color: 'red-color',
                         onClick: () => handleDelete(method.id),
                     }]} />
@@ -475,7 +475,7 @@ const PanelControls: React.FC = () => {
                 {method.disableBtn && !method.isCustom && (
                     isOn ? (
                         hasFields && (
-                            <AdminButtonUI buttons={[{
+                            <ButtonInputUI buttons={[{
                                 icon: 'setting', text: 'Settings', color: 'purple',
                                 onClick: () => dispatch({ type: 'SET_ACTIVE_TAB', id: isOpen ? null : method.id }),
                             }]} />
@@ -492,7 +492,7 @@ const PanelControls: React.FC = () => {
                 {/* CUSTOM (isCustom) */}
                 {method.isCustom && method.disableBtn && (
                     isOn ? (
-                        <AdminButtonUI buttons={[{
+                        <ButtonInputUI buttons={[{
                             icon: 'eye-blocked',
                             text: 'Hide',
                             color: 'purple',
@@ -960,7 +960,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
                 ))}
 
                 {addNewBtn && (
-                    <AdminButtonUI buttons={[{
+                    <ButtonInputUI buttons={[{
                         icon: 'plus', text: 'Add New', color: 'purple',
                         onClick: handleAddNew,
                     }]} />

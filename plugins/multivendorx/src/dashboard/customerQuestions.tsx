@@ -10,7 +10,7 @@ import {
 	BasicInputUI,
 	TextAreaUI,
 	PopupUI,
-	AdminButtonUI,
+	ButtonInputUI,
 	NavigatorHeader,
 	TableRow,
 	QueryProps,
@@ -248,7 +248,7 @@ const CustomerQuestions: React.FC = () => {
 						),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',

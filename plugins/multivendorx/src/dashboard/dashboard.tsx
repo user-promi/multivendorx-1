@@ -15,7 +15,7 @@ import React, { useState, useEffect } from 'react';
 import '../components/dashboard.scss';
 import '../dashboard/dashboard1.scss';
 import {
-	AdminButtonUI,
+	ButtonInputUI,
 	Analytics,
 	Card,
 	Column,
@@ -676,7 +676,7 @@ const Dashboard: React.FC = () => {
 						</div>
 
 						{lastWithdraws && lastWithdraws.length > 0 && (
-							<AdminButtonUI
+							<ButtonInputUI
 								buttons={{
 									icon: 'preview',
 									text: __(

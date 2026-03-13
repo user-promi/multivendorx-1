@@ -6,7 +6,7 @@ import type { MultiValue, SingleValue, StylesConfig, GroupBase } from 'react-sel
 
 // Internal dependencies
 import { FieldComponent } from './types';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 import { PopupUI } from './Popup';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -308,7 +308,7 @@ export const SelectInputUI: React.FC<SelectProps> = ({
             style={{ width: size ?? '' }}
         >
             {selectDeselect && (
-                <AdminButtonUI
+                <ButtonInputUI
                     position="left"
                     buttons={[
                         {

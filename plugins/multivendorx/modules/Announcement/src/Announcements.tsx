@@ -11,8 +11,8 @@ import {
 	FormGroup,
 	TableCard,
 	BasicInputUI,
-	AdminButtonUI,
-	ToggleSettingUI,
+	ButtonInputUI,
+	ChoiceToggleUI,
 	SelectInputUI,
 	PopupUI,
 	NavigatorHeader,
@@ -436,7 +436,7 @@ export const Announcements: React.FC = () => {
 					),
 				}}
 				footer={
-					<AdminButtonUI
+					<ButtonInputUI
 						buttons={[
 							{
 								icon: 'close',
@@ -552,7 +552,7 @@ export const Announcements: React.FC = () => {
 						)}
 						htmlFor="status"
 					>
-						<ToggleSettingUI
+						<ChoiceToggleUI
 							options={[
 								{
 									key: 'draft',

@@ -1,4 +1,4 @@
-import { AdminButtonUI, Analytics, BasicInputUI, Card, Column, Container, DynamicRowSetting, FormGroup, FormGroupWrapper, NavigatorHeader, SelectInputUI, ToggleSettingUI } from "zyra";
+import { ButtonInputUI, Analytics, BasicInputUI, Card, Column, Container, DynamicRowSetting, FormGroup, FormGroupWrapper, NavigatorHeader, SelectInputUI, ChoiceToggleUI } from "zyra";
 import { __ } from '@wordpress/i18n';
 import { useState } from 'react';
 
@@ -59,7 +59,7 @@ const AddInventory = () => {
                                 />
                             </FormGroup>
                             <FormGroup row label={__('Distance Unit', 'multivendorx-pro')} desc={__('Select distance unit for pricing', 'multivendorx-pro')}>
-                                <ToggleSettingUI
+                                <ChoiceToggleUI
                                     options={[
                                         {
                                             key: 'kilometer',

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { getApiLink } from '../utils/apiService';
 import '../styles/web/Log.scss';
 import { FieldComponent } from './types';
-import { AdminButtonUI } from './AdminButton';
+import { ButtonInputUI } from './ButtonInput';
 
 interface AppLocalizer {
     nonce: string;
@@ -125,7 +125,7 @@ export const LogUI: React.FC<LogProps> = ({
     return (
         <div className="section-log-container">
             <div className="buttons-wrapper">
-                <AdminButtonUI
+                <ButtonInputUI
                     position="left"
                     buttons={[
                         {
@@ -138,7 +138,7 @@ export const LogUI: React.FC<LogProps> = ({
                         },
                     ]}
                 />
-                <AdminButtonUI
+                <ButtonInputUI
                     position="left"
                     buttons={[
                         {
@@ -157,7 +157,7 @@ export const LogUI: React.FC<LogProps> = ({
                     <p className="log-viewer-text">
                         {appLocalizer.tab_name} - log viewer
                     </p>
-                    <AdminButtonUI
+                    <ButtonInputUI
                         position="left"
                         buttons={[
                             {

@@ -13,7 +13,7 @@ export default {
 	modal: [
 		{
 			key: 'radius_search_unit',
-			type: 'setting-toggle',
+			type: 'choice-toggle',
 			label: __('Show map on', 'multivendorx'),
 			settingDescription: __(
 				'Decide where the store map should appear.',
@@ -44,8 +44,8 @@ export default {
 		},
 		{
 			key: 'choose_map_api',
-			type: 'setting-toggle',
-			defaulValue: 'google_map_set',
+			type: 'choice-toggle',
+			defaulValue: 'google_map',
 			label: __('Map provider', 'multivendorx'),
 			settingDescription: __(
 				'Choose the service that powers your maps and location search.',
@@ -57,22 +57,22 @@ export default {
 			),
 			options: [
 				{
-					key: 'google_map_set',
+					key: 'google_map',
 					label: __('Google', 'multivendorx'),
-					value: __('google_map_set', 'multivendorx'),
+					value: __('google_map', 'multivendorx'),
 					icon: 'google',
 				},
 				{
-					key: 'mapbox_api_set',
+					key: 'mapbox',
 					label: __('Mapbox', 'multivendorx'),
-					value: __('mapbox_api_set', 'multivendorx'),
+					value: __('mapbox', 'multivendorx'),
 					icon: 'mapbox',
 				},
 			],
 			moduleEnabled: 'geo-location',
 		},
 		{
-			key: 'google_api_key',
+			key: 'google_map_api_key',
 			type: 'text',
 			label: __('Google map API key', 'multivendorx'),
 			desc: __(
@@ -83,7 +83,7 @@ export default {
 			dependent: {
 				key: 'choose_map_api',
 				set: true,
-				value: 'google_map_set',
+				value: 'google_map',
 			},
 		},
 		{
@@ -98,7 +98,7 @@ export default {
 			dependent: {
 				key: 'choose_map_api',
 				set: true,
-				value: 'mapbox_api_set',
+				value: 'mapbox',
 			},
 		},
 		{
@@ -128,7 +128,7 @@ export default {
 				},
 				{
 					key: 'radius_search_unit',
-					type: 'setting-toggle',
+					type: 'choice-toggle',
 					options: [
 						{
 							key: 'kilometers',

@@ -261,8 +261,8 @@ class Frontend {
         $provider = MultiVendorX()->setting->get_setting( 'choose_map_api', '' );
 
         // GOOGLE MAPS.
-        if ( 'google_map_set' === $provider ) {
-            $google_maps_api_key = MultiVendorX()->setting->get_setting( 'google_api_key', '' );
+        if ( 'google_map' === $provider ) {
+            $google_maps_api_key = MultiVendorX()->setting->get_setting( 'google_map_api_key', '' );
             if ( $google_maps_api_key ) {
                 wp_enqueue_script(
                     'google-maps',
@@ -275,7 +275,7 @@ class Frontend {
         }
 
         // MAPBOX.
-        if ( 'mapbox_api_set' === $provider ) {
+        if ( 'mapbox' === $provider ) {
             wp_enqueue_script(
                 'mapbox-gl',
                 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js',

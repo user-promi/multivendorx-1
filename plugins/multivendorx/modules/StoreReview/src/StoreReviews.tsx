@@ -7,8 +7,8 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	TableCard,
-	AdminButtonUI,
-	ToggleSettingUI,
+	ButtonInputUI,
+	ChoiceToggleUI,
 	PopupUI,
 	TextAreaUI,
 	TableRow,
@@ -337,7 +337,7 @@ const StoreReviews: React.FC = () => {
 						),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',
@@ -447,7 +447,7 @@ const StoreReviews: React.FC = () => {
 								)}
 								htmlFor="control"
 							>
-								<ToggleSettingUI
+								<ChoiceToggleUI
 									options={[
 										{
 											key: 'pending',

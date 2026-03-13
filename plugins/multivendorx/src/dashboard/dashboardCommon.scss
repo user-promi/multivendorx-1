@@ -470,72 +470,25 @@ body.dark {
 }
 
 // add product page end
-
-.coupons-calculation-wrapper {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 2rem;
-
-    .left {
-        display: flex;
-        align-items: start;
-        gap: 0.5rem;
-    }
-
-    .coupon {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        font-weight: 600;
-        font-size: 1.125rem;
-    }
-
-    .div {
-        width: 100%;
-    }
-
-    .right {
-        width: 50%;
-
-        table {
-            width: 100%;
-
-            tr {
-                padding: 0.313rem;
-                height: 2.313rem;
-
-                td {
-                    font-size: 1rem;
-                }
-            }
-
-            tr:last-child {
-                border-top: $border-light-small ;
-            }
-        }
-    }
-}
-
 .status-edit {
     font-size: 0.813rem;
     line-height: 0.813rem;
 }
 
-.item-details-table {
-    table {
-        tbody {
-            td {
-                img {
-                    width: 3rem;
-                }
-            }
-        }
-    }
-}
+// .item-details-table {
+//     table {
+//         tbody {
+//             td {
+//                 img {
+//                     width: 3rem;
+//                 }
+//             }
+//         }
+//     }
+// }
 
-// view order table
-.view-order-table {
+// add & view order start
+.table-wrapper {
     // tr {
     //     td:first-child {
     //         min-width: 40%;
@@ -589,54 +542,60 @@ body.dark {
     }
 }
 
-// .order-overview {
-//     display: flex;
-//     justify-content: space-between;
+.address-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
 
-//     .details {
-//         width: 50%;
+.coupons-calculation-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 2rem;
 
-//         .text-wrapper {
-//             display: flex;
-//             align-items: center;
-//             gap: 0.5rem;
-//             padding-bottom: 0.5rem;
+    .left {
+        display: flex;
+        align-items: start;
+        gap: 0.5rem;
+    }
 
-//             .text {
-//                 width: 10rem;
-//                 font-size: 1.125rem;
-//             }
-//         }
-//     }
-// }
+    .coupon {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        font-size: 1.125rem;
+    }
 
-// information notice start
-// .information-notioce {
-//     display: flex;
-//     align-items: center;
-//     gap: 0.5rem;
-//     padding: 0.75rem;
-//     margin: 0.625rem 0;
-//     background: #fff0e1e3;
-//     color: #ff9f43;
-//     border-radius: $border-radius-small;
+    .div {
+        width: 100%;
+    }
 
-//     i {
-//         font-size: 1.063rem;
-//         padding: 0.25rem;
-//         color: #fff;
-//         background: #ff9f43;
-//         border-radius: $border-radius-small;
-//     }
+    .right {
+        width: 50%;
 
-//     p {
-//         margin: 0;
-//         font-size: 1.063rem;
-//         line-height: 1.125rem;
-//     }
-// }
+        table {
+            width: 100%;
 
-// information notice end
+            tr {
+                padding: 0.313rem;
+                height: 2.313rem;
+
+                td {
+                    font-size: 1rem;
+                }
+            }
+
+            tr:last-child {
+                border-top: $border-light-small ;
+            }
+        }
+    }
+}
+
+// add & view order end
+
 
 // varification-wrapper start
 .varification-wrapper {
@@ -1144,6 +1103,7 @@ body.dark {
     width: 100%;
 
     .nested-time {
+
         .setting-form-input:first-of-type,
         .setting-form-input:nth-of-type(3),
         >.email-divider-container+.before+.setting-form-input,
@@ -1152,3 +1112,21 @@ body.dark {
         }
     }
 }
+
+
+// membership plan start
+.membership-plan {
+    .plan-name {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.45rem;
+        font-weight: 500;
+
+        i {
+            font-size: 1.625rem;
+        }
+    }
+}
+
+// membership plan end

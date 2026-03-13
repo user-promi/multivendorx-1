@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Internal dependencies
-import '../styles/web/ToggleSetting.scss';
+import '../styles/web/ChoiceToggle.scss';
 import { FieldComponent } from './types';
 
 // Types
@@ -17,7 +17,7 @@ interface Option {
     proSetting?: boolean;
 }
 
-interface ToggleSettingProps {
+interface ChoiceToggleProps {
     options?: Option[];
     wrapperClass?: string;
     value: string | string[];
@@ -32,7 +32,7 @@ interface ToggleSettingProps {
     onBlocked?: (type: 'pro', payload?: string) => void;
 }
 
-export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
+export const ChoiceToggleUI: React.FC< ChoiceToggleProps > = ( {
     options,
     wrapperClass,
     value,
@@ -142,9 +142,9 @@ export const ToggleSettingUI: React.FC< ToggleSettingProps > = ( {
     );
 };
 
-const ToggleSetting: FieldComponent = {
+const ChoiceToggle: FieldComponent = {
     render: ({ field, value, onChange, canAccess, appLocalizer, onBlocked }) => (
-        <ToggleSettingUI
+        <ChoiceToggleUI
             wrapperClass={field.wrapperClass}
             key={field.key}
             iconEnable={field.iconEnable} // If true, will display the toggle value as an icon
@@ -187,4 +187,4 @@ const ToggleSetting: FieldComponent = {
 
 };
 
-export default ToggleSetting;
+export default ChoiceToggle;

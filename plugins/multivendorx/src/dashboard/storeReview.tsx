@@ -6,7 +6,7 @@ import {
 	getApiLink,
 	FormGroupWrapper,
 	FormGroup,
-	AdminButtonUI,
+	ButtonInputUI,
 	PopupUI,
 	TextAreaUI,
 	TableCard,
@@ -258,7 +258,7 @@ const StoreReview: React.FC = () => {
 						),
 					}}
 					footer={
-						<AdminButtonUI
+						<ButtonInputUI
 							buttons={[
 								{
 									icon: 'close',

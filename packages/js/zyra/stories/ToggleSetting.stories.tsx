@@ -7,17 +7,17 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 /**
  * Internal dependencies
  */
-import ToggleSetting from '../src/components/ToggleSetting';
+import ChoiceToggle from '../src/components/ChoiceToggle';
 
-const meta: Meta<typeof ToggleSetting> = {
-    title: 'Zyra/Components/ToggleSetting',
-    component: ToggleSetting,
+const meta: Meta<typeof ChoiceToggle> = {
+    title: 'Zyra/Components/ChoiceToggle',
+    component: ChoiceToggle,
     tags: ['autodocs'],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof ToggleSetting>;
+type Story = StoryObj<typeof ChoiceToggle>;
 
 /**
  * 1. Basic Single Select (Radio)
@@ -27,7 +27,7 @@ export const BasicSingleSelect: Story = {
         const [value, setValue] = useState<string>('yes');
 
         return (
-            <ToggleSetting
+            <ChoiceToggle
                 {...args}
                 value={value}
                 onChange={setValue}
@@ -52,7 +52,7 @@ export const MultiSelect: Story = {
         const [value, setValue] = useState<string[]>(['email','sms']);
 
         return (
-            <ToggleSetting
+            <ChoiceToggle
                 {...args}
                 value={value}
                 onChange={(newValue) => {
@@ -83,7 +83,7 @@ export const ProOptionLocked: Story = {
         const [value, setValue] = useState('basic');
 
         return (
-            <ToggleSetting
+            <ChoiceToggle
                 {...args}
                 value={value}
                 onChange={setValue}
@@ -115,7 +115,7 @@ export const ProOptionUnlocked: Story = {
         const [value, setValue] = useState('advanced');
 
         return (
-            <ToggleSetting
+            <ChoiceToggle
                 {...args}
                 value={value}
                 onChange={setValue}
@@ -145,7 +145,7 @@ export const IconToggle: Story = {
         const [value, setValue] = useState('adminlib-grid');
 
         return (
-            <ToggleSetting
+            <ChoiceToggle
                 {...args}
                 value={value}
                 onChange={setValue}
@@ -170,7 +170,7 @@ export const ImageToggle: Story = {
         const [value, setValue] = useState('light');
 
         return (
-            <ToggleSetting
+            <ChoiceToggle
                 {...args}
                 value={value}
                 onChange={setValue}
@@ -204,7 +204,7 @@ export const WithPreAndPostText: Story = {
         const [value, setValue] = useState('on');
 
         return (
-            <ToggleSetting
+            <ChoiceToggle
                 {...args}
                 value={value}
                 onChange={setValue}

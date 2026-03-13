@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 // Internal dependencies
-import '../styles/web/MultiCheckboxTable.scss';
+import '../styles/web/MultiInputTable.scss';
 import { FieldComponent } from './types';
 import { FIELD_REGISTRY } from './FieldRegistry';
 
@@ -43,7 +43,7 @@ type GroupedRows = Record<string, CapabilityGroup>;
 
 // ── Component props ───────────────────────────────────────────────────────────
 
-export interface MultiCheckboxTableUIProps {
+export interface MultiInputTableUIProps {
     rows: Row[] | GroupedRows;
     columns: Column[];
     setting: FieldSetting;
@@ -105,22 +105,21 @@ export const TableCell: React.FC<TableCellProps> = ({
         disabled: disabled,
     };
 
+    
     return (
-        <td key={fieldKey}>
-            <Render
-                field={fieldConfig}
-                value={value}
-                modules={modules}
-                appLocalizer={appLocalizer}
-                onBlocked={onBlocked}
-                canAccess={!disabled}
-                onChange={(newValue: any) => { onChange(fieldKey, newValue) }}
-            />
-        </td>
+        <Render
+            field={fieldConfig}
+            value={value}
+            modules={modules}
+            appLocalizer={appLocalizer}
+            onBlocked={onBlocked}
+            canAccess={!disabled}
+            onChange={(newValue: any) => { onChange(fieldKey, newValue) }}
+        />
     );
 };
 
-export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
+export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
     rows,
     columns,
     setting,
@@ -157,29 +156,29 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
         return (
             <td key={`${column.key}_${rowKey}`}>
                 <div className="multi-field-cell">
-                    {fields.map((field) => {
-                        const fieldKey =
-                            column.fields
-                                ? `${column.key}_${field.key}_${rowKey}`
-                                : `${column.key}_${rowKey}`;
+                {fields.map((field) => {
+                    const fieldKey =
+                        column.fields
+                            ? `${column.key}_${field.key}_${rowKey}`
+                            : `${column.key}_${rowKey}`;
 
-                        return (
-                            <TableCell
-                                key={fieldKey}
-                                type={field.type}
-                                fieldKey={fieldKey}
-                                rowKey={rowKey}
-                                column={column}
-                                rowLabel={rowLabel}
-                                value={setting[fieldKey] ?? false}
-                                disabled={!isRowActive}
-                                onChange={onChange}
-                                modules={modules}
-                                appLocalizer={appLocalizer}
-                                onBlocked={onBlocked}
-                            />
-                        );
-                    })}
+                    return (
+                        <TableCell
+                            key={fieldKey}
+                            type={field.type}
+                            fieldKey={fieldKey}
+                            rowKey={rowKey}
+                            column={column}
+                            rowLabel={rowLabel}
+                            value={setting[column.key] ?? false}
+                            disabled={!isRowActive}
+                            onChange={onChange}
+                            modules={modules}
+                            appLocalizer={appLocalizer}
+                            onBlocked={onBlocked}
+                        />
+                    );
+                })}
                 </div>
             </td>
         );
@@ -203,18 +202,15 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
                 <tr key={row.key} className={row.enabledKey && !isRowActive ? 'row-disabled' : ''}>
                     <td>
                         {row.enabledKey ? (
-                            <div className="row-label-toggle">
-                                <div className="default-checkbox table-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        id={`row-toggle_${row.key}`}
-                                        checked={isRowActive}
-                                        onChange={(e) => handleRowToggle(e.target.checked)}
-                                    />
-                                    <label htmlFor={`row-toggle_${row.key}`} className="checkbox-label" />
-                                </div>
+                            <>
+                                <input
+                                    type="checkbox"
+                                    id={`row-toggle_${row.key}`}
+                                    checked={isRowActive}
+                                    onChange={(e) => handleRowToggle(e.target.checked)}
+                                />
                                 <span>{row.label}</span>
-                            </div>
+                            </>
                         ) : row.label}
                     </td>
                     {!isRowActive ? (
@@ -236,16 +232,12 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
             const isOpen = openGroup === groupKey;
             return (
                 <React.Fragment key={groupKey}>
-                    <tr className="toggle-header-row">
-                        <td colSpan={totalCols}>
-                            <div className="toggle-header" onClick={() => setOpenGroup(isOpen ? null : groupKey)}>
-                                <div className="header-title">
-                                    {group.label}
-                                    <i className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`} />
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                    <div className="toggle-header" onClick={() => setOpenGroup(isOpen ? null : groupKey)}>
+                        <div className="header-title">
+                            {group.label}
+                            <i className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`} />
+                        </div>
+                    </div>
                     {isOpen && Object.entries(group.capability).map(([capKey, capLabel]) => {
                         const hasExists = Object.values(storeTabSetting).some((arr) => arr?.includes(capKey));
                         return (
@@ -295,7 +287,7 @@ export const MultiCheckboxTableUI: React.FC<MultiCheckboxTableUIProps> = ({
 
 // ─── FieldComponent wrapper ───────────────────────────────────────────────────
 
-const MultiCheckboxTable: FieldComponent = {
+const MultiInputTable: FieldComponent = {
     render: ({
         field,
         value,
@@ -325,7 +317,7 @@ const MultiCheckboxTable: FieldComponent = {
         };
 
         return (
-            <MultiCheckboxTableUI
+            <MultiInputTableUI
                 khali_dabba={appLocalizer?.khali_dabba ?? false}
                 rows={field.rows ?? []}
                 columns={field.columns ?? []}
@@ -342,4 +334,4 @@ const MultiCheckboxTable: FieldComponent = {
     validate: () => null,
 };
 
-export default MultiCheckboxTable;
+export default MultiInputTable;
