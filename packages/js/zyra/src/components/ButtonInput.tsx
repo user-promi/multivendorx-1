@@ -2,6 +2,8 @@ import "../styles/web/UI/ButtonInput.scss";
 import React, { useState } from "react";
 import { FieldComponent } from './types';
 import { BlockStyle } from './CanvasEditor/blockStyle';
+import axios from "axios";
+import { getApiLink } from "../utils/apiService";
 
 type CustomStyle = {
     button_border_size: number;
@@ -105,6 +107,32 @@ export const ButtonInputUI: React.FC<ButtonInputProps> = ({
 
 const ButtonInput: FieldComponent = {
     render: ({ field, onChange, canAccess }) => {
+
+         const handleClick = () => {
+
+            if (!canAccess) return;
+
+            // REST API
+            if (field.apilink) {
+                axios({
+                    url: getApiLink(appLocalizer, String(field.apilink)),
+                    method: field.method ?? 'GET',
+                    headers: {
+                        'X-WP-Nonce': appLocalizer.nonce,
+                    },
+                    params: {
+                        key: field.key,
+                    },
+                }).then(() => {
+                    console.log("API Triggered");
+                });
+
+                return;
+            }
+
+            onChange(true);
+        };
+
         const baseConfig = {
             color: field.color || 'purple-bg',
             style: field.style,
@@ -122,8 +150,8 @@ const ButtonInput: FieldComponent = {
             : [{
                 ...baseConfig,
                 text: field.text || field.placeholder || field.name || 'Click',
-                onClick: field.onClick || (() => { onChange(true); }),
                 disabled: field.disabled,
+                onClick: field.onClick || handleClick,
                 icon: field.icon,
             }];
 
