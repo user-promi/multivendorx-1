@@ -301,7 +301,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 					{apiKey != '' && (
 						<>
 							<div className="woocommerce-widget-layered-nav-list">
-								<div className="woocommerce-product-search" style={{ position: 'relative'}}>
+								<div className="woocommerce-product-search">
 									<input
 										type="text"
 										className="search-field"
@@ -450,29 +450,21 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 
 										<div className="store-products">
 											<h4> {__('Top Products', 'multivendorx')} </h4>
+											{/* amit optimize site url  */}
 											{storeTopProducts[store.id]?.length > 0 ? (
 												<ul className="products columns-3">
 													{storeTopProducts[store.id]?.map((p) => {
-														// Get the site domain from site_url
 														const siteDomain = storesList?.site_url || '';
-
-														// Helper function to add -420x420 before file extension
 														const getProductImage = (imageUrl) => {
 															if (!imageUrl) {
-																// Return WooCommerce default placeholder with site domain
 																return siteDomain
 																	? `${siteDomain}/wp-content/uploads/woocommerce-placeholder.webp`
 																	: '/wp-content/uploads/woocommerce-placeholder.webp';
 															}
-
-															// Check if it's already a placeholder
 															if (imageUrl.includes('placeholder')) return imageUrl;
-
-															// Add -420x420 before the file extension
 															return imageUrl.replace(/\.(jpg|jpeg|png|gif|webp)$/i, '-420x420.$1');
 														};
 
-														// Helper function for srcset with placeholder
 														const getSrcSet = (imageUrl) => {
 															if (!imageUrl || imageUrl.includes('placeholder')) {
 																const basePlaceholder = siteDomain

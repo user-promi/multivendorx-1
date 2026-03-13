@@ -28,9 +28,7 @@ registerBlockType('multivendorx/marketplace-coupons', {
 	},
 
 	edit({ attributes, setAttributes }) {
-		const blockProps = useBlockProps({
-			className: 'multivendorx-marketplace-coupons-block',
-		});
+		const blockProps = useBlockProps();
 
 		return (
 			<div {...blockProps}>
@@ -91,9 +89,7 @@ registerBlockType('multivendorx/marketplace-coupons', {
 	},
 
 	save({ attributes }) {
-		const blockProps = useBlockProps.save({
-			className: 'multivendorx-marketplace-coupons-block',
-		});
+		const blockProps = useBlockProps.save();
 
 		return (
 			<div 

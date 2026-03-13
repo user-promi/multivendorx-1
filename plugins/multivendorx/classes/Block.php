@@ -68,7 +68,6 @@ class Block {
             'store-policy',
             'product-category',
             'store-quick-info',
-            'store-sidebar',
             'marketplace-coupons',
         );
 
