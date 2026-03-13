@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 
 export const getTourSteps = (appLocalizer: any) => [
 	{
+		forcedOpen: true,
 		selector: '.card-content',
 		placement: 'auto',
 		content: () => ({
