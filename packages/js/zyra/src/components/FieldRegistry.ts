@@ -2,7 +2,6 @@ import AddressField from './AddressField';
 import ButtonInput from './ButtonInput';
 import BasicInput from './BasicInput';
 import CalendarInput from './CalendarInput';
-import ClickableList from './ClickableList';
 import ColorSettingInput from './ColorSettingInput';
 import Content from './Content';
 import EmailTemplate from './EmailRenderer';
@@ -73,8 +72,6 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
   'expandable-panel': ExpandablePanel,
 
   'choice-toggle': ChoiceToggle,
-
-  'clickable-list': ClickableList,
 
   'form-builder': RegistrationForm,
 
