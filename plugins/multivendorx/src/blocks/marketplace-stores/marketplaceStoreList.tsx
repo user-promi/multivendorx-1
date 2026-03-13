@@ -301,7 +301,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 					{apiKey != '' && (
 						<>
 							<div className="woocommerce-widget-layered-nav-list">
-								<div className="woocommerce-product-search" style={{ position: 'relative', marginBottom: '15px' }}>
+								<div className="woocommerce-product-search" style={{ position: 'relative'}}>
 									<input
 										type="text"
 										className="search-field"
@@ -312,7 +312,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 									<button
 										type="button"
 										className="button location-button"
-										style={{ position: 'absolute', right: '5px', top: '50%', transform: 'translateY(-50%)' }}
 										onClick={requestUserLocation}
 									>
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3d7a3e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
