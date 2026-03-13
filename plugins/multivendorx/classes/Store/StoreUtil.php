@@ -681,50 +681,63 @@ class StoreUtil {
         return $country . ' ' . $phone;
     }
 
-    public static function get_specific_store_info() {
-        $store_slug = get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
-        if ( empty( $store_slug ) ) {
-            return;
-        }
-        $store_obj = Store::get_store( $store_slug, 'slug' );
-        $phone_meta = self::get_phone($store_obj->get_meta( 'phone' ));
+   public static function get_specific_store_info() {
+    $store_slug = get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
     
-        $store_phone = '';
-        if ( is_serialized( $phone_meta ) ) {
-            $phone_data = maybe_unserialize( $phone_meta );
-            if ( is_array( $phone_data ) && isset( $phone_data['country_code'] ) && isset( $phone_data['phone'] ) ) {
-                $store_phone = $phone_data['country_code'] . ' ' . $phone_data['phone'];
-            }
-        } else {
-            $store_phone = $phone_meta;
-        }
-        $info = array(
-            'storeName'          => $store_obj->get( 'name' ),
-            'storeDescription'   => $store_obj->get( 'description' ),
-            'storeSlug'          => $store_slug,
-            'storeId'            => $store_obj->get_id(),
-            'storeEmail'         => $store_obj->get_meta( 'primary_email' ),
-            'storePhone'         => $store_phone,
-            'facebook'           => $store_obj->get_meta( 'facebook' ),
-            'twitter'            => $store_obj->get_meta( 'twitter' ),
-            'linkedin'           => $store_obj->get_meta( 'linkedin' ),
-            'youtube'            => $store_obj->get_meta( 'youtube' ),
-            'instagram'          => $store_obj->get_meta( 'instagram' ),
-            'pinterest'          => $store_obj->get_meta( 'pinterest' ),
-            'storeLogo'          => $store_obj->get_meta( 'image' ),
-            'storeBanner'        => $store_obj->get_meta( 'banner' ),
-            'storePolicy'        => $store_obj->get_meta( 'store_policy' ),
-            'shippingPolicy'     => $store_obj->get_meta( 'shipping_policy' ),
-            'refundPolicy'       => $store_obj->get_meta( 'refund_policy' ),
-            'cancellationPolicy' => $store_obj->get_meta( 'cancellation_policy' ),
-            'storeAddress'       => $store_obj->get_meta( 'address' ),
-        );
-        /**
-         * Filter store info before returning.
-         *
-         * @param array $info
-         * @param object $store_obj
-         */
-        return apply_filters( 'multivendorx_store_info', $info, $store_obj );
+    if ( empty( $store_slug ) ) {
+        return;
     }
+    
+    $store_obj = Store::get_store( $store_slug, 'slug' );
+    $phone_meta = self::get_phone( $store_obj->get_meta( 'phone' ) );
+
+    $store_phone = '';
+    
+    if ( is_serialized( $phone_meta ) ) {
+        $phone_data = maybe_unserialize( $phone_meta );
+        if ( is_array( $phone_data ) && isset( $phone_data['country_code'] ) && isset( $phone_data['phone'] ) ) {
+            $store_phone = $phone_data['country_code'] . ' ' . $phone_data['phone'];
+        }
+    } else {
+        $store_phone = $phone_meta;
+    }
+
+    ob_start();
+    MultiVendorX()->util->get_template( 
+        'store/store-tabs.php', 
+        array( 'store_id' => $store_obj->get_id() ) 
+    );
+    $tabs_html = ob_get_clean();
+
+    $info = array(
+        'storeName'          => $store_obj->get( 'name' ),
+        'storeDescription'   => $store_obj->get( 'description' ),
+        'storeSlug'          => $store_slug,
+        'storeId'            => $store_obj->get_id(),
+        'storeEmail'         => $store_obj->get_meta( 'primary_email' ),
+        'storePhone'         => $store_phone,
+        'facebook'           => $store_obj->get_meta( 'facebook' ),
+        'twitter'            => $store_obj->get_meta( 'twitter' ),
+        'linkedin'           => $store_obj->get_meta( 'linkedin' ),
+        'youtube'            => $store_obj->get_meta( 'youtube' ),
+        'instagram'          => $store_obj->get_meta( 'instagram' ),
+        'pinterest'          => $store_obj->get_meta( 'pinterest' ),
+        'storeLogo'          => $store_obj->get_meta( 'image' ),
+        'storeBanner'        => $store_obj->get_meta( 'banner' ),
+        'storePolicy'        => $store_obj->get_meta( 'store_policy' ),
+        'shippingPolicy'     => $store_obj->get_meta( 'shipping_policy' ),
+        'refundPolicy'       => $store_obj->get_meta( 'refund_policy' ),
+        'cancellationPolicy' => $store_obj->get_meta( 'cancellation_policy' ),
+        'storeAddress'       => $store_obj->get_meta( 'address' ),
+        'storeTabs'          => $tabs_html,
+    );
+    
+    /**
+     * Filter store info before returning.
+     *
+     * @param array $info
+     * @param object $store_obj
+     */
+    return apply_filters( 'multivendorx_store_info', $info, $store_obj );
+}
 }

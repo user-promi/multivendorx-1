@@ -83,7 +83,8 @@ $star-color: #d49c00;
     background-position: center !important;
     background-repeat: no-repeat !important;
 
-    .banner-img {
+    .banner-img,
+    .banner-slider {
         width: 100%;
         background: #5756560d;
         display: flex;
@@ -159,15 +160,17 @@ $star-color: #d49c00;
         }
     }
 
-    //  .details {
-    //      .heading {
-    //          font-size: 1.313rem;
-    //          font-weight: 600;
-    //          line-height: 1;
-    //      }
-    //  }
-
     .store-details {
+
+        .details {
+            width: 100%;
+
+            h2,
+            .store-address {
+                text-align: left;
+            }
+        }
+
         img {
             width: 5rem;
             height: auto;
@@ -218,6 +221,12 @@ $star-color: #d49c00;
     }
 
     &.template2 {
+
+        h2,
+        .store-address {
+            text-align: center;
+        }
+
         .banner-img {
             display: flex;
             justify-content: center;
@@ -226,6 +235,7 @@ $star-color: #d49c00;
         .store-details {
             text-align: center;
             margin-top: -4%;
+            flex-direction: column;
 
             .profile {
                 display: flex;
@@ -577,6 +587,16 @@ $star-color: #d49c00;
     .rating .title {
         margin-left: 0.5rem;
         font-size: 0.875rem;
+    }
+
+    .review-images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        img{
+            width: 5rem;
+        }
     }
 }
 
