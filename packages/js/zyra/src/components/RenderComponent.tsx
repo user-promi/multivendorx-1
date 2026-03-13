@@ -503,11 +503,6 @@ const RenderComponent: React.FC<RenderProps> = ({
             );
 
             // const input = renderFieldInternal(inputField, value, handleChange, access );
-
-            const currentValue = setting[inputField.key] ?? '';
-
-            let computedAfterElement = inputField.afterElement;
-
             const input = (
                 <>
                     {inputField.beforeElement &&
@@ -529,28 +524,15 @@ const RenderComponent: React.FC<RenderProps> = ({
                         appLocalizer
                     )}
 
-                    {computedAfterElement &&
-                        (Array.isArray(computedAfterElement)
-                            ? computedAfterElement.map((element) =>
-                                renderFieldInternal(
-                                    element,
-                                    inputField,
-                                    value,
-                                    handleChange,
-                                    access,
-                                    appLocalizer
-                                )
-                            )
-                            : renderFieldInternal(
-                                computedAfterElement,
-                                inputField,
-                                value,
-                                handleChange,
-                                access,
-                                appLocalizer
-                            )
-                        )
-                    }
+                      {inputField.afterElement &&
+                        renderFieldInternal(
+                            inputField.afterElement,
+                            inputField,
+                            value,
+                            handleChange,
+                            access,
+                            appLocalizer
+                        )}
                 </>
             );
 
