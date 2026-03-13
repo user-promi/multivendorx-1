@@ -138,23 +138,53 @@ class StoreUtil {
      * @param string $tab Optional tab.
      * @return string
      */
-    public function get_store_url( $store_id, $tab = '' ) {
-        if ( ! $store_id ) {
-            return '';
+    public function get_store_url( $store_id = null, $tab = '' ) {
+
+        $store_base = MultiVendorX()->setting->get_setting( 'store_url', 'store' );
+        $store_slug = '';
+
+        if ( $store_id ) {
+            $store_data = new Store( $store_id );
+            $store_slug = $store_data ? sanitize_title( $store_data->get( 'slug' ) ) : '';
         }
 
-        $store_data       = new Store( $store_id );
-        $store_slug       = $store_data ? $store_data->get( 'slug' ) : '';
-        $custom_store_url = MultiVendorX()->setting->get_setting( 'store_url', 'store' );
+        // Pretty permalink enabled
+        if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
 
-        $path = '/' . $custom_store_url . '/' . $store_slug . '/';
-        if ( $tab ) {
-            $tab   = untrailingslashit( trim( $tab, " \n\r\t\v\0/\\" ) );
-            $path .= $tab;
-            $path  = trailingslashit( $path );
+            $path = '/' . $store_base . '/';
+
+            if ( $store_slug ) {
+                $path .= $store_slug . '/';
+            }
+
+            if ( $tab && $store_slug ) {
+                $tab  = untrailingslashit( trim( $tab, " \n\r\t\v\0/\\" ) );
+                $path .= $tab . '/';
+            }
+
+            $url = home_url( $path );
+
+        } else {
+
+            $url = home_url( '/?' . $store_base . '=' );
+
+            if ( $store_slug ) {
+                $url .= $store_slug;
+            }
+
+            if ( $tab && $store_slug ) {
+                $tab  = untrailingslashit( trim( $tab, " \n\r\t\v\0/\\" ) );
+                $url .= '&tab=' . $tab;
+            }
         }
 
-        return apply_filters( 'multivendorx_get_store_url', home_url( $path ), $custom_store_url, $store_id, $tab );
+        return apply_filters(
+            'multivendorx_get_store_url',
+            $url,
+            $store_base,
+            $store_id,
+            $tab
+        );
     }
 
     /**
