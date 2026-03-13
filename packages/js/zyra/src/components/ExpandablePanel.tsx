@@ -762,44 +762,69 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         const fieldVal = value[methodId]?.[field.key];
         const onChangeF = (val: unknown) => handleChange(methodId, field.key, val);
 
+        const navigateWizard = useCallback(
+            (direction: 'next' | 'back', redirect?: string) => {
+
+                const isFirst = state.wizardIndex === 0;
+                const isLast = state.wizardIndex === state.methods.length - 1;
+
+                if (direction === 'back') {
+                    if (isFirst) return;
+
+                    const i = state.wizardIndex - 1;
+
+                    dispatch({ type: 'SET_WIZARD_INDEX', index: i });
+                    dispatch({ type: 'SET_ACTIVE_TAB', id: state.methods[i].id });
+
+                    return;
+                }
+
+                if (direction === 'next') {
+
+                    saveWizard();
+
+                    if (!isLast) {
+                        const i = state.wizardIndex + 1;
+
+                        dispatch({ type: 'SET_WIZARD_INDEX', index: i });
+                        dispatch({ type: 'SET_ACTIVE_TAB', id: state.methods[i].id });
+
+                        return;
+                    }
+
+                    if (redirect) {
+                        window.open(redirect, '_self');
+                    }
+                }
+            },
+            [state.wizardIndex, state.methods, saveWizard]
+        );
+
         if (field.type === 'button' && isWizardMode && Array.isArray(field.options)) {
-            const isFirst = state.wizardIndex === 0;
-            const isLast = state.wizardIndex === state.methods.length - 1;
+            const buttonActions = {
+                back: (btn) => ({
+                    ...btn,
+                    text: btn.label,
+                    color: 'red',
+                    onClick: () => navigateWizard('back')
+                }),
+                next: (btn) => ({
+                    ...btn,
+                    text: btn.label,
+                    color: 'purple',
+                    onClick: () => navigateWizard('next', btn.redirect)
+                }),
+                skip: (btn) => ({
+                    ...btn,
+                    text: btn.label,
+                    color: 'blue',
+                    onClick: () => window.open(appLocalizer?.site_url, '_self')
+                })
+            };
 
             const buttonOptions = field.options.map(btn => {
-                switch (btn.action) {
-                    case 'back':
-                        return {
-                            ...btn, text: btn.label, color: 'red',
-                            onClick: () => {
-                                if (isFirst) return;
-                                const i = state.wizardIndex - 1;
-                                dispatch({ type: 'SET_WIZARD_INDEX', index: i });
-                                dispatch({ type: 'SET_ACTIVE_TAB', id: state.methods[i].id });
-                            },
-                        };
-                    case 'next':
-                        return {
-                            ...btn, text: btn.label, color: 'purple',
-                            onClick: () => {
-                                saveWizard();
-                                if (!isLast) {
-                                    const i = state.wizardIndex + 1;
-                                    dispatch({ type: 'SET_WIZARD_INDEX', index: i });
-                                    dispatch({ type: 'SET_ACTIVE_TAB', id: state.methods[i].id });
-                                } else if (btn.redirect) {
-                                    window.open(btn.redirect, '_self');
-                                }
-                            },
-                        };
-                    case 'skip':
-                        return {
-                            ...btn, text: btn.label, color: 'blue',
-                            onClick: () => window.open(appLocalizer?.site_url, '_self'),
-                        };
-                    default:
-                        return btn;
-                }
+                const actionHandler = buttonActions[btn.action];
+                return actionHandler ? actionHandler(btn) : btn;
             });
 
             return (

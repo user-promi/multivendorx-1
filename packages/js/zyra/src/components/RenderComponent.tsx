@@ -383,49 +383,6 @@ const RenderComponent: React.FC<RenderProps> = ({
         const Render = fieldComponent.render;
         
         const handleInternalChange = (val: any) => {
-            if (field.type == 'button') {
-
-                if (field.action) {
-                    axios
-                        .post(
-                            appLocalizer.ajaxurl,
-                            new URLSearchParams({
-                                action: field.action,
-                                _ajax_nonce: appLocalizer.nonce,
-                            })
-                        )
-                        .then((res) => {
-                            if (res.data.success && res.data.data.onboarding_url) {
-                                window.location.replace(res.data.data.onboarding_url);
-                            }
-                        });
-                }
-                
-                if (field.apilink) {
-                    axios({
-                        url: getApiLink(
-                            appLocalizer,
-                            String(field.apilink)
-                        ),
-                        method: field.method ?? 'GET',
-                        headers: {
-                            'X-WP-Nonce': appLocalizer.nonce,
-                        },
-                        params: {
-                            key: field.key,
-                        },
-                    }).then(() => {
-                        console.log('hittt')
-                    });
-                    return;
-                }
-
-                if (field.link) {
-                    window.open(field.link, '_blank');
-                    return;
-                }
-            }
-
             if (!isCompositeField(parentField)) {
                 onChange(field.key, val);
                 return;
