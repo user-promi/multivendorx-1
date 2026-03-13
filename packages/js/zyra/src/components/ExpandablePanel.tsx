@@ -765,36 +765,33 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         const navigateWizard = useCallback(
             (direction: 'next' | 'back', redirect?: string) => {
 
-                const isFirst = state.wizardIndex === 0;
-                const isLast = state.wizardIndex === state.methods.length - 1;
-
+                const { wizardIndex, methods } = state;
+                const lastIndex = methods.length - 1;
                 if (direction === 'back') {
-                    if (isFirst) return;
+                    if (wizardIndex === 0) return;
 
-                    const i = state.wizardIndex - 1;
+                    const newIndex = wizardIndex - 1;
+                    const method = methods[newIndex];
 
-                    dispatch({ type: 'SET_WIZARD_INDEX', index: i });
-                    dispatch({ type: 'SET_ACTIVE_TAB', id: state.methods[i].id });
+                    dispatch({ type: 'SET_WIZARD_INDEX', index: newIndex });
+                    dispatch({ type: 'SET_ACTIVE_TAB', id: method.id });
 
                     return;
                 }
 
-                if (direction === 'next') {
+                saveWizard();
 
-                    saveWizard();
+                if (wizardIndex < lastIndex) {
+                    const newIndex = wizardIndex + 1;
+                    const method = methods[newIndex];
 
-                    if (!isLast) {
-                        const i = state.wizardIndex + 1;
+                    dispatch({ type: 'SET_WIZARD_INDEX', index: newIndex });
+                    dispatch({ type: 'SET_ACTIVE_TAB', id: method.id });
+                    return;
+                }
 
-                        dispatch({ type: 'SET_WIZARD_INDEX', index: i });
-                        dispatch({ type: 'SET_ACTIVE_TAB', id: state.methods[i].id });
-
-                        return;
-                    }
-
-                    if (redirect) {
-                        window.open(redirect, '_self');
-                    }
+                if (redirect) {
+                    window.open(redirect, '_self');
                 }
             },
             [state.wizardIndex, state.methods, saveWizard]
