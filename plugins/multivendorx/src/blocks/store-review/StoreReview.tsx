@@ -130,8 +130,7 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 										)}
 									</li>
 								))}
-							</ol>
-						
+							</ol>						
 					</div>
 				</div>
 			</>

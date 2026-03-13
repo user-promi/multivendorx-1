@@ -50,6 +50,7 @@ const StoreTabs: React.FC = () => {
 	}
 
 	return (
+		
 		<div className="woocommerce">
 			<div className="product">
 				<div className="woocommerce-tabs wc-tabs-wrapper">
