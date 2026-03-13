@@ -28,7 +28,9 @@ registerBlockType('multivendorx/marketplace-coupons', {
 	},
 
 	edit({ attributes, setAttributes }) {
-		const blockProps = useBlockProps();
+		const blockProps = useBlockProps({
+			className: 'multivendorx-marketplace-coupons-block',
+		});
 
 		return (
 			<div {...blockProps}>
@@ -37,7 +39,6 @@ registerBlockType('multivendorx/marketplace-coupons', {
 						title={__('Coupon Settings', 'multivendorx')}
 						initialOpen={true}
 					>
-
 						<TextControl
 							label={__('Coupons Per Page', 'multivendorx')}
 							type="number"
@@ -75,43 +76,52 @@ registerBlockType('multivendorx/marketplace-coupons', {
 								setAttributes({ order: value })
 							}
 						/>
-
 					</PanelBody>
 				</InspectorControls>
 
-				<div style={{ padding: '20px', background: '#f7f7f7' }}>
-					<strong>{__('Store Coupons Preview', 'multivendorx')}</strong>
-					<p>
-						{__('Coupons will render on the frontend.', 'multivendorx')}
-					</p>
-				</div>
+				<BrowserRouter>
+					<StoreCouponList 
+						{...attributes} 
+						isPreview={true}
+						className="mvx-marketplace-coupons-preview"
+					/>
+				</BrowserRouter>
 			</div>
 		);
 	},
 
 	save({ attributes }) {
+		const blockProps = useBlockProps.save({
+			className: 'multivendorx-marketplace-coupons-block',
+		});
+
 		return (
-			<div
+			<div 
+				{...blockProps}
 				id="marketplace-coupons"
 				data-attributes={JSON.stringify(attributes)}
-			/>
+			>
+			</div>
 		);
 	},
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-	const element = document.getElementById('marketplace-coupons');
+	const elements = document.querySelectorAll('.multivendorx-marketplace-coupons-block');
 
-	if (element) {
+	elements.forEach((element) => {
 		const attributes = JSON.parse(
 			element.getAttribute('data-attributes') || '{}'
 		);
 
 		render(
 			<BrowserRouter>
-				<StoreCouponList {...attributes} />
+				<StoreCouponList 
+					{...attributes}
+					className="mvx-marketplace-coupons-frontend"
+				/>
 			</BrowserRouter>,
 			element
 		);
-	}
+	});
 });
