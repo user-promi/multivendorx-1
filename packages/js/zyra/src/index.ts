@@ -41,7 +41,7 @@ export { NestedComponentUI } from './components/NestedComponent';
 export { default as ExpandablePanel } from './components/ExpandablePanel';
 export { ExpandablePanelUI } from './components/ExpandablePanel';
 export { default as EmailsInput } from './components/EmailsInput';
-export { default as TourSetup } from './components/TourSetup';
+export { default as InitiateTour } from './components/InitiateTour';
 export { default as DynamicRowSetting } from './components/DynamicRowSetting';
 export {NavigatorHeader} from './components/SettingsNavigator';
 export {default as HeaderSearch} from './components/HeaderSearch';

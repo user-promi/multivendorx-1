@@ -7,19 +7,6 @@ import { TourProvider, ProviderProps, StepType, useTour } from '@reactour/tour';
 import { getApiLink } from '../utils/apiService';
 import { ButtonInputUI } from './ButtonInput';
 
-interface AppLocalizer {
-    enquiry_form_settings_url?: string;
-    page_url?: string;
-    settings_page_url?: string;
-    site_url?: string;
-    module_page_url?: string;
-    customization_settings_url?: string;
-    apiUrl: string;
-    nonce: string;
-    restUrl: string;
-    admin_dashboard_url?: string;
-}
-
 interface TourContent {
     title: string;
     description: string;
@@ -31,13 +18,11 @@ interface TourContent {
 }
 
 interface TourProps {
-    appLocalizer: AppLocalizer;
     steps: StepType[];
     forceOpen: boolean | number;
 }
 
-interface TourSetupProps extends Omit<ProviderProps, 'steps'> {
-    appLocalizer: AppLocalizer;
+interface InitiateTourProps extends Omit<ProviderProps, 'steps'> {
     steps: StepType[];
     forceOpen: boolean | number;
 }
@@ -45,7 +30,7 @@ interface TourSetupProps extends Omit<ProviderProps, 'steps'> {
 /**
  * Main Tour component that handles the guided tour functionality
  */
-const Tour: React.FC<TourProps> = ({ appLocalizer, steps, forceOpen }) => {
+const Tour: React.FC<TourProps> = ({  steps, forceOpen }) => {
     const { setIsOpen, setSteps, setCurrentStep } = useTour();
 
     const waitForElement = (selector: string): Promise<Element> =>
@@ -98,7 +83,6 @@ const Tour: React.FC<TourProps> = ({ appLocalizer, steps, forceOpen }) => {
                     const content = step.content({
                         navigateTo,
                         finishTour,
-                        appLocalizer,
                     }) as TourContent;
 
                     const buttons = [];
@@ -153,7 +137,7 @@ const Tour: React.FC<TourProps> = ({ appLocalizer, steps, forceOpen }) => {
         };
 
         fetchTourState();
-    }, [forceOpen, appLocalizer]);
+    }, [forceOpen]);
 
     return null;
 };
@@ -161,8 +145,7 @@ const Tour: React.FC<TourProps> = ({ appLocalizer, steps, forceOpen }) => {
 /**
  * Wraps the Tour component with TourProvider context
  */
-const TourSetup: React.FC<TourSetupProps> = ({
-    appLocalizer,
+const InitiateTour: React.FC<InitiateTourProps> = ({
     steps,
     forceOpen = false,
     ...rest
@@ -195,9 +178,9 @@ const TourSetup: React.FC<TourSetupProps> = ({
             }}
             {...rest}
         >
-            <Tour appLocalizer={appLocalizer} steps={steps} forceOpen={forceOpen} />
+            <Tour steps={steps} forceOpen={forceOpen} />
         </TourProvider>
     );
 };
 
-export default TourSetup;
+export default InitiateTour;
