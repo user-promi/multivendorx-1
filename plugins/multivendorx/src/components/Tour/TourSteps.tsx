@@ -8,20 +8,8 @@ export const getTourSteps = (appLocalizer: any) => [
 			title: __('Dashboard', 'multivendorx'),
 			description: __('View and configure your disbursement settings here.', 'multivendorx'),
 			nextBtn: {
-				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=overview`,
+				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=commissions`,
 				step: 1
-			}
-		}),
-	},
-	{
-		selector: '.form-group:has(.settings-form-label[for="approve_store"])',
-		placement: 'right',
-		content: () => ({
-			title: __('Store Configure', 'multivendorx'),
-			description: __('View and configure your disbursement settings here.', 'multivendorx'),
-			nextBtn: {
-				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
-				step: 2
 			}
 		}),
 	},
@@ -32,20 +20,8 @@ export const getTourSteps = (appLocalizer: any) => [
 			title: __('Marketplace commissions', 'multivendorx'),
 			description: __('View and configure your disbursement settings here.', 'multivendorx'),
 			nextBtn: {
-				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
-				step: 3
-			}
-		}),
-	},
-	{
-		selector: '.form-group:has(.settings-form-label[for="commission_per_store_order"])',
-		placement: 'right',
-		content: () => ({
-			title: __('Commission Value', 'multivendorx'),
-			description: __('View and configure your disbursement settings here.', 'multivendorx'),
-			nextBtn: {
-				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=disbursement`,
-				step: 4
+				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=payouts`,
+				step: 2
 			}
 		}),
 	},
@@ -53,8 +29,32 @@ export const getTourSteps = (appLocalizer: any) => [
 		selector: '.form-group:has(.settings-form-label[for="disbursement_order_status"])',
 		placement: 'right',
 		content: () => ({
-			title: __('Order Status', 'multivendorx'),
+			title: __('Store Configure', 'multivendorx'),
 			description: __('View and configure your disbursement settings here.', 'multivendorx'),
+			nextBtn: {
+				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=onboarding`,
+				step: 3
+			}
+		}),
+	},
+	{
+		selector: '.form-group:has(.settings-form-label[for="approve_store"])',
+		placement: 'right',
+		content: () => ({
+			title: __('Commission Value', 'multivendorx'),
+			description: __('View and configure your disbursement settings here.', 'multivendorx'),
+			nextBtn: {
+				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
+				step: 4
+			}
+		}),
+	},
+	{
+		selector: '.category-filter .category-item:nth-child(3) ',
+		placement: 'right',
+		content: () => ({
+			title: __('Modules', 'multivendorx'),
+			description: __('Here you can enable or disable marketplace modules.', 'multivendorx'),
 			nextBtn: {
 				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
 				step: 5
@@ -62,7 +62,19 @@ export const getTourSteps = (appLocalizer: any) => [
 		}),
 	},
 	{
-		selector: '[data-tour="appointment-showcase-tour"]',
+		selector: '[data-tour="simple-showcase-tour"]',
+		placement: 'auto',
+		content: () => ({
+			title: __('Modules', 'multivendorx'),
+			description: __('Here you can enable or disable marketplace modules.', 'multivendorx'),
+			nextBtn: {
+				link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=modules`,
+				step: 6
+			}
+		}),
+	},
+	{
+		selector: '.category-filter .category-item:nth-child(5) ',
 		placement: 'auto',
 		content: () => ({
 			title: __('Modules', 'multivendorx'),
