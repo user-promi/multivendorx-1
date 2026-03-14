@@ -12,46 +12,6 @@ export const renderCell = (
 	if (!header?.type) return value ?? null;
 
 	switch (header.type) {
-		case "product": {
-			const { id, name, image, link, sku } = row as any;
-			return (
-				<a href={link} className="product-wrapper">
-					{image ? (
-						<img src={image} alt={name} className="product-image" />
-					) : (
-						<i className="item-icon adminfont-store-inventory" />
-					)}
-					<span className="details">
-						<span className="title">{name}</span>
-						{sku && <span className="des">SKU: {sku}</span>}
-						{id && <div className="id">#{id}</div>}
-					</span>
-				</a>
-			);
-		}
-
-		case "card": {
-			const { link, name, description, image, icon, subDescription } =
-				row as any;
-
-			const Wrapper: React.ElementType = link ? "a" : "div";
-
-			return (
-				<Wrapper {...(link ? { href: link } : {})} className="product-wrapper">
-					{image ? (
-						<img src={image} alt={name || ""} className="image" />
-					) : icon ? (
-						<i className={`item-icon ${icon}`} />
-					) : null}
-					<div className="details">
-						{name && <div className="title">{name}</div>}
-						{description && <div className="des">{description}</div>}
-						{subDescription && <div className="des">{subDescription}</div>}
-					</div>
-				</Wrapper>
-			);
-		}
-
 		case "status": {
 			const formattedValue = String(value)
 				.toLowerCase()
