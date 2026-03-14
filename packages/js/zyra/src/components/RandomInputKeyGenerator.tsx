@@ -14,7 +14,7 @@ const generateRandomKey = (len: number): string =>
     )
   ).join("");
 
-const RandomInputKeyGeneratorUI: React.FC<RandomInputKeyGeneratorProps> = ({
+export const RandomInputKeyGeneratorUI: React.FC<RandomInputKeyGeneratorProps> = ({
   value = "",
   length = 8,
   onChange,

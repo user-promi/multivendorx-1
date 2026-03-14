@@ -8,19 +8,11 @@ import '../styles/web/Log.scss';
 import { FieldComponent } from './types';
 import { ButtonInputUI } from './ButtonInput';
 
-interface AppLocalizer {
-    nonce: string;
-    tab_name: string;
-    apiUrl: string;
-    restUrl: string;
-    [key: string]: string | number | boolean;
-}
-
 // Types
 interface LogProps {
     apiLink: string;
     downloadFileName: string;
-    appLocalizer: AppLocalizer;
+    appLocalizer: {[key: string]: string | number | boolean};
     downloadBtnText?: string;
     copyBtnText?: string;
     deleteBtnText?: string;

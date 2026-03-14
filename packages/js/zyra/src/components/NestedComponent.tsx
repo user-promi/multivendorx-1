@@ -63,7 +63,7 @@ interface NestedComponentProps {
     single?: boolean;
     wrapperClass?: string;
     canAccess?: boolean;
-    appLocalizer?: any;
+    appLocalizer?: {[key: string]: string | number | boolean};
 }
 
 export const NestedComponentUI: React.FC< NestedComponentProps > = ( {

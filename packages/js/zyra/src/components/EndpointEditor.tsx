@@ -20,17 +20,10 @@ interface Endpoint {
     visible?: boolean;
 }
 
-interface AppLocalizer {
-    nonce: string;
-    apiUrl: string;
-    restUrl: string;
-    [key: string]: string | number | boolean;
-}
-
 interface EndpointEditorProps {
     name: string;
     apilink: string;
-    appLocalizer: AppLocalizer;
+    appLocalizer: {[key: string]: string | number | boolean};
     onChange: (data: Record<string, Endpoint>) => void;
 }
 

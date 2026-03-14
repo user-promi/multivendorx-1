@@ -157,19 +157,20 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 								name="status"
 								wrapperClass="fit-content"
 								options={[
+									...(appLocalizer.current_user?.allcaps?.publish_products
+										? [
+											{
+												key: 'publish',
+												value: 'publish',
+												label: __('Published', 'multivendorx'),
+											},
+										]
+										: []),
 									{
 										key: 'draft',
 										value: 'draft',
 										label: __(
 											'Draft',
-											'multivendorx'
-										),
-									},
-									{
-										key: 'publish',
-										value: 'publish',
-										label: __(
-											'Published',
 											'multivendorx'
 										),
 									},

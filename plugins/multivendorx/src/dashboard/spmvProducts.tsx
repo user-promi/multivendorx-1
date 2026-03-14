@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { formatCurrency } from '../services/commonFunction';
+import { formatCurrency, dashNavigate } from '../services/commonFunction';
 import { BasicInputUI, ComponentStatusView, Skeleton } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
@@ -10,8 +10,6 @@ const SpmvProducts: React.FC = () => {
 	const [products, setProducts] = useState([]);
 	const [query, setQuery] = useState('');
 	const navigate = useNavigate();
-	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
-	const basePath = siteUrl.replace(window.location.origin, '');
 	const ITEMS_PER_PAGE = 12;
 	const [pageIndex, setPageIndex] = useState(0);
 	const [newProductId, setNewProductId] = useState(null);
@@ -83,15 +81,7 @@ const SpmvProducts: React.FC = () => {
 			return;
 		}
 
-		if (appLocalizer.permalink_structure) {
-			navigate(
-				`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${newProductId}`
-			);
-		} else {
-			navigate(
-				`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProductId}`
-			);
-		}
+		dashNavigate(navigate, ['products', 'edit', String(newProductId)]);
 	}, [newProductId]);
 
 	const duplicateProduct = async (product) => {
@@ -117,15 +107,7 @@ const SpmvProducts: React.FC = () => {
 			{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 		);
 
-		if (appLocalizer.permalink_structure) {
-			navigate(
-				`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${newProduct.data.id}/`
-			);
-		} else {
-			navigate(
-				`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${newProduct.data.id}`
-			);
-		}
+		dashNavigate(navigate, ['products', 'edit', String(newProduct.data.id)]);
 	};
 	return (
 		<>
