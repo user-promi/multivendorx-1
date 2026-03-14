@@ -23,7 +23,7 @@ interface GuidedTourProviderProps extends Omit<ProviderProps, 'steps'> {
 
 const headers = { headers: { 'X-WP-Nonce': appLocalizer.nonce } };
 
-const tourApi = {
+const TourApi = {
     fetchTourStatus: async () => {
         const res = await axios.get(
             getApiLink(appLocalizer, 'tour'),
@@ -56,7 +56,7 @@ const GuidedTourController = ({ steps }: { steps: GuidedTourStep[] }) => {
     const handleFinishTour = useCallback(async () => {
         setIsOpen(false);
         sessionStorage.removeItem(STORAGE_KEY);
-        await tourApi.updateTourStatus(true);
+        await TourApi.updateTourStatus(true);
     }, [setIsOpen]);
 
     const handleTourNavigation = useCallback(
@@ -77,7 +77,7 @@ const GuidedTourController = ({ steps }: { steps: GuidedTourStep[] }) => {
     useEffect(() => {
         const initializeTour = async () => {
             try {
-                const data = await tourApi.fetchTourStatus();
+                const data = await TourApi.fetchTourStatus();
 
                 if (!data.completed) {
                     const savedStep = sessionStorage.getItem(STORAGE_KEY);
@@ -170,7 +170,7 @@ const GuidedTourProvider: React.FC<GuidedTourProviderProps> = ({
             }}
             onClickClose={({ setIsOpen }) => {
                 setIsOpen(false);
-                tourApi.updateTourStatus(true);
+                TourApi.updateTourStatus(true);
                 sessionStorage.removeItem(STORAGE_KEY);
             }}
             {...rest}
