@@ -32,19 +32,11 @@ interface Separator {
 
 type ModuleItem = Module | Separator;
 
-interface AppLocalizer {
-    khali_dabba?: boolean;
-    nonce: string;
-    apiUrl: string;
-    restUrl: string;
-    active_plugins?: string[];
-}
-
 interface ModuleProps {
     modulesArray?: { category: boolean; modules: ModuleItem[] };
     apiLink: string;
     pluginName: string;
-    appLocalizer: AppLocalizer;
+    appLocalizer: {[key: string]: string | number | boolean};
     proPopupContent?: React.FC;
     variant?: 'default' | 'mini-module';
 }

@@ -38,9 +38,6 @@ export const EventCalendarUI: React.FC<EventCalendarProps> = ({
   const [selectedDate, setSelectedDate] = useState<DateObject | null>(null);
   const events = value;
 
-  // Get appLocalizer from window
-  const appLocalizer = (window as any).appLocalizer || {};
-
   const updateEvents = (updated: EventsData) => {
     onChange?.(updated);
   };
@@ -140,7 +137,6 @@ export const EventCalendarUI: React.FC<EventCalendarProps> = ({
             key={selectedDate.toString()}
             name="calendar-events"
             apilink="calendar-events"
-            appLocalizer={appLocalizer}
             methods={getPanelMethods()}
             value={getPanelValues()}
             onChange={handlePanelChange}

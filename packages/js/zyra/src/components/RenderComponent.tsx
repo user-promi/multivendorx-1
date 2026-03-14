@@ -50,14 +50,6 @@ interface SettingsType {
     id: string;
 }
 
-interface AppLocalizer {
-    khali_dabba: boolean;
-    nonce: string;
-    apiUrl: string;
-    restUrl: string;
-    tab_name: string;
-    [key: string]: string | number | boolean;
-}
 type SettingValue =
     | string
     | number
@@ -93,7 +85,7 @@ interface RenderProps {
     setting: Settings;
     updateSetting: (key: string, value: SettingValue) => void;
     modules: string[];
-    appLocalizer: AppLocalizer; // Allows any structure
+    appLocalizer: {[key: string]: string | number | boolean};
     Popup: React.ComponentType<PopupProps>;
     storeTabSetting?: Record<string, string[]>;
 }

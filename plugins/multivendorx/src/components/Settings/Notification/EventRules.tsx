@@ -118,10 +118,10 @@ const EventRules: React.FC = () => {
 			notifications: filtered,
 		}).then((response) => {
 			if (response.data.success) {
-				setEditingNotification(null);
+				// setEditingNotification(null);
 			}
 		});
-	}, [notificationId]);
+	}, [notificationId, notifications]);
 
 	// Extract unique bracketed tags from system_message
 	useEffect(() => {
@@ -205,7 +205,7 @@ const EventRules: React.FC = () => {
 		setNewRecipientValue('');
 	};
 
-	const toggleChannel = (notifId: number, channel: string) =>
+	const toggleChannel = (notifId: number, channel: string) => 
 		updateNotification(notifId, (n) => ({
 			...n,
 			channels: { ...n.channels, [channel]: !n.channels[channel] },

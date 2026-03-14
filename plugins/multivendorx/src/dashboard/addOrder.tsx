@@ -18,8 +18,9 @@ import {
 	InfoItem,
 } from 'zyra';
 import axios from 'axios';
-import { formatCurrency } from '@/services/commonFunction';
+import { formatCurrency, dashNavigate } from '@/services/commonFunction';
 import { __ } from '@wordpress/i18n';
+import { useNavigate } from 'react-router-dom';
 
 const AddOrder = () => {
 	const [rowIds, setRowIds] = useState<number[]>([]);
@@ -35,10 +36,12 @@ const AddOrder = () => {
 	const [showAddressEdit, setShowAddressEdit] = useState(false);
 	const [showShippingAddressEdit, setShowShippingAddressEdit] = useState(false);
 	const [showCreateCustomer, setShowCreateCustomer] = useState(false);
+	const [orderNote, SetOrderNote] = useState('');
 	const addressEditRef = useRef(null);
 	const shippingAddressEditRef = useRef(null);
 	const [shippingLines, setShippingLines] = useState([]);
 	const [availableShippingMethods, setAvailableShippingMethods] = useState([]);
+	const navigate = useNavigate();
 
 	useOutsideClick(addressEditRef, () => {
 		const payload = {
@@ -266,6 +269,13 @@ const AddOrder = () => {
 			payment_method: selectedPayment?.value || '',
 			payment_method_title: selectedPayment?.method_title || '',
 			set_paid: false,
+			customer_note: orderNote || '',
+			meta_data: [
+				{
+					key: 'multivendorx_store_id',
+					value: appLocalizer.store_id,
+				}
+			]
 		};
 
 		axios
@@ -273,7 +283,7 @@ const AddOrder = () => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((res) => {
-				window.location.assign(window.location.pathname);
+				dashNavigate(navigate, ['orders']);
 			});
 	};
 
@@ -1126,11 +1136,15 @@ const AddOrder = () => {
 					<Card title={__('Order note', 'multivendorx')}>
 						<FormGroup>
 							<TextAreaUI
-								name="shipping_policy"
+								name="order_note"
+								value={orderNote}
 								placeholder={__(
 									'Enter order note...',
 									'multivendorx'
 								)}
+								onChange={(value) =>
+									SetOrderNote(value)
+								}
 							/>
 						</FormGroup>
 					</Card>

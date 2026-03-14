@@ -98,7 +98,7 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({items, background, border
 };
 
 const ItemList: FieldComponent = {
-    render: ({ field, value, onChange, canAccess, appLocalizer }) => {
+    render: ({ field, value, onChange, canAccess }) => {
         const items = Array.isArray(value) ? value : field.items || [];
         
         return (
