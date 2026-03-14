@@ -14,6 +14,7 @@ import {
 	TextAreaUI,
 	FileInputUI,
 	NavigatorHeader,
+	Notice
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
@@ -28,6 +29,7 @@ const AddProduct = () => {
 	const [translation, setTranslation] = useState([]);
 	const [featuredImage, setFeaturedImage] = useState(null);
 	const [galleryImages, setGalleryImages] = useState([]);
+	const [errorMsg, setErrorMsg] = useState('');
 
 	useEffect(() => {
 		if (!productId) {
@@ -93,6 +95,17 @@ const AddProduct = () => {
 		galleryImages.forEach((img) => {
 			imagePayload.push({ id: img.id });
 		});
+
+		const validation = applyFilters(
+			'multivendorx_product_create_limit',
+			{ allowed: true, message: '' },
+			product
+		);
+
+		if (!validation.allowed) {
+			setErrorMsg(validation.message);
+			return;
+		}
 
 		const payload = {
 			...product,
@@ -223,6 +236,11 @@ const AddProduct = () => {
 						</div>
 					</div>
 				))}
+			<Notice
+				type= 'error'
+				displayPosition='notice'
+				message= {errorMsg}
+			/>
 			<NavigatorHeader
 				headerTitle={__('Add Product', 'multivendorx')}
 				headerDescription={__(
@@ -523,6 +541,7 @@ const AddProduct = () => {
 						product,
 						setProduct,
 						handleChange,
+						setErrorMsg
 					)}
 
 					{modules.includes('wpml') && (
