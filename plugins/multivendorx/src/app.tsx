@@ -402,8 +402,10 @@ const App = () => {
 				steps={getTourSteps(appLocalizer)}
 			/>
 			<Notice
+				uniqueKey='banner'
 				type="banner"
-				position="banner"
+				validity="lifetime"
+				displayPosition="banner"
 				message={bannerItem}
 				actionLabel="Upgrade Now"
 				onAction={() => handleDismissBanner()}

@@ -57,84 +57,123 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 		<div className="multivendorx-review-list-wrapper woocommerce">
 			{reviews.length > 0 && (
 				<>
-				<h3>{__('Store Review', 'multivendorx')}</h3>
-				<div id="reviews" className="woocommerce-Reviews">
-					<div id="comments">					
-							<ol className="commentlist">
+					<h3>{__('Store Review', 'multivendorx')}</h3>
+					<div id="reviews" className="woocommerce-Reviews">
+						<div id="comments">
+							<ul className="wc-block-review-list wc-block-components-review-list">
 								{reviews.map((review) => (
-									<li key={review.review_id} className="review byuser comment-author-admin bypostauthor">
-										<div className="comment_container">
-											{review.avatar_url ? (
-												<img
-													alt={`Avatar of ${review.customer_name}`}
-													src={review.avatar_url}
-													srcSet={`${review.avatar_url} 2x`}
-													className="avatar avatar-60 photo"
-													height="60"
-													width="60"
-													loading="lazy"
-													decoding="async"
-												/>
-											) : (
-												<div className="avatar avatar-60 photo avatar-placeholder">
-													{review.customer_name?.charAt(0)}
-												</div>
-											)}
-											<div className="comment-text">
+									<li
+										key={review.review_id}
+										className="wc-block-review-list-item__item wc-block-components-review-list-item__item wc-block-components-review-list-item__item--has-image"
+										aria-hidden="false"
+									>
+										<div className="wc-block-review-list-item__info wc-block-components-review-list-item__info">
+											<div className="wc-block-review-list-item__image wc-block-components-review-list-item__image">
+												{review.avatar_url ? (
+													<img
+														aria-hidden="true"
+														alt=""
+														src={review.avatar_url}
+													/>
+												) : (
+													<div className="avatar-placeholder">
+														{review.customer_name?.charAt(0)}
+													</div>
+												)}
+											</div>
 
-												<div className="star-rating" role="img" aria-label={`Rated ${review.overall_rating.toFixed(1)} out of 5`}>
-													<span style={{ width: `${(review.overall_rating / 5) * 100}%` }}>
-														<strong className="rating">{review.overall_rating.toFixed(1)}</strong>
-														{__(' out of 5', 'multivendorx')}
-													</span>
+											<div className="wc-block-review-list-item__meta wc-block-components-review-list-item__meta">
+												<div
+													id={`review-${review.review_id}`}
+													aria-label={`${review.review_title || 'Review'} Rated ${review.overall_rating.toFixed(1)} out of 5`}
+													className="wc-block-review-list-item__rating wc-block-components-review-list-item__rating"
+												>
+													<div
+														aria-hidden="true"
+														className={`wc-block-review-list-item__rating__stars wc-block-components-review-list-item__rating__stars wc-block-review-list-item__rating__stars--${Math.round(review.overall_rating)}`}
+														role="img"
+													>
+														<span style={{ width: `${(review.overall_rating / 5) * 100}%` }}>
+															{__('Rated ', 'multivendorx')}
+															<strong className="rating">{review.overall_rating.toFixed(1)}</strong>
+															{__(' out of 5', 'multivendorx')}
+														</span>
+													</div>
 												</div>
 
-												<p className="meta">
-													<strong className="woocommerce-review__author">{review.customer_name}</strong>
-													<span className="woocommerce-review__dash">–</span>
-													<time className="woocommerce-review__published-date">{review.date_created}</time>
-												</p>
+												{review.product_name && (
+													<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
+														<a
+															href={review.product_url || '#'}
+															aria-labelledby={`review-${review.review_id}`}
+														>
+															{review.product_name}
+														</a>
+													</div>
+												)}
 
-												<div className="description">
-													<h4 className="woocommerce-review__title">{review.review_title}</h4>
-													<p>{review.review_content}</p>
+												<div className="wc-block-review-list-item__author wc-block-components-review-list-item__author">
+													{review.customer_name}
 												</div>
+
+												<time
+													className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
+													dateTime={review.date_created}
+												>
+													{new Date(review.date_created).toLocaleDateString('en-US', {
+														year: 'numeric',
+														month: 'long',
+														day: 'numeric'
+													})}
+												</time>
 											</div>
 										</div>
 
-										{showImages && review.images?.length ? (
-											<div className="review-images">
-												{review.images.map((img, i) => (
-													<a
-														key={i}
-														href={img}
-														target="_blank"
-														rel="noopener noreferrer"
-													>
-														<img
-															src={img}
-															alt={__('Review Image', 'multivendorx')}
-														/>
-													</a>
-												))}
-											</div>
-										) : null}
+										<div className="wc-block-review-list-item__text wc-block-components-review-list-item__text">
+											<div>
+												<div>
+													{review.review_title && (
+														<h4 className="woocommerce-review__title">{review.review_title}</h4>
+													)}
+													<p>{review.review_content}</p>
 
-										{showAdminReply && review.reply && (
-											<div className="multivendorx-review-reply">
-												<strong>
-													{__('Admin reply:', 'multivendorx')}
-												</strong>
-												<p>{review.reply}</p>
+													{showImages && review.images?.length ? (
+														<div className="review-images">
+															{review.images.map((img, i) => (
+																<a
+																	key={i}
+																	href={img}
+																	target="_blank"
+																	rel="noopener noreferrer"
+																>
+																	<img
+																		src={img}
+																		alt={__('Review Image', 'multivendorx')}
+																		style={{ maxWidth: '100px', margin: '5px' }}
+																	/>
+																</a>
+															))}
+														</div>
+													) : null}
+
+													{showAdminReply && review.reply && (
+														<div className="multivendorx-review-reply">
+															<strong>
+																{__('Admin reply:', 'multivendorx')}
+															</strong>
+															<p>{review.reply}</p>
+														</div>
+													)}
+												</div>
 											</div>
-										)}
+										</div>
 									</li>
 								))}
-							</ol>						
+							</ul>
+						</div>
 					</div>
-				</div>
-			</>
-			) }
+				</>
+			)}
 		</div>
 	);
 };
