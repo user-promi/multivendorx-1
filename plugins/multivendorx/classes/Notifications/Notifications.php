@@ -88,24 +88,6 @@ STORE REGISTRATION & APPROVAL
 'category' => 'notification',
 ),
 
-'store_approved' => array(
-'name' => 'Store approved',
-'customer_enabled' => false,
-'store_enabled' => true,
-'admin_enabled' => false,
-'system_enabled'   => true,
-'email_subject' => 'Your store "[store_name]" has been approved',
-'email_body' => '
-<p>Hello,</p>
-<p>Congratulations! Your store <strong>[store_name]</strong> has been approved.</p>
-<p>You can now log in to your dashboard and start adding products to your store.</p>
-',
-'sms_content' => 'Store [store_name] approved.',
-'system_message' => 'Your store has been approved.',
-'tag' => 'Store',
-'category' => 'notification',
-),
-
 'store_rejected' => array(
 'name' => 'Store rejected',
 'customer_enabled' => false,
