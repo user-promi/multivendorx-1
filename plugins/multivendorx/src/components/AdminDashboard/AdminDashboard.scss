@@ -1025,65 +1025,6 @@
     }
 }
 
-// Block Type Header
-// .block-type-header {
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     margin-bottom: 1.125rem;
-//     padding-bottom: 1rem;
-//     border-bottom: $border-light-small;
-
-//     .block-type-title {
-//         h3 {
-//             margin: 0;
-//             font-size: 1rem;
-//             font-weight: 600;
-//             color: $text-color;
-//         }
-//     }
-// }
-
-// Setting Groups
-// .setting-group {
-//     margin-bottom: 0.813rem;
-//     border-radius: $border-radius-small;
-//     border: $border-light-small;
-//     overflow: hidden;
-
-//     .setting-group-header {
-//         display: flex;
-//         justify-content: space-between;
-//         align-items: center;
-//         padding: 0.5rem;
-//         cursor: pointer;
-//         user-select: none;
-
-//         .group-title {
-//             margin: 0;
-//             font-size: 0.875rem;
-//             font-weight: 600;
-//             color: $text-color;
-//             display: flex;
-//             align-items: center;
-//             gap: 0.5rem;
-//         }
-
-//         i {
-//             font-size: 1.125rem;
-//         }
-//     }
-
-//     .setting-group-content {
-//         padding: 0.5rem;
-
-//         .field-group {
-//             display: flex;
-//             gap: 0.5rem;
-//         }
-//     }
-// }
-
 // Spacing Controls
 .spacing-grid {
     display: flex;
@@ -1291,3 +1232,235 @@
         }
     }
 }
+
+
+// setting banner template
+.multivendorx-banner {
+    position: relative;
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+
+    .banner-img,
+    .banner-slider {
+        width: 100%;
+        background: #5756560d;
+        display: flex;
+        justify-content: center;
+        height: 25rem;
+        position: relative;
+
+        img {
+            max-height: 25rem;
+        }
+
+        .no-banner {
+            position: absolute;
+            content: "1500 x 900";
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8rem;
+            color: #0000007d;
+        }
+    }
+
+    .banner-right {
+        .social-profile {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.625rem;
+            display: flex;
+            gap: 0.813rem;
+
+            i {
+                font-size: 0.9rem;
+
+                &::before {
+                    padding: 0.313rem;
+                    background: #fff;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+
+    .buttons-wrapper {
+        display: flex;
+        gap: 0.313rem;
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+
+        i {
+            padding-right: 0.5rem;
+        }
+
+        .row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .contact-details {
+            width: 60%;
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            align-items: start;
+        }
+    }
+
+    .store-details {
+
+        .details {
+            width: 100%;
+
+            h2,
+            .store-address {
+                text-align: left;
+            }
+        }
+
+        img {
+            width: 5rem;
+            height: auto;
+        }
+
+        .buttons-wrapper {
+            align-items: start;
+        }
+
+        .profile {
+            .multivendorx-profile-img {
+                background: #fff;
+                box-shadow: 0 0.125rem 0.5rem 0 rgba(66, 62, 78, 0.12);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 5rem;
+                height: 5rem;
+                padding: 0.313rem;
+            }
+        }
+    }
+
+    .follow-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .follower-count {
+            font-size: 0.9rem;
+        }
+    }
+
+    &.template1 {
+        .contact-details {
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .store-details {
+            position: absolute;
+            display: flex;
+            gap: 1rem;
+            bottom: 5%;
+            left: 4%;
+            width: 92%;
+        }
+
+    }
+
+    &.template2 {
+
+        h2,
+        .store-address {
+            text-align: center;
+        }
+
+        .banner-img {
+            display: flex;
+            justify-content: center;
+        }
+
+        .store-details {
+            text-align: center;
+            margin-top: -4%;
+            flex-direction: column;
+
+            .profile {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 0.625rem;
+            }
+
+            .row {
+                justify-content: center;
+            }
+
+            .container {
+                flex-direction: column;
+                align-items: center;
+
+                .right-section {
+                    padding-top: 0.5rem;
+                }
+
+                .contact-details {
+                    width: 75%;
+                    flex-direction: column;
+                    align-items: center;
+                }
+            }
+
+            .buttons-wrapper {
+                justify-content: center;
+            }
+        }
+    }
+
+    &.template3 {
+        .contact-details{
+            flex-direction: column;
+        }
+        .store-details {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0 4rem;
+            margin-top: 1rem;
+
+            .contact-detail {
+                padding: 0;
+            }
+
+            .details {
+                width: 100%;
+            }
+        }
+    }
+
+    .placeholder {
+        left: 0;
+        top: 0;
+        color: $background-white;
+        display: flex;
+        justify-content: center;
+        background: $theme-color;
+        align-items: center;
+        font-size: 3rem;
+        width: 5rem;
+        height: 5rem;
+    }
+// end setting banner template
+} 

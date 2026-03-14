@@ -112,7 +112,7 @@ class Ajax {
         ob_start();
         if ( $reviews ) {
             echo '<div id="reviews" class="woocommerce-Reviews"> 
-                    <div class="comments">
+                    <div id="comments">
                     <ol class="commentlist">';
             foreach ( $reviews as $review ) {
                 $user_info         = get_userdata( $review->customer_id );
