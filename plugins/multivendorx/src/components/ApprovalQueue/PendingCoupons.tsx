@@ -8,10 +8,11 @@ import {
 	ButtonInputUI,
 	PopupUI,
 	TextAreaUI,
+	TableRow,
+	QueryProps,
 } from 'zyra';
 
 import { toWcIsoDate } from '@/services/commonFunction';
-import { QueryProps, TableRow } from '@/services/type';
 
 const DISCOUNT_TYPE_LABELS: Record<string, string> = {
 	percent: __('Percentage discount', 'multivendorx'),
@@ -19,9 +20,7 @@ const DISCOUNT_TYPE_LABELS: Record<string, string> = {
 	fixed_product: __('Fixed product discount', 'multivendorx'),
 };
 
-const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
-	onUpdated,
-}) => {
+const PendingCoupons: React.FC<{ setCount?: (count: number) => void }> = ({ setCount }) => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -76,7 +75,6 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 			)
 			.then(() => {
 				doRefreshTableData({});
-				onUpdated?.();
 			})
 			.catch(console.error);
 	};
@@ -104,7 +102,6 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 				setRejectReason('');
 				setRejectCouponId(null);
 				doRefreshTableData({});
-				onUpdated?.();
 			})
 			.catch(console.error)
 			.finally(() => setIsSubmitting(false));
@@ -126,7 +123,6 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 		},
 		date_created: {
 			label: __('Date created', 'multivendorx'),
-			isSortable: true,
 			type: 'date',
 		},
 		action: {
@@ -173,8 +169,8 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 					page: query.paged,
 					per_page: query.per_page,
 					search: query.searchValue,
-					orderby: query.orderby,
-					order: query.order,
+					orderby: 'date',
+					order: 'desc',
 					meta_key: 'multivendorx_store_id',
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
@@ -200,6 +196,7 @@ const PendingCoupons: React.FC<{ onUpdated?: () => void }> = ({
 
 				setRows(coupons);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
+				setCount?.(Number(response.headers['x-wp-total']) || 0);
 				setIsLoading(false);
 			})
 			.catch((error) => {

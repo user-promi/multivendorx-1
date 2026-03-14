@@ -16,116 +16,9 @@ const ApprovalQueue = () => {
 	const [couponCount, setCouponCount] = useState<number>(0);
 	const [withdrawCount, setWithdrawCount] = useState<number>(0);
 	const [deactivateCount, setDeactivateCount] = useState<number>(0);
+
 	const { modules } = useModules();
-	const ranOnce = useRef(false);
 	const settings = appLocalizer.settings_databases_value || {};
-
-	const refreshCounts = async () => {
-		if (settings?.general?.approve_store === 'manually') {
-			axios({
-				method: 'GET',
-				url: getApiLink(appLocalizer, 'store'),
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: { status: 'pending', page: 1, row: 1 },
-			})
-				.then((res) => {
-					const pendingCount =
-						Number(res.headers['x-wp-status-pending']) || 0;
-
-					setStoreCount(pendingCount);
-				})
-				.catch(() => { });
-		}
-
-		// Product Count (only if can publish products)
-		if (
-			!settings?.['store-permissions']?.products?.includes(
-				'publish_products'
-			)
-		) {
-			axios
-				.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					params: {
-						per_page: 1,
-						meta_key: 'multivendorx_store_id',
-						status: 'pending',
-					},
-				})
-				.then((res) =>
-					setProductCount(parseInt(res.headers['x-wp-total']) || 0)
-				)
-				.catch(() => { });
-		}
-
-		//Coupon Count (only if can publish coupons)
-		if (
-			settings?.['store-permissions']?.coupons?.includes(
-				'publish_coupons'
-			)
-		) {
-			axios
-				.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					params: {
-						per_page: 1,
-						meta_key: 'multivendorx_store_id',
-						status: 'pending',
-					},
-				})
-				.then((res) =>
-					setCouponCount(parseInt(res.headers['x-wp-total']) || 0)
-				)
-				.catch(() => { });
-		}
-
-		// Withdraw Count (only if manual withdraw enabled)
-		if (settings?.disbursement?.withdraw_type === 'manual') {
-			axios
-				.get(getApiLink(appLocalizer, 'store'), {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					params: {
-						page: 1,
-						row: 1,
-						pending_withdraw: true,
-					},
-				})
-				.then((res) => {
-					setWithdrawCount(Number(res.headers['x-wp-total']) || 0);
-				})
-				.catch(() => { });
-		}
-
-		// Deactivate Store Request (always active)
-		axios
-			.get(getApiLink(appLocalizer, 'store'), {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					page: 1,
-					row: 1,
-					deactivate: true,
-				},
-			})
-			.then((res) => {
-				setDeactivateCount(Number(res.headers['x-wp-total']) || 0);
-			})
-			.catch(() => { });
-	};
-
-	useEffect(() => {
-		// Wait until modules load
-		if (!modules || modules.length === 0) {
-			return;
-		}
-
-		// Prevent double run in Strict Mode
-		if (ranOnce.current) {
-			return;
-		}
-		ranOnce.current = true;
-
-		refreshCounts();
-	}, [modules]);
 
 	const location = new URLSearchParams(useLocation().hash.substring(1));
 
@@ -233,19 +126,19 @@ const ApprovalQueue = () => {
 		const defaultForm = (() => {
 			switch (tabId) {
 				case 'stores':
-					return <PendingStores onUpdated={refreshCounts} />;
+					return <PendingStores setCount={setStoreCount} />;
 
 				case 'products':
-					return <PendingProducts onUpdated={refreshCounts} />;
+					return <PendingProducts setCount={setProductCount} />;
 
 				case 'coupons':
-					return <PendingCoupons onUpdated={refreshCounts} />;
+					return <PendingCoupons setCount={setCouponCount} />;
 
 				case 'withdrawal':
-					return <PendingWithdrawal onUpdated={refreshCounts} />;
+					return <PendingWithdrawal setCount={setWithdrawCount} />;
 
 				case 'deactivate-requests':
-					return <PendingDeactivateRequests onUpdated={refreshCounts} />;
+					return <PendingDeactivateRequests setCount={setDeactivateCount} />;
 
 				default:
 					return null;
@@ -257,7 +150,6 @@ const ApprovalQueue = () => {
 			defaultForm,
 			{
 				tabId,
-				refreshCounts,
 			}
 		);
 	};

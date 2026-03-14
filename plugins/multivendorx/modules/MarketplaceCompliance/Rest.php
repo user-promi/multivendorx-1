@@ -6,15 +6,15 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\Compliance;
+namespace MultiVendorX\MarketplaceCompliance;
 
-use MultiVendorX\Compliance\Util;
+use MultiVendorX\MarketplaceCompliance\Util;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX REST Compliance Controller.
+ * MultiVendorX REST Marketplace Compliance Controller.
  *
  * @class       Module class
  * @version     PRODUCT_VERSION

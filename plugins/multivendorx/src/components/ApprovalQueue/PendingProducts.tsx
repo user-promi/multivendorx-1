@@ -8,13 +8,12 @@ import {
 	ButtonInputUI,
 	PopupUI,
 	TextAreaUI,
+	TableRow,
+	QueryProps,
 } from 'zyra';
-import { formatCurrency, toWcIsoDate } from '@/services/commonFunction';
-import { QueryProps, TableRow } from '@/services/type';
+import { toWcIsoDate } from '@/services/commonFunction';
 
-const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
-	onUpdated,
-}) => {
+const PendingProducts: React.FC<{ setCount?: (count: number) => void }> = ({ setCount }) => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -68,7 +67,6 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
 			.then(() => {
-				onUpdated?.();
 				doRefreshTableData({});
 			})
 			.catch(console.error);
@@ -97,7 +95,6 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 				setRejectReason('');
 				setRejectProductId(null);
 				doRefreshTableData({});
-				onUpdated?.();
 			})
 			.catch(console.error)
 			.finally(() => setIsSubmitting(false)); // enable button again
@@ -195,6 +192,7 @@ const PendingProducts: React.FC<{ onUpdated?: () => void }> = ({
 
 				setRows(products);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
+				setCount?.(Number(response.headers['x-wp-total']) || 0);
 				setIsLoading(false);
 			})
 			.catch((error) => {

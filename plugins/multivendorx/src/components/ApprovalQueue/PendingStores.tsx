@@ -11,12 +11,12 @@ import {
 	ButtonInputUI,
 	TextAreaUI,
 	PopupUI,
+	QueryProps,
 } from 'zyra';
 
 import { formatLocalDate } from '@/services/commonFunction';
-import { QueryProps, TableRow } from '@/services/type';
 
-const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
+const PendingStores: React.FC<{ setCount?: (count: number) => void }> = ({ setCount }) => {
 	const [rows, setRows] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -50,7 +50,6 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 		})
 			.then(() => {
 				doRefreshTableData({});
-				onUpdated?.();
 			})
 			.catch(console.error);
 	};
@@ -76,7 +75,6 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 				setRejectReason('');
 				setRejectStoreId(null);
 				doRefreshTableData({});
-				onUpdated?.();
 			})
 			.catch(console.error)
 			.finally(() => setIsSubmitting(false));
@@ -141,7 +139,6 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 			})
 			.then((response) => {
 				const items = response.data || [];
-				console.log('api', items);
 				// Extract IDs for selection
 				const ids = items
 					.filter((item: any) => item?.id != null)
@@ -149,7 +146,9 @@ const PendingStores: React.FC<{ onUpdated?: () => void }> = ({ onUpdated }) => {
 				setRowIds(ids);
 
 				setRows(items);
-				// setTotalRows(Number(response.headers['x-wp-status-pending']) || 0);
+				const count = Number(response.headers['x-wp-status-pending']) || 0;
+				setTotalRows(count);
+				setCount?.(count);
 				setIsLoading(false);
 			})
 			.catch(() => {

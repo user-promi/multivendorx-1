@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\Compliance;
+namespace MultiVendorX\MarketplaceCompliance;
 
 use MultiVendorX\FrontendScripts;
 

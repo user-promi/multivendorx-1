@@ -1,9 +1,18 @@
-export function truncateText(text: string, maxLength: number) {
-	if (!text) {
-		return '-';
+export const truncateText = (text: string, wordCount: number) => {
+	if (!text) return '';
+
+	// Strip HTML tags if present
+	const plainText = text.replace(/<[^>]+>/g, '');
+
+	// Split into words
+	const words = plainText.split(/\s+/);
+
+	if (words.length <= wordCount) {
+		return plainText;
 	}
-	return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
-}
+
+	return words.slice(0, wordCount).join(' ') + '...';
+};
 
 export function formatCurrency(amount: number | string): string {
 	if (amount === null || amount === undefined || amount === '') {

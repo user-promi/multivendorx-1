@@ -2,14 +2,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, TableCard } from 'zyra';
-import { QueryProps, TableRow } from '@/services/type';
+import { getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
 
-interface Props {
-	onUpdated?: () => void;
-}
-
-const PendingDeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
+const PendingDeactivateRequests: React.FC<{ setCount?: (count: number) => void }> = ({ setCount }) => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -28,7 +23,6 @@ const PendingDeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
 		})
 			.then(() => {
 				doRefreshTableData({});
-				onUpdated?.();
 			})
 			.catch(console.error);
 	};
@@ -85,6 +79,7 @@ const PendingDeactivateRequests: React.FC<Props> = ({ onUpdated }) => {
 
 				setRows(stores);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
+				setCount?.(Number(response.headers['x-wp-total']) || 0);
 				setIsLoading(false);
 			})
 			.catch((error) => {
