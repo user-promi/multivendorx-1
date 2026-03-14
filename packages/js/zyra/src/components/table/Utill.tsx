@@ -7,7 +7,7 @@ export const renderCell = (
 	format = "",
 	currency = {}
 ) => {
-	const value = row[header.key];
+	let value = row[header.key];
 
 	if (!header?.type) return value ?? null;
 
@@ -60,7 +60,7 @@ export const renderCell = (
 
 
 		case "currency": {
-			if (value == null) return null;
+			if (value == null || value === '') value = 0;
 
 			const numberValue =
 				typeof value === "number"
