@@ -221,3 +221,15 @@ export const dashNavigate = (navigate: any, segments: string[]) => {
 
 	navigate(path);
 };
+
+// Set a value in session storage
+export function setSession(key: string, value: number | string) {
+    sessionStorage.setItem(key, value.toString());
+}
+
+// Get a value from session storage, default is 0
+export function getSession(key: string, defaultValue: number | string = 0) {
+    const value = sessionStorage.getItem(key);
+    if (value === null) return defaultValue; // return 0 if key not found
+    return isNaN(Number(value)) ? value : Number(value); // parse number if possible
+}

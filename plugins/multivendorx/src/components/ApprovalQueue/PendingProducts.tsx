@@ -11,9 +11,10 @@ import {
 	TableRow,
 	QueryProps,
 } from 'zyra';
-import { toWcIsoDate } from '@/services/commonFunction';
+import { setSession, toWcIsoDate } from '@/services/commonFunction';
+import { useRef } from '@wordpress/element';
 
-const PendingProducts: React.FC<{ setCount?: (count: number) => void }> = ({ setCount }) => {
+const PendingProducts: React.FC<{}> = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -23,6 +24,7 @@ const PendingProducts: React.FC<{ setCount?: (count: number) => void }> = ({ set
 	const [rejectProductId, setRejectProductId] = useState<number | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false); // prevent multiple clicks
 	const [store, setStore] = useState<any[] | null>(null);
+	const firstLoadRef = useRef(true);
 
 	useEffect(() => {
 		axios
@@ -67,6 +69,7 @@ const PendingProducts: React.FC<{ setCount?: (count: number) => void }> = ({ set
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
 			.then(() => {
+				firstLoadRef.current = true;
 				doRefreshTableData({});
 			})
 			.catch(console.error);
@@ -94,6 +97,7 @@ const PendingProducts: React.FC<{ setCount?: (count: number) => void }> = ({ set
 				setRejectPopupOpen(false);
 				setRejectReason('');
 				setRejectProductId(null);
+				firstLoadRef.current = true;
 				doRefreshTableData({});
 			})
 			.catch(console.error)
@@ -192,7 +196,10 @@ const PendingProducts: React.FC<{ setCount?: (count: number) => void }> = ({ set
 
 				setRows(products);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
-				setCount?.(Number(response.headers['x-wp-total']) || 0);
+				if (firstLoadRef.current) {
+					setSession('productCount', Number(response.headers['x-wp-total']) || 0);
+					firstLoadRef.current = false;
+				}
 				setIsLoading(false);
 			})
 			.catch((error) => {

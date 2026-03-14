@@ -8,13 +8,14 @@ import PendingProducts from './PendingProducts';
 import PendingCoupons from './PendingCoupons';
 import PendingWithdrawal from './PendingWithdrawalRequests';
 import PendingDeactivateRequests from './PendingDeactivateRequests';
+import { getSession } from '@/services/commonFunction';
 
 const ApprovalQueue = () => {
-	const [storeCount, setStoreCount] = useState<number>(0);
-	const [productCount, setProductCount] = useState<number>(0);
-	const [couponCount, setCouponCount] = useState<number>(0);
-	const [withdrawCount, setWithdrawCount] = useState<number>(0);
-	const [deactivateCount, setDeactivateCount] = useState<number>(0);
+	const storeCount = getSession('storeCount', 0);
+	const productCount = getSession('productCount', 0);
+	const couponCount = getSession('couponCount', 0);
+	const withdrawCount = getSession('withdrawCount', 0);
+	const deactivateCount = getSession('deactivateCount', 0);
 
 	const { modules } = useModules();
 	const settings = appLocalizer.settings_databases_value || {};
@@ -125,19 +126,19 @@ const ApprovalQueue = () => {
 		const defaultForm = (() => {
 			switch (tabId) {
 				case 'stores':
-					return <PendingStores setCount={setStoreCount} />;
+					return <PendingStores />;
 
 				case 'products':
-					return <PendingProducts setCount={setProductCount} />;
+					return <PendingProducts />;
 
 				case 'coupons':
-					return <PendingCoupons setCount={setCouponCount} />;
+					return <PendingCoupons />;
 
 				case 'withdrawal':
-					return <PendingWithdrawal setCount={setWithdrawCount} />;
+					return <PendingWithdrawal />;
 
 				case 'deactivate-requests':
-					return <PendingDeactivateRequests setCount={setDeactivateCount} />;
+					return <PendingDeactivateRequests />;
 
 				default:
 					return null;
