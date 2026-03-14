@@ -81,7 +81,6 @@ registerBlockType('multivendorx/marketplace-coupons', {
 					<StoreCouponList 
 						{...attributes} 
 						isPreview={true}
-						className="mvx-marketplace-coupons-preview"
 					/>
 				</BrowserRouter>
 			</div>
@@ -114,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			<BrowserRouter>
 				<StoreCouponList 
 					{...attributes}
-					className="mvx-marketplace-coupons-frontend"
 				/>
 			</BrowserRouter>,
 			element

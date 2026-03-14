@@ -177,7 +177,7 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
                                 rowKey={rowKey}
                                 column={column}
                                 rowLabel={rowLabel}
-                                value={setting[column.key] ?? false}
+                                value={setting[fieldKey] ?? false}
                                 disabled={!isRowActive}
                                 onChange={onChange}
                                 modules={modules}
@@ -310,7 +310,7 @@ const MultiInputTable: FieldComponent = {
         const currentSetting: FieldSetting =
             value && typeof value === 'object' && !Array.isArray(value)
                 ? (value as FieldSetting)
-                : (settings as FieldSetting) ?? {};
+                : {};
 
         const handleChange = (subKeyOrBatch: string | RowChanges, subVal?: SettingValue) => {
 

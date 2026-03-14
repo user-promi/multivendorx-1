@@ -14,7 +14,7 @@ export default {
 	submitUrl: 'settings',
 	modal: [
 		{
-			key: 'sender_email_address',
+			key: 'receiver_email_address',
 			type: 'email',
 			size: '50%',
 			label: __('Admin email recipient', 'multivendorx'),
