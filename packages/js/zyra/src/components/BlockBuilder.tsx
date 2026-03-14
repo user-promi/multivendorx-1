@@ -5,7 +5,7 @@ import React from 'react';
 import CanvasEditor from './CanvasEditor/CanvasEditor';
 import { FieldComponent } from './types';
 import { Block } from './CanvasEditor/blockTypes';
-import '../styles/web/RegistrationForm.scss';
+import '../styles/web/BlockBuilder.scss';
 
 const OPTION_PRESETS = [
     { id: '1', label: 'Manufacture', value: 'manufacture' },
@@ -71,7 +71,7 @@ const DEFAULT_TEMPLATES: EmailTemplate[] = [
     blocks: [],
 }];
 
-export const FormBuilderUI: React.FC<any> = ({
+export const BlockBuilderUI: React.FC<any> = ({
     value,
     onChange,
     field,
@@ -195,8 +195,8 @@ export const FormBuilderUI: React.FC<any> = ({
 FIELD EXPORT
 --------------------------------------------------- */
 
-const FormBuilder: FieldComponent = {
-    render: FormBuilderUI,
+const BlockBuilder: FieldComponent = {
+    render: BlockBuilderUI,
 };
 
-export default FormBuilder;
+export default BlockBuilder;
