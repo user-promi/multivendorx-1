@@ -1431,9 +1431,10 @@
     }
 
     &.template3 {
-        .contact-details{
+        .contact-details {
             flex-direction: column;
         }
+
         .store-details {
             display: flex;
             gap: 1.5rem;
@@ -1462,5 +1463,6 @@
         width: 5rem;
         height: 5rem;
     }
-// end setting banner template
-} 
+
+    // end setting banner template
+}

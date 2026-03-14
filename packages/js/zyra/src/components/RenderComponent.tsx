@@ -555,11 +555,11 @@ const RenderComponent: React.FC<RenderProps> = ({
                                 })
                                 : input}
 
-                                    <Notice
+                                    {/* <Notice
                                         type="error"
                                         position="inline"
                                         message={errors[inputField.key] || ''}
-                                    />
+                                    /> */}
                             {inputField.desc && (
                                 <p
                                     className="settings-metabox-description"
