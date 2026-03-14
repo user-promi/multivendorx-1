@@ -72,9 +72,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'choice-toggle': ChoiceToggle,
 
-  'form-builder': BlockBuilder,
-
-  'email-builder': BlockBuilder,
+  'block-builder': BlockBuilder,
 
   'system-info': SystemInfo,
 

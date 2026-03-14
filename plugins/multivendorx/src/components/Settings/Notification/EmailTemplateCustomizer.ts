@@ -15,7 +15,7 @@ export default {
 	modal: [
 		{
 			key: 'store_registration_from',
-			type: 'email-builder',
+			type: 'block-builder',
 			classes: 'full-width',
 			// desc: 'Customise personalised store registration form for marketplace.',
 			// // Add templates configuration with proper content
