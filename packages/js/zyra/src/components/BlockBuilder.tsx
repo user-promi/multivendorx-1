@@ -80,7 +80,7 @@ export const BlockBuilderUI: React.FC<any> = ({
     name = field?.key,
 }) => {
 
-    const builderContext = field?.builderContext || 'registration';
+    const builderContext = field?.builderContext || 'form';
     const isEmailBuilder = builderContext === 'email';
 
     /* ---------------------------
