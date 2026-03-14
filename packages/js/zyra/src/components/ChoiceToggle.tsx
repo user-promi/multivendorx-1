@@ -28,7 +28,7 @@ interface ChoiceToggleProps {
     multiSelect?: boolean;
     custom?: boolean;
     canAccess?: boolean;
-    appLocalizer?: any;
+    appLocalizer?: {[key: string]: string | number | boolean};
     onBlocked?: (type: 'pro', payload?: string) => void;
 }
 

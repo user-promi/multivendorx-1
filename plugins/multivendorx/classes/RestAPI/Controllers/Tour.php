@@ -86,10 +86,10 @@ class Tour extends \WP_REST_Controller {
         }
         try {
             // Directly fetch stored value.
-            $status = filter_var( get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], false ), FILTER_VALIDATE_BOOLEAN );
+            $status = filter_var( get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_completed'], false ), FILTER_VALIDATE_BOOLEAN );
 
             return array(
-                'active' => $status,
+                'completed' => $status,
             );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
@@ -116,7 +116,7 @@ class Tour extends \WP_REST_Controller {
             return $error;
         }
         try {
-            update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_active'], $request->get_param( 'active' ) );
+            update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['tour_completed'], $request->get_param( 'completed' ) );
             return array( 'success' => true );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
