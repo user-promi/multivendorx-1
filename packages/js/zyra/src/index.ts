@@ -24,6 +24,7 @@ export { default as Section } from './components/Section';
 export { SectionUI } from './components/Section';
 export { default as SelectInput } from './components/SelectInput';
 export { SelectInputUI } from './components/SelectInput';
+export { RandomInputKeyGeneratorUI } from './components/RandomInputKeyGenerator';
 export { default as ShortCodeTable } from './components/ShortCodeTable';
 export { default as Tabs } from './components/Tabs';
 export { TabsUI } from './components/Tabs';
