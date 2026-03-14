@@ -4,16 +4,16 @@ import React from 'react';
 // Internal Dependencies
 import CanvasEditor from './CanvasEditor/CanvasEditor';
 import { FieldComponent } from './types';
+import { Block } from './CanvasEditor/blockTypes';
 import '../styles/web/RegistrationForm.scss';
 
 const OPTION_PRESETS = [
-            { id: '1', label: 'Manufacture', value: 'manufacture' },
-            { id: '2', label: 'Trader', value: 'trader' },
-            { id: '3', label: 'Authorized Agent', value: 'authorized_agent' },
+    { id: '1', label: 'Manufacture', value: 'manufacture' },
+    { id: '2', label: 'Trader', value: 'trader' },
+    { id: '3', label: 'Authorized Agent', value: 'authorized_agent' },
 ];
 
-// BLOCK GROUPS - WITH PLACEHOLDERS
-const BLOCK_GROUPS = [
+const REGISTRATION_BLOCK_GROUPS = [
     {
         id: 'registration',
         label: 'Registration Fields',
@@ -34,62 +34,169 @@ const BLOCK_GROUPS = [
             { id: 'heading', icon: 'form-textarea', value: 'heading', label: 'Heading' },
             { id: 'image', icon: 'image', value: 'image', label: 'Image' },
             { id: 'button', icon: 'button', value: 'button', placeholder: 'Click me' },
-            { id: 'columns', icon: 'blocks', value: 'columns',  },
-            { id: 'section', icon: 'form-section', value: 'section', },
+            { id: 'columns', icon: 'blocks', value: 'columns' },
+            { id: 'section', icon: 'form-section', value: 'section' },
             { id: 'recaptcha', icon: 'captcha-automatic-code', value: 'recaptcha', label: 'reCaptcha v3' },
-        ]
-    },
-    {
-        id: 'store',
-        label: 'Store Fields',
-        icon: 'store',
-        blocks: [
-            { id: 'store-name', icon: 't-letter-bold', value: 'text', label: 'Store Name', fixedName: 'name', placeholder: 'Enter your store name' },
-            { id: 'store-description', icon: 'text ', value: 'textarea', label: 'Store Desc', fixedName: 'description', placeholder: 'Enter your store description' },
-            { id: 'store-phone', icon: 'form-phone', value: 'text', label: 'Store Phone', fixedName: 'phone', placeholder: 'Enter your store phone' },
-            { id: 'store-paypal', icon: 'unread ', value: 'email', label: 'Store Paypal Email', fixedName: 'paypal_email', placeholder: 'Enter your PayPal email' },
-            { id: 'store-address', icon: 'form-address ', value: 'address', label: 'Store Address', fixedName: 'address' },
         ]
     }
 ];
 
-// MAIN COMPONENT
-export const RegistrationFormUI: React.FC<any> = ({
+
+const EMAIL_BLOCK_GROUPS = [
+{
+    id: 'email',
+    label: 'Email Blocks',
+    blocks: [
+        { id: 'columns', icon: 'blocks', value: 'columns', label: 'Columns' },
+        { id: 'heading', icon: 'form-textarea', value: 'heading', label: 'Heading', placeholder: 'Enter your heading here' },
+        { id: 'richtext', icon: 't-letter-bold', value: 'richtext', label: 'Text', placeholder: '<p>Enter your text content here</p>' },
+        { id: 'image', icon: 'image', value: 'image', label: 'Image' },
+        { id: 'button', icon: 'button', value: 'button', label: 'Button', placeholder: 'Click me' },
+        { id: 'section', icon: 'section', value: 'section', label: 'Section' },
+    ]
+}];
+
+export interface EmailTemplate {
+    id: string;
+    name: string;
+    previewText?: string;
+    blocks: Block[];
+}
+
+const DEFAULT_TEMPLATES: EmailTemplate[] = [
+{
+    id: 'default',
+    name: 'Default Template',
+    previewText: 'Start with a blank email template',
+    blocks: [],
+}];
+
+export const FormBuilderUI: React.FC<any> = ({
     value,
     onChange,
-    proSettingChange = () => false,
     field,
     setting = {},
-    name = field?.key || 'registration-form',
+    proSettingChange = () => false,
+    name = field?.key,
 }) => {
-    // Get initial blocks
-    const initialBlocks = React.useMemo(() => {
-        if (Array.isArray(value?.formfieldlist)) return value.formfieldlist;
-        if (Array.isArray(setting[name]?.formfieldlist)) return setting[name].formfieldlist;
-        return [];
-    }, [value, setting, name]);
+
+    const context = field?.context || 'registration';
+    const isEmailBuilder = context === 'email';
+
+    /* ---------------------------
+    EMAIL TEMPLATE STATE
+    --------------------------- */
+
+    const savedData = value || setting[name] || {};
+
+    const [templates, setTemplates] = React.useState<EmailTemplate[]>(() => {
+
+        if (!isEmailBuilder) return [];
+
+        // Templates coming from field config (your TS file)
+        if (field?.templates?.length) {
+            return field.templates.map((t: EmailTemplate) => ({
+                ...t,
+                ...savedData.templates?.find((st: EmailTemplate) => st.id === t.id),
+            }));
+        }
+
+        // Saved templates
+        if (savedData.templates?.length) {
+            return savedData.templates;
+        }
+
+        // Default fallback
+        return DEFAULT_TEMPLATES;
+    });
+
+    const [activeTemplateId, setActiveTemplateId] = React.useState(
+        savedData.activeTemplateId ||
+        field?.defaultTemplateId ||
+        templates[0]?.id ||
+        DEFAULT_TEMPLATES[0].id
+    );
+
+    const activeTemplate = templates.find(t => t.id === activeTemplateId);
+
+    /* ---------------------------
+    BLOCK CHANGE HANDLER
+    --------------------------- */
 
     const handleBlocksChange = React.useCallback((blocks: Block[]) => {
-        onChange({ formfieldlist: blocks });
-    }, [onChange]);
 
-    const visibleGroups = field?.visibleGroups || ['registration'];
-    
+        if (!isEmailBuilder) {
+            onChange({ formfieldlist: blocks });
+            return;
+        }
+
+        setTemplates(prev => {
+            const updated = prev.map(t =>
+                t.id === activeTemplateId ? { ...t, blocks } : t
+            );
+
+            onChange({ templates: updated, activeTemplateId });
+
+            return updated;
+        });
+
+    }, [isEmailBuilder, activeTemplateId, onChange]);
+
+    /* ---------------------------
+    TEMPLATE SELECT
+    --------------------------- */
+
+    const handleTemplateSelect = React.useCallback((id: string) => {
+        setActiveTemplateId(id);
+    }, []);
+
+    /* ---------------------------
+    INITIAL BLOCKS
+    --------------------------- */
+
+    const initialBlocks = React.useMemo(() => {
+
+        if (isEmailBuilder) {
+            return activeTemplate?.blocks || [];
+        }
+
+        if (Array.isArray(value?.formfieldlist)) return value.formfieldlist;
+        if (Array.isArray(setting[name]?.formfieldlist)) return setting[name].formfieldlist;
+
+        return [];
+
+    }, [value, setting, name, isEmailBuilder, activeTemplate]);
+
+    /* ---------------------------
+    RENDER
+    --------------------------- */
+
     return (
         <CanvasEditor
             blocks={initialBlocks}
             onChange={handleBlocksChange}
-            blockGroups={BLOCK_GROUPS}
-            visibleGroups={visibleGroups}
-            groupName="registration"
+            blockGroups={isEmailBuilder ? EMAIL_BLOCK_GROUPS : REGISTRATION_BLOCK_GROUPS}
+            visibleGroups={[context]}
+            groupName={context}
             proSettingChange={proSettingChange}
-            context="registration"
+            context={context}
+
+            {...(isEmailBuilder && {
+                templates,
+                activeTemplateId,
+                onTemplateSelect: handleTemplateSelect,
+                showTemplatesTab: true,
+            })}
         />
     );
 };
 
-const RegistrationForm: FieldComponent = {
-    render: RegistrationFormUI,
+/* ---------------------------------------------------
+FIELD EXPORT
+--------------------------------------------------- */
+
+const FormBuilder: FieldComponent = {
+    render: FormBuilderUI,
 };
 
-export default RegistrationForm;
+export default FormBuilder;
