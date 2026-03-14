@@ -21,7 +21,7 @@ interface GuidedTourProviderProps extends Omit<ProviderProps, 'steps'> {
     steps: StepType[];
 }
 
-const tourApi = {
+const TourApi = {
     fetchTourStatus: async () => {
         const res = await axios.get(
             getApiLink(appLocalizer, 'tour'),
@@ -47,7 +47,7 @@ const GuidedTourController = ({ steps }: { steps: StepType[] }) => {
 
     const handleFinishTour = useCallback(async () => {
         setIsOpen(false);
-        await tourApi.updateTourStatus(true);
+        await TourApi.updateTourStatus(true);
     }, [setIsOpen]);
 
     const handleTourNavigation = useCallback(
@@ -66,7 +66,7 @@ const GuidedTourController = ({ steps }: { steps: StepType[] }) => {
     useEffect(() => {
             const initializeTour = async () => {
                 try {
-                    const data = await tourApi.fetchTourStatus();
+                    const data = await TourApi.fetchTourStatus();
     
                     if (!data.isTourCompleted) {
                         const processedSteps = steps.map((step, index) => ({
@@ -159,7 +159,7 @@ const GuidedTourProvider: React.FC<GuidedTourProviderProps> = ({
             onClickClose={({ setIsOpen }) => {
                 setIsOpen(false);
                 // Trigger handleFinishTour via the close button — handled externally via axios
-                tourApi.updateTourStatus(true);
+                TourApi.updateTourStatus(true);
             }}
             {...rest}
         >

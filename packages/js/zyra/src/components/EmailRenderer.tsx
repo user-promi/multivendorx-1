@@ -19,7 +19,6 @@ interface EmailTemplateProps {
     value: any;
     onChange: (value: any) => void;
     canAccess: boolean;
-    appLocalizer?: {[key: string]: string | number | boolean};
     setting?: Record<string, any>;
     name?: string;
     proSettingChange?: () => boolean;

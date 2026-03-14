@@ -38,7 +38,7 @@ interface MultiCheckBoxProps {
 function isBlocked(
     opt: Option,
     modules: string[],
-    appLocalizer: {[key: string]: string | number | boolean};
+    appLocalizer: {[key: string]: string | number | boolean},
     onBlocked?: MultiCheckBoxProps['onBlocked'],
 ): boolean {
     if (opt.proSetting && !appLocalizer?.khali_dabba) {
