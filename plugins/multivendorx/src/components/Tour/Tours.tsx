@@ -53,7 +53,7 @@ export const getTourSteps = (appLocalizer: any) => [
 	},
 	{
 		selector: '[data-tour="simple-showcase-tour"]',
-		placement: 'auto',
+		placement: 'right',
 		title: __('Modules', 'multivendorx'),
 		description: __('Here you can enable or disable marketplace modules.', 'multivendorx'),
 		next: {
@@ -63,7 +63,7 @@ export const getTourSteps = (appLocalizer: any) => [
 	},
 	{
 		selector: '.category-filter .category-item:nth-child(5)',
-		placement: 'auto',
+		placement: 'right',
 		title: __('Modules', 'multivendorx'),
 		description: __('Here you can enable or disable marketplace modules.', 'multivendorx'),
 		finish: true
