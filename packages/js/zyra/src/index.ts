@@ -19,7 +19,7 @@ export { default as Modules } from './components/Modules';
 export { default as MultiCheckBox } from './components/MultiCheckbox';
 export { MultiCheckBoxUI } from './components/MultiCheckbox';
 export { default as MultiInputTable } from './components/MultiInputTable';
-export { default as CustomFrom } from './components/FormRenderer';
+export { default as BlockBuilder } from './components/BlockBuilder';
 export { default as Section } from './components/Section';
 export { SectionUI } from './components/Section';
 export { default as SelectInput } from './components/SelectInput';
