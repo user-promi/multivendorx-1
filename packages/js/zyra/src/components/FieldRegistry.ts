@@ -4,12 +4,11 @@ import BasicInput from './BasicInput';
 import CalendarInput from './CalendarInput';
 import ColorSettingInput from './ColorSettingInput';
 import Content from './Content';
-import EmailTemplate from './EmailRenderer';
 import EndpointEditor from './EndpointEditor';
 import EventCalendar from './EventCalendar';
 import ExpandablePanel from './ExpandablePanel';
 import FileInput from './FileInput';
-import RegistrationForm from './FormRenderer';
+import BlockBuilder from './BlockBuilder';
 import MapProvider from './MapProvider';
 import ItemList from './ItemList';
 import Log from './Log';
@@ -73,9 +72,9 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'choice-toggle': ChoiceToggle,
 
-  'form-builder': RegistrationForm,
+  'form-builder': BlockBuilder,
 
-  'email-template': EmailTemplate,
+  'email-builder': BlockBuilder,
 
   'system-info': SystemInfo,
 

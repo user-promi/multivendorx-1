@@ -20,7 +20,7 @@ interface SequentialTaskExecutorProps {
     apilink: string;
     action: string;
     interval: number;
-    appLocalizer: any;
+    appLocalizer: {[key: string]: string | number | boolean};
     successMessage?: string;
     failureMessage?: string;
     tasks: Task[];

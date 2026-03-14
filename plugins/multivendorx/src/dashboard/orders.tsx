@@ -63,7 +63,6 @@ const Orders: React.FC = () => {
 					}
 				});
 		};
-
 		fetchPage()
 			.then(() => {
 				if (allOrders.length === 0) {
@@ -196,6 +195,9 @@ const Orders: React.FC = () => {
 
 		customer: {
 			label: __('Customer', 'multivendorx'),
+			render: (row) => row.billing?.first_name
+						? `${row.billing.first_name} ${row.billing.last_name || ''}`
+						: 'Guest'
 		},
 
 		date_created: {
