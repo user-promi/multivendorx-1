@@ -5,7 +5,7 @@ import { __ } from '@wordpress/i18n';
 
 const RegistrationForm = () => {
 	const [loading, setLoading] = useState(false);
-	const [responseMessage, setResponseMessage] = useState('');
+	const [responseMessage, setResponseMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 	const [responseData, setResponseData] = useState<any[]>([]);
 	const [stores, setStores] = useState<any[]>([]);
 	const [selectedStore, setSelectedStore] = useState<any>(null);
@@ -118,14 +118,20 @@ const RegistrationForm = () => {
 			data: { formData: mappedData },
 		})
 			.then((response) => {
-				setResponseMessage('Store created successfully');
+				setResponseMessage({
+					type: 'success',
+					message: __('Store created successfully', 'multivendorx')
+				});
 				setLoading(false);
 				if (response.data.redirect !== '') {
 					window.open(response.data.redirect, '_self');
 				}
 			})
 			.catch(() => {
-				setResponseMessage('Error creating store');
+				setResponseMessage({
+					type: 'error',
+					message: __('Error creating store', 'multivendorx')
+				});
 				setLoading(false);
 			});
 	}, []);
@@ -137,16 +143,7 @@ const RegistrationForm = () => {
 	const memoizedStateList = useMemo(() => registrationForm.state_list, []);
 
 	return (
-		<>
-			{loading && (
-				<section className="loader-wrapper">
-					<div className="loader-item">
-						<div className="three-body-dot"></div>
-						<div className="three-body-dot"></div>
-						<div className="three-body-dot"></div>
-					</div>
-				</section>
-			)}
+		<div className="woocommerce">
 			{stores.length > 0 && (
 				<>
 					<div className="store-selector">
@@ -181,9 +178,13 @@ const RegistrationForm = () => {
 			/>
 			<div>{registrationForm.content_after_form}</div>
 			{responseMessage && (
-				<p>{responseMessage}</p>
+				<div className="woocommerce-notices-wrapper">
+					<ul className={responseMessage.type === 'success' ? 'woocommerce-message' : 'woocommerce-error'} role="alert">
+						<li>{responseMessage.message}</li>
+					</ul>
+				</div>
 			)}
-		</>
+		</div>
 	);
 };
 

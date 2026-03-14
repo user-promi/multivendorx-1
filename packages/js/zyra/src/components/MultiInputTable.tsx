@@ -25,7 +25,10 @@ interface Column {
     type?: string;
     moduleEnabled?: string;
     proSetting?: string;
-    visibleWhen?: string;
+    visibleWhen?: {
+        key: string
+        value: string | boolean
+    };
     fields?: {
         key: string
         type: string
@@ -105,7 +108,7 @@ export const TableCell: React.FC<TableCellProps> = ({
         disabled: disabled,
     };
 
-    
+
     return (
         <Render
             field={fieldConfig}
@@ -138,8 +141,12 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
     });
 
     const context = visibilityContext ?? setting;
-    const isColumnVisible = (col: Column) =>
-        col.visibleWhen ? Boolean(context[col.visibleWhen]) : true;
+    const isColumnVisible = (col: Column) => {
+        if (!col.visibleWhen) return true;
+
+        const { key, value } = col.visibleWhen;
+        return context?.[key] === value;
+    };
 
     const visibleColumns = columns.filter(isColumnVisible);
 
@@ -156,29 +163,29 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
         return (
             <td key={`${column.key}_${rowKey}`}>
                 <div className="multi-field-cell">
-                {fields.map((field) => {
-                    const fieldKey =
-                        column.fields
-                            ? `${column.key}_${field.key}_${rowKey}`
-                            : `${column.key}_${rowKey}`;
+                    {fields.map((field) => {
+                        const fieldKey =
+                            column.fields
+                                ? `${column.key}_${field.key}_${rowKey}`
+                                : `${column.key}_${rowKey}`;
 
-                    return (
-                        <TableCell
-                            key={fieldKey}
-                            type={field.type}
-                            fieldKey={fieldKey}
-                            rowKey={rowKey}
-                            column={column}
-                            rowLabel={rowLabel}
-                            value={setting[column.key] ?? false}
-                            disabled={!isRowActive}
-                            onChange={onChange}
-                            modules={modules}
-                            appLocalizer={appLocalizer}
-                            onBlocked={onBlocked}
-                        />
-                    );
-                })}
+                        return (
+                            <TableCell
+                                key={fieldKey}
+                                type={field.type}
+                                fieldKey={fieldKey}
+                                rowKey={rowKey}
+                                column={column}
+                                rowLabel={rowLabel}
+                                value={setting[column.key] ?? false}
+                                disabled={!isRowActive}
+                                onChange={onChange}
+                                modules={modules}
+                                appLocalizer={appLocalizer}
+                                onBlocked={onBlocked}
+                            />
+                        );
+                    })}
                 </div>
             </td>
         );

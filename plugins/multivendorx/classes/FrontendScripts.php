@@ -480,7 +480,7 @@ class FrontendScripts {
 							'admin_url'              => admin_url(),
 							'shop_url'               => MULTIVENDORX_PRO_SHOP_URL,
 							'admin_dashboard_url'    => admin_url( 'admin.php?page=multivendorx' ),
-							'store_page_url'         => get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ? trailingslashit( site_url() ) . untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ) . '/' : site_url( '/?' . MultiVendorX()->setting->get_setting( 'store_url', 'store' ) . '=' ),
+                            'store_page_url'         => MultiVendorX()->store->storeutil->get_store_url(),
 							'shipping_methods'       => apply_filters( 'multivendorx_store_shipping_options', array() ),
 							'order_meta'             => Utill::ORDER_META_SETTINGS,
                             'date_format'            => Utill::wp_to_react_date_format( get_option( 'date_format' ) ),
@@ -518,10 +518,7 @@ class FrontendScripts {
                             'tinymceApiKey'            => MultiVendorX()->setting->get_setting( 'tinymce_api_section' ),
                             'store_payment_settings'   => MultiVendorX()->payments->get_all_store_payment_settings(),
                             'store_id'                 => MultiVendorX()->active_store,
-                            'store_page_url'           => get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ?
-                                trailingslashit( site_url() ) .
-                                untrailingslashit( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) ) . '/' :
-                                site_url( '/?' . MultiVendorX()->setting->get_setting( 'store_url', 'store' ) . '=' ),
+                            'store_page_url'           => MultiVendorX()->store->storeutil->get_store_url(),
                             'admin_url'                => admin_url(),
                             'edit_order_capability'    => current_user_can( 'edit_shop_orders' ),
                             'permalink_structure'      => get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ? true : false,
@@ -591,6 +588,9 @@ class FrontendScripts {
                     'object_name'  => 'storesList',
                     'use_settings' => true,
                     'use_rest'     => true,
+                    'data'        => array(
+                        'store_page_url' => MultiVendorX()->store->storeutil->get_store_url(),
+                    ),
                 ),
                 'multivendorx-marketplace-products-editor-script' => array(
                     'object_name'  => 'productList',

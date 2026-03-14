@@ -50,13 +50,12 @@ interface ColorSettingProps {
     inputClass?: string;
     predefinedOptions: PaletteOption[];
     images: ImagePaletteOption[];
-
     value?: {
         selectedPalette: string;
         colors: Partial<CustomColors>;
         templateKey?: string;
     };
-
+    templateSelector?: boolean;
     onChange?: (e: {
         target: {
             name: string;
@@ -72,7 +71,7 @@ interface ColorSettingProps {
 }
 
 export const ColorSettingInputUI: React.FC<ColorSettingProps> = (props) => {
-    const { filedKey, predefinedOptions = [], images = [], templates = [], value, onChange, showPdfButton } = props;
+    const { filedKey, templateSelector = false, predefinedOptions = [], images = [], templates = [], value, onChange, showPdfButton } = props;
 
     // Initialize selectedPalette from DB value or default to first option
     const initialPalette =
@@ -195,7 +194,7 @@ export const ColorSettingInputUI: React.FC<ColorSettingProps> = (props) => {
     };
     return (
         <div className="color-settings-wrapper">
-            {(templates?.length ?? 0) > 1 && (
+            {(templates?.length ?? 0) > 1 && !templateSelector && (
                 <div className={props.wrapperClass}>
                     <div className="form-group-setting-wrapper">
                         <label>Select Template</label>
@@ -216,6 +215,8 @@ export const ColorSettingInputUI: React.FC<ColorSettingProps> = (props) => {
                     </div>
                 </div>
             )}
+
+
             <div className="color-setting">
                 {predefinedOptions.length > 0 && (
                     <div className="color-palette-wrapper">
@@ -366,6 +367,29 @@ export const ColorSettingInputUI: React.FC<ColorSettingProps> = (props) => {
                         )}
                     </div>
                 )}
+
+                {templateSelector && (
+                    <div className="template-list image-list">
+                        {templates.map((template) => (
+                            <div
+                                key={template.key}
+                                className={`image-thumbnail template-thumbnail ${templateKey === template.key ? 'active' : ''
+                                    }`}
+                                onClick={() => {
+                                    setTemplateKey(template.key);
+                                    setMode('templates');
+                                    setSelectedPalette('templates');
+                                    emitChange({
+                                        templateKey: template.key,
+                                        colors: customColors,
+                                    });
+                                }}
+                            >
+                                <p>{template.label}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
                 {activeTemplate && (
                     <div className="preview-wrapper">
                         <activeTemplate.component
@@ -452,6 +476,7 @@ const ColorSettingInput: FieldComponent = {
                 if (!canAccess) return;
                 onChange(e.target.value)
             }}
+            templateSelector={field.templateSelector ?? false}
             idPrefix="color-setting"
             showPdfButton={field.showPdfButton ?? false}
         />

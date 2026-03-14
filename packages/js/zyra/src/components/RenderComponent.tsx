@@ -13,7 +13,7 @@ import FormGroupWrapper from './UI/FormGroupWrapper';
 import { PopupUI } from './Popup';
 import axios from 'axios';
 import { Notice } from './Notice';
-import { addNotice } from './NoticeReceiver';
+import { addNotice } from './Notice';
 
 interface InputField {
     key: string;

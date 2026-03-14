@@ -1,7 +1,11 @@
 @use './config.scss' as *;
 
-.store-card{
-    h3,h4,h5,p{
+.store-card {
+
+    h3,
+    h4,
+    h5,
+    p {
         margin: 0;
     }
 }
@@ -118,8 +122,8 @@
 
 //  store page policy tabs end
 
-
-#marketplace-stores {
+// store list start
+// #marketplace-stores {
     .view-tabs-wrapper {
         display: flex;
         justify-content: end;
@@ -183,7 +187,9 @@
                 border: 0.063rem solid var(--theme-border-color);
                 border-radius: 0.313rem;
                 padding: 1rem;
-                // box-shadow: 0 0.125rem 0.5rem 0 #c9c7cd6e;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
                 box-sizing: border-box;
                 margin-bottom: 1rem;
 
@@ -214,14 +220,31 @@
                 .store-details {
                     flex-direction: column;
                     align-items: start;
+
                     h4 {
                         margin: 0;
                     }
                 }
 
+                // product section
+                .store-products {
+                    .products {
+                        display: flex;
+                        gap: 1rem;
+
+                        &::before {
+                            display: none;
+                        }
+
+                        .type-product {
+                            margin: 0;
+                        }
+                    }
+                }
+
                 .store-footer {
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: end;
                     align-items: center;
                     border-top: 0.063rem solid var(--theme-border-color);
                     padding-top: 1rem;
@@ -266,6 +289,7 @@
                     margin: 0;
                 }
             }
+
             .map-wrapper,
             .store-map {
                 width: 100%;
@@ -273,33 +297,41 @@
         }
     }
 
-    // product section
-    .store-products {
-        .products {
-            display: flex;
-            gap: 1rem;
+    // map start
+    .map-wrapper {
+        position: relative;
+
+        .input-field {
+            position: absolute;
+            top: 0.85rem;
+            left: 0.85rem;
+            z-index: 9;
         }
 
-        .woocommerce-loop-product__thumbnail {
-            width: 5rem;
+        .map {
+            width: 100%;
+            height: 25rem;
         }
     }
-}
+    // map end
+// }
+
+// store list end
 
 //  product list style start
-.top-products-inner {
-    .product-item {
-        .product-card {
-            .product-image {
-                width: 4rem;
+// .top-products-inner {
+//     .product-item {
+//         .product-card {
+//             .product-image {
+//                 width: 4rem;
 
-                img {
-                    width: 100%;
-                }
-            }
-        }
-    }
-}
+//                 img {
+//                     width: 100%;
+//                 }
+//             }
+//         }
+//     }
+// }
 
 //  store details start
 .store-details {
@@ -311,7 +343,7 @@
 //  store details end
 
 
-// store coupon
+// store coupon start
 .store-coupon-list {
     .coupon-card {
         padding: 1rem;
@@ -323,6 +355,14 @@
         p,
         h4 {
             margin: 0;
+            display: flex;
+            gap: 0.313rem;
+
+            span{
+                cursor: pointer;
+            }
         }
     }
 }
+
+// store coupon end

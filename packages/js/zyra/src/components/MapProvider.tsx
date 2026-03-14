@@ -397,20 +397,18 @@ export const MapProviderUI = ({
   };
 
   return (
-    <div style={{ position: "relative" }}>
-      <div style={{ position: "absolute", top: 10, left: 10, zIndex: 5 }}>
+    <div className="map-wrapper">
+      <div className="input-field">
         <input
           ref={inputRef}
           defaultValue={query}
           placeholder={placeholderSearch}
+          className="basic-input"
           onChange={(e) => {
-
             setQuery(e.target.value);
-
             if (mapProvider === "mapbox") {
               handleMapboxSearch(e.target.value);
             }
-
           }}
         />
 
@@ -420,11 +418,6 @@ export const MapProviderUI = ({
               <li
                 key={s.mapbox_id}
                 onClick={() => selectMapboxSuggestion(s)}
-                style={{
-                  padding: "8px",
-                  cursor: "pointer",
-                  borderBottom: "1px solid #eee"
-                }}
               >
                 {s.name}
               </li>
@@ -433,7 +426,7 @@ export const MapProviderUI = ({
         )}
       </div>
 
-      <div ref={containerRef} style={{ width: "100%", height: 400 }} />
+      <div ref={containerRef} className="map"/>
     </div>
   );
 };
