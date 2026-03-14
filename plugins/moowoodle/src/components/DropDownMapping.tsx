@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 
 // Internal dependencies
-import '../styles/web/DropDownMapping.scss';
+// import '../styles/web/DropDownMapping.scss';
 
 // Types
 interface DropDownMappingProps {

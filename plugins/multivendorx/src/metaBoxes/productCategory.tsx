@@ -1,4 +1,4 @@
-import { addFilter } from '@wordpress/hooks';
+import { applyFilters, addFilter } from '@wordpress/hooks';
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import {
@@ -8,7 +8,7 @@ import {
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const ProductCategorysection = ({ product, setProduct }) => {
+const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 	const [categories, setCategories] = useState([]);
 	const [selectedCats, setSelectedCats] = useState([]);
 	const [selectedCat, setSelectedCat] = useState(null);
@@ -181,7 +181,10 @@ const ProductCategorysection = ({ product, setProduct }) => {
 					per_page: 100,
 				},
 			})
-			.then((res) => setCategories(res.data));
+			.then((res) => {
+				const filtered = applyFilters('multivendorx_product_category_options', res.data);
+            	setCategories(filtered);
+			});
 	}, []);
 
 	useEffect(() => {
@@ -191,6 +194,18 @@ const ProductCategorysection = ({ product, setProduct }) => {
 	}, [product]);
 
 	const toggleCategory = (id) => {
+		const result = applyFilters(
+			'multivendorx_category_select_limit',
+			{ allow: true, message: '' },
+			id,
+			selectedCats
+		);
+
+		if (!result.allow) {
+			setErrorMsg(result.message);
+			return;
+		}
+
 		setSelectedCats((prev) => {
 			const updated =
 				prev.includes(id)
@@ -439,11 +454,11 @@ const ProductCategorysection = ({ product, setProduct }) => {
 addFilter(
 	'multivendorx_add_product_right_section',
 	'multivendorx/product_category',
-	(content, product, setProduct ) => {
+	(content, product, setProduct, handleChange, setErrorMsg ) => {
 		return (
 			<>
 				{content}
-				<ProductCategorysection product={product} setProduct={setProduct} />
+				<ProductCategorysection product={product} setProduct={setProduct} setErrorMsg={setErrorMsg} />
 			</>
 		);
 	},
