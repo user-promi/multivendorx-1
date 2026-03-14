@@ -104,7 +104,7 @@ class Utill {
         'plugin_db_version'      => 'multivendorx_version',
         'plugin_page_install'    => 'dc_product_vendor_plugin_page_install',
         'log_file'               => 'multivendorx_log_file',
-        'tour_active'            => 'multivendorx_tour_active',
+        'tour_isTourCompleted'   => 'multivendorx_tour_isTourCompleted',
         'admin_email'            => 'admin_email',
         'default_role'           => 'default_role',
         'revenue_mode_store'     => 'revenue_mode_store',
