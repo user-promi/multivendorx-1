@@ -31,14 +31,14 @@ interface MultiCheckBoxProps {
     onOptionsChange?: (options: Option[]) => void;
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
     modules: string[];
-    appLocalizer?: any;
+    appLocalizer?: {[key: string]: string | number | boolean};
     field?: any;
 }
 
 function isBlocked(
     opt: Option,
     modules: string[],
-    appLocalizer: any,
+    appLocalizer: {[key: string]: string | number | boolean};
     onBlocked?: MultiCheckBoxProps['onBlocked'],
 ): boolean {
     if (opt.proSetting && !appLocalizer?.khali_dabba) {

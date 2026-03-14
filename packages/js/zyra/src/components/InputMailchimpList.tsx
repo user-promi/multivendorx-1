@@ -20,12 +20,6 @@ interface Setting {
     [ key: string ]: string | SelectOption[] | boolean | number;
 }
 
-interface AppLocalizer {
-    nonce: string;
-    restUrl: string;
-    [ key: string ]: string | number | boolean;
-}
-
 interface InputMailchimpListProps {
     mailchimpKey: string;
     optionKey: string;
@@ -40,7 +34,7 @@ interface InputMailchimpListProps {
         key: string,
         value: string | SelectOption[] | boolean | number
     ) => void;
-    appLocalizer: AppLocalizer;
+    appLocalizer: {[key: string]: string | number | boolean};
 }
 
 const InputMailchimpList: React.FC< InputMailchimpListProps > = ( {

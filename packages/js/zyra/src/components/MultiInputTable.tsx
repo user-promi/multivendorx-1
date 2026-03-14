@@ -56,7 +56,7 @@ export interface MultiInputTableUIProps {
     storeTabSetting: Record<string, string[]>;
     khali_dabba: boolean;
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
-    appLocalizer?: any;
+    appLocalizer?: {[key: string]: string | number | boolean};
 }
 
 interface TableCellProps {
@@ -69,7 +69,7 @@ interface TableCellProps {
     disabled?: boolean
     onChange: (key: string, value: SettingValue) => void
     modules: string[]
-    appLocalizer: any
+    appLocalizer: {[key: string]: string | number | boolean};
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void
 }
 

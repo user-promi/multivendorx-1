@@ -67,7 +67,7 @@ export const TextContentUI: React.FC<{
   value?: any;
   onChange: (value: any) => void;
   canAccess?: boolean;
-  appLocalizer?: any;
+  appLocalizer?: {[key: string]: string | number | boolean};
   modules?: string[];
   settings?: Record<string, any>;
   onOptionsChange?: (options: any[]) => void;

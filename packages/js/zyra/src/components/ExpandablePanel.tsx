@@ -10,11 +10,6 @@ import FormGroupWrapper from './UI/FormGroupWrapper';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-interface AppLocalizer {
-    nonce?: string;
-    site_url?: string;
-}
-
 interface FieldOption {
     value: string | number;
     label: string;
@@ -68,7 +63,7 @@ interface AddNewTemplate {
 interface ExpandablePanelProps {
     name: string;
     apilink?: string;
-    appLocalizer?: AppLocalizer;
+    appLocalizer: {[key: string]: string | number | boolean};
     methods: ExpandablePanelMethod[];
     value: Record<string, Record<string, unknown>>;
     onChange: (data: Record<string, Record<string, unknown>>) => void;
@@ -117,7 +112,7 @@ interface PanelContextType {
     value: Record<string, Record<string, unknown>>;
     isWizardMode: boolean;
     canAccess: boolean;
-    appLocalizer?: AppLocalizer;
+    appLocalizer: {[key: string]: string | number | boolean};
     addNewTemplate?: AddNewTemplate;
     tplFields: PanelFormField[];
     titleRef: React.RefObject<HTMLInputElement>;
