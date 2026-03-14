@@ -921,7 +921,7 @@ STORE FOLLOWER NOTIFICATIONS
 
             $gateway = $this->active_gateway();
 			if ( $gateway ) {
-                foreach ( $receivers as $number ) {
+                foreach ( array_filter($receivers) as $number ) {
                     $gateway->send( $number, $message );
                 }
             }

@@ -680,7 +680,6 @@ class Stores extends \WP_REST_Controller {
 
             if ( 'active' === $store_data['status'] ) {
                 do_action( 'multivendorx_after_store_active', $store_id );
-file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":hit:  : " . var_export('hitt', true) . "\n", FILE_APPEND);
 
                 do_action(
                     'multivendorx_notify_store_activated',
