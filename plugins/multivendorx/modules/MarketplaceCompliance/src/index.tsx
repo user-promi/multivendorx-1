@@ -2,11 +2,13 @@ import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import PendingReportAbuse from './PendingAbuseReports';
 
-let reportAbuseCount = 0;
+const reportAbuseState = {
+	count: 0,
+};
 
 // function to update count
-const setReportAbuseCount = (count: number) => {
-	reportAbuseCount = count;
+const setReportAbuseCount = (count:number) => {
+	reportAbuseState.count = count;
 };
 
 addFilter(
@@ -24,7 +26,7 @@ addFilter(
 				settingTitle: __('Flagged products awaiting action', 'multivendorx'),
 				settingSubTitle: __('Review reports and maintain quality.', 'multivendorx'),
 				headerIcon: 'product indigo',
-				count: reportAbuseCount,
+				count: reportAbuseState.count,
 			},
 		});
 

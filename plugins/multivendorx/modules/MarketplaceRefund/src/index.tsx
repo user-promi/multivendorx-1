@@ -2,11 +2,13 @@ import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import PendingRefund from './PendingRefund';
 
-let refundCount = 0;
+let refundCountState = {
+	count : 0
+};
 
 // function to update count
 const setRefundCount = (count: number) => {
-	refundCount = count;
+	refundCountState.count = count;
 };
 
 addFilter(
@@ -27,7 +29,7 @@ addFilter(
 					'multivendorx'
 				),
 				headerIcon: 'marketplace-refund blue',
-				count: refundCount,
+				count: refundCountState.count,
 			},
 		});
 
