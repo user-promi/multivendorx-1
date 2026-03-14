@@ -30,6 +30,7 @@ const PendingCoupons: React.FC<{ setCount?: (count: number) => void }> = ({ setC
 	const [rejectCouponId, setRejectCouponId] = useState<number | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [store, setStore] = useState<any[] | null>(null);
+	const [countTrigger, setCountTrigger] = useState(0);
 
 	useEffect(() => {
 		axios
@@ -50,7 +51,30 @@ const PendingCoupons: React.FC<{ setCount?: (count: number) => void }> = ({ setC
 				setIsLoading(false);
 			});
 	}, []);
+	useEffect(() => {
+		const fetchPendingCouponsCount = () => {
+			if (!setCount) return;
 
+			axios
+				.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+					params: {
+						status: 'pending',
+						per_page: 1,
+						meta_key: 'multivendorx_store_id',
+					},
+				})
+				.then((response) => {
+					const total = Number(response.headers['x-wp-total'] || 0);
+					setCount(total);
+				})
+				.catch((err) => {
+					console.error('Failed to fetch pending coupons count:', err);
+					setCount(0);
+				});
+		};
+		fetchPendingCouponsCount();
+	}, [countTrigger]);
 	const handleSingleAction = (action: string, couponId: number) => {
 		if (!couponId) {
 			return;
@@ -75,6 +99,7 @@ const PendingCoupons: React.FC<{ setCount?: (count: number) => void }> = ({ setC
 			)
 			.then(() => {
 				doRefreshTableData({});
+				setCountTrigger((prev) => prev + 1);
 			})
 			.catch(console.error);
 	};
@@ -102,6 +127,7 @@ const PendingCoupons: React.FC<{ setCount?: (count: number) => void }> = ({ setC
 				setRejectReason('');
 				setRejectCouponId(null);
 				doRefreshTableData({});
+				setCountTrigger((prev) => prev + 1);
 			})
 			.catch(console.error)
 			.finally(() => setIsSubmitting(false));
@@ -196,7 +222,6 @@ const PendingCoupons: React.FC<{ setCount?: (count: number) => void }> = ({ setC
 
 				setRows(coupons);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
-				setCount?.(Number(response.headers['x-wp-total']) || 0);
 				setIsLoading(false);
 			})
 			.catch((error) => {
