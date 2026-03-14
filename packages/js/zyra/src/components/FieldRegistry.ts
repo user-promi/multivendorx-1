@@ -4,7 +4,6 @@ import BasicInput from './BasicInput';
 import CalendarInput from './CalendarInput';
 import ColorSettingInput from './ColorSettingInput';
 import Content from './Content';
-import EmailTemplate from './EmailRenderer';
 import EndpointEditor from './EndpointEditor';
 import EventCalendar from './EventCalendar';
 import ExpandablePanel from './ExpandablePanel';
@@ -75,7 +74,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
 
   'form-builder': BlockBuilder,
 
-  'email-template': BlockBuilder,
+  'email-builder': BlockBuilder,
 
   'system-info': SystemInfo,
 
