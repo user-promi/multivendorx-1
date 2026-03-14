@@ -51,7 +51,7 @@ class Store_Description extends Widget_Heading {
 
 		$description = ! empty( $store['storeDescription'] )
 			? $store['storeDescription']
-			: __( 'No store description available.', 'multivendorx' );
+			: '';
 
 		if ( empty( $description ) ) {
 			return;
