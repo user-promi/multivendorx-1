@@ -1,5 +1,5 @@
 // External dependencies
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { TourProvider, ProviderProps, StepType, useTour } from '@reactour/tour';
 
@@ -24,12 +24,28 @@ interface TourProps {
 interface InitiateTourProps extends Omit<ProviderProps, 'steps'> {
     steps: StepType[];
 }
+const useTourState = () => {
+    const updateTourFlag = useCallback(async (active: boolean) => {
+        try {
+            await axios.post(
+                getApiLink(appLocalizer, 'tour'),
+                { active },
+                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+            );
+        } catch (e) {
+            console.error('Error updating tour flag:', e);
+        }
+    }, []);
+
+    return { updateTourFlag };
+};
 
 /**
  * Main Tour component that handles the guided tour functionality
  */
 const Tour: React.FC<TourProps> = ({  steps }) => {
     const { setIsOpen, setSteps, setCurrentStep } = useTour();
+    const { updateTourFlag } = useTourState();
 
     const waitForElement = (selector: string): Promise<Element> =>
         new Promise((resolve) => {
@@ -48,15 +64,7 @@ const Tour: React.FC<TourProps> = ({  steps }) => {
 
     const finishTour = async () => {
         setIsOpen(false);
-        try {
-            await axios.post(
-                getApiLink(appLocalizer, 'tour'),
-                { active: true },
-                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-            );
-        } catch (e) {
-            console.error('Error updating tour flag:', e);
-        }
+        await updateTourFlag(true);
     };
 
     const navigateTo = async (url: string, step: number, selector?: string) => {
@@ -142,6 +150,8 @@ const InitiateTour: React.FC<InitiateTourProps> = ({
     steps,
     ...rest
 }) => {
+    const { updateTourFlag } = useTourState();
+
     return (
         <TourProvider
             steps={[]}
@@ -160,13 +170,7 @@ const InitiateTour: React.FC<InitiateTourProps> = ({
             onClickClose={({ setIsOpen }) => {
                 setIsOpen(false);
                 // Trigger finishTour via the close button — handled externally via axios
-                axios
-                    .post(
-                        getApiLink(appLocalizer, 'tour'),
-                        { active: true },
-                        { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-                    )
-                    .catch((e) => console.error('Error updating tour flag on close:', e));
+                updateTourFlag(true);
             }}
             {...rest}
         >
