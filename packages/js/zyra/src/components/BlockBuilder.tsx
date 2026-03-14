@@ -63,7 +63,7 @@ export interface EmailTemplate {
     blocks: Block[];
 }
 
-const DEFAULT_TEMPLATES: EmailTemplate[] = [
+const DEFAULT_EMAIL_TEMPLATES: EmailTemplate[] = [
 {
     id: 'default',
     name: 'Default Template',
@@ -80,44 +80,44 @@ export const BlockBuilderUI: React.FC<any> = ({
     name = field?.key,
 }) => {
 
-    const context = field?.context || 'registration';
-    const isEmailBuilder = context === 'email';
+    const builderContext = field?.builderContext || 'registration';
+    const isEmailBuilder = builderContext === 'email';
 
     /* ---------------------------
     EMAIL TEMPLATE STATE
     --------------------------- */
 
-    const savedData = value || setting[name] || {};
+    const storedBuilderData = value || setting[name] || {};
 
-    const [templates, setTemplates] = React.useState<EmailTemplate[]>(() => {
+    const [emailTemplates, setTemplates] = React.useState<EmailTemplate[]>(() => {
 
         if (!isEmailBuilder) return [];
 
         // Templates coming from field config (your TS file)
-        if (field?.templates?.length) {
-            return field.templates.map((t: EmailTemplate) => ({
+        if (field?.emailTemplates?.length) {
+            return field.emailTemplates.map((t: EmailTemplate) => ({
                 ...t,
-                ...savedData.templates?.find((st: EmailTemplate) => st.id === t.id),
+                ...storedBuilderData.emailTemplates?.find((st: EmailTemplate) => st.id === t.id),
             }));
         }
 
-        // Saved templates
-        if (savedData.templates?.length) {
-            return savedData.templates;
+        // Saved emailTemplates
+        if (storedBuilderData.emailTemplates?.length) {
+            return storedBuilderData.emailTemplates;
         }
 
         // Default fallback
-        return DEFAULT_TEMPLATES;
+        return DEFAULT_EMAIL_TEMPLATES;
     });
 
-    const [activeTemplateId, setActiveTemplateId] = React.useState(
-        savedData.activeTemplateId ||
+    const [activeEmailTemplateId, setActiveTemplateId] = React.useState(
+        storedBuilderData.activeEmailTemplateId ||
         field?.defaultTemplateId ||
-        templates[0]?.id ||
-        DEFAULT_TEMPLATES[0].id
+        emailTemplates[0]?.id ||
+        DEFAULT_EMAIL_TEMPLATES[0].id
     );
 
-    const activeTemplate = templates.find(t => t.id === activeTemplateId);
+    const activeEmailTemplate = emailTemplates.find(t => t.id === activeEmailTemplateId);
 
     /* ---------------------------
     BLOCK CHANGE HANDLER
@@ -132,15 +132,15 @@ export const BlockBuilderUI: React.FC<any> = ({
 
         setTemplates(prev => {
             const updated = prev.map(t =>
-                t.id === activeTemplateId ? { ...t, blocks } : t
+                t.id === activeEmailTemplateId ? { ...t, blocks } : t
             );
 
-            onChange({ templates: updated, activeTemplateId });
+            onChange({ emailTemplates: updated, activeEmailTemplateId });
 
             return updated;
         });
 
-    }, [isEmailBuilder, activeTemplateId, onChange]);
+    }, [isEmailBuilder, activeEmailTemplateId, onChange]);
 
     /* ---------------------------
     TEMPLATE SELECT
@@ -157,7 +157,7 @@ export const BlockBuilderUI: React.FC<any> = ({
     const initialBlocks = React.useMemo(() => {
 
         if (isEmailBuilder) {
-            return activeTemplate?.blocks || [];
+            return activeEmailTemplate?.blocks || [];
         }
 
         if (Array.isArray(value?.formfieldlist)) return value.formfieldlist;
@@ -165,7 +165,7 @@ export const BlockBuilderUI: React.FC<any> = ({
 
         return [];
 
-    }, [value, setting, name, isEmailBuilder, activeTemplate]);
+    }, [value, setting, name, isEmailBuilder, activeEmailTemplate]);
 
     /* ---------------------------
     RENDER
@@ -176,14 +176,14 @@ export const BlockBuilderUI: React.FC<any> = ({
             blocks={initialBlocks}
             onChange={handleBlocksChange}
             blockGroups={isEmailBuilder ? EMAIL_BLOCK_GROUPS : REGISTRATION_BLOCK_GROUPS}
-            visibleGroups={[context]}
-            groupName={context}
+            visibleGroups={[builderContext]}
+            groupName={builderContext}
             proSettingChange={proSettingChange}
-            context={context}
+            context={builderContext}
 
             {...(isEmailBuilder && {
-                templates,
-                activeTemplateId,
+                emailTemplates,
+                activeEmailTemplateId,
                 onTemplateSelect: handleTemplateSelect,
                 showTemplatesTab: true,
             })}
