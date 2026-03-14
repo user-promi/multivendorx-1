@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FieldComponent } from './types';
-import { FIELD_REGISTRY } from './FieldRegistry';
+import { FieldComponent, FIELD_REGISTRY } from './fieldUtils';
 
 interface TabFooter {
     url: string;

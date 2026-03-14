@@ -5,7 +5,7 @@ import CreatableSelect from 'react-select/creatable';
 import type { MultiValue, SingleValue, StylesConfig, GroupBase } from 'react-select';
 
 // Internal dependencies
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 import { ButtonInputUI } from './ButtonInput';
 import { PopupUI } from './Popup';
 

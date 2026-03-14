@@ -5,7 +5,7 @@ import { ReactSortable } from 'react-sortablejs';
 // Internal Dependencies
 import { SelectInputUI } from './SelectInput';
 import { BasicInputUI } from './BasicInput';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 // Constants for default address fields with sequential IDs
 const DEFAULT_ADDRESS_FIELDS = [

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 // Types
 interface Option {

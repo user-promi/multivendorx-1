@@ -7,7 +7,6 @@ import {
 	ItemListUI,
 	NavigatorHeader,
 	TableCard,
-	useModules,
 } from 'zyra';
 
 import ViewCommission from './viewCommission';
@@ -35,7 +34,6 @@ const StoreCommission: React.FC = () => {
 	>(null);
 	const [modalCommission, setModalCommission] =
 		useState<CommissionRow | null>(null);
-	const { modules } = useModules();
 
 	const headers = {
 		id: {
@@ -122,7 +120,7 @@ const StoreCommission: React.FC = () => {
 		axios
 			.get(getApiLink(appLocalizer, 'commission'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: buildCommissionQueryParams,
+				params: buildCommissionQueryParams(query),
 			})
 			.then((response) => {
 				const items = response.data || [];

@@ -6,7 +6,7 @@ import '../styles/web/ColorSettingInput.scss';
 import { ChoiceToggleUI } from './ChoiceToggle';
 import { SelectInputUI } from './SelectInput';
 import PdfDownloadButton from './PdfDownloadButton';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 interface CustomColors {
     colorPrimary: string;

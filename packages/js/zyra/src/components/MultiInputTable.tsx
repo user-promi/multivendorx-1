@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 
 // Internal dependencies
 import '../styles/web/MultiInputTable.scss';
-import { FieldComponent } from './types';
-import { FIELD_REGISTRY } from './FieldRegistry';
+import { FieldComponent, FIELD_REGISTRY } from './fieldUtils';
 
 export type SettingValue = string[] | boolean;
 export type RowChanges = Record<string, SettingValue>;

@@ -1,7 +1,7 @@
 // External dependencies
 import React, { ChangeEvent, MouseEvent, FocusEvent } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 interface TextAreaProps {
     id?: string;

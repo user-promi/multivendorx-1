@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useOutsideClick } from '../useOutsideClick';
+import { useOutsideClick } from '../fieldUtils';
 import Tooltip from '../UI/Tooltip';
 
 export interface ActionItem {
