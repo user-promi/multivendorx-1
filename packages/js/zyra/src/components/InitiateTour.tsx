@@ -32,11 +32,11 @@ const tourApi = {
         return res.data;
     },
 
-    updateTourStatus: async (isTourCompleted: boolean) => {
+    updateTourStatus: async (completed: boolean) => {
         try {
             await axios.post(
                 getApiLink(appLocalizer, 'tour'),
-                { isTourCompleted },
+                { completed },
                 headers
             );
         } catch (e) {
@@ -61,10 +61,17 @@ const GuidedTourController = ({ steps }: { steps: GuidedTourStep[] }) => {
 
     const handleTourNavigation = useCallback(
         (url: string, step: number) => {
-            sessionStorage.setItem(STORAGE_KEY, String(step));
-            window.location.href = url;
+            const currentUrl = window.location.href;
+
+            if (currentUrl === url) {
+                // same page → just move to next selector
+                setCurrentStep(step);
+            } else {
+                sessionStorage.setItem(STORAGE_KEY, String(step));
+                window.location.href = url;
+            }
         },
-        []
+        [setCurrentStep]
     );
 
     useEffect(() => {
@@ -72,7 +79,7 @@ const GuidedTourController = ({ steps }: { steps: GuidedTourStep[] }) => {
             try {
                 const data = await tourApi.fetchTourStatus();
 
-                if (!data.isTourCompleted) {
+                if (!data.completed) {
                     const savedStep = sessionStorage.getItem(STORAGE_KEY);
                     const startStep = savedStep ? parseInt(savedStep) : 0;
 
