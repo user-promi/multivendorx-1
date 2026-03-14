@@ -15,6 +15,7 @@ import {
 	QueryProps,
 	CategoryCount,
 	TabsUI,
+	RandomInputKeyGeneratorUI
 } from 'zyra';
 
 import axios from 'axios';
@@ -131,14 +132,14 @@ const AllCoupon: React.FC = () => {
 		title: '',
 		content: '',
 		discount_type: '',
-		coupon_amount: '',
+		coupon_amount: 0,
 		free_shipping: 'no',
 		expiry_date: '',
-		usage_limit: '',
-		limit_usage_to_x_items: '',
-		usage_limit_per_user: '',
-		minimum_amount: '',
-		maximum_amount: '',
+		usage_limit: 0,
+		limit_usage_to_x_items: 0,
+		usage_limit_per_user: 0,
+		minimum_amount: 0,
+		maximum_amount: 0,
 		individual_use: 'no',
 		exclude_sale_items: 'no',
 		product_ids: [],
@@ -170,8 +171,8 @@ const AllCoupon: React.FC = () => {
 					usage_limit: coupon.usage_limit || '',
 					limit_usage_to_x_items: coupon.limit_usage_to_x_items || '',
 					usage_limit_per_user: coupon.usage_limit_per_user || '',
-					minimum_amount: coupon.minimum_amount || '',
-					maximum_amount: coupon.maximum_amount || '',
+					minimum_amount: coupon.minimum_amount || 0,
+					maximum_amount: coupon.maximum_amount || 0,
 					individual_use: coupon.individual_use ? 'yes' : 'no',
 					exclude_sale_items: coupon.exclude_sale_items
 						? 'yes'
@@ -206,11 +207,11 @@ const AllCoupon: React.FC = () => {
 			individual_use: formData.individual_use === 'yes',
 			exclude_sale_items: formData.exclude_sale_items === 'yes',
 			free_shipping: formData.free_shipping === 'yes',
-			minimum_amount: formData.minimum_amount || '',
-			maximum_amount: formData.maximum_amount || '',
-			usage_limit: formData.usage_limit || '',
-			limit_usage_to_x_items: formData.limit_usage_to_x_items || '',
-			usage_limit_per_user: formData.usage_limit_per_user || '',
+			minimum_amount: formData.minimum_amount || 0,
+			maximum_amount: formData.maximum_amount || 0,
+			usage_limit: formData.usage_limit || 0,
+			limit_usage_to_x_items: formData.limit_usage_to_x_items || 0,
+			usage_limit_per_user: formData.usage_limit_per_user || 0,
 			date_expires: formData.expiry_date || '',
 			email_restrictions: formData.customer_email
 				? formData.customer_email.split(',')
@@ -247,14 +248,14 @@ const AllCoupon: React.FC = () => {
 					title: '',
 					content: '',
 					discount_type: '',
-					coupon_amount: '',
+					coupon_amount: 0,
 					free_shipping: 'no',
 					expiry_date: '',
-					usage_limit: '',
-					limit_usage_to_x_items: '',
-					usage_limit_per_user: '',
-					minimum_amount: '',
-					maximum_amount: '',
+					usage_limit: 0,
+					limit_usage_to_x_items: 0,
+					usage_limit_per_user: 0,
+					minimum_amount: 0,
+					maximum_amount: 0,
 					individual_use: 'no',
 					exclude_sale_items: 'no',
 					product_ids: [],
@@ -793,6 +794,15 @@ const AllCoupon: React.FC = () => {
 											title: value,
 										})
 									}
+								/>
+								<RandomInputKeyGeneratorUI
+									length="10"
+									onChange={(value) => {
+										setFormData({
+											...formData,
+											title: value,
+										});
+									}}
 								/>
 								{validationErrors.title && (
 									<div className="invalid-massage">
