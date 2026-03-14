@@ -680,16 +680,17 @@ class Stores extends \WP_REST_Controller {
 
             if ( 'active' === $store_data['status'] ) {
                 do_action( 'multivendorx_after_store_active', $store_id );
+file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":hit:  : " . var_export('hitt', true) . "\n", FILE_APPEND);
 
                 do_action(
                     'multivendorx_notify_store_activated',
                     'store_activated',
                     array(
-                        'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                        'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                        'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'store_id'    => $store_id,
                         'category'    => 'activity',
                     )
@@ -701,7 +702,7 @@ class Stores extends \WP_REST_Controller {
                     'multivendorx_notify_store_pending_approval',
                     'store_pending_approval',
                     array(
-                        'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                        'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
@@ -903,7 +904,7 @@ class Stores extends \WP_REST_Controller {
                         'multivendorx_notify_store_permanently_deactivated',
                         'store_permanently_deactivated',
                         array(
-                            'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                            'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                             'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                             'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                             'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
@@ -1016,7 +1017,7 @@ class Stores extends \WP_REST_Controller {
                             'multivendorx_notify_store_activated',
                             'store_activated',
                             array(
-                                'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                                'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                                 'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                                 'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                                 'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
@@ -1070,7 +1071,7 @@ class Stores extends \WP_REST_Controller {
                             'multivendorx_notify_store_permanently_rejected',
                             'store_permanently_rejected',
                             array(
-                                'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                                'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                                 'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                                 'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                                 'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
@@ -1086,7 +1087,7 @@ class Stores extends \WP_REST_Controller {
                             'multivendorx_notify_store_rejected',
                             'store_rejected',
                             array(
-                                'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                                'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                                 'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                                 'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                                 'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
@@ -1171,7 +1172,7 @@ class Stores extends \WP_REST_Controller {
                     'multivendorx_notify_store_activated',
                     'store_activated',
                     array(
-                        'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                        'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
@@ -1187,7 +1188,7 @@ class Stores extends \WP_REST_Controller {
                     'multivendorx_notify_store_rejected',
                     'store_rejected',
                     array(
-                        'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                        'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
@@ -1203,7 +1204,7 @@ class Stores extends \WP_REST_Controller {
                     'multivendorx_notify_store_under_review',
                     'store_under_review',
                     array(
-                        'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                        'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
@@ -1219,7 +1220,7 @@ class Stores extends \WP_REST_Controller {
                     'multivendorx_notify_store_suspended',
                     'store_suspended',
                     array(
-                        'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                        'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
@@ -1243,7 +1244,7 @@ class Stores extends \WP_REST_Controller {
                     'multivendorx_notify_store_permanently_deactivated',
                     'store_permanently_deactivated',
                     array(
-                        'admin_email' => MultiVendorX()->setting->get_setting( 'sender_email_address' ),
+                        'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),

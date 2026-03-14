@@ -48,7 +48,9 @@ class Notifications {
      * @return void
      */
     public function register_notification_hooks() {
-        foreach ( $this->events as $event => $value ) {
+        $this->events = $this->get_all_events();
+        foreach ( $this->events as $value ) {
+            $event = $value->system_action;
             add_action( "multivendorx_notify_{$event}", array( $this, 'trigger_notifications' ), 10, 2 );
         }
     }
@@ -883,6 +885,9 @@ STORE FOLLOWER NOTIFICATIONS
             $subject = $event->email_subject;
             $message = $event->email_body;
             foreach ( $parameters as $key => $value ) {
+                if (is_array($value)) {
+                    $value = implode(' ', $value);
+                }
 				$message = str_replace( '[' . $key . ']', $value, $message );
 			}
             $headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -908,6 +913,9 @@ STORE FOLLOWER NOTIFICATIONS
 
             $message = $event->sms_content;
 			foreach ( $parameters as $key => $value ) {
+                if (is_array($value)) {
+                    $value = implode(' ', $value);
+                }
 				$message = str_replace( '[' . $key . ']', $value, $message );
 			}
 
