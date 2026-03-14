@@ -48,7 +48,9 @@ class Notifications {
      * @return void
      */
     public function register_notification_hooks() {
-        foreach ( $this->events as $event => $value ) {
+        $this->events = $this->get_all_events();
+        foreach ( $this->events as $value ) {
+            $event = $value->system_action;
             add_action( "multivendorx_notify_{$event}", array( $this, 'trigger_notifications' ), 10, 2 );
         }
     }
@@ -82,24 +84,6 @@ STORE REGISTRATION & APPROVAL
 <p>Thank you for your patience.</p>',
 'sms_content' => 'Store [store_name] is pending approval.',
 'system_message' => 'Your store is currently under admin review.',
-'tag' => 'Store',
-'category' => 'notification',
-),
-
-'store_approved' => array(
-'name' => 'Store approved',
-'customer_enabled' => false,
-'store_enabled' => true,
-'admin_enabled' => false,
-'system_enabled'   => true,
-'email_subject' => 'Your store "[store_name]" has been approved',
-'email_body' => '
-<p>Hello,</p>
-<p>Congratulations! Your store <strong>[store_name]</strong> has been approved.</p>
-<p>You can now log in to your dashboard and start adding products to your store.</p>
-',
-'sms_content' => 'Store [store_name] approved.',
-'system_message' => 'Your store has been approved.',
 'tag' => 'Store',
 'category' => 'notification',
 ),
@@ -883,6 +867,9 @@ STORE FOLLOWER NOTIFICATIONS
             $subject = $event->email_subject;
             $message = $event->email_body;
             foreach ( $parameters as $key => $value ) {
+                if (is_array($value)) {
+                    $value = implode(' ', $value);
+                }
 				$message = str_replace( '[' . $key . ']', $value, $message );
 			}
             $headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -908,12 +895,15 @@ STORE FOLLOWER NOTIFICATIONS
 
             $message = $event->sms_content;
 			foreach ( $parameters as $key => $value ) {
+                if (is_array($value)) {
+                    $value = implode(' ', $value);
+                }
 				$message = str_replace( '[' . $key . ']', $value, $message );
 			}
 
             $gateway = $this->active_gateway();
 			if ( $gateway ) {
-                foreach ( $receivers as $number ) {
+                foreach ( array_filter($receivers) as $number ) {
                     $gateway->send( $number, $message );
                 }
             }

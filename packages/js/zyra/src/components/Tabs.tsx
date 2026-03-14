@@ -146,27 +146,29 @@ export const TabsUI: React.FC<TabsProps> = ({
 
     return (
         <>
-            <div className={`tabs-wrapper ${className}`}>
-                <div className="tabs-item">
-                    {tabs.map((tab, index) => (
-                        <div
-                            key={index}
-                            className={`tab ${index === activeIndex ? 'active-tab' : ''}`}
-                            onClick={() => setActiveIndex(index)}
-                        >
-                            <span className="tab-name">
-                                {tab.icon && (<i className={`adminfont-${tab.icon}`} />)}
-                                {tab.label}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-                {headerExtra && (
-                    <div className="tabs-header-extra">
-                        {headerExtra}
+            {tabs.length > 1 && (
+                <div className={`tabs-wrapper ${className}`}>
+                    <div className="tabs-item">
+                        {tabs.map((tab, index) => (
+                            <div
+                                key={index}
+                                className={`tab ${index === activeIndex ? 'active-tab' : ''}`}
+                                onClick={() => setActiveIndex(index)}
+                            >
+                                <span className="tab-name">
+                                    {tab.icon && (<i className={`adminfont-${tab.icon}`} />)}
+                                    {tab.label}
+                                </span>
+                            </div>
+                        ))}
                     </div>
-                )}
-            </div>
+                    {headerExtra && (
+                        <div className="tabs-header-extra">
+                            {headerExtra}
+                        </div>
+                    )}
+                </div>
+            )}
 
             {renderTabContent()}
 

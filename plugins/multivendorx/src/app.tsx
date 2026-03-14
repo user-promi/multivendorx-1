@@ -7,14 +7,14 @@ import {
 	FormGroup,
 	FormGroupWrapper,
 	PopupUI,
-	TourSetup,
+	GuidedTourProvider,
 	Notice
 } from 'zyra';
 
 import Brand from './assets/images/multivendorx-logo.png';
 import { searchIndex, SearchItem } from './searchIndex';
 import { __ } from '@wordpress/i18n';
-import { getTourSteps } from './components/Tour/TourSteps';
+import { getTourSteps } from './components/Tour/Tours';
 import NotificationTabContent from './components/Notifications/HeaderNotifications';
 import './routeRegistry';
 import './routes';
@@ -397,7 +397,7 @@ const App = () => {
 				</FormGroupWrapper>
 			</PopupUI>
 
-			<TourSetup
+			<GuidedTourProvider
 				appLocalizer={appLocalizer}
 				steps={getTourSteps(appLocalizer)}
 			/>

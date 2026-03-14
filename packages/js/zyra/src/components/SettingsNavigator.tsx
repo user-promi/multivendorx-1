@@ -37,7 +37,7 @@ type SettingsNavigatorProps = {
     settingName?: string;
     onNavigate?: (url: string) => void;
     settingTitleSection?: React.ReactNode;
-    appLocalizer: { khali_dabba?: boolean; shop_url?: string };
+    appLocalizer: {[key: string]: string | number | boolean};
     menuIcon?: boolean;
     variant?: 'default' | 'compact' | 'card' | 'settings';
     /* - 'default': Standard settings panel layout

@@ -463,7 +463,7 @@ export const ColorSettingInputUI: React.FC<ColorSettingProps> = (props) => {
 };
 
 const ColorSettingInput: FieldComponent = {
-    render: ({ field, value, onChange, canAccess, appLocalizer }) => (
+    render: ({ field, value, onChange, canAccess }) => (
         <ColorSettingInputUI
             filedKey={field.key}
             wrapperClass="form-group-color-setting"

@@ -8,16 +8,10 @@ import { getApiLink } from '../utils/apiService';
 import Skeleton from './UI/Skeleton';
 import { FieldComponent } from './types';
 
-interface AppLocalizer {
-    nonce: string;
-    apiUrl: string;
-    restUrl: string;
-}
-
 // Types
 interface SystemInfoProps {
     apiLink: string;
-    appLocalizer: AppLocalizer;
+   appLocalizer: {[key: string]: string | number | boolean};
     copyButtonLabel?: string;
     copiedLabel?: string;
 }
