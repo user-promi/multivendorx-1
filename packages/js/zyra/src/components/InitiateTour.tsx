@@ -1,5 +1,5 @@
 // External dependencies
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { TourProvider, ProviderProps, StepType, useTour } from '@reactour/tour';
 
@@ -17,128 +17,118 @@ interface TourContent {
     finishBtn?: boolean;
 }
 
-interface TourProps {
+interface GuidedTourProviderProps extends Omit<ProviderProps, 'steps'> {
     steps: StepType[];
 }
 
-interface InitiateTourProps extends Omit<ProviderProps, 'steps'> {
-    steps: StepType[];
-}
-const useTourState = () => {
-    const updateTourFlag = useCallback(async (active: boolean) => {
-        try {
-            await axios.post(
-                getApiLink(appLocalizer, 'tour'),
-                { active },
-                { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-            );
-        } catch (e) {
-            console.error('Error updating tour flag:', e);
-        }
-    }, []);
+const tourApi = {
+    fetchTourStatus: async () => {
+        const res = await axios.get(
+            getApiLink(appLocalizer, 'tour'),
+            { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+        );
+        return res.data;
+    },
 
-    return { updateTourFlag };
+    updateTourStatus: async (isTourCompleted: boolean) => {
+        await axios.post(
+            getApiLink(appLocalizer, 'tour'),
+            { isTourCompleted },
+            { headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+        );
+    }
 };
 
 /**
  * Main Tour component that handles the guided tour functionality
  */
-const Tour: React.FC<TourProps> = ({  steps }) => {
+const GuidedTourController = ({ steps }: { steps: StepType[] }) => {
     const { setIsOpen, setSteps, setCurrentStep } = useTour();
-    const { updateTourFlag } = useTourState();
 
-    const waitForElement = (selector: string): Promise<Element> =>
-        new Promise((resolve) => {
-            const checkElement = () => {
-                const element = document.querySelector(selector);
-                if (element) {
-                    resolve(element);
-                } else {
-                    setTimeout(checkElement, 100);
-                }
-            };
-            document.readyState === 'complete'
-                ? checkElement()
-                : window.addEventListener('load', checkElement, { once: true });
-        });
-
-    const finishTour = async () => {
+    const handleFinishTour = useCallback(async () => {
         setIsOpen(false);
-        await updateTourFlag(true);
-    };
+        await tourApi.updateTourStatus(true);
+    }, [setIsOpen]);
 
-    const navigateTo = async (url: string, step: number, selector?: string) => {
-        setIsOpen(false);
-        window.open(url, '_self');
-        if (selector) {
-            await waitForElement(selector);
-        }
-        setTimeout(() => {
-            setCurrentStep(step);
-            setIsOpen(true);
-        }, 500);
-    };
+    const handleTourNavigation = useCallback(
+        (url: string, step: number) => {
+            setIsOpen(false);
+            window.open(url, '_self');
 
-    const processedSteps = useMemo(() => {
-        return steps.map((step, index) => {
-            const isLastStep = index === steps.length - 1;
-
-            return {
-                ...step,
-                content: () => {
-                    const content = step.content({
-                        navigateTo,
-                        finishTour,
-                    }) as TourContent;
-
-                    const buttons = [];
-
-                    if (!isLastStep) {
-                        buttons.push({ text: 'End Tour', color: 'red', onClick: finishTour });
-                    }
-
-                    if (!isLastStep && content.nextBtn) {
-                        buttons.push({
-                            text: 'Next',
-                            color: 'purple',
-                            onClick: () => navigateTo(content.nextBtn!.link, content.nextBtn!.step),
-                        });
-                    }
-
-                    if (isLastStep && content.finishBtn) {
-                        buttons.push({ text: 'Finish Tour', color: 'purple', onClick: finishTour });
-                    }
-
-                    return (
-                        <div className="tour-box">
-                            <div className="title">{content.title}</div>
-                            <div className="desc">{content.description}</div>
-                            <ButtonInputUI buttons={buttons} />
-                        </div>
-                    );
-                },
-            };
-        });
-    }, [steps]);
+            setTimeout(() => {
+                setCurrentStep(step);
+                setIsOpen(true);
+            }, 500);
+        },
+        [setIsOpen, setCurrentStep]
+    );
 
     useEffect(() => {
-
-        const fetchTourState = async () => {
-            try {
-                const response = await axios.get(getApiLink(appLocalizer, 'tour'), {
-                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
-                });
-                if (response.data.active === false) {
-                    setSteps?.(processedSteps);
-                    setIsOpen?.(true);
+            const initializeTour = async () => {
+                try {
+                    const data = await tourApi.fetchTourStatus();
+    
+                    if (!data.isTourCompleted) {
+                        const processedSteps = steps.map((step, index) => ({
+                            ...step,
+                            content: () => {
+                                const content = step.content({
+                                    handleTourNavigation,
+                                    handleFinishTour
+                                }) as TourContent;
+    
+                                const isLast = index === steps.length - 1;
+    
+                                const tourActionButtons = [];
+    
+                                if (!isLast) {
+                                    tourActionButtons.push({
+                                        text: 'End Tour',
+                                        color: 'red',
+                                        onClick: handleFinishTour
+                                    });
+                                }
+    
+                                if (!isLast && content.nextBtn) {
+                                    tourActionButtons.push({
+                                        text: 'Next',
+                                        color: 'purple',
+                                        onClick: () =>
+                                            handleTourNavigation(
+                                                content.nextBtn!.link,
+                                                content.nextBtn!.step
+                                            )
+                                    });
+                                }
+    
+                                if (isLast && content.finishBtn) {
+                                    tourActionButtons.push({
+                                        text: 'Finish Tour',
+                                        color: 'purple',
+                                        onClick: handleFinishTour
+                                    });
+                                }
+    
+                                return (
+                                    <div className="tour-box">
+                                        <div className="title">{content.title}</div>
+                                        <div className="desc">{content.description}</div>
+                                        <ButtonInputUI buttons={tourActionButtons} />
+                                    </div>
+                                );
+                            }
+                        }));
+    
+                        setSteps(processedSteps);
+                        setIsOpen(true);
+                    }
+                } catch (e) {
+                    console.error('Error loading tour:', e);
                 }
-            } catch (error) {
-                console.error('Error fetching tour flag:', error);
-            }
-        };
-
-        fetchTourState();
-    }, [processedSteps]);
+            };
+    
+            initializeTour();
+        }, [steps, setSteps, setIsOpen, handleTourNavigation, handleFinishTour]);
 
     return null;
 };
@@ -146,11 +136,10 @@ const Tour: React.FC<TourProps> = ({  steps }) => {
 /**
  * Wraps the Tour component with TourProvider context
  */
-const InitiateTour: React.FC<InitiateTourProps> = ({
+const GuidedTourProvider: React.FC<GuidedTourProviderProps> = ({
     steps,
     ...rest
 }) => {
-    const { updateTourFlag } = useTourState();
 
     return (
         <TourProvider
@@ -169,14 +158,14 @@ const InitiateTour: React.FC<InitiateTourProps> = ({
             showBadge={false}
             onClickClose={({ setIsOpen }) => {
                 setIsOpen(false);
-                // Trigger finishTour via the close button — handled externally via axios
-                updateTourFlag(true);
+                // Trigger handleFinishTour via the close button — handled externally via axios
+                tourApi.updateTourStatus(true);
             }}
             {...rest}
         >
-            <Tour steps={steps} />
+            <GuidedTourController steps={steps} />
         </TourProvider>
     );
 };
 
-export default InitiateTour;
+export default GuidedTourProvider;
