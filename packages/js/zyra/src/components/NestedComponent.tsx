@@ -3,8 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 // Internal dependencies
 import '../styles/web/NestedComponent.scss';
-import { FieldComponent } from './types';
-import { FIELD_REGISTRY } from './FieldRegistry';
+import { FieldComponent, FIELD_REGISTRY } from './fieldUtils';
 import { ButtonInputUI } from './ButtonInput';
 import ItemList from './ItemList';
 

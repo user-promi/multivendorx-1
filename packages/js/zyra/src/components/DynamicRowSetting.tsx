@@ -3,7 +3,7 @@ import React from 'react';
 
 // Internal dependencies
 import '../styles/web/DynamicRowSetting.scss';
-import { FIELD_REGISTRY } from './FieldRegistry';
+import { FIELD_REGISTRY } from './fieldUtils';
 import { ButtonInputUI } from './ButtonInput';
 
 // Types

@@ -3,7 +3,7 @@ import React from 'react';
 
 // Internal Dependencies
 import CanvasEditor from './CanvasEditor/CanvasEditor';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 import { Block } from './CanvasEditor/blockTypes';
 import '../styles/web/BlockBuilder.scss';
 

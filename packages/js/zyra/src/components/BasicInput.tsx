@@ -2,7 +2,7 @@
 import { MouseEvent, FocusEvent, forwardRef } from 'react';
 
 // Internal Dependencies
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 interface InputFeedback {
     type: string;

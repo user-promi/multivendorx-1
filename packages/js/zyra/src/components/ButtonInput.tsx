@@ -1,6 +1,6 @@
 import "../styles/web/UI/ButtonInput.scss";
 import React, { useState } from "react";
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 import { BlockStyle } from './CanvasEditor/blockStyle';
 import axios from "axios";
 import { getApiLink } from "../utils/apiService";

@@ -3,9 +3,8 @@ import axios from 'axios';
 import DragListView from 'react-drag-listview';
 import '../styles/web/EndpointEditor.scss';
 import { getApiLink } from '../utils/apiService';
-import { FieldComponent } from './types';
 import { BasicInputUI } from './BasicInput';
-import { useOutsideClick } from './useOutsideClick';
+import { useOutsideClick, FieldComponent } from './fieldUtils';
 
 interface Submenu {
     name: string;

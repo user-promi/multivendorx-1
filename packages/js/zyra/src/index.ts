@@ -57,7 +57,7 @@ export { default as Popup } from './components/Popup';
 export { PopupUI } from './components/Popup';
 export { default as InfoItem } from './components/InfoItem';
 export { default as Analytics } from './components/Analytics';
-export { default as CountryCodes } from './components/CountryCodes';
+export { CountryCodes } from './components/fieldUtils';
 export { default as ComponentStatusView } from './components/UI/ComponentStatusView';
 export { default as Skeleton } from './components/UI/Skeleton';
 export { default as PdfDownloadButton } from './components/PdfDownloadButton';
@@ -72,7 +72,7 @@ export type { QueryProps, TableRow, CategoryCount } from './components/table/typ
 export { Notice, NoticeReceiver } from './components/Notice';
 
 export { default as TableCard } from './components/table/TableCard';
-export { useOutsideClick } from './components/useOutsideClick';
+export { useOutsideClick } from './components/fieldUtils';
 
 export {
     getApiResponse,

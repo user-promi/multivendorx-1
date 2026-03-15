@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 import { generateBlockStyles, BlockStyle } from './CanvasEditor/blockStyle';
 
 // Unified interface that handles both types

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import "../styles/web/Notice.scss";
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

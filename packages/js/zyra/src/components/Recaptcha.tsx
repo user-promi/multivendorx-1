@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Internal dependencies
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 // Types
 interface RecaptchaProps {
