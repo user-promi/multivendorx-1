@@ -10,6 +10,7 @@ import {
 	CategoryCount,
 	Container,
 	Column,
+	InfoItem,
 } from 'zyra';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -113,6 +114,22 @@ const StoreTable: React.FC = () => {
 	const headers = {
 		store_name: {
 			label: __('Store', 'multivendorx'),
+			render: (row: any) => (
+				<InfoItem
+					title={row.store_name}
+					titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
+					avatar={{
+						image: row.logo,
+						iconClass: row.logo ? '' : 'store-inventory',
+					}}
+					descriptions={[
+						{
+							label: __('Since', 'multivendorx'),
+							value: row.date || '—',
+						},
+					]}
+				/>
+			),
 		},
 		email: {
 			label: __('Contact', 'multivendorx'),
@@ -123,7 +140,26 @@ const StoreTable: React.FC = () => {
 		},
 		primary_owner: {
 			label: __('Primary Owner', 'multivendorx'),
-			render: (row) => row.primary_owner?.data?.display_name,
+			render: (row: any) => {
+				const owner = row.primary_owner?.data;
+
+				return (
+					<InfoItem
+						title={owner?.display_name}
+						titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
+						avatar={{
+							image: row.logo,
+							iconClass: row.logo ? '' : 'user-circle',
+						}}
+						descriptions={[
+							{
+								label: __('Email', 'multivendorx'),
+								value: owner?.user_email || '—',
+							},
+						]}
+					/>
+				);
+			},
 		},
 		status: {
 			label: __('Status', 'multivendorx'),

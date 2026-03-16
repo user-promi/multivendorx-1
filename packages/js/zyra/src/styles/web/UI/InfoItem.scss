@@ -21,6 +21,13 @@
         display: flex;
         gap: 0.75rem;
 
+        .avatar{
+            background: $theme-background-color;
+
+            i{
+                color: $theme-color;
+            }
+        }
         .details {
             display: flex;
             flex-direction: column;

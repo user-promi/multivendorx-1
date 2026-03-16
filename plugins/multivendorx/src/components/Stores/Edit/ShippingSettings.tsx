@@ -14,13 +14,11 @@ import {
 	getApiLink,
 	ComponentStatusView,
 	ChoiceToggleUI,
-	Notice,
 	NoticeManager,
 } from 'zyra';
 
 const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (!id) {

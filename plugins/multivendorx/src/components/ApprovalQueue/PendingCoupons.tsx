@@ -10,6 +10,7 @@ import {
 	TextAreaUI,
 	TableRow,
 	QueryProps,
+	InfoItem,
 } from 'zyra';
 
 import { setSession, toWcIsoDate } from '@/services/commonFunction';
@@ -114,6 +115,20 @@ const PendingCoupons: React.FC<{}> = () => {
 	const headers = {
 		code: {
 			label: __('Code', 'multivendorx'),
+			render: (row: any) => {
+
+				return (
+					<InfoItem
+						title="code (pkoro)"
+						descriptions={[
+							{
+								label: __('By', 'multivendorx'),
+								value: "NIke (pkoro)",
+							},
+						]}
+					/>
+				);
+			},
 		},
 		store_name: {
 			label: __('Store', 'multivendorx'),

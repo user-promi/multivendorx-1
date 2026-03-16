@@ -10,6 +10,7 @@ import {
 	PopupUI,
 	TableRow,
 	QueryProps,
+	InfoItem,
 } from 'zyra';
 import Popup from '../../../src/components/Popup/Popup';
 
@@ -74,15 +75,24 @@ const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
 		product: {
 			label: __('Product', 'multivendorx'),
 			render: (row: any) => (
-				// <ItemCardUI
-				// 	id={row.product?.id}
-				// 	title={row.product?.name}
-				// 	sku={row.product?.sku}
-				// 	image={row.product?.image}
-				// 	icon={'inventory'}
-				// 	link={`/wp-admin/post.php?post=${row.product?.id}&action=edit`}
-				// />
-				<></>
+				<InfoItem
+					title={row.product?.name}
+					titleLink={`/wp-admin/post.php?post=${row.product?.id}&action=edit`}
+					avatar={{
+						image: row.product?.image,
+						iconClass: row.product?.image ? '' : 'inventory',
+					}}
+					descriptions={[
+						{
+							label: 'SKU',
+							value: row.product?.sku || '—',
+						},
+						{
+							label: 'ID',
+							value: row.product?.id,
+						},
+					]}
+				/>
 			),
 		},
 		email: {

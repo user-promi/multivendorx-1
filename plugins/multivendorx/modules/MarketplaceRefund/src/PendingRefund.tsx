@@ -3,8 +3,6 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
 	ButtonInputUI,
-	Column,
-	Container,
 	FormGroup,
 	FormGroupWrapper,
 	getApiLink,
@@ -263,172 +261,168 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 
 	return (
 		<>
-			<Container general>
-				<Column>
-					<TableCard
-						headers={headers}
-						rows={rows}
-						totalRows={totalRows}
-						isLoading={isLoading}
-						onQueryUpdate={doRefreshTableData}
-						ids={rowIds}
-						search={{}}
-						filters={filters}
-						format={appLocalizer.date_format}
-						currency={{
-							currencySymbol: appLocalizer.currency_symbol,
-							priceDecimals: appLocalizer.price_decimals,
-							decimalSeparator: appLocalizer.decimal_separator,
-							thousandSeparator: appLocalizer.thousand_separator,
-							currencyPosition: appLocalizer.currency_position,
-						}}
+			<TableCard
+				headers={headers}
+				rows={rows}
+				totalRows={totalRows}
+				isLoading={isLoading}
+				onQueryUpdate={doRefreshTableData}
+				ids={rowIds}
+				search={{}}
+				filters={filters}
+				format={appLocalizer.date_format}
+				currency={{
+					currencySymbol: appLocalizer.currency_symbol,
+					priceDecimals: appLocalizer.price_decimals,
+					decimalSeparator: appLocalizer.decimal_separator,
+					thousandSeparator: appLocalizer.thousand_separator,
+					currencyPosition: appLocalizer.currency_position,
+				}}
+			/>
+			<PopupUI
+				open={popupOpen}
+				onClose={handleCloseForm}
+				width={40}
+				height="80%"
+				header={{
+					icon: 'announcement',
+					title: __('Refund Request Details', 'multivendorx'),
+					description: __(
+						'Review refund details before taking action.',
+						'multivendorx'
+					),
+				}}
+				footer={
+					<ButtonInputUI
+						buttons={[
+							{
+								icon: 'external-link',
+								text: __(
+									'View order to release funds',
+									'multivendorx'
+								),
+								color: 'yellow-bg',
+								onClick: () => {
+									if (!viewOrder) {
+										return;
+									}
+									window.open(
+										`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${viewOrder.id}&action=edit`,
+										'_blank'
+									);
+								},
+								disabled: false,
+								children: null,
+								customStyle: {},
+								style: {},
+							},
+							{
+								icon: 'save',
+								text: __('Reject', 'multivendorx'),
+								onClick: () => {
+									if (!viewOrder) {
+										return;
+									}
+									handleSubmit(viewOrder.id);
+								},
+								disabled: isSubmitting,
+								children: null,
+								customStyle: {},
+								style: {},
+							},
+						]}
 					/>
-					<PopupUI
-						open={popupOpen}
-						onClose={handleCloseForm}
-						width={40}
-						height="80%"
-						header={{
-							icon: 'announcement',
-							title: __('Refund Request Details', 'multivendorx'),
-							description: __(
-								'Review refund details before taking action.',
-								'multivendorx'
-							),
-						}}
-						footer={
-							<ButtonInputUI
-								buttons={[
-									{
-										icon: 'external-link',
-										text: __(
-											'View order to release funds',
-											'multivendorx'
-										),
-										color: 'yellow-bg',
-										onClick: () => {
-											if (!viewOrder) {
-												return;
-											}
-											window.open(
-												`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${viewOrder.id}&action=edit`,
-												'_blank'
-											);
-										},
-										disabled: false,
-										children: null,
-										customStyle: {},
-										style: {},
-									},
-									{
-										icon: 'save',
-										text: __('Reject', 'multivendorx'),
-										onClick: () => {
-											if (!viewOrder) {
-												return;
-											}
-											handleSubmit(viewOrder.id);
-										},
-										disabled: isSubmitting,
-										children: null,
-										customStyle: {},
-										style: {},
-									},
-								]}
-							/>
-						}
-					>
-						{viewOrder && (
-							<FormGroupWrapper>
-								<FormGroup
-									label={__('Refund Reason', 'multivendorx')}
-								>
-									<div className="refund-reason-box">
-										{getMetaValue(
-											viewOrder.meta_data,
-											appLocalizer.order_meta
-												.customer_refund_reason
-										)}
-									</div>
-								</FormGroup>
-								<FormGroup
-									label={__(
-										'Additional Information',
-										'multivendorx'
-									)}
-								>
-									<div className="refund-additional-info">
-										{getMetaValue(
-											viewOrder.meta_data,
-											appLocalizer.order_meta
-												.multivendorx_customer_refund_addi_info
-										)}
-									</div>
-								</FormGroup>
-								{viewOrder?.refund_images?.length > 0 && (
-									<FormGroup
-										label={
-											viewOrder.refund_images.length === 1
-												? 'Attachment'
-												: 'Attachments'
-										}
-									>
-										<div className="refund-attachment-list">
-											{viewOrder.refund_images.map(
-												(img, index) => (
-													<a
-														key={index}
-														href={img}
-														target="_blank"
-														rel="noopener noreferrer"
-														className="refund-attachment-item"
-													>
-														<div className="attachment-thumb">
-															<img
-																src={img}
-																alt={__(
-																	'Refund attachment',
-																	'multivendorx'
-																)}
-															/>
-														</div>
-														<div className="attachment-name">
-															{__(
-																'Attachment',
-																'multivendorx'
-															)}{' '}
-															{index + 1}
-														</div>
-													</a>
-												)
-											)}
-										</div>
-									</FormGroup>
+				}
+			>
+				{viewOrder && (
+					<FormGroupWrapper>
+						<FormGroup
+							label={__('Refund Reason', 'multivendorx')}
+						>
+							<div className="refund-reason-box">
+								{getMetaValue(
+									viewOrder.meta_data,
+									appLocalizer.order_meta
+										.customer_refund_reason
 								)}
-								<FormGroup
-									label={__('Reject Message', 'multivendorx')}
-									htmlFor="content"
-								>
-									<TextAreaUI
-										name="content"
-										value={formData.content}
-										onChange={(value: string) =>
-											handleChange('content', value)
-										}
-										usePlainText={false}
-										tinymceApiKey={
-											appLocalizer
-												.settings_databases_value[
-												'overview'
-											]['tinymce_api_section'] ?? ''
-										}
-									/>
-								</FormGroup>
-							</FormGroupWrapper>
+							</div>
+						</FormGroup>
+						<FormGroup
+							label={__(
+								'Additional Information',
+								'multivendorx'
+							)}
+						>
+							<div className="refund-additional-info">
+								{getMetaValue(
+									viewOrder.meta_data,
+									appLocalizer.order_meta
+										.multivendorx_customer_refund_addi_info
+								)}
+							</div>
+						</FormGroup>
+						{viewOrder?.refund_images?.length > 0 && (
+							<FormGroup
+								label={
+									viewOrder.refund_images.length === 1
+										? 'Attachment'
+										: 'Attachments'
+								}
+							>
+								<div className="refund-attachment-list">
+									{viewOrder.refund_images.map(
+										(img, index) => (
+											<a
+												key={index}
+												href={img}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="refund-attachment-item"
+											>
+												<div className="attachment-thumb">
+													<img
+														src={img}
+														alt={__(
+															'Refund attachment',
+															'multivendorx'
+														)}
+													/>
+												</div>
+												<div className="attachment-name">
+													{__(
+														'Attachment',
+														'multivendorx'
+													)}{' '}
+													{index + 1}
+												</div>
+											</a>
+										)
+									)}
+								</div>
+							</FormGroup>
 						)}
-					</PopupUI>
-				</Column>
-			</Container>
+						<FormGroup
+							label={__('Reject Message', 'multivendorx')}
+							htmlFor="content"
+						>
+							<TextAreaUI
+								name="content"
+								value={formData.content}
+								onChange={(value: string) =>
+									handleChange('content', value)
+								}
+								usePlainText={false}
+								tinymceApiKey={
+									appLocalizer
+										.settings_databases_value[
+										'overview'
+									]['tinymce_api_section'] ?? ''
+								}
+							/>
+						</FormGroup>
+					</FormGroupWrapper>
+				)}
+			</PopupUI>
 		</>
 	);
 };
