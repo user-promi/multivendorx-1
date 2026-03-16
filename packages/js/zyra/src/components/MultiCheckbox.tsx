@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FieldComponent } from './fieldUtils';
+import { FieldComponent, ZyraVariable } from './fieldUtils';
 
 // Types
 interface Option {
@@ -31,17 +31,15 @@ interface MultiCheckBoxProps {
     onOptionsChange?: (options: Option[]) => void;
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
     modules: string[];
-    appLocalizer?: {[key: string]: string | number | boolean};
     field?: any;
 }
 
 function isBlocked(
     opt: Option,
     modules: string[],
-    appLocalizer: {[key: string]: string | number | boolean},
     onBlocked?: MultiCheckBoxProps['onBlocked'],
 ): boolean {
-    if (opt.proSetting && !appLocalizer?.khali_dabba) {
+    if (opt.proSetting && !ZyraVariable?.khali_dabba) {
         onBlocked?.('pro');
         return true;
     }
@@ -91,7 +89,6 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
         options,
         value = [],
         modules,
-        appLocalizer,
         onBlocked,
         onChange,
         onOptionsChange,
@@ -133,7 +130,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
 
     const handleSelectDeselect = () => {
         const blocked = options.some(opt =>
-            isBlocked(opt, modules, appLocalizer, onBlocked)
+            isBlocked(opt, modules, onBlocked)
         );
         if (blocked) return;
         props.onMultiSelectDeselectChange?.(allSelected ? [] : options.map(o => o.value));
@@ -165,7 +162,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
 
     const handleDelete = (index: number) => {
         const opt = options[index];
-        if (isBlocked(opt, modules, appLocalizer, onBlocked)) return;
+        if (isBlocked(opt, modules, onBlocked)) return;
 
         const updated = options.filter((_, i) => i !== index);
         onOptionsChange?.(updated);
@@ -182,7 +179,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
                     type="checkbox"
                     checked={value.includes(field.rowKey)}
                     onChange={(e) => {
-                        if( !isBlocked(field, modules, appLocalizer, onBlocked)) {
+                        if( !isBlocked(field, modules, onBlocked)) {
                             onChange(e.target.checked)
                         }
                     }}
@@ -226,7 +223,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
                                             value={editValue}
                                             onChange={setEditValue}
                                             onSave={() => {
-                                                if (!isBlocked(option, modules, appLocalizer, onBlocked)) {
+                                                if (!isBlocked(option, modules, onBlocked)) {
                                                     handleSaveEdit(index);
                                                 }
                                             }}
@@ -241,7 +238,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
                                                 value={option.value}
                                                 checked={checked}
                                                 onChange={() => {
-                                                    if (!isBlocked(option, modules, appLocalizer, onBlocked)) {
+                                                    if (!isBlocked(option, modules, onBlocked)) {
                                                         toggle(option.value);
                                                     }
                                                 }}
@@ -251,7 +248,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
                                                 {option.label}
 
                                                 {/* Pro badge */}
-                                                {option.proSetting && !appLocalizer?.khali_dabba && (
+                                                {option.proSetting && !ZyraVariable?.khali_dabba && (
                                                     <span className="admin-pro-tag">
                                                         <i className="adminfont-pro-tag" /> Pro
                                                     </span>
@@ -357,7 +354,7 @@ const MultiCheckBox: FieldComponent = {
                 addNewBtn={field.addNewBtnText}
                 options={normalizedOptions}
                 value={normalizedValue}
-                appLocalizer={appLocalizer}
+                // appLocalizer={appLocalizer}
                 modules={modules}
                 field={field}
                 onChange={val => { if (canAccess) onChange(val); }}

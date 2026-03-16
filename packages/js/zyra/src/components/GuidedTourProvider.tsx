@@ -6,6 +6,7 @@ import { TourProvider, ProviderProps, StepType, useTour } from '@reactour/tour';
 // Internal dependencies
 import { getApiLink } from '../utils/apiService';
 import { ButtonInputUI } from './ButtonInput';
+import { ZyraVariable } from './fieldUtils';
 
 interface GuidedTourStep extends StepType {
     title: string;
@@ -21,12 +22,12 @@ interface GuidedTourProviderProps extends Omit<ProviderProps, 'steps'> {
     steps: GuidedTourStep[];
 }
 
-const headers = { headers: { 'X-WP-Nonce': appLocalizer.nonce } };
+const headers = { headers: { 'X-WP-Nonce': ZyraVariable.nonce } };
 
 const TourApi = {
     fetchTourStatus: async () => {
         const res = await axios.get(
-            getApiLink(appLocalizer, 'tour'),
+            getApiLink(ZyraVariable, 'tour'),
             headers
         );
         return res.data;
@@ -35,7 +36,7 @@ const TourApi = {
     updateTourStatus: async (completed: boolean) => {
         try {
             await axios.post(
-                getApiLink(appLocalizer, 'tour'),
+                getApiLink(ZyraVariable, 'tour'),
                 { completed },
                 headers
             );

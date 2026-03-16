@@ -6,6 +6,7 @@ import '../styles/web/SettingsNavigator.scss';
 import { SectionUI } from './Section';
 import { ButtonInputUI } from './ButtonInput';
 import Container from './UI/Container';
+import { ZyraVariable } from './fieldUtils';
 
 type Content = {
     id: string;
@@ -37,7 +38,6 @@ type SettingsNavigatorProps = {
     settingName?: string;
     onNavigate?: (url: string) => void;
     settingTitleSection?: React.ReactNode;
-    appLocalizer: {[key: string]: string | number | boolean};
     menuIcon?: boolean;
     variant?: 'default' | 'compact' | 'card' | 'settings';
     /* - 'default': Standard settings panel layout
@@ -179,7 +179,6 @@ const SettingsNavigator: React.FC<SettingsNavigatorProps> = ({
     settingName = '',
     onNavigate,
     settingTitleSection,
-    appLocalizer,
     variant = 'default',
     menuIcon,
     action,
@@ -375,7 +374,7 @@ const SettingsNavigator: React.FC<SettingsNavigatorProps> = ({
                     headerIcon={variant === 'default' ? activeFile?.headerIcon : headerIcon}
                     headerTitle={variant === 'default' ? activeFile?.headerTitle : headerTitle}
                     headerDescription={headerDescription}
-                    showPremiumLink={!appLocalizer.khali_dabba && showPremiumLink ? appLocalizer.shop_url : undefined}
+                    showPremiumLink={!ZyraVariable.khali_dabba && showPremiumLink ? ZyraVariable.shop_url : undefined}
                 />
 
                 <Breadcrumb

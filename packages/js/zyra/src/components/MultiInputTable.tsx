@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 // Internal dependencies
 import '../styles/web/MultiInputTable.scss';
-import { FieldComponent, FIELD_REGISTRY } from './fieldUtils';
+import { FieldComponent, FIELD_REGISTRY, ZyraVariable } from './fieldUtils';
 
 export type SettingValue = string[] | boolean;
 export type RowChanges = Record<string, SettingValue>;
@@ -58,7 +58,6 @@ export interface MultiInputTableUIProps {
     storeTabSetting: Record<string, string[]>;
     khali_dabba: boolean;
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
-    appLocalizer?: {[key: string]: string | number | boolean};
 }
 
 interface TableCellProps {
@@ -71,7 +70,6 @@ interface TableCellProps {
     disabled?: boolean
     onChange: (key: string, value: SettingValue) => void
     modules: string[]
-    appLocalizer: {[key: string]: string | number | boolean};
     onBlocked?: (type: 'pro' | 'module', payload?: string) => void
 }
 
@@ -85,7 +83,6 @@ export const TableCell: React.FC<TableCellProps> = ({
     disabled,
     onChange,
     modules,
-    appLocalizer,
     onBlocked
 }) => {
     const comp = FIELD_REGISTRY[type];
@@ -113,7 +110,7 @@ export const TableCell: React.FC<TableCellProps> = ({
             field={fieldConfig}
             value={value}
             modules={modules}
-            appLocalizer={appLocalizer}
+            // appLocalizer={appLocalizer}
             onBlocked={onBlocked}
             canAccess={!disabled}
             onChange={(newValue: any) => { onChange(fieldKey, newValue) }}
@@ -132,7 +129,6 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
     modules,
     onBlocked,
     khali_dabba,
-    appLocalizer
 }) => {
     const [openGroup, setOpenGroup] = useState<string | null>(() => {
         if (!Array.isArray(rows) && Object.keys(rows).length > 0) return Object.keys(rows)[0];
@@ -180,7 +176,7 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
                                 disabled={!isRowActive}
                                 onChange={onChange}
                                 modules={modules}
-                                appLocalizer={appLocalizer}
+                                // appLocalizer={appLocalizer}
                                 onBlocked={onBlocked}
                             />
                         );
@@ -299,7 +295,6 @@ const MultiInputTable: FieldComponent = {
         value,
         onChange,
         canAccess,
-        appLocalizer,
         modules,
         settings,
         onBlocked,
@@ -324,7 +319,7 @@ const MultiInputTable: FieldComponent = {
 
         return (
             <MultiInputTableUI
-                khali_dabba={appLocalizer?.khali_dabba ?? false}
+                khali_dabba={ZyraVariable?.khali_dabba ?? false}
                 rows={field.rows ?? []}
                 columns={field.columns ?? []}
                 setting={currentSetting}

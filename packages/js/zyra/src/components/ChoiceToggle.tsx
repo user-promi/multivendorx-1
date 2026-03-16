@@ -3,7 +3,7 @@ import React from 'react';
 
 // Internal dependencies
 import '../styles/web/ChoiceToggle.scss';
-import { FieldComponent } from './fieldUtils';
+import { FieldComponent, ZyraVariable } from './fieldUtils';
 
 // Types
 interface Option {
@@ -29,7 +29,6 @@ interface ChoiceToggleProps {
     multiSelect?: boolean;
     custom?: boolean;
     canAccess?: boolean;
-    appLocalizer?: any;
     onBlocked?: (type: 'pro' | 'plugin', payload?: Option) => void;
 }
 
@@ -42,17 +41,16 @@ export const ChoiceToggleUI: React.FC<ChoiceToggleProps> = ({
     iconEnable = false,
     custom,
     multiSelect = false,
-    appLocalizer,
     onBlocked
 }) => {
     const block = (option: Option) => {
         // Check pro setting
-        if (option.proSetting && !appLocalizer.khali_dabba) {
+        if (option.proSetting && !ZyraVariable.khali_dabba) {
             onBlocked?.('pro');
             return true;
         }
 
-        if (option.requiredPlugin && !(appLocalizer.active_plugins || []).includes(option.requiredPlugin)) {
+        if (option.requiredPlugin && !(ZyraVariable.active_plugins || []).includes(option.requiredPlugin)) {
             onBlocked?.('plugin', option);
             return true;
         }
@@ -133,7 +131,7 @@ export const ChoiceToggleUI: React.FC<ChoiceToggleProps> = ({
                                         <div className="toggle-custom-wrapper" dangerouslySetInnerHTML={{ __html: option.customHtml }} />
                                     )}
                                 </label>
-                                {isProOption && !appLocalizer.khali_dabba && (
+                                {isProOption && !ZyraVariable.khali_dabba && (
                                     <span className="admin-pro-tag">
                                         <i className="adminfont-pro-tag"></i>Pro
                                     </span>
@@ -156,7 +154,7 @@ const ChoiceToggle: FieldComponent = {
             custom={field.custom}
             multiSelect={field.multiSelect} // If true, allows selecting multiple options (checkboxes), else single select (radio)
             canAccess={canAccess}
-            appLocalizer={appLocalizer}
+            // appLocalizer={appLocalizer}
             onBlocked={onBlocked}
             options={
                 Array.isArray(field.options)

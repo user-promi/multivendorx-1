@@ -1,7 +1,7 @@
 // External dependencies
 import React, { ChangeEvent, MouseEvent, FocusEvent } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import { FieldComponent } from './fieldUtils';
+import { FieldComponent, ZyraVariable } from './fieldUtils';
 
 interface TextAreaProps {
     id?: string;
@@ -107,8 +107,8 @@ const TextArea: FieldComponent = {
             value={value || ''}
             usePlainText={field.usePlainText} // Toggle between textarea and TinyMCE
             tinymceApiKey={
-                appLocalizer?.tinymceApiKey
-                    ? appLocalizer.tinymceApiKey
+                ZyraVariable?.tinymceApiKey
+                    ? ZyraVariable.tinymceApiKey
                     : ''
             }
             onChange={(val) => {

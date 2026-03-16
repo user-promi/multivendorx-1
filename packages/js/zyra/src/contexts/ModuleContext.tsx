@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
 import { getApiLink } from '../utils/apiService';
+import { ZyraVariable } from '../components/fieldUtils';
 
 // Zustand store
 type ModuleContextType = {
@@ -22,7 +23,6 @@ export const useModules = create< ModuleContextType >( ( set ) => ( {
 } ) );
 
 export async function initializeModules(
-    appLocalizer: {[key: string]: string | number | boolean};
     pluginName: string,
     pluginSlug: string,
     apiLink: string
@@ -33,9 +33,9 @@ export async function initializeModules(
     ) {
         try {
             const response = await axios.get(
-                getApiLink( appLocalizer, apiLink ),
+                getApiLink( ZyraVariable, apiLink ),
                 {
-                    headers: { 'X-WP-Nonce': appLocalizer.nonce },
+                    headers: { 'X-WP-Nonce': ZyraVariable.nonce },
                 }
             );
 

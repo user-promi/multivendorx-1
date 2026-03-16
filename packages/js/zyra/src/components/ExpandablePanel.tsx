@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useReducer, useCallback, useContext, createCo
 import '../styles/web/ExpandablePanel.scss';
 import { getApiLink } from '../utils/apiService';
 import axios from 'axios';
-import { FieldComponent, FIELD_REGISTRY } from './fieldUtils';
+import { FieldComponent, FIELD_REGISTRY, ZyraVariable } from './fieldUtils';
 import FormGroup from './UI/FormGroup';
 import { ButtonInputUI } from './ButtonInput';
 import FormGroupWrapper from './UI/FormGroupWrapper';
@@ -62,7 +62,6 @@ interface AddNewTemplate {
 interface ExpandablePanelProps {
     name: string;
     apilink?: string;
-    appLocalizer: {[key: string]: string | number | boolean};
     methods: ExpandablePanelMethod[];
     value: Record<string, Record<string, unknown>>;
     onChange: (data: Record<string, Record<string, unknown>>) => void;
@@ -651,7 +650,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
     methods: initialMethods,
     value,
     onChange,
-    appLocalizer,
     apilink,
     isWizardMode = false,
     canAccess,
@@ -748,14 +746,14 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
 
     // ── Wizard ────────────────────────────────────────────────────────────────
     const saveWizard = useCallback(() => {
-        if (!apilink || !appLocalizer?.nonce) return;
+        if (!apilink || !ZyraVariable?.nonce) return;
         axios({
-            url: getApiLink(appLocalizer, apilink),
+            url: getApiLink(ZyraVariable, apilink),
             method: 'POST',
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            headers: { 'X-WP-Nonce': ZyraVariable.nonce },
             data: { setupWizard: true, value },
         }).catch(console.error);
-    }, [apilink, appLocalizer, value]);
+    }, [apilink, value]);
 
     // ── Dependent-field helpers ───────────────────────────────────────────────
     const isContain = (
@@ -842,7 +840,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
                     ...btn,
                     text: btn.label,
                     color: 'blue',
-                    onClick: () => window.open(appLocalizer?.site_url, '_self')
+                    onClick: () => window.open(ZyraVariable?.site_url, '_self')
                 })
             };
 
@@ -857,7 +855,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
                     value={fieldVal}
                     onChange={onChangeF}
                     canAccess={canAccess}
-                    appLocalizer={appLocalizer}
                 />
             );
         }
@@ -868,10 +865,10 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
                 value={fieldVal}
                 onChange={onChangeF}
                 canAccess={canAccess}
-                appLocalizer={appLocalizer}
+                // appLocalizer={appLocalizer}
             />
         );
-    }, [value, handleChange, isWizardMode, state.wizardIndex, state.methods, canAccess, appLocalizer, saveWizard]);
+    }, [value, handleChange, isWizardMode, state.wizardIndex, state.methods, canAccess, saveWizard]);
 
     // ── Effects ───────────────────────────────────────────────────────────────
 
@@ -983,7 +980,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         value,
         isWizardMode,
         canAccess,
-        appLocalizer,
         addNewTemplate,
         tplFields,
         titleRef,
@@ -1035,7 +1031,7 @@ const ExpandablePanel: FieldComponent = {
             key={field.key}
             name={field.key}
             apilink={String(field.apiLink)}
-            appLocalizer={appLocalizer}
+            // appLocalizer={appLocalizer}
             methods={field.modal ?? []}
             addNewBtn={field.addNewBtn}
             addNewTemplate={field.addNewTemplate}

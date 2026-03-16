@@ -6,12 +6,11 @@ import axios from 'axios';
 import '../styles/web/SystemInfoAccordion.scss';
 import { getApiLink } from '../utils/apiService';
 import Skeleton from './UI/Skeleton';
-import { FieldComponent } from './fieldUtils';
+import { FieldComponent, ZyraVariable } from './fieldUtils';
 
 // Types
 interface SystemInfoProps {
     apiLink: string;
-   appLocalizer: {[key: string]: string | number | boolean};
     copyButtonLabel?: string;
     copiedLabel?: string;
 }
@@ -30,7 +29,6 @@ type ApiResponse = Record<string, InfoSection>;
 
 export const SystemInfoUI : React.FC<SystemInfoProps> = ({
     apiLink,
-    appLocalizer,
     copyButtonLabel = 'Copy System Info',
     copiedLabel = 'Copied!',
 }) => {
@@ -41,13 +39,13 @@ export const SystemInfoUI : React.FC<SystemInfoProps> = ({
     // Fetch everything at once
     useEffect(() => {
         axios({
-            url: getApiLink(appLocalizer, apiLink),
+            url: getApiLink(ZyraVariable, apiLink),
             method: 'GET',
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            headers: { 'X-WP-Nonce': ZyraVariable.nonce },
         }).then((response) => {
             setData(response.data);
         });
-    }, [apiLink, appLocalizer]);
+    }, [apiLink]);
 
     const toggleSection = (key: string) => {
         setOpenKeys((prev) => (prev.includes(key) ? [] : [key]));

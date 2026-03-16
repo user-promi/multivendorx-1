@@ -5,14 +5,13 @@ import axios from 'axios';
 // Internal dependencies
 import { getApiLink } from '../utils/apiService';
 import '../styles/web/Log.scss';
-import { FieldComponent } from './fieldUtils';
+import { FieldComponent, ZyraVariable } from './fieldUtils';
 import { ButtonInputUI } from './ButtonInput';
 
 // Types
 interface LogProps {
     apiLink: string;
     downloadFileName: string;
-    appLocalizer: {[key: string]: string | number | boolean};
     downloadBtnText?: string;
     copyBtnText?: string;
     deleteBtnText?: string;
@@ -21,7 +20,6 @@ interface LogProps {
 export const LogUI: React.FC<LogProps> = ({
     apiLink,
     downloadFileName,
-    appLocalizer,
     downloadBtnText = 'Download',
     copyBtnText = 'Copy',
     deleteBtnText = 'Delete',
@@ -29,9 +27,9 @@ export const LogUI: React.FC<LogProps> = ({
     const [logData, setLogData] = useState<string[]>([]);
     const [copied, setCopied] = useState<boolean>(false);
     const apiConfig = {
-        url: getApiLink(appLocalizer, apiLink),
+        url: getApiLink(ZyraVariable, apiLink),
         method: 'GET',
-        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        headers: { 'X-WP-Nonce': ZyraVariable.nonce },
     };
     const logRegex = /^([^:]+:[^:]+:[^:]+):(.*)$/;
 
@@ -44,7 +42,7 @@ export const LogUI: React.FC<LogProps> = ({
         }).then((response) => {
             setLogData(response.data);
         });
-    }, [apiLink, appLocalizer]);
+    }, [apiLink]);
 
     const handleDownloadLog = (
         event: React.MouseEvent<HTMLButtonElement>
@@ -147,7 +145,7 @@ export const LogUI: React.FC<LogProps> = ({
             <div className="log-container-wrapper">
                 <div className="wrapper-header">
                     <p className="log-viewer-text">
-                        {appLocalizer.tab_name} - log viewer
+                        {ZyraVariable.tab_name} - log viewer
                     </p>
                     <ButtonInputUI
                         position="left"
@@ -201,7 +199,7 @@ export const LogUI: React.FC<LogProps> = ({
 const Log: FieldComponent = {
     render: ({ field, value, onChange, canAccess, appLocalizer }) => (
         <LogUI
-            appLocalizer={appLocalizer}
+            // appLocalizer={appLocalizer}
             apiLink={String(field.apiLink)}
             downloadFileName={String(field.fileName)}
             downloadBtnText={field.downloadBtnText}
