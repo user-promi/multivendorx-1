@@ -649,7 +649,7 @@ const EventRules: React.FC = () => {
 								</div>
 							</FormGroup>
 							<FormGroup label={__('Recipients', 'multivendorx')}>
-								<div className="buttons-wrapper">
+								<div className="buttons-wrapper left">
 									{defaultRecipients?.map((r: Recipient) => {
 										const { icon } =
 											RECIPIENT_CONFIG[r.label] ??
@@ -678,7 +678,7 @@ const EventRules: React.FC = () => {
 
 							{customRecipients?.length > 0 && (
 								<FormGroup label={__('Custom Recipients', 'multivendorx')}>
-									<div className="buttons-wrapper">
+									<div className="buttons-wrapper left">
 										{customRecipients.map((r: Recipient) => (
 											<div key={r.id} className={`admin-badge ${r.enabled ? 'purple' : ''}`} >
 												<i className="adminfont-mail"></i>

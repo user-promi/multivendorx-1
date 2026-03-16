@@ -344,7 +344,7 @@ export const KnowledgeBase: React.FC = () => {
 			</PopupUI>
 
 			<NavigatorHeader
-				headerIcon="book"
+				headerIcon="knowledgebase"
 				headerTitle={__('Knowledge Base', 'multivendorx')}
 				headerDescription={__(
 					'Build your knowledge base: add new guides or manage existing ones in one place.',
