@@ -28,15 +28,19 @@ class Install {
      */
     public function __construct() {
 
-        $this->create_database_table();
-        $this->create_database_triggers();
-        $this->plugin_create_pages();
-        $this->set_default_modules();
-        $this->set_default_settings();
+        if ( ! get_option( 'multivendorx_version', false ) ) {
+            $this->create_database_table();
+            $this->create_database_triggers();
+            $this->plugin_create_pages();
+            $this->set_default_modules();
+            $this->set_default_settings();
+        }
 
         if ( get_option( 'dc_product_vendor_plugin_db_version' ) ) {
             $this->migrate_mvx_to_multivendorx();
         }
+
+        $this->do_migration();
 
         update_option( 'multivendorx_version', MULTIVENDORX_PLUGIN_VERSION );
 
@@ -47,7 +51,7 @@ class Install {
      * Runs the database migration process.
      */
     public static function do_migration() {
-        // write migration code from 3.0.1.
+        // write migration code from 5.0.0.
     }
 
     /**

@@ -950,7 +950,7 @@ STORE FOLLOWER NOTIFICATIONS
         global $wpdb;
         $table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
 
-        $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
+        $events = $wpdb->get_results( "SELECT * FROM $table" );
 
         if ( ! empty( $id ) ) {
             $events = $wpdb->get_results(
@@ -960,7 +960,7 @@ STORE FOLLOWER NOTIFICATIONS
                 )
             );
         } else {
-            $events = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table" ) );
+            $events = $wpdb->get_results( "SELECT * FROM $table" );
         }
 
         return $events;

@@ -68,7 +68,6 @@ final class MultiVendorX {
         add_action( 'woocommerce_loaded', array( $this, 'init_plugin' ) );
         add_action( 'plugins_loaded', array( $this, 'is_woocommerce_loaded' ) );
         add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
-        add_action( 'init', array( $this, 'migrate_from_previous_version' ) );
     }
 
     /**
@@ -198,20 +197,13 @@ final class MultiVendorX {
      */
     public function is_woocommerce_loaded() {
         if ( did_action( 'woocommerce_loaded' ) || ! is_admin() ) {
+            $previous_version = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['plugin_db_version'], '' );
+            if ( version_compare( $previous_version, MultiVendorX()->version, '<' ) ) {
+                new Install();
+            }
             return;
         }
         add_action( 'admin_notices', array( $this, 'woocommerce_admin_notice' ) );
-    }
-
-    /**
-     * Migrate data from previous version.
-     */
-    public function migrate_from_previous_version() {
-        $previous_version = get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['plugin_db_version'], '' );
-
-        if ( version_compare( $previous_version, MultiVendorX()->version, '<' ) ) {
-            new Install();
-        }
     }
 
     /**
