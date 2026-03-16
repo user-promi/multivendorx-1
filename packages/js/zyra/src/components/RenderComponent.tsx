@@ -11,7 +11,7 @@ import '../styles/web/AdminForm.scss';
 import { FIELD_REGISTRY } from './fieldUtils';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import { PopupUI } from './Popup';
-import { Notice } from './Notice';
+import { Notice, NoticeStore } from './Notice';
 
 interface InputField {
     key: string;
@@ -111,11 +111,6 @@ const RenderComponent: React.FC<RenderProps> = ({
     });
     const { modules } = useModules();
     const [errors, setErrors] = useState<Record<string, string | null>>({});
-    const [notice, setNotice] = useState<{
-        title?: string;
-        message?: string;
-        type?: 'info' | 'success' | 'warning' | 'error';
-    } | null>(null);
 
     useEffect(() => {
         if (settingChanged.current) {
@@ -145,11 +140,12 @@ const RenderComponent: React.FC<RenderProps> = ({
                     ).then((response: unknown) => {
                         const apiResponse = response as ApiResponse;
                         if (apiResponse.message) {
-                            setNotice({
+                            NoticeStore.add({
                                 title: 'Great!',
                                 message: apiResponse.message,
-                                type: apiResponse.type,
-                            });
+                                type: apiResponse.type || 'success',
+                                position: 'float',
+                            }, 5000);
                         }
 
                         if (apiResponse.redirect_link) {
@@ -602,16 +598,6 @@ const RenderComponent: React.FC<RenderProps> = ({
 
     return (
         <>
-            {notice && (
-                <Notice
-                    key={Date.now()}
-                    title={notice.title}
-                    message={notice.message}
-                    type={notice.type}
-                    displayPosition="float"
-                    validity={5000}
-                />
-            )}
             {modelOpen && (
                 <PopupUI
                     position="lightbox"

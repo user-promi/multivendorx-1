@@ -6,7 +6,7 @@ import { MultiCheckBoxUI } from './MultiCheckbox';
 import HeaderSearch from './HeaderSearch';
 import { SelectInputUI } from './SelectInput';
 import { PopupUI } from './Popup';
-import { Notice } from './Notice';
+import { NoticeStore } from './Notice';
 
 interface Module {
     id: string;
@@ -53,7 +53,6 @@ const Modules: React.FC<ModuleProps> = ({
 }) => {
 
     const [modelOpen, setModelOpen] = useState(false);
-    const [successMsg, setSuccessMsg] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [selectedFilter, setSelectedFilter] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
@@ -126,7 +125,12 @@ const Modules: React.FC<ModuleProps> = ({
             { id: module.id, action }
         )
             .then(() => {
-                setSuccessMsg(`Module ${action}d`);
+                NoticeStore.add({
+                    title: 'Success!',
+                    message: `Module ${action}d`,
+                    type: 'success',
+                    position: 'float'
+                });
                 setTimeout(() => setSuccessMsg(''), 2000);
 
                 if (module.reloadOnChange) {
@@ -134,7 +138,12 @@ const Modules: React.FC<ModuleProps> = ({
                 }
             })
             .catch(() => {
-                setSuccessMsg(`Error: Failed to ${action} module`);
+                NoticeStore.add({
+                    title: 'Error',
+                    message: `Failed to ${action} module`,
+                    type: 'error',
+                    position: 'float'
+                });
                 setTimeout(() => setSuccessMsg(''), 2000);
             });
     };
@@ -255,15 +264,6 @@ const Modules: React.FC<ModuleProps> = ({
                 >
                     {ProPopupComponent && <ProPopupComponent />}
                 </PopupUI>
-            )}
-
-            {successMsg && (
-                <Notice
-                    message={successMsg}
-                    displayPosition='float'
-                    title='Success!'
-                // onDismiss={() => setSuccessMsg(null)}
-                />
             )}
 
             <div className="module-container" data-variant={variant}>
