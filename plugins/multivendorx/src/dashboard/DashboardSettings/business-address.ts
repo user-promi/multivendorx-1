@@ -17,8 +17,7 @@ export default {
 		{
 			type: 'text',
 			key: 'address',
-			label: __('Address *', 'multivendorx'),
-			required: true,
+			label: __('Address', 'multivendorx'),
 			placeholder: __('Enter your street address', 'multivendorx'),
 		},
 		{
