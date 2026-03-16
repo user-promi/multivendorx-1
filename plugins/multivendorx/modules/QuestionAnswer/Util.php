@@ -1,5 +1,4 @@
 <?php
-
 /**
  * MultiVendorX Util class file
  *
@@ -41,7 +40,7 @@ class Util {
             $params[] = $like;
         }
 
-        return $wpdb->get_results( $wpdb->prepare( $query, ...$params ) );
+        return $wpdb->get_results( $wpdb->prepare( $query, ...$params ) );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
     }
 
     /**
@@ -94,7 +93,7 @@ class Util {
             $where[] = "(answer_text IS NULL OR answer_text = '')";
         }
 
-        // Filter by search term
+        // Filter by search term.
         if ( ! empty( $args['search'] ) ) {
             $like    = '%' . esc_sql( $wpdb->esc_like( $args['search'] ) ) . '%';
             $where[] = "(question_text LIKE '$like' OR answer_text LIKE '$like')";
@@ -138,9 +137,9 @@ class Util {
 
         // Execute query.
         if ( isset( $args['count'] ) ) {
-            return (int) ( $wpdb->get_var( $query ) ?? 0 );
+            return (int) ( $wpdb->get_var( $query ) ?? 0 );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         }
-        return $wpdb->get_results( $query, ARRAY_A ) ? $wpdb->get_results( $query, ARRAY_A ) : array();
+        return $wpdb->get_results( $query, ARRAY_A ) ? $wpdb->get_results( $query, ARRAY_A ) : array();// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
     }
 
     /**
@@ -171,7 +170,7 @@ class Util {
 
         $formats = array( '%d', '%d', '%s', '%d', '%d', '%s', '%s', '%s', '%s' );
 
-        $inserted = $wpdb->insert( $table, $insert_data, $formats );
+        $inserted = $wpdb->insert( $table, $insert_data, $formats );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
         if ( $inserted ) {
             return $wpdb->insert_id;
@@ -249,7 +248,7 @@ class Util {
 
         $where        = array( 'id' => intval( $id ) );
         $where_format = array( '%d' );
-
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $updated = $wpdb->update(
             $table,
             $update_data,
@@ -284,13 +283,12 @@ class Util {
         if ( ! $id ) {
             return false;
         }
-
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $deleted = $wpdb->delete(
             $table,
             array( 'id' => $id ),
             array( '%d' )
         );
-
         // $wpdb->delete returns number of rows deleted, or false on error
         if ( false === $deleted ) {
             return false; // DB error.

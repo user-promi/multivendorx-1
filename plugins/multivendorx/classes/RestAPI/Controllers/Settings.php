@@ -75,7 +75,7 @@ class Settings extends \WP_REST_Controller {
      * @param object $request The REST request object.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -96,8 +96,8 @@ class Settings extends \WP_REST_Controller {
             return $error;
         }
         try {
-            $setupWizard = $request->get_param( 'setupWizard' );
-            if ( $setupWizard ) {
+            $setup_wizard = $request->get_param( 'setupWizard' );
+            if ( $setup_wizard ) {
                 $value = $request->get_param( 'value' );
                 if ( ! empty( $value ) ) {
                     $general_settings = array(

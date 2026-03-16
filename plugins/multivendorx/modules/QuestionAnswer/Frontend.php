@@ -27,7 +27,12 @@ class Frontend {
         add_filter( 'multivendorx_localize_scripts', array( $this, 'localize_scripts' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
     }
-
+    /**
+     * Register the frontend Q&A script for WooCommerce products.
+     *
+     * @param array $scripts Existing scripts array.
+     * @return array Modified scripts array including Q&A script.
+     */
     public function register_script( $scripts ) {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
@@ -39,6 +44,12 @@ class Frontend {
         return $scripts;
     }
 
+    /**
+     * Localize the frontend Q&A script.
+     *
+     * @param array $scripts Scripts array to localize.
+     * @return array Localized scripts array.
+     */
     public function localize_scripts( $scripts ) {
 
         $scripts['multivendorx-qna-frontend-script'] = array(

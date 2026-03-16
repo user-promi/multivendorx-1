@@ -102,6 +102,16 @@ class Status extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Handles tool update actions via REST API.
+     *
+     * Supported keys:
+     * - 'transients' : Clears all transients for all stores.
+     * - 'visitor'    : Truncates the visitors stats table.
+     *
+     * @param \WP_REST_Request $request REST request object.
+     * @return \WP_REST_Response|\WP_Error Response object or WP_Error on failure.
+     */
     public function update_tools_action( $request ) {
         global $wpdb;
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -126,7 +136,7 @@ class Status extends \WP_REST_Controller {
 
                     $transients_to_clear = array();
 
-                    // Transient prefixes that include vendor ID
+                    // Transient prefixes that include vendor ID.
                     $store_transient_names = apply_filters(
                         'mvx_clear_all_transients_included_vendor_id',
                         array(
@@ -149,7 +159,7 @@ class Status extends \WP_REST_Controller {
                         $store_id
                     );
 
-                    // Delete transients
+                    // Delete transients.
                     foreach ( $transients_to_clear as $transient ) {
                         if ( delete_transient( $transient ) ) {
                             $deleted = true;
@@ -162,7 +172,8 @@ class Status extends \WP_REST_Controller {
             }
 
             if ( 'visitor' === $key ) {
-                $table  = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+                $table = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $result = $wpdb->query( "TRUNCATE TABLE `$table`" );
 
                 if ( $result ) {

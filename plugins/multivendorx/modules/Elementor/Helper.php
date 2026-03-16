@@ -1,10 +1,20 @@
 <?php
+/**
+ * Elementor Store Helper trait for MultiVendorX.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\Elementor;
 
 use MultiVendorX\Store\StoreUtil;
 
 trait StoreHelper {
-
+    /**
+     * Get store data for frontend or Elementor preview.
+     *
+     * @return array|false Store data array or false if store slug not found.
+     */
 	protected function get_store_data() {
 
 		if ( $this->is_edit_or_preview_mode() ) {
@@ -33,6 +43,11 @@ trait StoreHelper {
 		return StoreUtil::get_specific_store_info();
 	}
 
+    /**
+     * Check if current request is in Elementor edit or preview mode.
+     *
+     * @return bool True if in edit or preview mode, false otherwise.
+     */
 	protected function is_edit_or_preview_mode() {
 
 		$elementor = \Elementor\Plugin::instance();
@@ -40,14 +55,13 @@ trait StoreHelper {
 		$is_edit_mode    = $elementor->editor->is_edit_mode();
 		$is_preview_mode = $elementor->preview->is_preview_mode();
 
-		// Fallback check (for edge cases)
+		// Fallback check (for edge cases).
 		if ( empty( $is_edit_mode ) && empty( $is_preview_mode ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( ! empty( $_REQUEST['action'] ) && ! empty( $_REQUEST['editor_post_id'] ) ) {
 				$is_edit_mode = true;
-			} elseif (
-				! empty( $_REQUEST['preview'] )
-				&& ! empty( $_REQUEST['theme_template_id'] )
-			) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			} elseif ( ! empty( $_REQUEST['preview'] ) && ! empty( $_REQUEST['theme_template_id'] ) ) {
 				$is_preview_mode = true;
 			}
 		}

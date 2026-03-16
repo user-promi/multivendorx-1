@@ -132,7 +132,7 @@ class CommissionManager {
                 'marketplace_payable'      => $marketplace_payable,
                 'currency'                 => get_woocommerce_currency(),
                 'status'                   => $status,
-                'rules_applied'            => serialize( $rules_array ),
+                'rules_applied'            => maybe_serialize( $rules_array ),
             );
             $format = array( '%d', '%d', '%d', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%s', '%s', '%s' );
 
@@ -152,10 +152,10 @@ class CommissionManager {
             $format = $filtered['format'];
 
             if ( ! $commission_id ) {
-                $wpdb->insert( $wpdb->prefix . Utill::TABLES['commission'], $data, $format );
+                $wpdb->insert( $wpdb->prefix . Utill::TABLES['commission'], $data, $format );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching,
                 $commission_id = $wpdb->insert_id;
             } else {
-                $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, array( 'ID' => $commission_id ), $format );
+                $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, array( 'ID' => $commission_id ), $format );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching,
             }
 
             if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
@@ -384,18 +384,28 @@ class CommissionManager {
     /**
      * Calculate coupon split between store and admin.
      *
-     * @param   object $order Order object.
-     * @param   float  $store_earning Store earning.
-     * @param   float  $marketplace_commission Marketplace commission.
+     * @param WC_Order $order                  Order object.
+     * @param float    $store_earning          Store earning.
+     * @param float    $marketplace_commission Marketplace commission.
+     * @return array
      */
     public function calc_coupon_split( $order, $store_earning, $marketplace_commission ) {
         $store_coupon_amount = 0;
         $admin_coupon_amount = 0;
         $store_coupon        = false;
-        $base_total          = $order->get_subtotal() - $order->get_discount_total();
-        $parent_order        = wc_get_order( $order->get_parent_id() );
 
-        if ( $parent_order->get_coupon_codes() ) {
+        $base_total   = $order->get_subtotal() - $order->get_discount_total();
+        $parent_order = wc_get_order( $order->get_parent_id() );
+
+        // Basic check for division by zero to prevent fatal errors.
+        if ( $base_total <= 0 ) {
+            return array(
+                'store_coupon_amount' => 0.0,
+                'admin_coupon_amount' => 0.0,
+            );
+        }
+
+        if ( $parent_order && $parent_order->get_coupon_codes() ) {
             foreach ( $parent_order->get_coupon_codes() as $coupon_code ) {
                 $coupon   = new \WC_Coupon( $coupon_code );
                 $store_id = (int) get_post_meta( $coupon->get_id(), Utill::POST_META_SETTINGS['store_id'], true );
@@ -405,40 +415,43 @@ class CommissionManager {
             }
         }
 
-        // 1st check exclude admin coupon setting on and the coupon is not store coupon OR
-        // 2nd check the commission_include_coupon set to admin
-        if ( ( ! empty( MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' ) ) && ! $store_coupon ) || MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) === 'admin' ) {
+        $include_setting = MultiVendorX()->setting->get_setting( 'commission_include_coupon' );
+        $exclude_admin   = MultiVendorX()->setting->get_setting( 'admin_coupon_excluded' );
+
+        if ( ( ! empty( $exclude_admin ) && ! $store_coupon ) || 'admin' === $include_setting ) {
             $store_coupon_amount = sprintf( '%+0.2f', ( $order->get_discount_total() * ( $store_earning / $base_total ) ) );
             $admin_coupon_amount = sprintf( '%+0.2f', - ( $order->get_discount_total() * ( $store_earning / $base_total ) ) );
-        } elseif ( MultiVendorX()->setting->get_setting( 'commission_include_coupon' ) === 'store' ) {
+        } elseif ( 'store' === $include_setting ) {
             $store_coupon_amount = sprintf( '%+0.2f', - ( $order->get_discount_total() * ( $marketplace_commission / $base_total ) ) );
             $admin_coupon_amount = sprintf( '%+0.2f', ( $order->get_discount_total() * ( $marketplace_commission / $base_total ) ) );
         }
 
         return array(
-			'store_coupon_amount' => (float) $store_coupon_amount,
-			'admin_coupon_amount' => (float) $admin_coupon_amount,
-		);
+            'store_coupon_amount' => (float) $store_coupon_amount,
+            'admin_coupon_amount' => (float) $admin_coupon_amount,
+        );
     }
 
     /**
-     * Get commission value of a item.
+     * Get commission value of an item.
      *
-     * @param   int    $product_id Product id.
-     * @param   int    $item_id Order item id.
-     * @param   object $item Order item object.
-     * @param   object $order Order object.
-     * @param   object $store Store object.
-     * @param   float  $after_refund_amount After refund amount.
+     * @param int           $product_id          Product ID.
+     * @param WC_Order_Item $item                Order item object.
+     * @param WC_Order      $order               Order object.
+     * @param Store         $store               Store object.
+     * @param float|null    $after_refund_amount After refund amount (optional).
      *
-     * @return  float
+     * @return float
      */
     public function get_item_commission( $product_id, $item, $order, $store, $after_refund_amount = null ) {
         $amount              = 0;
         $commission          = array();
         $product_value_total = 0;
 
-        $line_total = $after_refund_amount ? ( ( $order->get_item_total( $item, false, false ) - $after_refund_amount ) * $item['qty'] ) : $order->get_item_total( $item, false, false ) * $item['qty'];
+        $line_total = $after_refund_amount
+            ? ( ( $order->get_item_total( $item, false, false ) - $after_refund_amount ) * $item['qty'] )
+            : $order->get_item_total( $item, false, false ) * $item['qty'];
+
         // Filter the item total before calculating item commission.
         $line_total = apply_filters( 'mvx_get_commission_line_total', $line_total, $item, $order );
 
@@ -453,7 +466,9 @@ class CommissionManager {
             $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
             if ( ! empty( $commission ) && 'per_item' === $commission_type ) {
-                $amount = $line_total > 0 ? ( (float) $line_total * ( (float) $commission['commission_val'] / 100 ) + ( (float) $commission['commission_fixed'] * $item['qty'] ) ) : 0;
+                $amount = $line_total > 0
+                    ? ( (float) $line_total * ( (float) $commission['commission_val'] / 100 ) + ( (float) $commission['commission_fixed'] * $item['qty'] ) )
+                    : 0;
             }
 
             $product_value_total += $item->get_total();
@@ -497,7 +512,7 @@ class CommissionManager {
 
             // Category.
             $category_wise_commission = $this->get_category_wise_commission( $product );
-            if ( $category_wise_commission && $category_wise_commission->commission_percentage || $category_wise_commission->commission_fixed ) {
+            if ( $category_wise_commission && ( $category_wise_commission->commission_percentage || $category_wise_commission->commission_fixed ) ) {
                 return array(
                     'commission_val'   => $category_wise_commission->commission_percentage,
                     'commission_fixed' => $category_wise_commission->commission_fixed,
@@ -574,6 +589,7 @@ class CommissionManager {
      * @param   mixed $refund_id refund id.
      */
     public function calculate_commission_refunds( $store_order, $refund_id ) {
+        unset( $refund_id );
         global $wpdb;
         $commission_id = $store_order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true );
         $store_id      = $store_order->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
@@ -684,7 +700,7 @@ class CommissionManager {
             $data   = $filtered['data'];
             $format = $filtered['format'];
 
-            $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, array( 'ID' => $commission_id ), $format );
+            $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, array( 'ID' => $commission_id ), $format );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching,
 
             do_action( 'mvx_after_create_commission_refunds', $store_order, $commission_id );
 
@@ -704,7 +720,7 @@ class CommissionManager {
                 );
 
                 $format = array( '%d', '%d', '%d', '%s', '%s', '%f', '%s', '%s', '%s', '%s' );
-
+                /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching,*/
                 $wpdb->insert(
                     $wpdb->prefix . Utill::TABLES['transaction'],
                     $data,

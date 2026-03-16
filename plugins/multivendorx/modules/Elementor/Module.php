@@ -38,6 +38,11 @@ class Module {
         require_once MultiVendorX()->plugin_path . 'modules/Elementor/Helper.php';
     }
 
+    /**
+     * Check if the environment is compatible with Elementor.
+     *
+     * @return bool True if Elementor is defined, false otherwise.
+     */
     public static function is_compatible(): bool {
         return defined( 'ELEMENTOR_VERSION' );
     }

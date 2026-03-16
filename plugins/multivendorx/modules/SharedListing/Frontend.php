@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Frontend class file
  *
@@ -30,11 +29,11 @@ class Frontend {
         add_action( 'pre_get_posts', array( $this, 'filter_duplicate_product' ) );
         add_filter( 'woocommerce_product_tabs', array( $this, 'add_more_offers_tab' ) );
 
-        if ( MultiVendorX()->setting->get_setting( 'more_offers_display_position', 'none' ) == 'above' ) {
+        if ( 'above' === MultiVendorX()->setting->get_setting( 'more_offers_display_position', 'none' ) ) {
             add_action( 'woocommerce_single_product_summary', array( $this, 'spmv_tab_link' ), 60 );
         }
 
-        if ( MultiVendorX()->setting->get_setting( 'more_offers_display_position', 'none' ) == 'after' ) {
+        if ( 'after' === MultiVendorX()->setting->get_setting( 'more_offers_display_position', 'none' ) ) {
             add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'spmv_tab_link' ), 99 );
         }
 
@@ -42,7 +41,12 @@ class Frontend {
 
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
     }
-
+    /**
+     * Register frontend scripts for MultiVendorX Shared Listing module.
+     *
+     * @param array $scripts Existing scripts array.
+     * @return array Modified scripts array including shared listing frontend script.
+     */
     public function register_script( $scripts ) {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
@@ -53,7 +57,14 @@ class Frontend {
 
         return $scripts;
     }
-
+    /**
+     * Filters duplicate products from the main WooCommerce query.
+     *
+     * Excludes duplicate products based on mapped primary products.
+     *
+     * @param WP_Query $query The WooCommerce query object.
+     * @return void
+     */
     public function filter_duplicate_product( $query ) {
         if ( ! $query->is_main_query() || ! ( is_shop() || is_product_category() ) ) {
             return;
@@ -67,18 +78,25 @@ class Frontend {
 
         $query->set( 'post__not_in', $data['exclude'] );
     }
-
+    /**
+     * Get primary and excluded products based on MultiVendorX mapping.
+     *
+     * @return array {
+     *     @type array $primary IDs of primary products.
+     *     @type array $exclude IDs of products to exclude.
+     * }
+     */
     public function get_excluded_product() {
         global $wpdb;
 
         $priority = MultiVendorX()->setting->get_setting( 'spmv_show_order', 'min_price' );
 
-        $mapped_ids = $primary_ids = array();
+        $mapped_ids  = array();
+        $primary_ids = array();
 
         $table = $wpdb->prefix . Utill::TABLES['products_map'];
-
+        /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared */
         $maps = $wpdb->get_results( "SELECT product_map FROM {$table}" );
-
         foreach ( $maps as $map ) {
             $ids = json_decode( $map->product_map, true );
 
@@ -100,7 +118,13 @@ class Frontend {
             'exclude' => array_diff( array_unique( $mapped_ids ), $primary_ids ),
         );
     }
-
+    /**
+     * Select the primary product ID from a set of product IDs based on priority.
+     *
+     * @param int[]  $ids Array of product IDs to evaluate.
+     * @param string $priority Selection criteria: 'max_price', 'top_rated_store', 'min_price'.
+     * @return int|null Selected primary product ID or null if none found.
+     */
     public function select_primary_product( array $ids, string $priority ) {
         $selected_id = null;
 
@@ -144,7 +168,12 @@ class Frontend {
 
         return $selected_id;
     }
-
+    /**
+     * Add a "More Offers" tab to the WooCommerce single product tabs.
+     *
+     * @param array $tabs Existing WooCommerce product tabs.
+     * @return array Modified tabs array.
+     */
     public function add_more_offers_tab( $tabs ) {
         global $product;
 
@@ -157,21 +186,25 @@ class Frontend {
         }
         return $tabs;
     }
-
+    /**
+     * Output the content for the "More Offers" WooCommerce product tab.
+     *
+     * @return void
+     */
     public function woocommerce_product_spmv_tab() {
         global $product, $wpdb;
 
         $table = $wpdb->prefix . Utill::TABLES['products_map'];
 
-        $row = $wpdb->get_row(
+        /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared */
+        $row         = $wpdb->get_row(
             $wpdb->prepare(
                 "SELECT product_map FROM {$table} WHERE JSON_CONTAINS(product_map, %s)",
-                json_encode( (int) $product->get_id() )
+                wp_json_encode( (int) $product->get_id() )
             )
         );
-
         $product_ids = array_diff(
-            json_decode( $row->product_map, true ),
+            wp_json_decode( $row->product_map, true ),
             array( (int) $product->get_id() )
         );
 
@@ -181,7 +214,11 @@ class Frontend {
 
         MultiVendorX()->util->get_template( 'store/spmv-single-product-tab.php', array( 'product_ids' => $product_ids ) );
     }
-
+    /**
+     * Display the "More Stores" button on the single product page.
+     *
+     * @return void
+     */
     public function spmv_tab_link() {
         global $product;
 

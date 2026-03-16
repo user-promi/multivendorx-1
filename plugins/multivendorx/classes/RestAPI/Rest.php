@@ -73,7 +73,7 @@ class Rest {
             true
         );
 
-        // Default response values
+        // Default response values.
         $response->data['store_id']   = '';
         $response->data['store_name'] = '';
         $response->data['store_slug'] = '';
@@ -102,9 +102,10 @@ class Rest {
                 'key'     => Utill::POST_META_SETTINGS['store_id'],
                 'compare' => 'EXISTS',
             );
-
+            /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
             $args['meta_query']   = $args['meta_query'] ?? array();
             $args['meta_query'][] = $meta_query;
+            /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
         }
 
         return $args;
@@ -125,9 +126,11 @@ class Rest {
             return $args;
         }
 
+        /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
         $args['meta_query'] = $args['meta_query'] ?? array();
+        /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
 
-        // Store meta filter
+        // Store meta filter.
         if ( ! empty( $meta_key ) ) {
             $condition = array(
                 'key'     => sanitize_key( $meta_key ),
@@ -141,7 +144,7 @@ class Rest {
             $args['meta_query'][] = $condition;
         }
 
-        // Refund status filter
+        // Refund status filter.
         if ( ! empty( $refund_status ) ) {
             $args['meta_query'][] = array(
                 'key'     => '_customer_refund_order',
@@ -150,7 +153,7 @@ class Rest {
             );
         }
 
-        // Ensure relation when multiple meta queries exist
+        // Ensure relation when multiple meta queries exist.
         if ( count( $args['meta_query'] ) > 1 && empty( $args['meta_query']['relation'] ) ) {
             $args['meta_query']['relation'] = 'AND';
         }
@@ -184,17 +187,18 @@ class Rest {
         } else {
             $meta_condition['compare'] = 'EXISTS';
         }
-
-        $args['meta_query']   = $args['meta_query'] ?? array();
+        /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
+        $args['meta_query'] = $args['meta_query'] ?? array();
+        /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
         $args['meta_query'][] = $meta_condition;
 
-        // Ensure relation is set when multiple meta queries exist
+        // Ensure relation is set when multiple meta queries exist.
         if ( count( $args['meta_query'] ) > 1 && empty( $args['meta_query']['relation'] ) ) {
             $args['meta_query']['relation'] = 'AND';
         }
 
         $category = $request->get_param( 'cat' );
-        $operator = strtoupper( $request->get_param( 'operator' ) ?: 'IN' );
+        $operator = strtoupper( $request->get_param( 'operator' ) ?? 'IN' );
 
         if ( ! empty( $category ) ) {
             $slugs = array_map( 'sanitize_title', explode( ',', $category ) );
@@ -218,7 +222,7 @@ class Rest {
                 )
             );
 
-            // Safely get first store row
+            // Safely get first store row.
             $store_row = is_array( $store ) ? reset( $store ) : null;
 
             if ( ! empty( $store_row ) && ! empty( $store_row['ID'] ) ) {
@@ -245,7 +249,7 @@ class Rest {
         $meta_key   = $request['meta_key'] ?? '';
         $value      = $request['value'] ?? '';
 
-        // Filter by store ID
+        // Filter by store ID.
         if ( Utill::POST_META_SETTINGS['store_id'] === $meta_key ) {
             $condition = array(
                 'key' => Utill::POST_META_SETTINGS['store_id'],
@@ -261,7 +265,7 @@ class Rest {
             $meta_query[] = $condition;
         }
 
-        // Filter by discount type
+        // Filter by discount type.
         $discount_type = $request['discount_type'] ?? '';
 
         if ( ! empty( $discount_type ) ) {
@@ -272,10 +276,11 @@ class Rest {
             );
         }
 
-        // Merge with existing meta_query
+        // Merge with existing meta_query.
         if ( ! empty( $meta_query ) ) {
+            /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
             $args['meta_query'] = $args['meta_query'] ?? array();
-
+            /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
             foreach ( $meta_query as $condition ) {
                 $args['meta_query'][] = $condition;
             }
@@ -294,7 +299,7 @@ class Rest {
                 )
             );
 
-            // Safely get first store row
+            // Safely get first store row.
             $store_row = is_array( $store ) ? reset( $store ) : null;
 
             if ( ! empty( $store_row ) && ! empty( $store_row['ID'] ) ) {
@@ -318,6 +323,7 @@ class Rest {
      * @param string $post_type Post type.
      */
     public function grant_woocommerce_rest_permission( $permission, $context, $object_id, $post_type ) {
+        unset( $context, $object_id, $post_type );
         $user_id = MultiVendorX()->current_user_id;
 
         // Fetch custom user meta.
@@ -336,13 +342,14 @@ class Rest {
     /**
      * Filter WooCommerce orders by meta key existence.
      *
-     * @param array  $response WP_REST_Response object.
-     * @param object $object   Order object.
-     * @param object $request  REST API request object.
+     * @param WP_REST_Response $response REST API response object.
+     * @param WC_Order         $order    Order object.
+     * @param WP_REST_Request  $request  REST API request object.
+     * @return WP_REST_Response
      */
-    public function prepare_shop_order_filter_meta( $response, $object, $request ) {
-
-        $store_id = (int) $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
+    public function prepare_shop_order_filter_meta( $response, $order, $request ) {
+        unset( $request );
+        $store_id = (int) $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
 
         if ( $store_id > 0 ) {
             $store = new Store( $store_id );
@@ -352,7 +359,7 @@ class Rest {
             $response->data['store_slug'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
         }
 
-        $commission_id = (int) $object->get_meta( Utill::ORDER_META_SETTINGS['commission_id'] );
+        $commission_id = (int) $order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'] );
 
         if ( $commission_id > 0 ) {
             $commission = CommissionUtil::get_commission_db( $commission_id );
@@ -363,11 +370,11 @@ class Rest {
             }
         }
 
-        $refunds      = $object->get_refunds();
+        $refunds      = $order->get_refunds();
         $refund_items = array();
 
-        // Product refunds
-        foreach ( $object->get_items() as $item_id => $item ) {
+        // Product refunds.
+        foreach ( $order->get_items() as $item_id => $item ) {
             $refunded_tax = 0.0;
 
             foreach ( $refunds as $refund ) {
@@ -382,13 +389,13 @@ class Rest {
                 'item_id'             => $item_id,
                 'type'                => 'product',
                 'name'                => $item->get_name(),
-                'refunded_line_total' => (float) -1 * $object->get_total_refunded_for_item( $item_id ),
+                'refunded_line_total' => (float) -1 * $order->get_total_refunded_for_item( $item_id ),
                 'refunded_tax'        => (float) $refunded_tax,
             );
         }
 
-        // Shipping refunds
-        foreach ( $object->get_items( 'shipping' ) as $item_id => $item ) {
+        // Shipping refunds.
+        foreach ( $order->get_items( 'shipping' ) as $item_id => $item ) {
             $refunded_tax = 0.0;
 
             foreach ( $refunds as $refund ) {
@@ -403,16 +410,16 @@ class Rest {
                 'item_id'               => $item_id,
                 'type'                  => 'shipping',
                 'name'                  => $item->get_name(),
-                'refunded_shipping'     => (float) -1 * $object->get_total_refunded_for_item( $item_id, 'shipping' ),
+                'refunded_shipping'     => (float) -1 * $order->get_total_refunded_for_item( $item_id, 'shipping' ),
                 'refunded_shipping_tax' => (float) $refunded_tax,
             );
         }
 
         $response->data['refund_items'] = $refund_items;
 
-        // Order notes
+        // Order notes.
         $response->data['order_notes'] = wc_get_order_notes(
-            array( 'order_id' => $object->get_id() )
+            array( 'order_id' => $order->get_id() )
         );
 
         if ( ! empty( $response->data['refunds'] ) ) {
@@ -423,13 +430,13 @@ class Rest {
                 }
                 $username = get_the_author_meta( 'user_login', $refund->get_refunded_by() );
 
-                $refund_data['label'] = sprintf(
+				$refund_data['label'] = sprintf(
                     /* translators: 1: refund id, 2: date, 3: user */
                     __( 'Refund #%1$s - %2$s by %3$s', 'multivendorx' ),
                     $refund->get_id(),
                     wc_format_datetime( $refund->get_date_created() ),
-                    $username ?: __( 'system', 'multivendorx' )
-                );
+                    $username ?? __( 'system', 'multivendorx' )
+				);
             }
         }
 
@@ -439,13 +446,16 @@ class Rest {
     /**
      * Filter WooCommerce coupons by meta key existence.
      *
-     * @param array  $response REST API response.
-     * @param object $object   Coupon object.
-     * @param array  $request  Request object.
-     * @return array
+     * @param WP_REST_Response $response REST API response.
+     * @param WC_Coupon        $coupon   Coupon object.
+     * @param WP_REST_Request  $request  Request object.
+     * @return WP_REST_Response
      */
-    public function prepare_shop_coupon_filter_meta( $response, $object, $request ) {
-        $store_id = $object->get_meta( Utill::POST_META_SETTINGS['store_id'] );
+    public function prepare_shop_coupon_filter_meta( $response, $coupon, $request ) {
+        unset( $request );
+
+        $store_id = $coupon->get_meta( Utill::POST_META_SETTINGS['store_id'] );
+
         if ( $store_id ) {
             // Get store information.
             $store      = new Store( $store_id );
@@ -469,7 +479,7 @@ class Rest {
      * @param bool   $creating  True when creating, false when updating.
      */
     public function pre_insert_shop_coupon_fix_status( $coupon, $request, $creating ) {
-
+        unset( $creating );
         $status = sanitize_text_field( $request['status'] ) ?? '';
 
 	    if ( ! empty( $status ) ) {
@@ -623,7 +633,15 @@ class Rest {
             wc_add_notice( __( 'SKU is not generated!', 'multivendorx' ), 'error' );
         }
     }
-
+    /**
+     * Generate SKU data for a product if not being created.
+     *
+     * Calls the internal SKU save method when updating a product.
+     *
+     * @param \WC_Product      $product  The WooCommerce product object.
+     * @param \WP_REST_Request $request  The REST request object.
+     * @param bool             $creating True if the product is being created; false if updating.
+     */
     public function generate_sku_data_in_product( $product, $request, $creating ) {
         if ( $creating ) {
 			return;
@@ -713,14 +731,19 @@ class Rest {
             }
         }
     }
-
+    /**
+     * Fetch and render products for a store with optional search.
+     *
+     * @param \WP_REST_Request $request REST request containing 'storeId' and optional 'search'.
+     * @return string HTML of the WooCommerce product loop.
+     */
     public function fetch_store_products( $request ) {
 
         ob_start();
 
         $store_id = $request->get_param( 'storeId' );
         $search   = sanitize_text_field( $request->get_param( 'search' ) );
-        // Query products for this store
+        /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
         $args = array(
             'post_type'   => 'product',
             'post_status' => 'publish',
@@ -733,7 +756,7 @@ class Rest {
                 ),
             ),
         );
-
+        /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
         $custom_query = new \WP_Query( $args );
 
         if ( $custom_query->have_posts() ) {

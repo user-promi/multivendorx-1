@@ -133,7 +133,7 @@ class Transactions extends \WP_REST_Controller {
                     'transaction_type' => $transaction_type ?: null,
                     'limit'            => $limit,
                     'offset'           => $offset,
-                    'orderBy'          => $order_by ?: null,
+                    'order_by'         => $order_by ?: null,
                     'order'            => in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : null,
                 )
             );

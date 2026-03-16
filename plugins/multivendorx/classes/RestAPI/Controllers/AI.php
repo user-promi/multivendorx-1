@@ -9,6 +9,13 @@ namespace MultiVendorX\RestAPI\Controllers;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Class AI
+ *
+ * REST controller for AI Assistant operations.
+ *
+ * @package MultiVendorX\RestAPI\Controllers
+ */
 class AI extends \WP_REST_Controller {
 
     /**
@@ -36,18 +43,19 @@ class AI extends \WP_REST_Controller {
     }
 
     /**
-     * Permission check for AI Operations
+     * Get items permissions check.
      *
-     * @param mixed $request
+     * @param  object $request Full data about the request.
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'edit_products' );
     }
 
     /**
-     * Handle AI request (main entry point)
+     * Handle AI request (main entry point).
      *
-     * @param mixed $request
+     * @param \WP_REST_Request $request The REST request object.
+     * @return \WP_REST_Response
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -102,9 +110,10 @@ class AI extends \WP_REST_Controller {
     }
 
     /**
-     * Generate AI Suggestions
+     * Generate AI suggestions based on user prompt.
      *
-     * @param mixed $request
+     * @param \WP_REST_Request $request REST request object containing 'user_prompt'.
+     * @return \WP_REST_Response
      */
     private function generate_suggestions( $request ) {
         try {
@@ -216,7 +225,7 @@ class AI extends \WP_REST_Controller {
 
         $data = json_decode( wp_remote_retrieve_body( $response ), true );
 
-        // Directly access parsed JSON (NO regex, NO trimming)
+        // Directly access parsed JSON (NO regex, NO trimming).
         $result = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
 
         if ( ! $result ) {

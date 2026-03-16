@@ -20,16 +20,16 @@ use MultiVendorX\Store\Store;
 class Util {
 
     /**
-     * Get store policies with optional product-level overrides.
+     * Get store policies, optionally overridden by product or store settings.
      *
-     * @param int $store_id
-     * @param int $product_id
-     * @return array
+     * @param int $store_id   Store ID (default 0).
+     * @param int $product_id Product ID (default 0).
+     * @return array Associative array of policies.
      */
     public static function get_store_policies( $store_id = 0, $product_id = 0 ) {
         $policies = array();
 
-        // Global defaults
+        // Global defaults.
         $store_policy        = MultiVendorX()->setting->get_setting( 'store_policy', array() );
         $shipping_policy     = MultiVendorX()->setting->get_setting( 'shipping_policy', array() );
         $refund_policy       = MultiVendorX()->setting->get_setting( 'refund_policy', array() );
@@ -82,7 +82,7 @@ class Util {
             }
         }
 
-        // Normalize response
+        // Normalize response.
         if ( ! empty( $store_policy ) ) {
             $policies['store_policy'] = $store_policy;
         }
