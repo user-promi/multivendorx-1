@@ -21,7 +21,7 @@ const DISCOUNT_TYPE_LABELS: Record<string, string> = {
 	fixed_product: __('Fixed product discount', 'multivendorx'),
 };
 
-const PendingCoupons: React.FC<{ }> = () => {
+const PendingCoupons: React.FC<{}> = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -179,9 +179,9 @@ const PendingCoupons: React.FC<{ }> = () => {
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-							query.filter.created_at.startDate,
-							'start'
-						)
+								query.filter.created_at.startDate,
+								'start'
+							)
 						: undefined,
 
 					before: query.filter?.created_at?.endDate
@@ -201,7 +201,10 @@ const PendingCoupons: React.FC<{ }> = () => {
 				setRows(coupons);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
 				if (firstLoadRef.current) {
-					setSession('withdrawCount', Number(response.headers['x-wp-total']) || 0);
+					setSession(
+						'withdrawCount',
+						Number(response.headers['x-wp-total']) || 0
+					);
 					firstLoadRef.current = false;
 				}
 				setIsLoading(false);
@@ -266,9 +269,9 @@ const PendingCoupons: React.FC<{ }> = () => {
 										icon: 'cross',
 										text: isSubmitting
 											? __(
-												'Submitting...',
-												'multivendorx'
-											)
+													'Submitting...',
+													'multivendorx'
+												)
 											: __('Reject', 'multivendorx'),
 										disabled: isSubmitting,
 										onClick: submitReject,
@@ -280,9 +283,7 @@ const PendingCoupons: React.FC<{ }> = () => {
 						<TextAreaUI
 							name="reject_reason"
 							value={rejectReason}
-							onChange={(value: string) =>
-								setRejectReason(value)
-							}
+							onChange={(value: string) => setRejectReason(value)}
 							placeholder={__(
 								'Enter reason for rejecting this coupon...',
 								'multivendorx'

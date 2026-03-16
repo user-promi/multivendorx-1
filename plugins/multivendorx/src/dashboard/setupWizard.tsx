@@ -126,8 +126,14 @@ const SetupWizard: React.FC = () => {
 					type: 'select',
 					label: __('Country', 'multivendorx'),
 					options: [
-						{ label: __('United States', 'multivendorx'), value: 'us' },
-						{ label: __('United Kingdom', 'multivendorx'), value: 'uk' },
+						{
+							label: __('United States', 'multivendorx'),
+							value: 'us',
+						},
+						{
+							label: __('United Kingdom', 'multivendorx'),
+							value: 'uk',
+						},
 						{ label: __('Canada', 'multivendorx'), value: 'ca' },
 						{ label: __('Australia', 'multivendorx'), value: 'au' },
 					],
@@ -378,7 +384,10 @@ const SetupWizard: React.FC = () => {
 			<div>
 				<div className="welcome-wrapper">
 					<h4 className="wizard-title">
-						{__('Welcome to the MultivendorX family!', 'multivendorx')}
+						{__(
+							'Welcome to the MultivendorX family!',
+							'multivendorx'
+						)}
 					</h4>
 					<div className="des">
 						{__(

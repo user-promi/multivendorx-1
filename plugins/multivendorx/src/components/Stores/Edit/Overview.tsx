@@ -190,8 +190,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								const editUrl = `${appLocalizer.site_url.replace(
 									/\/$/,
 									''
-								)}/wp-admin/post.php?post=${product.id
-									}&action=edit`;
+								)}/wp-admin/post.php?post=${
+									product.id
+								}&action=edit`;
 
 								return (
 									<InfoItem
@@ -296,7 +297,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					<Card
 						title={__('Store information', 'multivendorx')}
 						iconName="external icon"
-						
 						onIconClick={() => {
 							navigate(
 								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`
@@ -304,25 +304,43 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 						}}
 					>
 						<FormGroupWrapper>
-							<FormGroup row label={__('Created on', 'multivendorx')}>
+							<FormGroup
+								row
+								label={__('Created on', 'multivendorx')}
+							>
 								{storeData.create_time}
 								<a
 									className="sku"
-									onClick={() => { navigate(`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`); }}
+									onClick={() => {
+										navigate(
+											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`
+										);
+									}}
 								>
 									{__('Application Data', 'multivendorx')}
 								</a>
 							</FormGroup>
-							<FormGroup row label={__('Lifetime earnings', 'multivendorx')}>
+							<FormGroup
+								row
+								label={__('Lifetime earnings', 'multivendorx')}
+							>
 								{formatCurrency(
-									storeData.commission
-										?.commission_total ?? 0
+									storeData.commission?.commission_total ?? 0
 								)}
 							</FormGroup>
 							{appLocalizer.khali_dabba && (
 								<>
-									<FormGroup row label={__('Vacation mode', 'multivendorx')}>
-										<span className="admin-badge red"> {__('Inactive', 'multivendorx')}</span>
+									<FormGroup
+										row
+										label={__(
+											'Vacation mode',
+											'multivendorx'
+										)}
+									>
+										<span className="admin-badge red">
+											{' '}
+											{__('Inactive', 'multivendorx')}
+										</span>
 									</FormGroup>
 
 									<div className="title">
@@ -346,7 +364,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					<Card
 						title={__('Store staff', 'multivendorx')}
 						iconName="external icon"
-						
 						onIconClick={() => {
 							navigate(
 								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`
@@ -367,8 +384,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									label: __('Email', 'multivendorx'),
 									value: storeData.primary_owner_info?.data
 										?.user_email ?? (
-											<Skeleton width={150} />
-										),
+										<Skeleton width={150} />
+									),
 								},
 							]}
 							badges={[

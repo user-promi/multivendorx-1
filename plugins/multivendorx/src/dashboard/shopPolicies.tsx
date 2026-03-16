@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-	
 	getApiLink,
 	Container,
 	Column,
@@ -85,7 +84,7 @@ const ShopPolicies = () => {
 		<>
 			<Notice
 				message={successMsg}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 

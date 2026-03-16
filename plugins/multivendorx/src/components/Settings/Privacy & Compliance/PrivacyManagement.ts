@@ -43,7 +43,7 @@ export default {
 					value: 'show_store_ratings',
 					label: __('Store ratings', 'multivendorx'),
 					dependent: 'show_store_name',
-				}
+				},
 			],
 			selectDeselect: true,
 		},

@@ -49,19 +49,23 @@ registerBlockType('multivendorx/product-category', {
 				<div {...blockProps}>
 					<h3>{__('Product Categories', 'multivendorx')}</h3>
 					<div className="wp-block-multivendorx-product-category multivendorx-product-categories">
-					<ul className="wc-block-product-categories-list">
-						{categories.map((category) => (
-							<li
-								key={category.id}
-								className="wc-block-product-categories-list-item"
-							>
-								<a>
-									<span className="wc-block-product-categories-list-item__name">{category.name}</span>
-								</a>
-								<span className="wc-block-product-categories-list-item-count">{category.count}</span>
-							</li>
-						))}
-					</ul>
+						<ul className="wc-block-product-categories-list">
+							{categories.map((category) => (
+								<li
+									key={category.id}
+									className="wc-block-product-categories-list-item"
+								>
+									<a>
+										<span className="wc-block-product-categories-list-item__name">
+											{category.name}
+										</span>
+									</a>
+									<span className="wc-block-product-categories-list-item-count">
+										{category.count}
+									</span>
+								</li>
+							))}
+						</ul>
 					</div>
 				</div>
 			</>
@@ -79,10 +83,7 @@ registerBlockType('multivendorx/product-category', {
 		});
 
 		return (
-			<div
-				{...blockProps}
-				id="multivendorx-store-product-category"
-			></div>
+			<div {...blockProps} id="multivendorx-store-product-category"></div>
 		);
 	},
 });

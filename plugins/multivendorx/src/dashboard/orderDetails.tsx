@@ -17,7 +17,7 @@ import {
 	NavigatorHeader,
 	TableCard,
 	TableRow,
-	ItemListUI
+	ItemListUI,
 } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
@@ -346,9 +346,7 @@ const OrderDetails: React.FC = () => {
 							<div className="detail">
 								<div className="name">{row.name}</div>
 								{row?.sku && (
-									<div className="sku">
-										SKU: {row.sku}
-									</div>
+									<div className="sku">SKU: {row.sku}</div>
 								)}
 							</div>
 						</div>
@@ -401,9 +399,7 @@ const OrderDetails: React.FC = () => {
 								<BasicInputUI
 									name="refund-amount"
 									type="number"
-									value={
-										refundItems[row.id]?.quantity ?? 0
-									}
+									value={refundItems[row.id]?.quantity ?? 0}
 									onChange={(value) =>
 										handleItemChange(
 											row.id,
@@ -414,7 +410,9 @@ const OrderDetails: React.FC = () => {
 								/>
 							)}
 							{refundMap[row.id]?.refunded_line_total !== 0 && (
-								<div>{refundMap[row.id]?.refunded_line_total}</div>
+								<div>
+									{refundMap[row.id]?.refunded_line_total}
+								</div>
 							)}
 						</div>
 					);
@@ -428,20 +426,16 @@ const OrderDetails: React.FC = () => {
 				if (row.rowType === 'line_item') {
 					return (
 						<div>
-							<div className="price">${parseFloat(row.subtotal).toFixed(2)}</div>
+							<div className="price">
+								${parseFloat(row.subtotal).toFixed(2)}
+							</div>
 							{isRefund && (
 								<BasicInputUI
 									name="refund-amount"
 									type="number"
-									value={
-										refundItems[row.id]?.total ?? 0
-									}
+									value={refundItems[row.id]?.total ?? 0}
 									onChange={(value) =>
-										handleItemChange(
-											row.id,
-											'total',
-											value
-										)
+										handleItemChange(row.id, 'total', value)
 									}
 								/>
 							)}
@@ -450,24 +444,22 @@ const OrderDetails: React.FC = () => {
 				} else if (row.rowType === 'shipping') {
 					return (
 						<div>
-							{!isRefund ? row.total : (
+							{!isRefund ? (
+								row.total
+							) : (
 								<BasicInputUI
 									name="refund"
 									type="number"
-									value={
-										refundItems[row.id]?.total ?? 0
-									}
+									value={refundItems[row.id]?.total ?? 0}
 									onChange={(value) =>
-										handleItemChange(
-											row.id,
-											'total',
-											value
-										)
+										handleItemChange(row.id, 'total', value)
 									}
 								/>
 							)}
 							{refundMap[row.id]?.refunded_shipping !== 0 && (
-								<div>{refundMap[row.id]?.refunded_shipping}</div>
+								<div>
+									{refundMap[row.id]?.refunded_shipping}
+								</div>
 							)}
 						</div>
 					);
@@ -482,20 +474,16 @@ const OrderDetails: React.FC = () => {
 				if (row.rowType === 'line_item') {
 					return (
 						<div>
-							<div className="price">${parseFloat(row.subtotal_tax).toFixed(2)}</div>
+							<div className="price">
+								${parseFloat(row.subtotal_tax).toFixed(2)}
+							</div>
 							{isRefund && (
 								<BasicInputUI
 									name="refund-amount"
 									type="number"
-									value={
-										refundItems[row.id]?.tax ?? 0
-									}
+									value={refundItems[row.id]?.tax ?? 0}
 									onChange={(value) =>
-										handleItemChange(
-											row.id,
-											'tax',
-											value
-										)
+										handleItemChange(row.id, 'tax', value)
 									}
 								/>
 							)}
@@ -507,24 +495,22 @@ const OrderDetails: React.FC = () => {
 				} else if (row.rowType === 'shipping') {
 					return (
 						<div>
-							{!isRefund ? row.total_tax : (
+							{!isRefund ? (
+								row.total_tax
+							) : (
 								<BasicInputUI
 									name="refund"
 									type="number"
-									value={
-										refundItems[row.id]?.tax ?? 0
-									}
+									value={refundItems[row.id]?.tax ?? 0}
 									onChange={(value) =>
-										handleItemChange(
-											row.id,
-											'tax',
-											value
-										)
+										handleItemChange(row.id, 'tax', value)
 									}
 								/>
 							)}
 							{refundMap[row.id]?.refunded_shipping_tax !== 0 && (
-								<div>{refundMap[row.id]?.refunded_shipping_tax}</div>
+								<div>
+									{refundMap[row.id]?.refunded_shipping_tax}
+								</div>
 							)}
 						</div>
 					);
@@ -538,7 +524,7 @@ const OrderDetails: React.FC = () => {
 		<>
 			<Notice
 				message={refundError}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 			{!appLocalizer.edit_order_capability ? (
@@ -570,10 +556,34 @@ const OrderDetails: React.FC = () => {
 											name="status"
 											type="single-select"
 											options={[
-												{ label: __('Processing', 'multivendorx'), value: 'processing' },
-												{ label: __('On Hold', 'multivendorx'), value: 'on-hold' },
-												{ label: __('Completed', 'multivendorx'), value: 'completed' },
-												{ label: __('Cancelled', 'multivendorx'), value: 'cancelled' },
+												{
+													label: __(
+														'Processing',
+														'multivendorx'
+													),
+													value: 'processing',
+												},
+												{
+													label: __(
+														'On Hold',
+														'multivendorx'
+													),
+													value: 'on-hold',
+												},
+												{
+													label: __(
+														'Completed',
+														'multivendorx'
+													),
+													value: 'completed',
+												},
+												{
+													label: __(
+														'Cancelled',
+														'multivendorx'
+													),
+													value: 'cancelled',
+												},
 											]}
 											value={orderData?.status}
 											onChange={(value) => {
@@ -591,7 +601,8 @@ const OrderDetails: React.FC = () => {
 							{
 								label: __('Back to Orders', 'multivendorx'),
 								icon: 'arrow-right',
-								onClick: () => dashNavigate(navigate, ['orders']),
+								onClick: () =>
+									dashNavigate(navigate, ['orders']),
 							},
 						]}
 					/>
@@ -605,7 +616,10 @@ const OrderDetails: React.FC = () => {
 										rows={tableRows}
 									/>
 								) : (
-									<p> {__('No items found.', 'multivendorx')}</p>
+									<p>
+										{' '}
+										{__('No items found.', 'multivendorx')}
+									</p>
 								)}
 
 								<div className="coupons-calculation-wrapper">
@@ -714,7 +728,7 @@ const OrderDetails: React.FC = () => {
 														<td>
 															{formatCurrency(
 																orderData?.commission_total -
-																totalRefunded
+																	totalRefunded
 															)}
 														</td>
 													</tr>
@@ -803,20 +817,20 @@ const OrderDetails: React.FC = () => {
 													{modules.includes(
 														'store-shipping'
 													) && (
-															<tr>
-																<td>
-																	{__(
-																		'Shipping:',
-																		'multivendorx'
-																	)}
-																</td>
-																<td>
-																	{formatCurrency(
-																		orderData?.shipping_total
-																	)}
-																</td>
-															</tr>
-														)}
+														<tr>
+															<td>
+																{__(
+																	'Shipping:',
+																	'multivendorx'
+																)}
+															</td>
+															<td>
+																{formatCurrency(
+																	orderData?.shipping_total
+																)}
+															</td>
+														</tr>
+													)}
 
 													<tr>
 														<td>
@@ -862,19 +876,19 @@ const OrderDetails: React.FC = () => {
 								<InfoItem
 									title={
 										modules.includes('privacy') &&
-											Array.isArray(
-												customer_information_access
-											) &&
-											customer_information_access.includes(
-												'name'
-											)
+										Array.isArray(
+											customer_information_access
+										) &&
+										customer_information_access.includes(
+											'name'
+										)
 											? orderData?.billing?.first_name ||
 												orderData?.billing?.last_name
 												? `${orderData?.billing?.first_name ?? ''} ${orderData?.billing?.last_name ?? ''}`
 												: __(
-													'Guest Customer',
-													'multivendorx'
-												)
+														'Guest Customer',
+														'multivendorx'
+													)
 											: __('Customer', 'multivendorx')
 									}
 									avatar={{
@@ -888,55 +902,55 @@ const OrderDetails: React.FC = () => {
 											),
 											value:
 												orderData?.customer_id &&
-													orderData.customer_id !== 0
+												orderData.customer_id !== 0
 													? `#${orderData.customer_id}`
 													: '—',
 										},
 										...(modules.includes('privacy') &&
-											Array.isArray(
-												customer_information_access
-											) &&
-											customer_information_access.includes(
-												'email_address'
-											) &&
-											orderData?.billing?.email
+										Array.isArray(
+											customer_information_access
+										) &&
+										customer_information_access.includes(
+											'email_address'
+										) &&
+										orderData?.billing?.email
 											? [
-												{
-													value: (
-														<>
-															<i className="adminfont-mail" />{' '}
-															{
-																orderData
-																	.billing
-																	.email
-															}
-														</>
-													),
-												},
-											]
+													{
+														value: (
+															<>
+																<i className="adminfont-mail" />{' '}
+																{
+																	orderData
+																		.billing
+																		.email
+																}
+															</>
+														),
+													},
+												]
 											: []),
 										...(modules.includes('privacy') &&
-											Array.isArray(
-												customer_information_access
-											) &&
-											customer_information_access.includes(
-												'phone_number'
-											) &&
-											orderData?.billing?.phone
+										Array.isArray(
+											customer_information_access
+										) &&
+										customer_information_access.includes(
+											'phone_number'
+										) &&
+										orderData?.billing?.phone
 											? [
-												{
-													value: (
-														<>
-															<i className="adminfont-phone" />{' '}
-															{
-																orderData
-																	.billing
-																	.phone
-															}
-														</>
-													),
-												},
-											]
+													{
+														value: (
+															<>
+																<i className="adminfont-phone" />{' '}
+																{
+																	orderData
+																		.billing
+																		.phone
+																}
+															</>
+														),
+													},
+												]
 											: []),
 									]}
 								/>
@@ -950,14 +964,14 @@ const OrderDetails: React.FC = () => {
 									>
 										<div className="details">
 											{orderData?.billing?.address_1 ||
-												orderData?.billing?.city ||
-												orderData?.billing?.postcode ||
-												orderData?.billing?.country ? (
+											orderData?.billing?.city ||
+											orderData?.billing?.postcode ||
+											orderData?.billing?.country ? (
 												<div className="address">
 													{orderData.billing
 														.first_name ||
-														orderData.billing
-															.last_name ? (
+													orderData.billing
+														.last_name ? (
 														<>
 															{
 																orderData
@@ -973,40 +987,40 @@ const OrderDetails: React.FC = () => {
 													) : null}
 													{orderData.billing
 														.company && (
-															<>
-																{' '}
-																,{' '}
-																{
-																	orderData
-																		.billing
-																		.company
-																}{' '}
-															</>
-														)}
+														<>
+															{' '}
+															,{' '}
+															{
+																orderData
+																	.billing
+																	.company
+															}{' '}
+														</>
+													)}
 													{orderData.billing
 														.address_1 && (
-															<>
-																{' '}
-																,{' '}
-																{
-																	orderData
-																		.billing
-																		.address_1
-																}{' '}
-															</>
-														)}
+														<>
+															{' '}
+															,{' '}
+															{
+																orderData
+																	.billing
+																	.address_1
+															}{' '}
+														</>
+													)}
 													{orderData.billing
 														.address_2 && (
-															<>
-																{' '}
-																,{' '}
-																{
-																	orderData
-																		.billing
-																		.address_2
-																}{' '}
-															</>
-														)}
+														<>
+															{' '}
+															,{' '}
+															{
+																orderData
+																	.billing
+																	.address_2
+															}{' '}
+														</>
+													)}
 													{orderData.billing.city && (
 														<>
 															{
@@ -1022,27 +1036,27 @@ const OrderDetails: React.FC = () => {
 													)}
 													{orderData.billing
 														.postcode && (
-															<>
-																,{' '}
-																{
-																	orderData
-																		.billing
-																		.postcode
-																}{' '}
-															</>
-														)}
+														<>
+															,{' '}
+															{
+																orderData
+																	.billing
+																	.postcode
+															}{' '}
+														</>
+													)}
 													{orderData.billing
 														.country && (
-															<>
-																{' '}
-																,{' '}
-																{
-																	orderData
-																		.billing
-																		.country
-																}
-															</>
-														)}
+														<>
+															{' '}
+															,{' '}
+															{
+																orderData
+																	.billing
+																	.country
+															}
+														</>
+													)}
 												</div>
 											) : (
 												<div className="address">
@@ -1111,9 +1125,7 @@ const OrderDetails: React.FC = () => {
 											'multivendorx'
 										)}
 										htmlFor="create-shipping"
-									>
-
-									</FormGroup>
+									></FormGroup>
 									<FormGroup
 										label={__(
 											'Enter Tracking Url ',
@@ -1175,20 +1187,40 @@ const OrderDetails: React.FC = () => {
 										)}
 									>
 										{orderData?.order_notes &&
-											orderData.order_notes.length > 0 ? (
+										orderData.order_notes.length > 0 ? (
 											<ItemListUI
 												className="notification-wrapper"
-												items={orderData?.order_notes?.slice(0, 5).map((note, index) => ({
-													id: note.id || index,
-													title: note.author || __('System Note', 'multivendorx'),
-													desc: note.content,
-													icon: note.is_customer_note ? 'mail yellow' : 'contact-form blue',
-													value: new Date(note.date_created.date).toLocaleDateString('en-GB', {
-														day: '2-digit',
-														month: 'short',
-														year: 'numeric',
-													}),
-												})) || []}
+												items={
+													orderData?.order_notes
+														?.slice(0, 5)
+														.map((note, index) => ({
+															id:
+																note.id ||
+																index,
+															title:
+																note.author ||
+																__(
+																	'System Note',
+																	'multivendorx'
+																),
+															desc: note.content,
+															icon: note.is_customer_note
+																? 'mail yellow'
+																: 'contact-form blue',
+															value: new Date(
+																note
+																	.date_created
+																	.date
+															).toLocaleDateString(
+																'en-GB',
+																{
+																	day: '2-digit',
+																	month: 'short',
+																	year: 'numeric',
+																}
+															),
+														})) || []
+												}
 											/>
 										) : (
 											<p>

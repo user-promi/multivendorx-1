@@ -38,7 +38,7 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 	}, [perPage, orderby, order, category, product_visibility]);
 
 	const fetchProducts = useCallback(async () => {
-		setLoading(true)
+		setLoading(true);
 		const params: any = {
 			per_page: perPage,
 			page,
@@ -59,25 +59,17 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 				`${productList.apiUrl}/wc/v3/products`,
 				{
 					headers: { 'X-WP-Nonce': productList.nonce },
-					params
+					params,
 				}
 			);
 
 			setProducts(response.data || []);
-			setLoading(false)
+			setLoading(false);
 		} catch (error) {
 			console.error('Error fetching products:', error);
-			setLoading(false)
+			setLoading(false);
 		}
-	}, [
-		page,
-		perPage,
-		orderby,
-		order,
-		category,
-		operator,
-		product_visibility,
-	]);
+	}, [page, perPage, orderby, order, category, operator, product_visibility]);
 
 	useEffect(() => {
 		fetchProducts();
@@ -96,13 +88,13 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 									<a href={product.permalink}>
 										<img
 											className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
-											src={
-												product.images?.[0]?.src
-											}
+											src={product.images?.[0]?.src}
 											alt={product.name}
 										/>
 
-										<span className="product-title">{product.name}</span>
+										<span className="product-title">
+											{product.name}
+										</span>
 									</a>
 
 									<span className="woocommerce-Price-amount amount">
@@ -119,16 +111,16 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 													<ins aria-hidden="true">
 														<span className="woocommerce-Price-amount amount">
 															<bdi>
-																{product.salePrice}
+																{
+																	product.salePrice
+																}
 															</bdi>
 														</span>
 													</ins>
 												</>
 											) : (
 												<span className="woocommerce-Price-amount amount">
-													<bdi>
-														{product.price}
-													</bdi>
+													<bdi>{product.price}</bdi>
 												</span>
 											)}
 										</bdi>

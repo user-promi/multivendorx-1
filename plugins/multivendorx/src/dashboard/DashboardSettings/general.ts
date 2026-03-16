@@ -36,6 +36,6 @@ export default {
 			type: 'text',
 			label: __('Buyer welcome message after purchase', 'multivendorx'),
 			key: 'messageToBuyer',
-		}
+		},
 	],
 };

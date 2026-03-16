@@ -187,9 +187,9 @@ registerBlockType('multivendorx/store-social-icons', {
 							help={
 								useThemeColors
 									? __(
-										'Using platform-specific colors',
-										'multivendorx'
-									)
+											'Using platform-specific colors',
+											'multivendorx'
+										)
 									: __('Using custom color', 'multivendorx')
 							}
 						/>

@@ -16,18 +16,14 @@ const CustomerSupport = () => {
 
 	const settingContent = applyFilters(
 		'multivendorx_customer_support_tab',
-		[],
-	).filter(
-		(tab) => !tab.module || modules.includes(tab.module)
-	);
+		[]
+	).filter((tab) => !tab.module || modules.includes(tab.module));
 
 	const getForm = (tabId: string) => {
 		return (
-			applyFilters(
-				'multivendorx_customer_support_tab_content',
-				null,
-				{ tabId }
-			) || <div />
+			applyFilters('multivendorx_customer_support_tab_content', null, {
+				tabId,
+			}) || <div />
 		);
 	};
 

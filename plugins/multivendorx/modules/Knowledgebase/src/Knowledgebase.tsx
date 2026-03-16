@@ -199,9 +199,7 @@ export const KnowledgeBase: React.FC = () => {
 		},
 		content: {
 			label: __('Write your explanation or tutorial', 'multivendorx'),
-			render:(row) =>(
-				truncateText(row.content,30)
-			)
+			render: (row) => truncateText(row.content, 30),
 		},
 		status_label: {
 			label: __('Status', 'multivendorx'),
@@ -329,7 +327,10 @@ export const KnowledgeBase: React.FC = () => {
 					title={__('Delete Knowledge Base', 'multivendorx')}
 					confirmMessage={
 						selectedKb
-							? __('Are you sure you want to delete this knowledge base?', 'multivendorx')
+							? __(
+									'Are you sure you want to delete this knowledge base?',
+									'multivendorx'
+								)
 							: ''
 					}
 					confirmYesText={__('Delete', 'multivendorx')}
@@ -431,7 +432,7 @@ export const KnowledgeBase: React.FC = () => {
 									usePlainText={false}
 									tinymceApiKey={
 										appLocalizer.settings_databases_value[
-										'overview'
+											'overview'
 										]['tinymce_api_section'] ?? ''
 									}
 									msg={{
@@ -454,12 +455,18 @@ export const KnowledgeBase: React.FC = () => {
 										{
 											key: 'pending',
 											value: 'pending',
-											label: __('Pending', 'multivendorx'),
+											label: __(
+												'Pending',
+												'multivendorx'
+											),
 										},
 										{
 											key: 'publish',
 											value: 'publish',
-											label: __('Published', 'multivendorx'),
+											label: __(
+												'Published',
+												'multivendorx'
+											),
 										},
 									]}
 									value={formData.status}

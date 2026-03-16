@@ -25,7 +25,7 @@ export default {
 				key: 'country_code',
 				size: '200px',
 				options: CountryCodes,
-			}
+			},
 		},
 
 		// Email / Additional Email

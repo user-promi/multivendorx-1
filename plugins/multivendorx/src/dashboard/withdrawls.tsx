@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
-	getApiLink,	
+	getApiLink,
 	Card,
 	Container,
 	Column,
@@ -102,7 +102,7 @@ const Withdrawls: React.FC = () => {
 		<>
 			<Notice
 				message={message}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 			<NavigatorHeader

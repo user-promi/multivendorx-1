@@ -39,7 +39,7 @@ type OverviewProps = {
 	COLORS?: string[];
 };
 
-const Overview: React.FC<OverviewProps> = ({ }) => {
+const Overview: React.FC<OverviewProps> = ({}) => {
 	const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
 	const [earningSummary, setEarningSummary] = useState<any[]>([]);
 	const [pieData, setPieData] = useState<any>([]);
@@ -61,7 +61,6 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 				const adminEarning =
 					data.total_order_amount - data.commission_total;
 				const storeEarning = data.commission_total;
-
 
 				const overviewData = [
 					{
@@ -173,8 +172,14 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 				];
 
 				const pieChartData = [
-					{ name: __('Admin Net Earning', 'multivendorx'), value: adminEarning },
-					{ name: __('Store Net Earning', 'multivendorx'), value: storeEarning },
+					{
+						name: __('Admin Net Earning', 'multivendorx'),
+						value: adminEarning,
+					},
+					{
+						name: __('Store Net Earning', 'multivendorx'),
+						value: storeEarning,
+					},
 					{
 						name: __('Commission Refunded', 'multivendorx'),
 						value: data.commission_refunded,
@@ -281,7 +286,7 @@ const Overview: React.FC<OverviewProps> = ({ }) => {
 									key={product.id}
 									title={product.title}
 									amount={product.price}
-								// isLoading={isLoading}
+									// isLoading={isLoading}
 								/>
 							</>
 						))}

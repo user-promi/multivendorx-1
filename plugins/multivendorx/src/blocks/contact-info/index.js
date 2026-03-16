@@ -99,7 +99,10 @@ registerBlockType('multivendorx/contact-info', {
 			[
 				'core/paragraph',
 				{
-					content: __('Do you need more information? Write to us!', 'multivendorx'),
+					content: __(
+						'Do you need more information? Write to us!',
+						'multivendorx'
+					),
 					className: 'contact-form-description',
 				},
 			],

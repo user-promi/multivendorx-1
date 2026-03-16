@@ -1,18 +1,19 @@
 const BannerTemplate3 = () => {
 	return (
 		<div className="multivendorx-banner template3">
-			<div className="banner-slider">
-			</div>
+			<div className="banner-slider"></div>
 			<div className="banner-right">
 				<div className="social-profile">
-					<a> <i className="dashicons dashicons-facebook"></i>
+					<a>
+						{' '}
+						<i className="dashicons dashicons-facebook"></i>
 					</a>
 
 					<a>
 						<i className="dashicons dashicons-twitter"></i>
 					</a>
 
-					<a >
+					<a>
 						<i className="dashicons dashicons-instagram"></i>
 					</a>
 
@@ -23,10 +24,8 @@ const BannerTemplate3 = () => {
 					<a>
 						<i className="dashicons dashicons-linkedin"></i>
 					</a>
-
 				</div>
-				<div className="multivendorx-btn-area">
-				</div>
+				<div className="multivendorx-btn-area"></div>
 			</div>
 			<div className="store-details">
 				<div className="profile">
@@ -38,12 +37,41 @@ const BannerTemplate3 = () => {
 						<div className="contact-details">
 							<h2>store155</h2>
 							<div className="row">
-								<div className="store-email"><i className="dashicons dashicons-email"></i> demo@gmail.com</div><div className="store-phone"> <i className="dashicons dashicons-phone"></i> 9874563120</div>                    </div>
-							<div className="store-address"> <i className="dashicons dashicons-location"></i>72 East 72nd Street</div>                                    </div>
+								<div className="store-email">
+									<i className="dashicons dashicons-email"></i>{' '}
+									demo@gmail.com
+								</div>
+								<div className="store-phone">
+									{' '}
+									<i className="dashicons dashicons-phone"></i>{' '}
+									9874563120
+								</div>{' '}
+							</div>
+							<div className="store-address">
+								{' '}
+								<i className="dashicons dashicons-location"></i>
+								72 East 72nd Street
+							</div>{' '}
+						</div>
 						<div className="right-section">
-							<button className="admin-btn btn-purple">Support</button>
-							<button className="admin-btn btn-purple">Chat</button>
-							<div className="follow-wrapper"> <button className="follow-btn admin-btn btn-purple">Unfollow</button> <div className="follower-count" id="followers-count-1">1 Follower</div> </div>
+							<button className="admin-btn btn-purple">
+								Support
+							</button>
+							<button className="admin-btn btn-purple">
+								Chat
+							</button>
+							<div className="follow-wrapper">
+								{' '}
+								<button className="follow-btn admin-btn btn-purple">
+									Unfollow
+								</button>{' '}
+								<div
+									className="follower-count"
+									id="followers-count-1"
+								>
+									1 Follower
+								</div>{' '}
+							</div>
 						</div>
 					</div>
 				</div>

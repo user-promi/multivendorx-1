@@ -222,9 +222,9 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			const method = isUpdate ? 'PUT' : 'POST';
 			const url = isUpdate
 				? getApiLink(
-					appLocalizer,
-					`zone-shipping/${selectedZone.zone_id}`
-				)
+						appLocalizer,
+						`zone-shipping/${selectedZone.zone_id}`
+					)
 				: getApiLink(appLocalizer, 'zone-shipping');
 
 			const requestData: any = {
@@ -268,15 +268,15 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		} catch (err) {
 			console.error(
 				'Error ' +
-				(isEditing ? 'updating' : 'adding') +
-				' shipping method:',
+					(isEditing ? 'updating' : 'adding') +
+					' shipping method:',
 				err
 			);
 			alert(
 				__(
 					'Error ' +
-					(isEditing ? 'updating' : 'adding') +
-					' shipping method',
+						(isEditing ? 'updating' : 'adding') +
+						' shipping method',
 					'multivendorx'
 				)
 			);
@@ -390,10 +390,11 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					onClose={() => setAddShipping(false)}
 					header={{
 						icon: 'shipping',
-						title: `${isEditing
-							? __('Edit Shipping', 'multivendorx')
-							: __('Add Shipping', 'multivendorx')
-							} — ${selectedZone.zone_name}`,
+						title: `${
+							isEditing
+								? __('Edit Shipping', 'multivendorx')
+								: __('Add Shipping', 'multivendorx')
+						} — ${selectedZone.zone_name}`,
 					}}
 					footer={
 						<ButtonInputUI
@@ -430,38 +431,51 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								options={
 									isEditing
 										? [
-											{
-												key: formData.shippingMethod,
-												value: formData.shippingMethod,
-												label: __(
-													formData.shippingMethod
-														.replace('_', ' ')
-														.replace(/\b\w/g, (c) => c.toUpperCase()),
-													'multivendorx'
-												),
-											},
-										]
+												{
+													key: formData.shippingMethod,
+													value: formData.shippingMethod,
+													label: __(
+														formData.shippingMethod
+															.replace('_', ' ')
+															.replace(
+																/\b\w/g,
+																(c) =>
+																	c.toUpperCase()
+															),
+														'multivendorx'
+													),
+												},
+											]
 										: applyFilters(
-											'multivendorx_zone_shipping_methods',
-											[
-												{
-													key: 'local_pickup',
-													value: 'local_pickup',
-													label: __('Local pickup', 'multivendorx'),
-												},
-												{
-													key: 'free_shipping',
-													value: 'free_shipping',
-													label: __('Free shipping', 'multivendorx'),
-												},
-												{
-													key: 'flat_rate',
-													value: 'flat_rate',
-													label: __('Flat Rate', 'multivendorx'),
-												},
-											],
-											modules
-										)
+												'multivendorx_zone_shipping_methods',
+												[
+													{
+														key: 'local_pickup',
+														value: 'local_pickup',
+														label: __(
+															'Local pickup',
+															'multivendorx'
+														),
+													},
+													{
+														key: 'free_shipping',
+														value: 'free_shipping',
+														label: __(
+															'Free shipping',
+															'multivendorx'
+														),
+													},
+													{
+														key: 'flat_rate',
+														value: 'flat_rate',
+														label: __(
+															'Flat Rate',
+															'multivendorx'
+														),
+													},
+												],
+												modules
+											)
 								}
 								disabled={isEditing}
 							/>
@@ -499,12 +513,18 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 											{
 												key: 'min_order',
 												value: 'min_order',
-												label: __('Min Order', 'multivendorx'),
+												label: __(
+													'Min Order',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'coupon',
 												value: 'coupon',
-												label: __('Coupon', 'multivendorx'),
+												label: __(
+													'Coupon',
+													'multivendorx'
+												),
 											},
 										]}
 									/>
@@ -589,12 +609,18 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 											{
 												key: 'class',
 												value: 'class',
-												label: __('Per Class', 'multivendorx'),
+												label: __(
+													'Per Class',
+													'multivendorx'
+												),
 											},
 											{
 												key: 'order',
 												value: 'order',
-												label: __('Per Order', 'multivendorx'),
+												label: __(
+													'Per Order',
+													'multivendorx'
+												),
 											},
 										]}
 									/>
@@ -607,7 +633,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 							null,
 							{
 								zone: selectedZone,
-								shippingMethod: formData.shippingMethod
+								shippingMethod: formData.shippingMethod,
 							}
 						)}
 					</div>

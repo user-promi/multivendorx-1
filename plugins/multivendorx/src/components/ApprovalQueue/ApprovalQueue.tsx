@@ -1,5 +1,5 @@
-import {  SettingsNavigator, useModules } from 'zyra';
-import {  useState } from 'react';
+import { SettingsNavigator, useModules } from 'zyra';
+import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useLocation, Link } from 'react-router-dom';
 import { applyFilters } from '@wordpress/hooks';
@@ -29,7 +29,10 @@ const ApprovalQueue = () => {
 			content: {
 				id: 'stores',
 				headerTitle: __('Stores', 'multivendorx'),
-				headerDescription: __('Eager to join the marketplace', 'multivendorx'),
+				headerDescription: __(
+					'Eager to join the marketplace',
+					'multivendorx'
+				),
 				settingTitle: __('Store in review queue', 'multivendorx'),
 				settingSubTitle: __(
 					'Next in line! Approve or reject new store join requests.',
@@ -83,9 +86,18 @@ const ApprovalQueue = () => {
 			content: {
 				id: 'withdrawal',
 				headerTitle: __('Withdrawals', 'multivendorx'),
-				headerDescription: __('Queued for disbursement', 'multivendorx'),
-				settingTitle: __('Withdrawals awaiting approval', 'multivendorx'),
-				settingSubTitle: __('Review and process store payouts.', 'multivendorx'),
+				headerDescription: __(
+					'Queued for disbursement',
+					'multivendorx'
+				),
+				settingTitle: __(
+					'Withdrawals awaiting approval',
+					'multivendorx'
+				),
+				settingSubTitle: __(
+					'Review and process store payouts.',
+					'multivendorx'
+				),
 				headerIcon: 'bank orange',
 				count: withdrawCount,
 			},
@@ -99,7 +111,10 @@ const ApprovalQueue = () => {
 					'Permanent store closure request',
 					'multivendorx'
 				),
-				settingTitle: __('Stores requesting deactivation', 'multivendorx'),
+				settingTitle: __(
+					'Stores requesting deactivation',
+					'multivendorx'
+				),
 				settingSubTitle: __(
 					'Approve or reject marketplace joiners.',
 					'multivendorx'
@@ -107,7 +122,7 @@ const ApprovalQueue = () => {
 				headerIcon: 'rejecte teal',
 				count: deactivateCount,
 			},
-		}
+		},
 	];
 
 	const filteredSettings = applyFilters(

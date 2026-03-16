@@ -1,9 +1,5 @@
 import { addFilter } from '@wordpress/hooks';
-import {
-	BasicInputUI,
-	DynamicRowSetting,
-	FormGroup,
-} from 'zyra';
+import { BasicInputUI, DynamicRowSetting, FormGroup } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const Downloadable = ({ product, setProduct, handleChange }) => {
@@ -72,7 +68,10 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 					keyName="downloads"
 					template={downloadTemplate}
 					value={product.downloads}
-					emptyText={__('No downloadable files added', 'multivendorx')}
+					emptyText={__(
+						'No downloadable files added',
+						'multivendorx'
+					)}
 					addLabel={__('Add new', 'multivendorx')}
 					onChange={(rows) => {
 						const cleanedRows = rows.map(
@@ -96,9 +95,7 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 					name="download_limit"
 					type="number"
 					value={product.download_limit}
-					onChange={(value) =>
-						handleChange('download_limit', value)
-					}
+					onChange={(value) => handleChange('download_limit', value)}
 				/>
 			</FormGroup>
 
@@ -111,9 +108,7 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 					name="download_expiry"
 					type="number"
 					value={product.download_expiry}
-					onChange={(value) =>
-						handleChange('download_expiry', value)
-					}
+					onChange={(value) => handleChange('download_expiry', value)}
 				/>
 			</FormGroup>
 		</>

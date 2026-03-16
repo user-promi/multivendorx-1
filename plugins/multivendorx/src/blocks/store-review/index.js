@@ -122,8 +122,14 @@ registerBlockType('multivendorx/store-review', {
 							label={__('Sort Order')}
 							value={sortOrder}
 							options={[
-								{ label: __('Newest First', 'multivendorx'), value: 'DESC' },
-								{ label: __('Oldest First', 'multivendorx'), value: 'ASC' },
+								{
+									label: __('Newest First', 'multivendorx'),
+									value: 'DESC',
+								},
+								{
+									label: __('Oldest First', 'multivendorx'),
+									value: 'ASC',
+								},
 							]}
 							onChange={(value) =>
 								setAttributes({ sortOrder: value })
@@ -178,7 +184,11 @@ registerBlockType('multivendorx/store-review', {
 											role="img"
 										>
 											<span style={{ width: '80%' }}>
-												Rated <strong className="rating">4</strong> out of 5
+												Rated{' '}
+												<strong className="rating">
+													4
+												</strong>{' '}
+												out of 5
 											</span>
 										</div>
 									</div>
@@ -240,7 +250,11 @@ registerBlockType('multivendorx/store-review', {
 											role="img"
 										>
 											<span style={{ width: '80%' }}>
-												Rated <strong className="rating">4</strong> out of 5
+												Rated{' '}
+												<strong className="rating">
+													4
+												</strong>{' '}
+												out of 5
 											</span>
 										</div>
 									</div>
@@ -302,15 +316,17 @@ registerBlockType('multivendorx/store-review', {
 											role="img"
 										>
 											<span style={{ width: '100%' }}>
-												Rated <strong className="rating">5</strong> out of 5
+												Rated{' '}
+												<strong className="rating">
+													5
+												</strong>{' '}
+												out of 5
 											</span>
 										</div>
 									</div>
 
 									<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
-										<a
-											aria-labelledby="review-3"
-										>
+										<a aria-labelledby="review-3">
 											T-shirt
 										</a>
 									</div>
@@ -331,7 +347,11 @@ registerBlockType('multivendorx/store-review', {
 							<div className="wc-block-review-list-item__text wc-block-components-review-list-item__text">
 								<div>
 									<div>
-										<p>Great quality t-shirt, fits perfectly and the material is super comfortable! Highly recommended.</p>
+										<p>
+											Great quality t-shirt, fits
+											perfectly and the material is super
+											comfortable! Highly recommended.
+										</p>
 									</div>
 								</div>
 							</div>

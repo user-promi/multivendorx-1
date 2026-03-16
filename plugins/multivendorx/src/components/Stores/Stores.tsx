@@ -43,10 +43,13 @@ const Stores = () => {
 
 	const checkSlugExists = async (slug: string): Promise<boolean> => {
 		try {
-			const response = await axios.get(getApiLink(appLocalizer, 'store'), {
-				params: { slug },
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			});
+			const response = await axios.get(
+				getApiLink(appLocalizer, 'store'),
+				{
+					params: { slug },
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				}
+			);
 			return response.data.exists;
 		} catch {
 			return false;
@@ -75,7 +78,10 @@ const Stores = () => {
 		const exists = await checkSlugExists(formData.slug);
 
 		if (exists) {
-			setFieldError('slug', `${__('Slug', 'multivendorx')} "${formData.slug}" ${__('already exists.', 'multivendorx')}`);
+			setFieldError(
+				'slug',
+				`${__('Slug', 'multivendorx')} "${formData.slug}" ${__('already exists.', 'multivendorx')}`
+			);
 		} else {
 			setFieldSuccess('slug', __('Available', 'multivendorx'));
 		}
@@ -101,7 +107,11 @@ const Stores = () => {
 	};
 
 	const saveEmails = (emailList: string[], primary: string) => {
-		setFormData((prev) => ({ ...prev, primary_email: primary, emails: emailList }));
+		setFormData((prev) => ({
+			...prev,
+			primary_email: primary,
+			emails: emailList,
+		}));
 	};
 
 	const resetForm = () => {
@@ -114,29 +124,44 @@ const Stores = () => {
 		const { name, slug, store_owners } = formData;
 
 		if (!name?.trim()) {
-			setFieldError('name', __('Store name is required.', 'multivendorx'));
+			setFieldError(
+				'name',
+				__('Store name is required.', 'multivendorx')
+			);
 			return;
 		}
 
 		if (!slug?.trim()) {
-			setFieldError('slug', __('Store slug is required.', 'multivendorx'));
+			setFieldError(
+				'slug',
+				__('Store slug is required.', 'multivendorx')
+			);
 			return;
 		}
 
 		if (!formData.primary_email?.trim()) {
-			setFieldError('email', __('Store email is required.', 'multivendorx'));
+			setFieldError(
+				'email',
+				__('Store email is required.', 'multivendorx')
+			);
 			return;
 		}
 
 		if (!store_owners) {
-			setFieldError('primary', __('Primary owner is required.', 'multivendorx'));
+			setFieldError(
+				'primary',
+				__('Primary owner is required.', 'multivendorx')
+			);
 			return;
 		}
 
 		// Re-check slug in case it was manually changed after the last check
 		const exists = await checkSlugExists(slug);
 		if (exists) {
-			setFieldError('slug', `${__('Slug', 'multivendorx')} "${slug}" ${__('already exists.', 'multivendorx')}`);
+			setFieldError(
+				'slug',
+				`${__('Slug', 'multivendorx')} "${slug}" ${__('already exists.', 'multivendorx')}`
+			);
 			return;
 		}
 
@@ -152,10 +177,18 @@ const Stores = () => {
 
 			if (response.data.success) {
 				setAddStore(false);
-				navigate(`?page=multivendorx#&tab=stores&edit/${response.data.id}`);
+				navigate(
+					`?page=multivendorx#&tab=stores&edit/${response.data.id}`
+				);
 			}
 		} catch {
-			setFieldError('name', __('Something went wrong while saving the store.', 'multivendorx'));
+			setFieldError(
+				'name',
+				__(
+					'Something went wrong while saving the store.',
+					'multivendorx'
+				)
+			);
 		}
 	};
 
@@ -184,11 +217,13 @@ const Stores = () => {
 	// This function now returns the notice props instead of the Notice component
 	const getFieldNotice = (key: string) => {
 		const err = error?.[key];
-		if (!err?.message) return { notice: undefined, noticeType: 'error' };
+		if (!err?.message) {
+			return { notice: undefined, noticeType: 'error' };
+		}
 
 		return {
 			notice: err.message,
-			noticeType: err.type as 'error' | 'success'
+			noticeType: err.type as 'error' | 'success',
 		};
 	};
 
@@ -262,7 +297,9 @@ const Stores = () => {
 									<BasicInputUI
 										name="name"
 										value={formData.name || ''}
-										onChange={(val) => handleChange('name', val as string)}
+										onChange={(val) =>
+											handleChange('name', val as string)
+										}
 									/>
 								</FormGroup>
 
@@ -274,11 +311,16 @@ const Stores = () => {
 									<BasicInputUI
 										name="slug"
 										value={formData.slug || ''}
-										onChange={(val) => handleChange('slug', val as string)}
+										onChange={(val) =>
+											handleChange('slug', val as string)
+										}
 									/>
 									<ButtonInputUI
 										buttons={{
-											text: __('Check Slug', 'multivendorx'),
+											text: __(
+												'Check Slug',
+												'multivendorx'
+											),
 											onClick: handleSlugCheck,
 										}}
 									/>
@@ -291,7 +333,9 @@ const Stores = () => {
 									<EmailsInput
 										value={formData.emails || []}
 										enablePrimary={true}
-										onChange={(list, primary) => saveEmails(list, primary)}
+										onChange={(list, primary) =>
+											saveEmails(list, primary)
+										}
 									/>
 								</FormGroup>
 
@@ -303,14 +347,17 @@ const Stores = () => {
 										name="description"
 										value={formData.description || ''}
 										onChange={(val: string) =>
-											setFormData(prev => ({
+											setFormData((prev) => ({
 												...prev,
-												description: val
+												description: val,
 											}))
 										}
 										usePlainText={false}
 										tinymceApiKey={
-											appLocalizer.settings_databases_value['overview']?.['tinymce_api_section'] ?? ''
+											appLocalizer
+												.settings_databases_value[
+												'overview'
+											]?.['tinymce_api_section'] ?? ''
 										}
 									/>
 								</FormGroup>
@@ -322,7 +369,9 @@ const Stores = () => {
 								>
 									<SelectInputUI
 										name="store_owners"
-										options={appLocalizer?.store_owners || []}
+										options={
+											appLocalizer?.store_owners || []
+										}
 										value={formData.store_owners}
 										type="single-select"
 										onChange={(newValue: any) => {

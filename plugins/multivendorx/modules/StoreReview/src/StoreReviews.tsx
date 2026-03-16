@@ -297,7 +297,10 @@ const StoreReviews: React.FC = () => {
 					title={__('Delete Review', 'multivendorx')}
 					confirmMessage={
 						selectedRv
-							? __('Are you sure you want to delete review?', 'multivendorx')
+							? __(
+									'Are you sure you want to delete review?',
+									'multivendorx'
+								)
 							: ''
 					}
 					confirmYesText={__('Delete', 'multivendorx')}
@@ -378,7 +381,7 @@ const StoreReviews: React.FC = () => {
 												...Array(
 													Math.round(
 														selectedReview.overall_rating ||
-														0
+															0
 													)
 												),
 											].map((_, i) => (
@@ -391,10 +394,10 @@ const StoreReviews: React.FC = () => {
 											{[
 												...Array(
 													5 -
-													Math.round(
-														selectedReview.overall_rating ||
-														0
-													)
+														Math.round(
+															selectedReview.overall_rating ||
+																0
+														)
 												),
 											].map((_, i) => (
 												<i

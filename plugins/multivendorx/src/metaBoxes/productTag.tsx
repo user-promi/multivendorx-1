@@ -1,11 +1,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {
-	InputWithSuggestions,
-	Card,
-	FormGroupWrapper,
-} from 'zyra';
+import { InputWithSuggestions, Card, FormGroupWrapper } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const ProductTag = ({ product, setProduct }) => {
@@ -22,10 +18,7 @@ const ProductTag = ({ product, setProduct }) => {
 	}, []);
 
 	return (
-		<Card
-			
-			title={__('Product tag', 'multivendorx')}
-		>
+		<Card title={__('Product tag', 'multivendorx')}>
 			{/* <FormGroupWrapper>
 				<InputWithSuggestions
 					suggestions={existingTags.map(

@@ -207,7 +207,6 @@ const AICard = ({ product, setProduct }) => {
 
 	return (
 		<Card
-			
 			className="theme-bg"
 			title={__('AI assist', 'multivendorx')}
 			desc={__('Get help creating your product listing', 'multivendorx')}
@@ -438,7 +437,7 @@ addFilter(
 		return (
 			<>
 				{content}
-				<AICard product={product} setProduct={setProduct}/>
+				<AICard product={product} setProduct={setProduct} />
 			</>
 		);
 	},

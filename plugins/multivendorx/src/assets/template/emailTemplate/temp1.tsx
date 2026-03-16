@@ -85,7 +85,7 @@ export const temp1 = {
 			type: 'richtext',
 			name: 'email-text-welcome-message',
 			html: __(
-				'Thank you for joining our growing community of sellers! We\'re thrilled to have you on board and can\'t wait to see what you\'ll create. Your store registration has been received and is currently being reviewed.',
+				"Thank you for joining our growing community of sellers! We're thrilled to have you on board and can't wait to see what you'll create. Your store registration has been received and is currently being reviewed.",
 				'multivendorx'
 			),
 			style: {
@@ -100,7 +100,7 @@ export const temp1 = {
 			id: 7,
 			type: 'heading',
 			name: 'email-heading-next-steps',
-			text: __('Here\'s what happens next:', 'multivendorx'),
+			text: __("Here's what happens next:", 'multivendorx'),
 			level: 3,
 			style: {
 				backgroundColor: 'transparent',
@@ -144,7 +144,10 @@ export const temp1 = {
 			id: 10,
 			type: 'richtext',
 			name: 'email-text-step1',
-			html: __('Identity and business verification process begins.', 'multivendorx'),
+			html: __(
+				'Identity and business verification process begins.',
+				'multivendorx'
+			),
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
@@ -171,7 +174,10 @@ export const temp1 = {
 			id: 12,
 			type: 'richtext',
 			name: 'email-text-step2',
-			html: __('Configure your store settings and add products.', 'multivendorx'),
+			html: __(
+				'Configure your store settings and add products.',
+				'multivendorx'
+			),
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
@@ -246,7 +252,7 @@ export const temp1 = {
 			id: 17,
 			type: 'heading',
 			name: 'email-heading-benefits',
-			text: __('What You\'ll Get:', 'multivendorx'),
+			text: __("What You'll Get:", 'multivendorx'),
 			level: 2,
 			style: {
 				backgroundColor: 'transparent',
@@ -274,7 +280,10 @@ export const temp1 = {
 			id: 19,
 			type: 'richtext',
 			name: 'email-text-benefit1',
-			html: __('✓ Access to {{customer_count}}+ customers', 'multivendorx'),
+			html: __(
+				'✓ Access to {{customer_count}}+ customers',
+				'multivendorx'
+			),
 			style: {
 				backgroundColor: 'transparent',
 				color: '#2d3748',
@@ -286,7 +295,10 @@ export const temp1 = {
 			id: 20,
 			type: 'richtext',
 			name: 'email-text-benefit2',
-			html: __('✓ Zero monthly fees - pay only when you sell', 'multivendorx'),
+			html: __(
+				'✓ Zero monthly fees - pay only when you sell',
+				'multivendorx'
+			),
 			style: {
 				backgroundColor: 'transparent',
 				color: '#2d3748',
@@ -363,7 +375,10 @@ export const temp1 = {
 			id: 26,
 			type: 'richtext',
 			name: 'email-text-faq1',
-			html: __('Usually within 24-48 hours during business days.', 'multivendorx'),
+			html: __(
+				'Usually within 24-48 hours during business days.',
+				'multivendorx'
+			),
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
@@ -389,7 +404,10 @@ export const temp1 = {
 			id: 28,
 			type: 'richtext',
 			name: 'email-text-faq2',
-			html: __('Commission rates start from {{commission_rate}}% per sale. No hidden fees!', 'multivendorx'),
+			html: __(
+				'Commission rates start from {{commission_rate}}% per sale. No hidden fees!',
+				'multivendorx'
+			),
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
@@ -415,7 +433,10 @@ export const temp1 = {
 			id: 30,
 			type: 'richtext',
 			name: 'email-text-faq3',
-			html: __('Yes! Our marketplace supports global selling with multiple currencies.', 'multivendorx'),
+			html: __(
+				'Yes! Our marketplace supports global selling with multiple currencies.',
+				'multivendorx'
+			),
 			style: {
 				backgroundColor: 'transparent',
 				color: '#4a5568',
@@ -495,7 +516,10 @@ export const temp1 = {
 			id: 36,
 			type: 'richtext',
 			name: 'email-text-copyright',
-			html: __('© {{current_year}} MultiVendorX Marketplace. All rights reserved.', 'multivendorx'),
+			html: __(
+				'© {{current_year}} MultiVendorX Marketplace. All rights reserved.',
+				'multivendorx'
+			),
 			style: {
 				backgroundColor: 'transparent',
 				color: '#718096',

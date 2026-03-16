@@ -13,7 +13,10 @@ addFilter(
 				id: 'questions',
 				headerTitle: __('Questions', 'multivendorx'),
 				settingTitle: __('Product questions in queue', 'multivendorx'),
-				settingSubTitle: __('Waiting for your response','multivendorx'),
+				settingSubTitle: __(
+					'Waiting for your response',
+					'multivendorx'
+				),
 				headerIcon: 'question',
 			},
 		});
@@ -26,7 +29,6 @@ addFilter(
 	'multivendorx_customer_support_tab_content',
 	'multivendorx/question-answer-content',
 	(defaultForm, { tabId }) => {
-
 		if (tabId === 'questions') {
 			return <Qna />;
 		}

@@ -2,10 +2,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, Container, Column, TableCard, PopupUI, TableRow, QueryProps, ItemCardUI } from 'zyra';
+import {
+	getApiLink,
+	Container,
+	Column,
+	TableCard,
+	PopupUI,
+	TableRow,
+	QueryProps,
+	ItemCardUI,
+} from 'zyra';
 import Popup from '../../../src/components/Popup/Popup';
 
-const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void; }> = ({ setCount }) => {
+const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
+	setCount,
+}) => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -69,7 +80,7 @@ const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void; }> = ({
 					title={row.product?.name}
 					sku={row.product?.sku}
 					image={row.product?.image}
-					icon={"inventory"}
+					icon={'inventory'}
 					link={`/wp-admin/post.php?post=${row.product?.id}&action=edit`}
 				/>
 			),

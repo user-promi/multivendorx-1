@@ -52,11 +52,26 @@ registerBlockType('multivendorx/marketplace-coupons', {
 							label={__('Order By', 'multivendorx')}
 							value={attributes.orderby}
 							options={[
-								{ label: __('Date', 'multivendorx'), value: 'date' },
-								{ label: __('ID', 'multivendorx'), value: 'id' },
-								{ label: __('Title', 'multivendorx'), value: 'title' },
-								{ label: __('Code', 'multivendorx'), value: 'code' },
-								{ label: __('Modified', 'multivendorx'), value: 'modified' },
+								{
+									label: __('Date', 'multivendorx'),
+									value: 'date',
+								},
+								{
+									label: __('ID', 'multivendorx'),
+									value: 'id',
+								},
+								{
+									label: __('Title', 'multivendorx'),
+									value: 'title',
+								},
+								{
+									label: __('Code', 'multivendorx'),
+									value: 'code',
+								},
+								{
+									label: __('Modified', 'multivendorx'),
+									value: 'modified',
+								},
 							]}
 							onChange={(value) =>
 								setAttributes({ orderby: value })
@@ -67,8 +82,14 @@ registerBlockType('multivendorx/marketplace-coupons', {
 							label={__('Order', 'multivendorx')}
 							value={attributes.order}
 							options={[
-								{ label: __('Descending', 'multivendorx'), value: 'DESC' },
-								{ label: __('Ascending', 'multivendorx'), value: 'ASC' },
+								{
+									label: __('Descending', 'multivendorx'),
+									value: 'DESC',
+								},
+								{
+									label: __('Ascending', 'multivendorx'),
+									value: 'ASC',
+								},
 							]}
 							onChange={(value) =>
 								setAttributes({ order: value })
@@ -78,10 +99,7 @@ registerBlockType('multivendorx/marketplace-coupons', {
 				</InspectorControls>
 
 				<BrowserRouter>
-					<StoreCouponList 
-						{...attributes} 
-						isPreview={true}
-					/>
+					<StoreCouponList {...attributes} isPreview={true} />
 				</BrowserRouter>
 			</div>
 		);
@@ -91,18 +109,19 @@ registerBlockType('multivendorx/marketplace-coupons', {
 		const blockProps = useBlockProps.save();
 
 		return (
-			<div 
+			<div
 				{...blockProps}
 				id="marketplace-coupons"
 				data-attributes={JSON.stringify(attributes)}
-			>
-			</div>
+			></div>
 		);
 	},
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-	const elements = document.querySelectorAll('.multivendorx-marketplace-coupons-block');
+	const elements = document.querySelectorAll(
+		'.multivendorx-marketplace-coupons-block'
+	);
 
 	elements.forEach((element) => {
 		const attributes = JSON.parse(
@@ -111,9 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		render(
 			<BrowserRouter>
-				<StoreCouponList 
-					{...attributes}
-				/>
+				<StoreCouponList {...attributes} />
 			</BrowserRouter>,
 			element
 		);

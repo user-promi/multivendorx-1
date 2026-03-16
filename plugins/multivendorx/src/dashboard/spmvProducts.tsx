@@ -107,7 +107,11 @@ const SpmvProducts: React.FC = () => {
 			{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 		);
 
-		dashNavigate(navigate, ['products', 'edit', String(newProduct.data.id)]);
+		dashNavigate(navigate, [
+			'products',
+			'edit',
+			String(newProduct.data.id),
+		]);
 	};
 	return (
 		<>
@@ -122,7 +126,10 @@ const SpmvProducts: React.FC = () => {
 							<div className="search-section">
 								<BasicInputUI
 									type="text"
-									placeholder={__('Search by an existing listing', 'multivendorx')}
+									placeholder={__(
+										'Search by an existing listing',
+										'multivendorx'
+									)}
 									value={query}
 									onChange={(value) => setQuery(value)}
 								/>
@@ -132,11 +139,19 @@ const SpmvProducts: React.FC = () => {
 					</div>
 
 					<div className="buttons-wrapper center">
-						<div className="desc">{__('Search by', 'multivendorx')}</div>
+						<div className="desc">
+							{__('Search by', 'multivendorx')}
+						</div>
 
-						<span className="admin-badge blue">{__('Name', 'multivendorx')}</span>
-						<span className="admin-badge pink">{__('UPC', 'multivendorx')}</span>
-						<span className="admin-badge teal">{__('ISBN', 'multivendorx')}</span>
+						<span className="admin-badge blue">
+							{__('Name', 'multivendorx')}
+						</span>
+						<span className="admin-badge pink">
+							{__('UPC', 'multivendorx')}
+						</span>
+						<span className="admin-badge teal">
+							{__('ISBN', 'multivendorx')}
+						</span>
 
 						<div className="desc">
 							{__('to locate the right listing.', 'multivendorx')}
@@ -205,7 +220,9 @@ const SpmvProducts: React.FC = () => {
 
 										<div
 											className="admin-btn btn-blue"
-											onClick={() => duplicateProduct(product)}
+											onClick={() =>
+												duplicateProduct(product)
+											}
 										>
 											<i className="adminfont-vendor-form-copy"></i>
 											{__('Copy', 'multivendorx')}
@@ -220,7 +237,9 @@ const SpmvProducts: React.FC = () => {
 									</div>
 
 									<div className="price">
-										{formatCurrency(product.price || '0.00')}
+										{formatCurrency(
+											product.price || '0.00'
+										)}
 									</div>
 								</div>
 							);
@@ -237,8 +256,11 @@ const SpmvProducts: React.FC = () => {
 						<div className="pagination-arrow">
 							<span
 								tabIndex={0}
-								className={`${pageIndex === 0 ? 'pagination-button-disabled' : ''
-									}`}
+								className={`${
+									pageIndex === 0
+										? 'pagination-button-disabled'
+										: ''
+								}`}
 								onClick={() => {
 									if (pageIndex === 0) {
 										return;
@@ -251,8 +273,11 @@ const SpmvProducts: React.FC = () => {
 
 							<span
 								tabIndex={0}
-								className={`${pageIndex === 0 ? 'pagination-button-disabled' : ''
-									}`}
+								className={`${
+									pageIndex === 0
+										? 'pagination-button-disabled'
+										: ''
+								}`}
 								onClick={() => {
 									if (pageIndex === 0) {
 										return;
@@ -267,8 +292,9 @@ const SpmvProducts: React.FC = () => {
 								{Array.from({ length: pageCount }, (_, i) => (
 									<button
 										key={i}
-										className={`number-btn ${pageIndex === i ? 'active' : ''
-											}`}
+										className={`number-btn ${
+											pageIndex === i ? 'active' : ''
+										}`}
 										onClick={() => setPageIndex(i)}
 									>
 										{i + 1}
@@ -278,10 +304,11 @@ const SpmvProducts: React.FC = () => {
 
 							<span
 								tabIndex={0}
-								className={`${pageIndex === pageCount - 1
+								className={`${
+									pageIndex === pageCount - 1
 										? 'pagination-button-disabled'
 										: ''
-									}`}
+								}`}
 								onClick={() => {
 									if (pageIndex === pageCount - 1) {
 										return;
@@ -294,10 +321,11 @@ const SpmvProducts: React.FC = () => {
 
 							<span
 								tabIndex={0}
-								className={`${pageIndex === pageCount - 1
+								className={`${
+									pageIndex === pageCount - 1
 										? 'pagination-button-disabled'
 										: ''
-									}`}
+								}`}
 								onClick={() => {
 									if (pageIndex === pageCount - 1) {
 										return;

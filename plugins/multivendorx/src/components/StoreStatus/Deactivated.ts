@@ -12,18 +12,24 @@ export default {
 			key: 'paid_promotion_limit',
 			label: __('Account capabilities', 'multivendorx'),
 			type: 'itemlist',
-			className: 'checklist',  
-			items: [ 
+			className: 'checklist',
+			items: [
 				{
 					title: __('Cannot log in to dashboard', 'multivendorx'),
 					icon: 'close adminfont-cross',
 				},
 				{
-					title: __('Cannot access selling privileges', 'multivendorx'),
+					title: __(
+						'Cannot access selling privileges',
+						'multivendorx'
+					),
 					icon: 'close adminfont-cross',
 				},
 				{
-					title: __('Cannot view or manage product listings', 'multivendorx'),
+					title: __(
+						'Cannot view or manage product listings',
+						'multivendorx'
+					),
 					icon: 'close adminfont-cross',
 				},
 			],

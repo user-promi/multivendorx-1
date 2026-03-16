@@ -13,7 +13,7 @@ import {
 import { __ } from '@wordpress/i18n';
 
 const ShippingCard = ({ product, setProduct, handleChange }) => {
-	const {modules} = useModules();
+	const { modules } = useModules();
 	const [shippingClasses, setShippingClasses] = useState([]);
 	const [productType, setProductType] = useState('physical');
 
@@ -34,10 +34,9 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 
 	return (
 		<Card
-			
 			title={__('Product delivery', 'multivendorx')}
-		// iconName="keyboard-arrow-down arrow-icon icon"
-		// toggle
+			// iconName="keyboard-arrow-down arrow-icon icon"
+			// toggle
 		>
 			{/* Dimensions */}
 			<FormGroupWrapper>
@@ -98,10 +97,7 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 								options={shippingClasses}
 								value={product.shipping_class}
 								onChange={(value) =>
-									handleChange(
-										'shipping_class',
-										value
-									)
+									handleChange('shipping_class', value)
 								}
 							/>
 						</FormGroup>
@@ -170,29 +166,28 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 						product,
 						setProduct,
 						handleChange
-					)
-				}
+					)}
 			</FormGroupWrapper>
 		</Card>
 	);
 };
 
 addFilter(
-    'multivendorx_add_product_middle_section',
-    'multivendorx/shipping',
-    (content, product, setProduct, handleChange) => {
-        return (
-            <>
-                {content}
-                {!product.virtual && (
-                    <ShippingCard
-                        product={product}
-                        setProduct={setProduct}
-                        handleChange={handleChange}
-                    />
-                )}
-            </>
-        );
-    },
-    50
+	'multivendorx_add_product_middle_section',
+	'multivendorx/shipping',
+	(content, product, setProduct, handleChange) => {
+		return (
+			<>
+				{content}
+				{!product.virtual && (
+					<ShippingCard
+						product={product}
+						setProduct={setProduct}
+						handleChange={handleChange}
+					/>
+				)}
+			</>
+		);
+	},
+	50
 );

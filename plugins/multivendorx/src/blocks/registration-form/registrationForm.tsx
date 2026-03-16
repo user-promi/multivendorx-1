@@ -5,7 +5,10 @@ import { __ } from '@wordpress/i18n';
 
 const RegistrationForm = () => {
 	const [loading, setLoading] = useState(false);
-	const [responseMessage, setResponseMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+	const [responseMessage, setResponseMessage] = useState<{
+		type: 'success' | 'error';
+		message: string;
+	} | null>(null);
 	const [responseData, setResponseData] = useState<any[]>([]);
 	const [stores, setStores] = useState<any[]>([]);
 	const [selectedStore, setSelectedStore] = useState<any>(null);
@@ -120,7 +123,7 @@ const RegistrationForm = () => {
 			.then((response) => {
 				setResponseMessage({
 					type: 'success',
-					message: __('Store created successfully', 'multivendorx')
+					message: __('Store created successfully', 'multivendorx'),
 				});
 				setLoading(false);
 				if (response.data.redirect !== '') {
@@ -130,7 +133,7 @@ const RegistrationForm = () => {
 			.catch(() => {
 				setResponseMessage({
 					type: 'error',
-					message: __('Error creating store', 'multivendorx')
+					message: __('Error creating store', 'multivendorx'),
 				});
 				setLoading(false);
 			});
@@ -179,7 +182,14 @@ const RegistrationForm = () => {
 			<div>{registrationForm.content_after_form}</div>
 			{responseMessage && (
 				<div className="woocommerce-notices-wrapper">
-					<ul className={responseMessage.type === 'success' ? 'woocommerce-message' : 'woocommerce-error'} role="alert">
+					<ul
+						className={
+							responseMessage.type === 'success'
+								? 'woocommerce-message'
+								: 'woocommerce-error'
+						}
+						role="alert"
+					>
 						<li>{responseMessage.message}</li>
 					</ul>
 				</div>

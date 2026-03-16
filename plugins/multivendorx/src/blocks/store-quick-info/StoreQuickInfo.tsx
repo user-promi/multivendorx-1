@@ -72,12 +72,19 @@ const StoreQuickInfo: React.FC<{}> = () => {
 	}, [storeDetails.storeId]);
 
 	const renderStars = (rating: number | null) => {
-		if (!rating) return null;
+		if (!rating) {
+			return null;
+		}
 
 		return (
-			<div className="star-rating" role="img" aria-label={`Rated ${rating.toFixed(1)} out of 5`}>
+			<div
+				className="star-rating"
+				role="img"
+				aria-label={`Rated ${rating.toFixed(1)} out of 5`}
+			>
 				<span style={{ width: `${(rating / 5) * 100}%` }}>
-					<strong className="rating">{rating.toFixed(1)}</strong> {__('out of 5', 'multivendorx')}
+					<strong className="rating">{rating.toFixed(1)}</strong>{' '}
+					{__('out of 5', 'multivendorx')}
 				</span>
 			</div>
 		);
@@ -101,14 +108,18 @@ const StoreQuickInfo: React.FC<{}> = () => {
 						<h3 className="store-name">{storeDetails.storeName}</h3>
 					)}
 					{storeDetails.storeEmail && (
-						<p> <span className="dashicons dashicons-email"></span> {storeDetails.storeEmail}</p>
+						<p>
+							{' '}
+							<span className="dashicons dashicons-email"></span>{' '}
+							{storeDetails.storeEmail}
+						</p>
 					)}
 
 					<div className="store-rating">
 						{renderStars(rating)}
 						{ratingCount !== null && (
 							<span className="rating-count">
-								{ratingCount > 0 
+								{ratingCount > 0
 									? `(${ratingCount} ${ratingCount === 1 ? __('review', 'multivendorx') : __('reviews', 'multivendorx')})`
 									: __('(0 reviews)', 'multivendorx')}
 							</span>
@@ -121,13 +132,17 @@ const StoreQuickInfo: React.FC<{}> = () => {
 				{totalProducts !== null && (
 					<div className="stat-item">
 						<div className="stat-number">{totalProducts}</div>
-						<div className="stat-label">{__('Products', 'multivendorx')}</div>
+						<div className="stat-label">
+							{__('Products', 'multivendorx')}
+						</div>
 					</div>
 				)}
 
 				<div className="stat-item">
 					<div className="stat-number">{ratingCount || 0}</div>
-					<div className="stat-label">{__('Reviews', 'multivendorx')}</div>
+					<div className="stat-label">
+						{__('Reviews', 'multivendorx')}
+					</div>
 				</div>
 			</div>
 		</div>

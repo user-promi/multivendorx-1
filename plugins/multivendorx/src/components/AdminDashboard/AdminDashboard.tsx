@@ -1,12 +1,11 @@
 import './AdminDashboard.scss';
 import '../dashboard.scss';
-import {TabsUI} from 'zyra';
+import { TabsUI } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import FreeVsProTab from './FreeVsProTab';
 import DashboardTab from './DashboardTab';
 
 const AdminDashboard = () => {
-
 	const upgradeButton = !appLocalizer.khali_dabba && (
 		<a
 			href={appLocalizer.shop_url}
@@ -33,11 +32,14 @@ const AdminDashboard = () => {
 			icon: 'pros-and-cons',
 			content: <FreeVsProTab />,
 		},
-	].filter(tab => !(appLocalizer?.khali_dabba && tab.pro));
-
+	].filter((tab) => !(appLocalizer?.khali_dabba && tab.pro));
 
 	return (
-		<TabsUI tabs={tabs} className="background" headerExtra={upgradeButton} />
+		<TabsUI
+			tabs={tabs}
+			className="background"
+			headerExtra={upgradeButton}
+		/>
 	);
 };
 

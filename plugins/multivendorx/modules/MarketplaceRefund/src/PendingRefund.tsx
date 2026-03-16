@@ -14,7 +14,7 @@ import {
 	TableRow,
 	TextAreaUI,
 } from 'zyra';
-import { toWcIsoDate, } from '../../../src/services/commonFunction';
+import { toWcIsoDate } from '../../../src/services/commonFunction';
 
 interface OrderMeta {
 	key: string;
@@ -50,7 +50,9 @@ const EMPTY_ORDER: RefundOrder = {
 	refund_images: [],
 };
 
-const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCount }) => {
+const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
+	setCount,
+}) => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -67,10 +69,12 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: StoreApi) => ({
-					label: store.store_name,
-					value: store.id,
-				}));
+				const options = (response.data || []).map(
+					(store: StoreApi) => ({
+						label: store.store_name,
+						value: store.id,
+					})
+				);
 
 				setStore(options);
 				setIsLoading(false);
@@ -152,7 +156,11 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 		},
 		reason: {
 			label: __('Refund Reason', 'multivendorx'),
-			render: (row: OrderRow) => getMetaValue(row.meta_data, appLocalizer.order_meta.customer_refund_reason)
+			render: (row: OrderRow) =>
+				getMetaValue(
+					row.meta_data,
+					appLocalizer.order_meta.customer_refund_reason
+				),
 		},
 		date_created: {
 			label: __('Date', 'multivendorx'),
@@ -167,7 +175,10 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 					label: __('View Details', 'multivendorx'),
 					icon: 'preview',
 					onClick: (row: OrderRow) => {
-						window.open(`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${row.id}&action=edit`, '_blank');
+						window.open(
+							`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${row.id}&action=edit`,
+							'_blank'
+						);
 					},
 				},
 				{
@@ -218,9 +229,9 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-							query.filter.created_at.startDate,
-							'start'
-						)
+								query.filter.created_at.startDate,
+								'start'
+							)
 						: undefined,
 					before: query.filter?.created_at?.endDate
 						? toWcIsoDate(query.filter.created_at.endDate, 'end')
@@ -239,7 +250,7 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 
 				setRows(orders);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
-				setCount?.(Number(response.headers['x-wp-total']) || 0)
+				setCount?.(Number(response.headers['x-wp-total']) || 0);
 				setIsLoading(false);
 			})
 			.catch((error) => {
@@ -290,10 +301,15 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 								buttons={[
 									{
 										icon: 'external-link',
-										text: __('View order to release funds', 'multivendorx'),
+										text: __(
+											'View order to release funds',
+											'multivendorx'
+										),
 										color: 'yellow-bg',
 										onClick: () => {
-											if (!viewOrder) return;
+											if (!viewOrder) {
+												return;
+											}
 											window.open(
 												`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${viewOrder.id}&action=edit`,
 												'_blank'
@@ -308,7 +324,9 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 										icon: 'save',
 										text: __('Reject', 'multivendorx'),
 										onClick: () => {
-											if (!viewOrder) return;
+											if (!viewOrder) {
+												return;
+											}
 											handleSubmit(viewOrder.id);
 										},
 										disabled: isSubmitting,
@@ -326,7 +344,11 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 									label={__('Refund Reason', 'multivendorx')}
 								>
 									<div className="refund-reason-box">
-										{getMetaValue(viewOrder.meta_data, appLocalizer.order_meta.customer_refund_reason)}
+										{getMetaValue(
+											viewOrder.meta_data,
+											appLocalizer.order_meta
+												.customer_refund_reason
+										)}
 									</div>
 								</FormGroup>
 								<FormGroup
@@ -336,7 +358,11 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 									)}
 								>
 									<div className="refund-additional-info">
-										{getMetaValue(viewOrder.meta_data, appLocalizer.order_meta.multivendorx_customer_refund_addi_info)}
+										{getMetaValue(
+											viewOrder.meta_data,
+											appLocalizer.order_meta
+												.multivendorx_customer_refund_addi_info
+										)}
 									</div>
 								</FormGroup>
 								{viewOrder?.refund_images?.length > 0 && (
@@ -391,15 +417,15 @@ const PendingRefund: React.FC<{setCount?: (count: number) => void;}> = ({ setCou
 										}
 										usePlainText={false}
 										tinymceApiKey={
-											appLocalizer.settings_databases_value[
-											'overview'
+											appLocalizer
+												.settings_databases_value[
+												'overview'
 											]['tinymce_api_section'] ?? ''
 										}
 									/>
 								</FormGroup>
 							</FormGroupWrapper>
 						)}
-
 					</PopupUI>
 				</Column>
 			</Container>

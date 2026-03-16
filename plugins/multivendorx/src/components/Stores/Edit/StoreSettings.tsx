@@ -13,7 +13,7 @@ import {
 	BasicInputUI,
 	SelectInputUI,
 	Notice,
-	CountryCodes
+	CountryCodes,
 } from 'zyra';
 import { useLocation } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
@@ -36,7 +36,10 @@ const StoreSettings = ({
 		{ label: __('Under Review', 'multivendorx'), value: 'under_review' },
 		{ label: __('Suspended', 'multivendorx'), value: 'suspended' },
 		{ label: __('Active', 'multivendorx'), value: 'active' },
-		{ label: __('Permanently Deactivated', 'multivendorx'), value: 'deactivated' }
+		{
+			label: __('Permanently Deactivated', 'multivendorx'),
+			value: 'deactivated',
+		},
 	];
 
 	const [stateOptions, setStateOptions] = useState<
@@ -50,7 +53,7 @@ const StoreSettings = ({
 		provider: string | null;
 		apiKey: string;
 	}>({ provider: 'null', apiKey: '' });
-	
+
 	const appLocalizer = (window as any).appLocalizer;
 	const { modules } = useModules();
 	const settings = appLocalizer.settings_databases_value;
@@ -112,10 +115,10 @@ const StoreSettings = ({
 
 		setMapConfig({
 			provider: provider || null,
-			apiKey: apiKey
+			apiKey: apiKey,
 		});
 	}, [settings]);
-	
+
 	// Load store data
 	useEffect(() => {
 		if (!id || !appLocalizer) {
@@ -222,7 +225,7 @@ const StoreSettings = ({
 		const updated = {
 			...formData,
 			country: value,
-			state: '', 
+			state: '',
 		};
 
 		setFormData(updated);
@@ -283,7 +286,10 @@ const StoreSettings = ({
 			if (cleanValue !== value.toLowerCase()) {
 				setErrorMsg((prev) => ({
 					...prev,
-					slug: __('Special characters are not allowed.', 'multivendorx'),
+					slug: __(
+						'Special characters are not allowed.',
+						'multivendorx'
+					),
 				}));
 				return;
 			}
@@ -362,7 +368,11 @@ const StoreSettings = ({
 
 	// Render map component using the merged provider
 	const renderMapComponent = () => {
-		if (!modules.includes('geo-location') || !mapConfig.apiKey || !mapConfig.provider) {
+		if (
+			!modules.includes('geo-location') ||
+			!mapConfig.apiKey ||
+			!mapConfig.provider
+		) {
 			return null;
 		}
 
@@ -374,7 +384,10 @@ const StoreSettings = ({
 				locationLng={addressData.location_lng}
 				isUserLocation={false}
 				onLocationUpdate={handleLocationUpdate}
-				placeholderSearch={__('Search for a location...', 'multivendorx')}
+				placeholderSearch={__(
+					'Search for a location...',
+					'multivendorx'
+				)}
 				stores={null}
 				mapProvider={mapConfig.provider}
 			/>
@@ -385,7 +398,7 @@ const StoreSettings = ({
 		<>
 			<Notice
 				message={successMsg}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 			<Container>
@@ -404,7 +417,10 @@ const StoreSettings = ({
 										)}
 										<br />
 										<b>
-											{__('Primary email:', 'multivendorx')}
+											{__(
+												'Primary email:',
+												'multivendorx'
+											)}
 										</b>
 										{__(
 											'Click the star icon to set an email as primary. This email will appear on your storefront, and all other email IDs will be hidden from display.',
@@ -417,7 +433,7 @@ const StoreSettings = ({
 									value={[data.emails]}
 									primary={data.primary_email}
 									enablePrimary={true}
-									onChange={(list, primary) => 
+									onChange={(list, primary) =>
 										saveEmails(list, primary)
 									}
 								/>
@@ -425,17 +441,21 @@ const StoreSettings = ({
 
 							<FormGroup label={__('Phone', 'multivendorx')}>
 								<SelectInputUI
-									type='single-select'
+									type="single-select"
 									name="country_code"
 									value={formData.country_code}
 									options={CountryCodes}
-									onChange={(selected) => handleChange('country_code', selected)}
+									onChange={(selected) =>
+										handleChange('country_code', selected)
+									}
 								/>
 								<BasicInputUI
 									name="phone"
 									type="number"
 									value={formData.phone}
-									onChange={(value) => handleChange('phone', value)}
+									onChange={(value) =>
+										handleChange('phone', value)
+									}
 								/>
 								{errorMsg.phone && (
 									<p className="invalid-massage">
@@ -466,7 +486,9 @@ const StoreSettings = ({
 								<BasicInputUI
 									name="address"
 									value={addressData.address}
-									onChange={(value) => handleAddressChange('address', value)}
+									onChange={(value) =>
+										handleAddressChange('address', value)
+									}
 								/>
 							</FormGroup>
 
@@ -478,7 +500,9 @@ const StoreSettings = ({
 								<BasicInputUI
 									name="city"
 									value={addressData.city}
-									onChange={(value) => handleAddressChange('city', value)}
+									onChange={(value) =>
+										handleAddressChange('city', value)
+									}
 								/>
 							</FormGroup>
 							<FormGroup
@@ -489,7 +513,9 @@ const StoreSettings = ({
 								<BasicInputUI
 									name="zip"
 									value={addressData.zip}
-									onChange={(value) => handleAddressChange('zip', value)}
+									onChange={(value) =>
+										handleAddressChange('zip', value)
+									}
 								/>
 							</FormGroup>
 
@@ -519,9 +545,7 @@ const StoreSettings = ({
 								/>
 							</FormGroup>
 							{/* Map Component */}
-							<FormGroup>
-								{renderMapComponent()}
-							</FormGroup>
+							<FormGroup>{renderMapComponent()}</FormGroup>
 						</FormGroupWrapper>
 						{/* Hidden coordinates */}
 						<input
@@ -584,7 +608,9 @@ const StoreSettings = ({
 								<BasicInputUI
 									name="slug"
 									value={formData.slug}
-									onChange={(val) => handleChange('slug', val)}
+									onChange={(val) =>
+										handleChange('slug', val)
+									}
 								/>
 								<div className="settings-metabox-description slug">
 									{__('Store URL', 'multivendorx')} :{' '}
@@ -622,14 +648,16 @@ const StoreSettings = ({
 
 							return (
 								<FormGroupWrapper key={network}>
-									<FormGroup 
+									<FormGroup
 										icon={iconClass}
-										label={network === 'twitter'
+										label={
+											network === 'twitter'
 												? 'X'
 												: network
-													.charAt(0)
-													.toUpperCase() +
-												network.slice(1)}
+														.charAt(0)
+														.toUpperCase() +
+													network.slice(1)
+										}
 									>
 										<BasicInputUI
 											name={network}
@@ -637,7 +665,9 @@ const StoreSettings = ({
 												formData[network]?.trim() ||
 												defaultUrl
 											}
-											onChange={(val: string) => handleChange(network, val)}
+											onChange={(val: string) =>
+												handleChange(network, val)
+											}
 										/>
 									</FormGroup>
 								</FormGroupWrapper>

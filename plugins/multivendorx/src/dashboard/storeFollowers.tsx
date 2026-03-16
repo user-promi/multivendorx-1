@@ -2,7 +2,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, NavigatorHeader, QueryProps, TableCard, TableRow } from 'zyra';
+import {
+	getApiLink,
+	NavigatorHeader,
+	QueryProps,
+	TableCard,
+	TableRow,
+} from 'zyra';
 
 const StoreFollower: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);

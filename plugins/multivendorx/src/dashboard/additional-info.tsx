@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { getApiLink, Notice,  TextAreaUI, ChoiceToggleUI } from 'zyra';
+import { getApiLink, Notice, TextAreaUI, ChoiceToggleUI } from 'zyra';
 
 const AdditionalInformation = () => {
 	const id = appLocalizer.store_id;
@@ -89,7 +89,7 @@ const AdditionalInformation = () => {
 		<>
 			<Notice
 				message={successMsg}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 

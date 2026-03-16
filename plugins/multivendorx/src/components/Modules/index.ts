@@ -478,7 +478,7 @@ export default {
 			desc: 'Ensure stores meet marketplace requirements with automated policy checks.',
 			docLink: 'https://multivendorx.com/docs/knowledgebase/NA',
 			settingsLink: `${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=compliance`,
-						category: 'marketplace_boosters',
+			category: 'marketplace_boosters',
 		},
 		{
 			id: 'marketplace-membership',

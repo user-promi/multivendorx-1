@@ -1,5 +1,7 @@
 export const truncateText = (text: string, wordCount: number) => {
-	if (!text) return '';
+	if (!text) {
+		return '';
+	}
 
 	// Strip HTML tags if present
 	const plainText = text.replace(/<[^>]+>/g, '');
@@ -180,8 +182,7 @@ export const downloadCSV = (
 const buildPath = (segments: string[]): string =>
 	`/${segments.filter(Boolean).join('/')}`;
 
-const sanitize = (value: string) =>
-	value.replace(/[^a-zA-Z0-9_-]/g, '');
+const sanitize = (value: string) => value.replace(/[^a-zA-Z0-9_-]/g, '');
 
 const updatePlainPermalinkUrl = (segments: string[]) => {
 	const [segment = '', element = '', context_id = ''] = segments;
@@ -224,12 +225,14 @@ export const dashNavigate = (navigate: any, segments: string[]) => {
 
 // Set a value in session storage
 export function setSession(key: string, value: number | string) {
-    sessionStorage.setItem(key, value.toString());
+	sessionStorage.setItem(key, value.toString());
 }
 
 // Get a value from session storage, default is 0
 export function getSession(key: string, defaultValue: number | string = 0) {
-    const value = sessionStorage.getItem(key);
-    if (value === null) return defaultValue; // return 0 if key not found
-    return isNaN(Number(value)) ? value : Number(value); // parse number if possible
+	const value = sessionStorage.getItem(key);
+	if (value === null) {
+		return defaultValue;
+	} // return 0 if key not found
+	return isNaN(Number(value)) ? value : Number(value); // parse number if possible
 }
