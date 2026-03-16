@@ -295,7 +295,6 @@ const EventRules: React.FC = () => {
 		});
 		handleAutoSave(updatedFormData.id, updatedFormData);
 	};
-	// Table headers configuration
 	const headers = {
 		event: {
 			label: __('Event', 'multivendorx'),

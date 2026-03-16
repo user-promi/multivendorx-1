@@ -8,7 +8,6 @@ import {
 	TableRow,
 	QueryProps,
 	CategoryCount,
-	Notice,
 } from 'zyra';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -335,14 +334,6 @@ const AllProduct: React.FC = () => {
 
 	return (
 		<>
-		<Notice
-            uniqueKey="product-listing-notice"
-            title={__('Welcome to your product dashboard!', 'multivendorx')}
-            message={__('Here you can manage all your products, view their status, and perform bulk actions. Use the filters to quickly find specific products or categories.', 'multivendorx')}
-            type="info"
-            displayPosition="inline"
-            validity={5000}
-        />
 			<NavigatorHeader
 				headerTitle={__('All Products', 'multivendorx')}
 				headerDescription={__('Products are created, updated, and managed for your store.', 'multivendorx')}
