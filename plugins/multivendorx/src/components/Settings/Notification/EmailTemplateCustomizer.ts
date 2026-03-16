@@ -19,7 +19,8 @@ export default {
 			classes: 'full-width',
 			// desc: 'Customise personalised store registration form for marketplace.',
 			// // Add templates configuration with proper content
-			templates: [temp1, temp2],
+			emailTemplates: [temp1, temp2],
+			visibleGroups: ['email'],
 			defaultTemplateId: 'store-registration',
 			context: 'email',
 		},

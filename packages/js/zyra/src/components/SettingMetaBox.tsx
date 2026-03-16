@@ -297,8 +297,6 @@ const createFieldRenderers = (): Record<string, React.FC<{
         </>
     ),
 
-    divider: () => null, // Divider has no content settings, only style
-
     columns: ({ formField, onChange }) => (
         <>
             <ContentGroup title="Layout" >
