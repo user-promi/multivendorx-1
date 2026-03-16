@@ -10,6 +10,7 @@ import {
 	FormGroup,
 	BasicInputUI,
 	Notice,
+	NoticeManager,
 } from 'zyra';
 import { __, sprintf } from '@wordpress/i18n';
 
@@ -36,7 +37,6 @@ interface StorePaymentConfig {
 
 const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	const storePayment: StorePaymentConfig =
 		(appLocalizer.store_payment_settings as StorePaymentConfig) || {};
@@ -69,13 +69,6 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 			setFormData(data);
 		}
 	}, [id, data]);
-
-	useEffect(() => {
-		if (successMsg) {
-			const timer = setTimeout(() => setSuccessMsg(null), 3000);
-			return () => clearTimeout(timer);
-		}
-	}, [successMsg]);
 
 	// NEW: Logic to handle Stripe dependencies
 	useEffect(() => {
@@ -154,18 +147,18 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 			data: updatedData,
 		}).then((res) => {
 			if (res.data.success) {
-				setSuccessMsg('Store saved successfully!');
+				NoticeManager.add({
+					title: __('Success', 'multivendorx'),
+					message: __('Store saved successfully!', 'multivendorx'),
+					type: 'success',
+					position: 'float',
+				});
 			}
 		});
 	};
 
 	return (
 		<>
-			<Notice
-				message={successMsg}
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-			/>
 			<Container>
 				<Column grid={8}>
 					<Card title={__('Withdrawal methods', 'multivendorx')}>

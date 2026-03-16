@@ -38,13 +38,10 @@ const BulkActionDropdown: React.FC<BulkActionDropdownProps> = ({
 					{selectedIds.length} Rows selected
 					<i onClick={onClearSelection} className="adminfont-close" />
 				</span>
-
-				<ButtonInputUI
-					buttons={{
-						text: allSelected ? 'Deselect All' : 'Select All',
-						onClick: () => onToggleSelectAll(!allSelected),
-					}}
-				/>
+				
+				<div className="action-item">
+					<div className="admin-btn" onClick={() => onToggleSelectAll(!allSelected)}> {allSelected ? 'Deselect All' : 'Select All'}</div>
+				</div>
 				{/* Conditional Bulk Actions Dropdown */}
 				{showDropdown && actions.length > 0 && onApply && (
 					<div className="action">

@@ -311,8 +311,12 @@ const BusinessAddress = () => {
 				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
-
-			{errorMsg && <div className="error-message">{errorMsg}</div>}
+			<Notice
+				message={errorMsg}
+				displayPosition="float"
+				type="error"
+				title={__('Great!', 'multivendorx')}
+			/>
 
 			<FormGroupWrapper>
 				{/* Address */}

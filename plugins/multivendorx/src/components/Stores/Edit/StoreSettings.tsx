@@ -12,8 +12,8 @@ import {
 	FormGroup,
 	BasicInputUI,
 	SelectInputUI,
-	Notice,
 	CountryCodes,
+	NoticeManager,
 } from 'zyra';
 import { useLocation } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
@@ -45,7 +45,6 @@ const StoreSettings = ({
 	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
 	>([]);
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({});
 
 	// Map states - simplified
@@ -146,13 +145,6 @@ const StoreSettings = ({
 			timezone: data.timezone || '',
 		});
 	}, [data]);
-
-	useEffect(() => {
-		if (successMsg) {
-			const timer = setTimeout(() => setSuccessMsg(null), 3000);
-			return () => clearTimeout(timer);
-		}
-	}, [successMsg]);
 
 	useEffect(() => {
 		if (formData.country) {
@@ -357,9 +349,12 @@ const StoreSettings = ({
 			data: updatedData,
 		})
 			.then((res) => {
-				if (res.data.success) {
-					setSuccessMsg('Store saved successfully!');
-				}
+				NoticeManager.add({
+					title: __('Success', 'multivendorx'),
+					message: __('Store saved successfully!', 'multivendorx'),
+					type: 'success',
+					position: 'float',
+				});
 			})
 			.catch((error) => {
 				console.error('Save error:', error);
@@ -396,11 +391,6 @@ const StoreSettings = ({
 
 	return (
 		<>
-			<Notice
-				message={successMsg}
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-			/>
 			<Container>
 				<Column grid={8}>
 					{/* Contact Information */}

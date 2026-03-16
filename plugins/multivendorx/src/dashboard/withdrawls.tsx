@@ -13,7 +13,7 @@ import {
 	PopupUI,
 	NavigatorHeader,
 	ItemListUI,
-	Notice,
+	NoticeManager,
 } from 'zyra';
 import { formatCurrency } from '../services/commonFunction';
 
@@ -21,7 +21,6 @@ const Withdrawls: React.FC = () => {
 	const [data, setData] = useState<any>([]);
 	const [amount, setAmount] = useState<number>();
 	const [error, setError] = useState<string>('');
-	const [message, setMessage] = useState<string>('');
 	const [lastWithdraws, setLastWithdraws] = useState<any>([]);
 
 	const [requestWithdrawal, setRequestWithdrawal] = useState(false);
@@ -95,16 +94,16 @@ const Withdrawls: React.FC = () => {
 			if (res.data.success) {
 				setRequestWithdrawal(false);
 			}
-			setMessage(res.data.message);
+			NoticeManager.add({
+				title: __('Great!', 'multivendorx'),
+				message: res.data.message,
+				type: 'success',
+				position: 'float',
+			});
 		});
 	};
 	return (
 		<>
-			<Notice
-				message={message}
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-			/>
 			<NavigatorHeader
 				headerTitle={__('Withdrawals', 'multivendorx')}
 				headerDescription={__(

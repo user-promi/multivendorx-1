@@ -8,8 +8,8 @@ import {
 	FormGroup,
 	FormGroupWrapper,
 	getApiLink,
-	Notice,
 	ChoiceToggleUI,
+	NoticeManager,
 } from 'zyra';
 import ShippingRatesByCountry from './ShippingRatesByCountry';
 import DistanceByZoneShipping from './DistanceByZoneShipping';
@@ -17,7 +17,6 @@ import { __ } from '@wordpress/i18n';
 
 const ShippingDelivery = () => {
 	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (!appLocalizer.store_id) {
@@ -80,18 +79,18 @@ const ShippingDelivery = () => {
 			data: updatedData,
 		}).then((res) => {
 			if (res.data.success) {
-				setSuccessMsg('Store saved successfully!');
+				NoticeManager.add({
+					title: __('Great!', 'multivendorx'),
+					message:  __('Store saved successfully!', 'multivendorx'),
+					type: 'success',
+					position: 'float',
+				});
 			}
 		});
 	};
 
 	return (
 		<>
-			<Notice
-				message={successMsg}
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-			/>
 			{/* Only show ChoiceToggle if shipping_methods has options */}
 			{appLocalizer.shipping_methods &&
 			appLocalizer.shipping_methods.length > 0 ? (

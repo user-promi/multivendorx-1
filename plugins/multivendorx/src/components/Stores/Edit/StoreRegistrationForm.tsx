@@ -51,16 +51,16 @@ const RegistrationPdf: React.FC<{ registrationData: any }> = ({
 		</Document>
 	);
 };
+
 const StoreRegistration = ({ id }: { id: string | null }) => {
-	const [formData, setFormData] = useState<{ [key: string]: string }>({});
+	const [formData, setFormData] = useState<{ [key: string]: any }>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [previousNotes, setPreviousNotes] = useState<
 		{ note: string; date: string }[]
 	>([]);
 
-	const FileDisplay = ({ fileUrl, fileType }) => {
+	const FileDisplay = ({ fileUrl, fileType }: { fileUrl: string; fileType: string }) => {
 		const renderFile = () => {
-			'';
 			if (fileType.includes('image')) {
 				return (
 					<img
@@ -112,28 +112,23 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 		}
 	}, [id]);
 
-	useEffect(() => {
-		if (successMsg) {
-			const timer = setTimeout(() => setSuccessMsg(null), 3000);
-			return () => clearTimeout(timer);
-		}
-	}, [successMsg]);
-
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
-		const { name, value } = e.target;
+		const { name, value, type } = e.target;
+		const checked = (e.target as HTMLInputElement).checked;
+		
 		setFormData((prev) => {
 			const updated = {
 				...(prev || {}),
-				[name]: value ?? '',
+				[name]: type === 'checkbox' ? checked : value ?? '',
 			};
 			autoSave(updated);
 			return updated;
 		});
 	};
 
-	const autoSave = (updatedData: { [key: string]: string }) => {
+	const autoSave = (updatedData: { [key: string]: any }) => {
 		axios({
 			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
@@ -168,11 +163,14 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 
 	return (
 		<>
-			<Notice
-				message={successMsg}
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-			/>
+			{successMsg && (
+				<Notice
+					message={successMsg}
+					displayPosition="float"
+					title={__('Great!', 'multivendorx')}
+					type="success"
+				/>
+			)}
 
 			<Container>
 				<Column>
@@ -394,7 +392,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 													type="checkbox"
 													name="store_permanent_reject"
 													checked={
-														formData.store_permanent_reject
+														formData.store_permanent_reject || false
 													}
 													onChange={handleChange}
 												/>

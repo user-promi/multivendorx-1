@@ -50,9 +50,9 @@ const InfoItem: React.FC<InfoItemProps> = ({
         const avatarContent = avatar.image ? (
             <img src={avatar.image} alt={title} />
         ) : avatar.iconClass ? (
-            <i className={avatar.iconClass} />
+            <i className={`adminfont-${avatar.iconClass}`} />
         ) : (
-            <span className={avatar.iconClass}>{avatar.text}</span>
+            <span className={`adminfont-${avatar.iconClass}`}>{avatar.text}</span>
         );
 
         return (

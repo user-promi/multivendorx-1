@@ -146,13 +146,13 @@ export type TableProps = CommonTableProps & {
 	currency?: {};
 };
 
-export type TableSummaryProps = {
-	// An array of objects with `label` & `value` properties, which display on a single line.
-	data: Array<{
-		label: string;
-		value: boolean | number | string | React.ReactNode;
-	}>;
-};
+// export type TableSummaryProps = {
+// 	// An array of objects with `label` & `value` properties, which display on a single line.
+// 	data: Array<{
+// 		label: string;
+// 		value: boolean | number | string | React.ReactNode;
+// 	}>;
+// };
 
 export type TableCardProps = CommonTableProps & {
 	/**
@@ -187,7 +187,7 @@ export type TableCardProps = CommonTableProps & {
 	 * An array of objects with `label` & `value` properties, which display in a line under the table.
 	 * Optional, can be left off to show no summary.
 	 */
-	summary?: TableSummaryProps['data'];
+	// summary?: TableSummaryProps['data'];
 	/**
 	 * The title used in the card header, also used as the caption for the content in this table.
 	 */

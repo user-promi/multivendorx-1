@@ -1,16 +1,21 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import Table from './table';
-import TableSummary from './summary';
 import Pagination from './Pagination';
 import { QueryProps, TableCardProps, TableRow } from './types';
 import BulkActionDropdown from './BulkActionDropdown';
 import RealtimeFilters from './RealtimeFilter';
-import CategoryFilter from './CategoryFilter';
 import ButtonActions from './ButtonActions';
 import HeaderSearch from '../HeaderSearch';
 import Skeleton from '../UI/Skeleton';
 import { PopupUI } from '../Popup';
 import '../../styles/web/Table.scss';
+
+// Category item interface 
+export interface CategoryItem {
+    label: string;
+    value: string;
+    count: number;
+}
 
 const defaultOnColumnsChange = (
 	showCols: string[],
@@ -35,7 +40,7 @@ const TableCard: React.FC<TableCardProps> = ({
 	summary,
 	title,
 	totalRows = 0,
-	categoryCounts,
+	categoryCounts = [],
 	activeCategory = 'all',
 	filters = [],
 	showColumnToggleIcon = true,
@@ -55,6 +60,7 @@ const TableCard: React.FC<TableCardProps> = ({
 		paged: 1,
 		per_page: 10,
 		filter: {},
+		categoryFilter: activeCategory, 
 	});
 	/**
 	 * TableCard query handler
@@ -90,6 +96,27 @@ const TableCard: React.FC<TableCardProps> = ({
 		}));
 	};
 
+	// Handle category change 
+	const handleCategoryChange = (value: string) => {
+		// Safely find the selected category to update total rows
+		if (categoryCounts && Array.isArray(categoryCounts)) {
+			const selectedCategory = categoryCounts.find(cat => cat && cat.value === value);
+			setDerivedTotalRows(selectedCategory?.count ?? 0);
+		}
+
+		setQuery((prev) => ({
+			...prev,
+			paged: 1, // Reset to first page when category changes
+			categoryFilter: value
+		}));
+	};
+
+	const visibleCategories = React.useMemo(() => {
+		if (!categoryCounts || !Array.isArray(categoryCounts)) {
+			return [];
+		}
+		return categoryCounts.filter(cat => cat && cat.count > 0);
+	}, [categoryCounts]);
 
 	useEffect(() => {
 		props.onQueryUpdate?.(query);
@@ -190,72 +217,67 @@ const TableCard: React.FC<TableCardProps> = ({
 			)}
 
 			{/* BODY */}
-			{(categoryCounts?.length > 0 || buttonActions || search || (showMenu && showColumnToggleIcon)) && (
-			<div className="admin-top-filter">
-				{categoryCounts && categoryCounts.length > 0 && (
-					<CategoryFilter
-						categories={categoryCounts}
-						activeCategory={query.categoryFilter || activeCategory}
-						onCategoryClick={(value) => {
-
-							const matched = categoryCounts.find(
-								(cat) => cat.value === value
-							);
-							setDerivedTotalRows(matched?.count ?? 0);
-
-							setQuery((prev) => ({
-								...prev,
-								paged: 1,
-								categoryFilter: value
-							}));
-						}}
-					/>
-				)}
-
-				<div className="table-action-wrapper">
-					{buttonActions && <ButtonActions actions={buttonActions} query={query} />}
-					{search && (
-						<HeaderSearch
-							search={{
-								placeholder: search.placeholder,
-								options: search.options,
-							}}
-							onQueryUpdate={(payload) => {
-								onQueryChange('searchValue')(payload.searchValue);
-								if ('searchAction' in payload) {
-									onQueryChange('searchAction')(String(payload.searchAction));
-								}
-							}}
-						/>
+			{(visibleCategories.length > 0 || buttonActions || search || (showMenu && showColumnToggleIcon)) && (
+				<div className="admin-top-filter">
+					{/* Category Filter - Integrated directly (was CategoryFilter component) */}
+					{visibleCategories.length > 0 && (
+						<div className="filter-wrapper">
+							{visibleCategories.map(({ label, value, count }) => (
+								<div
+									key={value}
+									className={`filter-item ${(query.categoryFilter || activeCategory) === value ? 'active' : ''}`}
+									onClick={() => handleCategoryChange(value)}
+								>
+									{label} ({count})
+								</div>
+							))}
+						</div>
 					)}
-					{showMenu && showColumnToggleIcon && (
-						<PopupUI
-							position="menu-dropdown"
-							toggleIcon="more-vertical"
-						>
-							<ul>
-								{Object.entries(headers).map(([key, config]) => {
-									const { label, required } = config;
-									if (required) return null;
 
-									return (
-										<li key={key}>
-											<label>
-												<input
-													type="checkbox"
-													checked={showCols.includes(key)}
-													onChange={() => onColumnToggle(key)}
-												/>
-												{label}
-											</label>
-										</li>
-									);
-								})}
-							</ul>
-						</PopupUI>
-					)}
+					<div className="table-action-wrapper">
+						{buttonActions && <ButtonActions actions={buttonActions} query={query} />}
+						{search && (
+							<HeaderSearch
+								search={{
+									placeholder: search.placeholder,
+									options: search.options,
+								}}
+								onQueryUpdate={(payload) => {
+									onQueryChange('searchValue')(payload.searchValue);
+									if ('searchAction' in payload) {
+										onQueryChange('searchAction')(String(payload.searchAction));
+									}
+								}}
+							/>
+						)}
+						{showMenu && showColumnToggleIcon && (
+							<PopupUI
+								position="menu-dropdown"
+								toggleIcon="more-vertical"
+							>
+								<ul>
+									{Object.entries(headers).map(([key, config]) => {
+										const { label, required } = config;
+										if (required) return null;
+
+										return (
+											<li key={key}>
+												<label>
+													<input
+														type="checkbox"
+														checked={showCols.includes(key)}
+														onChange={() => onColumnToggle(key)}
+													/>
+													{label}
+												</label>
+											</li>
+										);
+									})}
+								</ul>
+							</PopupUI>
+						)}
+					</div>
 				</div>
-			</div>
 			)}
 
 			<Table
@@ -297,12 +319,21 @@ const TableCard: React.FC<TableCardProps> = ({
 								}
 							/>
 
-							{summary && <TableSummary data={summary} />}
+							{summary &&
+								<ul className="table-summary" role="complementary">
+									{summary.map(({ label, value }, i) => (
+										<li className="table-summary-item" key={i}>
+											<span className="table-summary-value">{value}</span>
+											<span className="table-summary-label">{label}</span>
+										</li>
+									))}
+								</ul>
+							}
 						</Fragment>
 					)}
 				</div>
 			)}
-			
+
 			{selectedIds.length <= 2 && filters.length > 0 && (
 				<RealtimeFilters
 					filters={filters}
