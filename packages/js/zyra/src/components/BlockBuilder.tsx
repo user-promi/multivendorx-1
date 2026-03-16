@@ -38,6 +38,18 @@ const REGISTRATION_BLOCK_GROUPS = [
             { id: 'section', icon: 'form-section', value: 'section' },
             { id: 'recaptcha', icon: 'captcha-automatic-code', value: 'recaptcha', label: 'reCaptcha v3' },
         ]
+    },
+    {
+        id: 'store',
+        label: 'Store Fields',
+        icon: 'store',
+        blocks: [
+            { id: 'store-name', icon: 't-letter-bold', value: 'text', label: 'Store Name', fixedName: 'name', placeholder: 'Enter your store name' },
+            { id: 'store-description', icon: 'text ', value: 'textarea', label: 'Store Desc', fixedName: 'description', placeholder: 'Enter your store description' },
+            { id: 'store-phone', icon: 'form-phone', value: 'text', label: 'Store Phone', fixedName: 'phone', placeholder: 'Enter your store phone' },
+            { id: 'store-paypal', icon: 'unread ', value: 'email', label: 'Store Paypal Email', fixedName: 'paypal_email', placeholder: 'Enter your PayPal email' },
+            { id: 'store-address', icon: 'form-address ', value: 'address', label: 'Store Address', fixedName: 'address' },
+        ]
     }
 ];
 
@@ -167,6 +179,8 @@ export const BlockBuilderUI: React.FC<any> = ({
 
     }, [value, setting, name, isEmailBuilder, activeEmailTemplate]);
 
+    const visibleGroups = field?.visibleGroups || ['registration'];
+
     /* ---------------------------
     RENDER
     --------------------------- */
@@ -176,7 +190,7 @@ export const BlockBuilderUI: React.FC<any> = ({
             blocks={initialBlocks}
             onChange={handleBlocksChange}
             blockGroups={isEmailBuilder ? EMAIL_BLOCK_GROUPS : REGISTRATION_BLOCK_GROUPS}
-            visibleGroups={[builderContext]}
+            visibleGroups={visibleGroups}
             groupName={builderContext}
             proSettingChange={proSettingChange}
             context={builderContext}

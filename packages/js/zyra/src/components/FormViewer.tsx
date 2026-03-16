@@ -232,7 +232,6 @@ const FormViewer: React.FC<FormViewerProps> = ({
         {}
     );
     const formList = formFields.formfieldlist || [];
-    const buttonSetting = formFields.butttonsetting || {};
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
     const [captchaError, setCaptchaError] = useState<boolean>(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -857,32 +856,34 @@ const FormViewer: React.FC<FormViewerProps> = ({
                             </fieldset>
                         );
 
+                    case 'button':
+                        return (
+                            <p className="woocommerce-form-row form-row" key={field.id}>
+                                <ButtonInputUI
+                                    buttons={{
+                                        style: field.style,
+                                        onClick: (e) => {
+                                            const captcha = formList.find(
+                                                (f) => f.type === 'recaptcha'
+                                            );
+
+                                            if (captcha?.disabled === false) {
+                                                if (captchaError) return;
+                                                if (!captchaToken) return;
+                                            }
+
+                                            handleSubmit(e);
+                                        },
+                                        text: field.name || field.placeholder || 'Submit',
+                                    }}
+                                />
+                            </p>
+                        );
+                    
                     default:
                         return null;
                 }
             })}
-            <p className="woocommerce-form-row form-row">
-                <ButtonInputUI
-                    buttons={{
-                        customStyle: buttonSetting,
-                        onClick: (e) => {
-                            const captcha = formList.find(
-                                (field) => field.type === 'recaptcha'
-                            );
-                            if (captcha?.disabled === false) {
-                                if (captchaError) {
-                                    return;
-                                }
-                                if (!captchaToken) {
-                                    return;
-                                }
-                            }
-                            handleSubmit(e);
-                        },
-                        text: 'Submit',
-                    }}
-                />
-            </p>
         </form>
     );
 };
