@@ -13,7 +13,6 @@ import {
 	PopupUI,
 	useOutsideClick,
 	ItemListUI,
-	Notice,
 	Container,
 	NoticeManager,
 } from 'zyra';
@@ -95,7 +94,6 @@ const EditStore = () => {
 			data: updatedData,
 		}).then((res) => {
 			if (res.data.success) {
-				// setSuccessMsg('Store saved successfully!');
 				NoticeManager.add({
 					title: __('Great!', 'multivendorx'),
 					message: __('Store saved successfully!', 'multivendorx'),
@@ -397,11 +395,6 @@ const EditStore = () => {
 	].filter(Boolean);
 	return (
 		<>
-			{/* <Notice
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-				message={successMsg}
-			/> */}
 			<SettingsNavigator
 				settingContent={visibleTabs}
 				currentSetting={currentTab}

@@ -5,9 +5,9 @@ import {
 	BasicInputUI,
 	FormGroup,
 	FormGroupWrapper,
-	Notice,
 	ChoiceToggleUI,
 	getApiLink,
+	NoticeManager,
 } from 'zyra';
 import {
 	ConnectComponentsProvider,
@@ -40,7 +40,6 @@ interface StorePaymentConfig {
 const Withdrawl: React.FC = () => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 	const containerRef = useRef<HTMLDivElement>(null);
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	const storePayment: StorePaymentConfig =
 		(appLocalizer.store_payment_settings as StorePaymentConfig) || {};
@@ -56,13 +55,6 @@ const Withdrawl: React.FC = () => {
 	}));
 
 	const selectedProvider = storePayment[formData.payment_method];
-
-	useEffect(() => {
-		if (successMsg) {
-			const timer = setTimeout(() => setSuccessMsg(null), 3000);
-			return () => clearTimeout(timer);
-		}
-	}, [successMsg]);
 
 	useEffect(() => {
 		if (!appLocalizer.store_id) {
@@ -130,7 +122,12 @@ const Withdrawl: React.FC = () => {
 			data: updatedData,
 		}).then((res) => {
 			if (res.data.success) {
-				setSuccessMsg('Store saved successfully!');
+				NoticeManager.add({
+					title: __('Great!', 'multivendorx'),
+					message:  __('Store saved successfully!', 'multivendorx'),
+					type: 'success',
+					position: 'float',
+				});
 			}
 		});
 	};
@@ -154,11 +151,6 @@ const Withdrawl: React.FC = () => {
 
 	return (
 		<>
-			<Notice
-				message={successMsg}
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-			/>
 			{/* Payment Method Toggle */}
 			<FormGroupWrapper>
 				<FormGroup

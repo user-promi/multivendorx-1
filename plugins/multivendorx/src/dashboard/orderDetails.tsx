@@ -524,6 +524,7 @@ const OrderDetails: React.FC = () => {
 		<>
 			<Notice
 				message={refundError}
+				type="error"
 				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>

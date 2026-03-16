@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { getApiLink, Notice, TextAreaUI, ChoiceToggleUI } from 'zyra';
+import { getApiLink, TextAreaUI, ChoiceToggleUI, NoticeManager, Container, Column, Card, FormGroupWrapper, FormGroup } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 const AdditionalInformation = () => {
 	const id = appLocalizer.store_id;
 	const [formData, setFormData] = useState<{ [key: string] }>({});
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
 	>([]);
@@ -24,14 +24,6 @@ const AdditionalInformation = () => {
 			setFormData((prev) => ({ ...prev, ...data }));
 		});
 	}, [id]);
-
-	// Auto clear success message
-	useEffect(() => {
-		if (successMsg) {
-			const timer = setTimeout(() => setSuccessMsg(null), 3000);
-			return () => clearTimeout(timer);
-		}
-	}, [successMsg]);
 
 	// Fetch states when country changes
 	useEffect(() => {
@@ -80,49 +72,35 @@ const AdditionalInformation = () => {
 			})
 			.then((res) => {
 				if (res.data.success) {
-					setSuccessMsg('Store saved successfully!');
+					NoticeManager.add({
+						title: __('Great!', 'multivendorx'),
+						message: __('Store saved successfully!', 'multivendorx'),
+						type: 'success',
+						position: 'float',
+					});
 				}
 			});
 	};
 
 	return (
 		<>
-			<Notice
-				message={successMsg}
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-			/>
-
-			<div className="container-wrapper">
-				<div className="card-wrapper column-8">
+			<Container general>
+				<Column grid={8}>
 					{/* Message to Buyer */}
-					<div className="card-content">
-						<div className="card-title">
-							{__('Message to Buyer', 'multivendorx')}
-						</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<TextAreaUI
-									name="messageToBuyer"
-									value={formData.messageToBuyer || ''}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-					</div>
+					<Card title={__('Message to Buyer', 'multivendorx')}>
+						<FormGroupWrapper>
+							<TextAreaUI
+								name="messageToBuyer"
+								value={formData.messageToBuyer || ''}
+								onChange={handleChange}
+							/>
+						</FormGroupWrapper>
+					</Card>
 
 					{/* Privacy Controls */}
-					<div className="card-content">
-						<div className="card-title">
-							{__('Privacy Controls', 'multivendorx')}
-						</div>
-
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label>
-									{__('Hide Address', 'multivendorx')}
-								</label>
+					<Card title={__('Privacy Controls', 'multivendorx')}>
+						<FormGroupWrapper>
+							<FormGroup label={__('Hide Address', 'multivendorx')}>
 								<ChoiceToggleUI
 									options={[
 										{
@@ -141,14 +119,9 @@ const AdditionalInformation = () => {
 										handleToggleChange('hideAddress', val)
 									}
 								/>
-							</div>
-						</div>
+							</FormGroup>
 
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label>
-									{__('Hide Phone', 'multivendorx')}
-								</label>
+							<FormGroup label={__('Hide Phone', 'multivendorx')}>
 								<ChoiceToggleUI
 									options={[
 										{
@@ -167,14 +140,9 @@ const AdditionalInformation = () => {
 										handleToggleChange('hidePhone', val)
 									}
 								/>
-							</div>
-						</div>
+							</FormGroup>
 
-						<div className="form-group-wrapper">
-							<div className="form-group">
-								<label>
-									{__('Hide Email', 'multivendorx')}
-								</label>
+							<FormGroup label={__('Hide Phone', 'multivendorx')}>
 								<ChoiceToggleUI
 									options={[
 										{
@@ -193,11 +161,11 @@ const AdditionalInformation = () => {
 										handleToggleChange('hideEmail', val)
 									}
 								/>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
+				</Column>
+			</Container>
 		</>
 	);
 };

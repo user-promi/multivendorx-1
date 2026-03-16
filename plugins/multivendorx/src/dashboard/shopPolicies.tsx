@@ -9,14 +9,13 @@ import {
 	FormGroup,
 	TextAreaUI,
 	NavigatorHeader,
-	Notice,
+	NoticeManager,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const ShopPolicies = () => {
 	const id = appLocalizer.store_id;
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
 	>([]);
@@ -36,12 +35,6 @@ const ShopPolicies = () => {
 		});
 	}, [id]);
 
-	useEffect(() => {
-		if (successMsg) {
-			const timer = setTimeout(() => setSuccessMsg(null), 3000);
-			return () => clearTimeout(timer);
-		}
-	}, [successMsg]);
 	useEffect(() => {
 		if (formData.country) {
 			fetchStatesByCountry(formData.country);
@@ -75,19 +68,18 @@ const ShopPolicies = () => {
 			data: updatedData,
 		}).then((res) => {
 			if (res.data.success) {
-				setSuccessMsg('Store saved successfully!');
+				NoticeManager.add({
+					title: __('Great!', 'multivendorx'),
+					message:  __('Store saved successfully!', 'multivendorx'),
+					type: 'success',
+					position: 'float',
+				});
 			}
 		});
 	};
 
 	return (
 		<>
-			<Notice
-				message={successMsg}
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-			/>
-
 			<NavigatorHeader
 				headerTitle={__('Policy', 'multivendorx')}
 				headerDescription={__(

@@ -9,7 +9,7 @@ import {
 	FormGroup,
 	Card,
 	SelectInputUI,
-	Notice,
+	NoticeManager,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
@@ -17,7 +17,6 @@ import { applyFilters } from '@wordpress/hooks';
 const StoreSquad = ({ id }: { id: string | null }) => {
 	const { modules } = useModules();
 	const [formData, setFormData] = useState<{ [key: string]: any }>({});
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (!id) {
@@ -46,19 +45,18 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 			},
 		}).then((res) => {
 			if (res.data.success) {
-				setSuccessMsg('Store saved successfully!');
+				NoticeManager.add({
+					title: __('Great!', 'multivendorx'),
+					message: __('Store saved successfully!', 'multivendorx'),
+					type: 'success',
+					position: 'float',
+				});
 			}
 		});
 	};
 
 	return (
 		<>
-			<Notice
-				message={successMsg}
-				displayPosition="float"
-				title={__('Great!', 'multivendorx')}
-			/>
-
 			<Container>
 				<Column grid={8}>
 					<Card title={__('Store owners', 'multivendorx')}>

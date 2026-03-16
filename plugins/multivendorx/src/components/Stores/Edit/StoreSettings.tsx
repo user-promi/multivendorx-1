@@ -12,7 +12,6 @@ import {
 	FormGroup,
 	BasicInputUI,
 	SelectInputUI,
-	Notice,
 	CountryCodes,
 	NoticeManager,
 } from 'zyra';
@@ -46,7 +45,6 @@ const StoreSettings = ({
 	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
 	>([]);
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({});
 
 	// Map states - simplified
@@ -147,13 +145,6 @@ const StoreSettings = ({
 			timezone: data.timezone || '',
 		});
 	}, [data]);
-
-	useEffect(() => {
-		if (successMsg) {
-			const timer = setTimeout(() => setSuccessMsg(null), 3000);
-			return () => clearTimeout(timer);
-		}
-	}, [successMsg]);
 
 	useEffect(() => {
 		if (formData.country) {
