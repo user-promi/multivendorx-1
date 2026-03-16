@@ -12,7 +12,6 @@ import { FIELD_REGISTRY } from './fieldUtils';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import { PopupUI } from './Popup';
 import { Notice } from './Notice';
-import { addNotice } from './Notice';
 
 interface InputField {
     key: string;
@@ -112,6 +111,11 @@ const RenderComponent: React.FC<RenderProps> = ({
     });
     const { modules } = useModules();
     const [errors, setErrors] = useState<Record<string, string | null>>({});
+    const [notice, setNotice] = useState<{
+        title?: string;
+        message?: string;
+        type?: 'info' | 'success' | 'warning' | 'error';
+    } | null>(null);
 
     useEffect(() => {
         if (settingChanged.current) {
@@ -141,15 +145,11 @@ const RenderComponent: React.FC<RenderProps> = ({
                     ).then((response: unknown) => {
                         const apiResponse = response as ApiResponse;
                         if (apiResponse.message) {
-                            addNotice(
-                                {
-                                    title: 'Great!',
-                                    message: apiResponse.message,
-                                    type: apiResponse.type,
-                                    position: 'float',
-                                },
-                                5000
-                            );
+                            setNotice({
+                                title: 'Great!',
+                                message: apiResponse.message,
+                                type: apiResponse.type,
+                            });
                         }
 
                         if (apiResponse.redirect_link) {
@@ -553,11 +553,14 @@ const RenderComponent: React.FC<RenderProps> = ({
                                 })
                                 : input}
 
-                                    {/* <Notice
+                                {errors[inputField.key] && (
+                                    <Notice
+                                        uniqueKey={`error-${inputField.key}`}
                                         type="error"
-                                        position="inline"
-                                        message={errors[inputField.key] || ''}
-                                    /> */}
+                                        displayPosition="inline"
+                                        message={errors[inputField.key]}
+                                    />
+                                )}
                             {inputField.desc && (
                                 <p
                                     className="settings-metabox-description"
@@ -599,6 +602,16 @@ const RenderComponent: React.FC<RenderProps> = ({
 
     return (
         <>
+            {notice && (
+                <Notice
+                    key={Date.now()}
+                    title={notice.title}
+                    message={notice.message}
+                    type={notice.type}
+                    displayPosition="float"
+                    validity={5000}
+                />
+            )}
             {modelOpen && (
                 <PopupUI
                     position="lightbox"

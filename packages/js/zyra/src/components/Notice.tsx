@@ -62,7 +62,7 @@ const subscribe = (callback: (items: NoticeItem[]) => void) => {
     };
 };
 
-export const addNotice = (
+const addNotice = (
     notice: Omit<NoticeItem, 'expiresAt'>,
     validity: number | 'lifetime' = 'lifetime'
 ) => {
