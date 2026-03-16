@@ -75,7 +75,7 @@ interface DependentCondition {
 interface PopupProps {
     moduleName?: string;
     settings?: string;
-    plugin?: string;
+    plugin?: string | {};
 }
 
 interface RenderProps {
@@ -360,6 +360,11 @@ const RenderComponent: React.FC<RenderProps> = ({
         setModelOpen(true);
     };
 
+    const openPluginPopup = (plugin: {}) => {
+        setModulePopupData({ moduleName: '', settings: '', plugin: plugin });
+        setModelOpen(true);
+    };
+
     const renderFieldInternal = (
         field: InputField,
         parentField: InputField,
@@ -372,7 +377,7 @@ const RenderComponent: React.FC<RenderProps> = ({
         if (!fieldComponent) return null;
 
         const Render = fieldComponent.render;
-        
+
         const handleInternalChange = (val: any) => {
             if (!isCompositeField(parentField)) {
                 onChange(field.key, val);
@@ -402,10 +407,12 @@ const RenderComponent: React.FC<RenderProps> = ({
                     settingChanged.current = true;
                     updateSetting(`${field.key}_options`, opts);
                 }}
-                onBlocked={(type: 'pro' | 'module', payload?: string) => {
+                onBlocked={(type: 'pro' | 'module' | 'plugin', payload?: string | {}) => {
                     if (type === 'pro') openProPopup();
                     if (type === 'module' && payload)
                         openModulePopup(payload);
+                    if (type === 'plugin' && payload)
+                        openPluginPopup(payload);
                 }}
                 storeTabSetting={storeTabSetting}
             />
@@ -472,7 +479,7 @@ const RenderComponent: React.FC<RenderProps> = ({
                         appLocalizer
                     )}
 
-                      {inputField.afterElement &&
+                    {inputField.afterElement &&
                         renderFieldInternal(
                             inputField.afterElement,
                             inputField,
@@ -514,7 +521,7 @@ const RenderComponent: React.FC<RenderProps> = ({
                                 ? 'module-enabled'
                                 : ''
                             }`}
-                            data-cols={inputField.cols}
+                        data-cols={inputField.cols}
                         onClick={(e) => handleGroupClick(e, inputField)}
                     >
                         {inputField.icon && (
