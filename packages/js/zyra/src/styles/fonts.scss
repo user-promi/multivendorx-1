@@ -21,23 +21,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.adminfont-image:before {
+.adminfont-pinterest:before {
   content: "\e900";
-}
-.adminfont-center-align:before {
-  content: "\e901";
-}
-.adminfont-justify-align:before {
-  content: "\e902";
-}
-.adminfont-left-align:before {
-  content: "\e903";
-}
-.adminfont-right-align:before {
-  content: "\e904";
-}
-.adminfont-button:before {
-  content: "\e905";
 }
 .adminfont-cart:before {
   content: "\8907";
@@ -105,290 +90,317 @@
 .adminfont-section:before {
   content: "\e898";
 }
-.adminfont-book:before {
+.adminfont-knowledgebase:before {
   content: "\e8f0";
 }
 .adminfont-plus-circle:before {
   content: "\e8f7";
 }
-.adminfont-left-sidebar:before {
+.adminfont-image:before {
+  content: "\e901";
+}
+.adminfont-center-align:before {
+  content: "\e902";
+}
+.adminfont-justify-align:before {
+  content: "\e903";
+}
+.adminfont-left-align:before {
+  content: "\e904";
+}
+.adminfont-right-align:before {
+  content: "\e905";
+}
+.adminfont-button:before {
   content: "\e906";
 }
-.adminfont-right-sidebar:before {
+.adminfont-left-sidebar:before {
   content: "\e907";
 }
-.adminfont-no-sidebar1:before {
+.adminfont-right-sidebar:before {
   content: "\e908";
 }
-.adminfont-no-sidebar:before {
+.adminfont-no-sidebar1:before {
   content: "\e909";
 }
-.adminfont-arrow-down-up:before {
+.adminfont-no-sidebar:before {
   content: "\e90a";
 }
-.adminfont-clickatell:before {
+.adminfont-arrow-down-up:before {
   content: "\e90b";
 }
-.adminfont-plivo:before {
+.adminfont-clickatell:before {
   content: "\e90c";
 }
-.adminfont-twilio:before {
+.adminfont-plivo:before {
   content: "\e90d";
 }
-.adminfont-vonage:before {
+.adminfont-twilio:before {
   content: "\e90e";
 }
-.adminfont-save:before {
+.adminfont-vonage:before {
   content: "\e90f";
 }
-.adminfont-permanently-rejected:before {
+.adminfont-save:before {
   content: "\e910";
 }
-.adminfont-download:before {
+.adminfont-permanently-rejected:before {
   content: "\e911";
 }
-.adminfont-publish:before {
+.adminfont-download:before {
   content: "\e912";
 }
-.adminfont-withdraw:before {
+.adminfont-publish:before {
   content: "\e913";
 }
-.adminfont-pdf:before {
+.adminfont-withdraw:before {
   content: "\e914";
 }
-.adminfont-moon:before {
+.adminfont-pdf:before {
   content: "\e915";
 }
-.adminfont-light:before {
+.adminfont-moon:before {
   content: "\e916";
 }
-.adminfont-gemini:before {
+.adminfont-light:before {
   content: "\e917";
 }
-.adminfont-openrouter:before {
+.adminfont-gemini:before {
   content: "\e918";
 }
-.adminfont-chatgpt:before {
+.adminfont-openrouter:before {
   content: "\e919";
 }
-.adminfont-ai:before {
+.adminfont-chatgpt:before {
   content: "\e91a";
 }
-.adminfont-plus:before {
+.adminfont-ai:before {
   content: "\e91b";
 }
-.adminfont-thumb-up:before {
+.adminfont-plus:before {
   content: "\e91c";
 }
-.adminfont-coding:before {
+.adminfont-thumb-up:before {
   content: "\e91d";
 }
-.adminfont-twitter:before {
+.adminfont-coding:before {
   content: "\e91e";
 }
-.adminfont-instagram:before {
+.adminfont-twitter:before {
   content: "\e91f";
 }
-.adminfont-wallet-open:before {
+.adminfont-instagram:before {
   content: "\e920";
 }
-.adminfont-wallet-in:before {
+.adminfont-wallet-open:before {
   content: "\e921";
 }
-.adminfont-wallet:before {
+.adminfont-wallet-in:before {
   content: "\e922";
 }
-.adminfont-mapbox:before {
+.adminfont-wallet:before {
   content: "\e923";
 }
-.adminfont-google:before {
+.adminfont-mapbox:before {
   content: "\e924";
 }
-.adminfont-close-delete:before {
+.adminfont-google:before {
   content: "\e925";
 }
-.adminfont-rejecte:before {
+.adminfont-close-delete:before {
   content: "\e926";
 }
-.adminfont-active:before {
+.adminfont-rejecte:before {
   content: "\e927";
 }
-.adminfont-recycle:before {
+.adminfont-active:before {
   content: "\e928";
 }
-.adminfont-resources:before {
+.adminfont-recycle:before {
   content: "\e929";
 }
-.adminfont-coupon:before {
+.adminfont-resources:before {
   content: "\e92a";
 }
-.adminfont-wallet1:before {
+.adminfont-coupon:before {
   content: "\e92b";
 }
-.adminfont-sales:before {
+.adminfont-wallet1:before {
   content: "\e92c";
 }
-.adminfont-question:before {
+.adminfont-sales:before {
   content: "\e92d";
 }
-.adminfont-facilitator:before {
+.adminfont-question:before {
   content: "\e92e";
 }
-.adminfont-edit:before {
+.adminfont-facilitator:before {
   content: "\e92f";
 }
-.adminfont-direct-transaction:before {
+.adminfont-edit:before {
   content: "\e930";
 }
-.adminfont-geo-location:before {
+.adminfont-direct-transaction:before {
   content: "\e931";
 }
-.adminfont-product-addon:before {
+.adminfont-geo-location:before {
   content: "\e932";
 }
-.adminfont-advertise-product:before {
+.adminfont-product-addon:before {
   content: "\e933";
 }
-.adminfont-marketplace-gateway:before {
+.adminfont-advertise-product:before {
   content: "\e934";
 }
-.adminfont-marketplace-fee:before {
+.adminfont-marketplace-gateway:before {
   content: "\e935";
 }
-.adminfont-compliance:before {
+.adminfont-marketplace-fee:before {
   content: "\e936";
 }
-.adminfont-lock:before {
+.adminfont-compliance:before {
   content: "\e937";
 }
-.adminfont-pros-and-cons:before {
+.adminfont-lock:before {
   content: "\e938";
 }
-.adminfont-like:before {
+.adminfont-pros-and-cons:before {
   content: "\e939";
 }
-.adminfont-home:before {
+.adminfont-like:before {
   content: "\e93a";
 }
-.adminfont-dollar:before {
+.adminfont-home:before {
   content: "\e93b";
 }
-.adminfont-bank:before {
+.adminfont-dollar:before {
   content: "\e93c";
 }
-.adminfont-question-answer:before {
+.adminfont-bank:before {
   content: "\e93d";
 }
-.adminfont-zone-wise-shipping:before {
+.adminfont-question-answer:before {
   content: "\e93e";
 }
-.adminfont-approval:before {
+.adminfont-zone-wise-shipping:before {
   content: "\e93f";
 }
-.adminfont-cash:before {
+.adminfont-approval:before {
   content: "\e940";
 }
-.adminfont-view-files:before {
+.adminfont-cash:before {
   content: "\e941";
 }
-.adminfont-automation:before {
+.adminfont-view-files:before {
   content: "\e942";
 }
-.adminfont-shipping:before {
+.adminfont-automation:before {
   content: "\e943";
 }
-.adminfont-delivery-person:before {
+.adminfont-shipping:before {
   content: "\e944";
 }
-.adminfont-delivery:before {
+.adminfont-delivery-person:before {
   content: "\e945";
 }
-.adminfont-tax-compliance:before {
+.adminfont-delivery:before {
   content: "\e946";
 }
-.adminfont-legal-compliance:before {
+.adminfont-tax-compliance:before {
   content: "\e947";
 }
-.adminfont-seller-verification:before {
+.adminfont-legal-compliance:before {
   content: "\e948";
 }
-.adminfont-new:before {
+.adminfont-seller-verification:before {
   content: "\e949";
 }
-.adminfont-feature:before {
+.adminfont-new:before {
   content: "\e94a";
 }
-.adminfont-franchises-module:before {
+.adminfont-feature:before {
   content: "\e94b";
 }
-.adminfont-pending:before {
+.adminfont-franchises-module:before {
   content: "\e94c";
 }
-.adminfont-version-control:before {
+.adminfont-pending:before {
   content: "\e94d";
 }
-.adminfont-setup:before {
+.adminfont-version-control:before {
   content: "\e94e";
 }
-.adminfont-out-of-stock:before {
+.adminfont-setup:before {
   content: "\e94f";
 }
-.adminfont-migration:before {
+.adminfont-out-of-stock:before {
   content: "\e950";
 }
-.adminfont-document:before {
+.adminfont-migration:before {
   content: "\e951";
 }
-.adminfont-database:before {
+.adminfont-document:before {
   content: "\e952";
 }
-.adminfont-store-reject:before {
+.adminfont-database:before {
   content: "\e953";
 }
-.adminfont-store-reactivated:before {
+.adminfont-store-reject:before {
   content: "\e954";
 }
-.adminfont-refund:before {
+.adminfont-store-reactivated:before {
   content: "\e955";
 }
-.adminfont-order-shipped:before {
+.adminfont-refund:before {
   content: "\e956";
 }
-.adminfont-order-completed:before {
+.adminfont-order-shipped:before {
   content: "\e957";
 }
-.adminfont-wordpress:before {
+.adminfont-order-completed:before {
   content: "\e958";
 }
-.adminfont-profile:before {
+.adminfont-wordpress:before {
   content: "\e959";
 }
-.adminfont-forum:before {
+.adminfont-profile:before {
   content: "\e95a";
 }
-.adminfont-faq:before {
+.adminfont-forum:before {
   content: "\e95b";
 }
-.adminfont-moon-fill:before {
+.adminfont-faq:before {
   content: "\e95c";
 }
-.adminfont-verification10:before {
+.adminfont-moon-fill:before {
   content: "\e95d";
 }
-.adminfont-verification11:before {
+.adminfont-verification10:before {
   content: "\e95e";
 }
-.adminfont-in-progress:before {
+.adminfont-verification11:before {
   content: "\e95f";
 }
-.adminfont-suspended:before {
+.adminfont-in-progress:before {
   content: "\e960";
 }
-.adminfont-rejected:before {
+.adminfont-suspended:before {
   content: "\e961";
 }
-.adminfont-under-review:before {
+.adminfont-rejected:before {
   content: "\e962";
+}
+.adminfont-under-review:before {
+  content: "\e963";
+}
+.adminfont-product-rejected:before {
+  content: "\e964";
+}
+.adminfont-wholesale-buyer-approved:before {
+  content: "\e965";
+}
+.adminfont-wholesale-buyer-rejected:before {
+  content: "\e966";
 }
 .adminfont-accommodation:before {
   content: "\ef35";
@@ -810,8 +822,7 @@
 .adminfont-cross:before {
   content: "\efc1";
 }
-.adminfont-icon-yes:before,
-.adminfont-success:before {
+.adminfont-check-fill:before {
   content: "\efc2";
 }
 .adminfont-calendar:before {

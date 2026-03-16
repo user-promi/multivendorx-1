@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import "../styles/web/Notice.scss";
 import { FieldComponent } from './fieldUtils';
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-
 type NoticePosition = 'float' | 'notice' | 'banner';
 
 interface NoticeItem {
@@ -19,11 +17,10 @@ interface NoticeItem {
     expiresAt?: number;
 }
 
-// ─── Store ───────────────────────────────────────────────────────────────────
-
 const STORAGE_KEY = 'zyra_app_notices_v1';
 
-let subscribers: Array<(items: NoticeItem[]) => void> = [];
+let noticeQueue: NoticeItem[] = [];
+const subscribers = new Set<(items: NoticeItem[]) => void>();
 
 const getStored = (): NoticeItem[] => {
     if (typeof window === 'undefined') return [];
@@ -37,11 +34,8 @@ const getStored = (): NoticeItem[] => {
     }
 };
 
-let notices: NoticeItem[] = getStored();
-
 const persist = () => {
-    if (typeof window === 'undefined') return;
-    const persistable = notices.filter(n => typeof n.expiresAt === 'number');
+    const persistable = noticeQueue.filter(n => typeof n.expiresAt === 'number');
     persistable.length === 0
         ? localStorage.removeItem(STORAGE_KEY)
         : localStorage.setItem(STORAGE_KEY, JSON.stringify(persistable));
@@ -49,79 +43,98 @@ const persist = () => {
 
 const broadcast = () => {
     persist();
-    subscribers.forEach(cb => cb([...notices]));
+    subscribers.forEach(cb => cb([...noticeQueue]));
 };
 
-// ─── Public store API ─────────────────────────────────────────────────────────
+// initialize
+if (typeof window !== 'undefined') {
+    noticeQueue = getStored();
+}
 
-const subscribe = (callback: (items: NoticeItem[]) => void) => {
-    subscribers.push(callback);
-    callback([...notices]);
-    return () => {
-        subscribers = subscribers.filter(cb => cb !== callback);
-    };
-};
+export const NoticeManager = {
+  subscribe(cb: (items: NoticeItem[]) => void) {
+    subscribers.add(cb);
+    cb([...noticeQueue]);
+    return () => subscribers.delete(cb);
+  },
 
-export const addNotice = (
+  add(
     notice: Omit<NoticeItem, 'expiresAt'>,
     validity: number | 'lifetime' = 'lifetime'
-) => {
+) {
     const uniqueKey = notice.uniqueKey || Date.now().toString();
-    if (notices.some(n => n.uniqueKey === uniqueKey)) return;
+    if (noticeQueue.some((n) => n.uniqueKey === uniqueKey)) return;
 
     const expiresAt = validity === 'lifetime' ? undefined : Date.now() + validity;
-    notices.push({ ...notice, uniqueKey, expiresAt });
+
+    noticeQueue.push({
+      ...notice,
+      uniqueKey,
+      expiresAt,
+    });
+
+    if (expiresAt) {
+      setTimeout(() => {
+        NoticeManager.remove(uniqueKey);
+      }, validity);
+    }
+
     broadcast();
-};
+  },
 
-const removeNotice = (uniqueKey: string) => {
-    notices = notices.filter(n => n.uniqueKey !== uniqueKey);
+  remove(uniqueKey: string) {
+    noticeQueue = noticeQueue.filter((n) => n.uniqueKey !== uniqueKey);
     broadcast();
-};
+  },
 
-const flushExpired = () => {
-    const before = notices.length;
-    const now = Date.now();
-    notices = notices.filter(n => !n.expiresAt || n.expiresAt > now);
-    if (before !== notices.length) broadcast();
-};
-
-export const clearSessionNotices = () => {
-    notices = notices.filter(n => typeof n.expiresAt === 'number');
+  clearSession() {
+    noticeQueue = noticeQueue.filter((n) => n.expiresAt);
     broadcast();
+  },
 };
 
-// ─── Shared render helper ─────────────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────────────
+   Shared Render Helper
+────────────────────────────────────────────────────────────── */
 
 const renderNoticeContent = (item: NoticeItem, onClose?: () => void) => (
-    <>
-        <i className={`admin-font adminfont-${item.type}`} />
-        <div className="notice-details">
-            {item.title && <div className="notice-text">{item.title}</div>}
-            {Array.isArray(item.message)
-                ? item.message.map((msg, i) => (
-                    <React.Fragment key={i}>
-                        <div className="notice-desc">
-                            {msg}
-                            {item.actionLabel && (
-                                <button className="notice-action" onClick={item.onAction}>
-                                    {item.actionLabel}
-                                </button>
-                            )}
-                        </div>
-                        {onClose && (
-                            <i className="close-icon adminfont-close" onClick={onClose} />
-                        )}
-                    </React.Fragment>
-                ))
-                : item.message && (
-                    <div className="notice-desc">{item.message}</div>
+  <>
+    <i className={`admin-font adminfont-${item.type}`} />
+
+    <div className="notice-details">
+      {item.title && <div className="notice-text">{item.title}</div>}
+
+      {Array.isArray(item.message)
+        ? item.message.map((msg, i) => (
+            <React.Fragment key={i}>
+              <div className="notice-desc">
+                {msg}
+
+                {item.actionLabel && (
+                  <button
+                    className="notice-action"
+                    onClick={item.onAction}
+                  >
+                    {item.actionLabel}
+                  </button>
                 )}
-        </div>
-    </>
+              </div>
+
+              {onClose && (
+                <i
+                  className="close-icon adminfont-close"
+                  onClick={onClose}
+                />
+              )}
+            </React.Fragment>
+          ))
+        : item.message && (
+            <div className="notice-desc">{item.message}</div>
+          )}
+    </div>
+  </>
 );
 
-// ─── <Notice> — inline or delegated to store ──────────────────────────────────
 
 export interface NoticeProps {
     uniqueKey?: string;
@@ -148,12 +161,21 @@ export const Notice: React.FC<NoticeProps> = ({
 
     useEffect(() => {
         if (displayPosition === 'inline') return;
-        addNotice(
-            { uniqueKey, title, message, type, position: displayPosition, actionLabel, onAction },
-            validity
-        );
-        setIsVisible(false);
-    }, []);
+    NoticeManager.add(
+      {
+        uniqueKey,
+        title,
+        message,
+        type,
+        position: displayPosition,
+        actionLabel,
+        onAction,
+      },
+      validity
+    );
+
+    setIsVisible(false);
+  }, []);
 
     if (displayPosition !== 'inline' || !isVisible || (!title && !message)) return null;
 
@@ -180,31 +202,38 @@ interface NoticeReceiverProps {
     position: NoticePosition;
 }
 
-export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({ position }) => {
-    const [items, setItems] = useState<NoticeItem[]>([]);
-
-    useEffect(() => subscribe(all => setItems(all.filter(n => n.position === position))), [position]);
+export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({
+  position,
+}) => {
+  const [items, setItems] = useState<NoticeItem[]>([]);
 
     useEffect(() => {
-        flushExpired();
-        const interval = setInterval(flushExpired, 500);
-        return () => clearInterval(interval);
-    }, []);
+        return NoticeManager.subscribe((notices) => {
+        setItems(notices.filter((n) => n.position === position));
+        });
+    }, [position]);
 
     if (!items.length) return null;
 
     return (
         <div className={`receiver receiver-${position}`}>
-            {items.map(item => (
-                <div key={item.uniqueKey} className={`ui-notice type-${item.type} display-${item.position}`}>
-                    {renderNoticeContent(item, () => removeNotice(item.uniqueKey))}
-                </div>
-            ))}
+        {items.map((item) => (
+            <div
+            key={item.uniqueKey}
+            className={`ui-notice type-${item.type} display-${item.position}`}
+            >
+            {renderNoticeContent(item, () =>
+                NoticeManager.remove(item.uniqueKey)
+            )}
+            </div>
+        ))}
         </div>
     );
 };
 
-// ─── NoticeField — FieldRegistry entry ───────────────────────────────────────
+/* ──────────────────────────────────────────────────────────────
+   NoticeField (FieldRegistry)
+────────────────────────────────────────────────────────────── */
 
 const NoticeField: FieldComponent = {
     render: ({ field }) => {
@@ -219,7 +248,9 @@ const NoticeField: FieldComponent = {
         };
 
         return (
-            <div className={`ui-notice type-${item.type} display-${item.position}`}>
+            <div
+                className={`ui-notice type-${item.type} display-${item.position}`}
+            >
                 {renderNoticeContent(item)}
             </div>
         );
