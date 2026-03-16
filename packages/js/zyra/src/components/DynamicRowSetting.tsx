@@ -90,11 +90,31 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
             return;
         };
 
+        const updateRow = (patch: Partial<RowValue>) => {
+            const updatedRows = [...value];
+            updatedRows[rowIndex] = {
+                ...updatedRows[rowIndex],
+                ...patch,
+            };
+            onChange(updatedRows);
+        };
+
+        
         return (
             <>
                 <label>{field.label}</label>
                 <Render
-                    field={field}
+                    field={{
+                        ...field,
+                        onClick: field.onClick
+                            ? () =>
+                                field.onClick({
+                                    row,
+                                    rowIndex,
+                                    updateRow,
+                                })
+                            : field.onClick,
+                    }}
                     value={fieldValue}
                     onChange={handleInternalChange}
                     canAccess={canAccess}
@@ -110,38 +130,37 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
                         {emptyText}
                     </div>
                 ) : (
-                    value.map((row, rowIndex) => (
-                        <div key={rowIndex} className="repeater-field">
-                            <div className="field">
-                                {template.fields.map((field) => (
-                                    renderField(field, row, rowIndex)
-                                ))}
+                    value.map((row, rowIndex) => {
+                        const nestedChildren = childrenRenderer?.(row, rowIndex);
 
-                                <ButtonInputUI
-                                    position="left"
-                                    buttons={[
-                                        {
-                                            icon: 'delete',
-                                            text: 'Delete',
-                                            color: 'purple',
-                                            onClick: (e) => handleDelete(rowIndex),
-                                        },
-                                    ]}
-                                />
-                            </div>
-                            {(() => {
-                                const nestedChildren = childrenRenderer?.(
-                                    row,
-                                    rowIndex
-                                );
-                                return nestedChildren ? (
+                        return (
+                            <div key={rowIndex} className="repeater-field">
+                                <div className="field">
+                                    {template.fields.map((field) =>
+                                        renderField(field, row, rowIndex)
+                                    )}
+
+                                    <ButtonInputUI
+                                        position="left"
+                                        buttons={[
+                                            {
+                                                icon: 'delete',
+                                                text: 'Delete',
+                                                color: 'purple',
+                                                onClick: () => handleDelete(rowIndex),
+                                            },
+                                        ]}
+                                    />
+                                </div>
+
+                                {nestedChildren && (
                                     <div className="repeater-field-nested">
                                         {nestedChildren}
                                     </div>
-                                ) : null;
-                            })()}
-                        </div>
-                    ))
+                                )}
+                            </div>
+                        );
+                    })
                 )}
 
                 <ButtonInputUI

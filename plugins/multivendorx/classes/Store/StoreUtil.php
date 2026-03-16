@@ -104,7 +104,7 @@ class StoreUtil {
         global $wpdb;
 
         $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
-        $store = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table}" ), ARRAY_A );
+        $store = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
             MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );

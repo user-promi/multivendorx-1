@@ -172,7 +172,6 @@ const ButtonInput: FieldComponent = {
          const handleClick = () => {
 
             if (!canAccess) return;
-
             // REST API
             if (field.apilink) {
                 axios({
