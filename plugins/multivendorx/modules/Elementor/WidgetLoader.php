@@ -76,7 +76,6 @@ class WidgetLoader {
 		$all_tag_files = apply_filters( 'multivendorx_elementor_tag_files', $default_tags );
 
 		foreach ( $all_tag_files as $file ) {
-
 			if ( ! file_exists( $file ) ) {
 				continue;
 			}

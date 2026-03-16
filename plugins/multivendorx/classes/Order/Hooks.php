@@ -28,7 +28,7 @@ class Hooks {
         add_action( 'woocommerce_checkout_create_order_shipping_item', array( $this, 'add_metadate_for_shipping_item' ), 10, 4 );
 
         if ( current_user_can( 'administrator' ) ) {
-            $analytics_hooks = [
+            $analytics_hooks = array(
                 // Orders & Revenue
                 'woocommerce_analytics_clauses_where_orders_stats_total',
                 'woocommerce_analytics_clauses_where_orders_stats_interval',
@@ -46,16 +46,16 @@ class Hooks {
                 'woocommerce_analytics_clauses_where_coupons_stats_total',
                 'woocommerce_analytics_clauses_where_coupons_stats_interval',
                 'woocommerce_analytics_clauses_where_coupons_subquery',
-            ];
+            );
 
             foreach ( $analytics_hooks as $hook ) {
                 add_filter( $hook, array( $this, 'exclude_suborders_analytics' ) );
             }
         }
 
-        add_action( 'woocommerce_order_status_processing', array( $this, 'skip_suborder_sales'), 1 );
-        add_action( 'woocommerce_order_status_completed', array( $this, 'skip_suborder_sales'), 1 );
-        add_action( 'woocommerce_order_status_on-hold',array( $this, 'skip_suborder_sales'), 1 );
+        add_action( 'woocommerce_order_status_processing', array( $this, 'skip_suborder_sales' ), 1 );
+        add_action( 'woocommerce_order_status_completed', array( $this, 'skip_suborder_sales' ), 1 );
+        add_action( 'woocommerce_order_status_on-hold', array( $this, 'skip_suborder_sales' ), 1 );
 
         // Create store order after valid checkout processed.
         add_action( 'woocommerce_checkout_order_processed', array( $this, 'create_store_order' ) );
@@ -125,6 +125,7 @@ class Hooks {
     /**
      * Forces the SQL query to only include top-level parent orders.
      * * @param array $clauses Existing SQL clauses (where, join, etc.)
+     *
      * @return array Modified clauses
      */
     public function exclude_suborders_analytics( $clauses ) {

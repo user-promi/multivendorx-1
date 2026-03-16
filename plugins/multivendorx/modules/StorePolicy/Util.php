@@ -63,14 +63,14 @@ class Util {
          */
         if ( $store_id ) {
             $store                     = new Store( $store_id );
-            $privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', [] );
+            $privacy_override_settings = MultiVendorX()->setting->get_setting( 'store_policy_override', array() );
 
-            $policies = [
+            $policies = array(
                 'store'               => 'store_policy',
                 'shipping'            => 'shipping_policy',
                 'refund'              => 'refund_policy',
                 'cancellation_return' => 'cancellation_policy',
-            ];
+            );
 
             foreach ( $policies as $key => $meta_key ) {
                 if ( in_array( $key, $privacy_override_settings, true ) ) {

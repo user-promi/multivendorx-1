@@ -168,7 +168,7 @@ $banner_slider     = $meta_data['banner_slider'] ?? array();
 
                         // Show phone if not hidden.
                         if ( in_array( 'show_store_phone', $contact_settings, true ) && ! empty( $meta_data['phone'] ) && ( $meta_data['hidePhone'] ?? 'no' ) === 'no' ) {
-                            echo '<div class="store-phone"> <i class="dashicons dashicons-phone"></i>' . esc_html( StoreUtil::get_phone($meta_data['phone']) ) . '</div>';
+                            echo '<div class="store-phone"> <i class="dashicons dashicons-phone"></i>' . esc_html( StoreUtil::get_phone( $meta_data['phone'] ) ) . '</div>';
                         }
                         ?>
                     </div>

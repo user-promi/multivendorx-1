@@ -445,7 +445,7 @@ class Utill {
     public static function is_store_page() {
         // Admin edit page check.
         if ( is_admin() ) {
-            $page = get_page_by_path( 'store' );
+            $page    = get_page_by_path( 'store' );
             $post_id = filter_input( INPUT_GET, 'post', FILTER_VALIDATE_INT );
             if ( $page && $post_id && intval( $post_id ) === intval( $page->ID ) ) {
                 return true;

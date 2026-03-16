@@ -1460,9 +1460,9 @@ class Install {
         }
 
         if ( ! empty( $previous_store_settings['choose_map_api'] ) ) {
-            $map_settings['choose_map_api'] = $previous_store_settings['choose_map_api']['value'];
+            $map_settings['choose_map_api']     = $previous_store_settings['choose_map_api']['value'];
             $map_settings['google_map_api_key'] = $previous_store_settings['google_map_api_key'];
-            $map_settings['mapbox_api_key'] = $previous_store_settings['mapbox_api_key'];
+            $map_settings['mapbox_api_key']     = $previous_store_settings['mapbox_api_key'];
         }
 
         if ( ! empty( $previous_store_settings['show_related_products'] ) ) {
