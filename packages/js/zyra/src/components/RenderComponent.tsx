@@ -11,7 +11,7 @@ import '../styles/web/AdminForm.scss';
 import { FIELD_REGISTRY } from './fieldUtils';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import { PopupUI } from './Popup';
-import { Notice, NoticeStore } from './Notice';
+import { Notice, NoticeManager } from './Notice';
 
 interface InputField {
     key: string;
@@ -140,7 +140,7 @@ const RenderComponent: React.FC<RenderProps> = ({
                     ).then((response: unknown) => {
                         const apiResponse = response as ApiResponse;
                         if (apiResponse.message) {
-                            NoticeStore.add({
+                            NoticeManager.add({
                                 title: 'Great!',
                                 message: apiResponse.message,
                                 type: apiResponse.type || 'success',

@@ -6,7 +6,7 @@ import { MultiCheckBoxUI } from './MultiCheckbox';
 import HeaderSearch from './HeaderSearch';
 import { SelectInputUI } from './SelectInput';
 import { PopupUI } from './Popup';
-import { NoticeStore } from './Notice';
+import { NoticeManager } from './Notice';
 
 interface Module {
     id: string;
@@ -125,7 +125,7 @@ const Modules: React.FC<ModuleProps> = ({
             { id: module.id, action }
         )
             .then(() => {
-                NoticeStore.add({
+                NoticeManager.add({
                     title: 'Success!',
                     message: `Module ${action}d`,
                     type: 'success',
@@ -138,7 +138,7 @@ const Modules: React.FC<ModuleProps> = ({
                 }
             })
             .catch(() => {
-                NoticeStore.add({
+                NoticeManager.add({
                     title: 'Error',
                     message: `Failed to ${action} module`,
                     type: 'error',

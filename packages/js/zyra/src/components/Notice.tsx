@@ -51,7 +51,7 @@ if (typeof window !== 'undefined') {
     noticeQueue = getStored();
 }
 
-export const NoticeStore = {
+export const NoticeManager = {
   subscribe(cb: (items: NoticeItem[]) => void) {
     subscribers.add(cb);
     cb([...noticeQueue]);
@@ -75,7 +75,7 @@ export const NoticeStore = {
 
     if (expiresAt) {
       setTimeout(() => {
-        NoticeStore.remove(uniqueKey);
+        NoticeManager.remove(uniqueKey);
       }, validity);
     }
 
@@ -161,7 +161,7 @@ export const Notice: React.FC<NoticeProps> = ({
 
     useEffect(() => {
         if (displayPosition === 'inline') return;
-    NoticeStore.add(
+    NoticeManager.add(
       {
         uniqueKey,
         title,
@@ -208,7 +208,7 @@ export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({
   const [items, setItems] = useState<NoticeItem[]>([]);
 
     useEffect(() => {
-        return NoticeStore.subscribe((notices) => {
+        return NoticeManager.subscribe((notices) => {
         setItems(notices.filter((n) => n.position === position));
         });
     }, [position]);
@@ -223,7 +223,7 @@ export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({
             className={`ui-notice type-${item.type} display-${item.position}`}
             >
             {renderNoticeContent(item, () =>
-                NoticeStore.remove(item.uniqueKey)
+                NoticeManager.remove(item.uniqueKey)
             )}
             </div>
         ))}
