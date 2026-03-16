@@ -8,7 +8,7 @@ import React, {
 import { getApiLink, sendApiResponse } from '../utils/apiService';
 import { useModules } from '../contexts/ModuleContext';
 import '../styles/web/AdminForm.scss';
-import { FIELD_REGISTRY } from './fieldUtils';
+import { FIELD_REGISTRY, ZyraVariable } from './fieldUtils';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import { PopupUI } from './Popup';
 import { Notice, NoticeManager } from './Notice';
@@ -83,7 +83,6 @@ interface RenderProps {
     setting: Settings;
     updateSetting: (key: string, value: SettingValue) => void;
     modules: string[];
-    appLocalizer: {[key: string]: string | number | boolean};
     Popup: React.ComponentType<PopupProps>;
     storeTabSetting?: Record<string, string[]>;
 }
@@ -94,7 +93,6 @@ const COOLDOWN = 1;
 const RenderComponent: React.FC<RenderProps> = ({
     setting,
     updateSetting,
-    appLocalizer,
     settings,
     Popup,
     storeTabSetting
@@ -131,8 +129,8 @@ const RenderComponent: React.FC<RenderProps> = ({
                 // Cooldown complete, time for DB request
                 if (counter.current < 0) {
                     sendApiResponse(
-                        appLocalizer,
-                        getApiLink(appLocalizer, submitUrl),
+                        ZyraVariable,
+                        getApiLink(ZyraVariable, submitUrl),
                         {
                             setting,
                             settingName: id,
@@ -161,7 +159,7 @@ const RenderComponent: React.FC<RenderProps> = ({
             // Store the interval ID
             counterId.current = intervalId;
         }
-    }, [setting, appLocalizer, submitUrl, id]);
+    }, [setting, submitUrl, id]);
 
     useEffect(() => {
         if (modelOpen === false) {
@@ -183,7 +181,7 @@ const RenderComponent: React.FC<RenderProps> = ({
         hasDependentSetting?: string,
         hasDependentPlugin?: string
     ) => {
-        if (proFeaturesEnabled && !appLocalizer?.khali_dabba) {
+        if (proFeaturesEnabled && !ZyraVariable?.khali_dabba) {
             return false;
         }
 
@@ -216,7 +214,7 @@ const RenderComponent: React.FC<RenderProps> = ({
         // But we want to trigger popup on ANY click inside the group
 
         // 1. Pro Setting
-        if (field.proSetting && !appLocalizer?.khali_dabba) {
+        if (field.proSetting && !ZyraVariable?.khali_dabba) {
             setModelOpen(true);
             e.stopPropagation();
             return;
@@ -286,7 +284,7 @@ const RenderComponent: React.FC<RenderProps> = ({
     };
 
     const isProSetting = (proDependent: boolean): boolean => {
-        return proDependent && !appLocalizer?.khali_dabba;
+        return proDependent && !ZyraVariable?.khali_dabba;
     };
 
     type MultiSelectOption = { value: string; proSetting?: boolean };
@@ -367,7 +365,6 @@ const RenderComponent: React.FC<RenderProps> = ({
         value: any,
         onChange: (key: string, value: any) => void,
         canAccess: boolean,
-        appLocalizer: any
     ): JSX.Element | null => {
         const fieldComponent = FIELD_REGISTRY[field.type];
         if (!fieldComponent) return null;
@@ -396,7 +393,7 @@ const RenderComponent: React.FC<RenderProps> = ({
                 value={fieldValue}
                 onChange={handleInternalChange}
                 canAccess={canAccess}
-                appLocalizer={appLocalizer}
+                // appLocalizer={appLocalizer}
                 modules={modules}
                 settings={setting}
                 onOptionsChange={(opts: any[]) => {
@@ -463,7 +460,6 @@ const RenderComponent: React.FC<RenderProps> = ({
                             value,
                             handleChange,
                             access,
-                            appLocalizer
                         )}
 
                     {renderFieldInternal(
@@ -472,7 +468,6 @@ const RenderComponent: React.FC<RenderProps> = ({
                         value,
                         handleChange,
                         access,
-                        appLocalizer
                     )}
 
                     {inputField.afterElement &&
@@ -482,7 +477,6 @@ const RenderComponent: React.FC<RenderProps> = ({
                             value,
                             handleChange,
                             access,
-                            appLocalizer
                         )}
                 </>
             );
@@ -490,7 +484,7 @@ const RenderComponent: React.FC<RenderProps> = ({
             // const input = renderField(inputField, value, handleChange, access);
 
             const isLocked =
-                (inputField.proSetting && !appLocalizer?.khali_dabba) ||
+                (inputField.proSetting && !ZyraVariable?.khali_dabba) ||
                 (inputField.moduleEnabled &&
                     !modules.includes(inputField.moduleEnabled)) ||
                 (inputField.dependentSetting &&
@@ -565,7 +559,7 @@ const RenderComponent: React.FC<RenderProps> = ({
                             )}
                         </div>
                         {((inputField.proSetting &&
-                            appLocalizer?.khali_dabba) ||
+                            ZyraVariable?.khali_dabba) ||
                             !inputField.proSetting) &&
                             inputField.moduleEnabled &&
                             !modules.includes(inputField.moduleEnabled) && (
@@ -584,7 +578,7 @@ const RenderComponent: React.FC<RenderProps> = ({
                                     <i className="adminfont-lock"></i>
                                 </span>
                             )}
-                        {inputField.proSetting && !appLocalizer.khali_dabba && (
+                        {inputField.proSetting && !ZyraVariable.khali_dabba && (
                             <span className="admin-pro-tag">
                                 <i className="adminfont-pro-tag"></i>Pro
                             </span>
