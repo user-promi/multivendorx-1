@@ -1,6 +1,6 @@
 // External dependencies
 import React from 'react';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 // Types
 interface PrePostTextProps {

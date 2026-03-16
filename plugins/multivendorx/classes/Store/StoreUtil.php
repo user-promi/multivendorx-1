@@ -138,7 +138,7 @@ class StoreUtil {
      * @param string $tab Optional tab.
      * @return string
      */
-    public function get_store_url( $store_id = null, $tab = '' ) {
+    public function get_store_url( $store_id = null, $tab = '', $placeholder_string = false ) {
 
         $store_base = MultiVendorX()->setting->get_setting( 'store_url', 'store' );
         $store_slug = '';
@@ -146,6 +146,10 @@ class StoreUtil {
         if ( $store_id ) {
             $store_data = new Store( $store_id );
             $store_slug = $store_data ? sanitize_title( $store_data->get( 'slug' ) ) : '';
+        }
+
+        if ( ! $store_id || ! $placeholder_string ) {
+            return '';
         }
 
         // Pretty permalink enabled

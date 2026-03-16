@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Internal Dependencies
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 import "../styles/web/UI/ItemList.scss";
 
 interface Item {

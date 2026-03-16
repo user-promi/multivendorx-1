@@ -4,8 +4,7 @@ import React, {
     useRef,
     useState
 } from 'react';
-import { useOutsideClick } from './useOutsideClick';
-import { FieldComponent } from './types';
+import { useOutsideClick, FieldComponent } from './fieldUtils';
 import '../styles/web/Popup.scss';
 import Tooltip from './UI/Tooltip';
 

@@ -6,7 +6,7 @@ import axios from 'axios';
 import '../styles/web/SystemInfoAccordion.scss';
 import { getApiLink } from '../utils/apiService';
 import Skeleton from './UI/Skeleton';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 // Types
 interface SystemInfoProps {

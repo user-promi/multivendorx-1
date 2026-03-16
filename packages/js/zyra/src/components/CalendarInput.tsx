@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DatePicker, { Calendar, DateObject, DatePickerRef } from 'react-multi-date-picker';
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 import '../styles/web/CalendarInput.scss';
 
 export interface CalendarRange {

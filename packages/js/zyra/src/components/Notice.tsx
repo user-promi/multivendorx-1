@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import "../styles/web/Notice.scss";
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -142,14 +142,14 @@ export const Notice: React.FC<NoticeProps> = ({
     displayPosition = 'notice',
     actionLabel,
     onAction,
-    validity = 3000,
+    validity = 5000,
 }) => {
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
         if (displayPosition === 'inline') return;
         addNotice(
-            { uniqueKey, title, message, type, displayPosition, actionLabel, onAction },
+            { uniqueKey, title, message, type, position: displayPosition, actionLabel, onAction },
             validity
         );
         setIsVisible(false);

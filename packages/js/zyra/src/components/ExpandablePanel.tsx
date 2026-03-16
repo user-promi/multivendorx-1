@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useReducer, useCallback, useContext, createCo
 import '../styles/web/ExpandablePanel.scss';
 import { getApiLink } from '../utils/apiService';
 import axios from 'axios';
-import { FieldComponent } from './types';
-import { FIELD_REGISTRY } from './FieldRegistry';
+import { FieldComponent, FIELD_REGISTRY } from './fieldUtils';
 import FormGroup from './UI/FormGroup';
 import { ButtonInputUI } from './ButtonInput';
 import FormGroupWrapper from './UI/FormGroupWrapper';

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useOutsideClick } from './useOutsideClick';
+import { useOutsideClick } from './fieldUtils';
 import { BasicInputUI } from './BasicInput';
 import { ItemListUI } from './ItemList';
 import { SelectInputUI } from './SelectInput';

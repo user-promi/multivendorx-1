@@ -3,7 +3,7 @@ import React from 'react';
 
 // Internal Dependencies
 import { Block, BlockPatch, BlockType, ColumnsBlock } from './blockTypes';
-import { FIELD_REGISTRY } from '../FieldRegistry';
+import { FIELD_REGISTRY } from '../fieldUtils';
 
 // ID generator
 

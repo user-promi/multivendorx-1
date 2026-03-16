@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, DateObject } from 'react-multi-date-picker';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 import { PopupUI } from './Popup';
 import { ExpandablePanelUI } from './ExpandablePanel';
 import '../styles/web/EventCalendar.scss';

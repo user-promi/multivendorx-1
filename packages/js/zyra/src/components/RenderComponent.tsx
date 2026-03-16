@@ -8,10 +8,9 @@ import React, {
 import { getApiLink, sendApiResponse } from '../utils/apiService';
 import { useModules } from '../contexts/ModuleContext';
 import '../styles/web/AdminForm.scss';
-import { FIELD_REGISTRY } from './FieldRegistry';
+import { FIELD_REGISTRY } from './fieldUtils';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import { PopupUI } from './Popup';
-import axios from 'axios';
 import { Notice } from './Notice';
 import { addNotice } from './Notice';
 
@@ -554,11 +553,11 @@ const RenderComponent: React.FC<RenderProps> = ({
                                 })
                                 : input}
 
-                            <Notice
-                                type="error"
-                                position="inline"
-                                message={errors[inputField.key] || ''}
-                            />
+                                    {/* <Notice
+                                        type="error"
+                                        position="inline"
+                                        message={errors[inputField.key] || ''}
+                                    /> */}
                             {inputField.desc && (
                                 <p
                                     className="settings-metabox-description"

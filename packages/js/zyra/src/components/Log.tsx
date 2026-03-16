@@ -5,7 +5,7 @@ import axios from 'axios';
 // Internal dependencies
 import { getApiLink } from '../utils/apiService';
 import '../styles/web/Log.scss';
-import { FieldComponent } from './types';
+import { FieldComponent } from './fieldUtils';
 import { ButtonInputUI } from './ButtonInput';
 
 // Types
