@@ -1,5 +1,4 @@
 <?php
-
 /**
  * MultiVendorX Frontend class file
  *

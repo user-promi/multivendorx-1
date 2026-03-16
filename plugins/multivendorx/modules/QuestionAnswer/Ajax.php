@@ -1,10 +1,25 @@
 <?php
+/**
+ * MultiVendorX Ajax class file
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\QuestionAnswer;
 
 use MultiVendorX\Utill;
-
+/**
+ * MultiVendorX Questions Answers Ajax class
+ *
+ * @class       Ajax class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class Ajax {
 
+    /**
+     * Constructor. Registers AJAX actions and enqueues dashicons.
+     */
     public function __construct() {
         add_action( 'wp_ajax_qna_submit', array( $this, 'submit_question' ) );
         add_action( 'wp_ajax_nopriv_qna_submit', array( $this, 'submit_question' ) );
@@ -14,7 +29,7 @@ class Ajax {
 
         add_action( 'wp_ajax_qna_vote', array( $this, 'vote_question' ) );
 
-        // Load dashicons on frontend so vote icons are visible
+        // Load dashicons on frontend so vote icons are visible.
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_dashicons' ) );
     }
 
@@ -54,7 +69,7 @@ class Ajax {
             'voters'        => array(),
             'answer_text'   => '',
         );
-        // Insert question using Util class
+        // Insert question using Util class.
         $inserted = Util::insert_question( $data );
         if ( $inserted ) {
             wp_send_json_success( array( 'message' => 'Question submitted successfully.' ) );
@@ -97,8 +112,7 @@ class Ajax {
                     <p class="qna-question"><strong>Q:</strong> <?php echo esc_html( $row['question_text'] ); ?></p>
                     <small class="qna-meta">
                         By <?php echo esc_html( get_the_author_meta( 'display_name', $row['question_by'] ) ); ?>,
-                        <?php echo esc_html( human_time_diff( strtotime( $row['question_date'] ), current_time( 'timestamp' ) ) ) . ' ago'; ?>
-                    </small>
+                        <?php echo esc_html( human_time_diff( strtotime( $row['question_date'] ), time() ) ) . ' ago'; ?>                    </small>
                     <p class="qna-answer"><strong>A:</strong> <?php echo esc_html( $row['answer_text'] ); ?></p>
                     <div class="qna-votes">
                         <span class="qna-vote dashicons dashicons-thumbs-up" data-type="up"></span>

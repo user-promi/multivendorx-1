@@ -1,5 +1,4 @@
 <?php
-
 /**
  * MultiVendorX REST API Controller for Questions and Answers
  *
@@ -16,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MultiVendorX REST API Controller for Questions and Answers.
  *
- * @class       Module class
+ * @class       REST class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
@@ -89,7 +88,7 @@ class Rest extends \WP_REST_Controller {
      * @param  object $request Full data about the request.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
 
@@ -99,7 +98,7 @@ class Rest extends \WP_REST_Controller {
      * @param  object $request Full data about the request.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'edit_stores' );
+        return current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
 
@@ -142,6 +141,7 @@ class Rest extends \WP_REST_Controller {
 
             // --- Step 3: Handle Search (Product first, fallback to Question) ---
             if ( ! empty( $search ) ) {
+                /* phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
                 $product_query = new \WC_Product_Query(
                     array(
                         'limit'      => -1,
@@ -149,20 +149,20 @@ class Rest extends \WP_REST_Controller {
                         's'          => $search,
                         'meta_query' => array(
                             array(
-                                'key'     => '_multivendorx_store_id',
+                                'key'     => 'multivendorx_store_id',
                                 'compare' => 'EXISTS',
                             ),
                         ),
                     )
                 );
-
+                /* phpcs:enable WordPress.DB.SlowDBQuery.slow_db_query_meta_query */
                 $matched_product_ids = $product_query->get_products();
 
                 if ( ! empty( $matched_product_ids ) ) {
-                    // Product match → filter by products
+                    // Product match → filter by products.
                     $args['product_ids'] = $matched_product_ids;
                 } else {
-                    // No product match → fallback to question/answer search
+                    // No product match → fallback to question/answer search.
                     $args['search'] = $search;
                 }
             }
@@ -204,21 +204,21 @@ class Rest extends \WP_REST_Controller {
             unset( $base_args['limit'], $base_args['offset'], $base_args['has_answer'], $base_args['no_answer'] );
             $response = rest_ensure_response( $formatted );
 
-            // Prepare counts
+            // Prepare counts.
             $base_args['count'] = true;
             $all_count          = Util::get_question_information( $base_args );
 
-            // Answered count
+            // Answered count.
             $answered_args               = $base_args;
             $answered_args['has_answer'] = true;
             $answered_count              = Util::get_question_information( $answered_args );
 
-            // Unanswered count
+            // Unanswered count.
             $unanswered_args              = $base_args;
             $unanswered_args['no_answer'] = true;
             $unanswered_count             = Util::get_question_information( $unanswered_args );
 
-            // Set headers
+            // Set headers.
             $response->header( 'X-WP-Total', (int) $all_count );
             $response->header( 'X-WP-Status-Answered', (int) $answered_count );
             $response->header( 'X-WP-Status-Unanswered', (int) $unanswered_count );
@@ -255,18 +255,6 @@ class Rest extends \WP_REST_Controller {
         if ( ! $question ) {
             return new \WP_Error( 'not_found', __( 'Question not found', 'multivendorx' ), array( 'status' => 404 ) );
         }
-
-        // Permission check.
-        // if ( ! in_array( 'administrator', $current_user->roles, true ) ) {
-        // if ( in_array( 'store_owner', $current_user->roles, true ) ) {
-        // $product = wc_get_product( $q['product_id'] );
-        // if ( ! $product || $product->get_author() !== $current_user_id ) {
-        // return new \WP_Error( 'forbidden', __( 'You are not allowed to view this question', 'multivendorx' ), array( 'status' => 403 ) );
-        // }
-        // } else {
-        // return new \WP_Error( 'forbidden', __( 'You are not allowed to view this question', 'multivendorx' ), array( 'status' => 403 ) );
-        // }
-        // }
 
         return rest_ensure_response( $this->prepare_rest_item_for_response( $question ) );
     }
@@ -435,28 +423,18 @@ class Rest extends \WP_REST_Controller {
      * @return array Formatted QnA item for REST.
      */
     public function prepare_rest_item_for_response( $q ) {
-
-        $product = wc_get_product( $q['product_id'] );
-
-        $product_name = $product ? $product->get_name() : '';
-        $product_link = $product ? get_permalink( $product->get_id() ) : '';
-
-        // Product thumbnail in WooCommerce way
-        $product_image = '';
-        if ( $product ) {
-            $image_id = $product->get_image_id();
-            if ( $image_id ) {
-                $product_image = wp_get_attachment_image_url( $image_id, 'woocommerce_thumbnail' );
-            }
-        }
-
-        // Author info using WordPress get_userdata
-        $author_data = get_userdata( $q['question_by'] );
-        $author_name = $author_data
-            ? trim( $author_data->first_name . ' ' . $author_data->last_name ) ?: $author_data->display_name
+        $product       = wc_get_product( $q['product_id'] );
+        $product_name  = $product ? $product->get_name() : '';
+        $product_link  = $product ? get_permalink( $product->get_id() ) : '';
+        $product_image = $product && $product->get_image_id()
+            ? wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' )
             : '';
 
-        // Store object using MVX store API
+        $author_data = get_userdata( $q['question_by'] );
+        $author_name = $author_data && trim( $author_data->first_name . ' ' . $author_data->last_name )
+            ? trim( $author_data->first_name . ' ' . $author_data->last_name )
+            : ( $author_data->display_name ?? '' );
+
         $store_obj  = MultivendorX()->store->get_store( $q['store_id'] );
         $store_name = $store_obj ? $store_obj->get( 'name' ) : '';
 
@@ -474,12 +452,12 @@ class Rest extends \WP_REST_Controller {
             'author_name'         => $author_name,
             'question_date'       => Utill::multivendorx_rest_prepare_date_response( $q['question_date'] ),
             'question_date_gmt'   => Utill::multivendorx_rest_prepare_date_response( $q['question_date'], true ),
-            'answer_by'           => isset( $q['answer_by'] ) ? (int) $q['answer_by'] : 0,
+            'answer_by'           => (int) ( $q['answer_by'] ?? 0 ),
             'answer_date'         => Utill::multivendorx_rest_prepare_date_response( $q['answer_date'] ) ?? '',
             'answer_date_gmt'     => Utill::multivendorx_rest_prepare_date_response( $q['answer_date'], true ) ?? '',
-            'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), current_time( 'timestamp' ) ) . ' ago',
+            'time_ago'            => human_time_diff( strtotime( $q['question_date'] ), time() ) . ' ago',
             'total_votes'         => (int) $q['total_votes'],
-            'question_visibility' => $q['question_visibility'],
+            'question_visibility' => $q['question_visibility'] ?? 'public',
         );
     }
 }

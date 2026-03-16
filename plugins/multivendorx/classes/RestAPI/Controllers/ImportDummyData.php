@@ -8,7 +8,13 @@
 namespace MultiVendorX\RestAPI\Controllers;
 
 defined( 'ABSPATH' ) || exit;
-
+/**
+ * MultiVendorX REST API ImportDummyData Controller.
+ *
+ * @class       ImportDummyData class
+ * @version     PRODUCT_VERSION
+ * @author      MultiVendorX
+ */
 class ImportDummyData extends \WP_REST_Controller {
 
     /**
@@ -19,7 +25,7 @@ class ImportDummyData extends \WP_REST_Controller {
     protected $rest_base = 'import-dummy-data';
 
     /**
-     * Register AI Assistant API routes
+     * Register AI Assistant API routes.
      */
     public function register_routes() {
         register_rest_route(
@@ -27,12 +33,12 @@ class ImportDummyData extends \WP_REST_Controller {
             '/' . $this->rest_base,
             array(
                 array(
-                    'methods'             => \WP_REST_Server::CREATABLE, // POST
+                    'methods'             => \WP_REST_Server::CREATABLE,
                     'callback'            => array( $this, 'process_action' ),
                     'permission_callback' => array( $this, 'get_items_permissions_check' ),
                 ),
                 array(
-                    'methods'             => \WP_REST_Server::READABLE, // GET
+                    'methods'             => \WP_REST_Server::READABLE,
                     'callback'            => array( $this, 'get_status' ),
                     'permission_callback' => array( $this, 'get_items_permissions_check' ),
                 ),
@@ -41,16 +47,23 @@ class ImportDummyData extends \WP_REST_Controller {
     }
 
     /**
-     * Permission check for AI Operations
+     * Get a single item from the collection
+     *
+     * @param object $request Full details about the request.
      */
     public function get_items_permissions_check( $request ) {
         return current_user_can( 'edit_products' );
     }
 
     /**
-     * Process action request
+     * Process a specific REST API action request.
      *
-     * @param \WP_REST_Request $request
+     * Verifies the nonce, checks the requested action, and delegates to the
+     * corresponding method if it exists.
+     *
+     * @param \WP_REST_Request $request The REST request object containing the action and any parameters.
+     *
+     * @return array|\WP_Error The result of the action method, or an error array if invalid or unknown action.
      */
     public function process_action( $request ) {
 
@@ -78,19 +91,32 @@ class ImportDummyData extends \WP_REST_Controller {
     }
 
     /**
-     * Get current status
+     * Get the current import task status.
+     *
+     * Retrieves the transient for a given task and returns whether it is running
+     * along with any status messages.
+     *
+     * @param WP_REST_Request $request The REST request object containing 'task' parameter.
+     *
+     * @return array Status response with keys 'success', 'running', and 'status'.
      */
     public function get_status( $request ) {
         $task   = $request->get_param( 'task' );
-        $status = get_transient( 'multivendorx_import_status_' . $task ) ?: array();
-
+        $status = get_transient( 'multivendorx_import_status_' . $task ) ? get_transient( 'multivendorx_import_status_' . $task ) : array();
         return array(
             'success' => true,
             'running' => ! empty( $status ),
             'status'  => $status,
         );
     }
-
+    /**
+     * Import store owners from a dummy XML file.
+     *
+     * Loads the 'store_owners.xml' file, creates new WordPress users with role
+     * 'store_owner' if they do not exist, and handles profile/store images.
+     *
+     * @return WP_REST_Response Response containing imported user IDs and status message.
+     */
     public function import_store_owners() {
         $xml = $this->load_dummy_xml( 'store_owners' );
 
@@ -100,7 +126,7 @@ class ImportDummyData extends \WP_REST_Controller {
             $username = (string) $store->username;
             $email    = (string) $store->email;
 
-            // Check if user already exists
+            // Check if user already exists.
             $user = get_user_by( 'login', $username );
 
             if ( $user ) {
@@ -126,7 +152,7 @@ class ImportDummyData extends \WP_REST_Controller {
 
             $store_owners[] = (int) $user_id;
 
-            // Image handling
+            // Image handling.
             if ( isset( $store->images->image ) ) {
                 foreach ( $store->images->image as $image ) {
                     $src    = plugins_url( 'multivendorx/' . (string) $image->src );
@@ -160,7 +186,12 @@ class ImportDummyData extends \WP_REST_Controller {
 
 			return $response;
     }
-
+    /**
+     * Load a dummy XML file from the plugin's assets/dummy-data folder.
+     *
+     * @param string $filename Name of the XML file (without .xml extension).
+     * @return SimpleXMLElement|WP_Error Parsed XML object on success, or WP_Error on failure.
+     */
     private function load_dummy_xml( string $filename ) {
 
         $base_path = trailingslashit( MultiVendorX()->plugin_path ) . 'assets/dummy-data/';
@@ -170,6 +201,7 @@ class ImportDummyData extends \WP_REST_Controller {
             return new \WP_Error(
                 'file_not_found',
                 sprintf(
+                    // translators: %s is the name of the XML file being checked.
                     __( '%s XML file not found.', 'multivendorx' ),
                     ucfirst( str_replace( '_', ' ', $filename ) )
                 ),
@@ -190,7 +222,15 @@ class ImportDummyData extends \WP_REST_Controller {
 
         return $xml;
     }
-
+    /**
+     * Import stores from a dummy XML file into MultiVendorX.
+     *
+     * Loops through the XML stores, creates new stores if they don't exist,
+     * assigns owners, updates store meta, and returns the created store IDs.
+     *
+     * @param WP_REST_Request $request REST API request containing store owner IDs.
+     * @return WP_REST_Response REST response with created store IDs and message.
+     */
     public function import_stores( $request ) {
 
         $xml = $this->load_dummy_xml( 'stores' );
@@ -209,13 +249,13 @@ class ImportDummyData extends \WP_REST_Controller {
 
             $store_slug = sanitize_title( (string) $store->slug );
 
-            // CHECK IF STORE ALREADY EXISTS BY SLUG
+            // CHECK IF STORE ALREADY EXISTS BY SLUG.
             if ( \MultiVendorX\Store\Store::store_slug_exists( $store_slug ) ) {
-                // Store already exists → skip creation
+                // Store already exists → skip creation.
                 continue;
             }
 
-            // Create store object
+            // Create store object.
             $store_obj = new \MultiVendorX\Store\Store();
 
             $store_data = array(
@@ -230,17 +270,17 @@ class ImportDummyData extends \WP_REST_Controller {
                 $store_obj->set( $key, $value );
             }
 
-            // Save store
+            // Save store.
             $store_id = $store_obj->save();
 
             if ( ! $store_id ) {
                 continue;
             }
 
-            // Assign owner
+            // Assign owner.
             \MultiVendorX\Store\StoreUtil::set_primary_owner( $owner_id, $store_id );
 
-            // Store meta
+            // Store meta.
             $meta_fields = array(
                 'phone'     => (string) $store->phone,
                 'address_1' => (string) $store->address_1,
@@ -273,7 +313,15 @@ class ImportDummyData extends \WP_REST_Controller {
 
         return $response;
     }
-
+    /**
+     * Import products from dummy XML files into WooCommerce.
+     *
+     * Loops through predefined product types, creates products, variations,
+     * assigns categories, tags, stock, prices, and links products to stores.
+     *
+     * @param WP_REST_Request $request The REST API request containing store IDs.
+     * @return WP_REST_Response REST response with created product IDs and message.
+     */
     public function import_products( $request ) {
 
         $product_files = array(
@@ -322,14 +370,14 @@ class ImportDummyData extends \WP_REST_Controller {
                     continue;
                 }
 
-                // CREATE PRODUCT
+                // CREATE PRODUCT.
                 $product_id = wp_insert_post(
                     array(
 						'post_title'   => sanitize_text_field( (string) $product->name ),
 						'post_name'    => sanitize_title( (string) $product->slug ),
 						'post_content' => wp_kses_post( (string) $product->description ),
 						'post_excerpt' => wp_kses_post( (string) $product->short_description ),
-						'post_status'  => (string) $product->status ?: 'publish',
+						'post_status'  => (string) $product->status ? (string) $product->status : 'publish',
 						'post_type'    => 'product',
 						'post_author'  => MultiVendorX()->current_user_id,
                     )
@@ -343,10 +391,10 @@ class ImportDummyData extends \WP_REST_Controller {
 
                 do_action( 'multivendorx_after_product_import', $product_id, $store_id );
 
-                // PRODUCT TYPE
+                // PRODUCT TYPE.
                 wp_set_object_terms( $product_id, $product_type, 'product_type' );
 
-                // COMMON META
+                // COMMON META.
                 update_post_meta( $product_id, '_sku', (string) $product->sku );
                 update_post_meta( $product_id, '_visibility', 'visible' );
 
@@ -360,14 +408,14 @@ class ImportDummyData extends \WP_REST_Controller {
                     update_post_meta( $product_id, '_price', (string) $product->sale_price );
                 }
 
-                // STOCK
+                // STOCK.
                 if ( isset( $product->stock ) ) {
-                    update_post_meta( $product_id, '_manage_stock', (string) $product->stock->manage === 'true' ? 'yes' : 'no' );
+                    update_post_meta( $product_id, '_manage_stock', 'true' === (string) $product->stock->manage ? 'yes' : 'no' );
                     update_post_meta( $product_id, '_stock', (int) $product->stock->quantity );
                     update_post_meta( $product_id, '_stock_status', (string) $product->stock->status );
                 }
 
-                // CATEGORIES
+                // CATEGORIES.
                 if ( isset( $product->categories->category ) ) {
                     $cats = array();
                     foreach ( $product->categories->category as $cat ) {
@@ -376,7 +424,7 @@ class ImportDummyData extends \WP_REST_Controller {
                     wp_set_object_terms( $product_id, $cats, 'product_cat' );
                 }
 
-                // TAGS
+                // TAGS.
                 if ( isset( $product->tags->tag ) ) {
                     $tags = array();
                     foreach ( $product->tags->tag as $tag ) {
@@ -385,14 +433,14 @@ class ImportDummyData extends \WP_REST_Controller {
                     wp_set_object_terms( $product_id, $tags, 'product_tag' );
                 }
 
-                // SUBSCRIPTIONS
+                // SUBSCRIPTIONS.
                 if ( in_array( $product_type, array( 'subscription', 'variable-subscription' ), true ) ) {
                     update_post_meta( $product_id, '_subscription_price', (string) $product->price );
-                    update_post_meta( $product_id, '_subscription_period', (string) $product->period ?: 'month' );
-                    update_post_meta( $product_id, '_subscription_interval', (string) $product->interval ?: 1 );
+                    update_post_meta( $product_id, '_subscription_period', '' !== $product->period ? (string) $product->period : 'month' );
+                    update_post_meta( $product_id, '_subscription_interval', 1 !== $product->interval ? (string) $product->interval : 1 );
                 }
 
-                // VARIABLE PRODUCTS
+                // VARIABLE PRODUCTS.
                 if ( isset( $product->variations->variation ) ) {
                     wp_set_object_terms( $product_id, 'variable', 'product_type' );
 
@@ -442,12 +490,19 @@ class ImportDummyData extends \WP_REST_Controller {
 
         return $response;
     }
-
+    /**
+     * Import commission settings from dummy XML and apply them to product categories.
+     *
+     * Reads commission data, creates categories if needed, and updates term meta
+     * based on the configured commission type (fixed, percent, or fixed_with_percentage).
+     *
+     * @return WP_REST_Response REST response indicating success and message.
+     */
     public function import_commissions() {
 
         $xml = $this->load_dummy_xml( 'commissions' );
 
-        // Get current commission type setting
+        // Get current commission type setting.
         $commission_type = MultiVendorX()->setting->get_setting( 'commission_type' );
 
         foreach ( $xml->commission as $commission ) {
@@ -458,7 +513,7 @@ class ImportDummyData extends \WP_REST_Controller {
                 continue;
             }
 
-            // Create or get category
+            // Create or get category.
             $term = term_exists( $category_name, 'product_cat' );
             if ( ! $term ) {
                 $term = wp_insert_term( $category_name, 'product_cat' );
@@ -508,7 +563,7 @@ class ImportDummyData extends \WP_REST_Controller {
                     break;
 
                 default:
-                    // fallback
+                    // fallback.
                     update_term_meta(
                         $term_id,
                         'category_percentage_commission',
@@ -527,14 +582,26 @@ class ImportDummyData extends \WP_REST_Controller {
 
         return $response;
     }
-
+    /**
+     * Import orders from a given JSON request containing product IDs.
+     *
+     * Loads a dummy XML file containing orders and creates WooCommerce orders
+     * with billing, shipping, products, and payment details. Also creates sub-orders
+     * for MultiVendorX if applicable.
+     *
+     * Expects the request body to include a 'responseData' parameter with an array of product IDs.
+     *
+     * @param WP_REST_Request $request The REST API request object containing product IDs.
+     *
+     * @return WP_REST_Response REST response object containing success status, last order object, and message.
+     */
     public function import_orders( $request ) {
 
         $xml = $this->load_dummy_xml( 'orders' );
 
         foreach ( $xml->order as $order_xml ) {
 
-            // Create order
+            // Create order.
             $order = wc_create_order(
                 array(
 					'status' => (string) $order_xml->status,
@@ -545,7 +612,7 @@ class ImportDummyData extends \WP_REST_Controller {
                 continue;
             }
 
-            // Billing details
+            // Billing details.
             $order->set_billing_first_name( (string) $order_xml->billing->first_name );
             $order->set_billing_last_name( (string) $order_xml->billing->last_name );
             $order->set_billing_email( (string) $order_xml->billing->email );
@@ -555,7 +622,7 @@ class ImportDummyData extends \WP_REST_Controller {
             $order->set_billing_postcode( (string) $order_xml->billing->postcode );
             $order->set_billing_country( (string) $order_xml->billing->country );
 
-            // Add products
+            // Add products.
             foreach ( $order_xml->items->item as $item ) {
                 $params      = $request->get_json_params();
                 $product_ids = $params['responseData'];
@@ -580,7 +647,7 @@ class ImportDummyData extends \WP_REST_Controller {
                 );
             }
 
-            // Shipping
+            // Shipping.
             if ( isset( $order_xml->shipping ) ) {
                 $shipping = new \WC_Order_Item_Shipping();
                 $shipping->set_method_title( (string) $order_xml->shipping->method );
@@ -589,11 +656,11 @@ class ImportDummyData extends \WP_REST_Controller {
                 $order->add_item( $shipping );
             }
 
-            // Payment method
+            // Payment method.
             $order->set_payment_method( (string) $order_xml->payment_method );
             $order->set_payment_method_title( ucfirst( (string) $order_xml->payment_method ) );
 
-            // Finalize
+            // Finalize.
             $order->calculate_totals();
             $order->save();
 
@@ -614,7 +681,17 @@ class ImportDummyData extends \WP_REST_Controller {
         $response = rest_ensure_response( $response_data );
         return $response;
     }
-
+    /**
+     * Import product reviews from a given JSON request containing product IDs.
+     *
+     * Expects the request body to include a 'responseData' parameter with an array of product IDs.
+     * Loads a dummy XML file containing reviews and inserts them for the corresponding products.
+     * Duplicate reviews (based on author email) are skipped.
+     *
+     * @param WP_REST_Request $request The REST API request object.
+     *
+     * @return WP_REST_Response|array REST response object on success, or an array with error info.
+     */
     public function import_reviews( $request ) {
 
         $params      = $request->get_json_params();
@@ -651,7 +728,7 @@ class ImportDummyData extends \WP_REST_Controller {
                 continue;
             }
 
-            // Prevent duplicate reviews
+            // Prevent duplicate reviews.
             $existing = get_comments(
                 array(
 					'post_id'      => $product_id,

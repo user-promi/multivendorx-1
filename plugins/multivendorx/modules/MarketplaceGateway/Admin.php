@@ -77,7 +77,7 @@ class Admin {
             }
 
             // Decode applied rules safely using JSON.
-            $rules = unserialize( $filtered['data']['rules_applied'] );
+            $rules = maybe_unserialize( $filtered['data']['rules_applied'] );
 
             $rules['gateway_fee'] = array(
                 'fixed'      => $fixed_fee,
@@ -94,7 +94,7 @@ class Admin {
             }
 
             // Encode rules safely.
-            $filtered['data']['rules_applied'] = serialize( $rules );
+            $filtered['data']['rules_applied'] = maybe_serialize( $rules );
 
             $filtered['format'][] = '%f';
         }

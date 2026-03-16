@@ -1,5 +1,4 @@
 <?php
-
 /**
  * MultiVendorX REST API Notifications controller.
  *
@@ -238,8 +237,8 @@ class Notifications extends \WP_REST_Controller {
                 'offset'     => $offset,
                 'category'   => $request->get_param( 'notification' ) ? 'notification' : 'activity',
                 'store_id'   => $request->get_param( 'store_id' ) ? $request->get_param( 'store_id' ) : '',
-                'start_date' => $start_date ?: null,
-                'end_date'   => $end_date ?: null,
+                'start_date' => $start_date ? $start_date : null,
+                'end_date'   => $end_date ? $end_date : null,
             );
             $all_notifications = MultiVendorX()->notifications->get_all_notifications( $args );
 
@@ -268,16 +267,27 @@ class Notifications extends \WP_REST_Controller {
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
-
+    /**
+     * Update items based on the sync notifications setting.
+     *
+     * This method checks the 'sync_notifications' setting and performs
+     * the appropriate action:
+     * - 'sync_only_new_entry': deletes all existing events and inserts new system events.
+     * - 'sync_existing_entry': syncs all existing events.
+     *
+     * @param WP_REST_Request $request The REST API request object.
+     *
+     * @return void
+     */
     public function update_items( $request ) {
         $sync_notifications = MultiVendorX()->setting->get_setting( 'sync_notifications', '' );
 
-        if ( $sync_notifications == 'sync_only_new_entry' ) {
+        if ( 'sync_only_new_entry' === $sync_notifications ) {
             MultiVendorX()->notifications->delete_all_events();
             MultiVendorX()->notifications->insert_system_events( true );
         }
 
-        if ( $sync_notifications == 'sync_existing_entry' ) {
+        if ( 'sync_existing_entry' === $sync_notifications ) {
             MultiVendorX()->notifications->sync_events();
         }
     }
