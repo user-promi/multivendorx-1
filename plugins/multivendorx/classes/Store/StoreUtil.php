@@ -148,7 +148,7 @@ class StoreUtil {
             $store_slug = $store_data ? sanitize_title( $store_data->get( 'slug' ) ) : '';
         }
 
-        if ( ! $store_id || ! $placeholder_string ) {
+        if ( ! $store_id && ! $placeholder_string ) {
             return '';
         }
 
