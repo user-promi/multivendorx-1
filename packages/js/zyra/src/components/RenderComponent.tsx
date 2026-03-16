@@ -197,12 +197,12 @@ const RenderComponent: React.FC<RenderProps> = ({
             return false;
         }
 
-        if (
-            hasDependentPlugin &&
-            !appLocalizer[`${hasDependentPlugin}_active`]
-        ) {
-            return false;
-        }
+        // if (
+        //     hasDependentPlugin &&
+        //     !appLocalizer[`${hasDependentPlugin}_active`]
+        // ) {
+        //     return false;
+        // }
         return true;
     };
 
@@ -495,9 +495,9 @@ const RenderComponent: React.FC<RenderProps> = ({
                             Array.isArray(dependentValue) &&
                             dependentValue.length === 0
                         );
-                    })()) ||
-                (inputField.dependentPlugin &&
-                    !appLocalizer[`${inputField.dependentPlugin}_active`]);
+                    })());
+                // (inputField.dependentPlugin &&
+                //     !appLocalizer[`${inputField.dependentPlugin}_active`]);
 
             const fieldContent =
                 inputField.type === 'section' ? (
