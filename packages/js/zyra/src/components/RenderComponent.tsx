@@ -11,8 +11,7 @@ import '../styles/web/AdminForm.scss';
 import { FIELD_REGISTRY } from './fieldUtils';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import { PopupUI } from './Popup';
-import { Notice } from './Notice';
-import { addNotice } from './Notice';
+import { Notice, NoticeManager } from './Notice';
 
 interface InputField {
     key: string;
@@ -141,15 +140,12 @@ const RenderComponent: React.FC<RenderProps> = ({
                     ).then((response: unknown) => {
                         const apiResponse = response as ApiResponse;
                         if (apiResponse.message) {
-                            addNotice(
-                                {
-                                    title: 'Great!',
-                                    message: apiResponse.message,
-                                    type: apiResponse.type,
-                                    position: 'float',
-                                },
-                                5000
-                            );
+                            NoticeManager.add({
+                                title: 'Great!',
+                                message: apiResponse.message,
+                                type: apiResponse.type || 'success',
+                                position: 'float',
+                            }, 5000);
                         }
 
                         if (apiResponse.redirect_link) {
@@ -553,11 +549,14 @@ const RenderComponent: React.FC<RenderProps> = ({
                                 })
                                 : input}
 
-                                    {/* <Notice
+                                {errors[inputField.key] && (
+                                    <Notice
+                                        uniqueKey={`error-${inputField.key}`}
                                         type="error"
-                                        position="inline"
-                                        message={errors[inputField.key] || ''}
-                                    /> */}
+                                        displayPosition="inline"
+                                        message={errors[inputField.key]}
+                                    />
+                                )}
                             {inputField.desc && (
                                 <p
                                     className="settings-metabox-description"
