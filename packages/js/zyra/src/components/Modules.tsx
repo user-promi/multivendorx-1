@@ -7,6 +7,7 @@ import HeaderSearch from './HeaderSearch';
 import { SelectInputUI } from './SelectInput';
 import { PopupUI } from './Popup';
 import { NoticeManager } from './Notice';
+import { ZyraVariable } from './fieldUtils';
 
 interface Module {
     id: string;
@@ -36,7 +37,6 @@ interface ModuleProps {
     modulesArray?: { category: boolean; modules: ModuleItem[] };
     apiLink: string;
     pluginName: string;
-    appLocalizer: {[key: string]: string | number | boolean};
     proPopupContent?: React.FC;
     variant?: 'default' | 'mini-module';
 }
@@ -45,7 +45,6 @@ const isModule = (item: ModuleItem): item is Module => !('type' in item);
 
 const Modules: React.FC<ModuleProps> = ({
     modulesArray = { category: false, modules: [] },
-    appLocalizer,
     apiLink,
     proPopupContent: ProPopupComponent,
     pluginName,
@@ -89,7 +88,7 @@ const Modules: React.FC<ModuleProps> = ({
     ];
 
     const isModuleAvailable = (module: Module) =>
-        module.proModule ? appLocalizer.khali_dabba ?? false : true;
+        module.proModule ? ZyraVariable.khali_dabba ?? false : true;
 
     const handleOnChange = (
         event: string[],
@@ -105,7 +104,7 @@ const Modules: React.FC<ModuleProps> = ({
         }
 
         if (module.reqPluging?.some(
-            plugin => !appLocalizer.active_plugins?.includes(plugin.slug)
+            plugin => !ZyraVariable.active_plugins?.includes(plugin.slug)
         )) {
             openRequirePopup(module);
             return;
@@ -120,8 +119,8 @@ const Modules: React.FC<ModuleProps> = ({
         localStorage.setItem(`force_${pluginName}_context_reload`, 'true');
 
         sendApiResponse(
-            appLocalizer,
-            getApiLink(appLocalizer, apiLink),
+            ZyraVariable,
+            getApiLink(ZyraVariable, apiLink),
             { id: module.id, action }
         )
             .then(() => {
@@ -343,14 +342,14 @@ const Modules: React.FC<ModuleProps> = ({
                                             <i className={`font adminfont-${module.id}`} />
                                         </div>
 
-                                        {module.proModule && !appLocalizer.khali_dabba && (
+                                        {module.proModule && !ZyraVariable.khali_dabba && (
                                             <div className="pro-tag">
                                                 <i className="adminfont-pro-tag" />
                                             </div>
                                         )}
 
                                         {variant === 'mini-module' &&
-                                            (appLocalizer.khali_dabba || !module.proModule) && (
+                                            (ZyraVariable.khali_dabba || !module.proModule) && (
                                                 <div className="toggle-checkbox">
                                                     {toggleComponent}
                                                 </div>

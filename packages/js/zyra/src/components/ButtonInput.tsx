@@ -1,6 +1,6 @@
 import "../styles/web/UI/ButtonInput.scss";
 import React, { useState } from "react";
-import { FieldComponent } from './fieldUtils';
+import { FieldComponent, ZyraVariable } from './fieldUtils';
 import { BlockStyle } from './CanvasEditor/blockStyle';
 import axios from "axios";
 import { getApiLink } from "../utils/apiService";
@@ -175,10 +175,10 @@ const ButtonInput: FieldComponent = {
             // REST API
             if (field.apilink) {
                 axios({
-                    url: getApiLink(appLocalizer, String(field.apilink)),
+                    url: getApiLink(ZyraVariable, String(field.apilink)),
                     method: field.method ?? 'GET',
                     headers: {
-                        'X-WP-Nonce': appLocalizer.nonce,
+                        'X-WP-Nonce': ZyraVariable.nonce,
                     },
                     params: {
                         key: field.key,

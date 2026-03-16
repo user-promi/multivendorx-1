@@ -62,7 +62,6 @@ interface NestedComponentProps {
     single?: boolean;
     wrapperClass?: string;
     canAccess?: boolean;
-    appLocalizer?: {[key: string]: string | number | boolean};
 }
 
 export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
@@ -75,7 +74,6 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
     single = false,
     wrapperClass,
     canAccess,
-    appLocalizer
 } ) => {
 
     const [ rows, setRows ] = useState< RowType[] >( [] );
@@ -188,7 +186,7 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
                     value={fieldValue}
                     onChange={handleInternalChange}
                     canAccess={canAccess}
-                    appLocalizer={appLocalizer}
+                    // appLocalizer={appLocalizer}
                 />
             </>
         );
@@ -280,7 +278,7 @@ const NestedComponent: FieldComponent = {
                 onChange(val)
             }}
             canAccess={canAccess}
-            appLocalizer={appLocalizer}
+            // appLocalizer={appLocalizer}
         />
     ),
 

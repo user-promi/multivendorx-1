@@ -4,6 +4,7 @@ import { getApiLink } from '../utils/apiService';
 import { ButtonInputUI } from './ButtonInput';
 import { ItemListUI } from './ItemList';
 import { Notice } from './Notice';
+import { ZyraVariable } from './fieldUtils';
 
 interface Task {
     action: string;
@@ -20,7 +21,6 @@ interface SequentialTaskExecutorProps {
     apilink: string;
     action: string;
     interval: number;
-    appLocalizer: {[key: string]: string | number | boolean};
     successMessage?: string;
     failureMessage?: string;
     tasks: Task[];
@@ -41,7 +41,6 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
     apilink,
     action,
     interval,
-    appLocalizer,
     successMessage,
     failureMessage,
     tasks,
@@ -138,11 +137,11 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
             }
 
             const response = await axios.post(
-                getApiLink(appLocalizer, apilink),
+                getApiLink(ZyraVariable, apilink),
                 payload,
                 {
                     headers: {
-                        'X-WP-Nonce': appLocalizer.nonce,
+                        'X-WP-Nonce': ZyraVariable.nonce,
                     }
                 }
             );
@@ -173,7 +172,7 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
             processStarted.current = false;
             onError?.({ task: currentTask, error });
         }
-    }, [tasks, interval, appLocalizer, apilink, action, onComplete, onError, onTaskComplete]);
+    }, [tasks, interval, apilink, action, onComplete, onError, onTaskComplete]);
 
     const startProcess = useCallback(() => {
         if (processStarted.current) return;

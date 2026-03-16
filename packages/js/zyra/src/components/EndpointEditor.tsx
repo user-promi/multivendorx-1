@@ -4,7 +4,7 @@ import DragListView from 'react-drag-listview';
 import '../styles/web/EndpointEditor.scss';
 import { getApiLink } from '../utils/apiService';
 import { BasicInputUI } from './BasicInput';
-import { useOutsideClick, FieldComponent } from './fieldUtils';
+import { useOutsideClick, FieldComponent, ZyraVariable } from './fieldUtils';
 
 interface Submenu {
     name: string;
@@ -22,13 +22,11 @@ interface Endpoint {
 interface EndpointEditorProps {
     name: string;
     apilink: string;
-    appLocalizer: {[key: string]: string | number | boolean};
     onChange: (data: Record<string, Endpoint>) => void;
 }
 
 const EndpointManagerUI: React.FC<EndpointEditorProps> = ({
     apilink,
-    appLocalizer,
     onChange,
 }) => {
     const [endpoints, setEndpoints] = useState<[string, Endpoint][]>([]);
@@ -40,9 +38,9 @@ const EndpointManagerUI: React.FC<EndpointEditorProps> = ({
 
     useEffect(() => {
         axios({
-            url: getApiLink(appLocalizer, apilink),
+            url: getApiLink(ZyraVariable, apilink),
             method: 'GET',
-            headers: { 'X-WP-Nonce': appLocalizer.nonce },
+            headers: { 'X-WP-Nonce': ZyraVariable.nonce },
             params: { menuOnly: true },
         }).then((res) => {
             const typedData = res.data as Record<string, Endpoint>;
@@ -53,7 +51,7 @@ const EndpointManagerUI: React.FC<EndpointEditorProps> = ({
 
             setEndpoints(formatted);
         });
-    }, [apilink, appLocalizer]);  
+    }, [apilink]);  
 
     const autoSave = (updated: [string, Endpoint][]) => {
         setEndpoints(updated);
@@ -303,7 +301,7 @@ const EndpointManager: FieldComponent = {
         <EndpointManagerUI
             name={field.key}
             apilink={String(field.apiLink)}
-            appLocalizer={appLocalizer}
+            // appLocalizer={appLocalizer}
             onChange={(val) => {
                 if (!canAccess) return;
                 onChange(val);

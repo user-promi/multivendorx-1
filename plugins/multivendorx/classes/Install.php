@@ -942,6 +942,13 @@ class Install {
                 'placeholder' => 'text',
                 'readonly'    => true,
             ),
+            array(
+                'id'          => 3,
+                'type'        => 'button',
+                'label'       => 'Submit',
+                'text'        => 'Submit',
+                'name'        => 'submit',
+            ),
         );
 
         $registration_from_settings = array(
