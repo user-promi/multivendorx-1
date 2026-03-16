@@ -4,12 +4,18 @@ import Pagination from './Pagination';
 import { QueryProps, TableCardProps, TableRow } from './types';
 import BulkActionDropdown from './BulkActionDropdown';
 import RealtimeFilters from './RealtimeFilter';
-import CategoryFilter from './CategoryFilter';
 import ButtonActions from './ButtonActions';
 import HeaderSearch from '../HeaderSearch';
 import Skeleton from '../UI/Skeleton';
 import { PopupUI } from '../Popup';
 import '../../styles/web/Table.scss';
+
+// Category item interface 
+export interface CategoryItem {
+    label: string;
+    value: string;
+    count: number;
+}
 
 const defaultOnColumnsChange = (
 	showCols: string[],
@@ -34,7 +40,7 @@ const TableCard: React.FC<TableCardProps> = ({
 	summary,
 	title,
 	totalRows = 0,
-	categoryCounts,
+	categoryCounts = [],
 	activeCategory = 'all',
 	filters = [],
 	showColumnToggleIcon = true,
@@ -54,6 +60,7 @@ const TableCard: React.FC<TableCardProps> = ({
 		paged: 1,
 		per_page: 10,
 		filter: {},
+		categoryFilter: activeCategory, 
 	});
 	/**
 	 * TableCard query handler
@@ -89,6 +96,27 @@ const TableCard: React.FC<TableCardProps> = ({
 		}));
 	};
 
+	// Handle category change 
+	const handleCategoryChange = (value: string) => {
+		// Safely find the selected category to update total rows
+		if (categoryCounts && Array.isArray(categoryCounts)) {
+			const selectedCategory = categoryCounts.find(cat => cat && cat.value === value);
+			setDerivedTotalRows(selectedCategory?.count ?? 0);
+		}
+
+		setQuery((prev) => ({
+			...prev,
+			paged: 1, // Reset to first page when category changes
+			categoryFilter: value
+		}));
+	};
+
+	const visibleCategories = React.useMemo(() => {
+		if (!categoryCounts || !Array.isArray(categoryCounts)) {
+			return [];
+		}
+		return categoryCounts.filter(cat => cat && cat.count > 0);
+	}, [categoryCounts]);
 
 	useEffect(() => {
 		props.onQueryUpdate?.(query);
@@ -189,26 +217,21 @@ const TableCard: React.FC<TableCardProps> = ({
 			)}
 
 			{/* BODY */}
-			{(categoryCounts?.length > 0 || buttonActions || search || (showMenu && showColumnToggleIcon)) && (
+			{(visibleCategories.length > 0 || buttonActions || search || (showMenu && showColumnToggleIcon)) && (
 				<div className="admin-top-filter">
-					{categoryCounts && categoryCounts.length > 0 && (
-						<CategoryFilter
-							categories={categoryCounts}
-							activeCategory={query.categoryFilter || activeCategory}
-							onCategoryClick={(value) => {
-
-								const matched = categoryCounts.find(
-									(cat) => cat.value === value
-								);
-								setDerivedTotalRows(matched?.count ?? 0);
-
-								setQuery((prev) => ({
-									...prev,
-									paged: 1,
-									categoryFilter: value
-								}));
-							}}
-						/>
+					{/* Category Filter - Integrated directly (was CategoryFilter component) */}
+					{visibleCategories.length > 0 && (
+						<div className="filter-wrapper">
+							{visibleCategories.map(({ label, value, count }) => (
+								<div
+									key={value}
+									className={`filter-item ${(query.categoryFilter || activeCategory) === value ? 'active' : ''}`}
+									onClick={() => handleCategoryChange(value)}
+								>
+									{label} ({count})
+								</div>
+							))}
+						</div>
 					)}
 
 					<div className="table-action-wrapper">
