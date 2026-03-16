@@ -311,9 +311,9 @@ const SetupWizard: React.FC = () => {
 							value: 'store_order',
 						},
 						{
-							key: 'item',
+							key: 'per_item',
 							label: __('Per item based', 'multivendorx'),
-							value: 'item',
+							value: 'per_item',
 						},
 					],
 				},

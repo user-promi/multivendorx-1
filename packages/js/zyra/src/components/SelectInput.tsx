@@ -342,8 +342,26 @@ export const SelectInputUI: React.FC<SelectProps> = ({
 };
 
 const SelectInput: FieldComponent = {
-    render: ({ field, value, onChange, canAccess }) => {
+    render: ({ field, value, onChange, canAccess, appLocalizer, modules, settings }) => {
         const { type } = FIELD_TYPE_CONFIG[field.type] ?? DEFAULT_CONFIG;
+        let resolvedOptions: any = field.options || [];
+
+        // Handle dependent fields (ex: state depends on country)
+        if (field.dependent?.key && field.options) {
+            const parentValue = settings?.[field.dependent.key];
+            resolvedOptions = field.options?.[parentValue] || {};
+        }
+
+        // Convert options to react-select format
+        const formattedOptions = Array.isArray(resolvedOptions)
+            ? resolvedOptions.map((opt) => ({
+                  value: String(opt.value),
+                  label: opt.label ?? String(opt.value),
+              }))
+            : Object.entries(resolvedOptions || {}).map(([value, label]) => ({
+                  value: String(value),
+                  label: String(label),
+              }))
 
         return (
             <SelectInputUI
@@ -357,14 +375,7 @@ const SelectInput: FieldComponent = {
                 isClearable={field.isClearable}
                 selectDeselect={field.selectDeselect}
                 selectDeselectLabel="Select / Deselect All"
-                options={
-                    Array.isArray(field.options)
-                        ? field.options.map((opt) => ({
-                              value: String(opt.value),
-                              label: opt.label ?? String(opt.value),
-                          }))
-                        : []
-                }
+                options={formattedOptions}
                 value={coerceToString(value)}
                 onChange={(val) => { if (canAccess) onChange(val); }}
                 menuContent={field.menuContent}
@@ -378,6 +389,7 @@ const SelectInput: FieldComponent = {
             />
         );
     },
+    
 
     validate: (field, value) => {
         if (field.required && (!value || (Array.isArray(value) && value.length === 0))) {
