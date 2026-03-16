@@ -11,8 +11,7 @@ import '../styles/web/AdminForm.scss';
 import { FIELD_REGISTRY } from './fieldUtils';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import { PopupUI } from './Popup';
-import { Notice } from './Notice';
-import { addNotice } from './Notice';
+import { Notice, NoticeManager } from './Notice';
 
 interface InputField {
     key: string;
@@ -75,7 +74,7 @@ interface DependentCondition {
 interface PopupProps {
     moduleName?: string;
     settings?: string;
-    plugin?: string;
+    plugin?: string | {};
 }
 
 interface RenderProps {
@@ -141,15 +140,12 @@ const RenderComponent: React.FC<RenderProps> = ({
                     ).then((response: unknown) => {
                         const apiResponse = response as ApiResponse;
                         if (apiResponse.message) {
-                            addNotice(
-                                {
-                                    title: 'Great!',
-                                    message: apiResponse.message,
-                                    type: apiResponse.type,
-                                    position: 'float',
-                                },
-                                5000
-                            );
+                            NoticeManager.add({
+                                title: 'Great!',
+                                message: apiResponse.message,
+                                type: apiResponse.type || 'success',
+                                position: 'float',
+                            }, 5000);
                         }
 
                         if (apiResponse.redirect_link) {
@@ -360,6 +356,11 @@ const RenderComponent: React.FC<RenderProps> = ({
         setModelOpen(true);
     };
 
+    const openPluginPopup = (plugin: {}) => {
+        setModulePopupData({ moduleName: '', settings: '', plugin: plugin });
+        setModelOpen(true);
+    };
+
     const renderFieldInternal = (
         field: InputField,
         parentField: InputField,
@@ -372,7 +373,7 @@ const RenderComponent: React.FC<RenderProps> = ({
         if (!fieldComponent) return null;
 
         const Render = fieldComponent.render;
-        
+
         const handleInternalChange = (val: any) => {
             if (!isCompositeField(parentField)) {
                 onChange(field.key, val);
@@ -402,10 +403,12 @@ const RenderComponent: React.FC<RenderProps> = ({
                     settingChanged.current = true;
                     updateSetting(`${field.key}_options`, opts);
                 }}
-                onBlocked={(type: 'pro' | 'module', payload?: string) => {
+                onBlocked={(type: 'pro' | 'module' | 'plugin', payload?: string | {}) => {
                     if (type === 'pro') openProPopup();
                     if (type === 'module' && payload)
                         openModulePopup(payload);
+                    if (type === 'plugin' && payload)
+                        openPluginPopup(payload);
                 }}
                 storeTabSetting={storeTabSetting}
             />
@@ -472,7 +475,7 @@ const RenderComponent: React.FC<RenderProps> = ({
                         appLocalizer
                     )}
 
-                      {inputField.afterElement &&
+                    {inputField.afterElement &&
                         renderFieldInternal(
                             inputField.afterElement,
                             inputField,
@@ -514,7 +517,7 @@ const RenderComponent: React.FC<RenderProps> = ({
                                 ? 'module-enabled'
                                 : ''
                             }`}
-                            data-cols={inputField.cols}
+                        data-cols={inputField.cols}
                         onClick={(e) => handleGroupClick(e, inputField)}
                     >
                         {inputField.icon && (
@@ -546,11 +549,14 @@ const RenderComponent: React.FC<RenderProps> = ({
                                 })
                                 : input}
 
-                                    {/* <Notice
+                                {errors[inputField.key] && (
+                                    <Notice
+                                        uniqueKey={`error-${inputField.key}`}
                                         type="error"
-                                        position="inline"
-                                        message={errors[inputField.key] || ''}
-                                    /> */}
+                                        displayPosition="inline"
+                                        message={errors[inputField.key]}
+                                    />
+                                )}
                             {inputField.desc && (
                                 <p
                                     className="settings-metabox-description"

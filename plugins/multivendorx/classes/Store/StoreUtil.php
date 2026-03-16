@@ -154,7 +154,6 @@ class StoreUtil {
 
         // Pretty permalink enabled
         if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
-
             $path = '/' . $store_base . '/';
 
             if ( $store_slug ) {
@@ -162,14 +161,12 @@ class StoreUtil {
             }
 
             if ( $tab && $store_slug ) {
-                $tab  = untrailingslashit( trim( $tab, " \n\r\t\v\0/\\" ) );
+                $tab   = untrailingslashit( trim( $tab, " \n\r\t\v\0/\\" ) );
                 $path .= $tab . '/';
             }
 
             $url = home_url( $path );
-
         } else {
-
             $url = home_url( '/?' . $store_base . '=' );
 
             if ( $store_slug ) {
@@ -720,9 +717,9 @@ class StoreUtil {
         if ( empty( $store_slug ) ) {
             return;
         }
-        $store_obj = Store::get_store( $store_slug, 'slug' );
-        $phone_meta = self::get_phone($store_obj->get_meta( 'phone' ));
-    
+        $store_obj  = Store::get_store( $store_slug, 'slug' );
+        $phone_meta = self::get_phone( $store_obj->get_meta( 'phone' ) );
+
         $store_phone = '';
         if ( is_serialized( $phone_meta ) ) {
             $phone_data = maybe_unserialize( $phone_meta );
@@ -734,8 +731,8 @@ class StoreUtil {
         }
 
         ob_start();
-        MultiVendorX()->util->get_template('store/store-tabs.php', array('store_id' => $store_obj->get_id()));
-        $tabs_html = ob_get_clean(); 
+        MultiVendorX()->util->get_template( 'store/store-tabs.php', array( 'store_id' => $store_obj->get_id() ) );
+        $tabs_html = ob_get_clean();
 
         $info = array(
             'storeName'          => $store_obj->get( 'name' ),

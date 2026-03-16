@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-	
 	getApiLink,
 	useModules,
 	Container,
@@ -56,7 +55,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 		<>
 			<Notice
 				message={successMsg}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 
@@ -70,11 +69,13 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 								type="multi-select"
 								value={formData.store_owners || []}
 								onChange={(selected: any) => {
-									const store_owners =
-										(selected || []).map((option: any) =>
-											typeof option === 'object' ? option.value : option
-										);
-									
+									const store_owners = (selected || []).map(
+										(option: any) =>
+											typeof option === 'object'
+												? option.value
+												: option
+									);
+
 									const updated = {
 										...formData,
 										store_owners,

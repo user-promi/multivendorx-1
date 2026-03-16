@@ -293,10 +293,22 @@ registerBlockType('multivendorx/store-banner', {
 							value={template}
 							onChange={handleTemplateChange}
 							options={[
-								{ label: __('Template 1', 'multivendorx'), value: 'template-1' },
-								{ label: __('Template 2', 'multivendorx'), value: 'template-2' },
-								{ label: __('Template 3', 'multivendorx'), value: 'template-3' },
-								{ label: __('Custom', 'multivendorx'), value: 'empty' },
+								{
+									label: __('Template 1', 'multivendorx'),
+									value: 'template-1',
+								},
+								{
+									label: __('Template 2', 'multivendorx'),
+									value: 'template-2',
+								},
+								{
+									label: __('Template 3', 'multivendorx'),
+									value: 'template-3',
+								},
+								{
+									label: __('Custom', 'multivendorx'),
+									value: 'empty',
+								},
 							]}
 						/>
 
@@ -349,25 +361,68 @@ registerBlockType('multivendorx/store-banner', {
 						<SelectControl
 							label={__('Height', 'multivendorx')}
 							value={height}
-							onChange={(value) => setAttributes({ height: value })}
+							onChange={(value) =>
+								setAttributes({ height: value })
+							}
 							options={[
-								{ label: __('Small (18.75rem)', 'multivendorx'), value: '18.75rem' },
-								{ label: __('Medium (25rem)', 'multivendorx'), value: '25rem' },
-								{ label: __('Large (500px)', 'multivendorx'), value: '500px' },
-								{ label: __('Extra Large (600px)', 'multivendorx'), value: '600px' },
-								{ label: __('Auto', 'multivendorx'), value: 'auto' },
+								{
+									label: __(
+										'Small (18.75rem)',
+										'multivendorx'
+									),
+									value: '18.75rem',
+								},
+								{
+									label: __('Medium (25rem)', 'multivendorx'),
+									value: '25rem',
+								},
+								{
+									label: __('Large (500px)', 'multivendorx'),
+									value: '500px',
+								},
+								{
+									label: __(
+										'Extra Large (600px)',
+										'multivendorx'
+									),
+									value: '600px',
+								},
+								{
+									label: __('Auto', 'multivendorx'),
+									value: 'auto',
+								},
 							]}
 						/>
 
 						<SelectControl
 							label={__('Min Height', 'multivendorx')}
 							value={minHeight}
-							onChange={(value) => setAttributes({ minHeight: value })}
+							onChange={(value) =>
+								setAttributes({ minHeight: value })
+							}
 							options={[
-								{ label: __('Small (200px)', 'multivendorx'), value: '200px' },
-								{ label: __('Medium (18.75rem)', 'multivendorx'), value: '18.75rem' },
-								{ label: __('Large (25rem)', 'multivendorx'), value: '25rem' },
-								{ label: __('Extra Large (500px)', 'multivendorx'), value: '500px' },
+								{
+									label: __('Small (200px)', 'multivendorx'),
+									value: '200px',
+								},
+								{
+									label: __(
+										'Medium (18.75rem)',
+										'multivendorx'
+									),
+									value: '18.75rem',
+								},
+								{
+									label: __('Large (25rem)', 'multivendorx'),
+									value: '25rem',
+								},
+								{
+									label: __(
+										'Extra Large (500px)',
+										'multivendorx'
+									),
+									value: '500px',
+								},
 							]}
 						/>
 
@@ -378,20 +433,49 @@ registerBlockType('multivendorx/store-banner', {
 								setAttributes({ backgroundPosition: value })
 							}
 							options={[
-								{ label: __('Center', 'multivendorx'), value: 'center' },
-								{ label: __('Top', 'multivendorx'), value: 'top' },
-								{ label: __('Bottom', 'multivendorx'), value: 'bottom' },
-								{ label: __('Left', 'multivendorx'), value: 'left' },
-								{ label: __('Right', 'multivendorx'), value: 'right' },
-								{ label: __('Top Left', 'multivendorx'), value: 'top left' },
-								{ label: __('Top Right', 'multivendorx'), value: 'top right' },
-								{ label: __('Bottom Left', 'multivendorx'), value: 'bottom left' },
-								{ label: __('Bottom Right', 'multivendorx'), value: 'bottom right' },
+								{
+									label: __('Center', 'multivendorx'),
+									value: 'center',
+								},
+								{
+									label: __('Top', 'multivendorx'),
+									value: 'top',
+								},
+								{
+									label: __('Bottom', 'multivendorx'),
+									value: 'bottom',
+								},
+								{
+									label: __('Left', 'multivendorx'),
+									value: 'left',
+								},
+								{
+									label: __('Right', 'multivendorx'),
+									value: 'right',
+								},
+								{
+									label: __('Top Left', 'multivendorx'),
+									value: 'top left',
+								},
+								{
+									label: __('Top Right', 'multivendorx'),
+									value: 'top right',
+								},
+								{
+									label: __('Bottom Left', 'multivendorx'),
+									value: 'bottom left',
+								},
+								{
+									label: __('Bottom Right', 'multivendorx'),
+									value: 'bottom right',
+								},
 							]}
 						/>
 
 						<div style={{ marginTop: 20 }}>
-							<label>{__('Content Text Color', 'multivendorx')}</label>
+							<label>
+								{__('Content Text Color', 'multivendorx')}
+							</label>
 							<ColorPalette
 								value={contentColor}
 								onChange={(color) =>
@@ -414,7 +498,8 @@ registerBlockType('multivendorx/store-banner', {
 							label={__('Overlay Opacity (%)', 'multivendorx')}
 							value={overlayOpacity}
 							onChange={(value) =>
-								setAttributes({ overlayOpacity: value })}
+								setAttributes({ overlayOpacity: value })
+							}
 							min={0}
 							max={100}
 							step={5}

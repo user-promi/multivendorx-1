@@ -59,12 +59,12 @@ class StoreFollow extends Tag {
     public function render() {
     	$store    = $this->get_store_data();
         $store_id = ! empty( $store['storeId'] ) ? $store['storeId'] : '';
-        
-        if ( !empty($store_id) ) {
+
+        if ( ! empty( $store_id ) ) {
             $customer_follow_store = get_user_meta( MultiVendorX()->current_user_id, 'multivendorx_following_stores', true ) ?? array();
-            $store_lists = !empty($customer_follow_store) ? wp_list_pluck( $customer_follow_store, 'user_id' ) : array();
-            $follow_status = in_array($store_id, $store_lists) ? __( 'Unfollow', 'multivendorx' ) : __( 'Follow', 'multivendorx' );
-        	echo is_user_logged_in() ? esc_attr($follow_status) : esc_html_e('You must log in to follow', 'multivendorx');
+            $store_lists           = ! empty( $customer_follow_store ) ? wp_list_pluck( $customer_follow_store, 'user_id' ) : array();
+            $follow_status         = in_array( $store_id, $store_lists ) ? __( 'Unfollow', 'multivendorx' ) : __( 'Follow', 'multivendorx' );
+        	echo is_user_logged_in() ? esc_attr( $follow_status ) : esc_html_e( 'You must log in to follow', 'multivendorx' );
         } else {
             echo esc_html_e( 'Follow', 'multivendorx' );
         }

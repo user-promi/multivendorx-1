@@ -1,11 +1,7 @@
 import { applyFilters, addFilter } from '@wordpress/hooks';
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import {
-	
-	Card,
-	FormGroupWrapper,
-} from 'zyra';
+import { Card, FormGroupWrapper } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
@@ -17,7 +13,7 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 
 	const isPyramidEnabled =
 		appLocalizer.settings_databases_value['product-preferencess']
-		?.category_selection_method === 'yes';
+			?.category_selection_method === 'yes';
 	const wrapperRef = useRef(null);
 
 	const handleCategoryClick = (catId) => {
@@ -182,8 +178,11 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 				},
 			})
 			.then((res) => {
-				const filtered = applyFilters('multivendorx_product_category_options', res.data);
-            	setCategories(filtered);
+				const filtered = applyFilters(
+					'multivendorx_product_category_options',
+					res.data
+				);
+				setCategories(filtered);
 			});
 	}, []);
 
@@ -207,10 +206,9 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 		}
 
 		setSelectedCats((prev) => {
-			const updated =
-				prev.includes(id)
-					? prev.filter((item) => item !== id)
-					: [...prev, id];
+			const updated = prev.includes(id)
+				? prev.filter((item) => item !== id)
+				: [...prev, id];
 
 			setProduct((prevProduct) => ({
 				...prevProduct,
@@ -287,19 +285,14 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 	};
 
 	return (
-		<Card  title={__('Category', 'multivendorx')}>
-			{appLocalizer.settings_databases_value[
-				'product-preferencess'
-			]?.category_selection_method === 'yes' ? (
+		<Card title={__('Category', 'multivendorx')}>
+			{appLocalizer.settings_databases_value['product-preferencess']
+				?.category_selection_method === 'yes' ? (
 				<>
 					<div className="category-breadcrumb-wrapper">
-						<div className="category-breadcrumb">
-							{printPath()}
-						</div>
+						<div className="category-breadcrumb">{printPath()}</div>
 
-						{(selectedCat ||
-							selectedSub ||
-							selectedChild) && (
+						{(selectedCat || selectedSub || selectedChild) && (
 							<button
 								onClick={resetSelection}
 								className="admin-btn btn-red"
@@ -319,117 +312,102 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 									<React.Fragment key={cat.id}>
 										<li
 											className={`category ${
-												selectedCat ===
-												cat.id
+												selectedCat === cat.id
 													? 'radio-select-active'
 													: ''
 											}`}
 											style={{
 												display:
-													selectedCat ===
-														null ||
-													selectedCat ===
-														cat.id
+													selectedCat === null ||
+													selectedCat === cat.id
 														? 'block'
 														: 'none',
 											}}
 											onClick={() =>
-												handleCategoryClick(
-													cat.id
-												)
+												handleCategoryClick(cat.id)
 											}
 										>
-											<label>
-												{cat.name}
-											</label>
+											<label>{cat.name}</label>
 										</li>
 										{selectedCat === cat.id &&
-											cat.children?.length >
-												0 && (
+											cat.children?.length > 0 && (
 												<ul className="settings-form-group-radio">
-													{cat.children.map(
-														(sub) => (
-															<React.Fragment
-																key={
+													{cat.children.map((sub) => (
+														<React.Fragment
+															key={sub.id}
+														>
+															<li
+																className={`sub-category ${
+																	selectedSub ===
 																	sub.id
+																		? 'radio-select-active'
+																		: ''
+																}`}
+																style={{
+																	display:
+																		!selectedSub ||
+																		selectedSub ===
+																			sub.id
+																			? 'block'
+																			: 'none',
+																}}
+																onClick={() =>
+																	handleSubClick(
+																		sub.id
+																	)
 																}
 															>
-																<li
-																	className={`sub-category ${
-																		selectedSub ===
-																		sub.id
-																			? 'radio-select-active'
-																			: ''
-																	}`}
-																	style={{
-																		display:
-																			!selectedSub ||
-																			selectedSub ===
-																				sub.id
-																				? 'block'
-																				: 'none',
-																	}}
-																	onClick={() =>
-																		handleSubClick(
-																			sub.id
-																		)
-																	}
-																>
-																	<label>
-																		{
-																			sub.name
-																		}
-																	</label>
-																</li>
+																<label>
+																	{sub.name}
+																</label>
+															</li>
 
-																{selectedSub ===
-																	sub.id &&
-																	sub
-																		.children
-																		?.length >
-																		0 && (
-																		<ul className="settings-form-group-radio">
-																			{sub.children.map(
-																				(
-																					child
-																				) => (
-																					<li
-																						key={
-																							child.id
-																						}
-																						className={`sub-category ${
+															{selectedSub ===
+																sub.id &&
+																sub.children
+																	?.length >
+																	0 && (
+																	<ul className="settings-form-group-radio">
+																		{sub.children.map(
+																			(
+																				child
+																			) => (
+																				<li
+																					key={
+																						child.id
+																					}
+																					className={`sub-category ${
+																						selectedChild ===
+																						child.id
+																							? 'radio-select-active'
+																							: ''
+																					}`}
+																					style={{
+																						display:
+																							!selectedChild ||
 																							selectedChild ===
-																							child.id
-																								? 'radio-select-active'
-																								: ''
-																						}`}
-																						style={{
-																							display:
-																								!selectedChild ||
-																								selectedChild ===
-																									child.id
-																									? 'block'
-																									: 'none',
-																						}}
-																						onClick={() =>
-																							handleChildClick(
 																								child.id
-																							)
+																								? 'block'
+																								: 'none',
+																					}}
+																					onClick={() =>
+																						handleChildClick(
+																							child.id
+																						)
+																					}
+																				>
+																					<label>
+																						{
+																							child.name
 																						}
-																					>
-																						<label>
-																							{
-																								child.name
-																							}
-																						</label>
-																					</li>
-																				)
-																			)}
-																		</ul>
-																	)}
-															</React.Fragment>
-														)
-													)}
+																					</label>
+																				</li>
+																			)
+																		)}
+																	</ul>
+																)}
+														</React.Fragment>
+													))}
 												</ul>
 											)}
 									</React.Fragment>
@@ -454,11 +432,15 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 addFilter(
 	'multivendorx_add_product_right_section',
 	'multivendorx/product_category',
-	(content, product, setProduct, handleChange, setErrorMsg ) => {
+	(content, product, setProduct, handleChange, setErrorMsg) => {
 		return (
 			<>
 				{content}
-				<ProductCategorysection product={product} setProduct={setProduct} setErrorMsg={setErrorMsg} />
+				<ProductCategorysection
+					product={product}
+					setProduct={setProduct}
+					setErrorMsg={setErrorMsg}
+				/>
 			</>
 		);
 	},

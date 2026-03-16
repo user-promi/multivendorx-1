@@ -41,10 +41,10 @@ const ShippingRatesByCountry: React.FC = () => {
 				try {
 					shippingRates =
 						typeof response.data.multivendorx_shipping_rates ===
-							'string'
+						'string'
 							? JSON.parse(
-								response.data.multivendorx_shipping_rates
-							)
+									response.data.multivendorx_shipping_rates
+								)
 							: response.data.multivendorx_shipping_rates || [];
 				} catch {
 					shippingRates = [];
@@ -90,13 +90,13 @@ const ShippingRatesByCountry: React.FC = () => {
 	/** FIX COUNTRY OPTIONS */
 	const countryOptions = Array.isArray(countries)
 		? countries.map((item: any) => ({
-			label: item.label?.label || item.label,
-			value: item.label?.value || item.value,
-		}))
+				label: item.label?.label || item.label,
+				value: item.label?.value || item.value,
+			}))
 		: Object.entries(countries).map(([value, label]) => ({
-			label,
-			value,
-		}));
+				label,
+				value,
+			}));
 
 	const countryTemplate = {
 		fields: [
@@ -106,7 +106,10 @@ const ShippingRatesByCountry: React.FC = () => {
 				label: __('Country', 'multivendorx'),
 				placeholder: __('Select Country', 'multivendorx'),
 				options: [
-					{ label: __('Everywhere Else', 'multivendorx'), value: 'everywhere' },
+					{
+						label: __('Everywhere Else', 'multivendorx'),
+						value: 'everywhere',
+					},
 					...countryOptions,
 				],
 			},
@@ -166,9 +169,9 @@ const ShippingRatesByCountry: React.FC = () => {
 
 					const stateOptions = raw
 						? Object.entries(raw).map(([value, label]) => ({
-							value,
-							label,
-						}))
+								value,
+								label,
+							}))
 						: [];
 
 					if (stateOptions.length === 0) {

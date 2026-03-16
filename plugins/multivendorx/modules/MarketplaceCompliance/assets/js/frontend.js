@@ -141,7 +141,9 @@ jQuery(function ($) {
 							'</div></div>'
 					);
 
+					// CLOSE POPUP AFTER SUCCESS
 					setTimeout(function () {
+						$form.closest('.multivendorx-popup').fadeOut(200);
 						$form.find('.report-abuse-msg-box').empty();
 					}, 1000);
 

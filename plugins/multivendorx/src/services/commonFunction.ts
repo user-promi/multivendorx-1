@@ -1,9 +1,20 @@
-export function truncateText(text: string, maxLength: number) {
+export const truncateText = (text: string, wordCount: number) => {
 	if (!text) {
-		return '-';
+		return '';
 	}
-	return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
-}
+
+	// Strip HTML tags if present
+	const plainText = text.replace(/<[^>]+>/g, '');
+
+	// Split into words
+	const words = plainText.split(/\s+/);
+
+	if (words.length <= wordCount) {
+		return plainText;
+	}
+
+	return words.slice(0, wordCount).join(' ') + '...';
+};
 
 export function formatCurrency(amount: number | string): string {
 	if (amount === null || amount === undefined || amount === '') {
@@ -171,8 +182,7 @@ export const downloadCSV = (
 const buildPath = (segments: string[]): string =>
 	`/${segments.filter(Boolean).join('/')}`;
 
-const sanitize = (value: string) =>
-	value.replace(/[^a-zA-Z0-9_-]/g, '');
+const sanitize = (value: string) => value.replace(/[^a-zA-Z0-9_-]/g, '');
 
 const updatePlainPermalinkUrl = (segments: string[]) => {
 	const [segment = '', element = '', context_id = ''] = segments;
@@ -212,3 +222,17 @@ export const dashNavigate = (navigate: any, segments: string[]) => {
 
 	navigate(path);
 };
+
+// Set a value in session storage
+export function setSession(key: string, value: number | string) {
+	sessionStorage.setItem(key, value.toString());
+}
+
+// Get a value from session storage, default is 0
+export function getSession(key: string, defaultValue: number | string = 0) {
+	const value = sessionStorage.getItem(key);
+	if (value === null) {
+		return defaultValue;
+	} // return 0 if key not found
+	return isNaN(Number(value)) ? value : Number(value); // parse number if possible
+}

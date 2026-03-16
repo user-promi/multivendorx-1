@@ -77,7 +77,9 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 													/>
 												) : (
 													<div className="avatar-placeholder">
-														{review.customer_name?.charAt(0)}
+														{review.customer_name?.charAt(
+															0
+														)}
 													</div>
 												)}
 											</div>
@@ -93,10 +95,24 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 														className={`wc-block-review-list-item__rating__stars wc-block-components-review-list-item__rating__stars wc-block-review-list-item__rating__stars--${Math.round(review.overall_rating)}`}
 														role="img"
 													>
-														<span style={{ width: `${(review.overall_rating / 5) * 100}%` }}>
-															{__('Rated ', 'multivendorx')}
-															<strong className="rating">{review.overall_rating.toFixed(1)}</strong>
-															{__(' out of 5', 'multivendorx')}
+														<span
+															style={{
+																width: `${(review.overall_rating / 5) * 100}%`,
+															}}
+														>
+															{__(
+																'Rated ',
+																'multivendorx'
+															)}
+															<strong className="rating">
+																{review.overall_rating.toFixed(
+																	1
+																)}
+															</strong>
+															{__(
+																' out of 5',
+																'multivendorx'
+															)}
 														</span>
 													</div>
 												</div>
@@ -104,10 +120,15 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 												{review.product_name && (
 													<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
 														<a
-															href={review.product_url || '#'}
+															href={
+																review.product_url ||
+																'#'
+															}
 															aria-labelledby={`review-${review.review_id}`}
 														>
-															{review.product_name}
+															{
+																review.product_name
+															}
 														</a>
 													</div>
 												)}
@@ -118,13 +139,20 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 
 												<time
 													className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
-													dateTime={review.date_created}
+													dateTime={
+														review.date_created
+													}
 												>
-													{new Date(review.date_created).toLocaleDateString('en-US', {
-														year: 'numeric',
-														month: 'long',
-														day: 'numeric'
-													})}
+													{new Date(
+														review.date_created
+													).toLocaleDateString(
+														'en-US',
+														{
+															year: 'numeric',
+															month: 'long',
+															day: 'numeric',
+														}
+													)}
 												</time>
 											</div>
 										</div>
@@ -133,37 +161,65 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 											<div>
 												<div>
 													{review.review_title && (
-														<h4 className="woocommerce-review__title">{review.review_title}</h4>
+														<h4 className="woocommerce-review__title">
+															{
+																review.review_title
+															}
+														</h4>
 													)}
-													<p>{review.review_content}</p>
+													<p>
+														{review.review_content}
+													</p>
 
-													{showImages && review.images?.length ? (
+													{showImages &&
+													review.images?.length ? (
 														<div className="review-images">
-															{review.images.map((img, i) => (
-																<a
-																	key={i}
-																	href={img}
-																	target="_blank"
-																	rel="noopener noreferrer"
-																>
-																	<img
-																		src={img}
-																		alt={__('Review Image', 'multivendorx')}
-																		style={{ maxWidth: '100px', margin: '5px' }}
-																	/>
-																</a>
-															))}
+															{review.images.map(
+																(img, i) => (
+																	<a
+																		key={i}
+																		href={
+																			img
+																		}
+																		target="_blank"
+																		rel="noopener noreferrer"
+																	>
+																		<img
+																			src={
+																				img
+																			}
+																			alt={__(
+																				'Review Image',
+																				'multivendorx'
+																			)}
+																			style={{
+																				maxWidth:
+																					'100px',
+																				margin: '5px',
+																			}}
+																		/>
+																	</a>
+																)
+															)}
 														</div>
 													) : null}
 
-													{showAdminReply && review.reply && (
-														<div className="multivendorx-review-reply">
-															<strong>
-																{__('Admin reply:', 'multivendorx')}
-															</strong>
-															<p>{review.reply}</p>
-														</div>
-													)}
+													{showAdminReply &&
+														review.reply && (
+															<div className="multivendorx-review-reply">
+																<strong>
+																	{__(
+																		'Admin reply:',
+																		'multivendorx'
+																	)}
+																</strong>
+																<p>
+																	{
+																		review.reply
+																	}
+																</p>
+															</div>
+														)}
 												</div>
 											</div>
 										</div>

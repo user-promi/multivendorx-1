@@ -40,7 +40,8 @@ export default {
 			key: 'store_banner_template',
 			type: 'color-setting',
 			label: 'Shop banner section',
-			settingDescription: 'Choose how the store’s shop page appears, including banner, logo, and description.',
+			settingDescription:
+				'Choose how the store’s shop page appears, including banner, logo, and description.',
 			templateSelector: true,
 			templates: [
 				{

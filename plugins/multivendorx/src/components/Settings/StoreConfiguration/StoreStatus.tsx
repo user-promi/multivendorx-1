@@ -120,7 +120,7 @@ const StoreStatus: React.FC = () => {
 		}
 
 		const settingModal = getSettingById(settingsArray as any, currentTab);
-		
+
 		// Initialize settings for current tab
 		if (settingName !== currentTab) {
 			setSetting(

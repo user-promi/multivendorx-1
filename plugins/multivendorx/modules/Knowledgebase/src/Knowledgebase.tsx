@@ -199,6 +199,7 @@ export const KnowledgeBase: React.FC = () => {
 		},
 		content: {
 			label: __('Write your explanation or tutorial', 'multivendorx'),
+			render: (row) => truncateText(row.content, 30),
 		},
 		status_label: {
 			label: __('Status', 'multivendorx'),
@@ -326,7 +327,10 @@ export const KnowledgeBase: React.FC = () => {
 					title={__('Delete Knowledge Base', 'multivendorx')}
 					confirmMessage={
 						selectedKb
-							? __('Are you sure you want to delete this knowledge base?', 'multivendorx')
+							? __(
+									'Are you sure you want to delete this knowledge base?',
+									'multivendorx'
+								)
 							: ''
 					}
 					confirmYesText={__('Delete', 'multivendorx')}
@@ -428,7 +432,7 @@ export const KnowledgeBase: React.FC = () => {
 									usePlainText={false}
 									tinymceApiKey={
 										appLocalizer.settings_databases_value[
-										'overview'
+											'overview'
 										]['tinymce_api_section'] ?? ''
 									}
 									msg={{
@@ -442,32 +446,32 @@ export const KnowledgeBase: React.FC = () => {
 								htmlFor="status"
 							>
 								<ChoiceToggleUI
-									value={formData.status}
 									options={[
 										{
-											label: __('Draft', 'multivendorx'),
+											key: 'draft',
 											value: 'draft',
+											label: __('Draft', 'multivendorx'),
 										},
 										{
+											key: 'pending',
+											value: 'pending',
 											label: __(
 												'Pending',
 												'multivendorx'
 											),
-											value: 'pending',
 										},
 										{
+											key: 'publish',
+											value: 'publish',
 											label: __(
 												'Published',
 												'multivendorx'
 											),
-											value: 'publish',
 										},
 									]}
-									onChange={(value) =>
-										setFormData((prev) => ({
-											...prev,
-											status: value,
-										}))
+									value={formData.status}
+									onChange={(val: string) =>
+										handleChange('status', val)
 									}
 								/>
 							</FormGroup>

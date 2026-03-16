@@ -365,15 +365,15 @@ class Admin {
         $fixed_commission_per_product      = absint( filter_input( INPUT_POST, 'product_fixed_commission' ) );
         $percentage_commission_per_product = absint( filter_input( INPUT_POST, 'product_percentage_commission' ) );
 
-        if ( isset($linked_store_id) ) {
+        if ( isset( $linked_store_id ) ) {
             update_post_meta( $post_id, Utill::POST_META_SETTINGS['store_id'], $linked_store_id );
         }
 
-        if ( isset($fixed_commission_per_product) ) {
+        if ( isset( $fixed_commission_per_product ) ) {
             update_post_meta( $post_id, Utill::POST_META_SETTINGS['fixed_commission'], $fixed_commission_per_product );
         }
 
-        if ( isset($percentage_commission_per_product) ) {
+        if ( isset( $percentage_commission_per_product ) ) {
             update_post_meta( $post_id, Utill::POST_META_SETTINGS['percentage_commission'], $percentage_commission_per_product );
         }
     }

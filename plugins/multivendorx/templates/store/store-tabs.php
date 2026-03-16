@@ -25,8 +25,8 @@ if ( empty( $store_tabs ) ) {
 	return;
 }
 
-$current_tab = 'products'; // Default.
-$request_url = trailingslashit( home_url( add_query_arg( array(), $wp->request ) ) );
+$current_tab      = 'products'; // Default.
+$request_url      = trailingslashit( home_url( add_query_arg( array(), $wp->request ) ) );
 $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array() );
 
 // Loop through tabs.
@@ -141,7 +141,10 @@ do_action( 'multivendorx_before_store_tabs', $store_id );
                             
                             <?php if ( $products->have_posts() ) : ?>
                                 <?php woocommerce_product_loop_start(); ?>
-                                <?php while ( $products->have_posts() ) : $products->the_post(); ?>
+                                <?php
+                                while ( $products->have_posts() ) :
+									$products->the_post();
+									?>
                                     <?php
                                     do_action( 'woocommerce_shop_loop' );
                                     wc_get_template_part( 'content', 'product' );

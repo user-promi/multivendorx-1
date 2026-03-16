@@ -19,9 +19,15 @@ registerMultiVendorXRoute({ tab: 'status-tools', component: StatusAndTools });
 registerMultiVendorXRoute({ tab: 'modules', component: Modules });
 registerMultiVendorXRoute({ tab: 'stores', component: Stores });
 registerMultiVendorXRoute({ tab: 'commissions', component: Commissions });
-registerMultiVendorXRoute({ tab: 'customer-support', component: CustomerSupport });
+registerMultiVendorXRoute({
+	tab: 'customer-support',
+	component: CustomerSupport,
+});
 registerMultiVendorXRoute({ tab: 'approval-queue', component: ApprovalQueue });
-registerMultiVendorXRoute({ tab: 'transaction-history', component: TransactionHistory });
+registerMultiVendorXRoute({
+	tab: 'transaction-history',
+	component: TransactionHistory,
+});
 registerMultiVendorXRoute({ tab: 'reports', component: Analytics });
 registerMultiVendorXRoute({ tab: 'help-support', component: HelpSupport });
 registerMultiVendorXRoute({ tab: 'notifications', component: Notifications });

@@ -66,15 +66,15 @@ registerBlockType('multivendorx/store-email', {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  document
-    .querySelectorAll('.multivendorx-store-email-block')
-    .forEach((el) => {
-      const email = StoreInfo?.storeDetails?.storeEmail;
+	document
+		.querySelectorAll('.multivendorx-store-email-block')
+		.forEach((el) => {
+			const email = StoreInfo?.storeDetails?.storeEmail;
 
-      if (email) {
-        el.textContent = email;
-      } else {
-        el.closest('.wp-block-multivendorx-store-email')?.remove();
-      }
-    });
+			if (email) {
+				el.textContent = email;
+			} else {
+				el.closest('.wp-block-multivendorx-store-email')?.remove();
+			}
+		});
 });

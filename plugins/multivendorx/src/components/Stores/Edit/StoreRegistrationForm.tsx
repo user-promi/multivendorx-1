@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
 	getApiLink,
-	
 	Container,
 	Column,
 	Card,
@@ -171,7 +170,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 		<>
 			<Notice
 				message={successMsg}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 

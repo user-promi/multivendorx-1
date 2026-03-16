@@ -79,19 +79,24 @@ const StoreTable: React.FC = () => {
 						value: 'under_review',
 						label: __('Under Review', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-under-review']) || 0,
+							Number(
+								response.headers['x-wp-status-under-review']
+							) || 0,
 					},
 					{
 						value: 'suspended',
 						label: __('Suspended', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-suspended']) || 0,
+							Number(response.headers['x-wp-status-suspended']) ||
+							0,
 					},
 					{
 						value: 'deactivated',
 						label: __('Deactivated', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-deactivated']) || 0,
+							Number(
+								response.headers['x-wp-status-deactivated']
+							) || 0,
 					},
 				]);
 

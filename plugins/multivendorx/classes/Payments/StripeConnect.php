@@ -125,7 +125,7 @@ class StripeConnect {
                     'label' => __( 'Redirect url', 'multivendorx' ),
                     'title' => $redirect_url,
                     // 'desc'  => __( 'Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx' ),
-                    'desc'  => $redirect_url
+                    'desc'  => $redirect_url,
                 ),
             ),
         );

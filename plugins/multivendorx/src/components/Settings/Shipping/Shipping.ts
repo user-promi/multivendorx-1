@@ -56,9 +56,12 @@ export default {
 							),
 							icon: 'plus',
 							onClick: () => {
-								window.open(`${appLocalizer.admin_url}admin.php?page=wc-settings&tab=shipping`, '_blank');
+								window.open(
+									`${appLocalizer.admin_url}admin.php?page=wc-settings&tab=shipping`,
+									'_blank'
+								);
 							},
-						}
+						},
 					],
 				},
 				{

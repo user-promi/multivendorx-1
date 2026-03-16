@@ -21,7 +21,7 @@ export default {
 			// // Add templates configuration with proper content
 			templates: [temp1, temp2],
 			defaultTemplateId: 'store-registration',
-			context: "email",
+			context: 'email',
 		},
 	],
 };

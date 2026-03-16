@@ -1,33 +1,20 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import PendingRefund from './PendingRefund';
-import axios from 'axios';
 
-let refundCount = 0;
+let refundCountState = {
+	count: 0,
+};
 
-// Fetch once
-axios({
-	method: 'GET',
-	url: `${appLocalizer.apiUrl}/wc/v3/orders`,
-	headers: { 'X-WP-Nonce': appLocalizer.nonce },
-	params: {
-		meta_key: 'multivendorx_store_id',
-		status: 'refund-requested',
-		page: 1,
-		per_page: 1,
-	},
-})
-	.then((res) => {
-		refundCount = Number(res.headers['x-wp-total']) || 0;
-	})
-	.catch(() => {});
-
+// function to update count
+const setRefundCount = (count: number) => {
+	refundCountState.count = count;
+};
 
 addFilter(
 	'multivendorx_approval_queue_tab',
 	'multivendorx/refund-tab',
 	(settingContent) => {
-
 		settingContent.push({
 			type: 'file',
 			module: 'marketplace-refund',
@@ -41,7 +28,7 @@ addFilter(
 					'multivendorx'
 				),
 				headerIcon: 'marketplace-refund blue',
-				count: refundCount,
+				count: refundCountState.count,
 			},
 		});
 
@@ -49,14 +36,12 @@ addFilter(
 	}
 );
 
-
 addFilter(
 	'multivendorx_approval_queue_tab_content',
 	'multivendorx/refund-tab-content',
-	(defaultForm, { tabId, refreshCounts }) => {
-
+	(defaultForm, { tabId }) => {
 		if (tabId === 'refund-requests') {
-			return <PendingRefund onUpdated={refreshCounts} />;
+			return <PendingRefund setCount={setRefundCount} />;
 		}
 
 		return defaultForm;

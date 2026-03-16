@@ -15,9 +15,8 @@ import {
 	downloadCSV,
 	formatLocalDate,
 	toWcIsoDate,
-	dashNavigate
+	dashNavigate,
 } from '../services/commonFunction';
-
 
 const Orders: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -149,7 +148,7 @@ const Orders: React.FC = () => {
 							status === 'all'
 								? __('All', 'multivendorx')
 								: status.charAt(0).toUpperCase() +
-								status.slice(1),
+									status.slice(1),
 						count: total,
 					};
 				});
@@ -195,9 +194,10 @@ const Orders: React.FC = () => {
 
 		customer: {
 			label: __('Customer', 'multivendorx'),
-			render: (row) => row.billing?.first_name
-						? `${row.billing.first_name} ${row.billing.last_name || ''}`
-						: 'Guest'
+			render: (row) =>
+				row.billing?.first_name
+					? `${row.billing.first_name} ${row.billing.last_name || ''}`
+					: 'Guest',
 		},
 
 		date_created: {
@@ -226,14 +226,18 @@ const Orders: React.FC = () => {
 			actions: [
 				...(appLocalizer.edit_order_capability
 					? [
-						{
-							label: __('View', 'multivendorx'),
-							icon: 'eye',
-							onClick: (row) => {
-								dashNavigate(navigate, ['orders', 'view', String(row.id)]);
+							{
+								label: __('View', 'multivendorx'),
+								icon: 'eye',
+								onClick: (row) => {
+									dashNavigate(navigate, [
+										'orders',
+										'view',
+										String(row.id),
+									]);
+								},
 							},
-						},
-					]
+						]
 					: []),
 
 				{
@@ -411,7 +415,7 @@ const Orders: React.FC = () => {
 						onClick: () => {
 							dashNavigate(navigate, ['orders', 'add']);
 						},
-					}
+					},
 				]}
 			/>
 			<TableCard
@@ -424,13 +428,22 @@ const Orders: React.FC = () => {
 					placeholder: __('Search...', 'multivendorx'),
 					options: [
 						{ label: __('All', 'multivendorx'), value: 'all' },
-						{ label: __('Order Id', 'multivendorx'), value: 'order_id' },
-						{ label: __('Products', 'multivendorx'), value: 'products' },
+						{
+							label: __('Order Id', 'multivendorx'),
+							value: 'order_id',
+						},
+						{
+							label: __('Products', 'multivendorx'),
+							value: 'products',
+						},
 						{
 							label: __('Customer Email', 'multivendorx'),
 							value: 'customer_email',
 						},
-						{ label: __('Customer', 'multivendorx'), value: 'customer' },
+						{
+							label: __('Customer', 'multivendorx'),
+							value: 'customer',
+						},
 					],
 				}}
 				filters={filters}
@@ -438,10 +451,7 @@ const Orders: React.FC = () => {
 				ids={rowIds}
 				categoryCounts={categoryCounts}
 				bulkActions={bulkActions}
-				onBulkActionApply={(
-					action: string,
-					selectedIds: []
-				) => {
+				onBulkActionApply={(action: string, selectedIds: []) => {
 					handleBulkAction(action, selectedIds);
 				}}
 				format={appLocalizer.date_format}

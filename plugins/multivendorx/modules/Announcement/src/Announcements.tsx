@@ -343,13 +343,15 @@ export const Announcements: React.FC = () => {
 						value: 'publish',
 						label: __('Published', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-publish']) || 0,
+							Number(response.headers['x-wp-status-publish']) ||
+							0,
 					},
 					{
 						value: 'pending',
 						label: __('Pending', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-pending']) || 0,
+							Number(response.headers['x-wp-status-pending']) ||
+							0,
 					},
 					{
 						value: 'draft',
@@ -483,7 +485,7 @@ export const Announcements: React.FC = () => {
 							usePlainText={false}
 							tinymceApiKey={
 								appLocalizer.settings_databases_value[
-								'overview'
+									'overview'
 								]['tinymce_api_section'] ?? ''
 							}
 							msg={{

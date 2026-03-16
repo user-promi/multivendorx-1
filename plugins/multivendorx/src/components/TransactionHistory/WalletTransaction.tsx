@@ -201,7 +201,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			label: __('Transaction Type', 'multivendorx'),
 			render: (row) =>
 				row.transaction_type?.toLowerCase() === 'commission' &&
-					row.commission_id ? (
+				row.commission_id ? (
 					<span
 						className="link-item"
 						onClick={() => {
@@ -334,8 +334,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			label: 'Created Date',
 			type: 'date',
 		},
-	]; 
-	
+	];
+
 	const downloadTransactionCSV = (selectedIds: number[]) => {
 		if (!selectedIds) {
 			return;
@@ -426,14 +426,14 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 									const formattedPaymentMethod =
 										txn.payment_method
 											? txn.payment_method
-												.replace(/[-_]/g, ' ') // replace - and _ with spaces
-												.replace(/\b\w/g, (char) =>
-													char.toUpperCase()
-												) // capitalize each word
+													.replace(/[-_]/g, ' ') // replace - and _ with spaces
+													.replace(/\b\w/g, (char) =>
+														char.toUpperCase()
+													) // capitalize each word
 											: __(
-												'No Payment Method Selected',
-												'multivendorx'
-											);
+													'No Payment Method Selected',
+													'multivendorx'
+												);
 
 									return (
 										<div key={txn.id} className="info-item">
@@ -462,11 +462,12 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 
 											<div className="right-details">
 												<div
-													className={`price ${parseFloat(txn.debit) <
+													className={`price ${
+														parseFloat(txn.debit) <
 														0
-														? 'color-red'
-														: 'color-green'
-														}`}
+															? 'color-red'
+															: 'color-green'
+													}`}
 												>
 													{formatCurrency(txn.debit)}
 												</div>
@@ -561,59 +562,59 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 										},
 
 										...(wallet?.withdrawal_setting?.length >
-											0
+										0
 											? [
-												{
-													title: __(
-														'Free Withdrawals',
-														'multivendorx'
-													),
-													desc: (
-														<>
-															{__(
-																'Then',
-																'multivendorx'
-															)}{' '}
-															{Number(
-																wallet
-																	?.withdrawal_setting?.[0]
-																	?.withdrawal_percentage
-															) || 0}
-															% +{' '}
-															{formatCurrency(
-																Number(
+													{
+														title: __(
+															'Free Withdrawals',
+															'multivendorx'
+														),
+														desc: (
+															<>
+																{__(
+																	'Then',
+																	'multivendorx'
+																)}{' '}
+																{Number(
 																	wallet
 																		?.withdrawal_setting?.[0]
-																		?.withdrawal_fixed
-																) || 0
-															)}{' '}
-															{__(
-																'fee',
-																'multivendorx'
-															)}
-														</>
-													),
-													value: (
-														<>
-															{Math.max(
-																0,
-																(wallet
-																	?.withdrawal_setting?.[0]
-																	?.free_withdrawals ??
-																	0) -
-																(wallet?.free_withdrawal ??
-																	0)
-															)}{' '}
-															<span>
+																		?.withdrawal_percentage
+																) || 0}
+																% +{' '}
+																{formatCurrency(
+																	Number(
+																		wallet
+																			?.withdrawal_setting?.[0]
+																			?.withdrawal_fixed
+																	) || 0
+																)}{' '}
 																{__(
-																	'Left',
+																	'fee',
 																	'multivendorx'
 																)}
-															</span>
-														</>
-													),
-												},
-											]
+															</>
+														),
+														value: (
+															<>
+																{Math.max(
+																	0,
+																	(wallet
+																		?.withdrawal_setting?.[0]
+																		?.free_withdrawals ??
+																		0) -
+																		(wallet?.free_withdrawal ??
+																			0)
+																)}{' '}
+																<span>
+																	{__(
+																		'Left',
+																		'multivendorx'
+																	)}
+																</span>
+															</>
+														),
+													},
+												]
 											: []),
 									]}
 								/>
@@ -699,14 +700,14 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 									name="amount"
 									value={amount}
 									onChange={(value) => {
-										AmountChange(Number(value))
+										AmountChange(Number(value));
 									}}
 								/>
 
 								<div className="free-wrapper">
 									{wallet?.withdrawal_setting?.length > 0 &&
-										wallet?.withdrawal_setting?.[0]
-											?.free_withdrawals ? (
+									wallet?.withdrawal_setting?.[0]
+										?.free_withdrawals ? (
 										<>
 											{freeLeft > 0 ? (
 												<span>
@@ -784,12 +785,9 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 						currency={{
 							currencySymbol: appLocalizer.currency_symbol,
 							priceDecimals: appLocalizer.price_decimals,
-							decimalSeparator:
-								appLocalizer.decimal_separator,
-							thousandSeparator:
-								appLocalizer.thousand_separator,
-							currencyPosition:
-								appLocalizer.currency_position,
+							decimalSeparator: appLocalizer.decimal_separator,
+							thousandSeparator: appLocalizer.thousand_separator,
+							currencyPosition: appLocalizer.currency_position,
 						}}
 					/>
 				</Column>

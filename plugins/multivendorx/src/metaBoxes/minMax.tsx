@@ -1,11 +1,6 @@
 import { addFilter } from '@wordpress/hooks';
 import { useEffect, useState } from 'react';
-import {
-	Card,
-	BasicInputUI,
-	FormGroup,
-	FormGroupWrapper,
-} from 'zyra';
+import { Card, BasicInputUI, FormGroup, FormGroupWrapper } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const MinMax = ({ product, setProduct }) => {
@@ -131,18 +126,17 @@ const MinMax = ({ product, setProduct }) => {
 };
 
 addFilter(
-    'multivendorx_add_product_middle_section',
-    'multivendorx/min_max',
-    (content, product, setProduct, handleChange, modules) => {
-        return (
-            <>
-                {content}
-                {modules?.includes('min-max') &&
-                    product?.type === 'simple' && (
-                        <MinMax product={product} setProduct={setProduct} />
-                    )}
-            </>
-        );
-    },
-    20
+	'multivendorx_add_product_middle_section',
+	'multivendorx/min_max',
+	(content, product, setProduct, handleChange, modules) => {
+		return (
+			<>
+				{content}
+				{modules?.includes('min-max') && product?.type === 'simple' && (
+					<MinMax product={product} setProduct={setProduct} />
+				)}
+			</>
+		);
+	},
+	20
 );

@@ -27,7 +27,7 @@ export default {
 			classes: 'full-width',
 			visibleGroups: ['registration', 'store'],
 			desc: 'Customise personalised store registration form for marketplace.',
-			context: "form",
+			context: 'form',
 		},
 	],
 };

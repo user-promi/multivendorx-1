@@ -14,7 +14,10 @@ addFilter(
 				headerTitle: __('Store Reviews', 'multivendorx'),
 				headerIcon: 'store-review',
 				settingTitle: __('Store reviews at a glance', 'multivendorx'),
-				settingSubTitle: __('Track and manage reviews for all stores.','multivendorx'),
+				settingSubTitle: __(
+					'Track and manage reviews for all stores.',
+					'multivendorx'
+				),
 			},
 		});
 
@@ -26,7 +29,6 @@ addFilter(
 	'multivendorx_customer_support_tab_content',
 	'multivendorx/store-review-content',
 	(defaultForm, { tabId }) => {
-
 		if (tabId === 'review') {
 			return <StoreReviews />;
 		}

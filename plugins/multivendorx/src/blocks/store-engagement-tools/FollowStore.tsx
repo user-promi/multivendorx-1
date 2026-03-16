@@ -52,7 +52,7 @@ const FollowStore: React.FC<FollowStoreProps> = ({
 	}, []);
 
 	const handleFollowToggle = () => {
-		if (!StoreInfo.currentUserId || StoreInfo.currentUserId === "0") {
+		if (!StoreInfo.currentUserId || StoreInfo.currentUserId === '0') {
 			const currentUrl = window.location.href;
 			window.location.href = `${StoreInfo.loginUrl}?redirect_to=${encodeURIComponent(currentUrl)}`;
 			return;

@@ -81,7 +81,7 @@ const Dashboard: React.FC = () => {
 
 	const access =
 		appLocalizer.settings_databases_value?.['privacy']?.[
-		'customer_information_access'
+			'customer_information_access'
 		];
 	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
 
@@ -99,10 +99,10 @@ const Dashboard: React.FC = () => {
 			render: (row) =>
 				row.products && row.products.length > 0
 					? row.products.map((product, index) => (
-						<div key={index} className="product-wrapper">
-							{product.name}
-						</div>
-					))
+							<div key={index} className="product-wrapper">
+								{product.name}
+							</div>
+						))
 					: '-',
 		},
 		amount: {
@@ -171,20 +171,20 @@ const Dashboard: React.FC = () => {
 		setIsLoading(true);
 
 		// Reviews
-		axios.get(
-			getApiLink(appLocalizer, 'review'), {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				page: 1,
-				row: 4,
-				store_id: appLocalizer.store_id,
-				orderBy: 'date_created',
-				order: 'desc',
-				startDate: dateRange.startDate,
-				endDate: dateRange.endDate,
-				dashboard: true,
-			},
-		})
+		axios
+			.get(getApiLink(appLocalizer, 'review'), {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					page: 1,
+					row: 4,
+					store_id: appLocalizer.store_id,
+					orderBy: 'date_created',
+					order: 'desc',
+					startDate: dateRange.startDate,
+					endDate: dateRange.endDate,
+					dashboard: true,
+				},
+			})
 			.then((response) => {
 				const items = response.data.items || [];
 				setReview(items);
@@ -194,21 +194,21 @@ const Dashboard: React.FC = () => {
 			});
 
 		// Pending Refunds
-		axios.get(
-			`${appLocalizer.apiUrl}/wc/v3/orders`, {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				meta_key: 'multivendorx_store_id',
-				value: appLocalizer.store_id,
-				status: 'refund-requested',
-				page: 1,
-				per_page: 4,
-				orderby: 'date',
-				order: 'desc',
-				after: dateRange.startDate.toISOString().replace('Z', ''),
-				before: dateRange.endDate.toISOString().replace('Z', ''),
-			},
-		})
+		axios
+			.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					meta_key: 'multivendorx_store_id',
+					value: appLocalizer.store_id,
+					status: 'refund-requested',
+					page: 1,
+					per_page: 4,
+					orderby: 'date',
+					order: 'desc',
+					after: dateRange.startDate.toISOString().replace('Z', ''),
+					before: dateRange.endDate.toISOString().replace('Z', ''),
+				},
+			})
 			.then((response) => {
 				const items = response.data || [];
 				const formatData = items.map((order) => ({
@@ -229,16 +229,16 @@ const Dashboard: React.FC = () => {
 
 		// Announcements
 		if (modules.includes('announcement')) {
-			axios.get(
-				getApiLink(appLocalizer, 'announcement'), {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					page: 1,
-					row: 5,
-					store_id: appLocalizer.store_id,
-					status: 'publish',
-				},
-			})
+			axios
+				.get(getApiLink(appLocalizer, 'announcement'), {
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+					params: {
+						page: 1,
+						row: 5,
+						store_id: appLocalizer.store_id,
+						status: 'publish',
+					},
+				})
 				.then((response) => {
 					setAnnouncement(response.data || []);
 				})
@@ -248,19 +248,19 @@ const Dashboard: React.FC = () => {
 		}
 
 		// Top Products
-		axios.get(
-			`${appLocalizer.apiUrl}/wc/v3/products`, {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				per_page: 5,
-				meta_key: 'multivendorx_store_id',
-				orderby: 'popularity',
-				order: 'desc',
-				value: appLocalizer.store_id,
-				after: dateRange.startDate.toISOString().replace('Z', ''),
-				before: dateRange.endDate.toISOString().replace('Z', ''),
-			},
-		})
+		axios
+			.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					per_page: 5,
+					meta_key: 'multivendorx_store_id',
+					orderby: 'popularity',
+					order: 'desc',
+					value: appLocalizer.store_id,
+					after: dateRange.startDate.toISOString().replace('Z', ''),
+					before: dateRange.endDate.toISOString().replace('Z', ''),
+				},
+			})
 			.then((response) => {
 				const products = response.data;
 				const maxSales = Math.max(
@@ -284,19 +284,19 @@ const Dashboard: React.FC = () => {
 			});
 
 		// Recent Orders
-		axios.get(
-			`${appLocalizer.apiUrl}/wc/v3/orders`, {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				per_page: 5,
-				order: 'desc',
-				orderby: 'date',
-				meta_key: 'multivendorx_store_id',
-				value: appLocalizer.store_id,
-				after: dateRange.startDate.toISOString().replace('Z', ''),
-				before: dateRange.endDate.toISOString().replace('Z', ''),
-			},
-		})
+		axios
+			.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					per_page: 5,
+					order: 'desc',
+					orderby: 'date',
+					meta_key: 'multivendorx_store_id',
+					value: appLocalizer.store_id,
+					after: dateRange.startDate.toISOString().replace('Z', ''),
+					before: dateRange.endDate.toISOString().replace('Z', ''),
+				},
+			})
 			.then((response) => {
 				const orders = response.data.map((order) => ({
 					id: order.id,
@@ -320,29 +320,28 @@ const Dashboard: React.FC = () => {
 			});
 
 		// Store Data
-		axios.get(
-			getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
-			{
+		axios
+			.get(getApiLink(appLocalizer, `store/${appLocalizer.store_id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { dashboard: true, id: appLocalizer.store_id },
-			}
-		).then((res) => {
-			const data = res.data || {};
-			setStore(data);
-		});
+			})
+			.then((res) => {
+				const data = res.data || {};
+				setStore(data);
+			});
 
 		// Total Orders
-		axios.get(
-			`${appLocalizer.apiUrl}/wc/v3/orders`, {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				per_page: 1,
-				meta_key: 'multivendorx_store_id',
-				value: appLocalizer.store_id,
-				after: dateRange.startDate.toISOString().replace('Z', ''),
-				before: dateRange.endDate.toISOString().replace('Z', ''),
-			},
-		})
+		axios
+			.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					per_page: 1,
+					meta_key: 'multivendorx_store_id',
+					value: appLocalizer.store_id,
+					after: dateRange.startDate.toISOString().replace('Z', ''),
+					before: dateRange.endDate.toISOString().replace('Z', ''),
+				},
+			})
 			.then((response) => {
 				const totalOrders =
 					parseInt(response.headers['x-wp-total']) || 0;
@@ -353,22 +352,22 @@ const Dashboard: React.FC = () => {
 			});
 
 		// Last Withdrawals - keep using InfoItem (no TableCard needed)
-		axios.get(
-			getApiLink(appLocalizer, 'transaction'), {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				page: 1,
-				row: 5,
-				store_id: appLocalizer.store_id,
-				transaction_type: 'Withdrawal',
-				transaction_status: 'Completed',
-				orderBy: 'created_at',
-				order: 'DESC',
-				start_date: dateRange.startDate,
-				end_date: dateRange.endDate,
-				dashboard: true,
-			},
-		})
+		axios
+			.get(getApiLink(appLocalizer, 'transaction'), {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					page: 1,
+					row: 5,
+					store_id: appLocalizer.store_id,
+					transaction_type: 'Withdrawal',
+					transaction_status: 'Completed',
+					orderBy: 'created_at',
+					order: 'DESC',
+					start_date: dateRange.startDate,
+					end_date: dateRange.endDate,
+					dashboard: true,
+				},
+			})
 			.then((response) => {
 				const withdrawals = response.data.transaction || [];
 				setLastWithdraws(withdrawals);
@@ -376,18 +375,18 @@ const Dashboard: React.FC = () => {
 			.catch(() => setLastWithdraws([]));
 
 		// Customers - keep using InfoItem (no TableCard needed)
-		axios.get(
-			`${appLocalizer.apiUrl}/wc/v3/orders`, {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				per_page: 50,
-				status: ['completed', 'processing'],
-				meta_key: 'multivendorx_store_id',
-				meta_value: appLocalizer.store_id,
-				after: dateRange.startDate.toISOString().replace('Z', ''),
-				before: dateRange.endDate.toISOString().replace('Z', ''),
-			},
-		})
+		axios
+			.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					per_page: 50,
+					status: ['completed', 'processing'],
+					meta_key: 'multivendorx_store_id',
+					meta_value: appLocalizer.store_id,
+					after: dateRange.startDate.toISOString().replace('Z', ''),
+					before: dateRange.endDate.toISOString().replace('Z', ''),
+				},
+			})
 			.then((response) => {
 				const customersMap = {};
 
@@ -422,17 +421,17 @@ const Dashboard: React.FC = () => {
 			});
 
 		// Activities
-		axios.get(
-			getApiLink(appLocalizer, 'notifications'), {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				page: 1,
-				row: 5,
-				store_id: appLocalizer?.store_id,
-				start_date: dateRange.startDate,
-				end_date: dateRange.endDate,
-			},
-		})
+		axios
+			.get(getApiLink(appLocalizer, 'notifications'), {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					page: 1,
+					row: 5,
+					store_id: appLocalizer?.store_id,
+					start_date: dateRange.startDate,
+					end_date: dateRange.endDate,
+				},
+			})
 			.then((response) => {
 				setActivities(response.data || []);
 			})
@@ -444,19 +443,21 @@ const Dashboard: React.FC = () => {
 			});
 
 		// Revenue Data
-		axios.get(
-			getApiLink(appLocalizer, 'commission'), {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				format: 'reports',
-				store_id: appLocalizer.store_id,
-				dashboard: true,
-				start_date: dateRange.startDate,
-				end_date: dateRange.endDate,
-			},
-		})
+		axios
+			.get(getApiLink(appLocalizer, 'commission'), {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					format: 'reports',
+					store_id: appLocalizer.store_id,
+					dashboard: true,
+					start_date: dateRange.startDate,
+					end_date: dateRange.endDate,
+				},
+			})
 			.then((response) => {
-				setRevenueData(Array.isArray(response.data.data) ? response.data.data : []);
+				setRevenueData(
+					Array.isArray(response.data.data) ? response.data.data : []
+				);
 			});
 	}, [dateRange, modules]);
 
@@ -644,20 +645,20 @@ const Dashboard: React.FC = () => {
 										key={item.id}
 										title={
 											item.payment_method ===
-												'stripe-connect'
+											'stripe-connect'
 												? __('Stripe', 'multivendorx')
 												: item.payment_method ===
-													'bank-transfer'
+													  'bank-transfer'
 													? __(
-														'Direct to Local Bank (INR)',
-														'multivendorx'
-													)
-													: item.payment_method ===
-														'paypal-payout'
-														? __(
-															'PayPal',
+															'Direct to Local Bank (INR)',
 															'multivendorx'
 														)
+													: item.payment_method ===
+														  'paypal-payout'
+														? __(
+																'PayPal',
+																'multivendorx'
+															)
 														: ''
 										}
 										isLoading={isLoading}
@@ -833,7 +834,8 @@ const Dashboard: React.FC = () => {
 				{/* Admin Announcements */}
 				{modules.includes('announcement') && (
 					<Column fullHeight grid={4}>
-						<Card title={__('Admin Announcements', 'multivendorx')}
+						<Card
+							title={__('Admin Announcements', 'multivendorx')}
 							iconName="external icon"
 							onIconClick={() => {
 								const url = appLocalizer.permalink_structure
@@ -843,7 +845,8 @@ const Dashboard: React.FC = () => {
 							}}
 						>
 							<div className="notification-wrapper">
-								{Array.isArray(announcement) && announcement.length > 0 ? (
+								{Array.isArray(announcement) &&
+								announcement.length > 0 ? (
 									<ul>
 										{announcement.map((item, index) => (
 											<li key={item.id}>
@@ -965,7 +968,8 @@ const Dashboard: React.FC = () => {
 				<Column fullHeight grid={4}>
 					<Card title={__('Store Activity', 'multivendorx')}>
 						<div className="activity-log">
-							{Array.isArray(activities) && activities.length > 0 ? (
+							{Array.isArray(activities) &&
+							activities.length > 0 ? (
 								activities.slice(0, 5).map((a, i) => (
 									<div key={i} className="activity">
 										<div className="title">{a.title}</div>

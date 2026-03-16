@@ -6,7 +6,12 @@ jQuery(document).ready(function ($) {
 		var store_id = btn.data('store-id');
 		var user_id = btn.data('user-id');
 		$.ajax({
-			url: followStoreFrontend.apiUrl + '/' + followStoreFrontend.restUrl + '/follow-store/' + store_id,
+			url:
+				followStoreFrontend.apiUrl +
+				'/' +
+				followStoreFrontend.restUrl +
+				'/follow-store/' +
+				store_id,
 			method: 'GET',
 			headers: {
 				'X-WP-Nonce': followStoreFrontend.nonce,
@@ -47,7 +52,12 @@ jQuery(document).ready(function ($) {
 		btn.prop('disabled', true);
 
 		$.ajax({
-			url: followStoreFrontend.apiUrl + '/' + followStoreFrontend.restUrl + '/follow-store/' + store_id,
+			url:
+				followStoreFrontend.apiUrl +
+				'/' +
+				followStoreFrontend.restUrl +
+				'/follow-store/' +
+				store_id,
 			method: 'POST',
 			headers: {
 				'X-WP-Nonce': followStoreFrontend.nonce,

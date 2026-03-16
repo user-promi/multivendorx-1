@@ -454,7 +454,7 @@ export default {
 			name: __('Search & Discovery', 'multivendorx'),
 			desc: 'SEO settings for store pages and products using Rank Math or Yoast SEO.',
 			docLink: 'https://multivendorx.com/docs/knowledgebase/store-seo',
-			settingsLink: `${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=seo`,
+			settingsLink: `${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=search-discovery`,
 			proModule: true,
 			category: ['analytics_tools', 'store_management'],
 		},
@@ -478,7 +478,7 @@ export default {
 			desc: 'Ensure stores meet marketplace requirements with automated policy checks.',
 			docLink: 'https://multivendorx.com/docs/knowledgebase/NA',
 			settingsLink: `${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=compliance`,
-						category: 'marketplace_boosters',
+			category: 'marketplace_boosters',
 		},
 		{
 			id: 'marketplace-membership',

@@ -1,7 +1,14 @@
 /* global appLocalizer */
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { FormGroup, FormGroupWrapper, getApiLink, PopupUI, SectionUI, TableCard } from 'zyra';
+import {
+	FormGroup,
+	FormGroupWrapper,
+	getApiLink,
+	PopupUI,
+	SectionUI,
+	TableCard,
+} from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../../services/commonFunction';
 import { TableRow } from '@/services/type';
@@ -84,7 +91,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							// store refund map
 							setRefundMap(refundMap);
 						})
-						.catch(() => { });
+						.catch(() => {});
 
 					axios({
 						method: 'GET',
@@ -202,8 +209,9 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 									href={`${appLocalizer.site_url.replace(
 										/\/$/,
 										''
-									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${storeData.id
-										}`}
+									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
+										storeData.id
+									}`}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="store-link"
@@ -225,7 +233,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						</div>
 					</div>
 
-
 					<SectionUI title={__('Order Details', 'multivendorx')} />
 					<TableCard headers={popupColumns} rows={orderItems} />
 
@@ -241,17 +248,22 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 
 				<div className="section right">
 					<FormGroupWrapper>
+						<SectionUI
+							title={__('Order Overview', 'multivendorx')}
+						/>
 
-						<SectionUI title={__('Order Overview', 'multivendorx')} />
-
-						<FormGroup row label={__('Associated Order', 'multivendorx')}>
+						<FormGroup
+							row
+							label={__('Associated Order', 'multivendorx')}
+						>
 							{commissionData?.order_id ? (
 								<a
 									href={`${appLocalizer.site_url.replace(
 										/\/$/,
 										''
-									)}/wp-admin/post.php?post=${commissionData.order_id
-										}&action=edit`}
+									)}/wp-admin/post.php?post=${
+										commissionData.order_id
+									}&action=edit`}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="link-item"
@@ -263,39 +275,57 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							)}
 						</FormGroup>
 
-						<FormGroup row label={__('Order Status', 'multivendorx')}>
+						<FormGroup
+							row
+							label={__('Order Status', 'multivendorx')}
+						>
 							<span className="admin-badge blue">
 								{orderData?.status
 									? orderData.status
-										.replace(/^wc-/, '') // remove 'wc-' prefix if exists
-										.replace(/_/g, ' ') // replace underscores with spaces
-										.replace(/\b\w/g, (c) =>
-											c.toUpperCase()
-										) // capitalize first letter of each word
+											.replace(/^wc-/, '') // remove 'wc-' prefix if exists
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize first letter of each word
 									: ''}
 							</span>
 						</FormGroup>
 
-						<SectionUI title={__('Commission Overview', 'multivendorx')} />
+						<SectionUI
+							title={__('Commission Overview', 'multivendorx')}
+						/>
 
-						<FormGroup row label={__('Commission Status', 'multivendorx')}>
+						<FormGroup
+							row
+							label={__('Commission Status', 'multivendorx')}
+						>
 							<span
-								className={`admin-badge ${commissionData?.status === 'paid' ? 'green' : 'red'
-									}`}
+								className={`admin-badge ${
+									commissionData?.status === 'paid'
+										? 'green'
+										: 'red'
+								}`}
 							>
 								{commissionData?.status
 									? commissionData.status
-										.replace(/^wc-/, '') // remove any prefix like 'wc-'
-										.replace(/_/g, ' ') // replace underscores with spaces
-										.replace(/\b\w/g, (c) => c.toUpperCase()) // capitalize each word
+											.replace(/^wc-/, '') // remove any prefix like 'wc-'
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize each word
 									: ''}
 							</span>
 						</FormGroup>
 
-						<FormGroup row label={__('Commission Amount', 'multivendorx')}>
+						<FormGroup
+							row
+							label={__('Commission Amount', 'multivendorx')}
+						>
 							{formatCurrency(
 								parseFloat(commissionData?.total ?? 0) +
-								parseFloat(commissionData?.commission_refunded ?? 0)
+									parseFloat(
+										commissionData?.commission_refunded ?? 0
+									)
 							)}
 						</FormGroup>
 
@@ -306,13 +336,20 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<FormGroup row label={__('Tax', 'multivendorx')}>
 							{formatCurrency(
 								Number(commissionData?.tax || 0) +
-								Number(commissionData?.shipping_tax_amount || 0)
+									Number(
+										commissionData?.shipping_tax_amount || 0
+									)
 							)}
 						</FormGroup>
 
 						{commissionData?.commission_refunded > 0 && (
-							<FormGroup row label={__('Commission refund', 'multivendorx')}>
-								{formatCurrency(commissionData.commission_refunded)}
+							<FormGroup
+								row
+								label={__('Commission refund', 'multivendorx')}
+							>
+								{formatCurrency(
+									commissionData.commission_refunded
+								)}
 							</FormGroup>
 						)}
 
@@ -321,10 +358,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						</FormGroup>
 					</FormGroupWrapper>
 
-
 					{commissionData?.note && (
 						<>
-							<SectionUI title={__('Commission Notes', 'multivendorx')} />
+							<SectionUI
+								title={__('Commission Notes', 'multivendorx')}
+							/>
 							<div className="settings-metabox-note">
 								<i className="adminfont-info"></i>
 								<p>{commissionData?.note}</p>

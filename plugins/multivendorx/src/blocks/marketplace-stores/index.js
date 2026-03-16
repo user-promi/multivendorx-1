@@ -18,9 +18,18 @@ const EditBlock = (props) => {
 						label={__('Sort by', 'multivendorx')}
 						value={attributes.orderby}
 						options={[
-							{ label: __('Name', 'multivendorx'), value: 'name' },
-							{ label: __('Category', 'multivendorx'), value: 'category' },
-							{ label: __('Registered', 'multivendorx'), value: 'create-time' },
+							{
+								label: __('Name', 'multivendorx'),
+								value: 'name',
+							},
+							{
+								label: __('Category', 'multivendorx'),
+								value: 'category',
+							},
+							{
+								label: __('Registered', 'multivendorx'),
+								value: 'create-time',
+							},
 						]}
 						onChange={(value) => setAttributes({ orderby: value })}
 					/>
@@ -29,8 +38,14 @@ const EditBlock = (props) => {
 						label={__('Order', 'multivendorx')}
 						value={attributes.order}
 						options={[
-							{ label: __('Ascending', 'multivendorx'), value: 'asc' },
-							{ label: __('Descending', 'multivendorx'), value: 'desc' },
+							{
+								label: __('Ascending', 'multivendorx'),
+								value: 'asc',
+							},
+							{
+								label: __('Descending', 'multivendorx'),
+								value: 'desc',
+							},
 						]}
 						onChange={(value) => setAttributes({ order: value })}
 					/>

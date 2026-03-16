@@ -11,9 +11,9 @@ export default {
 		{
 			key: 'paid_promotion_limit',
 			label: __('Account capabilities', 'multivendorx'),
-			type: 'itemlist', 
-			className: 'checklist', 
-			items: [ 
+			type: 'itemlist',
+			className: 'checklist',
+			items: [
 				{
 					title: __('Log in to dashboard', 'multivendorx'),
 					icon: 'icon-yes',
@@ -27,7 +27,10 @@ export default {
 					icon: 'icon-yes',
 				},
 				{
-					title: __('Cannot modify products or settings', 'multivendorx'),
+					title: __(
+						'Cannot modify products or settings',
+						'multivendorx'
+					),
 					icon: 'cross',
 				},
 				{

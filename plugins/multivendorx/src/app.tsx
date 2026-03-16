@@ -8,7 +8,7 @@ import {
 	FormGroupWrapper,
 	PopupUI,
 	GuidedTourProvider,
-	Notice
+	Notice,
 } from 'zyra';
 
 import Brand from './assets/images/multivendorx-logo.png';
@@ -51,7 +51,9 @@ const Route = () => {
 	const route = routes.find((r) => r.tab === tab);
 	const Component = route?.component;
 
-	if (!Component) return null;
+	if (!Component) {
+		return null;
+	}
 
 	return (
 		<Component
@@ -178,15 +180,15 @@ const App = () => {
 		},
 	];
 	const bannerItem = [
-    "<b>Marketplace monetization:</b> Create flexible membership plans that let you charge stores for access, features, and growth opportunities.",
-    "<b>Built-in tax compliance:</b> Automatically generate tax-ready invoices for orders, commissions, and payouts to keep your marketplace compliant.",
-    "<b>Franchise-ready scaling:</b> Run multiple regional or franchise marketplaces with centralized control and consistent branding.",
-    "<b>Recurring revenue engine:</b> Enable subscription-based selling so your marketplace benefits from predictable, recurring income.",
-    "<b>Service and booking sales:</b> Allow stores to sell bookings for services, appointments, rentals, and experiences on your platform.",
-    "<b>High-value rentals:</b> Launch rental marketplace with date-based availability and higher order values.",
-    "<b>Verified stores:</b> Verify store identities using documents and badges to build trust and reduce risk on your marketplace.",
-    "<b>Vacation mode:</b> Allow stores to temporarily pause their shop during vacations while keeping their listings intact."
-];
+		'<b>Marketplace monetization:</b> Create flexible membership plans that let you charge stores for access, features, and growth opportunities.',
+		'<b>Built-in tax compliance:</b> Automatically generate tax-ready invoices for orders, commissions, and payouts to keep your marketplace compliant.',
+		'<b>Franchise-ready scaling:</b> Run multiple regional or franchise marketplaces with centralized control and consistent branding.',
+		'<b>Recurring revenue engine:</b> Enable subscription-based selling so your marketplace benefits from predictable, recurring income.',
+		'<b>Service and booking sales:</b> Allow stores to sell bookings for services, appointments, rentals, and experiences on your platform.',
+		'<b>High-value rentals:</b> Launch rental marketplace with date-based availability and higher order values.',
+		'<b>Verified stores:</b> Verify store identities using documents and badges to build trust and reduce risk on your marketplace.',
+		'<b>Vacation mode:</b> Allow stores to temporarily pause their shop during vacations while keeping their listings intact.',
+	];
 	const utilityListWithTab = [
 		{
 			toggleIcon: 'notification',
@@ -228,16 +230,25 @@ const App = () => {
 	};
 
 	return (
-		<>			
+		<>
 			<AdminHeader
 				brandImg={Brand}
 				results={results}
 				search={{
 					placeholder: __('Search...', 'multivendorx'),
 					options: [
-						{ value: 'all', label: __('Modules & Settings', 'multivendorx') },
-						{ value: 'modules', label: __('Modules', 'multivendorx') },
-						{ value: 'settings', label: __('Settings', 'multivendorx') },
+						{
+							value: 'all',
+							label: __('Modules & Settings', 'multivendorx'),
+						},
+						{
+							value: 'modules',
+							label: __('Modules', 'multivendorx'),
+						},
+						{
+							value: 'settings',
+							label: __('Settings', 'multivendorx'),
+						},
 					],
 				}}
 				onQueryUpdate={handleQueryUpdate}
@@ -392,7 +403,6 @@ const App = () => {
 						onError={(error) => {
 							console.error('Import failed', error);
 						}}
-						
 					/>
 				</FormGroupWrapper>
 			</PopupUI>
@@ -402,7 +412,7 @@ const App = () => {
 				steps={getTourSteps(appLocalizer)}
 			/>
 			<Notice
-				uniqueKey='banner'
+				uniqueKey="banner"
 				type="banner"
 				validity="lifetime"
 				displayPosition="banner"

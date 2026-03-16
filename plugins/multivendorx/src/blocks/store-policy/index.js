@@ -228,7 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	document
 		.querySelectorAll('.multivendorx-store-policy-block')
 		.forEach((block) => {
-
 			const items = block.querySelectorAll('.accordion-item');
 
 			items.forEach((item) => {
