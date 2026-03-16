@@ -122,6 +122,7 @@ interface PanelContextType {
     canDelete: () => boolean;
     renderField: (methodId: string, field: PanelFormField) => JSX.Element | null;
     commitEdit: () => void;
+    shouldRender: (dependent: any, methodId: string) => boolean;
 }
 
 interface PanelItemContextType {
@@ -554,7 +555,8 @@ const PanelControls: React.FC = () => {
 const PanelBody: React.FC = () => {
     const {
         isWizardMode,
-        renderField
+        renderField,
+        shouldRender
     } = usePanel();
     
     const {
@@ -573,6 +575,14 @@ const PanelBody: React.FC = () => {
             <FormGroupWrapper>
                 {method.formFields!.map(field => {
                     if (isWizardMode && field.key === 'wizardButtons') return null;
+                    const shouldShowField = Array.isArray(field.dependent)
+                                                ? field.dependent.every((dep) => shouldRender(dep, method.id))
+                                                : field.dependent
+                                                    ? shouldRender(field.dependent, method.id)
+                                                    : true;
+
+                    if (!shouldShowField) return null;
+
                     return (
                         <FormGroup
                             row key={field.key}
@@ -747,6 +757,64 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         }).catch(console.error);
     }, [apilink, appLocalizer, value]);
 
+    // ── Dependent-field helpers ───────────────────────────────────────────────
+    const isContain = (
+        key: string,
+        methodId: string,
+        valuee: string | number | boolean | null = null
+    ): boolean => {
+        const settingValue = value[methodId]?.[key];
+        if (Array.isArray(settingValue)) {
+            if (valuee === null) return settingValue.length > 0;
+            return settingValue.includes(valuee);
+        }
+
+        if (valuee === null) return Boolean(settingValue);
+        return settingValue === valuee;
+    };
+
+    const shouldRender = (dependent: any, methodId: string): boolean => {
+        if (dependent.set === true && !isContain(dependent.key, methodId)) return false;
+        if (dependent.set === false && isContain(dependent.key, methodId)) return false;
+        if (dependent.value !== undefined && !isContain(dependent.key, methodId, dependent.value)) return false;
+        return true;
+    };
+
+    const navigateWizard = useCallback(
+        (direction: 'next' | 'back', redirect?: string) => {
+
+            const { wizardIndex, methods } = state;
+            const lastIndex = methods.length - 1;
+            if (direction === 'back') {
+                if (wizardIndex === 0) return;
+
+                const newIndex = wizardIndex - 1;
+                const method = methods[newIndex];
+
+                dispatch({ type: 'SET_WIZARD_INDEX', index: newIndex });
+                dispatch({ type: 'SET_ACTIVE_TAB', id: method.id });
+
+                return;
+            }
+
+            saveWizard();
+
+            if (wizardIndex < lastIndex) {
+                const newIndex = wizardIndex + 1;
+                const method = methods[newIndex];
+
+                dispatch({ type: 'SET_WIZARD_INDEX', index: newIndex });
+                dispatch({ type: 'SET_ACTIVE_TAB', id: method.id });
+                return;
+            }
+
+            if (redirect) {
+                window.open(redirect, '_self');
+            }
+        },
+        [state.wizardIndex, state.methods, saveWizard]
+    );
+
     // ── Field renderer ────────────────────────────────────────────────────────
     const renderField = useCallback((methodId: string, field: PanelFormField): JSX.Element | null => {
         const comp = FIELD_REGISTRY[field.type];
@@ -755,41 +823,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         const Render = comp.render;
         const fieldVal = value[methodId]?.[field.key];
         const onChangeF = (val: unknown) => handleChange(methodId, field.key, val);
-
-        const navigateWizard = useCallback(
-            (direction: 'next' | 'back', redirect?: string) => {
-
-                const { wizardIndex, methods } = state;
-                const lastIndex = methods.length - 1;
-                if (direction === 'back') {
-                    if (wizardIndex === 0) return;
-
-                    const newIndex = wizardIndex - 1;
-                    const method = methods[newIndex];
-
-                    dispatch({ type: 'SET_WIZARD_INDEX', index: newIndex });
-                    dispatch({ type: 'SET_ACTIVE_TAB', id: method.id });
-
-                    return;
-                }
-
-                saveWizard();
-
-                if (wizardIndex < lastIndex) {
-                    const newIndex = wizardIndex + 1;
-                    const method = methods[newIndex];
-
-                    dispatch({ type: 'SET_WIZARD_INDEX', index: newIndex });
-                    dispatch({ type: 'SET_ACTIVE_TAB', id: method.id });
-                    return;
-                }
-
-                if (redirect) {
-                    window.open(redirect, '_self');
-                }
-            },
-            [state.wizardIndex, state.methods, saveWizard]
-        );
 
         if (field.type === 'button' && isWizardMode && Array.isArray(field.options)) {
             const buttonActions = {
@@ -961,6 +994,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         canDelete,
         renderField,
         commitEdit,
+        shouldRender
     };
 
     // ── Render ────────────────────────────────────────────────────────────────
