@@ -65,6 +65,10 @@ export const NoticeManager = {
     const uniqueKey = notice.uniqueKey || Date.now().toString();
     if (noticeQueue.some((n) => n.uniqueKey === uniqueKey)) return;
 
+    if (notice.position === 'float') {
+        validity = 5000;
+    }
+
     const expiresAt = validity === 'lifetime' ? undefined : Date.now() + validity;
 
     noticeQueue.push({

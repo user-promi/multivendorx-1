@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import Table from './table';
-import TableSummary from './summary';
 import Pagination from './Pagination';
 import { QueryProps, TableCardProps, TableRow } from './types';
 import BulkActionDropdown from './BulkActionDropdown';
@@ -191,71 +190,71 @@ const TableCard: React.FC<TableCardProps> = ({
 
 			{/* BODY */}
 			{(categoryCounts?.length > 0 || buttonActions || search || (showMenu && showColumnToggleIcon)) && (
-			<div className="admin-top-filter">
-				{categoryCounts && categoryCounts.length > 0 && (
-					<CategoryFilter
-						categories={categoryCounts}
-						activeCategory={query.categoryFilter || activeCategory}
-						onCategoryClick={(value) => {
+				<div className="admin-top-filter">
+					{categoryCounts && categoryCounts.length > 0 && (
+						<CategoryFilter
+							categories={categoryCounts}
+							activeCategory={query.categoryFilter || activeCategory}
+							onCategoryClick={(value) => {
 
-							const matched = categoryCounts.find(
-								(cat) => cat.value === value
-							);
-							setDerivedTotalRows(matched?.count ?? 0);
+								const matched = categoryCounts.find(
+									(cat) => cat.value === value
+								);
+								setDerivedTotalRows(matched?.count ?? 0);
 
-							setQuery((prev) => ({
-								...prev,
-								paged: 1,
-								categoryFilter: value
-							}));
-						}}
-					/>
-				)}
-
-				<div className="table-action-wrapper">
-					{buttonActions && <ButtonActions actions={buttonActions} query={query} />}
-					{search && (
-						<HeaderSearch
-							search={{
-								placeholder: search.placeholder,
-								options: search.options,
-							}}
-							onQueryUpdate={(payload) => {
-								onQueryChange('searchValue')(payload.searchValue);
-								if ('searchAction' in payload) {
-									onQueryChange('searchAction')(String(payload.searchAction));
-								}
+								setQuery((prev) => ({
+									...prev,
+									paged: 1,
+									categoryFilter: value
+								}));
 							}}
 						/>
 					)}
-					{showMenu && showColumnToggleIcon && (
-						<PopupUI
-							position="menu-dropdown"
-							toggleIcon="more-vertical"
-						>
-							<ul>
-								{Object.entries(headers).map(([key, config]) => {
-									const { label, required } = config;
-									if (required) return null;
 
-									return (
-										<li key={key}>
-											<label>
-												<input
-													type="checkbox"
-													checked={showCols.includes(key)}
-													onChange={() => onColumnToggle(key)}
-												/>
-												{label}
-											</label>
-										</li>
-									);
-								})}
-							</ul>
-						</PopupUI>
-					)}
+					<div className="table-action-wrapper">
+						{buttonActions && <ButtonActions actions={buttonActions} query={query} />}
+						{search && (
+							<HeaderSearch
+								search={{
+									placeholder: search.placeholder,
+									options: search.options,
+								}}
+								onQueryUpdate={(payload) => {
+									onQueryChange('searchValue')(payload.searchValue);
+									if ('searchAction' in payload) {
+										onQueryChange('searchAction')(String(payload.searchAction));
+									}
+								}}
+							/>
+						)}
+						{showMenu && showColumnToggleIcon && (
+							<PopupUI
+								position="menu-dropdown"
+								toggleIcon="more-vertical"
+							>
+								<ul>
+									{Object.entries(headers).map(([key, config]) => {
+										const { label, required } = config;
+										if (required) return null;
+
+										return (
+											<li key={key}>
+												<label>
+													<input
+														type="checkbox"
+														checked={showCols.includes(key)}
+														onChange={() => onColumnToggle(key)}
+													/>
+													{label}
+												</label>
+											</li>
+										);
+									})}
+								</ul>
+							</PopupUI>
+						)}
+					</div>
 				</div>
-			</div>
 			)}
 
 			<Table
@@ -297,12 +296,21 @@ const TableCard: React.FC<TableCardProps> = ({
 								}
 							/>
 
-							{summary && <TableSummary data={summary} />}
+							{summary &&
+								<ul className="table-summary" role="complementary">
+									{summary.map(({ label, value }, i) => (
+										<li className="table-summary-item" key={i}>
+											<span className="table-summary-value">{value}</span>
+											<span className="table-summary-label">{label}</span>
+										</li>
+									))}
+								</ul>
+							}
 						</Fragment>
 					)}
 				</div>
 			)}
-			
+
 			{selectedIds.length <= 2 && filters.length > 0 && (
 				<RealtimeFilters
 					filters={filters}

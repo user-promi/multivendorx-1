@@ -15,6 +15,7 @@ import {
 	ItemListUI,
 	Notice,
 	Container,
+	NoticeManager,
 } from 'zyra';
 
 import StoreSettings from './StoreSettings';
@@ -94,7 +95,13 @@ const EditStore = () => {
 			data: updatedData,
 		}).then((res) => {
 			if (res.data.success) {
-				setSuccessMsg('Store saved successfully!');
+				// setSuccessMsg('Store saved successfully!');
+				NoticeManager.add({
+					title: __('Great!', 'multivendorx'),
+					message: __('Store saved successfully!', 'multivendorx'),
+					type: 'success',
+					position: 'float',
+				});
 			}
 		});
 	};
@@ -390,11 +397,11 @@ const EditStore = () => {
 	].filter(Boolean);
 	return (
 		<>
-			<Notice
+			{/* <Notice
 				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 				message={successMsg}
-			/>
+			/> */}
 			<SettingsNavigator
 				settingContent={visibleTabs}
 				currentSetting={currentTab}

@@ -163,6 +163,11 @@ const StoreTable: React.FC = () => {
 			type: 'date',
 		},
 	];
+	const bulkActions = [
+		{ label: __('Published', 'multivendorx'), value: 'publish' },
+		{ label: __('Pending', 'multivendorx'), value: 'pending' },
+		{ label: __('Delete', 'multivendorx'), value: 'delete' },
+	];
 	return (
 		<Container general>
 			<Column>
@@ -174,6 +179,13 @@ const StoreTable: React.FC = () => {
 					onQueryUpdate={doRefreshTableData}
 					ids={rowIds}
 					categoryCounts={categoryCounts}
+					bulkActions={bulkActions}
+					onBulkActionApply={(
+						action: string,
+						selectedIds: []
+					) => {
+						// handleBulkAction(action, selectedIds);
+					}}
 					search={{}}
 					filters={filters}
 					format={appLocalizer.date_format}
