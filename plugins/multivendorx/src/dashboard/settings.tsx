@@ -79,6 +79,15 @@ const settings: React.FC<SettingsProps> = () => {
 		
 		const settingModal = getSettingById(settingsArray as any, currentTab);
 
+		useEffect(() => {
+			if (setting?.country) {
+				appLocalizer.all_store_meta = {
+					...appLocalizer.all_store_meta,
+					state: '',
+				};
+			}
+		}, [setting?.country]);
+
 		// Ensure settings context is initialized
 		if (settingName !== currentTab) {
 			setSetting(currentTab, appLocalizer.all_store_meta || {});
