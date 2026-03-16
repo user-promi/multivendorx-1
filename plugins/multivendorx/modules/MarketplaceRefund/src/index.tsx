@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import PendingRefund from './PendingRefund';
 
 let refundCountState = {
-	count : 0
+	count: 0,
 };
 
 // function to update count
@@ -15,7 +15,6 @@ addFilter(
 	'multivendorx_approval_queue_tab',
 	'multivendorx/refund-tab',
 	(settingContent) => {
-
 		settingContent.push({
 			type: 'file',
 			module: 'marketplace-refund',
@@ -37,12 +36,10 @@ addFilter(
 	}
 );
 
-
 addFilter(
 	'multivendorx_approval_queue_tab_content',
 	'multivendorx/refund-tab-content',
 	(defaultForm, { tabId }) => {
-
 		if (tabId === 'refund-requests') {
 			return <PendingRefund setCount={setRefundCount} />;
 		}

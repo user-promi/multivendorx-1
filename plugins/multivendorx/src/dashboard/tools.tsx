@@ -20,7 +20,7 @@ const Tools: React.FC = () => {
 				)}
 			>
 				<ButtonInputUI
-					position='left'
+					position="left"
 					buttons={[
 						{
 							icon: 'delete',

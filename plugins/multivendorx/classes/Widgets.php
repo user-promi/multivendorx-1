@@ -8,7 +8,7 @@ class Widgets {
     public function __construct() {
         add_action( 'widgets_init', array( $this, 'register_sidebar' ) );
         add_filter( 'register_block_type_args', array( $this, 'attach_sidebar_render_callback' ), 10, 2 );
-        add_filter( 'allowed_block_types_all', array( $this, 'restrict_store_blocks' ),10,2); 
+        add_filter( 'allowed_block_types_all', array( $this, 'restrict_store_blocks' ), 10, 2 );
     }
 
     /**
@@ -73,7 +73,6 @@ class Widgets {
         $filtered   = array();
 
         foreach ( $all_blocks as $block_name => $block_type ) {
-
             $category = $block_type->category ?? '';
 
             if ( $category === $restricted_category ) {

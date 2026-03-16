@@ -5,7 +5,7 @@ import {
 	Card,
 	FormGroup,
 	FormGroupWrapper,
-	useOutsideClick
+	useOutsideClick,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
@@ -22,7 +22,7 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 	useEffect(() => {
 		setProduct((prev) => ({
 			...prev,
-			featured: starFill
+			featured: starFill,
 		}));
 	}, [starFill]);
 
@@ -43,7 +43,6 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 
 	return (
 		<Card
-			
 			title={__('Publishing', 'multivendorx')}
 			action={
 				<>
@@ -71,17 +70,14 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 							{!isEditingVisibility && (
 								<div
 									onClick={() => {
-										setIsEditingVisibility(
-											(prev) => !prev
-										);
+										setIsEditingVisibility((prev) => !prev);
 										setIsEditingStatus(false);
 									}}
 								>
 									<span className="catalog-visibility-value">
 										{
 											VISIBILITY_LABELS[
-												product
-													.catalog_visibility
+												product.catalog_visibility
 											]
 										}
 									</span>
@@ -114,17 +110,13 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 											label: 'Hidden',
 										},
 									]}
-									value={
-										product.catalog_visibility
-									}
+									value={product.catalog_visibility}
 									onChange={(value) => {
 										handleChange(
 											'catalog_visibility',
 											value
 										);
-										setIsEditingVisibility(
-											false
-										);
+										setIsEditingVisibility(false);
 									}}
 								/>
 							)}
@@ -140,9 +132,7 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 						{!isEditingStatus && (
 							<div
 								onClick={() => {
-									setIsEditingStatus(
-										(prev) => !prev
-									);
+									setIsEditingStatus((prev) => !prev);
 									setIsEditingVisibility(false);
 								}}
 							>
@@ -157,38 +147,33 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 								name="status"
 								wrapperClass="fit-content"
 								options={[
-									...(appLocalizer.current_user?.allcaps?.publish_products
+									...(appLocalizer.current_user?.allcaps
+										?.publish_products
 										? [
-											{
-												key: 'publish',
-												value: 'publish',
-												label: __('Published', 'multivendorx'),
-											},
-										]
+												{
+													key: 'publish',
+													value: 'publish',
+													label: __(
+														'Published',
+														'multivendorx'
+													),
+												},
+											]
 										: []),
 									{
 										key: 'draft',
 										value: 'draft',
-										label: __(
-											'Draft',
-											'multivendorx'
-										),
+										label: __('Draft', 'multivendorx'),
 									},
 									{
 										key: 'pending',
 										value: 'pending',
-										label: __(
-											'Submit',
-											'multivendorx'
-										),
+										label: __('Submit', 'multivendorx'),
 									},
 								]}
 								value={product.status}
 								onChange={(value) =>
-									handleChange(
-										'status',
-										value
-									)
+									handleChange('status', value)
 								}
 							/>
 						)}
@@ -215,11 +200,15 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 addFilter(
 	'multivendorx_add_product_right_section',
 	'multivendorx/publishing_section',
-	(content,product,setProduct,handleChange) => {
+	(content, product, setProduct, handleChange) => {
 		return (
 			<>
 				{content}
-				<PublishingSection product={product} setProduct={setProduct} handleChange={handleChange} />
+				<PublishingSection
+					product={product}
+					setProduct={setProduct}
+					handleChange={handleChange}
+				/>
 			</>
 		);
 	},

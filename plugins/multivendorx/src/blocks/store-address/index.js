@@ -21,7 +21,7 @@ const LocationIcon = () => (
 registerBlockType('multivendorx/store-address', {
 	edit: ({ attributes, setAttributes }) => {
 		const blockProps = useBlockProps({
-			className: 'multivendorx-store-address-block store-details'
+			className: 'multivendorx-store-address-block store-details',
 		});
 		const showIcon = attributes.showIcon !== false;
 

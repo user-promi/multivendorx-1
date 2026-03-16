@@ -1,34 +1,19 @@
 import { addFilter } from '@wordpress/hooks';
-import {
-	BasicInputUI,
-	Card,
-	FormGroup,
-	FormGroupWrapper,
-} from 'zyra';
+import { BasicInputUI, Card, FormGroup, FormGroupWrapper } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const RelatedList = ({ product, setProduct, handleChange }) => {
-
 	return (
-		<Card
-			
-			title={__('Related listings', 'multivendorx')}
-		>
+		<Card title={__('Related listings', 'multivendorx')}>
 			<FormGroupWrapper>
-				<FormGroup
-					cols={2}
-					label={__('Upsells', 'multivendorx')}
-				>
+				<FormGroup cols={2} label={__('Upsells', 'multivendorx')}>
 					<BasicInputUI
 						name="name"
 						// value={product.name}
 						// onChange={(value) => handleChange('name', value)}
 					/>
 				</FormGroup>
-				<FormGroup
-					cols={2}
-					label={__('Cross-sells', 'multivendorx')}
-				>
+				<FormGroup cols={2} label={__('Cross-sells', 'multivendorx')}>
 					<BasicInputUI
 						name="name"
 						// value={product.name}
@@ -47,7 +32,11 @@ addFilter(
 		return (
 			<>
 				{content}
-				<RelatedList product={product} setProduct={setProduct} handleChange={handleChange} />
+				<RelatedList
+					product={product}
+					setProduct={setProduct}
+					handleChange={handleChange}
+				/>
 			</>
 		);
 	},

@@ -32,8 +32,9 @@ jQuery(document).ready(function ($) {
 						</span>
 					</div>`;
 
-					html += `<div class="total-number">${total} Rating${total !== 1 ? 's' : ''
-						}</div>
+					html += `<div class="total-number">${total} Rating${
+						total !== 1 ? 's' : ''
+					}</div>
                          </div>
                          <div class="rating-breakdown">`;
 
@@ -46,7 +47,8 @@ jQuery(document).ready(function ($) {
                         <div class="rating">
                             ${i} <i class="dashicons dashicons-star-filled"></i> 
                             <div class="bar"><span style="width:${percent}%;"></span></div> 
-                            <span>${count} Review${count !== 1 ? 's' : ''
+                            <span>${count} Review${
+								count !== 1 ? 's' : ''
 							}</span>
                         </div>`;
 					}
@@ -54,8 +56,9 @@ jQuery(document).ready(function ($) {
 					html += `</div></div><ul>`;
 
 					for (let p in data.averages) {
-						html += `<li><span>${Math.round(data.averages[p] * 10) / 10
-							}</span> ${p}</li>`;
+						html += `<li><span>${
+							Math.round(data.averages[p] * 10) / 10
+						}</span> ${p}</li>`;
 					}
 
 					html += `</ul></div>`;
@@ -99,11 +102,12 @@ jQuery(document).ready(function ($) {
 		if (!title || !content) {
 			$('#commentform').prepend(`
             <div class="woocommerce-error review-message">
-                ${!title && !content
-					? 'Please enter both the Review Title and Review Content.'
-					: !title
-						? 'Please enter a Review Title.'
-						: 'Please enter your Review Content.'
+                ${
+					!title && !content
+						? 'Please enter both the Review Title and Review Content.'
+						: !title
+							? 'Please enter a Review Title.'
+							: 'Please enter your Review Content.'
 				}
             </div>
         `);

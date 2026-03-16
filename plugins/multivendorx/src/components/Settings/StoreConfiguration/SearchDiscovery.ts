@@ -38,7 +38,8 @@ export default {
 					value: 'rank_math',
 					requiredPlugin: 'seo-by-rank-math/rank-math.php',
 					pluginName: 'Rank Math SEO', // human-friendly name
-					pluginLink: 'https://wordpress.org/plugins/seo-by-rank-math/',
+					pluginLink:
+						'https://wordpress.org/plugins/seo-by-rank-math/',
 				},
 			],
 			moduleEnabled: 'search-discovery',

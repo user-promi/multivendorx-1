@@ -9,7 +9,6 @@ import {
 	Mapbox,
 	Notice,
 	SelectInputUI,
-	
 	useModules,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
@@ -309,7 +308,7 @@ const BusinessAddress = () => {
 		<>
 			<Notice
 				message={successMsg}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 

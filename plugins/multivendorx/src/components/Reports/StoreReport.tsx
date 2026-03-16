@@ -80,14 +80,17 @@ const StoreReport: React.FC = () => {
 						id: 'pending',
 						label: __('Pending Stores', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-pending']) || 0,
+							Number(response.headers['x-wp-status-pending']) ||
+							0,
 						icon: 'pending yellow',
 					},
 					{
 						id: 'deactivated',
 						label: __('Deactivated Stores', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-deactivated']) || 0,
+							Number(
+								response.headers['x-wp-status-deactivated']
+							) || 0,
 						icon: 'close-delete red',
 					},
 				]);
@@ -149,19 +152,24 @@ const StoreReport: React.FC = () => {
 						value: 'under_review',
 						label: __('Under Review', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-under-review']) || 0,
+							Number(
+								response.headers['x-wp-status-under-review']
+							) || 0,
 					},
 					{
 						value: 'suspended',
 						label: __('Suspended', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-suspended']) || 0,
+							Number(response.headers['x-wp-status-suspended']) ||
+							0,
 					},
 					{
 						value: 'deactivated',
 						label: __('Deactivated', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-deactivated']) || 0,
+							Number(
+								response.headers['x-wp-status-deactivated']
+							) || 0,
 					},
 				]);
 
@@ -213,7 +221,7 @@ const StoreReport: React.FC = () => {
 			render: (row: any) =>
 				formatCurrency(
 					Number(row.commission?.total_order_amount || 0) -
-					Number(row.commission?.commission_total || 0)
+						Number(row.commission?.commission_total || 0)
 				),
 		},
 	};
@@ -237,7 +245,9 @@ const StoreReport: React.FC = () => {
 						text: __(item.label, 'multivendorx'),
 					}))}
 				/>
-				<Card title={__('Top revenue generating stores', 'multivendorx')}>
+				<Card
+					title={__('Top revenue generating stores', 'multivendorx')}
+				>
 					<ResponsiveContainer width="100%" height={300}>
 						<PieChart>
 							{pieData.length > 0 && (
@@ -249,7 +259,9 @@ const StoreReport: React.FC = () => {
 									dataKey="value"
 								/>
 							)}
-							<Tooltip formatter={(value) => formatCurrency(value)} />
+							<Tooltip
+								formatter={(value) => formatCurrency(value)}
+							/>
 							<Legend />
 						</PieChart>
 					</ResponsiveContainer>

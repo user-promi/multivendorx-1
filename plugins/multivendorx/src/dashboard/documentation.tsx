@@ -143,7 +143,7 @@ const Documentation: React.FC = () => {
 												)}
 											</a>
 										</>
-									)
+									),
 								},
 							]}
 						/>
@@ -183,7 +183,9 @@ const Documentation: React.FC = () => {
 						<div className="heading">{activeDocument.title}</div>
 						<div
 							className="des"
-							dangerouslySetInnerHTML={{ __html: activeDocument.content || '' }}
+							dangerouslySetInnerHTML={{
+								__html: activeDocument.content || '',
+							}}
 						/>
 					</div>
 				</PopupUI>

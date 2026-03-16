@@ -34,13 +34,16 @@ const AddOrder = () => {
 	const [selectedPayment, setSelectedPayment] = useState(null);
 	const [addedProducts, setAddedProducts] = useState([]);
 	const [showAddressEdit, setShowAddressEdit] = useState(false);
-	const [showShippingAddressEdit, setShowShippingAddressEdit] = useState(false);
+	const [showShippingAddressEdit, setShowShippingAddressEdit] =
+		useState(false);
 	const [showCreateCustomer, setShowCreateCustomer] = useState(false);
 	const [orderNote, SetOrderNote] = useState('');
 	const addressEditRef = useRef(null);
 	const shippingAddressEditRef = useRef(null);
 	const [shippingLines, setShippingLines] = useState([]);
-	const [availableShippingMethods, setAvailableShippingMethods] = useState([]);
+	const [availableShippingMethods, setAvailableShippingMethods] = useState(
+		[]
+	);
 	const navigate = useNavigate();
 
 	useOutsideClick(addressEditRef, () => {
@@ -274,8 +277,8 @@ const AddOrder = () => {
 				{
 					key: 'multivendorx_store_id',
 					value: appLocalizer.store_id,
-				}
-			]
+				},
+			],
 		};
 
 		axios
@@ -376,16 +379,16 @@ const AddOrder = () => {
 
 	// Define headers for the order items table
 	const tableRows = [
-		...addedProducts.map(product => ({
+		...addedProducts.map((product) => ({
 			...product,
 			rowType: 'product',
-			id: `product-${product.id}`
+			id: `product-${product.id}`,
 		})),
-		...shippingLines.map(ship => ({
+		...shippingLines.map((ship) => ({
 			...ship,
 			rowType: 'shipping',
-			id: `shipping-${ship.id}`
-		}))
+			id: `shipping-${ship.id}`,
+		})),
 	];
 
 	// Single table headers that handle both products and shipping
@@ -420,7 +423,9 @@ const AddOrder = () => {
 								<i className="adminfont-cart green"></i>
 							</div>
 							<div className="detail">
-								<div className="name">{__('Shipping', 'multivendorx')}</div>
+								<div className="name">
+									{__('Shipping', 'multivendorx')}
+								</div>
 								<SelectInputUI
 									name="shipping_method"
 									type="single-select"
@@ -429,18 +434,20 @@ const AddOrder = () => {
 										(o) => o.value === row.method_id
 									)}
 									onChange={(value) => {
-										const selectedOption = availableShippingMethods.find(
-											(o) => o.value === value
-										);
-										const method_title = selectedOption?.label || '';
+										const selectedOption =
+											availableShippingMethods.find(
+												(o) => o.value === value
+											);
+										const method_title =
+											selectedOption?.label || '';
 										setShippingLines((prev) =>
 											prev.map((s) =>
 												s.id === row.id
 													? {
-														...s,
-														method_id: value,
-														name: method_title,
-													}
+															...s,
+															method_id: value,
+															name: method_title,
+														}
 													: s
 											)
 										);
@@ -517,11 +524,11 @@ const AddOrder = () => {
 					onClick: (row) => {
 						if (row.rowType === 'product') {
 							setAddedProducts((prev) =>
-								prev.filter(p => p.id !== row.id)
+								prev.filter((p) => p.id !== row.id)
 							);
 						} else {
 							setShippingLines((prev) =>
-								prev.filter(s => s.id !== row.id)
+								prev.filter((s) => s.id !== row.id)
 							);
 						}
 					},
@@ -561,7 +568,7 @@ const AddOrder = () => {
 		},
 	};
 
-	// billing & shipping common card 
+	// billing & shipping common card
 	const renderAddressCard = (
 		title: string,
 		address: any,
@@ -575,15 +582,14 @@ const AddOrder = () => {
 		return (
 			<Card
 				title={__(title, 'multivendorx')}
-				iconName={hasCustomer && !isEditMode ? "edit" : ""}
+				iconName={hasCustomer && !isEditMode ? 'edit' : ''}
 				onIconClick={() => setIsEditMode(true)}
 			>
 				{!hasCustomer && (
 					<span>
 						{type === 'billing'
 							? __('No billing address found', 'multivendorx')
-							: __('Please Select a customer', 'multivendorx')
-						}
+							: __('Please Select a customer', 'multivendorx')}
 					</span>
 				)}
 
@@ -595,7 +601,10 @@ const AddOrder = () => {
 						<FormGroup row label={__('City', 'multivendorx')}>
 							{address.city}
 						</FormGroup>
-						<FormGroup row label={__('Postcode / ZIP', 'multivendorx')}>
+						<FormGroup
+							row
+							label={__('Postcode / ZIP', 'multivendorx')}
+						>
 							{address.postcode}
 						</FormGroup>
 						<FormGroup row label={__('State', 'multivendorx')}>
@@ -759,7 +768,8 @@ const AddOrder = () => {
 			<Container>
 				<Column grid={8}>
 					<Card>
-						{(addedProducts.length > 0 || shippingLines.length > 0) && (
+						{(addedProducts.length > 0 ||
+							shippingLines.length > 0) && (
 							<>
 								<TableCard
 									headers={tableHeaders}
@@ -775,13 +785,16 @@ const AddOrder = () => {
 									</div>
 
 									<div className="row">
-										<span>{__('Tax:', 'multivendorx')}</span>
+										<span>
+											{__('Tax:', 'multivendorx')}
+										</span>
 										<span>
 											$
 											{addedProducts
 												.reduce(
 													(sum, p) =>
-														sum + (p.tax_amount || 0),
+														sum +
+														(p.tax_amount || 0),
 													0
 												)
 												.toFixed(2)}
@@ -792,14 +805,18 @@ const AddOrder = () => {
 										<span>
 											{__('Shipping:', 'multivendorx')}
 										</span>
-										<span>{formatCurrency(totalShipping)}</span>
+										<span>
+											{formatCurrency(totalShipping)}
+										</span>
 									</div>
 
 									<div className="row total">
 										<strong>
 											{__('Grand Total:', 'multivendorx')}
 										</strong>
-										<strong>${grandTotal.toFixed(2)}</strong>
+										<strong>
+											${grandTotal.toFixed(2)}
+										</strong>
 									</div>
 								</div>
 							</>
@@ -811,8 +828,7 @@ const AddOrder = () => {
 									{
 										icon: 'plus',
 										text: 'Add Product',
-										onClick: () =>
-											setShowAddProduct(true),
+										onClick: () => setShowAddProduct(true),
 									},
 									{
 										icon: 'plus',
@@ -839,10 +855,7 @@ const AddOrder = () => {
 							{showAddProduct && (
 								<FormGroup
 									row
-									label={__(
-										'Select Product',
-										'multivendorx'
-									)}
+									label={__('Select Product', 'multivendorx')}
 								>
 									<SelectInputUI
 										name="product_select"
@@ -866,8 +879,7 @@ const AddOrder = () => {
 											}
 
 											const prod = allProducts.find(
-												(p) =>
-													p.id == selected
+												(p) => p.id == selected
 											);
 											if (prod) {
 												setAddedProducts((prev) => [
@@ -906,9 +918,7 @@ const AddOrder = () => {
 													icon: 'plus',
 													onClick: () => {
 														applyTaxToOrder();
-														setShowAddTax(
-															false
-														);
+														setShowAddTax(false);
 													},
 												},
 											]}
@@ -929,7 +939,8 @@ const AddOrder = () => {
 				<Column grid={4}>
 					<Card title={__('Payment Method', 'multivendorx')}>
 						<FormGroupWrapper>
-							<FormGroup row
+							<FormGroup
+								row
 								label={__('Payment Method', 'multivendorx')}
 								htmlFor="payment-method"
 							>
@@ -953,7 +964,8 @@ const AddOrder = () => {
 						{!selectedCustomer && (
 							<>
 								<FormGroupWrapper>
-									<FormGroup row
+									<FormGroup
+										row
 										label={__(
 											'Select Customer',
 											'multivendorx'
@@ -970,9 +982,15 @@ const AddOrder = () => {
 												);
 												setSelectedCustomer(customer);
 												if (customer) {
-													setShippingAddress(customer.shipping);
-													setBillingAddress(customer.billing);
-													setShowCreateCustomer(false);
+													setShippingAddress(
+														customer.shipping
+													);
+													setBillingAddress(
+														customer.billing
+													);
+													setShowCreateCustomer(
+														false
+													);
 												}
 											}}
 										/>
@@ -996,38 +1014,60 @@ const AddOrder = () => {
 						)}
 						{selectedCustomer && (
 							<InfoItem
-								title={selectedCustomer ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}` : __('Guest Customer', 'multivendorx')}
+								title={
+									selectedCustomer
+										? `${selectedCustomer.first_name} ${selectedCustomer.last_name}`
+										: __('Guest Customer', 'multivendorx')
+								}
 								avatar={{
-									text: selectedCustomer ? selectedCustomer.first_name[0] : 'C',
-									iconClass: 'avatar-text'
+									text: selectedCustomer
+										? selectedCustomer.first_name[0]
+										: 'C',
+									iconClass: 'avatar-text',
 								}}
-								descriptions={selectedCustomer ? [
-									{
-										label: __('Customer ID', 'multivendorx'),
-										value: `#${selectedCustomer.id}`,
-										boldLabel: true
-									},
-									{
-										value: (
-											<>
-												<i className="adminfont-mail" /> {selectedCustomer.email}
-											</>
-										)
-									},
-									{
-										value: (
-											<>
-												<i className="adminfont-phone" /> {selectedCustomer.billing?.phone}
-											</>
-										)
-									}
-								] : []}
+								descriptions={
+									selectedCustomer
+										? [
+												{
+													label: __(
+														'Customer ID',
+														'multivendorx'
+													),
+													value: `#${selectedCustomer.id}`,
+													boldLabel: true,
+												},
+												{
+													value: (
+														<>
+															<i className="adminfont-mail" />{' '}
+															{
+																selectedCustomer.email
+															}
+														</>
+													),
+												},
+												{
+													value: (
+														<>
+															<i className="adminfont-phone" />{' '}
+															{
+																selectedCustomer
+																	.billing
+																	?.phone
+															}
+														</>
+													),
+												},
+											]
+										: []
+								}
 								badges={[
 									{
 										text: __('Edit', 'multivendorx'),
 										className: 'blue',
-										onClick: () => setSelectedCustomer(null)
-									}
+										onClick: () =>
+											setSelectedCustomer(null),
+									},
 								]}
 							/>
 						)}
@@ -1076,8 +1116,15 @@ const AddOrder = () => {
 								>
 									<EmailsInput
 										mode="single"
-										value={newCustomer.email ? [newCustomer.email] : []}
-										placeholder={__('Enter email...', 'multivendorx')}
+										value={
+											newCustomer.email
+												? [newCustomer.email]
+												: []
+										}
+										placeholder={__(
+											'Enter email...',
+											'multivendorx'
+										)}
 										onChange={(emails) => {
 											setNewCustomer({
 												...newCustomer,
@@ -1142,9 +1189,7 @@ const AddOrder = () => {
 									'Enter order note...',
 									'multivendorx'
 								)}
-								onChange={(value) =>
-									SetOrderNote(value)
-								}
+								onChange={(value) => SetOrderNote(value)}
 							/>
 						</FormGroup>
 					</Card>

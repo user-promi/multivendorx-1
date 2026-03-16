@@ -208,7 +208,7 @@ const Commission: React.FC = () => {
 						count:
 							Number(
 								response.headers[
-								'x-wp-status-partially-refunded'
+									'x-wp-status-partially-refunded'
 								]
 							) || 0,
 					},

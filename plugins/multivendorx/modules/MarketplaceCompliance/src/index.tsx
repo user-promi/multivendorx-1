@@ -7,7 +7,7 @@ const reportAbuseState = {
 };
 
 // function to update count
-const setReportAbuseCount = (count:number) => {
+const setReportAbuseCount = (count: number) => {
 	reportAbuseState.count = count;
 };
 
@@ -15,16 +15,24 @@ addFilter(
 	'multivendorx_approval_queue_tab',
 	'multivendorx/report-abuse-tab',
 	(settingContent) => {
-
 		settingContent.push({
 			type: 'file',
 			module: 'marketplace-compliance',
 			content: {
 				id: 'report-abuse',
 				headerTitle: __('Flagged', 'multivendorx'),
-				headerDescription: __('Product reported for assessment', 'multivendorx'),
-				settingTitle: __('Flagged products awaiting action', 'multivendorx'),
-				settingSubTitle: __('Review reports and maintain quality.', 'multivendorx'),
+				headerDescription: __(
+					'Product reported for assessment',
+					'multivendorx'
+				),
+				settingTitle: __(
+					'Flagged products awaiting action',
+					'multivendorx'
+				),
+				settingSubTitle: __(
+					'Review reports and maintain quality.',
+					'multivendorx'
+				),
 				headerIcon: 'product indigo',
 				count: reportAbuseState.count,
 			},

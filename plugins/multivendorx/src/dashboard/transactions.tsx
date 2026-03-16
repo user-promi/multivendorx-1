@@ -45,7 +45,7 @@ const Transactions: React.FC = () => {
 			label: __('Transaction Type', 'multivendorx'),
 			render: (row) =>
 				row.transaction_type?.toLowerCase() === 'commission' &&
-					row.commission_id ? (
+				row.commission_id ? (
 					<span
 						className="link-item"
 						onClick={() => {

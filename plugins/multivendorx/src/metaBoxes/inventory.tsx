@@ -25,7 +25,6 @@ const Inventory = ({ product, setProduct, handleChange }) => {
 
 	return (
 		<Card
-			
 			title={__('Inventory', 'multivendorx')}
 			action={
 				<>
@@ -50,16 +49,11 @@ const Inventory = ({ product, setProduct, handleChange }) => {
 			}
 		>
 			<FormGroupWrapper>
-				<FormGroup
-					cols={2}
-					label={__('SKU', 'multivendorx')}
-				>
+				<FormGroup cols={2} label={__('SKU', 'multivendorx')}>
 					<BasicInputUI
 						name="sku"
 						value={product.sku}
-						onChange={(value) =>
-							handleChange('sku', value)
-						}
+						onChange={(value) => handleChange('sku', value)}
 					/>
 				</FormGroup>
 				{!product.manage_stock && (
@@ -72,10 +66,7 @@ const Inventory = ({ product, setProduct, handleChange }) => {
 							options={stockStatusOptions}
 							value={product.stock_status}
 							onChange={(selected) =>
-								handleChange(
-									'stock_status',
-									selected.value
-								)
+								handleChange('stock_status', selected.value)
 							}
 						/>
 					</FormGroup>
@@ -96,38 +87,26 @@ const Inventory = ({ product, setProduct, handleChange }) => {
 						</FormGroup>
 						<FormGroup
 							cols={2}
-							label={__(
-								'Allow backorders?',
-								'multivendorx'
-							)}
+							label={__('Allow backorders?', 'multivendorx')}
 						>
 							<SelectInputUI
 								name="backorders"
 								options={backorderOptions}
 								value={product.backorders}
 								onChange={(selected) =>
-									handleChange(
-										'backorders',
-										selected.value
-									)
+									handleChange('backorders', selected.value)
 								}
 							/>
 						</FormGroup>
 						<FormGroup
 							cols={2}
-							label={__(
-								'Low stock threshold',
-								'multivendorx'
-							)}
+							label={__('Low stock threshold', 'multivendorx')}
 						>
 							<BasicInputUI
 								name="low_stock_amount"
 								value={product.low_stock_amount}
 								onChange={(value) =>
-									handleChange(
-										'low_stock_amount',
-										value
-									)
+									handleChange('low_stock_amount', value)
 								}
 							/>
 						</FormGroup>
@@ -145,7 +124,11 @@ addFilter(
 		return (
 			<>
 				{content}
-				<Inventory product={product} setProduct={setProduct} handleChange={handleChange} />
+				<Inventory
+					product={product}
+					setProduct={setProduct}
+					handleChange={handleChange}
+				/>
 			</>
 		);
 	},

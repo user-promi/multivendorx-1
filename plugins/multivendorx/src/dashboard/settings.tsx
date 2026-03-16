@@ -76,7 +76,7 @@ const settings: React.FC<SettingsProps> = () => {
 		if (!currentTab) {
 			return null;
 		}
-		
+
 		const settingModal = getSettingById(settingsArray as any, currentTab);
 
 		// Ensure settings context is initialized

@@ -39,7 +39,7 @@ const paymentOptions = Object.values(filteredStorePayment).map((p) => ({
 // Generate all payment fields for all providers with conditions
 const generateAllPaymentFields = () => {
 	const allFields: PaymentField[] = [];
-	
+
 	Object.values(filteredStorePayment).forEach((provider) => {
 		if (provider.fields && Array.isArray(provider.fields)) {
 			const providerFields = provider.fields.map((field) => ({
@@ -53,7 +53,7 @@ const generateAllPaymentFields = () => {
 			allFields.push(...providerFields);
 		}
 	});
-	
+
 	return allFields;
 };
 

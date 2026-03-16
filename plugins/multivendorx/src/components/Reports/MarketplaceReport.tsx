@@ -41,7 +41,7 @@ type MarketplaceReportProps = {
 	COLORS?: string[];
 };
 
-const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
+const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 	const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
 	const [earningSummary, setEarningSummary] = useState<any[]>([]);
 	const [pieData, setPieData] = useState<any>([]);
@@ -234,8 +234,14 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 				);
 
 				const pieChartData = [
-					{ name: __('Admin Net Earning', 'multivendorx'), value: adminEarning },
-					{ name: __('Store Net Earning', 'multivendorx'), value: storeEarning },
+					{
+						name: __('Admin Net Earning', 'multivendorx'),
+						value: adminEarning,
+					},
+					{
+						name: __('Store Net Earning', 'multivendorx'),
+						value: storeEarning,
+					},
 					{
 						name: __('Commission Refunded', 'multivendorx'),
 						value: data.commission_refunded,
@@ -472,8 +478,8 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 														'percent'
 														? `${coupon.amount}%`
 														: formatCurrency(
-															coupon.amount
-														)
+																coupon.amount
+															)
 													: '-'}
 											</span>
 										</div>
@@ -589,7 +595,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({ }) => {
 												),
 												value: formatCurrency(
 													store.commission_refunded ||
-													0
+														0
 												),
 											},
 										]}

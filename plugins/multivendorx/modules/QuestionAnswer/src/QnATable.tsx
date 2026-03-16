@@ -283,7 +283,10 @@ const Qna: React.FC = () => {
 					title={__('Delete Question', 'multivendorx')}
 					confirmMessage={
 						selectedQn
-							? __('Are you sure you want to delete Question?', 'multivendorx')
+							? __(
+									'Are you sure you want to delete Question?',
+									'multivendorx'
+								)
 							: ''
 					}
 					confirmYesText={__('Delete', 'multivendorx')}
@@ -387,9 +390,9 @@ const Qna: React.FC = () => {
 									setSelectedQna((prev) =>
 										prev
 											? {
-												...prev,
-												question_visibility: value,
-											}
+													...prev,
+													question_visibility: value,
+												}
 											: prev
 									)
 								}

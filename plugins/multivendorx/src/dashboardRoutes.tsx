@@ -12,13 +12,17 @@ import Dashboard from './storeDashboard';
  */
 const getPlainPermalinkInitialPath = (): string => {
 	const params = new URLSearchParams(window.location.search);
-	const segment    = params.get('segment')    || 'dashboard';
-	const element    = params.get('element')    || '';
+	const segment = params.get('segment') || 'dashboard';
+	const element = params.get('element') || '';
 	const context_id = params.get('context_id') || '';
 
 	let path = `/${segment}`;
-	if (element)    path += `/${element}`;
-	if (context_id) path += `/${context_id}`;
+	if (element) {
+		path += `/${element}`;
+	}
+	if (context_id) {
+		path += `/${context_id}`;
+	}
 	return path;
 };
 
@@ -33,9 +37,9 @@ const AppRoutes = () => (
 			<Route path="/" element={<Navigate to="/dashboard" replace />} />
 
 			{/* All tab variations */}
-			<Route path="/:tab"                          element={<Dashboard />} />
-			<Route path="/:tab/:element"                 element={<Dashboard />} />
-			<Route path="/:tab/:element/:context_id"     element={<Dashboard />} />
+			<Route path="/:tab" element={<Dashboard />} />
+			<Route path="/:tab/:element" element={<Dashboard />} />
+			<Route path="/:tab/:element/:context_id" element={<Dashboard />} />
 
 			{/* Catch-all */}
 			<Route path="*" element={<Navigate to="/dashboard" replace />} />

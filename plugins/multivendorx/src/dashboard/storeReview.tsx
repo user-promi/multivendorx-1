@@ -57,10 +57,7 @@ const StoreReview: React.FC = () => {
 		try {
 			await axios
 				.put(
-					getApiLink(
-						appLocalizer,
-						`review/${selectedReview.id}`
-					),
+					getApiLink(appLocalizer, `review/${selectedReview.id}`),
 					{
 						reply: replyText,
 						status: selectedReview.status,
@@ -195,19 +192,22 @@ const StoreReview: React.FC = () => {
 						value: 'approved',
 						label: __('Approved', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-approved']) || 0,
+							Number(response.headers['x-wp-status-approved']) ||
+							0,
 					},
 					{
 						value: 'pending',
 						label: __('Pending', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-pending']) || 0,
+							Number(response.headers['x-wp-status-pending']) ||
+							0,
 					},
 					{
 						value: 'rejected',
 						label: __('Rejected', 'multivendorx'),
 						count:
-							Number(response.headers['x-wp-status-rejected']) || 0,
+							Number(response.headers['x-wp-status-rejected']) ||
+							0,
 					},
 				]);
 
@@ -295,7 +295,7 @@ const StoreReview: React.FC = () => {
 												...Array(
 													Math.round(
 														selectedReview.overall_rating ||
-														0
+															0
 													)
 												),
 											].map((_, i) => (
@@ -308,10 +308,10 @@ const StoreReview: React.FC = () => {
 											{[
 												...Array(
 													5 -
-													Math.round(
-														selectedReview.overall_rating ||
-														0
-													)
+														Math.round(
+															selectedReview.overall_rating ||
+																0
+														)
 												),
 											].map((_, i) => (
 												<i

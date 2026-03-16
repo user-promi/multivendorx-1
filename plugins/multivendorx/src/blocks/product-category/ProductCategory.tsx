@@ -40,27 +40,25 @@ const ProductCategory: React.FC<{}> = () => {
 
 	return (
 		<>
-		<h3>{__('Product Categories', 'multivendorx')}</h3>
-		<ul className="wc-block-product-categories-list">
-			{categories.map((category) => (
-				<li
-					key={category.id}
-					className="wc-block-product-categories-list-item"
-				>
-					<a
-						href={`/product-category/${category.slug}`}
+			<h3>{__('Product Categories', 'multivendorx')}</h3>
+			<ul className="wc-block-product-categories-list">
+				{categories.map((category) => (
+					<li
+						key={category.id}
+						className="wc-block-product-categories-list-item"
 					>
-						<span className="wc-block-product-categories-list-item__name">
-							{category.name}
-						</span>
-					</a>
+						<a href={`/product-category/${category.slug}`}>
+							<span className="wc-block-product-categories-list-item__name">
+								{category.name}
+							</span>
+						</a>
 
-					<span className="wc-block-product-categories-list-item-count">
-						({category.count})
-					</span>
-				</li>
-			))}
-		</ul>
+						<span className="wc-block-product-categories-list-item-count">
+							({category.count})
+						</span>
+					</li>
+				))}
+			</ul>
 		</>
 	);
 };

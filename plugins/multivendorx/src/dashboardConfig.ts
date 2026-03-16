@@ -34,8 +34,5 @@ const BASE_DASHBOARD_ROUTES: DashboardRouteConfig[] = [
 ];
 
 export const getDashboardRoutes = (): DashboardRouteConfig[] => {
-	return applyFilters(
-		'multivendorx_dashboard_routes',
-		BASE_DASHBOARD_ROUTES
-	);
+	return applyFilters('multivendorx_dashboard_routes', BASE_DASHBOARD_ROUTES);
 };

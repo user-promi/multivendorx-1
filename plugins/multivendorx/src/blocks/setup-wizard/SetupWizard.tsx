@@ -73,7 +73,10 @@ const SetupWizard: React.FC = () => {
 						},
 						{
 							key: 'subscription',
-							label: __('Subscription marketplace', 'multivendorx'),
+							label: __(
+								'Subscription marketplace',
+								'multivendorx'
+							),
 							value: 'subscription',
 						},
 						{
@@ -96,16 +99,36 @@ const SetupWizard: React.FC = () => {
 						'multivendorx'
 					),
 					options: [
-						{ key: 'simple', label: __('Simple', 'multivendorx'), value: 'simple' },
-						{ key: 'variable', label: __('Variable', 'multivendorx'), value: 'variable' },
-						{ key: 'booking', label: __('Booking', 'multivendorx'), value: 'booking' },
+						{
+							key: 'simple',
+							label: __('Simple', 'multivendorx'),
+							value: 'simple',
+						},
+						{
+							key: 'variable',
+							label: __('Variable', 'multivendorx'),
+							value: 'variable',
+						},
+						{
+							key: 'booking',
+							label: __('Booking', 'multivendorx'),
+							value: 'booking',
+						},
 						{
 							key: 'subscription',
 							label: __('Subscription', 'multivendorx'),
 							value: 'subscription',
 						},
-						{ key: 'rental', label: __('Rental', 'multivendorx'), value: 'rental' },
-						{ key: 'auction', label: __('Auction', 'multivendorx'), value: 'auction' },
+						{
+							key: 'rental',
+							label: __('Rental', 'multivendorx'),
+							value: 'rental',
+						},
+						{
+							key: 'auction',
+							label: __('Auction', 'multivendorx'),
+							value: 'auction',
+						},
 						{
 							key: 'accommodation',
 							label: __('Accommodation', 'multivendorx'),
@@ -213,10 +236,7 @@ const SetupWizard: React.FC = () => {
 			id: 'store_setup',
 			label: __('Configure Your Store', 'multivendorx'),
 			icon: 'storefront',
-			desc: __(
-				'How stores sell on your marketplace.',
-				'multivendorx'
-			),
+			desc: __('How stores sell on your marketplace.', 'multivendorx'),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -225,10 +245,7 @@ const SetupWizard: React.FC = () => {
 					key: 'approve_store',
 					type: 'choice-toggle',
 
-					label: __(
-						'Store registration approval',
-						'multivendorx'
-					),
+					label: __('Store registration approval', 'multivendorx'),
 
 					options: [
 						{
@@ -278,10 +295,7 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'commission_type',
 					type: 'choice-toggle',
-					label: __(
-						'How commission is calculated',
-						'multivendorx'
-					),
+					label: __('How commission is calculated', 'multivendorx'),
 					settingDescription: __(
 						'Choose how marketplace commission is applied.',
 						'multivendorx'
@@ -392,10 +406,7 @@ const SetupWizard: React.FC = () => {
 		},
 		{
 			id: 'more_settings',
-			label: __(
-				'Want to configure more settings?',
-				'multivendorx'
-			),
+			label: __('Want to configure more settings?', 'multivendorx'),
 			icon: 'storefront',
 			desc: __(
 				"You're all set with the basics! Use the quick links below to fine-tune your marketplace now — or come back later anytime.",
@@ -414,7 +425,10 @@ const SetupWizard: React.FC = () => {
 						'multivendorx'
 					),
 					onClick: () => {
-						window.open(`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`, '_blank');
+						window.open(
+							`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`,
+							'_blank'
+						);
 					},
 				},
 				// {
@@ -445,7 +459,7 @@ const SetupWizard: React.FC = () => {
 					],
 				},
 			],
-		}
+		},
 	];
 
 	const updateSetting = (key: string, data: any) => {
@@ -480,7 +494,6 @@ const SetupWizard: React.FC = () => {
 				isWizardMode={true}
 				canAccess={true}
 			/>
-
 		</div>
 	);
 };

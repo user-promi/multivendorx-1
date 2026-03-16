@@ -84,7 +84,10 @@ const PendingDeactivateRequests: React.FC<{}> = () => {
 				setRows(stores);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
 				if (firstLoadRef.current) {
-					setSession('deactivateCount', Number(response.headers['x-wp-total']) || 0);
+					setSession(
+						'deactivateCount',
+						Number(response.headers['x-wp-total']) || 0
+					);
 					firstLoadRef.current = false;
 				}
 				setIsLoading(false);

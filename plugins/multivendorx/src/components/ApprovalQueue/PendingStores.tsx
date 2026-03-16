@@ -150,7 +150,8 @@ const PendingStores: React.FC<{}> = () => {
 				setRowIds(ids);
 
 				setRows(items);
-				const count = Number(response.headers['x-wp-status-pending']) || 0;
+				const count =
+					Number(response.headers['x-wp-status-pending']) || 0;
 				setTotalRows(count);
 				if (firstLoadRef.current) {
 					setSession('storeCount', count);

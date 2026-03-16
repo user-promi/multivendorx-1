@@ -2,12 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import {
-	getApiLink,
-	ItemListUI,
-	NavigatorHeader,
-	TableCard,
-} from 'zyra';
+import { getApiLink, ItemListUI, NavigatorHeader, TableCard } from 'zyra';
 
 import ViewCommission from './viewCommission';
 import { downloadCSV, formatLocalDate } from '../services/commonFunction';
@@ -162,7 +157,7 @@ const StoreCommission: React.FC = () => {
 						count:
 							Number(
 								response.headers[
-								'x-wp-status-partially-refunded'
+									'x-wp-status-partially-refunded'
 								]
 							) || 0,
 					},
@@ -297,8 +292,14 @@ const StoreCommission: React.FC = () => {
 				search={{
 					placeholder: __('Search...', 'multivendorx'),
 					options: [
-						{ label: __('Commission Id', 'multivendorx'), value: 'commission_id' },
-						{ label: __('Order Id', 'multivendorx'), value: 'order_id' },
+						{
+							label: __('Commission Id', 'multivendorx'),
+							value: 'commission_id',
+						},
+						{
+							label: __('Order Id', 'multivendorx'),
+							value: 'order_id',
+						},
 					],
 				}}
 				filters={filters}

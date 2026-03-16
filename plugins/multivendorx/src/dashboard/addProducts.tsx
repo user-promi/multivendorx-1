@@ -14,7 +14,7 @@ import {
 	TextAreaUI,
 	FileInputUI,
 	NavigatorHeader,
-	Notice
+	Notice,
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
@@ -69,9 +69,7 @@ const AddProduct = () => {
 		}
 	}, [productId]);
 
-	const defaultTypeOptions = [
-		{ label: 'Simple Product', value: 'simple' },
-	];
+	const defaultTypeOptions = [{ label: 'Simple Product', value: 'simple' }];
 
 	const typeOptions = applyFilters(
 		'multivendorx_product_type_options',
@@ -236,11 +234,7 @@ const AddProduct = () => {
 						</div>
 					</div>
 				))}
-			<Notice
-				type= 'error'
-				displayPosition='notice'
-				message= {errorMsg}
-			/>
+			<Notice type="error" displayPosition="notice" message={errorMsg} />
 			<NavigatorHeader
 				headerTitle={__('Add Product', 'multivendorx')}
 				headerDescription={__(
@@ -270,10 +264,9 @@ const AddProduct = () => {
 									type="single-select"
 									options={typeOptions}
 									value={product.type}
-									onChange={(selected) =>{
-										handleChange('type', selected)
-									}
-									}
+									onChange={(selected) => {
+										handleChange('type', selected);
+									}}
 								/>
 							</FormGroup>
 						</FormGroupWrapper>
@@ -436,10 +429,7 @@ const AddProduct = () => {
 				</Column>
 
 				<Column grid={6}>
-					<Card
-						
-						title={__('General information', 'multivendorx')}
-					>
+					<Card title={__('General information', 'multivendorx')}>
 						<FormGroupWrapper>
 							<FormGroup
 								label={__('Product name', 'multivendorx')}
@@ -494,7 +484,7 @@ const AddProduct = () => {
 					</Card>
 
 					{product?.type === 'simple' && (
-						<Card  title={__('Price', 'multivendorx')}>
+						<Card title={__('Price', 'multivendorx')}>
 							<FormGroupWrapper>
 								<FormGroup
 									cols={2}
@@ -531,7 +521,6 @@ const AddProduct = () => {
 						handleChange,
 						modules
 					)}
-
 				</Column>
 
 				<Column grid={3}>
@@ -586,10 +575,7 @@ const AddProduct = () => {
 						</Card>
 					)}
 
-					<Card
-						
-						title={__('Upload image', 'multivendorx')}
-					>
+					<Card title={__('Upload image', 'multivendorx')}>
 						<FormGroupWrapper>
 							<FormGroup
 								label={__('Features Image', 'multivendorx')}

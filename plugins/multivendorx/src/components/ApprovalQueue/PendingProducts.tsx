@@ -175,9 +175,9 @@ const PendingProducts: React.FC<{}> = () => {
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-							query.filter.created_at.startDate,
-							'start'
-						)
+								query.filter.created_at.startDate,
+								'start'
+							)
 						: undefined,
 
 					before: query.filter?.created_at?.endDate
@@ -197,7 +197,10 @@ const PendingProducts: React.FC<{}> = () => {
 				setRows(products);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
 				if (firstLoadRef.current) {
-					setSession('productCount', Number(response.headers['x-wp-total']) || 0);
+					setSession(
+						'productCount',
+						Number(response.headers['x-wp-total']) || 0
+					);
 					firstLoadRef.current = false;
 				}
 				setIsLoading(false);
@@ -273,9 +276,7 @@ const PendingProducts: React.FC<{}> = () => {
 						<TextAreaUI
 							name="reject_reason"
 							value={rejectReason}
-							onChange={(value: string) =>
-								setRejectReason(value)
-							}
+							onChange={(value: string) => setRejectReason(value)}
 							placeholder={__(
 								'Enter reason for rejecting this product...',
 								'multivendorx'

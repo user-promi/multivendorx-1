@@ -445,12 +445,13 @@ const ProductReport: React.FC = () => {
 										</div>
 										<div className="right">
 											<i
-												className={`adminfont-pagination-right-arrow ${openReviewedCards[
-													product.id
-												]
-													? 'rotate-90 transition-transform'
-													: ''
-													}`}
+												className={`adminfont-pagination-right-arrow ${
+													openReviewedCards[
+														product.id
+													]
+														? 'rotate-90 transition-transform'
+														: ''
+												}`}
 											></i>
 										</div>
 									</div>

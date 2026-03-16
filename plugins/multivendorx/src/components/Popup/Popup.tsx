@@ -158,15 +158,17 @@ const ShowProPopup: React.FC<PopupProps> = (props) => {
 		const pluginData =
 			typeof props.plugin === 'string'
 				? {
-					slug: props.plugin,
-					pluginName: props.plugin.split('/')[0],
-					pluginLink: `${appLocalizer.admin_url}plugins.php`,
-				}
+						slug: props.plugin,
+						pluginName: props.plugin.split('/')[0],
+						pluginLink: `${appLocalizer.admin_url}plugins.php`,
+					}
 				: {
-					slug: props.plugin.requiredPlugin,
-					pluginName: props.plugin.pluginName || props.plugin.key,
-					pluginLink: props.plugin.pluginLink || `${appLocalizer.admin_url}plugins.php`,
-				};
+						slug: props.plugin.requiredPlugin,
+						pluginName: props.plugin.pluginName || props.plugin.key,
+						pluginLink:
+							props.plugin.pluginLink ||
+							`${appLocalizer.admin_url}plugins.php`,
+					};
 
 		return (
 			<div className="popup-wrapper">
@@ -182,7 +184,10 @@ const ShowProPopup: React.FC<PopupProps> = (props) => {
 					</h2>
 					<p>
 						{sprintf(
-							__('This feature requires the "%s" plugin to be active.', 'multivendorx'),
+							__(
+								'This feature requires the "%s" plugin to be active.',
+								'multivendorx'
+							),
 							pluginData.pluginName
 						)}
 					</p>
@@ -193,7 +198,10 @@ const ShowProPopup: React.FC<PopupProps> = (props) => {
 								icon: 'eye',
 								text: __('Activate Plugin', 'multivendorx'),
 								onClick: () => {
-									window.open(pluginData.pluginLink, '_blank');
+									window.open(
+										pluginData.pluginLink,
+										'_blank'
+									);
 								},
 							},
 						]}

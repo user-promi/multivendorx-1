@@ -205,7 +205,7 @@ const EventRules: React.FC = () => {
 		setNewRecipientValue('');
 	};
 
-	const toggleChannel = (notifId: number, channel: string) => 
+	const toggleChannel = (notifId: number, channel: string) =>
 		updateNotification(notifId, (n) => ({
 			...n,
 			channels: { ...n.channels, [channel]: !n.channels[channel] },

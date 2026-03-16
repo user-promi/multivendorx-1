@@ -163,7 +163,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 		<>
 			<Notice
 				message={successMsg}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 			<Container>
@@ -173,15 +173,15 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 							<FormGroup
 								desc={
 									paymentOptions &&
-										paymentOptions.length === 0
+									paymentOptions.length === 0
 										? sprintf(
-											/* translators: %s: link to payment integration settings */
-											__(
-												'You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.',
-												'multivendorx'
-											),
-											'?page=multivendorx#&tab=settings&subtab=withdrawal-methods'
-										)
+												/* translators: %s: link to payment integration settings */
+												__(
+													'You haven’t enabled any payment methods yet. Configure payout options <a href="%s">from here</a> to allow stores to receive their earnings.',
+													'multivendorx'
+												),
+												'?page=multivendorx#&tab=settings&subtab=withdrawal-methods'
+											)
 										: ''
 								}
 							>
@@ -201,7 +201,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 								if (
 									bankDetails &&
 									formData.payment_method ==
-									'bank-transfer' &&
+										'bank-transfer' &&
 									!(
 										field.key === 'account_type' ||
 										bankDetails.includes(field.key)
@@ -239,13 +239,13 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 												options={
 													Array.isArray(field.options)
 														? field.options.map(
-															(opt) => ({
-																...opt,
-																value: String(
-																	opt.value
-																),
-															})
-														)
+																(opt) => ({
+																	...opt,
+																	value: String(
+																		opt.value
+																	),
+																})
+															)
 														: []
 												}
 												value={
@@ -275,13 +275,15 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 											placeholder={
 												field.placeholder
 													? __(
-														field.placeholder,
-														'multivendorx'
-													)
+															field.placeholder,
+															'multivendorx'
+														)
 													: ''
 											}
 											value={formData[field.key]}
-											onChange={(value) => handleChange(field.key, value)}
+											onChange={(value) =>
+												handleChange(field.key, value)
+											}
 										/>
 									</FormGroup>
 								);
@@ -295,7 +297,7 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 						title={__('Store-specific commission', 'multivendorx')}
 					>
 						<Notice
-							type='info'
+							type="info"
 							message={sprintf(
 								__(
 									'If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.',
@@ -319,7 +321,9 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 										postText: '+',
 									}}
 									value={formData.commission_fixed}
-									onChange={(value) => handleChange('commission_fixed', value)}
+									onChange={(value) =>
+										handleChange('commission_fixed', value)
+									}
 								/>
 							</FormGroup>
 							<FormGroup
@@ -331,7 +335,12 @@ const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
 									postText="%"
 									name="commission_percentage"
 									value={formData.commission_percentage}
-									onChange={(value) => handleChange('commission_percentage', value)}
+									onChange={(value) =>
+										handleChange(
+											'commission_percentage',
+											value
+										)
+									}
 								/>
 							</FormGroup>
 						</FormGroupWrapper>

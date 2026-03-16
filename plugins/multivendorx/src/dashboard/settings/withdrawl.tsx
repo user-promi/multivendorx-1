@@ -6,7 +6,6 @@ import {
 	FormGroup,
 	FormGroupWrapper,
 	Notice,
-	
 	ChoiceToggleUI,
 	getApiLink,
 } from 'zyra';
@@ -157,7 +156,7 @@ const Withdrawl: React.FC = () => {
 		<>
 			<Notice
 				message={successMsg}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 			{/* Payment Method Toggle */}

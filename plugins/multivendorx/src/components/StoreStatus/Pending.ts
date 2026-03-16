@@ -9,29 +9,35 @@ export default {
 	submitUrl: 'settings',
 	modal: [
 		{
-            key: 'paid_promotion_limit',
+			key: 'paid_promotion_limit',
 			label: __('Account capabilities', 'multivendorx'),
-            type: 'itemlist',
-            className: 'checklist',  
-            items: [  
-                {
-                    title: __('Can log in to dashboard', 'multivendorx'),
-                    icon: 'check adminfont-icon-yes',
-                },
-                {
-                    title: __('Cannot modify store settings', 'multivendorx'),
-                    icon: 'close adminfont-cross',
-                },
-                {
-                    title: __('Denied from adding or editing products', 'multivendorx'),
-                    icon: 'close adminfont-cross',
-                },
-                {
-                    title: __('Cannot process or fulfill orders', 'multivendorx'),
-                    icon: 'close adminfont-cross',
-                },
-            ],
-        },
+			type: 'itemlist',
+			className: 'checklist',
+			items: [
+				{
+					title: __('Can log in to dashboard', 'multivendorx'),
+					icon: 'check adminfont-icon-yes',
+				},
+				{
+					title: __('Cannot modify store settings', 'multivendorx'),
+					icon: 'close adminfont-cross',
+				},
+				{
+					title: __(
+						'Denied from adding or editing products',
+						'multivendorx'
+					),
+					icon: 'close adminfont-cross',
+				},
+				{
+					title: __(
+						'Cannot process or fulfill orders',
+						'multivendorx'
+					),
+					icon: 'close adminfont-cross',
+				},
+			],
+		},
 		{
 			key: 'pending_msg',
 			label: __('Message shown to pending stores', 'multivendorx'),

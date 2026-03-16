@@ -9,7 +9,6 @@ import {
 	FormGroupWrapper,
 	getApiLink,
 	Notice,
-	
 	ChoiceToggleUI,
 } from 'zyra';
 import ShippingRatesByCountry from './ShippingRatesByCountry';
@@ -90,7 +89,7 @@ const ShippingDelivery = () => {
 		<>
 			<Notice
 				message={successMsg}
-				displayPosition='float'
+				displayPosition="float"
 				title={__('Great!', 'multivendorx')}
 			/>
 			{/* Only show ChoiceToggle if shipping_methods has options */}

@@ -6,7 +6,9 @@ import { getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
 import { useRef } from '@wordpress/element';
 import { setSession } from '@/services/commonFunction';
 
-const PendingWithdrawal: React.FC<{ setCount?: (count: number) => void }> = ({ setCount }) => {
+const PendingWithdrawal: React.FC<{ setCount?: (count: number) => void }> = ({
+	setCount,
+}) => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -89,7 +91,10 @@ const PendingWithdrawal: React.FC<{ setCount?: (count: number) => void }> = ({ s
 				setRows(stores);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
 				if (firstLoadRef.current) {
-					setSession('couponCount', Number(response.headers['x-wp-total']) || 0);
+					setSession(
+						'couponCount',
+						Number(response.headers['x-wp-total']) || 0
+					);
 					firstLoadRef.current = false;
 				}
 				setIsLoading(false);

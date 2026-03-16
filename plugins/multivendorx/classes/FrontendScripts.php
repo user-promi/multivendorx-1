@@ -414,7 +414,7 @@ class FrontendScripts {
             $active_store = MultiVendorX()->active_store;
 
             $store    = new Store( $active_store );
-            $all_meta = array_merge($store->get_data(), $store->get_all_meta());
+            $all_meta = array_merge( $store->get_data(), $store->get_all_meta() );
 
             if ( empty( $active_store ) && ! empty( $store_ids ) ) {
                 $first_store = reset( $store_ids );
@@ -480,7 +480,7 @@ class FrontendScripts {
 							'admin_url'              => admin_url(),
 							'shop_url'               => MULTIVENDORX_PRO_SHOP_URL,
 							'admin_dashboard_url'    => admin_url( 'admin.php?page=multivendorx' ),
-                            'store_page_url'         => MultiVendorX()->store->storeutil->get_store_url(null, '', true),
+                            'store_page_url'         => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
 							'shipping_methods'       => apply_filters( 'multivendorx_store_shipping_options', array() ),
 							'order_meta'             => Utill::ORDER_META_SETTINGS,
                             'date_format'            => Utill::wp_to_react_date_format( get_option( 'date_format' ) ),
@@ -518,17 +518,17 @@ class FrontendScripts {
                             'tinymceApiKey'            => MultiVendorX()->setting->get_setting( 'tinymce_api_section' ),
                             'store_payment_settings'   => MultiVendorX()->payments->get_all_store_payment_settings(),
                             'store_id'                 => MultiVendorX()->active_store,
-                            'store_page_url'           => MultiVendorX()->store->storeutil->get_store_url(null, '', true),
+                            'store_page_url'           => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
                             'admin_url'                => admin_url(),
                             'edit_order_capability'    => current_user_can( 'edit_shop_orders' ),
                             'permalink_structure'      => get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ? true : false,
                             'all_verification_methods' => MultiVendorX()->setting->get_setting( 'all_verification_methods' ),
-                            'shipping_methods'       => apply_filters( 'multivendorx_store_shipping_options', array() ),
-                            'all_store_meta'         => $all_meta,
-                            'site_name'              => get_bloginfo( 'name' ),
-                            'current_user'           => MultiVendorX()->current_user,
-                            'current_user_image'     => get_avatar_url( MultiVendorX()->current_user_id, array( 'size' => 48 ) ),
-                            'user_logout_url'        => esc_url(
+                            'shipping_methods'         => apply_filters( 'multivendorx_store_shipping_options', array() ),
+                            'all_store_meta'           => $all_meta,
+                            'site_name'                => get_bloginfo( 'name' ),
+                            'current_user'             => MultiVendorX()->current_user,
+                            'current_user_image'       => get_avatar_url( MultiVendorX()->current_user_id, array( 'size' => 48 ) ),
+                            'user_logout_url'          => esc_url(
                                 wp_logout_url(
                                     get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) )
                                 )
@@ -588,8 +588,8 @@ class FrontendScripts {
                     'object_name'  => 'storesList',
                     'use_settings' => true,
                     'use_rest'     => true,
-                    'data'        => array(
-                        'store_page_url' => MultiVendorX()->store->storeutil->get_store_url(null, '', true),
+                    'data'         => array(
+                        'store_page_url' => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
                     ),
                 ),
                 'multivendorx-marketplace-products-editor-script' => array(

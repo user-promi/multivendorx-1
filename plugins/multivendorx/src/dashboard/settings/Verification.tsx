@@ -244,8 +244,9 @@ const Verification = () => {
 			{/* Status Messages */}
 			{statusMessage && (
 				<div
-					className={`alert alert-${statusMessage.type === 'success' ? 'success' : 'error'
-						}`}
+					className={`alert alert-${
+						statusMessage.type === 'success' ? 'success' : 'error'
+					}`}
 				>
 					{statusMessage.text}
 					<button

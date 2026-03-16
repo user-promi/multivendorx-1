@@ -44,21 +44,30 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 						<FormGroup row label={__('Date', 'multivendorx')}>
 							{transaction.date}
 						</FormGroup>
-						<FormGroup row label={__('Order Details', 'multivendorx')}>
+						<FormGroup
+							row
+							label={__('Order Details', 'multivendorx')}
+						>
 							{transaction.order_details ? (
-									<a
-										href={`/dashboard/orders/#view/${transaction.order_details}`}
-									>
-										#{transaction.order_details}
-									</a>
-								) : (
-									'-'
-								)}
+								<a
+									href={`/dashboard/orders/#view/${transaction.order_details}`}
+								>
+									#{transaction.order_details}
+								</a>
+							) : (
+								'-'
+							)}
 						</FormGroup>
-						<FormGroup row label={__('Transaction Type', 'multivendorx')}>
+						<FormGroup
+							row
+							label={__('Transaction Type', 'multivendorx')}
+						>
 							{transaction.transaction_type}
 						</FormGroup>
-						<FormGroup row label={__('Payment Mode', 'multivendorx')}>
+						<FormGroup
+							row
+							label={__('Payment Mode', 'multivendorx')}
+						>
 							{transaction.payment_mode}
 						</FormGroup>
 						<FormGroup row label={__('Credit', 'multivendorx')}>
@@ -72,21 +81,21 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 						</FormGroup>
 						<FormGroup row label={__('Status', 'multivendorx')}>
 							<span
-									className={`admin-badge ${
-										transaction.status === 'Completed'
-											? 'green'
-											: 'red'
-									}`}
-								>
-									{transaction.status
-										? transaction.status
-												.replace(/^wc-/, '') // remove prefix
-												.replace(/_/g, ' ') // underscores → spaces
-												.replace(/\b\w/g, (c) =>
-													c.toUpperCase()
-												) // capitalize
-										: ''}
-								</span>
+								className={`admin-badge ${
+									transaction.status === 'Completed'
+										? 'green'
+										: 'red'
+								}`}
+							>
+								{transaction.status
+									? transaction.status
+											.replace(/^wc-/, '') // remove prefix
+											.replace(/_/g, ' ') // underscores → spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize
+									: ''}
+							</span>
 						</FormGroup>
 					</FormGroupWrapper>
 				</>

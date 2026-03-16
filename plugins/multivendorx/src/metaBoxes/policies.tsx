@@ -1,17 +1,12 @@
 import { addFilter } from '@wordpress/hooks';
 import { useEffect } from 'react';
-import {
-	TextAreaUI,
-	Card,
-	FormGroup,
-	FormGroupWrapper,
-} from 'zyra';
+import { TextAreaUI, Card, FormGroup, FormGroupWrapper } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const Policies = ({ product, setProduct, handleChange }) => {
 	const getMetaValue = (meta, key) =>
-			meta?.find((m) => m.key === key)?.value || '';
-	
+		meta?.find((m) => m.key === key)?.value || '';
+
 	useEffect(() => {
 		if (!product?.meta_data) {
 			return;
@@ -35,11 +30,9 @@ const Policies = ({ product, setProduct, handleChange }) => {
 	}, [product?.meta_data]);
 
 	return (
-		<Card  title={__('Policies', 'multivendorx')}>
+		<Card title={__('Policies', 'multivendorx')}>
 			<FormGroupWrapper>
-				<FormGroup
-					label={__('Shipping Policy', 'multivendorx')}
-				>
+				<FormGroup label={__('Shipping Policy', 'multivendorx')}>
 					<TextAreaUI
 						name="shipping_policy"
 						value={product.shipping_policy}
@@ -48,9 +41,7 @@ const Policies = ({ product, setProduct, handleChange }) => {
 						}
 					/>
 				</FormGroup>
-				<FormGroup
-					label={__('Refund Policy', 'multivendorx')}
-				>
+				<FormGroup label={__('Refund Policy', 'multivendorx')}>
 					<TextAreaUI
 						name="refund_policy"
 						value={product.refund_policy}
@@ -59,20 +50,12 @@ const Policies = ({ product, setProduct, handleChange }) => {
 						}
 					/>
 				</FormGroup>
-				<FormGroup
-					label={__(
-						'Cancellation Policy',
-						'multivendorx'
-					)}
-				>
+				<FormGroup label={__('Cancellation Policy', 'multivendorx')}>
 					<TextAreaUI
 						name="cancellation_policy"
 						value={product.cancellation_policy}
 						onChange={(value) =>
-							handleChange(
-								'cancellation_policy',
-								value
-							)
+							handleChange('cancellation_policy', value)
 						}
 					/>
 				</FormGroup>
@@ -88,7 +71,11 @@ addFilter(
 		return (
 			<>
 				{content}
-				<Policies product={product} setProduct={setProduct} handleChange={handleChange} />
+				<Policies
+					product={product}
+					setProduct={setProduct}
+					handleChange={handleChange}
+				/>
 			</>
 		);
 	},
