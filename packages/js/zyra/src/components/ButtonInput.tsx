@@ -172,6 +172,12 @@ const ButtonInput: FieldComponent = {
          const handleClick = () => {
 
             if (!canAccess) return;
+            if (field.action) {
+                const url = `${ZyraVariable.ajaxUrl.replace('admin-ajax.php', 'admin-post.php')}?action=${field.action}`;
+                window.open(url);
+                return;
+            }
+
             // REST API
             if (field.apilink) {
                 axios({
