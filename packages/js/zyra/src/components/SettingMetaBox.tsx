@@ -213,6 +213,16 @@ const OptionEditor: React.FC<{ options: Option[]; onChange: (options: Option[]) 
         );
     };
 
+const textFieldSettingsRenderer: React.FC<{
+    formField: FormField;
+    onChange: (key: SettingFieldKey, value: FormFieldValue) => void;
+}> = ({ formField, onChange }) => (
+    <>
+        <InputField label="Placeholder" value={formField.placeholder || ''} onChange={(v) => onChange('placeholder', v)} />
+        <InputField label="Character limit" type="number" value={formField.charlimit?.toString() || ''} onChange={(v) => onChange('charlimit', Number(v))} />
+    </>
+);
+
 // FIELD RENDERER FACTORY
 const createFieldRenderers = (): Record<string, React.FC<{
     formField: FormField;
@@ -220,20 +230,11 @@ const createFieldRenderers = (): Record<string, React.FC<{
     expandedGroups: Record<string, boolean>;
     toggleGroup: (group: string) => void;
 }>> => ({
+    
     // Basic inputs
-    text: ({ formField, onChange }) => (
-        <>
-            <InputField label="Placeholder" value={formField.placeholder || ''} onChange={(v) => onChange('placeholder', v)} />
-            <InputField label="Character limit" type="number" value={formField.charlimit?.toString() || ''} onChange={(v) => onChange('charlimit', Number(v))} />
-        </>
-    ),
+    text: textFieldSettingsRenderer,
 
-    email: ({ formField, onChange }) => (
-        <>
-            <InputField label="Placeholder" value={formField.placeholder || ''} onChange={(v) => onChange('placeholder', v)} />
-            <InputField label="Character limit" type="number" value={formField.charlimit?.toString() || ''} onChange={(v) => onChange('charlimit', Number(v))} />
-        </>
-    ),
+    email: textFieldSettingsRenderer,
 
     textarea: ({ formField, onChange }) => (
         <>

@@ -704,148 +704,80 @@ const FormViewer: React.FC<FormViewerProps> = ({
                     case 'divider':
                         return <p className="section-divider-container"></p>;
 
-                    case 'address':
+                    case 'address': {
+                        const subFields =
+                            field.fields?.length
+                                ? field.fields
+                                : [
+                                    { key: 'address_1', label: 'Address Line 1', type: 'text', required: true },
+                                    { key: 'address_2', label: 'Address Line 2', type: 'text' },
+                                    { key: 'city', label: 'City', type: 'text', required: true },
+                                    { key: 'state', label: 'State', type: 'select' },
+                                    { key: 'country', label: 'Country', type: 'select' },
+                                    { key: 'postcode', label: 'Postal Code', type: 'text', required: true },
+                                ];
+
                         return (
                             <fieldset key={field.id}>
                                 <legend>{field.label}</legend>
-                                {field.fields?.map((subField: Field) => {
-                                    if (subField.disabled) {
-                                        return null;
-                                    }
+
+                                {subFields.map((subField: any) => {
                                     const inputName = `${subField.key}`;
                                     const value = inputs[inputName] ?? '';
 
-                                    // Helper: build state options for a country code
-                                    const buildStateOptions = (
-                                        countryCode: string | undefined
-                                    ) => {
-                                        if (!countryCode || !stateList) {
-                                            return [];
-                                        }
-
-                                        const raw = stateList[countryCode];
-
-                                        // Case A: already an array of { label, value }
-                                        if (Array.isArray(raw)) {
-                                            return raw;
-                                        }
-
-                                        // Case B: object like { WB: 'West Bengal', MH: 'Maharashtra' }
-                                        if (raw && typeof raw === 'object') {
-                                            return Object.entries(raw).map(
-                                                ([code, name]) => ({
-                                                    label: String(name),
-                                                    value: String(code),
-                                                })
-                                            );
-                                        }
-
-                                        // Fallback: empty
-                                        return [];
-                                    };
-
-                                    // 🔹 Handle country dropdown
-                                    if (subField.key === 'country') {
-                                        return (
-                                            <p
-                                                className="woocommerce-form-row woocommerce-form-row--first form-row form-row-first"
-                                                key={subField.id}
-                                            >
-                                                <label htmlFor={inputName}>
-                                                    {subField.label}
-                                                </label>
-                                                <Multiselect
-                                                    options={
-                                                        countryList || []
-                                                    }
-                                                    // Multiselect returns a string (value) for single-select in your implementation
-                                                    onChange={(
-                                                        selectedCountryValue
-                                                    ) => {
-                                                        // selectedCountryValue should be a string (or null)
-                                                        const countryVal =
-                                                            selectedCountryValue ||
-                                                            null;
-                                                        handleChange(
-                                                            inputName,
-                                                            countryVal
-                                                        );
-
-                                                        // Clear / reset state when country changes
-                                                        handleChange(
-                                                            'state',
-                                                            null
-                                                        );
-                                                    }}
-                                                />
-                                            </p>
-                                        );
-                                    }
-
-                                    // 🔹 Handle state dropdown (depends on selected country)
-                                    if (subField.key === 'state') {
-                                        const selectedCountryValue =
-                                            inputs['country'];
-                                        const availableStates =
-                                            buildStateOptions(
-                                                selectedCountryValue as
-                                                | string
-                                                | undefined
-                                            );
-
-                                        return (
-                                            <p
-                                                className="woocommerce-form-row woocommerce-form-row--last form-row form-row-last"
-                                                key={subField.id}
-                                            >
-                                                <label htmlFor={inputName}>
-                                                    {subField.label}
-                                                </label>
-                                                <Multiselect
-                                                    options={availableStates}
-                                                    onChange={(
-                                                        selectedStateValue
-                                                    ) =>
-                                                        handleChange(
-                                                            inputName,
-                                                            selectedStateValue
-                                                        )
-                                                    }
-                                                />
-                                            </p>
-                                        );
-                                    }
-
-                                    // 🔹 Normal text fields
+                                    // TEXT FIELD
                                     if (subField.type === 'text') {
                                         return (
-                                            <p
-                                                className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide"
-                                                key={subField.id}
-                                            >
-                                                <label htmlFor={inputName}>
-                                                    {subField.label}
-                                                </label>
+                                            <p key={subField.key} className="form-row">
+                                                <label>{subField.label}</label>
                                                 <input
                                                     type="text"
-                                                    id={inputName}
-                                                    name={inputName}
-                                                    placeholder={
-                                                        subField.placeholder
-                                                    }
-                                                    value={
-                                                        (value as string) ||
-                                                        ''
-                                                    }
-                                                    required={
-                                                        field.required ||
-                                                        subField.required
-                                                    }
+                                                    className="input-text"
+                                                    value={value as string}
+                                                    placeholder={subField.placeholder}
+                                                    required={subField.required}
                                                     onChange={(e) =>
-                                                        handleChange(
-                                                            inputName,
-                                                            e.target.value
-                                                        )
+                                                        handleChange(inputName, e.target.value)
+                                                    }
+                                                />
+                                            </p>
+                                        );
+                                    }
+
+                                    // SELECT FIELD
+                                    if (subField.type === 'select') {
+                                        let options: Option[] = [];
+
+                                        if (subField.key === 'country') {
+                                            options = countryList || [];
+                                        }
+
+                                        if (subField.key === 'state') {
+                                            const selectedCountry =
+                                                inputs[`${field.name}_country`];
+
+                                            const rawStates =
+                                                stateList?.[selectedCountry as string];
+
+                                            if (Array.isArray(rawStates)) {
+                                                options = rawStates;
+                                            } else if (rawStates && typeof rawStates === 'object') {
+                                                options = Object.entries(rawStates).map(
+                                                    ([code, name]) => ({
+                                                        value: code,
+                                                        label: String(name),
+                                                    })
+                                                );
+                                            }
+                                        }
+
+                                        return (
+                                            <p key={subField.key} className="woocommerce-form-row woocommerce-form-row--last form-row form-row-last">
+                                                <label>{subField.label}</label>
+                                                <Multiselect
+                                                    options={options}
+                                                    onChange={(val) =>
+                                                        handleChange(inputName, val)
                                                     }
                                                 />
                                             </p>
@@ -856,7 +788,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                 })}
                             </fieldset>
                         );
-
+                    }
                     case 'button':
                         return (
                             <p className="woocommerce-form-row form-row" key={field.id}>
