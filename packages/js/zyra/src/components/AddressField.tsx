@@ -54,7 +54,7 @@ interface AddressFieldProps {
     setOpendInput: React.Dispatch< React.SetStateAction< SubField | null > >;
 }
 
-export const AddressFieldUI: React.FC< AddressFieldProps > = ( {
+const AddressFieldUI: React.FC< AddressFieldProps > = ( {
     formField,
     opendInput,
     setOpendInput,

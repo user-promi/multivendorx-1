@@ -8,7 +8,7 @@ import { ButtonInputUI } from './ButtonInput';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type InputValue = string | number | boolean | File | string[] | null | undefined;
+type InputValue = string | number | boolean | File | string[] | null ;
 
 declare global {
     interface Window {
@@ -46,7 +46,7 @@ interface Field {
 
 interface ButtonSetting {
     button_text?: string;
-    [key: string]: string | number | boolean | undefined;
+    [key: string]: string | number | boolean;
 }
 
 interface FormFields {
@@ -56,8 +56,8 @@ interface FormFields {
 
 interface FormViewerProps {
     formFields: FormFields;
-    response?: Record<string, string | number | File | undefined>;
-    onSubmit: (data: Record<string, string | number | File | undefined>) => void;
+    response?: Record<string, string | number | File >;
+    onSubmit: (data: Record<string, string | number | File >) => void;
     countryList?: Option[];
     stateList?: Record<string, Option[] | Record<string, string>>;
 }
@@ -70,7 +70,7 @@ const enquiryFormData: FormDataType = { default_placeholder: { name: '', email: 
 const wholesaleFormData: FormDataType = { default_placeholder: { name: '', email: '' } };
 const enquiryCartTable: FormDataType = { default_placeholder: { name: '', email: '' } };
 
-const getDefaultPlaceholder = (key: 'name' | 'email'): string | undefined =>
+const getDefaultPlaceholder = (key: 'name' | 'email'): string =>
     enquiryFormData?.default_placeholder?.[key] ??
     wholesaleFormData?.default_placeholder?.[key] ??
     enquiryCartTable?.default_placeholder?.[key];
@@ -134,9 +134,9 @@ const Checkboxes: React.FC<{
 
 const Radio: React.FC<{
     options: Option[];
-    onChange: (value: string | undefined) => void;
+    onChange: (value: string) => void;
 }> = ({ options, onChange }) => {
-    const [selected, setSelected] = useState<string | undefined>(
+    const [selected, setSelected] = useState<string>(
         options.find(({ isDefault }) => isDefault)?.value
     );
 
@@ -311,11 +311,11 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
         setErrors({});
 
-        const submitData: Record<string, string | number | File | undefined> = {};
+        const submitData: Record<string, string | number | File > = {};
         for (const key in inputs) {
             const value = inputs[key];
             if (value !== undefined && value !== null) {
-                submitData[key] = value as string | number | File | undefined;
+                submitData[key] = value as string | number | File ;
             }
         }
         onSubmit(submitData);
@@ -328,7 +328,6 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
         const name = field.name ?? '';
         const error = errors[name];
-        console.log(field.name);
 
         switch (field.type) {
             case 'title':
