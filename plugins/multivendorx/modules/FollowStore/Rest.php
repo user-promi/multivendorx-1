@@ -307,31 +307,29 @@ class Rest extends \WP_REST_Controller {
 
             $store = new \MultiVendorX\Store\Store( $store_id );
 
-            // Fetch followers (serialized-safe)
-            $followers = maybe_unserialize(
-                $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] ?? array()
-            );
+			$followers = $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] ?? array();
 
-            if ( ! is_array( $followers ) ) {
-                $followers = array();
-            }
+			if ( ! is_array( $followers ) ) {
+				$followers = array();
+			}
 
-            // Normalize old format: [1,2,3] → [['id'=>1,'date'=>'']]
-            if ( isset( $followers[0] ) && is_int( $followers[0] ) ) {
-                $followers = array_map(
-                    fn( $uid ) => array(
-                        'id'   => $uid,
-                        'date' => '',
-                    ),
+			$first = reset( $followers );
+
+			if ( false !== $first && is_int( $first ) ) {
+				$followers = array_map(
+					function ( $uid ) {
+						return array(
+							'id'   => $uid,
+							'date' => '',
+						);
+					},
                     $followers
-                );
-            }
+				);
+			}
 
-            // Normalize following IDs for strict compare
             $following_ids = array_map( 'strval', $following );
 
             if ( in_array( (string) $store_id, $following_ids, true ) ) {
-                // Unfollow
                 $following = array_diff( $following, array( $store_id ) );
                 $followers = array_filter(
                     $followers,
@@ -339,7 +337,6 @@ class Rest extends \WP_REST_Controller {
                 );
                 $follow    = false;
             } else {
-                // Follow
                 $following[] = $store_id;
 
                 if ( ! in_array( $user_id, array_column( $followers, 'id' ), true ) ) {
@@ -352,7 +349,6 @@ class Rest extends \WP_REST_Controller {
                 $follow = true;
             }
 
-            // Save updates
             update_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['following_stores'], array_values( $following ) );
             $store->update_meta( Utill::STORE_SETTINGS_KEYS['followers'], array_values( $followers ) );
 
