@@ -268,7 +268,7 @@ class Rest extends \WP_REST_Controller {
             return $error;
         }
         try {
-            $store_id = $request->get_param( 'storeId' );
+            $store_id = $request->get_param( 'store_id' );
             if ( $store_id ) {
                 $overall = Util::get_overall_rating( $store_id );
                 return rest_ensure_response( $overall );

@@ -296,14 +296,17 @@ class Stores extends \WP_REST_Controller {
             }
 
             // Advanced filters.
-            $filters = $request->get_param( 'filters' );
-            if ( ! empty( $filters ) ) {
-                $args['orderBy'] = $filters['sort'] ?? $args['orderBy'] ?? '';
-                $args['order']   = $filters['order'] ?? '';
-                $lat             = ! empty( $filters['location_lat'] ) ? $filters['location_lat'] : 0;
-                $lng             = ! empty( $filters['location_lng'] ) ? $filters['location_lng'] : 0;
-                $radius          = ! empty( $filters['distance'] ) ? $filters['distance'] : 0;
-                $unit            = $filters['miles'] ?? 'km';
+            $filter_flag = $request->get_param('filters');
+
+            if ( ! empty( $filter_flag ) ) {
+
+                $args['orderBy'] = $request->get_param('sort') ?? $args['orderBy'] ?? '';
+                $args['order']   = $request->get_param('order') ?? '';
+
+                $lat    = $request->get_param('location_lat') ?: 0;
+                $lng    = $request->get_param('location_lng') ?: 0;
+                $radius = $request->get_param('distance') ?: 0;
+                $unit   = $request->get_param('miles') ?: 'km';
 
                 switch ( $unit ) {
                     case 'miles':
@@ -316,15 +319,21 @@ class Stores extends \WP_REST_Controller {
                         $earth_radius = 6371;
                 }
 
-                if ( ! empty( $filters['limit'] ) && $filters['limit'] ) {
-                    $args['limit'] = absint( $filters['limit'] );
+                $limit  = $request->get_param('limit');
+                $offset = $request->get_param('offset');
+
+                if ( ! empty( $limit ) ) {
+                    $args['limit'] = absint( $limit );
                 }
 
-                if ( ! empty( $filters['offset'] ) && $filters['offset'] ) {
-                    $args['offset'] = absint( $filters['offset'] );
+                if ( ! empty( $offset ) ) {
+                    $args['offset'] = absint( $offset );
                 }
 
-                if ( ! empty( $filters['category'] ) ) {
+                // Category filter
+                $category = $request->get_param('category');
+                if ( ! empty( $category ) ) {
+
                     $product_ids = wc_get_products(
                         array(
                             'return'      => 'ids',
@@ -333,7 +342,7 @@ class Stores extends \WP_REST_Controller {
                                 array(
                                     'taxonomy' => 'product_cat',
                                     'field'    => 'term_id',
-                                    'terms'    => $filters['category'],
+                                    'terms'    => $category,
                                 ),
                             ),
                         )
@@ -355,9 +364,11 @@ class Stores extends \WP_REST_Controller {
                     $args['ID'] = $store_ids;
                 }
 
-                if ( ! empty( $filters['product'] ) ) {
+                // Product filter
+                $product = $request->get_param('product');
+                if ( ! empty( $product ) ) {
                     $args['ID'] = get_post_meta(
-                        $filters['product'],
+                        $product,
                         Utill::POST_META_SETTINGS['store_id'],
                         true
                     );
@@ -395,7 +406,7 @@ class Stores extends \WP_REST_Controller {
                 $owner_id           = StoreUtil::get_primary_owner( $store_id );
                 $owner              = get_userdata( $owner_id );
                 $formatted_stores[] = apply_filters(
-                    'multivendorx_stores',
+                    'multivendorx_stores_details',
                     array(
                         'id'                  => $store_id,
                         'store_name'          => $store['name'],
@@ -413,7 +424,8 @@ class Stores extends \WP_REST_Controller {
                         'location_lat'        => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['location_lat'] ] ?? '',
                         'location_lng'        => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['location_lng'] ] ?? '',
                         'commission'          => CommissionUtil::get_commission_summary_for_store( $store_id ),
-                    )
+                    ),
+                    $store_id
                 );
             }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getApiLink, MapProviderUI } from 'zyra';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 interface StoreRow {
 	id: number;
@@ -38,7 +38,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	const [storeTopProducts, setStoreTopProducts] = useState<{
 		[storeId: number]: any[];
 	}>({});
-
 	const [addressData, setAddressData] = useState({
 		location_lat: '',
 		location_lng: '',
@@ -53,9 +52,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		address: '',
 		distance: '',
 		miles: '',
-		sort: orderby,
 		order: order,
-		category: category,
 		product: '',
 		location_lat: '',
 		location_lng: '',
@@ -66,8 +63,11 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	}>({ provider: 'null', apiKey: '' });
 
 	const settings = storesList.settings_databases_value;
-
 	const [isUserLocation, setIsUserLocation] = useState(false);
+	const [topFilters, setTopFilters] = useState({
+		sort: '',
+		category: '',
+	});
 
 	useEffect(() => {
 		if (!settings?.geolocation) {
@@ -96,42 +96,24 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	}, []);
 
 	useEffect(() => {
+		const params: any = {
+			per_page: 50, 
+			meta_key: 'multivendorx_store_id',
+		};
+
+		if (topFilters.category) {
+			params.category = topFilters.category;
+		}
+
 		axios
 			.get(`${storesList.apiUrl}/wc/v3/products`, {
 				headers: { 'X-WP-Nonce': storesList.nonce },
-				params: {
-					per_page: 10,
-					meta_key: 'multivendorx_store_id',
-				},
+				params,
 			})
 			.then((response) => {
 				setProduct(response.data);
-			});
-	}, []);
-
-	const loadProducts = async (inputValue: string) => {
-		try {
-			const response = await axios.get(
-				`${storesList.apiUrl}/wc/v3/products`,
-				{
-					headers: { 'X-WP-Nonce': storesList.nonce },
-					params: {
-						per_page: 10,
-						search: inputValue,
-						meta_key: 'multivendorx_store_id',
-					},
-				}
-			);
-
-			return response.data.map((product: any) => ({
-				label: product.name,
-				value: product.id,
-			}));
-		} catch (error) {
-			console.error('Product search error:', error);
-			return [];
-		}
-	};
+			})
+	}, [topFilters.category]);
 
 	const fetchTopProducts = (storeId: number) => {
 		axios
@@ -152,16 +134,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 					[storeId]: response.data,
 				}));
 			})
-			.catch((error) => {
-				console.error(
-					`Failed to fetch top products for store ${storeId}:`,
-					error
-				);
-				setStoreTopProducts((prev) => ({
-					...prev,
-					[storeId]: [],
-				}));
-			});
 	};
 
 	useEffect(() => {
@@ -171,17 +143,17 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			});
 		}
 	}, [data]);
+
 	useEffect(() => {
 		axios({
 			method: 'GET',
 			url: getApiLink(storesList, 'store'),
 			headers: { 'X-WP-Nonce': storesList.nonce },
 			params: {
-				filters: {
-					...filters,
-					limit: perPage,
-					offset: (page - 1) * perPage,
-				},
+				page: page,
+				row: perPage,
+				filters: true,
+				...filters
 			},
 		})
 			.then((response) => {
@@ -197,7 +169,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
 		const { name, value } = e.target;
-		setFilters((prev) => ({ ...prev, [name]: value }));
+		setTopFilters((prev) => ({ ...prev, [name]: value }));
 	};
 
 	const handleLocationUpdate = (locationData: any) => {
@@ -401,7 +373,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 					)}
 					<select
 						name="sort"
-						value={filters.sort}
+						value={topFilters.sort}
 						onChange={handleInputChange}
 					>
 						<option value="name">
@@ -415,10 +387,10 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 						</option>
 					</select>
 
-					{filters.sort == 'category' && (
+					{topFilters.sort == 'category' && (
 						<select
 							name="category"
-							value={filters.category || ''}
+							value={topFilters.category || ''}
 							onChange={handleInputChange}
 						>
 							<option value="">
@@ -466,10 +438,10 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 								<div key={store.id} className="store">
 									<div className="store-body">
 										<div className="store-header">
-											{store.image ? (
+											{store.store_image ? (
 												<div className="store-image">
 													<img
-														src={store.image}
+														src={store.store_image}
 														alt={store.store_name}
 													/>
 												</div>
@@ -484,15 +456,19 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 											<div className="store-details">
 												<h4>{store.store_name}</h4>
 												<div className="review-rating">
-													<div className="star-rating">
-														<span>
-															Rated{' '}
-															<strong className="rating">
-																4.00
-															</strong>{' '}
-															out of 5
-														</span>
-													</div>
+													{store.rating !== undefined && (
+														<div
+															className="star-rating"
+															role="img"
+															aria-label={sprintf(__('Rated %s out of 5', 'multivendorx'), store.rating.toFixed(2))}
+														>
+															<span style={{ width: `${(store.rating / 5) * 100}%` }}>
+																{__('Rated', 'multivendorx')}{' '}
+																<strong className="rating">{store.rating.toFixed(2)}</strong>{' '}
+																{__('out of 5', 'multivendorx')}
+															</span>
+														</div>
+													)}
 												</div>
 												{store.phone &&
 													store.address && (
@@ -624,28 +600,28 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 																	{/* Add star rating if available */}
 																	{p.average_rating >
 																		0 && (
-																		<div
-																			className="star-rating"
-																			role="img"
-																			aria-label={`Rated ${p.average_rating} out of 5`}
-																		>
-																			<span
-																				style={{
-																					width: `${(p.average_rating / 5) * 100}%`,
-																				}}
+																			<div
+																				className="star-rating"
+																				role="img"
+																				aria-label={`Rated ${p.average_rating} out of 5`}
 																			>
-																				Rated{' '}
-																				<strong className="rating">
-																					{
-																						p.average_rating
-																					}
-																				</strong>{' '}
-																				out
-																				of
-																				5
-																			</span>
-																		</div>
-																	)}
+																				<span
+																					style={{
+																						width: `${(p.average_rating / 5) * 100}%`,
+																					}}
+																				>
+																					Rated{' '}
+																					<strong className="rating">
+																						{
+																							p.average_rating
+																						}
+																					</strong>{' '}
+																					out
+																					of
+																					5
+																				</span>
+																			</div>
+																		)}
 
 																	{/* Price HTML */}
 																	{p.price_html && (
@@ -678,35 +654,37 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 									</div>
 								</div>
 							))}
-						<nav className="woocommerce-pagination">
-							<ul className="page-numbers">
-								<li>
-									<button
-										disabled={page === 1}
-										onClick={() => setPage((p) => p - 1)}
-										className="page-numbers"
-									>
-										{__('Previous', 'multivendorx')}
-									</button>
-								</li>
+						{totalPages > 1 && (
+							<nav className="woocommerce-pagination">
+								<ul className="page-numbers">
+									<li>
+										<button
+											disabled={page === 1}
+											onClick={() => setPage((p) => p - 1)}
+											className="page-numbers"
+										>
+											{__('Previous', 'multivendorx')}
+										</button>
+									</li>
 
-								<li>
-									<span className="page-numbers current">
-										{page}
-									</span>
-								</li>
+									<li>
+										<span className="page-numbers current">
+											{page}
+										</span>
+									</li>
 
-								<li>
-									<button
-										disabled={page >= totalPages}
-										onClick={() => setPage((p) => p + 1)}
-										className="page-numbers"
-									>
-										{__('Next', 'multivendorx')}
-									</button>
-								</li>
-							</ul>
-						</nav>
+									<li>
+										<button
+											disabled={page >= totalPages}
+											onClick={() => setPage((p) => p + 1)}
+											className="page-numbers"
+										>
+											{__('Next', 'multivendorx')}
+										</button>
+									</li>
+								</ul>
+							</nav>
+						)}
 					</div>
 					<div className="store-map">{renderMapComponent()}</div>
 				</div>
