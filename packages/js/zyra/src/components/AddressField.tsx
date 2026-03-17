@@ -13,13 +13,13 @@ const DEFAULT_ADDRESS_FIELDS = [
     { id: 2, key: 'address_2', label: 'Address Line 2', type: 'text', placeholder: 'Address Line 2', required: false },
     { id: 3, key: 'city', label: 'City', type: 'text', placeholder: 'City', required: true },
     { 
-        id: 4, key: 'state', label: 'State', type: 'select', 
-        options: ['Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu'],
+        id: 4, key: 'country', label: 'Country', type: 'select', 
+        options: ['India', 'USA', 'UK', 'Canada'],
         required: false 
     },
     { 
-        id: 5, key: 'country', label: 'Country', type: 'select', 
-        options: ['India', 'USA', 'UK', 'Canada'],
+        id: 5, key: 'state', label: 'State', type: 'select', 
+        options: ['Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu'],
         required: false 
     },
     { id: 6, key: 'postcode', label: 'Postal Code', type: 'text', placeholder: 'Postal Code', required: true },
@@ -62,7 +62,7 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
     // Use default fields if no fields are provided and context is registration
     const [ subFields, setSubFields ] = useState< SubField[] >(
         formField.fields?.length ? formField.fields : 
-        (formField.context === 'registration' ? DEFAULT_ADDRESS_FIELDS : [])
+        (formField.context === 'form' ? DEFAULT_ADDRESS_FIELDS : [])
     );
 
     useEffect( () => {
@@ -70,7 +70,7 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
         // If no fields and context is registration, use defaults
         if (formField.fields?.length) {
             setSubFields(formField.fields);
-        } else if (!formField.fields?.length && formField.context === 'registration') {
+        } else if (!formField.fields?.length && formField.context === 'form') {
             setSubFields(DEFAULT_ADDRESS_FIELDS);
         } else {
             setSubFields([]);

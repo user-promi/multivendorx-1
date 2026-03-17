@@ -92,10 +92,6 @@ const STYLED_BLOCKS = new Set(['richtext', 'heading', 'image', 'button', 'divide
 // Blocks that have text style controls
 const TEXT_STYLED_BLOCKS = new Set(['richtext', 'heading', 'button']);
 
-const DEFAULT_EXPANDED_GROUPS = {
-    content: true,
-    layout: false,
-};
 
 const InputField: React.FC<{
     label: string;
@@ -213,27 +209,26 @@ const OptionEditor: React.FC<{ options: Option[]; onChange: (options: Option[]) 
         );
     };
 
+const textFieldSettingsRenderer: React.FC<{
+    formField: FormField;
+    onChange: (key: SettingFieldKey, value: FormFieldValue) => void;
+}> = ({ formField, onChange }) => (
+    <>
+        <InputField label="Placeholder" value={formField.placeholder || ''} onChange={(v) => onChange('placeholder', v)} />
+        <InputField label="Character limit" type="number" value={formField.charlimit?.toString() || ''} onChange={(v) => onChange('charlimit', Number(v))} />
+    </>
+);
+
 // FIELD RENDERER FACTORY
 const createFieldRenderers = (): Record<string, React.FC<{
     formField: FormField;
     onChange: (key: SettingFieldKey, value: FormFieldValue) => void;
-    expandedGroups: Record<string, boolean>;
-    toggleGroup: (group: string) => void;
 }>> => ({
+    
     // Basic inputs
-    text: ({ formField, onChange }) => (
-        <>
-            <InputField label="Placeholder" value={formField.placeholder || ''} onChange={(v) => onChange('placeholder', v)} />
-            <InputField label="Character limit" type="number" value={formField.charlimit?.toString() || ''} onChange={(v) => onChange('charlimit', Number(v))} />
-        </>
-    ),
+    text: textFieldSettingsRenderer,
 
-    email: ({ formField, onChange }) => (
-        <>
-            <InputField label="Placeholder" value={formField.placeholder || ''} onChange={(v) => onChange('placeholder', v)} />
-            <InputField label="Character limit" type="number" value={formField.charlimit?.toString() || ''} onChange={(v) => onChange('charlimit', Number(v))} />
-        </>
-    ),
+    email: textFieldSettingsRenderer,
 
     textarea: ({ formField, onChange }) => (
         <>
@@ -376,21 +371,13 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
     metaType = 'setting-meta',
 }) => {
     const [hasOpened, setHasOpened] = useState(opened.click);
-    const [expandedGroups, setExpandedGroups] = useState(DEFAULT_EXPANDED_GROUPS);
 
-    const fieldRenderers = useMemo(() => createFieldRenderers(), []);
-    const FieldRenderer = useMemo(
-        () => fieldRenderers[formField?.type || 'default'] || fieldRenderers.default,
-        [fieldRenderers, formField?.type]
-    );
+    const fieldRenderers = createFieldRenderers();
+    const FieldRenderer = fieldRenderers[formField?.type || 'default'] || fieldRenderers.default;
 
     useEffect(() => {
         setHasOpened(opened.click);
     }, [opened]);
-
-    const toggleGroup = useCallback((groupName: string) => {
-        setExpandedGroups(prev => ({ ...prev, [groupName]: !prev[groupName] }));
-    }, []);
 
     const hasStyleControls = useMemo(() =>
         STYLED_BLOCKS.has(formField?.type || ''),
@@ -402,21 +389,21 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
         [formField?.type]
     );
 
-    const handleLabelChange = useCallback((value: string) => {
+    const handleLabelChange = (value: string) => {
         onChange('label', value);
-    }, [onChange]);
+    };
 
-    const handleNameChange = useCallback((value: string) => {
+    const handleNameChange = (value: string) => {
         if (metaType === 'setting-meta') {
             onChange('name', value);
         } else {
             onChange('label', value);
         }
-    }, [metaType, onChange]);
+    };
 
-    const handlePlaceholderChange = useCallback((value: string) => {
+    const handlePlaceholderChange = (value: string) => {
         onChange('placeholder', value);
-    }, [onChange]);
+    };
 
     const handleDisabledChange = useCallback((disabled: boolean) => {
         onChange('disabled', disabled);
@@ -480,8 +467,6 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                                 <FieldRenderer
                                     formField={formField}
                                     onChange={onChange}
-                                    expandedGroups={expandedGroups}
-                                    toggleGroup={toggleGroup}
                                 />
                             )}
 
@@ -505,7 +490,9 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                                                     { key: 'required', value: "required", label: 'Required', },
                                                 ]}
                                                 value={formField.required ? ['required'] : []}
-                                                onChange={(vals) => onChange('required', vals.includes('required'))}
+                                                    onChange={(vals) => handleRequiredChange({
+                                                        target: { checked: vals.includes('required') }
+                                                    } as React.ChangeEvent<HTMLInputElement>)}
                                             />
                                         </div>
                                     </FormGroup>
