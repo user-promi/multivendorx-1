@@ -22,7 +22,11 @@ class Admin {
         add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_meta_fields' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'save_min_max_data' ) );
     }
-
+	/**
+	 * Add min/max quantity and amount meta fields to product edit page
+	 *
+	 * @return void
+	 */
     public function add_meta_fields() {
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
@@ -85,7 +89,12 @@ class Admin {
             );
         echo '</div>';
     }
-
+	/**
+	 * Save min/max quantity and amount meta data
+	 *
+	 * @param int $product_id Product ID.
+	 * @return void
+	 */
     public function save_min_max_data( $product_id ) {
         $product = wc_get_product( $product_id );
         if ( ! $product instanceof \WC_Product ) {

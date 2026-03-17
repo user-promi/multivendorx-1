@@ -491,7 +491,7 @@ class FrontendScripts {
 									'manage_plan_url' => MULTIVENDORX_PRO_SHOP_URL,
 								)
 							),
-                            'placeholder_url  '        => wc_placeholder_img_src(),
+                            'placeholder_url  '      => wc_placeholder_img_src(),
                         )
                     ),
                 ),
@@ -590,8 +590,8 @@ class FrontendScripts {
                     'use_settings' => true,
                     'use_rest'     => true,
                     'data'         => array(
-                        'store_page_url'       => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
-                        'placeholder_url'    => wc_placeholder_img_src(),
+                        'store_page_url'  => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
+                        'placeholder_url' => wc_placeholder_img_src(),
                     ),
                 ),
                 'multivendorx-marketplace-products-editor-script' => array(
