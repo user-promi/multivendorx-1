@@ -291,7 +291,7 @@ class Stores extends \WP_REST_Controller {
 
             $order_by = $request->get_param( 'order_dy' );
             if ( ! empty( $order_by ) ) {
-                $args['orderBy'] = sanitize_text_field( $order_by );
+                $args['order_by'] = sanitize_text_field( $order_by );
                 $args['order']   = sanitize_text_field( $request->get_param( 'order' ) );
             }
 
@@ -300,7 +300,7 @@ class Stores extends \WP_REST_Controller {
 
             if ( ! empty( $filter_flag ) ) {
 
-                $args['orderBy'] = $request->get_param('sort') ?? $args['orderBy'] ?? '';
+                $args['order_by'] = $request->get_param('sort') ?? $args['order_by'] ?? '';
                 $args['order']   = $request->get_param('order') ?? '';
 
                 $lat    = $request->get_param('location_lat') ?: 0;
@@ -501,7 +501,7 @@ class Stores extends \WP_REST_Controller {
 
         $args['limit']   = $limit;
         $args['offset']  = $offset;
-        $args['orderBy'] = 'create_time';
+        $args['order_by'] = 'create_time';
         $args['order']   = 'desc';
 
         $stores = StoreUtil::get_store_information( $args );

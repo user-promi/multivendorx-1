@@ -97,7 +97,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 
 	useEffect(() => {
 		const params: any = {
-			per_page: 50, 
+			per_page: 50,
 			meta_key: 'multivendorx_store_id',
 		};
 
@@ -200,7 +200,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			location_lng: updatedAddress.location_lng,
 		}));
 	};
-
 	const requestUserLocation = () => {
 		if (!navigator.geolocation) {
 			return;
@@ -503,57 +502,12 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 													'multivendorx'
 												)}{' '}
 											</h4>
-											{/* amit optimize site url  */}
 											{storeTopProducts[store.id]
 												?.length > 0 ? (
 												<ul className="products columns-3">
 													{storeTopProducts[
 														store.id
 													]?.map((p) => {
-														const siteDomain =
-															storesList?.site_url ||
-															'';
-														const getProductImage =
-															(imageUrl) => {
-																if (!imageUrl) {
-																	return siteDomain
-																		? `${siteDomain}/wp-content/uploads/woocommerce-placeholder.webp`
-																		: '/wp-content/uploads/woocommerce-placeholder.webp';
-																}
-																if (
-																	imageUrl.includes(
-																		'placeholder'
-																	)
-																) {
-																	return imageUrl;
-																}
-																return imageUrl.replace(
-																	/\.(jpg|jpeg|png|gif|webp)$/i,
-																	'-420x420.$1'
-																);
-															};
-
-														const getSrcSet = (
-															imageUrl
-														) => {
-															if (
-																!imageUrl ||
-																imageUrl.includes(
-																	'placeholder'
-																)
-															) {
-																const basePlaceholder =
-																	siteDomain
-																		? `${siteDomain}/wp-content/uploads/woocommerce-placeholder`
-																		: '/wp-content/uploads/woocommerce-placeholder';
-
-																// Return placeholder srcset with site domain
-																return `${basePlaceholder}.webp 1200w, ${basePlaceholder}-300x300.webp 300w, ${basePlaceholder}-1024x1024.webp 1024w, ${basePlaceholder}-150x150.webp 150w, ${basePlaceholder}-768x768.webp 768w`;
-															}
-
-															return `${getProductImage(imageUrl)} 420w, ${imageUrl.replace(/\.(jpg|jpeg|png|gif|webp)$/i, '-150x150.$1')} 150w, ${imageUrl.replace(/\.(jpg|jpeg|png|gif|webp)$/i, '-100x100.$1')} 100w, ${imageUrl.replace(/\.(jpg|jpeg|png|gif|webp)$/i, '-300x300.$1')} 300w`;
-														};
-
 														return (
 															<li
 																key={p.id}
@@ -569,27 +523,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 																	<img
 																		width="324"
 																		height="324"
-																		src={getProductImage(
-																			p
-																				.images?.[0]
-																				?.src
-																		)}
-																		srcSet={getSrcSet(
-																			p
-																				.images?.[0]
-																				?.src
-																		)}
-																		sizes="(max-width: 324px) 100vw, 324px"
-																		className={
-																			p
-																				.images?.[0]
-																				?.src
-																				? 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail'
-																				: 'woocommerce-placeholder wp-post-image'
-																		}
-																		alt={
-																			p.name
-																		}
+																		src={p.images?.[0]?.src || storesList?.placeholder_url}
+																		alt={p.name || 'Product Image'}
+																		className={p.images?.[0]?.src ? 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail' : 'woocommerce-placeholder wp-post-image'}
 																		decoding="async"
 																		loading="lazy"
 																	/>
