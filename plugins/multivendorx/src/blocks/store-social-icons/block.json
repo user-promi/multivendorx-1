@@ -10,19 +10,19 @@
   "attributes": {
     "iconSize": {
       "type": "number",
-      "default": 20
-    },
-    "iconColor": {
-      "type": "string",
-      "default": "#000"
+      "default": 24
     },
     "iconGap": {
       "type": "number",
-      "default": 15
+      "default": 12
     },
     "align": {
       "type": "string",
       "default": "center"
+    },
+    "showLabels": {
+      "type": "boolean",
+      "default": false
     }
   },
   "supports": {
