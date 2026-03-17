@@ -118,7 +118,7 @@ const ButtonInput: FieldComponent = {
             if (!canAccess) return;
             // Action
             if (field.action) {
-                window.open(`${ZyraVariable.site_url}/wp-admin/admin-post.php?action=${field.action}`);
+                window.open(field.action, '_self');
                 return;
             }
             // REST API
