@@ -17,32 +17,30 @@ const PrePostTextUI: React.FC< PrePostTextProps > = ( {
 } ) => {
     return (
         <>
-            {textType == 'pre' && 
-                <span className="before">{ preText }</span>
-            }
-            {textType == 'post' && 
+            { textType == 'pre' && <span className="before">{ preText }</span> }
+            { textType == 'post' && (
                 <span className="after">{ postText }</span>
-            }
+            ) }
         </>
     );
 };
 
 const PrePostText: FieldComponent = {
-  render: ({ field, value, onChange, canAccess }) => (
-    <PrePostTextUI
-      type={field.type}
-      textType={field.textType}
-      preText={field.preText}
-      postText={field.postText}
-    />
-  ),
+    render: ( { field, value, onChange, canAccess } ) => (
+        <PrePostTextUI
+            type={ field.type }
+            textType={ field.textType }
+            preText={ field.preText }
+            postText={ field.postText }
+        />
+    ),
 
-  validate: (field, value) => {
-    if (field.required && !value?.[field.key]) {
-      return `${field.label} is required`;
-    }
-    return null;
-  },
+    validate: ( field, value ) => {
+        if ( field.required && ! value?.[ field.key ] ) {
+            return `${ field.label } is required`;
+        }
+        return null;
+    },
 };
 
 export default PrePostText;

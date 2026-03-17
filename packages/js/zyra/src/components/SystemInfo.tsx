@@ -22,75 +22,75 @@ interface Field {
 
 interface InfoSection {
     label: string;
-    fields: Record<string, Field>;
+    fields: Record< string, Field >;
 }
 
-type ApiResponse = Record<string, InfoSection>;
+type ApiResponse = Record< string, InfoSection >;
 
-export const SystemInfoUI : React.FC<SystemInfoProps> = ({
+export const SystemInfoUI: React.FC< SystemInfoProps > = ( {
     apiLink,
     copyButtonLabel = 'Copy System Info',
     copiedLabel = 'Copied!',
-}) => {
-    const [data, setData] = useState<ApiResponse | null>(null);
-    const [openKeys, setOpenKeys] = useState<string[]>([]);
-    const [copied, setCopied] = useState(false);
+} ) => {
+    const [ data, setData ] = useState< ApiResponse | null >( null );
+    const [ openKeys, setOpenKeys ] = useState< string[] >( [] );
+    const [ copied, setCopied ] = useState( false );
 
     // Fetch everything at once
-    useEffect(() => {
-        axios({
-            url: getApiLink(ZyraVariable, apiLink),
+    useEffect( () => {
+        axios( {
+            url: getApiLink( ZyraVariable, apiLink ),
             method: 'GET',
             headers: { 'X-WP-Nonce': ZyraVariable.nonce },
-        }).then((response) => {
-            setData(response.data);
-        });
-    }, [apiLink]);
+        } ).then( ( response ) => {
+            setData( response.data );
+        } );
+    }, [ apiLink ] );
 
-    const toggleSection = (key: string) => {
-        setOpenKeys((prev) => (prev.includes(key) ? [] : [key]));
+    const toggleSection = ( key: string ) => {
+        setOpenKeys( ( prev ) => ( prev.includes( key ) ? [] : [ key ] ) );
     };
 
     // Format data for clipboard
-    const formatSystemInfo = (info: ApiResponse): string => {
+    const formatSystemInfo = ( info: ApiResponse ): string => {
         let output = '';
-        Object.values(info).forEach((section) => {
-            output += `=== ${section.label} ===\n`;
-            Object.values(section.fields).forEach((field) => {
-                output += `${field.label}: ${field.value}\n`;
-            });
+        Object.values( info ).forEach( ( section ) => {
+            output += `=== ${ section.label } ===\n`;
+            Object.values( section.fields ).forEach( ( field ) => {
+                output += `${ field.label }: ${ field.value }\n`;
+            } );
             output += '\n';
-        });
+        } );
         return output.trim();
     };
 
     const copyToClipboard = () => {
-        if (!data) {
+        if ( ! data ) {
             return;
         }
-        const formatted = formatSystemInfo(data);
-        navigator.clipboard.writeText(formatted).then(() => {
-            setCopied(true);
-        });
+        const formatted = formatSystemInfo( data );
+        navigator.clipboard.writeText( formatted ).then( () => {
+            setCopied( true );
+        } );
     };
 
-    if (!data) {
+    if ( ! data ) {
         return (
             <div className="system-info">
                 <div className="buttons-wrapper">
                     <div className="admin-btn btn-purple">
-                        <Skeleton width={6} />
+                        <Skeleton width={ 6 } />
                     </div>
                 </div>
 
-                {Array.from({ length: 10 }).map((_, index) => (
-                    <div key={index} className="system-item">
+                { Array.from( { length: 10 } ).map( ( _, index ) => (
+                    <div key={ index } className="system-item">
                         <div className="name">
-                            <Skeleton width={180} />
+                            <Skeleton width={ 180 } />
                             <i className="adminfont-pagination-right-arrow"></i>
                         </div>
                     </div>
-                ))}
+                ) ) }
             </div>
         );
     }
@@ -100,25 +100,25 @@ export const SystemInfoUI : React.FC<SystemInfoProps> = ({
             <div className="buttons-wrapper">
                 <div
                     className="admin-btn btn-purple"
-                    onClick={copyToClipboard}
+                    onClick={ copyToClipboard }
                 >
                     <i className="adminfont-vendor-form-copy"></i>
 
                     <span className="copy-success">
-                            {copied ? copiedLabel : copyButtonLabel}
+                        { copied ? copiedLabel : copyButtonLabel }
                     </span>
                 </div>
             </div>
 
-            {Object.entries(data).map(([key, section]) => {
-                const isOpen = openKeys.includes(key);
-                return(
-                    <div key={key} className="system-item">
+            { Object.entries( data ).map( ( [ key, section ] ) => {
+                const isOpen = openKeys.includes( key );
+                return (
+                    <div key={ key } className="system-item">
                         <div
-                            onClick={() => toggleSection(key)}
+                            onClick={ () => toggleSection( key ) }
                             className="name"
                         >
-                            <span>{section.label}</span>
+                            <span>{ section.label }</span>
                             <i
                                 className={
                                     isOpen
@@ -128,40 +128,40 @@ export const SystemInfoUI : React.FC<SystemInfoProps> = ({
                             ></i>
                         </div>
 
-                        {isOpen && (
+                        { isOpen && (
                             <div className="content">
                                 <table>
                                     <tbody>
-                                        {Object.entries(section.fields).map(
-                                            ([fieldKey, field]) => (
-                                                <tr key={fieldKey}>
+                                        { Object.entries( section.fields ).map(
+                                            ( [ fieldKey, field ] ) => (
+                                                <tr key={ fieldKey }>
                                                     <td className="field-label">
-                                                        {field.label}
+                                                        { field.label }
                                                     </td>
                                                     <td className="field-value">
-                                                        {field.value}
+                                                        { field.value }
                                                     </td>
                                                 </tr>
                                             )
-                                        )}
+                                        ) }
                                     </tbody>
                                 </table>
                             </div>
-                        )}
+                        ) }
                     </div>
                 );
-            })}
+            } ) }
         </div>
     );
 };
-        
+
 const SystemInfo: FieldComponent = {
-    render: ({ field, appLocalizer }) => (
+    render: ( { field, appLocalizer } ) => (
         <SystemInfoUI
-            apiLink={field.apiLink}
-            appLocalizer={appLocalizer}
-            copyButtonLabel={field.copyButtonLabel}
-            copiedLabel={field.copiedLabel}
+            apiLink={ field.apiLink }
+            appLocalizer={ appLocalizer }
+            copyButtonLabel={ field.copyButtonLabel }
+            copiedLabel={ field.copiedLabel }
         />
     ),
     validate: () => null,

@@ -36,7 +36,19 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
         add_filter( 'woocommerce_loop_add_to_cart_link', array( $this, 'add_to_cart_link_min_qty' ), 10, 2 );
     }
-
+    /**
+     * Get min and max rules for a product or order context.
+     *
+     * @param int    $product_id Product ID. Default 0.
+     * @param string $context    Rule context: 'quantity', 'amount', 'order_quantity', or 'order_amount'. Default 'quantity'.
+     *
+     * @return array {
+     *     Array of min and max values.
+     *
+     *     @type int|float $min Minimum allowed value.
+     *     @type int|float $max Maximum allowed value.
+     * }
+     */
     private function get_rules( $product_id = 0, $context = 'quantity' ) {
 
         $rules = array(
@@ -88,50 +100,74 @@ class Frontend {
 
         return $rules;
     }
-
+    /**
+     * Validate a value against min/max rules.
+     *
+     * @param int|float $value         Value to validate.
+     * @param int       $product_id    Product ID.
+     * @param string    $context       Rule context: 'quantity', 'amount', 'order_quantity', or 'order_amount'.
+     * @param bool      $return_number Whether to return the min/max number instead of a translated string. Default false.
+     *
+     * @return string|int|float Error message or min/max number if $return_number is true. Returns empty string if valid.
+     */
     private function validate_rules( $value, $product_id, $context, $return_number = false ) {
 
         $rules = $this->get_rules( $product_id, $context );
 
         if ( $rules['min'] && $value < $rules['min'] ) {
-            if ( $context == 'quantity' ) {
-                return $return_number ? $rules['min'] : __( 'Minimum product' . $context . ' is required ' . $rules['min'], 'multivendorx' );
+            if ( 'quantity' === $context ) {
+                // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                return $return_number ? $rules['min'] : __( 'Minimum product ' . $context . ' is required ' . $rules['min'], 'multivendorx' );
             }
 
-            if ( $context == 'amount' ) {
-                return $return_number ? $rules['min'] : __( 'Minimum product' . $context . ' is required ' . $rules['min'], 'multivendorx' );
+            if ( 'amount' === $context ) {
+                // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                return $return_number ? $rules['min'] : __( 'Minimum product ' . $context . ' is required ' . $rules['min'], 'multivendorx' );
             }
 
-            if ( $context == 'order_quantity' ) {
+            if ( 'order_quantity' === $context ) {
+                // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                 return $return_number ? $rules['min'] : __( 'Minimum order quantity is required ' . $rules['min'], 'multivendorx' );
             }
 
-            if ( $context == 'order_amount' ) {
+            if ( 'order_amount' === $context ) {
+                // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                 return $return_number ? $rules['min'] : __( 'Minimum order amount is required ' . $rules['min'], 'multivendorx' );
             }
         }
 
         if ( $rules['max'] && $value > $rules['max'] ) {
-            if ( $context == 'quantity' ) {
+            if ( 'quantity' === $context ) {
+                // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                 return $return_number ? $rules['max'] : __( 'Maximum product ' . $context . ' is required ' . $rules['max'], 'multivendorx' );
             }
 
-            if ( $context == 'amount' ) {
-                return $return_number ? $rules['max'] : __( 'Maximum product' . $context . ' is required ' . $rules['max'], 'multivendorx' );
+            if ( 'amount' === $context ) {
+                // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                return $return_number ? $rules['max'] : __( 'Maximum product ' . $context . ' is required ' . $rules['max'], 'multivendorx' );
             }
 
-            if ( $context == 'order_quantity' ) {
+            if ( 'order_quantity' === $context ) {
+                // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                 return $return_number ? $rules['max'] : __( 'Maximum order quantity is required ' . $rules['max'], 'multivendorx' );
             }
 
-            if ( $context == 'order_amount' ) {
+            if ( 'order_amount' === $context ) {
+                // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                 return $return_number ? $rules['max'] : __( 'Maximum order amount is required ' . $rules['max'], 'multivendorx' );
             }
         }
 
         return '';
     }
-
+    /**
+     * Display minimum quantity and amount requirements on the shop page.
+     *
+     * @param string     $price   Current product price HTML.
+     * @param WC_Product $product Product object.
+     *
+     * @return string Updated price HTML including min quantity/amount info.
+     */
     public function add_min_max_to_shop_page( $price, $product ) {
 
         if ( 'external' === $product->get_type() ) {
@@ -156,26 +192,42 @@ class Frontend {
 
         return $price . $html;
     }
-
+    /**
+     * Validate minimum quantity before adding a product to cart.
+     *
+     * @param bool $passed       Whether the add to cart check passed.
+     * @param int  $product_id   Product ID.
+     * @param int  $qty          Quantity being added to cart.
+     * @param int  $variation_id Variation ID, if applicable. Default 0.
+     *
+     * @return bool True if validation passed, false otherwise.
+     */
     public function validate_add_to_cart( $passed, $product_id, $qty, $variation_id = 0 ) {
 
-        $id    = $variation_id ?: $product_id;
+		$id    = ! empty( $variation_id ) ? $variation_id : $product_id;
         $limit = $this->validate_rules( $qty, $id, 'quantity', true );
 
         if ( $limit && $qty < $limit ) {
-            wc_add_notice(
+			// translators: %d is the minimum quantity required for the product.
+			wc_add_notice(
                 sprintf( __( 'Minimum quantity required is %d', 'multivendorx' ), $limit ),
                 'error'
-            );
+			);
             return false;
         }
 
         return $passed;
     }
-
+    /**
+     * Update cart item quantity if it violates minimum quantity rules.
+     *
+     * @param array $cart_item Cart item array.
+     *
+     * @return array Modified cart item array.
+     */
     public function update_cart_quantity( $cart_item ) {
 
-        $product_id = $cart_item['variation_id'] ?: $cart_item['product_id'];
+		$product_id = ! empty( $cart_item['variation_id'] ) ? $cart_item['variation_id'] : $cart_item['product_id'];
         $limit      = $this->validate_rules( $cart_item['quantity'], $product_id, 'quantity', true );
 
         if ( $limit ) {
@@ -184,17 +236,34 @@ class Frontend {
 
         return $cart_item;
     }
-
+    /**
+     * Append minimum/maximum quantity message to cart item HTML.
+     *
+     * @param string $html Current cart item HTML.
+     * @param string $key  Cart item key.
+     * @param array  $item Cart item array.
+     *
+     * @return string Modified cart item HTML with quantity message.
+     */
     public function cart_quantity_message( $html, $key, $item ) {
 
-        $id  = $item['variation_id'] ?: $item['product_id'];
+		$id  = ! empty( $item['variation_id'] ) ? $item['variation_id'] : $item['product_id'];
         $msg = $this->validate_rules( $item['quantity'], $id, 'quantity' );
 
         return $msg ? $html . "<div class='required'>{$msg}</div>" : $html;
     }
-
+    /**
+     * Append minimum/maximum amount message to cart item HTML.
+     *
+     * Removes the default proceed-to-checkout button if a rule is violated.
+     *
+     * @param string $html Current cart item HTML.
+     * @param array  $item Cart item array.
+     *
+     * @return string Modified cart item HTML with amount message.
+     */
     public function cart_amount_message( $html, $item ) {
-        $id  = $item['variation_id'] ?: $item['product_id'];
+        $id  = ! empty( $item['variation_id'] ) ? $item['variation_id'] : $item['product_id'];
         $msg = $this->validate_rules( $item['line_subtotal'], $id, 'amount' );
 
         if ( $msg ) {
@@ -204,7 +273,12 @@ class Frontend {
             return $html;
         }
     }
-
+    /**
+     * Add cart-level error messages for quantity or amount rule violations.
+     *
+     * @param WP_Error $errors Cart error object.
+     * @param WC_Cart  $cart   WooCommerce cart object.
+     */
     public function cart_error_message_block( $errors, $cart ) {
         foreach ( $cart->get_cart() as $cart_item ) {
             $id = ! empty( $cart_item['variation_id'] )
@@ -236,7 +310,15 @@ class Frontend {
             }
         }
     }
-
+    /**
+     * Add minimum and maximum quantity rules to available variation data.
+     *
+     * @param array      $data      Variation data.
+     * @param WC_Product $product   Parent product object.
+     * @param WC_Product $variation Variation product object.
+     *
+     * @return array Modified variation data with min/max quantity included.
+     */
     public function available_variation_min_max( $data, $product, $variation ) {
 
         $rules = $this->get_rules( $variation->get_id(), 'quantity' );
@@ -252,7 +334,14 @@ class Frontend {
 
         return $data;
     }
-
+    /**
+     * Update quantity input arguments for a product based on min/max rules.
+     *
+     * @param array      $args    Quantity input args.
+     * @param WC_Product $product Product object.
+     *
+     * @return array Modified quantity input args with min/max values.
+     */
     public function update_quantity_args( $args, $product ) {
 
         $rules = $this->get_rules( $product->get_id(), 'quantity' );
@@ -268,9 +357,15 @@ class Frontend {
         return $args;
     }
 
+    /**
+     * Restrict quantities in the cart to comply with min/max rules.
+     *
+     * Loops through all cart items and adjusts quantities if they are
+     * outside the allowed min/max limits.
+     */
     public function restrict_cart_quantity() {
         foreach ( WC()->cart->get_cart() as $key => $item ) {
-            $id    = $item['variation_id'] ?: $item['product_id'];
+            $id    = ! empty( $item['variation_id'] ) ? $item['variation_id'] : $item['product_id'];
             $rules = $this->get_rules( $id, 'quantity' );
 
             if ( $rules['max'] && $item['quantity'] > $rules['max'] ) {
@@ -282,7 +377,12 @@ class Frontend {
             }
         }
     }
-
+    /**
+     * Validate the overall order against min/max rules for quantity and amount.
+     *
+     * Adds WooCommerce notices if the cart violates order-level rules,
+     * and prevents proceeding to checkout when errors exist.
+     */
     public function validate_order_rules() {
 
         $qty = WC()->cart->get_cart_contents_count();
@@ -303,7 +403,11 @@ class Frontend {
             return;
         }
     }
-
+    /**
+     * Load frontend scripts required for quantity handling on product pages.
+     *
+     * Automatically sets variation quantity input to the variation's min value.
+     */
     public function load_scripts() {
         if ( is_product() ) {
             wc_enqueue_js(
@@ -313,7 +417,14 @@ class Frontend {
             );
         }
     }
-
+    /**
+     * Add minimum quantity data attribute to the Add to Cart link.
+     *
+     * @param string     $html    Original Add to Cart HTML.
+     * @param WC_Product $product Product object.
+     *
+     * @return string Modified Add to Cart HTML with min quantity attribute.
+     */
     public function add_to_cart_link_min_qty( $html, $product ) {
 
         $min = $this->get_rules( $product->get_id(), 'quantity' )['min'];

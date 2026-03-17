@@ -131,52 +131,52 @@ class Frontend {
     }
 
 
-    /**
-     * Show related products or not.
-     *
-     * @param array $query      Query args.
-     * @param int   $product_id Product ID.
-     * @return array Filtered related products IDs.
-     */
-    public function show_related_products( $query, $product_id ) {
+	/**
+	 * Show related products or not.
+	 *
+	 * @param array $query      Query args.
+	 * @param int   $product_id Product ID.
+	 * @return array Filtered related products IDs.
+	 */
+	public function show_related_products( $query, $product_id ) {
 
-        if ( ! $product_id ) {
-            return $query;
-        }
+		if ( ! $product_id ) {
+			return $query;
+		}
 
-        $related = MultiVendorX()->setting->get_setting( 'recommendation_source', '' );
+		$related = MultiVendorX()->setting->get_setting( 'recommendation_source', '' );
 
-        if ( 'none' === $related ) {
-            return array();
-        }
+		if ( 'none' === $related ) {
+			return array();
+		}
 
-        if ( 'all_stores' === $related ) {
-            return $query;
-        }
+		if ( 'all_stores' === $related ) {
+			return $query;
+		}
 
-        if ( 'same_store' !== $related ) {
-            return $query;
-        }
+		if ( 'same_store' !== $related ) {
+			return $query;
+		}
 
-        $store = Store::get_store( $product_id, 'product' );
-        if ( ! $store || ! $store->get_id() ) {
-            return $query;
-        }
+		$store = Store::get_store( $product_id, 'product' );
+		if ( ! $store || ! $store->get_id() ) {
+			return $query;
+		}
 
-        $products = wc_get_products(
+		$products = wc_get_products(
             array(
-                'status'     => 'publish',
-                'limit'      => -1,
-                'exclude'    => array( $product_id ),
-                'return'     => 'ids',
-                'meta_key'   => Utill::POST_META_SETTINGS['store_id'],
-                'meta_value' => $store->get_id(),
-                'orderby'    => 'rand',
+				'status'   => 'publish',
+				'limit'    => -1,
+				'exclude'  => array( $product_id ),
+				'return'   => 'ids',
+				'meta_key' => Utill::POST_META_SETTINGS['store_id'], // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+            'meta_value'   => $store->get_id(), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+            'orderby'      => 'rand',
             )
-        );
+		);
 
-        return $products ?: $query;
-    }
+		return $products ? $products : $query;
+	}
 
     /**
      * Message multiple stores cart
@@ -303,7 +303,7 @@ class Frontend {
             $cookie_id       = '_multivendorx_user_cookie_' . $current_user_id;
 
             if ( ! headers_sent() ) {
-                $secure       = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
+                $secure       = ( 'https' === wp_parse_url( home_url(), PHP_URL_SCHEME ) );
                 $cookie_value = filter_input( INPUT_COOKIE, $cookie_id );
 
                 if ( ! $cookie_value ) {
@@ -322,7 +322,13 @@ class Frontend {
             }
         }
     }
-
+	/**
+	 * Track store visitors statistics
+	 *
+	 * Records visitor data when viewing a product or store page
+	 *
+	 * @return void
+	 */
     public function multivendorx_store_visitors_stats() {
         $product_store = false;
 
@@ -339,7 +345,7 @@ class Frontend {
         if ( $product_store && $user_cookie ) {
             $ip_data = $this->get_visitor_ip_data();
 
-            if ( ! empty( $ip_data ) && $ip_data->status === 'success' ) {
+            if ( ! empty( $ip_data ) && 'success' === $ip_data->status ) {
                 $ip_data->user_id     = $user_id;
                 $ip_data->user_cookie = $user_cookie;
                 $ip_data->session_id  = session_id();
@@ -351,7 +357,14 @@ class Frontend {
             }
         }
     }
-
+	/**
+	 * Get visitor IP geolocation data
+	 *
+	 * Uses ip-api.com service to get location data for visitor IP
+	 * Results are cached for 2 months
+	 *
+	 * @return object|void IP data object with status, country, city, etc.
+	 */
     public function get_visitor_ip_data() {
         if ( ! class_exists( 'WC_Geolocation', false ) ) {
             include_once WC_ABSPATH . 'includes/class-wc-geolocation.php';
@@ -361,9 +374,9 @@ class Frontend {
         if ( $ip_address ) {
             if ( get_transient( 'multivendorx_' . $ip_address ) ) {
                 $data = get_transient( 'multivendorx_' . $ip_address );
-                if ( $data->status != 'error' ) {
-                    return $data;
-                }
+				if ( 'error' !== $data->status ) {
+					return $data;
+				}
             }
             $service_endpoint = 'http://ip-api.com/json/%s';
             $response         = wp_safe_remote_get( sprintf( $service_endpoint, $ip_address ), array( 'timeout' => 2 ) );
@@ -379,49 +392,53 @@ class Frontend {
         }
     }
 
-    /**
-     * Save vistor stats for store.
-     *
-     * @since 3.0.0
-     * @param int   $store_id
-     * @param array $data
-     */
-    public function multivendorx_save_visitor_stats( $store_id, $data ) {
-        global $wpdb;
-        $wpdb->query(
+	/**
+	 * Save vistor stats for store.
+	 *
+	 * @since 3.0.0
+	 * @param int   $store_id Store ID.
+	 * @param array $data     Visitor data object.
+	 */
+	public function multivendorx_save_visitor_stats( $store_id, $data ) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->prepare(
-                "INSERT INTO `{$wpdb->prefix}" . Utill::TABLES['visitors_stats'] . '` 
-                        ( store_id
-                        , user_id
-                        , user_cookie
-                        , session_id
-                        , ip
-                        , lat
-                        , lon
-                        , city
-                        , zip
-                        , regionCode
-                        , region
-                        , countryCode
-                        , country
-                        , isp
-                        , timezone
-                        ) VALUES ( %d
-                        , %d
-                        , %s
-                        , %s
-                        , %s
-                        , %s
-                        , %s
-                        , %s
-                        , %s 
-                        , %s
-                        , %s
-                        , %s
-                        , %s
-                        , %s
-                        , %s
-                        ) ON DUPLICATE KEY UPDATE `created` = now()',
+                "INSERT INTO {$table_name} 
+            ( store_id
+            , user_id
+            , user_cookie
+            , session_id
+            , ip
+            , lat
+            , lon
+            , city
+            , zip
+            , regionCode
+            , region
+            , countryCode
+            , country
+            , isp
+            , timezone
+            ) VALUES ( %d
+            , %d
+            , %s
+            , %s
+            , %s
+            , %s
+            , %s
+            , %s
+            , %s 
+            , %s
+            , %s
+            , %s
+            , %s
+            , %s
+            , %s
+            ) ON DUPLICATE KEY UPDATE `created` = now()",
                 $store_id,
                 $data->user_id,
                 $data->user_cookie,
@@ -432,12 +449,13 @@ class Frontend {
                 $data->city,
                 $data->zip,
                 $data->region,
-                $data->regionName,
-                $data->countryCode,
+                $data->regionName, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+                $data->countryCode, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
                 $data->country,
                 $data->isp,
                 $data->timezone
             )
-        );
-    }
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	}
 }

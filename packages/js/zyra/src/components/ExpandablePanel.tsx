@@ -1,4 +1,11 @@
-import React, { useEffect, useRef, useReducer, useCallback, useContext, createContext } from 'react';
+import React, {
+    useEffect,
+    useRef,
+    useReducer,
+    useCallback,
+    useContext,
+    createContext,
+} from 'react';
 import '../styles/web/ExpandablePanel.scss';
 import { getApiLink } from '../utils/apiService';
 import axios from 'axios';
@@ -25,7 +32,7 @@ interface PanelFormField {
     desc?: string;
     options?: FieldOption[];
     beforeElement?: React.ReactNode;
-    [key: string]: unknown;
+    [ key: string ]: unknown;
 }
 
 interface ExpandablePanelMethod {
@@ -63,8 +70,8 @@ interface ExpandablePanelProps {
     name: string;
     apilink?: string;
     methods: ExpandablePanelMethod[];
-    value: Record<string, Record<string, unknown>>;
-    onChange: (data: Record<string, Record<string, unknown>>) => void;
+    value: Record< string, Record< string, unknown > >;
+    onChange: ( data: Record< string, Record< string, unknown > > ) => void;
     isWizardMode?: boolean;
     canAccess: boolean;
     addNewBtn?: boolean;
@@ -94,7 +101,13 @@ type PanelAction =
     | { type: 'SET_PROGRESS'; progress: number[] }
     | { type: 'SET_OPEN_DROPDOWN'; id: string | null }
     | { type: 'SET_ICON_DROPDOWN'; id: string | null }
-    | { type: 'START_EDIT'; id: string; field: 'title' | 'description'; title?: string; desc?: string }
+    | {
+          type: 'START_EDIT';
+          id: string;
+          field: 'title' | 'description';
+          title?: string;
+          desc?: string;
+      }
     | { type: 'UPDATE_EDIT_TITLE'; title: string }
     | { type: 'UPDATE_EDIT_DESC'; desc: string }
     | { type: 'COMMIT_EDIT' }
@@ -106,27 +119,30 @@ type PanelAction =
 
 interface PanelContextType {
     state: PanelState;
-    dispatch: React.Dispatch<PanelAction>;
-    value: Record<string, Record<string, unknown>>;
+    dispatch: React.Dispatch< PanelAction >;
+    value: Record< string, Record< string, unknown > >;
     isWizardMode: boolean;
     canAccess: boolean;
-    appLocalizer: {[key: string]: string | number | boolean};
+    appLocalizer: { [ key: string ]: string | number | boolean };
     addNewTemplate?: AddNewTemplate;
     tplFields: PanelFormField[];
-    titleRef: React.RefObject<HTMLInputElement>;
-    descRef: React.RefObject<HTMLTextAreaElement>;
-    iconPicker: React.RefObject<HTMLDivElement>;
-    handleChange: (methodId: string, key: string, val: unknown) => void;
-    handleDelete: (methodId: string) => void;
+    titleRef: React.RefObject< HTMLInputElement >;
+    descRef: React.RefObject< HTMLTextAreaElement >;
+    iconPicker: React.RefObject< HTMLDivElement >;
+    handleChange: ( methodId: string, key: string, val: unknown ) => void;
+    handleDelete: ( methodId: string ) => void;
     canDelete: () => boolean;
-    renderField: (methodId: string, field: PanelFormField) => JSX.Element | null;
+    renderField: (
+        methodId: string,
+        field: PanelFormField
+    ) => JSX.Element | null;
     commitEdit: () => void;
-    shouldRender: (dependent: any, methodId: string) => boolean;
+    shouldRender: ( dependent: any, methodId: string ) => boolean;
 }
 
 interface PanelItemContextType {
     method: ExpandablePanelMethod;
-    methodValue: Record<string, unknown>;
+    methodValue: Record< string, unknown >;
     idx: number;
     isOn: boolean;
     isOpen: boolean;
@@ -140,27 +156,31 @@ interface PanelItemContextType {
 
 // ── Context Creation ──────────────────────────────────────────────────────────
 
-const PanelContext = createContext<PanelContextType | null>(null);
-const PanelItemContext = createContext<PanelItemContextType | null>(null);
+const PanelContext = createContext< PanelContextType | null >( null );
+const PanelItemContext = createContext< PanelItemContextType | null >( null );
 
 // ── Custom Hooks ─────────────────────────────────────────────────────────────
 
 const usePanel = () => {
-    const context = useContext(PanelContext);
-    if (!context) throw new Error('usePanel must be used within PanelProvider');
+    const context = useContext( PanelContext );
+    if ( ! context ) {
+        throw new Error( 'usePanel must be used within PanelProvider' );
+    }
     return context;
 };
 
 const usePanelItem = () => {
-    const context = useContext(PanelItemContext);
-    if (!context) throw new Error('usePanelItem must be used within PanelItemProvider');
+    const context = useContext( PanelItemContext );
+    if ( ! context ) {
+        throw new Error( 'usePanelItem must be used within PanelItemProvider' );
+    }
     return context;
 };
 
 // ── Reducer ───────────────────────────────────────────────────────────────────
 
-const panelReducer = (state: PanelState, action: PanelAction): PanelState => {
-    switch (action.type) {
+const panelReducer = ( state: PanelState, action: PanelAction ): PanelState => {
+    switch ( action.type ) {
         case 'SET_METHODS':
             return { ...state, methods: action.methods };
         case 'SET_ACTIVE_TAB':
@@ -197,14 +217,15 @@ const panelReducer = (state: PanelState, action: PanelAction): PanelState => {
         case 'ADD_METHOD':
             return {
                 ...state,
-                methods: [...state.methods, action.method],
+                methods: [ ...state.methods, action.method ],
                 activeTab: action.method.id,
             };
         case 'DELETE_METHOD':
             return {
                 ...state,
-                methods: state.methods.filter(m => m.id !== action.id),
-                activeTab: state.activeTab === action.id ? null : state.activeTab,
+                methods: state.methods.filter( ( m ) => m.id !== action.id ),
+                activeTab:
+                    state.activeTab === action.id ? null : state.activeTab,
             };
         default:
             return state;
@@ -213,13 +234,19 @@ const panelReducer = (state: PanelState, action: PanelAction): PanelState => {
 
 // ── Pure helpers ──────────────────────────────────────────────────────────────
 
-const isCountableField = (f: PanelFormField) =>
+const isCountableField = ( f: PanelFormField ) =>
     f.type !== 'button' && f.type !== 'notice';
 
-const isFilled = (val: unknown): boolean => {
-    if (val === null || val === undefined) return false;
-    if (typeof val === 'string') return val.trim() !== '';
-    if (Array.isArray(val)) return val.length > 0;
+const isFilled = ( val: unknown ): boolean => {
+    if ( val === null || val === undefined ) {
+        return false;
+    }
+    if ( typeof val === 'string' ) {
+        return val.trim() !== '';
+    }
+    if ( Array.isArray( val ) ) {
+        return val.length > 0;
+    }
     return true;
 };
 
@@ -227,23 +254,32 @@ const mergeTemplateFields = (
     method: ExpandablePanelMethod,
     tplFields: PanelFormField[]
 ): ExpandablePanelMethod => {
-    if (!tplFields.length) return method;
-    const existing = new Set((method.formFields ?? []).map(f => f.key));
+    if ( ! tplFields.length ) {
+        return method;
+    }
+    const existing = new Set(
+        ( method.formFields ?? [] ).map( ( f ) => f.key )
+    );
     return {
         ...method,
         formFields: [
-            ...(method.formFields ?? []),
-            ...tplFields.filter(f => !existing.has(f.key)),
+            ...( method.formFields ?? [] ),
+            ...tplFields.filter( ( f ) => ! existing.has( f.key ) ),
         ],
     };
 };
 
-const formatPrice = (methodValue: Record<string, unknown>) => {
+const formatPrice = ( methodValue: Record< string, unknown > ) => {
     const { price, unit } = methodValue;
-    if (price === null || price === undefined || price === '') return null;
+    if ( price === null || price === undefined || price === '' ) {
+        return null;
+    }
     return {
-        price: typeof price === 'number' ? `$${price.toFixed(2)}` : `$${price}`,
-        unit: unit ? String(unit) : '',
+        price:
+            typeof price === 'number'
+                ? `$${ price.toFixed( 2 ) }`
+                : `$${ price }`,
+        unit: unit ? String( unit ) : '',
     };
 };
 
@@ -252,8 +288,10 @@ const canEditField = (
     field: 'title' | 'description',
     tpl?: AddNewTemplate
 ): boolean => {
-    if (!method.isCustom) return false;
-    return !tpl?.editableFields || tpl.editableFields[field] !== false;
+    if ( ! method.isCustom ) {
+        return false;
+    }
+    return ! tpl?.editableFields || tpl.editableFields[ field ] !== false;
 };
 
 // ── Sub-Components ────────────────────────────────────────────────────────────
@@ -267,19 +305,11 @@ const PanelHeader: React.FC = () => {
         descRef,
         iconPicker,
         handleChange,
-        commitEdit
+        commitEdit,
     } = usePanel();
-    
-    const {
-        method,
-        methodValue,
-        isOpen,
-        isOn,
-        hasFields,
-        icon,
-        title,
-        desc
-    } = usePanelItem();
+
+    const { method, methodValue, isOpen, isOn, hasFields, icon, title, desc } =
+        usePanelItem();
 
     const editing = state.editId === method.id;
     const editField = state.editField;
@@ -289,136 +319,278 @@ const PanelHeader: React.FC = () => {
 
     return (
         <div className="expandable-header">
-            {hasFields && (
+            { hasFields && (
                 <div className="toggle-icon">
                     <i
-                        className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`}
-                        onClick={() => dispatch({ type: 'SET_ACTIVE_TAB', id: isOpen ? null : method.id })}
+                        className={ `adminfont-${
+                            isOpen
+                                ? 'keyboard-arrow-down'
+                                : 'pagination-right-arrow'
+                        }` }
+                        onClick={ () =>
+                            dispatch( {
+                                type: 'SET_ACTIVE_TAB',
+                                id: isOpen ? null : method.id,
+                            } )
+                        }
                     />
                 </div>
-            )}
+            ) }
 
             <div
                 className="details"
-                onClick={() => dispatch({ type: 'SET_ACTIVE_TAB', id: isOpen ? null : method.id })}
+                onClick={ () =>
+                    dispatch( {
+                        type: 'SET_ACTIVE_TAB',
+                        id: isOpen ? null : method.id,
+                    } )
+                }
             >
                 <div className="details-wrapper">
-                    {/* Icon picker */}
-                    {icon && (
+                    { /* Icon picker */ }
+                    { icon && (
                         <div
                             className="expandable-header-icon"
-                            ref={iconDropdown === method.id ? iconPicker : null}
-                            onClick={e => {
-                                if (!method.iconEnable) return;
+                            ref={
+                                iconDropdown === method.id ? iconPicker : null
+                            }
+                            onClick={ ( e ) => {
+                                if ( ! method.iconEnable ) {
+                                    return;
+                                }
                                 e.stopPropagation();
-                                dispatch({ type: 'SET_ICON_DROPDOWN', id: iconDropdown === method.id ? null : method.id });
-                            }}
+                                dispatch( {
+                                    type: 'SET_ICON_DROPDOWN',
+                                    id:
+                                        iconDropdown === method.id
+                                            ? null
+                                            : method.id,
+                                } );
+                            } }
                         >
-                            <i className={`adminfont-${icon} icon`} />
-                            {method.iconEnable && iconDropdown !== method.id && (
-                                <i className="adminfont-edit edit-icon" />
-                            )}
-                            {method.iconEnable && iconDropdown === method.id && (
-                                <div
-                                    className="icon-options-list"
-                                    onClick={e => e.stopPropagation()}
-                                >
-                                    {(method.iconOptions ?? addNewTemplate?.iconOptions ?? []).map(cls => (
-                                        <button
-                                            key={cls} type="button"
-                                            className={`icon-option ${icon === cls ? 'selected' : ''}`}
-                                            onClick={() => { handleChange(method.id, 'icon', cls); dispatch({ type: 'SET_ICON_DROPDOWN', id: null }); }}
-                                            title={cls}
-                                        >
-                                            <i className={`adminfont-${cls}`} />
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
+                            <i className={ `adminfont-${ icon } icon` } />
+                            { method.iconEnable &&
+                                iconDropdown !== method.id && (
+                                    <i className="adminfont-edit edit-icon" />
+                                ) }
+                            { method.iconEnable &&
+                                iconDropdown === method.id && (
+                                    <div
+                                        className="icon-options-list"
+                                        onClick={ ( e ) => e.stopPropagation() }
+                                    >
+                                        { (
+                                            method.iconOptions ??
+                                            addNewTemplate?.iconOptions ??
+                                            []
+                                        ).map( ( cls ) => (
+                                            <button
+                                                key={ cls }
+                                                type="button"
+                                                className={ `icon-option ${
+                                                    icon === cls
+                                                        ? 'selected'
+                                                        : ''
+                                                }` }
+                                                onClick={ () => {
+                                                    handleChange(
+                                                        method.id,
+                                                        'icon',
+                                                        cls
+                                                    );
+                                                    dispatch( {
+                                                        type: 'SET_ICON_DROPDOWN',
+                                                        id: null,
+                                                    } );
+                                                } }
+                                                title={ cls }
+                                            >
+                                                <i
+                                                    className={ `adminfont-${ cls }` }
+                                                />
+                                            </button>
+                                        ) ) }
+                                    </div>
+                                ) }
                         </div>
-                    )}
+                    ) }
 
                     <div className="expandable-header-info">
-                        {/* Title (inline-editable for custom) */}
+                        { /* Title (inline-editable for custom) */ }
                         <div className="title-wrapper">
                             <span className="title">
-                                {editing && editField === 'title' && canEditField(method, 'title', addNewTemplate) ? (
+                                { editing &&
+                                editField === 'title' &&
+                                canEditField(
+                                    method,
+                                    'title',
+                                    addNewTemplate
+                                ) ? (
                                     <input
-                                        ref={titleRef} type="text"
+                                        ref={ titleRef }
+                                        type="text"
                                         className="inline-edit-input title-edit"
-                                        value={editTitle}
-                                        onChange={e => dispatch({ type: 'UPDATE_EDIT_TITLE', title: e.target.value })}
-                                        onKeyDown={e => e.key === 'Enter' && commitEdit()}
-                                        onClick={e => e.stopPropagation()}
+                                        value={ editTitle }
+                                        onChange={ ( e ) =>
+                                            dispatch( {
+                                                type: 'UPDATE_EDIT_TITLE',
+                                                title: e.target.value,
+                                            } )
+                                        }
+                                        onKeyDown={ ( e ) =>
+                                            e.key === 'Enter' && commitEdit()
+                                        }
+                                        onClick={ ( e ) => e.stopPropagation() }
                                     />
                                 ) : (
                                     <span
-                                        className={`title ${canEditField(method, 'title', addNewTemplate) ? 'editable-title' : ''}`}
-                                        onClick={e => {
+                                        className={ `title ${
+                                            canEditField(
+                                                method,
+                                                'title',
+                                                addNewTemplate
+                                            )
+                                                ? 'editable-title'
+                                                : ''
+                                        }` }
+                                        onClick={ ( e ) => {
                                             e.stopPropagation();
-                                            if (canEditField(method, 'title', addNewTemplate)) {
-                                                dispatch({
+                                            if (
+                                                canEditField(
+                                                    method,
+                                                    'title',
+                                                    addNewTemplate
+                                                )
+                                            ) {
+                                                dispatch( {
                                                     type: 'START_EDIT',
                                                     id: method.id,
                                                     field: 'title',
-                                                    title: (methodValue.title as string) || method.label || '',
-                                                });
+                                                    title:
+                                                        ( methodValue.title as string ) ||
+                                                        method.label ||
+                                                        '',
+                                                } );
                                             }
-                                        }}
-                                        title={canEditField(method, 'title', addNewTemplate) ? 'Click to edit' : undefined}
+                                        } }
+                                        title={
+                                            canEditField(
+                                                method,
+                                                'title',
+                                                addNewTemplate
+                                            )
+                                                ? 'Click to edit'
+                                                : undefined
+                                        }
                                     >
-                                        {title}
-                                        {canEditField(method, 'title', addNewTemplate) && (
+                                        { title }
+                                        { canEditField(
+                                            method,
+                                            'title',
+                                            addNewTemplate
+                                        ) && (
                                             <i className="adminfont-edit inline-edit-icon" />
-                                        )}
+                                        ) }
                                     </span>
-                                )}
+                                ) }
 
-                                {/* Active/Inactive badge — predefined disableBtn methods only */}
-                                {method.disableBtn && !method.isCustom && (
+                                { /* Active/Inactive badge — predefined disableBtn methods only */ }
+                                { method.disableBtn && ! method.isCustom && (
                                     <div className="panel-badges">
-                                        <div className={`admin-badge ${isOn ? 'green' : 'red'}`}>
-                                            {isOn ? 'Active' : 'Inactive'}
+                                        <div
+                                            className={ `admin-badge ${
+                                                isOn ? 'green' : 'red'
+                                            }` }
+                                        >
+                                            { isOn ? 'Active' : 'Inactive' }
                                         </div>
                                     </div>
-                                )}
+                                ) }
                             </span>
                         </div>
 
-                        {/* Description (inline-editable for custom) */}
+                        { /* Description (inline-editable for custom) */ }
                         <div className="panel-description">
-                            {editing && editField === 'description' && canEditField(method, 'description', addNewTemplate) ? (
+                            { editing &&
+                            editField === 'description' &&
+                            canEditField(
+                                method,
+                                'description',
+                                addNewTemplate
+                            ) ? (
                                 <textarea
-                                    ref={descRef}
+                                    ref={ descRef }
                                     className="description-edit"
-                                    value={editDesc}
-                                    onChange={e => dispatch({ type: 'UPDATE_EDIT_DESC', desc: e.target.value })}
-                                    onKeyDown={e => e.key === 'Enter' && e.ctrlKey && commitEdit()}
-                                    onClick={e => e.stopPropagation()}
-                                    rows={3}
+                                    value={ editDesc }
+                                    onChange={ ( e ) =>
+                                        dispatch( {
+                                            type: 'UPDATE_EDIT_DESC',
+                                            desc: e.target.value,
+                                        } )
+                                    }
+                                    onKeyDown={ ( e ) =>
+                                        e.key === 'Enter' &&
+                                        e.ctrlKey &&
+                                        commitEdit()
+                                    }
+                                    onClick={ ( e ) => e.stopPropagation() }
+                                    rows={ 3 }
                                 />
                             ) : (
                                 <p
-                                    className={canEditField(method, 'description', addNewTemplate) ? 'editable-description' : undefined}
-                                    onClick={e => {
+                                    className={
+                                        canEditField(
+                                            method,
+                                            'description',
+                                            addNewTemplate
+                                        )
+                                            ? 'editable-description'
+                                            : undefined
+                                    }
+                                    onClick={ ( e ) => {
                                         e.stopPropagation();
-                                        if (canEditField(method, 'description', addNewTemplate)) {
-                                            dispatch({
+                                        if (
+                                            canEditField(
+                                                method,
+                                                'description',
+                                                addNewTemplate
+                                            )
+                                        ) {
+                                            dispatch( {
                                                 type: 'START_EDIT',
                                                 id: method.id,
                                                 field: 'description',
-                                                desc: (methodValue.description as string) || method.desc || '',
-                                            });
+                                                desc:
+                                                    ( methodValue.description as string ) ||
+                                                    method.desc ||
+                                                    '',
+                                            } );
                                         }
-                                    }}
-                                    title={canEditField(method, 'description', addNewTemplate) ? 'Click to edit' : undefined}
+                                    } }
+                                    title={
+                                        canEditField(
+                                            method,
+                                            'description',
+                                            addNewTemplate
+                                        )
+                                            ? 'Click to edit'
+                                            : undefined
+                                    }
                                 >
-                                    <span dangerouslySetInnerHTML={{ __html: desc }} />
-                                    {canEditField(method, 'description', addNewTemplate) && (
+                                    <span
+                                        dangerouslySetInnerHTML={ {
+                                            __html: desc,
+                                        } }
+                                    />
+                                    { canEditField(
+                                        method,
+                                        'description',
+                                        addNewTemplate
+                                    ) && (
                                         <i className="adminfont-edit inline-edit-icon" />
-                                    )}
+                                    ) }
                                 </p>
-                            )}
+                            ) }
                         </div>
                     </div>
                 </div>
@@ -429,190 +601,266 @@ const PanelHeader: React.FC = () => {
 };
 
 const PanelControls: React.FC = () => {
-    const {
-        state,
-        dispatch,
-        handleChange,
-        handleDelete,
-        canDelete
-    } = usePanel();
-    
-    const {
-        method,
-        isOn,
-        isOpen,
-        hasFields,
-        price,
-        cntFlds,
-        idx
-    } = usePanelItem();
+    const { state, dispatch, handleChange, handleDelete, canDelete } =
+        usePanel();
+
+    const { method, isOn, isOpen, hasFields, price, cntFlds, idx } =
+        usePanelItem();
 
     return (
         <div className="right-section">
-            {price && (
+            { price && (
                 <span className="price-field">
-                    {price.price}
-                    {price.unit && <span className="desc">{price.unit}</span>}
+                    { price.price }
+                    { price.unit && (
+                        <span className="desc">{ price.unit }</span>
+                    ) }
                 </span>
-            )}
+            ) }
 
             <ul className="settings-btn">
-                {/* Delete — custom only, respects minimum count */}
-                {method.isCustom && !method.hideDeleteBtn && canDelete() && (
-                    <ButtonInputUI buttons={[{
-                        icon: 'delete', text: 'Delete', color: 'red-color',
-                        onClick: () => handleDelete(method.id),
-                    }]} />
-                )}
+                { /* Delete — custom only, respects minimum count */ }
+                { method.isCustom && ! method.hideDeleteBtn && canDelete() && (
+                    <ButtonInputUI
+                        buttons={ [
+                            {
+                                icon: 'delete',
+                                text: 'Delete',
+                                color: 'red-color',
+                                onClick: () => handleDelete( method.id ),
+                            },
+                        ] }
+                    />
+                ) }
 
-                {/* PREDEFINED (disableBtn, non-custom) */}
-                {method.disableBtn && !method.isCustom && (
-                    isOn ? (
+                { /* PREDEFINED (disableBtn, non-custom) */ }
+                { method.disableBtn &&
+                    ! method.isCustom &&
+                    ( isOn ? (
                         hasFields && (
-                            <ButtonInputUI buttons={[{
-                                icon: 'setting', text: 'Settings', color: 'purple',
-                                onClick: () => dispatch({ type: 'SET_ACTIVE_TAB', id: isOpen ? null : method.id }),
-                            }]} />
+                            <ButtonInputUI
+                                buttons={ [
+                                    {
+                                        icon: 'setting',
+                                        text: 'Settings',
+                                        color: 'purple',
+                                        onClick: () =>
+                                            dispatch( {
+                                                type: 'SET_ACTIVE_TAB',
+                                                id: isOpen ? null : method.id,
+                                            } ),
+                                    },
+                                ] }
+                            />
                         )
                     ) : (
-                        <li onClick={() => handleChange(method.id, 'enable', true)}>
+                        <li
+                            onClick={ () =>
+                                handleChange( method.id, 'enable', true )
+                            }
+                        >
                             <span className="admin-btn btn-purple-bg">
                                 <i className="adminfont-eye" /> Enable
                             </span>
                         </li>
-                    )
-                )}
+                    ) ) }
 
-                {/* CUSTOM (isCustom) */}
-                {method.isCustom && method.disableBtn && (
-                    isOn ? (
-                        <ButtonInputUI buttons={[{
-                            icon: 'eye-blocked',
-                            text: 'Hide',
-                            color: 'purple',
-                            onClick: () => handleChange(method.id, 'enable', false),
-                        }]} />
+                { /* CUSTOM (isCustom) */ }
+                { method.isCustom &&
+                    method.disableBtn &&
+                    ( isOn ? (
+                        <ButtonInputUI
+                            buttons={ [
+                                {
+                                    icon: 'eye-blocked',
+                                    text: 'Hide',
+                                    color: 'purple',
+                                    onClick: () =>
+                                        handleChange(
+                                            method.id,
+                                            'enable',
+                                            false
+                                        ),
+                                },
+                            ] }
+                        />
                     ) : (
-                        <li onClick={() => handleChange(method.id, 'enable', true)}>
+                        <li
+                            onClick={ () =>
+                                handleChange( method.id, 'enable', true )
+                            }
+                        >
                             <span className="admin-btn btn-purple-bg">
                                 <i className="adminfont-eye" /> Show
                             </span>
                         </li>
-                    )
-                )}
+                    ) ) }
 
-                {/* Progress counter (non-disableBtn methods only) */}
-                {!method.disableBtn && method.countBtn && cntFlds.length > 0 && (
-                    <div className="admin-badge red">
-                        {state.progress[idx] || 0}/{cntFlds.length}
-                    </div>
-                )}
+                { /* Progress counter (non-disableBtn methods only) */ }
+                { ! method.disableBtn &&
+                    method.countBtn &&
+                    cntFlds.length > 0 && (
+                        <div className="admin-badge red">
+                            { state.progress[ idx ] || 0 }/{ cntFlds.length }
+                        </div>
+                    ) }
             </ul>
 
-            {/* 3-dot dropdown — non-custom, enabled methods */}
-            {!method.isCustom && isOn && (
+            { /* 3-dot dropdown — non-custom, enabled methods */ }
+            { ! method.isCustom && isOn && (
                 <div className="icon-wrapper">
                     <i
                         className="admin-icon adminfont-more-vertical"
-                        onClick={e => {
+                        onClick={ ( e ) => {
                             e.stopPropagation();
-                            dispatch({ type: 'SET_OPEN_DROPDOWN', id: state.openDropdown === method.id ? null : method.id });
-                        }}
+                            dispatch( {
+                                type: 'SET_OPEN_DROPDOWN',
+                                id:
+                                    state.openDropdown === method.id
+                                        ? null
+                                        : method.id,
+                            } );
+                        } }
                     />
-                    {state.openDropdown === method.id && (
-                        <div className="dropdown" onClick={e => e.stopPropagation()}>
+                    { state.openDropdown === method.id && (
+                        <div
+                            className="dropdown"
+                            onClick={ ( e ) => e.stopPropagation() }
+                        >
                             <div className="dropdown-body">
                                 <ul>
-                                    {method.disableBtn && hasFields && (
-                                        <li onClick={() => {
-                                            dispatch({ type: 'SET_ACTIVE_TAB', id: isOpen ? null : method.id });
-                                            dispatch({ type: 'SET_OPEN_DROPDOWN', id: null });
-                                        }}>
+                                    { method.disableBtn && hasFields && (
+                                        <li
+                                            onClick={ () => {
+                                                dispatch( {
+                                                    type: 'SET_ACTIVE_TAB',
+                                                    id: isOpen
+                                                        ? null
+                                                        : method.id,
+                                                } );
+                                                dispatch( {
+                                                    type: 'SET_OPEN_DROPDOWN',
+                                                    id: null,
+                                                } );
+                                            } }
+                                        >
                                             <span className="item">
-                                                <i className="adminfont-setting" /> Settings
+                                                <i className="adminfont-setting" />{ ' ' }
+                                                Settings
                                             </span>
                                         </li>
-                                    )}
-                                    <li className="delete" onClick={() => {
-                                        handleChange(method.id, 'enable', false);
-                                        dispatch({ type: 'SET_OPEN_DROPDOWN', id: null });
-                                    }}>
+                                    ) }
+                                    <li
+                                        className="delete"
+                                        onClick={ () => {
+                                            handleChange(
+                                                method.id,
+                                                'enable',
+                                                false
+                                            );
+                                            dispatch( {
+                                                type: 'SET_OPEN_DROPDOWN',
+                                                id: null,
+                                            } );
+                                        } }
+                                    >
                                         <div className="item">
-                                            <i className="adminfont-eye-blocked" /> Disable
+                                            <i className="adminfont-eye-blocked" />{ ' ' }
+                                            Disable
                                         </div>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                    )}
+                    ) }
                 </div>
-            )}
+            ) }
         </div>
     );
 };
 
 const PanelBody: React.FC = () => {
-    const {
-        isWizardMode,
-        renderField,
-        shouldRender
-    } = usePanel();
-    
-    const {
-        method,
-        isOpen,
-        isOn
-    } = usePanelItem();
+    const { isWizardMode, renderField, shouldRender } = usePanel();
 
-    const hasFields = Boolean(method.formFields?.length);
-    
-    if (!hasFields) return null;
-    if (!(method.openForm || (isOpen && (isOn || method.isCustom)))) return null;
+    const { method, isOpen, isOn } = usePanelItem();
+
+    const hasFields = Boolean( method.formFields?.length );
+
+    if ( ! hasFields ) {
+        return null;
+    }
+    if ( ! ( method.openForm || ( isOpen && ( isOn || method.isCustom ) ) ) ) {
+        return null;
+    }
 
     return (
-        <div className={`${method.wrapperClass ?? ''} expandable-panel open`.trim()}>
+        <div
+            className={ `${
+                method.wrapperClass ?? ''
+            } expandable-panel open`.trim() }
+        >
             <FormGroupWrapper>
-                {method.formFields!.map(field => {
-                    if (isWizardMode && field.key === 'wizardButtons') return null;
-                    const shouldShowField = Array.isArray(field.dependent)
-                                                ? field.dependent.every((dep) => shouldRender(dep, method.id))
-                                                : field.dependent
-                                                    ? shouldRender(field.dependent, method.id)
-                                                    : true;
+                { method.formFields!.map( ( field ) => {
+                    if ( isWizardMode && field.key === 'wizardButtons' ) {
+                        return null;
+                    }
+                    const shouldShowField = Array.isArray( field.dependent )
+                        ? field.dependent.every( ( dep ) =>
+                              shouldRender( dep, method.id )
+                          )
+                        : field.dependent
+                        ? shouldRender( field.dependent, method.id )
+                        : true;
 
-                    if (!shouldShowField) return null;
+                    if ( ! shouldShowField ) {
+                        return null;
+                    }
 
                     return (
                         <FormGroup
-                            row key={field.key}
-                            label={field.type !== 'notice' ? field.label : undefined}
-                            desc={field.desc}
-                            htmlFor={field.name}
+                            row
+                            key={ field.key }
+                            label={
+                                field.type !== 'notice'
+                                    ? field.label
+                                    : undefined
+                            }
+                            desc={ field.desc }
+                            htmlFor={ field.name }
                         >
-                            {field.beforeElement && renderField(method.id, field.beforeElement as PanelFormField)}
-                            {renderField(method.id, field)}
+                            { field.beforeElement &&
+                                renderField(
+                                    method.id,
+                                    field.beforeElement as PanelFormField
+                                ) }
+                            { renderField( method.id, field ) }
                         </FormGroup>
                     );
-                })}
+                } ) }
             </FormGroupWrapper>
         </div>
     );
 };
 
-const PanelItem: React.FC<{ method: ExpandablePanelMethod; idx: number }> = ({ method, idx }) => {
+const PanelItem: React.FC< {
+    method: ExpandablePanelMethod;
+    idx: number;
+} > = ( { method, idx } ) => {
     const { state, value } = usePanel();
-    
+
     // Cache methodValue once - KEY OPTIMIZATION
-    const methodValue = value[method.id] ?? {};
-    
-    const isOn = method.isCustom ? methodValue.enable !== false : Boolean(methodValue.enable);
+    const methodValue = value[ method.id ] ?? {};
+
+    const isOn = method.isCustom
+        ? methodValue.enable !== false
+        : Boolean( methodValue.enable );
     const isOpen = state.activeTab === method.id;
-    const hasFields = Boolean(method.formFields?.length);
-    const icon = (methodValue.icon as string) || method.icon;
-    const price = formatPrice(methodValue);
-    const title = (methodValue.title as string) || method.label;
-    const desc = (methodValue.description as string) || method.desc;
-    const cntFlds = method.formFields?.filter(isCountableField) ?? [];
+    const hasFields = Boolean( method.formFields?.length );
+    const icon = ( methodValue.icon as string ) || method.icon;
+    const price = formatPrice( methodValue );
+    const title = ( methodValue.title as string ) || method.label;
+    const desc = ( methodValue.description as string ) || method.desc;
+    const cntFlds = method.formFields?.filter( isCountableField ) ?? [];
 
     const itemContextValue: PanelItemContextType = {
         method,
@@ -625,17 +873,19 @@ const PanelItem: React.FC<{ method: ExpandablePanelMethod; idx: number }> = ({ m
         title,
         desc,
         price,
-        cntFlds
+        cntFlds,
     };
 
     return (
-        <PanelItemContext.Provider value={itemContextValue}>
+        <PanelItemContext.Provider value={ itemContextValue }>
             <div
-                className={[
+                className={ [
                     'expandable-item',
-                    method.disableBtn && !isOn ? 'disable' : '',
+                    method.disableBtn && ! isOn ? 'disable' : '',
                     method.openForm ? 'open' : '',
-                ].filter(Boolean).join(' ')}
+                ]
+                    .filter( Boolean )
+                    .join( ' ' ) }
             >
                 <PanelHeader />
                 <PanelBody />
@@ -646,7 +896,7 @@ const PanelItem: React.FC<{ method: ExpandablePanelMethod; idx: number }> = ({ m
 
 // ── Main Component ────────────────────────────────────────────────────────────
 
-export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
+export const ExpandablePanelUI: React.FC< ExpandablePanelProps > = ( {
     methods: initialMethods,
     value,
     onChange,
@@ -656,12 +906,14 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
     addNewBtn,
     addNewTemplate,
     min,
-}) => {
+} ) => {
     const tplFields = addNewTemplate?.formFields ?? [];
 
     // ── useReducer ────────────────────────────────────────────────────────────
-    const [state, dispatch] = useReducer(panelReducer, {
-        methods: initialMethods.map(m => m.isCustom ? mergeTemplateFields(m, tplFields) : m),
+    const [ state, dispatch ] = useReducer( panelReducer, {
+        methods: initialMethods.map( ( m ) =>
+            m.isCustom ? mergeTemplateFields( m, tplFields ) : m
+        ),
         activeTab: null,
         wizardIndex: 0,
         progress: [],
@@ -671,41 +923,66 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         editField: null,
         editTitle: '',
         editDesc: '',
-    });
+    } );
 
     // ── Refs ──────────────────────────────────────────────────────────────────
-    const titleRef = useRef<HTMLInputElement>(null);
-    const descRef = useRef<HTMLTextAreaElement>(null);
-    const iconPicker = useRef<HTMLDivElement>(null);
+    const titleRef = useRef< HTMLInputElement >( null );
+    const descRef = useRef< HTMLTextAreaElement >( null );
+    const iconPicker = useRef< HTMLDivElement >( null );
 
     // ── Core handler (memoized) ───────────────────────────────────────────────
-    const handleChange = useCallback((methodId: string, key: string, val: unknown) => {
-        if (key === 'wizardButtons') return;
-        onChange({
-            ...value,
-            [methodId]: { ...(value[methodId] ?? {}), [key]: val },
-        });
-    }, [onChange, value]);
+    const handleChange = useCallback(
+        ( methodId: string, key: string, val: unknown ) => {
+            if ( key === 'wizardButtons' ) {
+                return;
+            }
+            onChange( {
+                ...value,
+                [ methodId ]: { ...( value[ methodId ] ?? {} ), [ key ]: val },
+            } );
+        },
+        [ onChange, value ]
+    );
 
     // ── Helper to commit edit ─────────────────────────────────────────────────
-    const commitEdit = useCallback(() => {
-        if (state.editId && state.editField === 'title' && state.editTitle.trim())
-            handleChange(state.editId, 'title', state.editTitle.trim());
-        if (state.editId && state.editField === 'description')
-            handleChange(state.editId, 'description', state.editDesc);
-        dispatch({ type: 'COMMIT_EDIT' });
-    }, [state.editId, state.editField, state.editTitle, state.editDesc, handleChange]);
+    const commitEdit = useCallback( () => {
+        if (
+            state.editId &&
+            state.editField === 'title' &&
+            state.editTitle.trim()
+        ) {
+            handleChange( state.editId, 'title', state.editTitle.trim() );
+        }
+        if ( state.editId && state.editField === 'description' ) {
+            handleChange( state.editId, 'description', state.editDesc );
+        }
+        dispatch( { type: 'COMMIT_EDIT' } );
+    }, [
+        state.editId,
+        state.editField,
+        state.editTitle,
+        state.editDesc,
+        handleChange,
+    ] );
 
     // ── CRUD helpers ──────────────────────────────────────────────────────────
-    const canDelete = useCallback(() => 
-        min === undefined || state.methods.filter(m => m.isCustom).length > min,
-    [min, state.methods]);
+    const canDelete = useCallback(
+        () =>
+            min === undefined ||
+            state.methods.filter( ( m ) => m.isCustom ).length > min,
+        [ min, state.methods ]
+    );
 
-    const handleAddNew = useCallback(() => {
-        if (!canAccess || !addNewTemplate) return;
+    const handleAddNew = useCallback( () => {
+        if ( ! canAccess || ! addNewTemplate ) {
+            return;
+        }
 
-        const id = (addNewTemplate.label ?? 'item').trim().toLowerCase().replace(/\s+/g, '_') +
-            Math.floor(Math.random() * 10000);
+        const id =
+            ( addNewTemplate.label ?? 'item' )
+                .trim()
+                .toLowerCase()
+                .replace( /\s+/g, '_' ) + Math.floor( Math.random() * 10000 );
 
         const newMethod: ExpandablePanelMethod = {
             id,
@@ -717,43 +994,55 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
             connected: false,
             isCustom: true,
             disableBtn: addNewTemplate.disableBtn ?? false,
-            formFields: addNewTemplate.formFields?.map(f => ({ ...f })) ?? [],
+            formFields:
+                addNewTemplate.formFields?.map( ( f ) => ( { ...f } ) ) ?? [],
         };
 
-        const mergedMethod = mergeTemplateFields(newMethod, tplFields);
-        dispatch({ type: 'ADD_METHOD', method: mergedMethod });
+        const mergedMethod = mergeTemplateFields( newMethod, tplFields );
+        dispatch( { type: 'ADD_METHOD', method: mergedMethod } );
 
-        const init: Record<string, unknown> = {
+        const init: Record< string, unknown > = {
             isCustom: true,
             title: newMethod.label,
             description: newMethod.desc,
             label: newMethod.label,
             desc: newMethod.desc,
         };
-        if (addNewTemplate.icon) init.icon = addNewTemplate.icon;
-        newMethod.formFields?.forEach(f => { init[f.key] = ''; });
+        if ( addNewTemplate.icon ) {
+            init.icon = addNewTemplate.icon;
+        }
+        newMethod.formFields?.forEach( ( f ) => {
+            init[ f.key ] = '';
+        } );
 
-        onChange({ ...value, [id]: init });
-    }, [canAccess, addNewTemplate, tplFields, onChange, value]);
+        onChange( { ...value, [ id ]: init } );
+    }, [ canAccess, addNewTemplate, tplFields, onChange, value ] );
 
-    const handleDelete = useCallback((methodId: string) => {
-        if (!canDelete()) return;
-        dispatch({ type: 'DELETE_METHOD', id: methodId });
-        const next = { ...value };
-        delete next[methodId];
-        onChange(next);
-    }, [canDelete, onChange, value]);
+    const handleDelete = useCallback(
+        ( methodId: string ) => {
+            if ( ! canDelete() ) {
+                return;
+            }
+            dispatch( { type: 'DELETE_METHOD', id: methodId } );
+            const next = { ...value };
+            delete next[ methodId ];
+            onChange( next );
+        },
+        [ canDelete, onChange, value ]
+    );
 
     // ── Wizard ────────────────────────────────────────────────────────────────
-    const saveWizard = useCallback(() => {
-        if (!apilink || !ZyraVariable?.nonce) return;
-        axios({
-            url: getApiLink(ZyraVariable, apilink),
+    const saveWizard = useCallback( () => {
+        if ( ! apilink || ! ZyraVariable?.nonce ) {
+            return;
+        }
+        axios( {
+            url: getApiLink( ZyraVariable, apilink ),
             method: 'POST',
             headers: { 'X-WP-Nonce': ZyraVariable.nonce },
             data: { setupWizard: true, value },
-        }).catch(console.error);
-    }, [apilink, value]);
+        } ).catch( console.error );
+    }, [ apilink, value ] );
 
     // ── Dependent-field helpers ───────────────────────────────────────────────
     const isContain = (
@@ -761,216 +1050,305 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         methodId: string,
         valuee: string | number | boolean | null = null
     ): boolean => {
-        const settingValue = value[methodId]?.[key];
-        if (Array.isArray(settingValue)) {
-            if (valuee === null) return settingValue.length > 0;
-            return settingValue.includes(valuee);
+        const settingValue = value[ methodId ]?.[ key ];
+        if ( Array.isArray( settingValue ) ) {
+            if ( valuee === null ) {
+                return settingValue.length > 0;
+            }
+            return settingValue.includes( valuee );
         }
 
-        if (valuee === null) return Boolean(settingValue);
+        if ( valuee === null ) {
+            return Boolean( settingValue );
+        }
         return settingValue === valuee;
     };
 
-    const shouldRender = (dependent: any, methodId: string): boolean => {
-        if (dependent.set === true && !isContain(dependent.key, methodId)) return false;
-        if (dependent.set === false && isContain(dependent.key, methodId)) return false;
-        if (dependent.value !== undefined && !isContain(dependent.key, methodId, dependent.value)) return false;
+    const shouldRender = ( dependent: any, methodId: string ): boolean => {
+        if (
+            dependent.set === true &&
+            ! isContain( dependent.key, methodId )
+        ) {
+            return false;
+        }
+        if ( dependent.set === false && isContain( dependent.key, methodId ) ) {
+            return false;
+        }
+        if (
+            dependent.value !== undefined &&
+            ! isContain( dependent.key, methodId, dependent.value )
+        ) {
+            return false;
+        }
         return true;
     };
 
     const navigateWizard = useCallback(
-        (direction: 'next' | 'back', redirect?: string) => {
-
+        ( direction: 'next' | 'back', redirect?: string ) => {
             const { wizardIndex, methods } = state;
             const lastIndex = methods.length - 1;
-            if (direction === 'back') {
-                if (wizardIndex === 0) return;
+            if ( direction === 'back' ) {
+                if ( wizardIndex === 0 ) {
+                    return;
+                }
 
                 const newIndex = wizardIndex - 1;
-                const method = methods[newIndex];
+                const method = methods[ newIndex ];
 
-                dispatch({ type: 'SET_WIZARD_INDEX', index: newIndex });
-                dispatch({ type: 'SET_ACTIVE_TAB', id: method.id });
+                dispatch( { type: 'SET_WIZARD_INDEX', index: newIndex } );
+                dispatch( { type: 'SET_ACTIVE_TAB', id: method.id } );
 
                 return;
             }
 
             saveWizard();
 
-            if (wizardIndex < lastIndex) {
+            if ( wizardIndex < lastIndex ) {
                 const newIndex = wizardIndex + 1;
-                const method = methods[newIndex];
+                const method = methods[ newIndex ];
 
-                dispatch({ type: 'SET_WIZARD_INDEX', index: newIndex });
-                dispatch({ type: 'SET_ACTIVE_TAB', id: method.id });
+                dispatch( { type: 'SET_WIZARD_INDEX', index: newIndex } );
+                dispatch( { type: 'SET_ACTIVE_TAB', id: method.id } );
                 return;
             }
 
-            if (redirect) {
-                window.open(redirect, '_self');
+            if ( redirect ) {
+                window.open( redirect, '_self' );
             }
         },
-        [state.wizardIndex, state.methods, saveWizard]
+        [ state.wizardIndex, state.methods, saveWizard ]
     );
 
     // ── Field renderer ────────────────────────────────────────────────────────
-    const renderField = useCallback((methodId: string, field: PanelFormField): JSX.Element | null => {
-        const comp = FIELD_REGISTRY[field.type];
-        if (!comp) return null;
+    const renderField = useCallback(
+        ( methodId: string, field: PanelFormField ): JSX.Element | null => {
+            const comp = FIELD_REGISTRY[ field.type ];
+            if ( ! comp ) {
+                return null;
+            }
 
-        const Render = comp.render;
-        const fieldVal = value[methodId]?.[field.key];
-        const onChangeF = (val: unknown) => handleChange(methodId, field.key, val);
+            const Render = comp.render;
+            const fieldVal = value[ methodId ]?.[ field.key ];
+            const onChangeF = ( val: unknown ) =>
+                handleChange( methodId, field.key, val );
 
-        if (field.type === 'button' && isWizardMode && Array.isArray(field.options)) {
-            const buttonActions = {
-                back: (btn) => ({
-                    ...btn,
-                    text: btn.label,
-                    color: 'red',
-                    onClick: () => navigateWizard('back')
-                }),
-                next: (btn) => ({
-                    ...btn,
-                    text: btn.label,
-                    color: 'purple',
-                    onClick: () => navigateWizard('next', btn.redirect)
-                }),
-                skip: (btn) => ({
-                    ...btn,
-                    text: btn.label,
-                    color: 'blue',
-                    onClick: () => window.open(ZyraVariable?.site_url, '_self')
-                })
-            };
+            if (
+                field.type === 'button' &&
+                isWizardMode &&
+                Array.isArray( field.options )
+            ) {
+                const buttonActions = {
+                    back: ( btn ) => ( {
+                        ...btn,
+                        text: btn.label,
+                        color: 'red',
+                        onClick: () => navigateWizard( 'back' ),
+                    } ),
+                    next: ( btn ) => ( {
+                        ...btn,
+                        text: btn.label,
+                        color: 'purple',
+                        onClick: () => navigateWizard( 'next', btn.redirect ),
+                    } ),
+                    skip: ( btn ) => ( {
+                        ...btn,
+                        text: btn.label,
+                        color: 'blue',
+                        onClick: () =>
+                            window.open( ZyraVariable?.site_url, '_self' ),
+                    } ),
+                };
 
-            const buttonOptions = field.options.map(btn => {
-                const actionHandler = buttonActions[btn.action];
-                return actionHandler ? actionHandler(btn) : btn;
-            });
+                const buttonOptions = field.options.map( ( btn ) => {
+                    const actionHandler = buttonActions[ btn.action ];
+                    return actionHandler ? actionHandler( btn ) : btn;
+                } );
+
+                return (
+                    <Render
+                        field={ { ...field, options: buttonOptions } }
+                        value={ fieldVal }
+                        onChange={ onChangeF }
+                        canAccess={ canAccess }
+                    />
+                );
+            }
 
             return (
                 <Render
-                    field={{ ...field, options: buttonOptions }}
-                    value={fieldVal}
-                    onChange={onChangeF}
-                    canAccess={canAccess}
+                    field={ field }
+                    value={ fieldVal }
+                    onChange={ onChangeF }
+                    canAccess={ canAccess }
+                    // appLocalizer={appLocalizer}
                 />
             );
-        }
-
-        return (
-            <Render
-                field={field}
-                value={fieldVal}
-                onChange={onChangeF}
-                canAccess={canAccess}
-                // appLocalizer={appLocalizer}
-            />
-        );
-    }, [value, handleChange, isWizardMode, state.wizardIndex, state.methods, canAccess, saveWizard]);
+        },
+        [
+            value,
+            handleChange,
+            isWizardMode,
+            state.wizardIndex,
+            state.methods,
+            canAccess,
+            saveWizard,
+        ]
+    );
 
     // ── Effects ───────────────────────────────────────────────────────────────
 
     // Focus the active edit input
-    useEffect(() => {
-        if (state.editField === 'title') { titleRef.current?.focus(); titleRef.current?.select(); }
-        if (state.editField === 'description') { descRef.current?.focus(); descRef.current?.select(); }
-    }, [state.editId, state.editField]);
+    useEffect( () => {
+        if ( state.editField === 'title' ) {
+            titleRef.current?.focus();
+            titleRef.current?.select();
+        }
+        if ( state.editField === 'description' ) {
+            descRef.current?.focus();
+            descRef.current?.select();
+        }
+    }, [ state.editId, state.editField ] );
 
     // Keyboard shortcuts while editing
-    useEffect(() => {
-        if (!state.editId) return;
-        const handler = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                dispatch({ type: 'CANCEL_EDIT' });
+    useEffect( () => {
+        if ( ! state.editId ) {
+            return;
+        }
+        const handler = ( e: KeyboardEvent ) => {
+            if ( e.key === 'Escape' ) {
+                dispatch( { type: 'CANCEL_EDIT' } );
                 return;
             }
-            if (e.key === 'Enter' && (state.editField === 'title' || e.ctrlKey)) {
+            if (
+                e.key === 'Enter' &&
+                ( state.editField === 'title' || e.ctrlKey )
+            ) {
                 commitEdit();
             }
         };
-        document.addEventListener('keydown', handler);
-        return () => document.removeEventListener('keydown', handler);
-    }, [state.editId, state.editField, commitEdit]);
+        document.addEventListener( 'keydown', handler );
+        return () => document.removeEventListener( 'keydown', handler );
+    }, [ state.editId, state.editField, commitEdit ] );
 
     // Click outside commits the edit
-    useEffect(() => {
-        if (!state.editId) return;
-        const handler = (e: MouseEvent) => {
+    useEffect( () => {
+        if ( ! state.editId ) {
+            return;
+        }
+        const handler = ( e: MouseEvent ) => {
             const t = e.target as Node;
-            if (!titleRef.current?.contains(t) && !descRef.current?.contains(t)) {
+            if (
+                ! titleRef.current?.contains( t ) &&
+                ! descRef.current?.contains( t )
+            ) {
                 commitEdit();
             }
         };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, [state.editId, commitEdit]);
+        document.addEventListener( 'mousedown', handler );
+        return () => document.removeEventListener( 'mousedown', handler );
+    }, [ state.editId, commitEdit ] );
 
     // Close 3-dot dropdown on outside click
-    useEffect(() => {
-        if (!state.openDropdown) return;
-        const close = () => dispatch({ type: 'SET_OPEN_DROPDOWN', id: null });
-        document.addEventListener('click', close);
-        return () => document.removeEventListener('click', close);
-    }, [state.openDropdown]);
+    useEffect( () => {
+        if ( ! state.openDropdown ) {
+            return;
+        }
+        const close = () => dispatch( { type: 'SET_OPEN_DROPDOWN', id: null } );
+        document.addEventListener( 'click', close );
+        return () => document.removeEventListener( 'click', close );
+    }, [ state.openDropdown ] );
 
     // Close icon picker on outside click or Escape
-    useEffect(() => {
-        if (!state.iconDropdown) return;
-        const onMouse = (e: MouseEvent) => {
-            if (iconPicker.current && !iconPicker.current.contains(e.target as Node))
-                dispatch({ type: 'SET_ICON_DROPDOWN', id: null });
+    useEffect( () => {
+        if ( ! state.iconDropdown ) {
+            return;
+        }
+        const onMouse = ( e: MouseEvent ) => {
+            if (
+                iconPicker.current &&
+                ! iconPicker.current.contains( e.target as Node )
+            ) {
+                dispatch( { type: 'SET_ICON_DROPDOWN', id: null } );
+            }
         };
-        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') dispatch({ type: 'SET_ICON_DROPDOWN', id: null }); };
-        document.addEventListener('mousedown', onMouse);
-        document.addEventListener('keydown', onKey);
+        const onKey = ( e: KeyboardEvent ) => {
+            if ( e.key === 'Escape' ) {
+                dispatch( { type: 'SET_ICON_DROPDOWN', id: null } );
+            }
+        };
+        document.addEventListener( 'mousedown', onMouse );
+        document.addEventListener( 'keydown', onKey );
         return () => {
-            document.removeEventListener('mousedown', onMouse);
-            document.removeEventListener('keydown', onKey);
+            document.removeEventListener( 'mousedown', onMouse );
+            document.removeEventListener( 'keydown', onKey );
         };
-    }, [state.iconDropdown]);
+    }, [ state.iconDropdown ] );
 
     // Wizard: recalculate field-fill progress
-    useEffect(() => {
-        if (!isWizardMode) return;
-        const newProgress = state.methods.map(m => {
-            const methodValue = value[m.id] ?? {};
-            return (m.formFields?.filter(isCountableField) ?? [])
-                .filter(f => isFilled(methodValue[f.key])).length;
-        });
-        dispatch({ type: 'SET_PROGRESS', progress: newProgress });
-    }, [value, state.methods, isWizardMode]);
+    useEffect( () => {
+        if ( ! isWizardMode ) {
+            return;
+        }
+        const newProgress = state.methods.map( ( m ) => {
+            const methodValue = value[ m.id ] ?? {};
+            return ( m.formFields?.filter( isCountableField ) ?? [] ).filter(
+                ( f ) => isFilled( methodValue[ f.key ] )
+            ).length;
+        } );
+        dispatch( { type: 'SET_PROGRESS', progress: newProgress } );
+    }, [ value, state.methods, isWizardMode ] );
 
     // Sync methods state with persisted value (restores config-only props)
-    useEffect(() => {
+    useEffect( () => {
         const methodsFromValue = new Map(
-            Object.entries(value).map(([id, m]) => [id, { id, ...(m as ExpandablePanelMethod) }])
+            Object.entries( value ).map( ( [ id, m ] ) => [
+                id,
+                { id, ...( m as ExpandablePanelMethod ) },
+            ] )
         );
 
-        const updatedMethods = (() => {
-            const methodMap = new Map(state.methods.map(m => [m.id, m]));
+        const updatedMethods = ( () => {
+            const methodMap = new Map(
+                state.methods.map( ( m ) => [ m.id, m ] )
+            );
 
-            methodsFromValue.forEach((persistedMethod, id) => {
-                const existingMethod = methodMap.get(id);
-                methodMap.set(id, {
+            methodsFromValue.forEach( ( persistedMethod, id ) => {
+                const existingMethod = methodMap.get( id );
+                methodMap.set( id, {
                     ...existingMethod,
                     ...persistedMethod,
-                    disableBtn: persistedMethod.disableBtn ?? existingMethod?.disableBtn ?? (persistedMethod.isCustom ? addNewTemplate?.disableBtn ?? false : false),
-                    iconEnable: persistedMethod.iconEnable ?? existingMethod?.iconEnable ?? (persistedMethod.isCustom ? addNewTemplate?.iconEnable : false),
-                    iconOptions: persistedMethod.iconOptions ?? existingMethod?.iconOptions ?? (persistedMethod.isCustom ? addNewTemplate?.iconOptions : []),
-                });
-            });
+                    disableBtn:
+                        persistedMethod.disableBtn ??
+                        existingMethod?.disableBtn ??
+                        ( persistedMethod.isCustom
+                            ? addNewTemplate?.disableBtn ?? false
+                            : false ),
+                    iconEnable:
+                        persistedMethod.iconEnable ??
+                        existingMethod?.iconEnable ??
+                        ( persistedMethod.isCustom
+                            ? addNewTemplate?.iconEnable
+                            : false ),
+                    iconOptions:
+                        persistedMethod.iconOptions ??
+                        existingMethod?.iconOptions ??
+                        ( persistedMethod.isCustom
+                            ? addNewTemplate?.iconOptions
+                            : [] ),
+                } );
+            } );
 
-            return Array.from(methodMap.values()).map(m =>
-                m.isCustom ? mergeTemplateFields(m, tplFields) : m
+            return Array.from( methodMap.values() ).map( ( m ) =>
+                m.isCustom ? mergeTemplateFields( m, tplFields ) : m
             );
-        })();
+        } )();
 
-        if (JSON.stringify(updatedMethods) !== JSON.stringify(state.methods)) {
-            dispatch({ type: 'SET_METHODS', methods: updatedMethods });
+        if (
+            JSON.stringify( updatedMethods ) !== JSON.stringify( state.methods )
+        ) {
+            dispatch( { type: 'SET_METHODS', methods: updatedMethods } );
         }
-    }, [value, addNewTemplate, tplFields]);
+    }, [ value, addNewTemplate, tplFields ] );
 
     // ── Context Value ─────────────────────────────────────────────────────────
 
@@ -990,35 +1368,50 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         canDelete,
         renderField,
         commitEdit,
-        shouldRender
+        shouldRender,
     };
 
     // ── Render ────────────────────────────────────────────────────────────────
 
     // Wizard mode: only show steps up to current index
-    const visible = isWizardMode ? state.methods.slice(0, state.wizardIndex + 1) : state.methods;
+    const visible = isWizardMode
+        ? state.methods.slice( 0, state.wizardIndex + 1 )
+        : state.methods;
 
     return (
-        <PanelContext.Provider value={contextValue}>
+        <PanelContext.Provider value={ contextValue }>
             <div className="expandable-panel-group">
-                {visible.map((method, idx) => (
-                    <PanelItem key={method.id} method={method} idx={idx} />
-                ))}
+                { visible.map( ( method, idx ) => (
+                    <PanelItem
+                        key={ method.id }
+                        method={ method }
+                        idx={ idx }
+                    />
+                ) ) }
 
-                {addNewBtn && (
-                    <ButtonInputUI buttons={[{
-                        icon: 'plus', text: 'Add New', color: 'purple',
-                        onClick: handleAddNew,
-                    }]} />
-                )}
+                { addNewBtn && (
+                    <ButtonInputUI
+                        buttons={ [
+                            {
+                                icon: 'plus',
+                                text: 'Add New',
+                                color: 'purple',
+                                onClick: handleAddNew,
+                            },
+                        ] }
+                    />
+                ) }
             </div>
 
-            {/* Wizard navigation buttons (rendered outside the panel list) */}
-            {isWizardMode && (() => {
-                const step = state.methods[state.wizardIndex];
-                const btn = step?.formFields?.find(f => f.key === 'wizardButtons');
-                return btn ? renderField(step.id, btn) : null;
-            })()}
+            { /* Wizard navigation buttons (rendered outside the panel list) */ }
+            { isWizardMode &&
+                ( () => {
+                    const step = state.methods[ state.wizardIndex ];
+                    const btn = step?.formFields?.find(
+                        ( f ) => f.key === 'wizardButtons'
+                    );
+                    return btn ? renderField( step.id, btn ) : null;
+                } )() }
         </PanelContext.Provider>
     );
 };
@@ -1026,19 +1419,24 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
 // ── FieldComponent wrapper ────────────────────────────────────────────────────
 
 const ExpandablePanel: FieldComponent = {
-    render: ({ field, value, onChange, canAccess, appLocalizer }) => (
+    render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
         <ExpandablePanelUI
-            key={field.key}
-            name={field.key}
-            apilink={String(field.apiLink)}
+            key={ field.key }
+            name={ field.key }
+            apilink={ String( field.apiLink ) }
             // appLocalizer={appLocalizer}
-            methods={field.modal ?? []}
-            addNewBtn={field.addNewBtn}
-            addNewTemplate={field.addNewTemplate}
-            min={field.min}
-            value={value || {}}
-            onChange={val => { if (!canAccess) return; onChange(val); }}
-            canAccess={canAccess}
+            methods={ field.modal ?? [] }
+            addNewBtn={ field.addNewBtn }
+            addNewTemplate={ field.addNewTemplate }
+            min={ field.min }
+            value={ value || {} }
+            onChange={ ( val ) => {
+                if ( ! canAccess ) {
+                    return;
+                }
+                onChange( val );
+            } }
+            canAccess={ canAccess }
         />
     ),
     validate: () => null,

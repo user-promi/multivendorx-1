@@ -219,7 +219,7 @@ class Frontend {
      * @return array Modified store data with additional keys.
      */
     public function multivendorx_stores_details( $store, $store_id ) {
-        $store['rating'] =  Util::get_overall_rating( $store_id );
+        $store['rating'] = Util::get_overall_rating( $store_id );
         return $store;
     }
 }

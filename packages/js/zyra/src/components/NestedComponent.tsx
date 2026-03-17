@@ -75,17 +75,16 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
     wrapperClass,
     canAccess,
 } ) => {
-
     const [ rows, setRows ] = useState< RowType[] >( [] );
 
     // sync value → state
-    useEffect(() => {
-        if (single) {
-            setRows(value.length ? [value[0]] : [{}]);
+    useEffect( () => {
+        if ( single ) {
+            setRows( value.length ? [ value[ 0 ] ] : [ {} ] );
         } else {
-            setRows(value.length ? value : [{}]);
+            setRows( value.length ? value : [ {} ] );
         }
-    }, [value, single]);
+    }, [ value, single ] );
 
     function updateAndSave( updated: RowType[] ) {
         setRows( updated );
@@ -97,55 +96,65 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
         key: string,
         value: string | number | boolean | string[]
     ) {
-        const updated = rows.map((row, i) =>
-            i === rowIndex ? { ...(row ?? {}), [key]: value } : row
+        const updated = rows.map( ( row, i ) =>
+            i === rowIndex ? { ...( row ?? {} ), [ key ]: value } : row
         );
-        onChange(updated);
+        onChange( updated );
     }
 
-    const isFieldActive = (field: NestedField, row: RowType, rowIndex: number) => {
-        if (rowIndex === 0 && field.skipFirstRow) return false;
+    const isFieldActive = (
+        field: NestedField,
+        row: RowType,
+        rowIndex: number
+    ) => {
+        if ( rowIndex === 0 && field.skipFirstRow ) {
+            return false;
+        }
 
-        if (!field.dependent) return true;
+        if ( ! field.dependent ) {
+            return true;
+        }
 
-        const depVal = row?.[field.dependent.key];
+        const depVal = row?.[ field.dependent.key ];
 
-        const depActive = Array.isArray(depVal)
-            ? depVal.includes(field.dependent.value)
+        const depActive = Array.isArray( depVal )
+            ? depVal.includes( field.dependent.value )
             : depVal === field.dependent.value;
 
-        return field.dependent.set ? depActive : !depActive;
+        return field.dependent.set ? depActive : ! depActive;
     };
 
     function isLastRowComplete() {
-        if (!rows.length) return true;
+        if ( ! rows.length ) {
+            return true;
+        }
 
-        const lastRow = rows[rows.length - 1] ?? {};
+        const lastRow = rows[ rows.length - 1 ] ?? {};
 
-        return fields.every((field) => {
-            if (field.skipFirstRow && rows.length === 1) {
+        return fields.every( ( field ) => {
+            if ( field.skipFirstRow && rows.length === 1 ) {
                 return true;
             }
 
-            if (!field.key) {
+            if ( ! field.key ) {
                 return true;
             }
 
             // dependency check
-            if (!isFieldActive(field, lastRow, rows.length - 1)) {
+            if ( ! isFieldActive( field, lastRow, rows.length - 1 ) ) {
                 return true;
             }
 
-            const val = lastRow[field.key];
+            const val = lastRow[ field.key ];
             return val !== '';
-        });
+        } );
     }
 
     function addRow() {
         if ( single ) {
             return;
         }
-        
+
         if ( ! isLastRowComplete() ) {
             return;
         }
@@ -159,33 +168,31 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
     }
 
     function renderField( field: NestedField, row: RowType, rowIndex: number ) {
-        const fieldComponent = FIELD_REGISTRY[field.type];
-        if (field.type === 'checklist') {
-            return (
-                <ItemList
-                        className='checklist'
-                        items={field.options}
-                    />
-            );
+        const fieldComponent = FIELD_REGISTRY[ field.type ];
+        if ( field.type === 'checklist' ) {
+            return <ItemList className="checklist" items={ field.options } />;
         }
-        if (!fieldComponent) return null;
+        if ( ! fieldComponent ) {
+            return null;
+        }
         const Render = fieldComponent.render;
-        const fieldValue =row?.[field.key];
+        const fieldValue = row?.[ field.key ];
 
-        const handleInternalChange = (val: any) => {
-            handleChange( rowIndex, field.key, val )
-            return;            
+        const handleInternalChange = ( val: any ) => {
+            handleChange( rowIndex, field.key, val );
+            return;
         };
 
         return (
             <>
-                { ! ( rowIndex === 0 ) && field.label && 
-                    <label>{ field.label }</label> }
+                { ! ( rowIndex === 0 ) && field.label && (
+                    <label>{ field.label }</label>
+                ) }
                 <Render
-                    field={field}
-                    value={fieldValue}
-                    onChange={handleInternalChange}
-                    canAccess={canAccess}
+                    field={ field }
+                    value={ fieldValue }
+                    onChange={ handleInternalChange }
+                    canAccess={ canAccess }
                     // appLocalizer={appLocalizer}
                 />
             </>
@@ -201,56 +208,65 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
                         single ? '' : 'multiple'
                     } ${ wrapperClass }` }
                 >
-                    {fields.map((field, fieldIndex) => {
-                        if (rowIndex === 0 && field.skipFirstRow) {
+                    { fields.map( ( field, fieldIndex ) => {
+                        if ( rowIndex === 0 && field.skipFirstRow ) {
                             return null;
                         }
 
-                        if (!isFieldActive(field, row, rowIndex)) {
+                        if ( ! isFieldActive( field, row, rowIndex ) ) {
                             return null;
                         }
 
                         return (
-                             <>
-                                {field.beforeElement &&
-                                    renderField(field.beforeElement, row, rowIndex)}
+                            <>
+                                { field.beforeElement &&
+                                    renderField(
+                                        field.beforeElement,
+                                        row,
+                                        rowIndex
+                                    ) }
 
-                                {renderField(field, row, rowIndex)}
+                                { renderField( field, row, rowIndex ) }
 
-                                {field.afterElement &&
-                                    renderField(field.afterElement, row, rowIndex)}
+                                { field.afterElement &&
+                                    renderField(
+                                        field.afterElement,
+                                        row,
+                                        rowIndex
+                                    ) }
                             </>
                         );
-                    })}
+                    } ) }
 
                     { ! single && (
                         <div className="button-wrapper">
                             { /* Add button only on last row */ }
                             { rowIndex === rows.length - 1 && (
                                 <ButtonInputUI
-                                    buttons={[
+                                    buttons={ [
                                         {
                                             icon: 'plus',
                                             color: 'purple',
                                             text: addButtonLabel,
                                             onClick: addRow,
-                                            disabled: !isLastRowComplete()
+                                            disabled: ! isLastRowComplete(),
                                         },
-                                    ]}
+                                    ] }
                                 />
                             ) }
 
                             { /* Delete button on all rows except row 0 */ }
                             { rows.length > 1 && rowIndex > 0 && (
                                 <ButtonInputUI
-                                    buttons={[
+                                    buttons={ [
                                         {
                                             icon: 'delete',
                                             text: deleteButtonLabel,
                                             color: 'red',
-                                            onClick: () => removeRow(rowIndex)
+                                            onClick: () =>
+                                                removeRow( rowIndex ),
                                         },
-                                    ]}
+                                    ] }
                                 />
                             ) }
                         </div>
@@ -262,30 +278,31 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
 };
 
 const NestedComponent: FieldComponent = {
-    render: ({ field, value, onChange, canAccess, appLocalizer }) => (
+    render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
         <NestedComponentUI
-            key={field.key}
-            id={field.key}
-            label={field.label}
-            fields={field.nestedFields ?? []} //The list of inner fields that belong to this section.
-            value={value}
-            wrapperClass={field.rowClass}
-            addButtonLabel={field.addButtonLabel} //The text shown on the button to add a new item.
-            deleteButtonLabel={field.deleteButtonLabel} //The text shown on the button to remove an item.
-            single={field.single} //If set to true, only one item is allowed.
-            onChange={(val) => {
-                if (!canAccess) return;
-                onChange(val)
-            }}
-            canAccess={canAccess}
+            key={ field.key }
+            id={ field.key }
+            label={ field.label }
+            fields={ field.nestedFields ?? [] } //The list of inner fields that belong to this section.
+            value={ value }
+            wrapperClass={ field.rowClass }
+            addButtonLabel={ field.addButtonLabel } //The text shown on the button to add a new item.
+            deleteButtonLabel={ field.deleteButtonLabel } //The text shown on the button to remove an item.
+            single={ field.single } //If set to true, only one item is allowed.
+            onChange={ ( val ) => {
+                if ( ! canAccess ) {
+                    return;
+                }
+                onChange( val );
+            } }
+            canAccess={ canAccess }
             // appLocalizer={appLocalizer}
         />
     ),
 
-    validate: (field, value) => {
+    validate: ( field, value ) => {
         return null;
     },
-
 };
 
 export default NestedComponent;

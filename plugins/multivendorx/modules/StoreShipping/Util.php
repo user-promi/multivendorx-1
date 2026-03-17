@@ -113,7 +113,7 @@ class Util {
             );
         }
 
-        // Proper way for WP meta
+        // Proper way for WP meta.
         $settings = maybe_unserialize( $settings );
 
         return array(

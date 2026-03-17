@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Utill class file.
  *
@@ -371,7 +370,7 @@ class Utill {
     /**
      * Check if a WordPress plugin is active
      *
-     * @param string $plugin_slug Plugin folder/filename, e.g., 'woocommerce/woocommerce.php'
+     * @param string $plugin_slug Plugin folder/filename, e.g., 'woocommerce/woocommerce.php'.
      * @return bool
      */
     public static function is_active_plugin( $plugin_slug = '' ) {
@@ -441,7 +440,11 @@ class Utill {
         $registration_page = (int) MultiVendorX()->setting->get_setting( 'store_registration_page' );
         return is_page( $registration_page );
     }
-
+	/**
+	 * Check if current page is a store page
+	 *
+	 * @return bool|Store Returns true for admin store edit page, Store object for frontend store page, false otherwise
+	 */
     public static function is_store_page() {
         // Admin edit page check.
         if ( is_admin() ) {
@@ -472,7 +475,13 @@ class Utill {
 
         add_filter( 'icl_ls_languages', '__return_empty_array' );
     }
-
+	/**
+	 * Normalize date range for database queries
+	 *
+	 * @param string $start_raw Raw start date.
+	 * @param string $end_raw Raw end date.
+	 * @return array Normalized start and end dates
+	 */
     public static function normalize_date_range( $start_raw, $end_raw ) {
         $start_raw = sanitize_text_field( $start_raw );
         $end_raw   = sanitize_text_field( $end_raw );
@@ -481,7 +490,7 @@ class Utill {
         $end_date   = '';
 
         if ( $start_raw && $end_raw ) {
-            // Site timezone (WordPress standard)
+            // Site timezone (WordPress standard).
             $timezone = wp_timezone();
 
             $start_dt = new \DateTime( $start_raw . ' 00:00:00', $timezone );
@@ -497,57 +506,58 @@ class Utill {
         );
     }
 
-    /**
-     * Convert WordPress PHP date format to React date picker format
-     *
-     * @param string $date_format WordPress PHP date format
-     * @return string React date picker format
-     */
-    public static function wp_to_react_date_format( $date_format ) {
-        static $map = array(
-            'Y' => 'YYYY',
-            'y' => 'YY',
-            'F' => 'MMMM',
-            'M' => 'MMM',
-            'm' => 'MM',
-            'n' => 'M',
-            'd' => 'DD',
-            'j' => 'D',
-            'l' => 'dddd',
-            'D' => 'ddd',
-            'H' => 'HH',
-            'G' => 'H',
-            'h' => 'hh',
-            'g' => 'h',
-            'i' => 'mm',
-            's' => 'ss',
-            'A' => 'A',
-            'a' => 'a',
-        );
+	/**
+	 * Convert WordPress PHP date format to React date picker format
+	 *
+	 * @param string $date_format WordPress PHP date format.
+	 * @return string React date picker format.
+	 */
+	public static function wp_to_react_date_format( $date_format ) {
+		static $map = array(
+			'Y' => 'YYYY',
+			'y' => 'YY',
+			'F' => 'MMMM',
+			'M' => 'MMM',
+			'm' => 'MM',
+			'n' => 'M',
+			'd' => 'DD',
+			'j' => 'D',
+			'l' => 'dddd',
+			'D' => 'ddd',
+			'H' => 'HH',
+			'G' => 'H',
+			'h' => 'hh',
+			'g' => 'h',
+			'i' => 'mm',
+			's' => 'ss',
+			'A' => 'A',
+			'a' => 'a',
+		);
 
-        return strtr( $date_format, $map );
-    }
+		return strtr( $date_format, $map );
+	}
 
-    /**
-     * Format date time according to WordPress settings
-     *
-     * @param string $date Date time string
-     * @return string Formatted date time string as per WordPress settings
-     */
-    public static function multivendorx_rest_prepare_date_response( $date, $utc = false ) {
-        // Convert date to timestamp
-        $timestamp = is_numeric( $date ) ? (int) $date : strtotime( $date );
+	/**
+	 * Format date time according to WordPress settings
+	 *
+	 * @param string $date Date time string.
+	 * @param bool   $utc  Whether to return UTC time or local time.
+	 * @return string|null Formatted date time string as per WordPress settings, or null if invalid.
+	 */
+	public static function multivendorx_rest_prepare_date_response( $date, $utc = false ) {
+		// Convert date to timestamp.
+		$timestamp = is_numeric( $date ) ? (int) $date : strtotime( $date );
 
-        // Return null if the timestamp is invalid
-        if ( ! $timestamp ) {
-            return null;
-        }
+		// Return null if the timestamp is invalid.
+		if ( ! $timestamp ) {
+			return null;
+		}
 
-        // Return formatted date in UTC or local time
-        if ( $utc ) {
-            return gmdate( 'Y-m-d\TH:i:s', $timestamp );
-        } else {
-            return wp_date( 'Y-m-d\TH:i:s', $timestamp );
-        }
-    }
+		// Return formatted date in UTC or local time.
+		if ( $utc ) {
+			return gmdate( 'Y-m-d\TH:i:s', $timestamp );
+		} else {
+			return wp_date( 'Y-m-d\TH:i:s', $timestamp );
+		}
+	}
 }

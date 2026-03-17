@@ -41,207 +41,224 @@ interface ModuleProps {
     variant?: 'default' | 'mini-module';
 }
 
-const isModule = (item: ModuleItem): item is Module => !('type' in item);
+const isModule = ( item: ModuleItem ): item is Module => ! ( 'type' in item );
 
-const Modules: React.FC<ModuleProps> = ({
+const Modules: React.FC< ModuleProps > = ( {
     modulesArray = { category: false, modules: [] },
     apiLink,
     proPopupContent: ProPopupComponent,
     pluginName,
-    variant = 'default'
-}) => {
-
-    const [modelOpen, setModelOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState('All');
-    const [selectedFilter, setSelectedFilter] = useState('All');
-    const [searchQuery, setSearchQuery] = useState('');
-    const [requirePopup, setRequirePopup] = useState<{
+    variant = 'default',
+} ) => {
+    const [ modelOpen, setModelOpen ] = useState( false );
+    const [ selectedCategory, setSelectedCategory ] = useState( 'All' );
+    const [ selectedFilter, setSelectedFilter ] = useState( 'All' );
+    const [ searchQuery, setSearchQuery ] = useState( '' );
+    const [ requirePopup, setRequirePopup ] = useState< {
         moduleName: string;
         plugins: { name: string; slug: string; link: string }[];
-    } | null>(null);
+    } | null >( null );
 
     const { modules, insertModule, removeModule } = useModules();
 
     const moduleList = useMemo(
-        () => modulesArray.modules.filter(isModule),
-        [modulesArray.modules]
+        () => modulesArray.modules.filter( isModule ),
+        [ modulesArray.modules ]
     );
 
     const totalCount = moduleList.length;
-    const activeCount = moduleList.filter(m => modules.includes(m.id)).length;
+    const activeCount = moduleList.filter( ( m ) =>
+        modules.includes( m.id )
+    ).length;
     const inactiveCount = totalCount - activeCount;
 
-    const formatCategory = (category: string): string =>
+    const formatCategory = ( category: string ): string =>
         category
-            .split('_')
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
+            .split( '_' )
+            .map( ( word ) => word.charAt( 0 ).toUpperCase() + word.slice( 1 ) )
+            .join( ' ' );
 
-    const getCategories = (category?: string | string[]) =>
-        category ? (Array.isArray(category) ? category : [category]) : [];
+    const getCategories = ( category?: string | string[] ) =>
+        category ? ( Array.isArray( category ) ? category : [ category ] ) : [];
 
     const categories = [
         { id: 'All', label: 'All' },
         ...modulesArray.modules
-            .filter((item): item is Separator => !isModule(item))
-            .map(item => ({ id: item.id, label: item.label })),
+            .filter( ( item ): item is Separator => ! isModule( item ) )
+            .map( ( item ) => ( { id: item.id, label: item.label } ) ),
     ];
 
-    const isModuleAvailable = (module: Module) =>
+    const isModuleAvailable = ( module: Module ) =>
         module.proModule ? ZyraVariable.khali_dabba ?? false : true;
 
-    const handleOnChange = (
-        event: string[],
-        module: Module
-    ) => {
+    const handleOnChange = ( event: string[], module: Module ) => {
+        document
+            .querySelector( '.module-list-item.highlight' )
+            ?.classList.remove( 'highlight' );
 
-        document.querySelector('.module-list-item.highlight')
-            ?.classList.remove('highlight');
-
-        if (!isModuleAvailable(module)) {
-            setModelOpen(true);
+        if ( ! isModuleAvailable( module ) ) {
+            setModelOpen( true );
             return;
         }
 
-        if (module.reqPluging?.some(
-            plugin => !ZyraVariable.active_plugins?.includes(plugin.slug)
-        )) {
-            openRequirePopup(module);
+        if (
+            module.reqPluging?.some(
+                ( plugin ) =>
+                    ! ZyraVariable.active_plugins?.includes( plugin.slug )
+            )
+        ) {
+            openRequirePopup( module );
             return;
         }
 
         const action = event.length > 0 ? 'activate' : 'deactivate';
 
         action === 'activate'
-            ? insertModule?.(module.id)
-            : removeModule?.(module.id);
+            ? insertModule?.( module.id )
+            : removeModule?.( module.id );
 
-        localStorage.setItem(`force_${pluginName}_context_reload`, 'true');
+        localStorage.setItem( `force_${ pluginName }_context_reload`, 'true' );
 
-        sendApiResponse(
-            ZyraVariable,
-            getApiLink(ZyraVariable, apiLink),
-            { id: module.id, action }
-        )
-            .then(() => {
-                NoticeManager.add({
+        sendApiResponse( ZyraVariable, getApiLink( ZyraVariable, apiLink ), {
+            id: module.id,
+            action,
+        } )
+            .then( () => {
+                NoticeManager.add( {
                     title: 'Success!',
-                    message: `Module ${action}d`,
+                    message: `Module ${ action }d`,
                     type: 'success',
-                    position: 'float'
-                });
-                setTimeout(() => setSuccessMsg(''), 2000);
+                    position: 'float',
+                } );
+                setTimeout( () => setSuccessMsg( '' ), 2000 );
 
-                if (module.reloadOnChange) {
+                if ( module.reloadOnChange ) {
                     window.location.reload();
                 }
-            })
-            .catch(() => {
-                NoticeManager.add({
+            } )
+            .catch( () => {
+                NoticeManager.add( {
                     title: 'Error',
-                    message: `Failed to ${action} module`,
+                    message: `Failed to ${ action } module`,
                     type: 'error',
-                    position: 'float'
-                });
-                setTimeout(() => setSuccessMsg(''), 2000);
-            });
+                    position: 'float',
+                } );
+                setTimeout( () => setSuccessMsg( '' ), 2000 );
+            } );
     };
 
-    const openRequirePopup = (module: Module) => {
-        if (!module.reqPluging?.length) return;
+    const openRequirePopup = ( module: Module ) => {
+        if ( ! module.reqPluging?.length ) {
+            return;
+        }
 
-        setRequirePopup({
+        setRequirePopup( {
             moduleName: module.name,
-            plugins: module.reqPluging
-        });
+            plugins: module.reqPluging,
+        } );
     };
 
-    const filteredModules = useMemo(() => {
-        return modulesArray.modules.filter(module => {
-            if (!isModule(module)) return false;
-            if (variant === 'mini-module' && !module.miniModule) return false;
+    const filteredModules = useMemo( () => {
+        return modulesArray.modules.filter( ( module ) => {
+            if ( ! isModule( module ) ) {
+                return false;
+            }
+            if ( variant === 'mini-module' && ! module.miniModule ) {
+                return false;
+            }
 
-            const moduleCategories = getCategories(module.category);
-            const isActive = modules.includes(module.id);
+            const moduleCategories = getCategories( module.category );
+            const isActive = modules.includes( module.id );
 
             const matchesCategory =
                 selectedCategory === 'All' ||
-                moduleCategories.includes(selectedCategory);
+                moduleCategories.includes( selectedCategory );
 
             const matchesStatus =
                 selectedFilter === 'All' ||
-                (selectedFilter === 'Active' && isActive) ||
-                (selectedFilter === 'Inactive' && !isActive);
+                ( selectedFilter === 'Active' && isActive ) ||
+                ( selectedFilter === 'Inactive' && ! isActive );
 
             const matchesSearch =
-                !searchQuery ||
-                module.name.toLowerCase().includes(searchQuery.toLowerCase());
+                ! searchQuery ||
+                module.name.toLowerCase().includes( searchQuery.toLowerCase() );
 
             return matchesCategory && matchesStatus && matchesSearch;
-        });
-    }, [moduleList, selectedCategory, selectedFilter, searchQuery, modules]);
+        } );
+    }, [ moduleList, selectedCategory, selectedFilter, searchQuery, modules ] );
 
-    useEffect(() => {
+    useEffect( () => {
         let highlightedElement: HTMLElement | null = null;
         let hasHighlightedOnce = false;
 
         const scrollToTargetSection = () => {
-            if (hasHighlightedOnce) return;
+            if ( hasHighlightedOnce ) {
+                return;
+            }
             const hash = window.location.hash;
-            const params = new URLSearchParams(hash.replace('#&', ''));
-            const targetId = params.get('module');
-            if (!targetId) return;
+            const params = new URLSearchParams( hash.replace( '#&', '' ) );
+            const targetId = params.get( 'module' );
+            if ( ! targetId ) {
+                return;
+            }
 
-            setTimeout(() => {
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    targetElement.classList.add('highlight');
+            setTimeout( () => {
+                const targetElement = document.getElementById( targetId );
+                if ( targetElement ) {
+                    targetElement.scrollIntoView( {
+                        behavior: 'smooth',
+                        block: 'start',
+                    } );
+                    targetElement.classList.add( 'highlight' );
                     highlightedElement = targetElement;
                     hasHighlightedOnce = true;
                 }
-            }, 500);
+            }, 500 );
         };
 
-        const handleClickAnywhere = (e: Event) => {
-            if (highlightedElement && !highlightedElement.contains(e.target as Node)) {
-                highlightedElement.classList.remove('highlight');
+        const handleClickAnywhere = ( e: Event ) => {
+            if (
+                highlightedElement &&
+                ! highlightedElement.contains( e.target as Node )
+            ) {
+                highlightedElement.classList.remove( 'highlight' );
                 highlightedElement = null;
             }
         };
 
         scrollToTargetSection();
-        document.addEventListener('pointerdown', handleClickAnywhere);
-        return () => document.removeEventListener('pointerdown', handleClickAnywhere);
-    }, []);
+        document.addEventListener( 'pointerdown', handleClickAnywhere );
+        return () =>
+            document.removeEventListener( 'pointerdown', handleClickAnywhere );
+    }, [] );
 
     const statusOptions = [
-        { label: `All (${totalCount})`, value: 'All' },
-        { label: `Active (${activeCount})`, value: 'Active' },
-        { label: `Inactive (${inactiveCount})`, value: 'Inactive' },
+        { label: `All (${ totalCount })`, value: 'All' },
+        { label: `Active (${ activeCount })`, value: 'Active' },
+        { label: `Inactive (${ inactiveCount })`, value: 'Inactive' },
     ];
 
     return (
         <>
-            {requirePopup && (
+            { requirePopup && (
                 <PopupUI
                     position="lightbox"
-                    open={true}
-                    onClose={() => setRequirePopup(null)}
-                    width={28}
+                    open={ true }
+                    onClose={ () => setRequirePopup( null ) }
+                    width={ 28 }
                     height="auto"
-                    header={{
+                    header={ {
                         title: `Required Plugin`,
-                        description: `This module requires the following plugin(s)`
-                    }}
+                        description: `This module requires the following plugin(s)`,
+                    } }
                 >
                     <div className="required-plugin-popup">
-                        {requirePopup.plugins.map((plugin, idx) => (
-                            <div key={idx} className="required-plugin-item">
-                                <span>{plugin.name}</span>
+                        { requirePopup.plugins.map( ( plugin, idx ) => (
+                            <div key={ idx } className="required-plugin-item">
+                                <span>{ plugin.name }</span>
 
                                 <a
-                                    href={plugin.link}
+                                    href={ plugin.link }
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="install-link"
@@ -249,192 +266,235 @@ const Modules: React.FC<ModuleProps> = ({
                                     Install
                                 </a>
                             </div>
-                        ))}
+                        ) ) }
                     </div>
                 </PopupUI>
-            )}
-            {modelOpen && (
+            ) }
+            { modelOpen && (
                 <PopupUI
                     position="lightbox"
-                    open={modelOpen}
-                    onClose={() => setModelOpen(false)}
-                    width={31.25}
+                    open={ modelOpen }
+                    onClose={ () => setModelOpen( false ) }
+                    width={ 31.25 }
                     height="auto"
                 >
-                    {ProPopupComponent && <ProPopupComponent />}
+                    { ProPopupComponent && <ProPopupComponent /> }
                 </PopupUI>
-            )}
+            ) }
 
-            <div className="module-container" data-variant={variant}>
-
-                {/* FILTER SECTION */}
-                {variant === 'default' && (
+            <div className="module-container" data-variant={ variant }>
+                { /* FILTER SECTION */ }
+                { variant === 'default' && (
                     <div className="filter-wrapper">
                         <div className="category-filter">
-                            {modulesArray.category && categories.length > 1 &&
-                                categories.map((category) => (
+                            { modulesArray.category &&
+                                categories.length > 1 &&
+                                categories.map( ( category ) => (
                                     <span
-                                        key={category.id}
-                                        className={`category-item ${selectedCategory === category.id ? 'active' : ''}`}
-                                        onClick={() => setSelectedCategory(category.id)}
+                                        key={ category.id }
+                                        className={ `category-item ${
+                                            selectedCategory === category.id
+                                                ? 'active'
+                                                : ''
+                                        }` }
+                                        onClick={ () =>
+                                            setSelectedCategory( category.id )
+                                        }
                                     >
-                                        {category.label}
+                                        { category.label }
                                     </span>
-                                ))
-                            }
+                                ) ) }
                         </div>
                         <div className="module-search">
                             <HeaderSearch
                                 variant="mini-search"
-                                search={{ placeholder: 'Search .....' }}
-                                onQueryUpdate={(e) => {
-                                    setSearchQuery(e.searchValue);
-                                    if ('searchAction' in e) {
-                                        setSelectedFilter(e.searchAction);
+                                search={ { placeholder: 'Search .....' } }
+                                onQueryUpdate={ ( e ) => {
+                                    setSearchQuery( e.searchValue );
+                                    if ( 'searchAction' in e ) {
+                                        setSelectedFilter( e.searchAction );
                                     }
-                                }}
+                                } }
                             />
 
                             <SelectInputUI
                                 type="single-select"
-                                options={statusOptions}
-                                value={selectedFilter}
+                                options={ statusOptions }
+                                value={ selectedFilter }
                                 size="8rem"
-                                onChange={(value) =>
-                                    setSelectedFilter(value)
+                                onChange={ ( value ) =>
+                                    setSelectedFilter( value )
                                 }
                             />
                         </div>
                     </div>
-                )}
+                ) }
 
                 <div className="module-option-row">
-                    {filteredModules.map((item, index) => {
-
-                        if (!isModule(item)) return null;
+                    { filteredModules.map( ( item, index ) => {
+                        if ( ! isModule( item ) ) {
+                            return null;
+                        }
 
                         const module = item;
-                        const isActive = modules.includes(module.id);
+                        const isActive = modules.includes( module.id );
                         const requiredPlugins = module.reqPluging || [];
-                        const moduleCategories = getCategories(module.category);
+                        const moduleCategories = getCategories(
+                            module.category
+                        );
 
                         const toggleComponent = (
                             <MultiCheckBoxUI
                                 look="toggle"
                                 type="checkbox"
-                                value={isActive ? [module.id] : []}
-                                onChange={(e) => handleOnChange(e, module)}
-                                options={[{ key: module.id, value: module.id }]}
+                                value={ isActive ? [ module.id ] : [] }
+                                onChange={ ( e ) =>
+                                    handleOnChange( e, module )
+                                }
+                                options={ [
+                                    { key: module.id, value: module.id },
+                                ] }
                             />
                         );
 
                         return (
                             <div
-                                key={module.id}
-                                id={module.id}
-                                data-index={index}
+                                key={ module.id }
+                                id={ module.id }
+                                data-index={ index }
                                 className="module-list-item"
                             >
                                 <div className="module-body">
-
                                     <div className="module-header">
                                         <div className="icon">
-                                            <i className={`font adminfont-${module.id}`} />
+                                            <i
+                                                className={ `font adminfont-${ module.id }` }
+                                            />
                                         </div>
 
-                                        {module.proModule && !ZyraVariable.khali_dabba && (
-                                            <div className="pro-tag">
-                                                <i className="adminfont-pro-tag" />
-                                            </div>
-                                        )}
-
-                                        {variant === 'mini-module' &&
-                                            (ZyraVariable.khali_dabba || !module.proModule) && (
-                                                <div className="toggle-checkbox">
-                                                    {toggleComponent}
+                                        { module.proModule &&
+                                            ! ZyraVariable.khali_dabba && (
+                                                <div className="pro-tag">
+                                                    <i className="adminfont-pro-tag" />
                                                 </div>
-                                            )}
+                                            ) }
+
+                                        { variant === 'mini-module' &&
+                                            ( ZyraVariable.khali_dabba ||
+                                                ! module.proModule ) && (
+                                                <div className="toggle-checkbox">
+                                                    { toggleComponent }
+                                                </div>
+                                            ) }
                                     </div>
 
                                     <div className="module-details">
                                         <div className="meta-name">
-                                            {module.name}
+                                            { module.name }
                                         </div>
 
-                                        {variant === 'default' && (
+                                        { variant === 'default' && (
                                             <>
-                                                {moduleCategories.length > 0 && (
+                                                { moduleCategories.length >
+                                                    0 && (
                                                     <div className="tag-wrapper">
-                                                        {moduleCategories.map((cat, idx) => (
-                                                            <span
-                                                                key={idx}
-                                                                className="admin-badge blue"
-                                                            >
-                                                                {formatCategory(cat)}
-                                                            </span>
-                                                        ))}
+                                                        { moduleCategories.map(
+                                                            ( cat, idx ) => (
+                                                                <span
+                                                                    key={ idx }
+                                                                    className="admin-badge blue"
+                                                                >
+                                                                    { formatCategory(
+                                                                        cat
+                                                                    ) }
+                                                                </span>
+                                                            )
+                                                        ) }
                                                     </div>
-                                                )}
+                                                ) }
 
                                                 <p
                                                     className="meta-description"
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: module.desc || '',
-                                                    }}
+                                                    dangerouslySetInnerHTML={ {
+                                                        __html:
+                                                            module.desc || '',
+                                                    } }
                                                 />
                                             </>
-                                        )}
+                                        ) }
                                     </div>
                                 </div>
 
-                                {variant === 'default' && (
+                                { variant === 'default' && (
                                     <div className="footer-wrapper">
-
-                                        {requiredPlugins.length > 0 && (
+                                        { requiredPlugins.length > 0 && (
                                             <div className="requires">
                                                 <div className="requires-title">
                                                     Requires:
                                                 </div>
                                                 <span
                                                     className="link-item"
-                                                    onClick={() => openRequirePopup(module)}
+                                                    onClick={ () =>
+                                                        openRequirePopup(
+                                                            module
+                                                        )
+                                                    }
                                                 >
-                                                    {requiredPlugins.map((plugin) => plugin.name).join(', ')}
+                                                    { requiredPlugins
+                                                        .map(
+                                                            ( plugin ) =>
+                                                                plugin.name
+                                                        )
+                                                        .join( ', ' ) }
                                                 </span>
                                             </div>
-                                        )}
+                                        ) }
 
                                         <div className="module-footer">
                                             <div className="buttons">
-                                                {module.docLink && (
-                                                    <a href={module.docLink} target="_blank" rel="noreferrer">
+                                                { module.docLink && (
+                                                    <a
+                                                        href={ module.docLink }
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                    >
                                                         <i className="adminfont-book" />
                                                     </a>
-                                                )}
-                                                {module.videoLink && (
-                                                    <a href={module.videoLink} target="_blank" rel="noreferrer">
+                                                ) }
+                                                { module.videoLink && (
+                                                    <a
+                                                        href={
+                                                            module.videoLink
+                                                        }
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                    >
                                                         <i className="adminfont-button-appearance" />
                                                     </a>
-                                                )}
-                                                {module.settingsLink && (
-                                                    <a href={module.settingsLink}>
+                                                ) }
+                                                { module.settingsLink && (
+                                                    <a
+                                                        href={
+                                                            module.settingsLink
+                                                        }
+                                                    >
                                                         <i className="adminfont-setting" />
                                                     </a>
-                                                )}
+                                                ) }
                                             </div>
 
                                             <div
                                                 className="toggle-checkbox"
-                                                data-tour={`${module.id}-showcase-tour`}
+                                                data-tour={ `${ module.id }-showcase-tour` }
                                             >
-                                                {toggleComponent}
+                                                { toggleComponent }
                                             </div>
                                         </div>
                                     </div>
-                                )}
+                                ) }
                             </div>
                         );
-                    })}
+                    } ) }
                 </div>
             </div>
         </>

@@ -33,7 +33,7 @@ const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
         navigator.clipboard.writeText( text );
     };
 
-    const headers = optionLabel ;
+    const headers = optionLabel;
 
     return (
         <>
@@ -48,8 +48,7 @@ const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
                             <i
                                 className="adminfont-vendor-form-copy"
                                 onClick={ () =>
-                                    option.label &&
-                                    handleCopy( option.label )
+                                    option.label && handleCopy( option.label )
                                 }
                             ></i>
                         </div>
@@ -63,9 +62,9 @@ const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
                                 option.arguments.length > 0 && (
                                     <thead>
                                         <tr>
-                                            {headers.map((header, idx) => (
-                                                <th key={idx}>{header}</th>
-                                            ))}
+                                            { headers.map( ( header, idx ) => (
+                                                <th key={ idx }>{ header }</th>
+                                            ) ) }
                                         </tr>
                                     </thead>
                                 ) }
@@ -84,7 +83,10 @@ const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
                                     ) )
                                 ) : (
                                     <tr>
-                                        <td colSpan={ headers.length } className="no-args">
+                                        <td
+                                            colSpan={ headers.length }
+                                            className="no-args"
+                                        >
                                             No arguments required
                                         </td>
                                     </tr>
@@ -99,16 +101,12 @@ const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
 };
 
 const ShortCodeTable: FieldComponent = {
-    render: ({ field }) => (
+    render: ( { field } ) => (
         <ShortCodeTableUI
-            key={field.key}
-            icon={field.icon}
-            options={
-                Array.isArray(field.options)
-                    ? field.options
-                    : []
-            }
-            optionLabel={field.optionLabel} // Label header for the options column
+            key={ field.key }
+            icon={ field.icon }
+            options={ Array.isArray( field.options ) ? field.options : [] }
+            optionLabel={ field.optionLabel } // Label header for the options column
         />
     ),
     validate: () => null,

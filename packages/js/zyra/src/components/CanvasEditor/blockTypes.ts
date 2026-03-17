@@ -1,5 +1,5 @@
 // Block Type Definitions
-export type BlockType = 
+export type BlockType =
     | 'text'
     | 'email'
     | 'number'
@@ -49,13 +49,13 @@ export interface Block {
     row?: number;
     column?: number;
     filesize?: number;
-    sitekey?: string;   
-    text?: string;                          
-    level?: 1 | 2 | 3 | 4 | 5 | 6;       
-    html?: string;                          
-    src?: string;                           
-    alt?: string;                           
-    url?: string;                          
+    sitekey?: string;
+    text?: string;
+    level?: 1 | 2 | 3 | 4 | 5 | 6;
+    html?: string;
+    src?: string;
+    alt?: string;
+    url?: string;
     style?: import('./blockStyle').BlockStyle;
     layout?: ColumnLayout;
     columns?: Block[][];
@@ -79,16 +79,26 @@ export interface BlockConfig {
 }
 
 // Helper Types
-export type BlockPatch<T extends Block = Block> = Partial<T>;
-export type FieldValue = string | number | boolean | FieldValue[] | { [key: string]: FieldValue };
+export type BlockPatch< T extends Block = Block > = Partial< T >;
+export type FieldValue =
+    | string
+    | number
+    | boolean
+    | FieldValue[]
+    | { [ key: string ]: FieldValue };
 
-export const getColumnCount = (layout: ColumnLayout): number => {
-    switch (layout) {
-        case '1': return 1;
+export const getColumnCount = ( layout: ColumnLayout ): number => {
+    switch ( layout ) {
+        case '1':
+            return 1;
         case '2-50':
-        case '2-66': return 2;
-        case '3': return 3;
-        case '4': return 4;
-        default: return 2;
+        case '2-66':
+            return 2;
+        case '3':
+            return 3;
+        case '4':
+            return 4;
+        default:
+            return 2;
     }
 };
