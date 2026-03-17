@@ -125,7 +125,10 @@ class Shortcode {
     }
 
     /**
-     * Display stores list
+     * Display stores list.
+     *
+     * @param array $attributes Block or shortcode attributes.
+     * @return string HTML container for marketplace stores.
      */
     public function marketplace_stores( $attributes ) {
         if ( ( $attributes['orderby'] ?? null ) === 'registered' ) {
@@ -137,11 +140,13 @@ class Shortcode {
         FrontendScripts::enqueue_script( 'multivendorx-marketplace-stores-script' );
         FrontendScripts::localize_scripts( 'multivendorx-marketplace-stores-script' );
 
-        // Use id instead of class
         return '<div id="marketplace-stores" data-attributes="' . $json_attrs . '"></div>';
     }
     /**
-     * Display stores list
+     * Display products list.
+     *
+     * @param array $attributes Block or shortcode attributes.
+     * @return string HTML container for marketplace products.
      */
     public function marketplace_products( $attributes ) {
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
@@ -150,11 +155,13 @@ class Shortcode {
         FrontendScripts::enqueue_script( 'multivendorx-marketplace-products-script' );
         FrontendScripts::localize_scripts( 'multivendorx-marketplace-products-script' );
 
-        // Use id instead of class
         return '<div id="marketplace-products" data-attributes="' . $json_attrs . '"></div>';
     }
     /**
-     * Display stores list
+     * Display coupons list.
+     *
+     * @param array $attributes Block or shortcode attributes.
+     * @return string HTML container for marketplace coupons.
      */
     public function marketplace_coupons( $attributes ) {
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
@@ -163,7 +170,6 @@ class Shortcode {
         FrontendScripts::enqueue_script( 'multivendorx-marketplace-coupons-script' );
         FrontendScripts::localize_scripts( 'multivendorx-marketplace-coupons-script' );
 
-        // Use id instead of class
         return '<div id="marketplace-coupons" data-attributes="' . $json_attrs . '"></div>';
     }
 }

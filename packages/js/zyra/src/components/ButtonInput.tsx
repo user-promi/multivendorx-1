@@ -13,8 +13,14 @@ type CustomStyle = {
     button_border_radious: number; 
     button_font_size: number;
     button_font_width: number; 
-    button_margin: number;
-    button_padding: number;
+    button_margin_top: number;
+    button_margin_right: number;
+    button_margin_bottom: number;
+    button_margin_left: number;
+    button_padding_top: number;
+    button_padding_right: number;
+    button_padding_bottom: number;
+    button_padding_left: number;
     button_border_color_onhover: string;
     button_text_color_onhover: string;
     button_background_color_onhover: string;
@@ -46,8 +52,17 @@ const mapBlockStyleToCustomStyle = (style: BlockStyle): Partial<CustomStyle> => 
     button_font_size: style.fontSize,
     button_font_width: Number(style.fontWeight),
     button_border_size: style.borderWidth,
-    button_padding: style.paddingTop,
-    button_margin: style.marginTop,
+    // Map all padding sides
+    button_padding_top: style.paddingTop,
+    button_padding_right: style.paddingRight,
+    button_padding_bottom: style.paddingBottom,
+    button_padding_left: style.paddingLeft,
+    
+    // Map all margin sides
+    button_margin_top: style.marginTop,
+    button_margin_right: style.marginRight,
+    button_margin_bottom: style.marginBottom,
+    button_margin_left: style.marginLeft,
 });
 
 
@@ -56,6 +71,10 @@ const SingleButton: React.FC<{ btn: ButtonConfig; index: number }> = ({ btn, ind
 
     const styleFromBlock = btn.style ? mapBlockStyleToCustomStyle(btn.style) : {};
     const customStyle = { ...styleFromBlock, ...(btn.customStyle || {}) };
+    const padding = `${customStyle.button_padding_top}px ${customStyle.button_padding_right}px ${customStyle.button_padding_bottom}px ${customStyle.button_padding_left}px`;
+    
+    // Build margin string with all four values
+    const margin = `${customStyle.button_margin_top}px ${customStyle.button_margin_right}px ${customStyle.button_margin_bottom}px ${customStyle.button_margin_left}px`;
 
     const buttonStyle: React.CSSProperties = {
         border: hovered
@@ -70,8 +89,8 @@ const SingleButton: React.FC<{ btn: ButtonConfig; index: number }> = ({ btn, ind
         borderRadius: `${customStyle.button_border_radious}px`,
         fontSize: `${customStyle.button_font_size}px`,
         fontWeight: customStyle.button_font_width,
-        margin: `${customStyle.button_margin}px`,
-        padding: `${customStyle.button_padding}px`,
+        margin: margin,
+        padding: padding,
     };
 
     return (
@@ -111,67 +130,16 @@ export const ButtonInputUI: React.FC<ButtonInputProps> = ({
     );
 };
 
-// export const ButtonInputUI: React.FC<ButtonInputProps> = ({
-//     buttons,
-//     wrapperClass = "",
-//     position = ""
-// }) => {
-//     const buttonsArray = Array.isArray(buttons) ? buttons : [buttons];
-    
-//     const renderedButtons = buttonsArray.map((btn, index) => {
-//         const [hovered, setHovered] = useState(false);
-        
-//         const styleFromBlock = btn.style ? mapBlockStyleToCustomStyle(btn.style) : {};
-//         const customStyle = {  ...styleFromBlock, ...(btn.customStyle || {}) };
-        
-//         const buttonStyle: React.CSSProperties = {
-//             border: hovered 
-//                 ? `${customStyle.button_border_size}px solid ${customStyle.button_border_color_onhover}`
-//                 : `${customStyle.button_border_size}px solid ${customStyle.button_border_color}`,
-//             backgroundColor: hovered 
-//                 ? customStyle.button_background_color_onhover
-//                 : customStyle.button_background_color,
-//             color: hovered 
-//                 ? customStyle.button_text_color_onhover
-//                 : customStyle.button_text_color,
-//             borderRadius: `${customStyle.button_border_radious}px`,
-//             fontSize: `${customStyle.button_font_size}px`,
-//             fontWeight: customStyle.button_font_width,
-//             margin: `${customStyle.button_margin}px`,
-//             padding: `${customStyle.button_padding}px`,
-//         };
-
-//         return (
-//             <button
-//                 key={index}
-//                 className={`admin-btn btn-${btn.color || 'purple-bg'}`}
-//                 onClick={btn.onClick}
-//                 disabled={btn.disabled}
-//                 onMouseEnter={() => setHovered(true)}
-//                 onMouseLeave={() => setHovered(false)}
-//                 style={buttonStyle}
-//             >
-//                 {btn.children || (
-//                     <>
-//                         {btn.icon && <i className={`adminfont-${btn.icon}`} />}
-//                         {customStyle.button_text || btn.text}
-//                     </>
-//                 )}
-//             </button>
-//         );
-//     });
-
-//     const wrapperClasses = `buttons-wrapper${wrapperClass ? ` ${wrapperClass}` : ""}`;
-
-//     return <div className={wrapperClasses} data-position={position}>{renderedButtons}</div>;
-// };
-
 const ButtonInput: FieldComponent = {
     render: ({ field, onChange, canAccess }) => {
 
          const handleClick = () => {
-
             if (!canAccess) return;
+            // Redirect url
+            if (field.redirect_url) {
+                window.open(field.redirect_url, '_self');
+                return;
+            }
             // REST API
             if (field.apilink) {
                 axios({

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Basic Store Template configuration for MultiVendorX.
+ *
+ * Provides a simple starter layout for a store page.
+ *
+ * @package MultiVendorX
+ */
+
 return array(
     'name'        => 'basic-store-template',
     'title'       => __( 'Basic Store Template', 'multivendorx' ),

@@ -13,15 +13,14 @@ export const ZyraVariable = (() => {
       nonce: localizer.nonce, // system info, modules, renderComponent, module context
       apiUrl: localizer.apiUrl, // system info, modules, renderComponent, module context
       restUrl: localizer.restUrl, // system info, modules, renderComponent, module context
-      khali_dabba?: localizer.khali_dabba, // system info, modules, renderComponent, module context, settings navigator
-      active_plugins?: localizer.active_plugins, // system info, modules, renderComponent, module context, settings navigator
-      shop_url?: localizer.shop_url, // settings navigator
-      tab_name?: localizer.tab_name, // renderComponent
-      site_url?: localizer.site_url, // renderComponent
-      tinymceApiKey?: localizer.tinymceApiKey, // text area
+      khali_dabba: localizer.khali_dabba, // system info, modules, renderComponent, module context, settings navigator
+      active_plugins: localizer.active_plugins, // system info, modules, renderComponent, module context, settings navigator
+      shop_url: localizer.shop_url, // settings navigator
+      tab_name: localizer.tab_name, // renderComponent
+      site_url: localizer.site_url, // renderComponent
+      tinymceApiKey: localizer.tinymceApiKey, // text area
   } as const;
 })();
-
 
 export const CountryCodesObject = {
   AF: { name: "Afghanistan", dial_code: "+93" },

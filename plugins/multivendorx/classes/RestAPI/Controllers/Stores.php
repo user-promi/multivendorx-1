@@ -1,5 +1,4 @@
 <?php
-
 /**
  * MultiVendorX REST API Store Controller.
  *
@@ -92,7 +91,7 @@ class Stores extends \WP_REST_Controller {
      * @param object $request Request data.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -101,7 +100,7 @@ class Stores extends \WP_REST_Controller {
      * @param object $request Request data.
      */
     public function create_item_permissions_check( $request ) {
-        return current_user_can( 'create_stores' );
+        return current_user_can( 'create_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -110,7 +109,7 @@ class Stores extends \WP_REST_Controller {
      * @param object $request Request data.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'edit_stores' );
+        return current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -136,9 +135,11 @@ class Stores extends \WP_REST_Controller {
                 $store_id  = (int) $request->get_param( 'id' );
                 $cache_key = 'multivendorx_visitor_stats_data_' . $store_id;
 
-                if ( $cached = get_transient( $cache_key ) ) {
-                    return $cached;
-                }
+				$cached = get_transient( $cache_key );
+
+				if ( false !== $cached ) {
+					return $cached;
+				}
 
                 $dates = Utill::normalize_date_range(
                     $request->get_param( 'start_date' ),
@@ -148,34 +149,35 @@ class Stores extends \WP_REST_Controller {
                 $start = $dates['start_date'];
                 $end   = $dates['end_date'];
                 global $wpdb;
+                $table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
 
                 $rows = $wpdb->get_results(
+                    /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared */
                     $wpdb->prepare(
                         "SELECT country
-                        FROM {$wpdb->prefix}" . Utill::TABLES['visitors_stats'] . '
+                        FROM {$table_name}
                         WHERE store_id = %d
                         AND created >= %s
-                        AND created <= %s',
+                        AND created <= %s",
                         $store_id,
                         $start,
                         $end
                     )
                 );
-
-                $mapStats = array();
+                $map_stats = array();
 
                 foreach ( $rows as $row ) {
-                    $code              = strtolower( $row->country ?: '' );
-                    $mapStats[ $code ] = ( $mapStats[ $code ] ?? 0 ) + 1;
+					$code               = strtolower( ! empty( $row->country ) ? $row->country : '' );
+                    $map_stats[ $code ] = ( $map_stats[ $code ] ?? 0 ) + 1;
                 }
 
-                arsort( $mapStats );
+                arsort( $map_stats );
 
                 $colors = array();
                 $scale  = array( '#316fa8', '#3f7fb5', '#4c8fc1', '#5b9fcd', '#6bb0d9' );
                 $i      = 0;
 
-                foreach ( array_slice( $mapStats, 0, 5, true ) as $code => $count ) {
+                foreach ( array_slice( $map_stats, 0, 5, true ) as $code => $count ) {
                     $colors[ $code ] = $scale[ $i ] ?? '#316fa8';
                     ++$i;
                 }
@@ -183,7 +185,7 @@ class Stores extends \WP_REST_Controller {
                 $data = array(
                     'map_stats' => array_map(
                         fn( $count ) => array( 'hits_count' => $count ),
-                        $mapStats
+                        $map_stats
                     ),
                     'colors'    => $colors,
                 );
@@ -289,19 +291,22 @@ class Stores extends \WP_REST_Controller {
 
             $order_by = $request->get_param( 'order_dy' );
             if ( ! empty( $order_by ) ) {
-                $args['orderBy'] = sanitize_text_field( $order_by );
+                $args['order_by'] = sanitize_text_field( $order_by );
                 $args['order']   = sanitize_text_field( $request->get_param( 'order' ) );
             }
 
             // Advanced filters.
-            $filters = $request->get_param( 'filters' );
-            if ( ! empty( $filters ) ) {
-                $args['orderBy'] = $filters['sort'] ?? $args['orderBy'] ?? '';
-                $args['order']   = $filters['order'] ?? '';
-                $lat             = ! empty( $filters['location_lat'] ) ? $filters['location_lat'] : 0;
-                $lng             = ! empty( $filters['location_lng'] ) ? $filters['location_lng'] : 0;
-                $radius          = ! empty( $filters['distance'] ) ? $filters['distance'] : 0;
-                $unit            = $filters['miles'] ?? 'km';
+            $filter_flag = $request->get_param('filters');
+
+            if ( ! empty( $filter_flag ) ) {
+
+                $args['order_by'] = $request->get_param('sort') ?? $args['order_by'] ?? '';
+                $args['order']   = $request->get_param('order') ?? '';
+
+                $lat    = $request->get_param('location_lat') ?: 0;
+                $lng    = $request->get_param('location_lng') ?: 0;
+                $radius = $request->get_param('distance') ?: 0;
+                $unit   = $request->get_param('miles') ?: 'km';
 
                 switch ( $unit ) {
                     case 'miles':
@@ -314,15 +319,21 @@ class Stores extends \WP_REST_Controller {
                         $earth_radius = 6371;
                 }
 
-                if ( ! empty( $filters['limit'] ) && $filters['limit'] ) {
-                    $args['limit'] = absint( $filters['limit'] );
+                $limit  = $request->get_param('limit');
+                $offset = $request->get_param('offset');
+
+                if ( ! empty( $limit ) ) {
+                    $args['limit'] = absint( $limit );
                 }
 
-                if ( ! empty( $filters['offset'] ) && $filters['offset'] ) {
-                    $args['offset'] = absint( $filters['offset'] );
+                if ( ! empty( $offset ) ) {
+                    $args['offset'] = absint( $offset );
                 }
 
-                if ( ! empty( $filters['category'] ) ) {
+                // Category filter
+                $category = $request->get_param('category');
+                if ( ! empty( $category ) ) {
+
                     $product_ids = wc_get_products(
                         array(
                             'return'      => 'ids',
@@ -331,7 +342,7 @@ class Stores extends \WP_REST_Controller {
                                 array(
                                     'taxonomy' => 'product_cat',
                                     'field'    => 'term_id',
-                                    'terms'    => $filters['category'],
+                                    'terms'    => $category,
                                 ),
                             ),
                         )
@@ -353,9 +364,11 @@ class Stores extends \WP_REST_Controller {
                     $args['ID'] = $store_ids;
                 }
 
-                if ( ! empty( $filters['product'] ) ) {
+                // Product filter
+                $product = $request->get_param('product');
+                if ( ! empty( $product ) ) {
                     $args['ID'] = get_post_meta(
-                        $filters['product'],
+                        $product,
                         Utill::POST_META_SETTINGS['store_id'],
                         true
                     );
@@ -393,7 +406,7 @@ class Stores extends \WP_REST_Controller {
                 $owner_id           = StoreUtil::get_primary_owner( $store_id );
                 $owner              = get_userdata( $owner_id );
                 $formatted_stores[] = apply_filters(
-                    'multivendorx_stores',
+                    'multivendorx_stores_details',
                     array(
                         'id'                  => $store_id,
                         'store_name'          => $store['name'],
@@ -411,7 +424,8 @@ class Stores extends \WP_REST_Controller {
                         'location_lat'        => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['location_lat'] ] ?? '',
                         'location_lng'        => $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['location_lng'] ] ?? '',
                         'commission'          => CommissionUtil::get_commission_summary_for_store( $store_id ),
-                    )
+                    ),
+                    $store_id
                 );
             }
 
@@ -487,7 +501,7 @@ class Stores extends \WP_REST_Controller {
 
         $args['limit']   = $limit;
         $args['offset']  = $offset;
-        $args['orderBy'] = 'create_time';
+        $args['order_by'] = 'create_time';
         $args['order']   = 'desc';
 
         $stores = StoreUtil::get_store_information( $args );
@@ -518,7 +532,7 @@ class Stores extends \WP_REST_Controller {
 
         $formatted_stores = array();
         foreach ( $stores as $store ) {
-            if ( $store['status'] == 'active' ) {
+            if ( 'active' === $store['status'] ) {
                 $formatted_stores[] = array(
                     'id'         => (int) $store['ID'],
                     'store_name' => $store['name'],
@@ -849,7 +863,6 @@ class Stores extends \WP_REST_Controller {
             );
 
             foreach ( (array) $store->meta_data as $key => $values ) {
-                // $response[ $key ] = is_array( $values ) ? reset( $values ) : $values;
                 $response[ $key ] = $values;
             }
 
@@ -1065,7 +1078,7 @@ class Stores extends \WP_REST_Controller {
 
                     $store->save();
 
-                    if ( $status == 'permanently_rejected' ) {
+                    if ( 'permanently_rejected' === $status ) {
                         do_action(
                             'multivendorx_notify_store_permanently_rejected',
                             'store_permanently_rejected',
@@ -1081,7 +1094,7 @@ class Stores extends \WP_REST_Controller {
                         );
                     }
 
-                    if ( $status == 'rejected' ) {
+                    if ( 'rejected' === $status ) {
                         do_action(
                             'multivendorx_notify_store_rejected',
                             'store_rejected',
@@ -1182,7 +1195,7 @@ class Stores extends \WP_REST_Controller {
                 );
             }
 
-            if ( 'rejected' == ( $data['status'] ?? '' ) ) {
+            if ( 'rejected' === ( $data['status'] ?? '' ) ) {
                 do_action(
                     'multivendorx_notify_store_rejected',
                     'store_rejected',
@@ -1198,7 +1211,7 @@ class Stores extends \WP_REST_Controller {
                 );
             }
 
-            if ( 'under_review' == ( $data['status'] ?? '' ) ) {
+            if ( 'under_review' === ( $data['status'] ?? '' ) ) {
                 do_action(
                     'multivendorx_notify_store_under_review',
                     'store_under_review',
@@ -1214,7 +1227,7 @@ class Stores extends \WP_REST_Controller {
                 );
             }
 
-            if ( 'suspended' == ( $data['status'] ?? '' ) ) {
+            if ( 'suspended' === ( $data['status'] ?? '' ) ) {
                 do_action(
                     'multivendorx_notify_store_suspended',
                     'store_suspended',
@@ -1230,7 +1243,7 @@ class Stores extends \WP_REST_Controller {
                 );
             }
 
-            if ( 'deactivated' == ( $data['status'] ?? '' ) ) {
+            if ( 'deactivated' === ( $data['status'] ?? '' ) ) {
                 delete_metadata(
                     'user',
                     0,
@@ -1311,17 +1324,16 @@ class Stores extends \WP_REST_Controller {
             );
         }
 
-        // Fetch products for this store.
-        $products = wc_get_products(
+        /* phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value */
+        $products     = wc_get_products(
             array(
-                'status'     => 'publish', // or use your $status variable if dynamic.
+                'status'     => 'publish',
                 'limit'      => -1,
                 'return'     => 'ids',
                 'meta_key'   => Utill::POST_META_SETTINGS['store_id'],
                 'meta_value' => $id,
             )
         );
-
         $product_data = array();
         if ( ! empty( $products ) ) {
             foreach ( $products as $product_id ) {
@@ -1398,7 +1410,7 @@ class Stores extends \WP_REST_Controller {
 
         $paged_data = array_slice( $stores_with_withdraw, $offset, $limit );
 
-        // Return WP_REST_Response with total count in headers
+        // Return WP_REST_Response with total count in headers.
         $response = rest_ensure_response( $paged_data );
         $response->header( 'X-WP-Total', $total_count );
 
@@ -1432,14 +1444,14 @@ class Stores extends \WP_REST_Controller {
 
         $total = count( $stores_deactivate_requests );
 
-        // Pagination
+        // Pagination.
         $page   = max( 1, (int) $request->get_param( 'page' ) );
         $limit  = max( 1, (int) $request->get_param( 'row' ) );
         $offset = ( $page - 1 ) * $limit;
 
         $data = array_slice( $stores_deactivate_requests, $offset, $limit );
 
-        // REST response with headers
+        // REST response with headers.
         $response = rest_ensure_response( $data );
         $response->header( 'X-WP-Total', (int) $total );
 

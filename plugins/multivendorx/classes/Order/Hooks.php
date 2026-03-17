@@ -27,22 +27,22 @@ class Hooks {
         add_action( 'woocommerce_checkout_create_order_line_item', array( $this, 'add_metadata_for_line_item' ), 10, 4 );
         add_action( 'woocommerce_checkout_create_order_shipping_item', array( $this, 'add_metadate_for_shipping_item' ), 10, 4 );
 
-        if ( current_user_can( 'administrator' ) ) {
+        if ( current_user_can( 'manage_options' ) ) {
             $analytics_hooks = array(
-                // Orders & Revenue
+                // Orders & Revenue.
                 'woocommerce_analytics_clauses_where_orders_stats_total',
                 'woocommerce_analytics_clauses_where_orders_stats_interval',
                 'woocommerce_analytics_clauses_where_orders_subquery',
-                // Products
+                // Products.
                 'woocommerce_analytics_clauses_where_products_stats_total',
                 'woocommerce_analytics_clauses_where_products_stats_interval',
                 'woocommerce_analytics_clauses_where_products_subquery',
-                // Categories & Taxes
+                // Categories & Taxes.
                 'woocommerce_analytics_clauses_where_categories_subquery',
                 'woocommerce_analytics_clauses_where_taxes_stats_total',
                 'woocommerce_analytics_clauses_where_taxes_stats_interval',
                 'woocommerce_analytics_clauses_where_taxes_subquery',
-                // Coupons
+                // Coupons.
                 'woocommerce_analytics_clauses_where_coupons_stats_total',
                 'woocommerce_analytics_clauses_where_coupons_stats_interval',
                 'woocommerce_analytics_clauses_where_coupons_subquery',
@@ -70,7 +70,16 @@ class Hooks {
 
         add_action( 'woocommerce_order_status_changed', array( $this, 'trigger_order_status_notifications' ), 50, 4 );
     }
-
+    /**
+     * Skip counting sales for suborders.
+     *
+     * Prevents WooCommerce from recording sales for child orders
+     * by marking them as already recorded.
+     *
+     * @param int $order_id Order ID.
+     *
+     * @return void
+     */
     public function skip_suborder_sales( $order_id ) {
         $order = wc_get_order( $order_id );
 
@@ -78,9 +87,9 @@ class Hooks {
             return;
         }
 
-        // If this order is a suborder
+        // If this order is a suborder.
         if ( $order->get_parent_id() ) {
-            // Reset recorded sales flag so WooCommerce skips counting
+            // Reset recorded sales flag so WooCommerce skips counting.
             $order->get_data_store()->set_recorded_sales( $order, true );
         }
     }
@@ -122,22 +131,23 @@ class Hooks {
         }
     }
 
-    /**
-     * Forces the SQL query to only include top-level parent orders.
-     * * @param array $clauses Existing SQL clauses (where, join, etc.)
-     *
-     * @return array Modified clauses
-     */
-    public function exclude_suborders_analytics( $clauses ) {
-        global $wpdb;
+	/**
+	 * Forces the SQL query to only include top-level parent orders.
+	 *
+	 * @param array $clauses Existing SQL clauses (where, join, etc.).
+	 *
+	 * @return array Modified clauses.
+	 */
+	public function exclude_suborders_analytics( $clauses ) {
+		global $wpdb;
 
-        $table_name = $wpdb->prefix . 'wc_order_stats';
+		$table_name = $wpdb->prefix . 'wc_order_stats';
 
-        // Inject the constraint: parent_id must be 0
-        $clauses[] = "AND {$table_name}.parent_id = 0";
+		// Inject the constraint: parent_id must be 0.
+		$clauses[] = "AND {$table_name}.parent_id = 0";
 
-        return $clauses;
-    }
+		return $clauses;
+	}
 
     /**
      * Create the store orders of a main order from backend.
@@ -258,7 +268,7 @@ class Hooks {
 
         $store_id = $order ? absint( $order->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) ) : 0;
 
-        if ( $new_status != 'completed' ) {
+        if ( 'completed' !== $new_status ) {
             return;
         }
 
@@ -304,7 +314,7 @@ class Hooks {
 
         $store = new Store( $store_id );
         if ( $order->get_parent_id() > 0 ) {
-            if ( $new_status == 'processing' ) {
+            if ( 'processing' === $new_status ) {
                 do_action(
                     'multivendorx_notify_order_processing',
                     'order_processing',
@@ -319,7 +329,7 @@ class Hooks {
                 );
             }
 
-            if ( $new_status == 'completed' ) {
+            if ( 'completed' === $new_status ) {
                 do_action(
                     'multivendorx_notify_order_completed',
                     'order_completed',
@@ -334,7 +344,7 @@ class Hooks {
                 );
             }
 
-            if ( $new_status == 'cancelled' ) {
+            if ( 'cancelled' === $new_status ) {
                 do_action(
                     'multivendorx_notify_order_cancelled',
                     'order_cancelled',
@@ -351,7 +361,7 @@ class Hooks {
                 );
             }
 
-            if ( $new_status == 'refunded' ) {
+            if ( 'refunded' === $new_status ) {
                 do_action(
                     'multivendorx_notify_order_refunded',
                     'order_refunded',
@@ -366,7 +376,7 @@ class Hooks {
                 );
             }
 
-            if ( $old_status == 'refund-requested' && $new_status == 'processing' ) {
+            if ( 'refund-requested' === $old_status && 'processing' === $new_status ) {
                 do_action(
                     'multivendorx_notify_refund_rejected',
                     'refund_rejected',
