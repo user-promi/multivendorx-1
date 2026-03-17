@@ -192,6 +192,10 @@ class FrontendScripts {
 					'src'  => $base_url . 'block/registration-form/index.js',
 					'deps' => $component_asset['dependencies'],
                 ),
+                'multivendorx-store-products-script' => array(
+					'src'  => $base_url . MULTIVENDORX_PLUGIN_SLUG . '-store-products.min.js',
+					'deps' => $common_deps,
+				),
             )
         );
 
@@ -491,7 +495,8 @@ class FrontendScripts {
 									'manage_plan_url' => MULTIVENDORX_PRO_SHOP_URL,
 								)
 							),
-                            'placeholder_url  '      => wc_placeholder_img_src(),
+                            'placeholder_url  '        => wc_placeholder_img_src(),
+                            'default_user_avatar' => get_avatar_url( 0 ),
                         )
                     ),
                 ),
@@ -547,6 +552,7 @@ class FrontendScripts {
                             'order_meta'               => Utill::ORDER_META_SETTINGS,
                             'date_format'              => Utill::wp_to_react_date_format( get_option( 'date_format' ) ),
                             'placeholder_url  '        => wc_placeholder_img_src(),
+                            'default_user_avatar' => get_avatar_url( 0 ),
                         )
                     ),
                 ),
@@ -590,8 +596,9 @@ class FrontendScripts {
                     'use_settings' => true,
                     'use_rest'     => true,
                     'data'         => array(
-                        'store_page_url'  => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
-                        'placeholder_url' => wc_placeholder_img_src(),
+                        'store_page_url'       => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
+                        'placeholder_url'    => wc_placeholder_img_src(),
+                        'default_user_avatar' => get_avatar_url( 0 ),
                     ),
                 ),
                 'multivendorx-marketplace-products-editor-script' => array(
@@ -626,6 +633,7 @@ class FrontendScripts {
                             'activeModules' => MultiVendorX()->modules->get_active_modules(),
                             'currentUserId' => MultiVendorX()->current_user_id,
                             'loginUrl'      => wc_get_page_permalink( 'myaccount' ),
+                            'default_user_avatar' => get_avatar_url( 0 ),
                         )
                     ),
                 ),

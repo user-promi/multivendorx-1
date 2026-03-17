@@ -94,13 +94,7 @@ const StoreQuickInfo: React.FC<{}> = () => {
 		<div className="store-card">
 			<div className="store-header">
 				<div className="store-avatar">
-					{storeDetails.storeLogo ? (
-						<img src={storeDetails.storeLogo} alt="Store Avatar" />
-					) : storeDetails.storeName ? (
-						<span className="placeholder">
-							{storeDetails.storeName.slice(0, 2).toUpperCase()}
-						</span>
-					) : null}
+					<img src={storeDetails.storeLogo || StoreInfo.default_user_avatar} alt="Store Avatar" />
 				</div>
 
 				<div className="store-info">

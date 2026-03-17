@@ -122,8 +122,6 @@ class Ajax {
 				?>
                 <li class="review byuser comment-author-admin bypostauthor">
                     <div class="comment_container">
-                        <div class="avatar avatar-60 photo avatar-placeholder">
-                            <div class="avatar avatar-60 photo">
                                 <?php
                                 if ( $user_info ) {
                                     echo get_avatar( $review->customer_id, 60 );
@@ -131,8 +129,6 @@ class Ajax {
                                     echo get_avatar( 0, 60 );
                                 }
                                 ?>
-                            </div>
-                        </div>
                         <div class="comment-text">
                             <div class="star-rating" role="img" aria-label="<?php printf( __( 'Rated %s out of 5', 'multivendorx' ), $rating_rounded ); ?>">
                                 <span style="width: <?php echo esc_attr( $rating_percentage ); ?>%;">

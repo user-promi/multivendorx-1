@@ -46,6 +46,12 @@ class Frontend {
         // Store visitors stats data.
         add_action( 'template_redirect', array( $this, 'set_multivendorx_user_cookies' ), 10 );
         add_action( 'template_redirect', array( $this, 'multivendorx_store_visitors_stats' ), 20 );
+        add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
+    }
+
+    public function load_scripts() {
+        FrontendScripts::load_scripts();
+        FrontendScripts::enqueue_script( 'multivendorx-store-products-script' );
     }
 
     /**

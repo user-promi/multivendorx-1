@@ -579,6 +579,7 @@ registerBlockType('multivendorx/store-banner', {
 			flexDirection: 'column',
 			padding: '40px',
 			color: contentColor,
+			backgroundImage: url('')
 		};
 
 		return (

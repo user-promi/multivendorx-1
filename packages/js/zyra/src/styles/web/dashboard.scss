@@ -191,8 +191,12 @@
 .rating-details {
     flex-grow: 0;
     min-width: 25rem;
-
-    .rating-details-wrapper {
+    .review {
+        padding-top: 0.313rem;
+        color: $sub-text-color;
+    }
+}
+ .rating-details-wrapper {
         .title-wrapper {
             flex-direction: column;
             padding: 0;
@@ -207,12 +211,6 @@
             }
         }
     }
-
-    .review {
-        padding-top: 0.313rem;
-        color: $sub-text-color;
-    }
-}
 
 .star-icon {
     color: #ffc800;
