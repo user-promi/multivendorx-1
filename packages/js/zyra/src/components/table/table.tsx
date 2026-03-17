@@ -293,7 +293,7 @@ const Table: React.FC<TableProps> = ({
                                     return (
                                         <td
                                             key={`${rowId}-${colIndex}`}
-                                            className="admin-column"
+                                            className={`admin-column ${header.type}`}
                                         >
                                             {
                                                 header.isEditable ? (

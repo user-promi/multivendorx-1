@@ -4,6 +4,7 @@ import Skeleton from './UI/Skeleton';
 
 type AvatarProps = {
     image?: string;
+    imageHtml?: string;
     iconClass?: string;
     text?: string;
     link?: string;
@@ -51,6 +52,8 @@ const InfoItem: React.FC<InfoItemProps> = ({
             <img src={avatar.image} alt={title} />
         ) : avatar.iconClass ? (
             <i className={`adminfont-${avatar.iconClass}`} />
+        ) : avatar.imageHtml ? (
+            <div dangerouslySetInnerHTML={{ __html: avatar.imageHtml }} />
         ) : (
             <span className={`adminfont-${avatar.iconClass}`}>{avatar.text}</span>
         );
