@@ -44,11 +44,11 @@ const REGISTRATION_BLOCK_GROUPS = [
         label: 'Store Fields',
         icon: 'store',
         blocks: [
-            { id: 'store-name', icon: 't-letter-bold', value: 'text', label: 'Store Name', fixedName: 'name', placeholder: 'Enter your store name' },
-            { id: 'store-description', icon: 'text ', value: 'textarea', label: 'Store Desc', fixedName: 'description', placeholder: 'Enter your store description' },
-            { id: 'store-phone', icon: 'form-phone', value: 'text', label: 'Store Phone', fixedName: 'phone', placeholder: 'Enter your store phone' },
-            { id: 'store-paypal', icon: 'unread ', value: 'email', label: 'Store Paypal Email', fixedName: 'paypal_email', placeholder: 'Enter your PayPal email' },
-            { id: 'store-address', icon: 'form-address ', value: 'address', label: 'Store Address', fixedName: 'address' },
+            { id: 'store-name', icon: 't-letter-bold', value: 'text', label: 'Store Name', fixedName: 'store-name', placeholder: 'Enter your store name' },
+            { id: 'store-description', icon: 'text ', value: 'textarea', label: 'Store Desc', fixedName: 'store-description', placeholder: 'Enter your store description' },
+            { id: 'store-phone', icon: 'form-phone', value: 'text', label: 'Store Phone', fixedName: 'store-phone', placeholder: 'Enter your store phone' },
+            { id: 'store-paypal', icon: 'unread ', value: 'email', label: 'Store Paypal Email', fixedName: 'store-paypal', placeholder: 'Enter your PayPal email' },
+            { id: 'store-address', icon: 'form-address ', value: 'address', label: 'Store Address', fixedName: 'store-address' },
         ]
     }
 ];

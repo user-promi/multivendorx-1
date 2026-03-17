@@ -6,25 +6,15 @@ import type { MultiValue, SingleValue } from 'react-select';
 // Internal dependencies
 import { ButtonInputUI } from './ButtonInput';
 
+// ─── Types ───────────────────────────────────────────────────────────────────
 
-// Types
-type InputValue =
-    | string
-    | number
-    | boolean
-    | File
-    | string[]
-    | null
-    | undefined;
+type InputValue = string | number | boolean | File | string[] | null | undefined;
 
 declare global {
     interface Window {
         grecaptcha?: {
             ready: (callback: () => void) => void;
-            execute: (
-                siteKey: string,
-                options: { action: string }
-            ) => Promise<string>;
+            execute: (siteKey: string, options: { action: string }) => Promise<string>;
         };
     }
 }
@@ -51,6 +41,7 @@ interface Field {
     sitekey?: string;
     key?: string;
     fields?: Field[];
+    style?: string;
 }
 
 interface ButtonSetting {
@@ -65,13 +56,41 @@ interface FormFields {
 
 interface FormViewerProps {
     formFields: FormFields;
-    response?: Record<string, string | number | File | undefined>; // previously `any`
-    onSubmit: (
-        data: Record<string, string | number | File | undefined>
-    ) => void;
+    response?: Record<string, string | number | File | undefined>;
+    onSubmit: (data: Record<string, string | number | File | undefined>) => void;
     countryList?: Option[];
     stateList?: Record<string, Option[] | Record<string, string>>;
 }
+
+// ─── Placeholder Helpers ─────────────────────────────────────────────────────
+
+type FormDataType = { default_placeholder: { name: string; email: string } };
+
+const enquiryFormData: FormDataType = { default_placeholder: { name: '', email: '' } };
+const wholesaleFormData: FormDataType = { default_placeholder: { name: '', email: '' } };
+const enquiryCartTable: FormDataType = { default_placeholder: { name: '', email: '' } };
+
+const getDefaultPlaceholder = (key: 'name' | 'email'): string | undefined =>
+    enquiryFormData?.default_placeholder?.[key] ??
+    wholesaleFormData?.default_placeholder?.[key] ??
+    enquiryCartTable?.default_placeholder?.[key];
+
+// ─── Shared FormRow Wrapper ───────────────────────────────────────────────────
+
+const FormRow: React.FC<{ label?: string; fieldName?: string; error?: string; children: React.ReactNode }> = ({
+    label,
+    fieldName,
+    error,
+    children,
+}) => (
+    <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+        {label && <label htmlFor={fieldName}>{label}</label>}
+        {children}
+        {error && <span className="error-text">{error}</span>}
+    </p>
+);
+
+// ─── Sub-Components ───────────────────────────────────────────────────────────
 
 const Checkboxes: React.FC<{
     options: Option[];
@@ -86,31 +105,25 @@ const Checkboxes: React.FC<{
     }, [checkedItems, onChange]);
 
     const handleChange = (option: Option, checked: boolean) => {
-        const newCheckedItems = checkedItems.filter(
-            (item) => item.value !== option.value
-        );
-        if (checked) {
-            newCheckedItems.push(option);
-        }
-        setCheckedItems(newCheckedItems);
+        const updated = checkedItems.filter((item) => item.value !== option.value);
+        if (checked) updated.push(option);
+        setCheckedItems(updated);
     };
 
     return (
         <>
             {options.map((option) => (
-                <label htmlFor={option.value} className="woocommerce-form__label woocommerce-form__label-for-checkbox">
+                <label
+                    key={option.value}
+                    htmlFor={option.value}
+                    className="woocommerce-form__label woocommerce-form__label-for-checkbox"
+                >
                     <input
                         type="checkbox"
                         className="woocommerce-form__input woocommerce-form__input-checkbox"
                         id={option.value}
-                        checked={
-                            !!checkedItems.find(
-                                (item) => item.value === option.value
-                            )
-                        }
-                        onChange={(e) =>
-                            handleChange(option, e.target.checked)
-                        }
+                        checked={!!checkedItems.find((item) => item.value === option.value)}
+                        onChange={(e) => handleChange(option, e.target.checked)}
                     />
                     <span>{option.label}</span>
                 </label>
@@ -119,108 +132,66 @@ const Checkboxes: React.FC<{
     );
 };
 
+const Radio: React.FC<{
+    options: Option[];
+    onChange: (value: string | undefined) => void;
+}> = ({ options, onChange }) => {
+    const [selected, setSelected] = useState<string | undefined>(
+        options.find(({ isDefault }) => isDefault)?.value
+    );
+
+    useEffect(() => {
+        onChange(selected);
+    }, [selected, onChange]);
+
+    return (
+        <div className="multiselect-container items-wrapper">
+            {options.map((option, index) => (
+                <label
+                    key={option.value}
+                    className="woocommerce-form__label woocommerce-form__label-for-radio"
+                    data-index={index}
+                    htmlFor={option.value}
+                >
+                    <input
+                        type="radio"
+                        className="woocommerce-form__input woocommerce-form__input-radio"
+                        id={option.value}
+                        value={option.value}
+                        checked={selected === option.value}
+                        onChange={(e) => setSelected(e.target.value)}
+                    />
+                    <span>{option.label}</span>
+                </label>
+            ))}
+        </div>
+    );
+};
+
 const Multiselect: React.FC<{
     options: Option[];
     onChange: (value: string[] | string | null) => void;
     isMulti?: boolean;
 }> = ({ options = [], onChange, isMulti = false }) => {
-    const [selectedOptions, setSelectedOptions] = useState<
-        MultiValue<Option> | SingleValue<Option>
-    >(
+    const [selectedOptions, setSelectedOptions] = useState<MultiValue<Option> | SingleValue<Option>>(
         isMulti
             ? options.filter(({ isDefault }) => isDefault)
             : options.find(({ isDefault }) => isDefault) || null
     );
 
-    const handleChange = (
-        newValue: MultiValue<Option> | SingleValue<Option>
-    ) => {
+    const handleChange = (newValue: MultiValue<Option> | SingleValue<Option>) => {
         setSelectedOptions(newValue);
         if (isMulti) {
-            onChange(
-                Array.isArray(newValue)
-                    ? newValue.map((option) => option.value)
-                    : []
-            );
+            onChange(Array.isArray(newValue) ? newValue.map((o) => o.value) : []);
         } else {
             onChange(newValue ? (newValue as Option).value : null);
         }
     };
 
-    return (
-        <Select
-            isMulti={isMulti}
-            value={selectedOptions}
-            onChange={handleChange}
-            options={options}
-        />
-    );
+    return <Select isMulti={isMulti} value={selectedOptions} onChange={handleChange} options={options} />;
 };
 
-type RadioProps = {
-    options: Option[];
-    onChange: (value: string | undefined) => void;
-};
-
-/**
- * Render radio
- * @param {*} props
- */
-const Radio: React.FC<RadioProps> = ({ options, onChange }) => {
-    const [selectdedItem, setSelectdedItem] = useState<string | undefined>(
-        options.find(({ isDefault }) => isDefault)?.value
-    );
-
-    useEffect(() => {
-        onChange(selectdedItem);
-    }, [selectdedItem, onChange]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectdedItem(e.target.value);
-    };
-    return (
-        <div className="multiselect-container items-wrapper">
-            {options.map((option, index) => {
-                return (
-                    <label className="woocommerce-form__label woocommerce-form__label-for-radio" data-index={index} htmlFor={option.value}>
-                        <input
-                            type="radio"
-                            className="woocommerce-form__input woocommerce-form__input-radio"
-                            id={option.value}
-                            value={option.value}
-                            checked={selectdedItem === option.value}
-                            onChange={handleChange}
-                        />
-                        <span>{option.label}</span>
-                    </label>
-                );
-            })}
-        </div>
-    );
-};
-type FormDataType = {
-    default_placeholder: {
-        name: string;
-        email: string;
-    };
-};
-
-const enquiryFormData: FormDataType = {
-    default_placeholder: { name: '', email: '' },
-};
-const wholesaleFormData: FormDataType = {
-    default_placeholder: { name: '', email: '' },
-};
-const enquiryCartTable: FormDataType = {
-    default_placeholder: { name: '', email: '' },
-};
-
-const getDefaultPlaceholder = (
-    key: 'name' | 'email'
-): string | undefined =>
-    enquiryFormData?.default_placeholder?.[key] ??
-    wholesaleFormData?.default_placeholder?.[key] ??
-    enquiryCartTable?.default_placeholder?.[key];
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 const FormViewer: React.FC<FormViewerProps> = ({
     formFields,
@@ -229,33 +200,29 @@ const FormViewer: React.FC<FormViewerProps> = ({
     countryList,
     stateList,
 }) => {
-    const [inputs, setInputs] = useState<Record<string, InputValue>>(
-        {}
-    );
-    const formList = formFields.formfieldlist || [];
-    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-    const [captchaError, setCaptchaError] = useState<boolean>(false);
+    const [inputs, setInputs] = useState<Record<string, InputValue>>({});
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [fileName, setFileName] = useState<string>('');
-    const recaptchaField = formList.find(
-        (field) => field.type === 'recaptcha'
-    );
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const [captchaError, setCaptchaError] = useState<boolean>(false);
+
+    const formList = formFields.formfieldlist || [];
+    const recaptchaField = formList.find((f) => f.type === 'recaptcha');
     const siteKey = recaptchaField?.sitekey || null;
+    const defaultDate = new Date().getFullYear() + '-01-01';
+
     useEffect(() => {
-        if (response) {
-            setInputs(response);
-        }
+        if (response) setInputs(response);
     }, [response]);
+
     useEffect(() => {
-        if (!siteKey) {
-            return;
-        }
+        if (!siteKey) return;
 
         const loadRecaptcha = () => {
             window.grecaptcha?.ready(() => {
                 window.grecaptcha
                     ?.execute(siteKey, { action: 'form_submission' })
-                    .then((token) => setCaptchaToken(token))
+                    .then(setCaptchaToken)
                     .catch(() => setCaptchaError(true));
             });
         };
@@ -272,44 +239,44 @@ const FormViewer: React.FC<FormViewerProps> = ({
         }
     }, [siteKey]);
 
-    const handleChange = (name: string, value: InputValue) => {
-        setInputs((prevData) => ({ ...prevData, [name]: value }));
-    };
+    const handleChange = (name: string, value: InputValue) =>{
+        setInputs((prev) => ({ ...prev, [name]: value }));
+        // Clear error for this field
+        if (errors[name]) {
+            setErrors((prev) => {
+                const updated = { ...prev };
+                delete updated[name];
+                return updated;
+            });
+        }
+    }
 
-    const handleFileChange = (
-        name: string,
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const files = event.target.files;
-        const selectedFile = files && files[0];
-        if (selectedFile) {
-            setFileName(selectedFile.name);
-            setInputs((prevData) => ({
-                ...prevData,
-                [name]: selectedFile,
-            }));
+    const handleFileChange = (name: string, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setFileName(file.name);
+            setInputs((prev) => ({ ...prev, [name]: file }));
+            // Clear error for this field
+            if (errors[name]) {
+                setErrors((prev) => {
+                    const updated = { ...prev };
+                    delete updated[name];
+                    return updated;
+                });
+            }
         }
     };
 
-    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         const error: Record<string, string> = {};
 
         formList.forEach((field) => {
-            if (!field.required || field.disabled) {
-                return;
-            }
-            // Skip validation for 'name' and 'email'
-            if (
-                !field.name ||
-                field.name === 'name' ||
-                field.name === 'email'
-            ) {
-                return;
-            }
+            if (!field.required || field.disabled || !field.name) return;
+            if (field.name === 'name' || field.name === 'email') return;
 
-            const value = field.name ? inputs[field.name] : undefined;
+            const value = inputs[field.name];
 
             switch (field.type) {
                 case 'text':
@@ -317,28 +284,18 @@ const FormViewer: React.FC<FormViewerProps> = ({
                 case 'textarea':
                 case 'datepicker':
                 case 'timepicker':
-                    if (
-                        !value ||
-                        (typeof value === 'string' && value.trim() === '')
-                    ) {
+                    if (!value || (typeof value === 'string' && !value.trim())) {
                         error[field.name] = `${field.label} is required.`;
                     }
                     break;
-
                 case 'checkboxes':
                 case 'multiselect':
                     if (!Array.isArray(value) || value.length === 0) {
                         error[field.name] = `${field.label} is required.`;
                     }
                     break;
-
                 case 'dropdown':
                 case 'radio':
-                    if (!value) {
-                        error[field.name] = `${field.label} is required.`;
-                    }
-                    break;
-
                 case 'attachment':
                     if (!value) {
                         error[field.name] = `${field.label} is required.`;
@@ -347,476 +304,310 @@ const FormViewer: React.FC<FormViewerProps> = ({
             }
         });
 
-        if (Object.keys(error).length > 0) {
+        if (Object.keys(error).length) {
             setErrors(error);
             return;
         }
 
         setErrors({});
 
-        const data = new FormData();
-
-        for (const key in inputs) {
-            if (Object.prototype.hasOwnProperty.call(inputs, key)) {
-                const value = inputs[key];
-                if (value !== undefined && value !== null) {
-                    if (
-                        typeof value === 'number' ||
-                        typeof value === 'boolean'
-                    ) {
-                        data.append(key, value.toString());
-                    } else if (Array.isArray(value)) {
-                        data.append(key, JSON.stringify(value));
-                    } else {
-                        data.append(key, value as string | Blob);
-                    }
-                }
-            }
-        }
-
-        const submitData: Record<string, string | number | File | undefined> =
-            {};
+        const submitData: Record<string, string | number | File | undefined> = {};
         for (const key in inputs) {
             const value = inputs[key];
             if (value !== undefined && value !== null) {
-                // Exclude null values
                 submitData[key] = value as string | number | File | undefined;
             }
         }
         onSubmit(submitData);
     };
 
-    const defaultDate: string = new Date().getFullYear() + '-01-01';
+    // ─── Field Renderer ───────────────────────────────────────────────────────
+
+    const renderField = (field: Field) => {
+        if (field.disabled) return null;
+
+        const name = field.name ?? '';
+        const error = errors[name];
+        console.log(field.name);
+
+        switch (field.type) {
+            case 'title':
+                return <h2 key={field.id}>{field.label}</h2>;
+
+            case 'section':
+                return (
+                    <p key={field.id} className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                        {field.label}
+                    </p>
+                );
+
+            case 'divider':
+                return <p key={field.id} className="section-divider-container" />;
+
+            case 'text':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <input
+                            type="text"
+                            name={name}
+                            className="input-text"
+                            value={(inputs[name] as string) || ''}
+                            placeholder={field.placeholder}
+                            onChange={(e) => handleChange(name, e.target.value)}
+                            required={field.required}
+                            maxLength={field.charlimit}
+                        />
+                    </FormRow>
+                );
+
+            case 'email':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <input
+                            type="email"
+                            name={name}
+                            className="input-text"
+                            value={
+                                (getDefaultPlaceholder('email') ?? (inputs[name] as string) ?? '') as string
+                            }
+                            placeholder={field.placeholder}
+                            onChange={(e) => handleChange(name, e.target.value)}
+                            required={field.required}
+                            maxLength={field.charlimit}
+                        />
+                    </FormRow>
+                );
+
+            case 'textarea':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <textarea
+                            name={name}
+                            className="input-text"
+                            value={(inputs[name] as string) || ''}
+                            placeholder={field.placeholder}
+                            onChange={(e) => handleChange(name, e.target.value)}
+                            required={field.required}
+                            maxLength={field.charlimit}
+                            rows={field.row}
+                            cols={field.col}
+                        />
+                    </FormRow>
+                );
+
+            case 'checkboxes':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <Checkboxes
+                            options={field.options || []}
+                            onChange={(data) => handleChange(name, data)}
+                        />
+                    </FormRow>
+                );
+
+            case 'multiselect':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <div className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                            <Multiselect
+                                options={field.options ?? []}
+                                onChange={(data) => handleChange(name, data)}
+                                isMulti
+                            />
+                        </div>
+                    </FormRow>
+                );
+
+            case 'dropdown':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <div className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                            <Multiselect
+                                options={field.options ?? []}
+                                onChange={(data) => handleChange(name, data)}
+                            />
+                        </div>
+                    </FormRow>
+                );
+
+            case 'radio':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <Radio
+                            options={field.options ?? []}
+                            onChange={(data) => handleChange(name, data)}
+                        />
+                    </FormRow>
+                );
+
+            case 'recaptcha':
+                return (
+                    <p key={field.id} className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+                        <div className="recaptcha-wrapper">
+                            <input
+                                type="hidden"
+                                name="g-recaptcha-response"
+                                value={captchaToken as string}
+                                className="input-text"
+                            />
+                        </div>
+                    </p>
+                );
+
+            case 'attachment':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <div className="attachment-section">
+                            <label htmlFor="dropzone-file" className="attachment-label">
+                                &nbsp;
+                                <div className="wrapper">
+                                    <i className="adminfont-cloud-upload" />
+                                    <p className="heading">
+                                        {fileName === '' ? (
+                                            <>
+                                                <span>Click to upload</span> or drag and drop
+                                            </>
+                                        ) : (
+                                            fileName
+                                        )}
+                                    </p>
+                                </div>
+                                <input
+                                    readOnly
+                                    id="dropzone-file"
+                                    type="file"
+                                    className="hidden"
+                                    onChange={(e) => handleFileChange(name, e)}
+                                />
+                            </label>
+                        </div>
+                    </FormRow>
+                );
+
+            case 'datepicker':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <div className="date-picker-wrapper">
+                            <input
+                                type="date"
+                                className="input-text"
+                                value={(inputs[name] as string) || defaultDate}
+                                onChange={(e) => handleChange(name, e.target.value)}
+                            />
+                        </div>
+                    </FormRow>
+                );
+
+            case 'timepicker':
+                return (
+                    <FormRow key={field.id} label={field.label} fieldName={name} error={error}>
+                        <input
+                            type="time"
+                            className="input-text"
+                            value={(inputs[name] as string) || ''}
+                            onChange={(e) => handleChange(name, e.target.value)}
+                        />
+                    </FormRow>
+                );
+
+            case 'address': {
+                const subFields = field.fields?.length
+                    ? field.fields
+                    : [
+                          { key: 'address_1', label: 'Address Line 1', type: 'text', required: true },
+                          { key: 'address_2', label: 'Address Line 2', type: 'text' },
+                          { key: 'city', label: 'City', type: 'text', required: true },
+                          { key: 'state', label: 'State', type: 'select' },
+                          { key: 'country', label: 'Country', type: 'select' },
+                          { key: 'postcode', label: 'Postal Code', type: 'text', required: true },
+                      ];
+
+                return (
+                    <fieldset key={field.id}>
+                        <legend>{field.label}</legend>
+                        {subFields.map((subField: any) => {
+                            const inputName = subField.key;
+                            const subValue = inputs[inputName] ?? '';
+
+                            if (subField.type === 'text') {
+                                return (
+                                    <p key={subField.key} className="form-row">
+                                        <label>{subField.label}</label>
+                                        <input
+                                            type="text"
+                                            className="input-text"
+                                            value={subValue as string}
+                                            placeholder={subField.placeholder}
+                                            required={subField.required}
+                                            onChange={(e) => handleChange(inputName, e.target.value)}
+                                        />
+                                    </p>
+                                );
+                            }
+
+                            if (subField.type === 'select') {
+                                let options: Option[] = [];
+
+                                if (subField.key === 'country') {
+                                    options = countryList || [];
+                                } else if (subField.key === 'state') {
+                                    const selectedCountry = inputs[`${field.name}_country`];
+                                    const rawStates = stateList?.[selectedCountry as string];
+
+                                    if (Array.isArray(rawStates)) {
+                                        options = rawStates;
+                                    } else if (rawStates && typeof rawStates === 'object') {
+                                        options = Object.entries(rawStates).map(([code, label]) => ({
+                                            value: code,
+                                            label: String(label),
+                                        }));
+                                    }
+                                }
+
+                                return (
+                                    <p key={subField.key} className="woocommerce-form-row woocommerce-form-row--last form-row form-row-last">
+                                        <label>{subField.label}</label>
+                                        <Multiselect
+                                            options={options}
+                                            onChange={(val) => handleChange(inputName, val)}
+                                        />
+                                    </p>
+                                );
+                            }
+
+                            return null;
+                        })}
+                    </fieldset>
+                );
+            }
+
+            case 'button':
+                return (
+                    <p key={field.id} className="woocommerce-form-row form-row">
+                        <ButtonInputUI
+                            buttons={{
+                                style: field.style,
+                                onClick: (e) => {
+                                    const captcha = formList.find((f) => f.type === 'recaptcha');
+                                    if (captcha?.disabled === false) {
+                                        if (captchaError || !captchaToken) return;
+                                    }
+                                    handleSubmit(e);
+                                },
+                                text: field.text || field.placeholder || 'Submit',
+                            }}
+                        />
+                    </p>
+                );
+
+            default:
+                return null;
+        }
+    };
 
     return (
         <form className="woocommerce-form woocommerce-form-login login">
-            {formList.map((field) => {
-                if (field.disabled) {
-                    return null;
-                }
-                switch (field.type) {
-                    case 'title':
-                        return <h2> {field.label} </h2>;
-                    case 'text':
-                        return (
-                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <input
-                                    type="text"
-                                    name={field.name}
-                                    className="input-text"
-                                    value={
-                                        (field.name === 'name'
-                                            ? getDefaultPlaceholder('name') ?? inputs[field.name ?? '']
-                                            : inputs[field.name ?? '']) || ''
-                                    }
-                                    placeholder={field.placeholder}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            field.name ?? '',
-                                            e.target.value
-                                        )
-                                    }
-                                    required={field.required}
-                                    maxLength={field.charlimit}
-                                />
-                                {errors[field.name ?? ''] && (
-                                    <span className="error-text">
-                                        {errors[field.name ?? '']}
-                                    </span>
-                                )}
-                            </p>
-                        );
-                    case 'email':
-                        return (
-                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <input
-                                    type="email"
-                                    name={field.name}
-                                    className="input-text"
-                                    value={
-                                        getDefaultPlaceholder('email') ??
-                                        (inputs[field.name ?? ''] as string) ??
-                                        ''
-                                    }
-                                    placeholder={field.placeholder}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            field.name ?? '',
-                                            e.target.value
-                                        )
-                                    }
-                                    required={field.required}
-                                    maxLength={field.charlimit}
-                                />
-                            </p>
-                        );
-                    case 'textarea':
-                        return (
-                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <textarea
-                                    name={field.name}
-                                    value={
-                                        (inputs[
-                                            field.name ?? ''
-                                        ] as string) || ''
-                                    }
-                                    placeholder={field.placeholder}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            field.name ?? '',
-                                            e.target.value
-                                        )
-                                    }
-                                    required={field.required}
-                                    maxLength={field.charlimit}
-                                    rows={field.row}
-                                    cols={field.col}
-                                    className="input-text"
-                                />
-                                {errors[field.name ?? ''] && (
-                                    <span className="error-text">
-                                        {errors[field.name ?? '']}
-                                    </span>
-                                )}
-                            </p>
-                        );
-                    case 'checkboxes':
-                        return (
-                            <p
-                                className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide"
-                                key={field.name}
-                            >
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <Checkboxes
-                                    options={field.options || []}
-                                    onChange={(data) =>
-                                        handleChange(field.name!, data)
-                                    }
-                                />
-                            </p>
-                        );
-                    case 'multiselect':
-                        return (
-                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <div className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                    <Multiselect
-                                        options={field.options ?? []}
-                                        onChange={(data) =>
-                                            handleChange(
-                                                field.name ?? '',
-                                                data
-                                            )
-                                        }
-                                        isMulti
-                                    />
-                                </div>
-                                {errors[field.name ?? ''] && (
-                                    <span className="error-text">
-                                        {errors[field.name ?? '']}
-                                    </span>
-                                )}
-                            </p>
-                        );
-                    case 'dropdown':
-                        return (
-                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <div className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                    <Multiselect
-                                        options={field.options ?? []}
-                                        onChange={(data) =>
-                                            handleChange(
-                                                field.name ?? '',
-                                                data
-                                            )
-                                        }
-                                    />
-                                </div>
-                                {errors[field.name ?? ''] && (
-                                    <span className="error-text">
-                                        {errors[field.name ?? '']}
-                                    </span>
-                                )}
-                            </p>
-                        );
-                    case 'radio':
-                        return (
-                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <Radio
-                                    options={field.options ?? []}
-                                    onChange={(data) =>
-                                        handleChange(field.name ?? '', data)
-                                    }
-                                />
-                                {errors[field.name ?? ''] && (
-                                    <span className="error-text">
-                                        {errors[field.name ?? '']}
-                                    </span>
-                                )}
-                            </p>
-                        );
-                    case 'recaptcha':
-                        return (
-                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <div className="recaptcha-wrapper">
-                                    <input
-                                        type="hidden"
-                                        name="g-recaptcha-response"
-                                        value={captchaToken as string}
-                                        className="input-text"
-                                    />
-                                </div>
-                            </p>
-                        );
-                    case 'attachment':
-                        return (
-                            <p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <div className="attachment-section">
-                                    <label
-                                        htmlFor="dropzone-file"
-                                        className="attachment-label"
-                                    >
-                                        &nbsp;
-                                        <div className="wrapper">
-                                            <i className="adminfont-cloud-upload"></i>
-                                            <p className="heading">
-                                                {fileName === '' ? (
-                                                    <>
-                                                        <span>
-                                                            {
-                                                                'Click to upload'
-                                                            }
-                                                        </span>{' '}
-                                                        {'or drag and drop'}
-                                                    </>
-                                                ) : (
-                                                    fileName
-                                                )}
-                                            </p>
-                                        </div>
-                                        <input
-                                            readOnly
-                                            id="dropzone-file"
-                                            type="file"
-                                            className="hidden"
-                                            onChange={(e) =>
-                                                handleFileChange(
-                                                    field.name ?? '',
-                                                    e
-                                                )
-                                            } // Handle file input change
-                                        />
-                                    </label>
-                                </div>
-                                {errors[field.name ?? ''] && (
-                                    <span className="error-text">
-                                        {errors[field.name ?? '']}
-                                    </span>
-                                )}
-                            </p>
-                        );
-                    case 'datepicker':
-                        return (
-                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <div className="date-picker-wrapper">
-                                    <input
-                                        type="date"
-                                        value={
-                                            (inputs[
-                                                field.name ?? ''
-                                            ] as string) || defaultDate
-                                        }
-                                        onChange={(e) => {
-                                            handleChange(
-                                                field.name ?? '',
-                                                e.target.value
-                                            );
-                                        }}
-                                        className="input-text"
-                                    />
-                                </div>
-                                {errors[field.name ?? ''] && (
-                                    <span className="error-text">
-                                        {errors[field.name ?? '']}
-                                    </span>
-                                )}
-                            </p>
-                        );
-                    case 'timepicker':
-                        return (
-                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                <label htmlFor={field.name}>
-                                    {field.label}
-                                </label>
-                                <input
-                                    type="time"
-                                    value={
-                                        (inputs[
-                                            field.name ?? ''
-                                        ] as string) || ''
-                                    }
-                                    className="input-text"
-                                    onChange={(e) => {
-                                        handleChange(
-                                            field.name ?? '',
-                                            e.target.value
-                                        );
-                                    }}
-                                />
-                                {errors[field.name ?? ''] && (
-                                    <span className="error-text">
-                                        {errors[field.name ?? '']}
-                                    </span>
-                                )}
-                            </p>
-                        );
-                    case 'section':
-                        return (
-                            <p className=" woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                                {field.label}
-                            </p>
-                        );
-                    case 'divider':
-                        return <p className="section-divider-container"></p>;
-
-                    case 'address': {
-                        const subFields =
-                            field.fields?.length
-                                ? field.fields
-                                : [
-                                    { key: 'address_1', label: 'Address Line 1', type: 'text', required: true },
-                                    { key: 'address_2', label: 'Address Line 2', type: 'text' },
-                                    { key: 'city', label: 'City', type: 'text', required: true },
-                                    { key: 'state', label: 'State', type: 'select' },
-                                    { key: 'country', label: 'Country', type: 'select' },
-                                    { key: 'postcode', label: 'Postal Code', type: 'text', required: true },
-                                ];
-
-                        return (
-                            <fieldset key={field.id}>
-                                <legend>{field.label}</legend>
-
-                                {subFields.map((subField: any) => {
-                                    const inputName = `${subField.key}`;
-                                    const value = inputs[inputName] ?? '';
-
-                                    // TEXT FIELD
-                                    if (subField.type === 'text') {
-                                        return (
-                                            <p key={subField.key} className="form-row">
-                                                <label>{subField.label}</label>
-                                                <input
-                                                    type="text"
-                                                    className="input-text"
-                                                    value={value as string}
-                                                    placeholder={subField.placeholder}
-                                                    required={subField.required}
-                                                    onChange={(e) =>
-                                                        handleChange(inputName, e.target.value)
-                                                    }
-                                                />
-                                            </p>
-                                        );
-                                    }
-
-                                    // SELECT FIELD
-                                    if (subField.type === 'select') {
-                                        let options: Option[] = [];
-
-                                        if (subField.key === 'country') {
-                                            options = countryList || [];
-                                        }
-
-                                        if (subField.key === 'state') {
-                                            const selectedCountry =
-                                                inputs[`${field.name}_country`];
-
-                                            const rawStates =
-                                                stateList?.[selectedCountry as string];
-
-                                            if (Array.isArray(rawStates)) {
-                                                options = rawStates;
-                                            } else if (rawStates && typeof rawStates === 'object') {
-                                                options = Object.entries(rawStates).map(
-                                                    ([code, name]) => ({
-                                                        value: code,
-                                                        label: String(name),
-                                                    })
-                                                );
-                                            }
-                                        }
-
-                                        return (
-                                            <p key={subField.key} className="woocommerce-form-row woocommerce-form-row--last form-row form-row-last">
-                                                <label>{subField.label}</label>
-                                                <Multiselect
-                                                    options={options}
-                                                    onChange={(val) =>
-                                                        handleChange(inputName, val)
-                                                    }
-                                                />
-                                            </p>
-                                        );
-                                    }
-
-                                    return null;
-                                })}
-                            </fieldset>
-                        );
-                    }
-                    case 'button':
-                        return (
-                            <p className="woocommerce-form-row form-row" key={field.id}>
-                                <ButtonInputUI
-                                    buttons={{
-                                        style: field.style,
-                                        onClick: (e) => {
-                                            const captcha = formList.find(
-                                                (f) => f.type === 'recaptcha'
-                                            );
-
-                                            if (captcha?.disabled === false) {
-                                                if (captchaError) return;
-                                                if (!captchaToken) return;
-                                            }
-
-                                            handleSubmit(e);
-                                        },
-                                        text: field.text || field.placeholder || 'Submit',
-                                    }}
-                                />
-                            </p>
-                        );
-                    
-                    default:
-                        return null;
-                }
-            })}
+            {formList.map(renderField)}
         </form>
     );
 };
