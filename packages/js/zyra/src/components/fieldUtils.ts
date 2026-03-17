@@ -19,7 +19,6 @@ export const ZyraVariable = (() => {
       tab_name: localizer.tab_name, // renderComponent
       site_url: localizer.site_url, // renderComponent
       tinymceApiKey: localizer.tinymceApiKey, // text area
-      ajaxUrl: localizer.ajaxurl, // buttonInput
   } as const;
 })();
 
