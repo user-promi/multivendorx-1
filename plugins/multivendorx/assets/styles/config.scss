@@ -1,12 +1,11 @@
 :root {
-
     /* Primary color */
     --theme-primary:
         var(--wp--preset--color--primary,
         var(--ast-global-color-0,
         var(--global-palette1,
         var(--primary-color,
-        #5007aa))));
+        #1e73be))));
 
     /* Secondary color */
     --theme-secondary:
