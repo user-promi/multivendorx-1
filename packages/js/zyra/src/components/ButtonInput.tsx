@@ -116,9 +116,9 @@ const ButtonInput: FieldComponent = {
 
          const handleClick = () => {
             if (!canAccess) return;
-            // Action
-            if (field.action) {
-                window.open(field.action, '_self');
+            // Redirect url
+            if (field.redirect_url) {
+                window.open(field.redirect_url, '_self');
                 return;
             }
             // REST API

@@ -160,7 +160,7 @@ class StripeConnect {
                         'key'    => 'disconnect_account',
                         'label'  => __( 'Disconnect Stripe Account', 'multivendorx' ),
                         'text'   => __( 'Disconnect', 'multivendorx' ),
-                        'action' => admin_url( 'admin-post.php?action=multivendorx_disconnect_stripe' ),
+                        'redirect_url' => admin_url( 'admin-post.php?action=multivendorx_disconnect_stripe' ),
                         'class'  => 'mvx-stripe-disconnect-btn',
                     );
                 } else {
@@ -169,7 +169,7 @@ class StripeConnect {
                         'key'    => 'create_account',
                         'label'  => __( 'Connect with Stripe', 'multivendorx' ),
                         'text'   => __( 'Connect', 'multivendorx' ),
-                        'action' => admin_url( 'admin-post.php?action=multivendorx_connect_stripe' ),
+                        'redirect_url' => admin_url( 'admin-post.php?action=multivendorx_connect_stripe' ),
                         'class'  => 'mvx-stripe-connect-btn',
                     );
                 }
