@@ -39,6 +39,7 @@ interface Field {
     id: string;
     type: string;
     name?: string;
+    text?: string;
     label?: string;
     placeholder?: string;
     required?: boolean;
@@ -874,7 +875,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
                                             handleSubmit(e);
                                         },
-                                        text: field.name || field.placeholder || 'Submit',
+                                        text: field.text || field.placeholder || 'Submit',
                                     }}
                                 />
                             </p>

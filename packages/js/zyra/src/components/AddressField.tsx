@@ -54,7 +54,7 @@ interface AddressFieldProps {
     setOpendInput: React.Dispatch< React.SetStateAction< SubField | null > >;
 }
 
-const AddressFieldUI: React.FC< AddressFieldProps > = ( {
+export const AddressFieldUI: React.FC< AddressFieldProps > = ( {
     formField,
     opendInput,
     setOpendInput,
@@ -62,7 +62,7 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
     // Use default fields if no fields are provided and context is registration
     const [ subFields, setSubFields ] = useState< SubField[] >(
         formField.fields?.length ? formField.fields : 
-        (formField.context === 'registration' ? DEFAULT_ADDRESS_FIELDS : [])
+        (formField.context === 'form' ? DEFAULT_ADDRESS_FIELDS : [])
     );
 
     useEffect( () => {
@@ -70,7 +70,7 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
         // If no fields and context is registration, use defaults
         if (formField.fields?.length) {
             setSubFields(formField.fields);
-        } else if (!formField.fields?.length && formField.context === 'registration') {
+        } else if (!formField.fields?.length && formField.context === 'form') {
             setSubFields(DEFAULT_ADDRESS_FIELDS);
         } else {
             setSubFields([]);

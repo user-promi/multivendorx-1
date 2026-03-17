@@ -505,7 +505,9 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                                                     { key: 'required', value: "required", label: 'Required', },
                                                 ]}
                                                 value={formField.required ? ['required'] : []}
-                                                onChange={(vals) => onChange('required', vals.includes('required'))}
+                                                    onChange={(vals) => handleRequiredChange({
+                                                        target: { checked: vals.includes('required') }
+                                                    } as React.ChangeEvent<HTMLInputElement>)}
                                             />
                                         </div>
                                     </FormGroup>
