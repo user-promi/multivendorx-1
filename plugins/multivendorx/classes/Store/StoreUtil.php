@@ -581,12 +581,12 @@ class StoreUtil {
         }
 
         // ADD SORTING SUPPORT HERE.
-        if ( ! empty( $args['orderBy'] ) ) {
+        if ( ! empty( $args['order_by'] ) ) {
             // Only allow safe columns to sort by (avoid SQL injection).
             $allowed_columns = array( 'ID', 'name', 'status', 'slug', 'create_time' );
-            $orderBy         = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
+            $order_by         = in_array( $args['order_by'], $allowed_columns, true ) ? $args['order_by'] : 'ID';
             $order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
-            $query          .= " ORDER BY {$orderBy} {$order}";
+            $query          .= " ORDER BY {$order_by} {$order}";
         }
 
         // Keep your pagination logic.
