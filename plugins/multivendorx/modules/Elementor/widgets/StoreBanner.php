@@ -70,7 +70,7 @@ class Store_Banner extends Widget_Image {
 		}
 
 		// Get banner from existing structure.
-		$banner       = $store['storeBanner'] ?? '';
+		$banner = $store['storeBanner'] ?? '';
 
 		// If banner stored as attachment ID, convert to URL.
 		if ( is_numeric( $banner ) ) {

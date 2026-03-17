@@ -4,6 +4,7 @@
  *
  * @package MultiVendorX
  */
+
 namespace MultiVendorX\Notifications;
 
 use MultiVendorX\Utill;
@@ -55,41 +56,41 @@ class Notifications {
         }
     }
 
-    /**
-     * Insert system events
-     *
-     * @return void
-     */
+	/**
+	 * Insert system events.
+	 *
+	 * This function inserts system events, optionally only new ones.
+	 *
+	 * @param bool $new Optional. Whether to insert only new events. Default false.
+	 * @return void
+	 */
     public function insert_system_events( $new = false ) {
         global $wpdb;
 
         $this->events = apply_filters(
             'multivendorx_system_events',
             array(
-				/*
-				======================================================
-				STORE REGISTRATION & APPROVAL
-				====================================================== */
+				// Store Registration & Approval.
 
-				'store_pending_approval'             => array(
-					'name'             => 'Store pending approval',
-					'customer_enabled' => false,
-					'store_enabled'    => true,
-					'admin_enabled'    => true,
-					'system_enabled'   => true,
-					'email_subject'    => 'Your store application is under review',
-					'email_body'       => '
+											'store_pending_approval' => array(
+												'name'     => 'Store pending approval',
+												'customer_enabled' => false,
+												'store_enabled' => true,
+												'admin_enabled' => true,
+												'system_enabled' => true,
+												'email_subject' => 'Your store application is under review',
+												'email_body' => '
 <p>Hello,</p>
 <p>Your store <strong>[store_name]</strong> has been successfully submitted.</p>
 <p>The marketplace team is reviewing your application. You will be notified once the review process is completed.</p>
 <p>Thank you for your patience.</p>',
-					'sms_content'      => 'Store [store_name] is pending approval.',
-					'system_message'   => 'Your store is currently under admin review.',
-					'tag'              => 'Store',
-					'category'         => 'notification',
-				),
+												'sms_content' => 'Store [store_name] is pending approval.',
+												'system_message' => 'Your store is currently under admin review.',
+												'tag'      => 'Store',
+												'category' => 'notification',
+											),
 
-				'store_rejected'                     => array(
+				'store_rejected'                           => array(
 					'name'             => 'Store rejected',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
@@ -105,7 +106,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'store_permanently_rejected'         => array(
+				'store_permanently_rejected'               => array(
 					'name'             => 'Store permanently rejected',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
@@ -119,7 +120,7 @@ class Notifications {
 					'tag'              => 'Store',
 					'category'         => 'notification',
 				),
-				'store_account_created_by_admin'     => array(
+				'store_account_created_by_admin'           => array(
 					'name'             => 'Store account created by admin',
 					'desc'             => 'Store owner receives notification when an admin manually creates their store account.',
 					'customer_enabled' => false,
@@ -149,31 +150,27 @@ class Notifications {
 					'tag'              => 'Store',
 					'category'         => 'notification',
 				),
+				// POST ACTIVATION FLOW.
 
-				/*
-				=====================================================
-					POST ACTIVATION FLOW
-					===================================================== */
-
-					'store_active'                   => array(
-						'name'             => 'Store activated',
-						'customer_enabled' => false,
-						'store_enabled'    => true,
-						'admin_enabled'    => false,
-						'system_enabled'   => true,
-						'email_subject'    => 'Your store "[store_name]" is now active',
-						'email_body'       => '
+										'store_active'     => array(
+											'name'        => 'Store activated',
+											'customer_enabled' => false,
+											'store_enabled' => true,
+											'admin_enabled' => false,
+											'system_enabled' => true,
+											'email_subject' => 'Your store "[store_name]" is now active',
+											'email_body'  => '
 <p>Hello,</p>
 <p>Your store <strong>[store_name]</strong> is now active and visible to customers.</p>
 <p>You can now add products and begin receiving orders.</p>
 ',
-						'sms_content'      => 'Store [store_name] is now active.',
-						'system_message'   => 'Your store has been activated.',
-						'tag'              => 'Store',
-						'category'         => 'notification',
-					),
+											'sms_content' => 'Store [store_name] is now active.',
+											'system_message' => 'Your store has been activated.',
+											'tag'         => 'Store',
+											'category'    => 'notification',
+										),
 
-				'store_under_review'                 => array(
+				'store_under_review'                       => array(
 					'name'             => 'Store under review',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
@@ -190,7 +187,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'store_suspended'                    => array(
+				'store_suspended'                          => array(
 					'name'             => 'Store suspended',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
@@ -208,7 +205,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'store_permanently_deactivated'      => array(
+				'store_permanently_deactivated'            => array(
 					'name'             => 'Store permanently deactivated',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
@@ -225,7 +222,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'store_account_deactivation_request' => array(
+				'store_account_deactivation_request'       => array(
 					'name'             => 'Store account deactivation request',
 					'desc'             => 'Store owner requests deactivation of their store account.',
 					'customer_enabled' => false,
@@ -242,7 +239,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'store_account_deleted'              => array(
+				'store_account_deleted'                    => array(
 					'name'             => 'Store account deleted',
 					'desc'             => 'Store owner receives notification when their store account has been permanently deleted.',
 					'customer_enabled' => false,
@@ -266,31 +263,26 @@ class Notifications {
 					'tag'              => 'Store',
 					'category'         => 'notification',
 				),
-
-				/*
-				=====================================================
-				* ORDER NOTIFICATIONS
-				* ===================================================== */
-
-				'new_order_store'                    => array(
-					'name'             => 'New order received',
-					'customer_enabled' => false,
-					'store_enabled'    => true,
-					'admin_enabled'    => true,
-					'system_enabled'   => true,
-					'email_subject'    => 'New order received – Order #[order_id]',
-					'email_body'       => '
+				// ORDER NOTIFICATIONS.
+									'new_order_store'      => array(
+										'name'             => 'New order received',
+										'customer_enabled' => false,
+										'store_enabled'    => true,
+										'admin_enabled'    => true,
+										'system_enabled'   => true,
+										'email_subject'    => 'New order received – Order #[order_id]',
+										'email_body'       => '
 <p>Hello,</p>
 <p>You have received a new order.</p>
 <p><strong>Order Number:</strong> #[order_id]</p>
 ',
-					'sms_content'      => 'New order #[order_id] received.',
-					'system_message'   => 'New order received.',
-					'tag'              => 'Order',
-					'category'         => 'notification',
-				),
+										'sms_content'      => 'New order #[order_id] received.',
+										'system_message'   => 'New order received.',
+										'tag'              => 'Order',
+										'category'         => 'notification',
+									),
 
-				'order_status_changed'               => array(
+				'order_status_changed'                     => array(
 					'name'             => 'Order status changed',
 					'customer_enabled' => true,
 					'store_enabled'    => true,
@@ -307,7 +299,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'order_cancelled'                    => array(
+				'order_cancelled'                          => array(
 					'name'             => 'Order cancelled',
 					'customer_enabled' => true,
 					'store_enabled'    => true,
@@ -324,29 +316,26 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				/*
-				=====================================================
-			SHIPMENT TRACKING
-			===================================================== */
+				// SHIPMENT TRACKING.
 
-			'shipment_tracking_added'                => array(
-				'name'             => 'Shipment tracking added',
-				'customer_enabled' => true,
-				'store_enabled'    => false,
-				'admin_enabled'    => false,
-				'system_enabled'   => true,
-				'email_subject'    => 'Tracking added – Order #[order_id]',
-				'email_body'       => '
+								'shipment_tracking_added'  => array(
+									'name'             => 'Shipment tracking added',
+									'customer_enabled' => true,
+									'store_enabled'    => false,
+									'admin_enabled'    => false,
+									'system_enabled'   => true,
+									'email_subject'    => 'Tracking added – Order #[order_id]',
+									'email_body'       => '
 <p>Hello,</p>
 <p>Tracking information has been added for your order <strong>#[order_id]</strong>.</p>
 ',
-				'sms_content'      => 'Tracking added for order #[order_id].',
-				'system_message'   => 'Tracking information added to your order.',
-				'tag'              => 'Shipping',
-				'category'         => 'notification',
-			),
+									'sms_content'      => 'Tracking added for order #[order_id].',
+									'system_message'   => 'Tracking information added to your order.',
+									'tag'              => 'Shipping',
+									'category'         => 'notification',
+								),
 
-				'order_delivered'                    => array(
+				'order_delivered'                          => array(
 					'name'             => 'Order delivered',
 					'customer_enabled' => true,
 					'store_enabled'    => true,
@@ -359,29 +348,26 @@ class Notifications {
 					'tag'              => 'Shipping',
 					'category'         => 'notification',
 				),
-				/*
-				=====================================================
-					REFUND NOTIFICATIONS
-					===================================================== */
+				// REFUND NOTIFICATIONS.
 
-					'refund_requested'               => array(
-						'name'             => 'Refund requested',
-						'customer_enabled' => true,
-						'store_enabled'    => true,
-						'admin_enabled'    => true,
-						'system_enabled'   => true,
-						'email_subject'    => 'Refund requested – Order #[order_id]',
-						'email_body'       => '
+										'refund_requested' => array(
+											'name'        => 'Refund requested',
+											'customer_enabled' => true,
+											'store_enabled' => true,
+											'admin_enabled' => true,
+											'system_enabled' => true,
+											'email_subject' => 'Refund requested – Order #[order_id]',
+											'email_body'  => '
 <p>Hello,</p>
 <p>A refund request has been submitted for <strong>Order #[order_id]</strong>.</p>
 ',
-						'sms_content'      => 'Refund requested for order #[order_id].',
-						'system_message'   => 'Refund request submitted.',
-						'tag'              => 'Refund',
-						'category'         => 'notification',
-					),
+											'sms_content' => 'Refund requested for order #[order_id].',
+											'system_message' => 'Refund request submitted.',
+											'tag'         => 'Refund',
+											'category'    => 'notification',
+										),
 
-				'refund_accepted'                    => array(
+				'refund_accepted'                          => array(
 					'name'             => 'Refund accepted',
 					'customer_enabled' => true,
 					'store_enabled'    => true,
@@ -398,7 +384,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'refund_rejected'                    => array(
+				'refund_rejected'                          => array(
 					'name'             => 'Refund rejected',
 					'customer_enabled' => true,
 					'store_enabled'    => true,
@@ -415,26 +401,23 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				/*
-				======================================================
-					REVIEWS
-					====================================================== */
+				// REVIEWS.
 
-					'new_store_review'               => array(
-						'name'             => 'New store review',
-						'customer_enabled' => false,
-						'store_enabled'    => true,
-						'admin_enabled'    => false,
-						'system_enabled'   => true,
-						'email_subject'    => 'New review received for your store',
-						'email_body'       => '<p>Hello,</p><p>A customer has submitted a new review for your store.</p>',
-						'sms_content'      => 'New review received for your store.',
-						'system_message'   => 'Your store received a new customer review.',
-						'tag'              => 'Review',
-						'category'         => 'notification',
-					),
+										'new_store_review' => array(
+											'name'        => 'New store review',
+											'customer_enabled' => false,
+											'store_enabled' => true,
+											'admin_enabled' => false,
+											'system_enabled' => true,
+											'email_subject' => 'New review received for your store',
+											'email_body'  => '<p>Hello,</p><p>A customer has submitted a new review for your store.</p>',
+											'sms_content' => 'New review received for your store.',
+											'system_message' => 'Your store received a new customer review.',
+											'tag'         => 'Review',
+											'category'    => 'notification',
+										),
 
-				'review_reply_by_store'              => array(
+				'review_reply_by_store'                    => array(
 					'name'             => 'Store replied to review',
 					'desc'             => 'Store owner replies to a customer review.',
 					'customer_enabled' => true,
@@ -453,7 +436,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'review_reply_by_admin'              => array(
+				'review_reply_by_admin'                    => array(
 					'name'             => 'Admin replied to review',
 					'desc'             => 'Marketplace admin replies to a review.',
 					'customer_enabled' => true,
@@ -469,26 +452,23 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				/*
-				=====================================================
-				* PRODUCT NOTIFICATIONS
-				* ===================================================== */
+				// PRODUCT NOTIFICATIONS.
 
-				'product_submitted'                  => array(
-					'name'             => 'Product submitted',
-					'customer_enabled' => false,
-					'store_enabled'    => true,
-					'admin_enabled'    => true,
-					'system_enabled'   => true,
-					'email_subject'    => 'Product "[product_name]" submitted for approval',
-					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> has been submitted for review.</p>',
-					'sms_content'      => 'Product [product_name] submitted for approval.',
-					'system_message'   => 'Your product has been submitted for admin review.',
-					'tag'              => 'Product',
-					'category'         => 'notification',
-				),
+									'product_submitted'    => array(
+										'name'             => 'Product submitted',
+										'customer_enabled' => false,
+										'store_enabled'    => true,
+										'admin_enabled'    => true,
+										'system_enabled'   => true,
+										'email_subject'    => 'Product "[product_name]" submitted for approval',
+										'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> has been submitted for review.</p>',
+										'sms_content'      => 'Product [product_name] submitted for approval.',
+										'system_message'   => 'Your product has been submitted for admin review.',
+										'tag'              => 'Product',
+										'category'         => 'notification',
+									),
 
-				'product_approved'                   => array(
+				'product_approved'                         => array(
 					'name'             => 'Product approved',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
@@ -503,7 +483,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'product_rejected'                   => array(
+				'product_rejected'                         => array(
 					'name'             => 'Product rejected',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
@@ -518,7 +498,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'product_low_stock'                  => array(
+				'product_low_stock'                        => array(
 					'name'             => 'Product low stock',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
@@ -533,7 +513,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'product_out_of_stock'               => array(
+				'product_out_of_stock'                     => array(
 					'name'             => 'Product out of stock',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
@@ -547,29 +527,26 @@ class Notifications {
 					'tag'              => 'Product',
 					'category'         => 'notification',
 				),
-				/*
-				======================================================
-					PRODUCT QUESTIONS (Q&A)
-					====================================================== */
+				// PRODUCT QUESTIONS (Q&A).
 
-					'product_question_submitted'     => array(
-						'name'             => 'Product question submitted',
-						'desc'             => 'Customer submits a question on a product.',
-						'customer_enabled' => false,
-						'store_enabled'    => true,
-						'admin_enabled'    => true,
-						'system_enabled'   => true,
-						'email_subject'    => 'New product question – [product_name]',
-						'email_body'       => '<p>Hello,</p><p>A customer has asked a question about the product <strong>[product_name]</strong>.</p>
+										'product_question_submitted' => array(
+											'name'        => 'Product question submitted',
+											'desc'        => 'Customer submits a question on a product.',
+											'customer_enabled' => false,
+											'store_enabled' => true,
+											'admin_enabled' => true,
+											'system_enabled' => true,
+											'email_subject' => 'New product question – [product_name]',
+											'email_body'  => '<p>Hello,</p><p>A customer has asked a question about the product <strong>[product_name]</strong>.</p>
 <p><strong>Customer:</strong> [customer_name]</p><p>Please review the question and provide a response.</p>
 <p><a href="[question_url]">View question</a></p>',
-						'sms_content'      => 'New product question.',
-						'system_message'   => 'Customer asked a question.',
-						'tag'              => 'Product',
-						'category'         => 'notification',
-					),
+											'sms_content' => 'New product question.',
+											'system_message' => 'Customer asked a question.',
+											'tag'         => 'Product',
+											'category'    => 'notification',
+										),
 
-				'product_question_reply_by_store'    => array(
+				'product_question_reply_by_store'          => array(
 					'name'             => 'Store replied to product question',
 					'desc'             => 'Store owner replies to a product question.',
 					'customer_enabled' => true,
@@ -601,12 +578,9 @@ class Notifications {
 				// 'category'         => 'notification',
 				// ),
 
-					/*
-					=====================================================
-					* PAYOUT & WITHDRAWAL
-					* ===================================================== */
+			// PAYOUT & WITHDRAWAL.
 
-					'payout_received'                => array(
+					'payout_received'                      => array(
 						'name'             => 'Store payout processed',
 						'desc'             => 'Store receives a notification when a payout has been successfully processed.',
 						'customer_enabled' => false,
@@ -624,7 +598,7 @@ class Notifications {
 						'tag'              => 'Payment',
 						'category'         => 'notification',
 					),
-				'withdrawal_requested'               => array(
+				'withdrawal_requested'                     => array(
 					'name'             => 'Withdrawal request submitted',
 					'desc'             => 'Admin receives a notification when a store submits a withdrawal request.',
 					'customer_enabled' => false,
@@ -642,29 +616,26 @@ class Notifications {
 					'tag'              => 'Payment',
 					'category'         => 'notification',
 				),
-                /*
-                =====================================================
-			STORE FOLLOWER NOTIFICATIONS
-			===================================================== */
+				// STORE FOLLOWER NOTIFICATIONS.
 
-			'store_followed'                         => array(
-				'name'             => 'Store followed',
-				'customer_enabled' => false,
-				'store_enabled'    => true,
-				'admin_enabled'    => false,
-				'system_enabled'   => true,
-				'email_subject'    => 'You have a new store follower',
-				'email_body'       => '
+								'store_followed'           => array(
+									'name'             => 'Store followed',
+									'customer_enabled' => false,
+									'store_enabled'    => true,
+									'admin_enabled'    => false,
+									'system_enabled'   => true,
+									'email_subject'    => 'You have a new store follower',
+									'email_body'       => '
 <p>Hello,</p>
 <p>A customer has started following your store <strong>[store_name]</strong>.</p>
 ',
-				'sms_content'      => 'You have a new store follower.',
-				'system_message'   => 'A customer started following your store.',
-				'tag'              => 'Follower',
-				'category'         => 'notification',
-			),
+									'sms_content'      => 'You have a new store follower.',
+									'system_message'   => 'A customer started following your store.',
+									'tag'              => 'Follower',
+									'category'         => 'notification',
+								),
 
-				'store_new_product_to_followers'     => array(
+				'store_new_product_to_followers'           => array(
 					'name'             => 'New product from followed store',
 					'customer_enabled' => true,
 					'store_enabled'    => false,
@@ -681,7 +652,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'store_new_coupon_to_followers'      => array(
+				'store_new_coupon_to_followers'            => array(
 					'name'             => 'New coupon from followed store',
 					'customer_enabled' => true,
 					'store_enabled'    => false,
@@ -698,7 +669,7 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				'store_vacation_alert_to_followers'  => array(
+				'store_vacation_alert_to_followers'        => array(
 					'name'             => 'Store vacation alert',
 					'customer_enabled' => true,
 					'store_enabled'    => false,
@@ -715,20 +686,17 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				/*
-				=====================================================
-				* WHOLESALE BUYER
-				* ===================================================== */
+				// WHOLESALE BUYER.
 
-				'wholesale_buyer_approved'           => array(
-					'name'             => 'Wholesale buyer approved',
-					'desc'             => 'User request for wholesale access has been approved.',
-					'customer_enabled' => true,
-					'store_enabled'    => false,
-					'admin_enabled'    => false,
-					'system_enabled'   => true,
-					'email_subject'    => 'Your wholesale access has been approved',
-					'email_body'       => '
+									'wholesale_buyer_approved' => array(
+										'name'             => 'Wholesale buyer approved',
+										'desc'             => 'User request for wholesale access has been approved.',
+										'customer_enabled' => true,
+										'store_enabled'    => false,
+										'admin_enabled'    => false,
+										'system_enabled'   => true,
+										'email_subject'    => 'Your wholesale access has been approved',
+										'email_body'       => '
 
 <p>Hello [customer_name],</p>
 
@@ -739,13 +707,13 @@ class Notifications {
 <p><a href="[account_url]">Go to your account</a></p>
 
 ',
-					'sms_content'      => 'Your wholesale access request has been approved. You can now view wholesale prices.',
-					'system_message'   => 'Your wholesale buyer request has been approved. Wholesale pricing is now available to you.',
-					'tag'              => 'Wholesale',
-					'category'         => 'notification',
-				),
+										'sms_content'      => 'Your wholesale access request has been approved. You can now view wholesale prices.',
+										'system_message'   => 'Your wholesale buyer request has been approved. Wholesale pricing is now available to you.',
+										'tag'              => 'Wholesale',
+										'category'         => 'notification',
+									),
 
-				'wholesale_buyer_rejected'           => array(
+				'wholesale_buyer_rejected'                 => array(
 					'name'             => 'Wholesale buyer rejected',
 					'desc'             => 'User request for wholesale access has been rejected.',
 					'customer_enabled' => true,
@@ -1062,104 +1030,129 @@ class Notifications {
         }
     }
 
-    /**
-     * Get all notifications.
-     *
-     * @param int|null $store_id Store ID.
-     * @return array|object
-     */
-    public function get_all_notifications( $args = array() ) {
-        global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
+	/**
+	 * Get all notifications.
+	 *
+	 * @param array $args Query arguments.
+	 * @return array|object
+	 */
+	public function get_all_notifications( $args = array() ) {
+		global $wpdb;
+		$table = $wpdb->prefix . Utill::TABLES['notifications'];
 
-        $events = $wpdb->get_results(
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$events = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT * FROM $table WHERE is_dismissed = %d",
                 0
             )
-        );
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
-        if ( ! empty( $args ) ) {
-            $where = array();
+		if ( ! empty( $args ) ) {
+			$where = array();
 
-            if ( isset( $args['ID'] ) ) {
-                $ids     = is_array( $args['ID'] ) ? $args['ID'] : array( $args['ID'] );
-                $ids     = implode( ',', array_map( 'intval', $ids ) );
-                $where[] = "ID IN ($ids)";
-            }
+			if ( isset( $args['ID'] ) ) {
+				$ids     = is_array( $args['ID'] ) ? $args['ID'] : array( $args['ID'] );
+				$ids     = implode( ',', array_map( 'intval', $ids ) );
+				$where[] = "ID IN ($ids)"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			}
 
-            if ( isset( $args['category'] ) ) {
-                $where[] = "category = '" . esc_sql( $args['category'] ) . "'";
-            }
+			if ( isset( $args['category'] ) ) {
+				$where[] = "category = '" . esc_sql( $args['category'] ) . "'";
+			}
 
-            if ( isset( $args['store_id'] ) && ! empty( $args['store_id'] ) ) {
-                $where[] = "store_id = '" . esc_sql( $args['store_id'] ) . "'";
-            }
+			if ( isset( $args['store_id'] ) && ! empty( $args['store_id'] ) ) {
+				$where[] = "store_id = '" . esc_sql( $args['store_id'] ) . "'";
+			}
 
-            if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
-                $where[] = "created_at BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
-            }
+			if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
+				$where[] = "created_at BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
+			}
 
-            $table   = $wpdb->prefix . Utill::TABLES['notifications'];
-            $where[] = 'is_dismissed = 0 AND is_read = 0';
+			$table   = $wpdb->prefix . Utill::TABLES['notifications'];
+			$where[] = 'is_dismissed = 0 AND is_read = 0';
 
-            if ( isset( $args['count'] ) ) {
-                $query = "SELECT COUNT(*) FROM {$table}";
-            } else {
-                $query = "SELECT * FROM {$table}";
-            }
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			if ( isset( $args['count'] ) ) {
+				$query = "SELECT COUNT(*) FROM {$table}";
+			} else {
+				$query = "SELECT * FROM {$table}";
+			}
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-            if ( ! empty( $where ) ) {
-                $condition = $args['condition'] ?? ' AND ';
-                $query    .= ' WHERE ' . implode( $condition, $where );
-            }
+			if ( ! empty( $where ) ) {
+				$condition = $args['condition'] ?? ' AND ';
+				$query    .= ' WHERE ' . implode( $condition, $where );
+			}
 
-            // Keep your pagination logic.
-            if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
-                $limit  = intval( $args['limit'] );
-                $offset = intval( $args['offset'] );
-                $query .= " LIMIT $limit OFFSET $offset";
-            }
+			// Keep your pagination logic.
+			if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
+				$limit  = intval( $args['limit'] );
+				$offset = intval( $args['offset'] );
+				$query .= $wpdb->prepare( ' LIMIT %d OFFSET %d', $limit, $offset );
+			}
 
-            if ( isset( $args['count'] ) ) {
-                $results = $wpdb->get_var( $query );
-                return $results ?? 0;
-            } else {
-                $results = $wpdb->get_results( $query, ARRAY_A );
-                return $results ?? array();
-            }
-        }
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			if ( isset( $args['count'] ) ) {
+				$results = $wpdb->get_var( $query );
+				// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+				// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				return $results ?? 0;
+			} else {
+				$results = $wpdb->get_results( $query, ARRAY_A );
+				// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+				// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				return $results ?? array();
+			}
+		}
 
-        return $events;
-    }
+		return $events;
+	}
 
-    /**
-     * Clear notifications based on settings.
-     */
-    public function multivendorx_clear_notifications() {
-        global $wpdb;
+	/**
+	 * Clear notifications based on settings.
+	 *
+	 * Deletes notifications that are expired or older than the configured number of days.
+	 *
+	 * @return void
+	 */
+	public function multivendorx_clear_notifications() {
+		global $wpdb;
 
-        $days = MultiVendorX()->setting->get_setting( 'clear_notifications' );
+		$days  = MultiVendorX()->setting->get_setting( 'clear_notifications' );
+		$table = esc_sql( $wpdb->prefix . Utill::TABLES['notifications'] );
 
-        $table = "{$wpdb->prefix}" . Utill::TABLES['notifications'];
+		$current_date = current_time( 'mysql' );
 
-        $current_date = current_time( 'mysql' );
-
-        // Delete data older than N days or already expired.
-        $query = $wpdb->prepare(
+		// Prepare the SQL with placeholders only for values.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$query = $wpdb->prepare(
             "
-            DELETE FROM $table
-            WHERE (expires_at IS NOT NULL AND expires_at < %s)
-            OR (created_at < DATE_SUB(%s, INTERVAL %d DAY))
-            ",
+        DELETE FROM {$table}
+        WHERE (expires_at IS NOT NULL AND expires_at < %s)
+        OR (created_at < DATE_SUB(%s, INTERVAL %d DAY))
+        ",
             $current_date,
             $current_date,
             $days
-        );
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-        $wpdb->query( $query );
-    }
-
+		// Direct DB query (cannot be avoided here).
+		$wpdb->query( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+	}
+	/**
+	 * Get the active SMS gateway instance.
+	 *
+	 * This function retrieves the SMS gateway selected in the MultiVendorX settings.
+	 * It applies the 'multivendorx_available_sms_gateways' filter to allow custom gateways.
+	 *
+	 * @return object|false Returns an instance of the selected gateway class, or false if none is selected.
+	 */
     public function active_gateway() {
         $gateways = apply_filters(
             'multivendorx_available_sms_gateways',

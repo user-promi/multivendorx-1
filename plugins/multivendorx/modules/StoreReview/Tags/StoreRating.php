@@ -1,28 +1,35 @@
 <?php
+/**
+ * Store Rating Dynamic Tag for Elementor
+ *
+ * @package MultiVendorX\StoreReview\Tags
+ */
+
 namespace MultiVendorX\StoreReview\Tags;
 
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
 use MultiVendorX\Elementor\StoreHelper;
 
+/**
+ * Store Rating tag class
+ *
+ * Renders the store rating in Elementor dynamic tags
+ */
 class StoreRating extends Tag {
     use StoreHelper;
 
     /**
      * Class constructor
      *
-     * @since 1.0.0
-     *
-     * @param array $data
+     * @param array $data Elementor tag data.
      */
-    public function __construct( $data = array() ) {
+    public function __construct( $data = array() ) { // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod.Found
         parent::__construct( $data );
     }
 
     /**
      * Tag name
-     *
-     * @since 1.0.0
      *
      * @return string
      */
@@ -33,26 +40,32 @@ class StoreRating extends Tag {
     /**
      * Tag title
      *
-     * @since 1.0.0
-     *
      * @return string
      */
     public function get_title() {
         return __( 'Store Rating', 'multivendorx' );
     }
 
+    /**
+     * Tag group
+     *
+     * @return string
+     */
     public function get_group() {
         return 'multivendorx';
     }
 
+    /**
+     * Tag categories
+     *
+     * @return array
+     */
     public function get_categories() {
         return array( Module::TEXT_CATEGORY );
     }
 
     /**
      * Render tag
-     *
-     * @since 1.0.0
      *
      * @return void
      */

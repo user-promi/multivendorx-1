@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Modules Commission Util
  *
@@ -22,26 +21,27 @@ defined( 'ABSPATH' ) || exit;
  */
 class CommissionUtil {
 
-
-    /**
-     * Get a single commission row from databse by using commission id.
-     * Return stdClass object represent a single row.
+	/**
+	 * Get a single commission row from databse by using commission id.
+	 * Return stdClass object represent a single row.
      *
-     * @param   mixed $id Commission ID.
-     * @return  array | object | \stdClass
-     */
-    public static function get_commission_db( $id ) {
-        global $wpdb;
-        $commission = $wpdb->get_row(
-            $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE ID = %d', $id )
-        );
+	 * @param   mixed $id Commission ID.
+	 * @return  array | object | \stdClass
+	 */
+	public static function get_commission_db( $id ) {
+		global $wpdb;
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
+		$table_name = $wpdb->prefix . Utill::TABLES['commission'];
+		$commission = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->prepare( "SELECT * FROM {$table_name} WHERE ID = %d", $id ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
 
-        return $commission ?? new \stdClass();
-    }
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
+
+		return $commission ?? new \stdClass();
+	}
 
     /**
      * Get the commission object of Commission class.
@@ -53,22 +53,27 @@ class CommissionUtil {
         return new Commission( $id );
     }
 
-    /**
-     * Get the commission object of Commission class by store id and order id.
-     *
-     * @param   int $store_id Store ID.
-     * @param   int $order_id Order ID.
-     */
-    public static function get_commission_by_store_and_order_id( $store_id, $order_id ) {
-        global $wpdb;
-        $commission = $wpdb->get_row(
-            $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['commission'] . '` WHERE store_id = %d AND order_id = %d', $store_id, $order_id )
-        );
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
-        return $commission ?? new \stdClass();
-    }
+	/**
+	 * Get the commission object of Commission class by store id and order id.
+	 *
+	 * @param   int $store_id Store ID.
+	 * @param   int $order_id Order ID.
+	 * @return  object|\stdClass
+	 */
+	public static function get_commission_by_store_and_order_id( $store_id, $order_id ) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . Utill::TABLES['commission'];
+		$commission = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->prepare( "SELECT * FROM {$table_name} WHERE store_id = %d AND order_id = %d", $store_id, $order_id ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
+
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
+
+		return $commission ?? new \stdClass();
+	}
 
     /**
      * Fetch commission records or return total count based on filters.
@@ -82,7 +87,8 @@ class CommissionUtil {
     public static function get_commission_information( $args = array() ) {
         global $wpdb;
 
-        $where = array();
+        $where    = array();
+        $or_where = array();
 
         if ( isset( $args['ID'] ) ) {
             $ids        = is_array( $args['ID'] ) ? $args['ID'] : array( $args['ID'] );
@@ -141,15 +147,15 @@ class CommissionUtil {
             }
         }
 
-        // Sorting
-        if ( ! empty( $args['orderBy'] ) && ! $is_count ) {
+        // Sorting.
+        if ( ! empty( $args['order_by'] ) && ! $is_count ) {
             $allowed_columns = array( 'ID', 'order_id', 'status', 'store_id', 'create_time' );
-            $orderBy         = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
+            $order_by        = in_array( $args['order_by'], $allowed_columns, true ) ? $args['order_by'] : 'ID';
             $order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
-            $query          .= " ORDER BY {$orderBy} {$order}";
+            $query          .= " ORDER BY {$order_by} {$order}";
         }
 
-        // Pagination (logic fixed)
+        // Pagination (logic fixed).
         if ( isset( $args['limit'], $args['offset'] ) && ! $is_count ) {
             $limit  = intval( $args['limit'] );
             $offset = intval( $args['offset'] );
@@ -157,9 +163,9 @@ class CommissionUtil {
         }
 
         if ( $is_count ) {
-            $results = (int) $wpdb->get_var( $query );
+            $results = (int) $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         } else {
-            $results = $wpdb->get_results( $query, ARRAY_A );
+            $results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         }
 
         /** Centralized error logging */
@@ -170,49 +176,59 @@ class CommissionUtil {
         return $results ?? ( $is_count ? 0 : array() );
     }
 
-    /**
-     * Get commission summary for a store or top N stores.
-     *
-     * @param   int  $store_id  Store ID.
-     * @param   bool $top_stores  If true, fetch top N stores by total order value.
-     * @param   int  $limit  Number of stores to fetch.
-     *
-     * @return  array  Array of commission summary.
-     */
-    public static function get_commission_summary_for_store( $store_id = null, $dashboard = false, $top_stores = false, $limit = 3, $args = array() ) {
-        global $wpdb;
+	/**
+	 * Get commission summary for a store or top N stores.
+	 *
+	 * @param   int   $store_id    Store ID.
+	 * @param   bool  $dashboard   Whether to return dashboard data.
+	 * @param   bool  $top_stores  If true, fetch top N stores by total order value.
+	 * @param   int   $limit       Number of stores to fetch.
+	 * @param   array $args       Additional arguments (start_date, end_date).
+	 *
+	 * @return  array  Array of commission summary.
+	 */
+	public static function get_commission_summary_for_store( $store_id = null, $dashboard = false, $top_stores = false, $limit = 3, $args = array() ) {
+		global $wpdb;
 
-        $table_name = $wpdb->prefix . Utill::TABLES['commission'];
+		$table_name = $wpdb->prefix . Utill::TABLES['commission'];
 
-        // If $top_stores = true, fetch top N stores by total order value.
-        if ( $top_stores ) {
-            $query = $wpdb->prepare(
+		// If $top_stores = true, fetch top N stores by total order value.
+		if ( $top_stores ) {
+			$query = $wpdb->prepare(
                 "
-                SELECT 
-                    store_id,
-                    COALESCE(SUM(total_order_value), 0) AS total_order_amount,
-                    COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
-                    COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
-                    COALESCE(SUM(store_shipping), 0) AS shipping_amount,
-                    COALESCE(SUM(store_tax), 0) AS tax_amount,
-                    COALESCE(SUM(store_shipping_tax), 0) AS shipping_tax_amount,
-                    COALESCE(SUM(store_payable), 0) AS commission_total,
-                    COALESCE(SUM(store_refunded), 0) AS commission_refunded
-                FROM {$table_name}
-                GROUP BY store_id
-                ORDER BY total_order_amount DESC
-                LIMIT %d
+            SELECT 
+                store_id,
+                COALESCE(SUM(total_order_value), 0) AS total_order_amount,
+                COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
+                COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
+                COALESCE(SUM(store_shipping), 0) AS shipping_amount,
+                COALESCE(SUM(store_tax), 0) AS tax_amount,
+                COALESCE(SUM(store_shipping_tax), 0) AS shipping_tax_amount,
+                COALESCE(SUM(store_payable), 0) AS commission_total,
+                COALESCE(SUM(store_refunded), 0) AS commission_refunded
+            FROM {$table_name} 
+            GROUP BY store_id
+            ORDER BY total_order_amount DESC
+            LIMIT %d
             ",
                 $limit
-            );
+			);
 
-            $results = $wpdb->get_results( $query );
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+			$results = $wpdb->get_results( $query );
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
 
-            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-            }
+			if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+				MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+			}
 
-            return array_map(
+			return array_map(
                 function ( $row ) {
                     $store      = new Store( $row->store_id );
                     $store_name = $store ? $store->get( 'name' ) : '';
@@ -231,112 +247,141 @@ class CommissionUtil {
                     );
                 },
                 $results
-            );
-        }
+			);
+		}
 
-        if ( $dashboard ) {
-            $query = "
-                SELECT
-                    DATE_FORMAT(created_at, '%b') AS month,
-                    ROUND(SUM(total_order_value), 2) AS total_order_amount,
-                    ROUND(SUM(store_earning), 2) AS store_earnings,
-                    COUNT(DISTINCT order_id) AS orders
-                FROM {$table_name}
-                WHERE store_id = %d
-            ";
-
-            $params = array( $store_id );
-
-            if ( ! empty( $args['start_date'] ) && ! empty( $args['end_date'] ) ) {
-                $query   .= ' AND DATE(created_at) BETWEEN %s AND %s';
-                $params[] = $args['start_date'];
-                $params[] = $args['end_date'];
-            }
-
-            $query .= '
-                GROUP BY YEAR(created_at), MONTH(created_at)
-                ORDER BY created_at ASC
-            ';
-
-            $results = $wpdb->get_results(
-                $wpdb->prepare( $query, $params ),
-                ARRAY_A
-            );
-
-            return $results ?? array();
-        }
-
-        // Summary for a specific store.
-        $query = "
-            SELECT 
-                COALESCE(SUM(total_order_value), 0) AS total_order_amount,
-                COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
-                COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
-                COALESCE(SUM(store_shipping), 0) AS shipping_amount,
-                COALESCE(SUM(store_tax), 0) AS tax_amount,
-                COALESCE(SUM(store_shipping_tax), 0) AS shipping_tax_amount,
-                COALESCE(SUM(store_payable), 0) AS commission_total,
-                COALESCE(SUM(store_refunded), 0) AS commission_refunded
-            FROM {$table_name}
+		if ( $dashboard ) {
+			$query = "
+            SELECT
+                DATE_FORMAT(created_at, '%b') AS month,
+                ROUND(SUM(total_order_value), 2) AS total_order_amount,
+                ROUND(SUM(store_earning), 2) AS store_earnings,
+                COUNT(DISTINCT order_id) AS orders
+            FROM {$table_name} 
+            WHERE store_id = %d
         ";
 
-        if ( ! empty( $store_id ) ) {
-            $query .= $wpdb->prepare( ' WHERE store_id = %d', $store_id );
-        }
+			$params = array( $store_id );
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-        $result = $wpdb->get_row( $query );
+			if ( ! empty( $args['start_date'] ) && ! empty( $args['end_date'] ) ) {
+				$query   .= ' AND DATE(created_at) BETWEEN %s AND %s';
+				$params[] = $args['start_date'];
+				$params[] = $args['end_date'];
+			}
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
+			$query .= '
+            GROUP BY YEAR(created_at), MONTH(created_at)
+            ORDER BY created_at ASC
+        ';
 
-        // Last 30 days.
-        $last_30_days = $wpdb->get_row(
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+			$results = $wpdb->get_results(
+                $wpdb->prepare( $query, $params ),
+                ARRAY_A
+			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+
+			return $results ?? array();
+		}
+
+		// Summary for a specific store.
+		$query = "
+        SELECT 
+            COALESCE(SUM(total_order_value), 0) AS total_order_amount,
+            COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
+            COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
+            COALESCE(SUM(store_shipping), 0) AS shipping_amount,
+            COALESCE(SUM(store_tax), 0) AS tax_amount,
+            COALESCE(SUM(store_shipping_tax), 0) AS shipping_tax_amount,
+            COALESCE(SUM(store_payable), 0) AS commission_total,
+            COALESCE(SUM(store_refunded), 0) AS commission_refunded
+        FROM {$table_name} 
+    ";
+
+		if ( ! empty( $store_id ) ) {
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+			$query .= $wpdb->prepare( ' WHERE store_id = %d', $store_id );
+			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+		}
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+		$result = $wpdb->get_row( $query );
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
+
+		// Last 30 days.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+		$last_30_days = $wpdb->get_row(
             $wpdb->prepare(
                 "
-                SELECT
-                    COUNT(DISTINCT order_id) AS orders,
-                    ROUND(SUM(store_payable), 2) AS commission,
-                    ROUND(SUM(total_order_value), 2) AS total
-                FROM {$table_name}
-                WHERE store_id = %d
-                AND created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                ",
+            SELECT
+                COUNT(DISTINCT order_id) AS orders,
+                ROUND(SUM(store_payable), 2) AS commission,
+                ROUND(SUM(total_order_value), 2) AS total
+            FROM {$table_name} 
+            WHERE store_id = %d
+            AND created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            ",
                 $store_id
             ),
             ARRAY_A
-        );
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 
-        // Previous 30 Days.
-        $previous_30_days = $wpdb->get_row(
+		// Previous 30 Days.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+		$previous_30_days = $wpdb->get_row(
             $wpdb->prepare(
                 "
-                SELECT
-                    COUNT(DISTINCT order_id) AS orders,
-                    ROUND(SUM(store_payable), 2) AS commission,
-                    ROUND(SUM(total_order_value), 2) AS total
-                FROM {$table_name}
-                WHERE store_id = %d
-                AND created_at >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
-                AND created_at < DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                ",
+            SELECT
+                COUNT(DISTINCT order_id) AS orders,
+                ROUND(SUM(store_payable), 2) AS commission,
+                ROUND(SUM(total_order_value), 2) AS total
+            FROM {$table_name} 
+            WHERE store_id = %d
+            AND created_at >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
+            AND created_at < DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            ",
                 $store_id
             ),
             ARRAY_A
-        );
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 
-        return array(
-            'total_order_amount'  => floatval( $result->total_order_amount ),
-            'facilitator_fee'     => floatval( $result->facilitator_fee ),
-            'gateway_fee'         => floatval( $result->gateway_fee ),
-            'shipping_amount'     => floatval( $result->shipping_amount ),
-            'tax_amount'          => floatval( $result->tax_amount ),
-            'shipping_tax_amount' => floatval( $result->shipping_tax_amount ),
-            'commission_total'    => floatval( $result->commission_total ),
-            'commission_refunded' => floatval( $result->commission_refunded ),
-            'last_30_days'        => $last_30_days,
-            'previous_30_days'    => $previous_30_days,
-        );
-    }
+		return array(
+			'total_order_amount'  => floatval( $result->total_order_amount ),
+			'facilitator_fee'     => floatval( $result->facilitator_fee ),
+			'gateway_fee'         => floatval( $result->gateway_fee ),
+			'shipping_amount'     => floatval( $result->shipping_amount ),
+			'tax_amount'          => floatval( $result->tax_amount ),
+			'shipping_tax_amount' => floatval( $result->shipping_tax_amount ),
+			'commission_total'    => floatval( $result->commission_total ),
+			'commission_refunded' => floatval( $result->commission_refunded ),
+			'last_30_days'        => $last_30_days,
+			'previous_30_days'    => $previous_30_days,
+		);
+	}
 }

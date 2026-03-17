@@ -1,33 +1,55 @@
 <?php
+/**
+ * Store Social Elementor Widget
+ *
+ * @package MultiVendorX\Elementor\Widgets
+ */
 
 namespace MultiVendorX\Elementor\Widgets;
 
 defined( 'ABSPATH' ) || exit;
 
 use Elementor\Widget_Social_Icons;
-
 use MultiVendorX\Elementor\StoreHelper;
 
+/**
+ * Store Social widget class
+ */
 class Store_Social extends Widget_Social_Icons {
 
 	use StoreHelper;
 
+	/**
+	 * Get widget name
+	 */
 	public function get_name() {
 		return 'multivendorx_store_social';
 	}
 
+	/**
+	 * Get widget title
+	 */
 	public function get_title() {
 		return __( 'Store Social', 'multivendorx' );
 	}
 
+	/**
+	 * Get widget icon
+	 */
 	public function get_icon() {
 		return 'eicon-social-icons';
 	}
 
+	/**
+	 * Get widget categories
+	 */
 	public function get_categories() {
 		return array( 'multivendorx' );
 	}
 
+	/**
+	 * Register widget controls
+	 */
 	protected function register_controls() {
 		parent::register_controls();
 
@@ -70,15 +92,16 @@ class Store_Social extends Widget_Social_Icons {
 		);
 	}
 
+	/**
+	 * Render widget output
+	 */
 	protected function render() {
 		$store = $this->get_store_data();
 		if ( ! $store ) {
 			return;
 		}
 
-		// -------------------------------
-		// Render Dynamic Social Icons
-		// -------------------------------
+		// Render Dynamic Social Icons.
 		$social_platforms = array(
 			'facebook'  => 'fab fa-facebook',
 			'twitter'   => 'fab fa-twitter',

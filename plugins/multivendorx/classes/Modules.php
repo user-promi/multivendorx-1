@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Modules class file
  *
@@ -64,126 +63,16 @@ class Modules {
     public function __construct() {}
 
     /**
-     * Get list of all multivendorX module.
+     * Convert camel case string to kebab case.
      *
-     * @return array
+     * @param string $string_param The camel case string to convert.
+     * @return string The converted kebab case string.
      */
-    // public function get_all_modules() {
-    // if ( ! $this->modules ) {
-    // $this->modules = apply_filters(
-    // 'multivendorx_modules',
-    // array(
-    // 'simple'                 => array(
-    // 'id'           => 'simple',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Simple/Module.php',
-    // 'module_class' => 'MultiVendorX\Simple\Module',
-    // ),
-    // 'store-policy'           => array(
-    // 'id'           => 'store-policy',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/StorePolicy/Module.php',
-    // 'module_class' => 'MultiVendorX\StorePolicy\Module',
-    // ),
-    // 'store-review'           => array(
-    // 'id'           => 'store-review',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/StoreReview/Module.php',
-    // 'module_class' => 'MultiVendorX\StoreReview\Module',
-    // ),
-    // 'question-answer'        => array(
-    // 'id'           => 'question-answer',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/QuestionAnswers/Module.php',
-    // 'module_class' => 'MultiVendorX\QuestionsAnswers\Module',
-    // ),
-    // 'marketplace-refund'     => array(
-    // 'id'           => 'marketplace-refund',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/MarketplaceRefund/Module.php',
-    // 'module_class' => 'MultiVendorX\Refund\Module',
-    // ),
-    // 'shared-listing'         => array(
-    // 'id'           => 'shared-listing',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/SharedListing/Module.php',
-    // 'module_class' => 'MultiVendorX\SharedListing\Module',
-    // ),
-    // 'follow-store'           => array(
-    // 'id'           => 'follow-store',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/FollowStore/Module.php',
-    // 'module_class' => 'MultiVendorX\FollowStore\Module',
-    // ),
-    // 'marketplace-compliance' => array(
-    // 'id'           => 'marketplace-compliance',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Compliance/Module.php',
-    // 'module_class' => 'MultiVendorX\Compliance\Module',
-    // ),
-    // 'geo-location'           => array(
-    // 'id'           => 'geo-location',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/GeoLocation/Module.php',
-    // 'module_class' => 'MultiVendorX\GeoLocation\Module',
-    // ),
-    // 'store-shipping'         => array(
-    // 'id'           => 'store-shipping',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/StoreShipping/Module.php',
-    // 'module_class' => 'MultiVendorX\StoreShipping\Module',
-    // ),
-    // 'announcement'           => array(
-    // 'id'           => 'announcement',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Announcement/Module.php',
-    // 'module_class' => 'MultiVendorX\Announcement\Module',
-    // ),
-    // 'knowledgebase'          => array(
-    // 'id'           => 'knowledgebase',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Knowledgebase/Module.php',
-    // 'module_class' => 'MultiVendorX\Knowledgebase\Module',
-    // ),
-    // 'privacy'                => array(
-    // 'id'           => 'privacy',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Privacy/Module.php',
-    // 'module_class' => 'MultiVendorX\Privacy\Module',
-    // ),
-    // 'marketplace-gateway'    => array(
-    // 'id'           => 'marketplace-gateway',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/MarketplaceGateway/Module.php',
-    // 'module_class' => 'MultiVendorX\MarketplaceGateway\Module',
-    // ),
-    // 'min-max'                => array(
-    // 'id'           => 'min-max',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/MinMax/Module.php',
-    // 'module_class' => 'MultiVendorX\MinMax\Module',
-    // ),
-    // 'elementor'              => array(
-    // 'id'           => 'elementor',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/Elementor/Module.php',
-    // 'module_class' => 'MultiVendorX\Elementor\Module',
-    // 'requires'     => array(
-    // 'plugin' => array(
-    // 'elementor/elementor.php',
-    // 'elementor-pro/elementor-pro.php',
-    // ),
-    // ),
-    // ),
-    // 'wpml'                   => array(
-    // 'id'           => 'wpml',
-    // 'module_file'  => MultiVendorX()->plugin_path . 'modules/WPML/Module.php',
-    // 'module_class' => 'MultiVendorX\WPML\Module',
-    // 'requires'     => array(
-    // 'plugin' => array(
-    // 'sitepress-multilingual-cms/sitepress.php',
-    // 'wpml-string-translation/plugin.php',
-    // 'woocommerce-multilingual/wpml-woocommerce.php',
-    // ),
-    // ),
-    // ),
-    // )
-    // );
-    // }
-
-    // return $this->modules;
-    // }
-
-    private function camel_to_kebab( string $string ): string {
+    private function camel_to_kebab( string $string_param ): string {
         return strtolower(
-            preg_replace( '/(?<!^)[A-Z]/', '-$0', $string )
+            preg_replace( '/(?<!^)[A-Z]/', '-$0', $string_param )
         );
     }
-
     /**
      * Get all modules dynamically from /modules directory
      */
@@ -307,13 +196,12 @@ class Modules {
         self::$module_activated = true;
     }
 
-    /**
-     * Check a perticular module is available or not.
-     *
-     * @param array $module The module configuration array.
-     * @param bool  $license_active Whether the license for pro modules is active.
-     * @return bool
-     */
+	/**
+	 * Check a particular module is available or not.
+	 *
+	 * @param array $module The module configuration array.
+	 * @return bool
+	 */
     private function is_module_available( $module ) {
         if ( ! file_exists( $module['module_file'] ) ) {
             return false;

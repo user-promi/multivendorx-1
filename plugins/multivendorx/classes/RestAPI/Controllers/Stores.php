@@ -292,21 +292,20 @@ class Stores extends \WP_REST_Controller {
             $order_by = $request->get_param( 'order_dy' );
             if ( ! empty( $order_by ) ) {
                 $args['order_by'] = sanitize_text_field( $order_by );
-                $args['order']   = sanitize_text_field( $request->get_param( 'order' ) );
+                $args['order']    = sanitize_text_field( $request->get_param( 'order' ) );
             }
 
             // Advanced filters.
-            $filter_flag = $request->get_param('filters');
+            $filter_flag = $request->get_param( 'filters' );
 
             if ( ! empty( $filter_flag ) ) {
+                $args['order_by'] = $request->get_param( 'sort' ) ?? $args['order_by'] ?? '';
+                $args['order']    = $request->get_param( 'order' ) ?? '';
 
-                $args['order_by'] = $request->get_param('sort') ?? $args['order_by'] ?? '';
-                $args['order']   = $request->get_param('order') ?? '';
-
-                $lat    = $request->get_param('location_lat') ?: 0;
-                $lng    = $request->get_param('location_lng') ?: 0;
-                $radius = $request->get_param('distance') ?: 0;
-                $unit   = $request->get_param('miles') ?: 'km';
+                $lat    = $request->get_param( 'location_lat' ) ?: 0;
+                $lng    = $request->get_param( 'location_lng' ) ?: 0;
+                $radius = $request->get_param( 'distance' ) ?: 0;
+                $unit   = $request->get_param( 'miles' ) ?: 'km';
 
                 switch ( $unit ) {
                     case 'miles':
@@ -319,8 +318,8 @@ class Stores extends \WP_REST_Controller {
                         $earth_radius = 6371;
                 }
 
-                $limit  = $request->get_param('limit');
-                $offset = $request->get_param('offset');
+                $limit  = $request->get_param( 'limit' );
+                $offset = $request->get_param( 'offset' );
 
                 if ( ! empty( $limit ) ) {
                     $args['limit'] = absint( $limit );
@@ -331,9 +330,8 @@ class Stores extends \WP_REST_Controller {
                 }
 
                 // Category filter
-                $category = $request->get_param('category');
+                $category = $request->get_param( 'category' );
                 if ( ! empty( $category ) ) {
-
                     $product_ids = wc_get_products(
                         array(
                             'return'      => 'ids',
@@ -365,7 +363,7 @@ class Stores extends \WP_REST_Controller {
                 }
 
                 // Product filter
-                $product = $request->get_param('product');
+                $product = $request->get_param( 'product' );
                 if ( ! empty( $product ) ) {
                     $args['ID'] = get_post_meta(
                         $product,
@@ -499,10 +497,10 @@ class Stores extends \WP_REST_Controller {
             $args['end_date']   = $end_date;
         }
 
-        $args['limit']   = $limit;
-        $args['offset']  = $offset;
+        $args['limit']    = $limit;
+        $args['offset']   = $offset;
         $args['order_by'] = 'create_time';
-        $args['order']   = 'desc';
+        $args['order']    = 'desc';
 
         $stores = StoreUtil::get_store_information( $args );
 
