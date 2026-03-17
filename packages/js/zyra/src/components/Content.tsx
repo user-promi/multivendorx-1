@@ -24,6 +24,13 @@ export const TextContentView: React.FC<{
 
   const styles = generateBlockStyles(field.style, { includeText: true });
 
+  const enhancedStyles = {
+    ...styles,
+    textAlign: field.style?.textAlign || 'left',
+    display: 'block',
+    width: '100%',
+  };
+
   const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
     if (field.type === 'heading') {
       onChange({ text: e.currentTarget.textContent || '' });
@@ -38,7 +45,7 @@ export const TextContentView: React.FC<{
     return (
       <Tag
         className="email-heading"
-        style={styles}
+        style={enhancedStyles }
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={handleBlur}
@@ -52,7 +59,7 @@ export const TextContentView: React.FC<{
   return (
     <div
       className="email-text"
-      style={styles}
+      style={enhancedStyles}
       contentEditable={editable}
       suppressContentEditableWarning
       onBlur={handleBlur}
