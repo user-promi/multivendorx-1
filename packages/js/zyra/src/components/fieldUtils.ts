@@ -6,19 +6,6 @@ export interface FieldComponent {
   normalize?: (value: any) => any;
 }
 
-// export const ZyraVariable = {
-//   nonce: appLocalizer.nonce, // system info, modules, renderComponent, module context
-//   apiUrl: appLocalizer.apiUrl, // system info, modules, renderComponent, module context
-//   restUrl: appLocalizer.restUrl, // system info, modules, renderComponent, module context
-//   khali_dabba?: appLocalizer.khali_dabba, // system info, modules, renderComponent, module context, settings navigator
-//   active_plugins?: appLocalizer.active_plugins, // system info, modules, renderComponent, module context, settings navigator
-//   shop_url?: appLocalizer.shop_url, // settings navigator
-//   tab_name?: appLocalizer.tab_name, // renderComponent
-//   site_url?: appLocalizer.site_url, // renderComponent
-//   tinymceApiKey?: appLocalizer.tinymceApiKey, // text area
-
-// }
-
 export const ZyraVariable = (() => {
   const localizer = (window as any).appLocalizer || {};
 
