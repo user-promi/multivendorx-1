@@ -252,7 +252,16 @@ jQuery(document).ready(function ($) {
 		});
 	});
 
+	function toggleReviewContent(element) {
+    var $container = $(element).parent();
+    
+    $container.find('.review-content-short, .review-content-full').toggle();
+    $(element).text(
+        $(element).text() === 'Read more' ? 'Read less' : 'Read more'
+    );
+}
 	// Initial Load
 	loadAverageRatings();
 	loadReviews();
+	toggleReviewContent();
 });
