@@ -1,111 +1,131 @@
-import React from "react";
-import { TableRow, TableHeaderConfig } from "./types"; // keep types if you have them
+import React from 'react';
+import { TableRow, TableHeaderConfig } from './types'; // keep types if you have them
 
 export const renderCell = (
-	row: TableRow = {},
-	header: TableHeaderConfig = {},
-	format = "",
-	currency = {}
+    row: TableRow = {},
+    header: TableHeaderConfig = {},
+    format = '',
+    currency = {}
 ) => {
-	let value = row[header.key];
+    let value = row[ header.key ];
 
-	if (!header?.type) return value ?? null;
+    if ( ! header?.type ) {
+        return value ?? null;
+    }
 
-	switch (header.type) {
-		case "status": {
-			const formattedValue = String(value)
-				.toLowerCase()
-				.split('-')
-				.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-				.join(' ');
-			return (
-				<span className={`admin-badge badge-${String(value).toLowerCase()}`}>
-					{formattedValue}
-				</span>
-			);
-		}
+    switch ( header.type ) {
+        case 'status': {
+            const formattedValue = String( value )
+                .toLowerCase()
+                .split( '-' )
+                .map(
+                    ( word ) => word.charAt( 0 ).toUpperCase() + word.slice( 1 )
+                )
+                .join( ' ' );
+            return (
+                <span
+                    className={ `admin-badge badge-${ String(
+                        value
+                    ).toLowerCase() }` }
+                >
+                    { formattedValue }
+                </span>
+            );
+        }
 
-		case "date": {
-			if (!value) return null;
+        case 'date': {
+            if ( ! value ) {
+                return null;
+            }
 
-			const dateObj = new Date(value);
-			if (isNaN(dateObj.getTime())) return <span>{value}</span>;
+            const dateObj = new Date( value );
+            if ( isNaN( dateObj.getTime() ) ) {
+                return <span>{ value }</span>;
+            }
 
-			const map: Record<string, string> = {
-				YYYY: String(dateObj.getFullYear()),
-				YY: String(dateObj.getFullYear()).slice(-2),
+            const map: Record< string, string > = {
+                YYYY: String( dateObj.getFullYear() ),
+                YY: String( dateObj.getFullYear() ).slice( -2 ),
 
-				MMMM: dateObj.toLocaleString(undefined, { month: "long" }),
-				MMM: dateObj.toLocaleString(undefined, { month: "short" }),
-				MM: String(dateObj.getMonth() + 1).padStart(2, "0"),
+                MMMM: dateObj.toLocaleString( undefined, { month: 'long' } ),
+                MMM: dateObj.toLocaleString( undefined, { month: 'short' } ),
+                MM: String( dateObj.getMonth() + 1 ).padStart( 2, '0' ),
 
-				DD: String(dateObj.getDate()).padStart(2, "0"),
-				D: String(dateObj.getDate()),
+                DD: String( dateObj.getDate() ).padStart( 2, '0' ),
+                D: String( dateObj.getDate() ),
 
-				HH: String(dateObj.getHours()).padStart(2, "0"),
-				mm: String(dateObj.getMinutes()).padStart(2, "0"),
-				ss: String(dateObj.getSeconds()).padStart(2, "0"),
-			};
+                HH: String( dateObj.getHours() ).padStart( 2, '0' ),
+                mm: String( dateObj.getMinutes() ).padStart( 2, '0' ),
+                ss: String( dateObj.getSeconds() ).padStart( 2, '0' ),
+            };
 
-			// Use header.format if provided, otherwise default
-			const dateFormat = format || "YYYY-MM-DD";
+            // Use header.format if provided, otherwise default
+            const dateFormat = format || 'YYYY-MM-DD';
 
-			const formattedDate = dateFormat.replace(
-				/YYYY|YY|MMMM|MMM|MM|DD|D|HH|mm|ss/g,
-				(token) => map[token] ?? token
-			);
+            const formattedDate = dateFormat.replace(
+                /YYYY|YY|MMMM|MMM|MM|DD|D|HH|mm|ss/g,
+                ( token ) => map[ token ] ?? token
+            );
 
-			return <span>{formattedDate}</span>;
-		}
+            return <span>{ formattedDate }</span>;
+        }
 
+        case 'currency': {
+            if ( value == null || value === '' ) {
+                value = 0;
+            }
 
-		case "currency": {
-			if (value == null || value === '') value = 0;
+            const numberValue =
+                typeof value === 'number'
+                    ? value
+                    : parseFloat(
+                          value.toString().replace( /[^0-9.-]+/g, '' )
+                      );
 
-			const numberValue =
-				typeof value === "number"
-					? value
-					: parseFloat(value.toString().replace(/[^0-9.-]+/g, ""));
+            if ( isNaN( numberValue ) ) {
+                return <span>{ value }</span>;
+            }
 
-			if (isNaN(numberValue)) return <span>{value}</span>;
+            const {
+                currencySymbol,
+                priceDecimals,
+                decimalSeparator,
+                thousandSeparator,
+                currencyPosition,
+            } = currency;
 
-			const {
-				currencySymbol,
-				priceDecimals,
-				decimalSeparator,
-				thousandSeparator,
-				currencyPosition
-			} = currency;
+            const decimals = Number( priceDecimals ?? 2 );
 
-			const decimals = Number(priceDecimals ?? 2);
+            const fixed = numberValue.toFixed( decimals );
 
-			const fixed = numberValue.toFixed(decimals);
+            const parts = fixed.split( '.' );
+            parts[ 0 ] = parts[ 0 ].replace(
+                /\B(?=(\d{3})+(?!\d))/g,
+                thousandSeparator ?? ','
+            );
 
-			const parts = fixed.split(".");
-			parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator ?? ",");
+            const formattedNumber =
+                decimals > 0
+                    ? parts.join( decimalSeparator ?? '.' )
+                    : parts[ 0 ];
 
-			const formattedNumber =
-				decimals > 0
-					? parts.join(decimalSeparator ?? ".")
-					: parts[0];
+            let finalValue = formattedNumber;
+            if ( 'left' === currencyPosition ) {
+                finalValue = `${ currencySymbol }${ formattedNumber }`;
+            } else if ( 'left_space' === currencyPosition ) {
+                finalValue = `${ currencySymbol } ${ formattedNumber }`;
+            } else if ( 'right' === currencyPosition ) {
+                finalValue = `${ formattedNumber }${ currencySymbol }`;
+            } else if ( 'right_space' === currencyPosition ) {
+                finalValue = `${ formattedNumber } ${ currencySymbol }`;
+            } else {
+                finalValue = `${ currencySymbol }${ formattedNumber }`;
+            }
 
-			let finalValue = formattedNumber;
-			if ("left" === currencyPosition) {
-				finalValue = `${currencySymbol}${formattedNumber}`;
-			} else if ("left_space" === currencyPosition) {
-				finalValue = `${currencySymbol} ${formattedNumber}`;
-			} else if ("right" === currencyPosition) {
-				finalValue = `${formattedNumber}${currencySymbol}`;
-			} else if ("right_space" === currencyPosition) {
-				finalValue = `${formattedNumber} ${currencySymbol}`;
-			} else {
-				finalValue = `${currencySymbol}${formattedNumber}`;
-			}
+            return <span>{ finalValue }</span>;
+        }
 
-			return <span>{finalValue}</span>;
-		}
-
-		default:
-			return value ?? null;
-	}
+        default:
+            return value ?? null;
+    }
 };

@@ -6,9 +6,8 @@ import '../styles/web/MultiInputTable.scss';
 import { FieldComponent, FIELD_REGISTRY, ZyraVariable } from './fieldUtils';
 
 export type SettingValue = string[] | boolean;
-export type RowChanges = Record<string, SettingValue>;
-type FieldSetting = Record<string, SettingValue>;
-
+export type RowChanges = Record< string, SettingValue >;
+type FieldSetting = Record< string, SettingValue >;
 
 interface Row {
     key: string;
@@ -25,23 +24,22 @@ interface Column {
     moduleEnabled?: string;
     proSetting?: string;
     visibleWhen?: {
-        key: string
-        value: string | boolean
+        key: string;
+        value: string | boolean;
     };
     fields?: {
-        key: string
-        type: string
+        key: string;
+        type: string;
     }[];
 }
-
 
 interface CapabilityGroup {
     label: string;
     desc: string;
-    capability: Record<string, string>;
+    capability: Record< string, string >;
 }
 
-type GroupedRows = Record<string, CapabilityGroup>;
+type GroupedRows = Record< string, CapabilityGroup >;
 
 // ── Component props ───────────────────────────────────────────────────────────
 
@@ -52,28 +50,31 @@ export interface MultiInputTableUIProps {
     /** Global settings used for `visibleWhen` column lookups — keys like
      *  `enable_store_time` live here, NOT inside the field's own value. */
     visibilityContext?: FieldSetting;
-    onChange: (subKeyOrBatch: string | RowChanges, value?: SettingValue) => void;
+    onChange: (
+        subKeyOrBatch: string | RowChanges,
+        value?: SettingValue
+    ) => void;
     proSetting?: boolean;
     modules: string[];
-    storeTabSetting: Record<string, string[]>;
+    storeTabSetting: Record< string, string[] >;
     khali_dabba: boolean;
-    onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
+    onBlocked?: ( type: 'pro' | 'module', payload?: string ) => void;
 }
 
 interface TableCellProps {
-    type: string
-    fieldKey: string
-    rowKey: string
-    column: Column
-    rowLabel: string
-    value: SettingValue
-    disabled?: boolean
-    onChange: (key: string, value: SettingValue) => void
-    modules: string[]
-    onBlocked?: (type: 'pro' | 'module', payload?: string) => void
+    type: string;
+    fieldKey: string;
+    rowKey: string;
+    column: Column;
+    rowLabel: string;
+    value: SettingValue;
+    disabled?: boolean;
+    onChange: ( key: string, value: SettingValue ) => void;
+    modules: string[];
+    onBlocked?: ( type: 'pro' | 'module', payload?: string ) => void;
 }
 
-export const TableCell: React.FC<TableCellProps> = ({
+export const TableCell: React.FC< TableCellProps > = ( {
     type,
     fieldKey,
     rowKey,
@@ -83,12 +84,12 @@ export const TableCell: React.FC<TableCellProps> = ({
     disabled,
     onChange,
     modules,
-    onBlocked
-}) => {
-    const comp = FIELD_REGISTRY[type];
+    onBlocked,
+} ) => {
+    const comp = FIELD_REGISTRY[ type ];
 
-    if (!comp) {
-        return <td key={fieldKey}>—</td>;
+    if ( ! comp ) {
+        return <td key={ fieldKey }>—</td>;
     }
 
     const Render = comp.render;
@@ -98,27 +99,28 @@ export const TableCell: React.FC<TableCellProps> = ({
         key: fieldKey,
         type: type,
         label: column.label ?? rowLabel,
-        ...column,           // All column props pass through
-        rowKey: rowKey,       // Row context
+        ...column, // All column props pass through
+        rowKey: rowKey, // Row context
         rowLabel: rowLabel,
         disabled: disabled,
     };
 
-
     return (
         <Render
-            field={fieldConfig}
-            value={value}
-            modules={modules}
+            field={ fieldConfig }
+            value={ value }
+            modules={ modules }
             // appLocalizer={appLocalizer}
-            onBlocked={onBlocked}
-            canAccess={!disabled}
-            onChange={(newValue: any) => { onChange(fieldKey, newValue) }}
+            onBlocked={ onBlocked }
+            canAccess={ ! disabled }
+            onChange={ ( newValue: any ) => {
+                onChange( fieldKey, newValue );
+            } }
         />
     );
 };
 
-export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
+export const MultiInputTableUI: React.FC< MultiInputTableUIProps > = ( {
     rows,
     columns,
     setting,
@@ -129,158 +131,207 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
     modules,
     onBlocked,
     khali_dabba,
-}) => {
-    const [openGroup, setOpenGroup] = useState<string | null>(() => {
-        if (!Array.isArray(rows) && Object.keys(rows).length > 0) return Object.keys(rows)[0];
+} ) => {
+    const [ openGroup, setOpenGroup ] = useState< string | null >( () => {
+        if ( ! Array.isArray( rows ) && Object.keys( rows ).length > 0 ) {
+            return Object.keys( rows )[ 0 ];
+        }
         return null;
-    });
+    } );
 
     const context = visibilityContext ?? setting;
-    const isColumnVisible = (col: Column) => {
-        if (!col.visibleWhen) return true;
+    const isColumnVisible = ( col: Column ) => {
+        if ( ! col.visibleWhen ) {
+            return true;
+        }
 
         const { key, value } = col.visibleWhen;
-        return context?.[key] === value;
+        return context?.[ key ] === value;
     };
 
-    const visibleColumns = columns.filter(isColumnVisible);
-
+    const visibleColumns = columns.filter( isColumnVisible );
 
     const renderCell = (
         column: Column,
         rowKey: string,
         rowLabel: string,
-        isRowActive: boolean,
+        isRowActive: boolean
     ) => {
-
-        const fields = column.fields ?? [{ key: column.key, type: column.type }];
+        const fields = column.fields ?? [
+            { key: column.key, type: column.type },
+        ];
 
         return (
-            <td key={`${column.key}_${rowKey}`}>
+            <td key={ `${ column.key }_${ rowKey }` }>
                 <div className="multi-field-cell">
-                    {fields.map((field) => {
-                        const fieldKey =
-                            column.fields
-                                ? `${column.key}_${field.key}_${rowKey}`
-                                : `${column.key}_${rowKey}`;
+                    { fields.map( ( field ) => {
+                        const fieldKey = column.fields
+                            ? `${ column.key }_${ field.key }_${ rowKey }`
+                            : `${ column.key }_${ rowKey }`;
 
                         return (
                             <TableCell
-                                key={fieldKey}
-                                type={field.type}
-                                fieldKey={fieldKey}
-                                rowKey={rowKey}
-                                column={column}
-                                rowLabel={rowLabel}
-                                value={setting[fieldKey] ?? false}
-                                disabled={!isRowActive}
-                                onChange={onChange}
-                                modules={modules}
+                                key={ fieldKey }
+                                type={ field.type }
+                                fieldKey={ fieldKey }
+                                rowKey={ rowKey }
+                                column={ column }
+                                rowLabel={ rowLabel }
+                                value={ setting[ fieldKey ] ?? false }
+                                disabled={ ! isRowActive }
+                                onChange={ onChange }
+                                modules={ modules }
                                 // appLocalizer={appLocalizer}
-                                onBlocked={onBlocked}
+                                onBlocked={ onBlocked }
                             />
                         );
-                    })}
+                    } ) }
                 </div>
             </td>
         );
     };
 
-    const renderFlatRows = (flatRows: Row[]) =>
-        flatRows.map((row) => {
-
+    const renderFlatRows = ( flatRows: Row[] ) =>
+        flatRows.map( ( row ) => {
             const isRowActive = row.enabledKey
-                ? (setting[row.enabledKey] as string[] | undefined)?.includes(row.key) ?? false
+                ? (
+                      setting[ row.enabledKey ] as string[] | undefined
+                   )?.includes( row.key ) ?? false
                 : true;
 
-            const handleRowToggle = (checked: boolean) => {
-                const current = (setting[row.enabledKey!] as string[]) ?? [];
-                onChange(row.enabledKey!, checked
-                    ? [...current, row.key]
-                    : current.filter((k) => k !== row.key));
+            const handleRowToggle = ( checked: boolean ) => {
+                const current =
+                    ( setting[ row.enabledKey! ] as string[] ) ?? [];
+                onChange(
+                    row.enabledKey!,
+                    checked
+                        ? [ ...current, row.key ]
+                        : current.filter( ( k ) => k !== row.key )
+                );
             };
 
             return (
-                <tr key={row.key} className={row.enabledKey && !isRowActive ? 'row-disabled' : ''}>
+                <tr
+                    key={ row.key }
+                    className={
+                        row.enabledKey && ! isRowActive ? 'row-disabled' : ''
+                    }
+                >
                     <td>
-                        {row.enabledKey ? (
+                        { row.enabledKey ? (
                             <>
                                 <input
                                     type="checkbox"
-                                    id={`row-toggle_${row.key}`}
-                                    checked={isRowActive}
-                                    onChange={(e) => handleRowToggle(e.target.checked)}
+                                    id={ `row-toggle_${ row.key }` }
+                                    checked={ isRowActive }
+                                    onChange={ ( e ) =>
+                                        handleRowToggle( e.target.checked )
+                                    }
                                 />
-                                <span>{row.label}</span>
+                                <span>{ row.label }</span>
                             </>
-                        ) : row.label}
+                        ) : (
+                            row.label
+                        ) }
                     </td>
-                    {!isRowActive ? (
-                        <td colSpan={visibleColumns.length}>
-                            <span className="row-inactive-message">{row.inactiveMessage ?? 'Inactive'}</span>
+                    { ! isRowActive ? (
+                        <td colSpan={ visibleColumns.length }>
+                            <span className="row-inactive-message">
+                                { row.inactiveMessage ?? 'Inactive' }
+                            </span>
                         </td>
                     ) : (
-                        columns.filter(isColumnVisible).map((col) =>
-                            renderCell(col, row.key, row.label, true),
-                        )
-                    )}
+                        columns
+                            .filter( isColumnVisible )
+                            .map( ( col ) =>
+                                renderCell( col, row.key, row.label, true )
+                            )
+                    ) }
                 </tr>
             );
-        });
+        } );
 
-    const renderGroupedRows = (groupedRows: GroupedRows) => {
+    const renderGroupedRows = ( groupedRows: GroupedRows ) => {
         const totalCols = visibleColumns.length + 1;
-        return Object.entries(groupedRows).map(([groupKey, group]) => {
+        return Object.entries( groupedRows ).map( ( [ groupKey, group ] ) => {
             const isOpen = openGroup === groupKey;
             return (
-                <React.Fragment key={groupKey}>
-                    <div className="toggle-header" onClick={() => setOpenGroup(isOpen ? null : groupKey)}>
+                <React.Fragment key={ groupKey }>
+                    <div
+                        className="toggle-header"
+                        onClick={ () =>
+                            setOpenGroup( isOpen ? null : groupKey )
+                        }
+                    >
                         <div className="header-title">
-                            {group.label}
-                            <i className={`adminfont-${isOpen ? 'keyboard-arrow-down' : 'pagination-right-arrow'}`} />
+                            { group.label }
+                            <i
+                                className={ `adminfont-${
+                                    isOpen
+                                        ? 'keyboard-arrow-down'
+                                        : 'pagination-right-arrow'
+                                }` }
+                            />
                         </div>
                     </div>
-                    {isOpen && Object.entries(group.capability).map(([capKey, capLabel]) => {
-                        const hasExists = Object.values(storeTabSetting).some((arr) => arr?.includes(capKey));
-                        return (
-                            <tr key={capKey}>
-                                <td>{capLabel}</td>
-                                {columns.filter(isColumnVisible).map((col) =>
-                                    renderCell(col, capKey, capLabel, undefined, hasExists)
-                                )}
-                            </tr>
-                        );
-                    })}
+                    { isOpen &&
+                        Object.entries( group.capability ).map(
+                            ( [ capKey, capLabel ] ) => {
+                                const hasExists = Object.values(
+                                    storeTabSetting
+                                ).some( ( arr ) => arr?.includes( capKey ) );
+                                return (
+                                    <tr key={ capKey }>
+                                        <td>{ capLabel }</td>
+                                        { columns
+                                            .filter( isColumnVisible )
+                                            .map( ( col ) =>
+                                                renderCell(
+                                                    col,
+                                                    capKey,
+                                                    capLabel,
+                                                    undefined,
+                                                    hasExists
+                                                )
+                                            ) }
+                                    </tr>
+                                );
+                            }
+                        ) }
                 </React.Fragment>
             );
-        });
+        } );
     };
 
     return (
         <>
-            {proSetting && (
-                <span className="admin-pro-tag"><i className="adminfont-pro-tag" /> Pro</span>
-            )}
+            { proSetting && (
+                <span className="admin-pro-tag">
+                    <i className="adminfont-pro-tag" /> Pro
+                </span>
+            ) }
 
             <table className="grid-table">
                 <thead>
                     <tr>
                         <th />
-                        {columns.filter(isColumnVisible).map((column) => (
-                            <th key={column.key}>
-                                {column.label}
-                                {column.proSetting && !khali_dabba && (
-                                    <span className="admin-pro-tag"><i className="adminfont-pro-tag" /> Pro</span>
-                                )}
+                        { columns.filter( isColumnVisible ).map( ( column ) => (
+                            <th key={ column.key }>
+                                { column.label }
+                                { column.proSetting && ! khali_dabba && (
+                                    <span className="admin-pro-tag">
+                                        <i className="adminfont-pro-tag" /> Pro
+                                    </span>
+                                ) }
                             </th>
-                        ))}
+                        ) ) }
                     </tr>
                 </thead>
 
                 <tbody>
-                    {Array.isArray(rows)
-                        ? renderFlatRows(rows as Row[])
-                        : renderGroupedRows(rows as GroupedRows)}
+                    { Array.isArray( rows )
+                        ? renderFlatRows( rows as Row[] )
+                        : renderGroupedRows( rows as GroupedRows ) }
                 </tbody>
             </table>
         </>
@@ -290,7 +341,7 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
 // ─── FieldComponent wrapper ───────────────────────────────────────────────────
 
 const MultiInputTable: FieldComponent = {
-    render: ({
+    render: ( {
         field,
         value,
         onChange,
@@ -298,37 +349,41 @@ const MultiInputTable: FieldComponent = {
         modules,
         settings,
         onBlocked,
-        storeTabSetting
-    }) => {
-
+        storeTabSetting,
+    } ) => {
         const currentSetting: FieldSetting =
-            value && typeof value === 'object' && !Array.isArray(value)
-                ? (value as FieldSetting)
+            value && typeof value === 'object' && ! Array.isArray( value )
+                ? ( value as FieldSetting )
                 : {};
 
-        const handleChange = (subKeyOrBatch: string | RowChanges, subVal?: SettingValue) => {
+        const handleChange = (
+            subKeyOrBatch: string | RowChanges,
+            subVal?: SettingValue
+        ) => {
+            if ( ! canAccess ) {
+                return;
+            }
 
-            if (!canAccess) return;
+            const patch =
+                typeof subKeyOrBatch === 'object'
+                    ? subKeyOrBatch
+                    : { [ subKeyOrBatch ]: subVal };
 
-            const patch = typeof subKeyOrBatch === 'object'
-                ? subKeyOrBatch
-                : { [subKeyOrBatch]: subVal };
-
-            onChange({ ...currentSetting, ...patch });
+            onChange( { ...currentSetting, ...patch } );
         };
 
         return (
             <MultiInputTableUI
-                khali_dabba={ZyraVariable?.khali_dabba ?? false}
-                rows={field.rows ?? []}
-                columns={field.columns ?? []}
-                setting={currentSetting}
-                visibilityContext={settings as FieldSetting}
-                storeTabSetting={storeTabSetting ?? {}}
-                proSetting={field.proSetting ?? false}
-                modules={modules ?? []}
-                onBlocked={onBlocked}
-                onChange={handleChange}
+                khali_dabba={ ZyraVariable?.khali_dabba ?? false }
+                rows={ field.rows ?? [] }
+                columns={ field.columns ?? [] }
+                setting={ currentSetting }
+                visibilityContext={ settings as FieldSetting }
+                storeTabSetting={ storeTabSetting ?? {} }
+                proSetting={ field.proSetting ?? false }
+                modules={ modules ?? [] }
+                onBlocked={ onBlocked }
+                onChange={ handleChange }
             />
         );
     },

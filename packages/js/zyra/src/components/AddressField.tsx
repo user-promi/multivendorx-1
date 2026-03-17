@@ -9,20 +9,54 @@ import { FieldComponent } from './fieldUtils';
 
 // Constants for default address fields with sequential IDs
 const DEFAULT_ADDRESS_FIELDS = [
-    { id: 1, key: 'address_1', label: 'Address Line 1', type: 'text', placeholder: 'Address Line 1', required: true },
-    { id: 2, key: 'address_2', label: 'Address Line 2', type: 'text', placeholder: 'Address Line 2', required: false },
-    { id: 3, key: 'city', label: 'City', type: 'text', placeholder: 'City', required: true },
-    { 
-        id: 4, key: 'country', label: 'Country', type: 'select', 
-        options: ['India', 'USA', 'UK', 'Canada'],
-        required: false 
+    {
+        id: 1,
+        key: 'address_1',
+        label: 'Address Line 1',
+        type: 'text',
+        placeholder: 'Address Line 1',
+        required: true,
     },
-    { 
-        id: 5, key: 'state', label: 'State', type: 'select', 
-        options: ['Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu'],
-        required: false 
+    {
+        id: 2,
+        key: 'address_2',
+        label: 'Address Line 2',
+        type: 'text',
+        placeholder: 'Address Line 2',
+        required: false,
     },
-    { id: 6, key: 'postcode', label: 'Postal Code', type: 'text', placeholder: 'Postal Code', required: true },
+    {
+        id: 3,
+        key: 'city',
+        label: 'City',
+        type: 'text',
+        placeholder: 'City',
+        required: true,
+    },
+    {
+        id: 4,
+        key: 'country',
+        label: 'Country',
+        type: 'select',
+        options: [ 'India', 'USA', 'UK', 'Canada' ],
+        required: false,
+    },
+    {
+        id: 5,
+        key: 'state',
+        label: 'State',
+        type: 'select',
+        options: [ 'Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu' ],
+        required: false,
+    },
+    {
+        id: 6,
+        key: 'postcode',
+        label: 'Postal Code',
+        type: 'text',
+        placeholder: 'Postal Code',
+        required: true,
+    },
 ];
 
 interface SubField {
@@ -61,19 +95,25 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
 } ) => {
     // Use default fields if no fields are provided and context is registration
     const [ subFields, setSubFields ] = useState< SubField[] >(
-        formField.fields?.length ? formField.fields : 
-        (formField.context === 'form' ? DEFAULT_ADDRESS_FIELDS : [])
+        formField.fields?.length
+            ? formField.fields
+            : formField.context === 'form'
+            ? DEFAULT_ADDRESS_FIELDS
+            : []
     );
 
     useEffect( () => {
         // Update local state when formField.fields changes
         // If no fields and context is registration, use defaults
-        if (formField.fields?.length) {
-            setSubFields(formField.fields);
-        } else if (!formField.fields?.length && formField.context === 'form') {
-            setSubFields(DEFAULT_ADDRESS_FIELDS);
+        if ( formField.fields?.length ) {
+            setSubFields( formField.fields );
+        } else if (
+            ! formField.fields?.length &&
+            formField.context === 'form'
+        ) {
+            setSubFields( DEFAULT_ADDRESS_FIELDS );
         } else {
-            setSubFields([]);
+            setSubFields( [] );
         }
     }, [ formField.fields, formField.context ] );
 
@@ -83,37 +123,37 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
     };
 
     const FieldRenderers = {
-        text: (field: SubField) => (
+        text: ( field: SubField ) => (
             <>
-                <p>{field.label}</p>
-                <BasicInputUI
-                    placeholder= {field.placeholder}
-                />
+                <p>{ field.label }</p>
+                <BasicInputUI placeholder={ field.placeholder } />
             </>
         ),
-        select: (field: SubField) => {
+        select: ( field: SubField ) => {
             return (
                 <div className="address-field-item">
-                    <label className="field-label">{field.label}</label>
+                    <label className="field-label">{ field.label }</label>
                     <SelectInputUI
                         type="single-select"
-                        options={field.options?.map((opt) => ({
-                            value: opt,
-                            label: opt,
-                        })) || []}
+                        options={
+                            field.options?.map( ( opt ) => ( {
+                                value: opt,
+                                label: opt,
+                            } ) ) || []
+                        }
                     />
                 </div>
             );
-        }
+        },
     };
 
-    if(!subFields.length){
+    if ( ! subFields.length ) {
         return null;
     }
 
     return (
         <div className="address-field-wrapper">
-            <h4 className="address-section-title">{formField.label}</h4>
+            <h4 className="address-section-title">{ formField.label }</h4>
             <ReactSortable
                 list={ subFields }
                 setList={ updateParent }
@@ -141,7 +181,7 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
                             </span>
                         </div>
 
-                        {FieldRenderers[field.type]?.(field)}
+                        { FieldRenderers[ field.type ]?.( field ) }
                     </div>
                 ) ) }
             </ReactSortable>
@@ -151,7 +191,9 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
 
 const AddressField: FieldComponent = {
     render: ( { field, value, onChange, canAccess, appLocalizer } ) => {
-        const [ openedInput, setOpenedInput ] = useState< SubField | null >( null );
+        const [ openedInput, setOpenedInput ] = useState< SubField | null >(
+            null
+        );
 
         return (
             <AddressFieldUI

@@ -42,9 +42,9 @@ export { ExpandablePanelUI } from './components/ExpandablePanel';
 export { default as EmailsInput } from './components/EmailsInput';
 export { default as GuidedTourProvider } from './components/GuidedTourProvider';
 export { default as DynamicRowSetting } from './components/DynamicRowSetting';
-export {NavigatorHeader} from './components/SettingsNavigator';
-export {default as HeaderSearch} from './components/HeaderSearch';
-export {default as Tooltip} from './components/UI/Tooltip';
+export { NavigatorHeader } from './components/SettingsNavigator';
+export { default as HeaderSearch } from './components/HeaderSearch';
+export { default as Tooltip } from './components/UI/Tooltip';
 
 export { default as Container } from './components/UI/Container';
 export { default as Column } from './components/UI/Column';
@@ -68,7 +68,11 @@ export { EventCalendarUI } from './components/EventCalendar';
 export { useModules, initializeModules } from './contexts/ModuleContext';
 export { SettingProvider, useSetting } from './contexts/SettingContext';
 export type { SettingContextType } from './contexts/SettingContext';
-export type { QueryProps, TableRow, CategoryCount } from './components/table/types';
+export type {
+    QueryProps,
+    TableRow,
+    CategoryCount,
+} from './components/table/types';
 export { Notice, NoticeReceiver, NoticeManager } from './components/Notice';
 
 export { default as TableCard } from './components/table/TableCard';

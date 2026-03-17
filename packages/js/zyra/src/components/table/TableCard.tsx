@@ -10,359 +10,410 @@ import Skeleton from '../UI/Skeleton';
 import { PopupUI } from '../Popup';
 import '../../styles/web/Table.scss';
 
-// Category item interface 
+// Category item interface
 export interface CategoryItem {
     label: string;
     value: string;
     count: number;
 }
 
-const defaultOnColumnsChange = (
-	showCols: string[],
-	key?: string
-): void => { };
+const defaultOnColumnsChange = ( showCols: string[], key?: string ): void => {};
 
 /**
  * Pure React TableCard
  */
-const TableCard: React.FC<TableCardProps> = ({
-	className,
-	search,
-	headers = {},
-	ids = [],
-	isLoading = false,
-	onColumnsChange = defaultOnColumnsChange,
-	onSort,
-	bulkActions = [],
-	onBulkActionApply,
-	rows = [],
-	showMenu = true,
-	summary,
-	title,
-	totalRows = 0,
-	categoryCounts = [],
-	activeCategory = 'all',
-	filters = [],
-	showColumnToggleIcon = true,
-	onSelectCsvDownloadApply,
-	onCellEdit,
-	buttonActions,
-	format,
-	currency,
-	...props
-}) => {
-	const [selectedIds, setSelectedIds] = useState<number[]>([]);
-	const [derivedTotalRows, setDerivedTotalRows] = useState<number>(totalRows);
+const TableCard: React.FC< TableCardProps > = ( {
+    className,
+    search,
+    headers = {},
+    ids = [],
+    isLoading = false,
+    onColumnsChange = defaultOnColumnsChange,
+    onSort,
+    bulkActions = [],
+    onBulkActionApply,
+    rows = [],
+    showMenu = true,
+    summary,
+    title,
+    totalRows = 0,
+    categoryCounts = [],
+    activeCategory = 'all',
+    filters = [],
+    showColumnToggleIcon = true,
+    onSelectCsvDownloadApply,
+    onCellEdit,
+    buttonActions,
+    format,
+    currency,
+    ...props
+} ) => {
+    const [ selectedIds, setSelectedIds ] = useState< number[] >( [] );
+    const [ derivedTotalRows, setDerivedTotalRows ] =
+        useState< number >( totalRows );
 
-	const [query, setQuery] = useState<QueryProps>({
-		orderby: '',
-		order: 'desc',
-		paged: 1,
-		per_page: 10,
-		filter: {},
-		categoryFilter: activeCategory, 
-	});
-	/**
-	 * TableCard query handler
-	 */
-	const onQueryChange =
-		(param: string) =>
-			(value?: string, direction?: string) => {
-				setQuery((prev) => ({
-					...prev,
-					[param]:
-						param === 'paged' || param === 'per_page'
-							? Number(value)
-							: value,
-					order:
-						param === 'sort'
-							? direction
-							: prev.order,
-					orderby:
-						param === 'sort'
-							? value
-							: prev.orderby,
-				}));
-			};
+    const [ query, setQuery ] = useState< QueryProps >( {
+        orderby: '',
+        order: 'desc',
+        paged: 1,
+        per_page: 10,
+        filter: {},
+        categoryFilter: activeCategory,
+    } );
+    /**
+     * TableCard query handler
+     */
+    const onQueryChange =
+        ( param: string ) => ( value?: string, direction?: string ) => {
+            setQuery( ( prev ) => ( {
+                ...prev,
+                [ param ]:
+                    param === 'paged' || param === 'per_page'
+                        ? Number( value )
+                        : value,
+                order: param === 'sort' ? direction : prev.order,
+                orderby: param === 'sort' ? value : prev.orderby,
+            } ) );
+        };
 
-	const onFilterChange = (key: string, value: string | string[] | { startDate: Date; endDate: Date }) => {
-		setQuery((prev) => ({
-			...prev,
-			paged: 1, // reset to first page
-			filter: {
-				...prev.filter,
-				[key]: value,
-			},
-		}));
-	};
+    const onFilterChange = (
+        key: string,
+        value: string | string[] | { startDate: Date; endDate: Date }
+    ) => {
+        setQuery( ( prev ) => ( {
+            ...prev,
+            paged: 1, // reset to first page
+            filter: {
+                ...prev.filter,
+                [ key ]: value,
+            },
+        } ) );
+    };
 
-	// Handle category change 
-	const handleCategoryChange = (value: string) => {
-		// Safely find the selected category to update total rows
-		if (categoryCounts && Array.isArray(categoryCounts)) {
-			const selectedCategory = categoryCounts.find(cat => cat && cat.value === value);
-			setDerivedTotalRows(selectedCategory?.count ?? 0);
-		}
+    // Handle category change
+    const handleCategoryChange = ( value: string ) => {
+        // Safely find the selected category to update total rows
+        if ( categoryCounts && Array.isArray( categoryCounts ) ) {
+            const selectedCategory = categoryCounts.find(
+                ( cat ) => cat && cat.value === value
+            );
+            setDerivedTotalRows( selectedCategory?.count ?? 0 );
+        }
 
-		setQuery((prev) => ({
-			...prev,
-			paged: 1, // Reset to first page when category changes
-			categoryFilter: value
-		}));
-	};
+        setQuery( ( prev ) => ( {
+            ...prev,
+            paged: 1, // Reset to first page when category changes
+            categoryFilter: value,
+        } ) );
+    };
 
-	const visibleCategories = React.useMemo(() => {
-		if (!categoryCounts || !Array.isArray(categoryCounts)) {
-			return [];
-		}
-		return categoryCounts.filter(cat => cat && cat.count > 0);
-	}, [categoryCounts]);
+    const visibleCategories = React.useMemo( () => {
+        if ( ! categoryCounts || ! Array.isArray( categoryCounts ) ) {
+            return [];
+        }
+        return categoryCounts.filter( ( cat ) => cat && cat.count > 0 );
+    }, [ categoryCounts ] );
 
-	useEffect(() => {
-		props.onQueryUpdate?.(query);
-	}, [query]);
+    useEffect( () => {
+        props.onQueryUpdate?.( query );
+    }, [ query ] );
 
-	useEffect(() => {
-		setDerivedTotalRows(totalRows);
-	}, [totalRows]);
+    useEffect( () => {
+        setDerivedTotalRows( totalRows );
+    }, [ totalRows ] );
 
-	// Toggle single row
-	const handleSelectRow = (id: number, selected: boolean) => {
-		setSelectedIds((prev) =>
-			selected ? [...prev, id] : prev.filter((x) => x !== id)
-		);
-	};
+    // Toggle single row
+    const handleSelectRow = ( id: number, selected: boolean ) => {
+        setSelectedIds( ( prev ) =>
+            selected ? [ ...prev, id ] : prev.filter( ( x ) => x !== id )
+        );
+    };
 
-	// Toggle all rows
-	const handleSelectAll = (selected: boolean) => {
-		setSelectedIds(selected ? [...ids] : []);
-	};
+    // Toggle all rows
+    const handleSelectAll = ( selected: boolean ) => {
+        setSelectedIds( selected ? [ ...ids ] : [] );
+    };
 
-	// Handle bulk action apply
-	const handleBulkApply = (action: string) => {
-		onBulkActionApply?.(action, selectedIds);
-		setSelectedIds([]);
-	};
-	/**
-	 * Determine default visible columns
-	 */
-	const getShowCols = (headersObj: TableCardProps['headers'] = {}) => {
-		return Object.entries(headersObj)
-			.filter(([_, config]) => config.visible !== false)
-			.map(([key]) => key);
-	};
+    // Handle bulk action apply
+    const handleBulkApply = ( action: string ) => {
+        onBulkActionApply?.( action, selectedIds );
+        setSelectedIds( [] );
+    };
+    /**
+     * Determine default visible columns
+     */
+    const getShowCols = ( headersObj: TableCardProps[ 'headers' ] = {} ) => {
+        return Object.entries( headersObj )
+            .filter( ( [ _, config ] ) => config.visible !== false )
+            .map( ( [ key ] ) => key );
+    };
 
-	const [showCols, setShowCols] = useState<string[]>(getShowCols(headers));
+    const [ showCols, setShowCols ] = useState< string[] >(
+        getShowCols( headers )
+    );
 
-	/**
-	 * Toggle column visibility
-	 */
-	const onColumnToggle = (key: string) => {
-		const isVisible = showCols.includes(key);
-		let updated: string[];
+    /**
+     * Toggle column visibility
+     */
+    const onColumnToggle = ( key: string ) => {
+        const isVisible = showCols.includes( key );
+        let updated: string[];
 
-		if (isVisible) {
-			if (showCols.length <= 1) return; // don't hide last column
+        if ( isVisible ) {
+            if ( showCols.length <= 1 ) {
+                return;
+            } // don't hide last column
 
-			// Reset sorting if hiding currently sorted column
-			if (query.orderby === key) {
-				const defaultSort = Object.entries(headers).find(
-					([_, config]) => config.defaultSort
-				);
+            // Reset sorting if hiding currently sorted column
+            if ( query.orderby === key ) {
+                const defaultSort = Object.entries( headers ).find(
+                    ( [ _, config ] ) => config.defaultSort
+                );
 
-				if (defaultSort) {
-					onQueryChange('sort')(defaultSort[0], 'desc');
-				}
-			}
+                if ( defaultSort ) {
+                    onQueryChange( 'sort' )( defaultSort[ 0 ], 'desc' );
+                }
+            }
 
-			updated = showCols.filter((c) => c !== key);
-		} else {
-			updated = [...showCols, key];
-		}
+            updated = showCols.filter( ( c ) => c !== key );
+        } else {
+            updated = [ ...showCols, key ];
+        }
 
-		setShowCols(updated);
-		onColumnsChange(updated, key);
-	};
+        setShowCols( updated );
+        onColumnsChange( updated, key );
+    };
 
-	/**
-	 * Pagination handler
-	 */
-	const onPageChange = (
-		newPage: number,
-		direction?: 'previous' | 'next' | 'goto'
-	) => {
-		props.onPageChange?.(newPage, direction);
-		onQueryChange('paged')(String(newPage), direction);
-	};
+    /**
+     * Pagination handler
+     */
+    const onPageChange = (
+        newPage: number,
+        direction?: 'previous' | 'next' | 'goto'
+    ) => {
+        props.onPageChange?.( newPage, direction );
+        onQueryChange( 'paged' )( String( newPage ), direction );
+    };
 
-	/**
-	 * Derived visible headers & rows
-	 */
-	const visibleHeaders = Object.entries(headers)
-		.filter(([key, config]) =>
-			showCols.includes(key) && (config.tableDisplay !== false) // only include if table !== false (default true)
-		)
-		.map(([key, { csvDisplay, tableDisplay, ...rest }]) => ({
-			key,
-			...rest, // spread everything else except csv and table
-		}));
+    /**
+     * Derived visible headers & rows
+     */
+    const visibleHeaders = Object.entries( headers )
+        .filter(
+            ( [ key, config ] ) =>
+                showCols.includes( key ) && config.tableDisplay !== false // only include if table !== false (default true)
+        )
+        .map( ( [ key, { csvDisplay, tableDisplay, ...rest } ] ) => ( {
+            key,
+            ...rest, // spread everything else except csv and table
+        } ) );
 
-	return (
-		<div className="admin-table-wrapper">
-			{/* HEADER */}
-			{title && (
-				<div className="table-card-header">
-					<div className="title">{title}</div>
-				</div>
-			)}
+    return (
+        <div className="admin-table-wrapper">
+            { /* HEADER */ }
+            { title && (
+                <div className="table-card-header">
+                    <div className="title">{ title }</div>
+                </div>
+            ) }
 
-			{/* BODY */}
-			{(visibleCategories.length > 0 || buttonActions || search || (showMenu && showColumnToggleIcon)) && (
-				<div className="admin-top-filter">
-					{/* Category Filter - Integrated directly (was CategoryFilter component) */}
-					{visibleCategories.length > 0 && (
-						<div className="filter-wrapper">
-							{visibleCategories.map(({ label, value, count }) => (
-								<div
-									key={value}
-									className={`filter-item ${(query.categoryFilter || activeCategory) === value ? 'active' : ''}`}
-									onClick={() => handleCategoryChange(value)}
-								>
-									{label} ({count})
-								</div>
-							))}
-						</div>
-					)}
+            { /* BODY */ }
+            { ( visibleCategories.length > 0 ||
+                buttonActions ||
+                search ||
+                ( showMenu && showColumnToggleIcon ) ) && (
+                <div className="admin-top-filter">
+                    { /* Category Filter - Integrated directly (was CategoryFilter component) */ }
+                    { visibleCategories.length > 0 && (
+                        <div className="filter-wrapper">
+                            { visibleCategories.map(
+                                ( { label, value, count } ) => (
+                                    <div
+                                        key={ value }
+                                        className={ `filter-item ${
+                                            ( query.categoryFilter ||
+                                                activeCategory ) === value
+                                                ? 'active'
+                                                : ''
+                                        }` }
+                                        onClick={ () =>
+                                            handleCategoryChange( value )
+                                        }
+                                    >
+                                        { label } ({ count })
+                                    </div>
+                                )
+                            ) }
+                        </div>
+                    ) }
 
-					<div className="table-action-wrapper">
-						{buttonActions && <ButtonActions actions={buttonActions} query={query} />}
-						{search && (
-							<HeaderSearch
-								search={{
-									placeholder: search.placeholder,
-									options: search.options,
-								}}
-								onQueryUpdate={(payload) => {
-									onQueryChange('searchValue')(payload.searchValue);
-									if ('searchAction' in payload) {
-										onQueryChange('searchAction')(String(payload.searchAction));
-									}
-								}}
-							/>
-						)}
-						{showMenu && showColumnToggleIcon && (
-							<PopupUI
-								position="menu-dropdown"
-								toggleIcon="more-vertical"
-							>
-								<ul>
-									{Object.entries(headers).map(([key, config]) => {
-										const { label, required } = config;
-										if (required) return null;
+                    <div className="table-action-wrapper">
+                        { buttonActions && (
+                            <ButtonActions
+                                actions={ buttonActions }
+                                query={ query }
+                            />
+                        ) }
+                        { search && (
+                            <HeaderSearch
+                                search={ {
+                                    placeholder: search.placeholder,
+                                    options: search.options,
+                                } }
+                                onQueryUpdate={ ( payload ) => {
+                                    onQueryChange( 'searchValue' )(
+                                        payload.searchValue
+                                    );
+                                    if ( 'searchAction' in payload ) {
+                                        onQueryChange( 'searchAction' )(
+                                            String( payload.searchAction )
+                                        );
+                                    }
+                                } }
+                            />
+                        ) }
+                        { showMenu && showColumnToggleIcon && (
+                            <PopupUI
+                                position="menu-dropdown"
+                                toggleIcon="more-vertical"
+                            >
+                                <ul>
+                                    { Object.entries( headers ).map(
+                                        ( [ key, config ] ) => {
+                                            const { label, required } = config;
+                                            if ( required ) {
+                                                return null;
+                                            }
 
-										return (
-											<li key={key}>
-												<label>
-													<input
-														type="checkbox"
-														checked={showCols.includes(key)}
-														onChange={() => onColumnToggle(key)}
-													/>
-													{label}
-												</label>
-											</li>
-										);
-									})}
-								</ul>
-							</PopupUI>
-						)}
-					</div>
-				</div>
-			)}
+                                            return (
+                                                <li key={ key }>
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={ showCols.includes(
+                                                                key
+                                                            ) }
+                                                            onChange={ () =>
+                                                                onColumnToggle(
+                                                                    key
+                                                                )
+                                                            }
+                                                        />
+                                                        { label }
+                                                    </label>
+                                                </li>
+                                            );
+                                        }
+                                    ) }
+                                </ul>
+                            </PopupUI>
+                        ) }
+                    </div>
+                </div>
+            ) }
 
-			<Table
-				rows={rows}
-				headers={visibleHeaders}
-				// caption={title}
-				query={query}
-				onSort={
-					onSort ||
-					(onQueryChange('sort') as (
-						key: string,
-						direction: string
-					) => void)
-				}
-				ids={ids}
-				selectedIds={selectedIds}
-				onSelectRow={handleSelectRow}
-				onSelectAll={handleSelectAll}
-				onCellEdit={onCellEdit}
-				enableBulkSelect={bulkActions.length > 0 || !!onSelectCsvDownloadApply}
-				isLoading={isLoading}
-				format={format}
-				currency={currency}
-			/>
-			{/* pagination */}
-			{derivedTotalRows > 0 && (
-				<div className="admin-pagination">
-					{isLoading ? (
-						<Skeleton width="100%" />
-					) : (
-						<Fragment>
-							<Pagination
-								page={Number(query.paged)}
-								perPage={Number(query.per_page)}
-								total={derivedTotalRows}
-								onPageChange={onPageChange}
-								onPerPageChange={(perPage) =>
-									onQueryChange('per_page')(String(perPage))
-								}
-							/>
+            <Table
+                rows={ rows }
+                headers={ visibleHeaders }
+                // caption={title}
+                query={ query }
+                onSort={
+                    onSort ||
+                    ( onQueryChange( 'sort' ) as (
+                        key: string,
+                        direction: string
+                    ) => void )
+                }
+                ids={ ids }
+                selectedIds={ selectedIds }
+                onSelectRow={ handleSelectRow }
+                onSelectAll={ handleSelectAll }
+                onCellEdit={ onCellEdit }
+                enableBulkSelect={
+                    bulkActions.length > 0 || !! onSelectCsvDownloadApply
+                }
+                isLoading={ isLoading }
+                format={ format }
+                currency={ currency }
+            />
+            { /* pagination */ }
+            { derivedTotalRows > 0 && (
+                <div className="admin-pagination">
+                    { isLoading ? (
+                        <Skeleton width="100%" />
+                    ) : (
+                        <Fragment>
+                            <Pagination
+                                page={ Number( query.paged ) }
+                                perPage={ Number( query.per_page ) }
+                                total={ derivedTotalRows }
+                                onPageChange={ onPageChange }
+                                onPerPageChange={ ( perPage ) =>
+                                    onQueryChange( 'per_page' )(
+                                        String( perPage )
+                                    )
+                                }
+                            />
 
-							{summary &&
-								<ul className="table-summary" role="complementary">
-									{summary.map(({ label, value }, i) => (
-										<li className="table-summary-item" key={i}>
-											<span className="table-summary-value">{value}</span>
-											<span className="table-summary-label">{label}</span>
-										</li>
-									))}
-								</ul>
-							}
-						</Fragment>
-					)}
-				</div>
-			)}
+                            { summary && (
+                                <ul
+                                    className="table-summary"
+                                    role="complementary"
+                                >
+                                    { summary.map( ( { label, value }, i ) => (
+                                        <li
+                                            className="table-summary-item"
+                                            key={ i }
+                                        >
+                                            <span className="table-summary-value">
+                                                { value }
+                                            </span>
+                                            <span className="table-summary-label">
+                                                { label }
+                                            </span>
+                                        </li>
+                                    ) ) }
+                                </ul>
+                            ) }
+                        </Fragment>
+                    ) }
+                </div>
+            ) }
 
-			{selectedIds.length <= 2 && filters.length > 0 && (
-				<RealtimeFilters
-					filters={filters}
-					query={query.filter || {}}
-					onFilterChange={onFilterChange}
-					rows={rows}
-					onResetFilters={() =>
-						setQuery((prev) => ({ ...prev, filter: {}, paged: 1 }))
-					}
-					format={format}
-				/>
-			)}
+            { selectedIds.length <= 2 && filters.length > 0 && (
+                <RealtimeFilters
+                    filters={ filters }
+                    query={ query.filter || {} }
+                    onFilterChange={ onFilterChange }
+                    rows={ rows }
+                    onResetFilters={ () =>
+                        setQuery( ( prev ) => ( {
+                            ...prev,
+                            filter: {},
+                            paged: 1,
+                        } ) )
+                    }
+                    format={ format }
+                />
+            ) }
 
-			{selectedIds.length > 2 && (bulkActions.length > 0 || onSelectCsvDownloadApply) && (
-				<BulkActionDropdown
-					actions={bulkActions}
-					selectedIds={selectedIds}
-					onApply={handleBulkApply}
-					onClearSelection={() => setSelectedIds([])}
-					onSelectCsvDownloadApply={onSelectCsvDownloadApply}
-					totalIds={ids}
-					onToggleSelectAll={(select) =>
-						setSelectedIds(select ? [...ids] : [])
-					}
-					showDropdown={bulkActions.length > 0}
-				/>
-			)}
-		</div>
-	);
+            { selectedIds.length > 2 &&
+                ( bulkActions.length > 0 || onSelectCsvDownloadApply ) && (
+                    <BulkActionDropdown
+                        actions={ bulkActions }
+                        selectedIds={ selectedIds }
+                        onApply={ handleBulkApply }
+                        onClearSelection={ () => setSelectedIds( [] ) }
+                        onSelectCsvDownloadApply={ onSelectCsvDownloadApply }
+                        totalIds={ ids }
+                        onToggleSelectAll={ ( select ) =>
+                            setSelectedIds( select ? [ ...ids ] : [] )
+                        }
+                        showDropdown={ bulkActions.length > 0 }
+                    />
+                ) }
+        </div>
+    );
 };
 
 export default TableCard;

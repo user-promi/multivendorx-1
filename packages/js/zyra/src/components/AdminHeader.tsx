@@ -69,17 +69,17 @@ type AdminHeaderProps = {
         options?: { label: string; value: string }[];
     };
 
-    onQueryUpdate: (payload: {
+    onQueryUpdate: ( payload: {
         searchValue: string;
         searchAction?: string;
-    }) => void;
+    } ) => void;
 
-    onResultClick: (res: SearchItem) => void;
+    onResultClick: ( res: SearchItem ) => void;
     utilityList?: HeaderPopover[];
-    utilityListWithTab?: HeaderPopoverWithTab[],
+    utilityListWithTab?: HeaderPopoverWithTab[];
 };
 
-const AdminHeader: React.FC<AdminHeaderProps> = ({
+const AdminHeader: React.FC< AdminHeaderProps > = ( {
     brandImg,
     results = [],
     search,
@@ -89,90 +89,88 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
     pro,
     utilityList = [],
     utilityListWithTab = [],
-}) => {
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const [notices, setNotices] = React.useState<string[]>([]);
-    useEffect(() => {
+} ) => {
+    const wrapperRef = useRef< HTMLDivElement >( null );
+    const [ notices, setNotices ] = React.useState< string[] >( [] );
+    useEffect( () => {
         const captureNotices = () => {
             const noticeNodes = document.querySelectorAll(
                 '#screen-meta + .wrap .notice, #wpbody-content .notice'
             );
 
-            if (noticeNodes.length > 0) {
+            if ( noticeNodes.length > 0 ) {
                 const htmlArray: string[] = [];
-                noticeNodes.forEach((node) => {
-                    htmlArray.push(node.outerHTML);
+                noticeNodes.forEach( ( node ) => {
+                    htmlArray.push( node.outerHTML );
                     node.remove(); // remove from DOM so we control rendering
-                });
-                setNotices(htmlArray);
+                } );
+                setNotices( htmlArray );
             }
         };
         captureNotices();
-    }, []);
+    }, [] );
 
     return (
         <>
             <NoticeReceiver position="banner" />
-            <div className="admin-header" ref={wrapperRef}>
+            <div className="admin-header" ref={ wrapperRef }>
                 <div className="left-section">
-                    <img className="brand-logo" src={brandImg} alt="Logo" />
+                    <img className="brand-logo" src={ brandImg } alt="Logo" />
 
                     <div className="version-tag">
                         <span className="admin-badge purple">
                             <i className="adminfont-info"></i> <b>Free:</b>
-                            {free}
+                            { free }
                         </span>
                         <span className="admin-badge red">
                             <i className="adminfont-pro-tag"></i> Pro:
-                            {pro ? pro : 'Not Installed'}
+                            { pro ? pro : 'Not Installed' }
                         </span>
                     </div>
                 </div>
 
                 <div className="right-section">
                     <HeaderSearch
-                        search={search}
-                        results={results}
-                        onQueryUpdate={onQueryUpdate}
-                        onResultClick={onResultClick}
+                        search={ search }
+                        results={ results }
+                        onQueryUpdate={ onQueryUpdate }
+                        onResultClick={ onResultClick }
                     />
-                    {/* it will render header icon with tab */}
-                    {utilityListWithTab.map((list, index) => (
+                    { /* it will render header icon with tab */ }
+                    { utilityListWithTab.map( ( list, index ) => (
                         <PopupUI
-                            key={index}
+                            key={ index }
                             position="menu-dropdown"
-                            toggleIcon={list?.toggleIcon}
-                            width={24}
+                            toggleIcon={ list?.toggleIcon }
+                            width={ 24 }
                         >
-                            {list?.tabs && <TabsUI tabs={list.tabs} />}
+                            { list?.tabs && <TabsUI tabs={ list.tabs } /> }
                         </PopupUI>
-
-                    ))}
-                    {/* it will render header icon without tab and list of items */}
-                    {utilityList.map((list, index) => (
+                    ) ) }
+                    { /* it will render header icon without tab and list of items */ }
+                    { utilityList.map( ( list, index ) => (
                         <PopupUI
-                            key={index}
+                            key={ index }
                             position="menu-dropdown"
-                            toggleIcon={list.toggleIcon}
+                            toggleIcon={ list.toggleIcon }
                         >
-                            <ItemListUI items={list.items} />
+                            <ItemListUI items={ list.items } />
                         </PopupUI>
-                    ))}
-
+                    ) ) }
                 </div>
             </div>
-            {notices.length > 0 &&
-                notices.map((html, i) => (
+            { notices.length > 0 &&
+                notices.map( ( html, i ) => (
                     <>
                         <div
-                            key={i}
+                            key={ i }
                             className="wp-admin-notice"
-                            dangerouslySetInnerHTML={{ __html: html }}
+                            dangerouslySetInnerHTML={ { __html: html } }
                         />
                         <NoticeReceiver position="notice" />
                     </>
-                ))}
-                <NoticeReceiver position="float" />
+                ) ) }
+            <NoticeReceiver position="float" />
         </>
     );
 };

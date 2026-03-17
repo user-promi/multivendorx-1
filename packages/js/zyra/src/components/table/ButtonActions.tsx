@@ -7,7 +7,7 @@ export type ButtonAction = {
     icon?: string;
     onClick?: () => void;
     className?: string;
-    onClickWithQuery?: (query: QueryProps) => void;
+    onClickWithQuery?: ( query: QueryProps ) => void;
     color?: string; // Added to support your ButtonInputUI color prop
 };
 
@@ -16,31 +16,28 @@ type ButtonActionsProps = {
     query?: QueryProps;
 };
 
-const ButtonActions: React.FC<ButtonActionsProps> = ({
+const ButtonActions: React.FC< ButtonActionsProps > = ( {
     actions = [],
     query,
-}) => {
-    if (!actions.length) return null;
+} ) => {
+    if ( ! actions.length ) {
+        return null;
+    }
 
-    const resolvedButtons = actions.map((action) => ({
+    const resolvedButtons = actions.map( ( action ) => ( {
         text: action.label,
         icon: action.icon,
         color: action.color || '',
         onClick: () => {
-            if (action.onClickWithQuery && query) {
-                action.onClickWithQuery(query);
+            if ( action.onClickWithQuery && query ) {
+                action.onClickWithQuery( query );
             } else {
                 action.onClick?.();
             }
         },
-    }));
+    } ) );
 
-    return (
-        <ButtonInputUI 
-            buttons={resolvedButtons} 
-            position="left" 
-        />
-    );
+    return <ButtonInputUI buttons={ resolvedButtons } position="left" />;
 };
 
 export default ButtonActions;
