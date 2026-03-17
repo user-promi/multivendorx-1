@@ -10,17 +10,21 @@ interface SectionProps {
     wrapperClass?: string;
     title?: string;
     desc?: string;
-    withoutBorder?: boolean; 
+    withoutBorder?: boolean;
 }
 
-export const SectionUI : React.FC<SectionProps> = ( {
-    wrapperClass='',
+export const SectionUI: React.FC< SectionProps > = ( {
+    wrapperClass = '',
     title,
     desc,
-    withoutBorder = false
+    withoutBorder = false,
 } ) => {
     return (
-        <div className={`divider-section ${!title ? 'border-only' : ''} ${withoutBorder ? 'without-border' : ''} ${wrapperClass}`}>
+        <div
+            className={ `divider-section ${ ! title ? 'border-only' : '' } ${
+                withoutBorder ? 'without-border' : ''
+            } ${ wrapperClass }` }
+        >
             { title && (
                 <p
                     className="title"
@@ -33,12 +37,12 @@ export const SectionUI : React.FC<SectionProps> = ( {
 };
 
 const Section: FieldComponent = {
-    render: ({ field }) => (
+    render: ( { field } ) => (
         <SectionUI
-            wrapperClass={field.wrapperClass}
-            title={field.title}
-            desc={field.desc}
-            withoutBorder={field.withoutBorder}
+            wrapperClass={ field.wrapperClass }
+            title={ field.title }
+            desc={ field.desc }
+            withoutBorder={ field.withoutBorder }
         />
     ),
     validate: () => null,

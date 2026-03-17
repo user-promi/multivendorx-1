@@ -16,7 +16,7 @@ interface TextAreaProps {
     readOnly?: boolean;
     tinymceApiKey?: string;
     usePlainText?: boolean;
-    onChange?: (value: string) => void;
+    onChange?: ( value: string ) => void;
     onClick?: ( e: MouseEvent< HTMLTextAreaElement > ) => void;
     onMouseOver?: ( e: MouseEvent< HTMLTextAreaElement > ) => void;
     onMouseOut?: ( e: MouseEvent< HTMLTextAreaElement > ) => void;
@@ -42,12 +42,12 @@ export const TextAreaUI: React.FC< TextAreaProps > = ( {
     onFocus,
     onBlur,
 } ) => {
-    const handleEditorChange = (content: string) => {
-        onChange?.(content);
+    const handleEditorChange = ( content: string ) => {
+        onChange?.( content );
     };
 
-    const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        onChange?.(e.target.value);
+    const handleTextareaChange = ( e: ChangeEvent< HTMLTextAreaElement > ) => {
+        onChange?.( e.target.value );
     };
 
     return (
@@ -73,10 +73,10 @@ export const TextAreaUI: React.FC< TextAreaProps > = ( {
                 />
             ) : (
                 <textarea
-                    className={`textarea-input ${inputClass || ''}`}
+                    className={ `textarea-input ${ inputClass || '' }` }
                     id={ id }
                     name={ name }
-                    placeholder={placeholder}
+                    placeholder={ placeholder }
                     value={ value }
                     rows={ rowNumber }
                     cols={ colNumber }
@@ -94,34 +94,33 @@ export const TextAreaUI: React.FC< TextAreaProps > = ( {
 };
 
 const TextArea: FieldComponent = {
-    render: ({ field, value, onChange, canAccess, appLocalizer }) => (
+    render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
         <TextAreaUI
-            inputClass={field.class}
-            key={field.key}
-            id={field.id}
-            name={field.name}
-            placeholder={field.placeholder}
-            rowNumber={field.rowNumber} // for row number value
-            colNumber={field.colNumber} // for column number value
-            readOnly={field.readOnly}
-            value={value || ''}
-            usePlainText={field.usePlainText} // Toggle between textarea and TinyMCE
+            inputClass={ field.class }
+            key={ field.key }
+            id={ field.id }
+            name={ field.name }
+            placeholder={ field.placeholder }
+            rowNumber={ field.rowNumber } // for row number value
+            colNumber={ field.colNumber } // for column number value
+            readOnly={ field.readOnly }
+            value={ value || '' }
+            usePlainText={ field.usePlainText } // Toggle between textarea and TinyMCE
             tinymceApiKey={
-                ZyraVariable?.tinymceApiKey
-                    ? ZyraVariable.tinymceApiKey
-                    : ''
+                ZyraVariable?.tinymceApiKey ? ZyraVariable.tinymceApiKey : ''
             }
-            onChange={(val) => {
-                if (!canAccess) return;
-                onChange(val)
-            }}
+            onChange={ ( val ) => {
+                if ( ! canAccess ) {
+                    return;
+                }
+                onChange( val );
+            } }
         />
     ),
 
-    validate: (field, value) => {
+    validate: ( field, value ) => {
         return null;
     },
-
 };
 
 export default TextArea;

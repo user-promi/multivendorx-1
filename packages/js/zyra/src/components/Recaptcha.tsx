@@ -14,11 +14,12 @@ interface RecaptchaProps {
 }
 
 export const RecaptchaUI: React.FC< RecaptchaProps > = ( { formField } ) => {
-    if (!formField?.sitekey) {
+    if ( ! formField?.sitekey ) {
         return (
             <div className="main-input-wrapper recaptcha">
                 <p>
-                    Please enter the reCAPTCHA site key in the field settings to enable reCAPTCHA.
+                    Please enter the reCAPTCHA site key in the field settings to
+                    enable reCAPTCHA.
                 </p>
             </div>
         );
@@ -32,16 +33,15 @@ export const RecaptchaUI: React.FC< RecaptchaProps > = ( { formField } ) => {
 };
 
 const Recaptcha: FieldComponent = {
-    render:RecaptchaUI,
+    render: RecaptchaUI,
 
-    validate: (field, value) => {
-        if (field.required && !value?.[field.key]) {
-            return `${field.label} is required`;
+    validate: ( field, value ) => {
+        if ( field.required && ! value?.[ field.key ] ) {
+            return `${ field.label } is required`;
         }
 
         return null;
     },
-
 };
 
 export default Recaptcha;

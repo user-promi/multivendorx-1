@@ -1,18 +1,18 @@
-import "../styles/web/UI/ButtonInput.scss";
-import React, { useState } from "react";
+import '../styles/web/UI/ButtonInput.scss';
+import React, { useState } from 'react';
 import { FieldComponent, ZyraVariable } from './fieldUtils';
 import { BlockStyle } from './CanvasEditor/blockStyle';
-import axios from "axios";
-import { getApiLink } from "../utils/apiService";
+import axios from 'axios';
+import { getApiLink } from '../utils/apiService';
 
 type CustomStyle = {
     button_border_size: number;
     button_border_color: string;
     button_background_color: string;
     button_text_color: string;
-    button_border_radious: number; 
+    button_border_radious: number;
     button_font_size: number;
-    button_font_width: number; 
+    button_font_width: number;
     button_margin_top: number;
     button_margin_right: number;
     button_margin_bottom: number;
@@ -29,8 +29,8 @@ type CustomStyle = {
 
 type ButtonConfig = {
     icon: string;
-    text: string; 
-    onClick: React.MouseEventHandler<HTMLButtonElement>; 
+    text: string;
+    onClick: React.MouseEventHandler< HTMLButtonElement >;
     color: string;
     children: React.ReactNode;
     customStyle: CustomStyle;
@@ -44,50 +44,56 @@ type ButtonInputProps = {
     position: 'left' | 'right' | 'center';
 };
 
-const mapBlockStyleToCustomStyle = (style: BlockStyle): Partial<CustomStyle> => ({
+const mapBlockStyleToCustomStyle = (
+    style: BlockStyle
+): Partial< CustomStyle > => ( {
     button_background_color: style.backgroundColor,
     button_text_color: style.color,
     button_border_color: style.borderColor,
     button_border_radious: style.borderRadius,
     button_font_size: style.fontSize,
-    button_font_width: Number(style.fontWeight),
+    button_font_width: Number( style.fontWeight ),
     button_border_size: style.borderWidth,
     // Map all padding sides
     button_padding_top: style.paddingTop,
     button_padding_right: style.paddingRight,
     button_padding_bottom: style.paddingBottom,
     button_padding_left: style.paddingLeft,
-    
+
     // Map all margin sides
     button_margin_top: style.marginTop,
     button_margin_right: style.marginRight,
     button_margin_bottom: style.marginBottom,
     button_margin_left: style.marginLeft,
-});
+} );
 
+const SingleButton: React.FC< { btn: ButtonConfig; index: number } > = ( {
+    btn,
+    index,
+} ) => {
+    const [ hovered, setHovered ] = useState( false );
 
-const SingleButton: React.FC<{ btn: ButtonConfig; index: number }> = ({ btn, index }) => {
-    const [hovered, setHovered] = useState(false);
+    const styleFromBlock = btn.style
+        ? mapBlockStyleToCustomStyle( btn.style )
+        : {};
+    const customStyle = { ...styleFromBlock, ...( btn.customStyle || {} ) };
+    const padding = `${ customStyle.button_padding_top }px ${ customStyle.button_padding_right }px ${ customStyle.button_padding_bottom }px ${ customStyle.button_padding_left }px`;
 
-    const styleFromBlock = btn.style ? mapBlockStyleToCustomStyle(btn.style) : {};
-    const customStyle = { ...styleFromBlock, ...(btn.customStyle || {}) };
-    const padding = `${customStyle.button_padding_top}px ${customStyle.button_padding_right}px ${customStyle.button_padding_bottom}px ${customStyle.button_padding_left}px`;
-    
     // Build margin string with all four values
-    const margin = `${customStyle.button_margin_top}px ${customStyle.button_margin_right}px ${customStyle.button_margin_bottom}px ${customStyle.button_margin_left}px`;
+    const margin = `${ customStyle.button_margin_top }px ${ customStyle.button_margin_right }px ${ customStyle.button_margin_bottom }px ${ customStyle.button_margin_left }px`;
 
     const buttonStyle: React.CSSProperties = {
         border: hovered
-            ? `${customStyle.button_border_size}px solid ${customStyle.button_border_color_onhover}`
-            : `${customStyle.button_border_size}px solid ${customStyle.button_border_color}`,
+            ? `${ customStyle.button_border_size }px solid ${ customStyle.button_border_color_onhover }`
+            : `${ customStyle.button_border_size }px solid ${ customStyle.button_border_color }`,
         backgroundColor: hovered
             ? customStyle.button_background_color_onhover
             : customStyle.button_background_color,
         color: hovered
             ? customStyle.button_text_color_onhover
             : customStyle.button_text_color,
-        borderRadius: `${customStyle.button_border_radious}px`,
-        fontSize: `${customStyle.button_font_size}px`,
+        borderRadius: `${ customStyle.button_border_radious }px`,
+        fontSize: `${ customStyle.button_font_size }px`,
         fontWeight: customStyle.button_font_width,
         margin: margin,
         padding: padding,
@@ -95,37 +101,41 @@ const SingleButton: React.FC<{ btn: ButtonConfig; index: number }> = ({ btn, ind
 
     return (
         <button
-            key={index}
-            className={`admin-btn btn-${btn.color || 'purple-bg'}`}
-            onClick={btn.onClick}
-            disabled={btn.disabled}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            style={buttonStyle}
+            key={ index }
+            className={ `admin-btn btn-${ btn.color || 'purple-bg' }` }
+            onClick={ btn.onClick }
+            disabled={ btn.disabled }
+            onMouseEnter={ () => setHovered( true ) }
+            onMouseLeave={ () => setHovered( false ) }
+            style={ buttonStyle }
         >
-            {btn.children || (
+            { btn.children || (
                 <>
-                    {btn.icon && <i className={`adminfont-${btn.icon}`} />}
-                    {customStyle.button_text || btn.text}
+                    { btn.icon && (
+                        <i className={ `adminfont-${ btn.icon }` } />
+                    ) }
+                    { customStyle.button_text || btn.text }
                 </>
-            )}
+            ) }
         </button>
     );
 };
 
-export const ButtonInputUI: React.FC<ButtonInputProps> = ({
+export const ButtonInputUI: React.FC< ButtonInputProps > = ( {
     buttons,
-    wrapperClass = "",
-    position = ""
-}) => {
-    const buttonsArray = Array.isArray(buttons) ? buttons : [buttons];
-    const wrapperClasses = `buttons-wrapper${wrapperClass ? ` ${wrapperClass}` : ""}`;
+    wrapperClass = '',
+    position = '',
+} ) => {
+    const buttonsArray = Array.isArray( buttons ) ? buttons : [ buttons ];
+    const wrapperClasses = `buttons-wrapper${
+        wrapperClass ? ` ${ wrapperClass }` : ''
+    }`;
 
     return (
-        <div className={wrapperClasses} data-position={position}>
-            {buttonsArray.map((btn, index) => (
-                <SingleButton key={index} btn={btn} index={index} />
-            ))}
+        <div className={ wrapperClasses } data-position={ position }>
+            { buttonsArray.map( ( btn, index ) => (
+                <SingleButton key={ index } btn={ btn } index={ index } />
+            ) ) }
         </div>
     );
 };
@@ -141,9 +151,9 @@ const ButtonInput: FieldComponent = {
                 return;
             }
             // REST API
-            if (field.apilink) {
-                axios({
-                    url: getApiLink(ZyraVariable, String(field.apilink)),
+            if ( field.apilink ) {
+                axios( {
+                    url: getApiLink( ZyraVariable, String( field.apilink ) ),
                     method: field.method ?? 'GET',
                     headers: {
                         'X-WP-Nonce': ZyraVariable.nonce,
@@ -151,14 +161,14 @@ const ButtonInput: FieldComponent = {
                     params: {
                         key: field.key,
                     },
-                }).then(() => {
-                    console.log("API Triggered");
-                });
+                } ).then( () => {
+                    console.log( 'API Triggered' );
+                } );
 
                 return;
             }
 
-            onChange(true);
+            onChange( true );
         };
 
         const baseConfig = {
@@ -167,33 +177,41 @@ const ButtonInput: FieldComponent = {
             customStyle: field.customStyle,
         };
 
-        const resolvedButtons = (Array.isArray(field.options) && field.options.length > 0)
-            ? field.options.map((btn: any) => ({
-                ...baseConfig,
-                text: btn.label,
-                onClick: btn.onClick,
-                disabled: btn.disabled,
-                icon: btn.icon,
-            }))
-            : [{
-                ...baseConfig,
-                text: field.text || field.placeholder || field.name || 'Click',
-                disabled: field.disabled,
-                onClick: field.onClick || handleClick,
-                icon: field.icon,
-            }];
+        const resolvedButtons =
+            Array.isArray( field.options ) && field.options.length > 0
+                ? field.options.map( ( btn: any ) => ( {
+                      ...baseConfig,
+                      text: btn.label,
+                      onClick: btn.onClick,
+                      disabled: btn.disabled,
+                      icon: btn.icon,
+                  } ) )
+                : [
+                      {
+                          ...baseConfig,
+                          text:
+                              field.text ||
+                              field.placeholder ||
+                              field.name ||
+                              'Click',
+                          disabled: field.disabled,
+                          onClick: field.onClick || handleClick,
+                          icon: field.icon,
+                      },
+                  ];
 
         return (
             <ButtonInputUI
-                wrapperClass={field.wrapperClass || ''}
-                buttons={resolvedButtons}
-                position={field.position || 'left'}
+                wrapperClass={ field.wrapperClass || '' }
+                buttons={ resolvedButtons }
+                position={ field.position || 'left' }
             />
         );
     },
 
-    validate: (field, value) => {
-        const error = field.required && !value ? `${field.label} is required` : null;
+    validate: ( field, value ) => {
+        const error =
+            field.required && ! value ? `${ field.label } is required` : null;
         return error;
     },
 };

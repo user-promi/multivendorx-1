@@ -1,64 +1,62 @@
-import React from "react";
-import { FieldComponent } from "./fieldUtils";
+import React from 'react';
+import { FieldComponent } from './fieldUtils';
 
 interface RandomInputKeyGeneratorProps {
-  value?: string;
-  length?: number;
-  onChange: (value: string) => void;
+    value?: string;
+    length?: number;
+    onChange: ( value: string ) => void;
 }
 
-const generateRandomKey = (len: number): string =>
-  Array.from({ length: len }, () =>
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(
-      Math.floor(Math.random() * 62)
-    )
-  ).join("");
+const generateRandomKey = ( len: number ): string =>
+    Array.from( { length: len }, () =>
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.charAt(
+            Math.floor( Math.random() * 62 )
+        )
+    ).join( '' );
 
-export const RandomInputKeyGeneratorUI: React.FC<RandomInputKeyGeneratorProps> = ({
-  value = "",
-  length = 8,
-  onChange,
-}) => {
-  const handleGenerate = () => {
-    const key = generateRandomKey(length);
-    onChange(key);
-  };
+export const RandomInputKeyGeneratorUI: React.FC<
+    RandomInputKeyGeneratorProps
+> = ( { value = '', length = 8, onChange } ) => {
+    const handleGenerate = () => {
+        const key = generateRandomKey( length );
+        onChange( key );
+    };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(value);
-  };
+    const handleCopy = () => {
+        navigator.clipboard.writeText( value );
+    };
 
-  const handleDelete = () => {
-    onChange("");
-  };
+    const handleDelete = () => {
+        onChange( '' );
+    };
 
-  if (!value) {
+    if ( ! value ) {
+        return (
+            <button type="button" onClick={ handleGenerate }>
+                Generate
+            </button>
+        );
+    }
+
     return (
-      <button type="button" onClick={handleGenerate}>
-        Generate
-      </button>
+        <>
+            <button type="button" onClick={ handleCopy }>
+                Copy
+            </button>
+
+            <button type="button" onClick={ handleDelete }>
+                Delete
+            </button>
+        </>
     );
-  }
-
-  return (
-    <>
-      <button type="button" onClick={handleCopy}>
-        Copy
-      </button>
-
-      <button type="button" onClick={handleDelete}>
-        Delete
-      </button>
-    </>
-  );
 };
 
 const RandomInputKeyGenerator: FieldComponent = {
-    render: ({ field, value, onChange }) => (
+    render: ( { field, value, onChange } ) => (
         <RandomInputKeyGeneratorUI
-            value={value}
-            length={field.length}
-            onChange={onChange}
+            value={ value }
+            length={ field.length }
+            onChange={ onChange }
         />
     ),
 };

@@ -1,7 +1,7 @@
-import React from "react";
-import "../../styles/web/UI/Skeleton.scss";
+import React from 'react';
+import '../../styles/web/UI/Skeleton.scss';
 
-type SkeletonVariant = "text" | "circular" | "rectangular";
+type SkeletonVariant = 'text' | 'circular' | 'rectangular';
 
 interface SkeletonProps {
     variant?: SkeletonVariant;
@@ -10,19 +10,22 @@ interface SkeletonProps {
     className?: string;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({
-    variant = "text",
+const Skeleton: React.FC< SkeletonProps > = ( {
+    variant = 'text',
     width,
     height,
-    className = "",
-}) => {
+    className = '',
+} ) => {
     const styles: React.CSSProperties = {
         width,
         height,
     };
 
     return (
-        <span className={`skeleton skeleton-${variant} ${className}`} style={styles} />
+        <span
+            className={ `skeleton skeleton-${ variant } ${ className }` }
+            style={ styles }
+        />
     );
 };
 
