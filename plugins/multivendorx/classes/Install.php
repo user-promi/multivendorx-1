@@ -943,11 +943,11 @@ class Install {
                 'readonly'    => true,
             ),
             array(
-                'id'          => 3,
-                'type'        => 'button',
-                'label'       => 'Submit',
-                'text'        => 'Submit',
-                'name'        => 'submit',
+                'id'    => 3,
+                'type'  => 'button',
+                'label' => 'Submit',
+                'text'  => 'Submit',
+                'name'  => 'submit',
             ),
         );
 

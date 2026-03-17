@@ -1,7 +1,6 @@
 <?php
-
 /**
- * MultiVendorX REST API Controller for Questions and Answers
+ * MultiVendorX REST API Controller for Follow Store
  *
  * @package MultiVendorX
  */
@@ -14,9 +13,9 @@ use MultiVendorX\Utill;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * MultiVendorX REST API Controller for Questions and Answers.
+ * MultiVendorX REST API Controller for Follow Store.
  *
- * @class       Module class
+ * @class       Follow Store class
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
@@ -38,7 +37,7 @@ class Rest extends \WP_REST_Controller {
     }
 
     /**
-     * Register the routes for questions and answers.
+     * Register the routes for Follow Store.
      */
     public function register_routes() {
         register_rest_route(
@@ -79,7 +78,7 @@ class Rest extends \WP_REST_Controller {
      * @param  object $request Full data about the request.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -88,14 +87,16 @@ class Rest extends \WP_REST_Controller {
      * @param  object $request Full data about the request.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
-        /**
-         * Get all knowledge base articles.
-         *
-         * @param object $request WP_REST_Request object.
-         */
+    /**
+     * Get all knowledge base articles.
+     *
+     * @param \WP_REST_Request $request WP REST request object.
+     *
+     * @return mixed
+     */
     public function get_items( $request ) {
 
         $nonce = $request->get_header( 'X-WP-Nonce' );

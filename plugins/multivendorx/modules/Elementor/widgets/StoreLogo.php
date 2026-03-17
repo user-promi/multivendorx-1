@@ -1,4 +1,10 @@
 <?php
+/**
+ * Store Logo Widget.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\Elementor\Widgets;
 
 defined( 'ABSPATH' ) || exit;
@@ -6,80 +12,118 @@ defined( 'ABSPATH' ) || exit;
 use Elementor\Widget_Image;
 use MultiVendorX\Elementor\StoreHelper;
 
+/**
+ * Class Store_Logo
+ */
 class Store_Logo extends Widget_Image {
 
 	use StoreHelper;
 
+	/**
+	 * Get widget name.
+	 *
+	 * @return string
+	 */
 	public function get_name() {
 		return 'multivendorx_store_logo';
 	}
 
+	/**
+	 * Get widget title.
+	 *
+	 * @return string
+	 */
 	public function get_title() {
 		return __( 'Store Logo', 'multivendorx' );
 	}
 
+	/**
+	 * Get widget icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon() {
 		return 'eicon-image';
 	}
 
+	/**
+	 * Get widget categories.
+	 *
+	 * @return array
+	 */
 	public function get_categories() {
 		return array( 'multivendorx' );
 	}
 
+	/**
+	 * Get widget keywords.
+	 *
+	 * @return array
+	 */
 	public function get_keywords() {
 		return array( 'multivendorx', 'store', 'logo', 'avatar', 'profile' );
 	}
 
+	/**
+	 * Register controls.
+	 *
+	 * @return void
+	 */
 	protected function register_controls() {
 		parent::register_controls();
 
 		$this->update_control(
-            'section_image',
-            array(
-                'label' => __( 'Store Logo', 'multivendorx' ),
-            )
-        );
+			'section_image',
+			array(
+				'label' => __( 'Store Logo', 'multivendorx' ),
+			)
+		);
 
-        $this->update_control(
-            'image',
-            array(
-                'dynamic' => array(
-                    'default' => \Elementor\Plugin::instance()
-											->dynamic_tags
-											->tag_data_to_tag_text( null, 'multivendorx-store-logo' ),
-                ),
-            ),
-            array(
-                'recursive' => true,
-            )
-        );
+		$this->update_control(
+			'image',
+			array(
+				'dynamic' => array(
+					'default' => \Elementor\Plugin::instance()
+						->dynamic_tags
+						->tag_data_to_tag_text( null, 'multivendorx-store-logo' ),
+				),
+			),
+			array(
+				'recursive' => true,
+			)
+		);
 
-        $this->remove_control( 'caption_source' );
-        $this->remove_control( 'caption' );
+		$this->remove_control( 'caption_source' );
+		$this->remove_control( 'caption' );
 
-        // Update width control with 6rem default
-        $this->update_control(
-            'width',
-            array(
-                'default' => array(
-                    'unit' => 'rem',
-                    'size' => 6,
-                ),
-            )
-        );
+		// Update width control with 6rem default.
+		$this->update_control(
+			'width',
+			array(
+				'default' => array(
+					'unit' => 'rem',
+					'size' => 6,
+				),
+			)
+		);
 
-        // Update max width control with 6rem default
-        $this->update_control(
-            'image_max_width',
-            array(
-                'default' => array(
-                    'unit' => 'rem',
-                    'size' => 6,
-                ),
-            )
-        );
+		// Update max width control with 6rem default.
+		$this->update_control(
+			'image_max_width',
+			array(
+				'default' => array(
+					'unit' => 'rem',
+					'size' => 6,
+				),
+			)
+		);
 	}
 
+	/**
+	 * Render widget output.
+	 *
+	 * @return void
+	 */
 	protected function render() {
 
 		$store = $this->get_store_data();
@@ -87,7 +131,7 @@ class Store_Logo extends Widget_Image {
 			return;
 		}
 
-		// Get logo from existing structure
+		// Get logo from existing structure.
 		$logo       = $store['storeLogo'] ?? '';
 		$store_name = $store['storeName'] ?? '';
 
@@ -101,12 +145,12 @@ class Store_Logo extends Widget_Image {
 			return;
 		}
 
-		// If logo stored as attachment ID, convert to URL
+		// If logo stored as attachment ID, convert to URL.
 		if ( is_numeric( $logo ) ) {
 			$logo = wp_get_attachment_url( $logo );
 		}
 
-		// Get settings for width
+		// Get settings for width.
 		$settings  = $this->get_settings_for_display();
 		$width     = isset( $settings['width']['size'] ) ? $settings['width']['size'] . $settings['width']['unit'] : '6rem';
 		$max_width = isset( $settings['image_max_width']['size'] ) ? $settings['image_max_width']['size'] . $settings['image_max_width']['unit'] : '6rem';
