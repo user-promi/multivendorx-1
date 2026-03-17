@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Store tabs template.
  *
@@ -30,11 +29,11 @@ $request_url      = trailingslashit( home_url( add_query_arg( array(), $wp->requ
 $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array() );
 
 // Loop through tabs.
-foreach ( $store_tabs as $key => $tab ) {
-	if ( ! empty( $tab['url'] ) ) {
+foreach ( $store_tabs as $tab_key => $tab_item ) {
+	if ( ! empty( $tab_item['url'] ) ) {
 		// Compare current URL with tab URL.
-		if ( untrailingslashit( $tab['url'] ) === untrailingslashit( $request_url ) ) {
-			$current_tab = $key;
+		if ( untrailingslashit( $tab_item['url'] ) === untrailingslashit( $request_url ) ) {
+			$current_tab = $tab_key;
 			break;
 		}
 	}
@@ -61,11 +60,11 @@ do_action( 'multivendorx_before_store_tabs', $store_id );
         <div class="product">
             <div class="woocommerce-tabs wc-tabs-wrapper">
                 <ul class="tabs wc-tabs">
-                    <?php foreach ( $store_tabs as $key => $tab ) : ?>
-                        <?php if ( ! empty( $tab['url'] ) ) : ?>
-                            <li class="<?php echo esc_attr( $key ); ?> <?php echo ( $current_tab === $key ) ? 'active' : ''; ?>">
-                                <a href="<?php echo esc_url( $tab['url'] ); ?>">
-                                    <?php echo esc_html( $tab['title'] ); ?>
+                    <?php foreach ( $store_tabs as $tab_key => $tab_item ) : ?>
+                        <?php if ( ! empty( $tab_item['url'] ) ) : ?>
+                            <li class="<?php echo esc_attr( $tab_key ); ?> <?php echo ( $current_tab === $tab_key ) ? 'active' : ''; ?>">
+                                <a href="<?php echo esc_url( $tab_item['url'] ); ?>">
+                                    <?php echo esc_html( $tab_item['title'] ); ?>
                                 </a>
                             </li>
                         <?php endif; ?>
@@ -91,15 +90,15 @@ do_action( 'multivendorx_before_store_tabs', $store_id );
                         );
 
                         $search_keyword = $search_keyword ? trim( $search_keyword ) : '';
-                        $paged          = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+                        $paged_number   = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
                         $args = array(
                             'post_type'      => 'product',
                             'posts_per_page' => get_option( 'posts_per_page' ),
-                            'paged'          => $paged,
+                            'paged'          => $paged_number,
                             'author'         => $store_id,
                             'post_status'    => 'publish',
-                            'meta_query'     => array(
+                            'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
                                 array(
                                     'key'     => Utill::POST_META_SETTINGS['store_id'],
                                     'value'   => $store_id,
@@ -117,7 +116,7 @@ do_action( 'multivendorx_before_store_tabs', $store_id );
                             $args,
                             $store_id,
                             $search_keyword,
-                            $paged
+                            $paged_number
                         );
 
                         $products = new WP_Query( $args );
@@ -132,10 +131,10 @@ do_action( 'multivendorx_before_store_tabs', $store_id );
                                     autocomplete="off" />
 
                                 <?php
-                                // Preserve pagination if needed
-                                if ( $paged > 1 ) :
+                                // Preserve pagination if needed.
+                                if ( $paged_number > 1 ) :
                                     ?>
-                                    <input type="hidden" name="paged" value="<?php echo esc_attr( $paged ); ?>">
+                                    <input type="hidden" name="paged" value="<?php echo esc_attr( $paged_number ); ?>">
                                 <?php endif; ?>
                             </form>
                             
@@ -153,7 +152,7 @@ do_action( 'multivendorx_before_store_tabs', $store_id );
                                 <?php woocommerce_product_loop_end(); ?>
                                 
                                 <?php
-                                echo paginate_links(
+                                echo paginate_links( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     array(
                                         'total' => $products->max_num_pages,
                                     )

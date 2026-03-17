@@ -20,105 +20,114 @@ defined( 'ABSPATH' ) || exit;
  */
 class StoreUtil {
 
-    /**
-     * Add store users
-     *
-     * @param array $args Array of arguments.
-     */
-    public static function add_store_users( $args ) {
-        global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
+	/**
+	 * Add store users
+	 *
+	 * @param array $args Array of arguments.
+	 */
+	public static function add_store_users( $args ) {
+		global $wpdb;
+		$table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
 
-        $store_id = $args['store_id'] ?? 0;
-        $role_id  = $args['role_id'] ?? '';
-        $owners   = $args['users'] ?? array();
+		$store_id = $args['store_id'] ?? 0;
+		$role_id  = $args['role_id'] ?? '';
+		$owners   = $args['users'] ?? array();
 
-        // Remove old users not in list.
-        $wpdb->query(
+		// Remove old users not in list.
+		$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->prepare(
-                "DELETE FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id NOT IN (" . implode( ',', array_map( 'intval', $owners ) ) . ')',
+                "DELETE FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id NOT IN (" . implode( ',', array_map( 'intval', $owners ) ) . ')', // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
                 $store_id,
                 $role_id
             )
-        );
+		);
 
-        // Insert new users.
-        foreach ( $owners as $user_id ) {
-            $exists = $wpdb->get_var(
+		// Insert new users.
+		foreach ( $owners as $user_id ) {
+			$exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
                 $wpdb->prepare(
-                    "SELECT ID FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id = %d",
+                    "SELECT ID FROM {$table} WHERE store_id = %d AND role_id = %s AND user_id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                     $store_id,
                     $role_id,
                     $user_id
                 )
-            );
+			);
 
-            if ( ! $exists ) {
-                $wpdb->insert(
-                    $table,
-                    array(
-                        'store_id' => $store_id,
-                        'user_id'  => $user_id,
-                        'role_id'  => $role_id,
+			if ( ! $exists ) {
+				$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+					$table,
+					array(
+						'store_id' => $store_id,
+						'user_id'  => $user_id,
+						'role_id'  => $role_id,
                     ),
                     array( '%d', '%d', '%s' )
-                );
-            }
-        }
+				);
+			}
+		}
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
-    }
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
+	}
 
-    /**
-     * Get store users
-     *
-     * @param int $store_id Store ID.
-     * @return array
-     */
-    public static function get_store_users( $store_id ) {
-        global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
+	/**
+	 * Get store users
+	 *
+	 * @param int $store_id Store ID.
+	 * @return array
+	 */
+	public static function get_store_users( $store_id ) {
+		global $wpdb;
+		$table = "{$wpdb->prefix}" . Utill::TABLES['store_users'];
 
-        $primary_owner_id = self::get_primary_owner( $store_id );
-        $users            = $wpdb->get_results( $wpdb->prepare( "SELECT user_id FROM $table WHERE store_id = %d", $store_id ), ARRAY_A );
-        $user_ids         = wp_parse_id_list( wp_list_pluck( $users, 'user_id' ) );
+		$primary_owner_id = self::get_primary_owner( $store_id );
+		$users            = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->prepare(
+                "SELECT user_id FROM $table WHERE store_id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                $store_id
+            ),
+            ARRAY_A
+		);
+		$user_ids         = wp_parse_id_list( wp_list_pluck( $users, 'user_id' ) );
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
 
-        return array(
-            'users'         => $user_ids,
-            'primary_owner' => $primary_owner_id,
-        );
-    }
+		return array(
+			'users'         => $user_ids,
+			'primary_owner' => $primary_owner_id,
+		);
+	}
 
-    /**
-     * Get all stores
-     *
-     * @return array
-     */
-    public static function get_stores() {
-        global $wpdb;
+	/**
+	 * Get all stores
+	 *
+	 * @return array
+	 */
+	public static function get_stores() {
+		global $wpdb;
 
-        $table = "{$wpdb->prefix}" . Utill::TABLES['store'];
-        $store = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+		$table = "{$wpdb->prefix}" . Utill::TABLES['store'];
+		$store = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+            "SELECT * FROM {$table}", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            ARRAY_A
+		);
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
 
-        return $store ? $store : array();
-    }
+		return $store ? $store : array();
+	}
 
-    /**
-     * Get store tabs
-     *
-     * @param int $store_id Store ID.
-     * @return array
-     */
+	/**
+	 * Get store tabs
+	 *
+	 * @param int $store_id Store ID.
+	 * @return array
+	 */
     public function get_store_tabs( $store_id ) {
 
         $tabs = array(
@@ -136,6 +145,7 @@ class StoreUtil {
      *
      * @param int    $store_id Store ID.
      * @param string $tab Optional tab.
+     * @param bool   $placeholder_string Whether to return a placeholder URL.
      * @return string
      */
     public function get_store_url( $store_id = null, $tab = '', $placeholder_string = false ) {
@@ -152,7 +162,7 @@ class StoreUtil {
             return '';
         }
 
-        // Pretty permalink enabled
+        // Pretty permalink enabled.
         if ( get_option( Utill::WORDPRESS_SETTINGS['permalink'] ) ) {
             $path = '/' . $store_base . '/';
 
@@ -323,11 +333,8 @@ class StoreUtil {
         $all_registration_data['id'] = $store_id;
 
         // Get registration form data (serialized meta).
-        $store_meta     = $store->get_meta( Utill::STORE_SETTINGS_KEYS['registration_data'] );
-        $submitted_data = array();
-        if ( ! empty( $store_meta ) && is_serialized( $store_meta ) ) {
-            $submitted_data = unserialize( $store_meta );
-        }
+		$store_meta     = $store->get_meta( Utill::STORE_SETTINGS_KEYS['registration_data'] );
+		$submitted_data = ! empty( $store_meta ) ? $store_meta : array();
 
         $meta_keys = array(
             Utill::STORE_SETTINGS_KEYS['phone'],
@@ -378,8 +385,8 @@ class StoreUtil {
             'registration_data'      => array(),
             'all_registration_data'  => $all_registration_data,
             'primary_owner_info'     => $primary_owner_info,
-            'store_application_note' => unserialize( $store->get_meta( 'store_reject_note' ) ),
-            'store_permanent_reject' => $store->get( Utill::STORE_SETTINGS_KEYS['status'] ) === 'permanently_rejected',
+            'store_application_note' => $store->get_meta( 'store_reject_note' ),
+			'store_permanent_reject' => 'permanently_rejected' === $store->get( Utill::STORE_SETTINGS_KEYS['status'] ),
         );
 
         foreach ( $submitted_data as $field_name => $field_value ) {
@@ -414,201 +421,201 @@ class StoreUtil {
         return $response;
     }
 
-    /**
-     * Create atachment from array of fiels.
-     *
-     * @param mixed $files_array
-     * @return int|\WP_Error
-     */
-    public static function create_attachment_from_files_array( $files_array ) {
-        require_once ABSPATH . 'wp-admin/includes/file.php';
-        require_once ABSPATH . 'wp-admin/includes/image.php';
-        require_once ABSPATH . 'wp-admin/includes/media.php';
+	/**
+	 * Create attachment from array of files.
+	 *
+	 * @param mixed $files_array The files array from $_FILES.
+	 * @return int|\WP_Error
+	 */
+	public static function create_attachment_from_files_array( $files_array ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
 
-        // Handle the file upload
-        $upload = wp_handle_upload( $files_array, array( 'test_form' => false ) );
+		// Handle the file upload.
+		$upload = wp_handle_upload( $files_array, array( 'test_form' => false ) );
 
-        // Prepare the attachment
-        $file_path = $upload['file'];
-        $file_name = basename( $file_path );
-        $file_type = wp_check_filetype( $file_name, null );
+		// Prepare the attachment.
+		$file_path = $upload['file'];
+		$file_name = basename( $file_path );
+		$file_type = wp_check_filetype( $file_name, null );
 
-        // Create attachment post
-        $attachment = array(
-            'guid'           => $upload['url'],
-            'post_mime_type' => $file_type['type'],
-            'post_title'     => preg_replace( '/\.[^.]+$/', '', $file_name ),
-            'post_content'   => '',
-            'post_status'    => 'inherit',
-        );
+		// Create attachment post.
+		$attachment = array(
+			'guid'           => $upload['url'],
+			'post_mime_type' => $file_type['type'],
+			'post_title'     => preg_replace( '/\.[^.]+$/', '', $file_name ),
+			'post_content'   => '',
+			'post_status'    => 'inherit',
+		);
 
-        // Insert attachment into the media library
-        $attachment_id = wp_insert_attachment( $attachment, $file_path );
+		// Insert attachment into the media library.
+		$attachment_id = wp_insert_attachment( $attachment, $file_path );
 
-        if ( ! is_wp_error( $attachment_id ) ) {
-            // Generate metadata for the attachment, and update the attachment
-            $attachment_data = wp_generate_attachment_metadata( $attachment_id, $file_path );
-            wp_update_attachment_metadata( $attachment_id, $attachment_data );
+		if ( ! is_wp_error( $attachment_id ) ) {
+			// Generate metadata for the attachment, and update the attachment.
+			$attachment_data = wp_generate_attachment_metadata( $attachment_id, $file_path );
+			wp_update_attachment_metadata( $attachment_id, $attachment_data );
 
-            return $attachment_id; // Return the attachment ID
-        }
+			return $attachment_id; // Return the attachment ID.
+		}
 
-        return 0;
-    }
+		return 0;
+	}
 
-    /**
-     * Get primary owner for a store.
-     *
-     * @param int $store_id Store ID.
-     *
-     * @return int User ID.
-     */
-    public static function get_primary_owner( $store_id ) {
-        global $wpdb;
-        $table_name    = $wpdb->prefix . Utill::TABLES['store_users'];
-        $primary_owner = $wpdb->get_var(
+	/**
+	 * Get primary owner for a store.
+	 *
+	 * @param int $store_id Store ID.
+	 *
+	 * @return int User ID.
+	 */
+	public static function get_primary_owner( $store_id ) {
+		global $wpdb;
+		$table_name    = $wpdb->prefix . Utill::TABLES['store_users'];
+		$primary_owner = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->prepare(
-                "SELECT primary_owner FROM $table_name WHERE store_id = %d",
+                "SELECT primary_owner FROM $table_name WHERE store_id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 $store_id
             )
-        );
+		);
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
 
-        return $primary_owner;
-    }
+		return $primary_owner;
+	}
 
-    /**
-     * Set primary owner for a store.
-     *
-     * @param int $user_id User ID.
-     * @param int $store_id Store ID.
-     *
-     * @return void
-     */
-    public static function set_primary_owner( $user_id, $store_id ) {
-        global $wpdb;
+	/**
+	 * Set primary owner for a store.
+	 *
+	 * @param int $user_id User ID.
+	 * @param int $store_id Store ID.
+	 *
+	 * @return void
+	 */
+	public static function set_primary_owner( $user_id, $store_id ) {
+		global $wpdb;
 
-        $table_name = $wpdb->prefix . Utill::TABLES['store_users'];
+		$table_name = $wpdb->prefix . Utill::TABLES['store_users'];
 
-        // Check if store_id already exists.
-        $exists = $wpdb->get_var(
+		// Check if store_id already exists.
+		$exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->prepare(
-                "SELECT ID FROM $table_name WHERE store_id = %d",
+                "SELECT ID FROM $table_name WHERE store_id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 $store_id
             )
-        );
+		);
 
-        if ( $exists ) {
-            // Update.
-            $wpdb->update(
+		if ( $exists ) {
+			// Update.
+			$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
                 $table_name,
                 array( 'primary_owner' => $user_id ),
                 array( 'store_id' => $store_id ),
                 array( '%d' ),
                 array( '%d' )
-            );
-        } else {
-            // Insert.
-            $wpdb->insert(
+			);
+		} else {
+			// Insert.
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $table_name,
                 array(
-                    'store_id'      => $store_id,
-                    'user_id'       => $user_id,
-                    'role_id'       => 'store_owner',
-                    'primary_owner' => $user_id,
+					'store_id'      => $store_id,
+					'user_id'       => $user_id,
+					'role_id'       => 'store_owner',
+					'primary_owner' => $user_id,
                 ),
                 array( '%d', '%d', '%s', '%d' )
-            );
-        }
+			);
+		}
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
-    }
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
+	}
 
-    /**
-     * Get store records from the database based on given filters.
-     *
-     * @param array $args Filter options like 'ID', 'status', 'name', 'slug', 'description', 'who_created', 'create_time', 'limit', 'offset', 'count'.
-     * @return array|int List of stores (array) or count (int) if 'count' is set.
-     */
-    public static function get_store_information( $args = array() ) {
-        global $wpdb;
+	/**
+	 * Get store records from the database based on given filters.
+	 *
+	 * @param array $args Filter options like 'ID', 'status', 'name', 'slug', 'description', 'who_created', 'create_time', 'limit', 'offset', 'count'.
+	 * @return array|int List of stores (array) or count (int) if 'count' is set.
+	 */
+	public static function get_store_information( $args = array() ) {
+		global $wpdb;
 
-        $where = array();
+		$where = array();
 
-        if ( isset( $args['ID'] ) ) {
-            $ids     = is_array( $args['ID'] ) ? $args['ID'] : array( $args['ID'] );
-            $ids     = implode( ',', array_map( 'intval', $ids ) );
-            $where[] = "ID IN ($ids)";
-        }
+		if ( isset( $args['ID'] ) ) {
+			$ids     = is_array( $args['ID'] ) ? $args['ID'] : array( $args['ID'] );
+			$ids     = implode( ',', array_map( 'intval', $ids ) );
+			$where[] = "ID IN ($ids)";
+		}
 
-        if ( isset( $args['status'] ) ) {
-            $where[] = "status = '" . esc_sql( $args['status'] ) . "'";
-        }
+		if ( isset( $args['status'] ) ) {
+			$where[] = "status = '" . esc_sql( $args['status'] ) . "'";
+		}
 
-        if ( isset( $args['name'] ) ) {
-            $where[] = "name LIKE '%" . esc_sql( $args['name'] ) . "%'";
-        }
+		if ( isset( $args['name'] ) ) {
+			$where[] = "name LIKE '%" . esc_sql( $args['name'] ) . "%'";
+		}
 
-        if ( isset( $args['slug'] ) ) {
-            $where[] = "slug = '" . esc_sql( $args['slug'] ) . "'";
-        }
+		if ( isset( $args['slug'] ) ) {
+			$where[] = "slug = '" . esc_sql( $args['slug'] ) . "'";
+		}
 
-        if ( isset( $args['searchField'] ) ) {
-            $search  = esc_sql( $args['searchField'] );
-            $where[] = "(name LIKE '%$search%')";
-        }
+		if ( isset( $args['searchField'] ) ) {
+			$search  = esc_sql( $args['searchField'] );
+			$where[] = "(name LIKE '%$search%')";
+		}
 
-        if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
-            $where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
-        }
+		if ( isset( $args['start_date'] ) && isset( $args['end_date'] ) ) {
+			$where[] = "create_time BETWEEN '" . esc_sql( $args['start_date'] ) . "' AND '" . esc_sql( $args['end_date'] ) . "'";
+		}
 
-        $table = $wpdb->prefix . Utill::TABLES['store'];
+		$table = $wpdb->prefix . Utill::TABLES['store'];
 
-        if ( isset( $args['count'] ) ) {
-            $query = "SELECT COUNT(*) FROM {$table}";
-        } else {
-            $query = "SELECT * FROM {$table}";
-        }
+		if ( isset( $args['count'] ) ) {
+			$query = "SELECT COUNT(*) FROM {$table}";
+		} else {
+			$query = "SELECT * FROM {$table}";
+		}
 
-        if ( ! empty( $where ) ) {
-            $condition = $args['condition'] ?? ' AND ';
-            $query    .= ' WHERE ' . implode( $condition, $where );
-        }
+		if ( ! empty( $where ) ) {
+			$condition = $args['condition'] ?? ' AND ';
+			$query    .= ' WHERE ' . implode( $condition, $where );
+		}
 
-        // ADD SORTING SUPPORT HERE.
-        if ( ! empty( $args['orderBy'] ) ) {
-            // Only allow safe columns to sort by (avoid SQL injection).
-            $allowed_columns = array( 'ID', 'name', 'status', 'slug', 'create_time' );
-            $orderBy         = in_array( $args['orderBy'], $allowed_columns, true ) ? $args['orderBy'] : 'ID';
-            $order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
-            $query          .= " ORDER BY {$orderBy} {$order}";
-        }
+		// ADD SORTING SUPPORT HERE.
+		if ( ! empty( $args['order_by'] ) ) {
+			// Only allow safe columns to sort by (avoid SQL injection).
+			$allowed_columns = array( 'ID', 'name', 'status', 'slug', 'create_time' );
+			$order_by        = in_array( $args['order_by'], $allowed_columns, true ) ? $args['order_by'] : 'ID';
+			$order           = ( isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ) ? 'DESC' : 'ASC';
+			$query          .= " ORDER BY {$order_by} {$order}";
+		}
 
-        // Keep your pagination logic.
-        if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
-            $limit  = intval( $args['limit'] );
-            $offset = intval( $args['offset'] );
-            $query .= " LIMIT $limit OFFSET $offset";
-        }
+		// Keep your pagination logic.
+		if ( isset( $args['limit'] ) && isset( $args['offset'] ) && empty( $args['count'] ) ) {
+			$limit  = intval( $args['limit'] );
+			$offset = intval( $args['offset'] );
+			$query .= " LIMIT $limit OFFSET $offset";
+		}
 
-        if ( isset( $args['count'] ) ) {
-            $results = $wpdb->get_var( $query );
-        } else {
-            $results = $wpdb->get_results( $query, ARRAY_A );
-        }
+		if ( isset( $args['count'] ) ) {
+			$results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
+		} else {
+			$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
+		}
 
-        /** Centralized error logging (only once) */
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
+		/** Centralized error logging (only once) */
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
 
-        return $results ?? ( isset( $args['count'] ) ? 0 : array() );
-    }
+		return $results ?? ( isset( $args['count'] ) ? 0 : array() );
+	}
 
     /**
      * Get all product IDs that should be excluded based on conditions.
@@ -652,116 +659,138 @@ class StoreUtil {
         return false;
     }
 
-    public static function get_store_visitors( $store_id ) {
-        global $wpdb;
+	/**
+	 * Get store visitors statistics.
+	 *
+	 * @param int $store_id Store ID.
+	 * @return array Array with total, last_30_days, and previous_30_days visitor counts.
+	 */
+	public static function get_store_visitors( $store_id ) {
+		global $wpdb;
 
-        $table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+		$table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
 
-        // Total users (all-time).
-        $total_users = $wpdb->get_var(
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// Total users (all-time).
+		$total_users = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->prepare(
                 "
-                SELECT COUNT(DISTINCT user_id)
-                FROM {$table_name}
-                WHERE store_id = %d
-                ",
+            SELECT COUNT(DISTINCT user_id)
+            FROM {$table_name}
+            WHERE store_id = %d
+            ",
                 $store_id
             )
-        );
+		);
 
-        // Last 30 days.
-        $last_30_days = $wpdb->get_var(
+		// Last 30 days.
+		$last_30_days = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->prepare(
                 "
-                SELECT COUNT(DISTINCT user_id)
-                FROM {$table_name}
-                WHERE store_id = %d
-                AND created >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                ",
+            SELECT COUNT(DISTINCT user_id)
+            FROM {$table_name}
+            WHERE store_id = %d
+            AND created >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            ",
                 $store_id
             )
-        );
+		);
 
-        // Previous 30 days (30–60 days ago).
-        $previous_30_days = $wpdb->get_var(
+		// Previous 30 days (30–60 days ago).
+		$previous_30_days = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->prepare(
                 "
-                SELECT COUNT(DISTINCT user_id)
-                FROM {$table_name}
-                WHERE store_id = %d
-                AND created >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
-                AND created < DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                ",
+            SELECT COUNT(DISTINCT user_id)
+            FROM {$table_name}
+            WHERE store_id = %d
+            AND created >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
+            AND created < DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            ",
                 $store_id
             )
-        );
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-        return array(
-            'total'            => (int) $total_users,
-            'last_30_days'     => (int) $last_30_days,
-            'previous_30_days' => (int) $previous_30_days,
-        );
-    }
+		return array(
+			'total'            => (int) $total_users,
+			'last_30_days'     => (int) $last_30_days,
+			'previous_30_days' => (int) $previous_30_days,
+		);
+	}
 
-    public static function get_phone( $phone_meta ) {
-        $data = maybe_unserialize( $phone_meta );
+	/**
+	 * Get formatted phone number from phone meta data.
+	 *
+	 * @param mixed $phone_meta Phone meta data (could be serialized or array).
+	 * @return string Formatted phone number with country code.
+	 */
+	public static function get_phone( $phone_meta ) {
+		$data = maybe_unserialize( $phone_meta );
 
-        $country = $data['country_code'] ?? '';
-        $phone   = $data['phone'] ?? '';
+		$country = $data['country_code'] ?? '';
+		$phone   = $data['phone'] ?? '';
 
-        return $country . ' ' . $phone;
-    }
+		return $country . ' ' . $phone;
+	}
 
-    public static function get_specific_store_info() {
-        $store_slug = get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
-        if ( empty( $store_slug ) ) {
-            return;
-        }
-        $store_obj  = Store::get_store( $store_slug, 'slug' );
-        $phone_meta = self::get_phone( $store_obj->get_meta( 'phone' ) );
+	/**
+	 * Get specific store information for the current store.
+	 *
+	 * Retrieves store details including name, description, contact info, social media links,
+	 * policies, and store tabs HTML for the store based on the URL slug.
+	 *
+	 * @return array|null Array of store information or null if store not found.
+	 */
+	public static function get_specific_store_info() {
+		$store_slug = get_query_var( MultiVendorX()->setting->get_setting( 'store_url', 'store' ) );
+		if ( empty( $store_slug ) ) {
+			return;
+		}
+		$store_obj  = Store::get_store( $store_slug, 'slug' );
+		$phone_meta = self::get_phone( $store_obj->get_meta( 'phone' ) );
 
-        $store_phone = '';
-        if ( is_serialized( $phone_meta ) ) {
-            $phone_data = maybe_unserialize( $phone_meta );
-            if ( is_array( $phone_data ) && isset( $phone_data['country_code'] ) && isset( $phone_data['phone'] ) ) {
-                $store_phone = $phone_data['country_code'] . ' ' . $phone_data['phone'];
-            }
-        } else {
-            $store_phone = $phone_meta;
-        }
+		$store_phone = '';
+		if ( is_serialized( $phone_meta ) ) {
+			$phone_data = maybe_unserialize( $phone_meta );
+			if ( is_array( $phone_data ) && isset( $phone_data['country_code'] ) && isset( $phone_data['phone'] ) ) {
+				$store_phone = $phone_data['country_code'] . ' ' . $phone_data['phone'];
+			}
+		} else {
+			$store_phone = $phone_meta;
+		}
 
-        ob_start();
-        MultiVendorX()->util->get_template( 'store/store-tabs.php', array( 'store_id' => $store_obj->get_id() ) );
-        $tabs_html = ob_get_clean();
+		ob_start();
+		MultiVendorX()->util->get_template( 'store/store-tabs.php', array( 'store_id' => $store_obj->get_id() ) );
+		$tabs_html = ob_get_clean();
 
-        $info = array(
-            'storeName'          => $store_obj->get( 'name' ),
-            'storeDescription'   => $store_obj->get( 'description' ),
-            'storeSlug'          => $store_slug,
-            'storeId'            => $store_obj->get_id(),
-            'storeEmail'         => $store_obj->get_meta( 'primary_email' ),
-            'storePhone'         => $store_phone,
-            'facebook'           => $store_obj->get_meta( 'facebook' ),
-            'twitter'            => $store_obj->get_meta( 'twitter' ),
-            'linkedin'           => $store_obj->get_meta( 'linkedin' ),
-            'youtube'            => $store_obj->get_meta( 'youtube' ),
-            'instagram'          => $store_obj->get_meta( 'instagram' ),
-            'pinterest'          => $store_obj->get_meta( 'pinterest' ),
-            'storeLogo'          => $store_obj->get_meta( 'image' ),
-            'storeBanner'        => $store_obj->get_meta( 'banner' ),
-            'storePolicy'        => $store_obj->get_meta( 'store_policy' ),
-            'shippingPolicy'     => $store_obj->get_meta( 'shipping_policy' ),
-            'refundPolicy'       => $store_obj->get_meta( 'refund_policy' ),
-            'cancellationPolicy' => $store_obj->get_meta( 'cancellation_policy' ),
-            'storeAddress'       => $store_obj->get_meta( 'address' ),
-            'storeTabs'          => $tabs_html,
-        );
-        /**
-         * Filter store info before returning.
-         *
-         * @param array $info
-         * @param object $store_obj
-         */
-        return apply_filters( 'multivendorx_store_info', $info, $store_obj );
-    }
+		$info = array(
+			'storeName'          => $store_obj->get( 'name' ),
+			'storeDescription'   => $store_obj->get( 'description' ),
+			'storeSlug'          => $store_slug,
+			'storeId'            => $store_obj->get_id(),
+			'storeEmail'         => $store_obj->get_meta( 'primary_email' ),
+			'storePhone'         => $store_phone,
+			'facebook'           => $store_obj->get_meta( 'facebook' ),
+			'twitter'            => $store_obj->get_meta( 'twitter' ),
+			'linkedin'           => $store_obj->get_meta( 'linkedin' ),
+			'youtube'            => $store_obj->get_meta( 'youtube' ),
+			'instagram'          => $store_obj->get_meta( 'instagram' ),
+			'pinterest'          => $store_obj->get_meta( 'pinterest' ),
+			'storeLogo'          => $store_obj->get_meta( 'image' ),
+			'storeBanner'        => $store_obj->get_meta( 'banner' ),
+			'storePolicy'        => $store_obj->get_meta( 'store_policy' ),
+			'shippingPolicy'     => $store_obj->get_meta( 'shipping_policy' ),
+			'refundPolicy'       => $store_obj->get_meta( 'refund_policy' ),
+			'cancellationPolicy' => $store_obj->get_meta( 'cancellation_policy' ),
+			'storeAddress'       => $store_obj->get_meta( 'address' ),
+			'storeTabs'          => $tabs_html,
+		);
+		/**
+		 * Filter store info before returning.
+		 *
+		 * @param array $info
+		 * @param object $store_obj
+		 */
+		return apply_filters( 'multivendorx_store_info', $info, $store_obj );
+	}
 }

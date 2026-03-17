@@ -201,8 +201,8 @@ class Commissions extends \WP_REST_Controller {
                 $filter['ID'] = $ids;
             }
             // Default: latest first
-            $filter['orderBy'] = $order_by ?: 'created_at';
-            $filter['order']   = strtolower( $order ) === 'asc' ? 'ASC' : 'DESC';
+            $filter['order_by'] = $order_by ?: 'created_at';
+            $filter['order']    = strtolower( $order ) === 'asc' ? 'ASC' : 'DESC';
 
             // Fetch commissions.
             $commissions = CommissionUtil::get_commission_information(

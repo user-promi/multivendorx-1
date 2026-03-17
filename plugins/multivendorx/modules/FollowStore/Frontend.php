@@ -13,7 +13,7 @@ use MultiVendorX\FrontendScripts;
  * MultiVendorX Follow Store Frontend class
  *
  * @class       Module class
- * @version     5.0.0
+ * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
 class Frontend {
@@ -31,7 +31,12 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
         add_action( 'wp_footer', array( $this, 'render_login_modal' ) );
     }
-
+	/**
+	 * Register follow store frontend script
+	 *
+	 * @param array $scripts Scripts array.
+	 * @return array Modified scripts array
+	 */
     public function register_script( $scripts ) {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
@@ -42,7 +47,12 @@ class Frontend {
 
         return $scripts;
     }
-
+	/**
+	 * Localize follow store frontend script
+	 *
+	 * @param array $scripts Scripts array.
+	 * @return array Modified scripts array
+	 */
     public function localize_scripts( $scripts ) {
 
         $scripts['multivendorx-follow-store-frontend-script'] = array(

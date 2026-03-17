@@ -36,6 +36,7 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'woocommerce_order_item_meta_end', array( $this, 'multivendorx_add_store_review_button' ), 10, 3 );
         add_filter( 'multivendorx_store_frontend_localize_scripts', array( $this, 'multivendorx_store_frontend_localize_scripts' ) );
+        add_filter( 'multivendorx_stores_details', array( $this, 'multivendorx_stores_details' ), 10, 2 );
     }
 
     public function register_script( $scripts ) {
@@ -207,5 +208,18 @@ class Frontend {
         }
 
         return $item;
+    }
+
+    /**
+     * Add extra details to store data for REST/API or frontend usage.
+     *
+     * @param array $store Existing store data.
+     * @param int   $store_id   Store ID.
+     *
+     * @return array Modified store data with additional keys.
+     */
+    public function multivendorx_stores_details( $store, $store_id ) {
+        $store['rating'] = Util::get_overall_rating( $store_id );
+        return $store;
     }
 }

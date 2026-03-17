@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Template to display the vendor store banner and details.
  *
@@ -41,14 +40,14 @@ $banner_slider     = $meta_data['banner_slider'] ?? array();
 ?>
 
 <div class="multivendorx-banner <?php echo esc_attr( $selected_template ); ?>">
-    <?php if ( $banner_type === 'static_image' ) : ?>
+    <?php if ( 'static_image' === $banner_type ) : ?>
         <?php if ( ! empty( $banner ) ) : ?>
             <div class="banner-img">
                 <img src="<?php echo esc_url( $banner ); ?>" alt="">
             </div>
         <?php endif; ?>
 
-    <?php elseif ( $banner_type === 'slider_image' ) : ?>
+    <?php elseif ( 'slider_image' === $banner_type ) : ?>
         <div class="banner-slider">
             <?php
             if ( ! empty( $banner_slider ) ) :
@@ -59,13 +58,13 @@ $banner_slider     = $meta_data['banner_slider'] ?? array();
             <?php endif; ?>
         </div>
 
-    <?php elseif ( $banner_type === 'video' ) : ?>
+    <?php elseif ( 'video' === $banner_type ) : ?>
         <div class="banner-video">
             <?php if ( ! empty( $banner_video ) ) : ?>
                 <?php
                 $url = trim( $banner_video );
 
-                // YouTube URL
+                // YouTube URL.
                 if ( preg_match( '/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/', $url, $matches ) ) {
                     $youtube_id = $matches[1];
                     ?>
@@ -74,7 +73,7 @@ $banner_slider     = $meta_data['banner_slider'] ?? array();
                         frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
                     </iframe>
                     <?php
-                    // Vimeo URL
+                    // Vimeo URL.
                 } elseif ( preg_match( '/vimeo\.com\/(\d+)/', $url, $matches ) ) {
                     $vimeo_id = $matches[1];
                     ?>
@@ -83,7 +82,7 @@ $banner_slider     = $meta_data['banner_slider'] ?? array();
                         frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
                     </iframe>
                     <?php
-                    // Direct video file (mp4/webm/etc.)
+                    // Direct video file (mp4/webm/etc.).
                 } else {
                     ?>
                     <video autoplay muted loop controls style="width:100%; height:auto;">
@@ -191,18 +190,26 @@ $banner_slider     = $meta_data['banner_slider'] ?? array();
                         in_array( 'show_store_ratings', $branding_settings, true ) &&
                         $rating_value > 0
                     ) :
-                        ?>
-                        <div class="star-rating" role="img" aria-label="<?php printf( __( 'Rated %s out of 5', 'multivendorx' ), $rating_value ); ?>">
-                            <span style="width: <?php echo ( floatval( $rating_value ) / 5 ) * 100; ?>%;">
+                        // Translators: %s is the rating value out of 5.
+                        $aria_label = sprintf( esc_html__( 'Rated %s out of 5', 'multivendorx' ), esc_html( $rating_value ) );
+                        $width      = ( floatval( $rating_value ) / 5 ) * 100;
+						?>
+                        <div class="star-rating" role="img" aria-label="<?php echo esc_attr( $aria_label ); ?>">
+                            <span style="width: <?php echo esc_attr( $width ); ?>%;">
                                 <strong class="rating"><?php echo esc_html( $rating_value ); ?></strong> <?php esc_html_e( 'out of 5', 'multivendorx' ); ?>
                             </span>
                         </div>
-                        <span class="rating-count">(<?php echo esc_html( $review_count ); ?> <?php esc_html_e( 'Review', 'multivendorx' ); ?>)</span>
+                        <span class="rating-count">
+                            (<?php echo esc_html( $review_count ); ?> 
+                            <?php
+                            // Translators: label for single/multiple review counts.
+                            echo esc_html( _n( 'Review', 'Reviews', intval( $review_count ), 'multivendorx' ) );
+                            ?>
+                            )
+                        </span>
                     <?php endif; ?>
-                    <?php
 
-                    do_action( 'multivendorx_after_vendor_information', $store_id );
-                    ?>
+                    <?php do_action( 'multivendorx_after_vendor_information', $store_id ); ?>
                 </div>
             </div>
         </div>

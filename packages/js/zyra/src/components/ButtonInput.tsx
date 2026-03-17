@@ -140,65 +140,14 @@ export const ButtonInputUI: React.FC< ButtonInputProps > = ( {
     );
 };
 
-// export const ButtonInputUI: React.FC<ButtonInputProps> = ({
-//     buttons,
-//     wrapperClass = "",
-//     position = ""
-// }) => {
-//     const buttonsArray = Array.isArray(buttons) ? buttons : [buttons];
-
-//     const renderedButtons = buttonsArray.map((btn, index) => {
-//         const [hovered, setHovered] = useState(false);
-
-//         const styleFromBlock = btn.style ? mapBlockStyleToCustomStyle(btn.style) : {};
-//         const customStyle = {  ...styleFromBlock, ...(btn.customStyle || {}) };
-
-//         const buttonStyle: React.CSSProperties = {
-//             border: hovered
-//                 ? `${customStyle.button_border_size}px solid ${customStyle.button_border_color_onhover}`
-//                 : `${customStyle.button_border_size}px solid ${customStyle.button_border_color}`,
-//             backgroundColor: hovered
-//                 ? customStyle.button_background_color_onhover
-//                 : customStyle.button_background_color,
-//             color: hovered
-//                 ? customStyle.button_text_color_onhover
-//                 : customStyle.button_text_color,
-//             borderRadius: `${customStyle.button_border_radious}px`,
-//             fontSize: `${customStyle.button_font_size}px`,
-//             fontWeight: customStyle.button_font_width,
-//             margin: `${customStyle.button_margin}px`,
-//             padding: `${customStyle.button_padding}px`,
-//         };
-
-//         return (
-//             <button
-//                 key={index}
-//                 className={`admin-btn btn-${btn.color || 'purple-bg'}`}
-//                 onClick={btn.onClick}
-//                 disabled={btn.disabled}
-//                 onMouseEnter={() => setHovered(true)}
-//                 onMouseLeave={() => setHovered(false)}
-//                 style={buttonStyle}
-//             >
-//                 {btn.children || (
-//                     <>
-//                         {btn.icon && <i className={`adminfont-${btn.icon}`} />}
-//                         {customStyle.button_text || btn.text}
-//                     </>
-//                 )}
-//             </button>
-//         );
-//     });
-
-//     const wrapperClasses = `buttons-wrapper${wrapperClass ? ` ${wrapperClass}` : ""}`;
-
-//     return <div className={wrapperClasses} data-position={position}>{renderedButtons}</div>;
-// };
-
 const ButtonInput: FieldComponent = {
-    render: ( { field, onChange, canAccess } ) => {
-        const handleClick = () => {
-            if ( ! canAccess ) {
+    render: ({ field, onChange, canAccess }) => {
+
+         const handleClick = () => {
+            if (!canAccess) return;
+            // Redirect url
+            if (field.redirect_url) {
+                window.open(field.redirect_url, '_self');
                 return;
             }
             // REST API

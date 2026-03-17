@@ -1,4 +1,10 @@
 <?php
+/**
+ * Store Name Elementor Widget
+ *
+ * @package MultiVendorX\Elementor\Widgets
+ */
+
 namespace MultiVendorX\Elementor\Widgets;
 
 defined( 'ABSPATH' ) || exit;
@@ -6,25 +12,55 @@ defined( 'ABSPATH' ) || exit;
 use Elementor\Widget_Heading;
 use MultiVendorX\Elementor\StoreHelper;
 
+/**
+ * Store Name widget class
+ *
+ * Displays the store name in Elementor
+ */
 class Store_Name extends Widget_Heading {
     use StoreHelper;
 
+    /**
+     * Get widget name
+     *
+     * @return string
+     */
     public function get_name() {
         return 'multivendorx_store_name';
     }
 
+    /**
+     * Get widget title
+     *
+     * @return string
+     */
     public function get_title() {
         return __( 'Store Name', 'multivendorx' );
     }
 
+    /**
+     * Get widget icon
+     *
+     * @return string
+     */
     public function get_icon() {
         return 'eicon-heading';
     }
 
+    /**
+     * Get widget categories
+     *
+     * @return array
+     */
     public function get_categories() {
         return array( 'multivendorx' );
     }
 
+    /**
+     * Register widget controls
+     *
+     * @return void
+     */
     protected function register_controls() {
 
         parent::register_controls();
@@ -55,6 +91,11 @@ class Store_Name extends Widget_Heading {
         $this->remove_control( 'link' );
     }
 
+    /**
+     * Render widget output
+     *
+     * @return void
+     */
     protected function render() {
         $store = $this->get_store_data();
         if ( ! $store ) {
@@ -63,7 +104,6 @@ class Store_Name extends Widget_Heading {
 
         $settings = $this->get_settings_for_display();
 
-        // 5. Logic: Use the dynamic store name
         $name = ! empty( $store['storeName'] ) ? $store['storeName'] : $settings['title'];
 
         $tag = $settings['header_size'];

@@ -491,7 +491,7 @@ class FrontendScripts {
 									'manage_plan_url' => MULTIVENDORX_PRO_SHOP_URL,
 								)
 							),
-
+                            'placeholder_url  '      => wc_placeholder_img_src(),
                         )
                     ),
                 ),
@@ -546,6 +546,7 @@ class FrontendScripts {
                             'dimension_unit'           => get_option( Utill::WOO_SETTINGS['dimension_unit'] ),
                             'order_meta'               => Utill::ORDER_META_SETTINGS,
                             'date_format'              => Utill::wp_to_react_date_format( get_option( 'date_format' ) ),
+                            'placeholder_url  '        => wc_placeholder_img_src(),
                         )
                     ),
                 ),
@@ -589,7 +590,8 @@ class FrontendScripts {
                     'use_settings' => true,
                     'use_rest'     => true,
                     'data'         => array(
-                        'store_page_url' => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
+                        'store_page_url'  => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
+                        'placeholder_url' => wc_placeholder_img_src(),
                     ),
                 ),
                 'multivendorx-marketplace-products-editor-script' => array(
