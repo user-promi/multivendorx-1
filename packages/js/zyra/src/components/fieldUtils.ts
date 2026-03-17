@@ -22,7 +22,6 @@ export const ZyraVariable = (() => {
   } as const;
 })();
 
-
 export const CountryCodesObject = {
   AF: { name: "Afghanistan", dial_code: "+93" },
   AL: { name: "Albania", dial_code: "+355" },

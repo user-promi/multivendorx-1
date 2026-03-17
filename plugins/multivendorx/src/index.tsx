@@ -14,7 +14,7 @@ import { initializeModules } from 'zyra';
 //     document.getElementById( 'admin-main-wrapper' )
 // );
 
-initializeModules(appLocalizer, 'multivendorx', 'free', 'modules');
+initializeModules('multivendorx', 'free', 'modules');
 
 // 1. Try to mount admin panel if element is found
 const adminWrapper = document.getElementById('admin-main-wrapper');

@@ -144,10 +144,11 @@ const VisibilityToggle: React.FC<{ disabled?: boolean; onChange: (disabled: bool
         <FormGroup label="Visibility">
             <ChoiceToggleUI
                 options={[
-                    { key: 'visible', value: "Visible", label: 'Visible', },
-                    { key: 'hidden', value: "Hidden", label: 'Hidden', },
+                    { key: 'visible', value: "true", label: 'Visible', },
+                    { key: 'hidden', value: "false", label: 'Hidden', },
                 ]}
-                onChange={(label) => onChange(label)}
+                value={disabled ? "false" : "true"} // sync UI with state
+                onChange={(val) => onChange(val === "false")} // convert properly
             />
         </FormGroup>
     );
@@ -501,7 +502,7 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                                         <div className="input-wrapper">
                                             <MultiCheckBoxUI
                                                 options={[
-                                                    { key: 'required', value: "Required", label: 'Required', },
+                                                    { key: 'required', value: "required", label: 'Required', },
                                                 ]}
                                                 value={formField.required ? ['required'] : []}
                                                 onChange={(vals) => onChange('required', vals.includes('required'))}
