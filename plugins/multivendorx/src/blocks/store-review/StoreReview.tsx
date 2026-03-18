@@ -32,6 +32,7 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 }) => {
 	const [reviews, setReviews] = useState<Review[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
+	const [expandedReviews, setExpandedReviews] = useState<Record<number, boolean>>({});
 
 	useEffect(() => {
 		setLoading(true);
@@ -52,6 +53,18 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 			.finally(() => setLoading(false));
 	}, [reviewsToShow, sortOrder]);
 
+	const toggleReview = (reviewId: number) => {
+		setExpandedReviews(prev => ({
+			...prev,
+			[reviewId]: !prev[reviewId]
+		}));
+	};
+
+	const truncateContent = (content: string, maxLength: number = 150) => {
+		if (content.length <= maxLength) return content;
+		return content.substring(0, maxLength) + '...';
+	};
+
 	if (loading) {
 		return <p>{__('Loading reviews…', 'multivendorx')}</p>;
 	}
@@ -67,111 +80,132 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 			<div id="reviews" className="woocommerce-Reviews">
 				<div id="comments">
 					<ul className="wc-block-review-list wc-block-components-review-list">
-						{reviews.map((review) => (
-							<li
-								key={review.review_id}
-								className="wc-block-review-list-item__item wc-block-components-review-list-item__item wc-block-components-review-list-item__item--has-image"
-								aria-hidden="false"
-							>
-								<div className="wc-block-review-list-item__info wc-block-components-review-list-item__info">
-									<div className="wc-block-review-list-item__image wc-block-components-review-list-item__image">
-										<img
-											aria-hidden="true"
-											alt=""
-											src={review.avatar_url || StoreInfo.default_user_avatar}
-										/>
-									</div>
+						{reviews.map((review) => {
+							const isExpanded = expandedReviews[review.review_id] || false;
+							const maxLength = 20;
+							const shouldTruncate = review.review_content.length > maxLength;
+							const displayContent = isExpanded 
+								? review.review_content 
+								: truncateContent(review.review_content, maxLength);
 
-									<div className="wc-block-review-list-item__meta wc-block-components-review-list-item__meta">
-										<div
-											id={`review-${review.review_id}`}
-											aria-label={`${review.review_title || 'Review'} Rated ${review.overall_rating?.toFixed(1)} out of 5`}
-											className="wc-block-review-list-item__rating wc-block-components-review-list-item__rating"
-										>
-											<div
+							return (
+								<li
+									key={review.review_id}
+									className="wc-block-review-list-item__item wc-block-components-review-list-item__item wc-block-components-review-list-item__item--has-image"
+									aria-hidden="false"
+								>
+									<div className="wc-block-review-list-item__info wc-block-components-review-list-item__info">
+										<div className="wc-block-review-list-item__image wc-block-components-review-list-item__image">
+											<img
 												aria-hidden="true"
-												className={`wc-block-review-list-item__rating__stars wc-block-components-review-list-item__rating__stars wc-block-review-list-item__rating__stars--${Math.round(review.overall_rating)}`}
-												role="img"
+												alt=""
+												src={review.avatar_url || StoreInfo.default_user_avatar}
+											/>
+										</div>
+
+										<div className="wc-block-review-list-item__meta wc-block-components-review-list-item__meta">
+											<div
+												id={`review-${review.review_id}`}
+												aria-label={`${review.review_title || 'Review'} Rated ${review.overall_rating?.toFixed(1)} out of 5`}
+												className="wc-block-review-list-item__rating wc-block-components-review-list-item__rating"
 											>
-												<span
-													style={{
-														width: `${(review.overall_rating / 5) * 100}%`,
-													}}
+												<div
+													aria-hidden="true"
+													className={`wc-block-review-list-item__rating__stars wc-block-components-review-list-item__rating__stars wc-block-review-list-item__rating__stars--${Math.round(review.overall_rating)}`}
+													role="img"
 												>
-													{__('Rated ', 'multivendorx')}
-													<strong className="rating">
-														{review.overall_rating?.toFixed(1)}
-													</strong>
-													{__(' out of 5', 'multivendorx')}
-												</span>
+													<span
+														style={{
+															width: `${(review.overall_rating / 5) * 100}%`,
+														}}
+													>
+														{__('Rated ', 'multivendorx')}
+														<strong className="rating">
+															{review.overall_rating?.toFixed(1)}
+														</strong>
+														{__(' out of 5', 'multivendorx')}
+													</span>
+												</div>
 											</div>
-										</div>
 
-										{review.product_name && (
-											<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
-												<a
-													href={review.product_url || '#'}
-													aria-labelledby={`review-${review.review_id}`}
-												>
-													{review.product_name}
-												</a>
-											</div>
-										)}
-
-										<div className="wc-block-review-list-item__author wc-block-components-review-list-item__author">
-											{review.customer_name}
-										</div>
-
-										<time
-											className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
-											dateTime={review.date_created}
-										>
-											{new Date(review.date_created).toLocaleDateString('en-US', {
-												year: 'numeric',
-												month: 'long',
-												day: 'numeric',
-											})}
-										</time>
-									</div>
-								</div>
-
-								<div className="wc-block-review-list-item__text wc-block-components-review-list-item__text">
-									<div>
-										<div>
-											{review.review_title && (
-												<h4 className="woocommerce-review__title">
-													{review.review_title}
-												</h4>
-											)}
-
-											<p>{review.review_content}</p>
-
-											{review.images?.length > 0 && (
-												<div className="review-images">
-													{review.images.map((img, index) => (
-														<a
-															key={index}
-															href={img}
-															target="_blank"
-															rel="noopener noreferrer"
-														>
-															<img
-																src={img}
-																alt={__('Review Image', 'multivendorx')}
-																style={{
-																	maxWidth: '100px',
-																	margin: '5px',
-																}}
-															/>
-														</a>
-													))}
+											{review.product_name && (
+												<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
+													<a
+														href={review.product_url || '#'}
+														aria-labelledby={`review-${review.review_id}`}
+													>
+														{review.product_name}
+													</a>
 												</div>
 											)}
+
+											<div className="wc-block-review-list-item__author wc-block-components-review-list-item__author">
+												{review.customer_name}
+											</div>
+
+											<time
+												className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
+												dateTime={review.date_created}
+											>
+												{new Date(review.date_created).toLocaleDateString('en-US', {
+													year: 'numeric',
+													month: 'long',
+													day: 'numeric',
+												})}
+											</time>
 										</div>
 									</div>
-								</div>
-							</li>
-						))}
+
+									<div className="wc-block-review-list-item__text wc-block-components-review-list-item__text">
+										<div>
+											<div>
+												{review.review_title && (
+													<h4 className="woocommerce-review__title">
+														{review.review_title}
+													</h4>
+												)}
+
+												<div className="review-content-wrapper">
+													<p>{displayContent}</p>
+													{shouldTruncate && (
+														<span
+															onClick={() => toggleReview(review.review_id)}
+															className="read-more-button"
+														>
+															{isExpanded 
+																? __('Read less', 'multivendorx') 
+																: __('Read more', 'multivendorx')}
+														</span>
+													)}
+												</div>
+
+												{showImages && review.images?.length > 0 && (
+													<div className="review-images">
+														{review.images.map((img, index) => (
+															<a
+																key={index}
+																href={img}
+																target="_blank"
+																rel="noopener noreferrer"
+															>
+																<img
+																	src={img}
+																	alt={__('Review Image', 'multivendorx')}
+																	style={{
+																		maxWidth: '100px',
+																		margin: '5px',
+																	}}
+																/>
+															</a>
+														))}
+													</div>
+												)}
+											</div>
+										</div>
+									</div>
+								</li>
+							);
+						})}
 					</ul>
 				</div>
 			</div>
