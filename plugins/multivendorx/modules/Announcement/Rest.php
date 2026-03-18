@@ -633,7 +633,7 @@ class Rest extends \WP_REST_Controller {
 	 * @param WP_Post $post Announcement post object to prepare.
 	 * @return array Array containing announcement ID, title, content, status, store info, URL, and dates.
 	 */
-    public function prepare_item_for_response( $post ) {
+    public function prepare_item_for_response( $post, $request ) {
         $store_ids = (array) get_post_meta(
             $post->ID,
             Utill::POST_META_SETTINGS['announcement_stores'],
