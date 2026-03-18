@@ -1,3 +1,4 @@
+/* global jQuery */
 jQuery(document).ready(function ($) {
 	$('.goto_more_offer_tab').on('click', function (e) {
 		e.preventDefault();

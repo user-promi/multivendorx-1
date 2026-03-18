@@ -1,3 +1,4 @@
+/* global jQuery, review */
 jQuery(document).ready(function ($) {
 	const store_id = $('#store_for_rating').val();
 

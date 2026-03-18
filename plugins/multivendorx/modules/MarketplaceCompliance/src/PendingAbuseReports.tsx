@@ -14,6 +14,26 @@ import {
 } from 'zyra';
 import Popup from '../../../src/components/Popup/Popup';
 
+interface StoreOption {
+	label: string;
+	value: number;
+}
+// Product types
+interface Product {
+	id: number;
+	name: string;
+	image?: string;
+	sku?: string;
+}
+
+// Report Abuse types
+interface ReportAbuse {
+	id: number;
+	product?: Product;
+	email?: string;
+	reason?: string;
+	created_at?: string;
+}
 const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
 	setCount,
 }) => {
@@ -23,7 +43,7 @@ const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
 	const [rowIds, setRowIds] = useState<number[]>([]);
 	const [deleteId, setDeleteId] = useState<number | null>(null);
 	const [confirmOpen, setConfirmOpen] = useState(false);
-	const [store, setStore] = useState<any[] | null>(null);
+	const [store, setStore] = useState<StoreOption[] | null>(null);
 
 	const handleConfirmDelete = () => {
 		if (!deleteId) {
@@ -52,7 +72,7 @@ const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: any) => ({
+				const options = (response.data || []).map((store) => ({
 					label: store.store_name,
 					value: store.id,
 				}));
@@ -74,7 +94,7 @@ const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
 	const headers = {
 		product: {
 			label: __('Product', 'multivendorx'),
-			render: (row: any) => (
+			render: (row: ReportAbuse) => (
 				<InfoItem
 					title={row.product?.name}
 					titleLink={`/wp-admin/post.php?post=${row.product?.id}&action=edit`}
@@ -113,7 +133,7 @@ const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
 				{
 					label: __('Delete', 'multivendorx'),
 					icon: 'delete',
-					onClick: (row: any) => {
+					onClick: (row: ReportAbuse) => {
 						setDeleteId(row.id);
 						setConfirmOpen(true);
 					},
@@ -162,7 +182,7 @@ const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
 					? response.data
 					: [];
 
-				const ids = products.map((p: any) => p.id);
+				const ids = products.map((product) => product.id);
 				setRowIds(ids);
 
 				setRows(products);

@@ -1,50 +1,10 @@
 
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/Announcement/src/Announcements.tsx
-   24:27  error  'truncateText' is defined but never used  @typescript-eslint/no-unused-vars
-  330:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  331:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/Knowledgebase/src/Knowledgebase.tsx
-  115:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  258:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  259:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/MarketplaceCompliance/src/PendingAbuseReports.tsx
-   26:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   55:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-   77:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  116:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  165:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/QuestionAnswer/assets/js/frontend.js
-   1:1   error  'jQuery' is not defined       no-undef
-  28:4   error  'qnaFrontend' is not defined  no-undef
-  33:12  error  'qnaFrontend' is not defined  no-undef
-  60:4   error  'qnaFrontend' is not defined  no-undef
-  65:12  error  'qnaFrontend' is not defined  no-undef
-
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/QuestionAnswer/src/QnATable.tsx
-   21:27  error  'truncateText' is defined but never used  @typescript-eslint/no-unused-vars
    40:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
   103:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
   234:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
   235:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
   266:12  error  'error' is defined but never used         @typescript-eslint/no-unused-vars
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/SharedListing/assets/js/frontend.js
-  1:1  error  'jQuery' is not defined  no-undef
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/StorePolicy/assets/js/frontend.js
-  1:1  error  'jQuery' is not defined  no-undef
-
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/StoreReview/assets/js/frontend.js
-    1:1   error  'jQuery' is not defined  no-undef
-    7:4   error  'review' is not defined  no-undef
-   11:12  error  'review' is not defined  no-undef
-   77:4   error  'review' is not defined  no-undef
-   81:12  error  'review' is not defined  no-undef
-  119:28  error  'review' is not defined  no-undef
-  137:9   error  'review' is not defined  no-undef
 
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/StoreReview/src/StoreReviews.tsx
    46:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
@@ -54,8 +14,7 @@
   261:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/modules/StoreShipping/assets/js/frontend.js
-   1:1   error  'jQuery' is not defined                    no-undef
-   2:13  error  'distanceShippingFrontend' is not defined  no-undef
+   3:13  error  'distanceShippingFrontend' is not defined  no-undef
   22:20  error  'google' is not defined                    no-undef
   24:17  error  'google' is not defined                    no-undef
   29:16  error  'google' is not defined                    no-undef
@@ -883,12 +842,6 @@
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/src/metaBoxes/inventory.tsx
   12:31  error  'setProduct' is defined but never used  @typescript-eslint/no-unused-vars
 
-/opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/src/metaBoxes/productCategory.tsx
-  313:11  error  'React' is not defined  no-undef
-  337:16  error  'React' is not defined  no-undef
-  410:17  error  'React' is not defined  no-undef
-  414:12  error  'React' is not defined  no-undef
-
 /opt/dockerfolder/multivendorx-pro/multivendorx/plugins/multivendorx/src/metaBoxes/productTag.tsx
   8:23  error  'product' is defined but never used                @typescript-eslint/no-unused-vars
   8:32  error  'setProduct' is defined but never used             @typescript-eslint/no-unused-vars
@@ -946,5 +899,5 @@
   298:17  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
   401:20  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
 
-✖ 667 problems (667 errors, 0 warnings)
+✖ 636 problems (636 errors, 0 warnings)
 

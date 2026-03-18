@@ -18,7 +18,7 @@ import {
 } from 'zyra';
 
 import Popup from '../../../src/components/Popup/Popup';
-import { formatLocalDate, truncateText } from '@/services/commonFunction';
+import { formatLocalDate } from '../../../src/services/commonFunction';
 
 type StoreQnaRow = {
 	id: number;
