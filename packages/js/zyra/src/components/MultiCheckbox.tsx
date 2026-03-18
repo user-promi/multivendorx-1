@@ -14,6 +14,10 @@ interface Option {
     dependent?: string;
 }
 
+interface FieldContext {
+    rowKey?: string;
+}
+
 interface MultiCheckBoxProps {
     wrapperClass?: string;
     selectDeselect?: boolean;
@@ -31,7 +35,7 @@ interface MultiCheckBoxProps {
     onOptionsChange?: ( options: Option[] ) => void;
     onBlocked?: ( type: 'pro' | 'module', payload?: string ) => void;
     modules: string[];
-    field?: any;
+    field?: FieldContext;
 }
 
 function isBlocked(
