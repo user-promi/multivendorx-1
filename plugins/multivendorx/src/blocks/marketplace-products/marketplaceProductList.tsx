@@ -80,6 +80,8 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 			{loading ? (
 				<p>{__('Loading products...', 'multivendorx')}</p>
 			) : (
+				<>
+				<h3>{__('Products', 'multivendorx')}</h3>
 				<div className="woocommerce">
 					<ul className="product_list_widget">
 						{products.length > 0 ? (
@@ -132,6 +134,7 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 						)}
 					</ul>
 				</div>
+				</>
 			)}
 		</>
 	);
