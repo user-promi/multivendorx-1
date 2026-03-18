@@ -187,9 +187,8 @@ const StoreReport: React.FC = () => {
 	const headers = {
 		store_name: { 
 			label: __('Store', 'multivendorx') ,
+			type: 'info-item',
 			render: (row: any) => (
-				<>
-				{console.log(row)}
 				<InfoItem
 					title={row.store_name}
 					titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
@@ -204,11 +203,11 @@ const StoreReport: React.FC = () => {
 						},
 					]}
 				/>
-				</>
 			),
 		},
 		primary_owner: {
 			key: 'primary_owner',
+			type: 'info-item',
 			label: __('Primary Owner', 'multivendorx'),
 			render: (row: any) => (
 				<>

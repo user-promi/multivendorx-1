@@ -6,9 +6,11 @@
     margin: 1.5rem 0;
     justify-content: space-between;
 }
-.table-card-header{
+
+.table-card-header {
     padding-top: 2rem;
 }
+
 .table-filter-wrapper {
     display: flex;
     border-radius: $border-radius-small;
@@ -218,15 +220,6 @@
                     padding-right: 0;
                 }
 
-                &.action {
-                    flex-grow: 0;
-                    min-width: 5rem;
-                }
-
-                &.notificaton {
-                    min-width: 65%;
-                }
-
                 &.sortable {
                     cursor: pointer;
                 }
@@ -342,8 +335,9 @@
                         background: transparent;
                         border-color: transparent;
                     }
+
                     // for editable field
-                    .setting-form-input{
+                    .setting-form-input {
                         width: fit-content;
                     }
 
@@ -352,15 +346,6 @@
                         max-width: 2rem;
                         padding-right: 0;
                         flex-grow: 1;
-                    }
-
-                    &.actions {
-                        flex-grow: 0;
-                        min-width: 5rem;
-                    }
-
-                    &.notificaton {
-                        min-width: 65%;
                     }
 
                     &.product {
@@ -520,22 +505,38 @@
             }
         }
 
-        .question {
-            flex-grow: 0;
-            min-width: 18rem;
-
-            .question-wrapper {
-                .question {
-                    font-size: 1.063rem;
-                    font-weight: 500;
-                }
-
-                .answer {
-                    line-height: 1.125rem;
-                    padding: 0.45rem 0;
-                    color: $sub-text-color;
-                }
+        // .question {
+        //     flex-grow: 0;
+        //     min-width: 18rem;
+        // }
+        .question-wrapper {
+            .question {
+                font-size: 1.063rem;
+                font-weight: 500;
             }
+
+            .answer {
+                line-height: 1.125rem;
+                padding: 0.45rem 0;
+                color: $sub-text-color;
+            }
+        }
+
+        // header and coloumn common style
+        .header-col,
+        .admin-column {
+            &.info-item {
+                min-width: 12rem;
+            }
+
+            &.actions {
+                flex-grow: 0;
+                min-width: 5rem;
+            }
+
+            &.notificaton {
+                    min-width: 65%;
+                }
         }
     }
 }
@@ -653,28 +654,43 @@
     color: map-get(map-get($color-palette, blue), color);
     background: map-get(map-get($color-palette, blue), light-color);
 }
-.badge-rejected, .badge-unpaid, .badge-cancelled, .badge-failed, .badge-expired{
+
+.badge-rejected,
+.badge-unpaid,
+.badge-cancelled,
+.badge-failed,
+.badge-expired {
     color: map-get(map-get($color-palette, red), color);
     background: map-get(map-get($color-palette, red), light-color);
 }
-.badge-suspended{
+
+.badge-suspended {
     color: map-get(map-get($color-palette, teal), color);
     background: map-get(map-get($color-palette, teal), light-color);
 }
-.badge-refunded, .badge-processed, .badge-processing{
+
+.badge-refunded,
+.badge-processed,
+.badge-processing,
+.badge-refund-requested {
     color: map-get(map-get($color-palette, orange), color);
     background: map-get(map-get($color-palette, orange), light-color);
 }
-.badge-locked{
+
+.badge-locked {
     color: map-get(map-get($color-palette, purple), color);
     background: map-get(map-get($color-palette, purple), light-color);
 }
-.badge-deactivated{
+
+.badge-deactivated {
     color: map-get(map-get($color-palette, indigo), color);
     background: map-get(map-get($color-palette, indigo), light-color);
 }
-.badge-permanently_rejected, .badge-inactive{
+
+.badge-permanently_rejected,
+.badge-inactive {
     color: map-get(map-get($color-palette, pink), color);
     background: map-get(map-get($color-palette, pink), light-color);
 }
+
 // status color end

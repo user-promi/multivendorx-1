@@ -14,6 +14,7 @@ import {
 	TableRow,
 	QueryProps,
 	CategoryCount,
+	InfoItem,
 } from 'zyra';
 import Popup from '../../../src/components/Popup/Popup';
 import { formatLocalDate } from '@/services/commonFunction';

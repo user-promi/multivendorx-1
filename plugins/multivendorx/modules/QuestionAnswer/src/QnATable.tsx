@@ -15,6 +15,7 @@ import {
 	TableRow,
 	QueryProps,
 	CategoryCount,
+	InfoItem,
 } from 'zyra';
 
 import Popup from '../../../src/components/Popup/Popup';
@@ -144,12 +145,32 @@ const Qna: React.FC = () => {
 	const headers = {
 		product_name: {
 			label: __('Product', 'multivendorx'),
+			render: (row: any) => (
+				<InfoItem
+					title={row.product_name}
+					titleLink={row.product_link}
+					avatar={{
+						image: row.product_image,
+						iconClass: row.product_image ? '' : 'single-product',
+					}}
+					descriptions={[
+						{
+							label: __('By', 'multivendorx'),
+							value: row.store_name,
+						},
+					]}
+				/>
+			),
 		},
 		question_text: {
 			label: __('Question', 'multivendorx'),
-		},
-		answer_text: {
-			label: __('Ans', 'multivendorx'),
+			render: (row: any) => (
+				<div className="question-wrapper">
+					<div className="question">Q: {row.question_text}</div>
+					<div className="answer">A: {row.answer_text}</div>
+					<div className="desc">By {row.author_name}</div>
+				</div>
+			)
 		},
 		question_date: {
 			label: __('Date', 'multivendorx'),
@@ -160,6 +181,7 @@ const Qna: React.FC = () => {
 		},
 		question_visibility: {
 			label: __('Visibility', 'multivendorx'),
+			type: 'status'
 		},
 		action: {
 			type: 'action',
@@ -284,9 +306,9 @@ const Qna: React.FC = () => {
 					confirmMessage={
 						selectedQn
 							? __(
-									'Are you sure you want to delete Question?',
-									'multivendorx'
-								)
+								'Are you sure you want to delete Question?',
+								'multivendorx'
+							)
 							: ''
 					}
 					confirmYesText={__('Delete', 'multivendorx')}
@@ -306,7 +328,6 @@ const Qna: React.FC = () => {
 				onQueryUpdate={doRefreshTableData}
 				ids={rowIds}
 				categoryCounts={categoryCounts}
-				search={{}}
 				filters={filters}
 				format={appLocalizer.date_format}
 			/>
@@ -390,9 +411,9 @@ const Qna: React.FC = () => {
 									setSelectedQna((prev) =>
 										prev
 											? {
-													...prev,
-													question_visibility: value,
-												}
+												...prev,
+												question_visibility: value,
+											}
 											: prev
 									)
 								}
