@@ -113,9 +113,11 @@ const Modules: React.FC< ModuleProps > = ( {
 
         const action = event.length > 0 ? 'activate' : 'deactivate';
 
-        action === 'activate'
-            ? insertModule?.( module.id )
-            : removeModule?.( module.id );
+        if ( action === 'activate' ) {
+            insertModule?.( module.id );
+        } else {
+            removeModule?.( module.id );
+        }
 
         localStorage.setItem( `force_${ pluginName }_context_reload`, 'true' );
 

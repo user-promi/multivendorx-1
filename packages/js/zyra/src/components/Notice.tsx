@@ -42,9 +42,11 @@ const persist = () => {
     const persistable = noticeQueue.filter(
         ( n ) => typeof n.expiresAt === 'number'
     );
-    persistable.length === 0
-        ? localStorage.removeItem( STORAGE_KEY )
-        : localStorage.setItem( STORAGE_KEY, JSON.stringify( persistable ) );
+    if ( persistable.length === 0 ) {
+        localStorage.removeItem( STORAGE_KEY );
+    } else {
+        localStorage.setItem( STORAGE_KEY, JSON.stringify( persistable ) );
+    }
 };
 
 const broadcast = () => {

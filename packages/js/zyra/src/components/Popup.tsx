@@ -71,7 +71,11 @@ export const PopupUI = forwardRef< HTMLDivElement, PopupProps >(
 
         const handleToggle = ( e: React.MouseEvent ) => {
             e.stopPropagation();
-            open ? handleClose() : handleOpen();
+            if ( open ) {
+                handleClose();
+            } else {
+                handleOpen();
+            }
         };
 
         useOutsideClick( wrapperRef, () => {

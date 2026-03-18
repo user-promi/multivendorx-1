@@ -109,7 +109,7 @@ export const renderCell = (
                     ? parts.join( decimalSeparator ?? '.' )
                     : parts[ 0 ];
 
-            let finalValue = formattedNumber;
+            let finalValue: string;
             if ( 'left' === currencyPosition ) {
                 finalValue = `${ currencySymbol }${ formattedNumber }`;
             } else if ( 'left_space' === currencyPosition ) {
