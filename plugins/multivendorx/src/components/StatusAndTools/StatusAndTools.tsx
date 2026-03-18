@@ -1,4 +1,4 @@
-// /* global appLocalizer */
+/* global appLocalizer */
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
 // Context

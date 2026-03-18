@@ -1,37 +1,43 @@
 <?php
+/**
+ * Vonage (Nexmo) SMS Gateway.
+ *
+ * Handles sending SMS messages via Vonage/Nexmo API.
+ *
+ * @package MultiVendorX
+ * @see https://developer.nexmo.com/api/sms
+ */
 
 namespace MultiVendorX\Notifications\Gateways;
 
 use WP_Error;
 
 /**
- * Nexmo Class
- *
- * @see https://developer.nexmo.com/api/sms
+ * Vonage SMS Gateway Class.
  */
 class Vonage {
 
     /**
-     * API Endpoint
+     * API Endpoint.
      */
     const ENDPOINT = 'https://rest.nexmo.com';
 
     /**
-     * Get the name
+     * Get the gateway name.
      *
-     * @return string
+     * @return string Gateway name.
      */
     public function name() {
         return __( 'Vonage (nexmo)', 'multivendorx' );
     }
 
     /**
-     * Send SMS
+     * Send SMS via Vonage/Nexmo.
      *
-     * @param string $to
-     * @param string $message
+     * @param string $to      Recipient phone number in international format.
+     * @param string $message SMS message content.
      *
-     * @return WP_Error|bool
+     * @return true|WP_Error True on success, WP_Error on failure.
      */
     public function send( $to, $message ) {
         $api_key     = MultiVendorX()->setting->get_setting( 'vonage_api_key' );
@@ -50,18 +56,28 @@ class Vonage {
         );
 
         $request = wp_remote_post( self::ENDPOINT . '/sms/json', $args );
-        $body    = json_decode( wp_remote_retrieve_body( $request ) );
 
         if ( is_wp_error( $request ) ) {
             return $request;
         }
 
-        if ( $body->messages[0]->status !== '0' ) {
+        $body = json_decode( wp_remote_retrieve_body( $request ) );
+
+        // Validate response structure.
+        if ( empty( $body->messages ) || ! isset( $body->messages[0]->status ) ) {
             return new WP_Error(
-                $body->messages[0]->status,
-                $body->messages[0]->{'error-text'}
+                'invalid_response',
+                __( 'Invalid API response from Vonage.', 'multivendorx' )
             );
         }
+
+		if ( '0' !== $body->messages[0]->status ) {
+            return new WP_Error(
+                $body->messages[0]->status ?? 'unknown',
+                $body->messages[0]->{'error-text'} ?? __( 'Unknown error', 'multivendorx' )
+			);
+        }
+
         return true;
     }
 }

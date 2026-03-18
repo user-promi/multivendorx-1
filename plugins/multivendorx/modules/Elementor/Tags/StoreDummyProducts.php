@@ -1,26 +1,37 @@
 <?php
+/**
+ * Elementor Dynamic Tag: Store Dummy Products
+ *
+ * Provides a dummy product listing for Elementor dynamic tags.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\Elementor\Tags;
 
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
 
+/**
+ * StoreDummyProducts Dynamic Tag.
+ *
+ * Displays 12 WooCommerce products using shortcode.
+ */
 class StoreDummyProducts extends Tag {
 
     /**
-     * Class constructor
+     * Constructor.
      *
-     * @since 1.0.0
+     * @param array $data Optional tag data.
      *
-     * @param array $data
+     * @phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
      */
     public function __construct( $data = array() ) {
         parent::__construct( $data );
     }
 
     /**
-     * Tag name
-     *
-     * @since 1.0.0
+     * Tag name (unique identifier).
      *
      * @return string
      */
@@ -29,9 +40,7 @@ class StoreDummyProducts extends Tag {
     }
 
     /**
-     * Tag title
-     *
-     * @since 1.0.0
+     * Tag title (display name).
      *
      * @return string
      */
@@ -39,19 +48,26 @@ class StoreDummyProducts extends Tag {
         return __( 'Store Dummy Products', 'multivendorx' );
     }
 
+    /**
+     * Tag group ID.
+     *
+     * @return string
+     */
     public function get_group() {
-        return 'multivendorx'; // must match group ID
+        return 'multivendorx';
     }
 
+    /**
+     * Tag categories.
+     *
+     * @return array
+     */
     public function get_categories() {
         return array( Module::TEXT_CATEGORY );
     }
 
-
     /**
-     * Render tag
-     *
-     * @since 1.0.0
+     * Render tag output.
      *
      * @return void
      */

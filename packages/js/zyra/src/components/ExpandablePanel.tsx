@@ -1,4 +1,5 @@
 import React, {
+    JSX,
     useEffect,
     useRef,
     useReducer,
@@ -115,6 +116,12 @@ type PanelAction =
     | { type: 'ADD_METHOD'; method: ExpandablePanelMethod }
     | { type: 'DELETE_METHOD'; id: string };
 
+type DependentField = {
+    key: string;
+    set?: boolean;
+    value?: string | number | boolean;
+};
+
 // ── Context Types ─────────────────────────────────────────────────────────────
 
 interface PanelContextType {
@@ -123,12 +130,12 @@ interface PanelContextType {
     value: Record< string, Record< string, unknown > >;
     isWizardMode: boolean;
     canAccess: boolean;
-    appLocalizer: { [ key: string ]: string | number | boolean };
     addNewTemplate?: AddNewTemplate;
     tplFields: PanelFormField[];
     titleRef: React.RefObject< HTMLInputElement >;
     descRef: React.RefObject< HTMLTextAreaElement >;
     iconPicker: React.RefObject< HTMLDivElement >;
+    dependent?: DependentField | DependentField[];
     handleChange: ( methodId: string, key: string, val: unknown ) => void;
     handleDelete: ( methodId: string ) => void;
     canDelete: () => boolean;
@@ -137,7 +144,7 @@ interface PanelContextType {
         field: PanelFormField
     ) => JSX.Element | null;
     commitEdit: () => void;
-    shouldRender: ( dependent: any, methodId: string ) => boolean;
+    shouldRender: ( dependent: DependentField, methodId: string ) => boolean;
 }
 
 interface PanelItemContextType {
@@ -1064,7 +1071,10 @@ export const ExpandablePanelUI: React.FC< ExpandablePanelProps > = ( {
         return settingValue === valuee;
     };
 
-    const shouldRender = ( dependent: any, methodId: string ): boolean => {
+    const shouldRender = (
+        dependent: DependentField,
+        methodId: string
+    ): boolean => {
         if (
             dependent.set === true &&
             ! isContain( dependent.key, methodId )
@@ -1180,7 +1190,6 @@ export const ExpandablePanelUI: React.FC< ExpandablePanelProps > = ( {
                     value={ fieldVal }
                     onChange={ onChangeF }
                     canAccess={ canAccess }
-                    // appLocalizer={appLocalizer}
                 />
             );
         },
@@ -1419,12 +1428,11 @@ export const ExpandablePanelUI: React.FC< ExpandablePanelProps > = ( {
 // ── FieldComponent wrapper ────────────────────────────────────────────────────
 
 const ExpandablePanel: FieldComponent = {
-    render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
+    render: ( { field, value, onChange, canAccess } ) => (
         <ExpandablePanelUI
             key={ field.key }
             name={ field.key }
             apilink={ String( field.apiLink ) }
-            // appLocalizer={appLocalizer}
             methods={ field.modal ?? [] }
             addNewBtn={ field.addNewBtn }
             addNewTemplate={ field.addNewTemplate }

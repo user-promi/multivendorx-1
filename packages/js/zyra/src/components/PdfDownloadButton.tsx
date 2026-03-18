@@ -2,19 +2,19 @@
 import React from 'react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 
-interface PdfDownloadButtonProps {
-    PdfComponent: React.FC< any >;
+interface PdfDownloadButtonProps< T extends Record< string, unknown > > {
+    PdfComponent: React.ComponentType< T >;
     fileName: string;
-    data?: any;
+    data?: T;
 }
 
-const PdfDownloadButton: React.FC< PdfDownloadButtonProps > = ( {
+const PdfDownloadButton = < T extends object = Record< string, unknown > >( {
     PdfComponent,
     fileName,
     data,
-} ) => (
+}: PdfDownloadButtonProps< T > ) => (
     <PDFDownloadLink
-        document={ <PdfComponent { ...data } /> }
+        document={ <PdfComponent { ...( data ?? ( {} as T ) ) } /> }
         fileName={ fileName }
     >
         { ( { loading } ) => ( loading ? 'Generating PDF…' : 'Download PDF' ) }

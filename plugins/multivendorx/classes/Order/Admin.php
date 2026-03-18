@@ -114,76 +114,76 @@ class Admin {
         return $actions;
     }
 
-    /**
-     * Regenerate order commissions
-     *
-     * @param  object $order Order object.
-     */
-    public function regenerate_order_commissions( $order ) {
-        global $wpdb;
-        if ( ! $order->get_parent_id() ) {
-            return;
-        }
+	/**
+	 * Regenerate order commissions
+	 *
+	 * @param  object $order Order object.
+	 */
+	public function regenerate_order_commissions( $order ) {
+		global $wpdb;
+		if ( ! $order->get_parent_id() ) {
+			return;
+		}
 
-        $commission_id = $order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true ) ?? '';
+		$commission_id = $order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true ) ?? '';
 
-        if ( ! in_array( $order->get_status(), apply_filters( 'mvx_regenerate_order_commissions_statuses', array( 'on-hold', 'pending', 'processing', 'completed' ), $order ), true ) ) {
-            return;
-        }
+		if ( ! in_array( $order->get_status(), apply_filters( 'mvx_regenerate_order_commissions_statuses', array( 'on-hold', 'pending', 'processing', 'completed' ), $order ), true ) ) {
+			return;
+		}
 
-        $order->delete_meta_data( Utill::ORDER_META_SETTINGS['commissions_processed'] );
+		$order->delete_meta_data( Utill::ORDER_META_SETTINGS['commissions_processed'] );
 
-        $regenerate_commission_id = MultiVendorX()->commission->calculate_commission( $order, $commission_id );
+		$regenerate_commission_id = MultiVendorX()->commission->calculate_commission( $order, $commission_id );
 
-        $order->update_meta_data( Utill::ORDER_META_SETTINGS['commission_id'], $regenerate_commission_id );
-        $order->update_meta_data( Utill::ORDER_META_SETTINGS['commissions_processed'], 'yes' );
-        $order->save();
+		$order->update_meta_data( Utill::ORDER_META_SETTINGS['commission_id'], $regenerate_commission_id );
+		$order->update_meta_data( Utill::ORDER_META_SETTINGS['commissions_processed'], 'yes' );
+		$order->save();
 
-        $commission = CommissionUtil::get_commission_db( $regenerate_commission_id );
+		$commission = CommissionUtil::get_commission_db( $regenerate_commission_id );
 
-        if ( 'unpaid' !== $commission->status ) {
-            $row = $wpdb->get_row(
+		if ( 'unpaid' !== $commission->status ) {
+			$row = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $wpdb->prepare(
                     "SELECT *
-                            FROM $wpdb->prefix . Utill::TABLES['transaction']
-                            WHERE commission_id = %d",
+                        FROM $wpdb->prefix . Utill::TABLES['transaction']
+                        WHERE commission_id = %d",
                     $regenerate_commission_id
                 )
-            );
+			);
 
-            $wpdb->insert(
-                $wpdb->prefix . Utill::TABLES['transaction'],
-                array(
-                    'store_id'         => $row->store_id,
-                    'entry_type'       => 'Dr',
-                    'transaction_type' => 'Reversed',
-                    'amount'           => $row->amount,
-                    'currency'         => $row->currency,
-                    'narration'        => 'Transaction Reversed',
-                    'status'           => 'Completed',
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$wpdb->prefix . Utill::TABLES['transaction'],
+				array(
+					'store_id'         => $row->store_id,
+					'entry_type'       => 'Dr',
+					'transaction_type' => 'Reversed',
+					'amount'           => $row->amount,
+					'currency'         => $row->currency,
+					'narration'        => 'Transaction Reversed',
+					'status'           => 'Completed',
                 ),
                 array( '%d', '%s', '%s', '%f', '%s', '%s', '%s' )
-            );
+			);
 
-            $wpdb->insert(
-                $wpdb->prefix . Utill::TABLES['transaction'],
-                array(
-                    'store_id'         => $row->store_id,
-                    'entry_type'       => 'Cr',
-                    'transaction_type' => 'Commission',
-                    'amount'           => $commission->store_payable,
-                    'currency'         => $row->currency,
-                    'narration'        => 'Regeneate Commission received for order ' . $order->get_id(),
-                    'status'           => 'Completed',
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$wpdb->prefix . Utill::TABLES['transaction'],
+				array(
+					'store_id'         => $row->store_id,
+					'entry_type'       => 'Cr',
+					'transaction_type' => 'Commission',
+					'amount'           => $commission->store_payable,
+					'currency'         => $row->currency,
+					'narration'        => 'Regeneate Commission received for order ' . $order->get_id(),
+					'status'           => 'Completed',
                 ),
                 array( '%d', '%s', '%s', '%f', '%s', '%s', '%s' )
-            );
+			);
 
-            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-            }
-        }
-    }
+			if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+				MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+			}
+		}
+	}
 
     /**
      * Regenerate suborders

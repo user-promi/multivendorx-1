@@ -579,7 +579,7 @@ registerBlockType('multivendorx/store-banner', {
 			flexDirection: 'column',
 			padding: '40px',
 			color: contentColor,
-			backgroundImage: url('')
+			backgroundImage: url(''),
 		};
 
 		return (
@@ -608,8 +608,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (window.StoreInfo?.storeDetails) {
 		const bannerUrl = window.StoreInfo.storeDetails.storeBanner;
 
-		document.querySelectorAll('.multivendorx-store-banner').forEach((el) => {
-			if (bannerUrl) el.style.backgroundImage = `url(${bannerUrl})`;
-		});
+		document
+			.querySelectorAll('.multivendorx-store-banner')
+			.forEach((el) => {
+				if (bannerUrl) {
+					el.style.backgroundImage = `url(${bannerUrl})`;
+				}
+			});
 	}
 });

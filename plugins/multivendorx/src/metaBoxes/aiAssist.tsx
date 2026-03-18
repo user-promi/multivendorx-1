@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import React, { useState, useEffect } from 'react';
 import { addFilter } from '@wordpress/hooks';
 import { ButtonInputUI, Card, getApiLink } from 'zyra';

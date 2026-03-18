@@ -35,10 +35,19 @@ class Cron {
             wp_schedule_event( time(), 'daily', 'multivendorx_clear_notifications' );
         }
 
-        // This is add for testing
+        // This is add for testing.
         add_filter( 'multivendorx_system_events', array( $this, 'add_new_event' ), 10 );
     }
-
+	/**
+	 * Add a custom event to the existing events array.
+	 *
+	 * Merges a new event configuration into the provided array
+	 * of existing events. The event includes settings for admin,
+	 * store, email, SMS, and system messages.
+	 *
+	 * @param array $existing Existing events array.
+	 * @return array Modified events array including the new custom event.
+	 */
     public function add_new_event( $existing ) {
         $new = array(
             'add_custom_event' => array(

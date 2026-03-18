@@ -1,4 +1,12 @@
 <?php
+/**
+ * MultiVendorX Block Pattern Loader
+ *
+ * Dynamically registers all block patterns from the classes/Patterns directory.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX;
 
 defined( 'ABSPATH' ) || exit;
@@ -51,7 +59,7 @@ class Pattern {
             return;
         }
 
-        // IMPORTANT: filesystem path, not URL
+        // IMPORTANT: filesystem path, not URL.
         $pattern_dir = trailingslashit( MultiVendorX()->plugin_path ) . 'classes/Patterns/';
 
         if ( ! is_dir( $pattern_dir ) ) {

@@ -1,14 +1,14 @@
+/* global appLocalizer */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, TableCard } from 'zyra';
+import { getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
 
 import {
 	downloadCSV,
 	formatLocalDate,
 	toWcIsoDate,
 } from '../../services/commonFunction';
-import { QueryProps, TableRow } from '@/services/type';
 
 const OrderReport: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);

@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import React, { useState, useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
 import {

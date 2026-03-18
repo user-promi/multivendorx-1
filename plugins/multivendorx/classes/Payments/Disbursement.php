@@ -35,15 +35,17 @@ class Disbursement {
         global $wpdb;
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
 
-        $results = $wpdb->get_results(
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $results = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             "SELECT * FROM {$table}
             WHERE status = 'Upcoming'
             AND available_at IS NOT NULL
             AND available_at < NOW()"
         );
+        // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
         foreach ( $results as $row ) {
-            $wpdb->update(
+            $wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $table,
                 array( 'status' => 'Processed' ),
                 array( 'id' => $row->id ),
@@ -51,7 +53,7 @@ class Disbursement {
                 array( '%d' )
             );
 
-            $wpdb->insert(
+            $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $table,
                 array(
                     'store_id'         => $row->store_id,
@@ -86,11 +88,13 @@ class Disbursement {
         global $wpdb;
         $table = $wpdb->prefix . Utill::TABLES['transaction'];
 
-        $results = $wpdb->get_results(
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $results = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             "
             SELECT store_id, balance FROM {$table} WHERE id IN ( SELECT MAX(id) FROM {$table} GROUP BY store_id );
         "
         );
+        // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
         if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
             MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );

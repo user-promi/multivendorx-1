@@ -14,6 +14,10 @@ interface Option {
     dependent?: string;
 }
 
+interface FieldContext {
+    rowKey?: string;
+}
+
 interface MultiCheckBoxProps {
     wrapperClass?: string;
     selectDeselect?: boolean;
@@ -31,7 +35,7 @@ interface MultiCheckBoxProps {
     onOptionsChange?: ( options: Option[] ) => void;
     onBlocked?: ( type: 'pro' | 'module', payload?: string ) => void;
     modules: string[];
-    field?: any;
+    field?: FieldContext;
 }
 
 function isBlocked(
@@ -416,7 +420,6 @@ const MultiCheckBox: FieldComponent = {
         value,
         onChange,
         canAccess,
-        appLocalizer,
         modules,
         settings,
         onOptionsChange,
@@ -462,7 +465,6 @@ const MultiCheckBox: FieldComponent = {
                 addNewBtn={ field.addNewBtnText }
                 options={ normalizedOptions }
                 value={ normalizedValue }
-                // appLocalizer={appLocalizer}
                 modules={ modules }
                 field={ field }
                 onChange={ ( val ) => {

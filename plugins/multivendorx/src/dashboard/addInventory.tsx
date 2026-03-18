@@ -1,6 +1,5 @@
+/* global appLocalizer */
 import {
-	ButtonInputUI,
-	Analytics,
 	BasicInputUI,
 	Card,
 	Column,

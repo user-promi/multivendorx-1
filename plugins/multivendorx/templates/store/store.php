@@ -46,7 +46,7 @@ $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array
     </header>
     
     <?php
-    // Tabs and content with sidebar - now handled in store-tabs.php
+    // Tabs and content with sidebar - now handled in store-tabs.php.
     MultiVendorX()->util->get_template( 'store/store-tabs.php', array( 'store_id' => $store_id ) );
     ?>
 

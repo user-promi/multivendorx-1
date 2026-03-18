@@ -32,7 +32,9 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 }) => {
 	const [reviews, setReviews] = useState<Review[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
-	const [expandedReviews, setExpandedReviews] = useState<Record<number, boolean>>({});
+	const [expandedReviews, setExpandedReviews] = useState<
+		Record<number, boolean>
+	>({});
 
 	useEffect(() => {
 		setLoading(true);
@@ -54,14 +56,16 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 	}, [reviewsToShow, sortOrder]);
 
 	const toggleReview = (reviewId: number) => {
-		setExpandedReviews(prev => ({
+		setExpandedReviews((prev) => ({
 			...prev,
-			[reviewId]: !prev[reviewId]
+			[reviewId]: !prev[reviewId],
 		}));
 	};
 
 	const truncateContent = (content: string, maxLength: number = 150) => {
-		if (content.length <= maxLength) return content;
+		if (content.length <= maxLength) {
+			return content;
+		}
 		return content.substring(0, maxLength) + '...';
 	};
 
@@ -81,12 +85,17 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 				<div id="comments">
 					<ul className="wc-block-review-list wc-block-components-review-list">
 						{reviews.map((review) => {
-							const isExpanded = expandedReviews[review.review_id] || false;
+							const isExpanded =
+								expandedReviews[review.review_id] || false;
 							const maxLength = 20;
-							const shouldTruncate = review.review_content.length > maxLength;
-							const displayContent = isExpanded 
-								? review.review_content 
-								: truncateContent(review.review_content, maxLength);
+							const shouldTruncate =
+								review.review_content.length > maxLength;
+							const displayContent = isExpanded
+								? review.review_content
+								: truncateContent(
+										review.review_content,
+										maxLength
+									);
 
 							return (
 								<li
@@ -99,7 +108,10 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 											<img
 												aria-hidden="true"
 												alt=""
-												src={review.avatar_url || StoreInfo.default_user_avatar}
+												src={
+													review.avatar_url ||
+													StoreInfo.default_user_avatar
+												}
 											/>
 										</div>
 
@@ -119,11 +131,19 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 															width: `${(review.overall_rating / 5) * 100}%`,
 														}}
 													>
-														{__('Rated ', 'multivendorx')}
+														{__(
+															'Rated ',
+															'multivendorx'
+														)}
 														<strong className="rating">
-															{review.overall_rating?.toFixed(1)}
+															{review.overall_rating?.toFixed(
+																1
+															)}
 														</strong>
-														{__(' out of 5', 'multivendorx')}
+														{__(
+															' out of 5',
+															'multivendorx'
+														)}
 													</span>
 												</div>
 											</div>
@@ -131,7 +151,10 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 											{review.product_name && (
 												<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
 													<a
-														href={review.product_url || '#'}
+														href={
+															review.product_url ||
+															'#'
+														}
 														aria-labelledby={`review-${review.review_id}`}
 													>
 														{review.product_name}
@@ -147,7 +170,9 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 												className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
 												dateTime={review.date_created}
 											>
-												{new Date(review.date_created).toLocaleDateString('en-US', {
+												{new Date(
+													review.date_created
+												).toLocaleDateString('en-US', {
 													year: 'numeric',
 													month: 'long',
 													day: 'numeric',
@@ -169,37 +194,64 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 													<p>{displayContent}</p>
 													{shouldTruncate && (
 														<span
-															onClick={() => toggleReview(review.review_id)}
+															onClick={() =>
+																toggleReview(
+																	review.review_id
+																)
+															}
 															className="read-more-button"
 														>
-															{isExpanded 
-																? __('Read less', 'multivendorx') 
-																: __('Read more', 'multivendorx')}
+															{isExpanded
+																? __(
+																		'Read less',
+																		'multivendorx'
+																	)
+																: __(
+																		'Read more',
+																		'multivendorx'
+																	)}
 														</span>
 													)}
 												</div>
 
-												{showImages && review.images?.length > 0 && (
-													<div className="review-images">
-														{review.images.map((img, index) => (
-															<a
-																key={index}
-																href={img}
-																target="_blank"
-																rel="noopener noreferrer"
-															>
-																<img
-																	src={img}
-																	alt={__('Review Image', 'multivendorx')}
-																	style={{
-																		maxWidth: '100px',
-																		margin: '5px',
-																	}}
-																/>
-															</a>
-														))}
-													</div>
-												)}
+												{showImages &&
+													review.images?.length >
+														0 && (
+														<div className="review-images">
+															{review.images.map(
+																(
+																	img,
+																	index
+																) => (
+																	<a
+																		key={
+																			index
+																		}
+																		href={
+																			img
+																		}
+																		target="_blank"
+																		rel="noopener noreferrer"
+																	>
+																		<img
+																			src={
+																				img
+																			}
+																			alt={__(
+																				'Review Image',
+																				'multivendorx'
+																			)}
+																			style={{
+																				maxWidth:
+																					'100px',
+																				margin: '5px',
+																			}}
+																		/>
+																	</a>
+																)
+															)}
+														</div>
+													)}
 											</div>
 										</div>
 									</div>

@@ -100,8 +100,8 @@ const Commission: React.FC = () => {
 								'tax_amount',
 								'gateway_fee',
 								'marketplace_commission',
-								'store_discount', 
-								'admin_discount'
+								'store_discount',
+								'admin_discount',
 							].includes(key)
 						)
 						.map(([key, val]) => ({

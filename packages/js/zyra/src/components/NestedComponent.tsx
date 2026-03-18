@@ -178,7 +178,7 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
         const Render = fieldComponent.render;
         const fieldValue = row?.[ field.key ];
 
-        const handleInternalChange = ( val: any ) => {
+        const handleInternalChange = ( val: RowType[ string ] ) => {
             handleChange( rowIndex, field.key, val );
             return;
         };
@@ -208,7 +208,7 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
                         single ? '' : 'multiple'
                     } ${ wrapperClass }` }
                 >
-                    { fields.map( ( field, fieldIndex ) => {
+                    { fields.map( ( field ) => {
                         if ( rowIndex === 0 && field.skipFirstRow ) {
                             return null;
                         }
@@ -278,7 +278,7 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
 };
 
 const NestedComponent: FieldComponent = {
-    render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
+    render: ( { field, value, onChange, canAccess } ) => (
         <NestedComponentUI
             key={ field.key }
             id={ field.key }
@@ -296,11 +296,10 @@ const NestedComponent: FieldComponent = {
                 onChange( val );
             } }
             canAccess={ canAccess }
-            // appLocalizer={appLocalizer}
         />
     ),
 
-    validate: ( field, value ) => {
+    validate: () => {
         return null;
     },
 };

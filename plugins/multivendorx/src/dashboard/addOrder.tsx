@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { useEffect, useRef, useState } from 'react';
 import {
 	TableRow,

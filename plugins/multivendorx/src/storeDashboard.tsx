@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { useEffect, useState, useMemo, useRef } from 'react';
 import axios from 'axios';
 import {

@@ -25,15 +25,15 @@ interface SequentialTaskExecutorProps {
     failureMessage?: string;
     tasks: Task[];
     onComplete?: () => void;
-    onError?: ( error: any ) => void;
-    onTaskComplete?: ( task: Task, response: any ) => void;
+    onError?: ( error: unknown ) => void;
+    onTaskComplete?: ( task: Task, response: unknown ) => void;
 }
 
 interface DynamicResponse {
     success: boolean;
-    data?: any;
+    data?: unknown;
     message?: string;
-    [ key: string ]: any;
+    [ key: string ]: unknown;
 }
 
 const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {

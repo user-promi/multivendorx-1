@@ -1,4 +1,4 @@
-/*global jQuery reportAbuseFrontend */
+/* global jQuery, reportAbuseFrontend */
 jQuery(function ($) {
 	function showThemeNotice(container, type, message) {
 		var $container = $(container);

@@ -91,7 +91,7 @@ $banner_slider     = $meta_data['banner_slider'] ?? array();
                         </video>
                     <?php } ?>
                 <?php else : ?>
-                    <!-- <div class="banner-img" style="background-image='url(<?php ?>'"></div> -->
+                    <!-- <div class="banner-img" style="background-image='url('"></div> -->
                 <?php endif; ?>
             </div>
         <?php endif; ?>

@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
@@ -59,7 +60,13 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 		{ note: string; date: string }[]
 	>([]);
 
-	const FileDisplay = ({ fileUrl, fileType }: { fileUrl: string; fileType: string }) => {
+	const FileDisplay = ({
+		fileUrl,
+		fileType,
+	}: {
+		fileUrl: string;
+		fileType: string;
+	}) => {
 		const renderFile = () => {
 			if (fileType.includes('image')) {
 				return (
@@ -117,11 +124,11 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 	) => {
 		const { name, value, type } = e.target;
 		const checked = (e.target as HTMLInputElement).checked;
-		
+
 		setFormData((prev) => {
 			const updated = {
 				...(prev || {}),
-				[name]: type === 'checkbox' ? checked : value ?? '',
+				[name]: type === 'checkbox' ? checked : (value ?? ''),
 			};
 			autoSave(updated);
 			return updated;
@@ -392,7 +399,8 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 													type="checkbox"
 													name="store_permanent_reject"
 													checked={
-														formData.store_permanent_reject || false
+														formData.store_permanent_reject ||
+														false
 													}
 													onChange={handleChange}
 												/>

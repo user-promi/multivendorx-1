@@ -48,7 +48,7 @@ class Dashboard extends \WP_REST_Controller {
      * @param object $request Full details about the request.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'create_stores' );
+        return current_user_can( 'create_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**

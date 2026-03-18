@@ -113,7 +113,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
             // appLocalizer={appLocalizer}
             onBlocked={ onBlocked }
             canAccess={ ! disabled }
-            onChange={ ( newValue: any ) => {
+            onChange={ ( newValue: SettingValue ) => {
                 onChange( fieldKey, newValue );
             } }
         />
@@ -252,7 +252,6 @@ export const MultiInputTableUI: React.FC< MultiInputTableUIProps > = ( {
         } );
 
     const renderGroupedRows = ( groupedRows: GroupedRows ) => {
-        const totalCols = visibleColumns.length + 1;
         return Object.entries( groupedRows ).map( ( [ groupKey, group ] ) => {
             const isOpen = openGroup === groupKey;
             return (

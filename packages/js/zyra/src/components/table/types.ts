@@ -1,3 +1,4 @@
+import React from 'react';
 import { ButtonAction } from './ButtonActions';
 import { ActionItem } from './TableRowActions';
 

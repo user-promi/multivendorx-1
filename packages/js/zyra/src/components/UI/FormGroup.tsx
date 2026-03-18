@@ -1,3 +1,6 @@
+import React from 'react';
+
+// Internal dependencies
 import { Notice } from '../Notice';
 
 type FormGroupProps = {

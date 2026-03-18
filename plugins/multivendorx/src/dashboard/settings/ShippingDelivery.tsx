@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
@@ -81,7 +82,7 @@ const ShippingDelivery = () => {
 			if (res.data.success) {
 				NoticeManager.add({
 					title: __('Great!', 'multivendorx'),
-					message:  __('Store saved successfully!', 'multivendorx'),
+					message: __('Store saved successfully!', 'multivendorx'),
 					type: 'success',
 					position: 'float',
 				});

@@ -1,5 +1,4 @@
-// FreeVsProTab.tsx
-
+/* global appLocalizer */
 import React, { useEffect, useState } from 'react';
 import {
 	ButtonInputUI,

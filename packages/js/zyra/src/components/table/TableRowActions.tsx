@@ -5,13 +5,13 @@ import Tooltip from '../UI/Tooltip';
 export interface ActionItem {
     label?: string;
     icon?: React.ReactNode;
-    onClick: ( row?: {} ) => void;
+    onClick: ( row?: Record< string, unknown > ) => void;
     className?: string;
     type?: string;
 }
 
 interface TableRowActionsProps {
-    row: {};
+    row: Record< string, unknown >;
     rowActions: ActionItem[];
 }
 
@@ -35,7 +35,7 @@ const TableRowActions: React.FC< TableRowActionsProps > = ( {
             <div className="action-icons">
                 <div className="inline-actions">
                     { showInline ? (
-                        rowActions.map( ( action, index ) => (
+                        rowActions.map( ( action ) => (
                             <Tooltip text={ action.label }>
                                 <i
                                     onClick={ () => action.onClick( row ) }

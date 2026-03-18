@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import { useOutsideClick, FieldComponent } from './fieldUtils';
 import '../styles/web/Popup.scss';
 import Tooltip from './UI/Tooltip';
@@ -71,7 +71,11 @@ export const PopupUI = forwardRef< HTMLDivElement, PopupProps >(
 
         const handleToggle = ( e: React.MouseEvent ) => {
             e.stopPropagation();
-            open ? handleClose() : handleOpen();
+            if ( open ) {
+                handleClose();
+            } else {
+                handleOpen();
+            }
         };
 
         useOutsideClick( wrapperRef, () => {

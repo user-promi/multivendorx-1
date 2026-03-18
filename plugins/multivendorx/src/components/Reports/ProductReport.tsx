@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import React, { useEffect, useState } from 'react';
 import {
 	Legend,
@@ -19,15 +20,15 @@ import {
 	InfoItem,
 	ComponentStatusView,
 	TableCard,
+	TableRow,
+	QueryProps,
 } from 'zyra';
 import axios from 'axios';
 import {
 	downloadCSV,
-	formatCurrency,
 	formatLocalDate,
 	toWcIsoDate,
 } from '../../services/commonFunction';
-import { QueryProps, TableRow } from '@/services/type';
 import Counter from '@/services/Counter';
 
 type ToggleState = { [key: string]: boolean };

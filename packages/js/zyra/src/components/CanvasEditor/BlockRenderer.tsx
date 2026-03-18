@@ -2,14 +2,33 @@
 import React from 'react';
 
 // Internal Dependencies
-import { Block, BlockPatch, BlockType, ColumnsBlock } from './blockTypes';
+import {
+    Block,
+    BlockPatch,
+    BlockConfig,
+    BlockType,
+    ColumnsBlock,
+} from './blockTypes';
 import { FIELD_REGISTRY } from '../fieldUtils';
+
+interface CreateBlockOptions {
+    fixedName?: string;
+    placeholder?: string;
+    label?: string;
+    context?: string;
+    options?: Block[ 'options' ];
+}
+
+type CreateBlockInput = Partial< Block > | BlockConfig;
 
 // ID generator
 
 let idCounter = Date.now();
 const generateId = (): number => ++idCounter;
-export const createBlockID = ( type: BlockType, options?: any ): Block => {
+export const createBlockID = (
+    type: BlockType,
+    options?: CreateBlockOptions
+): Block => {
     const id = generateId();
     const {
         fixedName,
@@ -40,7 +59,10 @@ export const createBlockID = ( type: BlockType, options?: any ): Block => {
     return block;
 };
 
-export const createBlock = ( item: any, context?: string ): Block => {
+export const createBlock = (
+    item: CreateBlockInput,
+    context?: string
+): Block => {
     if ( item?.id && item?.type ) {
         if ( item.type === 'columns' && ! Array.isArray( item.columns ) ) {
             return {

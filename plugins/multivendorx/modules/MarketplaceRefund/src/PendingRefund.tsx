@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
@@ -341,9 +342,7 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 			>
 				{viewOrder && (
 					<FormGroupWrapper>
-						<FormGroup
-							label={__('Refund Reason', 'multivendorx')}
-						>
+						<FormGroup label={__('Refund Reason', 'multivendorx')}>
 							<div className="refund-reason-box">
 								{getMetaValue(
 									viewOrder.meta_data,
@@ -353,10 +352,7 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 							</div>
 						</FormGroup>
 						<FormGroup
-							label={__(
-								'Additional Information',
-								'multivendorx'
-							)}
+							label={__('Additional Information', 'multivendorx')}
 						>
 							<div className="refund-additional-info">
 								{getMetaValue(
@@ -418,9 +414,8 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 								}
 								usePlainText={false}
 								tinymceApiKey={
-									appLocalizer
-										.settings_databases_value[
-									'overview'
+									appLocalizer.settings_databases_value[
+										'overview'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>

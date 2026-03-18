@@ -1,10 +1,26 @@
 <?php
+/**
+ * MultiVendorX Widgets Class
+ *
+ * Handles store sidebar registration, rendering, and block restrictions.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Widgets handler.
+ */
 class Widgets {
 
+    /**
+     * Constructor.
+     *
+     * Hooks all necessary actions and filters.
+     */
     public function __construct() {
         add_action( 'widgets_init', array( $this, 'register_sidebar' ) );
         add_filter( 'register_block_type_args', array( $this, 'attach_sidebar_render_callback' ), 10, 2 );
@@ -12,7 +28,9 @@ class Widgets {
     }
 
     /**
-     * Register classic widget sidebar
+     * Register classic widget sidebar for store pages.
+     *
+     * @return void
      */
     public function register_sidebar() {
         register_sidebar(
@@ -28,22 +46,31 @@ class Widgets {
         );
     }
 
+    /**
+     * Attach render callback to the store sidebar block.
+     *
+     * @param array  $args       Block arguments.
+     * @param string $block_type Block name.
+     * @return array Modified block arguments.
+     */
     public function attach_sidebar_render_callback( $args, $block_type ) {
-        if ( isset( $block_type ) && $block_type === 'multivendorx/store-sidebar' ) {
+        if ( 'multivendorx/store-sidebar' === $block_type ) {
             $args['render_callback'] = array( $this, 'render_sidebar' );
         }
 
         return $args;
     }
 
-
     /**
-     * Render sidebar output (used by block templates)
+     * Render sidebar output (used by block templates).
+     *
+     * @return string Sidebar HTML.
      */
     public function render_sidebar() {
         if ( ! is_active_sidebar( 'multivendorx-store-sidebar' ) ) {
             return '';
         }
+
         $sidebar_position_setting = MultiVendorX()->setting->get_setting( 'store_sidebar', array() );
         $sidebar_position         = is_array( $sidebar_position_setting ) ? reset( $sidebar_position_setting ) : $sidebar_position_setting;
 
@@ -57,13 +84,17 @@ class Widgets {
     }
 
     /**
-     * Restrict MultiVendorX store blocks outside store page
+     * Restrict MultiVendorX store blocks outside store pages.
+     *
+     * @param array $allowed_blocks  Array of allowed block names.
+     * @param array $editor_context  Editor context. (Not used).
+     * @return array Filtered array of allowed block names.
      */
-    public function restrict_store_blocks( $allowed_blocks, $editor_context ) {
+    public function restrict_store_blocks( $allowed_blocks, $editor_context ) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
         $restricted_category = 'multivendorx-store-shop';
 
-        // If we are on store page → allow everything
+        // Allow all blocks if we are on a store page.
         if ( Utill::is_store_page() ) {
             return $allowed_blocks;
         }
@@ -75,7 +106,8 @@ class Widgets {
         foreach ( $all_blocks as $block_name => $block_type ) {
             $category = $block_type->category ?? '';
 
-            if ( $category === $restricted_category ) {
+            // Skip MultiVendorX store blocks outside store pages.
+            if ( $restricted_category === $category ) {
                 continue;
             }
 

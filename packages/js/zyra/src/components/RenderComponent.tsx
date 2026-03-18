@@ -376,6 +376,9 @@ const RenderComponent: React.FC< RenderProps > = ( {
         onChange: ( key: string, value: any ) => void,
         canAccess: boolean
     ): JSX.Element | null => {
+        if (field.component) {
+            return field.component;
+        }
         const fieldComponent = FIELD_REGISTRY[ field.type ];
         if ( ! fieldComponent ) {
             return null;

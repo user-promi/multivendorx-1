@@ -1,8 +1,15 @@
+/* global appLocalizer */
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, Container, Column, TableCard } from 'zyra';
-import { QueryProps, TableRow } from '@/services/type';
+import {
+	getApiLink,
+	Container,
+	Column,
+	TableCard,
+	TableRow,
+	QueryProps,
+} from 'zyra';
 
 const NotificationTable = (React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);

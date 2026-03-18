@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import DistanceByZoneShipping from '@/dashboard/settings/DistanceByZoneShipping';
 import ShippingRatesByCountry from '@/dashboard/settings/ShippingRatesByCountry';
 import { __ } from '@wordpress/i18n';
@@ -119,8 +120,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 						</FormGroupWrapper>
 
 						{/* //zone by shipping */}
-						{formData.shipping_options ===
-							'shipping_by_zone' && (
+						{formData.shipping_options === 'shipping_by_zone' && (
 							<DistanceByZoneShipping id={id} />
 						)}
 
@@ -304,8 +304,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												'multivendorx'
 											)}
 											value={
-												formData.local_pickup_cost ||
-												''
+												formData.local_pickup_cost || ''
 											}
 											onChange={(value: string) =>
 												handleChange(
@@ -401,9 +400,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 													value: 'M',
 												},
 											]}
-											value={
-												formData.distance_type || ''
-											}
+											value={formData.distance_type || ''}
 											onChange={(value) =>
 												handleToggleChange(
 													value,
@@ -429,9 +426,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												'0',
 												'multivendorx'
 											)}
-											value={
-												formData.distance_max || ''
-											}
+											value={formData.distance_max || ''}
 											onChange={(value: string) =>
 												handleChange(
 													'distance_max',
@@ -487,8 +482,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												'multivendorx'
 											)}
 											value={
-												formData.distance_rules ||
-												[]
+												formData.distance_rules || []
 											}
 											template={{
 												fields: [
@@ -522,9 +516,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 													},
 												],
 											}}
-											onChange={(
-												updatedRules: any[]
-											) => {
+											onChange={(updatedRules: any[]) => {
 												const updated = {
 													...formData,
 													distance_rules:

@@ -1,3 +1,5 @@
+/* global google*/
+/// <reference types="google.maps" />
 import { useEffect, useRef, useState } from 'react';
 import { FieldComponent } from './fieldUtils';
 
@@ -31,11 +33,78 @@ interface MapProviderProps {
     mapProvider: string;
 }
 
+interface MapboxSuggestion {
+    mapbox_id: string;
+    name: string;
+}
+
+type MapInstance = google.maps.Map | window.mapboxgl.Map;
+
+type MarkerInstance = google.maps.Marker | window.mapboxgl.Marker;
+
+type MapProviderType = 'google_map' | 'mapbox';
+
+interface MapAdapter {
+    loadScript( apiKey: string ): Promise< void >;
+
+    createMap(
+        container: HTMLElement,
+        lat: number,
+        lng: number,
+        zoom: number
+    ): MapInstance;
+
+    createMarker(
+        map: MapInstance,
+        lat: number,
+        lng: number,
+        isUser?: boolean
+    ): MarkerInstance;
+
+    onDragEnd(
+        marker: MarkerInstance,
+        cb: ( lat: number, lng: number ) => void
+    ): void;
+
+    onMapClick(
+        map: MapInstance,
+        cb: ( lat: number, lng: number ) => void
+    ): void;
+
+    reverseGeocode( lat: number, lng: number ): Promise< unknown >;
+
+    extractAddress( result: unknown ): AddressResult;
+}
+
+interface MapboxFeature {
+    geometry: {
+        coordinates: [ number, number ];
+    };
+    properties?: {
+        full_address?: string;
+        context?: {
+            place?: { name: string };
+            region?: { name: string };
+            country?: { country_code: string };
+            postcode?: { name: string };
+        };
+    };
+}
+
+interface AddressResult {
+    address?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    zip?: string;
+    location_address?: string;
+}
+
 const DEFAULT_LOCATION = { lat: 40.7128, lng: -74.006 };
 
 /* ---------------- GOOGLE ADAPTER ---------------- */
 
-const googleAdapter = {
+const googleAdapter: MapAdapter = {
     async loadScript( apiKey: string ) {
         if ( window.google?.maps ) {
             return;
@@ -68,7 +137,12 @@ const googleAdapter = {
         } );
     },
 
-    createMarker( map: any, lat: number, lng: number, isUser?: boolean ) {
+    createMarker(
+        map: MapInstance,
+        lat: number,
+        lng: number,
+        isUser?: boolean
+    ) {
         return new window.google.maps.Marker( {
             map,
             position: { lat, lng },
@@ -79,15 +153,18 @@ const googleAdapter = {
         } );
     },
 
-    onDragEnd( marker: any, cb: any ) {
+    onDragEnd(
+        marker: MarkerInstance,
+        cb: ( lat: number, lng: number ) => void
+    ) {
         marker.addListener( 'dragend', () => {
             const p = marker.getPosition();
             cb( p.lat(), p.lng() );
         } );
     },
 
-    onMapClick( map: any, cb: any ) {
-        map.addListener( 'click', ( e: any ) =>
+    onMapClick( map: MapInstance, cb: ( lat: number, lng: number ) => void ) {
+        map.addListener( 'click', ( e: google.maps.MapMouseEvent ) =>
             cb( e.latLng.lat(), e.latLng.lng() )
         );
     },
@@ -96,32 +173,37 @@ const googleAdapter = {
         return new Promise( ( resolve ) => {
             new window.google.maps.Geocoder().geocode(
                 { location: { lat, lng } },
-                ( r: any, s: any ) => resolve( s === 'OK' ? r[ 0 ] : null )
+                (
+                    results: google.maps.GeocoderResult[],
+                    status: google.maps.GeocoderStatus
+                ) => resolve( status === 'OK' ? results[ 0 ] : null )
             );
         } );
     },
 
-    extractAddress( result: any ) {
+    extractAddress( result: google.maps.GeocoderAddressComponent | null ) {
         if ( ! result ) {
             return {};
         }
 
-        const components: any = {};
+        const components: Record< string, string > = {};
 
-        result.address_components?.forEach( ( c: any ) => {
-            if ( c.types.includes( 'locality' ) ) {
-                components.city = c.long_name;
+        result.address_components?.forEach(
+            ( c: google.maps.GeocoderAddressComponent ) => {
+                if ( c.types.includes( 'locality' ) ) {
+                    components.city = c.long_name;
+                }
+                if ( c.types.includes( 'administrative_area_level_1' ) ) {
+                    components.state = c.long_name;
+                }
+                if ( c.types.includes( 'country' ) ) {
+                    components.country = c.short_name;
+                }
+                if ( c.types.includes( 'postal_code' ) ) {
+                    components.zip = c.long_name;
+                }
             }
-            if ( c.types.includes( 'administrative_area_level_1' ) ) {
-                components.state = c.long_name;
-            }
-            if ( c.types.includes( 'country' ) ) {
-                components.country = c.short_name;
-            }
-            if ( c.types.includes( 'postal_code' ) ) {
-                components.zip = c.long_name;
-            }
-        } );
+        );
 
         return {
             address: result.formatted_address,
@@ -136,7 +218,7 @@ const googleAdapter = {
 
 /* ---------------- MAPBOX ADAPTER ---------------- */
 
-const mapboxAdapter = {
+const mapboxAdapter: MapAdapter = {
     async loadScript( apiKey: string ) {
         if ( window.mapboxgl ) {
             window.mapboxgl.accessToken = apiKey;
@@ -173,21 +255,26 @@ const mapboxAdapter = {
         } );
     },
 
-    createMarker( map: any, lat: number, lng: number ) {
+    createMarker( map: MapInstance, lat: number, lng: number ) {
         return new window.mapboxgl.Marker( { draggable: true } )
             .setLngLat( [ lng, lat ] )
             .addTo( map );
     },
 
-    onDragEnd( marker: any, cb: any ) {
+    onDragEnd(
+        marker: MarkerInstance,
+        cb: ( lat: number, lng: number ) => void
+    ) {
         marker.on( 'dragend', () => {
             const { lat, lng } = marker.getLngLat();
             cb( lat, lng );
         } );
     },
 
-    onMapClick( map: any, cb: any ) {
-        map.on( 'click', ( e: any ) => cb( e.lngLat.lat, e.lngLat.lng ) );
+    onMapClick( map: MapInstance, cb: ( lat: number, lng: number ) => void ) {
+        map.on( 'click', ( e: { lngLat: { lat: number; lng: number } } ) =>
+            cb( e.lngLat.lat, e.lngLat.lng )
+        );
     },
 
     async reverseGeocode( lat: number, lng: number ) {
@@ -199,7 +286,7 @@ const mapboxAdapter = {
         return data.features?.[ 0 ];
     },
 
-    extractAddress( result: any ) {
+    extractAddress( result: MapboxFeature ) {
         if ( ! result ) {
             return {};
         }
@@ -221,7 +308,7 @@ const mapboxAdapter = {
 
 /* ---------------- PROVIDER REGISTRY ---------------- */
 
-const PROVIDERS: any = {
+const PROVIDERS: Record< MapProviderType, MapAdapter > = {
     google_map: googleAdapter,
     mapbox: mapboxAdapter,
 };
@@ -240,14 +327,18 @@ export const MapProviderUI = ( {
     const provider = PROVIDERS[ mapProvider ] || googleAdapter;
 
     const containerRef = useRef< HTMLDivElement >( null );
-    const mapRef = useRef< any >( null );
-    const markerRef = useRef< any >( null );
+    const mapRef = useRef< MapInstance | null >( null );
+    const markerRef = useRef< MarkerInstance | null >( null );
     const inputRef = useRef< HTMLInputElement >( null );
 
-    const debounceRef = useRef< any >( null );
+    const debounceRef = useRef< ReturnType< typeof setTimeout > | null >(
+        null
+    );
 
     const [ query, setQuery ] = useState( '' );
-    const [ suggestions, setSuggestions ] = useState< any[] >( [] );
+    const [ suggestions, setSuggestions ] = useState< MapboxSuggestion[] >(
+        []
+    );
     const [ googleLoaded, setGoogleLoaded ] = useState( false );
 
     const lat = locationLat ? parseFloat( locationLat ) : DEFAULT_LOCATION.lat;
@@ -405,7 +496,7 @@ export const MapProviderUI = ( {
         }, 300 );
     };
 
-    const selectMapboxSuggestion = async ( suggestion: any ) => {
+    const selectMapboxSuggestion = async ( suggestion: MapboxSuggestion ) => {
         const res = await fetch(
             `https://api.mapbox.com/search/searchbox/v1/retrieve/${ suggestion.mapbox_id }?access_token=${ apiKey }&session_token=${ sessionToken }`
         );

@@ -29,10 +29,14 @@ class Frontend {
         add_filter( 'multivendorx_register_scripts', array( $this, 'register_script' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
 
-        // add_filter( 'template_include', [ $this, 'store_policy_template' ] );
         add_filter( 'multivendorx_store_frontend_localize_scripts', array( $this, 'multivendorx_store_frontend_localize_scripts' ) );
     }
-
+	/**
+	 * Register store policy frontend script
+	 *
+	 * @param array $scripts Scripts array.
+	 * @return array Modified scripts array.
+	 */
     public function register_script( $scripts ) {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
@@ -145,6 +149,12 @@ class Frontend {
     public function woocommerce_product_policies_tab() {
         MultiVendorX()->util->get_template( 'store/store-single-product-policy-tab.php' );
     }
+    /**
+     * Add store policies to frontend localized script data
+     *
+     * @param array $item Localized script data.
+     * @return array Modified localized script data with store policies.
+     */
     public function multivendorx_store_frontend_localize_scripts( $item ) {
         $store_id               = isset( $item['storeDetails']['storeId'] )
             ? absint( $item['storeDetails']['storeId'] )

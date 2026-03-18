@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { addFilter } from '@wordpress/hooks';
 import { useRef, useState, useEffect } from 'react';
 import {
