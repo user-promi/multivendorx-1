@@ -3,7 +3,13 @@ import React, { useState, useCallback } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 
 // Internal Dependencies
-import { Block, BlockPatch, ColumnsBlock, getColumnCount } from './blockTypes';
+import {
+    Block,
+    BlockPatch,
+    BlockConfig,
+    ColumnsBlock,
+    getColumnCount,
+} from './blockTypes';
 import BlockRenderer from './BlockRenderer';
 
 // Types
@@ -27,12 +33,18 @@ export interface ColumnRendererProps {
     groupName: string;
     openBlock: Block | null;
     setOpenBlock: ( block: Block | null ) => void;
-    onColumnSetList: ( parentIdx: number, colIdx: number, list: any[] ) => void;
+    onColumnSetList: (
+        parentIdx: number,
+        colIdx: number,
+        list: SortableItem[]
+    ) => void;
     onChildMutate: ( updated: ColumnsBlock ) => void;
     onSelect: () => void;
     onDelete: () => void;
     showMeta?: boolean;
 }
+
+type SortableItem = Partial< Block > | BlockConfig;
 
 export const safeColumns = ( block: ColumnsBlock ): Block[][] => {
     if ( Array.isArray( block.columns ) && block.columns.length > 0 ) {
