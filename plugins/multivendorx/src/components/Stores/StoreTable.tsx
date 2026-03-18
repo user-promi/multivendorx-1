@@ -140,7 +140,7 @@ const StoreTable: React.FC = () => {
 		},
 		primary_owner: {
 			label: __('Primary Owner', 'multivendorx'),
-			render: (row: any) => {x
+			render: (row: any) => {
 				const owner = row.primary_owner?.data;
 
 				return (

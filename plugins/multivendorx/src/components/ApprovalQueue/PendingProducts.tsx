@@ -123,24 +123,25 @@ const PendingProducts: React.FC<{}> = () => {
 			type: 'date',
 		},
 		action: {
-			type: 'action',
 			label: __('Action', 'multivendorx'),
-
-			actions: [
-				{
-					label: __('Approve', 'multivendorx'),
-					icon: 'check',
-					onClick: (row) =>
-						handleSingleAction('approve_product', row.id),
-				},
-				{
-					label: __('Reject', 'multivendorx'),
-					icon: 'close',
-					onClick: (row) =>
-						handleSingleAction('reject_product', row.id),
-					className: 'danger',
-				},
-			],
+			render: (row: any) => {
+				return (
+					<ButtonInputUI
+						buttons={[
+							{
+								icon: 'check',
+								text: __('Approve', 'multivendorx'),
+								color: 'purple',
+								onClick: (row: any) => handleSingleAction('approve_product', row.id),
+							},
+							{
+								icon: 'close',
+								text: __('Reject', 'multivendorx'),
+								onClick: (row: any) => handleSingleAction('reject_product', row.id),
+							},
+						]}
+					/>
+				)}
 		},
 	};
 
@@ -175,9 +176,9 @@ const PendingProducts: React.FC<{}> = () => {
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-								query.filter.created_at.startDate,
-								'start'
-							)
+							query.filter.created_at.startDate,
+							'start'
+						)
 						: undefined,
 
 					before: query.filter?.created_at?.endDate

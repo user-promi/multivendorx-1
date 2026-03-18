@@ -190,6 +190,11 @@ const Orders: React.FC = () => {
 	const headers = {
 		id: {
 			label: __('Order ID', 'multivendorx'),
+			render: (row) => {
+				return(
+					<> <span>{row.id}</span> </>
+				)
+			}
 		},
 
 		customer: {
@@ -208,11 +213,6 @@ const Orders: React.FC = () => {
 		status: {
 			label: __('Status', 'multivendorx'),
 			type: 'status',
-		},
-
-		commission_total: {
-			label: __('Total Earning', 'multivendorx'),
-			type: 'currency',
 		},
 
 		total: {

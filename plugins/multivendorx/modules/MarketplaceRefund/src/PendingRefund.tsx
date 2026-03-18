@@ -166,28 +166,33 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 			type: 'date',
 		},
 		action: {
-			type: 'action',
 			label: __('Action', 'multivendorx'),
-			actions: [
-				{
-					label: __('View Details', 'multivendorx'),
-					icon: 'preview',
-					onClick: (row: OrderRow) => {
-						window.open(
-							`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${row.id}&action=edit`,
-							'_blank'
-						);
-					},
-				},
-				{
-					label: __('Reject', 'multivendorx'),
-					icon: 'close',
-					onClick: (row: OrderRow) => {
-						setViewOrder(row);
-						setPopupOpen(true);
-					},
-				},
-			],
+			render: (row: any) => {
+				return (
+					<ButtonInputUI
+						buttons={[
+							{
+								icon: 'preview',
+								text: __('View Details', 'multivendorx'),
+								color: 'purple',
+								onClick: (row: OrderRow) => {
+									window.open(
+										`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${row.id}&action=edit`,
+										'_blank'
+									);
+								},
+							},
+							{
+								icon: 'close',
+								text: __('Reject', 'multivendorx'),
+								onClick: (row: OrderRow) => {
+									setViewOrder(row);
+									setPopupOpen(true);
+								},
+							},
+						]}
+					/>
+				)}
 		},
 	};
 
@@ -227,9 +232,9 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-								query.filter.created_at.startDate,
-								'start'
-							)
+							query.filter.created_at.startDate,
+							'start'
+						)
 						: undefined,
 					before: query.filter?.created_at?.endDate
 						? toWcIsoDate(query.filter.created_at.endDate, 'end')
@@ -415,7 +420,7 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 								tinymceApiKey={
 									appLocalizer
 										.settings_databases_value[
-										'overview'
+									'overview'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>

@@ -116,22 +116,18 @@ const PendingCoupons: React.FC<{}> = () => {
 		code: {
 			label: __('Code', 'multivendorx'),
 			render: (row: any) => {
-
 				return (
 					<InfoItem
-						title="code (pkoro)"
+						title={row.code}
 						descriptions={[
 							{
 								label: __('By', 'multivendorx'),
-								value: "NIke (pkoro)",
+								value: row.store_name,
 							},
 						]}
 					/>
 				);
 			},
-		},
-		store_name: {
-			label: __('Store', 'multivendorx'),
 		},
 		discount_type: {
 			label: __('Discount Type', 'multivendorx'),
@@ -145,21 +141,26 @@ const PendingCoupons: React.FC<{}> = () => {
 			type: 'date',
 		},
 		action: {
-			type: 'action',
 			label: 'Action',
-			actions: [
-				{
-					label: __('Approve', 'multivendorx'),
-					icon: 'check',
-					onClick: (row) => handleSingleAction('approve_coupon', id),
-				},
-				{
-					label: __('Reject', 'multivendorx'),
-					icon: 'close',
-					onClick: (row) => handleSingleAction('reject_coupon', id),
-					className: 'danger',
-				},
-			],
+			render: (row: any) => {
+				return (
+					<ButtonInputUI
+						buttons={[
+							{
+								icon: 'check',
+								text: __('Approve', 'multivendorx'),
+								color: 'purple',
+								onClick: (row) => handleSingleAction('approve_coupon', row.id)
+							},
+							{
+								icon: 'close',
+								text: __('Reject', 'multivendorx'),
+								onClick: (row) => handleSingleAction('reject_coupon', row.id)
+							},
+						]}
+					/>
+				)
+			}
 		},
 	};
 
@@ -194,9 +195,9 @@ const PendingCoupons: React.FC<{}> = () => {
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-								query.filter.created_at.startDate,
-								'start'
-							)
+							query.filter.created_at.startDate,
+							'start'
+						)
 						: undefined,
 
 					before: query.filter?.created_at?.endDate
@@ -284,9 +285,9 @@ const PendingCoupons: React.FC<{}> = () => {
 										icon: 'cross',
 										text: isSubmitting
 											? __(
-													'Submitting...',
-													'multivendorx'
-												)
+												'Submitting...',
+												'multivendorx'
+											)
 											: __('Reject', 'multivendorx'),
 										disabled: isSubmitting,
 										onClick: submitReject,

@@ -627,6 +627,9 @@
 .table-action-column {
     position: relative;
 }
+.transparent-status{
+    background: transparent;
+}
 
 // status color start
 .badge-completed,
@@ -635,7 +638,8 @@
 .badge-paid,
 .badge-public,
 .badge-publish,
-.badge-published {
+.badge-published,
+.badge-instock {
     color: map-get(map-get($color-palette, green), color);
     background: map-get(map-get($color-palette, green), light-color);
 }
