@@ -13,6 +13,7 @@ import {
 } from 'zyra';
 import ShowProPopup from '../components/Popup/Popup';
 import ShippingDelivery from './settings/ShippingDelivery';
+import BusinessAddress from './DashboardSettings/BusinessAddress';
 
 type SettingItem = Record<string, any>;
 
@@ -102,6 +103,9 @@ const settings: React.FC<SettingsProps> = () => {
 
 		if (currentTab === 'shipping') {
 			return <ShippingDelivery />;
+		}
+		if (currentTab === 'business-address') {
+			return <BusinessAddress />;
 		}
 
 		return (

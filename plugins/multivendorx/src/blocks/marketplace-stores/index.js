@@ -3,12 +3,14 @@ import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { render } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
 import MarketplaceStoreList from './marketplaceStoreList';
-import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
+import { PanelBody, SelectControl, TextControl, ToggleControl } from '@wordpress/components'; // Add ToggleControl
 import { __ } from '@wordpress/i18n';
 
 const EditBlock = (props) => {
 	const { attributes, setAttributes } = props;
-	const blockProps = useBlockProps();
+	const blockProps = useBlockProps({
+		className: "stores-list-edit-panel"
+	});
 
 	return (
 		<div {...blockProps}>
@@ -67,6 +69,13 @@ const EditBlock = (props) => {
 							})
 						}
 					/>
+					
+					<ToggleControl
+						label={__('Show Map', 'multivendorx')}
+						help={attributes.showMap ? __('Map is visible', 'multivendorx') : __('Map is hidden', 'multivendorx')}
+						checked={attributes.showMap}
+						onChange={(value) => setAttributes({ showMap: value })}
+					/>
 				</PanelBody>
 			</InspectorControls>
 
@@ -74,6 +83,7 @@ const EditBlock = (props) => {
 				orderby={attributes.orderby}
 				order={attributes.order}
 				category={attributes.category}
+				showMap={attributes.showMap}
 			/>
 		</div>
 	);
@@ -91,6 +101,7 @@ registerBlockType('multivendorx/marketplace-stores', {
 		order: { type: 'string', default: 'asc' },
 		category: { type: 'string', default: '' },
 		perpage: { type: 'number', default: 12 },
+		showMap: { type: 'boolean', default: true },
 	},
 
 	edit: EditBlock,
@@ -104,6 +115,7 @@ registerBlockType('multivendorx/marketplace-stores', {
 		);
 	},
 });
+
 document.addEventListener('DOMContentLoaded', () => {
 	const element = document.getElementById('marketplace-stores');
 	if (element) {
