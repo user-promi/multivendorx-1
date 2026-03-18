@@ -26,14 +26,10 @@ interface FileItem {
     id?: number;
     url: string;
 }
-
-const getFileIcon = ( url: string ): string => {
-    const filename = url.includes( '#' )
-        ? url.split( '#' )[ 1 ]
-        : url.split( '/' ).pop() || '';
-    const ext = filename.split( '.' ).pop()?.toLowerCase();
-    return ext || 'file';
-};
+interface WPMediaAttachment {
+    id: number;
+    url: string;
+}
 
 const getFileName = ( url?: string ): string => {
     if ( ! url ) {
@@ -106,7 +102,7 @@ export const FileInputUI: React.FC< FileInputProps > = ( props ) => {
                 .state()
                 .get( 'selection' )
                 .toJSON()
-                .map( ( a: any ) => ( {
+                .map( ( a: WPMediaAttachment ) => ( {
                     id: a.id,
                     url: a.url,
                 } ) );

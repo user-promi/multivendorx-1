@@ -91,7 +91,9 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
         const Render = fieldComponent.render;
         const fieldValue = row?.[ field.key ];
 
-        const handleInternalChange = ( val: any ) => {
+        const handleInternalChange = (
+            val: string | number | File | RowValue[] | null
+        ) => {
             handleChange( rowIndex, field.key, val );
             return;
         };

@@ -410,15 +410,7 @@ export const SelectInputUI: React.FC< SelectProps > = ( {
 };
 
 const SelectInput: FieldComponent = {
-    render: ( {
-        field,
-        value,
-        onChange,
-        canAccess,
-        appLocalizer,
-        modules,
-        settings,
-    } ) => {
+    render: ( { field, value, onChange, canAccess, settings } ) => {
         const { type } = FIELD_TYPE_CONFIG[ field.type ] ?? DEFAULT_CONFIG;
         let resolvedOptions: any = field.options || [];
 

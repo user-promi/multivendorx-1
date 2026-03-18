@@ -5,7 +5,7 @@ import { TourProvider, ProviderProps, StepType, useTour } from '@reactour/tour';
 
 // Internal dependencies
 import { getApiLink } from '../utils/apiService';
-import { ButtonInputUI } from './ButtonInput';
+import { ButtonInputUI, ButtonConfig } from './ButtonInput';
 import { ZyraVariable } from './fieldUtils';
 
 interface GuidedTourStep extends StepType {
@@ -90,7 +90,7 @@ const GuidedTourController = ( { steps }: { steps: GuidedTourStep[] } ) => {
                         return {
                             ...step,
                             content: () => {
-                                const buttons: any[] = [];
+                                const buttons: ButtonConfig[] = [];
 
                                 if ( ! isLast ) {
                                     buttons.push( {

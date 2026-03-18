@@ -8,6 +8,14 @@ import { SelectInputUI } from './SelectInput';
 import PdfDownloadButton from './PdfDownloadButton';
 import { FieldComponent } from './fieldUtils';
 
+type ColorChangePayload =
+    | ColorSettingValue
+    | { templateKey: string; colors: CustomColors };
+
+type SelectOption = {
+    label: string;
+    value: string;
+};
 interface CustomColors {
     colorPrimary: string;
     colorSecondary: string;
@@ -35,11 +43,16 @@ interface ImagePaletteOption {
     img?: string;
 }
 
+interface TemplateComponentProps {
+    colors: CustomColors;
+    isPreview?: boolean;
+}
+
 interface Template {
     key: string;
     label: string;
-    preview?: React.ComponentType< any >;
-    component: React.ComponentType< any >;
+    preview?: React.ComponentType< TemplateComponentProps >;
+    component: React.ComponentType< TemplateComponentProps >;
     pdf?: React.FC< { colors: CustomColors } >;
 }
 
@@ -93,7 +106,7 @@ export const ColorSettingInputUI: React.FC< ColorSettingProps > = ( props ) => {
     );
     const ActivePdf = activeTemplate?.pdf;
 
-    const emitChange = ( payload: any ) => {
+    const emitChange = ( payload: ColorChangePayload ) => {
         onChange?.( {
             target: {
                 name: filedKey,
@@ -211,7 +224,7 @@ export const ColorSettingInputUI: React.FC< ColorSettingProps > = ( props ) => {
                                 value: tpl.key,
                             } ) ) }
                             value={ templateKey }
-                            onChange={ ( newValue: any ) => {
+                            onChange={ ( newValue: SelectOption ) => {
                                 if ( ! newValue || Array.isArray( newValue ) ) {
                                     return;
                                 }
@@ -525,7 +538,7 @@ const ColorSettingInput: FieldComponent = {
         />
     ),
 
-    validate: ( field, value ) => {
+    validate: () => {
         return null;
     },
 };

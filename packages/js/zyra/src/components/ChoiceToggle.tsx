@@ -170,14 +170,7 @@ export const ChoiceToggleUI: React.FC< ChoiceToggleProps > = ( {
 };
 
 const ChoiceToggle: FieldComponent = {
-    render: ( {
-        field,
-        value,
-        onChange,
-        canAccess,
-        appLocalizer,
-        onBlocked,
-    } ) => (
+    render: ( { field, value, onChange, canAccess, onBlocked } ) => (
         <ChoiceToggleUI
             wrapperClass={ field.wrapperClass }
             key={ field.key }
@@ -185,7 +178,6 @@ const ChoiceToggle: FieldComponent = {
             custom={ field.custom }
             multiSelect={ field.multiSelect } // If true, allows selecting multiple options (checkboxes), else single select (radio)
             canAccess={ canAccess }
-            // appLocalizer={appLocalizer}
             onBlocked={ onBlocked }
             options={
                 Array.isArray( field.options )
