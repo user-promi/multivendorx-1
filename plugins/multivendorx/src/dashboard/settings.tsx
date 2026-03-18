@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { useEffect, useState } from 'react';
 // Context
 import { SettingProvider, useSetting } from '../contexts/SettingContext';

@@ -116,14 +116,13 @@ const PendingCoupons: React.FC<{}> = () => {
 		code: {
 			label: __('Code', 'multivendorx'),
 			render: (row: any) => {
-
 				return (
 					<InfoItem
 						title="code (pkoro)"
 						descriptions={[
 							{
 								label: __('By', 'multivendorx'),
-								value: "NIke (pkoro)",
+								value: 'NIke (pkoro)',
 							},
 						]}
 					/>

@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
@@ -185,25 +186,25 @@ const StoreReport: React.FC = () => {
 	};
 
 	const headers = {
-		store_name: { 
-			label: __('Store', 'multivendorx') ,
+		store_name: {
+			label: __('Store', 'multivendorx'),
 			render: (row: any) => (
 				<>
-				{console.log(row)}
-				<InfoItem
-					title={row.store_name}
-					titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
-					avatar={{
-						image: row.store_image,
-						iconClass: row.store_image ? '' : 'store-inventory',
-					}}
-					descriptions={[
-						{
-							label: __('Since', 'multivendorx'),
-							value: row.date || '—',
-						},
-					]}
-				/>
+					{console.log(row)}
+					<InfoItem
+						title={row.store_name}
+						titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
+						avatar={{
+							image: row.store_image,
+							iconClass: row.store_image ? '' : 'store-inventory',
+						}}
+						descriptions={[
+							{
+								label: __('Since', 'multivendorx'),
+								value: row.date || '—',
+							},
+						]}
+					/>
 				</>
 			),
 		},
@@ -212,21 +213,24 @@ const StoreReport: React.FC = () => {
 			label: __('Primary Owner', 'multivendorx'),
 			render: (row: any) => (
 				<>
-				{console.log(row)}
-				<InfoItem
-					title={row.primary_owner?.data?.display_name}
-					titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
-					avatar={{
-						imageHtml: row.primary_owner_image,
-						iconClass: row.primary_owner_image ? '' : 'store-inventory',
-					}}
-					descriptions={[
-						{
-							label: __('Email', 'multivendorx'),
-							value: row.primary_owner?.data?.user_email || '—',
-						},
-					]}
-				/>
+					{console.log(row)}
+					<InfoItem
+						title={row.primary_owner?.data?.display_name}
+						titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
+						avatar={{
+							imageHtml: row.primary_owner_image,
+							iconClass: row.primary_owner_image
+								? ''
+								: 'store-inventory',
+						}}
+						descriptions={[
+							{
+								label: __('Email', 'multivendorx'),
+								value:
+									row.primary_owner?.data?.user_email || '—',
+							},
+						]}
+					/>
 				</>
 			),
 		},

@@ -1,5 +1,6 @@
+/* global appLocalizer */
 import { render } from '@wordpress/element';
-import { BrowserRouter, HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from './app';
 import DashboardRoutes from './dashboardRoutes';
 import 'zyra/build/index.css';

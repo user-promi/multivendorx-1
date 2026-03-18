@@ -20,7 +20,10 @@ import {
 	CategoryCount,
 } from 'zyra';
 import Popup from '../../../src/components/Popup/Popup';
-import { formatLocalDate, truncateText } from '@/services/commonFunction';
+import {
+	formatLocalDate,
+	truncateText,
+} from '../../../src/services/commonFunction';
 
 type KBForm = {
 	title: string;
@@ -112,7 +115,7 @@ export const KnowledgeBase: React.FC = () => {
 		}
 	};
 
-	const handleBulkAction = (action: string, selectedIds: any[] = []) => {
+	const handleBulkAction = (action: string, selectedIds: number[] = []) => {
 		if (!selectedIds.length) {
 			return;
 		}
@@ -255,8 +258,8 @@ export const KnowledgeBase: React.FC = () => {
 				const items = response.data || [];
 
 				const ids = items
-					.filter((kb: any) => kb?.id != null)
-					.map((kb: any) => kb.id);
+					.filter((kb) => kb?.id != null)
+					.map((kb) => kb.id);
 
 				setRowIds(ids);
 				setRows(items);

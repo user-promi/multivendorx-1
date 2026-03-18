@@ -3,13 +3,18 @@ import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { render } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
 import MarketplaceStoreList from './marketplaceStoreList';
-import { PanelBody, SelectControl, TextControl, ToggleControl } from '@wordpress/components'; // Add ToggleControl
+import {
+	PanelBody,
+	SelectControl,
+	TextControl,
+	ToggleControl,
+} from '@wordpress/components'; // Add ToggleControl
 import { __ } from '@wordpress/i18n';
 
 const EditBlock = (props) => {
 	const { attributes, setAttributes } = props;
 	const blockProps = useBlockProps({
-		className: "stores-list-edit-panel"
+		className: 'stores-list-edit-panel',
 	});
 
 	return (
@@ -69,10 +74,14 @@ const EditBlock = (props) => {
 							})
 						}
 					/>
-					
+
 					<ToggleControl
 						label={__('Show Map', 'multivendorx')}
-						help={attributes.showMap ? __('Map is visible', 'multivendorx') : __('Map is hidden', 'multivendorx')}
+						help={
+							attributes.showMap
+								? __('Map is visible', 'multivendorx')
+								: __('Map is hidden', 'multivendorx')
+						}
 						checked={attributes.showMap}
 						onChange={(value) => setAttributes({ showMap: value })}
 					/>

@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { __ } from '@wordpress/i18n';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {

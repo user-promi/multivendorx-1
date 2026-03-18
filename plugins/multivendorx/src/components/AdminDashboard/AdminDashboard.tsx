@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import './AdminDashboard.scss';
 import '../dashboard.scss';
 import { TabsUI } from 'zyra';

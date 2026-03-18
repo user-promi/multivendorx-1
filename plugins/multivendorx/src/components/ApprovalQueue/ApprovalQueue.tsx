@@ -1,5 +1,5 @@
+/* global appLocalizer */
 import { SettingsNavigator, useModules } from 'zyra';
-import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useLocation, Link } from 'react-router-dom';
 import { applyFilters } from '@wordpress/hooks';

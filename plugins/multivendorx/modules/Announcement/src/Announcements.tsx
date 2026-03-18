@@ -21,8 +21,7 @@ import {
 	CategoryCount,
 } from 'zyra';
 import Popup from '../../../src/components/Popup/Popup';
-import { formatLocalDate, truncateText } from '@/services/commonFunction';
-
+import { formatLocalDate } from '../../../src/services/commonFunction';
 type AnnouncementForm = {
 	title: string;
 	url: string;
@@ -327,8 +326,8 @@ export const Announcements: React.FC = () => {
 			.then((response) => {
 				const items = response.data || [];
 				const ids = items
-					.filter((ann: any) => ann?.id != null)
-					.map((ann: any) => ann.id);
+					.filter((ann) => ann?.id != null)
+					.map((ann) => ann.id);
 
 				setRowIds(ids);
 				setRows(items);

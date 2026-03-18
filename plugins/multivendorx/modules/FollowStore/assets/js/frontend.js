@@ -1,4 +1,4 @@
-/*global jQuery followStoreFrontend*/
+/* global jQuery, followStoreFrontend */
 jQuery(document).ready(function ($) {
 	// Initialize buttons
 	$('.follow-btn').each(function () {

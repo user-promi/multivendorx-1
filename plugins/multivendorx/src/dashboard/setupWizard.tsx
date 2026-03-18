@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import React, { useState, useRef } from 'react';
 import 'zyra/build/index.css';
 import { ExpandablePanelUI } from 'zyra';

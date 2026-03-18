@@ -1,6 +1,6 @@
+/* global jQuery */
 jQuery(document).ready(function ($) {
 	var opts = distanceShippingFrontend;
-	console.log('opt', opts);
 	if ($('#multivendorx_user_location_lat').length === 0) {
 		return;
 	}

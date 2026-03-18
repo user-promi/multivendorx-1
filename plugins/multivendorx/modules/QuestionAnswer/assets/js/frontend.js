@@ -1,3 +1,4 @@
+/* global jQuery, qnaFrontend */
 jQuery(document).ready(function ($) {
 	let productId = $('#product-qna').data('product');
 	let searchTimeout;

@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { __ } from '@wordpress/i18n';
 
 const gatewayList = appLocalizer.gateway_list || [];

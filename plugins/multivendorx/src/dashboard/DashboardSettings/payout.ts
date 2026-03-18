@@ -27,7 +27,10 @@ const storePayment: StorePaymentConfig =
 	(appLocalizer.store_payment_settings as StorePaymentConfig) || {};
 
 const filteredStorePayment = Object.fromEntries(
-	Object.entries(storePayment).filter(([_, value]) => value !== null && (!Array.isArray(value) || value.length > 0))
+	Object.entries(storePayment).filter(
+		([_, value]) =>
+			value !== null && (!Array.isArray(value) || value.length > 0)
+	)
 );
 
 const paymentOptions = Object.values(filteredStorePayment).map((p) => ({
@@ -53,14 +56,17 @@ const generateAllPaymentFields = (): PaymentField[] => {
 					// Use React.createElement instead of JSX
 					return {
 						...baseField,
-						component: React.createElement(StripeEmbeddedOnboarding, {
-							publishableKey: field.publish,
-							clientSecret: field.client_secret,
-							onComplete: () => {
-								console.log('Stripe onboarding completed');
-                        		window.location.reload();
-							},
-						}),
+						component: React.createElement(
+							StripeEmbeddedOnboarding,
+							{
+								publishableKey: field.publish,
+								clientSecret: field.client_secret,
+								onComplete: () => {
+									console.log('Stripe onboarding completed');
+									window.location.reload();
+								},
+							}
+						),
 					};
 				}
 

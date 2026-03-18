@@ -216,10 +216,7 @@ const StoreTable: React.FC = () => {
 					ids={rowIds}
 					categoryCounts={categoryCounts}
 					bulkActions={bulkActions}
-					onBulkActionApply={(
-						action: string,
-						selectedIds: []
-					) => {
+					onBulkActionApply={(action: string, selectedIds: []) => {
 						// handleBulkAction(action, selectedIds);
 					}}
 					search={{}}

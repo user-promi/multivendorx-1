@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import {
 	BarChart,
 	Bar,
@@ -27,8 +28,8 @@ import {
 	TableCard,
 	NavigatorHeader,
 	CalendarInputUI,
+	TableRow,
 } from 'zyra';
-import { TableRow } from '@/services/type';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { formatCurrency, formatTimeAgo } from '@/services/commonFunction';

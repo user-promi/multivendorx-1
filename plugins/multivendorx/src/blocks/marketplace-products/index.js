@@ -10,7 +10,7 @@ import MarketplaceProductList from './marketplaceProductList';
 const EditBlock = (props) => {
 	const { attributes, setAttributes } = props;
 	const blockProps = useBlockProps({
-		className: 'marketplace-products-edit'
+		className: 'marketplace-products-edit',
 	});
 
 	return (
@@ -21,11 +21,26 @@ const EditBlock = (props) => {
 						label="Sort by"
 						value={attributes.orderby}
 						options={[
-							{ label: __('Popularity', 'multivendorx'), value: 'popularity' },
-							{ label: __('Recent', 'multivendorx'), value: 'recent' },
-							{ label: __('By Rating', 'multivendorx'), value: 'rating' },
-							{ label: __('By Price', 'multivendorx'), value: 'price' },
-							{ label: __('On Sale', 'multivendorx'), value: 'on_sale' },
+							{
+								label: __('Popularity', 'multivendorx'),
+								value: 'popularity',
+							},
+							{
+								label: __('Recent', 'multivendorx'),
+								value: 'recent',
+							},
+							{
+								label: __('By Rating', 'multivendorx'),
+								value: 'rating',
+							},
+							{
+								label: __('By Price', 'multivendorx'),
+								value: 'price',
+							},
+							{
+								label: __('On Sale', 'multivendorx'),
+								value: 'on_sale',
+							},
 						]}
 						onChange={(value) => setAttributes({ orderby: value })}
 					/>

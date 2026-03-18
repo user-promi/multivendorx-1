@@ -8,10 +8,7 @@ import {
 	PanelBody,
 	PanelRow,
 } from '@wordpress/components';
-import {
-	InspectorControls,
-	useBlockProps,
-} from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 
 registerBlockType('multivendorx/contact-info', {
 	attributes: {
@@ -177,29 +174,49 @@ registerBlockType('multivendorx/contact-info', {
 				<div {...blockProps}>
 					<div className="contact-form-block-editor">
 						<h2>{__('Contact store', 'multivendorx')}</h2>
-						<p>{__('Do you need more information? Write to us!', 'multivendorx')}</p>
-						
+						<p>
+							{__(
+								'Do you need more information? Write to us!',
+								'multivendorx'
+							)}
+						</p>
+
 						<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 							<label>
-								{__('Name', 'multivendorx')} 
-								<input type="text" name="name" className="input-text" required />
+								{__('Name', 'multivendorx')}
+								<input
+									type="text"
+									name="name"
+									className="input-text"
+									required
+								/>
 							</label>
 						</p>
-						
+
 						<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 							<label>
-								{__('Email', 'multivendorx')} 
-								<input type="email" name="email" className="input-text" required />
+								{__('Email', 'multivendorx')}
+								<input
+									type="email"
+									name="email"
+									className="input-text"
+									required
+								/>
 							</label>
 						</p>
-						
+
 						<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 							<label>
-								{__('Message', 'multivendorx')} 
-								<textarea name="message" className="input-text" rows="4" required></textarea>
+								{__('Message', 'multivendorx')}
+								<textarea
+									name="message"
+									className="input-text"
+									rows="4"
+									required
+								></textarea>
 							</label>
 						</p>
-						
+
 						<button type="submit" className="contact-form-submit">
 							{__('Send Message', 'multivendorx')}
 						</button>

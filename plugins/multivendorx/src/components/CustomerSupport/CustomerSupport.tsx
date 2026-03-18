@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import {
 	useModules,
 	Container,
