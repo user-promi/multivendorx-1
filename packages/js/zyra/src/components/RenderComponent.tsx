@@ -140,8 +140,7 @@ const RenderComponent: React.FC< RenderProps > = ( {
                                     message: apiResponse.message,
                                     type: apiResponse.type || 'success',
                                     position: 'float',
-                                },
-                                5000
+                                }
                             );
                         }
 

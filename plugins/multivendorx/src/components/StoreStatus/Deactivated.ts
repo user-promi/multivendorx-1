@@ -16,21 +16,21 @@ export default {
 			items: [
 				{
 					title: __('Cannot log in to dashboard', 'multivendorx'),
-					icon: 'close adminfont-cross',
+					icon: 'cross',
 				},
 				{
 					title: __(
 						'Cannot access selling privileges',
 						'multivendorx'
 					),
-					icon: 'close adminfont-cross',
+					icon: 'cross',
 				},
 				{
 					title: __(
 						'Cannot view or manage product listings',
 						'multivendorx'
 					),
-					icon: 'close adminfont-cross',
+					icon: 'cross',
 				},
 			],
 		},

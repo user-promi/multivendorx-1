@@ -16,15 +16,15 @@ export default {
 			items: [
 				{
 					title: __('Can log in to dashboard', 'multivendorx'),
-					icon: 'close adminfont-cross',
+					icon: 'cross',
 				},
 				{
 					title: __('Cannot modify store settings', 'multivendorx'),
-					icon: 'close adminfont-cross',
+					icon: 'cross',
 				},
 				{
 					title: __('Cannot add or edit products', 'multivendorx'),
-					icon: 'close adminfont-cross',
+					icon: 'cross',
 				},
 			],
 		},

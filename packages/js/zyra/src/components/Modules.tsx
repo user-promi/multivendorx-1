@@ -130,7 +130,6 @@ const Modules: React.FC< ModuleProps > = ( {
                     type: 'success',
                     position: 'float',
                 } );
-                setTimeout( () => setSuccessMsg( '' ), 2000 );
 
                 if ( module.reloadOnChange ) {
                     window.location.reload();
@@ -143,7 +142,6 @@ const Modules: React.FC< ModuleProps > = ( {
                     type: 'error',
                     position: 'float',
                 } );
-                setTimeout( () => setSuccessMsg( '' ), 2000 );
             } );
     };
 
