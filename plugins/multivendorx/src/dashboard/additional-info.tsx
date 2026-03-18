@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { getApiLink, TextAreaUI, ChoiceToggleUI, NoticeManager, Container, Column, Card, FormGroupWrapper, FormGroup } from 'zyra';
+import {
+	getApiLink,
+	TextAreaUI,
+	ChoiceToggleUI,
+	NoticeManager,
+	Container,
+	Column,
+	Card,
+	FormGroupWrapper,
+	FormGroup,
+} from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 const AdditionalInformation = () => {
@@ -74,7 +84,10 @@ const AdditionalInformation = () => {
 				if (res.data.success) {
 					NoticeManager.add({
 						title: __('Great!', 'multivendorx'),
-						message: __('Store saved successfully!', 'multivendorx'),
+						message: __(
+							'Store saved successfully!',
+							'multivendorx'
+						),
 						type: 'success',
 						position: 'float',
 					});
@@ -100,7 +113,9 @@ const AdditionalInformation = () => {
 					{/* Privacy Controls */}
 					<Card title={__('Privacy Controls', 'multivendorx')}>
 						<FormGroupWrapper>
-							<FormGroup label={__('Hide Address', 'multivendorx')}>
+							<FormGroup
+								label={__('Hide Address', 'multivendorx')}
+							>
 								<ChoiceToggleUI
 									options={[
 										{

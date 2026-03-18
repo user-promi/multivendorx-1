@@ -94,7 +94,13 @@ const StoreQuickInfo: React.FC<{}> = () => {
 		<div className="store-card">
 			<div className="store-header">
 				<div className="store-avatar">
-					<img src={storeDetails.storeLogo || StoreInfo.default_user_avatar} alt="Store Avatar" />
+					<img
+						src={
+							storeDetails.storeLogo ||
+							StoreInfo.default_user_avatar
+						}
+						alt="Store Avatar"
+					/>
 				</div>
 
 				<div className="store-info">

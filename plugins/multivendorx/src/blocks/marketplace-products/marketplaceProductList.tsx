@@ -81,59 +81,65 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 				<p>{__('Loading products...', 'multivendorx')}</p>
 			) : (
 				<>
-				<h3>{__('Products', 'multivendorx')}</h3>
-				<div className="woocommerce">
-					<ul className="product_list_widget">
-						{products.length > 0 ? (
-							products.map((product) => (
-								<li key={product.id}>
-									<a href={product.permalink}>
-										<img
-											className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
-											src={product.images?.[0]?.src}
-											alt={product.name}
-										/>
+					<h3>{__('Products', 'multivendorx')}</h3>
+					<div className="woocommerce">
+						<ul className="product_list_widget">
+							{products.length > 0 ? (
+								products.map((product) => (
+									<li key={product.id}>
+										<a href={product.permalink}>
+											<img
+												className="attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
+												src={product.images?.[0]?.src}
+												alt={product.name}
+											/>
 
-										<span className="product-title">
-											{product.name}
+											<span className="product-title">
+												{product.name}
+											</span>
+										</a>
+
+										<span className="woocommerce-Price-amount amount">
+											<bdi>
+												{product.salePrice ? (
+													<>
+														<del aria-hidden="true">
+															<span className="woocommerce-Price-amount amount">
+																<bdi>
+																	{
+																		product.price
+																	}
+																</bdi>
+															</span>
+														</del>
+														<ins aria-hidden="true">
+															<span className="woocommerce-Price-amount amount">
+																<bdi>
+																	{
+																		product.salePrice
+																	}
+																</bdi>
+															</span>
+														</ins>
+													</>
+												) : (
+													<span className="woocommerce-Price-amount amount">
+														<bdi>
+															{product.price}
+														</bdi>
+													</span>
+												)}
+											</bdi>
 										</span>
-									</a>
-
-									<span className="woocommerce-Price-amount amount">
-										<bdi>
-											{product.salePrice ? (
-												<>
-													<del aria-hidden="true">
-														<span className="woocommerce-Price-amount amount">
-															<bdi>
-																{product.price}
-															</bdi>
-														</span>
-													</del>
-													<ins aria-hidden="true">
-														<span className="woocommerce-Price-amount amount">
-															<bdi>
-																{
-																	product.salePrice
-																}
-															</bdi>
-														</span>
-													</ins>
-												</>
-											) : (
-												<span className="woocommerce-Price-amount amount">
-													<bdi>{product.price}</bdi>
-												</span>
-											)}
-										</bdi>
-									</span>
-								</li>
-							))
-						) : (
-							<p>{__('No products found.', 'multivendorx')}</p>
-						)}
-					</ul>
-				</div>
+									</li>
+								))
+							) : (
+								<p>
+									{__('No products found.', 'multivendorx')}
+								</p>
+							)}
+						</ul>
+					</div>
 				</>
 			)}
 		</>

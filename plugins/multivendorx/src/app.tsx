@@ -1,7 +1,7 @@
+/* global appLocalizer */
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
-	ButtonInputUI,
 	AdminHeader,
 	SequentialTaskExecutor,
 	FormGroup,

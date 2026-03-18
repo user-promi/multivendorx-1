@@ -251,7 +251,7 @@ jQuery(document).ready(function ($) {
 			);
 		});
 	});
-	
+
 	// Initial Load
 	loadAverageRatings();
 	loadReviews();

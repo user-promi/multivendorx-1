@@ -151,32 +151,28 @@ const StoreReviews: React.FC = () => {
 			render: (row: any) => (
 				<div className="review-details">
 					<div className="review">
-						{[
-							...Array(
-								Math.round(
-									row.overall_rating || 0
-								)
-							),
-						].map((_, i) => (
-							<i key={`filled-${i}`} className="star-icon adminfont-star" />
-						))}
+						{[...Array(Math.round(row.overall_rating || 0))].map(
+							(_, i) => (
+								<i
+									key={`filled-${i}`}
+									className="star-icon adminfont-star"
+								/>
+							)
+						)}
 
 						{[
-							...Array(
-								5 -
-								Math.round(
-									row.overall_rating ||
-									0
-								)
-							),
+							...Array(5 - Math.round(row.overall_rating || 0)),
 						].map((_, i) => (
-							<i key={`empty-${i}`} className="star-icon adminfont-star-o" />
+							<i
+								key={`empty-${i}`}
+								className="star-icon adminfont-star-o"
+							/>
 						))}
 					</div>
 					<div className="title">{row.review_title}</div>
 					<div className="desc">{row.review_content}</div>
 				</div>
-			)
+			),
 		},
 		status: {
 			label: __('Status', 'multivendorx'),
@@ -321,9 +317,9 @@ const StoreReviews: React.FC = () => {
 					confirmMessage={
 						selectedRv
 							? __(
-								'Are you sure you want to delete review?',
-								'multivendorx'
-							)
+									'Are you sure you want to delete review?',
+									'multivendorx'
+								)
 							: ''
 					}
 					confirmYesText={__('Delete', 'multivendorx')}
@@ -404,7 +400,7 @@ const StoreReviews: React.FC = () => {
 												...Array(
 													Math.round(
 														selectedReview.overall_rating ||
-														0
+															0
 													)
 												),
 											].map((_, i) => (
@@ -417,10 +413,10 @@ const StoreReviews: React.FC = () => {
 											{[
 												...Array(
 													5 -
-													Math.round(
-														selectedReview.overall_rating ||
-														0
-													)
+														Math.round(
+															selectedReview.overall_rating ||
+																0
+														)
 												),
 											].map((_, i) => (
 												<i

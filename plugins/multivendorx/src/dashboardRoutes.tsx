@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { Suspense } from 'react';
 import { Routes, Route, Navigate, MemoryRouter } from 'react-router-dom';
 import Dashboard from './storeDashboard';

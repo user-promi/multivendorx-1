@@ -124,7 +124,7 @@ const Withdrawl: React.FC = () => {
 			if (res.data.success) {
 				NoticeManager.add({
 					title: __('Great!', 'multivendorx'),
-					message:  __('Store saved successfully!', 'multivendorx'),
+					message: __('Store saved successfully!', 'multivendorx'),
 					type: 'success',
 					position: 'float',
 				});

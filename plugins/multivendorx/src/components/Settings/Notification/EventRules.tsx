@@ -179,7 +179,10 @@ const EventRules: React.FC = () => {
 			page: query.paged || 1,
 			per_page: query.per_page || 10,
 			search: query.searchValue || '',
-			tag: query.categoryFilter === 'All' ? '' : query.categoryFilter || '',
+			tag:
+				query.categoryFilter === 'All'
+					? ''
+					: query.categoryFilter || '',
 			events: true,
 		})
 			.then((response) => {
@@ -305,54 +308,63 @@ const EventRules: React.FC = () => {
 						<div className="title">
 							{row.event}
 							{row.tag && (
-								<span className={`admin-badge yellow ${row.tag}`}>
+								<span
+									className={`admin-badge yellow ${row.tag}`}
+								>
 									{row.tag}
 								</span>
 							)}
 							{row.category && (
-								<span className={`admin-badge blue ${row.category}`}>
+								<span
+									className={`admin-badge blue ${row.category}`}
+								>
 									{row.category}
 								</span>
 							)}
 						</div>
-						<div className="des">
-							{row.description}
-						</div>
+						<div className="des">{row.description}</div>
 					</div>
 				</div>
-			)
+			),
 		},
 		recipients: {
 			label: __('Recipients', 'multivendorx'),
 			render: (row: Notification) => (
 				<div className="recipients-list">
 					{(row.recipients || []).map((recipient: Recipient) => (
-						<RecipientBadge key={recipient.id} recipient={recipient} />
+						<RecipientBadge
+							key={recipient.id}
+							recipient={recipient}
+						/>
 					))}
 				</div>
-			)
+			),
 		},
 		system: {
 			label: __('System', 'multivendorx'),
 			render: (row: Notification) => (
 				<div className="system-column">
-					{Object.entries(row.channels || {}).map(([channel, enabled]: [string, boolean]) => {
-						const cfg = CHANNEL_CONFIG[channel];
-						if (!cfg || !enabled) return null;
-						return (
-							<i
-								key={channel}
-								className={`adminfont-${cfg.icon} admin-badge ${cfg.badge}`}
-								onClick={(e) => {
-									e.stopPropagation();
-									setNotificationId(row.id);
-									openEditPannel(row.id, channel);
-								}}
-							/>
-						);
-					})}
+					{Object.entries(row.channels || {}).map(
+						([channel, enabled]: [string, boolean]) => {
+							const cfg = CHANNEL_CONFIG[channel];
+							if (!cfg || !enabled) {
+								return null;
+							}
+							return (
+								<i
+									key={channel}
+									className={`adminfont-${cfg.icon} admin-badge ${cfg.badge}`}
+									onClick={(e) => {
+										e.stopPropagation();
+										setNotificationId(row.id);
+										openEditPannel(row.id, channel);
+									}}
+								/>
+							);
+						}
+					)}
 				</div>
-			)
+			),
 		},
 		action: {
 			type: 'action',
@@ -365,14 +377,17 @@ const EventRules: React.FC = () => {
 						setEditingNotification(row.id);
 						setNotificationId(row.id);
 					},
-				}
+				},
 			],
 		},
 	};
 
 	return (
 		<Container general>
-			<div className="notification-container module-container tab-bg" data-variant="default">
+			<div
+				className="notification-container module-container tab-bg"
+				data-variant="default"
+			>
 				{/* View Toggle + Category Filter */}
 				<div className="toggle-setting-wrapper view-toggle">
 					<div className="category-filter">
@@ -433,7 +448,6 @@ const EventRules: React.FC = () => {
 				</div>
 
 				{viewMode === 'list' && (
-
 					<Column>
 						<TableCard
 							headers={headers}
@@ -447,7 +461,6 @@ const EventRules: React.FC = () => {
 							}}
 						/>
 					</Column>
-
 				)}
 
 				{openChannel && (
@@ -458,12 +471,13 @@ const EventRules: React.FC = () => {
 						height="70%"
 						header={{
 							icon: 'cart',
-							title: `${openChannel === 'system'
-								? __('System Notification', 'multivendorx')
-								: openChannel === 'sms'
-									? __('SMS Message', 'multivendorx')
-									: __('Email Message', 'multivendorx')
-								} - ${editNotification?.event ?? ''}`,
+							title: `${
+								openChannel === 'system'
+									? __('System Notification', 'multivendorx')
+									: openChannel === 'sms'
+										? __('SMS Message', 'multivendorx')
+										: __('Email Message', 'multivendorx')
+							} - ${editNotification?.event ?? ''}`,
 						}}
 						footer={
 							<ButtonInputUI
@@ -482,12 +496,17 @@ const EventRules: React.FC = () => {
 							<FormGroupWrapper>
 								{openChannel === 'system' && (
 									<FormGroup
-										label={__('System Message', 'multivendorx')}
+										label={__(
+											'System Message',
+											'multivendorx'
+										)}
 										htmlFor="system-message"
 									>
 										<TextAreaUI
 											name="system_message"
-											value={formData.system_message || ''}
+											value={
+												formData.system_message || ''
+											}
 											onClick={(e) =>
 												trackCursor(e, 'system_message')
 											}
@@ -509,7 +528,10 @@ const EventRules: React.FC = () => {
 								)}
 								{openChannel === 'sms' && (
 									<FormGroup
-										label={__('SMS Content', 'multivendorx')}
+										label={__(
+											'SMS Content',
+											'multivendorx'
+										)}
 										htmlFor="sms-content"
 									>
 										<TextAreaUI
@@ -544,9 +566,14 @@ const EventRules: React.FC = () => {
 										>
 											<BasicInputUI
 												name="email_subject"
-												value={formData.email_subject || ''}
+												value={
+													formData.email_subject || ''
+												}
 												onClick={(e) =>
-													trackCursor(e, 'email_subject')
+													trackCursor(
+														e,
+														'email_subject'
+													)
 												}
 												onChange={(value) => {
 													setFormData({
@@ -562,12 +589,17 @@ const EventRules: React.FC = () => {
 										</FormGroup>
 										<FormGroup
 											cols={2}
-											label={__('Email Body', 'multivendorx')}
+											label={__(
+												'Email Body',
+												'multivendorx'
+											)}
 											htmlFor="email-body"
 										>
 											<TextAreaUI
 												name="email_body"
-												value={formData.email_body || ''}
+												value={
+													formData.email_body || ''
+												}
 												onClick={(e) =>
 													trackCursor(e, 'email_body')
 												}
@@ -591,7 +623,9 @@ const EventRules: React.FC = () => {
 											<span
 												key={idx}
 												className="tag-item"
-												onClick={() => insertAtCursor(tag)}
+												onClick={() =>
+													insertAtCursor(tag)
+												}
 											>
 												{tag}
 											</span>
@@ -616,7 +650,9 @@ const EventRules: React.FC = () => {
 						}}
 					>
 						<FormGroupWrapper>
-							<FormGroup label={__('Delivery method', 'multivendorx')}>
+							<FormGroup
+								label={__('Delivery method', 'multivendorx')}
+							>
 								<div className="buttons-wrapper left">
 									{Object.entries(
 										notifications.find(
@@ -632,8 +668,8 @@ const EventRules: React.FC = () => {
 												key={channel}
 												className={`admin-badge ${enabled ? 'purple' : ''}`}
 											>
-													<i className={cfg.icon}></i>
-													<span>{cfg.label}</span>
+												<i className={cfg.icon}></i>
+												<span>{cfg.label}</span>
 												<i
 													onClick={() =>
 														toggleChannel(
@@ -677,23 +713,33 @@ const EventRules: React.FC = () => {
 							</FormGroup>
 
 							{customRecipients?.length > 0 && (
-								<FormGroup label={__('Custom Recipients', 'multivendorx')}>
+								<FormGroup
+									label={__(
+										'Custom Recipients',
+										'multivendorx'
+									)}
+								>
 									<div className="buttons-wrapper left">
-										{customRecipients.map((r: Recipient) => (
-											<div key={r.id} className={`admin-badge ${r.enabled ? 'purple' : ''}`} >
-												<i className="adminfont-mail"></i>
-												<span>{r.label}</span>
-												<i
-													className="delete-btn adminfont-delete"
-													onClick={() =>
-														deleteRecipient(
-															editingNotification,
-															r.id
-														)
-													}
-												/>
-											</div>
-										))}
+										{customRecipients.map(
+											(r: Recipient) => (
+												<div
+													key={r.id}
+													className={`admin-badge ${r.enabled ? 'purple' : ''}`}
+												>
+													<i className="adminfont-mail"></i>
+													<span>{r.label}</span>
+													<i
+														className="delete-btn adminfont-delete"
+														onClick={() =>
+															deleteRecipient(
+																editingNotification,
+																r.id
+															)
+														}
+													/>
+												</div>
+											)
+										)}
 									</div>
 								</FormGroup>
 							)}
@@ -731,11 +777,16 @@ const EventRules: React.FC = () => {
 				{viewMode === 'grid' && (
 					<div className="module-option-row">
 						{filteredNotifications.map((notif: any) => (
-							<div key={notif.id} className="module-list-item notification-card">
+							<div
+								key={notif.id}
+								className="module-list-item notification-card"
+							>
 								<div className="module-body">
 									<div className="module-header">
 										<div className="icon">
-											<i className={`notification-icon adminfonts ${notif.icon}`} />
+											<i
+												className={`notification-icon adminfonts ${notif.icon}`}
+											/>
 										</div>
 									</div>
 									<div className="module-details">
@@ -743,24 +794,29 @@ const EventRules: React.FC = () => {
 											{notif.event}
 										</div>
 										<div className="tag-wrapper">
-											{(notif.recipients || []).map((r: any) => (
-												<RecipientBadge
-													key={r.id}
-													recipient={r}
-													onToggle={() =>
-														toggleRecipient(notif.id, r.id)
-													}
-													onDelete={
-														r.canDelete
-															? () =>
-																deleteRecipient(
-																	notif.id,
-																	r.id
-																)
-															: undefined
-													}
-												/>
-											))}
+											{(notif.recipients || []).map(
+												(r: any) => (
+													<RecipientBadge
+														key={r.id}
+														recipient={r}
+														onToggle={() =>
+															toggleRecipient(
+																notif.id,
+																r.id
+															)
+														}
+														onDelete={
+															r.canDelete
+																? () =>
+																		deleteRecipient(
+																			notif.id,
+																			r.id
+																		)
+																: undefined
+														}
+													/>
+												)
+											)}
 										</div>
 										<div className="meta-description">
 											{notif.description}
@@ -770,27 +826,28 @@ const EventRules: React.FC = () => {
 								<div className="footer-wrapper">
 									<div className="module-footer">
 										<div className="system-column">
-											{Object.entries(notif.channels || {}).map(
-												([channel, enabled]: any) => {
-													const cfg = CHANNEL_CONFIG[channel];
-													if (!cfg) {
-														return null;
-													}
-													return (
-														<i
-															key={channel}
-															className={`adminfont-${cfg.icon} admin-badge ${cfg.badge} ${!enabled ? 'disable' : ''}`}
-															onClick={(e) => {
-																e.stopPropagation();
-																toggleChannel(
-																	notif.id,
-																	channel
-																);
-															}}
-														/>
-													);
+											{Object.entries(
+												notif.channels || {}
+											).map(([channel, enabled]: any) => {
+												const cfg =
+													CHANNEL_CONFIG[channel];
+												if (!cfg) {
+													return null;
 												}
-											)}
+												return (
+													<i
+														key={channel}
+														className={`adminfont-${cfg.icon} admin-badge ${cfg.badge} ${!enabled ? 'disable' : ''}`}
+														onClick={(e) => {
+															e.stopPropagation();
+															toggleChannel(
+																notif.id,
+																channel
+															);
+														}}
+													/>
+												);
+											})}
 										</div>
 										<ButtonInputUI
 											buttons={[
@@ -802,7 +859,9 @@ const EventRules: React.FC = () => {
 														setEditingNotification(
 															notif.id
 														);
-														setNotificationId(notif.id);
+														setNotificationId(
+															notif.id
+														);
 													},
 												},
 											]}

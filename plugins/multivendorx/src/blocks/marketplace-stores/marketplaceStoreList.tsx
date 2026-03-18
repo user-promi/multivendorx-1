@@ -114,7 +114,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			})
 			.then((response) => {
 				setProduct(response.data);
-			})
+			});
 	}, [topFilters.category]);
 
 	const fetchTopProducts = (storeId: number) => {
@@ -135,7 +135,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 					...prev,
 					[storeId]: response.data,
 				}));
-			})
+			});
 	};
 
 	useEffect(() => {
@@ -155,7 +155,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 				page: page,
 				row: perPage,
 				filters: true,
-				...filters
+				...filters,
 			},
 		})
 			.then((response) => {
@@ -457,16 +457,39 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 											<div className="store-details">
 												<h4>{store.store_name}</h4>
 												<div className="review-rating">
-													{store.rating !== undefined && (
+													{store.rating !==
+														undefined && (
 														<div
 															className="star-rating"
 															role="img"
-															aria-label={sprintf(__('Rated %s out of 5', 'multivendorx'), store.rating.toFixed(2))}
+															aria-label={sprintf(
+																__(
+																	'Rated %s out of 5',
+																	'multivendorx'
+																),
+																store.rating.toFixed(
+																	2
+																)
+															)}
 														>
-															<span style={{ width: `${(store.rating / 5) * 100}%` }}>
-																{__('Rated', 'multivendorx')}{' '}
-																<strong className="rating">{store.rating.toFixed(2)}</strong>{' '}
-																{__('out of 5', 'multivendorx')}
+															<span
+																style={{
+																	width: `${(store.rating / 5) * 100}%`,
+																}}
+															>
+																{__(
+																	'Rated',
+																	'multivendorx'
+																)}{' '}
+																<strong className="rating">
+																	{store.rating.toFixed(
+																		2
+																	)}
+																</strong>{' '}
+																{__(
+																	'out of 5',
+																	'multivendorx'
+																)}
 															</span>
 														</div>
 													)}
@@ -525,9 +548,23 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 																	<img
 																		width="324"
 																		height="324"
-																		src={p.images?.[0]?.src || storesList?.placeholder_url}
-																		alt={p.name || 'Product Image'}
-																		className={p.images?.[0]?.src ? 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail' : 'woocommerce-placeholder wp-post-image'}
+																		src={
+																			p
+																				.images?.[0]
+																				?.src ||
+																			storesList?.placeholder_url
+																		}
+																		alt={
+																			p.name ||
+																			'Product Image'
+																		}
+																		className={
+																			p
+																				.images?.[0]
+																				?.src
+																				? 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail'
+																				: 'woocommerce-placeholder wp-post-image'
+																		}
 																		decoding="async"
 																		loading="lazy"
 																	/>
@@ -538,28 +575,28 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 																	{/* Add star rating if available */}
 																	{p.average_rating >
 																		0 && (
-																			<div
-																				className="star-rating"
-																				role="img"
-																				aria-label={`Rated ${p.average_rating} out of 5`}
+																		<div
+																			className="star-rating"
+																			role="img"
+																			aria-label={`Rated ${p.average_rating} out of 5`}
+																		>
+																			<span
+																				style={{
+																					width: `${(p.average_rating / 5) * 100}%`,
+																				}}
 																			>
-																				<span
-																					style={{
-																						width: `${(p.average_rating / 5) * 100}%`,
-																					}}
-																				>
-																					Rated{' '}
-																					<strong className="rating">
-																						{
-																							p.average_rating
-																						}
-																					</strong>{' '}
-																					out
-																					of
-																					5
-																				</span>
-																			</div>
-																		)}
+																				Rated{' '}
+																				<strong className="rating">
+																					{
+																						p.average_rating
+																					}
+																				</strong>{' '}
+																				out
+																				of
+																				5
+																			</span>
+																		</div>
+																	)}
 
 																	{/* Price HTML */}
 																	{p.price_html && (
@@ -598,7 +635,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 									<li>
 										<button
 											disabled={page === 1}
-											onClick={() => setPage((p) => p - 1)}
+											onClick={() =>
+												setPage((p) => p - 1)
+											}
 											className="page-numbers"
 										>
 											{__('Previous', 'multivendorx')}
@@ -614,7 +653,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 									<li>
 										<button
 											disabled={page >= totalPages}
-											onClick={() => setPage((p) => p + 1)}
+											onClick={() =>
+												setPage((p) => p + 1)
+											}
 											className="page-numbers"
 										>
 											{__('Next', 'multivendorx')}
