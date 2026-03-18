@@ -167,7 +167,7 @@ const Qna: React.FC = () => {
 			render: (row: any) => (
 				<div className="question-wrapper">
 					<div className="question">Q: {row.question_text}</div>
-					<div className="answer">A: {row.answer_text}</div>
+					{row.answer_text && <div className="answer">A: {row.answer_text}</div>}
 					<div className="desc">By {row.author_name}</div>
 				</div>
 			)

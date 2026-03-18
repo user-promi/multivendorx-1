@@ -209,7 +209,7 @@ const TableCard: React.FC< TableCardProps > = ( {
         } ) );
 
     return (
-        <div className="admin-table-wrapper">
+        <div className={`admin-table-wrapper ${className}`}>
             { /* HEADER */ }
             { title && (
                 <div className="table-card-header">

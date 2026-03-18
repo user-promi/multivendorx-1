@@ -1,5 +1,15 @@
 @use '../../global.scss' as *;
 
+.admin-table-wrapper.transparent-table{
+    .admin-table{
+        background: transparent;
+
+        .admin-table-body tr{
+            border-top: $border-light-small;
+        }
+    }
+}
+
 .admin-top-filter {
     display: flex;
     align-items: center;
