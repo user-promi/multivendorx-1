@@ -7,6 +7,10 @@ import type {
     SingleValue,
     StylesConfig,
     GroupBase,
+    MenuListProps,
+    ValueContainerProps,
+    OnChangeValue,
+    Props as SelectComponentProps,
 } from 'react-select';
 
 // Internal dependencies
@@ -27,6 +31,13 @@ export type SelectType =
     | 'multi-select'
     | 'creatable'
     | 'creatable-multi';
+
+type RSProps = SelectComponentProps< SelectOption, boolean >;
+
+type FieldOptions =
+    | SelectOption[]
+    | Record< string, string >
+    | Record< string, SelectOption[] >;
 
 export interface SelectProps {
     type: SelectType;
@@ -207,7 +218,7 @@ const buildStyles = (
     } ),
 } );
 
-const CustomMenuList = ( props: any ) => {
+const CustomMenuList = ( props: MenuListProps< SelectOption, boolean > ) => {
     const { menuContent, keepMenuOpenOnMenuContentClick } = props.selectProps;
     return (
         <components.MenuList { ...props }>
@@ -237,7 +248,9 @@ const CustomNoOptionsMessage = ( props: any ) => (
     </components.NoOptionsMessage>
 );
 
-const CustomValueContainer = ( props: any ) => {
+const CustomValueContainer = (
+    props: ValueContainerProps< SelectOption, boolean >
+) => {
     const {
         children,
         getValue,
@@ -328,7 +341,7 @@ export const SelectInputUI: React.FC< SelectProps > = ( {
     const [ popupOpen, setPopupOpen ] = React.useState( false );
 
     const { isMulti, Component } = FIELD_TYPE_CONFIG[ type ] ?? DEFAULT_CONFIG;
-    const CastComponent = Component as any;
+    const CastComponent = Component as React.ComponentType< RSProps >;
 
     const optionsData: SelectOption[] = options.map( ( opt, index ) => ( {
         value: opt.value,
@@ -353,7 +366,7 @@ export const SelectInputUI: React.FC< SelectProps > = ( {
         isMulti,
         isDisabled: disabled,
         isClearable,
-        onChange: ( raw: any ) =>
+        onChange: ( raw: OnChangeValue< SelectOption, boolean > ) =>
             onChange( extractValue( raw ?? ( isMulti ? [] : null ), isMulti ) ),
         styles: buildStyles( isMulti ),
         components: CUSTOM_COMPONENTS,
@@ -412,7 +425,7 @@ export const SelectInputUI: React.FC< SelectProps > = ( {
 const SelectInput: FieldComponent = {
     render: ( { field, value, onChange, canAccess, settings } ) => {
         const { type } = FIELD_TYPE_CONFIG[ field.type ] ?? DEFAULT_CONFIG;
-        let resolvedOptions: any = field.options || [];
+        let resolvedOptions: FieldOptions = field.options || [];
 
         // Handle dependent fields (ex: state depends on country)
         if ( field.dependent?.key && field.options ) {

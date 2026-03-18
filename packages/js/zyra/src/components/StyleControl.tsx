@@ -4,11 +4,12 @@ import { ChoiceToggleUI } from './ChoiceToggle';
 import Card from './UI/Card';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import FormGroup from './UI/FormGroup';
+import { BlockStyle } from './CanvasEditor/blockStyle';
 import { BasicInputUI } from './BasicInput';
 
 interface StyleControlsProps {
-    style?: any;
-    onChange: ( style: any ) => void;
+    style?: BlockStyle;
+    onChange: ( style: BlockStyle ) => void;
     includeTextStyles?: boolean;
 }
 

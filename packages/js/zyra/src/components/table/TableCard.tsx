@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Table from './table';
 import Pagination from './Pagination';
-import { QueryProps, TableCardProps, TableRow } from './types';
+import { QueryProps, TableCardProps } from './types';
 import BulkActionDropdown from './BulkActionDropdown';
 import RealtimeFilters from './RealtimeFilter';
 import ButtonActions from './ButtonActions';
