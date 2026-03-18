@@ -283,63 +283,72 @@ const Table: React.FC< TableProps > = ( {
                                     </td>
                                 ) }
 
-                                {Object.entries(headers).map(([key, header], colIndex) => {
-                                    const rowId = row.id;
-                                    const cell = row[header.key];
+                                { Object.entries( headers ).map(
+                                    ( [ key, header ], colIndex ) => {
+                                        const rowId = row.id;
+                                        const cell = row[ header.key ];
+                                        if (
+                                            typeof header.render === 'function'
+                                        ) {
+                                            return (
+                                                <td
+                                                    key={ `${ rowId }-${ colIndex }` }
+                                                    className={ `admin-column ${ header.type }` }
+                                                    style={
+                                                        header.width
+                                                            ? {
+                                                                  minWidth: `${ header.width }rem`,
+                                                              }
+                                                            : {}
+                                                    }
+                                                >
+                                                    { header.render( row ) }
+                                                </td>
+                                            );
+                                        }
 
-                                    if (typeof header.render === 'function') {
-                                        return (
-                                            <td
-                                                key={`${rowId}-${colIndex}`}
-                                                className={`admin-column ${header.type}`}
-                                                style={
-                                                    header.width
-                                                        ? { minWidth: `${header.width}rem` }
-                                                        : {}
-                                                }
-                                            >
-                                                {header.render(row)}
-                                            </td>
+                                        if ( header.type === 'action' ) {
+                                            return (
+                                                <td
+                                                    key={ `action-${ rowId }` }
+                                                    className="admin-column actions"
+                                                >
+                                                    <TableRowActions
+                                                        row={ row }
+                                                        rowActions={
+                                                            header.actions
+                                                        }
+                                                    />
+                                                </td>
+                                            );
+                                        }
+
+                                        let displayValue = renderCell(
+                                            row,
+                                            header,
+                                            format,
+                                            currency
                                         );
-                                    }
 
-                                    if (header.type === 'action') {
                                         return (
                                             <td
                                                 key={ `${ rowId }-${ colIndex }` }
                                                 className="admin-column"
                                             >
-                                                <TableRowActions
-                                                    row={row}
-                                                    rowActions={header.actions}
-                                                />
+                                                { header.isEditable
+                                                    ? renderEditableCell( {
+                                                          header,
+                                                          cell,
+                                                          isEditing: false,
+                                                          onSave: onCellEdit,
+                                                      } )
+                                                    : displayValue }
                                             </td>
                                         );
+                                        
                                     }
-
-                                    const displayValue = renderCell(
-                                        row,
-                                        header,
-                                        format,
-                                        currency
-                                    );
-
-                                    return (
-                                        <td
-                                            key={`${rowId}-${colIndex}`}
-                                             className={`admin-column ${header.type}`}
-                                        >
-                                            {header.isEditable
-                                                ? renderEditableCell({
-                                                    header,
-                                                    cell,
-                                                    isEditing: false,
-                                                    onSave: onCellEdit,
-                                                })
-                                                : displayValue}
-                                        </td>
-                                    );
-                                })}
+                                )}
+                                
 
                             </tr>
                         ) )
