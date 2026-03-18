@@ -212,7 +212,6 @@ const BusinessAddress = () => {
 			! settings['store-permissions']?.edit_store_info_activation ||
 			[].includes('store_address')
 		) {
-			console.log('inside if')
 			return;
 		}
 		// Format email data for backend
