@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { FieldComponent } from './fieldUtils';
 import { generateBlockStyles, BlockStyle } from './CanvasEditor/blockStyle';
 
@@ -75,12 +75,11 @@ export const TextContentView: React.FC< {
 // Main Render Component - Matches FieldComponent interface
 export const TextContentUI: React.FC< {
     field: TextContentBlockData;
-    value?: any;
-    onChange: ( value: any ) => void;
+    value?: Partial< TextContentBlockData >;
+    onChange: ( value: Partial< TextContentBlockData > ) => void;
     canAccess?: boolean;
     modules?: string[];
-    settings?: Record< string, any >;
-    onOptionsChange?: ( options: any[] ) => void;
+    settings?: Record< string, string | number | boolean | null >;
     onBlocked?: ( type: 'pro' | 'module', payload?: string ) => void;
 } > = ( { field, onChange } ) => {
     if ( ! field ) {

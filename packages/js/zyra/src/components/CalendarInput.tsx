@@ -60,14 +60,12 @@ interface PresetsProps {
     setValue: ( dates: DateObject[] | DateObject ) => void;
     pickerRef: React.RefObject< DatePickerRef >;
     format: string;
-    maxDate?: Date;
 }
 
 const Presets: React.FC< PresetsProps > = ( {
     setValue,
     pickerRef,
     format,
-    maxDate,
 } ) => {
     const now = new Date();
 
@@ -209,8 +207,7 @@ export const CalendarInputUI: React.FC< CalendarInputProps > = ( {
                 key="presets"
                 setValue={ handleChange }
                 pickerRef={ pickerRef }
-                format={ format }
-                maxDate={ maxDate } // Pass maxDate to presets
+                format={ format } // Pass maxDate to presets
             />
         );
     }

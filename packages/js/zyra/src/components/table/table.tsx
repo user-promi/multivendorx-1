@@ -345,11 +345,8 @@ const Table: React.FC< TableProps > = ( {
                                                     : displayValue }
                                             </td>
                                         );
-                                        
                                     }
-                                )}
-                                
-
+                                ) }
                             </tr>
                         ) )
                     ) : (

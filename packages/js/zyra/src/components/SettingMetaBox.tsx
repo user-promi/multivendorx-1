@@ -122,14 +122,7 @@ const InputField: React.FC< {
     className?: string;
     readonly?: boolean;
     placeholder?: string;
-} > = ( {
-    label,
-    value,
-    onChange,
-    className,
-    readonly = false,
-    placeholder,
-} ) => (
+} > = ( { label, value, onChange, readonly = false, placeholder } ) => (
     <FormGroup label={ label }>
         <BasicInputUI
             value={ value || '' }

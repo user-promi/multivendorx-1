@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-
+import StripeEmbeddedOnboarding from './StripeEmbeddedOnboarding';
 interface PaymentField {
 	publish?: any;
 	client_secret?: any;
@@ -27,7 +27,7 @@ const storePayment: StorePaymentConfig =
 	(appLocalizer.store_payment_settings as StorePaymentConfig) || {};
 
 const filteredStorePayment = Object.fromEntries(
-	Object.entries(storePayment).filter(([_, value]) => value !== null)
+	Object.entries(storePayment).filter(([_, value]) => value !== null && (!Array.isArray(value) || value.length > 0))
 );
 
 const paymentOptions = Object.values(filteredStorePayment).map((p) => ({
@@ -37,19 +37,36 @@ const paymentOptions = Object.values(filteredStorePayment).map((p) => ({
 }));
 
 // Generate all payment fields for all providers with conditions
-const generateAllPaymentFields = () => {
+const generateAllPaymentFields = (): PaymentField[] => {
 	const allFields: PaymentField[] = [];
 
 	Object.values(filteredStorePayment).forEach((provider) => {
 		if (provider.fields && Array.isArray(provider.fields)) {
-			const providerFields = provider.fields.map((field) => ({
-				...field,
-				key: `${field.key}`, // Make key unique by prefixing with provider ID
-				dependent: {
-					key: 'payment_method',
-					value: provider.id, // Only show when this payment method is selected
-				},
-			}));
+			const providerFields = provider.fields.map((field) => {
+				const baseField: PaymentField = {
+					...field,
+					key: `${field.key}`,
+					dependent: { key: 'payment_method', value: provider.id },
+				};
+
+				if (field.type === 'embedded') {
+					// Use React.createElement instead of JSX
+					return {
+						...baseField,
+						component: React.createElement(StripeEmbeddedOnboarding, {
+							publishableKey: field.publish,
+							clientSecret: field.client_secret,
+							onComplete: () => {
+								console.log('Stripe onboarding completed');
+                        		window.location.reload();
+							},
+						}),
+					};
+				}
+
+				return baseField;
+			});
+
 			allFields.push(...providerFields);
 		}
 	});

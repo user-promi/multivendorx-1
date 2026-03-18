@@ -7,6 +7,27 @@ import { FieldComponent } from './fieldUtils';
 import { Block } from './CanvasEditor/blockTypes';
 import '../styles/web/BlockBuilder.scss';
 
+interface BuilderValue {
+    formfieldlist?: Block[];
+    emailTemplates?: EmailTemplate[];
+    activeEmailTemplateId?: string;
+}
+
+interface BlockBuilderProps {
+    value?: BuilderValue;
+    onChange: ( data: BuilderValue ) => void;
+    field?: {
+        key?: string;
+        context?: 'form' | 'email';
+        visibleGroups?: string[];
+        defaultTemplateId?: string;
+        emailTemplates?: EmailTemplate[];
+    };
+    setting?: Record< string, BuilderValue >;
+    proSettingChange?: ( ...args: unknown[] ) => boolean;
+    name?: string;
+}
+
 const OPTION_PRESETS = [
     { id: '1', label: 'Manufacture', value: 'manufacture' },
     { id: '2', label: 'Trader', value: 'trader' },
@@ -230,7 +251,7 @@ const DEFAULT_EMAIL_TEMPLATES: EmailTemplate[] = [
     },
 ];
 
-export const BlockBuilderUI: React.FC< any > = ( {
+export const BlockBuilderUI: React.FC< BlockBuilderProps > = ( {
     value,
     onChange,
     field,

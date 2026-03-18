@@ -94,7 +94,7 @@ export const TextAreaUI: React.FC< TextAreaProps > = ( {
 };
 
 const TextArea: FieldComponent = {
-    render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
+    render: ( { field, value, onChange, canAccess } ) => (
         <TextAreaUI
             inputClass={ field.class }
             key={ field.key }
@@ -118,7 +118,7 @@ const TextArea: FieldComponent = {
         />
     ),
 
-    validate: ( field, value ) => {
+    validate: () => {
         return null;
     },
 };

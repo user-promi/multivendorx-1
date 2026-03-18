@@ -26,7 +26,7 @@ const PrePostTextUI: React.FC< PrePostTextProps > = ( {
 };
 
 const PrePostText: FieldComponent = {
-    render: ( { field, value, onChange, canAccess } ) => (
+    render: ( { field } ) => (
         <PrePostTextUI
             type={ field.type }
             textType={ field.textType }

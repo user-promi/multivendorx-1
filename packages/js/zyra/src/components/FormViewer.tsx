@@ -17,6 +17,14 @@ type InputValue =
     | null
     | undefined;
 
+type AddressSubField = {
+    key: string;
+    label: string;
+    type: 'text' | 'select';
+    required?: boolean;
+    placeholder?: string;
+};
+
 declare global {
     interface Window {
         grecaptcha?: {
@@ -50,7 +58,7 @@ interface Field {
     options?: Option[];
     sitekey?: string;
     key?: string;
-    fields?: Field[];
+    fields?: AddressSubField[];
     style?: string;
 }
 
@@ -654,7 +662,7 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                 );
 
             case 'address': {
-                const subFields = field.fields?.length
+                const subFields: AddressSubField[] = field.fields?.length
                     ? field.fields
                     : [
                           {
@@ -687,7 +695,7 @@ const FormViewer: React.FC< FormViewerProps > = ( {
                 return (
                     <fieldset key={ field.id }>
                         <legend>{ field.label }</legend>
-                        { subFields.map( ( subField: any ) => {
+                        { subFields.map( ( subField ) => {
                             const inputName = subField.key;
                             const subValue = inputs[ inputName ] ?? '';
 

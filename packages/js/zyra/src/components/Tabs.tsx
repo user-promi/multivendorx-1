@@ -39,7 +39,7 @@ export const TabsUI: React.FC< TabsProps > = ( {
     const [ activeIndex, setActiveIndex ] = useState( defaultActiveIndex );
 
     // Helper function to render a field from configuration
-    const renderFieldFromConfig = ( fieldConfig: any, index: number ) => {
+    const renderFieldFromConfig = ( fieldConfig: any ) => {
         const registeredField = FIELD_REGISTRY[ fieldConfig.type ];
         const Render = registeredField?.render;
 
@@ -221,7 +221,7 @@ const Tabs: FieldComponent = {
         />
     ),
 
-    validate: ( field, value ) => {
+    validate: () => {
         return null;
     },
 };

@@ -416,7 +416,6 @@ const MultiCheckBox: FieldComponent = {
         value,
         onChange,
         canAccess,
-        appLocalizer,
         modules,
         settings,
         onOptionsChange,
@@ -462,7 +461,6 @@ const MultiCheckBox: FieldComponent = {
                 addNewBtn={ field.addNewBtnText }
                 options={ normalizedOptions }
                 value={ normalizedValue }
-                // appLocalizer={appLocalizer}
                 modules={ modules }
                 field={ field }
                 onChange={ ( val ) => {
