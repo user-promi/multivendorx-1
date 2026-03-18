@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Modules REST API Announcement controller
  *
@@ -156,7 +155,7 @@ class Rest extends \WP_REST_Controller {
             );
 
             if ( $store_id > 0 ) {
-                $args['meta_query'] = array(
+                $args['meta_query'] = array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
                     'relation' => 'OR',
                     array(
                         'key'     => Utill::POST_META_SETTINGS['announcement_stores'],
@@ -173,9 +172,9 @@ class Rest extends \WP_REST_Controller {
 
             $response = rest_ensure_response( array() );
 
-            if ( $sec_fetch_site === 'same-origin' && preg_match( '#/dashboard/?$#', $referer ) && get_transient( 'multivendorx_announcement_data_' . $store_id ) ) {
-                return get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['announcement_transient'] . $store_id );
-            }
+			if ( 'same-origin' === $sec_fetch_site && preg_match( '#/dashboard/?$#', $referer ) && get_transient( 'multivendorx_announcement_data_' . $store_id ) ) {
+				return get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['announcement_transient'] . $store_id );
+			}
 
             foreach ( array( 'any', 'publish', 'pending', 'draft' ) as $status ) {
                 $args['post_status'] = $status;
@@ -183,7 +182,7 @@ class Rest extends \WP_REST_Controller {
                 $query = new \WP_Query( $args );
                 $count = (int) $query->found_posts;
 
-                if ( $status === 'any' ) {
+                if ( 'any' === $status ) {
                     $response->header( 'X-WP-Total', $count );
                     $response->header(
                         'X-WP-TotalPages',
@@ -220,11 +219,11 @@ class Rest extends \WP_REST_Controller {
             $items = array();
 
             foreach ( $posts as $post ) {
-                $items[] = $this->prepare_item_for_response( $post, $request );
+                $items[] = $this->prepare_item_for_response( $post );
             }
             $response->set_data( $items );
 
-            if ( $sec_fetch_site === 'same-origin' && preg_match( '#/dashboard/?$#', $referer ) ) {
+            if ( 'same-origin' === $sec_fetch_site && preg_match( '#/dashboard/?$#', $referer ) ) {
                 set_transient(
                     Utill::MULTIVENDORX_TRANSIENT_KEYS['announcement_transient'] . $store_id,
                     $response,
@@ -290,7 +289,7 @@ class Rest extends \WP_REST_Controller {
                 );
             }
 
-            return rest_ensure_response( $this->prepare_item_for_response( $post, $request ) );
+            return rest_ensure_response( $this->prepare_item_for_response( $post ) );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 
@@ -626,13 +625,15 @@ class Rest extends \WP_REST_Controller {
             );
         }
     }
-    /**
-     * Prepare announcement object for REST response.
-     *
-     * @param WP_Post $post
-     * @return array
-     */
-    public function prepare_item_for_response( $post, $request ) {
+	/**
+	 * Prepare announcement object for REST response.
+	 *
+	 * Retrieves all relevant announcement data and associated store names.
+	 *
+	 * @param WP_Post $post Announcement post object to prepare.
+	 * @return array Array containing announcement ID, title, content, status, store info, URL, and dates.
+	 */
+    public function prepare_item_for_response( $post ) {
         $store_ids = (array) get_post_meta(
             $post->ID,
             Utill::POST_META_SETTINGS['announcement_stores'],
@@ -652,7 +653,6 @@ class Rest extends \WP_REST_Controller {
             'id'               => $post->ID,
             'title'            => $post->post_title,
             'content'          => $post->post_content,
-            'status'           => $post->post_status,
             'status'           => $post->post_status,
             'status_label'     => ucfirst( get_post_status_object( $post->post_status )->label ),
             'stores'           => $store_ids,

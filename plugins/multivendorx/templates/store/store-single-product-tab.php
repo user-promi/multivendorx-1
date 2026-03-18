@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Store Single Product Tab Template.
  *

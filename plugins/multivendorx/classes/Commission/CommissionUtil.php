@@ -193,42 +193,42 @@ class CommissionUtil {
 		$table_name = $wpdb->prefix . Utill::TABLES['commission'];
 
 		// If $top_stores = true, fetch top N stores by total order value.
-		if ( $top_stores ) {
-			$query = $wpdb->prepare(
+        if ( $top_stores ) {
+            // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $query = $wpdb->prepare(
                 "
-            SELECT 
-                store_id,
-                COALESCE(SUM(total_order_value), 0) AS total_order_amount,
-                COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
-                COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
-                COALESCE(SUM(store_shipping), 0) AS shipping_amount,
-                COALESCE(SUM(store_tax), 0) AS tax_amount,
-                COALESCE(SUM(store_shipping_tax), 0) AS shipping_tax_amount,
-                COALESCE(SUM(store_payable), 0) AS commission_total,
-                COALESCE(SUM(store_refunded), 0) AS commission_refunded
-            FROM {$table_name} 
-            GROUP BY store_id
-            ORDER BY total_order_amount DESC
-            LIMIT %d
-            ",
+                SELECT 
+                    store_id,
+                    COALESCE(SUM(total_order_value), 0) AS total_order_amount,
+                    COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
+                    COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
+                    COALESCE(SUM(store_shipping), 0) AS shipping_amount,
+                    COALESCE(SUM(store_tax), 0) AS tax_amount,
+                    COALESCE(SUM(store_shipping_tax), 0) AS shipping_tax_amount,
+                    COALESCE(SUM(store_payable), 0) AS commission_total,
+                    COALESCE(SUM(store_refunded), 0) AS commission_refunded
+                FROM {$table_name} 
+                GROUP BY store_id
+                ORDER BY total_order_amount DESC
+                LIMIT %d
+                ",
                 $limit
-			);
+            );
+            // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
-			// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
-			$results = $wpdb->get_results( $query );
-			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
-			// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
-			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+            // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+            $results = $wpdb->get_results( $query );
+            // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
+            // phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+            // phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
 
-			if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-				MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-			}
+            if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+                MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+            }
 
-			return array_map(
+            return array_map(
                 function ( $row ) {
                     $store      = new Store( $row->store_id );
                     $store_name = $store ? $store->get( 'name' ) : '';
@@ -247,8 +247,8 @@ class CommissionUtil {
                     );
                 },
                 $results
-			);
-		}
+            );
+        }
 
 		if ( $dashboard ) {
 			$query = "

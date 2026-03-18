@@ -1,5 +1,4 @@
 <?php
-
 /**
  * MultiVendorX REST API Transaction Controller
  *
@@ -86,79 +85,76 @@ class Transactions extends \WP_REST_Controller {
         return true;
     }
 
-    /**
-     * Get items endpoint handler.
-     *
-     * @param object $request Full details about the request.
-     */
-    public function get_items( $request ) {
-        $nonce = $request->get_header( 'X-WP-Nonce' );
-        if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-            $error = new \WP_Error(
+	/**
+	 * Get items endpoint handler.
+	 *
+	 * @param object $request Full details about the request.
+	 */
+	public function get_items( $request ) {
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			$error = new \WP_Error(
                 'invalid_nonce',
                 __( 'Invalid nonce', 'multivendorx' ),
                 array( 'status' => 403 )
-            );
-            MultiVendorX()->util->log( $error );
-            return $error;
-        }
+			);
+			MultiVendorX()->util->log( $error );
+			return $error;
+		}
 
-        try {
-            // Pagination & basic params
-            $limit              = max( 1, (int) $request->get_param( 'row' ) ?: 10 );
-            $page               = max( 1, (int) $request->get_param( 'page' ) ?: 1 );
-            $offset             = ( $page - 1 ) * $limit;
-            $store_id           = (int) $request->get_param( 'store_id' );
-            $status             = $request->get_param( 'status' );
-            $transaction_type   = $request->get_param( 'transaction_type' );
-            $transaction_status = $request->get_param( 'transaction_status' );
-            $order_by           = sanitize_text_field( $request->get_param( 'order_by' ) ) ?: 'created_at';
-            $order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) ) ?: 'DESC';
-            $search_id          = $request->get_param( 'search_value' );
-            $dates              = Utill::normalize_date_range(
+		try {
+			$limit              = max( 1, (int) $request->get_param( 'row' ) ? (int) $request->get_param( 'row' ) : 10 );
+			$page               = max( 1, (int) $request->get_param( 'page' ) ? (int) $request->get_param( 'page' ) : 1 );
+			$offset             = ( $page - 1 ) * $limit;
+			$store_id           = (int) $request->get_param( 'store_id' );
+			$status             = $request->get_param( 'status' );
+			$transaction_type   = $request->get_param( 'transaction_type' );
+			$transaction_status = $request->get_param( 'transaction_status' );
+			$order_by           = sanitize_text_field( $request->get_param( 'order_by' ) ) ? sanitize_text_field( $request->get_param( 'order_by' ) ) : 'created_at';
+			$order              = strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) ) ? strtoupper( sanitize_text_field( $request->get_param( 'order' ) ) ) : 'DESC';
+			$search_id          = $request->get_param( 'search_value' );
+			$dates              = Utill::normalize_date_range(
                 $request->get_param( 'start_date' ),
                 $request->get_param( 'end_date' )
-            );
-            $ids                = $request->get_param( 'ids' );
-            $sec_fetch_site     = $request->get_header( 'sec_fetch_site' );
-            $referer            = $request->get_header( 'referer' );
+			);
+			$ids                = $request->get_param( 'ids' );
+			$sec_fetch_site     = $request->get_header( 'sec_fetch_site' );
+			$referer            = $request->get_header( 'referer' );
 
-            // Build args
-            $args = array_filter(
-                array(
-                    'store_id'         => $store_id ?: null,
-                    'status'           => $status ?: null,
-                    'start_date'       => $dates['start_date'] ?: null,
-                    'end_date'         => $dates['end_date'] ?: null,
-                    'transaction_type' => $transaction_type ?: null,
-                    'limit'            => $limit,
-                    'offset'           => $offset,
-                    'order_by'         => $order_by ?: null,
-                    'order'            => in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : null,
+			$args = array_filter(
+				array(
+					'store_id'         => $store_id ? $store_id : null,
+					'status'           => $status ? $status : null,
+					'start_date'       => $dates['start_date'] ? $dates['start_date'] : null,
+					'end_date'         => $dates['end_date'] ? $dates['end_date'] : null,
+					'transaction_type' => $transaction_type ? $transaction_type : null,
+					'limit'            => $limit,
+					'offset'           => $offset,
+					'order_by'         => $order_by ? $order_by : null,
+					'order'            => in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : null,
                 )
-            );
+			);
 
-            if ( $transaction_status ) {
-                $args['entry_type'] = $transaction_status;
-            }
+			if ( $transaction_status ) {
+				$args['entry_type'] = $transaction_status;
+			}
 
-            if ( $sec_fetch_site === 'same-origin' && preg_match( '#/dashboard/?$#', $referer ) && get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['withdrawal_transient'] . $store_id ) ) {
-                return get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['withdrawal_transient'] . $store_id );
-            }
+			if ( 'same-origin' === $sec_fetch_site && preg_match( '#/dashboard/?$#', $referer ) && get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['withdrawal_transient'] . $store_id ) ) {
+				return get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['withdrawal_transient'] . $store_id );
+			}
 
-            if ( ! empty( $search_id ) ) {
-                // Force numeric-only search
-                $args['id'] = is_numeric( $search_id ) ? intval( $search_id ) : 0;
+			if ( ! empty( $search_id ) ) {
+				$args['id'] = is_numeric( $search_id ) ? intval( $search_id ) : 0;
 
-                unset( $args['start_date'], $args['end_date'] );
-            }
+				unset( $args['start_date'], $args['end_date'] );
+			}
 
-            if ( $ids ) {
-                $args['id'] = $ids;
-            }
+			if ( $ids ) {
+				$args['id'] = $ids;
+			}
 
-            $transactions = Transaction::get_transaction_information( $args );
-            $formatted    = array_map(
+			$transactions = Transaction::get_transaction_information( $args );
+			$formatted    = array_map(
                 function ( $row ) {
                     $store = new Store( $row['store_id'] );
                     return array(
@@ -180,52 +176,50 @@ class Transactions extends \WP_REST_Controller {
                     );
                 },
                 $transactions
-            );
+			);
 
-            $count_args = array_filter(
-                array(
-                    'count'    => true,
-                    'store_id' => $store_id ?: null,
+			$count_args = array_filter(
+				array(
+					'count'    => true,
+					'store_id' => $store_id ? $store_id : null,
                 )
-            );
+			);
 
-            $statuses = array(
-                'completed' => 'Completed',
-                'processed' => 'Processed',
-                'upcoming'  => 'Upcoming',
-                'failed'    => 'Failed',
-            );
+			$statuses = array(
+				'completed' => 'Completed',
+				'processed' => 'Processed',
+				'upcoming'  => 'Upcoming',
+				'failed'    => 'Failed',
+			);
 
-            $response = rest_ensure_response( $formatted );
+			$response = rest_ensure_response( $formatted );
 
-            // Total count
-            $response->header( 'X-WP-Total', (int) Transaction::get_transaction_information( $count_args ) );
+			$response->header( 'X-WP-Total', (int) Transaction::get_transaction_information( $count_args ) );
 
-            // Status-wise counts
-            foreach ( $statuses as $key => $status ) {
-                $count = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => $status ) ) );
-                $response->header( 'X-WP-Status-' . ucfirst( $key ), (int) $count );
-            }
+			foreach ( $statuses as $key => $status ) {
+				$count = Transaction::get_transaction_information( array_merge( $count_args, array( 'status' => $status ) ) );
+				$response->header( 'X-WP-Status-' . ucfirst( $key ), (int) $count );
+			}
 
-            if ( $sec_fetch_site === 'same-origin' && preg_match( '#/dashboard/?$#', $referer ) ) {
-                set_transient(
+			if ( 'same-origin' === $sec_fetch_site && preg_match( '#/dashboard/?$#', $referer ) ) {
+				set_transient(
                     Utill::MULTIVENDORX_TRANSIENT_KEYS['withdrawal_transient'] . $store_id,
                     $response,
                     DAY_IN_SECONDS
-                );
-            }
+				);
+			}
 
-            return $response;
-        } catch ( \Exception $e ) {
-            MultiVendorX()->util->log( $e );
+			return $response;
+		} catch ( \Exception $e ) {
+			MultiVendorX()->util->log( $e );
 
-            return new \WP_Error(
+			return new \WP_Error(
                 'server_error',
                 __( 'Unexpected server error', 'multivendorx' ),
                 array( 'status' => 500 )
-            );
-        }
-    }
+			);
+		}
+	}
 
     /**
      * Get store balance

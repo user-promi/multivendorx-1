@@ -61,10 +61,10 @@ class Notifications {
 	 *
 	 * This function inserts system events, optionally only new ones.
 	 *
-	 * @param bool $new Optional. Whether to insert only new events. Default false.
+	 * @param bool $is_new Optional. Whether to insert only new events. Default false.
 	 * @return void
 	 */
-    public function insert_system_events( $new = false ) {
+    public function insert_system_events( $is_new = false ) {
         global $wpdb;
 
         $this->events = apply_filters(
@@ -740,295 +740,304 @@ class Notifications {
             )
         );
 
-        if ( ! $new ) {
-            $count = $wpdb->get_var(
-                "SELECT COUNT(*) FROM {$wpdb->prefix}" . Utill::TABLES['system_events']
-            );
+		if ( ! $is_new ) {
+			$table = $wpdb->prefix . Utill::TABLES['system_events'];
+			$count = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				"SELECT COUNT(*) FROM {$table}" // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			);
 
-            if ( $count > 0 ) {
-                return;
-            }
-        }
+			if ( $count > 0 ) {
+				return;
+			}
+		}
 
-        foreach ( $this->events as $key => $event ) {
-            $wpdb->insert(
-                "{$wpdb->prefix}" . Utill::TABLES['system_events'],
-                array(
-                    'event_name'       => $event['name'],
-                    'description'      => $event['desc'],
-                    'admin_enabled'    => $event['admin_enabled'] ?? false,
-                    'customer_enabled' => $event['customer_enabled'] ?? false,
-                    'store_enabled'    => $event['store_enabled'] ?? false,
-                    'system_enabled'   => true,
-                    'system_action'    => $key,
-                    'email_subject'    => $event['email_subject'] ?? '',
-                    'email_body'       => $event['email_body'] ?? '',
-                    'sms_content'      => $event['sms_content'] ?? '',
-                    'system_message'   => $event['system_message'] ?? '',
-                    'status'           => 'active',
-                    'custom_emails'    => wp_json_encode( array() ), // empty array.
-                    'tag'              => $event['tag'] ?? '',
-                    'category'         => $event['category'] ?? '',
-                ),
-                array(
-                    '%s',
-                    '%s',
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%d',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                )
-            );
-        }
+		foreach ( $this->events as $key => $event ) {
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				"{$wpdb->prefix}" . Utill::TABLES['system_events'],
+				array(
+					'event_name'       => $event['name'],
+					'description'      => $event['desc'],
+					'admin_enabled'    => $event['admin_enabled'] ?? false,
+					'customer_enabled' => $event['customer_enabled'] ?? false,
+					'store_enabled'    => $event['store_enabled'] ?? false,
+					'system_enabled'   => true,
+					'system_action'    => $key,
+					'email_subject'    => $event['email_subject'] ?? '',
+					'email_body'       => $event['email_body'] ?? '',
+					'sms_content'      => $event['sms_content'] ?? '',
+					'system_message'   => $event['system_message'] ?? '',
+					'status'           => 'active',
+					'custom_emails'    => wp_json_encode( array() ), // empty array.
+					'tag'              => $event['tag'] ?? '',
+					'category'         => $event['category'] ?? '',
+				),
+				array(
+					'%s',
+					'%s',
+					'%d',
+					'%d',
+					'%d',
+					'%d',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+				)
+			);
+		}
     }
 
-    /**
-     * Trigger notifications.
-     *
-     * @param string $action_name Action name.
-     * @param array  $parameters Parameters.
-     * @return void
-     */
-    public function trigger_notifications( $action_name, $parameters ) {
-        global $wpdb;
-        $event = $wpdb->get_row(
-            $wpdb->prepare( 'SELECT * FROM `' . $wpdb->prefix . Utill::TABLES['system_events'] . '` WHERE system_action = %s', $action_name )
-        );
+	/**
+	 * Trigger notifications.
+	 *
+	 * @param string $action_name Action name.
+	 * @param array  $parameters Parameters.
+	 * @return void
+	 */
+	public function trigger_notifications( $action_name, $parameters ) {
+		global $wpdb;
 
-        if ( $event->system_enabled ) {
-            $this->send_notifications( $event, $parameters );
-        }
+		$table = $wpdb->prefix . Utill::TABLES['system_events'];
+		$event = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->prepare(
+                "SELECT * FROM {$table} WHERE system_action = %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                $action_name
+            )
+		);
 
-        if ( $event->email_enabled ) {
-            $receivers = array();
+		if ( $event->system_enabled ) {
+			$this->send_notifications( $event, $parameters );
+		}
 
-            // System recipients.
-            if ( $event->admin_enabled ) {
-                $receivers[] = $parameters['admin_email'];
-            }
+		if ( $event->email_enabled ) {
+			$receivers = array();
 
-            if ( $event->store_enabled ) {
-                $receivers[] = $parameters['store_email'];
-            }
-
-            if ( $event->customer_enabled ) {
-                $receivers[] = $parameters['customer_email'];
-            }
-
-            // Custom recipients.
-            if ( ! empty( $event->custom_emails ) && is_array( $event->custom_emails ) ) {
-                $receivers = array_merge( $receivers, $event->custom_emails );
-            }
-
-            $to      = array_unique( $receivers );
-            $subject = $event->email_subject;
-            $message = $event->email_body;
-            foreach ( $parameters as $key => $value ) {
-                if ( is_array( $value ) ) {
-                    $value = implode( ' ', $value );
-                }
-				$message = str_replace( '[' . $key . ']', $value, $message );
+			// System recipients.
+			if ( $event->admin_enabled ) {
+				$receivers[] = $parameters['admin_email'];
 			}
-            $headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-            wp_mail( $to, $subject, $message, $headers );
-        }
+			if ( $event->store_enabled ) {
+				$receivers[] = $parameters['store_email'];
+			}
 
-        if ( $event->sms_enabled ) {
-            $receivers = array();
+			if ( $event->customer_enabled ) {
+				$receivers[] = $parameters['customer_email'];
+			}
 
-            if ( $event->admin_enabled ) {
-				$parameters['admin_phone'] = $parameters['admin_phone']['country_code'] . $parameters['admin_phone']['sms_receiver_phone_number'];
-                $receivers[]               = $parameters['admin_phone'];
-            }
+			// Custom recipients.
+			if ( ! empty( $event->custom_emails ) && is_array( $event->custom_emails ) ) {
+				$receivers = array_merge( $receivers, $event->custom_emails );
+			}
 
-            if ( $event->store_enabled ) {
-                $receivers[] = $parameters['store_phone'];
-            }
-
-            if ( $event->customer_enabled ) {
-                $receivers[] = $parameters['customer_phone'];
-            }
-
-            $message = $event->sms_content;
+			$to      = array_unique( $receivers );
+			$subject = $event->email_subject;
+			$message = $event->email_body;
 			foreach ( $parameters as $key => $value ) {
-                if ( is_array( $value ) ) {
-                    $value = implode( ' ', $value );
-                }
+				if ( is_array( $value ) ) {
+					$value = implode( ' ', $value );
+				}
+				$message = str_replace( '[' . $key . ']', $value, $message );
+			}
+			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+			wp_mail( $to, $subject, $message, $headers );
+		}
+
+		if ( $event->sms_enabled ) {
+			$receivers = array();
+
+			if ( $event->admin_enabled ) {
+				$parameters['admin_phone'] = $parameters['admin_phone']['country_code'] . $parameters['admin_phone']['sms_receiver_phone_number'];
+				$receivers[]               = $parameters['admin_phone'];
+			}
+
+			if ( $event->store_enabled ) {
+				$receivers[] = $parameters['store_phone'];
+			}
+
+			if ( $event->customer_enabled ) {
+				$receivers[] = $parameters['customer_phone'];
+			}
+
+			$message = $event->sms_content;
+			foreach ( $parameters as $key => $value ) {
+				if ( is_array( $value ) ) {
+					$value = implode( ' ', $value );
+				}
 				$message = str_replace( '[' . $key . ']', $value, $message );
 			}
 
-            $gateway = $this->active_gateway();
+			$gateway = $this->active_gateway();
 			if ( $gateway ) {
-                foreach ( array_filter( $receivers ) as $number ) {
-                    $gateway->send( $number, $message );
-                }
-            }
-        }
-    }
+				foreach ( array_filter( $receivers ) as $number ) {
+					$gateway->send( $number, $message );
+				}
+			}
+		}
+	}
 
-    /**
-     * Send notifications.
-     *
-     * @param object $event Event object.
-     * @param array  $parameters Parameters.
-     * @return void
-     */
-    public function send_notifications( $event, $parameters ) {
+	/**
+	 * Send notifications.
+	 *
+	 * @param object $event Event object.
+	 * @param array  $parameters Parameters.
+	 * @return void
+	 */
+	public function send_notifications( $event, $parameters ) {
 
-        global $wpdb;
+		global $wpdb;
 
-        $wpdb->insert(
+		$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
             "{$wpdb->prefix}" . Utill::TABLES['notifications'],
             array(
-                'store_id' => $parameters['store_id'] ?? null,
-                'category' => $parameters['category'],
-                'type'     => $event->system_action,
-                'title'    => $event->event_name,
-                'message'  => $event->description,
+				'store_id' => $parameters['store_id'] ?? null,
+				'category' => $parameters['category'],
+				'type'     => $event->system_action,
+				'title'    => $event->event_name,
+				'message'  => $event->description,
             ),
             array(
-                '%d',
-                '%s',
-                '%s',
-                '%s',
-                '%s',
+				'%d',
+				'%s',
+				'%s',
+				'%s',
+				'%s',
             )
-        );
-    }
+		);
+	}
 
-    /**
-     * Get all events.
-     *
-     * @param int|null $id Event ID.
-     * @return array|object
-     */
-    public function get_all_events( $id = null ) {
-        global $wpdb;
-        $table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
+	/**
+	 * Get all events.
+	 *
+	 * @param int|null $id Event ID.
+	 * @return array|object
+	 */
+	public function get_all_events( $id = null ) {
+		global $wpdb;
+		$table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
 
-        $events = $wpdb->get_results( "SELECT * FROM $table" );
-
-        if ( ! empty( $id ) ) {
-            $events = $wpdb->get_results(
+		if ( ! empty( $id ) ) {
+			$events = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $wpdb->prepare(
-                    "SELECT * FROM $table WHERE id = %d",
+                    "SELECT * FROM $table WHERE id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                     $id
                 )
-            );
-        } else {
-            $events = $wpdb->get_results( "SELECT * FROM $table" );
-        }
+			);
+		} else {
+			$events = $wpdb->get_results( "SELECT * FROM $table" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		}
 
-        return $events;
-    }
+		return $events;
+	}
 
-    /**
-     * Delete all events.
-     *
-     * @return array|object
-     */
-    public function delete_all_events() {
-        global $wpdb;
+	/**
+	 * Delete all events.
+	 *
+	 * @return array|object
+	 */
+	public function delete_all_events() {
+		global $wpdb;
 
-        $table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
+		$table = "{$wpdb->prefix}" . Utill::TABLES['system_events'];
 
-        return $wpdb->query( "DELETE FROM $table" );
-    }
+		return $wpdb->query( "DELETE FROM $table" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	}
 
-    public function sync_events() {
-        global $wpdb;
-        $existing_events = $this->get_all_events();
-        $all_events      = $this->events;
-        $override_fields = MultiVendorX()->setting->get_setting( 'override_existing_fields', array() );
-        $existing_map    = array();
+	/**
+	 * Sync events with database
+	 *
+	 * @return void
+	 */
+	public function sync_events() {
+		global $wpdb;
+		$existing_events = $this->get_all_events();
+		$all_events      = $this->events;
+		$override_fields = MultiVendorX()->setting->get_setting( 'override_existing_fields', array() );
+		$existing_map    = array();
 
-        foreach ( $existing_events as $event ) {
-            if ( ! empty( $event->system_action ) ) {
-                $existing_map[ $event->system_action ] = $event;
-            }
-        }
+		foreach ( $existing_events as $event ) {
+			if ( ! empty( $event->system_action ) ) {
+				$existing_map[ $event->system_action ] = $event;
+			}
+		}
 
-        // DELETE events which is not in main events array.
-        $valid_keys = array_keys( $all_events );
+		// DELETE events which is not in main events array.
+		$valid_keys = array_keys( $all_events );
 
-        foreach ( $existing_map as $system_action => $existing_event ) {
-            if ( ! in_array( $system_action, $valid_keys, true ) ) {
-                $wpdb->delete(
+		foreach ( $existing_map as $system_action => $existing_event ) {
+			if ( ! in_array( $system_action, $valid_keys, true ) ) {
+				$wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                     "{$wpdb->prefix}" . Utill::TABLES['system_events'],
                     array( 'system_action' => $system_action ),
                     array( '%s' )
-                );
-            }
-        }
+				);
+			}
+		}
 
-        foreach ( $all_events as $key => $event ) {
-            if ( array_key_exists( $key, $existing_map ) ) {
-                $update_fields = array();
+		foreach ( $all_events as $key => $event ) {
+			if ( array_key_exists( $key, $existing_map ) ) {
+				$update_fields = array();
 
-                if ( ! empty( $override_fields ) && in_array( 'override_notifiers', $override_fields ) ) {
-                    $update_fields['admin_enabled']    = $event['admin_enabled'] ?? false;
-                    $update_fields['customer_enabled'] = $event['customer_enabled'] ?? false;
-                    $update_fields['store_enabled']    = $event['store_enabled'] ?? false;
-                }
+				if ( ! empty( $override_fields ) && in_array( 'override_notifiers', $override_fields, true ) ) {
+					$update_fields['admin_enabled']    = $event['admin_enabled'] ?? false;
+					$update_fields['customer_enabled'] = $event['customer_enabled'] ?? false;
+					$update_fields['store_enabled']    = $event['store_enabled'] ?? false;
+				}
 
-                if ( ! empty( $override_fields ) && in_array( 'override_custom', $override_fields ) ) {
-                    $update_fields['custom_emails'] = wp_json_encode( $event['custom_emails'] ?? array() );
-                }
+				if ( ! empty( $override_fields ) && in_array( 'override_custom', $override_fields, true ) ) {
+					$update_fields['custom_emails'] = wp_json_encode( $event['custom_emails'] ?? array() );
+				}
 
-                if ( ! empty( $override_fields ) && in_array( 'override_email_content', $override_fields ) ) {
-                    $update_fields['email_subject'] = $event['email_subject'] ?? null;
-                    $update_fields['email_body']    = $event['email_body'] ?? null;
-                }
+				if ( ! empty( $override_fields ) && in_array( 'override_email_content', $override_fields, true ) ) {
+					$update_fields['email_subject'] = $event['email_subject'] ?? null;
+					$update_fields['email_body']    = $event['email_body'] ?? null;
+				}
 
-                if ( ! empty( $override_fields ) && in_array( 'override_sms_content', $override_fields ) ) {
-                    $update_fields['sms_content'] = $event['sms_content'] ?? null;
-                }
+				if ( ! empty( $override_fields ) && in_array( 'override_sms_content', $override_fields, true ) ) {
+					$update_fields['sms_content'] = $event['sms_content'] ?? null;
+				}
 
-                if ( ! empty( $override_fields ) && in_array( 'override_system_content', $override_fields ) ) {
-                    $update_fields['system_message'] = $event['system_message'] ?? null;
-                }
+				if ( ! empty( $override_fields ) && in_array( 'override_system_content', $override_fields, true ) ) {
+					$update_fields['system_message'] = $event['system_message'] ?? null;
+				}
 
-                if ( ! empty( $update_fields ) ) {
-                    $wpdb->update(
+				if ( ! empty( $update_fields ) ) {
+					$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                         "{$wpdb->prefix}" . Utill::TABLES['system_events'],
                         $update_fields,
                         array( 'system_action' => $key )
-                    );
-                }
-            } else {
-                $wpdb->insert(
+					);
+				}
+			} else {
+				$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                     "{$wpdb->prefix}" . Utill::TABLES['system_events'],
                     array(
-                        'event_name'       => $event['name'],
-                        'description'      => $event['desc'],
-                        'admin_enabled'    => $event['admin_enabled'] ?? false,
-                        'customer_enabled' => $event['customer_enabled'] ?? false,
-                        'store_enabled'    => $event['store_enabled'] ?? false,
-                        'system_enabled'   => true,
-                        'system_action'    => $key,
-                        'email_subject'    => $event['email_subject'] ?? '',
-                        'email_body'       => $event['email_body'] ?? '',
-                        'sms_content'      => $event['sms_content'] ?? '',
-                        'system_message'   => $event['system_message'] ?? '',
-                        'status'           => 'active',
-                        'custom_emails'    => wp_json_encode( array() ), // empty array.
-                        'tag'              => $event['tag'] ?? '',
-                        'category'         => $event['category'] ?? '',
+						'event_name'       => $event['name'],
+						'description'      => $event['desc'],
+						'admin_enabled'    => $event['admin_enabled'] ?? false,
+						'customer_enabled' => $event['customer_enabled'] ?? false,
+						'store_enabled'    => $event['store_enabled'] ?? false,
+						'system_enabled'   => true,
+						'system_action'    => $key,
+						'email_subject'    => $event['email_subject'] ?? '',
+						'email_body'       => $event['email_body'] ?? '',
+						'sms_content'      => $event['sms_content'] ?? '',
+						'system_message'   => $event['system_message'] ?? '',
+						'status'           => 'active',
+						'custom_emails'    => wp_json_encode( array() ), // empty array.
+						'tag'              => $event['tag'] ?? '',
+						'category'         => $event['category'] ?? '',
                     )
-                );
-            }
-        }
-    }
+				);
+			}
+		}
+	}
 
 	/**
 	 * Get all notifications.
@@ -1040,16 +1049,12 @@ class Notifications {
 		global $wpdb;
 		$table = $wpdb->prefix . Utill::TABLES['notifications'];
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$events = $wpdb->get_results(
+		$events = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->prepare(
-                "SELECT * FROM $table WHERE is_dismissed = %d",
+                "SELECT * FROM $table WHERE is_dismissed = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 0
             )
 		);
-		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		if ( ! empty( $args ) ) {
 			$where = array();
@@ -1075,13 +1080,11 @@ class Notifications {
 			$table   = $wpdb->prefix . Utill::TABLES['notifications'];
 			$where[] = 'is_dismissed = 0 AND is_read = 0';
 
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			if ( isset( $args['count'] ) ) {
-				$query = "SELECT COUNT(*) FROM {$table}";
+				$query = "SELECT COUNT(*) FROM {$table}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			} else {
-				$query = "SELECT * FROM {$table}";
+				$query = "SELECT * FROM {$table}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			}
-			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 			if ( ! empty( $where ) ) {
 				$condition = $args['condition'] ?? ' AND ';
@@ -1095,17 +1098,11 @@ class Notifications {
 				$query .= $wpdb->prepare( ' LIMIT %d OFFSET %d', $limit, $offset );
 			}
 
-			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
-			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			if ( isset( $args['count'] ) ) {
-				$results = $wpdb->get_var( $query );
-				// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
-				// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$results = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 				return $results ?? 0;
 			} else {
-				$results = $wpdb->get_results( $query, ARRAY_A );
-				// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
-				// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 				return $results ?? array();
 			}
 		}
@@ -1124,11 +1121,10 @@ class Notifications {
 		global $wpdb;
 
 		$days  = MultiVendorX()->setting->get_setting( 'clear_notifications' );
-		$table = esc_sql( $wpdb->prefix . Utill::TABLES['notifications'] );
+		$table = $wpdb->prefix . Utill::TABLES['notifications'];
 
 		$current_date = current_time( 'mysql' );
 
-		// Prepare the SQL with placeholders only for values.
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$query = $wpdb->prepare(
             "
@@ -1142,9 +1138,9 @@ class Notifications {
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		// Direct DB query (cannot be avoided here).
 		$wpdb->query( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 	}
+
 	/**
 	 * Get the active SMS gateway instance.
 	 *

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Store Rating Elementor Widget.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\StoreReview\Widgets;
 
 defined( 'ABSPATH' ) || exit;
@@ -7,33 +13,60 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use MultiVendorX\Elementor\StoreHelper;
-
+/**
+ * Store Rating widget class.
+ */
 class Store_Rating extends Widget_Base {
 
     use StoreHelper;
 
+	/**
+	 * Get widget name.
+	 *
+	 * @return string
+	 */
     public function get_name() {
         return 'multivendorx_store_rating';
     }
-
+	/**
+	 * Get widget title.
+	 *
+	 * @return string
+	 */
     public function get_title() {
         return __( 'Store Rating', 'multivendorx' );
     }
-
+	/**
+	 * Get widget icon.
+	 *
+	 * @return string
+	 */
     public function get_icon() {
         return 'eicon-rating';
     }
-
+	/**
+	 * Get widget categories.
+	 *
+	 * @return array
+	 */
     public function get_categories() {
         return array( 'multivendorx' );
     }
-
+	/**
+	 * Get widget keywords.
+	 *
+	 * @return array
+	 */
     public function get_keywords() {
         return array( 'multivendorx', 'store', 'rating', 'stars', 'reviews' );
     }
-
+	/**
+	 * Register widget controls.
+	 *
+	 * @return void
+	 */
     protected function register_controls() {
-        // Content Section
+        // Content Section.
         $this->start_controls_section(
             'section_content',
             array(
@@ -84,7 +117,7 @@ class Store_Rating extends Widget_Base {
 
         $this->end_controls_section();
 
-        // Style Section
+        // Style Section.
         $this->start_controls_section(
             'section_style',
             array(
@@ -240,38 +273,53 @@ class Store_Rating extends Widget_Base {
 
         $this->end_controls_section();
     }
+	/**
+	 * Render widget output.
+	 *
+	 * @return void
+	 */
+	protected function render() {
+		$settings = $this->get_settings_for_display();
+		$store    = $this->get_store_data();
 
-    protected function render() {
-        $settings = $this->get_settings_for_display();
-        $store    = $this->get_store_data();
+		// Get rating from settings (dynamic tag will populate this).
+		$rating = isset( $settings['rating'] ) ? floatval( $settings['rating'] ) : 0;
 
-        // Get rating from settings (dynamic tag will populate this)
-        $rating = isset( $settings['rating'] ) ? floatval( $settings['rating'] ) : 0;
+		// Ensure rating is between 0 and 5.
+		$rating = max( 0, min( 5, $rating ) );
 
-        // Ensure rating is between 0 and 5
-        $rating = max( 0, min( 5, $rating ) );
+		// Calculate width percentage for stars.
+		$width = ( $rating / 5 ) * 100;
 
-        // Calculate width percentage for stars
-        $width = ( $rating / 5 ) * 100;
+		$show_text = isset( $settings['show_rating_text'] ) && 'yes' === $settings['show_rating_text'];
 
-        $show_text = isset( $settings['show_rating_text'] ) && $settings['show_rating_text'] === 'yes';
-
-        // WooCommerce star rating structure
-        ?>
-        <div class="multivendorx-store-rating">
-            <div class="star-rating" role="img" aria-label="<?php printf( __( 'Rated %s out of 5', 'multivendorx' ), number_format( $rating, 1 ) ); ?>">
-                <span style="width: <?php echo esc_attr( $width ); ?>%;">
-                    <strong class="rating"><?php echo esc_html( number_format( $rating, 1 ) ); ?></strong> <?php esc_html_e( 'out of 5', 'multivendorx' ); ?>
-                </span>
-            </div>
-            
-            <?php if ( $show_text ) : ?>
-                <span class="star-rating-text">(<?php echo esc_html( number_format( $rating, 1 ) ); ?>)</span>
-            <?php endif; ?>
-        </div>
+		// WooCommerce star rating structure.
+		?>
+    <div class="multivendorx-store-rating">
         <?php
-    }
+		$aria_label = sprintf(
+		/* translators: %s: rating value */
+            __( 'Rated %s out of 5', 'multivendorx' ),
+            number_format( $rating, 1 )
+		);
+        ?>
+        <div class="star-rating" role="img" aria-label="<?php echo esc_attr( $aria_label ); ?>">
+            <span style="width: <?php echo esc_attr( $width ); ?>%;">
+                <strong class="rating"><?php echo esc_html( number_format( $rating, 1 ) ); ?></strong> <?php esc_html_e( 'out of 5', 'multivendorx' ); ?>
+            </span>
+        </div>
 
+        <?php if ( $show_text ) : ?>
+            <span class="star-rating-text">(<?php echo esc_html( number_format( $rating, 1 ) ); ?>)</span>
+        <?php endif; ?>
+    </div>
+		<?php
+	}
+	/**
+	 * Render content template for editor.
+	 *
+	 * @return void
+	 */
     protected function content_template() {
         ?>
         <#

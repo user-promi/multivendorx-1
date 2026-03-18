@@ -55,16 +55,15 @@ class Frontend {
                 return;
             }
 
-            // Order created timestamp
+            // Order created timestamp.
             $order_ts = $order_date->getTimestamp();
 
-            // Expiry timestamp
+            // Expiry timestamp.
             $expiry_ts = strtotime( "+{$refund_days} days", $order_ts );
 
-            // Current WP time
-            $now_ts = current_time( 'timestamp' );
-
-            // If expired → stop (no button)
+            // Current WP time.
+			$now_ts = time();
+            // If expired → stop (no button).
             if ( $now_ts > $expiry_ts ) {
                 return;
             }

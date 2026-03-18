@@ -1,44 +1,51 @@
 <?php
+/**
+ * Plivo SMS Gateway.
+ *
+ * Handles sending SMS messages via Plivo API.
+ *
+ * @package MultiVendorX
+ * @see https://www.plivo.com/docs/sms/api/message#send-a-message
+ */
 
 namespace MultiVendorX\Notifications\Gateways;
 
 use WP_Error;
 
 /**
- * Plivo Class
- *
- * @see https://www.plivo.com/docs/sms/api/message#send-a-message
+ * Plivo SMS Gateway Class.
  */
 class Plivo {
 
     /**
-     * API Endpoint
+     * API Endpoint.
      */
     const ENDPOINT = 'https://api.plivo.com/v1/Account/{auth_id}/Message/';
 
     /**
-     * Get the name
+     * Get the gateway name.
      *
-     * @return string
+     * @return string Gateway name.
      */
     public function name() {
         return __( 'Plivo', 'multivendorx' );
     }
 
     /**
-     * Send SMS
+     * Send SMS via Plivo.
      *
-     * @param string $to
-     * @param string $message
+     * @param string $to      Recipient phone number in international format.
+     * @param string $message SMS message content.
      *
-     * @return WP_Error|true
+     * @return true|WP_Error True on success, WP_Error on failure.
      */
     public function send( $to, $message ) {
         $auth_id     = MultiVendorX()->setting->get_setting( 'plivo_auth_id' );
         $auth_token  = MultiVendorX()->setting->get_setting( 'plivo_auth_token' );
         $from_number = MultiVendorX()->setting->get_setting( 'sms_sender_phone_number' );
         $from_number = $from_number['country_code'] . $from_number['sms_sender_phone_number'];
-        $args        = array(
+
+        $args = array(
             'headers' => array(
                 'Authorization' => 'Basic ' . base64_encode( $auth_id . ':' . $auth_token ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
             ),

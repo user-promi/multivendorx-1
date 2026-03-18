@@ -179,6 +179,7 @@ class PaypalPayout {
             'method'  => 'POST',
             'timeout' => 30,
             'headers' => array(
+                // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
                 'Authorization' => 'Basic ' . base64_encode( $client_id . ':' . $client_secret ),
                 'Content-Type'  => 'application/x-www-form-urlencoded',
                 'Accept'        => 'application/json',

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Modules class file
  *
@@ -75,7 +74,7 @@ class Rest extends \WP_REST_Controller {
      * @param object $request Full data about the request.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -84,7 +83,7 @@ class Rest extends \WP_REST_Controller {
      * @param object $request Full data about the request.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'edit_stores' );
+        return current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
 
