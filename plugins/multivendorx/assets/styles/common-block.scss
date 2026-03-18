@@ -364,11 +364,11 @@
         margin: 0;
 
         li {
-            padding: 10px 0;
+            padding: 0.625rem 0;
             margin: 0;
             list-style: none;
             overflow: hidden;
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 0.063rem solid #e5e5e5;
             transition: background-color 0.2s ease;
 
             &:last-child {
@@ -393,23 +393,23 @@
 
         img {
             float: right;
-            margin-left: 10px;
-            width: 50px;
+            margin-left: 0.625rem;
+            width: 3.125rem;
             height: auto;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0.063rem 0.125rem 0 rgba(0, 0, 0, 0.1);
         }
 
         .product-title {
             display: block;
             line-height: 1.3;
-            margin-bottom: 5px;
-            font-size: 13px;
+            margin-bottom: 0.313rem;
+            font-size: 0.813rem;
         }
 
 
         // Price Styles
         .amount {
-            font-size: 13px;
+            font-size: 0.813rem;
             font-weight: 600;
             color: #515151;
         }
@@ -418,7 +418,7 @@
             .amount {
                 font-weight: 400;
                 color: #777;
-                font-size: 12px;
+                font-size: 0.75rem;
                 text-decoration: line-through;
             }
         }
