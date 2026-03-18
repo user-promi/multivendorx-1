@@ -293,7 +293,7 @@ const Table: React.FC< TableProps > = ( {
                                             return (
                                                 <td
                                                     key={ `${ rowId }-${ colIndex }` }
-                                                    className={ `admin-column ${ header.type }` }
+                                                    className={ `admin-column ${className} ${ header.type }` }
                                                     style={
                                                         header.width
                                                             ? {
@@ -333,7 +333,7 @@ const Table: React.FC< TableProps > = ( {
                                         return (
                                             <td
                                                 key={ `${ rowId }-${ colIndex }` }
-                                                className={ `admin-column ${ header.type }` }
+                                                className={ `admin-column ${className} ${ header.type }` }
                                             >
                                                 { header.isEditable
                                                     ? renderEditableCell( {
