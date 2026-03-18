@@ -1,5 +1,4 @@
 <?php
-
 /**
  * MultiVendorX REST API Store Review Controller.
  *
@@ -95,11 +94,16 @@ class Rest extends \WP_REST_Controller {
      * @return bool
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
-
+	/**
+	 * Check if the current user can create an item.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return bool True if the user has permission, false otherwise.
+	 */
     public function create_item_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -109,7 +113,7 @@ class Rest extends \WP_REST_Controller {
      * @return bool
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'edit_stores' );
+        return current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -134,8 +138,8 @@ class Rest extends \WP_REST_Controller {
             if ( $request->get_param( 'overview' ) ) {
                 return rest_ensure_response( $this->calculate_store_rating_summary( intval( $store_id ) ) );
             }
-            $limit          = intval( $request->get_param( 'row' ) ) ?: 0;
-            $page           = intval( $request->get_param( 'page' ) ) ?: 1;
+			$limit          = intval( $request->get_param( 'row' ) ) ? intval( $request->get_param( 'row' ) ) : 0;
+			$page           = intval( $request->get_param( 'page' ) ) ? intval( $request->get_param( 'page' ) ) : 1;
             $offset         = ( $page - 1 ) * $limit;
             $status         = sanitize_text_field( $request->get_param( 'status' ) );
             $order_by       = sanitize_text_field( $request->get_param( 'order_by' ) );
@@ -194,8 +198,8 @@ class Rest extends \WP_REST_Controller {
                 $args['order_dir'] = 'DESC';
             }
 
-            if ( $sec_fetch_site === 'same-origin' && preg_match( '#/dashboard/?$#', $referer ) && get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['review_transient'] . $store_id ) ) {
-                return get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['review_transient'] . $store_id );
+			if ( 'same-origin' === $sec_fetch_site && preg_match( '#/dashboard/?$#', $referer ) && get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['review_transient'] . $store_id ) ) {
+                    return get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['review_transient'] . $store_id );
             }
             // --- Step 6: Fetch Review Data ---.
             $reviews = Util::get_review_information( $args );
@@ -234,7 +238,7 @@ class Rest extends \WP_REST_Controller {
             $response->header( 'X-WP-Status-Approved', $approved_count );
             $response->header( 'X-WP-Status-Rejected', $rejected_count );
 
-            if ( $sec_fetch_site === 'same-origin' && preg_match( '#/dashboard/?$#', $referer ) ) {
+            if ( 'same-origin' === $sec_fetch_site && preg_match( '#/dashboard/?$#', $referer ) ) {
                 set_transient(
                     Utill::MULTIVENDORX_TRANSIENT_KEYS['review_transient'] . $store_id,
                     $response,
@@ -294,7 +298,16 @@ class Rest extends \WP_REST_Controller {
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
-
+	/**
+	 * Create a new store review via REST API.
+	 *
+	 * Validates nonce, checks required fields, prevents duplicate reviews,
+	 * handles file uploads, calculates overall rating, and stores review data.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response|\WP_Error
+	 */
     public function create_item( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
         if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
@@ -583,7 +596,16 @@ class Rest extends \WP_REST_Controller {
             'date_modified_gmt' => Utill::multivendorx_rest_prepare_date_response( $review['date_modified'], true ),
         );
     }
-
+	/**
+	 * Calculate store rating summary data.
+	 *
+	 * Retrieves rating parameters, computes average ratings,
+	 * overall rating, total reviews, and rating breakdown.
+	 *
+	 * @param int $store_id Store ID.
+	 *
+	 * @return array
+	 */
     private function calculate_store_rating_summary( $store_id ) {
 
         if ( ! $store_id ) {

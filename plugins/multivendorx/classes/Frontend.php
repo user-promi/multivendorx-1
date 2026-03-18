@@ -49,10 +49,18 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
     }
 
-    public function load_scripts() {
-        FrontendScripts::load_scripts();
-        FrontendScripts::enqueue_script( 'multivendorx-store-products-script' );
-    }
+	/**
+	 * Load and enqueue frontend scripts for the store.
+	 *
+	 * This includes the general frontend scripts and
+	 * the specific store products script.
+	 *
+	 * @return void
+	 */
+	public function load_scripts() {
+		FrontendScripts::load_scripts();
+		FrontendScripts::enqueue_script( 'multivendorx-store-products-script' );
+	}
 
     /**
      * Restrict store products from shop

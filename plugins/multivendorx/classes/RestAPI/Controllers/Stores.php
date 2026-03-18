@@ -135,11 +135,11 @@ class Stores extends \WP_REST_Controller {
                 $store_id  = (int) $request->get_param( 'id' );
                 $cache_key = 'multivendorx_visitor_stats_data_' . $store_id;
 
-				$cached = get_transient( $cache_key );
+                $cached = get_transient( $cache_key );
 
-				if ( false !== $cached ) {
-					return $cached;
-				}
+                if ( false !== $cached ) {
+                    return $cached;
+                }
 
                 $dates = Utill::normalize_date_range(
                     $request->get_param( 'start_date' ),
@@ -151,8 +151,8 @@ class Stores extends \WP_REST_Controller {
                 global $wpdb;
                 $table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
 
-                $rows = $wpdb->get_results(
-                    /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared */
+                // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                $rows = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                     $wpdb->prepare(
                         "SELECT country
                         FROM {$table_name}
@@ -164,10 +164,12 @@ class Stores extends \WP_REST_Controller {
                         $end
                     )
                 );
+                // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
                 $map_stats = array();
 
                 foreach ( $rows as $row ) {
-					$code               = strtolower( ! empty( $row->country ) ? $row->country : '' );
+                    $code               = strtolower( ! empty( $row->country ) ? $row->country : '' );
                     $map_stats[ $code ] = ( $map_stats[ $code ] ?? 0 ) + 1;
                 }
 
@@ -302,10 +304,10 @@ class Stores extends \WP_REST_Controller {
                 $args['order_by'] = $request->get_param( 'sort' ) ?? $args['order_by'] ?? '';
                 $args['order']    = $request->get_param( 'order' ) ?? '';
 
-                $lat    = $request->get_param( 'location_lat' ) ?: 0;
-                $lng    = $request->get_param( 'location_lng' ) ?: 0;
-                $radius = $request->get_param( 'distance' ) ?: 0;
-                $unit   = $request->get_param( 'miles' ) ?: 'km';
+				$lat    = $request->get_param( 'location_lat' ) !== null ? $request->get_param( 'location_lat' ) : 0;
+				$lng    = $request->get_param( 'location_lng' ) !== null ? $request->get_param( 'location_lng' ) : 0;
+				$radius = $request->get_param( 'distance' ) !== null ? $request->get_param( 'distance' ) : 0;
+				$unit   = $request->get_param( 'miles' ) !== null ? $request->get_param( 'miles' ) : 'km';
 
                 switch ( $unit ) {
                     case 'miles':
@@ -329,14 +331,14 @@ class Stores extends \WP_REST_Controller {
                     $args['offset'] = absint( $offset );
                 }
 
-                // Category filter
+                // Category filter.
                 $category = $request->get_param( 'category' );
                 if ( ! empty( $category ) ) {
                     $product_ids = wc_get_products(
                         array(
                             'return'      => 'ids',
                             'numberposts' => -1,
-                            'tax_query'   => array(
+                            'tax_query'   => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
                                 array(
                                     'taxonomy' => 'product_cat',
                                     'field'    => 'term_id',
@@ -362,7 +364,7 @@ class Stores extends \WP_REST_Controller {
                     $args['ID'] = $store_ids;
                 }
 
-                // Product filter
+                // Product filter.
                 $product = $request->get_param( 'product' );
                 if ( ! empty( $product ) ) {
                     $args['ID'] = get_post_meta(
@@ -541,11 +543,15 @@ class Stores extends \WP_REST_Controller {
         return rest_ensure_response( $formatted_stores );
     }
 
-    /**
-     * Create a store.
-     *
-     * @param object $request Full data about the request.
-     */
+	/**
+	 * Create a store.
+	 *
+	 * Handles both admin and frontend store registration.
+	 *
+	 * @param \WP_REST_Request $request Full data about the request.
+	 * @return \WP_REST_Response|\WP_Error
+	 * @throws \Exception If the store cannot be saved or another unexpected error occurs.
+	 */
     public function create_item( $request ) {
 
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -960,8 +966,8 @@ class Stores extends \WP_REST_Controller {
                             array(
                                 'limit'      => -1,
                                 'return'     => 'ids',
-                                'meta_key'   => Utill::POST_META_SETTINGS['store_id'],
-                                'meta_value' => $id,
+                                'meta_key'   => Utill::POST_META_SETTINGS['store_id'], // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                                'meta_value' => $id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
                             )
                         );
 
@@ -1322,16 +1328,15 @@ class Stores extends \WP_REST_Controller {
             );
         }
 
-        /* phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value */
-        $products     = wc_get_products(
+		$products     = wc_get_products(
             array(
-                'status'     => 'publish',
-                'limit'      => -1,
-                'return'     => 'ids',
-                'meta_key'   => Utill::POST_META_SETTINGS['store_id'],
-                'meta_value' => $id,
+				'status'   => 'publish',
+				'limit'    => -1,
+				'return'   => 'ids',
+				'meta_key' => Utill::POST_META_SETTINGS['store_id'], // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+            'meta_value'   => $id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
             )
-        );
+		);
         $product_data = array();
         if ( ! empty( $products ) ) {
             foreach ( $products as $product_id ) {

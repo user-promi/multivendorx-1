@@ -29,7 +29,6 @@ class Util {
 
 		$table = $wpdb->prefix . Utill::TABLES['report_abuse'];
 
-		// Sanitize and prepare data.
 		$insert_data = array(
 			'store_id'   => isset( $data['store_id'] ) ? intval( $data['store_id'] ) : 0,
 			'product_id' => isset( $data['product_id'] ) ? intval( $data['product_id'] ) : 0,
@@ -38,8 +37,7 @@ class Util {
 			'message'    => isset( $data['message'] ) ? sanitize_textarea_field( $data['message'] ) : '',
 		);
 
-		// Insert data.
-		$inserted = $wpdb->insert(
+		$inserted = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$table,
 			$insert_data,
 			array( '%d', '%d', '%s', '%s', '%s' )
@@ -49,7 +47,7 @@ class Util {
             MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
 
-		// Return result AFTER logging
+		// phpcs:ignore Squiz.Commenting.InlineComment.InvalidEndChar
 		return $inserted ? $wpdb->insert_id : false;
 	}
 
@@ -86,8 +84,8 @@ class Util {
 
 		// Build base query.
 		$query = isset( $args['count'] ) && $args['count']
-			? "SELECT COUNT(*) FROM $table"
-			: "SELECT * FROM $table";
+			? "SELECT COUNT(*) FROM $table" // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			: "SELECT * FROM $table"; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( ! empty( $where ) ) {
 			$query .= ' WHERE ' . implode( ' AND ', $where );
@@ -108,8 +106,8 @@ class Util {
 		}
 
 		$result = isset( $args['count'] ) && $args['count']
-		? (int) $wpdb->get_var( $query )
-		: (array) $wpdb->get_results( $query, ARRAY_A );
+		? (int) $wpdb->get_var( $query ) // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+		: (array) $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
             MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
@@ -133,7 +131,7 @@ class Util {
 			return false;
 		}
 
-		$deleted = $wpdb->delete(
+		$deleted = $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table,
 			array( 'id' => $id ),
 			array( '%d' )
@@ -143,11 +141,10 @@ class Util {
             MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
 
-		// $wpdb->delete returns number of rows deleted, or false on error.
 		if ( false === $deleted ) {
-			return false; // DB error.
+			return false;
 		}
 
-		return true; // Success, even if 0 rows (no row existed).
+		return true;
 	}
 }

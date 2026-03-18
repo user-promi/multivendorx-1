@@ -1,17 +1,28 @@
 <?php
+/**
+ * Elementor Dynamic Tag: Store Info
+ *
+ * Provides store information (address, email, phone) for use in Elementor dynamic tags.
+ *
+ * @package MultiVendorX
+ */
+
 namespace MultiVendorX\Elementor\Tags;
 
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Modules\DynamicTags\Module;
 use MultiVendorX\Elementor\StoreHelper;
 
+/**
+ * StoreInfo Dynamic Tag.
+ *
+ * Retrieves store address, email, and phone for Elementor.
+ */
 class StoreInfo extends Tag {
     use StoreHelper;
 
     /**
-     * Tag name
-     *
-     * @since 1.0.0
+     * Tag name (unique identifier).
      *
      * @return string
      */
@@ -20,9 +31,7 @@ class StoreInfo extends Tag {
     }
 
     /**
-     * Tag title
-     *
-     * @since 1.0.0
+     * Tag title (display name).
      *
      * @return string
      */
@@ -30,20 +39,30 @@ class StoreInfo extends Tag {
         return __( 'Store Info', 'multivendorx' );
     }
 
+    /**
+     * Tag group ID.
+     *
+     * @return string
+     */
     public function get_group() {
-        return 'multivendorx'; // must match group ID
+        return 'multivendorx';
     }
 
+    /**
+     * Tag categories.
+     *
+     * @return array
+     */
     public function get_categories() {
         return array( Module::TEXT_CATEGORY );
     }
 
     /**
-     * Render Tag
+     * Retrieve store info value.
      *
-     * @since 1.0.0
+     * Returns structured array of store address, email, and phone.
      *
-     * @return void
+     * @return array
      */
     protected function get_value() {
         $store_data = $this->get_store_data();
@@ -71,7 +90,7 @@ class StoreInfo extends Tag {
             ),
             array(
                 'key'         => 'phone',
-                'title'       => __( 'Phone No', 'multivendorx' ),
+                'title'       => __( 'Phone No.', 'multivendorx' ),
                 'text'        => $store_data['storePhone'],
                 'icon'        => 'mvx-font ico-call-icon',
                 'show'        => true,
@@ -79,13 +98,17 @@ class StoreInfo extends Tag {
                     'text' => $store_data['storePhone'],
                 ),
             ),
-            // Store description entry removed
         );
 
         return apply_filters( 'multivendorx_elementor_tags_store_info_value', $store_info );
     }
 
+    /**
+     * Render tag output.
+     *
+     * @return void
+     */
     protected function render() {
-        echo json_encode( $this->get_value() );
+        echo wp_json_encode( $this->get_value() );
     }
 }

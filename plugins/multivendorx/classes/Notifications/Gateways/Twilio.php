@@ -1,44 +1,51 @@
 <?php
+/**
+ * Twilio SMS Gateway.
+ *
+ * Handles sending SMS messages via Twilio API.
+ *
+ * @package MultiVendorX
+ * @see https://www.twilio.com/docs/sms/api/message
+ */
 
 namespace MultiVendorX\Notifications\Gateways;
 
 use WP_Error;
 
 /**
- * Twilio Class
- *
- * @see https://www.twilio.com/docs/sms/api/message
+ * Twilio SMS Gateway Class.
  */
 class Twilio {
 
     /**
-     * API Endpoint
+     * API Endpoint.
      */
     const ENDPOINT = 'https://api.twilio.com/2010-04-01/Accounts/{sid}/Messages.json';
 
     /**
-     * Get the name
+     * Get the gateway name.
      *
-     * @return string
+     * @return string Gateway name.
      */
     public function name() {
         return __( 'Twilio', 'multivendorx' );
     }
 
     /**
-     * Send SMS
+     * Send SMS via Twilio.
      *
-     * @param string $to
-     * @param string $message
+     * @param string $to      Recipient phone number in international format.
+     * @param string $message SMS message content.
      *
-     * @return WP_Error|true
+     * @return true|WP_Error True on success, WP_Error on failure.
      */
     public function send( $to, $message ) {
         $account_sid = MultiVendorX()->setting->get_setting( 'twilio_account_sid' );
         $auth_token  = MultiVendorX()->setting->get_setting( 'twilio_auth_token' );
         $from_number = MultiVendorX()->setting->get_setting( 'sms_sender_phone_number' );
         $from_number = $from_number['country_code'] . $from_number['sms_sender_phone_number'];
-        $args        = array(
+
+        $args = array(
             'headers' => array(
                 'Authorization' => 'Basic ' . base64_encode( $account_sid . ':' . $auth_token ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
             ),

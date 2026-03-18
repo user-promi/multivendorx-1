@@ -200,20 +200,35 @@ class StripeConnect {
         do_action( 'multivendorx_after_payment_complete', $store_id, 'Stripe Connect', $status, $order_id, $transaction_id, $note, $amount );
     }
 
-    public function get_store_stripe_config() {
-        $store_id = MultiVendorX()->active_store;
-        $store    = new Store( $store_id );
-        $settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
-        $stripe   = $settings['stripe-connect'] ?? array();
-        $mode     = $stripe['payment_mode'] ?? 'test';
+	/**
+	 * Get Stripe configuration for the current store.
+	 *
+	 * Retrieves the Stripe client ID and secret key based on the store's
+	 * payment settings and the selected mode (test or live).
+	 *
+	 * @return array {
+	 *     Stripe configuration for the store.
+	 *
+	 *     @type string $mode       Payment mode, 'test' or 'live'.
+	 *     @type \MultiVendorX\Store $store Store object.
+	 *     @type string $client_id  Stripe client ID for the store.
+	 *     @type string $secret_key Stripe secret key for the store.
+	 * }
+	 */
+	public function get_store_stripe_config() {
+		$store_id = MultiVendorX()->active_store;
+		$store    = new Store( $store_id );
+		$settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
+		$stripe   = $settings['stripe-connect'] ?? array();
+		$mode     = $stripe['payment_mode'] ?? 'test';
 
-        return array(
-            'mode'       => $mode,
-            'store'      => $store,
-            'client_id'  => $mode === 'test' ? ( $stripe['test_client_id'] ?? '' ) : ( $stripe['live_client_id'] ?? '' ),
-            'secret_key' => $mode === 'test' ? ( $stripe['test_secret_key'] ?? '' ) : ( $stripe['live_secret_key'] ?? '' ),
-        );
-    }
+		return array(
+			'mode'       => $mode,
+			'store'      => $store,
+			'client_id'  => 'test' === $mode ? ( $stripe['test_client_id'] ?? '' ) : ( $stripe['live_client_id'] ?? '' ),
+			'secret_key' => 'test' === $mode ? ( $stripe['test_secret_key'] ?? '' ) : ( $stripe['live_secret_key'] ?? '' ),
+		);
+	}
 
     /**
      * Create Stripe account
@@ -222,7 +237,7 @@ class StripeConnect {
         $config       = $this->get_store_stripe_config();
         $store        = $config['store'];
         $redirect_uri = admin_url( 'admin-post.php?action=multivendorx_stripe_oauth_callback' );
-        // Generate secure state
+        // Generate secure state.
         $state = wp_generate_password( 24, false );
 
 		$store->update_meta(
@@ -246,7 +261,7 @@ class StripeConnect {
             'https://connect.stripe.com/oauth/authorize'
         );
 
-        wp_redirect( $url );
+        wp_safe_redirect( $url );
         exit;
     }
 
@@ -324,7 +339,7 @@ class StripeConnect {
         }
 
         $store->delete_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
-        wp_redirect( $this->get_redirect_url( 'disconnected', 'true' ) );
+        wp_safe_redirect( $this->get_redirect_url( 'disconnected', 'true' ) );
         exit;
     }
 

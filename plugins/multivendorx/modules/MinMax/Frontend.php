@@ -192,32 +192,35 @@ class Frontend {
 
         return $price . $html;
     }
-    /**
-     * Validate minimum quantity before adding a product to cart.
-     *
-     * @param bool $passed       Whether the add to cart check passed.
-     * @param int  $product_id   Product ID.
-     * @param int  $qty          Quantity being added to cart.
-     * @param int  $variation_id Variation ID, if applicable. Default 0.
-     *
-     * @return bool True if validation passed, false otherwise.
-     */
-    public function validate_add_to_cart( $passed, $product_id, $qty, $variation_id = 0 ) {
+	/**
+	 * Validate minimum quantity before adding a product to cart.
+	 *
+	 * @param bool $passed       Whether the add to cart check passed.
+	 * @param int  $product_id   Product ID.
+	 * @param int  $qty          Quantity being added to cart.
+	 * @param int  $variation_id Variation ID, if applicable. Default 0.
+	 *
+	 * @return bool True if validation passed, false otherwise.
+	 */
+	public function validate_add_to_cart( $passed, $product_id, $qty, $variation_id = 0 ) {
 
 		$id    = ! empty( $variation_id ) ? $variation_id : $product_id;
-        $limit = $this->validate_rules( $qty, $id, 'quantity', true );
+		$limit = $this->validate_rules( $qty, $id, 'quantity', true );
 
-        if ( $limit && $qty < $limit ) {
-			// translators: %d is the minimum quantity required for the product.
+		if ( $limit && $qty < $limit ) {
 			wc_add_notice(
-                sprintf( __( 'Minimum quantity required is %d', 'multivendorx' ), $limit ),
+                sprintf(
+                /* translators: %d: minimum quantity required */
+                    __( 'Minimum quantity required is %d', 'multivendorx' ),
+                    $limit
+                ),
                 'error'
 			);
-            return false;
-        }
+			return false;
+		}
 
-        return $passed;
-    }
+		return $passed;
+	}
     /**
      * Update cart item quantity if it violates minimum quantity rules.
      *

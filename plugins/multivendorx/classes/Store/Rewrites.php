@@ -38,10 +38,10 @@ class Rewrites {
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
         add_action( 'wp', array( $this, 'flash_rewrite_rules' ) );
 
-        // Make endpoint behave like a page
+        // Make endpoint behave like a page.
         add_action( 'pre_get_posts', array( $this, 'make_endpoint_virtual_page' ) );
 
-        // Load correct template
+        // Load correct template.
         add_filter( 'template_include', array( $this, 'load_store_template' ) );
         // For PHP template query of products.
         // add_action( 'pre_get_posts', array( $this, 'store_query_filter' ) );
@@ -146,7 +146,15 @@ class Rewrites {
         return apply_filters( 'multivendorx_query_vars', $vars, $this );
     }
 
-    // Virtual page
+    /**
+     * Convert custom endpoint into a virtual page.
+     *
+     * Intercepts the main query and replaces it with the
+     * "store" page when the custom store URL query var is present.
+     *
+     * @param WP_Query $query WordPress query object.
+     * @return void
+     */
     public function make_endpoint_virtual_page( $query ) {
         if ( $query->is_main_query() && get_query_var( $this->custom_store_url ) ) {
             $page = get_page_by_path( 'store' );
@@ -165,7 +173,16 @@ class Rewrites {
         }
     }
 
-    // Load template
+	/**
+	 * Load the appropriate template for the store endpoint.
+	 *
+	 * Resolves and returns a custom Elementor template if provided,
+	 * otherwise falls back to plugin block or classic PHP templates
+	 * based on theme support.
+	 *
+	 * @param string $template Default template path.
+	 * @return string Modified template path.
+	 */
     public function load_store_template( $template ) {
         $store_name = get_query_var( $this->custom_store_url );
 
@@ -176,22 +193,29 @@ class Rewrites {
                 return $filtered_template;
             }
 
-            // Path to plugin block template
+            // Path to plugin block template.
             $plugin_template = MultiVendorX()->plugin_path . 'templates/store/store.html';
 
             if ( file_exists( $plugin_template ) && ( wp_is_block_theme() || file_exists( get_theme_file_path( 'theme.json' ) ) ) ) {
-                // Use a temporary PHP wrapper to render the block template
+                // Use a temporary PHP wrapper to render the block template.
                 return MultiVendorX()->plugin_path . 'templates/store/store-wrapper.php';
             }
 
-            // Classic PHP fallback
+            // Classic PHP fallback.
             return MultiVendorX()->plugin_path . 'templates/store/store.php';
         }
 
         return $template;
     }
 
-
+	/**
+	 * Register and enqueue all scripts and styles needed for the store page.
+	 *
+	 * Loads frontend scripts and styles for store details, tabs, reviews,
+	 * social icons, and other store-specific functionality.
+	 *
+	 * @return void
+	 */
     public function register_store_state() {
         $store_slug = get_query_var( $this->custom_store_url );
 
@@ -217,20 +241,30 @@ class Rewrites {
         FrontendScripts::localize_scripts( 'multivendorx-store-provider-script' );
         FrontendScripts::enqueue_style( 'multivendorx-store-tabs-style' );
     }
-
-    public function add_sidebar_class_for_block_template( $classes ) {
-        $classes  = array_filter(
+	/**
+	 * Add sidebar position class to block template body classes.
+	 *
+	 * Removes existing multivendorx sidebar classes and adds the
+	 * configured sidebar position class if set.
+	 *
+	 * @param array $classes Existing body classes.
+	 * @return array Modified body classes.
+	 */
+	public function add_sidebar_class_for_block_template( $classes ) {
+		$classes = array_filter(
             $classes,
-            function ( $class ) {
-				return strpos( $class, 'multivendorx-sidebar-' ) !== 0;
-			}
-        );
-        $position = MultiVendorX()->setting->get_setting( 'store_sidebar', '' );
-        if ( ! empty( $position ) ) {
-            $classes[] = 'multivendorx-sidebar-' . $position;
-        }
-        return $classes;
-    }
+            function ( $cls ) {
+                return strpos( $cls, 'multivendorx-sidebar-' ) !== 0;
+            }
+		);
+
+		$position = MultiVendorX()->setting->get_setting( 'store_sidebar', '' );
+		if ( ! empty( $position ) ) {
+			$classes[] = 'multivendorx-sidebar-' . $position;
+		}
+
+		return $classes;
+	}
 
     /**
      * Flush rewrite rules

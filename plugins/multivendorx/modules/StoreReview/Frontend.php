@@ -38,7 +38,15 @@ class Frontend {
         add_filter( 'multivendorx_store_frontend_localize_scripts', array( $this, 'multivendorx_store_frontend_localize_scripts' ) );
         add_filter( 'multivendorx_stores_details', array( $this, 'multivendorx_stores_details' ), 10, 2 );
     }
-
+	/**
+	 * Register frontend scripts for the Store Review module.
+	 *
+	 * Adds the script details to the provided scripts array including
+	 * source path and dependencies.
+	 *
+	 * @param array $scripts Array of existing scripts to register.
+	 * @return array Modified array with the Store Review frontend script included.
+	 */
     public function register_script( $scripts ) {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
@@ -49,7 +57,15 @@ class Frontend {
 
         return $scripts;
     }
-
+	/**
+	 * Localize frontend scripts for the Store Review module.
+	 *
+	 * Provides localized data (e.g., AJAX URLs or settings) to the frontend
+	 * JavaScript via the `wp_localize_script` mechanism.
+	 *
+	 * @param array $scripts Array of registered scripts to localize.
+	 * @return array Modified array with localization data for the Store Review script.
+	 */
     public function localize_scripts( $scripts ) {
 
         $scripts['multivendorx-review-frontend-script'] = array(
@@ -131,7 +147,7 @@ class Frontend {
      * @param object $item order item.
      * @param object $order order object.
      */
-    public function multivendorx_add_store_review_button( $item_id, $item, $order ) {
+    public function multivendorx_add_store_review_button( $item_id, $item, $order ) {// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
         static $printed_stores = array(); // Track already printed store IDs.
 
         $product_id = $item->get_product_id();
@@ -164,7 +180,17 @@ class Frontend {
             '</a>';
         echo '</div>';
     }
-
+	/**
+	 * Localize store frontend script data.
+	 *
+	 * Adds necessary data to the frontend block/item for a store, including:
+	 * - Login URL with redirect.
+	 * - Verified buyer status.
+	 * - Review status for the current user.
+	 *
+	 * @param array $item Store-related data array to be enriched for frontend scripts.
+	 * @return array Modified store data array including login URL, review status, and verification info.
+	 */
     public function multivendorx_store_frontend_localize_scripts( $item ) {
         $store_id = isset( $item['storeDetails']['storeId'] )
             ? absint( $item['storeDetails']['storeId'] )
@@ -178,7 +204,7 @@ class Frontend {
 
         $myaccount_url = wc_get_page_permalink( 'myaccount' );
 
-        $item['loginUrl'] = add_query_arg( 'redirect_to', urlencode( get_permalink() ), $myaccount_url );
+		$item['loginUrl'] = add_query_arg( 'redirect_to', rawurlencode( get_permalink() ), $myaccount_url );
 
         $storereview = MultiVendorX()->setting->get_setting(
             'is_storereview_varified',
@@ -193,12 +219,12 @@ class Frontend {
         $item['isVerifiedBuyer'] = false;
         if ( $is_logged_in && $store_id ) {
 
-            // Get review status
+            // Get review status.
             $item['reviewStatus'] = Util::get_user_review_status(
                 $store_id,
                 $user_id
             );
-            // If verified-only enabled → check verified buyer
+            // If verified-only enabled → check verified buyer.
             if ( $is_verified_buyer_only ) {
                 $item['isVerifiedBuyer'] = Util::is_verified_buyer(
                     $store_id,

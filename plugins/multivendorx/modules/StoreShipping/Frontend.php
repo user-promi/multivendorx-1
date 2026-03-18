@@ -39,7 +39,14 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
         add_filter( 'woocommerce_cart_shipping_packages', array( $this, 'add_user_location_to_shipping_package' ) );
     }
-
+	/**
+	 * Register frontend scripts for store shipping module.
+	 *
+	 * Adds the store shipping frontend JS file to the scripts array.
+	 *
+	 * @param array $scripts Existing scripts array.
+	 * @return array Modified scripts array including the store shipping script.
+	 */
     public function register_script( $scripts ) {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
@@ -50,7 +57,14 @@ class Frontend {
 
         return $scripts;
     }
-
+	/**
+	 * Localize store shipping frontend script with data and settings.
+	 *
+	 * Passes configuration for map, store icons, and API keys to the frontend JS.
+	 *
+	 * @param array $scripts Existing scripts array.
+	 * @return array Modified scripts array with localized data.
+	 */
     public function localize_scripts( $scripts ) {
 
         $scripts['multivendorx-store-shipping-frontend-script'] = array(

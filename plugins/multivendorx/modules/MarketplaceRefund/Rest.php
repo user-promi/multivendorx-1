@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Modules class file
  *
@@ -65,7 +64,7 @@ class Rest extends \WP_REST_Controller {
      * @param object $request Full details about the request.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read_shop_orders' ) || current_user_can( 'edit_shop_orders' );
+        return current_user_can( 'read_shop_orders' ) || current_user_can( 'edit_shop_orders' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -74,13 +73,18 @@ class Rest extends \WP_REST_Controller {
      * @param object $request Full details about the request.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'edit_shop_orders' );
+        return current_user_can( 'edit_shop_orders' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
 
     /**
      * Get all refunds filtered by store, search, and date.
-     * 100% WooCommerce-native (no raw SQL).
+     *
+     * @param \WP_REST_Request $request REST request object containing filters like:
+     *                                   'row', 'page', 'store_id', 'search_action',
+     *                                   'search_value', 'order_by', 'order', 'start_date', 'end_date'.
+     * @return \WP_REST_Response|\WP_Error
+     * @throws \Exception If an unexpected error occurs while fetching refunds.
      */
     public function get_items( $request ) {
         $nonce = $request->get_header( 'X-WP-Nonce' );
@@ -139,7 +143,7 @@ class Rest extends \WP_REST_Controller {
             // Count query (for correct totals).
             $count_args = array(
                 'type'       => 'shop_order_refund',
-                'meta_query' => $meta_query,
+                'meta_query' => $meta_query, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
                 'return'     => 'ids',
             );
 
@@ -152,7 +156,7 @@ class Rest extends \WP_REST_Controller {
             // Build main query.
             $args = array(
                 'type'       => 'shop_order_refund',
-                'meta_query' => $meta_query,
+                'meta_query' => $meta_query, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
                 'limit'      => $limit,
                 'offset'     => $offset,
                 'return'     => 'objects',
@@ -188,7 +192,7 @@ class Rest extends \WP_REST_Controller {
                             case 'customer':
                                 $name  = strtolower( $order->get_formatted_billing_full_name() );
                                 $email = strtolower( $order->get_billing_email() );
-                                return str_contains( $name, $search_value ) || str_contains( $email, $search_field );
+                                return ( false !== strpos( $name, $search_value ) ) || ( false !== strpos( $email, $search_field ) );
 
                             default:
                                 return true;
@@ -387,20 +391,26 @@ class Rest extends \WP_REST_Controller {
         }
     }
 
-    /**
-     * Get parent order item id from store order item id
-     *
-     * @param int $item_id Store order item id.
-     * @return int
-     */
-    public function get_store_parent_order_item_id( $item_id ) {
-        global $wpdb;
-        $store_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", 'store_order_item_id', absint( $item_id ) ) );
+	/**
+	 * Get parent order item id from store order item id
+	 *
+	 * @param int $item_id Store order item id.
+	 * @return int
+	 */
+	public function get_store_parent_order_item_id( $item_id ) {
+		global $wpdb;
+		$store_item_id = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->prepare(
+                "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d",
+                'store_order_item_id',
+                absint( $item_id )
+            )
+		);
 
-        if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-            MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        }
+		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
+			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
+		}
 
-        return $store_item_id;
-    }
+		return $store_item_id;
+	}
 }

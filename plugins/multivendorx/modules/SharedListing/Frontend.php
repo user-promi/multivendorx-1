@@ -186,34 +186,33 @@ class Frontend {
         }
         return $tabs;
     }
-    /**
-     * Output the content for the "More Offers" WooCommerce product tab.
-     *
-     * @return void
-     */
-    public function woocommerce_product_spmv_tab() {
-        global $product, $wpdb;
+	/**
+	 * Output the content for the "More Offers" WooCommerce product tab.
+	 *
+	 * @return void
+	 */
+	public function woocommerce_product_spmv_tab() {
+		global $product, $wpdb;
 
-        $table = $wpdb->prefix . Utill::TABLES['products_map'];
+		$table = $wpdb->prefix . Utill::TABLES['products_map'];
 
-        /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared */
-        $row         = $wpdb->get_row(
+		$row         = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->prepare(
-                "SELECT product_map FROM {$table} WHERE JSON_CONTAINS(product_map, %s)",
+                "SELECT product_map FROM {$table} WHERE JSON_CONTAINS(product_map, %s)", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
                 wp_json_encode( (int) $product->get_id() )
             )
-        );
-        $product_ids = array_diff(
+		);
+		$product_ids = array_diff(
             wp_json_decode( $row->product_map, true ),
             array( (int) $product->get_id() )
-        );
+		);
 
-        if ( count( $product_ids ) <= 1 ) {
+		if ( count( $product_ids ) <= 1 ) {
 			return;
-        }
+		}
 
-        MultiVendorX()->util->get_template( 'store/spmv-single-product-tab.php', array( 'product_ids' => $product_ids ) );
-    }
+		MultiVendorX()->util->get_template( 'store/spmv-single-product-tab.php', array( 'product_ids' => $product_ids ) );
+	}
     /**
      * Display the "More Stores" button on the single product page.
      *

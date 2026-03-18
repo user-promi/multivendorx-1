@@ -90,7 +90,7 @@ class Rest extends \WP_REST_Controller {
      * @param object $request Request object.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );
+        return current_user_can( 'read' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -99,7 +99,7 @@ class Rest extends \WP_REST_Controller {
      * @param object $request Request object.
      */
     public function create_item_permissions_check( $request ) {
-        return current_user_can( 'create_stores' );
+        return current_user_can( 'create_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -108,7 +108,7 @@ class Rest extends \WP_REST_Controller {
      * @param object $request Request object.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'edit_stores' );
+        return current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
 
@@ -212,15 +212,15 @@ class Rest extends \WP_REST_Controller {
             \WC_Cache_Helper::get_transient_version( 'shipping', true );
 
             // Return response.
-            return rest_ensure_response(
+			return rest_ensure_response(
                 array(
-                    'success'  => true,
-                    'message'  => __( 'Shipping method settings saved successfully', 'multivendorx' ),
-                    'store_id' => $store_id,
-                    'zone_id'  => $zone_id,
-                    'meta_key' => $meta_key,
+					'success'  => true,
+					'message'  => __( 'Shipping method settings saved successfully', 'multivendorx' ),
+					'store_id' => $store_id,
+					'zone_id'  => $zone_id,
+					'meta_key' => $meta_key, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
                 )
-            );
+			);
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 

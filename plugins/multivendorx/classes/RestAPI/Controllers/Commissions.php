@@ -1,5 +1,4 @@
 <?php
-
 /**
  * MultiVendorX REST API Controller for Commission
  *
@@ -200,8 +199,8 @@ class Commissions extends \WP_REST_Controller {
             if ( $ids ) {
                 $filter['ID'] = $ids;
             }
-            // Default: latest first
-            $filter['order_by'] = $order_by ?: 'created_at';
+            // Default: latest first.
+            $filter['order_by'] = $order_by ? $order_by : 'created_at';
             $filter['order']    = strtolower( $order ) === 'asc' ? 'ASC' : 'DESC';
 
             // Fetch commissions.
@@ -339,6 +338,18 @@ class Commissions extends \WP_REST_Controller {
             return new \WP_Error( 'server_error', __( 'Unexpected server error', 'multivendorx' ), array( 'status' => 500 ) );
         }
     }
+    /**
+     * Prepare commission data for REST API response.
+     *
+     * Converts a commission array into a standardized response format,
+     * including store info, financial details, timestamps, and optionally
+     * order items.
+     *
+     * @param array $commission Commission data array.
+     * @param bool  $with_items Optional. Whether to include order items in the response. Default false.
+     *
+     * @return array Formatted commission data ready for REST response.
+     */
     public function prepare_item_for_response( $commission, $with_items = false ) {
 
         $store      = new Store( $commission['store_id'] ?? 0 );

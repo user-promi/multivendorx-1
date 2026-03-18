@@ -1,38 +1,43 @@
 <?php
+/**
+ * Clickatell SMS Gateway.
+ *
+ * Handles sending SMS messages via Clickatell REST API.
+ *
+ * @package MultiVendorX
+ * @see https://www.clickatell.com/developers/api-documentation/rest-api-send-message/
+ */
 
 namespace MultiVendorX\Notifications\Gateways;
 
 use WP_Error;
 
 /**
- * Clickatell Class
- *
- * @see https://www.clickatell.com/developers/api-documentation/rest-api-send-message/
+ * Clickatell SMS Gateway Class.
  */
 class Clickatell {
 
     /**
-     * API Endpoint
+     * API Endpoint.
      */
     const ENDPOINT = 'https://platform.clickatell.com/messages';
 
     /**
-     * Get the name
+     * Get the gateway name.
      *
-     * @return string
+     * @return string Gateway name.
      */
     public function name() {
         return __( 'Clickatell', 'multivendorx' );
     }
 
-
     /**
-     * Send SMS
+     * Send SMS via Clickatell.
      *
-     * @param string $to
-     * @param string $message
+     * @param string $to      Recipient phone number in international format.
+     * @param string $message SMS message content.
      *
-     * @return WP_Error|true
+     * @return true|WP_Error True on success, WP_Error on failure.
      */
     public function send( $to, $message ) {
         $api_key = MultiVendorX()->setting->get_setting( 'clickatell_api_key' );
@@ -60,31 +65,29 @@ class Clickatell {
         $body          = wp_remote_retrieve_body( $response );
         $response_code = wp_remote_retrieve_response_code( $response );
 
-        // phpcs:disable
         if ( 202 !== $response_code ) {
             switch ( $response_code ) {
                 case 200:
                     $body = json_decode( $body );
 
                     return new WP_Error(
-                        $body->errorCode,
-                        $body->errorDescription
+                        $body->errorCode ?? 0, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+                        $body->errorDescription ?? __( 'Unknown error', 'multivendorx' ) // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
                     );
 
                 case 400:
                     return new WP_Error(
                         400,
-                        'Bad Request'
+                        __( 'Bad Request', 'multivendorx' )
                     );
 
                 default:
                     return new WP_Error(
                         $response_code,
-                        'Bad Request'
+                        __( 'Bad Request', 'multivendorx' )
                     );
             }
         }
-        // phpcs:enable
 
         return true;
     }

@@ -100,7 +100,17 @@ class Block {
             FrontendScripts::localize_scripts( $block_script['textdomain'] . '-' . $block_script['name'] . '-script' );
         }
     }
-
+	/**
+	 * Enqueue frontend scripts for registered blocks.
+	 *
+	 * Iterates through all registered block scripts and enqueues their
+	 * JavaScript files only if the block exists in the current post content.
+	 * Also localizes the scripts with necessary data.
+	 *
+	 * @global WP_Post $post Current post object.
+	 *
+	 * @return void
+	 */
     public function enqueue_scripts() {
         global $post;
         FrontendScripts::load_scripts();

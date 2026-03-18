@@ -153,7 +153,7 @@ class Rest extends \WP_REST_Controller {
                 $query = new \WP_Query( $args );
                 $count = (int) $query->found_posts;
 
-                if ( $status === 'any' ) {
+                if ( 'any' === $status ) {
                     $response->header( 'X-WP-Total', $count );
                     $response->header(
                         'X-WP-TotalPages',
@@ -439,13 +439,14 @@ class Rest extends \WP_REST_Controller {
             )
         );
     }
-    /**
-     * Prepare knowledge base object for REST response.
-     *
-     * @param WP_Post         $post
-     * @param WP_REST_Request $request
-     * @return array
-     */
+	/**
+	 * Prepare knowledge base object for REST response.
+	 *
+	 * @param WP_Post         $post    Post object.
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return array
+	 */
     public function prepare_item_for_response( $post, $request ) {
 
         return array(

@@ -413,7 +413,7 @@ class Install {
      * @return void
      */
     public static function set_default_modules() {
-        // Enable module by default
+        // Enable module by default.
         $active_modules  = get_option( Utill::ACTIVE_MODULES_DB_KEY, array() );
         $default_modules = array(
             'announcement',
@@ -1097,26 +1097,39 @@ class Install {
 
         $template_slug = 'store';
 
-        // Check if page already exists
+        // Check if page already exists.
         $existing = get_page_by_path( $template_slug );
 
         if ( ! $existing ) {
             $block_template_path = MultiVendorX()->plugin_path . 'templates/store/store.html';
-            $blocks_html         = file_exists( $block_template_path ) ? file_get_contents( $block_template_path ) : '';
+            $blocks_html         = file_exists( $block_template_path ) ? file_get_contents( $block_template_path ) : '';// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file read, not a remote request.
 
-            // Insert hidden page with default blocks
+            // Insert hidden page with default blocks.
             wp_insert_post(
                 array(
 					'post_title'   => 'Store Template',
 					'post_name'    => $template_slug,
 					'post_type'    => 'page',
 					'post_status'  => 'private',
-					'post_content' => $blocks_html, // default blocks pre-filled
+					'post_content' => $blocks_html, // default blocks pre-filled.
                 )
             );
         }
     }
-
+	/**
+	 * Run migration from legacy MVX (dc_) structure to MultiVendorX.
+	 *
+	 * This method orchestrates the migration process by:
+	 * - Migrating old modules configuration.
+	 * - Migrating legacy plugin settings.
+	 * - Migrating product category related settings.
+	 * - Migrating custom database tables.
+	 *
+	 * After successful migration, it removes the old database version
+	 * option to prevent re-running the migration.
+	 *
+	 * @return void
+	 */
     public function migrate_mvx_to_multivendorx() {
         $this->migrate_old_modules();
         $this->migrate_old_settings();
@@ -1174,7 +1187,11 @@ class Install {
             wp_insert_post( $page_data );
         }
     }
-
+	/**
+	 * Get mapping of old module IDs to new module IDs.
+	 *
+	 * @return array
+	 */
     public function old_new_map_module_id() {
         $map_modules = array(
             'spmv'                  => 'shared-listing',
@@ -1421,7 +1438,7 @@ class Install {
         }
 
         if ( ! empty( $previous_dashboard_settings['vendor_color_scheme_picker'] ) ) {
-            if ( $previous_dashboard_settings['vendor_color_scheme_picker'] == 'outer_space_blue' ) {
+            if ( 'outer_space_blue' === $previous_dashboard_settings['vendor_color_scheme_picker'] ) {
                 $appearance_settings['store_color_settings']['selectedPalette'] = 'obsidian_night';
                 $appearance_settings['store_color_settings']['colors']          = array(
 					'colorPrimary'   => '#00EED0',
@@ -1431,7 +1448,7 @@ class Install {
 				);
             }
 
-            if ( $previous_dashboard_settings['vendor_color_scheme_picker'] == 'green_lagoon' ) {
+            if ( 'green_lagoon' === $previous_dashboard_settings['vendor_color_scheme_picker'] ) {
                 $appearance_settings['store_color_settings']['selectedPalette'] = 'golden_ray';
                 $appearance_settings['store_color_settings']['colors']          = array(
 					'colorPrimary'   => '#0E117A',
@@ -1441,7 +1458,7 @@ class Install {
 				);
             }
 
-            if ( $previous_dashboard_settings['vendor_color_scheme_picker'] == 'old_west' ) {
+            if ( 'old_west' === $previous_dashboard_settings['vendor_color_scheme_picker'] ) {
                 $appearance_settings['store_color_settings']['selectedPalette'] = 'emerald_edge';
                 $appearance_settings['store_color_settings']['colors']          = array(
 					'colorPrimary'   => '#E6B924',
@@ -1451,7 +1468,7 @@ class Install {
 				);
             }
 
-            if ( $previous_dashboard_settings['vendor_color_scheme_picker'] == 'wild_watermelon' ) {
+            if ( 'wild_watermelon' === $previous_dashboard_settings['vendor_color_scheme_picker'] ) {
                 $appearance_settings['store_color_settings']['selectedPalette'] = 'orchid_bloom';
                 $appearance_settings['store_color_settings']['colors']          = array(
 					'colorPrimary'   => '#FF5959',
@@ -1476,34 +1493,34 @@ class Install {
             $map_settings['mapbox_api_key']     = $previous_store_settings['mapbox_api_key'];
         }
 
-        if ( ! empty( $previous_store_settings['show_related_products'] ) ) {
-            if ( $previous_store_settings['show_related_products']['value'] == 'vendors_related' ) {
-                $product_settings['recommendation_source'] = 'same_store';
-            }
-            if ( $previous_store_settings['show_related_products']['value'] == 'all_related' ) {
-                $product_settings['recommendation_source'] = 'all_stores';
-            }
-            if ( $previous_store_settings['show_related_products']['value'] == 'disable' ) {
-                $product_settings['recommendation_source'] = 'none';
-            }
-        }
+		if ( ! empty( $previous_store_settings['show_related_products'] ) ) {
+			if ( 'vendors_related' === $previous_store_settings['show_related_products']['value'] ) {
+				$product_settings['recommendation_source'] = 'same_store';
+			}
+			if ( 'all_related' === $previous_store_settings['show_related_products']['value'] ) {
+				$product_settings['recommendation_source'] = 'all_stores';
+			}
+			if ( 'disable' === $previous_store_settings['show_related_products']['value'] ) {
+				$product_settings['recommendation_source'] = 'none';
+			}
+		}
 
         $previous_spmv_settings = get_option( 'mvx_spmv_pages_tab_settings', array() );
         if ( ! empty( $previous_spmv_settings['is_singleproductmultiseller'] ) ) {
             $general_settings['store_selling_mode'] = 'single_product_multiple_vendor';
         }
 
-        if ( ! empty( $previous_spmv_settings['singleproductmultiseller_show_order'] ) ) {
-            if ( $previous_spmv_settings['singleproductmultiseller_show_order'] == 'min-price' ) {
-                $general_settings['spmv_show_order'] = 'min_price';
-            }
-            if ( $previous_spmv_settings['singleproductmultiseller_show_order'] == 'max-price' ) {
-                $general_settings['spmv_show_order'] = 'max_price';
-            }
-            if ( $previous_spmv_settings['singleproductmultiseller_show_order'] == 'top-rated-vendor' ) {
-                $general_settings['spmv_show_order'] = 'top_rated_store';
-            }
-        }
+		if ( ! empty( $previous_spmv_settings['singleproductmultiseller_show_order'] ) ) {
+			if ( 'min-price' === $previous_spmv_settings['singleproductmultiseller_show_order'] ) {
+				$general_settings['spmv_show_order'] = 'min_price';
+			}
+			if ( 'max-price' === $previous_spmv_settings['singleproductmultiseller_show_order'] ) {
+				$general_settings['spmv_show_order'] = 'max_price';
+			}
+			if ( 'top-rated-vendor' === $previous_spmv_settings['singleproductmultiseller_show_order'] ) {
+				$general_settings['spmv_show_order'] = 'top_rated_store';
+			}
+		}
 
         $previous_disbursement_settings = get_option( 'mvx_disbursement_tab_settings', array() );
         if ( ! empty( $previous_disbursement_settings['commission_calculation_on_tax'] ) ) {
@@ -1525,105 +1542,99 @@ class Install {
         }
 
         $previous_commission_settings = get_option( 'mvx_commissions_tab_settings', array() );
-        if ( ! empty( $previous_commission_settings['revenue_sharing_mode'] ) && $previous_commission_settings['revenue_sharing_mode'] == 'revenue_sharing_mode_vendor' ) {
-            update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['revenue_mode_store'], true );
-        }
+		if ( ! empty( $previous_commission_settings['revenue_sharing_mode'] ) && 'revenue_sharing_mode_vendor' === $previous_commission_settings['revenue_sharing_mode'] ) {
+			update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['revenue_mode_store'], true );
+		}
 
-        if ( ! empty( $previous_commission_settings['commission_type'] ) ) {
-            if ( $previous_commission_settings['commission_type']['value'] == 'fixed' ) {
-                $commission_settings['commission_type']     = 'per_item';
-                $commission_settings['commission_per_item'] = array(
+		if ( ! empty( $previous_commission_settings['commission_type'] ) ) {
+			if ( 'fixed' === $previous_commission_settings['commission_type']['value'] ) {
+				$commission_settings['commission_type']     = 'per_item';
+				$commission_settings['commission_per_item'] = array(
 					array(
 						'commission_fixed'      => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['fixed_ammount'] ?? '',
 						'commission_percentage' => '',
 					),
 				);
-            }
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'percent' ) {
-                $commission_settings['commission_type']     = 'per_item';
-                $commission_settings['commission_per_item'] = array(
+			if ( 'percent' === $previous_commission_settings['commission_type']['value'] ) {
+				$commission_settings['commission_type']     = 'per_item';
+				$commission_settings['commission_per_item'] = array(
 					array(
 						'commission_fixed'      => '',
 						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_ammount'] ?? '',
 					),
 				);
-            }
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'fixed_with_percentage_qty' ) {
-                $commission_settings['commission_type']     = 'per_item';
-                $commission_settings['commission_per_item'] = array(
+			if ( 'fixed_with_percentage_qty' === $previous_commission_settings['commission_type']['value'] ) {
+				$commission_settings['commission_type']     = 'per_item';
+				$commission_settings['commission_per_item'] = array(
 					array(
 						'commission_fixed'      => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['fixed_ammount'] ?? '',
 						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_ammount'] ?? '',
 					),
 				);
-            }
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'fixed_with_percentage' ) {
-                $commission_settings['commission_type']            = 'store_order';
-                $commission_settings['commission_per_store_order'] = array(
+			if ( 'fixed_with_percentage' === $previous_commission_settings['commission_type']['value'] ) {
+				$commission_settings['commission_type']            = 'store_order';
+				$commission_settings['commission_per_store_order'] = array(
 					array(
 						'commission_fixed'      => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['fixed_ammount'] ?? '',
 						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_ammount'] ?? '',
 					),
 				);
-            }
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'commission_by_product_price' ) {
-                $commission_settings['commission_type'] = 'store_order';
-                if ( ! empty( $previous_commission_settings['vendor_commission_by_products'] ) ) {
-                    foreach ( $previous_commission_settings['vendor_commission_by_products'] as $product_rule ) {
-                        $new_rule = array();
+			if ( 'commission_by_product_price' === $previous_commission_settings['commission_type']['value'] ) {
+				$commission_settings['commission_type'] = 'store_order';
+				if ( ! empty( $previous_commission_settings['vendor_commission_by_products'] ) ) {
+					foreach ( $previous_commission_settings['vendor_commission_by_products'] as $product_rule ) {
+						$new_rule = array();
 
-                        $new_rule['rule_type']     = 'price';
-                        $new_rule['product_price'] = $product_rule['cost'] ?? '';
+						$new_rule['rule_type']     = 'price';
+						$new_rule['product_price'] = $product_rule['cost'] ?? '';
 
-                        $rule_map = array(
-                            'upto'    => 'less_than',
-                            'greater' => 'more_than',
-                        );
+						$rule_map = array(
+							'upto'    => 'less_than',
+							'greater' => 'more_than',
+						);
 
-                        $new_rule['rule'] = $rule_map[ $product_rule['rule']['value'] ] ?? '';
+						$new_rule['rule'] = $rule_map[ $product_rule['rule']['value'] ] ?? '';
 
-                        // Commission percentage
-                        $new_rule['commission_percentage'] = $product_rule['commission'] ?? '0';
+						$new_rule['commission_percentage'] = $product_rule['commission'] ?? '0';
+						$new_rule['commission_fixed']      = $product_rule['commission_fixed'] ?? '0';
 
-                        // Commission fixed
-                        $new_rule['commission_fixed'] = $product_rule['commission_fixed'] ?? '0';
+						$commission_settings['commission_per_store_order'][] = $new_rule;
+					}
+				}
+			}
 
-                        $commission_settings['commission_per_store_order'][] = $new_rule;
-                    }
-                }
-            }
+			if ( 'commission_by_purchase_quantity' === $previous_commission_settings['commission_type']['value'] ) {
+				$commission_settings['commission_type'] = 'store_order';
+				if ( ! empty( $previous_commission_settings['vendor_commission_by_quantity'] ) ) {
+					foreach ( $previous_commission_settings['vendor_commission_by_quantity'] as $quantity_rule ) {
+						$new_rule = array();
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'commission_by_purchase_quantity' ) {
-                $commission_settings['commission_type'] = 'store_order';
-                if ( ! empty( $previous_commission_settings['vendor_commission_by_quantity'] ) ) {
-                    foreach ( $previous_commission_settings['vendor_commission_by_quantity'] as $quantity_rule ) {
-                        $new_rule = array();
+						$new_rule['rule_type']   = 'quantity';
+						$new_rule['product_qty'] = $quantity_rule['quantity'] ?? '';
 
-                        $new_rule['rule_type']   = 'quantity';
-                        $new_rule['product_qty'] = $quantity_rule['quantity'] ?? '';
+						$rule_map = array(
+							'upto'    => 'less_than',
+							'greater' => 'more_than',
+						);
 
-                        $rule_map = array(
-                            'upto'    => 'less_than',
-                            'greater' => 'more_than',
-                        );
+						$new_rule['rule'] = $rule_map[ $quantity_rule['rule']['value'] ] ?? '';
 
-                        $new_rule['rule'] = $rule_map[ $quantity_rule['rule']['value'] ] ?? '';
+						$new_rule['commission_percentage'] = $quantity_rule['commission'] ?? '0';
+						$new_rule['commission_fixed']      = $quantity_rule['commission_fixed'] ?? '0';
 
-                        // Commission percentage
-                        $new_rule['commission_percentage'] = $quantity_rule['commission'] ?? '0';
-
-                        // Commission fixed
-                        $new_rule['commission_fixed'] = $quantity_rule['commission_fixed'] ?? '0';
-
-                        $commission_settings['commission_per_store_order'][] = $new_rule;
-                    }
-                }
-            }
-        }
+						$commission_settings['commission_per_store_order'][] = $new_rule;
+					}
+				}
+			}
+		}
 
         if ( ! empty( $previous_commission_settings['payment_gateway_charge'] ) ) {
             update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['payment_gateway_charge'], true );
@@ -1633,9 +1644,9 @@ class Install {
         $previous_country_settings  = get_option( 'woocommerce_mvx_product_shipping_by_country_settings', array() );
         $previous_vendor_settings   = get_option( 'woocommerce_mvx_vendor_shipping_1_settings', array() );
 
-        if ( ! empty( $previous_disbursement_settings['give_shipping'] ) || ( ! empty( $previous_distance_settings['enable'] ) && $previous_distance_settings['tax_status'] == 'taxable' ) || ( ! empty( $previous_country_settings['enable'] ) && $previous_country_settings['tax_status'] == 'taxable' ) || $previous_vendor_settings['tax_status'] == 'taxable' ) {
-            $commission_settings['taxable'] = array( 'taxable' );
-        }
+		if ( ! empty( $previous_disbursement_settings['give_shipping'] ) || ( ! empty( $previous_distance_settings['enable'] ) && 'taxable' === $previous_distance_settings['tax_status'] ) || ( ! empty( $previous_country_settings['enable'] ) && 'taxable' === $previous_country_settings['tax_status'] ) || 'taxable' === $previous_vendor_settings['tax_status'] ) {
+			$commission_settings['taxable'] = array( 'taxable' );
+		}
 
         if ( ! empty( $previous_disbursement_settings['commission_include_coupon'] ) ) {
             $coupon_settings['commission_include_coupon'] = 'store';
@@ -1647,11 +1658,11 @@ class Install {
 
         $statuses = array();
 
-        foreach ( $previous_disbursement_settings['order_withdrawl_status'] as $status ) {
-            if ( $status['value'] === 'completed' || $status['value'] === 'processing' ) {
-                $statuses[] = $status['value'];
-            }
-        }
+		foreach ( $previous_disbursement_settings['order_withdrawl_status'] as $status ) {
+			if ( 'completed' === $status['value'] || 'processing' === $status['value'] ) {
+				$statuses[] = $status['value'];
+			}
+		}
 
         $disbursement_settings = array(
             'commission_lock_period'    => ! empty( $previous_disbursement_settings['commission_threshold_time'] ) ?? 0,
@@ -1736,35 +1747,35 @@ class Install {
             'client_secret' => ! empty( $previous_paypal_settings['client_secret'] ) ?? '',
         );
 
-        $oldFields = get_option( 'mvx_new_vendor_registration_form_data', array() );
+		$old_fields = get_option( 'mvx_new_vendor_registration_form_data', array() );
 
-        if ( ! empty( $oldFields ) ) {
-            $newForm = array(
-                'store_registration_from' => array(
-                    'formfieldlist'  => array(),
-                    'butttonsetting' => array(),
-                ),
-            );
+		if ( ! empty( $old_fields ) ) {
+			$new_form = array(
+				'store_registration_from' => array(
+					'formfieldlist'  => array(),
+					'butttonsetting' => array(),
+				),
+			);
 
-            $idCounter     = 1;
-            $addressFields = array();
+			$id_counter     = 1;
+			$address_fields = array();
 
-            foreach ( $oldFields as $field ) {
-                // Skip parent title
-                if ( $field['type'] === 'p_title' ) {
-                    $newForm['store_registration_from']['formfieldlist'][] = array(
-                        'id'       => $idCounter++,
-                        'type'     => 'title',
-                        'label'    => '',
-                        'chosen'   => '',
-                        'selected' => '',
-                    );
-                    continue;
-                }
+			foreach ( $old_fields as $field ) {
+				// Skip parent title.
+				if ( 'p_title' === $field['type'] ) {
+					$new_form['store_registration_from']['formfieldlist'][] = array(
+						'id'       => $id_counter++,
+						'type'     => 'title',
+						'label'    => '',
+						'chosen'   => '',
+						'selected' => '',
+					);
+					continue;
+				}
 
-                // Address fields collected separately
-                if ( str_starts_with( $field['type'], 'vendor_' ) &&
-                    in_array(
+				// Address fields collected separately.
+				if ( 0 === strpos( $field['type'], 'vendor_' ) &&
+					in_array(
                         $field['type'],
                         array(
 							'vendor_address_1',
@@ -1773,99 +1784,101 @@ class Install {
 							'vendor_state',
 							'vendor_country',
 							'vendor_postcode',
-						)
-                    ) ) {
-                    $addressMap = array(
-                        'vendor_address_1' => 'address_1',
-                        'vendor_address_2' => 'address_2',
-                        'vendor_city'      => 'city',
-                        'vendor_state'     => 'state',
-                        'vendor_country'   => 'country',
-                        'vendor_postcode'  => 'postcode',
-                    );
+                        ),
+                        true
+					) ) {
+					$address_map = array(
+						'vendor_address_1' => 'address_1',
+						'vendor_address_2' => 'address_2',
+						'vendor_city'      => 'city',
+						'vendor_state'     => 'state',
+						'vendor_country'   => 'country',
+						'vendor_postcode'  => 'postcode',
+					);
 
-                    $addressFields[] = array(
-                        'id'          => $idCounter++,
-                        'key'         => $addressMap[ $field['type'] ],
-                        'label'       => $field['label'],
-                        'type'        => 'text',
-                        'placeholder' => $field['label'],
-                        'required'    => $field['required'] ?? '',
-                        'chosen'      => '',
-                        'selected'    => '',
-                    );
-                    continue;
-                }
+					$address_fields[] = array(
+						'id'          => $id_counter++,
+						'key'         => $address_map[ $field['type'] ],
+						'label'       => $field['label'],
+						'type'        => 'text',
+						'placeholder' => $field['label'],
+						'required'    => $field['required'] ?? '',
+						'chosen'      => '',
+						'selected'    => '',
+					);
+					continue;
+				}
 
-                // Type conversion
-                $typeMap = array(
-                    'textbox'             => 'text',
-                    'multi-select'        => 'multiselect',
-                    'vendor_description'  => 'textarea',
-                    'vendor_page_title'   => 'text',
-                    'vendor_paypal_email' => 'email',
-                );
+				// Type conversion.
+				$type_map = array(
+					'textbox'             => 'text',
+					'multi-select'        => 'multiselect',
+					'vendor_description'  => 'textarea',
+					'vendor_page_title'   => 'text',
+					'vendor_paypal_email' => 'email',
+				);
 
-                $type = $typeMap[ $field['type'] ] ?? $field['type'];
+				$type = $type_map[ $field['type'] ] ?? $field['type'];
 
-                $newField = array(
-                    'id'          => $idCounter++,
-                    'type'        => $type,
-                    'label'       => $field['label'],
-                    'required'    => $field['required'] ?? '',
-                    'name'        => strtolower( $field['type'] . '-mknk' . substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyz0123456789' ), 0, 4 ) ),
-                    'placeholder' => $field['placeholder'] ?? '',
-                    'chosen'      => '',
-                    'selected'    => '',
-                );
+				$new_field = array(
+					'id'          => $id_counter++,
+					'type'        => $type,
+					'label'       => $field['label'],
+					'required'    => $field['required'] ?? '',
+					'name'        => strtolower( $field['type'] . '-mknk' . substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyz0123456789' ), 0, 4 ) ),
+					'placeholder' => $field['placeholder'] ?? '',
+					'chosen'      => '',
+					'selected'    => '',
+				);
 
-                // Options
-                if ( ! empty( $field['options'] ) ) {
-                    $newField['options'] = array();
-                    $optId               = 1;
+				// Options.
+				if ( ! empty( $field['options'] ) ) {
+					$new_field['options'] = array();
+					$opt_id               = 1;
 
-                    foreach ( $field['options'] as $option ) {
-                        $newField['options'][] = array(
-                            'id'       => $optId++,
-                            'label'    => $option['label'],
-                            'value'    => $option['value'],
-                            'chosen'   => '',
-                            'selected' => '',
-                        );
-                    }
-                }
+					foreach ( $field['options'] as $option ) {
+						$new_field['options'][] = array(
+							'id'       => $opt_id++,
+							'label'    => $option['label'],
+							'value'    => $option['value'],
+							'chosen'   => '',
+							'selected' => '',
+						);
+					}
+				}
 
-                // Recaptcha
-                if ( $type === 'recaptcha' ) {
-                    $newField['name']        = 'recaptcha-mknk' . substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyz0123456789' ), 0, 4 );
-                    $newField['placeholder'] = 'recaptcha';
-                }
+				// Recaptcha.
+				if ( 'recaptcha' === $type ) {
+					$new_field['name']        = 'recaptcha-mknk' . substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyz0123456789' ), 0, 4 );
+					$new_field['placeholder'] = 'recaptcha';
+				}
 
-                // Attachment
-                if ( $type === 'attachment' ) {
-                    $newField['name']        = 'attachment-mknk' . substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyz0123456789' ), 0, 4 );
-                    $newField['placeholder'] = 'attachment';
-                }
+				// Attachment.
+				if ( 'attachment' === $type ) {
+					$new_field['name']        = 'attachment-mknk' . substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyz0123456789' ), 0, 4 );
+					$new_field['placeholder'] = 'attachment';
+				}
 
-                $newForm['store_registration_from']['formfieldlist'][] = $newField;
-            }
+				$new_form['store_registration_from']['formfieldlist'][] = $new_field;
+			}
 
-            // Add address block if exists
-            if ( ! empty( $addressFields ) ) {
-                $newForm['store_registration_from']['formfieldlist'][] = array(
-                    'id'       => $idCounter++,
-                    'type'     => 'address',
-                    'label'    => 'Address',
-                    'name'     => 'address',
-                    'fields'   => $addressFields,
-                    'value'    => array(),
-                    'readonly' => '',
-                    'chosen'   => '',
-                    'selected' => '',
-                );
-            }
-            update_option( Utill::MULTIVENDORX_SETTINGS['registration'], $newForm );
-        }
+			// Add address block if exists.
+			if ( ! empty( $address_fields ) ) {
+				$new_form['store_registration_from']['formfieldlist'][] = array(
+					'id'       => $id_counter++,
+					'type'     => 'address',
+					'label'    => 'Address',
+					'name'     => 'address',
+					'fields'   => $address_fields,
+					'value'    => array(),
+					'readonly' => '',
+					'chosen'   => '',
+					'selected' => '',
+				);
+			}
+
+			update_option( Utill::MULTIVENDORX_SETTINGS['registration'], $new_form );
+		}
 
         update_option( Utill::MULTIVENDORX_SETTINGS['refunds'], $refund_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'], $store_permissions );
@@ -1883,7 +1896,17 @@ class Install {
         update_option( Utill::MULTIVENDORX_SETTINGS['developer-tools'], $tool_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], $payment_settings );
     }
-
+	/**
+	 * Migrate product, category, and coupon settings from MVX structure.
+	 *
+	 * Handles:
+	 * - Product-level commission meta migration.
+	 * - Product vendor (store) association update.
+	 * - Category-level commission meta migration.
+	 * - Coupon vendor (store) association update.
+	 *
+	 * @return void
+	 */
     public function migrate_product_category_settings() {
         $previous_commission_settings = get_option( 'mvx_commissions_tab_settings', array() );
 
@@ -1895,49 +1918,49 @@ class Install {
         );
 
         foreach ( $products as $product_id ) {
-            if ( $previous_commission_settings['commission_type']['value'] == 'fixed' ) {
-                $previous_value = get_post_meta( $product_id, '_commission_per_product', true );
+			if ( 'fixed' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_value = get_post_meta( $product_id, '_commission_per_product', true );
 
-                if ( empty( $previous_value ) ) {
-                    continue;
-                }
+				if ( empty( $previous_value ) ) {
+					continue;
+				}
 
-                update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_value );
-            }
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_value );
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'percent' ) {
-                $previous_value = get_post_meta( $product_id, '_commission_per_product', true );
+			if ( 'percent' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_value = get_post_meta( $product_id, '_commission_per_product', true );
 
-                if ( empty( $previous_value ) ) {
-                    continue;
-                }
+				if ( empty( $previous_value ) ) {
+					continue;
+				}
 
-                update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_value );
-            }
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_value );
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'fixed_with_percentage_qty' ) {
-                $previous_percentage_value = get_post_meta( $product_id, '_commission_percentage_per_product', true );
-                $previous_fixed_value      = get_post_meta( $product_id, '_commission_fixed_with_percentage_qty', true );
+			if ( 'fixed_with_percentage_qty' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_percentage_value = get_post_meta( $product_id, '_commission_percentage_per_product', true );
+				$previous_fixed_value      = get_post_meta( $product_id, '_commission_fixed_with_percentage_qty', true );
 
-                if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
-                    continue;
-                }
+				if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
+					continue;
+				}
 
-                update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_fixed_value );
-                update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_percentage_value );
-            }
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_fixed_value );
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_percentage_value );
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'fixed_with_percentage' ) {
-                $previous_percentage_value = get_post_meta( $product_id, '_commission_percentage_per_product', true );
-                $previous_fixed_value      = get_post_meta( $product_id, '_commission_fixed_with_percentage', true );
+			if ( 'fixed_with_percentage' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_percentage_value = get_post_meta( $product_id, '_commission_percentage_per_product', true );
+				$previous_fixed_value      = get_post_meta( $product_id, '_commission_fixed_with_percentage', true );
 
-                if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
-                    continue;
-                }
+				if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
+					continue;
+				}
 
-                update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_fixed_value );
-                update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_percentage_value );
-            }
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_fixed_value );
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_percentage_value );
+			}
 
             // Migrate product vendor.
             $author_id = (int) get_post_field( 'post_author', $product_id );
@@ -1959,49 +1982,49 @@ class Install {
         );
 
         foreach ( $terms as $term_id ) {
-            if ( $previous_commission_settings['commission_type']['value'] == 'fixed' ) {
-                $previous_value = get_term_meta( $term_id, 'commission', true );
+			if ( 'fixed' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_value = get_term_meta( $term_id, 'commission', true );
 
-                if ( empty( $previous_value ) ) {
-                    continue;
-                }
+				if ( empty( $previous_value ) ) {
+					continue;
+				}
 
-                update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_value );
-            }
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_value );
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'percent' ) {
-                $previous_value = get_term_meta( $term_id, 'commission', true );
+			if ( 'percent' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_value = get_term_meta( $term_id, 'commission', true );
 
-                if ( empty( $previous_value ) ) {
-                    continue;
-                }
+				if ( empty( $previous_value ) ) {
+					continue;
+				}
 
-                update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_value );
-            }
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_value );
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'fixed_with_percentage_qty' ) {
-                $previous_percentage_value = get_term_meta( $term_id, 'commission_percentage', true );
-                $previous_fixed_value      = get_term_meta( $term_id, 'fixed_with_percentage_qty', true );
+			if ( 'fixed_with_percentage_qty' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_percentage_value = get_term_meta( $term_id, 'commission_percentage', true );
+				$previous_fixed_value      = get_term_meta( $term_id, 'fixed_with_percentage_qty', true );
 
-                if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
-                    continue;
-                }
+				if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
+					continue;
+				}
 
-                update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_fixed_value );
-                update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_percentage_value );
-            }
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_fixed_value );
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_percentage_value );
+			}
 
-            if ( $previous_commission_settings['commission_type']['value'] == 'fixed_with_percentage' ) {
-                $previous_percentage_value = get_term_meta( $term_id, 'commission_percentage', true );
-                $previous_fixed_value      = get_term_meta( $term_id, 'fixed_with_percentage', true );
+			if ( 'fixed_with_percentage' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_percentage_value = get_term_meta( $term_id, 'commission_percentage', true );
+				$previous_fixed_value      = get_term_meta( $term_id, 'fixed_with_percentage', true );
 
-                if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
-                    continue;
-                }
+				if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
+					continue;
+				}
 
-                update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_fixed_value );
-                update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_percentage_value );
-            }
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_fixed_value );
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_percentage_value );
+			}
         }
 
         // Migrate coupon vendor.
@@ -2023,7 +2046,11 @@ class Install {
             }
         }
     }
-
+	/**
+	 * Get mapping of old vendor meta keys to new keys.
+	 *
+	 * @return array
+	 */
     public function old_new_meta_map() {
         $map_meta = array(
             'mvx_vendor_fields'               => 'multivendorx_registration_data',
@@ -2080,7 +2107,6 @@ class Install {
             'refresh_token'                   => 'stripe_refresh_token',
             '_vendor_external_store_url'      => 'store_external_store_url',
             '_vendor_external_store_label'    => 'store_external_store_label',
-            'refresh_token'                   => 'stripe_refresh_token',
             '_vendor_term_id'                 => '',
             '_vendor_page_title'              => '',
             '_vendor_page_slug'               => '',
@@ -2139,9 +2165,9 @@ class Install {
                 $status = 'rejected';
             }
 
-            if ( get_user_meta( $user_id, '_vendor_turn_off', true ) == 'Enable' ) {
-                $status = 'suspended';
-            }
+			if ( 'Enable' === get_user_meta( $user_id, '_vendor_turn_off', true ) ) {
+				$status = 'suspended';
+			}
 
             // Store create.
             $store = new Store();
@@ -2169,7 +2195,7 @@ class Install {
 
             foreach ( $user_meta as $meta_key => $meta_values ) {
                 // report abuse table data insert.
-                if ( $meta_key == 'report_abuse_data' ) {
+                if ( 'report_abuse_data' === $meta_key ) {
                     $table = $wpdb->prefix . Utill::TABLES['report_abuse'];
 
                     foreach ( $meta_values as $value ) {
@@ -2183,17 +2209,17 @@ class Install {
                         );
 
                         // Insert data.
-                        $wpdb->insert(
+						$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                             $table,
                             $insert_data,
                             array( '%d', '%d', '%s', '%s', '%s' )
-                        );
+						);
                     }
                     continue;
                 }
 
                 // follow-store store meta migration.
-                if ( $meta_key == 'mvx_vendor_followed_by_customer' ) {
+				if ( 'mvx_vendor_followed_by_customer' === $meta_key ) {
                     $new_meta = array();
 
                     foreach ( $meta_values as $item ) {
@@ -2201,7 +2227,7 @@ class Install {
                             'id'   => (int) $item['user_id'],
                             'date' => $item['timestamp'],
                         );
-                    }
+					}
 
                     $store->update_meta( 'followers', $new_meta );
                     continue;
@@ -2214,7 +2240,7 @@ class Install {
 
                 $new_meta_key = $map_meta[ $meta_key ];
 
-                if ( $new_meta_key === 'address' ) {
+                if ( 'address' === $new_meta_key ) {
                     $existing    = $store->get_meta( 'address' );
                     $meta_values = trim( $existing . ' ' . $meta_values );
                 }
@@ -2224,13 +2250,13 @@ class Install {
         }
 
         // follow store customer side migration.
-        $users = get_users(
+		$users = get_users(
             array(
-				'meta_key'     => 'mvx_customer_follow_vendor',
-				'meta_compare' => 'EXISTS',
-				'fields'       => 'ID',
+				'meta_key' => 'mvx_customer_follow_vendor', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+            'meta_compare' => 'EXISTS',
+            'fields'       => 'ID',
             )
-        );
+		);
 
         foreach ( $users as $user_id ) {
             $results  = array();
@@ -2323,36 +2349,35 @@ class Install {
             $store_payable       = get_post_meta( $commission_id, '_commission_total', true );
             $status              = get_post_meta( $commission_id, '_paid_status', true );
             $refunded            = abs( (float) get_post_meta( $commission_id, '_commission_refunded', true ) );
-            $created_at          = date( 'Y-m-d H:i:s', get_post_meta( $commission_id, '_paid_date', true ) );
+			$created_at          = gmdate( 'Y-m-d H:i:s', get_post_meta( $commission_id, '_paid_date', true ) );
+            $vendor_id           = get_term_meta( $commission_vendor, '_vendor_user_id', true );
+            $store_id            = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
 
-            $vendor_id = get_term_meta( $commission_vendor, '_vendor_user_id', true );
-            $store_id  = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
-
-            $insert_id = $wpdb->insert(
+			$insert_id = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $table_name,
                 array(
-                    'order_id'       => (int) $commission_order_id,
-                    'store_id'       => (int) $store_id,
-                    'store_earning'  => $store_earning,
-                    'store_shipping' => $store_shipping,
-                    'store_tax'      => $store_tax,
-                    'store_payable'  => $store_payable,
-                    'store_refunded' => $refunded,
-                    'status'         => $status,
-                    'created_at'     => $created_at,
+					'order_id'       => (int) $commission_order_id,
+					'store_id'       => (int) $store_id,
+					'store_earning'  => $store_earning,
+					'store_shipping' => $store_shipping,
+					'store_tax'      => $store_tax,
+					'store_payable'  => $store_payable,
+					'store_refunded' => $refunded,
+					'status'         => $status,
+					'created_at'     => $created_at,
                 ),
                 array(
-                    '%d',
-                    '%d',
-                    '%f',
-                    '%f',
-                    '%f',
-                    '%f',
-                    '%f',
-                    '%s',
-                    '%s',
+					'%d',
+					'%d',
+					'%f',
+					'%f',
+					'%f',
+					'%f',
+					'%f',
+					'%s',
+					'%s',
                 )
-            );
+			);
 
             $order = wc_get_order( $commission_order_id );
 
@@ -2364,13 +2389,13 @@ class Install {
             );
 
             foreach ( $meta_map as $old_key => $new_key ) {
-                if ( $old_key == '_commission_id' ) {
-                    $value = $insert_id;
-                } elseif ( $old_key == '_vendor_id' ) {
-                    $value = $store_id;
-                } else {
-                    $value = $order->get_meta( $old_key );
-                }
+				if ( '_commission_id' === $old_key ) {
+					$value = $insert_id;
+				} elseif ( '_vendor_id' === $old_key ) {
+					$value = $store_id;
+				} else {
+					$value = $order->get_meta( $old_key );
+				}
 
                 $order->update_meta_data( $new_key, $value );
                 $order->delete_meta_data( $old_key );
@@ -2399,114 +2424,114 @@ class Install {
         }
 
         // Visitor stats table migrate.
-        $old_visitors_table = $wpdb->prefix . 'mvx_visitors_stats';
-        $new_visitors_table = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+		$old_visitors_table = $wpdb->prefix . 'mvx_visitors_stats';
+		$new_visitors_table = $wpdb->prefix . Utill::TABLES['visitors_stats'];
 
-        $rows = $wpdb->get_results( "SELECT * FROM {$old_visitors_table}" );
+		$rows = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            "SELECT * FROM {$old_visitors_table}" // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
 
-        $store_cache = array();
+		$store_cache = array();
 
-        foreach ( $rows as $row ) {
-            $author_id = (int) $row->vendor_id;
+		foreach ( $rows as $row ) {
+			$author_id = (int) $row->vendor_id;
 
-            if ( ! isset( $store_cache[ $author_id ] ) ) {
-                $store_cache[ $author_id ] = (int) get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
-            }
+			if ( ! isset( $store_cache[ $author_id ] ) ) {
+				$store_cache[ $author_id ] = (int) get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+			}
 
-            $store_id = $store_cache[ $author_id ] ?: 0;
+			$store_id = ! empty( $store_cache[ $author_id ] ) ? $store_cache[ $author_id ] : 0;
 
-            $wpdb->insert(
-                $new_visitors_table,
-                array(
-                    'store_id'    => $store_id,
-                    'user_id'     => (int) $row->user_id,
-                    'user_cookie' => $row->user_cookie,
-                    'session_id'  => $row->session_id,
-                    'ip'          => $row->ip,
-                    'lat'         => $row->lat,
-                    'lon'         => $row->lon,
-                    'city'        => $row->city,
-                    'zip'         => $row->zip,
-                    'regionCode'  => $row->regionCode,
-                    'region'      => $row->region,
-                    'countryCode' => $row->countryCode,
-                    'country'     => $row->country,
-                    'isp'         => $row->isp,
-                    'timezone'    => $row->timezone,
-                    'created'     => $row->created,
-                )
-            );
-        }
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$new_visitors_table,
+				array(
+					'store_id'    => $store_id,
+					'user_id'     => (int) $row->user_id,
+					'user_cookie' => $row->user_cookie,
+					'session_id'  => $row->session_id,
+					'ip'          => $row->ip,
+					'lat'         => $row->lat,
+					'lon'         => $row->lon,
+					'city'        => $row->city,
+					'zip'         => $row->zip,
+					'regionCode'  => $row->regionCode, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+                'region'          => $row->region,
+                'countryCode'     => $row->countryCode, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+                'country'         => $row->country,
+                'isp'             => $row->isp,
+                'timezone'        => $row->timezone,
+                'created'         => $row->created,
+				)
+			);
+		}
 
         // Questions and answers table migration.
-        $questions_table = $wpdb->prefix . 'mvx_cust_questions';
-        $answers_table   = $wpdb->prefix . 'mvx_cust_answers';
-        $new_qna_table   = $wpdb->prefix . Utill::TABLES['product_qna'];
+		$questions_table = $wpdb->prefix . 'mvx_cust_questions';
+		$answers_table   = $wpdb->prefix . 'mvx_cust_answers';
+		$new_qna_table   = $wpdb->prefix . Utill::TABLES['product_qna'];
 
-        $questions = $wpdb->get_results( "SELECT * FROM {$questions_table}" );
-        foreach ( $questions as $question ) {
-            $answer = $wpdb->get_row(
-                $wpdb->prepare(
-                    "SELECT * FROM {$answers_table} WHERE ques_ID = %d ORDER BY ans_created ASC LIMIT 1",
-                    $question->ques_ID
-                )
-            );
+		$questions = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            "SELECT * FROM {$questions_table}" // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
+		foreach ( $questions as $question ) {
+			$answer = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->prepare(
+                    "SELECT * FROM {$answers_table} WHERE ques_ID = %d ORDER BY ans_created ASC LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                    $question->ques_ID // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+				)
+			);
 
-            $ques_votes = $question->ques_vote ? maybe_unserialize( $question->ques_vote ) : array();
-            $ans_votes  = $answer ? maybe_unserialize( $answer->ans_vote ) : array();
+			$ques_votes = $question->ques_vote ? maybe_unserialize( $question->ques_vote ) : array();
+			$ans_votes  = $answer ? maybe_unserialize( $answer->ans_vote ) : array();
 
-            // Merge votes
-            $merged_votes = array_merge( $ques_votes, $ans_votes );
-            $total_votes  = count( $merged_votes );
+			$merged_votes = array_merge( $ques_votes, $ans_votes );
+			$total_votes  = count( $merged_votes );
 
-            $store_id = get_post_meta( $question->product_ID, Utill::POST_META_SETTINGS['store_id'], true );
-            $wpdb->insert(
-                $new_qna_table,
-                array(
-                    'id'                  => (int) $question->ques_ID,
-                    'product_id'          => (int) $question->product_ID,
-                    'store_id'            => $store_id,
-                    'question_text'       => $question->ques_details,
-                    'question_by'         => (int) $question->ques_by,
-                    'question_date'       => $question->ques_created,
-                    'answer_text'         => $answer ? $answer->ans_details : null,
-                    'answer_by'           => $answer ? (int) $answer->ans_by : null,
-                    'answer_date'         => $answer ? $answer->ans_created : null,
-                    'total_votes'         => $total_votes,
-                    'voters'              => maybe_serialize( $merged_votes ),
-                    'question_visibility' => 'public',
-                    'created_at'          => $question->ques_created,
-                    'updated_at'          => $answer ? $answer->ans_created : $question->ques_created,
-                ),
-                array(
-                    '%d',
+			$store_id = get_post_meta( $question->product_ID, Utill::POST_META_SETTINGS['store_id'], true ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$new_qna_table,
+				array(
+					'id'                  => (int) $question->ques_ID, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					'product_id'          => (int) $question->product_ID, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					'store_id'            => $store_id,
+					'question_text'       => $question->ques_details,
+					'question_by'         => (int) $question->ques_by,
+					'question_date'       => $question->ques_created,
+					'answer_text'         => $answer ? $answer->ans_details : null,
+					'answer_by'           => $answer ? (int) $answer->ans_by : null,
+					'answer_date'         => $answer ? $answer->ans_created : null,
+					'total_votes'         => $total_votes,
+					'voters'              => maybe_serialize( $merged_votes ),
+					'question_visibility' => 'public',
+					'created_at'          => $question->ques_created,
+					'updated_at'          => $answer ? $answer->ans_created : $question->ques_created,
+				),
+				array(
 					'%d',
 					'%d',
-					'%s',
-					'%d',
-					'%s',
-                    '%s',
 					'%d',
 					'%s',
 					'%d',
 					'%s',
 					'%s',
+					'%d',
 					'%s',
-                )
-            );
-        }
+					'%d',
+					'%s',
+					'%s',
+					'%s',
+				)
+			);
+		}
 
         // SPMV table migration.
-        $old_spmv_table = $wpdb->prefix . 'mvx_products_map';
-        $new_spmv_table = $wpdb->prefix . Utill::TABLES['products_map'];
+		$old_spmv_table = $wpdb->prefix . 'mvx_products_map';
+		$new_spmv_table = $wpdb->prefix . Utill::TABLES['products_map'];
 
-        $spmv_products = $wpdb->get_results(
-            "SELECT product_map_id, product_id, created
-            FROM {$old_spmv_table}
-            ORDER BY product_map_id, ID"
-        );
-
-        $maps = array();
+		$spmv_products = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->prepare( "SELECT product_map_id, product_id, created FROM {$old_spmv_table} ORDER BY product_map_id, ID" ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
+        $maps          = array();
         foreach ( $spmv_products as $row ) {
             $map_id     = (int) $row->product_map_id;
             $product_id = (int) $row->product_id;
@@ -2522,19 +2547,19 @@ class Install {
         }
 
         foreach ( $maps as $map_id => $data ) {
-            $wpdb->insert(
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $new_spmv_table,
                 array(
-                    'ID'          => $map_id,
-                    'product_map' => wp_json_encode( array_values( $data['products'] ) ),
-                    'created'     => $data['created'],
+					'ID'          => $map_id,
+					'product_map' => wp_json_encode( array_values( $data['products'] ) ),
+					'created'     => $data['created'],
                 ),
                 array(
-                    '%d',
-                    '%s',
-                    '%s',
+					'%d',
+					'%s',
+					'%s',
                 )
-            );
+			);
 
             foreach ( $data['products'] as $product_id ) {
                 update_post_meta( $product_id, 'multivendorx_spmv_id', $map_id );
@@ -2544,12 +2569,13 @@ class Install {
         }
 
         // Vendor ledger(Transactions) table migrate.
-        $old_ledger_table = $wpdb->prefix . 'mvx_vendor_ledger';
-        $new_ledger_table = $wpdb->prefix . Utill::TABLES['transaction'];
+		$old_ledger_table = $wpdb->prefix . 'mvx_vendor_ledger';
+		$new_ledger_table = $wpdb->prefix . Utill::TABLES['transaction'];
 
-        $transactions = $wpdb->get_results( "SELECT * FROM {$old_ledger_table}", ARRAY_A );
-
-        $store_cache = array();
+		$transactions = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->prepare( "SELECT * FROM {$old_ledger_table}" ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
+        $store_cache  = array();
 
         foreach ( $transactions as $row ) {
             $author_id = (int) $row['vendor_id'];
@@ -2558,31 +2584,31 @@ class Install {
                 $store_cache[ $author_id ] = (int) get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
             }
 
-            $store_id = $store_cache[ $author_id ] ?: 0;
+            $store_id = ! empty( $store_cache[ $author_id ] ) ? $store_cache[ $author_id ] : 0;
 
             $is_credit  = ! empty( $row['credit'] );
             $entry_type = $is_credit ? 'Cr' : 'Dr';
             $amount     = $is_credit ? (float) $row['credit'] : (float) $row['debit'];
 
-            $wpdb->insert(
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $new_ledger_table,
                 array(
-                    'store_id'         => $store_id,
-                    'order_id'         => (int) $row['order_id'],
-                    'commission_id'    => $row['ref_id'],
-                    'entry_type'       => $entry_type,
-                    'transaction_type' => $row['ref_type'],
-                    'amount'           => $amount,
-                    'balance'          => (float) $row['balance'],
-                    'locking_balance'  => 0,
-                    'currency'         => get_woocommerce_currency(),
-                    'narration'        => $row['ref_info'],
-                    'status'           => $row['ref_status'],
-                    'created_at'       => $row['created'],
-                    'updated_at'       => $row['created'],
+					'store_id'         => $store_id,
+					'order_id'         => (int) $row['order_id'],
+					'commission_id'    => $row['ref_id'],
+					'entry_type'       => $entry_type,
+					'transaction_type' => $row['ref_type'],
+					'amount'           => $amount,
+					'balance'          => (float) $row['balance'],
+					'locking_balance'  => 0,
+					'currency'         => get_woocommerce_currency(),
+					'narration'        => $row['ref_info'],
+					'status'           => $row['ref_status'],
+					'created_at'       => $row['created'],
+					'updated_at'       => $row['created'],
                 ),
                 array(
-                    '%d',
+					'%d',
 					'%d',
 					'%s',
 					'%s',
@@ -2596,7 +2622,7 @@ class Install {
 					'%s',
 					'%s',
                 )
-            );
+			);
         }
     }
 }

@@ -1,63 +1,83 @@
 <?php
+/**
+ * Elementor Store Document
+ *
+ * Provides a custom Elementor document type for MultiVendorX store pages.
+ *
+ * @package MultiVendorX
+ */
 
 namespace MultiVendorX\Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
-class StoreDocument extends \Elementor\Core\Base\Document {
+use Elementor\Core\Base\Document;
 
-    /**
-     * Get document properties
-     */
-    public static function get_properties() {
-        $properties                    = parent::get_properties();
-        $properties['support_kit']     = true;
-        $properties['show_in_library'] = true;
-        $properties['cpt']             = array( 'elementor_library' );
-        return $properties;
-    }
+/**
+ * StoreDocument class.
+ */
+class StoreDocument extends Document {
 
-    /**
-     * Get document name
-     */
-    public function get_name() {
-        return 'multivendorx-store';
-    }
+	/**
+	 * Get document properties.
+	 *
+	 * @return array
+	 */
+	public static function get_properties() {
+		$properties                    = parent::get_properties();
+		$properties['support_kit']     = true;
+		$properties['show_in_library'] = true;
+		$properties['cpt']             = array( 'elementor_library' );
+		return $properties;
+	}
 
-    /**
-     * Get document title
-     */
-    public static function get_title() {
-        return __( 'Store Page', 'multivendorx' );
-    }
+	/**
+	 * Get document name.
+	 *
+	 * @return string
+	 */
+	public function get_name() {
+		return 'multivendorx-store';
+	}
 
-    /**
-     * Get document type label
-     */
-    public static function get_plural_title() {
-        return __( 'Store Pages', 'multivendorx' );
-    }
+	/**
+	 * Get document title.
+	 *
+	 * @return string
+	 */
+	public static function get_title() {
+		return __( 'Store Page', 'multivendorx' );
+	}
 
-    /**
-     * Register controls for the document
-     */
-    protected function register_controls() {
-        parent::register_controls();
-    }
+	/**
+	 * Get document type plural label.
+	 *
+	 * @return string
+	 */
+	public static function get_plural_title() {
+		return __( 'Store Pages', 'multivendorx' );
+	}
 
-    /**
-     * Get CSS wrapper selector
-     */
-    public function get_css_wrapper_selector() {
-        return 'body.store-page';
-    }
+	/**
+	 * Get CSS wrapper selector.
+	 *
+	 * @return string
+	 */
+	public function get_css_wrapper_selector() {
+		return 'body.store-page';
+	}
 
-    /**
-     * Save template type
-     */
-    protected function _register_controls() {
-        parent::_register_controls();
-    }
+	/**
+	 * Register controls for the document.
+	 *
+	 * Calls parent registration.
+     * @phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
+     *
+	 * @return void
+	 */
+	protected function register_controls() {
+		parent::register_controls();
+	}
 }

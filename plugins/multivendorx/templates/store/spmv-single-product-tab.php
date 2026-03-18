@@ -18,8 +18,8 @@ $product_ids = $args['product_ids'];
 <table class="woocommerce-table shop_table more-offers-table">
     <thead>
         <tr>
-            <th>Store</th>
-            <th>Price</th>
+            <th><?php esc_html_e( 'Store', 'multivendorx' ); ?></th>
+            <th><?php esc_html_e( 'Price', 'multivendorx' ); ?></th>
             <th></th>
         </tr>
     </thead>
@@ -28,28 +28,27 @@ $product_ids = $args['product_ids'];
         foreach ( $product_ids as $product_id ) :
             $product = wc_get_product( $product_id );
             if ( ! $product ) {
-				continue;
+                continue;
             }
 
             $store_id        = get_post_meta( $product_id, 'multivendorx_store_id', true );
             $store           = new Store( $store_id );
             $overall_reviews = Util::get_overall_rating( $store_id );
             $reviews         = count( Util::get_reviews_by_store( $store_id ) );
-			?>
+            ?>
             <tr>
                 <td>
-                    <?php echo esc_html( $store->get( 'name' ) ?? 'Admin' ); ?>
+                    <?php echo esc_html( $store->get( 'name' ) ?? __( 'Admin', 'multivendorx' ) ); ?>
 
                     <div class="reviews-wrapper">
                         <?php for ( $i = 0; $i < 5; $i++ ) : ?>
                             <i
                                 class="review adminfont-star
                                 <?php
-                                    echo (
-                                        $reviews > 0 &&
-                                        $i < round( $overall_reviews )
-															) ? '' : '-o';
-								?>
+                                    echo esc_attr(
+                                        ( $reviews > 0 && $i < round( $overall_reviews ) ) ? '' : '-o'
+                                    );
+                                ?>
                                 "
                             ></i>
                         <?php endfor; ?>
@@ -57,16 +56,15 @@ $product_ids = $args['product_ids'];
 
                 </td>
 
-                <td><?php echo wc_price( $product->get_price() ); ?></td>
+                <td><?php echo wp_kses_post( wc_price( $product->get_price() ) ); ?></td>
 
                 <td>
                     <?php woocommerce_template_loop_add_to_cart( array( 'product' => $product ) ); ?>
-                    <a href="<?php echo get_permalink( $product_id ); ?>" class="button">
-                        Details
+                    <a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" class="button">
+                        <?php esc_html_e( 'Details', 'multivendorx' ); ?>
                     </a>
                 </td>
             </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
-
