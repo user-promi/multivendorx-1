@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';

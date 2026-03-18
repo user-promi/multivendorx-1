@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import DistanceByZoneShipping from '@/dashboard/settings/DistanceByZoneShipping';
 import ShippingRatesByCountry from '@/dashboard/settings/ShippingRatesByCountry';
 import { __ } from '@wordpress/i18n';

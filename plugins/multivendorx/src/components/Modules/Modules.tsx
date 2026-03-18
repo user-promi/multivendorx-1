@@ -1,5 +1,5 @@
+/* global appLocalizer */
 import { NavigatorHeader, Container, Modules } from 'zyra';
-// import context
 import { __ } from '@wordpress/i18n';
 import { getModuleData } from '../../services/templateService';
 import proPopupContent from '../Popup/Popup';

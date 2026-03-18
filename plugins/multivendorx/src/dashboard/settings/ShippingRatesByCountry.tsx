@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DynamicRowSetting, getApiLink } from 'zyra';

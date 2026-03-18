@@ -1,5 +1,6 @@
+/* global appLocalizer */
 import { useState, useEffect } from 'react';
-import { TextArea, FileInput, SelectInput, getApiLink } from 'zyra';
+import { getApiLink } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 

@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { applyFilters, addFilter } from '@wordpress/hooks';
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';

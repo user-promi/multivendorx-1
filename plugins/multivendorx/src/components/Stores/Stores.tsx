@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import { useLocation, useNavigate } from 'react-router-dom';
 import StoreTable from './StoreTable';
 import EditStore from './Edit/EditStore';

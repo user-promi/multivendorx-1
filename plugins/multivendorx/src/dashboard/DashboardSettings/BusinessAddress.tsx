@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
+/* global appLocalizer */
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
 	BasicInputUI,

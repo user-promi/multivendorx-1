@@ -1,4 +1,4 @@
-// /* global appLocalizer */
+/* global appLocalizer */
 import React, { useEffect, useState, JSX } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { SettingProvider, useSetting } from '../../../contexts/SettingContext';

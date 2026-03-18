@@ -1,10 +1,8 @@
+/* global appLocalizer */
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, TableCard } from 'zyra';
-
-import { truncateText } from '@/services/commonFunction';
-import { QueryProps, TableRow } from '@/services/type';
+import { getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
 
 const AnnouncementsTable = (React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);

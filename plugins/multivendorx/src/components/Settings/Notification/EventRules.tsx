@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import React, { useEffect, useMemo, useState } from 'react';
 import './EventRules.scss';
 import {

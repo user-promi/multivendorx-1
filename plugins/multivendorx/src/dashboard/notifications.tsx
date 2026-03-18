@@ -1,3 +1,4 @@
+/* global appLocalizer */
 import React, { useEffect, useState } from 'react';
 import { getApiLink, Skeleton } from 'zyra';
 import axios from 'axios';

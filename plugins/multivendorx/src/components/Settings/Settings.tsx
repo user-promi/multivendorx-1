@@ -1,11 +1,8 @@
-// /* global appLocalizer */
+/* global appLocalizer */
 import React, { useEffect, JSX } from 'react';
 import { __ } from '@wordpress/i18n';
-// Context
 import { SettingProvider, useSetting } from '../../contexts/SettingContext';
-// Services
 import { getTemplateData } from '../../services/templateService';
-// Utils
 import {
 	getAvailableSettings,
 	getSettingById,
