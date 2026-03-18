@@ -190,7 +190,7 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
 };
 
 const AddressField: FieldComponent = {
-    render: ( { field, value, onChange, canAccess, appLocalizer } ) => {
+    render: ( { field } ) => {
         const [ openedInput, setOpenedInput ] = useState< SubField | null >(
             null
         );
