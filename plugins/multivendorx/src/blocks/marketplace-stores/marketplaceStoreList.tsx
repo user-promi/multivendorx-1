@@ -20,6 +20,7 @@ interface StoresListProps {
 	order?: string;
 	category?: string;
 	perPage?: number;
+	showMap?: boolean;
 }
 
 const MarketplaceStoreList: React.FC<StoresListProps> = ({
@@ -27,6 +28,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	order = '',
 	category = '',
 	perPage = 12,
+	showMap = true,
 }) => {
 	const [data, setData] = useState<StoreRow[] | []>([]);
 	const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -622,7 +624,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 							</nav>
 						)}
 					</div>
-					<div className="store-map">{renderMapComponent()}</div>
+					{showMap && (
+						<div className="store-map">{renderMapComponent()}</div>
+					)}
 				</div>
 			</div>
 		</>

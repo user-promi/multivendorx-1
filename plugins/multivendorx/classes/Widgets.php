@@ -22,7 +22,7 @@ class Widgets {
 				'description'   => __( 'Widgets for MultiVendorX store pages only.', 'multivendorx' ),
 				'before_widget' => '<div class="multivendorx-widget %2$s">',
 				'after_widget'  => '</div>',
-				'before_title'  => '<h3 class="multivendorx-widget-title">',
+				'before_title'  => '<h3>',
 				'after_title'   => '</h3>',
             )
         );
