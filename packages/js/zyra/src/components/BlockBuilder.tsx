@@ -238,7 +238,7 @@ export const BlockBuilderUI: React.FC< any > = ( {
     proSettingChange = () => false,
     name = field?.key,
 } ) => {
-    const builderContext = field?.builderContext || 'form';
+    const builderContext = field?.context || 'form';
     const isEmailBuilder = builderContext === 'email';
 
     /* ---------------------------
@@ -353,8 +353,8 @@ export const BlockBuilderUI: React.FC< any > = ( {
             proSettingChange={ proSettingChange }
             context={ builderContext }
             { ...( isEmailBuilder && {
-                emailTemplates,
-                activeEmailTemplateId,
+                templates: emailTemplates,
+                activeTemplateId: activeEmailTemplateId,
                 onTemplateSelect: handleTemplateSelect,
                 showTemplatesTab: true,
             } ) }

@@ -315,31 +315,10 @@ const Table: React.FC< TableProps > = ( {
                                                 />
                                             </td>
                                         );
+                                        
                                     }
-
-                                    const displayValue = renderCell(
-                                        row,
-                                        header,
-                                        format,
-                                        currency
-                                    );
-
-                                    return (
-                                        <td
-                                            key={`${rowId}-${colIndex}`}
-                                             className={`admin-column ${header.type}`}
-                                        >
-                                            {header.isEditable
-                                                ? renderEditableCell({
-                                                    header,
-                                                    cell,
-                                                    isEditing: false,
-                                                    onSave: onCellEdit,
-                                                })
-                                                : displayValue}
-                                        </td>
-                                    );
-                                })}
+                                )}
+                                
 
                             </tr>
                         ) )

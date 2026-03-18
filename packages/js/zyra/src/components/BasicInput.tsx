@@ -1,13 +1,8 @@
 // External Dependencies
-import { MouseEvent, FocusEvent, forwardRef } from 'react';
+import React, { MouseEvent, FocusEvent, forwardRef } from 'react';
 
 // Internal Dependencies
 import { FieldComponent } from './fieldUtils';
-
-interface InputFeedback {
-    type: string;
-    message: string;
-}
 
 type InputValue = string | number | FileList;
 
@@ -151,7 +146,7 @@ export const BasicInputUI = forwardRef< HTMLInputElement, BasicInputProps >(
 );
 
 const BasicInput: FieldComponent = {
-    render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
+    render: ( { field, value, onChange, canAccess } ) => (
         <BasicInputUI
             wrapperClass={ field.wrapperClass }
             inputClass={ field.class }

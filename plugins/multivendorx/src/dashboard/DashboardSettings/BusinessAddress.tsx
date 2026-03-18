@@ -5,8 +5,7 @@ import {
 	FormGroup,
 	FormGroupWrapper,
 	getApiLink,
-	GoogleMap,
-	Mapbox,
+	MapProviderUI,
 	Notice,
 	SelectInputUI,
 	useModules,
@@ -30,8 +29,10 @@ const BusinessAddress = () => {
 	const [formData, setFormData] = useState<FormData>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
-	const [mapProvider, setMapProvider] = useState('');
-	const [apiKey, setApiKey] = useState('');
+	const [mapConfig, setMapConfig] = useState<{
+		provider: string | null;
+		apiKey: string;
+	}>({ provider: 'null', apiKey: '' });
 	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
 	>([]);
@@ -53,10 +54,7 @@ const BusinessAddress = () => {
 	const [newAddress, setNewAddress] = useState<any>(null);
 
 	useEffect(() => {
-		if (!newAddress) {
-			return;
-		}
-		if (!stateOptions.length) {
+		if (!newAddress || !stateOptions.length) {
 			return;
 		}
 
@@ -100,14 +98,12 @@ const BusinessAddress = () => {
 		}
 
 		const provider = settings.geolocation.choose_map_api;
+		const apiKey = settings.geolocation[`${provider}_api_key`] || '';
 
-		setMapProvider(provider);
-
-		if (provider === 'google_map_set') {
-			setApiKey(settings.geolocation.google_api_key || '');
-		} else if (provider === 'mapbox_api_set') {
-			setApiKey(settings.geolocation.mapbox_api_key || '');
-		}
+		setMapConfig({
+			provider: provider || null,
+			apiKey: apiKey,
+		});
 	}, [settings]);
 
 	// Load initial data
@@ -200,42 +196,6 @@ const BusinessAddress = () => {
 		autoSave(updatedFormData);
 	};
 
-	// Handle country select change (from old code)
-	const handleCountryChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) {
-			return;
-		}
-
-		const updated = {
-			...formData,
-			country: newValue.value,
-			state: '', // reset state when country changes
-		};
-
-		setFormData(updated);
-		setAddressData((prev) => ({ ...prev, country: newValue.label }));
-
-		autoSave(updated);
-		fetchStatesByCountry(newValue.value);
-	};
-
-	// Handle state select change (from old code)
-	const handleStateChange = (newValue: any) => {
-		if (!newValue || Array.isArray(newValue)) {
-			return;
-		}
-
-		const updated = {
-			...formData,
-			state: newValue.value,
-		};
-
-		setFormData(updated);
-		setAddressData((prev) => ({ ...prev, state: newValue.label }));
-
-		autoSave(updated);
-	};
-
 	const fetchStatesByCountry = (countryCode: string) => {
 		axios({
 			method: 'GET',
@@ -249,7 +209,7 @@ const BusinessAddress = () => {
 	// Then update your autoSave function:
 	const autoSave = (updatedData: any) => {
 		if (
-			settings['store-permissions']?.edit_store_info_activation ||
+			! settings['store-permissions']?.edit_store_info_activation ||
 			[].includes('store_address')
 		) {
 			return;
@@ -274,34 +234,30 @@ const BusinessAddress = () => {
 	};
 
 	const renderMapComponent = () => {
-		if (!modules.includes('geo-location') || !apiKey) {
+		if (
+			!modules.includes('geo-location') ||
+			!mapConfig.apiKey ||
+			!mapConfig.provider
+		) {
 			return null;
 		}
 
-		const commonProps = {
-			apiKey,
-			locationAddress: addressData.address,
-			locationLat: addressData.location_lat,
-			locationLng: addressData.location_lng,
-			onLocationUpdate: handleLocationUpdate,
-			labelSearch: __('Search for a location'),
-			labelMap: __('Drag or click on the map to choose a location'),
-			instructionText: __(
-				'Enter a search term or drag/drop a pin on the map.'
-			),
-			placeholderSearch: __('Search for a location...'),
-		};
-
-		switch (settings.geolocation.choose_map_api) {
-			case 'google_map_set':
-				return <GoogleMap {...commonProps} />;
-
-			case 'mapbox_api_set':
-				return <Mapbox {...commonProps} />;
-
-			default:
-				return null;
-		}
+		return (
+			<MapProviderUI
+				apiKey={mapConfig.apiKey}
+				locationAddress={addressData.address}
+				locationLat={addressData.location_lat}
+				locationLng={addressData.location_lng}
+				isUserLocation={false}
+				onLocationUpdate={handleLocationUpdate}
+				placeholderSearch={__(
+					'Search for a location...',
+					'multivendorx'
+				)}
+				stores={null}
+				mapProvider={mapConfig.provider}
+			/>
+		);
 	};
 
 	return (
@@ -390,7 +346,7 @@ const BusinessAddress = () => {
 				</FormGroup>
 
 				{/* Map Component */}
-				{renderMapComponent()}
+				<FormGroup>{renderMapComponent()}</FormGroup>
 				{/* Hidden coordinates */}
 				<input
 					type="hidden"

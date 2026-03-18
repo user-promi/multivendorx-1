@@ -1,4 +1,5 @@
 import { registerBlockType } from '@wordpress/blocks';
+import { __ } from '@wordpress/i18n';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { render } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,7 +9,9 @@ import MarketplaceProductList from './marketplaceProductList';
 // EditBlock Component
 const EditBlock = (props) => {
 	const { attributes, setAttributes } = props;
-	const blockProps = useBlockProps();
+	const blockProps = useBlockProps({
+		className: 'marketplace-products-edit'
+	});
 
 	return (
 		<div {...blockProps}>
@@ -18,11 +21,11 @@ const EditBlock = (props) => {
 						label="Sort by"
 						value={attributes.orderby}
 						options={[
-							{ label: 'Title', value: 'title' },
-							{ label: 'Date', value: 'date' },
-							{ label: 'Rating', value: 'rating' },
-							{ label: 'Popularity', value: 'popularity' },
-							{ label: 'Price', value: 'price' },
+							{ label: __('Popularity', 'multivendorx'), value: 'popularity' },
+							{ label: __('Recent', 'multivendorx'), value: 'recent' },
+							{ label: __('By Rating', 'multivendorx'), value: 'rating' },
+							{ label: __('By Price', 'multivendorx'), value: 'price' },
+							{ label: __('On Sale', 'multivendorx'), value: 'on_sale' },
 						]}
 						onChange={(value) => setAttributes({ orderby: value })}
 					/>
