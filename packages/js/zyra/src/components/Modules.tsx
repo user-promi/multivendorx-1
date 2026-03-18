@@ -130,7 +130,6 @@ const Modules: React.FC< ModuleProps > = ( {
                     type: 'success',
                     position: 'float',
                 } );
-                setTimeout( () => setSuccessMsg( '' ), 2000 );
 
                 if ( module.reloadOnChange ) {
                     window.location.reload();
@@ -143,7 +142,6 @@ const Modules: React.FC< ModuleProps > = ( {
                     type: 'error',
                     position: 'float',
                 } );
-                setTimeout( () => setSuccessMsg( '' ), 2000 );
             } );
     };
 
@@ -201,19 +199,6 @@ const Modules: React.FC< ModuleProps > = ( {
             if ( ! targetId ) {
                 return;
             }
-
-            setTimeout( () => {
-                const targetElement = document.getElementById( targetId );
-                if ( targetElement ) {
-                    targetElement.scrollIntoView( {
-                        behavior: 'smooth',
-                        block: 'start',
-                    } );
-                    targetElement.classList.add( 'highlight' );
-                    highlightedElement = targetElement;
-                    hasHighlightedOnce = true;
-                }
-            }, 500 );
         };
 
         const handleClickAnywhere = ( e: Event ) => {

@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import { useOutsideClick, FieldComponent } from './fieldUtils';
 import '../styles/web/Popup.scss';
 import Tooltip from './UI/Tooltip';

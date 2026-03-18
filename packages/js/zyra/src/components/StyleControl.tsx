@@ -1,5 +1,5 @@
 // External dependencies
-import React, { useState } from 'react';
+import React from 'react';
 import { ChoiceToggleUI } from './ChoiceToggle';
 import Card from './UI/Card';
 import FormGroupWrapper from './UI/FormGroupWrapper';

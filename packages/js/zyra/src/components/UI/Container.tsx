@@ -1,3 +1,6 @@
+import React from 'react';
+
+// Internal dependencies
 import '../../styles/web/UI/Container.scss';
 
 type ContainerProps = {

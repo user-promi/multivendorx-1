@@ -312,7 +312,7 @@ const EndpointEditorUI: React.FC< EndpointEditorProps > = ( {
 };
 
 const EndpointEditor: FieldComponent = {
-    render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
+    render: ( { field, onChange, canAccess } ) => (
         <EndpointEditorUI
             name={ field.key }
             apilink={ String( field.apiLink ) }

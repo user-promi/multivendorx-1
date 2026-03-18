@@ -39,7 +39,7 @@ export const ItemListUI: React.FC< ItemListUIProps > = ( {
     return (
         <div className={ `item-list ${ className || 'default' }` }>
             { items &&
-                items.map( ( item, index ) => {
+                items.map( ( item ) => {
                     const handleClick = ( e: React.MouseEvent ) => {
                         e.stopPropagation();
                         if ( item.action ) {

@@ -201,7 +201,7 @@ export const LogUI: React.FC< LogProps > = ( {
 };
 
 const Log: FieldComponent = {
-    render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
+    render: ( { field } ) => (
         <LogUI
             // appLocalizer={appLocalizer}
             apiLink={ String( field.apiLink ) }
@@ -212,7 +212,7 @@ const Log: FieldComponent = {
         />
     ),
 
-    validate: ( field, value ) => {
+    validate: () => {
         return null;
     },
 };

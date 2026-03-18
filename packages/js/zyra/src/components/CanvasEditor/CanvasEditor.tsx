@@ -4,7 +4,7 @@ import { ReactSortable } from 'react-sortablejs';
 
 // Internal Dependencies
 import { BlockRenderer, createBlock } from './BlockRenderer';
-import { Block, BlockPatch, ColumnsBlock } from './blockTypes';
+import { Block, BlockPatch, BlockConfig, ColumnsBlock } from './blockTypes';
 import {
     ColumnRenderer,
     useColumnManager,
@@ -44,6 +44,7 @@ interface CanvasEditorProps {
     context?: string;
     inputTypeList?: Array< { value: string; label: string } >;
 }
+type SortableItem = Partial< Block > | BlockConfig;
 
 export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
     blocks: externalBlocks,
@@ -165,7 +166,7 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
     };
 
     const handleCanvasSetList = useCallback(
-        ( rawList: any[] ) => {
+        ( rawList: SortableItem[] ) => {
             if ( proSettingChange() ) {
                 return;
             }
@@ -182,7 +183,7 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
 
     /** Column-level ReactSortable setList — called from ColumnRenderer */
     const handleColumnSetList = useCallback(
-        ( parentIdx: number, colIdx: number, rawList: any[] ) => {
+        ( parentIdx: number, colIdx: number, rawList: SortableItem[] ) => {
             if ( ! pendingDrag.current ) {
                 pendingDrag.current = { columns: new Map() };
             }
@@ -241,7 +242,7 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
     );
 
     const handleSettingsChange = useCallback(
-        ( key: string, value: any ) => {
+        ( key: keyof Block, value: Block[ keyof Block ] ) => {
             if ( proSettingChange() ) {
                 return;
             }

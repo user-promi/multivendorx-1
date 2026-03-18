@@ -27,7 +27,7 @@ type CustomStyle = {
     button_text: string;
 };
 
-type ButtonConfig = {
+export type ButtonConfig = {
     icon: string;
     text: string;
     onClick: React.MouseEventHandler< HTMLButtonElement >;
@@ -42,6 +42,13 @@ type ButtonInputProps = {
     buttons: ButtonConfig | ButtonConfig[];
     wrapperClass: string;
     position: 'left' | 'right' | 'center';
+};
+
+type ButtonOption = {
+    label: string;
+    onClick?: React.MouseEventHandler< HTMLButtonElement >;
+    disabled?: boolean;
+    icon?: string;
 };
 
 const mapBlockStyleToCustomStyle = (
@@ -141,13 +148,14 @@ export const ButtonInputUI: React.FC< ButtonInputProps > = ( {
 };
 
 const ButtonInput: FieldComponent = {
-    render: ({ field, onChange, canAccess }) => {
-
-         const handleClick = () => {
-            if (!canAccess) return;
+    render: ( { field, onChange, canAccess } ) => {
+        const handleClick = () => {
+            if ( ! canAccess ) {
+                return;
+            }
             // Redirect url
-            if (field.redirect_url) {
-                window.open(field.redirect_url, '_self');
+            if ( field.redirect_url ) {
+                window.open( field.redirect_url, '_self' );
                 return;
             }
             // REST API
@@ -179,7 +187,7 @@ const ButtonInput: FieldComponent = {
 
         const resolvedButtons =
             Array.isArray( field.options ) && field.options.length > 0
-                ? field.options.map( ( btn: any ) => ( {
+                ? field.options.map( ( btn: ButtonOption ) => ( {
                       ...baseConfig,
                       text: btn.label,
                       onClick: btn.onClick,
