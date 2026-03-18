@@ -598,17 +598,17 @@ $star-color: #d49c00;
     //     font-size: 0.875rem;
     // }
 
-    // .review-images {
-    //     display: flex;
-    //     flex-wrap: wrap;
-    //     gap: 1rem;
-
-    //     img {
-    //         width: 5rem;
-    //     }
-    // }
 }
 
+.review-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    img {
+        width: 5rem;
+    }
+}
 //  review page end
 
 .order-refund-product-list {
@@ -646,9 +646,10 @@ $star-color: #d49c00;
 
 
 // elementor banner 
-.elementor-element:has(.multivendorx-store-banner){
+.elementor-element:has(.multivendorx-store-banner) {
     width: 100%;
 }
+
 .multivendorx-store-banner {
     min-width: 100%;
     background-repeat: no-repeat;
