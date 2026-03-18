@@ -11,7 +11,6 @@ import {
 import {
 	InspectorControls,
 	useBlockProps,
-	InnerBlocks,
 } from '@wordpress/block-editor';
 
 registerBlockType('multivendorx/contact-info', {
@@ -78,75 +77,6 @@ registerBlockType('multivendorx/contact-info', {
 
 		const blockProps = useBlockProps();
 
-		const ALLOWED_BLOCKS = [
-			'core/heading',
-			'core/paragraph',
-			'core/button',
-			'core/text',
-			'core/email',
-			'core/textarea',
-		];
-
-		const TEMPLATE = [
-			[
-				'core/heading',
-				{
-					level: 2,
-					content: __('Contact store', 'multivendorx'),
-					className: 'contact-form-title',
-				},
-			],
-			[
-				'core/paragraph',
-				{
-					content: __(
-						'Do you need more information? Write to us!',
-						'multivendorx'
-					),
-					className: 'contact-form-description',
-				},
-			],
-			[
-				'core/paragraph',
-				{
-					content: __(
-						'<label>Name <input type="text" name="name" class="input-text" required /></label>',
-						'multivendorx'
-					),
-					className:
-						' woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide',
-				},
-			],
-			[
-				'core/paragraph',
-				{
-					content: __(
-						'<label>Email <input type="email" name="email" class="input-text" required /></label>',
-						'multivendorx'
-					),
-					className:
-						' woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide',
-				},
-			],
-			[
-				'core/paragraph',
-				{
-					content: __(
-						'<label>Message <textarea name="message" class="input-text" rows="4" required></textarea></label>',
-						'multivendorx'
-					),
-					className:
-						' woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide',
-				},
-			],
-			[
-				'core/button',
-				{
-					text: __('Send Message', 'multivendorx'),
-					className: 'contact-form-submit',
-				},
-			],
-		];
 		return (
 			<>
 				<InspectorControls>
@@ -246,10 +176,34 @@ registerBlockType('multivendorx/contact-info', {
 
 				<div {...blockProps}>
 					<div className="contact-form-block-editor">
-						<InnerBlocks
-							allowedBlocks={ALLOWED_BLOCKS}
-							template={TEMPLATE}
-						/>
+						<h2>{__('Contact store', 'multivendorx')}</h2>
+						<p>{__('Do you need more information? Write to us!', 'multivendorx')}</p>
+						
+						<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label>
+								{__('Name', 'multivendorx')} 
+								<input type="text" name="name" className="input-text" required />
+							</label>
+						</p>
+						
+						<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label>
+								{__('Email', 'multivendorx')} 
+								<input type="email" name="email" className="input-text" required />
+							</label>
+						</p>
+						
+						<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label>
+								{__('Message', 'multivendorx')} 
+								<textarea name="message" className="input-text" rows="4" required></textarea>
+							</label>
+						</p>
+						
+						<button type="submit" className="contact-form-submit">
+							{__('Send Message', 'multivendorx')}
+						</button>
+
 						{enableGoogleRecaptcha && (
 							<div className="recaptcha-preview">
 								<p>
