@@ -113,7 +113,7 @@ export const TableCell: React.FC< TableCellProps > = ( {
             // appLocalizer={appLocalizer}
             onBlocked={ onBlocked }
             canAccess={ ! disabled }
-            onChange={ ( newValue: any ) => {
+            onChange={ ( newValue: SettingValue ) => {
                 onChange( fieldKey, newValue );
             } }
         />

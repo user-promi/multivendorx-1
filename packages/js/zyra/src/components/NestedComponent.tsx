@@ -178,7 +178,7 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
         const Render = fieldComponent.render;
         const fieldValue = row?.[ field.key ];
 
-        const handleInternalChange = ( val: any ) => {
+        const handleInternalChange = ( val: RowType[ string ] ) => {
             handleChange( rowIndex, field.key, val );
             return;
         };
