@@ -7,6 +7,7 @@ import { ChoiceToggleUI } from './ChoiceToggle';
 import { SelectInputUI } from './SelectInput';
 import PdfDownloadButton from './PdfDownloadButton';
 import { FieldComponent } from './fieldUtils';
+import { BasicInputUI } from './BasicInput';
 
 type ColorChangePayload =
     | ColorSettingValue
@@ -303,105 +304,95 @@ export const ColorSettingInputUI: React.FC< ColorSettingProps > = ( props ) => {
                                 } }
                             />
                         </div>
-
-                        { /* Predefined Palettes */ }
-                        { mode === 'predefined' && (
-                            <div className="predefined">
-                                { predefinedOptions.map( ( option ) => {
-                                    const checked =
-                                        selectedPalette === option.value;
-                                    return (
-                                        <div
-                                            key={ option.key }
-                                            className="palette"
-                                        >
-                                            <input
-                                                className={ props.inputClass }
-                                                id={ `${ props.idPrefix }-${ option.key }` }
-                                                type="radio"
-                                                name="vendor_color_scheme_picker"
-                                                checked={ checked }
-                                                value={ option.value }
-                                                onChange={ handlePaletteChange }
-                                            />
-
-                                            <label
-                                                htmlFor={ `${ props.idPrefix }-${ option.key }` }
-                                            >
-                                                { option.colors && (
-                                                    <div className="color">
-                                                        { Object.values(
-                                                            option.colors
-                                                        ).map( ( c, i ) => (
-                                                            <div
-                                                                key={ i }
-                                                                style={ {
-                                                                    backgroundColor:
-                                                                        c,
-                                                                } }
-                                                            />
-                                                        ) ) }
-                                                    </div>
-                                                ) }
-
-                                                { option.image && (
-                                                    <div className="color">
-                                                        <img
-                                                            src={ option.image }
-                                                            alt=""
-                                                        />
-                                                    </div>
-                                                ) }
-
-                                                <span>{ option.label }</span>
-                                            </label>
-                                        </div>
-                                    );
-                                } ) }
-                            </div>
-                        ) }
-
-                        { /* Custom Palette */ }
-                        { mode === 'custom' && (
-                            <div className="custom">
-                                <div className="palette">
-                                    { Object.entries( customColors ).map(
-                                        ( [ key, val ] ) => (
+                        
+                        <div className="color-palette">
+                            { /* Predefined Palettes */ }
+                            { mode === 'predefined' && (
+                                <>
+                                    { predefinedOptions.map( ( option ) => {
+                                        const checked =
+                                            selectedPalette === option.value;
+                                        return (
                                             <div
-                                                className="color-wrapper"
-                                                key={ key }
+                                                key={ option.key }
+                                                className="palette"
                                             >
                                                 <input
-                                                    type="color"
-                                                    value={ val }
-                                                    onChange={ ( e ) =>
-                                                        handleCustomChange(
-                                                            key as keyof CustomColors,
-                                                            e.target.value
-                                                        )
-                                                    }
+                                                    className={ props.inputClass }
+                                                    id={ `${ props.idPrefix }-${ option.key }` }
+                                                    type="radio"
+                                                    name="vendor_color_scheme_picker"
+                                                    checked={ checked }
+                                                    value={ option.value }
+                                                    onChange={ handlePaletteChange }
                                                 />
-                                                <label>
-                                                    <div>
-                                                        { key
-                                                            .replace(
-                                                                /([A-Z])/g,
-                                                                ' $1'
-                                                            )
-                                                            .replace(
-                                                                /^./,
-                                                                ( s ) =>
-                                                                    s.toUpperCase()
-                                                            ) }
-                                                    </div>
-                                                    <span>{ val }</span>
+
+                                                <label
+                                                    htmlFor={ `${ props.idPrefix }-${ option.key }` }
+                                                >
+                                                    { option.colors && (
+                                                        <div className="color">
+                                                            { Object.values(
+                                                                option.colors
+                                                            ).map( ( c, i ) => (
+                                                                <div
+                                                                    key={ i }
+                                                                    style={ {
+                                                                        backgroundColor:
+                                                                            c,
+                                                                    } }
+                                                                />
+                                                            ) ) }
+                                                        </div>
+                                                    ) }
+
+                                                    { option.image && (
+                                                        <div className="color">
+                                                            <img
+                                                                src={ option.image }
+                                                                alt=""
+                                                            />
+                                                        </div>
+                                                    ) }
+
+                                                    <span>{ option.label }</span>
                                                 </label>
                                             </div>
+                                        );
+                                    } ) }
+                                </>
+                            ) }
+
+                            { /* Custom Palette */ }
+                            { mode === 'custom' && (
+                                <>
+                                    { Object.entries( customColors ).map(
+                                        ( [ key, val ] ) => (
+                                            <BasicInputUI
+                                                type="color"
+                                                value={ val }
+                                                inputLabel={ key
+                                                        .replace(
+                                                            /([A-Z])/g,
+                                                            ' $1'
+                                                        )
+                                                        .replace(
+                                                            /^./,
+                                                            ( s ) =>
+                                                                s.toUpperCase()
+                                                        ) }
+                                                onChange={ ( newVal ) =>
+                                                    handleCustomChange(
+                                                        key as keyof CustomColors,
+                                                        newVal
+                                                    )
+                                                }
+                                            />
                                         )
                                     ) }
-                                </div>
-                            </div>
-                        ) }
+                                </>
+                            ) }
+                        </div>
                     </div>
                 ) }
 

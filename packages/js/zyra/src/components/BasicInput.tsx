@@ -120,7 +120,7 @@ export const BasicInputUI = forwardRef< HTMLInputElement, BasicInputProps >(
 
                     { type === 'color' && (
                         <label htmlFor="" className="color-value">
-                           <span className="title"> {inputLabel} </div>
+                         {inputLabel && <span className="title"> {inputLabel} </span> }
                             { value ?? '' }
                         </label>                            
                     ) }
@@ -153,6 +153,7 @@ const BasicInput: FieldComponent = {
             name={ field.name }
             type={ field.type }
             placeholder={ field.placeholder }
+            inputLabel={ field.inputLabel }
             rangeUnit={ field.rangeUnit }
             minNumber={ field.minNumber ?? 0 }
             maxNumber={ field.maxNumber ?? 50 }
