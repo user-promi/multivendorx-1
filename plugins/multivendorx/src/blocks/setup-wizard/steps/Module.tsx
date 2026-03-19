@@ -3,6 +3,7 @@ import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import Loading from './Loading';
 import { getApiLink } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 interface ModulesProps {
 	onNext: () => void;
@@ -45,7 +46,7 @@ const Modules: React.FC<ModulesProps> = ({ onNext, onPrev }) => {
 				{ modules: modulesToSave },
 				{
 					headers: {
-						'X-WP-Nonce': (window as any).appLocalizer?.nonce,
+						'X-WP-Nonce': appLocalizer?.nonce,
 					},
 				}
 			)
@@ -60,15 +61,16 @@ const Modules: React.FC<ModulesProps> = ({ onNext, onPrev }) => {
 
 	return (
 		<section>
-			<h2>Modules</h2>
+			<h2>{__('Modules', 'multivendorx')}</h2>
 			<article className="module-wrapper">
 				<div className="module-items">
 					<div className="module-details">
-						<h3>Enquiry</h3>
+						<h3>{__('Enquiry', 'multivendorx')}</h3>
 						<p className="module-description">
-							Add a button for customers to submit inquiries,
-							sending their details and message to the admin for a
-							response.
+							{__(
+								'Add a button for customers to submit inquiries, sending their details and message to the admin for a response.',
+								'multivendorx'
+							)}
 						</p>
 					</div>
 					<div className="toggle-checkbox">
@@ -85,10 +87,12 @@ const Modules: React.FC<ModulesProps> = ({ onNext, onPrev }) => {
 
 				<div className="module-items">
 					<div className="module-details">
-						<h3>Quote</h3>
+						<h3>{__('Quote', 'multivendorx')}</h3>
 						<p className="module-description">
-							Include a quotation button for customers to request
-							personalized product quotes via email.
+							{__(
+								'Include a quotation button for customers to request personalized product quotes via email.',
+								'multivendorx'
+							)}
 						</p>
 					</div>
 					<div className="toggle-checkbox">
@@ -107,14 +111,14 @@ const Modules: React.FC<ModulesProps> = ({ onNext, onPrev }) => {
 			<footer className="setup-footer-btn-wrapper">
 				<div>
 					<button className="footer-btn pre-btn" onClick={onPrev}>
-						Prev
+						{__('Prev', 'multivendorx')}
 					</button>
 					<button className="footer-btn" onClick={onNext}>
-						Skip
+						{__('Skip', 'multivendorx')}
 					</button>
 				</div>
 				<button className="footer-btn next-btn" onClick={moduleSave}>
-					Next
+					{__('Next', 'multivendorx')}
 				</button>
 			</footer>
 

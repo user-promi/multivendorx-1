@@ -15,14 +15,11 @@ import {
 
 import { setSession, toWcIsoDate } from '@/services/commonFunction';
 import { useRef } from '@wordpress/element';
-
-const DISCOUNT_TYPE_LABELS: Record<string, string> = {
-	percent: __('Percentage discount', 'multivendorx'),
-	fixed_cart: __('Fixed cart discount', 'multivendorx'),
-	fixed_product: __('Fixed product discount', 'multivendorx'),
+type StoreOption = {
+	label: string;
+	value: number;
 };
-
-const PendingCoupons: React.FC<{}> = () => {
+const PendingCoupons: React.FC<object> = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -31,7 +28,7 @@ const PendingCoupons: React.FC<{}> = () => {
 	const [rejectReason, setRejectReason] = useState('');
 	const [rejectCouponId, setRejectCouponId] = useState<number | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [store, setStore] = useState<any[] | null>(null);
+	const [store, setStore] = useState<StoreOption[] | null>(null);
 	const firstLoadRef = useRef(true);
 
 	useEffect(() => {
@@ -40,7 +37,7 @@ const PendingCoupons: React.FC<{}> = () => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: any) => ({
+				const options = (response.data || []).map((store) => ({
 					label: store.store_name,
 					value: store.id,
 				}));
@@ -115,10 +112,10 @@ const PendingCoupons: React.FC<{}> = () => {
 	const headers = {
 		code: {
 			label: __('Code', 'multivendorx'),
-			render: (row: any) => {
+			render: (row) => {
 				return (
 					<InfoItem
-						title="code (pkoro)"
+						title={row.code}
 						descriptions={[
 							{
 								label: __('By', 'multivendorx'),
@@ -150,12 +147,14 @@ const PendingCoupons: React.FC<{}> = () => {
 				{
 					label: __('Approve', 'multivendorx'),
 					icon: 'check',
-					onClick: (row) => handleSingleAction('approve_coupon', id),
+					onClick: (row) =>
+						handleSingleAction('approve_coupon', row.id),
 				},
 				{
 					label: __('Reject', 'multivendorx'),
 					icon: 'close',
-					onClick: (row) => handleSingleAction('reject_coupon', id),
+					onClick: (row) =>
+						handleSingleAction('reject_coupon', row.id),
 					className: 'danger',
 				},
 			],
@@ -209,7 +208,7 @@ const PendingCoupons: React.FC<{}> = () => {
 					? response.data
 					: [];
 
-				const ids = coupons.map((p: any) => p.id);
+				const ids = coupons.map((coupon) => coupon.id);
 				setRowIds(ids);
 
 				setRows(coupons);

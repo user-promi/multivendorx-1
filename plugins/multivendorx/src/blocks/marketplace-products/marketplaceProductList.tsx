@@ -1,3 +1,4 @@
+/* global productList */
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
@@ -10,7 +11,6 @@ interface Product {
 }
 
 interface MarketplaceProductListProps {
-	columns?: number;
 	perPage?: number;
 	orderby?: string;
 	order?: 'asc' | 'desc';
@@ -21,7 +21,6 @@ interface MarketplaceProductListProps {
 }
 
 const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
-	columns = 4,
 	perPage = 12,
 	orderby = 'title',
 	order = 'asc',
@@ -39,7 +38,7 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 
 	const fetchProducts = useCallback(async () => {
 		setLoading(true);
-		const params: any = {
+		const params = {
 			per_page: perPage,
 			page,
 			orderby,

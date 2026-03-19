@@ -1,3 +1,4 @@
+/* global storesList */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getApiLink, MapProviderUI } from 'zyra';
@@ -16,17 +17,29 @@ type Category = {
 };
 
 interface StoresListProps {
-	orderby?: string;
 	order?: string;
-	category?: string;
 	perPage?: number;
 	showMap?: boolean;
 }
 
+interface Product {
+	id: number;
+	name: string;
+	permalink?: string;
+	images?: Array<{
+		src: string;
+	}>;
+	categories?: Array<{
+		id: number;
+		name: string;
+		slug: string;
+	}>;
+	average_rating?: number;
+	price_html?: string;
+}
+
 const MarketplaceStoreList: React.FC<StoresListProps> = ({
-	orderby = '',
 	order = '',
-	category = '',
 	perPage = 12,
 	showMap = true,
 }) => {
@@ -37,9 +50,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	const [total, setTotal] = useState(0);
 	const [apiKey, setApiKey] = useState('');
 	const [viewMode, setViewMode] = useState<'list' | 'split' | 'map'>('list');
-	const [storeTopProducts, setStoreTopProducts] = useState<{
-		[storeId: number]: any[];
-	}>({});
+	const [storeTopProducts, setStoreTopProducts] = useState<
+		Record<number, Product[]>
+	>({});
 	const [addressData, setAddressData] = useState({
 		location_lat: '',
 		location_lng: '',
@@ -65,7 +78,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	}>({ provider: 'null', apiKey: '' });
 
 	const settings = storesList.settings_databases_value;
-	const [isUserLocation, setIsUserLocation] = useState(false);
 	const [topFilters, setTopFilters] = useState({
 		sort: '',
 		category: '',
@@ -98,7 +110,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	}, []);
 
 	useEffect(() => {
-		const params: any = {
+		const params = {
 			per_page: 50,
 			meta_key: 'multivendorx_store_id',
 		};
@@ -174,7 +186,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		setTopFilters((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleLocationUpdate = (locationData: any) => {
+	const handleLocationUpdate = (locationData) => {
 		if (!locationData) {
 			return;
 		}
@@ -210,8 +222,6 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		navigator.geolocation.getCurrentPosition((position) => {
 			const lat = position.coords.latitude.toString();
 			const lng = position.coords.longitude.toString();
-
-			setIsUserLocation(true);
 
 			setFilters((prev) => ({
 				...prev,

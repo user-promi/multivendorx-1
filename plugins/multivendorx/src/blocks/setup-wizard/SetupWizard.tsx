@@ -4,7 +4,17 @@ import 'zyra/build/index.css';
 import { ExpandablePanelUI } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import img from '../../assets/images/multivendorx-logo.png';
-
+interface SettingsState {
+	marketplace_setup: {
+		store_selling_mode: string;
+	};
+	commission_setup: {
+		disbursement_order_status: string[];
+	};
+	store_setup: {
+		approve_store: string;
+	};
+}
 const SetupWizard: React.FC = () => {
 	// Required state for ExpandablePanel
 	const [value, setValue] = useState({
@@ -18,8 +28,6 @@ const SetupWizard: React.FC = () => {
 			approve_store: 'manually',
 		},
 	});
-
-	const appLocalizer = (window as any).appLocalizer;
 
 	const inputField = {
 		key: 'setup_wizard',
@@ -463,7 +471,7 @@ const SetupWizard: React.FC = () => {
 		},
 	];
 
-	const updateSetting = (key: string, data: any) => {
+	const updateSetting = (key: string, data: SettingsState) => {
 		setValue(data);
 	};
 
@@ -489,7 +497,7 @@ const SetupWizard: React.FC = () => {
 				appLocalizer={appLocalizer}
 				methods={methods}
 				value={value}
-				onChange={(data: any) => {
+				onChange={(data) => {
 					updateSetting(inputField.key, data);
 				}}
 				isWizardMode={true}

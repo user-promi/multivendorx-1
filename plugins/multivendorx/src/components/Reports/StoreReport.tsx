@@ -14,13 +14,14 @@ import {
 } from 'zyra';
 import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import axios from 'axios';
-import {
-	formatCurrency,
-	formatDate,
-	formatLocalDate,
-} from '../../services/commonFunction';
+import { formatCurrency, formatLocalDate } from '../../services/commonFunction';
 import Counter from '@/services/Counter';
-
+type OverViewItem = {
+	id: string;
+	label: string;
+	count: number;
+	icon: string;
+};
 const StoreReport: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [rowIds, setRowIds] = useState<number[]>([]);
@@ -29,7 +30,7 @@ const StoreReport: React.FC = () => {
 	const [categoryCounts, setCategoryCounts] = useState<
 		CategoryCount[] | null
 	>(null);
-	const [overviewData, setOverviewData] = useState<any[]>([]);
+	const [overviewData, setOverviewData] = useState<OverViewItem[]>([]);
 	const [pieData, setPieData] = useState<{ name: string; value: number }[]>(
 		[]
 	);
@@ -52,11 +53,11 @@ const StoreReport: React.FC = () => {
 				// 🔹 Pie data
 				const pieChartData = items
 					.filter(
-						(store: any) =>
+						(store) =>
 							store.commission &&
 							store.commission.commission_total > 0
 					)
-					.map((store: any) => ({
+					.map((store) => ({
 						name: `${store.store_name} (${formatCurrency(
 							store.commission.commission_total
 						)})`,
@@ -99,6 +100,7 @@ const StoreReport: React.FC = () => {
 			} catch (e) {
 				setPieData([]);
 				setOverviewData([]);
+				console.error(e);
 			}
 		};
 
@@ -131,8 +133,8 @@ const StoreReport: React.FC = () => {
 			.then((response) => {
 				const items = response.data || [];
 				const ids = items
-					.filter((item: any) => item?.id != null)
-					.map((item: any) => item.id);
+					.filter((item) => item?.id != null)
+					.map((item) => item.id);
 
 				setRowIds(ids);
 
@@ -182,13 +184,14 @@ const StoreReport: React.FC = () => {
 				setRows([]);
 				setTotalRows(0);
 				setIsLoading(false);
+				console.error(error);
 			});
 	};
 
 	const headers = {
 		store_name: {
 			label: __('Store', 'multivendorx'),
-			render: (row: any) => (
+			render: (row) => (
 				<>
 					{console.log(row)}
 					<InfoItem
@@ -211,7 +214,7 @@ const StoreReport: React.FC = () => {
 		primary_owner: {
 			key: 'primary_owner',
 			label: __('Primary Owner', 'multivendorx'),
-			render: (row: any) => (
+			render: (row) => (
 				<>
 					{console.log(row)}
 					<InfoItem
@@ -241,28 +244,25 @@ const StoreReport: React.FC = () => {
 		order_total: {
 			key: 'order_total',
 			label: __('Order Total', 'multivendorx'),
-			render: (row: any) =>
-				formatCurrency(row.commission?.total_order_amount),
+			render: (row) => formatCurrency(row.commission?.total_order_amount),
 		},
 		shipping: {
 			key: 'shipping',
 			label: __('Shipping', 'multivendorx'),
-			render: (row: any) =>
-				formatCurrency(row.commission?.shipping_amount),
+			render: (row) => formatCurrency(row.commission?.shipping_amount),
 		},
 		tax: {
 			label: __('Tax', 'multivendorx'),
-			render: (row: any) => formatCurrency(row.commission?.tax_amount),
+			render: (row) => formatCurrency(row.commission?.tax_amount),
 		},
 		store_ommission: {
 			label: __('Store Commission', 'multivendorx'),
-			render: (row: any) =>
-				formatCurrency(row.commission?.commission_total),
+			render: (row) => formatCurrency(row.commission?.commission_total),
 		},
 		email: { label: __('Contact', 'multivendorx') },
 		admin_earning: {
 			label: __('Admin Earnings', 'multivendorx'),
-			render: (row: any) =>
+			render: (row) =>
 				formatCurrency(
 					Number(row.commission?.total_order_amount || 0) -
 						Number(row.commission?.commission_total || 0)

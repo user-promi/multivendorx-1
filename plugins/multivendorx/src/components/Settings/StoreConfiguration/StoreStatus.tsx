@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import React, { useEffect, useState, JSX } from 'react';
+import React, { useEffect, JSX } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { SettingProvider, useSetting } from '../../../contexts/SettingContext';
 import { getTemplateData } from '../../../services/templateService';
@@ -10,14 +10,12 @@ import {
 	useModules,
 	SettingsNavigator,
 } from 'zyra';
-
-// Types
-type SettingItem = Record<string, any>;
+import { __ } from '@wordpress/i18n';
 
 const StoreStatus: React.FC = () => {
 	const location = new URLSearchParams(useLocation().hash.substring(1));
 	const initialTab = location.get('tabId') || 'pending';
-	const settingsArray: SettingItem[] = getAvailableSettings(
+	const settingsArray = getAvailableSettings(
 		getTemplateData('storeStatus'),
 		[]
 	);
@@ -113,13 +111,12 @@ const StoreStatus: React.FC = () => {
 		const { setting, settingName, setSetting, updateSetting } =
 			useSetting();
 		const { modules } = useModules();
-		const [storeTabSetting, setStoreTabSetting] = useState<any>(null);
 
 		if (!currentTab) {
 			return null;
 		}
 
-		const settingModal = getSettingById(settingsArray as any, currentTab);
+		const settingModal = getSettingById(settingsArray, currentTab);
 
 		// Initialize settings for current tab
 		if (settingName !== currentTab) {
@@ -137,23 +134,22 @@ const StoreStatus: React.FC = () => {
 
 		return settingName === currentTab ? (
 			<RenderComponent
-				settings={settingModal as any}
+				settings={settingModal}
 				proSetting={appLocalizer.pro_settings_list}
 				setting={setting}
 				updateSetting={updateSetting}
 				appLocalizer={appLocalizer}
 				modules={modules}
-				storeTabSetting={storeTabSetting}
 			/>
 		) : (
-			<>Loading...</>
+			<>{__('Loading...', 'multivendorx')}</>
 		);
 	};
 
 	return (
 		<SettingProvider>
 			<SettingsNavigator
-				settingContent={settingContent as any}
+				settingContent={settingContent}
 				currentSetting={initialTab}
 				getForm={GetForm}
 				prepareUrl={(tabid: string) =>

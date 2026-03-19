@@ -1,16 +1,22 @@
+import React from 'react';
 import { applyFilters } from '@wordpress/hooks';
 import AddProductCom from './dashboard/addProducts';
 import SpmvProducts from './dashboard/spmvProducts';
 import AddOrder from './dashboard/addOrder';
 import OrderDetails from './dashboard/orderDetails';
 
-export interface DashboardRouteConfig {
-	tab: string;
-	element: string;
-	component: React.ComponentType<any>;
+export interface BaseDashboardProps {
+	params?: Record<string, string>;
+	query?: URLSearchParams;
 }
 
-const BASE_DASHBOARD_ROUTES: DashboardRouteConfig[] = [
+export interface DashboardRouteConfig<P = Record<string, unknown>> {
+	tab: string;
+	element: string;
+	component: React.ComponentType<P>;
+}
+
+const BASE_DASHBOARD_ROUTES: DashboardRouteConfig<BaseDashboardProps>[] = [
 	{
 		tab: 'products',
 		element: 'add',
@@ -34,5 +40,8 @@ const BASE_DASHBOARD_ROUTES: DashboardRouteConfig[] = [
 ];
 
 export const getDashboardRoutes = (): DashboardRouteConfig[] => {
-	return applyFilters('multivendorx_dashboard_routes', BASE_DASHBOARD_ROUTES);
+	return applyFilters(
+		'multivendorx_dashboard_routes',
+		BASE_DASHBOARD_ROUTES
+	) as DashboardRouteConfig[];
 };

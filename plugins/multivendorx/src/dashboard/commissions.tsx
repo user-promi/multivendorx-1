@@ -2,11 +2,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, ItemListUI, NavigatorHeader, TableCard } from 'zyra';
+import {
+	CategoryCount,
+	getApiLink,
+	ItemListUI,
+	NavigatorHeader,
+	QueryProps,
+	TableCard,
+	TableRow,
+} from 'zyra';
 
 import ViewCommission from './viewCommission';
 import { downloadCSV, formatLocalDate } from '../services/commonFunction';
-import { categoryCounts, QueryProps, TableRow } from '@/services/type';
 
 type CommissionRow = {
 	id: number;
@@ -25,7 +32,7 @@ const StoreCommission: React.FC = () => {
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [rowIds, setRowIds] = useState<number[]>([]);
 	const [categoryCounts, setCategoryCounts] = useState<
-		categoryCounts[] | null
+		CategoryCount[] | null
 	>(null);
 	const [modalCommission, setModalCommission] =
 		useState<CommissionRow | null>(null);
@@ -176,6 +183,7 @@ const StoreCommission: React.FC = () => {
 				setRows([]);
 				setTotalRows(0);
 				setIsLoading(false);
+				console.error(error);
 			});
 	};
 
@@ -235,7 +243,7 @@ const StoreCommission: React.FC = () => {
 		query: QueryProps,
 		includePagination: boolean = true
 	) => {
-		const params: Record<string, any> = {
+		const params = {
 			status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
 			search_action: query.searchAction || 'commission_id',
 			search_value: query.searchValue || '',

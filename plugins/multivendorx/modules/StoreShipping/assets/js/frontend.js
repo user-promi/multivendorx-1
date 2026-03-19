@@ -1,4 +1,4 @@
-/* global jQuery */
+/* global jQuery,distanceShippingFrontend,google,mapboxgl */
 jQuery(document).ready(function ($) {
 	var opts = distanceShippingFrontend;
 	if ($('#multivendorx_user_location_lat').length === 0) {

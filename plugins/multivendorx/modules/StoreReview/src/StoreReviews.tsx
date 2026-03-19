@@ -16,7 +16,7 @@ import {
 	CategoryCount,
 } from 'zyra';
 import Popup from '../../../src/components/Popup/Popup';
-import { formatLocalDate } from '@/services/commonFunction';
+import { formatLocalDate } from '../../../src/services/commonFunction';
 
 type Review = {
 	id: number;
@@ -37,13 +37,16 @@ type Review = {
 	time_ago: string;
 	store_name?: string;
 };
-
+type StoreOption = {
+	label: string;
+	value: number;
+};
 const StoreReviews: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [rowIds, setRowIds] = useState<number[]>([]);
-	const [store, setStore] = useState<any[] | null>(null);
+	const [store, setStore] = useState<StoreOption[] | null>(null);
 	const [categoryCounts, setCategoryCounts] = useState<
 		CategoryCount[] | null
 	>(null);
@@ -82,7 +85,7 @@ const StoreReviews: React.FC = () => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: any) => ({
+				const options = (response.data || []).map((store) => ({
 					label: store.store_name,
 					value: store.id,
 				}));
@@ -148,7 +151,7 @@ const StoreReviews: React.FC = () => {
 		},
 		details: {
 			label: __('Details', 'multivendorx'),
-			render: (row: any) => (
+			render: (row) => (
 				<div className="review-details">
 					<div className="review">
 						{[...Array(Math.round(row.overall_rating || 0))].map(
@@ -257,8 +260,8 @@ const StoreReviews: React.FC = () => {
 			.then((response) => {
 				const items = response.data || [];
 				const ids = items
-					.filter((item: any) => item?.id != null)
-					.map((item: any) => item.id);
+					.filter((item) => item?.id != null)
+					.map((item) => item.id);
 
 				setRowIds(ids);
 

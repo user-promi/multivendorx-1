@@ -1,3 +1,4 @@
+/* global StoreInfo */
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import {
@@ -13,9 +14,7 @@ import {
 	ColorIndicator,
 	SelectControl,
 	__experimentalNumberControl as NumberControl,
-	Placeholder,
 } from '@wordpress/components';
-// import { image } from '@wordpress/icons';
 
 registerBlockType('multivendorx/store-logo', {
 	attributes: {

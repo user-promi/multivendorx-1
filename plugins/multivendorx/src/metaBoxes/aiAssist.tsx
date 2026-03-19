@@ -4,7 +4,7 @@ import { addFilter } from '@wordpress/hooks';
 import { ButtonInputUI, Card, getApiLink } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const AICard = ({ product, setProduct }) => {
 	const [aiSuggestions, setAiSuggestions] = useState({
 		productName: [],

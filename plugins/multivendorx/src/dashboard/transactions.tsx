@@ -47,13 +47,7 @@ const Transactions: React.FC = () => {
 			render: (row) =>
 				row.transaction_type?.toLowerCase() === 'commission' &&
 				row.commission_id ? (
-					<span
-						className="link-item"
-						onClick={() => {
-							setSelectedCommissionId(row.commission_id);
-							setViewCommission(true);
-						}}
-					>
+					<span className="link-item">
 						{`Commission #${row.commission_id}`}
 					</span>
 				) : (
@@ -145,8 +139,8 @@ const Transactions: React.FC = () => {
 					? response.data
 					: [];
 
-				const ids: number[] = transactions.map((p: any) =>
-					Number(p.id)
+				const ids: number[] = transactions.map((transaction) =>
+					Number(transaction.id)
 				);
 				setRowIds(ids);
 
@@ -243,7 +237,7 @@ const Transactions: React.FC = () => {
 		query: QueryProps,
 		includePagination: boolean = true
 	) => {
-		const params: Record<string, any> = {
+		const params = {
 			store_id: appLocalizer.store_id,
 			status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
 			search_value: query.searchValue,

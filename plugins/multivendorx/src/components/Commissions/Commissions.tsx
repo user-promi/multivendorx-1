@@ -5,7 +5,6 @@ import { __ } from '@wordpress/i18n';
 import {
 	getApiLink,
 	NavigatorHeader,
-	useModules,
 	Container,
 	Column,
 	TableCard,
@@ -16,7 +15,10 @@ import {
 } from 'zyra';
 import ViewCommission from './ViewCommission';
 import { downloadCSV, formatLocalDate } from '../../services/commonFunction';
-
+type StoreOption = {
+	label: string;
+	value: number;
+};
 const Commission: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -25,15 +27,11 @@ const Commission: React.FC = () => {
 	const [categoryCounts, setCategoryCounts] = useState<
 		CategoryCount[] | null
 	>(null);
-	const [store, setStore] = useState<any[] | null>(null);
-	const [commissionLookup, setCommissionLookup] = useState<
-		Record<number, WCTax>
-	>({});
+	const [store, setStore] = useState<StoreOption[] | null>(null);
 	const [viewCommission, setViewCommission] = useState(false);
 	const [selectedCommissionId, setSelectedCommissionId] = useState<
 		number | string | null
 	>(null);
-	const { modules } = useModules();
 
 	const handleSingleAction = (action: string, row) => {
 		if (!row.id) {
@@ -57,7 +55,7 @@ const Commission: React.FC = () => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: any) => ({
+				const options = (response.data || []).map((store) => ({
 					label: store.store_name,
 					value: store.id,
 				}));
@@ -172,7 +170,7 @@ const Commission: React.FC = () => {
 			})
 			.then((response) => {
 				const items = response.data || [];
-				const ids = items.map((item: any) => {
+				const ids = items.map((item) => {
 					return item.id;
 				});
 				setRowIds(ids);
@@ -229,6 +227,7 @@ const Commission: React.FC = () => {
 				setRows([]);
 				setTotalRows(0);
 				setIsLoading(false);
+				console.log(error);
 			});
 	};
 
@@ -293,7 +292,7 @@ const Commission: React.FC = () => {
 		query: QueryProps,
 		includePagination: boolean = true
 	) => {
-		const params: Record<string, any> = {
+		const params = {
 			status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
 			search_value: query.searchValue || '',
 			start_date: query.filter?.created_at?.startDate

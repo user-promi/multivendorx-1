@@ -7,8 +7,9 @@ import {
 	Modules,
 	ItemListUI,
 	Container,
+	NoticeManager,
 } from 'zyra';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { getModuleData } from '../../services/templateService';
 import axios from 'axios';
 import proPopupContent from '../Popup/Popup';
@@ -21,12 +22,11 @@ interface WPPlugin {
 	status?: string;
 }
 
-const DashboardTab: React.FC<{}> = () => {
+const DashboardTab: React.FC<object> = () => {
 	const [installing, setInstalling] = useState<string>('');
 	const [pluginStatus, setPluginStatus] = useState<{
 		[key: string]: boolean;
 	}>({});
-	const [successMsg, setSuccessMsg] = useState<string>('');
 	const [plugins, setPlugins] = useState<WPPlugin[]>([]);
 
 	const modulesArray = getModuleData();
@@ -82,6 +82,7 @@ const DashboardTab: React.FC<{}> = () => {
 				console.error('Failed to fetch plugins:', error);
 			});
 	};
+
 	const installOrActivatePlugin = (slug: string) => {
 		if (!slug || installing) {
 			return;
@@ -90,7 +91,7 @@ const DashboardTab: React.FC<{}> = () => {
 		setInstalling(slug);
 
 		let apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins`;
-		let requestData: any = { status: 'active' };
+		let requestData = { status: 'active' };
 
 		const existingPlugin = plugins.find((plugin) =>
 			plugin.plugin.includes(slug)
@@ -99,7 +100,15 @@ const DashboardTab: React.FC<{}> = () => {
 		if (!existingPlugin) {
 			requestData.slug = slug;
 		} else if (existingPlugin.status === 'active') {
-			setSuccessMsg(`Plugin "${slug}" is already active.`);
+			NoticeManager.add({
+				title: __('Info', 'multivendorx'),
+				message: sprintf(
+					__('Plugin "%s" is already active.', 'multivendorx'),
+					slug
+				),
+				type: 'info',
+				position: 'float',
+			});
 			setInstalling('');
 			return;
 		} else {
@@ -129,18 +138,44 @@ const DashboardTab: React.FC<{}> = () => {
 					[slug]: true,
 				}));
 
-				setSuccessMsg(
-					`Plugin "${slug}" ${
-						existingPlugin ? 'activated' : 'installed & activated'
-					} successfully!`
-				);
+				// Show success notice
+				NoticeManager.add({
+					title: __('Success!', 'multivendorx'),
+					message: existingPlugin
+						? sprintf(
+								__(
+									'Plugin "%s" activated successfully!',
+									'multivendorx'
+								),
+								slug
+							)
+						: sprintf(
+								__(
+									'Plugin "%s" installed & activated successfully!',
+									'multivendorx'
+								),
+								slug
+							),
+					type: 'success',
+					position: 'float',
+				});
 			})
 			.catch((error) => {
 				console.error(error);
-				setSuccessMsg(`Failed to install/activate plugin "${slug}".`);
+				NoticeManager.add({
+					title: __('Error!', 'multivendorx'),
+					message: sprintf(
+						__(
+							'Failed to install/activate plugin "%s".',
+							'multivendorx'
+						),
+						slug
+					),
+					type: 'error',
+					position: 'float',
+				});
 			})
 			.finally(() => {
-				setTimeout(() => setSuccessMsg(''), 3000);
 				setInstalling('');
 			});
 	};

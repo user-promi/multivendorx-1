@@ -23,6 +23,23 @@ const STATUS_LABELS: Record<string, string> = {
 	private: __('Private', 'multivendorx'),
 	trash: __('Trash', 'multivendorx'),
 };
+interface Language {
+	code: string;
+	name: string;
+	flag_url?: string;
+	[key: string]: unknown;
+}
+interface ProductRow {
+	id: number;
+	name: string;
+	price: string;
+	stock_status: string;
+	categories?: Array<{ id: number; name: string }>;
+	date_created: string;
+	status: string;
+	permalink: string;
+	[key: string]: unknown;
+}
 
 const AllProduct: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -67,7 +84,9 @@ const AllProduct: React.FC = () => {
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			);
 			setCategoriesList(response.data);
-		} catch {}
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const fetchProductStatusCounts = async () => {
@@ -76,7 +95,7 @@ const AllProduct: React.FC = () => {
 
 			const results = await Promise.allSettled(
 				statuses.map(async (status) => {
-					const params: any = {
+					const params = {
 						per_page: 1,
 						meta_key: 'multivendorx_store_id',
 						value: appLocalizer.store_id,
@@ -137,12 +156,12 @@ const AllProduct: React.FC = () => {
 			);
 	};
 
-	const fetchLanguageWiseProductCounts = async (langs: any[]) => {
+	const fetchLanguageWiseProductCounts = async (langs: Language[]) => {
 		if (!langs?.length) {
 			return;
 		}
 
-		const fetchCount = async (lang: any) => {
+		const fetchCount = async (lang: Language) => {
 			try {
 				const res = await axios.get(
 					`${appLocalizer.apiUrl}/wc/v3/products`,
@@ -259,8 +278,8 @@ const AllProduct: React.FC = () => {
 				const items = response.data || [];
 				setRowIds(
 					items
-						.filter((i: any) => i?.id != null)
-						.map((i: any) => i.id)
+						.filter((item) => item?.id != null)
+						.map((item) => item.id)
 				);
 				setRows(items);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
@@ -341,7 +360,7 @@ const AllProduct: React.FC = () => {
 		},
 		stock_status: {
 			label: __('Stock', 'multivendorx'),
-			render: (row: any) =>
+			render: (row: ProductRow) =>
 				row.stock_status === 'instock'
 					? __('In stock', 'multivendorx')
 					: row.stock_status === 'outofstock'
@@ -350,9 +369,9 @@ const AllProduct: React.FC = () => {
 		},
 		categories: {
 			label: __('Categories', 'multivendorx'),
-			render: (row: any) =>
+			render: (row: ProductRow) =>
 				Array.isArray(row.categories) && row.categories.length
-					? row.categories.map((c: any) => c.name).join(', ')
+					? row.categories.map((c) => c.name).join(', ')
 					: __('-', 'multivendorx'),
 		},
 		date_created: {
@@ -372,7 +391,7 @@ const AllProduct: React.FC = () => {
 					{
 						label: __('Edit', 'multivendorx'),
 						icon: 'edit',
-						onClick: (row: any) =>
+						onClick: (row: ProductRow) =>
 							dashNavigate(navigate, [
 								'products',
 								'edit',
@@ -382,13 +401,13 @@ const AllProduct: React.FC = () => {
 					{
 						label: __('View', 'multivendorx'),
 						icon: 'eye',
-						onClick: (row: any) =>
+						onClick: (row: ProductRow) =>
 							window.location.assign(row.permalink),
 					},
 					{
 						label: __('Copy URL', 'multivendorx'),
 						icon: 'copy',
-						onClick: (row: any) =>
+						onClick: (row: ProductRow) =>
 							navigator.clipboard
 								.writeText(row.permalink)
 								.catch(() => {}),
@@ -396,7 +415,7 @@ const AllProduct: React.FC = () => {
 					{
 						label: __('Delete', 'multivendorx'),
 						icon: 'delete delete',
-						onClick: (row: any) => handleDelete(row.id),
+						onClick: (row: ProductRow) => handleDelete(row.id),
 					},
 				],
 				modules

@@ -35,7 +35,7 @@ const Orders: React.FC = () => {
 	const hash = location.hash.replace(/^#/, '') || '';
 
 	const exportAllOrders = () => {
-		let allOrders: any[] = [];
+		let allOrders = [];
 		let page = 1;
 		const perPage = 100;
 
@@ -125,7 +125,7 @@ const Orders: React.FC = () => {
 		}
 
 		const requests = statuses.map((status) => {
-			const params: any = {
+			const params = {
 				per_page: 1,
 				meta_key: 'multivendorx_store_id',
 				value: appLocalizer.store_id,
@@ -245,7 +245,7 @@ const Orders: React.FC = () => {
 					label: __('Download', 'multivendorx'),
 					icon: 'download',
 					onClick: (row) => {
-						window.location.href = `?page=multivendorx#&tab=stores&edit/${rowIds.id}`;
+						window.location.href = `?page=multivendorx#&tab=stores&edit/${row.id}`;
 					},
 				},
 
@@ -297,11 +297,7 @@ const Orders: React.FC = () => {
 				const orders = Array.isArray(response.data)
 					? response.data
 					: [];
-				setRowIds(orders.map((o: any) => o.id));
-				const lookup: Record<number, any> = {};
-				orders.forEach((order: any) => {
-					lookup[order.id] = order;
-				});
+				setRowIds(orders.map((o) => o.id));
 
 				setRows(orders);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
@@ -344,7 +340,7 @@ const Orders: React.FC = () => {
 		query: QueryProps,
 		includePagination: boolean = true
 	) => {
-		const params: Record<string, any> = {
+		const params = {
 			search: query.searchValue,
 			status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
 			orderby: query.orderby || 'date',

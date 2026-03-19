@@ -31,13 +31,16 @@ type StoreQnaRow = {
 	time_ago?: string;
 	question_visibility?: string;
 };
-
+type StoreOption = {
+	label: string;
+	value: number;
+};
 const Qna: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [rowIds, setRowIds] = useState<number[]>([]);
-	const [store, setStore] = useState<any[] | null>(null);
+	const [store, setStore] = useState<StoreOption[] | null>(null);
 	const [categoryCounts, setCategoryCounts] = useState<
 		CategoryCount[] | null
 	>(null);
@@ -100,7 +103,7 @@ const Qna: React.FC = () => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: any) => ({
+				const options = (response.data || []).map((store) => ({
 					label: store.store_name,
 					value: store.id,
 				}));
@@ -231,8 +234,8 @@ const Qna: React.FC = () => {
 			.then((response) => {
 				const items = response.data || [];
 				const ids = items
-					.filter((item: any) => item?.id != null)
-					.map((item: any) => item.id);
+					.filter((item) => item?.id != null)
+					.map((item) => item.id);
 
 				setRowIds(ids);
 				setRows(items);
@@ -267,6 +270,7 @@ const Qna: React.FC = () => {
 				setRows([]);
 				setTotalRows(0);
 				setIsLoading(false);
+				console.error(error);
 			});
 	};
 

@@ -6,16 +6,14 @@ import { getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
 import { useRef } from '@wordpress/element';
 import { setSession } from '@/services/commonFunction';
 
-const PendingWithdrawal: React.FC<{ setCount?: (count: number) => void }> = ({
-	setCount,
-}) => {
+const PendingWithdrawal: React.FC<object> = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [rowIds, setRowIds] = useState<number[]>([]);
 	const firstLoadRef = useRef(true);
 
-	const handleSingleAction = (action: string, row: any) => {
+	const handleSingleAction = (action: string, row) => {
 		if (!row?.id) {
 			return;
 		}
@@ -57,13 +55,13 @@ const PendingWithdrawal: React.FC<{ setCount?: (count: number) => void }> = ({
 				{
 					label: __('Approve', 'multivendorx'),
 					icon: 'check',
-					onClick: (row: any) => handleSingleAction('approve', row),
+					onClick: (row) => handleSingleAction('approve', row),
 				},
 				{
 					label: __('Reject', 'multivendorx'),
 					icon: 'close',
 					className: 'danger',
-					onClick: (row: any) => handleSingleAction('reject', row),
+					onClick: (row) => handleSingleAction('reject', row),
 				},
 			],
 		},

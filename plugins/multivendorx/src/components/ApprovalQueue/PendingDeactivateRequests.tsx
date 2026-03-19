@@ -6,7 +6,7 @@ import { getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
 import { useRef } from '@wordpress/element';
 import { setSession } from '@/services/commonFunction';
 
-const PendingDeactivateRequests: React.FC<{}> = () => {
+const PendingDeactivateRequests: React.FC<object> = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -50,13 +50,13 @@ const PendingDeactivateRequests: React.FC<{}> = () => {
 				{
 					label: __('Approve', 'multivendorx'),
 					icon: 'check',
-					onClick: (row: any) => handleSingleAction('approve', row),
+					onClick: (row) => handleSingleAction('approve', row),
 				},
 				{
 					label: __('Reject', 'multivendorx'),
 					icon: 'close',
 					className: 'danger',
-					onClick: (row: any) => handleSingleAction('reject', row),
+					onClick: (row) => handleSingleAction('reject', row),
 				},
 			],
 		},

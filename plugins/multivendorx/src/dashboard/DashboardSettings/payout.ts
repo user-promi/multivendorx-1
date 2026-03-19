@@ -1,8 +1,10 @@
+/* global appLocalizer */
+import React from 'react';
 import { __ } from '@wordpress/i18n';
 import StripeEmbeddedOnboarding from './StripeEmbeddedOnboarding';
 interface PaymentField {
-	publish?: any;
-	client_secret?: any;
+	publish?: string;
+	client_secret?: string;
 	key: string | number;
 	action?: string;
 	html?: string | TrustedHTML;
@@ -28,6 +30,7 @@ const storePayment: StorePaymentConfig =
 
 const filteredStorePayment = Object.fromEntries(
 	Object.entries(storePayment).filter(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		([_, value]) =>
 			value !== null && (!Array.isArray(value) || value.length > 0)
 	)

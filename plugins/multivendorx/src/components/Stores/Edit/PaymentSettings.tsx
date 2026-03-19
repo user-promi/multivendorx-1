@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
 	ChoiceToggleUI,
@@ -16,7 +16,7 @@ import {
 import { __, sprintf } from '@wordpress/i18n';
 
 interface PaymentField {
-	key: any;
+	key: string;
 	html: string | TrustedHTML;
 	name: string;
 	type?: string;
@@ -29,20 +29,34 @@ interface PaymentProvider {
 	id: string;
 	label: string;
 	fields?: PaymentField[];
-	formFields?: PaymentField[]; // Accommodate the PHP structure
+	formFields?: PaymentField[];
 }
 
 interface StorePaymentConfig {
 	[key: string]: PaymentProvider;
 }
+interface StoreData {
+	payment_method?: string;
+	dashboard_access?: string;
+	onboarding_flow?: string;
+	charge_type?: string;
+	commission_fixed?: string | number;
+	commission_percentage?: string | number;
+	[key: string]: string | number | undefined;
+}
 
-const PaymentSettings = ({ id, data }: { id: string | null; data: any }) => {
-	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
+interface PaymentSettingsProps {
+	id: string | null;
+	data: StoreData | null;
+}
+const PaymentSettings: React.FC<PaymentSettingsProps> = ({ id, data }) => {
+	const [formData, setFormData] = useState({});
 
 	const storePayment: StorePaymentConfig =
 		(appLocalizer.store_payment_settings as StorePaymentConfig) || {};
 
 	const filteredStorePayment = Object.fromEntries(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		Object.entries(storePayment).filter(([_, value]) => value !== null)
 	);
 

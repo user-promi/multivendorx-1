@@ -13,8 +13,11 @@ import {
 } from 'zyra';
 import { setSession, toWcIsoDate } from '@/services/commonFunction';
 import { useRef } from '@wordpress/element';
-
-const PendingProducts: React.FC<{}> = () => {
+type StoreOption = {
+	label: string;
+	value: number;
+};
+const PendingProducts: React.FC<object> = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
@@ -22,8 +25,8 @@ const PendingProducts: React.FC<{}> = () => {
 	const [rejectPopupOpen, setRejectPopupOpen] = useState(false);
 	const [rejectReason, setRejectReason] = useState('');
 	const [rejectProductId, setRejectProductId] = useState<number | null>(null);
-	const [isSubmitting, setIsSubmitting] = useState(false); // prevent multiple clicks
-	const [store, setStore] = useState<any[] | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [store, setStore] = useState<StoreOption[] | null>(null);
 	const firstLoadRef = useRef(true);
 
 	useEffect(() => {
@@ -32,7 +35,7 @@ const PendingProducts: React.FC<{}> = () => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: any) => ({
+				const options = (response.data || []).map((store) => ({
 					label: store.store_name,
 					value: store.id,
 				}));
@@ -110,8 +113,8 @@ const PendingProducts: React.FC<{}> = () => {
 		},
 		category: {
 			label: __('Category', 'multivendorx'),
-			render: (row: any) =>
-				row.categories?.map((c: any) => c.name).join(', ') || '-',
+			render: (row) =>
+				row.categories?.map((cat) => cat.name).join(', ') || '-',
 		},
 		price: {
 			label: __('Price', 'multivendorx'),
@@ -191,7 +194,7 @@ const PendingProducts: React.FC<{}> = () => {
 					? response.data
 					: [];
 
-				const ids = products.map((p: any) => p.id);
+				const ids = products.map((product) => product.id);
 				setRowIds(ids);
 
 				setRows(products);

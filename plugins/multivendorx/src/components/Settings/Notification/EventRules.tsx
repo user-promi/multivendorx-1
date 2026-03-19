@@ -64,12 +64,20 @@ interface Notification {
 		[key: string]: boolean | undefined;
 	};
 }
+interface FormData {
+	id?: number;
+	system_message?: string;
+	sms_content?: string;
+	email_subject?: string;
+	email_body?: string;
+	[key: string]: string | number | boolean | undefined;
+}
 
 const apiRequest = (
 	method: 'GET' | 'POST',
 	path: string,
-	data?: any,
-	params?: any
+	data?: Record<string, unknown>,
+	params?: Record<string, unknown>
 ) =>
 	axios({
 		method,
@@ -103,7 +111,7 @@ const EventRules: React.FC = () => {
 		number | null
 	>(null);
 	const [notificationId, setNotificationId] = useState<number | null>(null);
-	const [formData, setFormData] = useState<Record<string, any>>({});
+	const [formData, setFormData] = useState<FormData>({});
 	const [activeTag, setActiveTag] = useState<string>('All');
 	const [cursorPos, setCursorPos] = useState<{
 		start: number;
@@ -190,18 +198,18 @@ const EventRules: React.FC = () => {
 				const items = response.data || [];
 				setNotifications(items);
 
-				// Extract IDs for bulk actions
-				const ids = items
-					.filter((item: Notification) => item?.id != null)
-					.map((item: Notification) => item.id);
 				setIsLoading(false);
 			})
 			.catch((error) => {
 				setIsLoading(false);
+				console.error(error);
 			});
 	};
 
-	const updateNotification = (id: number, updater: (n: any) => any) =>
+	const updateNotification = (
+		id: number,
+		updater: (n: Notification) => Notification
+	) =>
 		setNotifications((prev) =>
 			prev.map((n) => (n.id === id ? updater(n) : n))
 		);
@@ -209,7 +217,7 @@ const EventRules: React.FC = () => {
 	const toggleRecipient = (notifId: number, recipientId: number) =>
 		updateNotification(notifId, (n) => ({
 			...n,
-			recipients: n.recipients.map((r: any) =>
+			recipients: n.recipients.map((r) =>
 				r.id === recipientId ? { ...r, enabled: !r.enabled } : r
 			),
 		}));
@@ -217,7 +225,7 @@ const EventRules: React.FC = () => {
 	const deleteRecipient = (notifId: number, recipientId: number) =>
 		updateNotification(notifId, (n) => ({
 			...n,
-			recipients: n.recipients.filter((r: any) => r.id !== recipientId),
+			recipients: n.recipients.filter((r) => r.id !== recipientId),
 		}));
 
 	const addRecipient = (notifId: number | null) => {
@@ -226,7 +234,7 @@ const EventRules: React.FC = () => {
 		}
 		updateNotification(notifId, (n) => {
 			const maxId = n.recipients?.length
-				? Math.max(...n.recipients.map((r: any) => r.id))
+				? Math.max(...n.recipients.map((r) => r.id))
 				: 0;
 			return {
 				...n,
@@ -261,7 +269,7 @@ const EventRules: React.FC = () => {
 		setOpenChannel(channel);
 	};
 
-	const handleAutoSave = (id: number | null, data?: any) => {
+	const handleAutoSave = (id: number | null, data?: FormData) => {
 		if (id == null) {
 			return;
 		}
@@ -659,7 +667,7 @@ const EventRules: React.FC = () => {
 										notifications.find(
 											(n) => n.id === editingNotification
 										)?.channels || {}
-									).map(([channel, enabled]: any) => {
+									).map(([channel, enabled]) => {
 										const cfg = CHANNEL_CONFIG[channel];
 										if (!cfg) {
 											return null;
@@ -777,7 +785,7 @@ const EventRules: React.FC = () => {
 
 				{viewMode === 'grid' && (
 					<div className="module-option-row">
-						{filteredNotifications.map((notif: any) => (
+						{filteredNotifications.map((notif) => (
 							<div
 								key={notif.id}
 								className="module-list-item notification-card"
@@ -796,7 +804,7 @@ const EventRules: React.FC = () => {
 										</div>
 										<div className="tag-wrapper">
 											{(notif.recipients || []).map(
-												(r: any) => (
+												(r) => (
 													<RecipientBadge
 														key={r.id}
 														recipient={r}
@@ -829,7 +837,7 @@ const EventRules: React.FC = () => {
 										<div className="system-column">
 											{Object.entries(
 												notif.channels || {}
-											).map(([channel, enabled]: any) => {
+											).map(([channel, enabled]) => {
 												const cfg =
 													CHANNEL_CONFIG[channel];
 												if (!cfg) {
@@ -856,7 +864,7 @@ const EventRules: React.FC = () => {
 													icon: 'edit',
 													text: 'Manage',
 													color: 'purple',
-													onClick: (e) => {
+													onClick: () => {
 														setEditingNotification(
 															notif.id
 														);

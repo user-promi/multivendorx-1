@@ -3,22 +3,22 @@ import React, { createContext, useReducer, useContext, ReactNode } from 'react';
 // Define types for the state
 type SettingState = {
 	settingName: string;
-	setting: Record<string, any>;
+	setting: Record<string, unknown>;
 };
 
 // Define types for actions
 type SettingAction =
 	| {
 			type: 'SET_SETTINGS';
-			payload: { settingName: string; setting: Record<string, any> };
+			payload: { settingName: string; setting: Record<string, unknown> };
 	  }
-	| { type: 'UPDATE_SETTINGS'; payload: { key: string; value: any } }
+	| { type: 'UPDATE_SETTINGS'; payload: { key: string; value: unknown } }
 	| { type: 'CLEAR_SETTINGS' };
 
 // Define context type
 type SettingContextType = SettingState & {
-	setSetting: (name: string, setting: Record<string, any>) => void;
-	updateSetting: (key: string, value: any) => void;
+	setSetting: (name: string, setting: Record<string, unknown>) => void;
+	updateSetting: (key: string, value: unknown) => void;
 	clearSetting: () => void;
 };
 
@@ -37,14 +37,17 @@ const settingReducer = (
 	action: SettingAction
 ): SettingState => {
 	switch (action.type) {
-		case 'SET_SETTINGS':
+		case 'SET_SETTINGS': {
 			return { ...action.payload };
-		case 'UPDATE_SETTINGS':
+		}
+		case 'UPDATE_SETTINGS': {
 			const { key, value } = action.payload;
 			const setting = { ...state.setting, [key]: value };
 			return { ...state, setting };
-		case 'CLEAR_SETTINGS':
+		}
+		case 'CLEAR_SETTINGS': {
 			return { settingName: '', setting: {} };
+		}
 		default:
 			return state;
 	}
@@ -59,11 +62,14 @@ type SettingProviderProps = {
 const SettingProvider: React.FC<SettingProviderProps> = ({ children }) => {
 	const [state, dispatch] = useReducer(settingReducer, initialState);
 
-	const setSetting = (settingName: string, setting: Record<string, any>) => {
+	const setSetting = (
+		settingName: string,
+		setting: Record<string, unknown>
+	) => {
 		dispatch({ type: 'SET_SETTINGS', payload: { settingName, setting } });
 	};
 
-	const updateSetting = (key: string, value: any) => {
+	const updateSetting = (key: string, value: unknown) => {
 		dispatch({ type: 'UPDATE_SETTINGS', payload: { key, value } });
 	};
 

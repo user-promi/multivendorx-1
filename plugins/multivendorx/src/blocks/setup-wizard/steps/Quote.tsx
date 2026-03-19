@@ -3,6 +3,7 @@ import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import Loading from './Loading';
 import { getApiLink } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 interface QuoteProps {
 	onFinish: () => void;
@@ -34,7 +35,7 @@ const Quote: React.FC<QuoteProps> = ({ onFinish, onPrev }) => {
 		axios
 			.post(getApiLink('settings'), data, {
 				headers: {
-					'X-WP-Nonce': (window as any).appLocalizer?.nonce,
+					'X-WP-Nonce': appLocalizer?.nonce,
 				},
 			})
 			.then(() => {
@@ -48,14 +49,18 @@ const Quote: React.FC<QuoteProps> = ({ onFinish, onPrev }) => {
 
 	return (
 		<section>
-			<h2>Quote</h2>
+			<h2>{__('Quote', 'multivendorx')}</h2>
 			<article className="module-wrapper">
 				<div className="module-items">
 					<div className="module-details">
-						<h3>Restrict for logged-in user</h3>
+						<h3>
+							{__('Restrict for logged-in user', 'multivendorx')}
+						</h3>
 						<p className="module-description">
-							If enabled, non-logged-in users cannot submit
-							quotation requests.
+							{__(
+								'If enabled, non-logged-in users cannot submit quotation requests.',
+								'multivendorx'
+							)}
 						</p>
 					</div>
 					<div className="toggle-checkbox">
@@ -74,17 +79,17 @@ const Quote: React.FC<QuoteProps> = ({ onFinish, onPrev }) => {
 			<footer className="setup-footer-btn-wrapper">
 				<div>
 					<button className="footer-btn pre-btn" onClick={onPrev}>
-						Prev
+						{__('Prev', 'multivendorx')}
 					</button>
 					<button className="footer-btn" onClick={onFinish}>
-						Skip
+						{__('Skip', 'multivendorx')}
 					</button>
 				</div>
 				<button
 					className="footer-btn next-btn"
 					onClick={saveQuoteSettings}
 				>
-					Finish
+					{__('Finish', 'multivendorx')}
 				</button>
 			</footer>
 

@@ -95,7 +95,6 @@ const importAll = (
 	const sortStructure = (nodes: SettingNode[]): SettingNode[] => {
 		const sorted = nodes
 			.sort((a, b) => {
-				// Get priority for any node type
 				const getPriority = (node: SettingNode): number => {
 					if (node.type === 'file') {
 						const priority = node.content?.priority ?? Infinity;
@@ -141,12 +140,12 @@ const getTemplateData = (
 	return importAll(ctx);
 };
 
-const getModuleData = (): any | null => {
+const getModuleData = () => {
 	try {
 		const module = require('../components/Modules/index.ts').default;
 		return module;
 	} catch (error) {
-		console.warn('Module not found, skipping...');
+		console.warn('Module not found, skipping...', error);
 		return null;
 	}
 };

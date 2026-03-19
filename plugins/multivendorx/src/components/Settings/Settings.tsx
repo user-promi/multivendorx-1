@@ -15,18 +15,12 @@ import { useLocation, Link } from 'react-router-dom';
 import EventRules from './Notification/EventRules.tsx';
 import StoreStatus from './StoreConfiguration/StoreStatus.tsx';
 
-// Types
-type SettingItem = Record<string, any>;
-
 interface SettingsProps {
 	id: string;
 }
 
 const Settings: React.FC<SettingsProps> = () => {
-	const settingsArray: SettingItem[] = getAvailableSettings(
-		getTemplateData('settings'),
-		[]
-	);
+	const settingsArray = getAvailableSettings(getTemplateData('settings'), []);
 	const location = new URLSearchParams(useLocation().hash.substring(1));
 
 	// Render the dynamic form
@@ -39,8 +33,8 @@ const Settings: React.FC<SettingsProps> = () => {
 		if (!currentTab) {
 			return null;
 		}
-		const settingModal = getSettingById(settingsArray as any, currentTab);
-		const [storeTabSetting, setStoreTabSetting] = React.useState<any>(null);
+		const settingModal = getSettingById(settingsArray, currentTab);
+		const [storeTabSetting, setStoreTabSetting] = React.useState(null);
 
 		// Ensure settings context is initialized
 		if (settingName !== currentTab) {
@@ -50,7 +44,6 @@ const Settings: React.FC<SettingsProps> = () => {
 			);
 		}
 
-		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useEffect(() => {
 			if (settingName === currentTab) {
 				appLocalizer.settings_databases_value[settingName] = setting;
@@ -105,7 +98,7 @@ const Settings: React.FC<SettingsProps> = () => {
 			<>
 				{settingName === currentTab ? (
 					<RenderComponent
-						settings={settingModal as SettingContent}
+						settings={settingModal}
 						proSetting={appLocalizer.pro_settings_list}
 						setting={setting}
 						updateSetting={updateSetting}
@@ -115,7 +108,7 @@ const Settings: React.FC<SettingsProps> = () => {
 						storeTabSetting={storeTabSetting}
 					/>
 				) : (
-					<>Loading...</>
+					<>{__('Loading...', 'multivendorx')}</>
 				)}
 			</>
 		);
@@ -124,7 +117,7 @@ const Settings: React.FC<SettingsProps> = () => {
 	return (
 		<SettingProvider>
 			<SettingsNavigator
-				settingContent={settingsArray as any}
+				settingContent={settingsArray}
 				currentSetting={location.get('subtab') as string}
 				getForm={GetForm}
 				prepareUrl={(subTab: string) =>

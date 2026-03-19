@@ -3,7 +3,7 @@ import DistanceByZoneShipping from '@/dashboard/settings/DistanceByZoneShipping'
 import ShippingRatesByCountry from '@/dashboard/settings/ShippingRatesByCountry';
 import { __ } from '@wordpress/i18n';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	BasicInputUI,
 	Card,
@@ -18,8 +18,23 @@ import {
 	NoticeManager,
 } from 'zyra';
 
-const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
-	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
+interface ShippingRate {
+	[key: string]: string | number;
+}
+
+interface StoreShippingData {
+	shipping_options?: string;
+	distance_rules?: ShippingRate[] | string;
+	multivendorx_shipping_rates?: ShippingRate[] | string;
+	[key: string]: string | number | boolean | ShippingRate[] | undefined;
+}
+
+interface ShippingSettingsProps {
+	id: string | null;
+	data: StoreShippingData | null;
+}
+const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
+	const [formData, setFormData] = useState({});
 
 	useEffect(() => {
 		if (!id) {
@@ -39,6 +54,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 						data.distance_rules = JSON.parse(data.distance_rules);
 					} catch (err) {
 						data.distance_rules = []; // fallback to empty array
+						console.error(err);
 					}
 				}
 
@@ -50,6 +66,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 						);
 					} catch (err) {
 						data.multivendorx_shipping_rates = [];
+						console.error(err);
 					}
 				}
 
@@ -109,7 +126,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 								<ChoiceToggleUI
 									options={appLocalizer.shipping_methods}
 									value={formData.shipping_options || ''}
-									onChange={(value: any) =>
+									onChange={(value: string) =>
 										handleToggleChange(
 											value,
 											'shipping_options'
@@ -516,7 +533,7 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 													},
 												],
 											}}
-											onChange={(updatedRules: any[]) => {
+											onChange={(updatedRules) => {
 												const updated = {
 													...formData,
 													distance_rules:

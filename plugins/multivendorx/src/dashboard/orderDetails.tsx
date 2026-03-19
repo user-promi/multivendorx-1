@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
 	ButtonInputUI,
@@ -28,8 +28,8 @@ import { dashNavigate } from '../services/commonFunction';
 const OrderDetails: React.FC = () => {
 	const [isRefundLoading, setIsRefundLoading] = useState(false);
 	const [refundError, setRefundError] = useState('');
-	const [orderData, setOrderData] = useState<any>(null);
-	const [customerData, setCustomerData] = useState<any>();
+	const [orderData, setOrderData] = useState(null);
+	const [customerData, setCustomerData] = useState();
 	const { context_id } = useParams();
 	const orderId = context_id;
 

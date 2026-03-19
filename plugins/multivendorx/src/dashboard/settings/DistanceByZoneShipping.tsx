@@ -12,13 +12,30 @@ import {
 import { __ } from '@wordpress/i18n';
 import { applyFilters, doAction } from '@wordpress/hooks';
 
+interface ShippingMethod {
+	id: string;
+	instance_id: number;
+	title: string;
+	method_id: string;
+	enabled?: boolean;
+	settings?: Record<string, unknown>;
+}
 type Zone = {
 	id: number;
 	zone_name: string;
 	formatted_zone_location: string;
-	shipping_methods: any[];
+	shipping_methods: ShippingMethod[];
 	zone_id: number;
 };
+interface FormData {
+	shippingMethod: string;
+	localPickupCost: string;
+	freeShippingType: string;
+	minOrderCost: string;
+	flatRateCost: string;
+	flatRateClassCost: string;
+	flatRateCalculationType: string;
+}
 
 interface DistanceByZoneShippingProps {
 	id: string | number;
@@ -30,13 +47,14 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 	let store_id = appLocalizer.store_id ? appLocalizer.store_id : id;
 	const { modules } = useModules();
 	const [data, setData] = useState<Zone[]>([]);
-	const [error, setError] = useState<string>();
 	const [addShipping, setAddShipping] = useState<boolean>(false);
 	const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
 	const [isEditing, setIsEditing] = useState<boolean>(false);
-	const [editingMethod, setEditingMethod] = useState<any>(null);
+	const [editingMethod, setEditingMethod] = useState<ShippingMethod | null>(
+		null
+	);
 
-	const [formData, setFormData] = useState<any>({
+	const [formData, setFormData] = useState<FormData>({
 		shippingMethod: '',
 		localPickupCost: '',
 		freeShippingType: '',
@@ -65,7 +83,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			setData(zonesArray);
 		} catch (err) {
 			console.error('Error loading zones:', err);
-			setError(__('Failed to load shipping zones', 'multivendorx'));
 		}
 	};
 
@@ -85,13 +102,13 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		});
 	};
 
-	const handleEdit = async (method: any) => {
+	const handleEdit = async (method: ShippingMethod) => {
 		setIsEditing(true);
 		setEditingMethod(method);
 
 		const zoneWithMethod = data.find((zone) => {
 			const methods = Object.values(zone.shipping_methods || {});
-			return methods.some((m: any) => m.id === method.id);
+			return methods.some((m: ShippingMethod) => m.id === method.id);
 		});
 
 		setSelectedZone(zoneWithMethod || null);
@@ -119,7 +136,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 				const data = response.data;
 				const methodConfig = data.settings;
 
-				const form: any = {
+				const form = {
 					shippingMethod: data.method_id,
 					localPickupCost: '',
 					freeShippingType: '',
@@ -152,7 +169,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		}
 	};
 
-	const handleDelete = async (method: any, zone: Zone) => {
+	const handleDelete = async (method: ShippingMethod, zone: Zone) => {
 		if (!confirm(`Are you sure you want to delete "${method.title}"?`)) {
 			return;
 		}
@@ -180,8 +197,8 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		}
 	};
 
-	const handleChange = (key: string, value: any) => {
-		setFormData((prev: any) => ({ ...prev, [key]: value }));
+	const handleChange = (key: string, value: string) => {
+		setFormData((prev) => ({ ...prev, [key]: value }));
 	};
 
 	const handleSave = async () => {
@@ -190,7 +207,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			return;
 		}
 		try {
-			const shippingData: any = { settings: {} };
+			const shippingData = { settings: {} };
 
 			if (formData.shippingMethod === 'local_pickup') {
 				shippingData.settings = {
@@ -227,7 +244,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					)
 				: getApiLink(appLocalizer, 'zone-shipping');
 
-			const requestData: any = {
+			const requestData = {
 				store_id: store_id,
 				zone_id: selectedZone.zone_id,
 				method_id: isUpdate
@@ -303,7 +320,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		}
 		return (
 			<div className="shipping-method-wrapper">
-				{methodsArray.map((method: any) => (
+				{methodsArray.map((method: ShippingMethod) => (
 					<div key={method.instance_id} className="shipping-method">
 						<div className="admin-badge yellow">{method.title}</div>
 						<i
@@ -490,7 +507,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									name="localPickupCost"
 									placeholder="Enter cost"
 									value={formData.localPickupCost}
-									onChange={(val: any) =>
+									onChange={(val: string) =>
 										handleChange('localPickupCost', val)
 									}
 								/>

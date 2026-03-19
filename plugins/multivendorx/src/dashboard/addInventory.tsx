@@ -36,7 +36,7 @@ const AddInventory = () => {
 		{ label: 'Flat Hour Pricing', value: '2', customers: '3' },
 	];
 
-	const handleChange = (key: string, value: any) => {
+	const handleChange = (key: string, value) => {
 		const updated = { ...formData, [key]: value };
 		setFormData(updated);
 	};
@@ -214,7 +214,7 @@ const AddInventory = () => {
 											},
 										],
 									}}
-									onChange={(updatedRules: any[]) => {
+									onChange={(updatedRules) => {
 										handleChange(
 											'block_types',
 											updatedRules

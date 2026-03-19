@@ -1,3 +1,4 @@
+/* global StoreInfo */
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import {
@@ -247,13 +248,7 @@ registerBlockType('multivendorx/store-social-icons', {
 	},
 
 	save: ({ attributes }) => {
-		const {
-			iconSize,
-			iconColor,
-			iconGap,
-			align,
-			useThemeColors = true,
-		} = attributes;
+		const { iconSize, iconGap, align } = attributes;
 
 		// Set block props with alignment
 		const blockProps = useBlockProps.save({
@@ -270,15 +265,7 @@ registerBlockType('multivendorx/store-social-icons', {
 			},
 		});
 
-		// Get background color based on settings
-		const getBackgroundColor = (platform) => {
-			if (useThemeColors && iconColors[platform]) {
-				return iconColors[platform];
-			}
-			return iconColor || '#666666';
-		};
-
-		const iconLinkStyle = (platform) => ({
+		const iconLinkStyle = () => ({
 			width: `${iconSize}px`,
 			height: `${iconSize}px`,
 			borderRadius: '50%',
@@ -298,7 +285,7 @@ registerBlockType('multivendorx/store-social-icons', {
 						<a
 							href="#"
 							className="wp-block-social-link-anchor"
-							style={iconLinkStyle('facebook')}
+							style={iconLinkStyle()}
 						>
 							<FacebookIcon />
 						</a>
@@ -309,7 +296,7 @@ registerBlockType('multivendorx/store-social-icons', {
 						<a
 							href="#"
 							className="wp-block-social-link-anchor"
-							style={iconLinkStyle('twitter')}
+							style={iconLinkStyle()}
 						>
 							<TwitterIcon />
 						</a>
@@ -320,7 +307,7 @@ registerBlockType('multivendorx/store-social-icons', {
 						<a
 							href="#"
 							className="wp-block-social-link-anchor"
-							style={iconLinkStyle('instagram')}
+							style={iconLinkStyle()}
 						>
 							<InstagramIcon />
 						</a>
@@ -331,7 +318,7 @@ registerBlockType('multivendorx/store-social-icons', {
 						<a
 							href="#"
 							className="wp-block-social-link-anchor"
-							style={iconLinkStyle('youtube')}
+							style={iconLinkStyle()}
 						>
 							<YouTubeIcon />
 						</a>
@@ -341,7 +328,7 @@ registerBlockType('multivendorx/store-social-icons', {
 						<a
 							href="#"
 							className="wp-block-social-link-anchor"
-							style={iconLinkStyle('linkedin')}
+							style={iconLinkStyle()}
 						>
 							<LinkedInIcon />
 						</a>
@@ -351,7 +338,7 @@ registerBlockType('multivendorx/store-social-icons', {
 						<a
 							href="#"
 							className="wp-block-social-link-anchor"
-							style={iconLinkStyle('linkedin')}
+							style={iconLinkStyle()}
 						>
 							<PinterestIcon />
 						</a>

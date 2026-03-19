@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
@@ -16,7 +16,7 @@ import {
 	QueryProps,
 	CategoryCount,
 } from 'zyra';
-import { formatLocalDate, truncateText } from '@/services/commonFunction';
+import { formatLocalDate } from '@/services/commonFunction';
 
 type StoreQnaRow = {
 	id: number;
@@ -172,8 +172,8 @@ const CustomerQuestions: React.FC = () => {
 			.then((response) => {
 				const items = response.data || [];
 				const ids = items
-					.filter((item: any) => item?.id != null)
-					.map((item: any) => item.id);
+					.filter((item) => item?.id != null)
+					.map((item) => item.id);
 
 				setRowIds(ids);
 
@@ -209,6 +209,7 @@ const CustomerQuestions: React.FC = () => {
 				setRows([]);
 				setTotalRows(0);
 				setIsLoading(false);
+				console.error(error);
 			});
 	};
 	return (

@@ -52,6 +52,7 @@ const StoreFollower: React.FC = () => {
 				setRows([]);
 				setTotalRows(0);
 				setIsLoading(false);
+				console.error(error);
 			});
 	};
 

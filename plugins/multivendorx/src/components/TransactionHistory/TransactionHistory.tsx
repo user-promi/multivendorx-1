@@ -7,9 +7,15 @@ import axios from 'axios';
 import WalletTransaction from './WalletTransaction';
 import { applyFilters } from '@wordpress/hooks';
 
+type StoreOption = {
+	label: string;
+	value: number;
+};
+
 export const TransactionHistory: React.FC = () => {
-	const [allStores, setAllStores] = useState<any[]>([]);
-	const [selectedStore, setSelectedStore] = useState<any>(null);
+	const [allStores, setAllStores] = useState<StoreOption[]>([]);
+	const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
+	const [selectedStoreLabel, setSelectedStoreLabel] = useState<string>('');
 
 	// Fetch stores on mount
 	useEffect(() => {
@@ -21,12 +27,13 @@ export const TransactionHistory: React.FC = () => {
 		})
 			.then((response) => {
 				if (response?.data?.length) {
-					const mappedStores = response.data.map((store: any) => ({
+					const mappedStores = response.data.map((store) => ({
 						value: store.id,
 						label: store.store_name,
 					}));
 					setAllStores(mappedStores);
-					setSelectedStore(mappedStores[0]);
+					setSelectedStoreId(mappedStores[0].value);
+					setSelectedStoreLabel(mappedStores[0].label);
 				}
 			})
 			.catch((error) => {
@@ -36,6 +43,15 @@ export const TransactionHistory: React.FC = () => {
 				);
 			});
 	}, []);
+
+	// Helper function to get store label by ID
+	const getStoreLabelById = (storeId: number | null): string => {
+		if (!storeId) {
+			return '';
+		}
+		const store = allStores.find((s) => s.value === storeId);
+		return store?.label || '';
+	};
 
 	const locationUrl = new URLSearchParams(useLocation().hash.substring(1));
 
@@ -63,21 +79,28 @@ export const TransactionHistory: React.FC = () => {
 	const getForm = (tabId: string) => {
 		switch (tabId) {
 			case 'wallet-transaction':
-				return selectedStore?.value ? (
-					<WalletTransaction storeId={selectedStore.value} />
+				return selectedStoreId ? (
+					<WalletTransaction storeId={selectedStoreId} />
 				) : null;
 			case 'direct-transaction':
-				const output = applyFilters(
+				return applyFilters(
 					'direct_transaction_output',
 					null,
-					selectedStore
+					selectedStoreId
 				);
-
-				return output;
-
 			default:
 				return <div></div>;
 		}
+	};
+
+	// Handle store change
+	const handleStoreChange = (newValue: number | string | null) => {
+		if (!newValue || typeof newValue !== 'number') {
+			return;
+		}
+
+		setSelectedStoreId(newValue);
+		setSelectedStoreLabel(getStoreLabelById(newValue));
 	};
 
 	return (
@@ -95,17 +118,17 @@ export const TransactionHistory: React.FC = () => {
 				menuIcon={true}
 				headerIcon="store-reactivated"
 				headerTitle={
-					selectedStore
+					selectedStoreId
 						? __(
-								`Storewise Transaction History - ${selectedStore.label}`,
+								`Storewise Transaction History - ${selectedStoreLabel}`,
 								'multivendorx'
 							)
 						: __('Storewise Transaction History', 'multivendorx')
 				}
 				headerDescription={
-					selectedStore
+					selectedStoreId
 						? __(
-								`View and manage transactions for ${selectedStore.label} store`,
+								`View and manage transactions for ${selectedStoreLabel} store`,
 								'multivendorx'
 							)
 						: __(
@@ -122,11 +145,9 @@ export const TransactionHistory: React.FC = () => {
 
 						<SelectInputUI
 							name="store"
-							value={selectedStore?.value || ''}
+							value={selectedStoreId || ''}
 							options={allStores}
-							onChange={(newValue: any) =>
-								setSelectedStore(newValue)
-							}
+							onChange={handleStoreChange}
 							size="12rem"
 						/>
 					</>

@@ -936,7 +936,7 @@ const Dashboard: React.FC = () => {
 								{customers && customers.length > 0 ? (
 									customers.map((customer, index) => (
 										<InfoItem
-											key={customer.id}
+											key={index}
 											title={customer.name}
 											avatar={{
 												text: customer.name
