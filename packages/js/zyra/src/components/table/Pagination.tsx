@@ -172,9 +172,9 @@ const Pagination: React.FC< PaginationProps > = ( {
             </div>
             { showPagePicker && (
                 <div className="pagination-number-wrapper">
+                    Go to page
                     <BasicInputUI
                         type="number"
-                        inputLabel="Go to page"
                         minNumber={ 1 }
                         maxNumber={ pageCount }
                         value={ inputValue }

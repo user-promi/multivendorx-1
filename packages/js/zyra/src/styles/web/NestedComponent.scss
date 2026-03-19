@@ -46,13 +46,13 @@
             color: $sub-text-color;
         }
 
-        .settings-input-content:has(.toggle-setting-container) {
+        .settings-input-content:has(.choice-toggle-container) {
             label {
                 padding-right: 0.5rem;
             }
         }
 
-        .toggle-setting-wrapper {
+        .choice-toggle-wrapper {
             margin-bottom: 0;
         }
 

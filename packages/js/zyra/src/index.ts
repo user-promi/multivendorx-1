@@ -56,7 +56,7 @@ export { ButtonInputUI } from './components/ButtonInput';
 export { default as Popup } from './components/Popup';
 export { PopupUI } from './components/Popup';
 export { default as InfoItem } from './components/InfoItem';
-export { default as Analytics } from './components/Analytics';
+export { default as Analytics } from './components/UI/Analytics';
 export { CountryCodes } from './components/fieldUtils';
 export { default as ComponentStatusView } from './components/UI/ComponentStatusView';
 export { default as Skeleton } from './components/UI/Skeleton';

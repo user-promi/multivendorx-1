@@ -78,7 +78,7 @@
 }
 
 // Toggle settings wrapper
-.toggle-setting-wrapper {
+.choice-toggle-wrapper {
     display: flex;
 
     .toggle-option {
@@ -205,7 +205,7 @@
     }
 }
 
-.toggle-setting-container {
+.choice-toggle-container {
     width: fit-content;
     display: flex;
     align-items: center;
@@ -216,13 +216,13 @@
         width: 100%;
 
         .toggle-option,
-        .toggle-setting-wrapper {
+        .choice-toggle-wrapper {
             width: 100%;
         }
     }
 }
 
-.toggle-setting-container:has(.custom) {
+.choice-toggle-container:has(.custom) {
     width: 100%;
 }
 

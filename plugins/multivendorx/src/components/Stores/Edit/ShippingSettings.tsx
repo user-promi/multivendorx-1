@@ -151,6 +151,10 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 											'multivendorx'
 										)}
 										htmlFor="multivendorx_shipping_type_price"
+										desc={__(
+												'This is the shipping cost applied to every order.',
+												'multivendorx'
+											)}
 									>
 										<BasicInputUI
 											type="number"
@@ -175,12 +179,6 @@ const ShippingSettings = ({ id, data }: { id: string | null; data: any }) => {
 												'multivendorx'
 											)}
 										/>
-										<div className="settings-metabox-description">
-											{__(
-												'This is the shipping cost applied to every order.',
-												'multivendorx'
-											)}
-										</div>
 									</FormGroup>
 									{/* Per Product Additional Price */}
 									<FormGroup

@@ -132,9 +132,9 @@
                 border-radius: $border-radius-small;
                 display: flex;
 
-                .setting-form-input {
-                    width: 100%;
-                }
+                // .setting-form-input {
+                //     width: 100%;
+                // }
 
                 .basic-input {
                     cursor: pointer;
@@ -309,7 +309,7 @@
                 border-bottom: $border-light-small;
             }
 
-            .toggle-setting-container,
+            .choice-toggle-container,
             .input-wrapper {
                 width: 100%;
             }

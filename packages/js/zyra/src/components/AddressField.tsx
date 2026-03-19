@@ -152,8 +152,8 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
     }
 
     return (
-        <div className="address-field-wrapper">
-            <h4 className="address-section-title">{ formField.label }</h4>
+        // <div className="address-field-wrapper">
+        //     <h4 className="address-section-title">{ formField.label }</h4>
             <ReactSortable
                 list={ subFields }
                 setList={ updateParent }
@@ -185,7 +185,7 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
                     </div>
                 ) ) }
             </ReactSortable>
-        </div>
+        // </div> 
     );
 };
 
