@@ -98,14 +98,37 @@ const StoreReview: React.FC = () => {
 		customer_name: {
 			label: __('Customer', 'multivendorx'),
 		},
-		overall_rating: {
-			label: __('Ratings', 'multivendorx'),
-		},
-		review_title: {
-			label: __('Title', 'multivendorx'),
-		},
-		review_content: {
-			label: __('Content', 'multivendorx'),
+		details: {
+			label: __('Details', 'multivendorx'),
+			render: (row: any) => (
+				<div className="review-details">
+					<div className="review">
+						{[
+							...Array(
+								Math.round(
+									row.overall_rating || 0
+								)
+							),
+						].map((_, i) => (
+							<i key={`filled-${i}`} className="star-icon adminfont-star" />
+						))}
+
+						{[
+							...Array(
+								5 -
+								Math.round(
+									row.overall_rating ||
+									0
+								)
+							),
+						].map((_, i) => (
+							<i key={`empty-${i}`} className="star-icon adminfont-star-o" />
+						))}
+					</div>
+					<div className="title">{row.review_title}</div>
+					<div className="desc">{row.review_content}</div>
+				</div>
+			)
 		},
 		status: {
 			label: __('Status', 'multivendorx'),
@@ -184,7 +207,7 @@ const StoreReview: React.FC = () => {
 
 				setCategoryCounts([
 					{
-						value: '',
+						value: 'all',
 						label: __('All', 'multivendorx'),
 						count: Number(response.headers['x-wp-total']) || 0,
 					},

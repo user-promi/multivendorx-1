@@ -16,25 +16,25 @@ export default {
 			items: [
 				{
 					title: __('Can log in to dashboard', 'multivendorx'),
-					icon: 'check adminfont-icon-yes',
+					icon: 'check-fill',
 				},
 				{
 					title: __('Cannot modify store settings', 'multivendorx'),
-					icon: 'close adminfont-cross',
+					icon: 'cross',
 				},
 				{
 					title: __(
 						'Denied from adding or editing products',
 						'multivendorx'
 					),
-					icon: 'close adminfont-cross',
+					icon: 'cross',
 				},
 				{
 					title: __(
 						'Cannot process or fulfill orders',
 						'multivendorx'
 					),
-					icon: 'close adminfont-cross',
+					icon: 'cross',
 				},
 			],
 		},

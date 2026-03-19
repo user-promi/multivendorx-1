@@ -40,8 +40,9 @@ const Transactions: React.FC = () => {
 		useState<TransactionRow | null>(null);
 
 	const headers = {
-		id: { label: __('ID', 'multivendorx') },
+		id: { label: __('ID', 'multivendorx') , type:'id'},
 		status: { label: __('Status', 'multivendorx'), type: 'status' },
+		created_at: { label: __('Date', 'multivendorx'), type: 'date' },
 		transaction_type: {
 			label: __('Transaction Type', 'multivendorx'),
 			render: (row) =>
@@ -65,7 +66,6 @@ const Transactions: React.FC = () => {
 					</span>
 				),
 		},
-		created_at: { label: __('Date', 'multivendorx'), type: 'date' },
 		credit: { label: __('Credit', 'multivendorx'), type: 'currency' },
 		debit: { label: __('Debit', 'multivendorx'), type: 'currency' },
 		balance: {
@@ -80,7 +80,7 @@ const Transactions: React.FC = () => {
 			actions: [
 				{
 					label: __('View', 'multivendorx'),
-					icon: 'edit',
+					icon: 'eye',
 					onClick: (row) => {
 						setModalTransaction(row);
 					},
@@ -284,39 +284,35 @@ const Transactions: React.FC = () => {
 				)}
 			/>
 
-			<Container general>
-				<Column>
-					<TableCard
-						headers={headers}
-						rows={rows}
-						totalRows={totalRows}
-						isLoading={isLoading}
-						onQueryUpdate={doRefreshTableData}
-						search={{ placeholder: 'Search...' }}
-						filters={filters}
-						buttonActions={buttonActions}
-						ids={rowIds}
-						categoryCounts={categoryCounts}
-						bulkActions={[]}
-						onSelectCsvDownloadApply={downloadTransactionCSV}
-						format={appLocalizer.date_format}
-						currency={{
-							currencySymbol: appLocalizer.currency_symbol,
-							priceDecimals: appLocalizer.price_decimals,
-							decimalSeparator: appLocalizer.decimal_separator,
-							thousandSeparator: appLocalizer.thousand_separator,
-							currencyPosition: appLocalizer.currency_position,
-						}}
-					/>
+			<TableCard
+				headers={headers}
+				rows={rows}
+				totalRows={totalRows}
+				isLoading={isLoading}
+				onQueryUpdate={doRefreshTableData}
+				search={{ placeholder: 'Search...' }}
+				filters={filters}
+				buttonActions={buttonActions}
+				ids={rowIds}
+				categoryCounts={categoryCounts}
+				bulkActions={[]}
+				onSelectCsvDownloadApply={downloadTransactionCSV}
+				format={appLocalizer.date_format}
+				currency={{
+					currencySymbol: appLocalizer.currency_symbol,
+					priceDecimals: appLocalizer.price_decimals,
+					decimalSeparator: appLocalizer.decimal_separator,
+					thousandSeparator: appLocalizer.thousand_separator,
+					currencyPosition: appLocalizer.currency_position,
+				}}
+			/>
 
-					{modalTransaction && (
-						<TransactionDetailsModal
-							transaction={modalTransaction}
-							onClose={() => setModalTransaction(null)}
-						/>
-					)}
-				</Column>
-			</Container>
+			{modalTransaction && (
+				<TransactionDetailsModal
+					transaction={modalTransaction}
+					onClose={() => setModalTransaction(null)}
+				/>
+			)}
 		</>
 	);
 };

@@ -44,6 +44,11 @@ const OrderReport: React.FC = () => {
 	const headers = {
 		id: {
 			label: __('Order', 'multivendorx'),
+			render: (row: any) => {
+				return(
+					<span>#{row.id}</span>
+				)
+			}
 		},
 		store_name: {
 			label: __('Store', 'multivendorx'),

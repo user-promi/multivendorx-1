@@ -76,7 +76,6 @@ const Commission: React.FC = () => {
 			label: __('ID', 'multivendorx'),
 			isSortable: true,
 			type: 'id',
-			className: 'id',
 		},
 		order_id: {
 			label: __('Order', 'multivendorx'),
