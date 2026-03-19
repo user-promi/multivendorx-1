@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
 	ButtonInputUI,
@@ -21,7 +21,7 @@ import {
 
 import axios from 'axios';
 import Popup from '../components/Popup/Popup';
-import { formatLocalDate, toWcIsoDate } from '@/services/commonFunction';
+import { toWcIsoDate } from '@/services/commonFunction';
 
 const COUPON_STATUS_MAP: Record<string, string> = {
 	all: __('All', 'multivendorx'),
@@ -129,7 +129,7 @@ const AllCoupon: React.FC = () => {
 		id: undefined,
 	};
 
-	const [formData, setFormData] = useState<any>({
+	const [formData, setFormData] = useState({
 		title: '',
 		content: '',
 		discount_type: '',
@@ -151,8 +151,6 @@ const AllCoupon: React.FC = () => {
 	});
 
 	const [AddCoupon, setAddCoupon] = useState(false);
-
-	const [activeTab, setActiveTab] = useState('general');
 
 	const handleEditCoupon = (couponId: number) => {
 		axios
@@ -188,7 +186,6 @@ const AllCoupon: React.FC = () => {
 				});
 
 				setAddCoupon(true);
-				setActiveTab('general');
 			})
 			.catch(() => {
 				alert('Failed to fetch coupon details. Please try again.');
@@ -200,7 +197,7 @@ const AllCoupon: React.FC = () => {
 			return; // Stop submission if errors exist
 		}
 
-		const payload: any = {
+		const payload = {
 			code: formData.title,
 			description: formData.content,
 			discount_type: formData.discount_type,
@@ -337,7 +334,7 @@ const AllCoupon: React.FC = () => {
 									},
 								]}
 								value={formData.free_shipping}
-								onChange={(val: any) =>
+								onChange={(val) =>
 									setFormData({
 										...formData,
 										free_shipping: val,
@@ -484,7 +481,7 @@ const AllCoupon: React.FC = () => {
 									},
 								]}
 								value={formData.individual_use}
-								onChange={(val: any) =>
+								onChange={(val: string) =>
 									setFormData({
 										...formData,
 										individual_use: val,
@@ -511,7 +508,7 @@ const AllCoupon: React.FC = () => {
 									},
 								]}
 								value={formData.exclude_sale_items}
-								onChange={(val: any) =>
+								onChange={(val: string) =>
 									setFormData({
 										...formData,
 										exclude_sale_items: val,
@@ -544,7 +541,7 @@ const AllCoupon: React.FC = () => {
 
 	const fetchCouponStatusCounts = () => {
 		const requests = Object.keys(COUPON_STATUS_MAP).map((status) => {
-			const params: any = {
+			const params = {
 				meta_key: 'multivendorx_store_id',
 				value: appLocalizer.store_id,
 				status: status === 'all' ? 'any' : status,
@@ -570,7 +567,9 @@ const AllCoupon: React.FC = () => {
 			.then((results) => {
 				const counts = results
 					.filter(
-						(result): result is PromiseFulfilledResult<any> =>
+						(
+							result
+						): result is PromiseFulfilledResult<CategoryCount> =>
 							result.status === 'fulfilled'
 					)
 					.map((result) => result.value);
@@ -750,7 +749,6 @@ const AllCoupon: React.FC = () => {
 						icon: 'plus',
 						onClick: () => {
 							setFormData({ ...defaultFormData });
-							setActiveTab('general');
 							setAddCoupon(true);
 						},
 					},

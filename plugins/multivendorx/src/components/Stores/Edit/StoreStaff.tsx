@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
 	getApiLink,
@@ -15,9 +15,35 @@ import {
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 
-const StoreSquad = ({ id }: { id: string | null }) => {
+// Define proper interfaces
+interface StoreOwner {
+	label: string;
+	value: string;
+	[key: string]: unknown;
+}
+
+interface StoreSquadFormData {
+	store_owners?: string[];
+	primary_owner?: string;
+	state?: string;
+	[key: string]: string | string[] | undefined;
+}
+
+interface StoreSquadProps {
+	id: string | null;
+}
+
+// Type for the filter callback
+type FilterCallback = (
+	content: null,
+	formData: StoreSquadFormData,
+	setFormData: React.Dispatch<React.SetStateAction<StoreSquadFormData>>,
+	autoSave: (data: StoreSquadFormData) => void
+) => React.ReactElement | null;
+
+const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 	const { modules } = useModules();
-	const [formData, setFormData] = useState<{ [key: string]: any }>({});
+	const [formData, setFormData] = useState<StoreSquadFormData>({});
 
 	useEffect(() => {
 		if (!id) {
@@ -35,7 +61,7 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 		});
 	}, [id]);
 
-	const autoSave = (updatedData: { [key: string]: any }) => {
+	const autoSave = (updatedData: StoreSquadFormData) => {
 		axios({
 			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),
@@ -67,12 +93,23 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 								options={appLocalizer.store_owners || []}
 								type="multi-select"
 								value={formData.store_owners || []}
-								onChange={(selected: any) => {
-									const store_owners = (selected || []).map(
-										(option: any) =>
-											typeof option === 'object'
+								onChange={(
+									selected: StoreOwner[] | string[] | string
+								) => {
+									const storeOwnersArray = Array.isArray(
+										selected
+									)
+										? selected
+										: selected
+											? [selected]
+											: [];
+
+									const store_owners = storeOwnersArray.map(
+										(option: StoreOwner | string) =>
+											typeof option === 'object' &&
+											option !== null
 												? option.value
-												: option
+												: String(option)
 									);
 
 									const updated = {
@@ -87,22 +124,22 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 						</FormGroupWrapper>
 
 						{modules.includes('staff-manager') &&
-							applyFilters(
+							(applyFilters(
 								'additional_staff_manager_fields',
 								null,
 								formData,
 								setFormData,
 								autoSave
-							)}
+							) as ReturnType<FilterCallback>)}
 
 						{modules.includes('facilitator') &&
-							applyFilters(
+							(applyFilters(
 								'additional_facilitator_fields',
 								null,
 								formData,
 								setFormData,
 								autoSave
-							)}
+							) as ReturnType<FilterCallback>)}
 					</Card>
 				</Column>
 
@@ -122,16 +159,25 @@ const StoreSquad = ({ id }: { id: string | null }) => {
 									name="primary_owner"
 									options={appLocalizer?.store_owners || []}
 									value={formData.primary_owner}
-									onChange={(newValue: any) => {
+									onChange={(
+										newValue: StoreOwner | string | null
+									) => {
 										if (
 											!newValue ||
 											Array.isArray(newValue)
 										) {
 											return;
 										}
+
+										const primaryOwnerValue =
+											typeof newValue === 'object' &&
+											newValue !== null
+												? newValue.value
+												: String(newValue);
+
 										const updated = {
 											...formData,
-											primary_owner: newValue,
+											primary_owner: primaryOwnerValue,
 										};
 										setFormData(updated);
 										autoSave(updated);

@@ -1,3 +1,4 @@
+/* global StoreInfo */
 import React from 'react';
 
 const StoreTabs: React.FC = () => {

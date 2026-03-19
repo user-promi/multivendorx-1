@@ -9,26 +9,56 @@ import {
 	PopupUI,
 	SectionUI,
 	TableCard,
+	TableRow,
 } from 'zyra';
 import { formatCurrency } from '@/services/commonFunction';
-import { TableRow } from '@/services/type';
 
 type ViewCommissionProps = {
 	open: boolean;
 	onClose: () => void;
 	commissionId: number;
 };
+interface CommissionData {
+	order_id?: number;
+	store_id?: number;
+	status?: string;
+	amount?: number;
+	total?: number;
+	shipping?: number;
+	tax?: number;
+	shipping_tax_amount?: number;
+	commission_refunded?: number;
+	note?: string;
+	[key: string]: unknown;
+}
+
+interface OrderData {
+	status?: string;
+	shipping_lines?: Array<{
+		method_title: string;
+		total: string;
+		total_tax: string;
+	}>;
+	line_items?: Array<{
+		name: string;
+		price: string;
+		quantity: number;
+		total?: string;
+		total_tax?: string;
+	}>;
+	[key: string]: unknown;
+}
 
 const ViewCommission: React.FC<ViewCommissionProps> = ({
 	open,
 	onClose,
 	commissionId,
 }) => {
-	const [commissionData, setCommissionData] = useState<any>(null);
-	const [storeData, setStoreData] = useState<any>(null);
-	const [orderData, setOrderData] = useState<any>(null);
+	const [commissionData, setCommissionData] = useState<CommissionData | null>(
+		null
+	);
+	const [orderData, setOrderData] = useState<OrderData | null>(null);
 	const [shippingItems, setShippingItems] = useState<TableRow[][]>([]);
-	const [refundMap, setRefundMap] = useState<Record<number, any>>({});
 
 	// Add new state
 	const [orderItems, setOrderItems] = useState<TableRow[][]>([]);
@@ -37,7 +67,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 		if (!commissionId) {
 			setCommissionData(null);
 			setOrderData(null);
-			setOrderItems([]); // reset
+			setOrderItems([]);
 			return;
 		}
 
@@ -50,50 +80,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 				const commission = res.data || {};
 				setCommissionData(commission);
 
-				if (commission.store_id) {
-					axios({
-						method: 'GET',
-						url: getApiLink(
-							appLocalizer,
-							`store/${commission.store_id}`
-						),
-						headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					})
-						.then((storeRes) => {
-							setStoreData(storeRes.data || {});
-						})
-						.catch(() => setStoreData(null));
-				}
-
 				if (commission.order_id) {
-					axios({
-						method: 'GET',
-						url: `${appLocalizer.apiUrl}/wc/v3/orders/${commission.order_id}/refunds`,
-						headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					})
-						.then((refundRes) => {
-							const refunds = refundRes.data || [];
-
-							// map refunds by product_id
-							let refundMap: Record<number, any> = {};
-
-							refunds.forEach((refund: any) => {
-								refund.line_items.forEach((item: any) => {
-									const productId = item.product_id;
-
-									refundMap[productId] = {
-										qty: item.quantity, // negative
-										total: item.total,
-										tax: item.total_tax,
-									};
-								});
-							});
-
-							// store refund map
-							setRefundMap(refundMap);
-						})
-						.catch(() => {});
-
 					axios({
 						method: 'GET',
 						url: `${appLocalizer.apiUrl}/wc/v3/orders/${commission.order_id}`,
@@ -105,7 +92,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							setOrderData(order);
 							if (Array.isArray(order.shipping_lines)) {
 								const mappedRows = order.shipping_lines.map(
-									(ship: any) => ({
+									(ship) => ({
 										method: ship.method_title,
 										amount: ship.total,
 										tax: ship.total_tax,
@@ -119,7 +106,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 
 							if (Array.isArray(order.line_items)) {
 								const mappedRows = order.line_items.map(
-									(item: any) => {
+									(item) => {
 										const total = parseFloat(
 											item.total || '0'
 										);
@@ -150,7 +137,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			})
 			.catch(() => {
 				setCommissionData(null);
-				setStoreData(null);
 				setOrderData(null);
 				setOrderItems([]);
 			});
@@ -202,7 +188,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			}}
 		>
 			<div className="content multi">
-				{/* your existing code untouched */}
 				<div className="section left">
 					<TableCard
 						title={__('Order Details', 'multivendorx')}

@@ -1,3 +1,4 @@
+/* global StoreInfo */
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import {
@@ -42,61 +43,6 @@ registerBlockType('multivendorx/store-review', {
 			attributes;
 
 		const blockProps = useBlockProps();
-
-		const StarFilled = () => (
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 20 20"
-				width="20"
-				height="20"
-			>
-				<path
-					d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
-					fill="#f0b849"
-				/>
-			</svg>
-		);
-
-		const StarEmpty = () => (
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 20 20"
-				width="20"
-				height="20"
-			>
-				<path
-					d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
-					fill="#ddd"
-				/>
-			</svg>
-		);
-
-		const reviewData = {
-			avatar: 'B',
-			name: 'Jone',
-			time: '1 day ago',
-			rating: 4,
-			title: 'Great Store',
-			content: 'The quality is excellent and delivery was fast.',
-			images: ['#', '#'],
-			adminReply: 'Thank you for your valuable feedback!',
-		};
-
-		const renderStars = (rating, isEditor = true) => {
-			const stars = [];
-			for (let i = 1; i <= 5; i++) {
-				if (isEditor) {
-					stars.push(
-						i <= rating ? (
-							<StarFilled key={i} />
-						) : (
-							<StarEmpty key={i} />
-						)
-					);
-				}
-			}
-			return stars;
-		};
 
 		return (
 			<>
@@ -175,7 +121,10 @@ registerBlockType('multivendorx/store-review', {
 								<div className="wc-block-review-list-item__meta wc-block-components-review-list-item__meta">
 									<div
 										id="review-1"
-										aria-label="new product Rated 4 out of 5"
+										aria-label={__(
+											'new product Rated 4 out of 5',
+											'multivendorx'
+										)}
 										className="wc-block-review-list-item__rating wc-block-components-review-list-item__rating"
 									>
 										<div
@@ -184,11 +133,11 @@ registerBlockType('multivendorx/store-review', {
 											role="img"
 										>
 											<span style={{ width: '80%' }}>
-												Rated{' '}
+												{__('Rated', 'multivendorx')}{' '}
 												<strong className="rating">
 													4
 												</strong>{' '}
-												out of 5
+												{__('out of 5', 'multivendorx')}
 											</span>
 										</div>
 									</div>
@@ -198,19 +147,19 @@ registerBlockType('multivendorx/store-review', {
 											href="http://localhost:8889/product/new-product/"
 											aria-labelledby="review-1"
 										>
-											new product
+											{__('new product', 'multivendorx')}
 										</a>
 									</div>
 
 									<div className="wc-block-review-list-item__author wc-block-components-review-list-item__author">
-										admin
+										{__('admin', 'multivendorx')}
 									</div>
 
 									<time
 										className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
 										dateTime="2026-03-05T13:47:31"
 									>
-										March 5, 2026
+										{__('March 5, 2026', 'multivendorx')}
 									</time>
 								</div>
 							</div>
@@ -218,7 +167,7 @@ registerBlockType('multivendorx/store-review', {
 							<div className="wc-block-review-list-item__text wc-block-components-review-list-item__text">
 								<div>
 									<div>
-										<p>dd</p>
+										<p>{__('dd', 'multivendorx')}</p>
 									</div>
 								</div>
 							</div>
@@ -241,7 +190,10 @@ registerBlockType('multivendorx/store-review', {
 								<div className="wc-block-review-list-item__meta wc-block-components-review-list-item__meta">
 									<div
 										id="review-2"
-										aria-label="Hat Rated 4 out of 5"
+										aria-label={__(
+											'Hat Rated 4 out of 5',
+											'multivendorx'
+										)}
 										className="wc-block-review-list-item__rating wc-block-components-review-list-item__rating"
 									>
 										<div
@@ -250,11 +202,11 @@ registerBlockType('multivendorx/store-review', {
 											role="img"
 										>
 											<span style={{ width: '80%' }}>
-												Rated{' '}
+												{__('Rated', 'multivendorx')}{' '}
 												<strong className="rating">
 													4
 												</strong>{' '}
-												out of 5
+												{__('out of 5', 'multivendorx')}
 											</span>
 										</div>
 									</div>
@@ -264,19 +216,19 @@ registerBlockType('multivendorx/store-review', {
 											href="http://localhost:8889/product/hat/"
 											aria-labelledby="review-2"
 										>
-											Hat
+											{__('Hat', 'multivendorx')}
 										</a>
 									</div>
 
 									<div className="wc-block-review-list-item__author wc-block-components-review-list-item__author">
-										admin
+										{__('admin', 'multivendorx')}
 									</div>
 
 									<time
 										className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
 										dateTime="2026-03-02T13:52:43"
 									>
-										March 2, 2026
+										{__('March 2, 2026', 'multivendorx')}
 									</time>
 								</div>
 							</div>
@@ -284,7 +236,7 @@ registerBlockType('multivendorx/store-review', {
 							<div className="wc-block-review-list-item__text wc-block-components-review-list-item__text">
 								<div>
 									<div>
-										<p>dgdggdd</p>
+										<p>{__('dgdggdd', 'multivendorx')}</p>
 									</div>
 								</div>
 							</div>
@@ -307,7 +259,10 @@ registerBlockType('multivendorx/store-review', {
 								<div className="wc-block-review-list-item__meta wc-block-components-review-list-item__meta">
 									<div
 										id="review-3"
-										aria-label="T-shirt Rated 5 out of 5"
+										aria-label={__(
+											'T-shirt Rated 5 out of 5',
+											'multivendorx'
+										)}
 										className="wc-block-review-list-item__rating wc-block-components-review-list-item__rating"
 									>
 										<div
@@ -316,30 +271,30 @@ registerBlockType('multivendorx/store-review', {
 											role="img"
 										>
 											<span style={{ width: '100%' }}>
-												Rated{' '}
+												{__('Rated', 'multivendorx')}{' '}
 												<strong className="rating">
 													5
 												</strong>{' '}
-												out of 5
+												{__('out of 5', 'multivendorx')}
 											</span>
 										</div>
 									</div>
 
 									<div className="wc-block-review-list-item__product wc-block-components-review-list-item__product">
 										<a aria-labelledby="review-3">
-											T-shirt
+											{__('T-shirt', 'multivendorx')}
 										</a>
 									</div>
 
 									<div className="wc-block-review-list-item__author wc-block-components-review-list-item__author">
-										johndoe
+										{__('johndoe', 'multivendorx')}
 									</div>
 
 									<time
 										className="wc-block-review-list-item__published-date wc-block-components-review-list-item__published-date"
 										dateTime="2026-03-10T09:15:22"
 									>
-										March 10, 2026
+										{__('March 10, 2026', 'multivendorx')}
 									</time>
 								</div>
 							</div>
@@ -348,9 +303,10 @@ registerBlockType('multivendorx/store-review', {
 								<div>
 									<div>
 										<p>
-											Great quality t-shirt, fits
-											perfectly and the material is super
-											comfortable! Highly recommended.
+											{__(
+												'Great quality t-shirt, fits perfectly and the material is super comfortable! Highly recommended.',
+												'multivendorx'
+											)}
 										</p>
 									</div>
 								</div>

@@ -1,9 +1,10 @@
+/* global StoreInfo */
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { getApiLink } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const StoreQuickInfo: React.FC<{}> = () => {
+const StoreQuickInfo: React.FC<object> = () => {
 	const [rating, setRatings] = useState<number | null>(null);
 	const [ratingCount, setRatingsCount] = useState<number | null>(null);
 	const [totalProducts, setTotalProducts] = useState<number | null>(null);

@@ -1,3 +1,4 @@
+/* global StoreInfo */
 import { __ } from '@wordpress/i18n';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';

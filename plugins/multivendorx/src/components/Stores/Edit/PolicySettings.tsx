@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
 	getApiLink,
@@ -11,8 +11,21 @@ import {
 	NoticeManager,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
+interface StoreData {
+	payment_method?: string;
+	dashboard_access?: string;
+	onboarding_flow?: string;
+	charge_type?: string;
+	commission_fixed?: string | number;
+	commission_percentage?: string | number;
+	[key: string]: string | number | undefined;
+}
 
-const PolicySettings = ({ id, data }: { id: string | null; data: any }) => {
+interface PolicySettingsProps {
+	id: string | null;
+	data: StoreData | null;
+}
+const PolicySettings: React.FC<PolicySettingsProps> = ({ id, data }) => {
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
 
 	useEffect(() => {

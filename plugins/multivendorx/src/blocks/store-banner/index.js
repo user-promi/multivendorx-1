@@ -13,7 +13,7 @@ import {
 	SelectControl,
 	ToggleControl,
 } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch } from '@wordpress/data';
 
 // Template 1: Store Header
 const TEMPLATE_1 = [
@@ -206,9 +206,6 @@ registerBlockType('multivendorx/store-banner', {
 		} = attributes;
 
 		const { replaceInnerBlocks } = useDispatch(blockEditorStore);
-		const { getBlocks } = useSelect((select) => ({
-			getBlocks: select(blockEditorStore).getBlocks,
-		}));
 
 		const bannerImage =
 			'http://localhost:8889/wp-content/plugins/woocommerce/assets/images/pattern-placeholders/table-wood-house-chair-floor-window.jpg';
@@ -579,7 +576,6 @@ registerBlockType('multivendorx/store-banner', {
 			flexDirection: 'column',
 			padding: '40px',
 			color: contentColor,
-			backgroundImage: url(''),
 		};
 
 		return (

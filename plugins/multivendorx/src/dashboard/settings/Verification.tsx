@@ -3,13 +3,26 @@ import { useState, useEffect } from 'react';
 import { getApiLink } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-
+interface ConnectedProfiles {
+	[key: string]: {
+		id?: string;
+		name?: string;
+		email?: string;
+		connected_at?: string;
+		[key: string]: unknown;
+	};
+}
+interface VerificationMethod {
+	active: boolean;
+	label: string;
+	required?: boolean;
+	[key: string]: unknown;
+}
 const Verification = () => {
-	const appLocalizer = (window as any).appLocalizer;
 	const allVerificationMethods = appLocalizer.all_verification_methods;
-	const [connectedProfiles, setConnectedProfiles] = useState<any>({});
+	const [connectedProfiles, setConnectedProfiles] =
+		useState<ConnectedProfiles>({});
 	const [loading, setLoading] = useState<string>('');
-	const [profileLoading, setProfileLoading] = useState<boolean>(true);
 	const [statusMessage, setStatusMessage] = useState<{
 		type: string;
 		text: string;
@@ -23,7 +36,6 @@ const Verification = () => {
 	const checkUrlStatus = () => {
 		const urlParams = new URLSearchParams(window.location.search);
 		const verificationStatus = urlParams.get('social_verification');
-		const provider = urlParams.get('provider');
 		const message = urlParams.get('message');
 
 		if (verificationStatus && message) {
@@ -47,7 +59,6 @@ const Verification = () => {
 
 	const fetchConnectedProfiles = async () => {
 		try {
-			setProfileLoading(true);
 			const response = await axios({
 				method: 'GET',
 				url: getApiLink(appLocalizer, 'store/social-profiles'),
@@ -63,8 +74,6 @@ const Verification = () => {
 			}
 		} catch (error) {
 			console.error('Error fetching connected profiles:', error);
-		} finally {
-			setProfileLoading(false);
 		}
 	};
 
@@ -89,7 +98,7 @@ const Verification = () => {
 					'Failed to connect: ' + (data.message || 'Unknown error')
 				);
 			}
-		} catch (error: any) {
+		} catch (error) {
 			console.error('Error connecting social profile:', error);
 			const errorMessage =
 				error.response?.data?.message ||
@@ -120,7 +129,7 @@ const Verification = () => {
 
 			const data = response.data;
 			if (data.success) {
-				setConnectedProfiles((prev: any) => {
+				setConnectedProfiles((prev) => {
 					const updated = { ...prev };
 					delete updated[provider];
 					return updated;
@@ -131,7 +140,7 @@ const Verification = () => {
 					'Failed to disconnect: ' + (data.message || 'Unknown error')
 				);
 			}
-		} catch (error: any) {
+		} catch (error) {
 			console.error('Error disconnecting social profile:', error);
 			const errorMessage =
 				error.response?.data?.message ||
@@ -269,7 +278,7 @@ const Verification = () => {
 					{allVerificationMethods?.[
 						'id-verification'
 					]?.verification_methods?.map(
-						(method: any, index: number) =>
+						(method: VerificationMethod, index: number) =>
 							method.active && (
 								<div
 									key={index}

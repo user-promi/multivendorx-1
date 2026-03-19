@@ -8,15 +8,54 @@ import {
 	PopupUI,
 	SectionUI,
 	TableCard,
+	TableRow,
 } from 'zyra';
 import axios from 'axios';
 import { formatCurrency } from '../../services/commonFunction';
-import { TableRow } from '@/services/type';
 
 interface ViewCommissionProps {
 	open: boolean;
 	onClose: () => void;
 	commissionId?: number | string | null;
+}
+interface CommissionData {
+	order_id?: number;
+	store_id?: number;
+	status?: string;
+	total?: number;
+	commission_refunded?: number;
+	shipping?: number;
+	tax?: number;
+	shipping_tax_amount?: number;
+	note?: string;
+	[key: string]: unknown;
+}
+interface StoreData {
+	id?: number;
+	name?: string;
+	email?: string;
+	[key: string]: unknown;
+}
+interface OrderData {
+	status?: string;
+	shipping_lines?: Array<{
+		method_title: string;
+		total: string;
+		total_tax: string;
+	}>;
+	line_items?: Array<{
+		name: string;
+		price: string;
+		quantity: number;
+		total?: string;
+		total_tax?: string;
+	}>;
+	[key: string]: unknown;
+}
+interface RefundItem {
+	qty: number;
+	total: string;
+	tax: string;
 }
 
 const ViewCommission: React.FC<ViewCommissionProps> = ({
@@ -24,11 +63,12 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 	onClose,
 	commissionId,
 }) => {
-	const [commissionData, setCommissionData] = useState<any>(null);
-	const [storeData, setStoreData] = useState<any>(null);
-	const [orderData, setOrderData] = useState<any>(null);
+	const [commissionData, setCommissionData] = useState<CommissionData | null>(
+		null
+	);
+	const [storeData, setStoreData] = useState<StoreData | null>(null);
+	const [orderData, setOrderData] = useState<OrderData | null>(null);
 	const [shippingItems, setShippingItems] = useState<TableRow[][]>([]);
-	const [refundMap, setRefundMap] = useState<Record<number, any>>({});
 	const [orderItems, setOrderItems] = useState<TableRow[][]>([]);
 
 	useEffect(() => {
@@ -74,22 +114,19 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							const refunds = refundRes.data || [];
 
 							// map refunds by product_id
-							let refundMap: Record<number, any> = {};
+							let refundMap: Record<number, RefundItem> = {};
 
-							refunds.forEach((refund: any) => {
-								refund.line_items.forEach((item: any) => {
+							refunds.forEach((refund) => {
+								refund.line_items.forEach((item) => {
 									const productId = item.product_id;
 
 									refundMap[productId] = {
-										qty: item.quantity, // negative
+										qty: item.quantity,
 										total: item.total,
 										tax: item.total_tax,
 									};
 								});
 							});
-
-							// store refund map
-							setRefundMap(refundMap);
 						})
 						.catch(() => {});
 
@@ -104,7 +141,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							setOrderData(order);
 							if (Array.isArray(order.shipping_lines)) {
 								const mappedRows = order.shipping_lines.map(
-									(ship: any) => ({
+									(ship) => ({
 										method: ship.method_title,
 										amount: ship.total,
 										tax: ship.total_tax,
@@ -118,7 +155,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 
 							if (Array.isArray(order.line_items)) {
 								const mappedRows = order.line_items.map(
-									(item: any) => {
+									(item) => {
 										const total = parseFloat(
 											item.total || '0'
 										);

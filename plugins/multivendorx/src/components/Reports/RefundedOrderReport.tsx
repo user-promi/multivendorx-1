@@ -19,7 +19,7 @@ const RefundedOrderReport: React.FC = () => {
 				params: { options: true },
 			})
 			.then((response) => {
-				const options = (response.data || []).map((store: any) => ({
+				const options = (response.data || []).map((store) => ({
 					label: store.store_name,
 					value: store.id,
 				}));
@@ -121,7 +121,7 @@ const RefundedOrderReport: React.FC = () => {
 					? response.data
 					: [];
 
-				setRowIds(orders.map((o: any) => o.id));
+				setRowIds(orders.map((order) => order.id));
 
 				setRows(orders);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
@@ -139,7 +139,7 @@ const RefundedOrderReport: React.FC = () => {
 		query: QueryProps,
 		includePagination: boolean = true
 	) => {
-		const params: Record<string, any> = {
+		const params = {
 			search_action: query.searchAction || 'order_id',
 			search_value: query.searchValue,
 			order_by: query.orderby || 'date',

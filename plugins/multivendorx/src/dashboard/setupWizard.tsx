@@ -3,7 +3,22 @@ import React, { useState, useRef } from 'react';
 import 'zyra/build/index.css';
 import { ExpandablePanelUI } from 'zyra';
 import { __ } from '@wordpress/i18n';
-// import img from '../../assets/images/multivendorx-logo.png';
+
+interface WizardData {
+	marketplace_setup: {
+		store_selling_mode: string;
+		[key: string]: unknown;
+	};
+	commission_setup: {
+		disbursement_order_status: string[];
+		[key: string]: unknown;
+	};
+	store_setup: {
+		approve_store: string;
+		[key: string]: unknown;
+	};
+	[key: string]: unknown;
+}
 
 const SetupWizard: React.FC = () => {
 	// Required state for ExpandablePanel
@@ -19,8 +34,6 @@ const SetupWizard: React.FC = () => {
 		},
 	});
 	const settingChanged = useRef(false);
-
-	const appLocalizer = window.appLocalizer;
 
 	const inputField = {
 		key: 'setup_wizard',
@@ -374,11 +387,9 @@ const SetupWizard: React.FC = () => {
 		},
 	];
 
-	const updateSetting = (key: string, data: any) => {
+	const updateSetting = (key: string, data: WizardData) => {
 		setValue(data);
 	};
-
-	const hasAccess = () => true;
 
 	return (
 		<div className="wizard-container">
@@ -404,7 +415,7 @@ const SetupWizard: React.FC = () => {
 					appLocalizer={appLocalizer}
 					methods={methods}
 					value={value}
-					onChange={(data: any) => {
+					onChange={(data) => {
 						settingChanged.current = true;
 						updateSetting(inputField.key, data);
 					}}

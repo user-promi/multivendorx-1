@@ -17,12 +17,30 @@ import {
 	NoticeManager,
 } from 'zyra';
 import { formatCurrency } from '../services/commonFunction';
+interface WithdrawalData {
+	available_balance?: number;
+	locking_balance?: number;
+	thresold?: number;
+	payment_schedules?: string;
+	free_withdrawal?: number;
+	withdrawal_setting?: Array<{
+		withdrawal_percentage?: number;
+		withdrawal_fixed?: number;
+		free_withdrawals?: number;
+	}>;
+}
 
+interface WithdrawalItem {
+	id: number;
+	amount: number;
+	date: string;
+	payment_method: string;
+}
 const Withdrawls: React.FC = () => {
-	const [data, setData] = useState<any>([]);
+	const [data, setData] = useState<WithdrawalData>([]);
 	const [amount, setAmount] = useState<number>();
 	const [error, setError] = useState<string>('');
-	const [lastWithdraws, setLastWithdraws] = useState<any>([]);
+	const [lastWithdraws, setLastWithdraws] = useState<WithdrawalItem[]>([]);
 
 	const [requestWithdrawal, setRequestWithdrawal] = useState(false);
 
@@ -117,7 +135,7 @@ const Withdrawls: React.FC = () => {
 				<Column grid={6}>
 					<Card title={__('Last Withdrawal', 'multivendorx')}>
 						{lastWithdraws && lastWithdraws.length > 0 ? (
-							lastWithdraws.map((item: any) => (
+							lastWithdraws.map((item: WithdrawalItem) => (
 								<div
 									className="last-withdradal-wrapper"
 									key={item.id}

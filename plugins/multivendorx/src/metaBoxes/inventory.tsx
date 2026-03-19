@@ -8,7 +8,7 @@ import {
 	FormGroupWrapper,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Inventory = ({ product, setProduct, handleChange }) => {
 	const stockStatusOptions = [
 		{ value: '', label: 'Stock Status' },

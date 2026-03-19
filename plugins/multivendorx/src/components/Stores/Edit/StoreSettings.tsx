@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
 	getApiLink,
@@ -19,20 +19,108 @@ import {
 import { useLocation } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 
-interface FormData {
+// Define proper interfaces
+interface PhoneData {
+	country_code: string;
+	phone: string;
+}
+
+interface AddressData {
+	location_lat: string;
+	location_lng: string;
+	address: string;
+	city: string;
+	state: string;
+	country: string;
+	zip: string;
+	timezone: string;
+}
+
+interface FormData extends Partial<AddressData> {
+	primary_email?: string;
+	emails?: string[];
+	slug?: string;
+	status?: string;
+	country_code?: string;
+	phone?: string;
+	facebook?: string;
+	twitter?: string;
+	linkedin?: string;
+	youtube?: string;
+	instagram?: string;
+	pinterest?: string;
+	[key: string]: string | string[] | undefined;
+}
+
+interface StoreData {
+	emails?: string[];
+	primary_email?: string;
+	phone?: PhoneData;
+	location_lat?: string;
+	location_lng?: string;
+	address?: string;
+	city?: string;
+	state?: string;
+	country?: string;
+	zip?: string;
+	timezone?: string;
+	status?: string;
+	slug?: string;
+	facebook?: string;
+	twitter?: string;
+	linkedin?: string;
+	youtube?: string;
+	instagram?: string;
+	pinterest?: string;
+	[key: string]: string | string[] | PhoneData | undefined;
+}
+
+interface MapConfig {
+	provider: string | null;
+	apiKey: string;
+}
+
+interface ErrorMessages {
 	[key: string]: string;
 }
 
-const StoreSettings = ({
+interface StateOption {
+	label: string;
+	value: string;
+}
+
+interface LocationData {
+	address?: string;
+	city?: string;
+	state?: string;
+	country?: string;
+	zip?: string;
+	location_lat?: string;
+	location_lng?: string;
+	timezone?: string;
+	[key: string]: string | undefined;
+}
+
+interface StoreSettingsProps {
+	id: string | null;
+	data: StoreData | null;
+	onUpdate: (data: Record<string, string>) => void;
+}
+
+const StoreSettings: React.FC<StoreSettingsProps> = ({
 	id,
 	data,
 	onUpdate,
-}: {
-	id: string | null;
-	data: any;
-	onUpdate: any;
 }) => {
 	const [formData, setFormData] = useState<FormData>({});
+	const [stateOptions, setStateOptions] = useState<StateOption[]>([]);
+	const [errorMsg, setErrorMsg] = useState<ErrorMessages>({});
+	const [mapConfig, setMapConfig] = useState<MapConfig>({
+		provider: null,
+		apiKey: '',
+	});
+	const [newAddress, setNewAddress] = useState<LocationData | null>(null);
+
 	const statusOptions = [
 		{ label: __('Under Review', 'multivendorx'), value: 'under_review' },
 		{ label: __('Suspended', 'multivendorx'), value: 'suspended' },
@@ -43,21 +131,19 @@ const StoreSettings = ({
 		},
 	];
 
-	const [stateOptions, setStateOptions] = useState<
-		{ label: string; value: string }[]
-	>([]);
-	const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({});
-
-	// Map states - simplified
-	const [mapConfig, setMapConfig] = useState<{
-		provider: string | null;
-		apiKey: string;
-	}>({ provider: 'null', apiKey: '' });
-
-	const appLocalizer = (window as any).appLocalizer;
 	const { modules } = useModules();
 	const settings = appLocalizer.settings_databases_value;
-	const [newAddress, setNewAddress] = useState<any>(null);
+
+	const [addressData, setAddressData] = useState<AddressData>({
+		location_lat: '',
+		location_lng: '',
+		address: '',
+		city: '',
+		state: '',
+		country: '',
+		zip: '',
+		timezone: '',
+	});
 
 	useEffect(() => {
 		if (!newAddress) {
@@ -69,7 +155,7 @@ const StoreSettings = ({
 
 		const foundState = stateOptions.find(
 			(item) =>
-				item.label.split(' ')[0] === newAddress.state.split(' ')[0] ||
+				item.label.split(' ')[0] === newAddress.state?.split(' ')[0] ||
 				item.value === newAddress.state
 		);
 
@@ -80,29 +166,7 @@ const StoreSettings = ({
 
 		applyLocation(resolvedLocation);
 		setNewAddress(null);
-	}, [stateOptions]);
-
-	// === SAVE FUNCTION ===
-	const saveEmails = (emailList: string[], primary: string) => {
-		const updated = {
-			...formData,
-			primary_email: primary,
-			emails: emailList,
-		};
-		setFormData(updated);
-		autoSave(updated);
-	};
-
-	const [addressData, setAddressData] = useState({
-		location_lat: '',
-		location_lng: '',
-		address: '',
-		city: '',
-		state: '',
-		country: '',
-		zip: '',
-		timezone: '',
-	});
+	}, [stateOptions, newAddress]);
 
 	// Load map configuration
 	useEffect(() => {
@@ -121,12 +185,10 @@ const StoreSettings = ({
 
 	// Load store data
 	useEffect(() => {
-		if (!id || !appLocalizer) {
-			console.error('Missing store ID or appLocalizer');
+		if (!id || !appLocalizer || !data) {
 			return;
 		}
 
-		// Set all form data
 		setFormData((prev) => ({
 			...prev,
 			...data,
@@ -134,7 +196,6 @@ const StoreSettings = ({
 			phone: data.phone?.phone || '',
 		}));
 
-		// Set address-specific data
 		setAddressData({
 			location_lat: data.location_lat || '',
 			location_lng: data.location_lng || '',
@@ -145,7 +206,7 @@ const StoreSettings = ({
 			zip: data.zip || '',
 			timezone: data.timezone || '',
 		});
-	}, [data]);
+	}, [data, id]);
 
 	useEffect(() => {
 		if (formData.country) {
@@ -156,7 +217,8 @@ const StoreSettings = ({
 	const location = useLocation();
 
 	useEffect(() => {
-		const highlightId = location.state?.highlightTarget;
+		const highlightId = (location.state as { highlightTarget?: string })
+			?.highlightTarget;
 		if (highlightId) {
 			const target = document.getElementById(highlightId);
 
@@ -174,7 +236,18 @@ const StoreSettings = ({
 		}
 	}, [location.state]);
 
-	const handleAddressChange = (name: string, value: string) => {
+	// === SAVE FUNCTION ===
+	const saveEmails = (emailList: string[], primary: string) => {
+		const updated = {
+			...formData,
+			primary_email: primary,
+			emails: emailList,
+		};
+		setFormData(updated);
+		autoSave(updated);
+	};
+
+	const handleAddressChange = (name: keyof AddressData, value: string) => {
 		const newAddressData = {
 			...addressData,
 			[name]: value,
@@ -182,7 +255,6 @@ const StoreSettings = ({
 
 		setAddressData(newAddressData);
 
-		// Also update formData to maintain consistency
 		const updatedFormData = {
 			...formData,
 			[name]: value,
@@ -192,7 +264,7 @@ const StoreSettings = ({
 		autoSave(updatedFormData);
 	};
 
-	const applyLocation = (locationData: any) => {
+	const applyLocation = (locationData: LocationData) => {
 		setAddressData((prev) => ({ ...prev, ...locationData }));
 
 		const updatedFormData = { ...formData, ...locationData };
@@ -200,18 +272,16 @@ const StoreSettings = ({
 		autoSave(updatedFormData);
 	};
 
-	const handleLocationUpdate = (locationData: any) => {
+	const handleLocationUpdate = (locationData: LocationData) => {
 		setNewAddress(locationData);
 
-		// ensure states are loading
 		if (locationData.country) {
 			fetchStatesByCountry(locationData.country);
 		}
 	};
 
-	// Handle country select change
-	const handleCountryChange = (value: string) => {
-		if (!value) {
+	const handleCountryChange = (value: string | string[]) => {
+		if (!value || Array.isArray(value)) {
 			return;
 		}
 
@@ -226,9 +296,8 @@ const StoreSettings = ({
 		fetchStatesByCountry(value);
 	};
 
-	// Handle state select change
-	const handleStateChange = (value: string) => {
-		if (!value) {
+	const handleStateChange = (value: string | string[]) => {
+		if (!value || Array.isArray(value)) {
 			return;
 		}
 
@@ -251,9 +320,9 @@ const StoreSettings = ({
 		});
 	};
 
-	const checkSlugExists = async (slug: string) => {
+	const checkSlugExists = async (slug: string): Promise<boolean> => {
 		try {
-			const response = await axios.get(
+			const response = await axios.get<{ exists: boolean }>(
 				getApiLink(appLocalizer, 'store'),
 				{
 					params: {
@@ -265,6 +334,7 @@ const StoreSettings = ({
 			);
 			return response.data.exists;
 		} catch (err) {
+			console.error(err);
 			return false;
 		}
 	};
@@ -316,11 +386,11 @@ const StoreSettings = ({
 
 		if (name === 'phone' || name === 'country_code') {
 			const phoneData = {
-				country_code: updated.country_code,
-				phone: updated.phone,
+				country_code: updated.country_code || '',
+				phone: updated.phone || '',
 			};
 
-			const isValidPhone = /^[0-9]{6,15}$/.test(updated.phone);
+			const isValidPhone = /^[0-9]{6,15}$/.test(updated.phone || '');
 
 			if (isValidPhone || updated.phone === '') {
 				autoSave({ phone: phoneData });
@@ -338,7 +408,7 @@ const StoreSettings = ({
 		autoSave(updated);
 	};
 
-	const autoSave = (updatedData: any) => {
+	const autoSave = (updatedData: Record<string, unknown>) => {
 		if (!id) {
 			return;
 		}
@@ -349,7 +419,7 @@ const StoreSettings = ({
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		})
-			.then((res) => {
+			.then(() => {
 				NoticeManager.add({
 					title: __('Success', 'multivendorx'),
 					message: __('Store saved successfully!', 'multivendorx'),
@@ -362,7 +432,6 @@ const StoreSettings = ({
 			});
 	};
 
-	// Render map component using the merged provider
 	const renderMapComponent = () => {
 		if (
 			!modules.includes('geo-location') ||
@@ -421,8 +490,8 @@ const StoreSettings = ({
 								}
 							>
 								<EmailsInput
-									value={[data.emails]}
-									primary={data.primary_email}
+									value={data?.emails ? [data.emails] : []}
+									primary={data?.primary_email || ''}
 									enablePrimary={true}
 									onChange={(list, primary) =>
 										saveEmails(list, primary)
@@ -434,16 +503,19 @@ const StoreSettings = ({
 								<SelectInputUI
 									type="single-select"
 									name="country_code"
-									value={formData.country_code}
+									value={formData.country_code || ''}
 									options={CountryCodes}
 									onChange={(selected) =>
-										handleChange('country_code', selected)
+										handleChange(
+											'country_code',
+											selected as string
+										)
 									}
 								/>
 								<BasicInputUI
 									name="phone"
 									type="number"
-									value={formData.phone}
+									value={formData.phone || ''}
 									onChange={(value) =>
 										handleChange('phone', value)
 									}
@@ -518,7 +590,7 @@ const StoreSettings = ({
 							>
 								<SelectInputUI
 									name="country"
-									value={formData.country}
+									value={formData.country || ''}
 									options={appLocalizer.country_list || []}
 									onChange={handleCountryChange}
 								/>
@@ -530,7 +602,7 @@ const StoreSettings = ({
 							>
 								<SelectInputUI
 									name="state"
-									value={formData.state}
+									value={formData.state || ''}
 									options={stateOptions}
 									onChange={handleStateChange}
 								/>
@@ -563,20 +635,17 @@ const StoreSettings = ({
 							>
 								<SelectInputUI
 									name="status"
-									value={formData.status}
+									value={formData.status || ''}
 									options={statusOptions}
-									onChange={(newValue: any) => {
-										if (
-											!newValue ||
-											Array.isArray(newValue)
-										) {
+									onChange={(value) => {
+										if (!value || Array.isArray(value)) {
 											return;
 										}
 										const updated = {
 											...formData,
-											status: newValue,
+											status: value,
 										};
-										onUpdate({ status: newValue });
+										onUpdate({ status: value });
 										setFormData(updated);
 										autoSave(updated);
 									}}
@@ -598,7 +667,7 @@ const StoreSettings = ({
 							>
 								<BasicInputUI
 									name="slug"
-									value={formData.slug}
+									value={formData.slug || ''}
 									onChange={(val) =>
 										handleChange('slug', val)
 									}
@@ -609,9 +678,9 @@ const StoreSettings = ({
 										className="link-item"
 										target="_blank"
 										rel="noopener noreferrer"
-										href={`${appLocalizer.store_page_url}${formData.slug}`}
+										href={`${appLocalizer.store_page_url}${formData.slug || ''}`}
 									>
-										{`${appLocalizer.store_page_url}${formData.slug}`}{' '}
+										{`${appLocalizer.store_page_url}${formData.slug || ''}`}{' '}
 										<i className="adminfont-external"></i>
 									</a>
 								</div>
@@ -626,14 +695,16 @@ const StoreSettings = ({
 
 					{/* Social Information */}
 					<Card title={__('Social information', 'multivendorx')}>
-						{[
-							'facebook',
-							'twitter',
-							'linkedin',
-							'youtube',
-							'instagram',
-							'pinterest',
-						].map((network) => {
+						{(
+							[
+								'facebook',
+								'twitter',
+								'linkedin',
+								'youtube',
+								'instagram',
+								'pinterest',
+							] as const
+						).map((network) => {
 							const iconClass = `${network} ${network}`;
 							const defaultUrl = `https://${network === 'twitter' ? 'x' : network}.com/`;
 

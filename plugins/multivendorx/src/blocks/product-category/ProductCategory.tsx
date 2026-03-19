@@ -1,3 +1,4 @@
+/* global StoreInfo */
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
@@ -7,7 +8,7 @@ interface Category {
 	name: string;
 }
 
-const ProductCategory: React.FC<{}> = () => {
+const ProductCategory: React.FC<object> = () => {
 	const [categories, setCategories] = useState<Category[]>([]);
 
 	useEffect(() => {
@@ -20,14 +21,12 @@ const ProductCategory: React.FC<{}> = () => {
 					}
 				);
 
-				const allCategories: Category[] = response.data.map(
-					(cat: any) => ({
-						id: cat.id,
-						name: cat.name,
-						slug: cat.slug,
-						count: cat.count,
-					})
-				);
+				const allCategories: Category[] = response.data.map((cat) => ({
+					id: cat.id,
+					name: cat.name,
+					slug: cat.slug,
+					count: cat.count,
+				}));
 
 				setCategories(allCategories);
 			} catch (err) {

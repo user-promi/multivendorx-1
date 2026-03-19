@@ -15,18 +15,29 @@ import { __ } from '@wordpress/i18n';
 
 declare global {
 	interface Window {
-		google: any;
-		mapboxgl: any;
-		MapboxGeocoder: any;
+		google: Record<string, unknown>;
+		mapboxgl: Record<string, unknown>;
+		MapboxGeocoder: Record<string, unknown>;
 	}
 }
 
 interface FormData {
 	[key: string]: string;
 }
+interface LocationData {
+	address?: string;
+	city?: string;
+	state?: string;
+	country?: string;
+	zip?: string;
+	location_lat?: string;
+	location_lng?: string;
+	timezone?: string;
+	[key: string]: string | undefined;
+}
 
 const BusinessAddress = () => {
-	const id = (window as any).appLocalizer?.store_id;
+	const id = appLocalizer?.store_id;
 	const [formData, setFormData] = useState<FormData>({});
 	const [successMsg, setSuccessMsg] = useState<string | null>(null);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -37,7 +48,6 @@ const BusinessAddress = () => {
 	const [stateOptions, setStateOptions] = useState<
 		{ label: string; value: string }[]
 	>([]);
-	const appLocalizer = (window as any).appLocalizer;
 	const settings = appLocalizer.settings_databases_value;
 
 	const [addressData, setAddressData] = useState({
@@ -52,7 +62,7 @@ const BusinessAddress = () => {
 	});
 	const { modules } = useModules();
 
-	const [newAddress, setNewAddress] = useState<any>(null);
+	const [newAddress, setNewAddress] = useState<LocationData | null>(null);
 
 	useEffect(() => {
 		if (!newAddress || !stateOptions.length) {
@@ -74,7 +84,7 @@ const BusinessAddress = () => {
 		setNewAddress(null);
 	}, [stateOptions]);
 
-	const applyLocation = (locationData: any) => {
+	const applyLocation = (locationData: LocationData) => {
 		setAddressData((prev) => ({ ...prev, ...locationData }));
 
 		const updatedFormData = { ...formData, ...locationData };
@@ -82,7 +92,7 @@ const BusinessAddress = () => {
 		autoSave(updatedFormData);
 	};
 
-	const handleLocationUpdate = (locationData: any) => {
+	const handleLocationUpdate = (locationData: LocationData) => {
 		setNewAddress(locationData);
 
 		// ensure states are loading
@@ -146,7 +156,7 @@ const BusinessAddress = () => {
 				if (data.country) {
 					fetchStatesByCountry(data.country);
 				}
-			} catch (error: any) {
+			} catch (error) {
 				console.error('Error loading store data:', error);
 				setErrorMsg('Failed to load store data');
 				// Initialize with empty structure
@@ -208,7 +218,7 @@ const BusinessAddress = () => {
 	};
 
 	// Then update your autoSave function:
-	const autoSave = (updatedData: any) => {
+	const autoSave = (updatedData: Record<string, unknown>) => {
 		if (
 			!settings['store-permissions']?.edit_store_info_activation ||
 			[].includes('store_address')

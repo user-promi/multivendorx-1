@@ -14,7 +14,15 @@ interface ShippingCountryRate {
 	cost: string;
 	states: ShippingStateRate[];
 }
-
+interface CountryItem {
+	label?:
+		| {
+				label?: string;
+				value?: string;
+		  }
+		| string;
+	value?: string;
+}
 const ShippingRatesByCountry: React.FC = () => {
 	const [rates, setRates] = useState<ShippingCountryRate[]>([]);
 	const [loading, setLoading] = useState(false);
@@ -52,7 +60,7 @@ const ShippingRatesByCountry: React.FC = () => {
 				}
 
 				setRates(
-					shippingRates.map((r: any) => ({
+					shippingRates.map((r: ShippingCountryRate) => ({
 						country: r.country || '',
 						cost: r.cost || '',
 						states: Array.isArray(r.states) ? r.states : [],
@@ -90,7 +98,7 @@ const ShippingRatesByCountry: React.FC = () => {
 
 	/** FIX COUNTRY OPTIONS */
 	const countryOptions = Array.isArray(countries)
-		? countries.map((item: any) => ({
+		? countries.map((item: CountryItem) => ({
 				label: item.label?.label || item.label,
 				value: item.label?.value || item.value,
 			}))
@@ -153,7 +161,7 @@ const ShippingRatesByCountry: React.FC = () => {
 				template={countryTemplate}
 				value={rates}
 				addLabel={__('Add Country', 'multivendorx')}
-				onChange={(updatedCountries: any) => {
+				onChange={(updatedCountries: ShippingCountryRate[]) => {
 					const fixed = updatedCountries.map((r) => ({
 						...r,
 						states: r.states || [],
@@ -162,7 +170,7 @@ const ShippingRatesByCountry: React.FC = () => {
 				}}
 				/** Render nested states inside the country row */
 				childrenRenderer={(
-					countryRow: { country: string; states: unknown },
+					countryRow: ShippingCountryRate,
 					countryIndex: string | number
 				) => {
 					const code = countryRow.country?.toUpperCase() || '';
@@ -201,7 +209,9 @@ const ShippingRatesByCountry: React.FC = () => {
 									'Add State/Region',
 									'multivendorx'
 								)}
-								onChange={(updatedStates: any) => {
+								onChange={(
+									updatedStates: ShippingStateRate[]
+								) => {
 									const clone = [...rates];
 									clone[countryIndex].states = updatedStates;
 									autoSave(clone);

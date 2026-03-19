@@ -14,11 +14,14 @@ import {
 	ConnectComponentsProvider,
 	ConnectAccountOnboarding,
 } from '@stripe/react-connect-js';
-import { loadConnectAndInitialize } from '@stripe/connect-js';
+import {
+	loadConnectAndInitialize,
+	StripeConnectInstance,
+} from '@stripe/connect-js';
 
 interface PaymentField {
-	publish: any;
-	client_secret: any;
+	publish: string;
+	client_secret: string;
 	key: number;
 	action: string;
 	html: string | TrustedHTML;
@@ -46,6 +49,7 @@ const Withdrawl: React.FC = () => {
 		(appLocalizer.store_payment_settings as StorePaymentConfig) || {};
 
 	const filteredStorePayment = Object.fromEntries(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		Object.entries(storePayment).filter(([_, value]) => value !== null)
 	);
 
@@ -73,7 +77,7 @@ const Withdrawl: React.FC = () => {
 	}, [appLocalizer.store_id]);
 
 	const [stripeConnectInstance, setStripeConnectInstance] =
-		useState<any>(null);
+		useState<StripeConnectInstance | null>(null);
 
 	useEffect(() => {
 		if (!containerRef.current || !selectedProvider?.fields) {

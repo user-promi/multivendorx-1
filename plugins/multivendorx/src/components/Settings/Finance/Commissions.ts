@@ -32,8 +32,6 @@ const gatewayFields = gatewayList.flatMap((gateway) => [
 	},
 ]);
 
-const taxes_enabled = appLocalizer.taxes_enabled;
-
 const nestedFields = [
 	{
 		key: 'default_fixed',

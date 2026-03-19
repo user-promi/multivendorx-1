@@ -3,7 +3,10 @@ import {
 	ConnectComponentsProvider,
 	ConnectAccountOnboarding,
 } from '@stripe/react-connect-js';
-import { loadConnectAndInitialize } from '@stripe/connect-js';
+import {
+	loadConnectAndInitialize,
+	StripeConnectInstance,
+} from '@stripe/connect-js';
 
 interface Props {
 	publishableKey: string;
@@ -16,7 +19,9 @@ const StripeEmbeddedOnboarding: React.FC<Props> = ({
 	clientSecret,
 	onComplete,
 }) => {
-	const [instance, setInstance] = useState<any>(null);
+	const [instance, setInstance] = useState<StripeConnectInstance | null>(
+		null
+	);
 
 	useEffect(() => {
 		if (!publishableKey || !clientSecret) {

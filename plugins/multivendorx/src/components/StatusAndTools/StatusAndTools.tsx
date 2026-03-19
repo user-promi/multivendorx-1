@@ -16,18 +16,12 @@ import {
 import ShowProPopup from '../Popup/Popup';
 import { useLocation, Link } from 'react-router-dom';
 
-// Types
-type SettingItem = Record<string, any>;
-
 interface SettingsProps {
 	id: string;
 }
 
 const StatusAndTools: React.FC<SettingsProps> = () => {
-	const settingsArray: SettingItem[] = getAvailableSettings(
-		getTemplateData('tools'),
-		[]
-	);
+	const settingsArray = getAvailableSettings(getTemplateData('tools'), []);
 	const location = new URLSearchParams(useLocation().hash.substring(1));
 
 	// Render the dynamic form
@@ -40,8 +34,8 @@ const StatusAndTools: React.FC<SettingsProps> = () => {
 		if (!currentTab) {
 			return null;
 		}
-		const settingModal = getSettingById(settingsArray as any, currentTab);
-		const [storeTabSetting, setStoreTabSetting] = React.useState<any>(null);
+		const settingModal = getSettingById(settingsArray, currentTab);
+		const [storeTabSetting, setStoreTabSetting] = React.useState(null);
 
 		// Ensure settings context is initialized
 		if (settingName !== currentTab) {
@@ -51,7 +45,6 @@ const StatusAndTools: React.FC<SettingsProps> = () => {
 			);
 		}
 
-		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useEffect(() => {
 			if (settingName === currentTab) {
 				appLocalizer.settings_databases_value[settingName] = setting;
@@ -105,7 +98,7 @@ const StatusAndTools: React.FC<SettingsProps> = () => {
 						storeTabSetting={storeTabSetting}
 					/>
 				) : (
-					<>Loading...</>
+					<>{__('Loading...', 'multivendorx')}</>
 				)}
 			</>
 		);
@@ -114,7 +107,7 @@ const StatusAndTools: React.FC<SettingsProps> = () => {
 	return (
 		<SettingProvider>
 			<SettingsNavigator
-				settingContent={settingsArray as any}
+				settingContent={settingsArray}
 				currentSetting={location.get('subtab') as string}
 				getForm={GetForm}
 				prepareUrl={(subTab: string) =>

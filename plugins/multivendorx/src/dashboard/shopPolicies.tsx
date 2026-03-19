@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
 	getApiLink,
@@ -17,9 +17,6 @@ import { __ } from '@wordpress/i18n';
 const ShopPolicies = () => {
 	const id = appLocalizer.store_id;
 	const [formData, setFormData] = useState<{ [key: string]: string }>({});
-	const [stateOptions, setStateOptions] = useState<
-		{ label: string; value: string }[]
-	>([]);
 
 	useEffect(() => {
 		if (!id) {
@@ -35,22 +32,6 @@ const ShopPolicies = () => {
 			setFormData((prev) => ({ ...prev, ...data }));
 		});
 	}, [id]);
-
-	useEffect(() => {
-		if (formData.country) {
-			fetchStatesByCountry(formData.country);
-		}
-	}, [formData.country]);
-
-	const fetchStatesByCountry = (countryCode: string) => {
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, `states/${countryCode}`),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		}).then((res) => {
-			setStateOptions(res.data || []);
-		});
-	};
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

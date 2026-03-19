@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	TableRow,
 	ButtonInputUI,
@@ -22,6 +22,15 @@ import axios from 'axios';
 import { formatCurrency, dashNavigate } from '@/services/commonFunction';
 import { __ } from '@wordpress/i18n';
 import { useNavigate } from 'react-router-dom';
+interface AddressData {
+	address_1?: string;
+	address_2?: string;
+	city?: string;
+	postcode?: string;
+	state?: string;
+	country?: string;
+	[key: string]: string | undefined;
+}
 
 const AddOrder = () => {
 	const [rowIds, setRowIds] = useState<number[]>([]);
@@ -120,10 +129,12 @@ const AddOrder = () => {
 
 	const customerOptions = [
 		{ label: 'Choose customer...', value: '' },
-		...customers?.map((c) => ({
-			label: `${c.first_name} ${c.last_name}`.trim() || c.email,
-			value: c.id,
-		})),
+		...(customers
+			? customers.map((c) => ({
+					label: `${c.first_name} ${c.last_name}`.trim() || c.email,
+					value: c.id,
+				}))
+			: []),
 	];
 
 	useEffect(() => {
@@ -210,7 +221,7 @@ const AddOrder = () => {
 			})
 			.then((res) => {
 				const taxes = Array.isArray(res.data) ? res.data : [];
-				const ids = taxes.map((tax: any) => {
+				const ids = taxes.map((tax) => {
 					return tax.id;
 				});
 
@@ -286,7 +297,7 @@ const AddOrder = () => {
 			.post(`${appLocalizer.apiUrl}/wc/v3/orders`, orderData, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
-			.then((res) => {
+			.then(() => {
 				dashNavigate(navigate, ['orders']);
 			});
 	};
@@ -572,10 +583,10 @@ const AddOrder = () => {
 	// billing & shipping common card
 	const renderAddressCard = (
 		title: string,
-		address: any,
+		address: AddressData,
 		isEditMode: boolean,
 		setIsEditMode: (value: boolean) => void,
-		editRef: any,
+		editRef: React.RefObject<HTMLDivElement | null>,
 		type: 'billing' | 'shipping'
 	) => {
 		const hasCustomer = !!selectedCustomer;
@@ -626,18 +637,22 @@ const AddOrder = () => {
 							>
 								<BasicInputUI
 									name={`${type}_address_1`}
-									value={address.address_1}
-									onChange={(value) => {
+									value={address.address_1 || ''}
+									onChange={(value: string) => {
 										if (type === 'billing') {
-											setBillingAddress((prev) => ({
-												...prev,
-												address_1: value,
-											}));
+											setBillingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													address_1: value,
+												})
+											);
 										} else {
-											setShippingAddress((prev) => ({
-												...prev,
-												address_1: value,
-											}));
+											setShippingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													address_1: value,
+												})
+											);
 										}
 									}}
 								/>
@@ -651,17 +666,21 @@ const AddOrder = () => {
 								<BasicInputUI
 									name={`${type}_city`}
 									value={address.city || ''}
-									onChange={(value) => {
+									onChange={(value: string) => {
 										if (type === 'billing') {
-											setBillingAddress((prev) => ({
-												...prev,
-												city: value,
-											}));
+											setBillingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													city: value,
+												})
+											);
 										} else {
-											setShippingAddress((prev) => ({
-												...prev,
-												city: value,
-											}));
+											setShippingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													city: value,
+												})
+											);
 										}
 									}}
 								/>
@@ -675,17 +694,21 @@ const AddOrder = () => {
 								<BasicInputUI
 									name={`${type}_postcode`}
 									value={address.postcode || ''}
-									onChange={(value) => {
+									onChange={(value: string) => {
 										if (type === 'billing') {
-											setBillingAddress((prev) => ({
-												...prev,
-												postcode: value,
-											}));
+											setBillingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													postcode: value,
+												})
+											);
 										} else {
-											setShippingAddress((prev) => ({
-												...prev,
-												postcode: value,
-											}));
+											setShippingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													postcode: value,
+												})
+											);
 										}
 									}}
 								/>
@@ -701,17 +724,21 @@ const AddOrder = () => {
 									type="single-select"
 									value={address.country}
 									options={appLocalizer.country_list || []}
-									onChange={(selected) => {
+									onChange={(selected: string) => {
 										if (type === 'billing') {
-											setBillingAddress((prev) => ({
-												...prev,
-												country: selected,
-											}));
+											setBillingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													country: selected,
+												})
+											);
 										} else {
-											setShippingAddress((prev) => ({
-												...prev,
-												country: selected,
-											}));
+											setShippingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													country: selected,
+												})
+											);
 										}
 										fetchStatesByCountry(selected);
 									}}
@@ -728,17 +755,21 @@ const AddOrder = () => {
 									type="single-select"
 									value={address.state}
 									options={stateOptions}
-									onChange={(selected) => {
+									onChange={(selected: string) => {
 										if (type === 'billing') {
-											setBillingAddress((prev) => ({
-												...prev,
-												state: selected,
-											}));
+											setBillingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													state: selected,
+												})
+											);
 										} else {
-											setShippingAddress((prev) => ({
-												...prev,
-												state: selected,
-											}));
+											setShippingAddress(
+												(prev: AddressData) => ({
+													...prev,
+													state: selected,
+												})
+											);
 										}
 									}}
 								/>

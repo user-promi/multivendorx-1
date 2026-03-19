@@ -30,8 +30,31 @@ import {
 	toWcIsoDate,
 } from '../../services/commonFunction';
 import Counter from '@/services/Counter';
-
 type ToggleState = { [key: string]: boolean };
+
+interface Product {
+	id: number;
+	name: string;
+	price: string;
+	total_sales: string;
+	average_rating: string;
+	categories?: Array<{ id: number; name: string }>;
+	images?: Array<{ src: string }>;
+	price_html?: string;
+	description?: string;
+	stock_status?: string;
+	store_name?: string;
+	date_created?: string;
+}
+interface ChartDataItem {
+	name: string;
+	net_sales: number;
+	items_sold: number;
+}
+interface Category {
+	id: number;
+	name: string;
+}
 
 const ProductReport: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -40,10 +63,10 @@ const ProductReport: React.FC = () => {
 	const [store, setStore] = useState([]);
 
 	const [error, setError] = useState<string | null>(null);
-	const [toReviewedProduct, setToReviewedProduct] = useState<any[]>([]);
-	const [toSellingProduct, setToSellingProduct] = useState<any[]>([]);
+	const [toReviewedProduct, setToReviewedProduct] = useState<Product[]>([]);
+	const [toSellingProduct, setToSellingProduct] = useState<Product[]>([]);
 	const [openReviewedCards, setOpenReviewedCards] = useState<ToggleState>({});
-	const [chartData, setChartData] = useState<any[]>([]);
+	const [chartData, setChartData] = useState<ChartDataItem[]>([]);
 	const [inStockCount, setInStockCount] = useState(0);
 	const [outOfStockCount, setOutOfStockCount] = useState(0);
 	const [onBackorderCount, setOnBackorderCount] = useState(0);
@@ -67,12 +90,10 @@ const ProductReport: React.FC = () => {
 						params: { options: true },
 					})
 					.then((response) => {
-						const options = (response.data || []).map(
-							(store: any) => ({
-								label: store.store_name,
-								value: store.id,
-							})
-						);
+						const options = (response.data || []).map((store) => ({
+							label: store.store_name,
+							value: store.id,
+						}));
 
 						setStore(options);
 						setIsDashboardLoading(false);
@@ -93,13 +114,16 @@ const ProductReport: React.FC = () => {
 					.then((response) => {
 						const products = response.data || [];
 						const data = products
-							.filter((p: any) => Number(p.total_sales) > 0)
-							.map((p: any) => ({
-								name: p.name,
+							.filter(
+								(product: Product) =>
+									Number(product.total_sales) > 0
+							)
+							.map((product: Product) => ({
+								name: product.name,
 								net_sales:
-									parseFloat(p.price || 0) *
-									parseInt(p.total_sales || 0),
-								items_sold: parseInt(p.total_sales || 0),
+									parseFloat(product.price || 0) *
+									parseInt(product.total_sales || 0),
+								items_sold: parseInt(product.total_sales || 0),
 							}));
 						setChartData(data);
 					})
@@ -123,7 +147,7 @@ const ProductReport: React.FC = () => {
 					.then((response) =>
 						setToReviewedProduct(
 							response.data.filter(
-								(product: any) =>
+								(product: Product) =>
 									parseFloat(product.average_rating) > 0
 							)
 						)
@@ -153,7 +177,7 @@ const ProductReport: React.FC = () => {
 					.then((response) =>
 						setToSellingProduct(
 							response.data.filter(
-								(product: any) =>
+								(product: Product) =>
 									Number(product.total_sales) > 0
 							)
 						)
@@ -254,8 +278,8 @@ const ProductReport: React.FC = () => {
 		},
 		category: {
 			label: __('Category', 'multivendorx'),
-			render: (row: any) =>
-				row.categories?.map((c: any) => c.name).join(', ') || '-',
+			render: (row) =>
+				row.categories?.map((cat) => cat.name).join(', ') || '-',
 		},
 		date_created: {
 			label: __('Date Created', 'multivendorx'),
@@ -278,7 +302,7 @@ const ProductReport: React.FC = () => {
 					? response.data
 					: [];
 
-				const ids = products.map((p: any) => p.id);
+				const ids = products.map((product) => product.id);
 				setRowIds(ids);
 
 				setRows(products);
@@ -339,7 +363,7 @@ const ProductReport: React.FC = () => {
 		query: QueryProps,
 		includePagination: boolean = true
 	) => {
-		const params: Record<string, any> = {
+		const params = {
 			search: query.searchValue,
 			orderby: query.orderby,
 			order: query.order,
@@ -416,7 +440,7 @@ const ProductReport: React.FC = () => {
 					{/* Top Reviewed Products Section */}
 					<Card title="Top Reviewed Products">
 						{toReviewedProduct.length > 0 ? (
-							toReviewedProduct.map((product: any) => (
+							toReviewedProduct.map((product: Product) => (
 								<div
 									className="card-content"
 									key={`review-${product.id}`}
@@ -513,8 +537,10 @@ const ProductReport: React.FC = () => {
 															)}
 															{product.categories
 																?.map(
-																	(c: any) =>
-																		c.name
+																	(
+																		cat: Category
+																	) =>
+																		cat.name
 																)
 																.join(', ') ||
 																'-'}
@@ -538,7 +564,7 @@ const ProductReport: React.FC = () => {
 					<Card title="Top Selling Products">
 						{toSellingProduct.length > 0 ? (
 							toSellingProduct.map(
-								(product: any, index: number) => (
+								(product: Product, index: number) => (
 									<InfoItem
 										key={`selling-${product.id}`}
 										title={product.name}

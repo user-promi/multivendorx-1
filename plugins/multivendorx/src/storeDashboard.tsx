@@ -15,18 +15,39 @@ import { __ } from '@wordpress/i18n';
 import './metaBoxes';
 import { getDashboardRoutes } from './dashboardConfig';
 import { dashNavigate } from './services/commonFunction';
+interface SubmenuItem {
+	key: string;
+	name: string;
+	filename?: string;
+	capability?: string | string[];
+	module?: string[];
+}
 
+interface StoreData {
+	slug?: string;
+	status?: string;
+	name?: string;
+	[key: string]: unknown;
+}
+
+interface MenuItem {
+	name: string;
+	icon: string;
+	filename?: string;
+	capability?: string | string[];
+	module?: string[];
+	submenu?: SubmenuItem[];
+}
 const Dashboard = () => {
 	const { tab: urlTab, element, context_id } = useParams();
 	const navigate = useNavigate();
 
-	const [menu, setMenu] = useState<Record<string, any>>({});
+	const [menu, setMenu] = useState<Record<string, MenuItem>>({});
 	const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>(
 		{}
 	);
-	const [storeData, setStoreData] = useState<any>(null);
+	const [storeData, setStoreData] = useState<StoreData | null>(null);
 	const [currentTab, setCurrentTab] = useState('');
-	const [announcement, setAnnouncement] = useState<any[]>([]);
 	const [showUserDropdown, setShowUserDropdown] = useState(false);
 	const [showStoreList, setShowStoreList] = useState(false);
 	const [isDarkMode, setIsDarkMode] = useState(false);
@@ -40,7 +61,7 @@ const Dashboard = () => {
 
 	const DEFAULT_TAB = 'dashboard';
 
-	const hasCapability = (capability: any): boolean => {
+	const hasCapability = (capability): boolean => {
 		if (!capability) {
 			return true;
 		}
@@ -61,7 +82,7 @@ const Dashboard = () => {
 		return userCaps[capability] === true;
 	};
 
-	const isModuleActive = (requiredModules: any): boolean => {
+	const isModuleActive = (requiredModules): boolean => {
 		if (!requiredModules) {
 			return true;
 		}
@@ -95,7 +116,7 @@ const Dashboard = () => {
 			method: 'GET',
 			url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		}).then((res: any) => setStoreData(res.data || null));
+		}).then((res) => setStoreData(res.data || null));
 	}, [appLocalizer.store_id]);
 
 	useEffect(() => {
@@ -104,22 +125,6 @@ const Dashboard = () => {
 			url: getApiLink(appLocalizer, 'endpoints'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => setMenu(res.data || {}));
-
-		if (modules.includes('announcement')) {
-			axios({
-				method: 'GET',
-				url: getApiLink(appLocalizer, 'announcement'),
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					page: 1,
-					row: 4,
-					store_id: appLocalizer.store_id,
-					status: 'publish',
-				},
-			})
-				.then((res) => setAnnouncement(res.data.items || []))
-				.catch(() => {});
-		}
 	}, []);
 
 	// Dark mode
@@ -151,7 +156,7 @@ const Dashboard = () => {
 				capability = item.capability;
 				break;
 			}
-			const sub = item.submenu?.find((s: any) => s.key === currentTab);
+			const sub = item.submenu?.find((s) => s.key === currentTab);
 			if (sub) {
 				capability = sub.capability;
 				break;
@@ -169,7 +174,7 @@ const Dashboard = () => {
 			}
 			const isParentActive = currentTab === key;
 			const isChildActive = item.submenu.some(
-				(s: any) => s.key === currentTab
+				(s) => s.key === currentTab
 			);
 			if (isParentActive || isChildActive) {
 				open[key] = true;
@@ -194,7 +199,7 @@ const Dashboard = () => {
 		const list: { tab: string; filename: string }[] = [];
 		Object.entries(menu).forEach(([key, item]) => {
 			list.push({ tab: key, filename: item.filename || key });
-			item.submenu?.forEach((sub: any) =>
+			item.submenu?.forEach((sub) =>
 				list.push({ tab: sub.key, filename: sub.filename || sub.key })
 			);
 		});
@@ -245,8 +250,8 @@ const Dashboard = () => {
 
 	// Menu filtered by capability + active modules
 	const filteredMenu = useMemo(() => {
-		const result: Record<string, any> = {};
-		Object.entries(menu).forEach(([key, item]: any) => {
+		const result = {};
+		Object.entries(menu).forEach(([key, item]: [string, MenuItem]) => {
 			if (!hasCapability(item.capability)) {
 				return;
 			}
@@ -257,7 +262,7 @@ const Dashboard = () => {
 			let filteredSubmenu = item.submenu;
 			if (item.submenu?.length) {
 				filteredSubmenu = item.submenu.filter(
-					(sub: any) =>
+					(sub) =>
 						hasCapability(sub.capability) &&
 						isModuleActive(sub.module)
 				);
@@ -295,7 +300,7 @@ const Dashboard = () => {
 			url: getApiLink(appLocalizer, `store/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { action: 'switch' },
-		}).then((res: any) => {
+		}).then((res) => {
 			window.location.assign(res.data.redirect);
 		});
 	};
@@ -397,29 +402,27 @@ const Dashboard = () => {
 											<ul
 												className={`subtabs ${isOpen ? 'open' : ''}`}
 											>
-												{item.submenu.map(
-													(sub: any) => (
-														<li key={sub.key}>
-															<NavLink
-																className={({
-																	isActive,
-																}) =>
-																	isActive
-																		? 'active'
-																		: ''
-																}
-																to={`/${sub.key}`}
-																onClick={() =>
-																	setCurrentTab(
-																		sub.key
-																	)
-																}
-															>
-																{sub.name}
-															</NavLink>
-														</li>
-													)
-												)}
+												{item.submenu.map((sub) => (
+													<li key={sub.key}>
+														<NavLink
+															className={({
+																isActive,
+															}) =>
+																isActive
+																	? 'active'
+																	: ''
+															}
+															to={`/${sub.key}`}
+															onClick={() =>
+																setCurrentTab(
+																	sub.key
+																)
+															}
+														>
+															{sub.name}
+														</NavLink>
+													</li>
+												))}
 											</ul>
 										)}
 									</li>
