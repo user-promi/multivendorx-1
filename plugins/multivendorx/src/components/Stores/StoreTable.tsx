@@ -13,11 +13,7 @@ import {
 	InfoItem,
 } from 'zyra';
 import { useNavigate } from 'react-router-dom';
-import {
-	formatCurrency,
-	formatDate,
-	formatLocalDate,
-} from '../../services/commonFunction';
+import { formatCurrency, formatLocalDate } from '../../services/commonFunction';
 
 const StoreTable: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -57,8 +53,8 @@ const StoreTable: React.FC = () => {
 				const items = response.data || [];
 
 				const ids = items
-					.filter((item: any) => item?.id != null)
-					.map((item: any) => item.id);
+					.filter((item) => item?.id != null)
+					.map((item) => item.id);
 
 				setRowIds(ids);
 
@@ -108,13 +104,14 @@ const StoreTable: React.FC = () => {
 				setRows([]);
 				setTotalRows(0);
 				setIsLoading(false);
+				console.error(error);
 			});
 	};
 
 	const headers = {
 		store_name: {
 			label: __('Store', 'multivendorx'),
-			render: (row: any) => (
+			render: (row) => (
 				<InfoItem
 					title={row.store_name}
 					titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
@@ -140,7 +137,7 @@ const StoreTable: React.FC = () => {
 		},
 		primary_owner: {
 			label: __('Primary Owner', 'multivendorx'),
-			render: (row: any) => {
+			render: (row) => {
 				const owner = row.primary_owner?.data;
 
 				return (
@@ -216,9 +213,6 @@ const StoreTable: React.FC = () => {
 					ids={rowIds}
 					categoryCounts={categoryCounts}
 					bulkActions={bulkActions}
-					onBulkActionApply={(action: string, selectedIds: []) => {
-						// handleBulkAction(action, selectedIds);
-					}}
 					search={{}}
 					filters={filters}
 					format={appLocalizer.date_format}

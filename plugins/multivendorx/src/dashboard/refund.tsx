@@ -2,10 +2,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, NavigatorHeader, TableCard } from 'zyra';
+import {
+	getApiLink,
+	NavigatorHeader,
+	QueryProps,
+	TableCard,
+	TableRow,
+} from 'zyra';
 
 import { formatLocalDate } from '@/services/commonFunction';
-import { QueryProps, TableRow } from '@/services/type';
 
 const Refund: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -71,8 +76,8 @@ const Refund: React.FC = () => {
 			.then((response) => {
 				const items = response.data || [];
 				const ids = items
-					.filter((item: any) => item?.review_id != null)
-					.map((item: any) => item.review_id);
+					.filter((item) => item?.review_id != null)
+					.map((item) => item.review_id);
 
 				setRowIds(ids);
 

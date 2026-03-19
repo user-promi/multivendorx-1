@@ -31,15 +31,14 @@ import '../ViewStore.scss';
 import { applyFilters } from '@wordpress/hooks';
 
 const EditStore = () => {
-	const [data, setData] = useState<any>({});
-	const [successMsg, setSuccessMsg] = useState<string | null>(null);
+	const [data, setData] = useState({});
 	const [bannerMenu, setBannerMenu] = useState(false);
 	const [logoMenu, setLogoMenu] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [deleteOption, setDeleteOption] = useState('');
 	const [editName, setEditName] = useState(false);
 	const [editDesc, setEditDesc] = useState(false);
-	const [selectedOwner, setSelectedOwner] = useState<any>(null);
+	const [selectedOwner, setSelectedOwner] = useState(null);
 	const location = useLocation();
 	const [prevName, setPrevName] = useState('');
 	const [prevDesc, setPrevDesc] = useState('');
@@ -117,15 +116,11 @@ const EditStore = () => {
 		}).then((res) => {
 			const data = res.data || {};
 			setData(data);
-			const currentTab =
-				data?.status === 'pending' || data?.status === 'rejected'
-					? 'application-details'
-					: 'store-overview';
 		});
 	}, [editId]);
 
 	const runUploader = (key: string) => {
-		const frame = (window as any).wp.media({
+		const frame = wp.media({
 			title: 'Select or Upload Image',
 			button: { text: 'Use this image' },
 			multiple: false,
@@ -155,8 +150,8 @@ const EditStore = () => {
 		}
 	};
 
-	const deleteStoreApiCall = (option: any) => {
-		const payload: any = {
+	const deleteStoreApiCall = (option) => {
+		const payload = {
 			delete: true,
 			deleteOption: option,
 		};
@@ -264,7 +259,7 @@ const EditStore = () => {
 			},
 		},
 	].filter((setting) => !setting.module || modules.includes(setting.module));
-	const handleUpdateData = useCallback((updatedFields: any) => {
+	const handleUpdateData = useCallback((updatedFields) => {
 		setData((prev) => ({ ...prev, ...updatedFields }));
 	}, []);
 
@@ -332,15 +327,12 @@ const EditStore = () => {
 				case 'application-details':
 					return <StoreRegistration id={editId} />;
 				case 'store-facilitator':
-					// return <Facilitator id={editId} data={data} />;
-					const output = applyFilters(
+					return applyFilters(
 						'add_facilitator_content',
 						null,
 						editId,
 						data
 					);
-
-					return output;
 				default:
 					return <div></div>;
 			}
@@ -1049,7 +1041,7 @@ const EditStore = () => {
 									},
 								]}
 								value={deleteOption}
-								onChange={(value: any) => {
+								onChange={(value) => {
 									setDeleteOption(value);
 									setSelectedOwner(null);
 								}}
@@ -1066,7 +1058,7 @@ const EditStore = () => {
 									name="new_owner"
 									value={selectedOwner?.value}
 									options={appLocalizer.store_owners}
-									onChange={(val: any) => {
+									onChange={(val) => {
 										if (val) {
 											setSelectedOwner(val);
 										}

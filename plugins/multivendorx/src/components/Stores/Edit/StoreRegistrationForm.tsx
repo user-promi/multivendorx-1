@@ -24,26 +24,53 @@ const styles = StyleSheet.create({
 	row: { marginBottom: 6 },
 	label: { fontWeight: 'bold' },
 });
+interface RegistrationData {
+	[key: string]: string | number | boolean | null | undefined;
+}
 
-const RegistrationPdf: React.FC<{ registrationData: any }> = ({
+interface RegistrationPdfProps {
+	registrationData: RegistrationData | null;
+}
+
+interface StoreNote {
+	note: string;
+	date: string;
+}
+
+interface StoreRegistrationFormData {
+	status?: 'approve' | 'rejected' | string;
+	store_application_note?: StoreNote[];
+	[key: string]: string | number | boolean | StoreNote[] | undefined;
+}
+
+const RegistrationPdf: React.FC<RegistrationPdfProps> = ({
 	registrationData,
 }) => {
 	const data = registrationData || {};
 	return (
 		<Document>
 			<Page size="A4" style={styles.page}>
-				<Text style={styles.title}>Registration Data</Text>
+				<Text style={styles.title}>
+					{__('Registration Data', 'multivendorx')}
+				</Text>
 				{Object.keys(data).length === 0 ? (
 					<Text>
-						Store submitted application without filling out
-						registration form.
+						{__(
+							'Store submitted application without filling out registration form.',
+							'multivendorx'
+						)}
 					</Text>
 				) : (
 					Object.entries(data).map(([label, value], index) => (
 						<View key={index} style={styles.row}>
 							<Text>
-								<Text style={styles.label}>{label}: </Text>
-								{String(value || '[Not Provided]')}
+								<Text style={styles.label}>
+									{__(label, 'multivendorx')}:{' '}
+								</Text>
+								{String(
+									value ||
+										__('[Not Provided]', 'multivendorx')
+								)}
 							</Text>
 						</View>
 					))
@@ -134,7 +161,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 		});
 	};
 
-	const autoSave = (updatedData: { [key: string]: any }) => {
+	const autoSave = (updatedData: StoreRegistrationFormData) => {
 		axios({
 			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${id}`),

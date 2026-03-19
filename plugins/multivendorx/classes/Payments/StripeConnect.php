@@ -31,7 +31,7 @@ class StripeConnect {
         // Disconnect.
         add_action( 'admin_post_multivendorx_disconnect_stripe', array( $this, 'disconnect_stripe' ) );
         // Use admin_post endpoint for OAuth callback (works whether user is logged-in or not).
-        add_action( 'admin_post_multivendorx_stripe_oauth_callback', array( $this, 'handle_oauth_callback' ) );
+        add_action( 'admin_post_multivendorx_stripe_oauth_callback', array( $this, 'handle_oauth_callback' ), 20 );
     }
 
     /**

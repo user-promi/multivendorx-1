@@ -17,15 +17,19 @@ export {};
 
 declare global {
 	interface AppLocalizer {
-		google_maps_api_key: any;
+		google_maps_api_key: string;
 		apiUrl: string;
 		restUrl: string;
 		nonce: string;
-		khali_dabba: any;
+		khali_dabba: string | boolean;
 		tab_name: string;
 		settings_databases_value: any;
 		all_store_meta: any;
-		pages_list: any;
+		pages_list: {
+			value: number;
+			label: string;
+			key: number;
+		}[];
 		pro_settings_list: any;
 		country_list: any;
 		capabilities: any;
@@ -37,41 +41,57 @@ declare global {
 		assistants_list: any;
 		payments_settings: any;
 		store_payment_settings: any;
-		store_id: any;
-		freeVersion: any;
-		marketplace_site: any;
-		site_url: any;
+		store_id: string | number;
+		freeVersion: string;
+		marketplace_site: string;
+		site_url: string;
 		color: any;
 		ajaxurl: string;
 		gateway_list: any;
 		facilitators_list: any;
-		user_id: any;
-		currency: any;
-		currency_symbol: any;
-		price_format: any;
-		decimal_sep: any;
-		thousand_sep: any;
-		decimals: any;
+		user_id: string | number;
+		currency: string;
+		currency_symbol: string;
+		price_format: string;
+		decimal_sep: string;
+		thousand_sep: string;
+		decimals: string;
 		edit_order_capability: any;
 		all_verification_methods: any;
-		tinymceApiKey: any;
+		tinymceApiKey: string;
 		shipping_methods: any;
 		state_list: any;
-		module_page_url: any;
-		admin_dashboard_url: any;
+		module_page_url: string;
+		admin_dashboard_url: string;
 		store_page_url: string;
-		pro_data: any;
-		shop_url: any;
-		admin_url: any;
-		capability_pro: any;
-		taxes_enabled: any;
-		permalink_structure: any;
+		pro_data: {
+			version: string | boolean;
+			manage_plan_url: string;
+		};
+		shop_url: string;
+		admin_url: string;
+		capability_pro: {
+			[capability: string]: {
+				prosetting: boolean;
+				module?: string;
+			};
+		};
+		taxes_enabled: string | boolean;
+		permalink_structure: string | boolean;
 		zones_list: any;
-		adminUrl: any;
-		module_page_url: any;
-		current_user: any;
+		adminUrl: string;
+		module_page_url: string;
+		current_user: {
+			id: number;
+			user_login: string;
+			user_email: string;
+			display_name: string;
+			roles: string[];
+			is_vendor?: boolean;
+			store_id?: number;
+		};
 		order_meta: any;
-		date_format: any;
+		date_format: string;
 		price_decimals: string;
 		decimal_separator: string;
 		thousand_separator: string;
@@ -85,8 +105,8 @@ declare global {
 		nonce: string;
 		settings: Array;
 		default_placeholder: Array;
-		content_before_form: any;
-		content_after_form: any;
+		content_before_form: string;
+		content_after_form: string;
 		error_strings: Array;
 	}
 

@@ -2,7 +2,7 @@
 import { __ } from '@wordpress/i18n';
 
 const methods = appLocalizer?.payments_settings
-	? Object.entries(appLocalizer.payments_settings).map(([_, value]) => value)
+	? Object.values(appLocalizer.payments_settings)
 	: [];
 
 export default {

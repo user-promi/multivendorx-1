@@ -1,20 +1,47 @@
+/* global registrationForm, */
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { FormViewer, getApiLink, ChoiceToggle } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
+type StoreOption = {
+	label: string;
+	value: string | number;
+};
+
+type RegistrationResponse = {
+	id: string | number;
+	name?: string;
+	description?: string;
+	slug?: string;
+	[key: string]: string | number | boolean | null | undefined;
+};
+
+type StoreNote = {
+	note: string;
+};
+
+type StoreData = {
+	id: string | number;
+	note?: StoreNote[];
+};
 
 const RegistrationForm = () => {
-	const [loading, setLoading] = useState(false);
 	const [responseMessage, setResponseMessage] = useState<{
 		type: 'success' | 'error';
 		message: string;
 	} | null>(null);
-	const [responseData, setResponseData] = useState<any[]>([]);
-	const [stores, setStores] = useState<any[]>([]);
-	const [selectedStore, setSelectedStore] = useState<any>(null);
-	const [inputs, setInputs] = useState<Record<string, any>>({});
-	const [allStoreData, setAllStoreData] = useState<any[]>([]);
-	const [storeData, setStoreData] = useState<any>(null);
+	const [responseData, setResponseData] = useState<RegistrationResponse[]>(
+		[]
+	);
+	const [stores, setStores] = useState<StoreOption[]>([]);
+	const [selectedStore, setSelectedStore] = useState<StoreOption | null>(
+		null
+	);
+	const [inputs, setInputs] = useState<
+		RegistrationResponse | Record<string, string | number | boolean>
+	>({});
+	const [allStoreData, setAllStoreData] = useState<StoreData[]>([]);
+	const [storeData, setStoreData] = useState<StoreData | null>(null);
 	const formData = registrationForm;
 
 	useEffect(() => {
@@ -46,9 +73,9 @@ const RegistrationForm = () => {
 			});
 
 			if (storeList.length > 0 && regData.length > 0) {
-				const match = storeList.find((store: any) =>
+				const match = storeList.find((store) =>
 					regData.some(
-						(item: any) => String(item.id) === String(store.value)
+						(item) => String(item.id) === String(store.value)
 					)
 				);
 
@@ -64,7 +91,7 @@ const RegistrationForm = () => {
 					}
 
 					const dataMatch = returnedStoreData.find(
-						(item: any) => String(item.id) === String(match.value)
+						(item) => String(item.id) === String(match.value)
 					);
 					if (dataMatch) {
 						setStoreData(dataMatch);
@@ -84,60 +111,62 @@ const RegistrationForm = () => {
 		setInputs(match || {});
 
 		const dataMatch = allStoreData.find(
-			(item: any) => String(item.id) === String(val)
+			(item) => String(item.id) === String(val)
 		);
 		setStoreData(dataMatch || {});
 	};
 
-	const onSubmit = useCallback((submittedFormData: Record<string, any>) => {
-		setLoading(true);
+	const onSubmit = useCallback(
+		(submittedFormData: Record<string, string | number | boolean>) => {
+			const mappedData: Record<string, string | number | boolean> = {};
 
-		const mappedData: Record<string, any> = {};
-
-		if (submittedFormData['name']) {
-			mappedData['name'] = submittedFormData['name'];
-		}
-		if (submittedFormData['description']) {
-			mappedData['description'] = submittedFormData['description'];
-		}
-		if (submittedFormData['slug']) {
-			mappedData['slug'] = submittedFormData['slug'];
-		}
-
-		Object.keys(submittedFormData).forEach((key) => {
-			if (!['name', 'description', 'slug'].includes(key)) {
-				mappedData[key] = submittedFormData[key];
+			if (submittedFormData['name']) {
+				mappedData['name'] = submittedFormData['name'];
 			}
-		});
+			if (submittedFormData['description']) {
+				mappedData['description'] = submittedFormData['description'];
+			}
+			if (submittedFormData['slug']) {
+				mappedData['slug'] = submittedFormData['slug'];
+			}
 
-		axios({
-			method: 'POST',
-			url: getApiLink(registrationForm, 'store'),
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				'X-WP-Nonce': registrationForm.nonce,
-				registrations: 'registrations',
-			},
-			data: { formData: mappedData },
-		})
-			.then((response) => {
-				setResponseMessage({
-					type: 'success',
-					message: __('Store created successfully', 'multivendorx'),
-				});
-				setLoading(false);
-				if (response.data.redirect !== '') {
-					window.open(response.data.redirect, '_self');
+			Object.keys(submittedFormData).forEach((key) => {
+				if (!['name', 'description', 'slug'].includes(key)) {
+					mappedData[key] = submittedFormData[key];
 				}
-			})
-			.catch(() => {
-				setResponseMessage({
-					type: 'error',
-					message: __('Error creating store', 'multivendorx'),
-				});
-				setLoading(false);
 			});
-	}, []);
+
+			axios({
+				method: 'POST',
+				url: getApiLink(registrationForm, 'store'),
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					'X-WP-Nonce': registrationForm.nonce,
+					registrations: 'registrations',
+				},
+				data: { formData: mappedData },
+			})
+				.then((response) => {
+					setResponseMessage({
+						type: 'success',
+						message: __(
+							'Store created successfully',
+							'multivendorx'
+						),
+					});
+					if (response.data.redirect !== '') {
+						window.open(response.data.redirect, '_self');
+					}
+				})
+				.catch(() => {
+					setResponseMessage({
+						type: 'error',
+						message: __('Error creating store', 'multivendorx'),
+					});
+				});
+		},
+		[]
+	);
 
 	const memoizedCountryList = useMemo(
 		() => registrationForm.country_list,
@@ -153,7 +182,7 @@ const RegistrationForm = () => {
 						<ChoiceToggle
 							options={stores}
 							value={selectedStore?.value || ''}
-							onChange={(val: any) => handleStoreChange(val)}
+							onChange={(val) => handleStoreChange(val)}
 						/>
 					</div>
 

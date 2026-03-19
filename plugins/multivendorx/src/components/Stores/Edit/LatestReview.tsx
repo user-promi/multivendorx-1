@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { TableCard, getApiLink } from 'zyra';
-import { QueryProps, TableHeader, TableRow } from '@/services/type';
+import { QueryProps, TableCard, TableRow, getApiLink } from 'zyra';
 
 interface LatestReviewProps {
 	store_id?: number;

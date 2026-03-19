@@ -1,7 +1,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { BasicInputUI, Card, FormGroup, FormGroupWrapper } from 'zyra';
 import { __ } from '@wordpress/i18n';
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const RelatedList = ({ product, setProduct, handleChange }) => {
 	return (
 		<Card title={__('Related listings', 'multivendorx')}>

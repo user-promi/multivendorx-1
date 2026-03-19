@@ -21,6 +21,7 @@ const Downloadable = ({ product, setProduct, handleChange }) => {
 				key: 'upload',
 				type: 'button',
 				label: 'Upload file',
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				onClick: ({ row, rowIndex, updateRow }) => {
 					const frame = wp.media({
 						title: 'Select or Upload File',

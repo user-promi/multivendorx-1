@@ -41,17 +41,16 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 	const [categoryCounts, setCategoryCounts] = useState<
 		CategoryCount[] | null
 	>(null);
-	const [wallet, setWallet] = useState<any[]>([]);
-	const [recentDebits, setRecentDebits] = useState<any[]>([]);
-	const [storeData, setStoreData] = useState<any>(null);
+	const [wallet, setWallet] = useState([]);
+	const [recentDebits, setRecentDebits] = useState([]);
+	const [storeData, setStoreData] = useState(null);
 	const [requestWithdrawal, setRequestWithdrawal] = useState(false);
 	const [validationErrors, setValidationErrors] = useState<{
 		amount?: string;
 		paymentMethod?: string;
 	}>({});
 	const [amount, setAmount] = useState<number>(0);
-	const [note, setNote] = useState<any | ''>('');
-	const [paymentMethod, setPaymentMethod] = useState<any | ''>('');
+	const [note, setNote] = useState('');
 
 	const [viewCommission, setViewCommission] = useState(false);
 	const [selectedCommissionId, setSelectedCommissionId] = useState<
@@ -113,6 +112,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			})
 			.catch((error) => {
 				setRecentDebits([]);
+				console.error(error);
 			});
 	}, [storeId]);
 
@@ -120,7 +120,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 		// Clear all old errors first
 		setValidationErrors({});
 
-		const newErrors: { amount?: string; paymentMethod?: string } = {};
+		const newErrors = {};
 		// Amount validations
 		if (!amount || amount <= 0) {
 			newErrors.amount = 'Please enter a valid amount.';
@@ -150,7 +150,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 				disbursement: true,
 				amount,
 				store_id: storeId,
-				method: paymentMethod,
 				note,
 			},
 		})
@@ -160,7 +159,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 					setTimeout(() => {
 						window.location.reload();
 					}, 200);
-				} else if (res.data?.message) {
 				}
 			})
 			.catch((err) => {
@@ -242,8 +240,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			.then((response) => {
 				const transactions = response.data || [];
 
-				const ids: number[] = transactions.map((t: any) =>
-					Number(t.id)
+				const ids: number[] = transactions.map((transaction) =>
+					Number(transaction.id)
 				);
 				setRowIds(ids);
 				setRows(transactions);
@@ -383,7 +381,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 		query: QueryProps,
 		includePagination: boolean = true
 	) => {
-		const params: Record<string, any> = {
+		const params = {
 			store_id: storeId,
 			status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
 			search_value: query.searchValue,

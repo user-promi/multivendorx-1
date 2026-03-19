@@ -42,13 +42,66 @@ type MarketplaceReportProps = {
 	COLORS?: string[];
 };
 
-const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
-	const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
-	const [earningSummary, setEarningSummary] = useState<any[]>([]);
-	const [pieData, setPieData] = useState<any>([]);
-	const [topCoupons, setTopCoupons] = useState<any[]>([]);
-	const [topCustomers, setTopCustomers] = useState<any[]>([]);
-	const [topStores, setTopStores] = useState<any[]>([]);
+interface CommissionOverviewItem {
+	id: string;
+	label: string;
+	count: number;
+	formatted: string;
+	icon: string;
+	module?: string;
+	condition?: boolean;
+}
+
+interface EarningSummaryItem {
+	id: string;
+	title: string;
+	price: string;
+	module?: string;
+	condition?: boolean;
+}
+
+interface PieChartDataItem {
+	name: string;
+	value: number;
+}
+
+interface Coupon {
+	id: number;
+	code: string;
+	usage_count: number;
+	description?: string;
+	amount: string;
+	discount_type: string;
+	store_name?: string;
+}
+
+interface Customer {
+	user_id: number;
+	name: string;
+	username: string;
+	email: string;
+	orders_count: number;
+	total_spend: number;
+}
+
+interface Store {
+	store_id: number;
+	store_name: string;
+	commission_total: number;
+	commission_refunded: number;
+	total_order_amount: number;
+}
+const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
+	const [commissionDetails, setCommissionDeatils] = useState<
+		CommissionOverviewItem[]
+	>([]);
+	const [earningSummary, setEarningSummary] = useState<EarningSummaryItem[]>(
+		[]
+	);
+	const [pieData, setPieData] = useState<PieChartDataItem>([]);
+	const [topCoupons, setTopCoupons] = useState<Coupon[]>([]);
+	const [topCustomers, setTopCustomers] = useState<Customer[]>([]);
+	const [topStores, setTopStores] = useState<Store[]>([]);
 	const { modules } = useModules();
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -419,7 +472,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 				<Column fullHeight row>
 					<Card title={__('Top Selling Coupons', 'multivendorx')}>
 						{topCoupons.length > 0 ? (
-							topCoupons.map((coupon: any, index: number) => (
+							topCoupons.map((coupon: Coupon, index: number) => (
 								<div
 									className="info-item"
 									key={`coupon-${coupon.id}`}
@@ -498,64 +551,71 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 					</Card>
 					<Card title={__('Top Customers', 'multivendorx')}>
 						{topCustomers.length > 0 ? (
-							topCustomers.map((customer: any, index: number) => (
-								<div
-									className="info-item"
-									key={`customer-${customer.user_id}`}
-								>
-									<div className="details-wrapper">
-										<div className="avatar">
-											<a
-												href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
-												target="_blank"
-												rel="noopener noreferrer"
-											>
-												<span
-													className={`admin-color${index + 1}`}
-												>
-													{(
-														(
-															customer.name?.trim() ||
-															customer.username
-														)?.charAt(0) || ''
-													).toUpperCase()}
-												</span>
-											</a>
-										</div>
-
-										<div className="details">
-											<div className="name">
+							topCustomers.map(
+								(customer: Customer, index: number) => (
+									<div
+										className="info-item"
+										key={`customer-${customer.user_id}`}
+									>
+										<div className="details-wrapper">
+											<div className="avatar">
 												<a
 													href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
 													target="_blank"
 													rel="noopener noreferrer"
 												>
-													{customer.name?.trim() ||
-														customer.username}
+													<span
+														className={`admin-color${index + 1}`}
+													>
+														{(
+															(
+																customer.name?.trim() ||
+																customer.username
+															)?.charAt(0) || ''
+														).toUpperCase()}
+													</span>
 												</a>
 											</div>
-											<div className="des">
-												{__('Orders', 'multivendorx')}:
-												{customer.orders_count || 0}
-											</div>
-											<div className="des">
-												{customer.email ||
-													__('', 'multivendorx')}
-											</div>
-										</div>
-									</div>
 
-									<div className="right-details">
-										<div className="price">
-											<span>
-												{formatCurrency(
-													customer.total_spend || 0
-												)}
-											</span>
+											<div className="details">
+												<div className="name">
+													<a
+														href={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
+														target="_blank"
+														rel="noopener noreferrer"
+													>
+														{customer.name?.trim() ||
+															customer.username}
+													</a>
+												</div>
+												<div className="des">
+													{__(
+														'Orders',
+														'multivendorx'
+													)}
+													:
+													{customer.orders_count || 0}
+												</div>
+												<div className="des">
+													{customer.email ||
+														__('', 'multivendorx')}
+												</div>
+											</div>
+										</div>
+
+										<div className="right-details">
+											<div className="price">
+												<span>
+													{formatCurrency(
+														customer.total_spend ||
+															0
+													)}
+												</span>
+											</div>
 										</div>
 									</div>
-								</div>
-							))
+								)
+							)
 						) : (
 							<p>
 								{__('No top customers found.', 'multivendorx')}
@@ -564,10 +624,10 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = ({}) => {
 					</Card>
 					<Card title={__('Top Stores', 'multivendorx')}>
 						{topStores.length > 0 ? (
-							topStores.map((store: any, index: number) => (
+							topStores.map((store: Store, index: number) => (
 								<>
 									<InfoItem
-										key={`store-${store.store_id}`}
+										key={`store-${index}`}
 										title={store.store_name || ''}
 										isLoading={isLoading}
 										titleLink={`${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`}

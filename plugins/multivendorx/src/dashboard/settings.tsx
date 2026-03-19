@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // Context
 import { SettingProvider, useSetting } from '../contexts/SettingContext';
 // Services
@@ -15,8 +15,7 @@ import {
 import ShowProPopup from '../components/Popup/Popup';
 import ShippingDelivery from './settings/ShippingDelivery';
 import BusinessAddress from './DashboardSettings/BusinessAddress';
-
-type SettingItem = Record<string, any>;
+import { __ } from '@wordpress/i18n';
 
 interface SettingsProps {
 	id: string;
@@ -25,12 +24,12 @@ interface SettingsProps {
 const settings: React.FC<SettingsProps> = () => {
 	const { modules } = useModules();
 
-	const allSettings: SettingItem[] = getAvailableSettings(
+	const allSettings = getAvailableSettings(
 		getTemplateData('dashboardSettings'),
 		[]
 	);
 
-	const settingsArray: SettingItem[] = allSettings.filter((setting) => {
+	const settingsArray = allSettings.filter((setting) => {
 		if (setting.content.module) {
 			return modules.includes(setting.content.module);
 		}
@@ -46,7 +45,7 @@ const settings: React.FC<SettingsProps> = () => {
 		}
 	}, [successMsg]);
 
-	const SimpleLink = ({ to, children, onClick, className }: any) => (
+	const SimpleLink = ({ to, children, onClick, className }) => (
 		<a href={to} onClick={onClick} className={className}>
 			{children}
 		</a>
@@ -69,7 +68,7 @@ const settings: React.FC<SettingsProps> = () => {
 	// Build hash URL for a given tab
 	const prepareUrl = (tabId: string) => `#subtab=${tabId}`;
 
-	const GetForm = (currentTab: string | null): JSX.Element | null => {
+	const GetForm = (currentTab: string | null): React.ReactElement | null => {
 		// get the setting context
 		const { setting, settingName, setSetting, updateSetting } =
 			useSetting();
@@ -79,7 +78,7 @@ const settings: React.FC<SettingsProps> = () => {
 			return null;
 		}
 
-		const settingModal = getSettingById(settingsArray as any, currentTab);
+		const settingModal = getSettingById(settingsArray, currentTab);
 
 		useEffect(() => {
 			if (setting?.country) {
@@ -95,7 +94,6 @@ const settings: React.FC<SettingsProps> = () => {
 			setSetting(currentTab, appLocalizer.all_store_meta || {});
 		}
 
-		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useEffect(() => {
 			if (settingName === currentTab) {
 				appLocalizer.all_store_meta = setting;
@@ -113,7 +111,7 @@ const settings: React.FC<SettingsProps> = () => {
 			<>
 				{settingName === currentTab ? (
 					<RenderComponent
-						settings={settingModal as SettingContent}
+						settings={settingModal}
 						proSetting={appLocalizer.pro_settings_list}
 						setting={setting}
 						updateSetting={updateSetting}
@@ -122,7 +120,7 @@ const settings: React.FC<SettingsProps> = () => {
 						Popup={ShowProPopup}
 					/>
 				) : (
-					<>Loading...</>
+					<>{__('Loading...', 'multivendorx')}</>
 				)}
 			</>
 		);
@@ -132,7 +130,7 @@ const settings: React.FC<SettingsProps> = () => {
 		<>
 			<SettingProvider>
 				<SettingsNavigator
-					settingContent={settingsArray as any}
+					settingContent={settingsArray}
 					currentSetting={currentTab}
 					getForm={GetForm}
 					prepareUrl={prepareUrl}

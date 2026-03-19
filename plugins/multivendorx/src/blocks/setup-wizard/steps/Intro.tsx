@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { __ } from '@wordpress/i18n';
 
 interface Task {
 	title: string;
@@ -12,70 +13,72 @@ interface Section {
 	steps: Task[];
 }
 
+interface IntroProps {
+	onNext: () => void;
+}
+
 const sectionsData: Section[] = [
 	{
-		title: 'Set Up The Basics',
+		title: __('Set Up The Basics', 'multivendorx'),
 		steps: [
 			{
-				title: 'Set Site Title & Tagline',
-				description: 'Give your site a name and tagline.',
+				title: __('Set Site Title & Tagline', 'multivendorx'),
+				description: __(
+					'Give your site a name and tagline.',
+					'multivendorx'
+				),
 				completed: true,
-				actionText: 'Set Up',
+				actionText: __('Set Up', 'multivendorx'),
 			},
 			{
-				title: 'Review Admin Email',
-				description: 'Ensure your admin email is correct.',
+				title: __('Review Admin Email', 'multivendorx'),
+				description: __(
+					'Ensure your admin email is correct.',
+					'multivendorx'
+				),
 				completed: false,
-				actionText: 'Review',
+				actionText: __('Review', 'multivendorx'),
 			},
 			{
-				title: 'Choose Page Links',
-				description: 'Decide how page links appear.',
+				title: __('Choose Page Links', 'multivendorx'),
+				description: __(
+					'Decide how page links appear.',
+					'multivendorx'
+				),
 				completed: false,
-				actionText: 'Set Up',
+				actionText: __('Set Up', 'multivendorx'),
 			},
 			{
-				title: 'Search Engine Visibility',
-				description: 'Control search engine indexing.',
+				title: __('Search Engine Visibility', 'multivendorx'),
+				description: __(
+					'Control search engine indexing.',
+					'multivendorx'
+				),
 				completed: false,
-				actionText: 'Review',
+				actionText: __('Review', 'multivendorx'),
 			},
 		],
 	},
 	{
-		title: 'Design, Style & Theme',
+		title: __('Design, Style & Theme', 'multivendorx'),
 		steps: [
 			{
-				title: 'Pick a Color Scheme',
+				title: __('Pick a Color Scheme', 'multivendorx'),
 				description: '',
 				completed: false,
-				actionText: 'Set Up',
+				actionText: __('Set Up', 'multivendorx'),
 			},
 			{
-				title: 'Choose Typography',
+				title: __('Choose Typography', 'multivendorx'),
 				description: '',
 				completed: false,
-				actionText: 'Set Up',
+				actionText: __('Set Up', 'multivendorx'),
 			},
 		],
 	},
 ];
 
 const Intro: React.FC<IntroProps> = ({ onNext }) => {
-	// return (
-	// <section>
-	//     <h2>Welcome to the CatalogX family!</h2>
-	//     <p>
-	//         Thank you for choosing CatalogX! This quick setup wizard will help you configure the basic settings and you will have your marketplace ready in no time.
-	//         <strong> It’s completely optional and shouldn’t take longer than five minutes.</strong>
-	//     </p>
-	//     <p>
-	//         If you don't want to go through the wizard right now, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!
-	//     </p>
-	//     <button className='footer-btn next-btn' onClick={onNext}>Next</button>
-	// </section>
-
-	// );
 	const [expanded, setExpanded] = useState<number | null>(0);
 
 	const toggleSection = (index: number) => {
@@ -83,79 +86,106 @@ const Intro: React.FC<IntroProps> = ({ onNext }) => {
 	};
 
 	return (
-		<div className="wizard-container">
-			{sectionsData.map((section, idx) => {
-				const completedSteps = section.steps.filter(
-					(s) => s.completed
-				).length;
-				const totalSteps = section.steps.length;
-
-				return (
-					<div
-						key={idx}
-						className={`wizard-section ${
-							expanded === idx ? 'expanded' : ''
-						}`}
-					>
-						<div
-							className="wizard-header"
-							onClick={() => toggleSection(idx)}
-						>
-							<div className="wizard-title">
-								<span
-									className={`chevron ${
-										expanded === idx ? 'rotate' : ''
-									}`}
-								>
-									&gt;
-								</span>
-								{section.title}
-							</div>
-							<div className="wizard-progress">
-								{completedSteps}/{totalSteps}
-							</div>
-						</div>
-
-						{expanded === idx && (
-							<div className="wizard-steps">
-								{section.steps.map((task, tidx) => (
-									<div key={tidx} className="wizard-step">
-										<div className="step-info">
-											<div
-												className={`step-status ${
-													task.completed
-														? 'completed'
-														: ''
-												}`}
-											>
-												{task.completed && (
-													<span className="check">
-														&#10003;
-													</span>
-												)}
-											</div>
-											<div className="step-text">
-												<span className="step-title">
-													{task.title}
-												</span>
-												{task.description && (
-													<span className="desc">
-														{task.description}
-													</span>
-												)}
-											</div>
-										</div>
-										<button className="admin-btn btn-blue">
-											{task.actionText} &rarr;
-										</button>
-									</div>
-								))}
-							</div>
+		<>
+			<section className="welcome-section">
+				<h2>{__('Welcome to the CatalogX family!', 'multivendorx')}</h2>
+				<p>
+					{__(
+						'Thank you for choosing CatalogX! This quick setup wizard will help you configure the basic settings and you will have your marketplace ready in no time.',
+						'multivendorx'
+					)}{' '}
+					<strong>
+						{__(
+							'It’s completely optional and shouldn’t take longer than five minutes.',
+							'multivendorx'
 						)}
-					</div>
-				);
-			})}
-		</div>
+					</strong>
+				</p>
+				<p>
+					{__(
+						"If you don't want to go through the wizard right now, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!",
+						'multivendorx'
+					)}
+				</p>
+				<button className="footer-btn next-btn" onClick={onNext}>
+					{__('Next', 'multivendorx')}
+				</button>
+			</section>
+
+			<div className="wizard-container">
+				{sectionsData.map((section, idx) => {
+					const completedSteps = section.steps.filter(
+						(s) => s.completed
+					).length;
+					const totalSteps = section.steps.length;
+
+					return (
+						<div
+							key={idx}
+							className={`wizard-section ${
+								expanded === idx ? 'expanded' : ''
+							}`}
+						>
+							<div
+								className="wizard-header"
+								onClick={() => toggleSection(idx)}
+							>
+								<div className="wizard-title">
+									<span
+										className={`chevron ${
+											expanded === idx ? 'rotate' : ''
+										}`}
+									>
+										&gt;
+									</span>
+									{section.title}
+								</div>
+								<div className="wizard-progress">
+									{completedSteps}/{totalSteps}
+								</div>
+							</div>
+
+							{expanded === idx && (
+								<div className="wizard-steps">
+									{section.steps.map((task, tidx) => (
+										<div key={tidx} className="wizard-step">
+											<div className="step-info">
+												<div
+													className={`step-status ${
+														task.completed
+															? 'completed'
+															: ''
+													}`}
+												>
+													{task.completed && (
+														<span className="check">
+															&#10003;
+														</span>
+													)}
+												</div>
+												<div className="step-text">
+													<span className="step-title">
+														{task.title}
+													</span>
+													{task.description && (
+														<span className="desc">
+															{task.description}
+														</span>
+													)}
+												</div>
+											</div>
+											<button className="admin-btn btn-blue">
+												{task.actionText} &rarr;
+											</button>
+										</div>
+									))}
+								</div>
+							)}
+						</div>
+					);
+				})}
+			</div>
+		</>
 	);
 };
 

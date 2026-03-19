@@ -39,14 +39,31 @@ type OverviewProps = {
 	pieData: { name: string; value: number }[];
 	COLORS?: string[];
 };
+interface CommissionDetail {
+	id: string;
+	label: string;
+	count: string;
+	icon: string;
+}
 
-const Overview: React.FC<OverviewProps> = ({}) => {
-	const [commissionDetails, setCommissionDeatils] = useState<any[]>([]);
-	const [earningSummary, setEarningSummary] = useState<any[]>([]);
-	const [pieData, setPieData] = useState<any>([]);
-	const [topCoupons, setTopCoupons] = useState<any[]>([]);
-	const [topCustomers, setTopCustomers] = useState<any[]>([]);
-	const [topStores, setTopStores] = useState<any[]>([]);
+interface EarningSummaryItem {
+	id: string;
+	title: string;
+	price: string;
+}
+
+interface PieDataItem {
+	name: string;
+	value: number;
+}
+const Overview: React.FC<OverviewProps> = () => {
+	const [commissionDetails, setCommissionDeatils] = useState<
+		CommissionDetail[]
+	>([]);
+	const [earningSummary, setEarningSummary] = useState<EarningSummaryItem[]>(
+		[]
+	);
+	const [pieData, setPieData] = useState<PieDataItem[]>([]);
 
 	const fetchCommissionDetails = async () => {
 		axios({
@@ -194,66 +211,9 @@ const Overview: React.FC<OverviewProps> = ({}) => {
 			.catch(() => {
 				// Handle error gracefully
 			});
-
-		axios({
-			method: 'GET',
-			url: getApiLink(appLocalizer, 'commission'),
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: { format: 'reports', top_stores: 3 },
-		})
-			.then((response) => {
-				setTopStores(response.data);
-			})
-			.catch(() => {
-				// Handle error gracefully
-			});
 	};
 
 	useEffect(() => {
-		// Top selling coupons
-		axios({
-			method: 'GET',
-			url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				meta_key: 'multivendorx_store_id',
-				per_page: 50, // get more so we can sort later
-				orderby: 'date', // valid param, required by API
-				order: 'desc',
-			},
-		})
-			.then((response) => {
-				// Sort coupons manually by usage_count (descending)
-				const sortedCoupons = response.data
-					.sort((a, b) => b.usage_count - a.usage_count)
-					.slice(0, 5); // take top 5 only
-				setTopCoupons(sortedCoupons);
-			})
-			.catch((error) => {
-				console.error('Error fetching top coupons:', error);
-			});
-
-		axios({
-			method: 'GET',
-			url: `${appLocalizer.apiUrl}/wc-analytics/customers`,
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				per_page: 50, // fetch more customers so we can sort manually
-				orderby: 'total_spend',
-				order: 'desc',
-			},
-		})
-			.then((response) => {
-				// Sort by total_spend manually in case API doesn't enforce order
-				const sortedCustomers = response.data
-					.sort((a, b) => b.total_spend - a.total_spend)
-					.slice(0, 5); // Top 5 customers only
-				setTopCustomers(sortedCustomers);
-			})
-			.catch((error) => {
-				console.error('Error fetching top customers:', error);
-			});
-
 		fetchCommissionDetails();
 	}, []);
 	return (

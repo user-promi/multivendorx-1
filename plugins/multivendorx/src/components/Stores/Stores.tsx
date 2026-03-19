@@ -195,7 +195,7 @@ const Stores = () => {
 
 	// Open WordPress media uploader
 	const runUploader = (key: string) => {
-		const frame: any = (window as any).wp.media({
+		const frame = wp.media({
 			title: 'Select or Upload Image',
 			button: { text: 'Use this image' },
 			multiple: false,
@@ -375,7 +375,7 @@ const Stores = () => {
 										}
 										value={formData.store_owners}
 										type="single-select"
-										onChange={(newValue: any) => {
+										onChange={(newValue) => {
 											setFormData((prev) => ({
 												...prev,
 												store_owners: newValue,
@@ -406,9 +406,6 @@ const Stores = () => {
 										}
 										onRemove={() =>
 											handleRemoveImage('image')
-										}
-										onReplace={() =>
-											handleReplaceImage('image')
 										}
 									/>
 								</FormGroup>

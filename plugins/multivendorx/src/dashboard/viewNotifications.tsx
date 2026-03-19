@@ -7,7 +7,7 @@ import ActivitiesTable from './activityTable';
 import AnnouncementsTable from './AnnouncementsTable';
 
 const ViewNotifications = (React.FC = () => {
-	const SimpleLink = ({ to, children, onClick, className }: any) => (
+	const SimpleLink = ({ to, children, onClick, className }) => (
 		<a href={to} onClick={onClick} className={className}>
 			{children}
 		</a>

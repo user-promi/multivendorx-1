@@ -1,7 +1,26 @@
-/* global appLocalizer */
 import { __ } from '@wordpress/i18n';
 
-export const getTourSteps = (appLocalizer: any) => [
+interface AppLocalizer {
+	site_url: string;
+	admin_url?: string;
+	apiUrl?: string;
+	nonce?: string;
+	[key: string]: unknown;
+}
+
+interface TourStep {
+	selector: string;
+	placement: string;
+	title: string;
+	description: string;
+	next?: {
+		link: string;
+		step: number;
+	};
+	finish?: boolean;
+}
+
+export const getTourSteps = (appLocalizer: AppLocalizer): TourStep[] => [
 	{
 		selector: '.card-content',
 		placement: 'auto',

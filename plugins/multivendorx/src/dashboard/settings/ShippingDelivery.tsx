@@ -15,9 +15,29 @@ import {
 import ShippingRatesByCountry from './ShippingRatesByCountry';
 import DistanceByZoneShipping from './DistanceByZoneShipping';
 import { __ } from '@wordpress/i18n';
-
+interface FormData {
+	shipping_options?: string;
+	multivendorx_shipping_type_price?: string;
+	multivendorx_additional_product?: string;
+	multivendorx_additional_qty?: string;
+	free_shipping_amount?: string;
+	local_pickup_cost?: string;
+	distance_default_cost?: string;
+	distance_type?: string;
+	distance_max?: string;
+	distance_local_pickup_cost?: string;
+	distance_rules?: Array<{ max_distance: string; cost: string }>;
+	[key: string]:
+		| string
+		| Array<{ max_distance: string; cost: string }>
+		| undefined;
+}
+interface DistanceRule {
+	max_distance: string;
+	cost: string;
+}
 const ShippingDelivery = () => {
-	const [formData, setFormData] = useState<{ [key: string]: any }>({}); // Use 'any' for simplicity here
+	const [formData, setFormData] = useState<FormData>({});
 
 	useEffect(() => {
 		if (!appLocalizer.store_id) {
@@ -37,6 +57,7 @@ const ShippingDelivery = () => {
 						data.distance_rules = JSON.parse(data.distance_rules);
 					} catch (err) {
 						data.distance_rules = []; // fallback to empty array
+						console.error(err);
 					}
 				}
 
@@ -48,6 +69,7 @@ const ShippingDelivery = () => {
 						);
 					} catch (err) {
 						data.multivendorx_shipping_rates = [];
+						console.error(err);
 					}
 				}
 
@@ -109,7 +131,7 @@ const ShippingDelivery = () => {
 								<ChoiceToggleUI
 									options={appLocalizer.shipping_methods}
 									value={formData.shipping_options || ''}
-									onChange={(value: any) =>
+									onChange={(value: string) =>
 										handleToggleChange(
 											value,
 											'shipping_options'
@@ -376,7 +398,7 @@ const ShippingDelivery = () => {
 												},
 											]}
 											value={formData.distance_type || ''}
-											onChange={(value: any) =>
+											onChange={(value: string) =>
 												handleToggleChange(
 													value,
 													'distance_type'
@@ -494,7 +516,9 @@ const ShippingDelivery = () => {
 													},
 												],
 											}}
-											onChange={(updatedRules: any[]) => {
+											onChange={(
+												updatedRules: DistanceRule[]
+											) => {
 												const updated = {
 													...formData,
 													distance_rules:

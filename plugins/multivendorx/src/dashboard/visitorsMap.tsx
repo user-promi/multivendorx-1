@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getApiLink } from 'zyra';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
@@ -49,7 +49,7 @@ const VisitorsMap: React.FC<VisitorsMapProps> = ({ dateRange }) => {
 		});
 	}, [dateRange]);
 
-	const getCountryCode = (geo: any): string | null => {
+	const getCountryCode = (geo): string | null => {
 		const name = geo?.properties?.name;
 		if (!name) {
 			return null;
@@ -57,7 +57,7 @@ const VisitorsMap: React.FC<VisitorsMapProps> = ({ dateRange }) => {
 		return name.toLowerCase();
 	};
 
-	const handleMouseEnter = (geo: any) => {
+	const handleMouseEnter = (geo) => {
 		const code = getCountryCode(geo);
 		if (!code || !data) {
 			return;

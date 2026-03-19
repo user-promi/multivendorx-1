@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 import axios from 'axios';
@@ -21,15 +21,49 @@ import LatestRefundRequest from './LatestRefundRequest';
 
 interface OverviewProps {
 	id: string | null;
-	storeData?: any;
+	storeData?: StoreData;
+}
+
+interface Transaction {
+	id: number;
+	amount: string | number;
+	date: string;
+	transaction_type: string;
+	transaction_status: string;
+}
+
+interface Product {
+	id: number;
+	name: string;
+	sku: string;
+	price: string | number;
+	images?: Array<{ src: string }>;
+}
+
+interface StoreData {
+	transactions?: {
+		balance?: number;
+		locking_balance?: number;
+	};
+	request_withdrawal_amount?: number;
+	create_time?: string;
+	commission?: {
+		commission_total?: number;
+	};
+	primary_owner_info?: {
+		data?: {
+			display_name?: string;
+			user_email?: string;
+		};
+	};
 }
 
 const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 	const navigate = useNavigate();
 	const { modules } = useModules();
 
-	const [recentDebits, setRecentDebits] = useState<any[]>([]);
-	const [recentProducts, setRecentProducts] = useState<any[]>([]);
+	const [recentDebits, setRecentDebits] = useState<Transaction[]>([]);
+	const [recentProducts, setRecentProducts] = useState<Product[]>([]);
 
 	useEffect(() => {
 		if (!id) {

@@ -2,10 +2,9 @@ import { useEffect, useRef } from 'react';
 
 interface Props {
 	apiKey: string;
-	salesData: Record<string, number>;
 }
 
-const CountrySalesMap = ({ apiKey, salesData }: Props) => {
+const CountrySalesMap = ({ apiKey }: Props) => {
 	const mapRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {

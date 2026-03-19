@@ -1,15 +1,13 @@
-/* global appLocalizer */
 import React, { useState } from 'react';
 
 import { __ } from '@wordpress/i18n';
 
-import { TableRow } from '@/services/type';
-import { NavigatorHeader, TableCard } from 'zyra';
+import { NavigatorHeader, TableCard, TableRow } from 'zyra';
 
 const SupportTickets: React.FC = () => {
-	const [rows, setRows] = useState<TableRow[][]>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [totalRows, setTotalRows] = useState<number>(0);
+	const [rows] = useState<TableRow[][]>([]);
+	const [isLoading] = useState(false);
+	const [totalRows] = useState<number>(0);
 	const headers = {
 		title: {
 			label: __('Title', 'multivendorx'),

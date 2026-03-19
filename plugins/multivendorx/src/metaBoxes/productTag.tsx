@@ -1,22 +1,19 @@
-/* global appLocalizer */
 import { addFilter } from '@wordpress/hooks';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Card } from 'zyra';
 import { __ } from '@wordpress/i18n';
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ProductTag = ({ product, setProduct }) => {
-	const [existingTags, setExistingTags] = useState([]);
+	// const [existingTags, setExistingTags] = useState([]);
 
-	useEffect(() => {
-		axios
-			.get(`${appLocalizer.apiUrl}/wc/v3/products/tags`, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			})
-			.then((res) => {
-				setExistingTags(res.data);
-			});
-	}, []);
+	// useEffect(() => {
+	// 	axios
+	// 		.get(`${appLocalizer.apiUrl}/wc/v3/products/tags`, {
+	// 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+	// 		})
+	// 		.then((res) => {
+	// 			setExistingTags(res.data);
+	// 		});
+	// }, []);
 
 	return (
 		<Card title={__('Product tag', 'multivendorx')}>

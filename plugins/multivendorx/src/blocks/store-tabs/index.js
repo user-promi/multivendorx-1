@@ -10,13 +10,13 @@ const Edit = () => {
 			<div className="components-disabled mvx-store-products-wrapper">
 				<ul className="wc-tabs tabs">
 					<li className="description_tab active">
-						<a> Products </a>
+						<a> {__('Products', 'multivendorx')} </a>
 					</li>
 					<li className="description_tab">
-						<a> Reviews </a>
+						<a> {__('Reviews', 'multivendorx')} </a>
 					</li>
 					<li className="description_tab">
-						<a> Policy </a>
+						<a> {__('Policy', 'multivendorx')} </a>
 					</li>
 				</ul>
 				<ul
@@ -25,57 +25,57 @@ const Edit = () => {
 				>
 					{[
 						{
-							name: 'Classic T-Shirt',
+							name: __('Classic T-Shirt', 'multivendorx'),
 							price: '₹499',
 							type: 'simple',
 							hasSale: true,
 						},
 						{
-							name: 'Denim Jacket',
+							name: __('Denim Jacket', 'multivendorx'),
 							price: '₹1,299',
 							type: 'simple',
 							hasSale: false,
 						},
 						{
-							name: 'Running Shoes',
+							name: __('Running Shoes', 'multivendorx'),
 							price: '₹1,999',
 							regularPrice: '₹2,499',
 							type: 'variable',
 							hasSale: true,
 						},
 						{
-							name: 'Cotton Hoodie',
+							name: __('Cotton Hoodie', 'multivendorx'),
 							price: '₹899',
 							type: 'simple',
 							hasSale: true,
 						},
 						{
-							name: 'Sports Cap',
+							name: __('Sports Cap', 'multivendorx'),
 							price: '₹399',
 							type: 'simple',
 							hasSale: false,
 						},
 						{
-							name: 'Yoga Mat',
+							name: __('Yoga Mat', 'multivendorx'),
 							price: '₹799',
 							regularPrice: '₹999',
 							type: 'variable',
 							hasSale: true,
 						},
 						{
-							name: 'Gym Bag',
+							name: __('Gym Bag', 'multivendorx'),
 							price: '₹1,499',
 							type: 'simple',
 							hasSale: false,
 						},
 						{
-							name: 'Water Bottle',
+							name: __('Water Bottle', 'multivendorx'),
 							price: '₹249',
 							type: 'simple',
 							hasSale: true,
 						},
 						{
-							name: 'Training Gloves',
+							name: __('Training Gloves', 'multivendorx'),
 							price: '₹599',
 							regularPrice: '₹799',
 							type: 'variable',
@@ -97,9 +97,14 @@ const Edit = () => {
 								</a>
 								{product.hasSale && (
 									<div className="wc-block-components-product-sale-badge wc-block-components-product-sale-badge--align-right">
-										<span aria-hidden="true">Sale</span>
+										<span aria-hidden="true">
+											{__('Sale', 'multivendorx')}
+										</span>
 										<span className="screen-reader-text">
-											Product on sale
+											{__(
+												'Product on sale',
+												'multivendorx'
+											)}
 										</span>
 									</div>
 								)}
@@ -114,13 +119,19 @@ const Edit = () => {
 								product.regularPrice ? (
 									<span className="wc-block-components-product-price__value">
 										<span className="screen-reader-text">
-											Previous price:
+											{__(
+												'Previous price:',
+												'multivendorx'
+											)}
 										</span>
 										<del className="wc-block-components-product-price__regular">
 											{product.regularPrice}
 										</del>
 										<span className="screen-reader-text">
-											Discounted price:
+											{__(
+												'Discounted price:',
+												'multivendorx'
+											)}
 										</span>
 										<ins className="wc-block-components-product-price__value is-discounted">
 											{product.price}
@@ -139,8 +150,8 @@ const Edit = () => {
 									className="wp-block-button__link wp-element-button add_to_cart_button"
 								>
 									{product.type === 'variable'
-										? 'Select options'
-										: 'Add to cart'}
+										? __('Select options', 'multivendorx')
+										: __('Add to cart', 'multivendorx')}
 								</a>
 							</div>
 						</li>
@@ -150,6 +161,7 @@ const Edit = () => {
 		</div>
 	);
 };
+
 registerBlockType('multivendorx/store-tabs', {
 	apiVersion: 2,
 	edit: Edit,

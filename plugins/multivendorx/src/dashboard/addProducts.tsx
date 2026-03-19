@@ -19,6 +19,7 @@ import {
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
+import { dashNavigate } from '@/services/commonFunction';
 
 const AddProduct = () => {
 	const { modules } = useModules();
@@ -180,15 +181,11 @@ const AddProduct = () => {
 
 	const handleTranslationClick = (lang) => {
 		if (lang.translated_product_id) {
-			if (appLocalizer.permalink_structure) {
-				navigate(
-					`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${lang.translated_product_id}/`
-				);
-			} else {
-				navigate(
-					`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${lang.translated_product_id}`
-				);
-			}
+			dashNavigate(navigate, [
+				'products',
+				'edit',
+				String(lang.translated_product_id),
+			]);
 			return;
 		}
 
@@ -203,15 +200,11 @@ const AddProduct = () => {
 			},
 		}).then((res) => {
 			if (res.data?.product_id) {
-				if (appLocalizer.permalink_structure) {
-					navigate(
-						`${basePath}/${appLocalizer.dashboard_slug}/products/edit/${res.data.product_id}/`
-					);
-				} else {
-					navigate(
-						`${basePath}/?page_id=${appLocalizer.dashboard_page_id}&segment=products&element=edit&context_id=${res.data.product_id}`
-					);
-				}
+				dashNavigate(navigate, [
+					'products',
+					'edit',
+					String(res.data?.product_id),
+				]);
 			}
 		});
 	};

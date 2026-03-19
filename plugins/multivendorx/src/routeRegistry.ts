@@ -1,12 +1,13 @@
+import React from 'react';
 declare global {
 	interface Window {
 		MULTIVENDORX_ROUTES: {
 			tab: string;
-			component: React.ComponentType<any>;
+			component: React.ComponentType<Record<string, unknown>>;
 		}[];
 		registerMultiVendorXRoute: (route: {
 			tab: string;
-			component: React.ComponentType<any>;
+			component: React.ComponentType<Record<string, unknown>>;
 		}) => void;
 	}
 }

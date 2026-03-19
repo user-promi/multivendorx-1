@@ -3,6 +3,7 @@ import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import Loading from './Loading';
 import { getApiLink } from 'zyra';
+import { __ } from '@wordpress/i18n';
 
 interface EnquiryProps {
 	onNext: () => void;
@@ -40,7 +41,7 @@ const Enquiry: React.FC<EnquiryProps> = ({ onNext, onPrev }) => {
 		axios
 			.post(getApiLink('settings'), data, {
 				headers: {
-					'X-WP-Nonce': (window as any).appLocalizer?.nonce,
+					'X-WP-Nonce': appLocalizer?.nonce,
 				},
 			})
 			.then(() => {
@@ -54,14 +55,16 @@ const Enquiry: React.FC<EnquiryProps> = ({ onNext, onPrev }) => {
 
 	return (
 		<section>
-			<h2>Enquiry</h2>
+			<h2>{__('Enquiry', 'multivendorx')}</h2>
 			<article className="module-wrapper">
 				<div className="module-items">
 					<div className="module-details">
-						<h3>Display Enquiry Form:</h3>
+						<h3>{__('Display Enquiry Form:', 'multivendorx')}</h3>
 						<p className="module-description">
-							Select whether the form is displayed directly on the
-							page or in a pop-up window.
+							{__(
+								'Select whether the form is displayed directly on the page or in a pop-up window.',
+								'multivendorx'
+							)}
 						</p>
 					</div>
 					<ul>
@@ -75,7 +78,9 @@ const Enquiry: React.FC<EnquiryProps> = ({ onNext, onPrev }) => {
 								checked={displayOption === 'popup'}
 								onChange={() => setDisplayOption('popup')}
 							/>
-							<label htmlFor="popup">Popup</label>
+							<label htmlFor="popup">
+								{__('Popup', 'multivendorx')}
+							</label>
 						</li>
 						<li>
 							<input
@@ -87,7 +92,9 @@ const Enquiry: React.FC<EnquiryProps> = ({ onNext, onPrev }) => {
 								checked={displayOption === 'inline'}
 								onChange={() => setDisplayOption('inline')}
 							/>
-							<label htmlFor="inline">Inline In-page</label>
+							<label htmlFor="inline">
+								{__('Inline In-page', 'multivendorx')}
+							</label>
 						</li>
 					</ul>
 				</div>
@@ -96,10 +103,14 @@ const Enquiry: React.FC<EnquiryProps> = ({ onNext, onPrev }) => {
 			<article className="module-wrapper">
 				<div className="module-items">
 					<div className="module-details">
-						<h3>Restrict for logged-in user</h3>
+						<h3>
+							{__('Restrict for logged-in user', 'multivendorx')}
+						</h3>
 						<p className="module-description">
-							If enabled, non-logged-in users can't access the
-							enquiry flow.
+							{__(
+								'If enabled, non-logged-in users cannot access the enquiry flow.',
+								'multivendorx'
+							)}
 						</p>
 					</div>
 					<div className="toggle-checkbox">
@@ -120,17 +131,17 @@ const Enquiry: React.FC<EnquiryProps> = ({ onNext, onPrev }) => {
 			<footer className="setup-footer-btn-wrapper">
 				<div>
 					<button className="footer-btn pre-btn" onClick={onPrev}>
-						Prev
+						{__('Prev', 'multivendorx')}
 					</button>
 					<button className="footer-btn" onClick={onNext}>
-						Skip
+						{__('Skip', 'multivendorx')}
 					</button>
 				</div>
 				<button
 					className="footer-btn next-btn"
 					onClick={saveEnquirySettings}
 				>
-					Next
+					{__('Next', 'multivendorx')}
 				</button>
 			</footer>
 			{loading && <Loading />}

@@ -1,3 +1,4 @@
+/* global appLocalizer */
 export const truncateText = (text: string, wordCount: number) => {
 	if (!text) {
 		return '';
@@ -132,9 +133,23 @@ export const toWcIsoDate = (date: Date, type: 'start' | 'end'): string => {
 	return d.toISOString();
 };
 
+interface HeaderColumn {
+	label: string;
+	csvDisplay?: boolean;
+	[key: string]: unknown;
+}
+
+interface HeaderConfig {
+	[key: string]: HeaderColumn;
+}
+
+interface RowData {
+	[key: string]: string | number | boolean | null | undefined;
+}
+
 export const downloadCSV = (
-	headers: Record<string, any>,
-	rows: Record<string, any>[],
+	headers: HeaderConfig,
+	rows: RowData[],
 	filename: string = 'export.csv'
 ) => {
 	if (!rows || rows.length === 0) {
@@ -152,7 +167,10 @@ export const downloadCSV = (
 	// Data rows
 	rows.forEach((row) => {
 		const rowData = csvColumns
-			.map((col) => `"${row[col.key] != null ? row[col.key] : ''}"`)
+			.map((col) => {
+				const value = row[col.key];
+				return `"${value != null ? value : ''}"`;
+			})
 			.join(',');
 		csvRows.push(rowData);
 	});
@@ -207,7 +225,10 @@ const updatePlainPermalinkUrl = (segments: string[]) => {
  *
  * @param segments  e.g. ['products'], ['products', 'edit'], ['products', 'edit', '123']
  */
-export const dashNavigate = (navigate: any, segments: string[]) => {
+export const dashNavigate = (
+	navigate: (path: string) => void,
+	segments: string[]
+) => {
 	const ALLOWED_SEGMENTS = ['products', 'orders', 'dashboard'];
 
 	if (!ALLOWED_SEGMENTS.includes(segments[0])) {
