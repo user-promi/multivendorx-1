@@ -154,11 +154,6 @@
           }
         }
       }
-
-      .divider-section {
-        padding: 1rem 1rem .5rem;
-        background: $background-white;
-      }
     }
   }
 
@@ -210,11 +205,6 @@
           color: #fff;
         }
       }
-    }
-
-    .divider-section {
-      padding-top: 0;
-      padding-bottom: 1.5rem;
     }
   }
 
@@ -364,7 +354,6 @@
     .general-wrapper {
       width: 75%;
       background: $background-white;
-      border: $border-light-small;
       margin: 0 1rem 1rem;
       border-radius: $border-radius-small;
       border: none;
@@ -376,11 +365,6 @@
       .tab-content {
         box-sizing: border-box;
       }
-    }
-
-    .divider-section {
-      padding: 1rem 1rem .5rem;
-      background: $background-white;
     }
   }
 }
@@ -543,8 +527,6 @@
     border-bottom: 0.126rem solid transparent;
     font-weight: 500;
     cursor: pointer;
-
-    // transition: all 0.4s ease;
 
     .tab-name {
       font-size: 0.938rem;

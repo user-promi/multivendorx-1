@@ -76,6 +76,7 @@
     box-shadow: $box-shadow;
     background: $background-white;
     width: 100%;
+
     // height: 100%;
     box-sizing: border-box;
     border: 0.063rem solid #dfdfdf;
@@ -97,12 +98,13 @@
 
         &.hide-body {
             display: none;
-            /*for hide toggle hide body */
+            /* for hide toggle hide body */
         }
 
         .card-header {
             // margin: 0;
             border-bottom: $border-light-small;
+
             // margin-bottom: 1rem;
         }
     }
@@ -145,6 +147,7 @@
 // checklist start common and delete
 .card-wrapper:has(.checklist-wrapper) {
     height: fit-content;
+
     // position: sticky !important;
     top: 5rem;
     z-index: 9;

@@ -48,7 +48,7 @@
       margin-left: -0.313rem;
       border-width: 0.313rem;
       border-style: solid;
-      border-color: #2e2e2e transparent transparent transparent;
+      border-color: #2e2e2e transparent transparent;
     }
   }
 
@@ -57,7 +57,7 @@
       &::after {
         top: auto;
         bottom: 100%;
-        border-color: transparent transparent #2e2e2e transparent;
+        border-color: transparent transparent #2e2e2e;
       }
     }
   }

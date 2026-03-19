@@ -1,7 +1,6 @@
 @use '../../../global.scss' as *;
 
 @each $name, $style in $btn-color-palette {
-
   // light background color btn
   .btn-#{$name} {
     background: map-get($style, light-color);

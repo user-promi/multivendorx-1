@@ -72,7 +72,7 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
     addButtonLabel = 'Add',
     deleteButtonLabel = 'Delete',
     single = false,
-    wrapperClass,
+    wrapperClass= '',
     canAccess,
 } ) => {
     const [ rows, setRows ] = useState< RowType[] >( [] );
@@ -239,37 +239,26 @@ export const NestedComponentUI: React.FC< NestedComponentProps > = ( {
                     } ) }
 
                     { ! single && (
-                        <div className="button-wrapper">
-                            { /* Add button only on last row */ }
-                            { rowIndex === rows.length - 1 && (
-                                <ButtonInputUI
-                                    buttons={ [
-                                        {
-                                            icon: 'plus',
-                                            color: 'purple',
-                                            text: addButtonLabel,
-                                            onClick: addRow,
-                                            disabled: ! isLastRowComplete(),
-                                        },
-                                    ] }
-                                />
-                            ) }
-
-                            { /* Delete button on all rows except row 0 */ }
-                            { rows.length > 1 && rowIndex > 0 && (
-                                <ButtonInputUI
-                                    buttons={ [
-                                        {
-                                            icon: 'delete',
-                                            text: deleteButtonLabel,
-                                            color: 'red',
-                                            onClick: () =>
-                                                removeRow( rowIndex ),
-                                        },
-                                    ] }
-                                />
-                            ) }
-                        </div>
+                        <ButtonInputUI
+                            buttons={[
+                                //  Add button only on last row 
+                                ...(rowIndex === rows.length - 1 ? [{
+                                    icon: 'plus',
+                                    color: 'purple',
+                                    text: addButtonLabel,
+                                    onClick: addRow,
+                                    disabled: !isLastRowComplete(),
+                                }] : []),
+                                
+                                // Delete button on all rows except row 0
+                                ...(rows.length > 1 && rowIndex > 0 ? [{
+                                    icon: 'delete',
+                                    text: deleteButtonLabel,
+                                    color: 'red',
+                                    onClick: () => removeRow(rowIndex),
+                                }] : []),
+                            ]}
+                        />
                     ) }
                 </div>
             ) ) }
