@@ -163,7 +163,7 @@ const App = () => {
 		},
 		{
 			title: __('Documentation', 'multivendorx'),
-			icon: 'book',
+			icon: 'knowledgebase',
 			link: 'https://multivendorx.com/docs/knowledgebase/?utm_source=settings&utm_medium=plugin&utm_campaign=promotion',
 			targetBlank: true,
 		},
@@ -265,7 +265,7 @@ const App = () => {
 				width={31.25}
 				height={50}
 				header={{
-					icon: 'book',
+					icon: 'knowledgebase',
 					title: __('Import Dummy Data', 'multivendorx'),
 					description: __(
 						'Get a hands-on feel of your marketplace in minutes.',

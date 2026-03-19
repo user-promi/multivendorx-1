@@ -763,7 +763,6 @@ const Dashboard: React.FC = () => {
 								isLoading={isLoading}
 								ids={topProductIds}
 								className="transparent-table"
-								title=""
 								showMenu={false}
 								showColumnToggleIcon={false}
 							/>
@@ -940,7 +939,7 @@ const Dashboard: React.FC = () => {
 												text: customer.name
 													?.charAt(0)
 													.toUpperCase(),
-												iconClass: 'red-color',
+												iconClass: 'user-circle',
 											}}
 											isLoading={isLoading}
 											descriptions={[
@@ -973,7 +972,7 @@ const Dashboard: React.FC = () => {
 									<div key={i} className="activity">
 										<div className="title">{a.title}</div>
 										<div className="des">{a.message}</div>
-										<span>{a.date}</span>
+										<span>{a.created_at}</span>
 									</div>
 								))
 							) : (

@@ -374,7 +374,7 @@ export const KnowledgeBase: React.FC = () => {
 					position="slide-right-to-left"
 					showBackdrop={true}
 					header={{
-						icon: 'book',
+						icon: 'knowledgebase',
 						title: editId
 							? __('Edit Knowledgebase', 'multivendorx')
 							: __('Add Knowledgebase', 'multivendorx'),

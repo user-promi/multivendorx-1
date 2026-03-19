@@ -32,6 +32,7 @@ type HeaderSearchProps = {
     onQueryUpdate: ( payload: SearchPayload ) => void;
     onResultClick?: ( res: SearchItem ) => void;
     variant?: 'default' | 'mini-search';
+    width?: number;
 };
 
 const HeaderSearch: React.FC< HeaderSearchProps > = ( {
@@ -39,6 +40,7 @@ const HeaderSearch: React.FC< HeaderSearchProps > = ( {
     results,
     onQueryUpdate,
     onResultClick,
+    width,
     variant = 'default',
 } ) => {
     if ( ! search ) {
@@ -97,6 +99,7 @@ const HeaderSearch: React.FC< HeaderSearchProps > = ( {
                     <SelectInputUI
                         options={ options }
                         value={ action }
+                        size = {`${width}rem`}
                         onChange={ ( value ) => {
                             setAction( value );
                             triggerSearch( query, value );

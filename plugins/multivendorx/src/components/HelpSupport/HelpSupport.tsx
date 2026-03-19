@@ -198,7 +198,7 @@ const HelpSupport: React.FC = () => {
 									rel="noopener noreferrer"
 									className="admin-btn btn-purple"
 								>
-									{__('Watch All Tutorials', 'multivendorx')}
+								<i className="adminfont-eye"/>	{__('Watch All Tutorials', 'multivendorx')}
 								</a>
 							</div>
 

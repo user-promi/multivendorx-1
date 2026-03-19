@@ -533,7 +533,7 @@ export default {
 			category: ['store_management', 'payment_management'],
 		},
 		{
-			id: 'advertisement',
+			id: 'advertise-product',
 			name: __('Advertise Product', 'multivendorx'),
 			desc: 'Paid promotion for products within the marketplace, boosting visibility.',
 			docLink:
