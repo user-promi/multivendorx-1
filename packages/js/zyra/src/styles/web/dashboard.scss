@@ -231,7 +231,6 @@
         gap: 0.5rem;
 
         .item-icon {
-            padding: 0.313rem 0;
             font-size: 1.125rem;
             padding: 0.313rem;
             border-radius: $border-radius-small;
@@ -322,6 +321,7 @@
     align-items: end;
     justify-content: end;
     gap: 0.313rem;
+
     // margin-bottom: 0.625rem;
     color: $text-color;
 

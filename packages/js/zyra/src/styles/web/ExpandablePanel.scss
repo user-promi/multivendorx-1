@@ -186,26 +186,26 @@
                 font-size: 0.95rem;
             }
 
-            .copy-text-wrapper {
-                display: flex;
-                align-items: center;
+            // .copy-text-wrapper {
+            //     display: flex;
+            //     align-items: center;
 
-                code {
-                    background: $theme-background-color;
-                    color: $theme-color;
-                    margin-right: 0.313rem;
-                }
+            //     code {
+            //         background: $theme-background-color;
+            //         color: $theme-color;
+            //         margin-right: 0.313rem;
+            //     }
 
-                i {
-                    font-size: 1rem;
-                }
+            //     i {
+            //         font-size: 1rem;
+            //     }
 
-                .copied-msg {
-                    margin-left: 0.5rem;
-                    color: green;
-                    font-size: 0.75rem;
-                }
-            }
+            //     .copied-msg {
+            //         margin-left: 0.5rem;
+            //         color: green;
+            //         font-size: 0.75rem;
+            //     }
+            // }
 
             .clickable-list-wrapper {
                 .clickable-items {

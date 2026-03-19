@@ -6,6 +6,7 @@ body:has(.admin-main-wrapper) {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+
   // background: rgb(246 248 260 / 50%) !important;
 }
 
@@ -41,6 +42,7 @@ a {
     .before,
     .after {
       font-size: 0.95rem;
+
       // width: 13rem;
     }
 
@@ -131,8 +133,6 @@ a {
     margin: -0.063rem .3rem 0 0 !important;
     border-radius: $border-radius-small;
     font-size: 0.95rem;
-    height: 1.125rem;
-    width: 1.125rem;
   }
 
   input[type="checkbox"]:checked::before {
@@ -200,7 +200,6 @@ a {
 $index: 1;
 
 @each $name, $style in $color-palette {
-
   // color name with background (.red & .admin-color1)
   .#{$name},
   .admin-color#{$index} {
@@ -599,6 +598,7 @@ $index: 1;
   gap: 1rem;
   position: relative;
   width: fit-content;
+
   // margin: 0.5rem 0;
 
   .loader {
@@ -935,10 +935,9 @@ $index: 1;
     .action-dropdown.hover {
       display: block;
       left: -50%;
-      height: 1rem;
       position: absolute;
       inset: 0 auto auto 0;
-      transform: translate(-100%, 0rem);
+      transform: translate(-100%, 0);
       background: $background-color;
       height: 100%;
       padding: 0 0.313rem;

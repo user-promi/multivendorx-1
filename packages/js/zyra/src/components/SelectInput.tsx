@@ -175,14 +175,15 @@ const buildStyles = (
         ...( isMulti ? {} : { height: '2.213rem', maxHeight: '2.213rem' } ),
         paddingTop: 0,
         paddingBottom: 0,
+        width: '100%',
         margin: 0,
         '&:active': { color: 'var(--colorPrimary)' },
     } ),
     valueContainer: ( base ) => ( {
         ...base,
         margin: 0,
-        paddingTop: isMulti ? '2px' : 0,
-        paddingBottom: isMulti ? '2px' : 0,
+        paddingTop: isMulti ? '0.125rem' : 0,
+        paddingBottom: isMulti ? '0.125rem' : 0,
         backgroundColor: 'transparent',
         flexWrap: isMulti ? 'wrap' : 'nowrap',
     } ),
@@ -201,12 +202,12 @@ const buildStyles = (
     multiValue: ( base ) => ( {
         ...base,
         backgroundColor: 'var(--backgroundPrimary)',
-        margin: '2px',
+        margin: '0.125rem',
     } ),
     multiValueLabel: ( base ) => ( {
         ...base,
         color: 'var(--colorPrimary)',
-        padding: '0 4px',
+        padding: '0 0.25rem',
     } ),
     multiValueRemove: ( base ) => ( {
         ...base,

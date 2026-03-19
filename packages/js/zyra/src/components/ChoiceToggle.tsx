@@ -148,7 +148,7 @@ export const ChoiceToggleUI: React.FC< ChoiceToggleProps > = ( {
                                     ) }
                                     { option.customHtml && (
                                         <div
-                                            className="toggle-custom-wrapper"
+                                            className="choice-toggle-custom-wrapper"
                                             dangerouslySetInnerHTML={ {
                                                 __html: option.customHtml,
                                             } }

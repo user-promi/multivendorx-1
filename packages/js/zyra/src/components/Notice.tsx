@@ -148,7 +148,7 @@ const renderNoticeContent = ( item: NoticeItem, onClose?: () => void ) => (
                       </React.Fragment>
                   ) )
                 : item.message && (
-                      <div className="notice-desc">{ item.message }</div>
+                      <div  className="notice-desc"  dangerouslySetInnerHTML={{ __html: item.message }} />
                   ) }
         </div>
     </>
