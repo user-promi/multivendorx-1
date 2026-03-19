@@ -1,7 +1,6 @@
 import React, { JSX, useEffect, useRef, useState, ReactNode } from 'react';
 import { getApiLink, sendApiResponse } from '../utils/apiService';
 import { useModules } from '../contexts/ModuleContext';
-import '../styles/web/AdminForm.scss';
 import { FIELD_REGISTRY, ZyraVariable } from './fieldUtils';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import { PopupUI } from './Popup';
