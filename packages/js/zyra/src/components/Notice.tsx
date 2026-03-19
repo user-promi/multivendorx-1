@@ -149,11 +149,8 @@ const renderNoticeContent = (item: NoticeItem, onClose?: () => void) => (
                     </>
                 )
                 : item.message && (
-                    <div className="notice-desc">
-                        <span dangerouslySetInnerHTML={{ __html: item.message }} />
-                    </div>
-                )
-            }
+                      <div  className="notice-desc"  dangerouslySetInnerHTML={{ __html: item.message }} />
+                  ) }
         </div>
     </>
 );
