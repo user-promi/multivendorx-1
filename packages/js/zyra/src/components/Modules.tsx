@@ -132,7 +132,6 @@ const Modules: React.FC< ModuleProps > = ( {
                     type: 'success',
                     position: 'float',
                 } );
-
                 if ( module.reloadOnChange ) {
                     window.location.reload();
                 }
