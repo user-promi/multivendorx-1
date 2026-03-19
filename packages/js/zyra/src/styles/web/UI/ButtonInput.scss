@@ -1,7 +1,6 @@
 @use '../../../global.scss' as *;
 
 @each $name, $style in $btn-color-palette {
-
   // light background color btn
   .btn-#{$name} {
     background: map-get($style, light-color);
@@ -70,4 +69,15 @@
   &.btn-preview {
     padding: 0;
   }
+}
+
+.add-btn {
+  display: flex;
+  gap: 0.313rem;
+  align-items: center;
+  border-bottom: 0.063rem solid $theme-color;
+  padding-bottom: 0.125rem;
+  font-size: 0.813rem;
+  color: $theme-color;
+  cursor: pointer;
 }

@@ -570,25 +570,25 @@ a {
 
 
 // top product start
-.top-products {
-    tr {
-        td:nth-child(1) {
-            width: 10%;
-        }
+// .top-products {
+//     tr {
+//         td:nth-child(1) {
+//             width: 10%;
+//         }
 
-        td:nth-child(2) {
-            width: 35%;
-        }
+//         td:nth-child(2) {
+//             width: 35%;
+//         }
 
-        td:nth-child(3) {
-            width: 40%;
-        }
+//         td:nth-child(3) {
+//             width: 40%;
+//         }
 
-        td:nth-child(4) {
-            width: 15%;
-        }
-    }
-}
+//         td:nth-child(4) {
+//             width: 15%;
+//         }
+//     }
+// }
 
 // top customer
 .top-customer-wrapper {
@@ -631,38 +631,39 @@ a {
     }
 }
 
-.table-wrapper {
-    border: none !important; /* overwrite zyra style*/
+// .table-wrapper {
+//     border: none !important; /* overwrite zyra style*/
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
+//     table {
+//         width: 100%;
+//         border-collapse: collapse;
 
-        td {
-            padding: 0.625rem 0;
-            border-bottom: $border-light-small;
-            flex-direction: column;
-            gap: 0.313rem;
-        }
+//         td {
+//             padding: 0.625rem 0;
+//             border-bottom: $border-light-small;
+//             flex-direction: column;
+//             gap: 0.313rem;
+//         }
 
-        thead {
-            td {
-                color: $text-color;
-            }
-        }
+//         thead {
+//             td {
+//                 color: $text-color;
+//             }
+//         }
 
-        tbody {
-            td {
-                color: $sub-text-color;
-            }
-        }
-    }
-}
+//         tbody {
+//             td {
+//                 color: $sub-text-color;
+//             }
+//         }
+//     }
+// }
 
 // top product end
 
 // progress-bar
 .progress-bar {
+    width: 100%;
     div {
         width: 80%;
         height: 0.313rem;
@@ -793,6 +794,17 @@ a {
 
 // column details start
 
+
+// dashboard transparent table strat
+.transparent-table{
+    .admin-table{
+        background: transparent;
+
+        .admin-table-body tr{
+            border-top: $border-light-small;
+        }   
+    }
+}
 
 // switch store start
 .switch-store-wrapper {

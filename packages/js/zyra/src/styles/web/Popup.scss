@@ -21,11 +21,8 @@
     // Backdrop styles
     .popup-backdrop {
         position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
+        inset: 0;
+        background-color: rgb(0 0 0 / 50%);
         z-index: 9998;
         animation: fadeIn 0.2s ease-in-out;
     }
@@ -36,7 +33,7 @@
         z-index: 9999;
         background: $background-white;
         transition: transform 1s ease 0.3s;
-        border-radius: $border-light-small;
+        border-radius: $border-radius-small;
 
         // header
         .popup-header {
@@ -99,10 +96,9 @@
             min-width: 14rem;
             right: 0;
             background: #fff;
-            border-radius: $border-radius-small;
             transition: all 0.3s ease;
             z-index: 9999;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 20px rgb(0 0 0 / 15%);
 
             .popup-body {
                 margin: 0;
@@ -186,7 +182,6 @@
         &[data-position^="slide-"] {
             display: flex;
             flex-direction: column;
-            border-radius: $border-radius-small;
             max-height: 95vh;
 
             .popup-body {
@@ -244,9 +239,9 @@
             overflow-y: auto;
             animation: modalSlideIn 0.3s ease-out;
 
-            .popup-body{
-                padding: 1rem;
-            }
+            // .popup-body{
+            //     padding: 1rem;
+            // }
         }
 
         &[data-position="lightbox"] {

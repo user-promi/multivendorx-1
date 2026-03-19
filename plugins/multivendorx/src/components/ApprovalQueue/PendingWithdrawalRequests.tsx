@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
+import { ButtonInputUI, getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
 import { useRef } from '@wordpress/element';
 import { setSession } from '@/services/commonFunction';
 
@@ -49,21 +49,26 @@ const PendingWithdrawal: React.FC<object> = () => {
 			type: 'currency',
 		},
 		action: {
-			type: 'action',
 			label: __('Action', 'multivendorx'),
-			actions: [
-				{
-					label: __('Approve', 'multivendorx'),
-					icon: 'check',
-					onClick: (row) => handleSingleAction('approve', row),
-				},
-				{
-					label: __('Reject', 'multivendorx'),
-					icon: 'close',
-					className: 'danger',
-					onClick: (row) => handleSingleAction('reject', row),
-				},
-			],
+			render: (row: any) => {
+				return (
+					<ButtonInputUI
+						buttons={[
+							{
+								icon: 'check',
+								text: __('Approve', 'multivendorx'),
+								color: 'purple',
+								onClick: (row: any) => handleSingleAction('approve', row.id),
+							},
+							{
+								icon: 'close',
+								text: __('Reject', 'multivendorx'),
+								onClick: (row: any) => handleSingleAction('reject', row.id),
+							},
+						]}
+					/>
+				)
+			}
 		},
 	};
 

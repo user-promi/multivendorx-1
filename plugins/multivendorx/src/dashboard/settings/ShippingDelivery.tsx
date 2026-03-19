@@ -172,6 +172,7 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 										htmlFor="multivendorx_shipping_type_price"
+										desc= {__( 'This is the shipping cost applied to every order.', 'multivendorx')}
 									>
 										<BasicInputUI
 											type="number"
@@ -188,12 +189,6 @@ const ShippingDelivery = () => {
 												)
 											}
 										/>
-										<div className="settings-metabox-description">
-											{__(
-												'This is the shipping cost applied to every order.',
-												'multivendorx'
-											)}
-										</div>
 									</FormGroup>
 
 									<FormGroup
@@ -202,6 +197,10 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 										htmlFor="multivendorx_additional_product"
+										desc={__(
+												'This amount will be added to the Default Shipping Price for each additional product type in the cart.',
+												'multivendorx'
+											)}
 									>
 										<BasicInputUI
 											type="number"
@@ -218,12 +217,6 @@ const ShippingDelivery = () => {
 												)
 											}
 										/>
-										<div className="settings-metabox-description">
-											{__(
-												'This amount will be added to the Default Shipping Price for each additional product type in the cart.',
-												'multivendorx'
-											)}
-										</div>
 									</FormGroup>
 
 									<FormGroup
@@ -232,6 +225,10 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 										htmlFor="multivendorx_additional_qty"
+										desc={__(
+												'This amount will be added to the Default Shipping Price for each additional quantity of the same product.',
+												'multivendorx'
+											)}
 									>
 										<BasicInputUI
 											type="number"
@@ -248,12 +245,6 @@ const ShippingDelivery = () => {
 												)
 											}
 										/>
-										<div className="settings-metabox-description">
-											{__(
-												'This amount will be added to the Default Shipping Price for each additional quantity of the same product.',
-												'multivendorx'
-											)}
-										</div>
 									</FormGroup>
 
 									<FormGroup
@@ -262,6 +253,10 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 										htmlFor="free_shipping_amount"
+										desc={__(
+												"If the customer's order total exceeds this amount, shipping becomes free. Leave empty if you do not want to offer free shipping.",
+												'multivendorx'
+											)}
 									>
 										<BasicInputUI
 											type="number"
@@ -281,12 +276,6 @@ const ShippingDelivery = () => {
 												)
 											}
 										/>
-										<div className="settings-metabox-description">
-											{__(
-												"If the customer's order total exceeds this amount, shipping becomes free. Leave empty if you do not want to offer free shipping.",
-												'multivendorx'
-											)}
-										</div>
 									</FormGroup>
 
 									<FormGroup
@@ -295,6 +284,10 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 										htmlFor="local_pickup_cost"
+										desc={__(
+												'This is the fee customers need to pay if they choose Local Pickup as the delivery option.',
+												'multivendorx'
+											)}
 									>
 										<BasicInputUI
 											type="number"
@@ -310,12 +303,6 @@ const ShippingDelivery = () => {
 												)
 											}
 										/>
-										<div className="settings-metabox-description">
-											{__(
-												'This is the fee customers need to pay if they choose Local Pickup as the delivery option.',
-												'multivendorx'
-											)}
-										</div>
 									</FormGroup>
 								</FormGroupWrapper>
 
@@ -358,6 +345,10 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 										htmlFor="distance_default_cost"
+										desc={__(
+												'Apply default shipping charge to orders that do not match any configured distance-based shipping range.',
+												'multivendorx'
+											)}
 									>
 										<BasicInputUI
 											type="number"
@@ -375,12 +366,6 @@ const ShippingDelivery = () => {
 											}
 											min="0"
 										/>
-										<div className="settings-metabox-description">
-											{__(
-												'Apply default shipping charge to orders that do not match any configured distance-based shipping range.',
-												'multivendorx'
-											)}
-										</div>
 									</FormGroup>
 
 									{/* Distance Type */}
@@ -429,6 +414,10 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 										htmlFor="distance_max"
+										desc={__(
+												'Set how far you are willing to deliver orders (leave blank to deliver everywhere).',
+												'multivendorx'
+											)}
 									>
 										<BasicInputUI
 											type="number"
@@ -443,12 +432,6 @@ const ShippingDelivery = () => {
 											}
 											min="0"
 										/>
-										<div className="settings-metabox-description">
-											{__(
-												'Set how far you are willing to deliver orders (leave blank to deliver everywhere).',
-												'multivendorx'
-											)}
-										</div>
 									</FormGroup>
 
 									{/* Local Pickup Cost */}
@@ -458,6 +441,10 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 										htmlFor="distance_local_pickup_cost"
+										desc={__(
+												'Set the fee for customers who pick up their order themselves (use 0 for free pickup, or leave blank to turn it off).',
+												'multivendorx'
+											)}
 									>
 										<BasicInputUI
 											type="number"
@@ -475,12 +462,6 @@ const ShippingDelivery = () => {
 											}
 											min="0"
 										/>
-										<div className="settings-metabox-description">
-											{__(
-												'Set the fee for customers who pick up their order themselves (use 0 for free pickup, or leave blank to turn it off).',
-												'multivendorx'
-											)}
-										</div>
 									</FormGroup>
 
 									{/* Distance–Cost Rules */}
@@ -554,7 +535,7 @@ const ShippingDelivery = () => {
 					</Column>
 				</Container>
 			) : (
-				<div className="settings-metabox-description">
+				<div className="desc">
 					{__(
 						'No shipping methods are available at the moment.',
 						'multivendorx'

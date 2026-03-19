@@ -14,6 +14,7 @@ import { FieldComponent, FIELD_REGISTRY, ZyraVariable } from './fieldUtils';
 import FormGroup from './UI/FormGroup';
 import { ButtonInputUI } from './ButtonInput';
 import FormGroupWrapper from './UI/FormGroupWrapper';
+import { BasicInputUI } from './BasicInput';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -433,21 +434,19 @@ const PanelHeader: React.FC = () => {
                                     'title',
                                     addNewTemplate
                                 ) ? (
-                                    <input
-                                        ref={ titleRef }
-                                        type="text"
-                                        className="inline-edit-input title-edit"
+                                    <BasicInputUI
+                                        ref={titleRef}
                                         value={ editTitle }
-                                        onChange={ ( e ) =>
-                                            dispatch( {
-                                                type: 'UPDATE_EDIT_TITLE',
-                                                title: e.target.value,
+                                        onChange={ ( value: string ) => 
+                                            dispatch( { 
+                                                type: 'UPDATE_EDIT_TITLE', 
+                                                title: value 
                                             } )
                                         }
-                                        onKeyDown={ ( e ) =>
-                                            e.key === 'Enter' && commitEdit()
+                                        onKeyDown={ ( e: React.KeyboardEvent ) => 
+                                            e.key === 'Enter' && commitEdit() 
                                         }
-                                        onClick={ ( e ) => e.stopPropagation() }
+                                        onClick={ ( e: React.MouseEvent ) => e.stopPropagation() }
                                     />
                                 ) : (
                                     <span

@@ -398,7 +398,7 @@ const EventRules: React.FC = () => {
 				data-variant="default"
 			>
 				{/* View Toggle + Category Filter */}
-				<div className="toggle-setting-wrapper view-toggle">
+				<div className="choice-toggle-wrapper view-toggle">
 					<div className="category-filter">
 						{uniqueTags.map((tag) => (
 							<div
@@ -434,7 +434,7 @@ const EventRules: React.FC = () => {
 								className="toggle-option"
 							>
 								<input
-									className="toggle-setting-form-input"
+									className="choice-toggle-form-input"
 									type="radio"
 									id={`${mode}-view`}
 									name="view-mode"

@@ -40,12 +40,19 @@ const StoreCommission: React.FC = () => {
 	const headers = {
 		id: {
 			label: __('ID', 'multivendorx'),
+			type: 'id',
 			isSortable: true,
+			render: (row) => (
+				<span>#{row.id}</span>
+			)
 		},
 		order_id: {
 			label: __('Order', 'multivendorx'),
 			isSortable: true,
-		},
+			render: (row) => (
+				<span>#{row.order_id}</span>
+			)
+		},	
 		total_order_amount: {
 			label: __('Order Amount', 'multivendorx'),
 			isSortable: true,
@@ -81,24 +88,19 @@ const StoreCommission: React.FC = () => {
 			),
 			csvDisplay: false,
 		},
-		store_payable: {
-			label: __('Store Earning', 'multivendorx'),
-			isSortable: true,
-			type: 'currency',
-		},
 		marketplace_payable: {
-			label: __('Marketplace Earning', 'multivendorx'),
+			label: __('Total Earned', 'multivendorx'),
 			isSortable: true,
 			type: 'currency',
-		},
-		status: {
-			label: __('Status', 'multivendorx'),
-			type: 'status',
 		},
 		created_at: {
 			label: __('Date', 'multivendorx'),
 			isSortable: true,
 			type: 'date',
+		},
+		status: {
+			label: __('Status', 'multivendorx'),
+			type: 'status',
 		},
 		action: {
 			label: __('Action', 'multivendorx'),

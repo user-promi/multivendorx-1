@@ -127,14 +127,15 @@
 
             .form-field-container-wrapper {
                 border: 0.063rem dashed transparent;
+
                 // padding: 0.5rem;
                 cursor: grabbing;
                 border-radius: $border-radius-small;
                 display: flex;
 
-                .setting-form-input {
-                    width: 100%;
-                }
+                // .setting-form-input {
+                //     width: 100%;
+                // }
 
                 .basic-input {
                     cursor: pointer;
@@ -162,6 +163,7 @@
 
                 .form-field-container-wrapper {
                     border-color: $theme-color;
+
                     // background: #5c0ebb14;
                 }
 
@@ -309,7 +311,7 @@
                 border-bottom: $border-light-small;
             }
 
-            .toggle-setting-container,
+            .choice-toggle-container,
             .input-wrapper {
                 width: 100%;
             }

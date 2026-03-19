@@ -189,30 +189,27 @@ const StoreReport: React.FC = () => {
 	};
 
 	const headers = {
-		store_name: {
-			label: __('Store', 'multivendorx'),
-			render: (row) => (
-				<>
-					{console.log(row)}
-					<InfoItem
-						title={row.store_name}
-						titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
-						avatar={{
-							image: row.store_image,
-							iconClass: row.store_image ? '' : 'store-inventory',
-						}}
-						descriptions={[
-							{
-								label: __('Since', 'multivendorx'),
-								value: row.date || '—',
-							},
-						]}
-					/>
-				</>
+		store_name: { 
+			label: __('Store', 'multivendorx') ,
+			render: (row: any) => (
+				<InfoItem
+					title={row.store_name}
+					titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
+					avatar={{
+						image: row.store_image,
+						iconClass: row.store_image ? '' : 'store-inventory',
+					}}
+					descriptions={[
+						{
+							label: __('Since', 'multivendorx'),
+							value: row.date || '—',
+						},
+					]}
+				/>
 			),
 		},
 		primary_owner: {
-			key: 'primary_owner',
+			key: 'primary_owner',	
 			label: __('Primary Owner', 'multivendorx'),
 			render: (row) => (
 				<>

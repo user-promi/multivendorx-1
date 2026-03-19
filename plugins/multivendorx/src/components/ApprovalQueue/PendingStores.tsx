@@ -106,19 +106,24 @@ const PendingStores: React.FC<object> = () => {
 		},
 		action: {
 			label: __('Action', 'multivendorx'),
-			type: 'action',
-			actions: [
-				{
-					label: __('Approve', 'multivendorx'),
-					icon: 'check',
-					onClick: (row) => handleSingleAction('active', row.id),
-				},
-				{
-					label: __('Reject', 'multivendorx'),
-					icon: 'close',
-					onClick: (row) => handleSingleAction('declined', row.id),
-				},
-			],
+			render: (row: any) => {
+				return (
+					<ButtonInputUI
+						buttons={[
+							{
+								icon: 'check',
+								text: __('Active', 'multivendorx'),
+								color: 'purple',
+								onClick: (row: any) => handleSingleAction('active', row.id),
+							},
+							{
+								icon: 'close',
+								text: __('Declined', 'multivendorx'),
+								onClick: (row: any) => handleSingleAction('declined', row.id),
+							},
+						]}
+					/>
+				)}
 		},
 	};
 

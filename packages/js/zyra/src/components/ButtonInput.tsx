@@ -32,15 +32,15 @@ export type ButtonConfig = {
     text: string;
     onClick: React.MouseEventHandler< HTMLButtonElement >;
     color: string;
-    children: React.ReactNode;
-    customStyle: CustomStyle;
-    disabled: boolean;
-    style: BlockStyle;
+    children?: React.ReactNode;
+    customStyle?: CustomStyle;
+    disabled?: boolean;
+    style?: BlockStyle;
 };
 
 type ButtonInputProps = {
     buttons: ButtonConfig | ButtonConfig[];
-    wrapperClass: string;
+    wrapperClass?: string;
     position: 'left' | 'right' | 'center';
 };
 

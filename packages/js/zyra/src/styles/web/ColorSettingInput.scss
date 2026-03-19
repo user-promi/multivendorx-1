@@ -50,22 +50,20 @@
         gap: 2rem;
 
         .color-palette-wrapper {
-
             width: 22%;
 
             .form-group-setting-wrapper {
                 padding-bottom: 1rem;
             }
 
-            .predefined {
+            .color-palette {
                 display: flex;
-                gap: 0.5rem;
+                gap: 1rem;
                 flex-direction: column;
 
                 .palette {
                     display: flex;
                     align-items: center;
-                    margin-bottom: 0.5rem;
 
                     input {
                         display: none;
@@ -83,11 +81,6 @@
                         background-color: #fff;
                         width: 100%;
                         transition: all 0.2s ease;
-
-                        &.checked {
-                            border: 0.125rem solid #007cba;
-                            background-color: #f0faff;
-                        }
                     }
 
                     &:has(input:checked) {
@@ -112,36 +105,6 @@
 
                         div {
                             width: 100%;
-                        }
-                    }
-                }
-            }
-
-            .custom {
-                .palette {
-                    display: flex;
-                    gap: 1rem;
-                    flex-direction: column;
-
-                    .color-wrapper {
-                        display: flex;
-                        gap: 0.25rem;
-                        padding: 0.313rem;
-                        border: $border-light-small;
-
-                        input {
-                            height: 3rem;
-                            width: 3rem;
-                            border: none;
-                            padding: 0;
-                        }
-
-                        label {
-                            div {
-                                font-size: 0.9rem;
-                                font-weight: 500;
-                                color: $theme-color;
-                            }
                         }
                     }
                 }

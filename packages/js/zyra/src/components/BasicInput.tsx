@@ -74,8 +74,6 @@ export const BasicInputUI = forwardRef< HTMLInputElement, BasicInputProps >(
     ) => {
         return (
             <>
-                { inputLabel && <label htmlFor={ id }>{ inputLabel }</label> }
-
                 <div
                     className={ `setting-form-input input-wrapper ${
                         wrapperClass || ''
@@ -83,11 +81,10 @@ export const BasicInputUI = forwardRef< HTMLInputElement, BasicInputProps >(
                     style={ { width: size || '' } }
                 >
                     { preText && (
-                        <span className="pre">
-                            <span
-                                dangerouslySetInnerHTML={ { __html: preText } }
-                            />
-                        </span>
+                        <span
+                            className="pre"
+                            dangerouslySetInnerHTML={ { __html: preText } }
+                        />
                     ) }
 
                     <input
@@ -122,15 +119,17 @@ export const BasicInputUI = forwardRef< HTMLInputElement, BasicInputProps >(
                     />
 
                     { type === 'color' && (
-                        <div className="color-value">{ value ?? '' }</div>
+                        <label htmlFor="" className="color-value">
+                         {inputLabel && <span className="title"> {inputLabel} </span> }
+                            { value ?? '' }
+                        </label>                            
                     ) }
 
                     { postText && (
-                        <span className="parameter">
-                            <span
-                                dangerouslySetInnerHTML={ { __html: postText } }
-                            />
-                        </span>
+                        <span
+                            className="parameter"
+                            dangerouslySetInnerHTML={ { __html: postText } }
+                        />
                     ) }
                 </div>
 

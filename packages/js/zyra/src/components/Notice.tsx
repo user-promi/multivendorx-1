@@ -68,30 +68,34 @@ export const NoticeManager = {
 
     add(
         notice: Omit< NoticeItem, 'expiresAt' >,
-        validity: number | 'lifetime' = 'lifetime'
+        validity?: number | 'lifetime' 
     ) {
         const uniqueKey = notice.uniqueKey || Date.now().toString();
         if ( noticeQueue.some( ( n ) => n.uniqueKey === uniqueKey ) ) {
             return;
         }
 
-        if ( notice.position === 'float' ) {
-            validity = 5000;
+        let finalValidity: number | 'lifetime';
+        
+        if (validity !== undefined) {
+            finalValidity = validity;
+        } else {
+            finalValidity = notice.position === 'float' ? 5000 : 'lifetime';
         }
 
         const expiresAt =
-            validity === 'lifetime' ? undefined : Date.now() + validity;
+            finalValidity === 'lifetime' ? undefined : Date.now() + (finalValidity as number);
 
-        noticeQueue.push( {
+        noticeQueue.push({
             ...notice,
             uniqueKey,
             expiresAt,
-        } );
+        });
 
-        if ( expiresAt ) {
-            setTimeout( () => {
-                NoticeManager.remove( uniqueKey );
-            }, validity );
+        if (expiresAt && typeof finalValidity === 'number') {
+            setTimeout(() => {
+                NoticeManager.remove(uniqueKey);
+            }, finalValidity);
         }
 
         broadcast();
@@ -144,7 +148,7 @@ const renderNoticeContent = ( item: NoticeItem, onClose?: () => void ) => (
                       </React.Fragment>
                   ) )
                 : item.message && (
-                      <div className="notice-desc">{ item.message }</div>
+                      <div  className="notice-desc"  dangerouslySetInnerHTML={{ __html: item.message }} />
                   ) }
         </div>
     </>

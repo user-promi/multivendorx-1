@@ -9,6 +9,7 @@ import {
 	TableRow,
 	QueryProps,
 	CategoryCount,
+	InfoItem,
 } from 'zyra';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -353,6 +354,26 @@ const AllProduct: React.FC = () => {
 	const headers = {
 		name: {
 			label: __('Product Name', 'multivendorx'),
+			width: 18,
+			render: (row: any) => {
+				console.log(row)
+				return (
+					<InfoItem
+						title={row.name}
+						titleLink={row.permalink}
+						avatar={{
+							image: row.images?.[0]?.src || '',
+							iconClass: row.images?.[0]?.src ? '' : 'single-product',
+						}}
+						descriptions={[
+							{
+								label: __('SKU:', 'multivendorx'),
+								value: row.sku || '—',
+							},
+						]}
+					/>
+				);
+			}
 		},
 		price: {
 			label: __('Price', 'multivendorx'),
@@ -360,12 +381,8 @@ const AllProduct: React.FC = () => {
 		},
 		stock_status: {
 			label: __('Stock', 'multivendorx'),
-			render: (row: ProductRow) =>
-				row.stock_status === 'instock'
-					? __('In stock', 'multivendorx')
-					: row.stock_status === 'outofstock'
-						? __('Out of stock', 'multivendorx')
-						: row.stock_status,
+			type: 'status',
+			ClassName: 'transparent-status'
 		},
 		categories: {
 			label: __('Categories', 'multivendorx'),

@@ -16,15 +16,15 @@ export default {
 			items: [
 				{
 					title: __('Log in to dashboard', 'multivendorx'),
-					icon: 'icon-yes',
+					icon: 'check-fill',
 				},
 				{
 					title: __('View rejection reason', 'multivendorx'),
-					icon: 'icon-yes',
+					icon: 'check-fill',
 				},
 				{
 					title: __('Submit new application', 'multivendorx'),
-					icon: 'icon-yes',
+					icon: 'check-fill',
 				},
 				{
 					title: __(

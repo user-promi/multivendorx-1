@@ -86,12 +86,12 @@ export const ChoiceToggleUI: React.FC< ChoiceToggleProps > = ( {
     return (
         <>
             <div
-                className={ `toggle-setting-container ${
+                className={ `choice-toggle-container ${
                     wrapperClass ? wrapperClass : ''
                 }` }
             >
                 <div
-                    className={ `toggle-setting-wrapper ${
+                    className={ `choice-toggle-wrapper ${
                         custom ? 'custom' : ''
                     }` }
                 >
@@ -110,7 +110,7 @@ export const ChoiceToggleUI: React.FC< ChoiceToggleProps > = ( {
                                 className="toggle-option"
                             >
                                 <input
-                                    className="toggle-setting-form-input"
+                                    className="choice-toggle-form-input"
                                     type={ multiSelect ? 'checkbox' : 'radio' }
                                     id={ option.key }
                                     name={ key }
@@ -148,7 +148,7 @@ export const ChoiceToggleUI: React.FC< ChoiceToggleProps > = ( {
                                     ) }
                                     { option.customHtml && (
                                         <div
-                                            className="toggle-custom-wrapper"
+                                            className="choice-toggle-custom-wrapper"
                                             dangerouslySetInnerHTML={ {
                                                 __html: option.customHtml,
                                             } }

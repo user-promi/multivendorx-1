@@ -10,14 +10,6 @@ export default {
 		'Configure the essential system pages required for your marketplace - including store registration, store dashboard.',
 		'multivendorx'
 	),
-	video: {
-		icon: 'adminfont-general-tab', // optional icon class
-		link: 'https://example.com/video/general-settings',
-	},
-	docs: {
-		icon: 'adminfont-general-tab', // optional icon class
-		link: 'https://example.com/docs/general-settings',
-	},
 	headerIcon: 'view-files',
 	submitUrl: 'settings',
 	modal: [
@@ -92,9 +84,9 @@ export default {
 						'Sends a single order and invoice for the entire purchase',
 						'multivendorx'
 					),
-					icon: 'adminfont-cart',
+					icon: 'cart',
 					value: 'mainorder',
-					customHtml: `<div class="toggle-notice">
+					customHtml: `<div class="choice-toggle-notice">
 					<p><strong>What it does:</strong> Sends a single order and invoice for the entire purchase.</p>
 					<p><strong>Email/Invoice:</strong> One email, one receipt with your marketplace tax details.</p>
 					<p><strong>My Account:</strong> Shows one combined order.</p>
@@ -108,9 +100,9 @@ export default {
 						'Sends separate orders and invoices for each store',
 						'multivendorx'
 					),
-					icon: 'adminfont-store',
+					icon: 'order',
 					value: 'suborders',
-					customHtml: `<div class="toggle-notice">
+					customHtml: `<div class="choice-toggle-notice">
 					<p><strong>What it does:</strong> Sends separate orders and invoices for each store.</p>
 					<p><strong>Email/Invoice:</strong> Separate emails and receipts with each store’s tax details.</p>
 					<p><strong>My Account:</strong> Shows multiple orders (one per store).</p>
@@ -127,9 +119,9 @@ export default {
 						'Sends both a combined order and separate store orders with invoices',
 						'multivendorx'
 					),
-					icon: 'adminfont-repeat',
+					icon: 'order-completed',
 					value: 'main_sub',
-					customHtml: `<div class="toggle-notice">
+					customHtml: `<div class="choice-toggle-notice">
 					<p><strong>What it does:</strong> Sends both a combined order and separate store orders with invoices.</p>
 					<p><strong>Email/Invoice:</strong> One email for the full order + separate emails per store; multiple receipts with marketplace and store tax details.</p>
 					<p><strong>My Account:</strong> Shows combined + individual orders.</p>

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FieldComponent } from './fieldUtils';
 import { ButtonInputUI } from './ButtonInput';
+import '../styles/web/FileInput.scss';
 
 interface FileInputProps {
     wrapperClass?: string;
