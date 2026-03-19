@@ -119,7 +119,7 @@
                         }
                     }
 
-                    .setting-form-input:has(.toggle-setting-wrapper) {
+                    .setting-form-input:has(.choice-toggle-wrapper) {
                         border: none;
                     }
                 }
@@ -185,7 +185,7 @@
             justify-content: start;
         }
 
-        .toggle-setting-container label {
+        .choice-toggle-container label {
             margin: 0;
         }
 

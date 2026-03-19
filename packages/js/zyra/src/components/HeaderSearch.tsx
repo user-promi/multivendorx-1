@@ -3,6 +3,7 @@ import { useOutsideClick } from './fieldUtils';
 import { BasicInputUI } from './BasicInput';
 import { ItemListUI } from './ItemList';
 import { SelectInputUI } from './SelectInput';
+import '../styles/web/HeaderSearch.scss';
 
 type SearchItem = {
     icon?: string;

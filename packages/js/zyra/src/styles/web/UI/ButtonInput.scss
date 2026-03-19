@@ -71,3 +71,15 @@
     padding: 0;
   }
 }
+
+// normal btn with 
+.add-btn {
+  display: flex;
+  gap: 0.313rem;
+  align-items: center;
+  border-bottom: 0.063rem solid $theme-color;
+  padding-bottom: 0.125rem;
+  font-size: 0.813rem;
+  color: $theme-color;
+  cursor: pointer;
+}

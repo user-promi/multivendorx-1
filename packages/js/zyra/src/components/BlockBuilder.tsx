@@ -37,7 +37,7 @@ const OPTION_PRESETS = [
 const REGISTRATION_BLOCK_GROUPS = [
     {
         id: 'registration',
-        label: 'Registration Fields',
+        label: 'Blocks',
         icon: 'user',
         blocks: [
             {
@@ -146,7 +146,7 @@ const REGISTRATION_BLOCK_GROUPS = [
     },
     {
         id: 'store',
-        label: 'Store Fields',
+        label: 'Store',
         icon: 'store',
         blocks: [
             {
