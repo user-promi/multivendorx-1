@@ -1,7 +1,7 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
-import { render } from '@wordpress/element';
+import { createRoot } from '@wordpress/element';
 import { BrowserRouter } from 'react-router-dom';
 import StoreCouponList from './StoreCouponList';
 import { __ } from '@wordpress/i18n';
@@ -118,21 +118,15 @@ registerBlockType('multivendorx/marketplace-coupons', {
 	},
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-	const elements = document.querySelectorAll(
-		'.multivendorx-marketplace-coupons-block'
-	);
+window.addEventListener('load', () => {
+	const elements = document.querySelectorAll('#marketplace-coupons');
 
 	elements.forEach((element) => {
 		const attributes = JSON.parse(
 			element.getAttribute('data-attributes') || '{}'
 		);
 
-		render(
-			<BrowserRouter>
-				<StoreCouponList {...attributes} />
-			</BrowserRouter>,
-			element
-		);
+		const root = createRoot(element);
+		root.render(<StoreCouponList {...attributes} />);
 	});
 });
