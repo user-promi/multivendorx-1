@@ -253,17 +253,70 @@ registerBlockType('multivendorx/contact-info', {
 
 		return (
 			<div {...blockProps}>
-				<form className="woocommerce-form woocommerce-form-login login">
+				<form
+					className="woocommerce-form woocommerce-form-login login multivendorx-contact-form"
+					method="post"
+					action=""
+				>
 					{hideFromGuests && (
-						<div
-							className="multivendorx-hide-guests-notice"
-							style={{ display: 'none' }}
-						>
+						<div style={{ display: 'none' }}>
 							{__('This form is hidden from guests.')}
 						</div>
 					)}
 
-					<InnerBlocks.Content />
+					<h2>{__('Contact store', 'multivendorx')}</h2>
+					<p>
+						{__(
+							'Do you need more information? Write to us!',
+							'multivendorx'
+						)}
+					</p>
+
+					<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+						<label htmlFor="contact-name">
+							{__('Name', 'multivendorx')} <span className="required">*</span>
+						</label>
+						<input
+							type="text"
+							name="contact_name"
+							id="contact-name"
+							className="input-text"
+							required
+						/>
+					</p>
+
+					<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+						<label htmlFor="contact-email">
+							{__('Email', 'multivendorx')} <span className="required">*</span>
+						</label>
+						<input
+							type="email"
+							name="contact_email"
+							id="contact-email"
+							className="input-text"
+							required
+						/>
+					</p>
+
+					<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+						<label htmlFor="contact-message">
+							{__('Message', 'multivendorx')} <span className="required">*</span>
+						</label>
+						<textarea
+							name="contact_message"
+							id="contact-message"
+							className="input-text"
+							rows="4"
+							required
+						></textarea>
+					</p>
+
+					<input type="hidden" name="multivendorx_contact_form" value="1" />
+					<input type="hidden" name="store_id" value="" />
+
+					<button type="submit" className="contact-form-submit">
+						{__('Send Message', 'multivendorx')}
+					</button>
 
 					{enableGoogleRecaptcha && (
 						<div
