@@ -16,6 +16,7 @@ import {
 	ComponentStatusView,
 	ChoiceToggleUI,
 	NoticeManager,
+	SectionUI,
 } from 'zyra';
 
 interface ShippingRate {
@@ -134,7 +135,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 									}
 								/>
 							</FormGroup>
-						</FormGroupWrapper>
+						
 
 						{/* //zone by shipping */}
 						{formData.shipping_options === 'shipping_by_zone' && (
@@ -145,21 +146,8 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 						{formData.shipping_options ===
 							'shipping_by_country' && (
 							<>
-								<div className="form-group-title-wrapper">
-									<div className="title">
-										{__(
-											'Default Shipping Rules',
-											'multivendorx'
-										)}
-									</div>
-									<div className="des">
-										{__(
-											'Set base rates that apply to all orders',
-											'multivendorx'
-										)}
-									</div>
-								</div>
-								<FormGroupWrapper>
+								<SectionUI title={__('Default Shipping Rules', 'multivendorx')} desc={__( 'Set base rates that apply to all orders','multivendorx')}/>
+								
 									{/* Default Shipping Price */}
 									<FormGroup
 										row
@@ -329,22 +317,8 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 											}
 										/>
 									</FormGroup>
-								</FormGroupWrapper>
-								<div className="form-group-title-wrapper">
-									<div className="title">
-										{__(
-											'Country-Specific Rates',
-											'multivendorx'
-										)}
-									</div>
-									<div className="des">
-										{__(
-											'Country-specific rates will be added to the Default Shipping Price. If state/region rates are defined, the final shipping cost will be State Rate + Default Shipping Price.',
-											'multivendorx'
-										)}
-									</div>
-								</div>
-
+								<SectionUI title={__('Country-Specific Rates', 'multivendorx')} desc={__( 'Country-specific rates will be added to the Default Shipping Price. If state/region rates are defined, the final shipping cost will be State Rate + Default Shipping Price.','multivendorx')}/>
+								
 								<ShippingRatesByCountry />
 							</>
 						)}
@@ -352,15 +326,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 						{formData.shipping_options ===
 							'shipping_by_distance' && (
 							<>
-								<FormGroupWrapper>
-									<div className="form-group-title-wrapper">
-										<div className="title">
-											{__(
-												'Distance-wise Shipping Configuration',
-												'multivendorx'
-											)}
-										</div>
-									</div>
+									<SectionUI title={__('Distance-wise Shipping Configuration', 'multivendorx')}/>
 
 									{/* Default Cost */}
 									<FormGroup
@@ -378,6 +344,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 												'0.00',
 												'multivendorx'
 											)}
+											size={"8rem"}
 											value={
 												formData.distance_default_cost ||
 												''
@@ -437,6 +404,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 										<BasicInputUI
 											type="number"
 											name="distance_max"
+											size={"8rem"}
 											placeholder={__(
 												'0',
 												'multivendorx'
@@ -464,6 +432,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 										<BasicInputUI
 											type="number"
 											name="distance_local_pickup_cost"
+											size={"8rem"}
 											placeholder={__(
 												'0.00',
 												'multivendorx'
@@ -542,9 +511,9 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 											}}
 										/>
 									</FormGroup>
-								</FormGroupWrapper>
 							</>
 						)}
+						</FormGroupWrapper>
 					</Card>
 				</Column>
 			) : (

@@ -142,15 +142,14 @@ class StripeConnect {
             $store_id          = MultiVendorX()->active_store;
             $store             = new Store( $store_id );
             $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
-            $onboarding_status = $stripe_account_id ? 'Connected' : 'Not Connected';
             $fields            = array(
-                array(
-                    'type'       => 'notice',
-                    'title'      => __( 'Stripe Status:', 'multivendorx' ),
-                    'message'    => $onboarding_status,
-                    'noticeType' => 'info',
-					'display'    => 'notice',
-                ),
+                   array(
+                    'key'             => 'registration_page',
+                    'type'            => 'notice',
+                    'message'         => __( '<b>Stripe Status:</b> ' . ( $stripe_account_id ? 'Connected' : 'Not Connected' ), 'multivendorx' ),
+                    'noticeType'      => $stripe_account_id ? 'success' : 'error',
+                    'displayPosition' => 'notice',
+                ),                
             );
 
             if ( ! is_admin() ) {

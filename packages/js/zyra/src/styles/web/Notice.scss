@@ -15,13 +15,13 @@
 
     &.type-success {
         i {
-            color: green;
+            color: map-get(map-get($color-palette, green), color);;
         }
     }
 
     &.type-error {
         i {
-            color: red;
+            color: map-get(map-get($color-palette, red), color);
         }
     }
 
@@ -119,8 +119,7 @@
         margin-bottom: 0.5rem;
         background: $background-white;
         box-shadow: $box-shadow;
-
-        // animation: noticeslide 5s ease-in;
+        animation: noticeslide 3s ease-in;
         opacity: 1;
         position: relative;
 
@@ -129,7 +128,9 @@
             font-weight: 500;
             line-height: 1.313;
         }
-
+        .notice-desc{
+            color: $sub-text-color;
+        }
         &::after {
             content: '';
             position: absolute;
@@ -137,14 +138,14 @@
             left: 0;
             width: 0;
             height: 0.125rem;
-            background-color: green;
-            animation: borderSlide 4.5s ease-in-out;
+            background-color: map-get(map-get($color-palette, green), color);;
+            animation: borderSlide 2.5s ease-in-out;
             animation-delay: 0.5s;
         }
 
         &.type-success {
             i {
-                color: #008000;
+                color: map-get(map-get($color-palette, green), color);;
                 font-size: 1.4rem;
             }
         }
@@ -166,27 +167,25 @@
 
         &.type-success {
             .notice-desc {
-                color: green;
+                color: map-get(map-get($color-palette, green), color);;
             }
         }
 
         &.type-error {
             .notice-desc {
-                color: red;
+                color: map-get(map-get($color-palette, red), color);;
             }
         }
     }
 
     &.display-notice:not(.type-banner) {
-        background: #ece2f991;
         padding: 0.5rem 0.8rem;
         display: flex;
-        align-items: start;
+        align-items: center;
         gap: 0.5rem;
         border: 0.063rem solid $theme-color;
         border-radius: $border-radius-small;
         box-sizing: border-box;
-        width: fit-content;
 
         .notice-text {
             font-size: 1.2rem;
@@ -197,6 +196,33 @@
         .notice-desc {
             font-size: 0.875rem;
         }
+
+        &.type-info {
+            background: $theme-background-color;
+
+            .notice-desc {
+                color: $text-color;
+            }
+        }
+
+        &.type-error {
+            background: map-get(map-get($color-palette, red), light-color);
+            border-color: map-get(map-get($color-palette, red), color);
+
+            .notice-desc {
+                color: map-get(map-get($color-palette, red), color);
+            }
+        }
+
+        &.type-success {
+            background: map-get(map-get($color-palette, green), light-color);
+            border-color: map-get(map-get($color-palette, green), color);;
+
+            .notice-desc {
+                color: map-get(map-get($color-palette, green), color);
+
+            }
+        }
     }
 
     i {
@@ -204,7 +230,7 @@
         color: $theme-color;
     }
 
-    .banner-btn{
+    .banner-btn {
         text-decoration: underline;
         color: $theme-color;
         font-size: 0.8rem;
@@ -214,7 +240,7 @@
 
 @keyframes noticeslide {
     0% {
-        transform: translateX(-120%);
+        transform: translateX(120%);
         opacity: 1;
     }
 
