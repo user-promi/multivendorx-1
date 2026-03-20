@@ -7,56 +7,55 @@ export const renderCell = (
     format = '',
     currency = {}
 ) => {
-    let value = row[ header.key ];
+    let value = row[header.key];
 
-    if ( ! header?.type ) {
+    if (!header?.type) {
         return value ?? null;
     }
 
-    switch ( header.type ) {
+    switch (header.type) {
         case 'status': {
-            const formattedValue = String( value )
+            const formattedValue = String(value)
                 .toLowerCase()
-                .split( '-' )
+                .split(/[-_]/)
                 .map(
-                    ( word ) => word.charAt( 0 ).toUpperCase() + word.slice( 1 )
+                    (word) => word.charAt(0).toUpperCase() + word.slice(1)
                 )
-                .join( ' ' );
+                .join(' ');
+
             return (
                 <span
-                    className={ `admin-badge badge-${ String(
-                        value
-                    ).toLowerCase() }` }
+                    className={`admin-badge badge-${String(value).toLowerCase()}`}
                 >
-                    { formattedValue }
+                    {formattedValue}
                 </span>
             );
         }
 
         case 'date': {
-            if ( ! value ) {
+            if (!value) {
                 return null;
             }
 
-            const dateObj = new Date( value );
-            if ( isNaN( dateObj.getTime() ) ) {
-                return <span>{ value }</span>;
+            const dateObj = new Date(value);
+            if (isNaN(dateObj.getTime())) {
+                return <span>{value}</span>;
             }
 
-            const map: Record< string, string > = {
-                YYYY: String( dateObj.getFullYear() ),
-                YY: String( dateObj.getFullYear() ).slice( -2 ),
+            const map: Record<string, string> = {
+                YYYY: String(dateObj.getFullYear()),
+                YY: String(dateObj.getFullYear()).slice(-2),
 
-                MMMM: dateObj.toLocaleString( undefined, { month: 'long' } ),
-                MMM: dateObj.toLocaleString( undefined, { month: 'short' } ),
-                MM: String( dateObj.getMonth() + 1 ).padStart( 2, '0' ),
+                MMMM: dateObj.toLocaleString(undefined, { month: 'long' }),
+                MMM: dateObj.toLocaleString(undefined, { month: 'short' }),
+                MM: String(dateObj.getMonth() + 1).padStart(2, '0'),
 
-                DD: String( dateObj.getDate() ).padStart( 2, '0' ),
-                D: String( dateObj.getDate() ),
+                DD: String(dateObj.getDate()).padStart(2, '0'),
+                D: String(dateObj.getDate()),
 
-                HH: String( dateObj.getHours() ).padStart( 2, '0' ),
-                mm: String( dateObj.getMinutes() ).padStart( 2, '0' ),
-                ss: String( dateObj.getSeconds() ).padStart( 2, '0' ),
+                HH: String(dateObj.getHours()).padStart(2, '0'),
+                mm: String(dateObj.getMinutes()).padStart(2, '0'),
+                ss: String(dateObj.getSeconds()).padStart(2, '0'),
             };
 
             // Use header.format if provided, otherwise default
@@ -64,14 +63,14 @@ export const renderCell = (
 
             const formattedDate = dateFormat.replace(
                 /YYYY|YY|MMMM|MMM|MM|DD|D|HH|mm|ss/g,
-                ( token ) => map[ token ] ?? token
+                (token) => map[token] ?? token
             );
 
-            return <span>{ formattedDate }</span>;
+            return <span>{formattedDate}</span>;
         }
 
         case 'currency': {
-            if ( value == null || value === '' ) {
+            if (value == null || value === '') {
                 value = 0;
             }
 
@@ -79,11 +78,11 @@ export const renderCell = (
                 typeof value === 'number'
                     ? value
                     : parseFloat(
-                          value.toString().replace( /[^0-9.-]+/g, '' )
-                      );
+                        value.toString().replace(/[^0-9.-]+/g, '')
+                    );
 
-            if ( isNaN( numberValue ) ) {
-                return <span>{ value }</span>;
+            if (isNaN(numberValue)) {
+                return <span>{value}</span>;
             }
 
             const {
@@ -94,35 +93,35 @@ export const renderCell = (
                 currencyPosition,
             } = currency;
 
-            const decimals = Number( priceDecimals ?? 2 );
+            const decimals = Number(priceDecimals ?? 2);
 
-            const fixed = numberValue.toFixed( decimals );
+            const fixed = numberValue.toFixed(decimals);
 
-            const parts = fixed.split( '.' );
-            parts[ 0 ] = parts[ 0 ].replace(
+            const parts = fixed.split('.');
+            parts[0] = parts[0].replace(
                 /\B(?=(\d{3})+(?!\d))/g,
                 thousandSeparator ?? ','
             );
 
             const formattedNumber =
                 decimals > 0
-                    ? parts.join( decimalSeparator ?? '.' )
-                    : parts[ 0 ];
+                    ? parts.join(decimalSeparator ?? '.')
+                    : parts[0];
 
             let finalValue: string;
-            if ( 'left' === currencyPosition ) {
-                finalValue = `${ currencySymbol }${ formattedNumber }`;
-            } else if ( 'left_space' === currencyPosition ) {
-                finalValue = `${ currencySymbol } ${ formattedNumber }`;
-            } else if ( 'right' === currencyPosition ) {
-                finalValue = `${ formattedNumber }${ currencySymbol }`;
-            } else if ( 'right_space' === currencyPosition ) {
-                finalValue = `${ formattedNumber } ${ currencySymbol }`;
+            if ('left' === currencyPosition) {
+                finalValue = `${currencySymbol}${formattedNumber}`;
+            } else if ('left_space' === currencyPosition) {
+                finalValue = `${currencySymbol} ${formattedNumber}`;
+            } else if ('right' === currencyPosition) {
+                finalValue = `${formattedNumber}${currencySymbol}`;
+            } else if ('right_space' === currencyPosition) {
+                finalValue = `${formattedNumber} ${currencySymbol}`;
             } else {
-                finalValue = `${ currencySymbol }${ formattedNumber }`;
+                finalValue = `${currencySymbol}${formattedNumber}`;
             }
 
-            return <span>{ finalValue }</span>;
+            return <span>{finalValue}</span>;
         }
 
         case 'id': {
