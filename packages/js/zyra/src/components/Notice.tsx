@@ -80,7 +80,7 @@ export const NoticeManager = {
         if (validity !== undefined) {
             finalValidity = validity;
         } else {
-            finalValidity = notice.position === 'float' ? 5000 : 'lifetime';
+            finalValidity = notice.position === 'float' ? 3000 : 'lifetime';
         }
 
         const expiresAt =

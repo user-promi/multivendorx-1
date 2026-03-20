@@ -119,8 +119,7 @@
         margin-bottom: 0.5rem;
         background: $background-white;
         box-shadow: $box-shadow;
-
-        // animation: noticeslide 5s ease-in;
+        animation: noticeslide 3s ease-in;
         opacity: 1;
         position: relative;
 
@@ -129,7 +128,9 @@
             font-weight: 500;
             line-height: 1.313;
         }
-
+        .notice-desc{
+            color: $sub-text-color;
+        }
         &::after {
             content: '';
             position: absolute;
@@ -138,7 +139,7 @@
             width: 0;
             height: 0.125rem;
             background-color: map-get(map-get($color-palette, green), color);;
-            animation: borderSlide 4.5s ease-in-out;
+            animation: borderSlide 2.5s ease-in-out;
             animation-delay: 0.5s;
         }
 
@@ -239,7 +240,7 @@
 
 @keyframes noticeslide {
     0% {
-        transform: translateX(-120%);
+        transform: translateX(120%);
         opacity: 1;
     }
 

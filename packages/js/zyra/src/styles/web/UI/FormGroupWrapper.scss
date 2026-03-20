@@ -67,9 +67,7 @@
                     padding: 0;
                 }
             }
-            &:has(.display-notice){
-                width: 100%;
-            }
+
             .after,
             .before {
                 font-size: 0.95rem;
@@ -164,6 +162,10 @@
 
             .settings-input-content {
                 width: 75%;
+
+                &:has(.display-notice) {
+                    width: 100%;
+                }
             }
         }
 
@@ -207,7 +209,7 @@
         }
     }
 
-    &.bg-light-white, 
+    &.bg-light-white,
     .form-group.bg-light-white {
         background: #f7f7f7;
         padding: 1rem;
@@ -216,39 +218,39 @@
 
 // change class name and common style (.desc)
 .settings-metabox-description {
-  padding-top: 0.45rem;
-  color: $sub-text-color;
-  width: 100%;
-  line-height: 1.625;
-  margin: 0;
-  font-size: 0.813rem;
-
-  b {
-    color: #000000b7;
-  }
-
-  p {
-    margin-bottom: 0.5rem;
-  }
-
-  ul {
-    list-style-type: none;
+    padding-top: 0.45rem;
+    color: $sub-text-color;
+    width: 100%;
+    line-height: 1.625;
     margin: 0;
-    margin-left: 1rem;
-  }
+    font-size: 0.813rem;
 
-  li {
-    list-style-type: number;
-    margin: 0;
-  }
+    b {
+        color: #000000b7;
+    }
 
-  code {
-    padding: 0.063rem 0.125rem 0.125rem;
-    font-size: 0.688rem;
-    line-height: 0.5;
-  }
+    p {
+        margin-bottom: 0.5rem;
+    }
 
-  a {
-    color: $theme-color;
-  }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        margin-left: 1rem;
+    }
+
+    li {
+        list-style-type: number;
+        margin: 0;
+    }
+
+    code {
+        padding: 0.063rem 0.125rem 0.125rem;
+        font-size: 0.688rem;
+        line-height: 0.5;
+    }
+
+    a {
+        color: $theme-color;
+    }
 }
