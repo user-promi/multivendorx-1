@@ -32,7 +32,6 @@ const Stores = () => {
 
 	const hash = location.hash;
 	const isTabActive = hash.includes('tab=stores');
-	const isAddStore = hash.includes('create');
 	const isEditStore = hash.includes('edit');
 	const generateSlug = (text: string) =>
 		text
@@ -230,9 +229,9 @@ const Stores = () => {
 
 	return (
 		<>
-			{isTabActive && isEditStore && !isAddStore && <EditStore />}
+			{isTabActive && isEditStore && <EditStore />}
 
-			{!isAddStore && !isEditStore && (
+			{!isEditStore && (
 				<>
 					<NavigatorHeader
 						headerIcon="storefront"
