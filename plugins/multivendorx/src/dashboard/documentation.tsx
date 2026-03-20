@@ -120,7 +120,7 @@ const Documentation: React.FC = () => {
 				{filteredDocuments.map((doc) => (
 					<>
 						<ItemListUI
-							className="mini-card"
+							className="mini-card documentation"
 							border
 							items={[
 								{

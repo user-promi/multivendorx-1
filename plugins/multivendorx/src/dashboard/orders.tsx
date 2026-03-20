@@ -11,6 +11,11 @@ import {
 	QueryProps,
 	CategoryCount,
 	NavigatorHeader,
+	ButtonInputUI,
+	getApiLink,
+	SelectInputUI,
+	BasicInputUI,
+	FormGroup
 } from 'zyra';
 import {
 	downloadCSV,
@@ -28,6 +33,8 @@ const Orders: React.FC = () => {
 		CategoryCount[] | null
 	>(null);
 	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [tracking, setTracking] = useState(false);
+	const [trackingOrderId, setTrackingOrderId] = useState(false);
 	const [message, setMessage] = useState('');
 	const { modules } = useModules();
 	const location = useLocation();
@@ -269,7 +276,8 @@ const Orders: React.FC = () => {
 					label: __('Shipping', 'multivendorx'),
 					icon: 'eye',
 					onClick: (row) => {
-						window.location.href = `?page=multivendorx#&tab=stores&edit/${row.id}`;
+						setTracking(true);
+						setTrackingOrderId(row.id);
 					},
 				},
 
@@ -370,6 +378,36 @@ const Orders: React.FC = () => {
 
 		return params;
 	};
+
+	const [formData, setFormData] = useState({
+		provider: '',
+		date: '',
+		tracking_url: '',
+		tracking_number: '',
+	});
+
+	const handleChange = (key, value) => {
+		setFormData((prev) => ({
+			...prev,
+			[key]: value,
+		}));
+	};
+
+
+	const handleTracking = () => {
+		axios({
+			method: 'POST',
+			url: getApiLink(appLocalizer, `tracking`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: {
+				...formData,
+				order_id: trackingOrderId,
+			},
+		})
+		.then(() => {
+			setTracking(false);
+		})
+	}
 
 	const downloadCSVByQuery = (query: QueryProps) => {
 		axios
@@ -477,6 +515,73 @@ const Orders: React.FC = () => {
 			>
 				{message}
 			</PopupUI>
+
+			{tracking && 
+				<PopupUI
+					position="lightbox"
+					open={tracking}
+					onClose={() => setTracking(false)}
+					width={31.25}
+					height="70%"
+					header={{
+						icon: 'warning',
+						title: __('Tracking', 'multivendorx'),
+					}}
+					footer={
+						<ButtonInputUI
+							buttons={[
+								{
+									icon: 'close',
+									text: __('Cancel', 'multivendorx'),
+									color: 'red',
+									onClick: () => {
+										setTracking(false);
+									},
+								},
+								{
+									icon: 'cross',
+									color: 'purple',
+									text: __('Send', 'multivendorx'),
+									onClick: handleTracking,
+								},
+							]}
+						/>
+					}
+				>
+					<FormGroup cols={2} label={__('Shipping Providers', 'multivendorx-pro')} htmlFor="title" >
+                        <SelectInputUI
+							type="single-select"
+							name="provider"
+							value={formData.provider || ''}
+							options={appLocalizer.settings_databases_value.shipping.shipping_provides}
+							onChange={(selected) =>
+								handleChange('provider', selected)
+							}
+						/>
+                    </FormGroup>
+					<FormGroup cols={2} label={__('Date', 'multivendorx-pro')} htmlFor="title" >
+                        <BasicInputUI
+                            type="text"
+                            value={formData.date}
+                            onChange={(value: any) => handleChange('date', value)}
+                        />
+                    </FormGroup>
+					<FormGroup cols={2} label={__('Tracking URL', 'multivendorx-pro')} htmlFor="title" >
+                        <BasicInputUI
+                            type="text"
+                            value={formData.tracking_url}
+                            onChange={(value: any) => handleChange('tracking_url', value)}
+                        />
+                    </FormGroup>
+					<FormGroup cols={2} label={__('Tracking Number', 'multivendorx-pro')} htmlFor="title" >
+                        <BasicInputUI
+                            type="text"
+                            value={formData.tracking_number}
+                            onChange={(value: any) => handleChange('tracking_number', value)}
+                        />
+                    </FormGroup>
+				</PopupUI>
+			}
 		</>
 	);
 };

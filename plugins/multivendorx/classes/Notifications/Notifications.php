@@ -71,24 +71,23 @@ class Notifications {
             'multivendorx_system_events',
             array(
 				// Store Registration & Approval.
-
-											'store_pending_approval' => array(
-												'name'     => 'Store pending approval',
-												'customer_enabled' => false,
-												'store_enabled' => true,
-												'admin_enabled' => true,
-												'system_enabled' => true,
-												'email_subject' => 'Your store application is under review',
-												'email_body' => '
-<p>Hello,</p>
-<p>Your store <strong>[store_name]</strong> has been successfully submitted.</p>
-<p>The marketplace team is reviewing your application. You will be notified once the review process is completed.</p>
-<p>Thank you for your patience.</p>',
-												'sms_content' => 'Store [store_name] is pending approval.',
-												'system_message' => 'Your store is currently under admin review.',
-												'tag'      => 'Store',
-												'category' => 'notification',
-											),
+				'store_pending_approval' => array(
+					'name'     => 'Store pending approval',
+					'customer_enabled' => false,
+					'store_enabled' => true,
+					'admin_enabled' => true,
+					'system_enabled' => true,
+					'email_subject' => 'Your store application is under review',
+					'email_body' => '
+						<p>Hello,</p>
+						<p>Your store <strong>[store_name]</strong> has been successfully submitted.</p>
+						<p>The marketplace team is reviewing your application. You will be notified once the review process is completed.</p>
+						<p>Thank you for your patience.</p>',
+					'sms_content' => 'Store [store_name] is pending approval.',
+					'system_message' => 'Your store is currently under admin review.',
+					'tag'      => 'Store',
+					'category' => 'activity',
+				),
 
 				'store_rejected'                           => array(
 					'name'             => 'Store rejected',
@@ -98,12 +97,12 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store application was rejected',
 					'email_body'       => '<p>Hello,</p>
-<p>Unfortunately your store application <strong>[store_name]</strong> has been rejected.</p>
-<p>Please review marketplace requirements and reapply if applicable.</p>',
+											<p>Unfortunately your store application <strong>[store_name]</strong> has been rejected.</p>
+											<p>Please review marketplace requirements and reapply if applicable.</p>',
 					'sms_content'      => 'Store application rejected.',
 					'system_message'   => 'Your store application has been rejected.',
 					'tag'              => 'Store',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
 				'store_permanently_rejected'               => array(
@@ -113,12 +112,11 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store application has been permanently rejected',
-					'email_body'       => '<p>Hello,</p><p>Your store application <strong>[store_name]</strong> has been permanently rejected due to policy violations.</p>
-',
+					'email_body'       => '<p>Hello,</p><p>Your store application <strong>[store_name]</strong> has been permanently rejected due to policy violations.</p>',
 					'sms_content'      => 'Store application permanently rejected.',
 					'system_message'   => 'Your store application has been permanently rejected.',
 					'tag'              => 'Store',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 				'store_account_created_by_admin'           => array(
 					'name'             => 'Store account created by admin',
@@ -129,46 +127,38 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store account has been created – [store_name]',
 					'email_body'       => '<p>Hello [store_owner_name],</p><p>An account has been created for you on <strong>[marketplace_name]</strong> to manage the store <strong>[store_name]</strong>.</p>
-
-<p>You can now log in and start setting up your store.</p><p>
-<strong>Login URL:</strong> <a href="[login_url]">[login_url]</a><br>
-<strong>Username:</strong> [store_username]
-</p>
-
-<p>After logging in, you can:</p>
-<ul>
-<li>Update your store profile</li>
-<li>Add products</li>
-<li>Configure shipping and payment settings</li>
-</ul>
-
-<p>If you did not expect this account creation, please contact the marketplace administrator.</p>
-
-',
+											<p>You can now log in and start setting up your store.</p><p>
+											<strong>Login URL:</strong> <a href="[login_url]">[login_url]</a><br>
+											<strong>Username:</strong> [store_owner_name]
+											</p>
+											<p>After logging in, you can:</p>
+											<ul>
+											<li>Update your store profile</li>
+											<li>Add products</li>
+											<li>Configure shipping and payment settings</li>
+											</ul>
+											<p>If you did not expect this account creation, please contact the marketplace administrator.</p>',
 					'sms_content'      => 'Your store account for [store_name] has been created. Please log in to get started.',
 					'system_message'   => 'Your store account for [store_name] has been created by the marketplace admin.',
 					'tag'              => 'Store',
 					'category'         => 'notification',
 				),
 				// POST ACTIVATION FLOW.
-
-										'store_active'     => array(
-											'name'        => 'Store activated',
-											'customer_enabled' => false,
-											'store_enabled' => true,
-											'admin_enabled' => false,
-											'system_enabled' => true,
-											'email_subject' => 'Your store "[store_name]" is now active',
-											'email_body'  => '
-<p>Hello,</p>
-<p>Your store <strong>[store_name]</strong> is now active and visible to customers.</p>
-<p>You can now add products and begin receiving orders.</p>
-',
-											'sms_content' => 'Store [store_name] is now active.',
-											'system_message' => 'Your store has been activated.',
-											'tag'         => 'Store',
-											'category'    => 'notification',
-										),
+				'store_activated'     => array(
+					'name'        => 'Store activated',
+					'customer_enabled' => false,
+					'store_enabled' => true,
+					'admin_enabled' => false,
+					'system_enabled' => true,
+					'email_subject' => 'Your store "[store_name]" is now active',
+					'email_body'  => '<p>Hello,</p>
+									<p>Your store <strong>[store_name]</strong> is now active and visible to customers.</p>
+									<p>You can now add products and begin receiving orders.</p>',
+					'sms_content' => 'Store [store_name] is now active.',
+					'system_message' => 'Your store has been activated.',
+					'tag'         => 'Store',
+					'category'    => 'activity',
+				),
 
 				'store_under_review'                       => array(
 					'name'             => 'Store under review',
@@ -177,14 +167,12 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store "[store_name]" is under review',
-					'email_body'       => '
-<p>Hello,</p>
-<p>Your store <strong>[store_name]</strong> has been placed under administrative review.</p>
-',
+					'email_body'       => '<p>Hello,</p>
+										<p>Your store <strong>[store_name]</strong> has been placed under administrative review.</p>',
 					'sms_content'      => 'Store [store_name] under review.',
 					'system_message'   => 'Your store has been placed under review.',
 					'tag'              => 'Store',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
 				'store_suspended'                          => array(
@@ -194,15 +182,13 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store "[store_name]" has been suspended',
-					'email_body'       => '
-<p>Hello,</p>
-<p>Your store <strong>[store_name]</strong> has been temporarily suspended.</p>
-<p>Please contact marketplace support for more information.</p>
-',
+					'email_body'       => '<p>Hello,</p>
+											<p>Your store <strong>[store_name]</strong> has been temporarily suspended.</p>
+											<p>Please contact marketplace support for more information.</p>',
 					'sms_content'      => 'Store [store_name] suspended.',
 					'system_message'   => 'Your store has been suspended.',
 					'tag'              => 'Store',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
 				'store_permanently_deactivated'            => array(
@@ -212,14 +198,13 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store "[store_name]" has been permanently deactivated',
-					'email_body'       => '
-<p>Hello,</p>
-<p>Your store <strong>[store_name]</strong> has been permanently deactivated.</p>
-',
+					'email_body'       => '<p>Hello,</p>
+											<p>Your store <strong>[store_name]</strong> has been permanently deactivated.</p>
+											',
 					'sms_content'      => 'Store [store_name] permanently deactivated.',
 					'system_message'   => 'Your store has been permanently deactivated.',
 					'tag'              => 'Store',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
 				'store_account_deactivation_request'       => array(
@@ -236,105 +221,113 @@ class Notifications {
 					'sms_content'      => 'Store [store_name] requested account deactivation.',
 					'system_message'   => 'Store [store_name] has requested to deactivate their store account.',
 					'tag'              => 'Store',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
-
-				'store_account_deleted'                    => array(
-					'name'             => 'Store account deleted',
-					'desc'             => 'Store owner receives notification when their store account has been permanently deleted.',
+//didi
+				'store_deactivation_request_rejected'            => array(
+					'name'             => 'Store deactivation rejected',
+					'customer_enabled' => false,
+					'store_enabled'    => true,
+					'admin_enabled'    => false,
+					'system_enabled'   => true,
+					'email_subject'    => 'Your store "[store_name]" deactivation request has been rejected',
+					'email_body'       => '<p>Hello,</p>
+											<p>Your store <strong>[store_name]</strong> has been permanently deactivated.</p>
+											',
+					'sms_content'      => 'Store [store_name] deactivation request has been rejected',
+					'system_message'   => 'Your store deactivation request has been rejected.',
+					'tag'              => 'Store',
+					'category'         => 'activity',
+				),
+				// ORDER NOTIFICATIONS.
+				'new_order_store'      => array(
+					'name'             => 'New order received',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
-					'email_subject'    => 'Your store "[store_name]" has been permanently deleted',
-					'email_body'       => '
-
-<p>Hello [store_owner_name],</p>
-
-<p>Your store <strong>[store_name]</strong> has been permanently deleted from <strong>[marketplace_name]</strong>.</p>
-
-<p>This action removes your store profile, products, and store-related data from the marketplace.</p>
-
-<p>If you believe this action was taken in error or require further clarification, please contact the marketplace administrator.</p>
-
-',
-					'sms_content'      => 'Your store [store_name] has been permanently deleted.',
-					'system_message'   => 'Store [store_name] account has been permanently deleted.',
-					'tag'              => 'Store',
-					'category'         => 'notification',
-				),
-				// ORDER NOTIFICATIONS.
-									'new_order_store'      => array(
-										'name'             => 'New order received',
-										'customer_enabled' => false,
-										'store_enabled'    => true,
-										'admin_enabled'    => true,
-										'system_enabled'   => true,
-										'email_subject'    => 'New order received – Order #[order_id]',
-										'email_body'       => '
-<p>Hello,</p>
-<p>You have received a new order.</p>
-<p><strong>Order Number:</strong> #[order_id]</p>
-',
-										'sms_content'      => 'New order #[order_id] received.',
-										'system_message'   => 'New order received.',
-										'tag'              => 'Order',
-										'category'         => 'notification',
-									),
-
-				'order_status_changed'                     => array(
-					'name'             => 'Order status changed',
-					'customer_enabled' => true,
-					'store_enabled'    => true,
-					'admin_enabled'    => false,
-					'system_enabled'   => true,
-					'email_subject'    => 'Order #[order_id] status updated',
-					'email_body'       => '
-<p>Hello,</p>
-<p>The status for <strong>Order #[order_id]</strong> has been updated.</p>
-',
-					'sms_content'      => 'Order #[order_id] updated.',
-					'system_message'   => 'Order status updated.',
+					'email_subject'    => 'New order received – Order #[order_id]',
+					'email_body'       => '<p>Hello,</p>
+											<p>You have received a new order.</p>
+											<p><strong>Order Number:</strong> #[order_id]</p>
+											',
+					'sms_content'      => 'New order #[order_id] received.',
+					'system_message'   => 'New order received.',
 					'tag'              => 'Order',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
-				'order_cancelled'                          => array(
+				'order_processing'              => array(
+					'name'             => 'Order processing',
+					'desc'             => 'An order status is changed to processing.',
+					'store_enabled'    => true,
+					'customer_enabled' => true,
+					'email_subject'    => 'Order processing started',
+					'email_body'       => 'Your order [order_id] is now being processed.',
+					'sms_content'      => 'Order [order_id] is now processing.',
+					'system_message'   => 'Order [order_id] status: Processing.',
+					'tag'              => 'Order',
+					'category'         => 'activity',
+				),
+
+				'order_completed'               => array(
+					'name'             => 'Order completed',
+					'desc'             => 'An order is completed successfully.',
+					'store_enabled'    => true,
+					'customer_enabled' => true,
+					'email_subject'    => 'Order completed',
+					'email_body'       => 'Order [order_id] has been successfully completed.',
+					'sms_content'      => 'Order [order_id] completed successfully.',
+					'system_message'   => 'Order [order_id] marked as completed.',
+					'tag'              => 'Order',
+					'category'         => 'activity',
+				),
+
+				'order_cancelled'               => array(
 					'name'             => 'Order cancelled',
-					'customer_enabled' => true,
+					'desc'             => 'An order is cancelled by the customer or admin.',
 					'store_enabled'    => true,
+					'customer_enabled' => true,
 					'admin_enabled'    => true,
-					'system_enabled'   => true,
-					'email_subject'    => 'Order #[order_id] cancelled',
-					'email_body'       => '
-<p>Hello,</p>
-<p>Order <strong>#[order_id]</strong> has been cancelled.</p>
-',
-					'sms_content'      => 'Order #[order_id] has been cancelled.',
-					'system_message'   => 'Order #[order_id] has been cancelled.',
+					'email_subject'    => 'Order cancelled',
+					'email_body'       => 'Order [order_id] has been cancelled.',
+					'sms_content'      => 'Order [order_id] cancelled successfully.',
+					'system_message'   => 'Order [order_id] cancelled.',
 					'tag'              => 'Order',
-					'category'         => 'notification',
+					'category'         => 'activity',
+				),
+
+				'order_refunded'                => array(
+					'name'             => 'Order refunded',
+					'desc'             => 'A refund is issued for an order.',
+					'store_enabled'    => true,
+					'customer_enabled' => true,
+					'email_subject'    => 'Order refunded',
+					'email_body'       => 'Your refund for order [order_id] has been processed.',
+					'sms_content'      => 'Refund for [order_id] processed.',
+					'system_message'   => 'Order [order_id] refunded.',
+					'tag'              => 'Order',
+					'category'         => 'activity',
 				),
 
 				// SHIPMENT TRACKING.
-
-								'shipment_tracking_added'  => array(
-									'name'             => 'Shipment tracking added',
-									'customer_enabled' => true,
-									'store_enabled'    => false,
-									'admin_enabled'    => false,
-									'system_enabled'   => true,
-									'email_subject'    => 'Tracking added – Order #[order_id]',
-									'email_body'       => '
-<p>Hello,</p>
-<p>Tracking information has been added for your order <strong>#[order_id]</strong>.</p>
-',
-									'sms_content'      => 'Tracking added for order #[order_id].',
-									'system_message'   => 'Tracking information added to your order.',
-									'tag'              => 'Shipping',
-									'category'         => 'notification',
-								),
-
+				'shipment_tracking_added'  => array(
+					'name'             => 'Shipment tracking added',
+					'customer_enabled' => true,
+					'store_enabled'    => false,
+					'admin_enabled'    => false,
+					'system_enabled'   => true,
+					'email_subject'    => 'Tracking added – Order #[order_id]',
+					'email_body'       => '
+										<p>Hello,</p>
+										<p>Tracking information has been added for your order <strong>#[order_id]</strong>.</p>
+										',
+					'sms_content'      => 'Tracking added for order #[order_id].',
+					'system_message'   => 'Tracking information added to your order.',
+					'tag'              => 'Shipping',
+					'category'         => 'notification',
+				),
+				//Pro
 				'order_delivered'                          => array(
 					'name'             => 'Order delivered',
 					'customer_enabled' => true,
@@ -350,22 +343,22 @@ class Notifications {
 				),
 				// REFUND NOTIFICATIONS.
 
-										'refund_requested' => array(
-											'name'        => 'Refund requested',
-											'customer_enabled' => true,
-											'store_enabled' => true,
-											'admin_enabled' => true,
-											'system_enabled' => true,
-											'email_subject' => 'Refund requested – Order #[order_id]',
-											'email_body'  => '
-<p>Hello,</p>
-<p>A refund request has been submitted for <strong>Order #[order_id]</strong>.</p>
-',
-											'sms_content' => 'Refund requested for order #[order_id].',
-											'system_message' => 'Refund request submitted.',
-											'tag'         => 'Refund',
-											'category'    => 'notification',
-										),
+				'refund_requested' => array(
+					'name'        => 'Refund requested',
+					'customer_enabled' => true,
+					'store_enabled' => true,
+					'admin_enabled' => true,
+					'system_enabled' => true,
+					'email_subject' => 'Refund requested – Order #[order_id]',
+					'email_body'  => '
+									<p>Hello,</p>
+									<p>A refund request has been submitted for <strong>Order #[order_id]</strong>.</p>
+									',
+					'sms_content' => 'Refund requested for order #[order_id].',
+					'system_message' => 'Refund request submitted.',
+					'tag'         => 'Refund',
+					'category'    => 'activity',
+				),
 
 				'refund_accepted'                          => array(
 					'name'             => 'Refund accepted',
@@ -375,13 +368,13 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Refund approved – Order #[order_id]',
 					'email_body'       => '
-<p>Hello,</p>
-<p>The refund request for <strong>Order #[order_id]</strong> has been approved.</p>
-',
+										<p>Hello,</p>
+										<p>The refund request for <strong>Order #[order_id]</strong> has been approved.</p>
+										',
 					'sms_content'      => 'Refund approved for #[order_id].',
 					'system_message'   => 'Refund approved.',
 					'tag'              => 'Refund',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
 				'refund_rejected'                          => array(
@@ -391,52 +384,31 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Refund rejected – Order #[order_id]',
-					'email_body'       => '
-<p>Hello,</p>
-<p>The refund request for <strong>Order #[order_id]</strong> has been rejected.</p>
-',
+					'email_body'       => '<p>Hello,</p>
+											<p>The refund request for <strong>Order #[order_id]</strong> has been rejected.</p>
+											',
 					'sms_content'      => 'Refund rejected for #[order_id].',
 					'system_message'   => 'Refund rejected.',
 					'tag'              => 'Refund',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
 				// REVIEWS.
-
-										'new_store_review' => array(
-											'name'        => 'New store review',
-											'customer_enabled' => false,
-											'store_enabled' => true,
-											'admin_enabled' => false,
-											'system_enabled' => true,
-											'email_subject' => 'New review received for your store',
-											'email_body'  => '<p>Hello,</p><p>A customer has submitted a new review for your store.</p>',
-											'sms_content' => 'New review received for your store.',
-											'system_message' => 'Your store received a new customer review.',
-											'tag'         => 'Review',
-											'category'    => 'notification',
-										),
-
-				'review_reply_by_store'                    => array(
-					'name'             => 'Store replied to review',
-					'desc'             => 'Store owner replies to a customer review.',
-					'customer_enabled' => true,
-					'store_enabled'    => false,
-					'admin_enabled'    => false,
-					'system_enabled'   => true,
-					'email_subject'    => 'Store response to your review – [product_name]',
-					'email_body'       => '<p>Hello [customer_name],</p><p><strong>[store_name]</strong> has replied to your review for <strong>[product_name]</strong>.</p>
-
-<p>You can view the response and continue the conversation from your account.</p><p><a href="[review_url]">View reply</a></p>
-
-',
-					'sms_content'      => 'Store replied to your review.',
-					'system_message'   => 'Store has replied to your review.',
-					'tag'              => 'Review',
-					'category'         => 'notification',
+				'new_store_review' => array(
+					'name'        => 'New store review',
+					'customer_enabled' => false,
+					'store_enabled' => true,
+					'admin_enabled' => false,
+					'system_enabled' => true,
+					'email_subject' => 'New review received for your store',
+					'email_body'  => '<p>Hello,</p><p>A customer has submitted a new review for your store.</p>',
+					'sms_content' => 'New review received for your store.',
+					'system_message' => 'Your store received a new customer review.',
+					'tag'         => 'Review',
+					'category'    => 'activity',
 				),
-
-				'review_reply_by_admin'                    => array(
+				//didi product_name remove and text final and review_url remove
+				'review_reply'                    => array(
 					'name'             => 'Admin replied to review',
 					'desc'             => 'Marketplace admin replies to a review.',
 					'customer_enabled' => true,
@@ -449,24 +421,23 @@ class Notifications {
 					'sms_content'      => 'Marketplace replied to your review.',
 					'system_message'   => 'Admin has replied to your review.',
 					'tag'              => 'Review',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
 				// PRODUCT NOTIFICATIONS.
-
-									'product_submitted'    => array(
-										'name'             => 'Product submitted',
-										'customer_enabled' => false,
-										'store_enabled'    => true,
-										'admin_enabled'    => true,
-										'system_enabled'   => true,
-										'email_subject'    => 'Product "[product_name]" submitted for approval',
-										'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> has been submitted for review.</p>',
-										'sms_content'      => 'Product [product_name] submitted for approval.',
-										'system_message'   => 'Your product has been submitted for admin review.',
-										'tag'              => 'Product',
-										'category'         => 'notification',
-									),
+				'product_submitted'    => array(
+					'name'             => 'Product submitted',
+					'customer_enabled' => false,
+					'store_enabled'    => true,
+					'admin_enabled'    => true,
+					'system_enabled'   => true,
+					'email_subject'    => 'Product "[product_name]" submitted for approval',
+					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> has been submitted for review.</p>',
+					'sms_content'      => 'Product [product_name] submitted for approval.',
+					'system_message'   => 'Your product has been submitted for admin review.',
+					'tag'              => 'Product',
+					'category'         => 'activity',
+				),
 
 				'product_approved'                         => array(
 					'name'             => 'Product approved',
@@ -480,7 +451,7 @@ class Notifications {
 					'sms_content'      => 'Product [product_name] approved.',
 					'system_message'   => 'Your product is now live.',
 					'tag'              => 'Product',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
 
 				'product_rejected'                         => array(
@@ -495,9 +466,9 @@ class Notifications {
 					'sms_content'      => 'Product [product_name] rejected.',
 					'system_message'   => 'Your product submission was rejected.',
 					'tag'              => 'Product',
-					'category'         => 'notification',
+					'category'         => 'activity',
 				),
-
+				//PRO
 				'product_low_stock'                        => array(
 					'name'             => 'Product low stock',
 					'customer_enabled' => false,
@@ -512,7 +483,7 @@ class Notifications {
 					'tag'              => 'Product',
 					'category'         => 'notification',
 				),
-
+				//PRO
 				'product_out_of_stock'                     => array(
 					'name'             => 'Product out of stock',
 					'customer_enabled' => false,
@@ -528,25 +499,25 @@ class Notifications {
 					'category'         => 'notification',
 				),
 				// PRODUCT QUESTIONS (Q&A).
-
-										'product_question_submitted' => array(
-											'name'        => 'Product question submitted',
-											'desc'        => 'Customer submits a question on a product.',
-											'customer_enabled' => false,
-											'store_enabled' => true,
-											'admin_enabled' => true,
-											'system_enabled' => true,
-											'email_subject' => 'New product question – [product_name]',
-											'email_body'  => '<p>Hello,</p><p>A customer has asked a question about the product <strong>[product_name]</strong>.</p>
+// didi remove question_url
+				'product_question_submitted' => array(
+					'name'        => 'Product question submitted',
+					'desc'        => 'Customer submits a question on a product.',
+					'customer_enabled' => false,
+					'store_enabled' => true,
+					'admin_enabled' => true,
+					'system_enabled' => true,
+					'email_subject' => 'New product question – [product_name]',
+					'email_body'  => '<p>Hello,</p><p>A customer has asked a question about the product <strong>[product_name]</strong>.</p>
 <p><strong>Customer:</strong> [customer_name]</p><p>Please review the question and provide a response.</p>
 <p><a href="[question_url]">View question</a></p>',
-											'sms_content' => 'New product question.',
-											'system_message' => 'Customer asked a question.',
-											'tag'         => 'Product',
-											'category'    => 'notification',
-										),
-
-				'product_question_reply_by_store'          => array(
+					'sms_content' => 'New product question.',
+					'system_message' => 'Customer asked a question.',
+					'tag'         => 'Product',
+					'category'    => 'notification',
+				),
+				// didi content change
+				'product_question_reply'          => array(
 					'name'             => 'Store replied to product question',
 					'desc'             => 'Store owner replies to a product question.',
 					'customer_enabled' => true,
@@ -555,7 +526,6 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Answer to your question – [product_name]',
 					'email_body'       => '<p>Hello [customer_name],</p><p>The store <strong>[store_name]</strong> has replied to your question regarding <strong>[product_name]</strong>.</p>
-
 <p><a href="[question_url]">View reply</a></p>',
 					'sms_content'      => 'Reply to your product question.',
 					'system_message'   => 'Question reply received.',
@@ -563,77 +533,114 @@ class Notifications {
 					'category'         => 'notification',
 				),
 
-				// 'product_question_reply_by_admin' => array(
-				// 'name'             => 'Admin replied to product question',
-				// 'desc'             => 'Marketplace admin replies to a product question.',
-				// 'customer_enabled' => true,
-				// 'store_enabled'   => false,
-				// 'admin_enabled'    => false,
-				// 'system_enabled'   => true,
-				// 'email_subject'    => 'Marketplace answered your question – [product_name]',
-				// 'email_body'       => '<p>Hello [customer_name],</p><p>The marketplace team has responded to your question regarding <strong>[product_name]</strong>.</p>
+				// PAYOUT & WITHDRAWAL.
+				'payout_received'              => array(
+					'name'           => 'Payout received',
+					'desc'           => 'A payment is received for an order.',
+					'store_enabled'  => true,
+					'admin_enabled'  => true,
+					'email_subject'  => 'Payout received',
+					'email_body'     => 'Payout for order [order_id] has been received successfully.',
+					'sms_content'    => 'Payout received for [order_id].',
+					'system_message' => 'Payout for [order_id] received.',
+					'tag'            => 'Payment',
+					'category'       => 'activity',
+				),
 
-				// <p><a href="[question_url]">View reply</a></p>',
-				// 'tag'              => 'Product',
-				// 'category'         => 'notification',
-				// ),
+				'payout_failed'                 => array(
+					'name'           => 'Payout failed',
+					'desc'           => 'A payout processing attempt has failed.',
+					'admin_enabled'  => true,
+					'email_subject'  => 'Payout failed',
+					'email_body'     => 'Payout of [amount] for store [store_name] failed.',
+					'sms_content'    => 'Payout failed for [store_name].',
+					'system_message' => 'Payout error for [store_name].',
+					'tag'            => 'Payment',
+					'category'       => 'activity',
+				),
 
-			// PAYOUT & WITHDRAWAL.
+				'withdrawal_requested'          => array(
+					'name'           => 'Withdrawal requested',
+					'desc'           => 'A withdrawal request is submitted by a store.',
+					'admin_enabled'  => true,
+					'store_enabled'  => true,
+					'email_subject'  => 'Withdrawal request submitted',
+					'email_body'     => 'Store [store_name] requested withdrawal of [amount].',
+					'sms_content'    => 'Withdrawal request of [amount] submitted.',
+					'system_message' => 'Withdrawal requested by [store_name].',
+					'tag'            => 'Payment',
+					'category'       => 'notification',
+				),
 
-					'payout_received'                      => array(
-						'name'             => 'Store payout processed',
-						'desc'             => 'Store receives a notification when a payout has been successfully processed.',
-						'customer_enabled' => false,
-						'store_enabled'    => true,
-						'admin_enabled'    => false,
-						'system_enabled'   => true,
-						'email_subject'    => 'Payout processed – [amount] transferred to your account',
-						'email_body'       => '<p>Hello [store_name],</p><p>Your payout has been successfully processed.</p>
-<p><strong>Amount:</strong> [amount] <br><strong>Payout reference:</strong> [payout_id]
-</p><p>The amount has been transferred to your registered payout account.</p><p>If you have any questions regarding this transaction, please contact the marketplace administrator.</p>
+				'withdrawal_released'           => array(
+					'name'           => 'Withdrawal released',
+					'desc'           => 'A withdrawal is released successfully.',
+					'store_enabled'  => true,
+					'email_subject'  => 'Withdrawal released',
+					'email_body'     => 'Your withdrawal has been released via [payment_processor].',
+					'sms_content'    => 'Withdrawal released successfully.',
+					'system_message' => 'Withdrawal released successfully.',
+					'tag'            => 'Payment',
+					'category'       => 'notification',
+				),
 
-',
-						'sms_content'      => 'Payout of [amount] has been processed.',
-						'system_message'   => 'Your payout of [amount] has been successfully processed.',
-						'tag'              => 'Payment',
-						'category'         => 'notification',
-					),
-				'withdrawal_requested'                     => array(
-					'name'             => 'Withdrawal request submitted',
-					'desc'             => 'Admin receives a notification when a store submits a withdrawal request.',
-					'customer_enabled' => false,
-					'store_enabled'    => false,
+				'withdrawl_rejected'            => array(
+					'name'           => 'Withdrawl rejected',
+					'desc'           => 'A withdrawl request is rejected by the admin.',
+					'store_enabled'  => true,
+					'email_subject'  => 'Withdrawl rejected',
+					'email_body'     => 'A Withdrawl of [amount] has been rejected by your administrator.',
+					'sms_content'    => 'Withdrawl of [amount] rejected.',
+					'system_message' => 'Withdrawl Payout rejected: [amount].',
+					'tag'            => 'Payment',
+					'category'       => 'activity',
+				),
+				// ========== REPORT ABUSE ==========
+				'report_abuse_submitted'        => array(
+					'name'             => 'Report abuse submitted',
+					'desc'             => 'A product is reported for abuse by a customer.',
 					'admin_enabled'    => true,
-					'system_enabled'   => true,
-					'email_subject'    => 'New withdrawal request from [store_name] – [amount]',
-					'email_body'       => '<p>Hello Admin,</p><p>A new withdrawal request has been submitted by a store.</p>
-
-<p><strong>Store:</strong> [store_name] <br><strong>Requested amount:</strong> [amount]</p><p>Please review the request and approve or reject it from the admin dashboard.</p>
-
-',
-					'sms_content'      => 'New withdrawal request from [store_name].',
-					'system_message'   => 'Store [store_name] requested withdrawal of [amount].',
-					'tag'              => 'Payment',
+					'store_enabled'    => true,
+					'customer_enabled' => true,
+					'email_subject'    => 'Product reported',
+					'email_body'       => 'Customer reported “[product_name]” for abuse.',
+					'sms_content'      => 'Product “[product_name]” reported.',
+					'system_message'   => 'Abuse report for “[product_name]” received.',
+					'tag'              => 'Report',
 					'category'         => 'notification',
 				),
-				// STORE FOLLOWER NOTIFICATIONS.
 
-								'store_followed'           => array(
-									'name'             => 'Store followed',
-									'customer_enabled' => false,
-									'store_enabled'    => true,
-									'admin_enabled'    => false,
-									'system_enabled'   => true,
-									'email_subject'    => 'You have a new store follower',
-									'email_body'       => '
-<p>Hello,</p>
-<p>A customer has started following your store <strong>[store_name]</strong>.</p>
-',
-									'sms_content'      => 'You have a new store follower.',
-									'system_message'   => 'A customer started following your store.',
-									'tag'              => 'Follower',
-									'category'         => 'notification',
-								),
+				// ========== ANNOUNCEMENTS ==========
+				'system_announcement'           => array(
+					'name'             => 'System announcement',
+					'desc'             => 'A system-wide announcement is published by the admin.',
+					'store_enabled'    => true,
+					'admin_enabled' => true,
+					'email_subject'    => 'New announcement',
+					'email_body'       => '[announcement_message]',
+					'sms_content'      => '[announcement_message]',
+					'system_message'   => 'New announcement: [announcement_message]',
+					'tag'              => 'System',
+					'category'         => 'notification',
+				),
+
+				// STORE FOLLOWER NOTIFICATIONS.
+				'store_followed'           => array(
+					'name'             => 'Store followed',
+					'customer_enabled' => false,
+					'store_enabled'    => true,
+					'admin_enabled'    => false,
+					'system_enabled'   => true,
+					'email_subject'    => 'You have a new store follower',
+					'email_body'       => '
+										<p>Hello,</p>
+										<p>A customer has started following your store <strong>[store_name]</strong>.</p>
+										',
+					'sms_content'      => 'You have a new store follower.',
+					'system_message'   => 'A customer started following your store.',
+					'tag'              => 'Follower',
+					'category'         => 'activity',
+				),
 
 				'store_new_product_to_followers'           => array(
 					'name'             => 'New product from followed store',
@@ -643,9 +650,9 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'New product from "[store_name]"',
 					'email_body'       => '
-<p>Hello,</p>
-<p>A store you follow has added a new product <strong>[product_name]</strong>.</p>
-',
+										<p>Hello,</p>
+										<p>A store you follow has added a new product <strong>[product_name]</strong>.</p>
+										',
 					'sms_content'      => 'New product from store you follow.',
 					'system_message'   => 'A followed store added a new product.',
 					'tag'              => 'Follower',
@@ -660,15 +667,15 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'New coupon from "[store_name]"',
 					'email_body'       => '
-<p>Hello,</p>
-<p>A store you follow has created a new coupon <strong>[coupon_code]</strong>.</p>
-',
+											<p>Hello,</p>
+											<p>A store you follow has created a new coupon <strong>[coupon_code]</strong>.</p>
+											',
 					'sms_content'      => 'New coupon available from followed store.',
 					'system_message'   => 'A store you follow created a new coupon.',
 					'tag'              => 'Follower',
 					'category'         => 'notification',
 				),
-
+				//Pro
 				'store_vacation_alert_to_followers'        => array(
 					'name'             => 'Store vacation alert',
 					'customer_enabled' => true,
@@ -677,41 +684,35 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Store "[store_name]" is on vacation',
 					'email_body'       => '
-<p>Hello,</p>
-<p>The store you follow <strong>[store_name]</strong> is currently on vacation.</p>
-',
+											<p>Hello,</p>
+											<p>The store you follow <strong>[store_name]</strong> is currently on vacation.</p>
+											',
 					'sms_content'      => 'Store you follow is on vacation.',
 					'system_message'   => 'A store you follow is currently on vacation.',
 					'tag'              => 'Follower',
 					'category'         => 'notification',
 				),
 
-				// WHOLESALE BUYER.
-
-									'wholesale_buyer_approved' => array(
-										'name'             => 'Wholesale buyer approved',
-										'desc'             => 'User request for wholesale access has been approved.',
-										'customer_enabled' => true,
-										'store_enabled'    => false,
-										'admin_enabled'    => false,
-										'system_enabled'   => true,
-										'email_subject'    => 'Your wholesale access has been approved',
-										'email_body'       => '
-
-<p>Hello [customer_name],</p>
-
-<p>Your request for <strong>wholesale buyer access</strong> has been approved.</p>
-
-<p>You can now log in to your account and view <strong>wholesale pricing</strong> on eligible products across the marketplace.</p>
-
-<p><a href="[account_url]">Go to your account</a></p>
-
-',
-										'sms_content'      => 'Your wholesale access request has been approved. You can now view wholesale prices.',
-										'system_message'   => 'Your wholesale buyer request has been approved. Wholesale pricing is now available to you.',
-										'tag'              => 'Wholesale',
-										'category'         => 'notification',
-									),
+				// WHOLESALE BUYER.(PRO)
+				'wholesale_buyer_approved' => array(
+					'name'             => 'Wholesale buyer approved',
+					'desc'             => 'User request for wholesale access has been approved.',
+					'customer_enabled' => true,
+					'store_enabled'    => false,
+					'admin_enabled'    => false,
+					'system_enabled'   => true,
+					'email_subject'    => 'Your wholesale access has been approved',
+					'email_body'       => '
+										<p>Hello [customer_name],</p>
+										<p>Your request for <strong>wholesale buyer access</strong> has been approved.</p>
+										<p>You can now log in to your account and view <strong>wholesale pricing</strong> on eligible products across the marketplace.</p>
+										<p><a href="[account_url]">Go to your account</a></p>
+										',
+					'sms_content'      => 'Your wholesale access request has been approved. You can now view wholesale prices.',
+					'system_message'   => 'Your wholesale buyer request has been approved. Wholesale pricing is now available to you.',
+					'tag'              => 'Wholesale',
+					'category'         => 'notification',
+				),
 
 				'wholesale_buyer_rejected'                 => array(
 					'name'             => 'Wholesale buyer rejected',
@@ -722,16 +723,11 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Wholesale access request not approved',
 					'email_body'       => '
-
-<p>Hello [customer_name],</p>
-
-<p>Your request to register as a <strong>wholesale buyer</strong> could not be approved at this time.</p>
-
-<p>If you believe this decision was made in error or need further clarification, please contact our support team.</p>
-
-<p><a href="[support_url]">Contact support</a></p>
-
-',
+											<p>Hello [customer_name],</p>
+											<p>Your request to register as a <strong>wholesale buyer</strong> could not be approved at this time.</p>
+											<p>If you believe this decision was made in error or need further clarification, please contact our support team.</p>
+											<p><a href="[support_url]">Contact support</a></p>
+										',
 					'sms_content'      => 'Your wholesale buyer request was not approved. Please contact support for details.',
 					'system_message'   => 'Your wholesale buyer request has been rejected.',
 					'tag'              => 'Wholesale',

@@ -149,8 +149,8 @@ class OrderManager {
             $store = new Store( $store_id );
 
             do_action(
-                'multivendorx_notify_new_order',
-                'new_order',
+                'multivendorx_notify_new_order_store',
+                'new_order_store',
                 array(
                     'admin_email'    => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                     'admin_phone'    => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),

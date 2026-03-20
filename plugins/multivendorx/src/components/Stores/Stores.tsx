@@ -31,7 +31,6 @@ const Stores = () => {
 
 	const hash = location.hash;
 	const isTabActive = hash.includes('tab=stores');
-	const isAddStore = hash.includes('create');
 	const isEditStore = hash.includes('edit');
 	const generateSlug = (text: string) =>
 		text
@@ -206,9 +205,9 @@ const Stores = () => {
 	};
 	return (
 		<>
-			{isTabActive && isEditStore && !isAddStore && <EditStore />}
+			{isTabActive && isEditStore && <EditStore />}
 
-			{!isAddStore && !isEditStore && (
+			{!isEditStore && (
 				<>
 					<NavigatorHeader
 						headerIcon="storefront"
@@ -375,11 +374,23 @@ const Stores = () => {
 											'Upload Image',
 											'multivendorx'
 										)}
-										onChange={(image) => {
-											setFormData((prev) => ({
-												...prev,
-												image: image.url,
-											}));
+										onChange={(val) => {
+											if (!val || (Array.isArray(val) && val.length === 0)) {
+												// ✅ REMOVE case
+												handleRemoveImage('image');
+											} else {
+												// ✅ ADD / REPLACE case
+												const file = Array.isArray(val) ? val[0] : val;
+
+												const url = typeof file === 'string' ? file : file?.url;
+
+												setFormData((prev) => ({
+													...prev,
+													image: url || '',
+												}));
+
+												setImagePreview(url || '');
+											}
 										}}
 									/>
 								</FormGroup>

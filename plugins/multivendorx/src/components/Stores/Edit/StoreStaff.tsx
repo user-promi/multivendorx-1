@@ -93,6 +93,7 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 								options={appLocalizer.store_owners || []}
 								type="multi-select"
 								value={formData.store_owners || []}
+								size="20rem"
 								onChange={(
 									selected: StoreOwner[] | string[] | string
 								) => {

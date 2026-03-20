@@ -8,6 +8,7 @@
 namespace MultiVendorX\QuestionAnswer;
 
 use MultiVendorX\QuestionAnswer\Util;
+use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -345,6 +346,19 @@ class Rest extends \WP_REST_Controller {
             // Save via Util helper.
             $updated = Util::update_question( $id, $data_to_update );
 
+            $store = new Store($q->store_id);
+            $user = get_user_by('id', $q->question_by);
+            do_action(
+                'multivendorx_notify_product_question_reply',
+                'product_question_reply',
+                array(
+                    'customer_email' => $user->user_email,
+					'customer_phone' => get_user_meta( $q->question_by, 'billing_phone', true ),
+                    'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                    'customer_name' => $user->display_name,
+                    'category'    => 'activity',
+                )
+            );
             if ( ! $updated ) {
                 return rest_ensure_response( array( 'success' => false ) );
             }

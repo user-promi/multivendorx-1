@@ -388,6 +388,19 @@ class Hooks {
 					)
                 );
             }
+
+            if ( 'refund-requested' === $old_status && 'refunded' === $new_status ) {
+                do_action(
+                    'multivendorx_notify_refund_accepted',
+                    'refund_accepted',
+                    array(
+						'customer_email' => $order->get_billing_email(),
+						'customer_phone' => $order->get_billing_phone(),
+						'order_id'       => $order->get_id(),
+						'category'       => 'activity',
+					)
+                );
+            }
         }
     }
 }

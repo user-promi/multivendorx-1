@@ -124,9 +124,6 @@ export const renderCell = (
             return <span>{finalValue}</span>;
         }
 
-        case 'id': {
-            <span>#{value}</span>
-        }
         default:
             return value ?? null;
     }

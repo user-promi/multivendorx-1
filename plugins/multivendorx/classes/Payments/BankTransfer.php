@@ -145,7 +145,7 @@ class BankTransfer {
                     ),
                     array(
                         'key'   => 'bank_address',
-                        'type'  => 'text-area',
+                        'type'  => 'textarea',
                         'label' => 'Bank address',
                     ),
                     array(

@@ -8,6 +8,12 @@ import {
 	ChoiceToggleUI,
 	PopupUI,
 	useModules,
+	SectionUI,
+	TableCard,
+	TableRow,
+	Container,
+	Column,
+	FormGroup,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import { applyFilters, doAction } from '@wordpress/hooks';
@@ -20,6 +26,7 @@ interface ShippingMethod {
 	enabled?: boolean;
 	settings?: Record<string, unknown>;
 }
+
 type Zone = {
 	id: number;
 	zone_name: string;
@@ -27,6 +34,7 @@ type Zone = {
 	shipping_methods: ShippingMethod[];
 	zone_id: number;
 };
+
 interface FormData {
 	shippingMethod: string;
 	localPickupCost: string;
@@ -300,110 +308,90 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		}
 	};
 
-	const renderShippingMethods = (zone: Zone) => {
-		const methodsObj = zone.shipping_methods || {};
-		const methodsArray = Object.values(methodsObj);
+	const headers = {
+		zone_name: {
+			label: __('Zone Name', 'multivendorx'),
+			render: (row: TableRow) => row.zone_name || '—',
+		},
+		formatted_zone_location: {
+			label: __('Region(s)', 'multivendorx'),
+			render: (row: TableRow) => row.formatted_zone_location || '—',
+		},
+		shipping_methods: {
+			label: __('Shipping Method(s)', 'multivendorx'),
+			render: (row: TableRow) => {
+				const zone = row as Zone;
+				const methodsObj = zone.shipping_methods || {};
+				const methodsArray = Object.values(methodsObj);
 
-		if (methodsArray.length === 0) {
-			return (
-				<div>
-					<div>No shipping methods</div>
-					<button
-						className="admin-btn btn-purple"
-						onClick={() => handleAdd(zone)}
-					>
-						<i className="adminfont-plus"></i>{' '}
-						{__('Add Shipping Method', 'multivendorx')}
-					</button>
-				</div>
-			);
-		}
-		return (
-			<div className="shipping-method-wrapper">
-				{methodsArray.map((method: ShippingMethod) => (
-					<div key={method.instance_id} className="shipping-method">
-						<div className="admin-badge yellow">{method.title}</div>
-						<i
-							onClick={() => handleEdit(method)}
-							className="admin-badge blue adminfont-edit"
-						></i>
-						<i
-							onClick={() => handleDelete(method, zone)}
-							className="admin-badge red adminfont-delete"
-						></i>
+				if (methodsArray.length === 0) {
+					return (
+						<div>
+							<div>No shipping methods</div>
+							<button
+								className="admin-btn btn-purple"
+								onClick={() => handleAdd(zone)}
+							>
+								<i className="adminfont-plus"></i>{' '}
+								{__('Add Shipping Method', 'multivendorx')}
+							</button>
+						</div>
+					);
+				}
+				return (
+					<div className="shipping-method-wrapper">
+						{methodsArray.map((method: ShippingMethod) => (
+							<div key={method.instance_id} className="shipping-method">
+								<div className="admin-badge yellow">{method.title}</div>
+								<i
+									onClick={() => handleEdit(method)}
+									className="admin-badge blue adminfont-edit"
+									style={{ cursor: 'pointer', marginLeft: '8px' }}
+								></i>
+								<i
+									onClick={() => handleDelete(method, zone)}
+									className="admin-badge red adminfont-delete"
+									style={{ cursor: 'pointer', marginLeft: '8px' }}
+								></i>
+							</div>
+						))}
+
+						<button
+							className="admin-btn btn-purple"
+							onClick={() => handleAdd(zone)}
+							style={{ marginTop: '10px' }}
+						>
+							<i className="adminfont-plus"></i>{' '}
+							{__('Add New Method', 'multivendorx')}
+						</button>
 					</div>
-				))}
-
-				<button
-					className="admin-btn btn-purple"
-					onClick={() => handleAdd(zone)}
-				>
-					<i className="adminfont-plus"></i>{' '}
-					{__('Add New Method', 'multivendorx')}
-				</button>
-			</div>
-		);
+				);
+			},
+		},
 	};
+
+	const rows: TableRow[] = data.map((zone) => ({
+		...zone,
+	}));
 
 	return (
 		<>
-			<div className="form-group-title-wrapper">
-				<div className="title">
-					{__('Zone-wise Shipping Configuration', 'multivendorx')}
-				</div>
-			</div>
-
-			<div className="admin-table-wrapper">
-				<table className="admin-table">
-					<thead className="admin-table-header">
-						<tr className="header-row">
-							<th className="header-col">
-								{__('Zone Name', 'multivendorx')}
-							</th>
-							<th className="header-col">
-								{__('Region(s)', 'multivendorx')}
-							</th>
-							<th className="header-col">
-								{__('Shipping Method(s)', 'multivendorx')}
-							</th>
-						</tr>
-					</thead>
-					<tbody className="admin-table-body">
-						{data.length === 0 ? (
-							<tr>
-								<td colSpan={3} className="no-data">
-									<p>
-										{__(
-											'No shipping zones found',
-											'multivendorx'
-										)}
-									</p>
-								</td>
-							</tr>
-						) : (
-							data.map((zone) => (
-								<tr key={zone.id} className="admin-row">
-									<td className="admin-column">
-										{zone.zone_name || '—'}
-									</td>
-									<td className="admin-column">
-										{zone.formatted_zone_location || '—'}
-									</td>
-									<td className="admin-column">
-										{renderShippingMethods(zone)}
-									</td>
-								</tr>
-							))
-						)}
-					</tbody>
-				</table>
-			</div>
-
+			<SectionUI title={__('Zone-wise Shipping Configuration', 'multivendorx')}/>
+			<FormGroup>
+					<TableCard
+						headers={headers}
+						rows={rows}
+						isLoading={false}
+						showMenu={false}
+						onQueryUpdate={() => {}}
+						emptyMessage={__('No shipping zones found', 'multivendorx')}
+					/>
+			</FormGroup>
 			{addShipping && selectedZone && (
 				<PopupUI
 					open={addShipping}
-					width={70}
-					height="80%"
+					width={35}
+					height="60%"
 					onClose={() => setAddShipping(false)}
 					header={{
 						icon: 'shipping',

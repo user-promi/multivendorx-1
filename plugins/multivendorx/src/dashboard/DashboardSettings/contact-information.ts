@@ -20,11 +20,12 @@ export default {
 		{
 			key: 'phone',
 			type: 'number',
+			size: '12rem',
 			label: __('Phone', 'multivendorx'),
 			beforeElement: {
 				type: 'select',
 				key: 'country_code',
-				size: '200px',
+				size: '10rem',
 				options: CountryCodes,
 			},
 		},
@@ -42,7 +43,6 @@ export default {
 			type: 'text',
 			label: __('Live Chat (Enable, WhatsApp, etc.)', 'multivendorx'),
 			key: 'live_chat',
-			moduleEnabled: 'live-chat',
 		},
 	],
 };

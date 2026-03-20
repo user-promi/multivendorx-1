@@ -109,7 +109,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
 
         return (
             <>
-                <label>{ field.label }</label>
+                {field.label && <label>{ field.label }</label> }
                 <Render
                     field={ {
                         ...field,
@@ -154,7 +154,7 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
                                             {
                                                 icon: 'delete',
                                                 text: 'Delete',
-                                                color: 'purple',
+                                                color: 'red',
                                                 onClick: () =>
                                                     handleDelete( rowIndex ),
                                             },

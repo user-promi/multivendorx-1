@@ -143,19 +143,19 @@ const DashboardTab: React.FC<object> = () => {
 					title: __('Success!', 'multivendorx'),
 					message: existingPlugin
 						? sprintf(
-								__(
-									'Plugin "%s" activated successfully!',
-									'multivendorx'
-								),
-								slug
-							)
-						: sprintf(
-								__(
-									'Plugin "%s" installed & activated successfully!',
-									'multivendorx'
-								),
-								slug
+							__(
+								'Plugin "%s" activated successfully!',
+								'multivendorx'
 							),
+							slug
+						)
+						: sprintf(
+							__(
+								'Plugin "%s" installed & activated successfully!',
+								'multivendorx'
+							),
+							slug
+						),
 					type: 'success',
 					position: 'float',
 				});
@@ -187,7 +187,7 @@ const DashboardTab: React.FC<object> = () => {
 				'Step-by-step guides to set up and manage your marketplace.',
 				'multivendorx'
 			),
-			iconClass: 'book',
+			iconClass: 'knowledgebase',
 			linkText: __('Explore Docs', 'multivendorx'),
 			href: 'https://multivendorx.com/docs/knowledgebase/',
 		},
@@ -232,7 +232,6 @@ const DashboardTab: React.FC<object> = () => {
 			),
 			icon: 'commission',
 			linkText: __('Join Discord', 'multivendorx'),
-			href: '#',
 		},
 		{
 			title: __('Verified stores only', 'multivendorx'),
@@ -242,7 +241,6 @@ const DashboardTab: React.FC<object> = () => {
 			),
 			icon: 'verification3',
 			linkText: __('Join Discord', 'multivendorx'),
-			href: '#',
 		},
 		{
 			title: __('Diversified marketplace', 'multivendorx'),
@@ -252,7 +250,6 @@ const DashboardTab: React.FC<object> = () => {
 			),
 			icon: 'marketplace',
 			linkText: __('Explore Docs', 'multivendorx'),
-			href: '#',
 		},
 		{
 			title: __('Vacation mode for stores', 'multivendorx'),
@@ -262,7 +259,6 @@ const DashboardTab: React.FC<object> = () => {
 			),
 			icon: 'vacation',
 			linkText: __('Explore Docs', 'multivendorx'),
-			href: '#',
 		},
 		{
 			title: __('Never run out of stock', 'multivendorx'),
@@ -272,7 +268,6 @@ const DashboardTab: React.FC<object> = () => {
 			),
 			icon: 'global-community',
 			linkText: __('Book Consultation', 'multivendorx'),
-			href: '#',
 		},
 		{
 			title: __('Autopilot notifications', 'multivendorx'),
@@ -282,375 +277,378 @@ const DashboardTab: React.FC<object> = () => {
 			),
 			icon: 'notification',
 			linkText: __('Join Discord', 'multivendorx'),
-			href: '#',
 		},
 	];
 
 	return (
-		<>
-			<Container general>
-				<Column grid={8}>
-					<Card>
-						<div className="pro-banner-wrapper">
-							<div className="content">
-								<div className="heading">
-									{__(
-										'Welcome to MultiVendorX',
-										'multivendorx'
-									)}
-								</div>
-								<div className="description">
-									{__(
-										'Expand your WooCommerce store by creating a marketplace for multiple stores. Manage, grow, and scale seamlessly.',
-										'multivendorx'
-									)}
-								</div>
-
-								<div className="button-wrapper">
-									{renderUpgradeButton(
-										__('Upgrade Now', 'multivendorx')
-									)}
-
-									<div
-										className="admin-btn"
-										onClick={() =>
-											(window.location.href =
-												'?page=multivendorx-setup')
-										}
-									>
-										{__(
-											'Launch Setup Wizard',
-											'multivendorx'
-										)}
-										<i className="adminfont-import"></i>
-									</div>
-								</div>
-							</div>
-
-							<div className="image">
-								<img src={Mascot} alt="" />
-							</div>
-						</div>
-					</Card>
-					{!appLocalizer.khali_dabba && (
-						<Card
-							title={__(
-								'Build a professional marketplace',
-								'multivendorx'
-							)}
-							badge={[
-								{
-									text: 'Starting at $299/year',
-									color: 'blue',
-								},
-							]}
-							desc={__(
-								'Unlock advanced features and premium modules to create a marketplace that stands out.',
-								'multivendorx'
-							)}
-						>
-							<ItemListUI
-								className="feature-list"
-								items={featuresList.map(
-									({ icon, title, desc }) => ({
-										icon: icon,
-										title: title,
-										desc: desc,
-									})
+		<Container general>
+			<Column grid={8}>
+				<Card>
+					<div className="pro-banner-wrapper">
+						<div className="content">
+							<div className="heading">
+								{__(
+									'Welcome to MultiVendorX',
+									'multivendorx'
 								)}
-							/>
-							<div className="pro-banner">
-								<div className="text">
-									{__(
-										'Join 8,000+ successful marketplace owners',
-										'multivendorx'
-									)}
-								</div>
-								<div className="des">
-									{__(
-										'Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.',
-										'multivendorx'
-									)}
-								</div>
+							</div>
+							<div className="description">
+								{__(
+									'Expand your WooCommerce store by creating a marketplace for multiple stores. Manage, grow, and scale seamlessly.',
+									'multivendorx'
+								)}
+							</div>
 
+							<div className="button-wrapper">
 								{renderUpgradeButton(
 									__('Upgrade Now', 'multivendorx')
 								)}
 
-								<div className="des">
+								<div
+									className="admin-btn"
+									onClick={() =>
+									(window.location.href =
+										'?page=multivendorx-setup')
+									}
+								>
 									{__(
-										'15-day money-back guarantee',
+										'Launch Setup Wizard',
 										'multivendorx'
 									)}
+									<i className="adminfont-import"></i>
 								</div>
 							</div>
-						</Card>
-					)}
+						</div>
+
+						<div className="image">
+							<img src={Mascot} alt="" />
+						</div>
+					</div>
+				</Card>
+				{!appLocalizer.khali_dabba && (
 					<Card
-						title={__('Modules', 'multivendorx')}
-						action={
-							<ButtonInputUI
-								buttons={[
+						title={__(
+							'Build a professional marketplace',
+							'multivendorx'
+						)}
+						badge={[
+							{
+								text: 'Starting at $299/year',
+								color: 'blue',
+							},
+						]}
+						desc={__(
+							'Unlock advanced features and premium modules to create a marketplace that stands out.',
+							'multivendorx'
+						)}
+					>
+						<ItemListUI
+							className="feature-list"
+							items={featuresList.map(
+								({ icon, title, desc }) => ({
+									icon: icon,
+									title: title,
+									desc: desc,
+								})
+							)}
+						/>
+						<div className="pro-banner">
+							<div className="text">
+								{__(
+									'Join 8,000+ successful marketplace owners',
+									'multivendorx'
+								)}
+							</div>
+							<div className="des">
+								{__(
+									'Create, manage, and grow your marketplace with confidence. Trusted by thousands of entrepreneurs worldwide.',
+									'multivendorx'
+								)}
+							</div>
+
+							{renderUpgradeButton(
+								__('Upgrade Now', 'multivendorx')
+							)}
+
+							<div className="des">
+								{__(
+									'15-day money-back guarantee',
+									'multivendorx'
+								)}
+							</div>
+						</div>
+					</Card>
+				)}
+				<Card
+					title={__('Modules', 'multivendorx')}
+					action={
+						<ButtonInputUI
+							buttons={[
+								{
+									icon: 'eye',
+									text: __('View All', 'multivendorx'),
+									color: 'purple',
+									onClick: () => {
+										window.open(
+											'?page=multivendorx#&tab=modules'
+										);
+									},
+								},
+							]}
+						/>
+					}
+				>
+					<Modules
+						modulesArray={modulesArray}
+						appLocalizer={appLocalizer}
+						apiLink="modules"
+						proPopupContent={proPopupContent}
+						pluginName="multivendorx"
+						variant="mini-module"
+					/>
+				</Card>
+			</Column>
+
+			{/* Right Side */}
+			<Column grid={4}>
+				<Card title={__('Extend your website', 'multivendorx')}>
+					<Column row>
+						{pluginStatus['woocommerce-catalog-enquiry'] ? (
+							<ItemListUI
+								className="mini-card"
+								background
+								items={[
 									{
-										icon: 'eye',
-										text: __('View All', 'multivendorx'),
-										color: 'purple',
-										onClick: () => {
-											window.open(
-												'?page=multivendorx#&tab=modules'
-											);
-										},
+										title: __(
+											'CatalogX Pro',
+											'multivendorx'
+										),
+										desc: __(
+											'Advanced product catalog with enhanced enquiry features and premium templates',
+											'multivendorx'
+										),
+										img: catalogx,
+										tags: (
+											<>
+												<span className="admin-badge red">
+													<i className="adminfont-pro-tag"></i>{' '}
+													{__(
+														'Pro',
+														'multivendorx'
+													)}
+												</span>
+												<a
+													href="https://catalogx.com/pricing/"
+													target="_blank"
+													rel="noopener noreferrer"
+												>
+													{__(
+														'Get Pro',
+														'multivendorx'
+													)}
+												</a>
+											</>
+										),
 									},
 								]}
 							/>
-						}
-					>
-						<Modules
-							modulesArray={modulesArray}
-							appLocalizer={appLocalizer}
-							apiLink="modules"
-							proPopupContent={proPopupContent}
-							pluginName="multivendorx"
-							variant="mini-module"
-						/>
-					</Card>
-				</Column>
-
-				{/* Right Side */}
-				<Column grid={4}>
-					<Card title={__('Extend your website', 'multivendorx')}>
-						<Column row>
-							{pluginStatus['woocommerce-catalog-enquiry'] ? (
-								<ItemListUI
-									className="mini-card"
-									background
-									items={[
-										{
-											title: __(
-												'CatalogX Pro',
-												'multivendorx'
-											),
-											desc: __(
-												'Advanced product catalog with enhanced enquiry features and premium templates',
-												'multivendorx'
-											),
-											img: catalogx,
-											tags: (
-												<>
-													<span className="admin-badge red">
-														<i className="adminfont-pro-tag"></i>{' '}
-														{__(
-															'Pro',
-															'multivendorx'
-														)}
-													</span>
-													<a
-														href="https://catalogx.com/pricing/"
-														target="_blank"
-														rel="noopener noreferrer"
-													>
-														{__(
-															'Get Pro',
-															'multivendorx'
-														)}
-													</a>
-												</>
-											),
-										},
-									]}
-								/>
-							) : (
-								<ItemListUI
-									className="mini-card"
-									background
-									items={[
-										{
-											title: __(
-												'CatalogX',
-												'multivendorx'
-											),
-											desc: __(
-												'Turn your store into a product catalog with enquiry-based sales',
-												'multivendorx'
-											),
-											img: catalogx,
-											tags: (
-												<>
-													<span className="admin-badge green">
-														{__(
-															'Free',
-															'multivendorx'
-														)}
-													</span>
-													<a
-														href="#"
-														onClick={(e) => {
-															e.preventDefault();
-															if (!installing) {
-																installOrActivatePlugin(
-																	'woocommerce-catalog-enquiry'
-																);
-															}
-														}}
-														style={{
-															pointerEvents:
-																installing
-																	? 'none'
-																	: 'auto',
-															opacity:
-																installing ===
+						) : (
+							<ItemListUI
+								className="mini-card"
+								background
+								items={[
+									{
+										title: __(
+											'CatalogX',
+											'multivendorx'
+										),
+										desc: __(
+											'Turn your store into a product catalog with enquiry-based sales',
+											'multivendorx'
+										),
+										img: catalogx,
+										tags: (
+											<>
+												<span className="admin-badge green">
+													{__(
+														'Free',
+														'multivendorx'
+													)}
+												</span>
+												<a
+													href="#"
+													onClick={(e) => {
+														e.preventDefault();
+														if (!installing) {
+															installOrActivatePlugin(
 																'woocommerce-catalog-enquiry'
-																	? 0.6
-																	: 1,
-														}}
-													>
-														{installing ===
+															);
+														}
+													}}
+													style={{
+														pointerEvents:
+															installing
+																? 'none'
+																: 'auto',
+														opacity:
+															installing ===
+																'woocommerce-catalog-enquiry'
+																? 0.6
+																: 1,
+													}}
+												>
+													{installing ===
 														'woocommerce-catalog-enquiry'
-															? __(
-																	'Installing...',
-																	'multivendorx'
-																)
-															: __(
-																	'Install',
-																	'multivendorx'
-																)}
-													</a>
-												</>
-											),
-										},
-									]}
-								/>
-							)}
+														? __(
+															'Installing...',
+															'multivendorx'
+														)
+														: __(
+															'Install',
+															'multivendorx'
+														)}
+												</a>
+											</>
+										),
+									},
+								]}
+							/>
+						)}
 
-							{pluginStatus['woocommerce-product-stock-alert'] ? (
-								<ItemListUI
-									className="mini-card"
-									background
-									items={[
-										{
-											title: __(
-												'Notifima Pro',
-												'multivendorx'
-											),
-											desc: __(
-												'Advanced stock alerts, wishlist features, and premium notification system',
-												'multivendorx'
-											),
-											img: notifima,
-											tags: (
-												<>
-													<span className="admin-badge red">
-														<i className="adminfont-pro-tag"></i>{' '}
-														{__(
-															'Pro',
-															'multivendorx'
-														)}
-													</span>
-													<a
-														href="https://notifima.com/pricing/"
-														target="_blank"
-														rel="noopener noreferrer"
-													>
-														{__(
-															'Get Pro',
-															'multivendorx'
-														)}
-													</a>
-												</>
-											),
-										},
-									]}
-								/>
-							) : (
-								<ItemListUI
-									className="mini-card"
-									background
-									items={[
-										{
-											title: __(
-												'Notifima',
-												'multivendorx'
-											),
-											desc: __(
-												'Advanced stock alerts and wishlist features for WooCommerce',
-												'multivendorx'
-											),
-											img: notifima,
-											tags: (
-												<>
-													<span className="admin-badge green">
-														{__(
-															'Free',
-															'multivendorx'
-														)}
-													</span>
-													<a
-														href="#"
-														onClick={(e) => {
-															e.preventDefault();
-															if (!installing) {
-																installOrActivatePlugin(
-																	'woocommerce-product-stock-alert'
-																);
-															}
-														}}
-														style={{
-															pointerEvents:
-																installing
-																	? 'none'
-																	: 'auto',
-															opacity:
-																installing ===
+						{pluginStatus['woocommerce-product-stock-alert'] ? (
+							<ItemListUI
+								className="mini-card"
+								background
+								items={[
+									{
+										title: __(
+											'Notifima Pro',
+											'multivendorx'
+										),
+										desc: __(
+											'Advanced stock alerts, wishlist features, and premium notification system',
+											'multivendorx'
+										),
+										img: notifima,
+										tags: (
+											<>
+												<span className="admin-badge red">
+													<i className="adminfont-pro-tag"></i>{' '}
+													{__(
+														'Pro',
+														'multivendorx'
+													)}
+												</span>
+												<a
+													href="https://notifima.com/pricing/"
+													target="_blank"
+													rel="noopener noreferrer"
+												>
+													{__(
+														'Get Pro',
+														'multivendorx'
+													)}
+												</a>
+											</>
+										),
+									},
+								]}
+							/>
+						) : (
+							<ItemListUI
+								className="mini-card"
+								background
+								items={[
+									{
+										title: __(
+											'Notifima',
+											'multivendorx'
+										),
+										desc: __(
+											'Advanced stock alerts and wishlist features for WooCommerce',
+											'multivendorx'
+										),
+										img: notifima,
+										tags: (
+											<>
+												<span className="admin-badge green">
+													{__(
+														'Free',
+														'multivendorx'
+													)}
+												</span>
+												<a
+													href="#"
+													onClick={(e) => {
+														e.preventDefault();
+														if (!installing) {
+															installOrActivatePlugin(
 																'woocommerce-product-stock-alert'
-																	? 0.6
-																	: 1,
-														}}
-													>
-														{installing ===
+															);
+														}
+													}}
+													style={{
+														pointerEvents:
+															installing
+																? 'none'
+																: 'auto',
+														opacity:
+															installing ===
+																'woocommerce-product-stock-alert'
+																? 0.6
+																: 1,
+													}}
+												>
+													{installing ===
 														'woocommerce-product-stock-alert'
-															? __(
-																	'Installing...',
-																	'multivendorx'
-																)
-															: __(
-																	'Install',
-																	'multivendorx'
-																)}
-													</a>
-												</>
-											),
-										},
-									]}
-								/>
-							)}
-						</Column>
-					</Card>
+														? __(
+															'Installing...',
+															'multivendorx'
+														)
+														: __(
+															'Install',
+															'multivendorx'
+														)}
+												</a>
+											</>
+										),
+									},
+								]}
+							/>
+						)}
+					</Column>
+				</Card>
 
-					{/* Quick Links */}
-					<Card
-						title={__('Need help getting started?', 'multivendorx')}
-					>
-						<div className="cards-wrapper quick-link">
-							{resources.map((res, index) => (
-								<div className="cards" key={index}>
-									<div className="header">
-										<i
-											className={`icon adminfont-${res.iconClass}`}
-										></i>
-										<a href={res.href} target="blank">
-											{__(res.linkText, 'multivendorx')}
-											<i className="adminfont-external"></i>
-										</a>
-									</div>
-									<h3>{__(res.title, 'multivendorx')}</h3>
-									<p>{__(res.desc, 'multivendorx')}</p>
-								</div>
-							))}
-						</div>
-					</Card>
-				</Column>
-			</Container>
-		</>
+				{/* Quick Links */}
+				<Card
+					title={__('Need help getting started?', 'multivendorx')}
+				>
+					<div className="quick-link">
+						{resources.map((res) => (
+							<ItemListUI
+								className="mini-card list"
+								border
+								items={[
+									{
+										title: __(res.title, 'multivendorx'),
+										desc: __(res.desc, 'multivendorx'),
+										icon: res.iconClass,
+										tags: (
+											<>
+												<a href={res.href} target="blank">
+													{__(res.linkText, 'multivendorx')}
+													<i className="adminfont-external"></i>
+												</a>
+											</>
+										),
+									},
+								]}
+							/>
+						))}
+					</div>
+				</Card>
+			</Column>
+		</Container>
 	);
 };
 
