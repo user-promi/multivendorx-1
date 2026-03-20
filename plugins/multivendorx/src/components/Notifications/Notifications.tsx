@@ -13,20 +13,16 @@ const Notifications = () => {
 			type: 'file',
 			content: {
 				id: 'notifications',
-				name: __('Notifications', 'multivendorx'),
-				desc: __('Store Info', 'multivendorx'),
-				hideSettingHeader: true,
-				icon: 'adminfont-credit-card',
+				headerTitle: __('Notifications', 'multivendorx'),
+				headerIcon: 'credit-card',
 			},
 		},
 		{
 			type: 'file',
 			content: {
 				id: 'activities',
-				name: __('Activities', 'multivendorx'),
-				desc: __('Store Info', 'multivendorx'),
-				hideSettingHeader: true,
-				icon: 'adminfont-credit-card',
+				headerTitle: __('Activities', 'multivendorx'),
+				headerIcon: 'credit-card',
 			},
 		},
 	];

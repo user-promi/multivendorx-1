@@ -19,7 +19,7 @@ import {
 } from 'zyra';
 
 import Popup from '../../../src/components/Popup/Popup';
-import { formatLocalDate } from '../../../src/services/commonFunction';
+import { formatLocalDate, getUrl } from '../../../src/services/commonFunction';
 
 type StoreQnaRow = {
 	id: number;
@@ -151,7 +151,7 @@ const Qna: React.FC = () => {
 			render: (row: any) => (
 				<InfoItem
 					title={row.product_name}
-					titleLink={row.product_link}
+					titleLink={getUrl(row.product_id,'product')}
 					avatar={{
 						image: row.product_image,
 						iconClass: row.product_image ? '' : 'single-product',

@@ -356,7 +356,6 @@ const AllProduct: React.FC = () => {
 			label: __('Product Name', 'multivendorx'),
 			width: 18,
 			render: (row: any) => {
-				console.log(row)
 				return (
 					<InfoItem
 						title={row.name}

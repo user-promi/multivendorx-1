@@ -12,9 +12,10 @@ import {
 	TextAreaUI,
 	PopupUI,
 	QueryProps,
+	InfoItem,
 } from 'zyra';
 
-import { formatLocalDate, setSession } from '@/services/commonFunction';
+import { formatDate, formatLocalDate, setSession } from '@/services/commonFunction';
 import { useRef } from '@wordpress/element';
 
 const PendingStores: React.FC<object> = () => {
@@ -95,9 +96,14 @@ const PendingStores: React.FC<object> = () => {
 	const headers = {
 		store_name: {
 			label: __('Store', 'multivendorx'),
-		},
-		email: {
-			label: __('Email', 'multivendorx'),
+			render: (row) => (
+				<InfoItem
+					title={row.store_name}
+					avatar={{
+						iconClass: 'store-inventory',
+					}}
+				/>
+			),
 		},
 		applied_on: {
 			label: __('Applied On', 'multivendorx'),
@@ -106,7 +112,7 @@ const PendingStores: React.FC<object> = () => {
 		},
 		action: {
 			label: __('Action', 'multivendorx'),
-			render: (row: any) => {
+			render: (row) => {
 				return (
 					<ButtonInputUI
 						buttons={[
@@ -114,16 +120,17 @@ const PendingStores: React.FC<object> = () => {
 								icon: 'check',
 								text: __('Active', 'multivendorx'),
 								color: 'purple',
-								onClick: (row: any) => handleSingleAction('active', row.id),
+								onClick: () => { handleSingleAction('active', row.id) },
 							},
 							{
 								icon: 'close',
 								text: __('Declined', 'multivendorx'),
-								onClick: (row: any) => handleSingleAction('declined', row.id),
+								onClick: () => handleSingleAction('declined', row.id),
 							},
 						]}
 					/>
-				)}
+				)
+			}
 		},
 	};
 
@@ -154,8 +161,7 @@ const PendingStores: React.FC<object> = () => {
 				setRowIds(ids);
 
 				setRows(items);
-				const count =
-					Number(response.headers['x-wp-status-pending']) || 0;
+				const count = Number(response.headers['x-wp-total']) || 0;
 				setTotalRows(count);
 				if (firstLoadRef.current) {
 					setSession('storeCount', count);
@@ -169,7 +175,6 @@ const PendingStores: React.FC<object> = () => {
 				setIsLoading(false);
 			});
 	};
-
 	return (
 		<>
 			<Container>

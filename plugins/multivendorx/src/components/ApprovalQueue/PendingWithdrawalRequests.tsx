@@ -4,7 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { ButtonInputUI, getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
 import { useRef } from '@wordpress/element';
-import { setSession } from '@/services/commonFunction';
+import { getUrl, setSession } from '@/services/commonFunction';
 
 const PendingWithdrawal: React.FC<object> = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -39,6 +39,11 @@ const PendingWithdrawal: React.FC<object> = () => {
 	const headers = {
 		store_name: {
 			label: __('Store', 'multivendorx'),
+			render: (row) => (
+				<a href={getUrl(row.store_id, 'store', 'edit')} target="_blank" rel="noopener noreferrer" className="link-item">
+					{row.store_name}
+				</a>
+			)
 		},
 		status: {
 			label: __('Status', 'multivendorx'),

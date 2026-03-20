@@ -322,7 +322,7 @@ class Commissions extends \WP_REST_Controller {
             return $error;
         }
         try {
-            $order_id = absint( $request->get_param( 'orderId' ) );
+            $order_id = absint( $request->get_param( 'order_id' ) );
             $action   = $request->get_param( 'action' );
 
             if ( 'regenerate' === $action ) {
@@ -368,6 +368,7 @@ class Commissions extends \WP_REST_Controller {
 
             'marketplace_commission' => (float) ( $commission['marketplace_commission'] ?? 0 ),
             'marketplace_payable'    => (float) ( $commission['marketplace_payable'] ?? 0 ),
+            'marketplace_refunded'   => (float) ( $commission['marketplace_refunded'] ?? 0 ),
 
             'store_earning'          => (float) ( $commission['store_earning'] ?? 0 ),
             'store_payable'          => (float) ( $commission['store_payable'] ?? 0 ),

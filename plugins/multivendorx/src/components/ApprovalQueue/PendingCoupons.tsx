@@ -52,25 +52,20 @@ const PendingCoupons: React.FC<object> = () => {
 	}, []);
 
 	const handleSingleAction = (action: string, couponId: number) => {
-		if (!couponId) {
+		if (!couponId && !action) {
 			return;
 		}
 
-		if (action === 'reject_coupon') {
+		if (action === 'reject') {
 			setRejectCouponId(couponId);
 			setRejectPopupOpen(true);
-			return;
-		}
-
-		const statusUpdate = action === 'approve_coupon' ? 'publish' : null;
-		if (!statusUpdate) {
 			return;
 		}
 
 		axios
 			.put(
 				`${appLocalizer.apiUrl}/wc/v3/coupons/${couponId}`,
-				{ status: statusUpdate },
+				{ status: action },
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
 			.then(() => {
@@ -128,6 +123,7 @@ const PendingCoupons: React.FC<object> = () => {
 		},
 		discount_type: {
 			label: __('Discount Type', 'multivendorx'),
+			type:'status'
 		},
 		amount: {
 			label: __('Amount', 'multivendorx'),
@@ -139,7 +135,7 @@ const PendingCoupons: React.FC<object> = () => {
 		},
 		action: {
 			label: 'Action',
-			render: (row: any) => {
+			render: (row) => {
 				return (
 					<ButtonInputUI
 						buttons={[
@@ -147,12 +143,12 @@ const PendingCoupons: React.FC<object> = () => {
 								icon: 'check',
 								text: __('Approve', 'multivendorx'),
 								color: 'purple',
-								onClick: (row) => handleSingleAction('approve_coupon', row.id)
+								onClick: () => handleSingleAction('publish', row.id)
 							},
 							{
 								icon: 'close',
 								text: __('Reject', 'multivendorx'),
-								onClick: (row) => handleSingleAction('reject_coupon', row.id)
+								onClick: () => handleSingleAction('reject', row.id)
 							},
 						]}
 					/>

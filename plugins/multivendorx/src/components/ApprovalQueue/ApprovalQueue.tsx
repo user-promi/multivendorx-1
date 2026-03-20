@@ -21,11 +21,10 @@ const ApprovalQueue = () => {
 	const settings = appLocalizer.settings_databases_value || {};
 
 	const location = new URLSearchParams(useLocation().hash.substring(1));
-
 	const baseSettingContent = [
 		{
 			type: 'file',
-			condition: settings?.general?.approve_store === 'manually',
+			condition: settings?.onboarding?.approve_store === 'manually',
 			content: {
 				id: 'stores',
 				headerTitle: __('Stores', 'multivendorx'),
@@ -45,7 +44,7 @@ const ApprovalQueue = () => {
 		{
 			type: 'file',
 			condition:
-				!settings?.['store-permissions']?.products?.includes(
+				settings?.['store-permissions']?.products?.includes(
 					'publish_products'
 				),
 			content: {
@@ -82,7 +81,7 @@ const ApprovalQueue = () => {
 		},
 		{
 			type: 'file',
-			condition: settings?.disbursement?.withdraw_type === 'manual',
+			condition: settings?.payouts?.withdraw_type === 'manual',
 			content: {
 				id: 'withdrawal',
 				headerTitle: __('Withdrawals', 'multivendorx'),
@@ -130,7 +129,6 @@ const ApprovalQueue = () => {
 		baseSettingContent,
 		{ settings, modules }
 	);
-
 	const settingContent = filteredSettings.filter(
 		(tab) =>
 			(!tab.module || modules.includes(tab.module)) &&

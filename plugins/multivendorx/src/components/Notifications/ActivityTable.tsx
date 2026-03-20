@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, Container, Column, TableCard } from 'zyra';
+import { getApiLink, Container, Column, TableCard, InfoItem } from 'zyra';
 import { QueryProps, TableRow } from '@/services/type';
+import { getUrl } from '@/services/commonFunction';
 
 const ActivityTable = (React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -40,15 +41,25 @@ const ActivityTable = (React.FC = () => {
 
 	const headers = {
 		store_name: {
-			label: __('Store Name', 'multivendorx'),
+			label: __('Store', 'multivendorx'),
+			render: (row) => (
+				<InfoItem
+					title={row.store_name}
+					titleLink={getUrl(row.store_id, 'store', 'edit')}
+					avatar={{
+						iconClass: 'store-inventory',
+					}}
+				/>
+			),
 		},
 		title: {
 			label: __('Title', 'multivendorx'),
 		},
 		type: {
 			label: __('Type', 'multivendorx'),
+			type: 'status'
 		},
-		date: {
+		created_at: {
 			label: __('Date', 'multivendorx'),
 			type: 'date',
 		},
@@ -64,6 +75,7 @@ const ActivityTable = (React.FC = () => {
 					totalRows={totalRows}
 					isLoading={isLoading}
 					onQueryUpdate={doRefreshTableData}
+					format={appLocalizer.date_format}
 				/>
 			</Column>
 		</Container>

@@ -13,7 +13,7 @@ import {
 	InfoItem,
 } from 'zyra';
 import { useNavigate } from 'react-router-dom';
-import { formatCurrency, formatLocalDate } from '../../services/commonFunction';
+import { formatCurrency, formatDate, formatLocalDate, getUrl } from '../../services/commonFunction';
 
 const StoreTable: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -114,15 +114,15 @@ const StoreTable: React.FC = () => {
 			render: (row) => (
 				<InfoItem
 					title={row.store_name}
-					titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
+					titleLink={getUrl(row.id, 'store', 'edit')}
 					avatar={{
-						image: row.logo,
-						iconClass: row.logo ? '' : 'store-inventory',
+						image: row.store_image,
+						iconClass: row.store_image ? '' : 'store-inventory',
 					}}
 					descriptions={[
 						{
 							label: __('Since', 'multivendorx'),
-							value: row.date || '—',
+							value: formatDate(row.create_time) || '—',
 						},
 					]}
 				/>
@@ -143,10 +143,9 @@ const StoreTable: React.FC = () => {
 				return (
 					<InfoItem
 						title={owner?.display_name}
-						titleLink={`/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${row.id}`}
+						titleLink={getUrl(row.id, 'store', 'edit')}
 						avatar={{
-							image: row.logo,
-							iconClass: row.logo ? '' : 'user-circle',
+							imageHtml: row.primary_owner_image,
 						}}
 						descriptions={[
 							{
@@ -171,19 +170,14 @@ const StoreTable: React.FC = () => {
 					label: __('Settings', 'multivendorx'),
 					icon: 'setting',
 					onClick: (row) => {
-						navigate(
-							`?page=multivendorx#&tab=stores&edit/${row.id}`
-						);
+						navigate(getUrl(row.id, 'store', 'edit'));
 					},
 				},
 				{
 					label: __('Storefront', 'multivendorx'),
 					icon: 'storefront',
 					onClick: (row) => {
-						window.open(
-							`${appLocalizer.store_page_url}${row.store_slug}`,
-							'_blank'
-						);
+						window.open(getUrl(row.id, 'store', 'view', row.store_slug), '_blank');
 					},
 				},
 			],
@@ -196,10 +190,30 @@ const StoreTable: React.FC = () => {
 			type: 'date',
 		},
 	];
+	const handleBulkAction = (action: string, selectedIds: []) => {
+		if (!selectedIds.length) {
+			return;
+		}
+
+		if (!action) {
+			return;
+		}
+
+		axios({
+			method: 'PUT',
+			url: getApiLink(appLocalizer, `store/${selectedIds[0]}`),
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: { action, ids: selectedIds },
+		})
+			.then(() => {
+				doRefreshTableData({});
+			})
+	};
 	const bulkActions = [
-		{ label: __('Published', 'multivendorx'), value: 'publish' },
-		{ label: __('Pending', 'multivendorx'), value: 'pending' },
-		{ label: __('Delete', 'multivendorx'), value: 'delete' },
+		{ label: __('Active', 'multivendorx'), value: 'active' },
+		{ label: __('Under Review', 'multivendorx'), value: 'under_review' },
+		{ label: __('Rejected', 'multivendorx'), value: 'rejected' },
+		{ label: __('Suspended', 'multivendorx'), value: 'suspended' },
 	];
 	return (
 		<Container general>
@@ -213,6 +227,12 @@ const StoreTable: React.FC = () => {
 					ids={rowIds}
 					categoryCounts={categoryCounts}
 					bulkActions={bulkActions}
+					onBulkActionApply={(
+						action: string,
+						selectedIds: []
+					) => {
+						handleBulkAction(action, selectedIds);
+					}}
 					search={{}}
 					filters={filters}
 					format={appLocalizer.date_format}

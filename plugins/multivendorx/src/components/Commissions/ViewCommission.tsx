@@ -5,13 +5,14 @@ import {
 	FormGroup,
 	FormGroupWrapper,
 	getApiLink,
+	InfoItem,
 	PopupUI,
 	SectionUI,
 	TableCard,
 	TableRow,
 } from 'zyra';
 import axios from 'axios';
-import { formatCurrency } from '../../services/commonFunction';
+import { formatCurrency, getUrl } from '../../services/commonFunction';
 
 interface ViewCommissionProps {
 	open: boolean;
@@ -76,7 +77,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			setCommissionData(null);
 			setStoreData(null);
 			setOrderData(null);
-			setOrderItems([]); // reset
+			setOrderItems([]);
 			return;
 		}
 
@@ -128,7 +129,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 								});
 							});
 						})
-						.catch(() => {});
+						.catch(() => { });
 
 					axios({
 						method: 'GET',
@@ -139,48 +140,13 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							const order = orderRes.data || {};
 
 							setOrderData(order);
-							if (Array.isArray(order.shipping_lines)) {
-								const mappedRows = order.shipping_lines.map(
-									(ship) => ({
-										method: ship.method_title,
-										amount: ship.total,
-										tax: ship.total_tax,
-									})
-								);
-
-								setShippingItems(mappedRows);
-							} else {
-								setShippingItems([]);
-							}
-
-							if (Array.isArray(order.line_items)) {
-								const mappedRows = order.line_items.map(
-									(item) => {
-										const total = parseFloat(
-											item.total || '0'
-										);
-										const tax = parseFloat(
-											item.total_tax || '0'
-										);
-
-										return {
-											id: item.name, // product name
-											cost: formatCurrency(item.price),
-											qty: item.quantity,
-											total: formatCurrency(total),
-											tax: formatCurrency(tax),
-										};
-									}
-								);
-
-								setOrderItems(mappedRows);
-							} else {
-								setOrderItems([]);
-							}
+							setOrderItems(order.line_items);
+							setShippingItems(order.shipping_lines);
 						})
 						.catch(() => {
 							setOrderData(null);
 							setOrderItems([]);
+							setShippingItems([]);
 						});
 				}
 			})
@@ -195,30 +161,53 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 	const popupColumns = {
 		id: {
 			label: __('Product', 'multivendorx'),
+			render: (row) => {
+				return (
+					<InfoItem
+						title={row.name}
+						titleLink={getUrl(row.product_id,'product')||''}
+						avatar={{
+							image: row.image?.src || '',
+							iconClass: 'single-product',
+						}}
+						descriptions={[
+							{
+								label: __('SKU:', 'multivendorx'),
+								value: row.sku || '—',
+							},
+						]}
+					/>
+				);
+			}
 		},
-		cost: {
+		price: {
 			label: __('Cost', 'multivendorx'),
+			type: 'currency'
 		},
-		qty: {
+		quantity: {
 			label: __('Qty', 'multivendorx'),
 		},
 		total: {
 			label: __('Total', 'multivendorx'),
+			type: 'currency'
 		},
-		tax: {
+		total_tax: {
 			label: __('Tax', 'multivendorx'),
+			type: 'currency'
 		},
 	};
 
 	const shippingColumns = {
-		method: {
+		method_title: {
 			label: __('Method', 'multivendorx'),
 		},
-		amount: {
+		total: {
 			label: __('Amount', 'multivendorx'),
+			type: 'currency'
 		},
-		tax: {
+		total_tax: {
 			label: __('Tax', 'multivendorx'),
+			type: 'currency'
 		},
 	};
 
@@ -246,9 +235,8 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 									href={`${appLocalizer.site_url.replace(
 										/\/$/,
 										''
-									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
-										storeData.id
-									}`}
+									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${storeData.id
+										}`}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="store-link"
@@ -271,7 +259,17 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 					</div>
 
 					<SectionUI title={__('Order Details', 'multivendorx')} />
-					<TableCard headers={popupColumns} rows={orderItems} />
+					<TableCard
+						headers={popupColumns}
+						rows={orderItems}
+						currency={{
+							currencySymbol: appLocalizer.currency_symbol,
+							priceDecimals: appLocalizer.price_decimals,
+							decimalSeparator: appLocalizer.decimal_separator,
+							thousandSeparator: appLocalizer.thousand_separator,
+							currencyPosition: appLocalizer.currency_position,
+						}}
+					/>
 
 					{Array.isArray(shippingItems) &&
 						shippingItems.length > 0 && (
@@ -279,6 +277,13 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 								headers={shippingColumns}
 								rows={shippingItems}
 								title={__('Shipping', 'multivendorx')}
+								currency={{
+									currencySymbol: appLocalizer.currency_symbol,
+									priceDecimals: appLocalizer.price_decimals,
+									decimalSeparator: appLocalizer.decimal_separator,
+									thousandSeparator: appLocalizer.thousand_separator,
+									currencyPosition: appLocalizer.currency_position,
+								}}
 							/>
 						)}
 				</div>
@@ -295,12 +300,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						>
 							{commissionData?.order_id ? (
 								<a
-									href={`${appLocalizer.site_url.replace(
-										/\/$/,
-										''
-									)}/wp-admin/post.php?post=${
-										commissionData.order_id
-									}&action=edit`}
+									href={getUrl(commissionData.order_id, 'order')}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="link-item"
@@ -319,11 +319,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							<span className="admin-badge blue">
 								{orderData?.status
 									? orderData.status
-											.replace(/^wc-/, '') // remove 'wc-' prefix if exists
-											.replace(/_/g, ' ') // replace underscores with spaces
-											.replace(/\b\w/g, (c) =>
-												c.toUpperCase()
-											) // capitalize first letter of each word
+										.replace(/^wc-/, '') // remove 'wc-' prefix if exists
+										.replace(/_/g, ' ') // replace underscores with spaces
+										.replace(/\b\w/g, (c) =>
+											c.toUpperCase()
+										) // capitalize first letter of each word
 									: ''}
 							</span>
 						</FormGroup>
@@ -337,72 +337,64 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							label={__('Commission Status', 'multivendorx')}
 						>
 							<span
-								className={`admin-badge ${
-									commissionData?.status === 'paid'
-										? 'green'
-										: 'red'
-								}`}
+								className={`admin-badge ${commissionData?.status === 'paid'
+									? 'green'
+									: 'red'
+									}`}
 							>
 								{commissionData?.status
 									? commissionData.status
-											.replace(/^wc-/, '') // remove any prefix like 'wc-'
-											.replace(/_/g, ' ') // replace underscores with spaces
-											.replace(/\b\w/g, (c) =>
-												c.toUpperCase()
-											) // capitalize each word
+										.replace(/^wc-/, '') // remove any prefix like 'wc-'
+										.replace(/_/g, ' ') // replace underscores with spaces
+										.replace(/\b\w/g, (c) =>
+											c.toUpperCase()
+										) // capitalize each word
 									: ''}
 							</span>
 						</FormGroup>
-
 						<FormGroup
 							row
-							label={__('Commission Amount', 'multivendorx')}
+							label={__('Marketplace Commission', 'multivendorx')}
 						>
 							{formatCurrency(
-								parseFloat(commissionData?.total ?? 0) +
-									parseFloat(
-										commissionData?.commission_refunded ?? 0
-									)
+								parseFloat(commissionData?.marketplace_commission ?? 0)
 							)}
 						</FormGroup>
 
 						<FormGroup row label={__('Shipping', 'multivendorx')}>
-							{formatCurrency(commissionData?.shipping)}
+							{formatCurrency(commissionData?.shipping_amount)}
 						</FormGroup>
 
 						<FormGroup row label={__('Tax', 'multivendorx')}>
 							{formatCurrency(
-								Number(commissionData?.tax || 0) +
-									Number(
-										commissionData?.shipping_tax_amount || 0
-									)
+								Number(commissionData?.tax_amount || 0)
 							)}
 						</FormGroup>
 
-						{commissionData?.commission_refunded > 0 && (
+						{commissionData?.marketplace_refunded > 0 && (
 							<FormGroup
 								row
 								label={__('Commission refund', 'multivendorx')}
 							>
 								{formatCurrency(
-									commissionData.commission_refunded
+									commissionData.marketplace_refunded
 								)}
 							</FormGroup>
 						)}
 
 						<FormGroup row label={__('Total', 'multivendorx')}>
-							{formatCurrency(commissionData?.total)}
+							{formatCurrency(commissionData?.total_order_amount)}
 						</FormGroup>
 					</FormGroupWrapper>
 
-					{commissionData?.note && (
+					{commissionData?.commission_note && (
 						<>
 							<SectionUI
 								title={__('Commission Notes', 'multivendorx')}
 							/>
 							<div className="settings-metabox-note">
 								<i className="adminfont-info"></i>
-								<p>{commissionData?.note}</p>
+								<p>{commissionData?.commission_note}</p>
 							</div>
 						</>
 					)}

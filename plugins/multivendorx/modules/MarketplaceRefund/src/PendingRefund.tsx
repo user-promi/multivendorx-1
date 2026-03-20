@@ -13,7 +13,7 @@ import {
 	TableRow,
 	TextAreaUI,
 } from 'zyra';
-import { toWcIsoDate } from '../../../src/services/commonFunction';
+import { getUrl, toWcIsoDate } from '../../../src/services/commonFunction';
 
 interface OrderMeta {
 	key: string;
@@ -139,11 +139,23 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 	};
 
 	const headers = {
+
 		id: {
 			label: __('Order', 'multivendorx'),
+			isSortable: true,
+			render: (row) => (
+				<a href={getUrl(row.id, 'order')} target="_blank" rel="noopener noreferrer" className="link-item">
+					#{row.id}
+				</a>
+			)
 		},
 		store_name: {
 			label: __('Store', 'multivendorx'),
+			render: (row) => (
+				<a href={getUrl(row.store_id, 'store', 'edit')} target="_blank" rel="noopener noreferrer" className="link-item">
+					{row.store_name}
+				</a>
+			)
 		},
 		total: {
 			label: __('Amount', 'multivendorx'),
@@ -176,9 +188,9 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 								icon: 'preview',
 								text: __('View Details', 'multivendorx'),
 								color: 'purple',
-								onClick: (row: OrderRow) => {
+								onClick: () => {
 									window.open(
-										`${appLocalizer.site_url.replace(/\/$/, '')}/wp-admin/post.php?post=${row.id}&action=edit`,
+										getUrl(row.id, 'order'),
 										'_blank'
 									);
 								},
@@ -186,14 +198,15 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 							{
 								icon: 'close',
 								text: __('Reject', 'multivendorx'),
-								onClick: (row: OrderRow) => {
+								onClick: () => {
 									setViewOrder(row);
 									setPopupOpen(true);
 								},
 							},
 						]}
 					/>
-				)}
+				)
+			}
 		},
 	};
 
@@ -415,7 +428,7 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 								usePlainText={false}
 								tinymceApiKey={
 									appLocalizer.settings_databases_value[
-										'overview'
+									'overview'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>

@@ -10,8 +10,9 @@ import {
 	TextAreaUI,
 	TableRow,
 	QueryProps,
+	InfoItem,
 } from 'zyra';
-import { setSession, toWcIsoDate } from '@/services/commonFunction';
+import { getUrl, setSession, toWcIsoDate } from '@/services/commonFunction';
 import { useRef } from '@wordpress/element';
 type StoreOption = {
 	label: string;
@@ -50,25 +51,20 @@ const PendingProducts: React.FC<object> = () => {
 	}, []);
 
 	const handleSingleAction = (action: string, productId: number) => {
-		if (!productId) {
+		if (!productId && !action) {
 			return;
 		}
 
-		if (action === 'reject_product') {
+		if (action === 'reject') {
 			setRejectProductId(productId);
 			setRejectPopupOpen(true);
-			return;
-		}
-
-		const statusUpdate = action === 'approve_product' ? 'publish' : null;
-		if (!statusUpdate) {
 			return;
 		}
 
 		axios
 			.post(
 				`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
-				{ status: statusUpdate },
+				{ status: action },
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
 			.then(() => {
@@ -109,7 +105,26 @@ const PendingProducts: React.FC<object> = () => {
 
 	const headers = {
 		name: {
-			label: __('Product', 'multivendorx'),
+			label: __('Product Name', 'multivendorx'),
+			width: 18,
+			render: (row) => {
+				return (
+					<InfoItem
+						title={row.name}
+						titleLink={getUrl(row.id, 'product') || ''}
+						avatar={{
+							image: row.images?.[0]?.src || '',
+							iconClass: row.images?.[0]?.src ? '' : 'single-product',
+						}}
+						descriptions={[
+							{
+								label: __('SKU:', 'multivendorx'),
+								value: row.sku || '—',
+							},
+						]}
+					/>
+				);
+			}
 		},
 		category: {
 			label: __('Category', 'multivendorx'),
@@ -127,7 +142,7 @@ const PendingProducts: React.FC<object> = () => {
 		},
 		action: {
 			label: __('Action', 'multivendorx'),
-			render: (row: any) => {
+			render: (row) => {
 				return (
 					<ButtonInputUI
 						buttons={[
@@ -135,16 +150,17 @@ const PendingProducts: React.FC<object> = () => {
 								icon: 'check',
 								text: __('Approve', 'multivendorx'),
 								color: 'purple',
-								onClick: (row: any) => handleSingleAction('approve_product', row.id),
+								onClick: () => handleSingleAction('publish', row.id),
 							},
 							{
 								icon: 'close',
 								text: __('Reject', 'multivendorx'),
-								onClick: (row: any) => handleSingleAction('reject_product', row.id),
+								onClick: () => handleSingleAction('reject', row.id),
 							},
 						]}
 					/>
-				)}
+				)
+			}
 		},
 	};
 
@@ -173,7 +189,7 @@ const PendingProducts: React.FC<object> = () => {
 					page: query.paged,
 					per_page: query.per_page,
 					search: query.searchValue,
-					orderby: query.orderby,
+					orderby: 'date',
 					order: query.order,
 					meta_key: 'multivendorx_store_id',
 					value: query?.filter?.store_id,

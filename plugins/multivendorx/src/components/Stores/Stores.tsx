@@ -25,7 +25,6 @@ const Stores = () => {
 
 	const [addStore, setAddStore] = useState(false);
 	const [formData, setFormData] = useState<Record<string, string>>({});
-	const [imagePreview, setImagePreview] = useState<string>('');
 	const [error, setError] = useState<
 		Record<string, { type: string; message: string }>
 	>({});
@@ -117,7 +116,6 @@ const Stores = () => {
 
 	const resetForm = () => {
 		setFormData({});
-		setImagePreview('');
 		setError({});
 	};
 
@@ -178,6 +176,7 @@ const Stores = () => {
 
 			if (response.data.success) {
 				setAddStore(false);
+				resetForm();
 				navigate(
 					`?page=multivendorx#&tab=stores&edit/${response.data.id}`
 				);
@@ -193,28 +192,6 @@ const Stores = () => {
 		}
 	};
 
-	// Open WordPress media uploader
-	const runUploader = (key: string) => {
-		const frame = wp.media({
-			title: 'Select or Upload Image',
-			button: { text: 'Use this image' },
-			multiple: false,
-		});
-
-		frame.on('select', () => {
-			const attachment = frame.state().get('selection').first().toJSON();
-			setFormData((prev) => ({ ...prev, [key]: attachment.url }));
-			setImagePreview(attachment.url);
-		});
-
-		frame.open();
-	};
-
-	const handleRemoveImage = (key: string) => {
-		setFormData((prev) => ({ ...prev, [key]: '' }));
-		setImagePreview('');
-	};
-
 	// This function now returns the notice props instead of the Notice component
 	const getFieldNotice = (key: string) => {
 		const err = error?.[key];
@@ -227,7 +204,6 @@ const Stores = () => {
 			noticeType: err.type as 'error' | 'success',
 		};
 	};
-
 	return (
 		<>
 			{isTabActive && isEditStore && !isAddStore && <EditStore />}
@@ -246,7 +222,6 @@ const Stores = () => {
 								label: __('Add Store', 'multivendorx'),
 								icon: 'plus',
 								onClick: () => {
-									resetForm();
 									setAddStore(true);
 								},
 							},
@@ -357,7 +332,7 @@ const Stores = () => {
 										tinymceApiKey={
 											appLocalizer
 												.settings_databases_value[
-												'overview'
+											'overview'
 											]?.['tinymce_api_section'] ?? ''
 										}
 									/>
@@ -389,24 +364,18 @@ const Stores = () => {
 									htmlFor="store_owners"
 								>
 									<FileInputUI
-										value={formData.image || ''}
 										name="image"
-										accept={
-											'.jpg,.jpeg,.png,.gif,.pdf,.zip'
-										} // Backend controls file types: "image/*", ".pdf", "image/*,.pdf"
-										imageSrc={imagePreview || ''}
+										accept={'.jpg,.jpeg,.png,.gif,.pdf,.zip'}
+										imageSrc={formData.image || ''}
 										imageWidth={75}
 										imageHeight={75}
-										openUploader={__(
-											'Upload Image',
-											'multivendorx'
-										)}
-										onButtonClick={() =>
-											runUploader('image')
-										}
-										onRemove={() =>
-											handleRemoveImage('image')
-										}
+										openUploader={__('Upload Image', 'multivendorx')}
+										onChange={(image) => {
+											setFormData((prev) => ({
+												...prev,
+												image: image.url
+											}));
+										}}
 									/>
 								</FormGroup>
 							</FormGroupWrapper>

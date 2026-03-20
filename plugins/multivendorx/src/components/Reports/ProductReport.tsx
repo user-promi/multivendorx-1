@@ -27,6 +27,7 @@ import axios from 'axios';
 import {
 	downloadCSV,
 	formatLocalDate,
+	getUrl,
 	toWcIsoDate,
 } from '../../services/commonFunction';
 import Counter from '@/services/Counter';
@@ -265,9 +266,36 @@ const ProductReport: React.FC = () => {
 	const headers = {
 		name: {
 			label: __('Product', 'multivendorx'),
+			render: (row) => {
+				return (
+					<InfoItem
+						title={row.name}
+						titleLink={getUrl(row.id, 'product') || ''}
+						avatar={{
+							image: row.images?.[0]?.src || '',
+							iconClass: row.images?.[0]?.src ? '' : 'single-product',
+						}}
+						descriptions={[
+							{
+								label: __('SKU:', 'multivendorx'),
+								value: row.sku || '—',
+							},
+						]}
+					/>
+				);
+			}
 		},
 		store_name: {
 			label: __('Store', 'multivendorx'),
+			render: (row) => (
+				<InfoItem
+					title={row.store_name}
+					titleLink={getUrl(row.store_id, 'store', 'edit')}
+					avatar={{
+						iconClass: 'store-inventory',
+					}}
+				/>
+			),
 		},
 		total_sales: {
 			label: __('Items sold', 'multivendorx'),
@@ -365,7 +393,7 @@ const ProductReport: React.FC = () => {
 	) => {
 		const params = {
 			search: query.searchValue,
-			orderby: query.orderby,
+			orderby: 'date',
 			order: query.order,
 			meta_key: 'multivendorx_store_id',
 			value: query?.filter?.store_id,
@@ -470,13 +498,12 @@ const ProductReport: React.FC = () => {
 										</div>
 										<div className="right">
 											<i
-												className={`adminfont-pagination-right-arrow ${
-													openReviewedCards[
-														product.id
-													]
-														? 'rotate-90 transition-transform'
-														: ''
-												}`}
+												className={`adminfont-pagination-right-arrow ${openReviewedCards[
+													product.id
+												]
+													? 'rotate-90 transition-transform'
+													: ''
+													}`}
 											></i>
 										</div>
 									</div>
