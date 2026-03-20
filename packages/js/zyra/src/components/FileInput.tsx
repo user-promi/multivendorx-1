@@ -49,11 +49,22 @@ export const FileInputUI: React.FC< FileInputProps > = ( props ) => {
     const [ activeIndex, setActiveIndex ] = useState( 0 );
     const [ isReplacing, setIsReplacing ] = useState( false );
 
-    useEffect( () => {
+    useEffect(() => {
         const src = props.imageSrc;
-        setFiles( ! src ? [] : Array.isArray( src ) ? src : [ src ] );
-        setActiveIndex( 0 );
-    }, [ props.imageSrc ] );
+        if (!src || (Array.isArray(src) && src.length === 0)) {
+            setFiles([]);
+            return;
+        }
+
+        const normalized = (Array.isArray(src) ? src : [src])
+            .filter(Boolean)
+            .map((item) =>
+                typeof item === 'string' ? { url: item } : item
+            );
+
+        setFiles(normalized);
+        setActiveIndex(0);
+    }, [props.imageSrc]);
 
     const updateFile = ( fileList: FileItem[] ) => {
         setFiles( fileList );
@@ -65,10 +76,10 @@ export const FileInputUI: React.FC< FileInputProps > = ( props ) => {
         if ( ! fileList?.length ) {
             return;
         }
-        const urls = Array.from( fileList ).map(
-            ( f ) => `${ URL.createObjectURL( f ) }#${ f.name }`
-        );
-        let result: string[];
+        const urls = Array.from(fileList).map((f) => ({
+            url: `${URL.createObjectURL(f)}#${f.name}`,
+        }));
+        let result: FileItem[];
         if ( isReplacing ) {
             result = [ ...files ];
             if ( result[ activeIndex ]?.startsWith( 'blob:' ) ) {
@@ -123,7 +134,8 @@ export const FileInputUI: React.FC< FileInputProps > = ( props ) => {
     };
 
     const handleRemove = ( index: number ) => {
-        const url = files[ index ];
+        const file = files[index];
+        const url = file?.url;
         if ( url?.startsWith( 'blob:' ) ) {
             URL.revokeObjectURL( url.split( '#' )[ 0 ] );
         }
@@ -239,7 +251,7 @@ export const FileInputUI: React.FC< FileInputProps > = ( props ) => {
                                 }` }
                                 onClick={ () => setActiveIndex( i ) }
                             >
-                                { isImageFile( file ) ? (
+                                { isImageFile( file.url ) ? (
                                     <img
                                         src={ fileSrc }
                                         alt={ `preview-${ i }` }
@@ -279,7 +291,7 @@ const FileInput: FieldComponent = {
     render: ( { field, value, onChange, canAccess, appLocalizer } ) => (
         <FileInputUI
             inputClass={ field.class }
-            imageSrc={ value ?? appLocalizer?.default_logo }
+            imageSrc={ value || '' }
             imageWidth={ field.width }
             imageHeight={ field.height }
             openUploader={ appLocalizer?.open_uploader }

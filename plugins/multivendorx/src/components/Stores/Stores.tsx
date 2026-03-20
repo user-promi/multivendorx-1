@@ -401,12 +401,24 @@ const Stores = () => {
 											'Upload Image',
 											'multivendorx'
 										)}
-										onButtonClick={() =>
-											runUploader('image')
-										}
-										onRemove={() =>
-											handleRemoveImage('image')
-										}
+										onChange={(val) => {
+											if (!val || (Array.isArray(val) && val.length === 0)) {
+												// ✅ REMOVE case
+												handleRemoveImage('image');
+											} else {
+												// ✅ ADD / REPLACE case
+												const file = Array.isArray(val) ? val[0] : val;
+
+												const url = typeof file === 'string' ? file : file?.url;
+
+												setFormData((prev) => ({
+													...prev,
+													image: url || '',
+												}));
+
+												setImagePreview(url || '');
+											}
+										}}
 									/>
 								</FormGroup>
 							</FormGroupWrapper>

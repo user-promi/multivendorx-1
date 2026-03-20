@@ -667,16 +667,19 @@ const SettingMetaBox: React.FC< SettingMetaBoxProps > = ( {
                                                         ? [ 'required' ]
                                                         : []
                                                 }
-                                                onChange={ ( vals ) =>
-                                                    handleRequiredChange( {
-                                                        target: {
-                                                            checked:
-                                                                vals.includes(
-                                                                    'required'
-                                                                ),
-                                                        },
-                                                    } as React.ChangeEvent< HTMLInputElement > )
-                                                }
+                                                    onChange={(vals) => {
+                                                        const next = vals.includes('required');
+
+                                                        if (next === formField.required) {
+                                                            return; // 🚀 prevent unnecessary update
+                                                        }
+
+                                                        handleRequiredChange({
+                                                            target: {
+                                                                checked: next,
+                                                            },
+                                                        } as React.ChangeEvent<HTMLInputElement>);
+                                                    }}
                                             />
                                         </div>
                                     </FormGroup>
