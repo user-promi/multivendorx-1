@@ -13,7 +13,12 @@ import {
 } from 'zyra';
 
 import ViewCommission from './viewCommission';
-import { downloadCSV, formatLocalDate } from '../services/commonFunction';
+import {
+	dashNavigate,
+	downloadCSV,
+	formatLocalDate,
+} from '../services/commonFunction';
+import { useNavigate } from 'react-router-dom';
 
 type CommissionRow = {
 	id: number;
@@ -36,23 +41,39 @@ const StoreCommission: React.FC = () => {
 	>(null);
 	const [modalCommission, setModalCommission] =
 		useState<CommissionRow | null>(null);
+	const navigate = useNavigate();
 
 	const headers = {
 		id: {
 			label: __('ID', 'multivendorx'),
-			type: 'id',
 			isSortable: true,
 			render: (row) => (
-				<span>#{row.id}</span>
-			)
+				<span
+					onClick={() => {
+						setModalCommission(row);
+					}}
+				>
+					#{row.id}
+				</span>
+			),
 		},
 		order_id: {
 			label: __('Order', 'multivendorx'),
 			isSortable: true,
 			render: (row) => (
-				<span>#{row.order_id}</span>
-			)
-		},	
+				<span
+					onClick={() =>
+						dashNavigate(navigate, [
+							'orders',
+							'view',
+							String(row.order_id),
+						])
+					}
+				>
+					#{row.order_id}
+				</span>
+			),
+		},
 		total_order_amount: {
 			label: __('Order Amount', 'multivendorx'),
 			isSortable: true,

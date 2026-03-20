@@ -483,14 +483,8 @@ class Stores extends \WP_REST_Controller {
             'status' => 'pending',
         );
 
-        $count = $request->get_param( 'count' );
-        if ( $count ) {
-            $args['count'] = true;
-            return rest_ensure_response(
-                (int) StoreUtil::get_store_information( $args )
-            );
-        }
-
+        $response = rest_ensure_response(array());
+        $response->header( 'X-WP-Total', (int) StoreUtil::get_store_information( array_merge($args,array('count' => true)) ) );
         $start_date = $request->get_param( 'start_date' );
         $end_date   = $request->get_param( 'end_date' );
 
@@ -520,8 +514,9 @@ class Stores extends \WP_REST_Controller {
                 )
             );
         }
+        $response->set_data($formatted_stores);
 
-        return rest_ensure_response( $formatted_stores );
+        return $response;
     }
 
     /**
@@ -920,6 +915,23 @@ class Stores extends \WP_REST_Controller {
         }
 
         try {
+            $ids    = $request->get_param( 'ids' );
+            $status = $request->get_param( 'action' );
+
+            if ( ! empty( $ids ) && ! empty( $status ) ) {
+                foreach ( (array) $ids as $store_id ) {
+                    $store = new Store( absint( $store_id ) );
+
+                    $store->set( Utill::STORE_SETTINGS_KEYS['status'], $status );
+                    $store->save();
+                }
+
+                return rest_ensure_response(
+                    array(
+                        'success' => true,
+                    )
+                );
+            }
             $id   = absint( $request->get_param( 'id' ) );
             $data = (array) $request->get_json_params();
 

@@ -26,6 +26,7 @@ type InfoItemProps = {
     title: string;
     titleLink?: string;
     avatar?: AvatarProps;
+    onClick?: () => void;
     descriptions?: DescriptionProps[];
     badges?: BadgeProps[];
     amount?: React.ReactNode;
@@ -34,151 +35,154 @@ type InfoItemProps = {
     isLoading?: boolean;
 };
 
-const InfoItem: React.FC< InfoItemProps > = ( {
+const InfoItem: React.FC<InfoItemProps> = ({
     title,
     titleLink,
     avatar,
+    onClick,
     descriptions = [],
     badges = [],
     amount,
     amountClassName = '',
     className = '',
     isLoading = false,
-} ) => {
+}) => {
     const renderAvatar = () => {
-        if ( ! avatar ) {
+        if (!avatar) {
             return null;
         }
 
         const avatarContent = avatar.image ? (
-            <img src={ avatar.image } alt={ title } />
+            <img src={avatar.image} alt={title} />
         ) : avatar.iconClass ? (
-            <i className={ `adminfont-${ avatar.iconClass }` } />
+            <i className={`adminfont-${avatar.iconClass}`} />
         ) : avatar.imageHtml ? (
-            <div dangerouslySetInnerHTML={ { __html: avatar.imageHtml } } />
+            <div dangerouslySetInnerHTML={{ __html: avatar.imageHtml }} />
         ) : (
-            <span className={ `adminfont-${ avatar.iconClass }` }>
-                { avatar.text }
+            <span className={`adminfont-${avatar.iconClass}`}>
+                {avatar.text}
             </span>
         );
 
         return (
             <div className="avatar">
-                { avatar.link ? (
+                {avatar.link ? (
                     <a
-                        href={ avatar.link }
+                        href={avatar.link}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        { avatarContent }
+                        {avatarContent}
                     </a>
                 ) : (
                     avatarContent
-                ) }
+                )}
             </div>
         );
     };
 
     const Title = titleLink ? (
-        <a href={ titleLink } target="_blank" rel="noopener noreferrer">
-            { title }
+        <a href={titleLink} target="_blank" rel="noopener noreferrer">
+            {title}
         </a>
+    ) : onClick ? (
+        <span onClick={onClick}>{title}</span>
     ) : (
         title
     );
 
     return (
         <div className="info-item-wrapper">
-            <div className={ `info-item ${ className }` }>
-                { isLoading ? (
+            <div className={`info-item ${className}`}>
+                {isLoading ? (
                     <>
                         <div className="details-wrapper">
-                            { avatar && (
+                            {avatar && (
                                 <div className="avatar">
                                     <Skeleton
                                         variant="circular"
-                                        width={ 30 }
-                                        height={ 30 }
+                                        width={30}
+                                        height={30}
                                     />
                                 </div>
-                            ) }
+                            )}
 
                             <div className="details">
                                 <div className="name">
-                                    <Skeleton width={ 180 } height={ 24 } />
-                                    { badges.length > 0 && (
+                                    <Skeleton width={180} height={24} />
+                                    {badges.length > 0 && (
                                         <Skeleton
                                             variant="rectangular"
-                                            width={ 60 }
-                                            height={ 20 }
+                                            width={60}
+                                            height={20}
                                         />
-                                    ) }
+                                    )}
                                 </div>
-                                { descriptions && (
+                                {descriptions && (
                                     <div className="des">
                                         <Skeleton width="90%" />
                                     </div>
-                                ) }
+                                )}
                                 <div className="des">
                                     <Skeleton width="75%" />
                                 </div>
                             </div>
                         </div>
-                        { amount !== undefined && (
+                        {amount !== undefined && (
                             <div className="right-details">
                                 <div className="price">
-                                    <Skeleton width={ 70 } />
+                                    <Skeleton width={70} />
                                 </div>
                             </div>
-                        ) }
+                        )}
                     </>
                 ) : (
                     <>
                         <div className="details-wrapper">
-                            { renderAvatar() }
+                            {renderAvatar()}
 
                             <div className="details">
                                 <div className="name">
-                                    { Title }
+                                    {Title}
 
-                                    { badges.map( ( badge, index ) => (
+                                    {badges.map((badge, index) => (
                                         <span
-                                            key={ index }
-                                            className={ `admin-badge ${ badge.className }` }
-                                            onClick={ badge.onClick }
+                                            key={index}
+                                            className={`admin-badge ${badge.className}`}
+                                            onClick={badge.onClick}
                                         >
-                                            { badge.text }
+                                            {badge.text}
                                         </span>
-                                    ) ) }
+                                    ))}
                                 </div>
 
-                                { descriptions.map( ( desc, index ) => (
-                                    <div className="des" key={ index }>
-                                        { desc.label && (
+                                {descriptions.map((desc, index) => (
+                                    <div className="des" key={index}>
+                                        {desc.label && (
                                             <>
-                                                { desc.boldLabel ? (
-                                                    <b>{ desc.label }</b>
+                                                {desc.boldLabel ? (
+                                                    <b>{desc.label}</b>
                                                 ) : (
                                                     desc.label
-                                                ) }
-                                                { ': ' }
+                                                )}
+                                                {': '}
                                             </>
-                                        ) }
-                                        { desc.value }
+                                        )}
+                                        {desc.value}
                                     </div>
-                                ) ) }
+                                ))}
                             </div>
                         </div>
 
-                        { amount !== undefined && (
+                        {amount !== undefined && (
                             <div className="right-details">
-                                <div className={ `price ${ amountClassName }` }>
-                                    { amount }
+                                <div className={`price ${amountClassName}`}>
+                                    {amount}
                                 </div>
                             </div>
-                        ) }
+                        )}
                     </>
-                ) }
+                )}
             </div>
         </div>
     );

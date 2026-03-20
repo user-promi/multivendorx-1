@@ -157,9 +157,9 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 										)}
 										htmlFor="multivendorx_shipping_type_price"
 										desc={__(
-												'This is the shipping cost applied to every order.',
-												'multivendorx'
-											)}
+											'This is the shipping cost applied to every order.',
+											'multivendorx'
+										)}
 									>
 										<BasicInputUI
 											type="number"

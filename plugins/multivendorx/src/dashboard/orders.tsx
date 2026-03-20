@@ -198,11 +198,19 @@ const Orders: React.FC = () => {
 	const headers = {
 		id: {
 			label: __('Order ID', 'multivendorx'),
-			render: (row) => {
-				return(
-					<> <span>{row.id}</span> </>
-				)
-			}
+			render: (row) => (
+				<span
+					onClick={() =>
+						dashNavigate(navigate, [
+							'orders',
+							'view',
+							String(row.id),
+						])
+					}
+				>
+					#{row.id}
+				</span>
+			),
 		},
 
 		customer: {

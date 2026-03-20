@@ -236,14 +236,16 @@ const StoreReviews: React.FC = () => {
 
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
-
 		axios
 			.get(getApiLink(appLocalizer, 'review'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,
 					row: query.per_page || 10,
-					status: query.categoryFilter || '',
+					status:
+						query.categoryFilter === 'all'
+							? ''
+							: query.categoryFilter,
 					search_value: query.searchValue || '',
 					store_id: query?.filter?.storeId,
 					start_date: query.filter?.created_at?.startDate
@@ -269,7 +271,7 @@ const StoreReviews: React.FC = () => {
 
 				setCategoryCounts([
 					{
-						value: '',
+						value: 'all',
 						label: 'All',
 						count: Number(response.headers['x-wp-total']) || 0,
 					},

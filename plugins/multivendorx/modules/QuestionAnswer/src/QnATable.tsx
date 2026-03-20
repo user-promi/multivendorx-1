@@ -19,7 +19,7 @@ import {
 } from 'zyra';
 
 import Popup from '../../../src/components/Popup/Popup';
-import { formatLocalDate } from '../../../src/services/commonFunction';
+import { formatLocalDate, getUrl } from '../../../src/services/commonFunction';
 
 type StoreQnaRow = {
 	id: number;
@@ -151,7 +151,7 @@ const Qna: React.FC = () => {
 			render: (row: any) => (
 				<InfoItem
 					title={row.product_name}
-					titleLink={row.product_link}
+					titleLink={getUrl(row.product_id, 'product')}
 					avatar={{
 						image: row.product_image,
 						iconClass: row.product_image ? '' : 'single-product',
@@ -170,10 +170,12 @@ const Qna: React.FC = () => {
 			render: (row: any) => (
 				<div className="question-wrapper">
 					<div className="question">Q: {row.question_text}</div>
-					{row.answer_text && <div className="answer">A: {row.answer_text}</div>}
+					{row.answer_text && (
+						<div className="answer">A: {row.answer_text}</div>
+					)}
 					<div className="desc">By {row.author_name}</div>
 				</div>
-			)
+			),
 		},
 		question_date: {
 			label: __('Date', 'multivendorx'),
@@ -184,7 +186,7 @@ const Qna: React.FC = () => {
 		},
 		question_visibility: {
 			label: __('Visibility', 'multivendorx'),
-			type: 'status'
+			type: 'status',
 		},
 		action: {
 			type: 'action',
@@ -310,9 +312,9 @@ const Qna: React.FC = () => {
 					confirmMessage={
 						selectedQn
 							? __(
-								'Are you sure you want to delete Question?',
-								'multivendorx'
-							)
+									'Are you sure you want to delete Question?',
+									'multivendorx'
+								)
 							: ''
 					}
 					confirmYesText={__('Delete', 'multivendorx')}
@@ -415,9 +417,9 @@ const Qna: React.FC = () => {
 									setSelectedQna((prev) =>
 										prev
 											? {
-												...prev,
-												question_visibility: value,
-											}
+													...prev,
+													question_visibility: value,
+												}
 											: prev
 									)
 								}

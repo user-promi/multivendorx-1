@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
-	Column,
-	Container,
 	getApiLink,
 	NavigatorHeader,
 	TableCard,
@@ -14,6 +12,7 @@ import {
 } from 'zyra';
 import TransactionDetailsModal from './TransactionDetailsModal';
 import { downloadCSV, formatLocalDate } from '../services/commonFunction';
+import ViewCommission from './viewCommission';
 
 type TransactionRow = {
 	id: number;
@@ -38,25 +37,29 @@ const Transactions: React.FC = () => {
 
 	const [modalTransaction, setModalTransaction] =
 		useState<TransactionRow | null>(null);
-
+	const [modalCommission, setModalCommission] =
+		useState<TransactionRow | null>(null);
 	const headers = {
-		id: { label: __('ID', 'multivendorx') , type:'id'},
+		id: { label: __('ID', 'multivendorx') },
 		status: { label: __('Status', 'multivendorx'), type: 'status' },
 		created_at: { label: __('Date', 'multivendorx'), type: 'date' },
 		transaction_type: {
 			label: __('Transaction Type', 'multivendorx'),
 			render: (row) =>
 				row.transaction_type?.toLowerCase() === 'commission' &&
-				row.commission_id ? (
-					<span className="link-item">
+					row.commission_id ? (
+					<span
+						className="link-item"
+						onClick={() => setModalCommission(row)}
+						style={{ cursor: 'pointer' }}
+					>
 						{`Commission #${row.commission_id}`}
 					</span>
 				) : (
 					<span>
 						{row.narration
 							?.replace(/-/g, ' ')
-							.replace(/\b\w/g, (c: string) => c.toUpperCase()) ||
-							'-'}
+							.replace(/\b\w/g, (c: string) => c.toUpperCase()) || '-'}
 					</span>
 				),
 		},
@@ -305,6 +308,13 @@ const Transactions: React.FC = () => {
 				<TransactionDetailsModal
 					transaction={modalTransaction}
 					onClose={() => setModalTransaction(null)}
+				/>
+			)}
+			{modalCommission && (
+				<ViewCommission
+					open={!!modalCommission}
+					onClose={() => setModalCommission(null)}
+					commissionId={modalCommission.commission_id}
 				/>
 			)}
 		</>

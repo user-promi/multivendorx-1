@@ -274,7 +274,8 @@ registerBlockType('multivendorx/contact-info', {
 
 					<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 						<label htmlFor="contact-name">
-							{__('Name', 'multivendorx')} <span className="required">*</span>
+							{__('Name', 'multivendorx')}{' '}
+							<span className="required">*</span>
 						</label>
 						<input
 							type="text"
@@ -287,7 +288,8 @@ registerBlockType('multivendorx/contact-info', {
 
 					<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 						<label htmlFor="contact-email">
-							{__('Email', 'multivendorx')} <span className="required">*</span>
+							{__('Email', 'multivendorx')}{' '}
+							<span className="required">*</span>
 						</label>
 						<input
 							type="email"
@@ -300,7 +302,8 @@ registerBlockType('multivendorx/contact-info', {
 
 					<p className="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 						<label htmlFor="contact-message">
-							{__('Message', 'multivendorx')} <span className="required">*</span>
+							{__('Message', 'multivendorx')}{' '}
+							<span className="required">*</span>
 						</label>
 						<textarea
 							name="contact_message"
@@ -311,7 +314,11 @@ registerBlockType('multivendorx/contact-info', {
 						></textarea>
 					</p>
 
-					<input type="hidden" name="multivendorx_contact_form" value="1" />
+					<input
+						type="hidden"
+						name="multivendorx_contact_form"
+						value="1"
+					/>
 					<input type="hidden" name="store_id" value="" />
 
 					<button type="submit" className="contact-form-submit">

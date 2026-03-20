@@ -13,6 +13,7 @@ import {
 	InfoItem,
 } from 'zyra';
 import Popup from '../../../src/components/Popup/Popup';
+import { getUrl } from '../../../src/services/commonFunction';
 
 interface StoreOption {
 	label: string;
@@ -97,10 +98,10 @@ const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
 			render: (row: ReportAbuse) => (
 				<InfoItem
 					title={row.product?.name}
-					titleLink={`/wp-admin/post.php?post=${row.product?.id}&action=edit`}
+					titleLink={getUrl(row.product?.id, 'product')}
 					avatar={{
 						image: row.product?.image,
-						iconClass: row.product?.image ? '' : 'inventory',
+						iconClass: 'single-product',
 					}}
 					descriptions={[
 						{

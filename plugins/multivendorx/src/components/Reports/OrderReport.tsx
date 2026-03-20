@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
+import { getApiLink, InfoItem, QueryProps, TableCard, TableRow } from 'zyra';
 
 import {
 	downloadCSV,
 	formatLocalDate,
+	getUrl,
 	toWcIsoDate,
 } from '../../services/commonFunction';
 
@@ -44,14 +45,29 @@ const OrderReport: React.FC = () => {
 	const headers = {
 		id: {
 			label: __('Order', 'multivendorx'),
-			render: (row: any) => {
-				return(
-					<span>#{row.id}</span>
-				)
-			}
+
+			render: (row) => (
+				<a
+					href={getUrl(row.id, 'order')}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="link-item"
+				>
+					#{row.id}
+				</a>
+			),
 		},
 		store_name: {
 			label: __('Store', 'multivendorx'),
+			render: (row) => (
+				<InfoItem
+					title={row.store_name}
+					titleLink={getUrl(row.store_id, 'store', 'edit')}
+					avatar={{
+						iconClass: 'store-inventory',
+					}}
+				/>
+			),
 		},
 		total: {
 			label: __('Amount', 'multivendorx'),
