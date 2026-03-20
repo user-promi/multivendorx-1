@@ -275,6 +275,9 @@ export const getUrl = (
 
 			case 'user':
 				return `${base}/wp-admin/user-edit.php?user_id=${id}`;
+				
+			case 'order':
+				return `${base}/wp-admin/post.php?post=${id}&action=edit`;
 
 			default:
 				return '#';
@@ -285,9 +288,6 @@ export const getUrl = (
 		switch (type) {
 			case 'product':
 				return `${base}/?post_type=product&p=${id}`;
-
-			case 'order':
-				return `${base}/wp-admin/post.php?post=${id}&action=edit`;
 
 			case 'store':
 				return slug ? `${appLocalizer.store_page_url}${slug}` : '#';

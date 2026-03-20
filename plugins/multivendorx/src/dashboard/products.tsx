@@ -259,6 +259,7 @@ const AllProduct: React.FC = () => {
 					page: query.paged || 1,
 					row: query.per_page || 10,
 					search: query.searchValue || '',
+					status: query.categoryFilter === 'all' ? 'any' : query.categoryFilter,
 					type: query.filter?.productType,
 					category: query.filter?.category,
 					stock_status: query.filter?.stockStatus,
@@ -329,7 +330,7 @@ const AllProduct: React.FC = () => {
 			],
 		},
 		{
-			key: 'stock_status',
+			key: 'stockStatus',
 			type: 'select',
 			label: __('Stock Status', 'multivendorx'),
 			options: [

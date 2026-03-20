@@ -10,18 +10,28 @@ import {
 	TableRow,
 } from 'zyra';
 
-import { formatLocalDate } from '@/services/commonFunction';
+import { dashNavigate, formatLocalDate } from '@/services/commonFunction';
+import { useNavigate } from 'react-router-dom';
 
 const Refund: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [rowIds, setRowIds] = useState<number[]>([]);
-
+	const navigate = useNavigate();
 	const headers = {
 		order_id: {
 			label: __('Order', 'multivendorx'),
 			isSortable: true,
+			render: (row) => (
+				<span
+					onClick={() =>
+						dashNavigate(navigate, ['orders', 'view', String(row.order_id)])
+					}
+				>
+					#{row.order_id}
+				</span>
+			),
 		},
 		customer_name: {
 			label: __('Customer', 'multivendorx'),
