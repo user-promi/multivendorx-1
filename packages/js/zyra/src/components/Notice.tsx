@@ -20,19 +20,19 @@ interface NoticeItem {
 const STORAGE_KEY = 'zyra_app_notices_v1';
 
 let noticeQueue: NoticeItem[] = [];
-const subscribers = new Set< ( items: NoticeItem[] ) => void >();
+const subscribers = new Set<(items: NoticeItem[]) => void>();
 
 const getStored = (): NoticeItem[] => {
-    if ( typeof window === 'undefined' ) {
+    if (typeof window === 'undefined') {
         return [];
     }
     try {
-        const data = localStorage.getItem( STORAGE_KEY );
-        if ( ! data ) {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) {
             return [];
         }
-        const parsed: NoticeItem[] = JSON.parse( data );
-        return parsed.filter( ( n ) => typeof n.expiresAt === 'number' );
+        const parsed: NoticeItem[] = JSON.parse(data);
+        return parsed.filter((n) => typeof n.expiresAt === 'number');
     } catch {
         return [];
     }
@@ -40,43 +40,43 @@ const getStored = (): NoticeItem[] => {
 
 const persist = () => {
     const persistable = noticeQueue.filter(
-        ( n ) => typeof n.expiresAt === 'number'
+        (n) => typeof n.expiresAt === 'number'
     );
-    if ( persistable.length === 0 ) {
-        localStorage.removeItem( STORAGE_KEY );
+    if (persistable.length === 0) {
+        localStorage.removeItem(STORAGE_KEY);
     } else {
-        localStorage.setItem( STORAGE_KEY, JSON.stringify( persistable ) );
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(persistable));
     }
 };
 
 const broadcast = () => {
     persist();
-    subscribers.forEach( ( cb ) => cb( [ ...noticeQueue ] ) );
+    subscribers.forEach((cb) => cb([...noticeQueue]));
 };
 
 // initialize
-if ( typeof window !== 'undefined' ) {
+if (typeof window !== 'undefined') {
     noticeQueue = getStored();
 }
 
 export const NoticeManager = {
-    subscribe( cb: ( items: NoticeItem[] ) => void ) {
-        subscribers.add( cb );
-        cb( [ ...noticeQueue ] );
-        return () => subscribers.delete( cb );
+    subscribe(cb: (items: NoticeItem[]) => void) {
+        subscribers.add(cb);
+        cb([...noticeQueue]);
+        return () => subscribers.delete(cb);
     },
 
     add(
-        notice: Omit< NoticeItem, 'expiresAt' >,
-        validity?: number | 'lifetime' 
+        notice: Omit<NoticeItem, 'expiresAt'>,
+        validity?: number | 'lifetime'
     ) {
         const uniqueKey = notice.uniqueKey || Date.now().toString();
-        if ( noticeQueue.some( ( n ) => n.uniqueKey === uniqueKey ) ) {
+        if (noticeQueue.some((n) => n.uniqueKey === uniqueKey)) {
             return;
         }
 
         let finalValidity: number | 'lifetime';
-        
+
         if (validity !== undefined) {
             finalValidity = validity;
         } else {
@@ -101,13 +101,13 @@ export const NoticeManager = {
         broadcast();
     },
 
-    remove( uniqueKey: string ) {
-        noticeQueue = noticeQueue.filter( ( n ) => n.uniqueKey !== uniqueKey );
+    remove(uniqueKey: string) {
+        noticeQueue = noticeQueue.filter((n) => n.uniqueKey !== uniqueKey);
         broadcast();
     },
 
     clearSession() {
-        noticeQueue = noticeQueue.filter( ( n ) => n.expiresAt );
+        noticeQueue = noticeQueue.filter((n) => n.expiresAt);
         broadcast();
     },
 };
@@ -116,37 +116,38 @@ export const NoticeManager = {
    Shared Render Helper
 ────────────────────────────────────────────────────────────── */
 
-const renderNoticeContent = ( item: NoticeItem, onClose?: () => void ) => (
+const renderNoticeContent = (item: NoticeItem, onClose?: () => void) => (
     <>
-        <i className={ `admin-font adminfont-${ item.type }` } />
+        <i className={`admin-font adminfont-${item.type}`} />
 
         <div className="notice-details">
-            { item.title && <div className="notice-text">{ item.title }</div> }
+            {item.title && <div className="notice-text">{item.title}</div>}
 
-            { Array.isArray( item.message )
-                ? item.message.map( ( msg, i ) => (
-                      <React.Fragment key={ i }>
-                          <div className="notice-desc">
-                              { msg }
+            {Array.isArray(item.message)
+                ? (
+                    <>
+                        {item.message.map((msg, i) => (
+                            <div key={i} className="notice-desc">
+                                <span dangerouslySetInnerHTML={{ __html: msg }} />
+                                {item.actionLabel && (
+                                    <div
+                                        className="banner-btn"
+                                        onClick={item.onAction}
+                                    >
+                                        {item.actionLabel}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
 
-                              { item.actionLabel && (
-                                  <button
-                                      className="notice-action"
-                                      onClick={ item.onAction }
-                                  >
-                                      { item.actionLabel }
-                                  </button>
-                              ) }
-                          </div>
-
-                          { onClose && (
-                              <i
-                                  className="close-icon adminfont-close"
-                                  onClick={ onClose }
-                              />
-                          ) }
-                      </React.Fragment>
-                  ) )
+                        {onClose && (
+                            <i
+                                className="close-icon adminfont-close"
+                                onClick={onClose}
+                            />
+                        )}
+                    </>
+                )
                 : item.message && (
                       <div  className="notice-desc"  dangerouslySetInnerHTML={{ __html: item.message }} />
                   ) }
@@ -165,7 +166,7 @@ export interface NoticeProps {
     validity?: number | 'lifetime';
 }
 
-export const Notice: React.FC< NoticeProps > = ( {
+export const Notice: React.FC<NoticeProps> = ({
     uniqueKey,
     title,
     message,
@@ -174,11 +175,11 @@ export const Notice: React.FC< NoticeProps > = ( {
     actionLabel,
     onAction,
     validity = 5000,
-} ) => {
-    const [ isVisible, setIsVisible ] = useState( true );
+}) => {
+    const [isVisible, setIsVisible] = useState(true);
 
-    useEffect( () => {
-        if ( displayPosition === 'inline' ) {
+    useEffect(() => {
+        if (displayPosition === 'inline') {
             return;
         }
         NoticeManager.add(
@@ -194,13 +195,13 @@ export const Notice: React.FC< NoticeProps > = ( {
             validity
         );
 
-        setIsVisible( false );
-    }, [] );
+        setIsVisible(false);
+    }, []);
 
     if (
         displayPosition !== 'inline' ||
-        ! isVisible ||
-        ( ! title && ! message )
+        !isVisible ||
+        (!title && !message)
     ) {
         return null;
     }
@@ -217,9 +218,9 @@ export const Notice: React.FC< NoticeProps > = ( {
 
     return (
         <div
-            className={ `ui-notice type-${ type } display-${ displayPosition }` }
+            className={`ui-notice type-${type} display-${displayPosition}`}
         >
-            { renderNoticeContent( item, () => setIsVisible( false ) ) }
+            {renderNoticeContent(item, () => setIsVisible(false))}
         </div>
     );
 };
@@ -230,33 +231,33 @@ interface NoticeReceiverProps {
     position: NoticePosition;
 }
 
-export const NoticeReceiver: React.FC< NoticeReceiverProps > = ( {
+export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({
     position,
-} ) => {
-    const [ items, setItems ] = useState< NoticeItem[] >( [] );
+}) => {
+    const [items, setItems] = useState<NoticeItem[]>([]);
 
-    useEffect( () => {
-        return NoticeManager.subscribe( ( notices ) => {
-            setItems( notices.filter( ( n ) => n.position === position ) );
-        } );
-    }, [ position ] );
+    useEffect(() => {
+        return NoticeManager.subscribe((notices) => {
+            setItems(notices.filter((n) => n.position === position));
+        });
+    }, [position]);
 
-    if ( ! items.length ) {
+    if (!items.length) {
         return null;
     }
 
     return (
-        <div className={ `receiver receiver-${ position }` }>
-            { items.map( ( item ) => (
+        <div className={`receiver receiver-${position}`}>
+            {items.map((item) => (
                 <div
-                    key={ item.uniqueKey }
-                    className={ `ui-notice type-${ item.type } display-${ item.position }` }
+                    key={item.uniqueKey}
+                    className={`ui-notice type-${item.type} display-${item.position}`}
                 >
-                    { renderNoticeContent( item, () =>
-                        NoticeManager.remove( item.uniqueKey )
-                    ) }
+                    {renderNoticeContent(item, () =>
+                        NoticeManager.remove(item.uniqueKey)
+                    )}
                 </div>
-            ) ) }
+            ))}
         </div>
     );
 };
@@ -266,7 +267,7 @@ export const NoticeReceiver: React.FC< NoticeReceiverProps > = ( {
 ────────────────────────────────────────────────────────────── */
 
 const NoticeField: FieldComponent = {
-    render: ( { field } ) => {
+    render: ({ field }) => {
         const item: NoticeItem = {
             uniqueKey: field.uniqueKey || field.key,
             title: field.title,
@@ -279,9 +280,9 @@ const NoticeField: FieldComponent = {
 
         return (
             <div
-                className={ `ui-notice type-${ item.type } display-${ item.position }` }
+                className={`ui-notice type-${item.type} display-${item.position}`}
             >
-                { renderNoticeContent( item ) }
+                {renderNoticeContent(item)}
             </div>
         );
     },

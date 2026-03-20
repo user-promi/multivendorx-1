@@ -219,6 +219,32 @@
         }
     }
 
+    &.search-results {
+        .item {
+            padding: 0.75rem;
+            cursor: pointer;
+            font-size: .875rem;
+            color: #333;
+            border-bottom: $border-light-small;
+            display: flex;
+            align-items: start;
+            gap: .5rem;
+            margin: 0;
+            transition: all .5s ease;
+
+            .item-title{
+                font-size: 1rem;
+            }
+            .desc{
+                padding-top: 0.25rem;
+            }
+
+            &:hover{
+                background: #f3f3f3;
+            }
+        }
+    }
+
     .border {
         border: $border-light-small;
         padding: 0.85rem;

@@ -203,6 +203,13 @@
         font-size: 1.313rem;
         color: $theme-color;
     }
+
+    .banner-btn{
+        text-decoration: underline;
+        color: $theme-color;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
 }
 
 @keyframes noticeslide {

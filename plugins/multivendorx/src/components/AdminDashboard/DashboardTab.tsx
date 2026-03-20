@@ -187,7 +187,7 @@ const DashboardTab: React.FC<object> = () => {
 				'Step-by-step guides to set up and manage your marketplace.',
 				'multivendorx'
 			),
-			iconClass: 'adminfont-book',
+			iconClass: 'book',
 			linkText: __('Explore Docs', 'multivendorx'),
 			href: 'https://multivendorx.com/docs/knowledgebase/',
 		},
@@ -197,7 +197,7 @@ const DashboardTab: React.FC<object> = () => {
 				'Get tailored advice from our marketplace specialists.',
 				'multivendorx'
 			),
-			iconClass: 'adminfont-preview',
+			iconClass: 'preview',
 			linkText: __('Book Consultation', 'multivendorx'),
 			href: 'https://multivendorx.com/custom-development/',
 		},
@@ -207,7 +207,7 @@ const DashboardTab: React.FC<object> = () => {
 				'Connect with our team and fellow builders on Discord.',
 				'multivendorx'
 			),
-			iconClass: 'adminfont-global-community',
+			iconClass: 'global-community',
 			linkText: __('Join Discord', 'multivendorx'),
 			href: 'https://discord.com/channels/1376811097134469191/1376811102020829258',
 		},
@@ -217,7 +217,7 @@ const DashboardTab: React.FC<object> = () => {
 				'Share experiences and tips with other marketplace owners.',
 				'multivendorx'
 			),
-			iconClass: 'adminfont-user-circle',
+			iconClass: 'user-circle',
 			linkText: __('Join Group', 'multivendorx'),
 			href: 'https://www.facebook.com/groups/226246620006065/',
 		},
@@ -635,7 +635,7 @@ const DashboardTab: React.FC<object> = () => {
 								<div className="cards" key={index}>
 									<div className="header">
 										<i
-											className={`icon ${res.iconClass}`}
+											className={`icon adminfont-${res.iconClass}`}
 										></i>
 										<a href={res.href} target="blank">
 											{__(res.linkText, 'multivendorx')}
