@@ -73,7 +73,7 @@ const Enquiry = ( props: any ) => {
                         </li>
                         <li>
                             <input
-                                className="toggle-setting-form-input"
+                                className="choice-toggle-form-input"
                                 type="radio"
                                 id="inline"
                                 name="approve_vendor"
