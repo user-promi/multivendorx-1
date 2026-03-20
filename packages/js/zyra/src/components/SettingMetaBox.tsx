@@ -671,7 +671,7 @@ const SettingMetaBox: React.FC< SettingMetaBoxProps > = ( {
                                                         const next = vals.includes('required');
 
                                                         if (next === formField.required) {
-                                                            return; // 🚀 prevent unnecessary update
+                                                            return; // prevent unnecessary update
                                                         }
 
                                                         handleRequiredChange({

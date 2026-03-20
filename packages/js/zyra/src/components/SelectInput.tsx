@@ -465,7 +465,7 @@ const SelectInput: FieldComponent = {
                     if (!canAccess) return;
 
                     if (JSON.stringify(val) === JSON.stringify(value)) {
-                        return; // 🚀 prevent unnecessary update
+                        return; // prevent unnecessary update
                     }
 
                     onChange(val);
