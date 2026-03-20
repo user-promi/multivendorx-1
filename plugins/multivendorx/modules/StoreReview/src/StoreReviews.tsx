@@ -236,7 +236,6 @@ const StoreReviews: React.FC = () => {
 
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
-		console.log('all', query);
 		axios
 			.get(getApiLink(appLocalizer, 'review'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },

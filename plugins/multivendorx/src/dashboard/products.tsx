@@ -126,10 +126,10 @@ const AllProduct: React.FC = () => {
 					result.status === 'fulfilled'
 						? result.value
 						: {
-								value: statuses[index],
-								label: STATUS_LABELS[statuses[index]],
-								count: 0,
-							}
+							value: statuses[index],
+							label: STATUS_LABELS[statuses[index]],
+							count: 0,
+						}
 				)
 			);
 		} catch (error) {
@@ -268,9 +268,9 @@ const AllProduct: React.FC = () => {
 					stock_status: query.filter?.stockStatus,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-								query.filter.created_at.startDate,
-								'start'
-							)
+							query.filter.created_at.startDate,
+							'start'
+						)
 						: undefined,
 					before: query.filter?.created_at?.endDate
 						? toWcIsoDate(query.filter.created_at.endDate, 'end')
@@ -359,16 +359,20 @@ const AllProduct: React.FC = () => {
 		name: {
 			label: __('Product Name', 'multivendorx'),
 			width: 18,
-			render: (row: any) => {
+			render: (row) => {
 				return (
 					<InfoItem
 						title={row.name}
-						titleLink={row.permalink}
+						onClick={() =>
+							dashNavigate(navigate, [
+								'products',
+								'edit',
+								String(row.id),
+							])
+						}
 						avatar={{
 							image: row.images?.[0]?.src || '',
-							iconClass: row.images?.[0]?.src
-								? ''
-								: 'single-product',
+							iconClass: row.images?.[0]?.src ? '' : 'single-product',
 						}}
 						descriptions={[
 							{
@@ -432,7 +436,7 @@ const AllProduct: React.FC = () => {
 						onClick: (row: ProductRow) =>
 							navigator.clipboard
 								.writeText(row.permalink)
-								.catch(() => {}),
+								.catch(() => { }),
 					},
 					{
 						label: __('Delete', 'multivendorx'),
@@ -458,13 +462,13 @@ const AllProduct: React.FC = () => {
 					[
 						...(modules.includes('import-export')
 							? [
-									{
-										custom: applyFilters(
-											'product_import_export',
-											null
-										),
-									},
-								]
+								{
+									custom: applyFilters(
+										'product_import_export',
+										null
+									),
+								},
+							]
 							: []),
 
 						{
