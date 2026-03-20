@@ -114,7 +114,9 @@ const PendingProducts: React.FC<object> = () => {
 						titleLink={getUrl(row.id, 'product') || ''}
 						avatar={{
 							image: row.images?.[0]?.src || '',
-							iconClass: row.images?.[0]?.src ? '' : 'single-product',
+							iconClass: row.images?.[0]?.src
+								? ''
+								: 'single-product',
 						}}
 						descriptions={[
 							{
@@ -124,7 +126,7 @@ const PendingProducts: React.FC<object> = () => {
 						]}
 					/>
 				);
-			}
+			},
 		},
 		category: {
 			label: __('Category', 'multivendorx'),
@@ -150,17 +152,19 @@ const PendingProducts: React.FC<object> = () => {
 								icon: 'check',
 								text: __('Approve', 'multivendorx'),
 								color: 'purple',
-								onClick: () => handleSingleAction('publish', row.id),
+								onClick: () =>
+									handleSingleAction('publish', row.id),
 							},
 							{
 								icon: 'close',
 								text: __('Reject', 'multivendorx'),
-								onClick: () => handleSingleAction('reject', row.id),
+								onClick: () =>
+									handleSingleAction('reject', row.id),
 							},
 						]}
 					/>
-				)
-			}
+				);
+			},
 		},
 	};
 
@@ -195,9 +199,9 @@ const PendingProducts: React.FC<object> = () => {
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-							query.filter.created_at.startDate,
-							'start'
-						)
+								query.filter.created_at.startDate,
+								'start'
+							)
 						: undefined,
 
 					before: query.filter?.created_at?.endDate

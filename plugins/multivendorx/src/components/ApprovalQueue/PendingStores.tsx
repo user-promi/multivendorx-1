@@ -15,7 +15,11 @@ import {
 	InfoItem,
 } from 'zyra';
 
-import { formatDate, formatLocalDate, setSession } from '@/services/commonFunction';
+import {
+	formatDate,
+	formatLocalDate,
+	setSession,
+} from '@/services/commonFunction';
 import { useRef } from '@wordpress/element';
 
 const PendingStores: React.FC<object> = () => {
@@ -120,17 +124,20 @@ const PendingStores: React.FC<object> = () => {
 								icon: 'check',
 								text: __('Active', 'multivendorx'),
 								color: 'purple',
-								onClick: () => { handleSingleAction('active', row.id) },
+								onClick: () => {
+									handleSingleAction('active', row.id);
+								},
 							},
 							{
 								icon: 'close',
 								text: __('Declined', 'multivendorx'),
-								onClick: () => handleSingleAction('declined', row.id),
+								onClick: () =>
+									handleSingleAction('declined', row.id),
 							},
 						]}
 					/>
-				)
-			}
+				);
+			},
 		},
 	};
 

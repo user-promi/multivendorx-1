@@ -2,7 +2,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { ButtonInputUI, getApiLink, QueryProps, TableCard, TableRow } from 'zyra';
+import {
+	ButtonInputUI,
+	getApiLink,
+	QueryProps,
+	TableCard,
+	TableRow,
+} from 'zyra';
 import { useRef } from '@wordpress/element';
 import { getUrl, setSession } from '@/services/commonFunction';
 
@@ -40,10 +46,15 @@ const PendingWithdrawal: React.FC<object> = () => {
 		store_name: {
 			label: __('Store', 'multivendorx'),
 			render: (row) => (
-				<a href={getUrl(row.store_id, 'store', 'edit')} target="_blank" rel="noopener noreferrer" className="link-item">
+				<a
+					href={getUrl(row.store_id, 'store', 'edit')}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="link-item"
+				>
 					{row.store_name}
 				</a>
-			)
+			),
 		},
 		status: {
 			label: __('Status', 'multivendorx'),
@@ -63,17 +74,19 @@ const PendingWithdrawal: React.FC<object> = () => {
 								icon: 'check',
 								text: __('Approve', 'multivendorx'),
 								color: 'purple',
-								onClick: (row: any) => handleSingleAction('approve', row.id),
+								onClick: (row: any) =>
+									handleSingleAction('approve', row.id),
 							},
 							{
 								icon: 'close',
 								text: __('Reject', 'multivendorx'),
-								onClick: (row: any) => handleSingleAction('reject', row.id),
+								onClick: (row: any) =>
+									handleSingleAction('reject', row.id),
 							},
 						]}
 					/>
-				)
-			}
+				);
+			},
 		},
 	};
 

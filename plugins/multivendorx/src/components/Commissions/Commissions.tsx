@@ -14,7 +14,11 @@ import {
 	ItemListUI,
 } from 'zyra';
 import ViewCommission from './ViewCommission';
-import { downloadCSV, formatLocalDate, getUrl } from '../../services/commonFunction';
+import {
+	downloadCSV,
+	formatLocalDate,
+	getUrl,
+} from '../../services/commonFunction';
 type StoreOption = {
 	label: string;
 	value: number;
@@ -82,16 +86,21 @@ const Commission: React.FC = () => {
 				>
 					#{row.id}
 				</span>
-			)
+			),
 		},
 		order_id: {
 			label: __('Order', 'multivendorx'),
 			isSortable: true,
 			render: (row) => (
-				<a href={getUrl(row.order_id, 'order')} target="_blank" rel="noopener noreferrer" className="link-item">
+				<a
+					href={getUrl(row.order_id, 'order')}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="link-item"
+				>
 					#{row.order_id} - {row.store_name || '-'}
 				</a>
-			)
+			),
 		},
 		total_order_amount: {
 			label: __('Order Amount', 'multivendorx'),
@@ -221,7 +230,7 @@ const Commission: React.FC = () => {
 						count:
 							Number(
 								response.headers[
-								'x-wp-status-partially-refunded'
+									'x-wp-status-partially-refunded'
 								]
 							) || 0,
 					},

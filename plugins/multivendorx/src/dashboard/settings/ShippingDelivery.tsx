@@ -172,7 +172,10 @@ const ShippingDelivery = () => {
 											'multivendorx'
 										)}
 										htmlFor="multivendorx_shipping_type_price"
-										desc= {__( 'This is the shipping cost applied to every order.', 'multivendorx')}
+										desc={__(
+											'This is the shipping cost applied to every order.',
+											'multivendorx'
+										)}
 									>
 										<BasicInputUI
 											type="number"
@@ -198,9 +201,9 @@ const ShippingDelivery = () => {
 										)}
 										htmlFor="multivendorx_additional_product"
 										desc={__(
-												'This amount will be added to the Default Shipping Price for each additional product type in the cart.',
-												'multivendorx'
-											)}
+											'This amount will be added to the Default Shipping Price for each additional product type in the cart.',
+											'multivendorx'
+										)}
 									>
 										<BasicInputUI
 											type="number"
@@ -226,9 +229,9 @@ const ShippingDelivery = () => {
 										)}
 										htmlFor="multivendorx_additional_qty"
 										desc={__(
-												'This amount will be added to the Default Shipping Price for each additional quantity of the same product.',
-												'multivendorx'
-											)}
+											'This amount will be added to the Default Shipping Price for each additional quantity of the same product.',
+											'multivendorx'
+										)}
 									>
 										<BasicInputUI
 											type="number"
@@ -254,9 +257,9 @@ const ShippingDelivery = () => {
 										)}
 										htmlFor="free_shipping_amount"
 										desc={__(
-												"If the customer's order total exceeds this amount, shipping becomes free. Leave empty if you do not want to offer free shipping.",
-												'multivendorx'
-											)}
+											"If the customer's order total exceeds this amount, shipping becomes free. Leave empty if you do not want to offer free shipping.",
+											'multivendorx'
+										)}
 									>
 										<BasicInputUI
 											type="number"
@@ -285,9 +288,9 @@ const ShippingDelivery = () => {
 										)}
 										htmlFor="local_pickup_cost"
 										desc={__(
-												'This is the fee customers need to pay if they choose Local Pickup as the delivery option.',
-												'multivendorx'
-											)}
+											'This is the fee customers need to pay if they choose Local Pickup as the delivery option.',
+											'multivendorx'
+										)}
 									>
 										<BasicInputUI
 											type="number"
@@ -346,9 +349,9 @@ const ShippingDelivery = () => {
 										)}
 										htmlFor="distance_default_cost"
 										desc={__(
-												'Apply default shipping charge to orders that do not match any configured distance-based shipping range.',
-												'multivendorx'
-											)}
+											'Apply default shipping charge to orders that do not match any configured distance-based shipping range.',
+											'multivendorx'
+										)}
 									>
 										<BasicInputUI
 											type="number"
@@ -415,9 +418,9 @@ const ShippingDelivery = () => {
 										)}
 										htmlFor="distance_max"
 										desc={__(
-												'Set how far you are willing to deliver orders (leave blank to deliver everywhere).',
-												'multivendorx'
-											)}
+											'Set how far you are willing to deliver orders (leave blank to deliver everywhere).',
+											'multivendorx'
+										)}
 									>
 										<BasicInputUI
 											type="number"
@@ -442,9 +445,9 @@ const ShippingDelivery = () => {
 										)}
 										htmlFor="distance_local_pickup_cost"
 										desc={__(
-												'Set the fee for customers who pick up their order themselves (use 0 for free pickup, or leave blank to turn it off).',
-												'multivendorx'
-											)}
+											'Set the fee for customers who pick up their order themselves (use 0 for free pickup, or leave blank to turn it off).',
+											'multivendorx'
+										)}
 									>
 										<BasicInputUI
 											type="number"

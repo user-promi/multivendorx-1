@@ -236,14 +236,17 @@ const StoreReviews: React.FC = () => {
 
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
-		console.log('all', query)
+		console.log('all', query);
 		axios
 			.get(getApiLink(appLocalizer, 'review'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,
 					row: query.per_page || 10,
-					status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
+					status:
+						query.categoryFilter === 'all'
+							? ''
+							: query.categoryFilter,
 					search_value: query.searchValue || '',
 					store_id: query?.filter?.storeId,
 					start_date: query.filter?.created_at?.startDate
@@ -320,9 +323,9 @@ const StoreReviews: React.FC = () => {
 					confirmMessage={
 						selectedRv
 							? __(
-								'Are you sure you want to delete review?',
-								'multivendorx'
-							)
+									'Are you sure you want to delete review?',
+									'multivendorx'
+								)
 							: ''
 					}
 					confirmYesText={__('Delete', 'multivendorx')}
@@ -403,7 +406,7 @@ const StoreReviews: React.FC = () => {
 												...Array(
 													Math.round(
 														selectedReview.overall_rating ||
-														0
+															0
 													)
 												),
 											].map((_, i) => (
@@ -416,10 +419,10 @@ const StoreReviews: React.FC = () => {
 											{[
 												...Array(
 													5 -
-													Math.round(
-														selectedReview.overall_rating ||
-														0
-													)
+														Math.round(
+															selectedReview.overall_rating ||
+																0
+														)
 												),
 											].map((_, i) => (
 												<i

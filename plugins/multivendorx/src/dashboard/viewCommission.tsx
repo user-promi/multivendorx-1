@@ -135,22 +135,22 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						]}
 					/>
 				);
-			}
+			},
 		},
 		price: {
 			label: __('Cost', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 		quantity: {
 			label: __('Qty', 'multivendorx'),
 		},
 		total: {
 			label: __('Total', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 		total_tax: {
 			label: __('Tax', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 	};
 
@@ -160,11 +160,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 		},
 		total: {
 			label: __('Amount', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 		total_tax: {
 			label: __('Tax', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 	};
 
@@ -205,11 +205,15 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 								headers={shippingColumns}
 								rows={shippingItems}
 								currency={{
-									currencySymbol: appLocalizer.currency_symbol,
+									currencySymbol:
+										appLocalizer.currency_symbol,
 									priceDecimals: appLocalizer.price_decimals,
-									decimalSeparator: appLocalizer.decimal_separator,
-									thousandSeparator: appLocalizer.thousand_separator,
-									currencyPosition: appLocalizer.currency_position,
+									decimalSeparator:
+										appLocalizer.decimal_separator,
+									thousandSeparator:
+										appLocalizer.thousand_separator,
+									currencyPosition:
+										appLocalizer.currency_position,
 								}}
 							/>
 						)}
@@ -250,11 +254,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							<span className="admin-badge blue">
 								{orderData?.status
 									? orderData.status
-										.replace(/^wc-/, '') // remove 'wc-' prefix if exists
-										.replace(/_/g, ' ') // replace underscores with spaces
-										.replace(/\b\w/g, (c) =>
-											c.toUpperCase()
-										) // capitalize first letter of each word
+											.replace(/^wc-/, '') // remove 'wc-' prefix if exists
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize first letter of each word
 									: ''}
 							</span>
 						</FormGroup>
@@ -268,18 +272,19 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							label={__('Commission Status', 'multivendorx')}
 						>
 							<span
-								className={`admin-badge ${commissionData?.status === 'paid'
-									? 'green'
-									: 'red'
-									}`}
+								className={`admin-badge ${
+									commissionData?.status === 'paid'
+										? 'green'
+										: 'red'
+								}`}
 							>
 								{commissionData?.status
 									? commissionData.status
-										.replace(/^wc-/, '') // remove any prefix like 'wc-'
-										.replace(/_/g, ' ') // replace underscores with spaces
-										.replace(/\b\w/g, (c) =>
-											c.toUpperCase()
-										) // capitalize each word
+											.replace(/^wc-/, '') // remove any prefix like 'wc-'
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize each word
 									: ''}
 							</span>
 						</FormGroup>
@@ -289,7 +294,8 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							label={__('Commission Amount', 'multivendorx')}
 						>
 							{formatCurrency(
-								parseFloat(commissionData?.store_earning ?? 0))}
+								parseFloat(commissionData?.store_earning ?? 0)
+							)}
 						</FormGroup>
 
 						<FormGroup row label={__('Shipping', 'multivendorx')}>
@@ -307,9 +313,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 								row
 								label={__('Commission refund', 'multivendorx')}
 							>
-								{formatCurrency(
-									commissionData.store_refunded
-								)}
+								{formatCurrency(commissionData.store_refunded)}
 							</FormGroup>
 						)}
 

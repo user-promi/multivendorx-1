@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
 
 	const access =
 		appLocalizer.settings_databases_value?.['privacy']?.[
-		'customer_information_access'
+			'customer_information_access'
 		];
 	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
 
@@ -100,10 +100,10 @@ const Dashboard: React.FC = () => {
 			render: (row) =>
 				row.products && row.products.length > 0
 					? row.products.map((product, index) => (
-						<div key={index} className="product-wrapper">
-							{product.name}
-						</div>
-					))
+							<div key={index} className="product-wrapper">
+								{product.name}
+							</div>
+						))
 					: '-',
 		},
 		amount: {
@@ -120,7 +120,7 @@ const Dashboard: React.FC = () => {
 		id: {
 			label: __('#', 'multivendorx'),
 			isNumeric: true,
-			type: 'id'
+			type: 'id',
 		},
 
 		name: {
@@ -647,20 +647,20 @@ const Dashboard: React.FC = () => {
 										key={item.id}
 										title={
 											item.payment_method ===
-												'stripe-connect'
+											'stripe-connect'
 												? __('Stripe', 'multivendorx')
 												: item.payment_method ===
-													'bank-transfer'
+													  'bank-transfer'
 													? __(
-														'Direct to Local Bank (INR)',
-														'multivendorx'
-													)
-													: item.payment_method ===
-														'paypal-payout'
-														? __(
-															'PayPal',
+															'Direct to Local Bank (INR)',
 															'multivendorx'
 														)
+													: item.payment_method ===
+														  'paypal-payout'
+														? __(
+																'PayPal',
+																'multivendorx'
+															)
 														: ''
 										}
 										isLoading={isLoading}
@@ -714,33 +714,33 @@ const Dashboard: React.FC = () => {
 							window.open(url);
 						}}
 					>
-							{recentOrderRows.length > 0 ? (
-								<TableCard
-									headers={recentOrderHeaders}
-									rows={recentOrderRows}
-									isLoading={isLoading}
-									ids={recentOrderIds}
-									className="transparent-table"
-									showMenu={false}
-									showColumnToggleIcon={false}
-									format={appLocalizer.date_format}
-									currency={{
-										currencySymbol:
-											appLocalizer.currency_symbol,
-										priceDecimals: appLocalizer.price_decimals,
-										decimalSeparator:
-											appLocalizer.decimal_separator,
-										thousandSeparator:
-											appLocalizer.thousand_separator,
-										currencyPosition:
-											appLocalizer.currency_position,
-									}}
-								/>
-							) : (
-								<div className="no-data">
-									{__('No products found.', 'multivendorx')}
-								</div>
-							)}
+						{recentOrderRows.length > 0 ? (
+							<TableCard
+								headers={recentOrderHeaders}
+								rows={recentOrderRows}
+								isLoading={isLoading}
+								ids={recentOrderIds}
+								className="transparent-table"
+								showMenu={false}
+								showColumnToggleIcon={false}
+								format={appLocalizer.date_format}
+								currency={{
+									currencySymbol:
+										appLocalizer.currency_symbol,
+									priceDecimals: appLocalizer.price_decimals,
+									decimalSeparator:
+										appLocalizer.decimal_separator,
+									thousandSeparator:
+										appLocalizer.thousand_separator,
+									currencyPosition:
+										appLocalizer.currency_position,
+								}}
+							/>
+						) : (
+							<div className="no-data">
+								{__('No products found.', 'multivendorx')}
+							</div>
+						)}
 					</Card>
 				</Column>
 
@@ -844,7 +844,7 @@ const Dashboard: React.FC = () => {
 						>
 							<div className="notification-wrapper">
 								{Array.isArray(announcement) &&
-									announcement.length > 0 ? (
+								announcement.length > 0 ? (
 									<ul>
 										{announcement.map((item, index) => (
 											<li key={item.id}>
@@ -967,7 +967,7 @@ const Dashboard: React.FC = () => {
 					<Card title={__('Store Activity', 'multivendorx')}>
 						<div className="activity-log">
 							{Array.isArray(activities) &&
-								activities.length > 0 ? (
+							activities.length > 0 ? (
 								activities.slice(0, 5).map((a, i) => (
 									<div key={i} className="activity">
 										<div className="title">{a.title}</div>

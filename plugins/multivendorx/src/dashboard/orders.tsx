@@ -149,7 +149,7 @@ const Orders: React.FC = () => {
 							status === 'all'
 								? __('All', 'multivendorx')
 								: status.charAt(0).toUpperCase() +
-								status.slice(1),
+									status.slice(1),
 						count: total,
 					};
 				});
@@ -194,7 +194,11 @@ const Orders: React.FC = () => {
 			render: (row) => (
 				<span
 					onClick={() =>
-						dashNavigate(navigate, ['orders', 'view', String(row.id)])
+						dashNavigate(navigate, [
+							'orders',
+							'view',
+							String(row.id),
+						])
 					}
 				>
 					#{row.id}
@@ -231,18 +235,18 @@ const Orders: React.FC = () => {
 			actions: [
 				...(appLocalizer.edit_order_capability
 					? [
-						{
-							label: __('View', 'multivendorx'),
-							icon: 'eye',
-							onClick: (row) => {
-								dashNavigate(navigate, [
-									'orders',
-									'view',
-									String(row.id),
-								]);
+							{
+								label: __('View', 'multivendorx'),
+								icon: 'eye',
+								onClick: (row) => {
+									dashNavigate(navigate, [
+										'orders',
+										'view',
+										String(row.id),
+									]);
+								},
 							},
-						},
-					]
+						]
 					: []),
 
 				{

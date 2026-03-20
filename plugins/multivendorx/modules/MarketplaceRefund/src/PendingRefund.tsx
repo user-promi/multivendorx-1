@@ -139,23 +139,32 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 	};
 
 	const headers = {
-
 		id: {
 			label: __('Order', 'multivendorx'),
 			isSortable: true,
 			render: (row) => (
-				<a href={getUrl(row.id, 'order')} target="_blank" rel="noopener noreferrer" className="link-item">
+				<a
+					href={getUrl(row.id, 'order')}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="link-item"
+				>
 					#{row.id}
 				</a>
-			)
+			),
 		},
 		store_name: {
 			label: __('Store', 'multivendorx'),
 			render: (row) => (
-				<a href={getUrl(row.store_id, 'store', 'edit')} target="_blank" rel="noopener noreferrer" className="link-item">
+				<a
+					href={getUrl(row.store_id, 'store', 'edit')}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="link-item"
+				>
 					{row.store_name}
 				</a>
-			)
+			),
 		},
 		total: {
 			label: __('Amount', 'multivendorx'),
@@ -205,8 +214,8 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 							},
 						]}
 					/>
-				)
-			}
+				);
+			},
 		},
 	};
 
@@ -246,9 +255,9 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-							query.filter.created_at.startDate,
-							'start'
-						)
+								query.filter.created_at.startDate,
+								'start'
+							)
 						: undefined,
 					before: query.filter?.created_at?.endDate
 						? toWcIsoDate(query.filter.created_at.endDate, 'end')
@@ -428,7 +437,7 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 								usePlainText={false}
 								tinymceApiKey={
 									appLocalizer.settings_databases_value[
-									'overview'
+										'overview'
 									]['tinymce_api_section'] ?? ''
 								}
 							/>

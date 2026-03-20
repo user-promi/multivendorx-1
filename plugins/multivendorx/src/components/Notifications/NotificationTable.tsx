@@ -65,7 +65,7 @@ const NotificationTable = (React.FC = () => {
 		},
 		type: {
 			label: __('Type', 'multivendorx'),
-			type:'status'
+			type: 'status',
 		},
 		created_at: {
 			label: __('Date', 'multivendorx'),

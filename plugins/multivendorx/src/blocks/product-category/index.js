@@ -95,5 +95,5 @@ window.addEventListener('load', () => {
 	}
 
 	const root = createRoot(el);
-	root.render(<ProductCategory/>);
+	root.render(<ProductCategory />);
 });

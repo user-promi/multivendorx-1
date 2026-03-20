@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
-	Column,
-	Container,
 	getApiLink,
 	NavigatorHeader,
 	TableCard,
@@ -40,7 +38,7 @@ const Transactions: React.FC = () => {
 		useState<TransactionRow | null>(null);
 
 	const headers = {
-		id: { label: __('ID', 'multivendorx') , type:'id'},
+		id: { label: __('ID', 'multivendorx') },
 		status: { label: __('Status', 'multivendorx'), type: 'status' },
 		created_at: { label: __('Date', 'multivendorx'), type: 'date' },
 		transaction_type: {

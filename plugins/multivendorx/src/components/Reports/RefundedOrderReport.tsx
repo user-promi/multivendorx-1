@@ -3,7 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import { getApiLink, InfoItem, QueryProps, TableCard, TableRow } from 'zyra';
 import axios from 'axios';
-import { downloadCSV, formatLocalDate, getUrl } from '../../services/commonFunction';
+import {
+	downloadCSV,
+	formatLocalDate,
+	getUrl,
+} from '../../services/commonFunction';
 
 const RefundedOrderReport: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -38,10 +42,15 @@ const RefundedOrderReport: React.FC = () => {
 			label: __('Order', 'multivendorx'),
 			isSortable: true,
 			render: (row) => (
-				<a href={getUrl(row.order_id, 'order')} target="_blank" rel="noopener noreferrer" className="link-item">
+				<a
+					href={getUrl(row.order_id, 'order')}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="link-item"
+				>
 					#{row.order_id}
 				</a>
-			)
+			),
 		},
 		customer_name: {
 			label: __('Customer', 'multivendorx'),

@@ -273,7 +273,9 @@ const ProductReport: React.FC = () => {
 						titleLink={getUrl(row.id, 'product') || ''}
 						avatar={{
 							image: row.images?.[0]?.src || '',
-							iconClass: row.images?.[0]?.src ? '' : 'single-product',
+							iconClass: row.images?.[0]?.src
+								? ''
+								: 'single-product',
 						}}
 						descriptions={[
 							{
@@ -283,7 +285,7 @@ const ProductReport: React.FC = () => {
 						]}
 					/>
 				);
-			}
+			},
 		},
 		store_name: {
 			label: __('Store', 'multivendorx'),
@@ -429,7 +431,9 @@ const ProductReport: React.FC = () => {
 						isLoading={isDashboardLoading}
 					/>
 
-					<Card title={__( 'Revenue & Sales Comparison','multivendorx')}>
+					<Card
+						title={__('Revenue & Sales Comparison', 'multivendorx')}
+					>
 						{error ? (
 							<p>{error}</p>
 						) : chartData.length > 0 ? (
@@ -498,12 +502,13 @@ const ProductReport: React.FC = () => {
 										</div>
 										<div className="right">
 											<i
-												className={`adminfont-pagination-right-arrow ${openReviewedCards[
-													product.id
-												]
-													? 'rotate-90 transition-transform'
-													: ''
-													}`}
+												className={`adminfont-pagination-right-arrow ${
+													openReviewedCards[
+														product.id
+													]
+														? 'rotate-90 transition-transform'
+														: ''
+												}`}
 											></i>
 										</div>
 									</div>

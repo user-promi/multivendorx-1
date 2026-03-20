@@ -129,7 +129,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 								});
 							});
 						})
-						.catch(() => { });
+						.catch(() => {});
 
 					axios({
 						method: 'GET',
@@ -165,7 +165,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 				return (
 					<InfoItem
 						title={row.name}
-						titleLink={getUrl(row.product_id,'product')||''}
+						titleLink={getUrl(row.product_id, 'product') || ''}
 						avatar={{
 							image: row.image?.src || '',
 							iconClass: 'single-product',
@@ -178,22 +178,22 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						]}
 					/>
 				);
-			}
+			},
 		},
 		price: {
 			label: __('Cost', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 		quantity: {
 			label: __('Qty', 'multivendorx'),
 		},
 		total: {
 			label: __('Total', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 		total_tax: {
 			label: __('Tax', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 	};
 
@@ -203,11 +203,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 		},
 		total: {
 			label: __('Amount', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 		total_tax: {
 			label: __('Tax', 'multivendorx'),
-			type: 'currency'
+			type: 'currency',
 		},
 	};
 
@@ -235,8 +235,9 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 									href={`${appLocalizer.site_url.replace(
 										/\/$/,
 										''
-									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${storeData.id
-										}`}
+									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
+										storeData.id
+									}`}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="store-link"
@@ -278,11 +279,15 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 								rows={shippingItems}
 								title={__('Shipping', 'multivendorx')}
 								currency={{
-									currencySymbol: appLocalizer.currency_symbol,
+									currencySymbol:
+										appLocalizer.currency_symbol,
 									priceDecimals: appLocalizer.price_decimals,
-									decimalSeparator: appLocalizer.decimal_separator,
-									thousandSeparator: appLocalizer.thousand_separator,
-									currencyPosition: appLocalizer.currency_position,
+									decimalSeparator:
+										appLocalizer.decimal_separator,
+									thousandSeparator:
+										appLocalizer.thousand_separator,
+									currencyPosition:
+										appLocalizer.currency_position,
 								}}
 							/>
 						)}
@@ -300,7 +305,10 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						>
 							{commissionData?.order_id ? (
 								<a
-									href={getUrl(commissionData.order_id, 'order')}
+									href={getUrl(
+										commissionData.order_id,
+										'order'
+									)}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="link-item"
@@ -319,11 +327,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							<span className="admin-badge blue">
 								{orderData?.status
 									? orderData.status
-										.replace(/^wc-/, '') // remove 'wc-' prefix if exists
-										.replace(/_/g, ' ') // replace underscores with spaces
-										.replace(/\b\w/g, (c) =>
-											c.toUpperCase()
-										) // capitalize first letter of each word
+											.replace(/^wc-/, '') // remove 'wc-' prefix if exists
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize first letter of each word
 									: ''}
 							</span>
 						</FormGroup>
@@ -337,18 +345,19 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							label={__('Commission Status', 'multivendorx')}
 						>
 							<span
-								className={`admin-badge ${commissionData?.status === 'paid'
-									? 'green'
-									: 'red'
-									}`}
+								className={`admin-badge ${
+									commissionData?.status === 'paid'
+										? 'green'
+										: 'red'
+								}`}
 							>
 								{commissionData?.status
 									? commissionData.status
-										.replace(/^wc-/, '') // remove any prefix like 'wc-'
-										.replace(/_/g, ' ') // replace underscores with spaces
-										.replace(/\b\w/g, (c) =>
-											c.toUpperCase()
-										) // capitalize each word
+											.replace(/^wc-/, '') // remove any prefix like 'wc-'
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize each word
 									: ''}
 							</span>
 						</FormGroup>
@@ -357,7 +366,9 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							label={__('Marketplace Commission', 'multivendorx')}
 						>
 							{formatCurrency(
-								parseFloat(commissionData?.marketplace_commission ?? 0)
+								parseFloat(
+									commissionData?.marketplace_commission ?? 0
+								)
 							)}
 						</FormGroup>
 

@@ -26,7 +26,11 @@ const Refund: React.FC = () => {
 			render: (row) => (
 				<span
 					onClick={() =>
-						dashNavigate(navigate, ['orders', 'view', String(row.order_id)])
+						dashNavigate(navigate, [
+							'orders',
+							'view',
+							String(row.order_id),
+						])
 					}
 				>
 					#{row.order_id}

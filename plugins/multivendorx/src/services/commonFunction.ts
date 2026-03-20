@@ -264,7 +264,9 @@ export const getUrl = (
 	mode: 'edit' | 'view' | 'settings' = 'edit',
 	slug?: string
 ) => {
-	if (!id && !slug) return '#';
+	if (!id && !slug) {
+		return '#';
+	}
 
 	const base = appLocalizer.site_url.replace(/\/$/, '');
 
@@ -275,7 +277,7 @@ export const getUrl = (
 
 			case 'user':
 				return `${base}/wp-admin/user-edit.php?user_id=${id}`;
-				
+
 			case 'order':
 				return `${base}/wp-admin/post.php?post=${id}&action=edit`;
 

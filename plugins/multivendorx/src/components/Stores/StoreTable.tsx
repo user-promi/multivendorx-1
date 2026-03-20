@@ -13,7 +13,12 @@ import {
 	InfoItem,
 } from 'zyra';
 import { useNavigate } from 'react-router-dom';
-import { formatCurrency, formatDate, formatLocalDate, getUrl } from '../../services/commonFunction';
+import {
+	formatCurrency,
+	formatDate,
+	formatLocalDate,
+	getUrl,
+} from '../../services/commonFunction';
 
 const StoreTable: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -177,7 +182,10 @@ const StoreTable: React.FC = () => {
 					label: __('Storefront', 'multivendorx'),
 					icon: 'storefront',
 					onClick: (row) => {
-						window.open(getUrl(row.id, 'store', 'view', row.store_slug), '_blank');
+						window.open(
+							getUrl(row.id, 'store', 'view', row.store_slug),
+							'_blank'
+						);
 					},
 				},
 			],
@@ -204,10 +212,9 @@ const StoreTable: React.FC = () => {
 			url: getApiLink(appLocalizer, `store/${selectedIds[0]}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { action, ids: selectedIds },
-		})
-			.then(() => {
-				doRefreshTableData({});
-			})
+		}).then(() => {
+			doRefreshTableData({});
+		});
 	};
 	const bulkActions = [
 		{ label: __('Active', 'multivendorx'), value: 'active' },
@@ -227,10 +234,7 @@ const StoreTable: React.FC = () => {
 					ids={rowIds}
 					categoryCounts={categoryCounts}
 					bulkActions={bulkActions}
-					onBulkActionApply={(
-						action: string,
-						selectedIds: []
-					) => {
+					onBulkActionApply={(action: string, selectedIds: []) => {
 						handleBulkAction(action, selectedIds);
 					}}
 					search={{}}

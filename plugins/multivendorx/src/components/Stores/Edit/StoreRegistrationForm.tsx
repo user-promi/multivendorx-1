@@ -190,9 +190,13 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 			if (res.data.success) {
 				NoticeManager.add({
 					title: status === 'approve' ? 'Success' : 'Error!',
-					message: status === 'approve'
-						?  __('Store approved successfully!', 'multivendorx') 
-						: __('Store rejected successfully!', 'multivendorx'),
+					message:
+						status === 'approve'
+							? __('Store approved successfully!', 'multivendorx')
+							: __(
+									'Store rejected successfully!',
+									'multivendorx'
+								),
 					type: status === 'approve' ? 'success' : 'error',
 					position: 'float',
 				});
@@ -212,10 +216,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 							<div className="card-header">
 								<div className="left">
 									<div className="title">
-										{__(
-											'Store details',
-											'multivendorx'
-										)}
+										{__('Store details', 'multivendorx')}
 									</div>
 								</div>
 							</div>
@@ -262,8 +263,8 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 						</div>
 						<div className="right">
 							{formData.registration_data &&
-								Object.keys(formData.registration_data)
-									.length > 0 && (
+								Object.keys(formData.registration_data).length >
+									0 && (
 									<div className="admin-btn btn-purple">
 										<i className="adminfont-download"></i>
 										<PdfDownloadButton
@@ -281,8 +282,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 					<div className="card-body" id="registration-archive">
 						{/* Registration Data */}
 						{formData.registration_data &&
-						Object.keys(formData.registration_data).length >
-							0 ? (
+						Object.keys(formData.registration_data).length > 0 ? (
 							Object.entries(formData.registration_data).map(
 								([label, value]) => {
 									const isAttachment =
@@ -302,9 +302,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 											<div className="value">
 												{isAttachment ? (
 													<a
-														href={
-															value.attachment
-														}
+														href={value.attachment}
 														target="_blank"
 														rel="noopener noreferrer"
 													>
@@ -352,8 +350,8 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 									{(
 										(
 											formData.primary_owner_info?.data?.display_name?.trim() ||
-											formData.primary_owner_info
-												?.data?.user_login
+											formData.primary_owner_info?.data
+												?.user_login
 										)?.charAt(0) || ''
 									).toUpperCase()}
 								</div>
@@ -383,16 +381,14 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								<div className="form-group-wrapper">
 									<div className="form-group">
 										<ul>
-											{previousNotes.map(
-												(item, idx) => (
-													<li key={idx}>
-														<strong>
-															{item.date}:
-														</strong>{' '}
-														{item.note}
-													</li>
-												)
-											)}
+											{previousNotes.map((item, idx) => (
+												<li key={idx}>
+													<strong>
+														{item.date}:
+													</strong>{' '}
+													{item.note}
+												</li>
+											))}
 										</ul>
 									</div>
 								</div>
@@ -452,9 +448,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 												),
 												color: 'red',
 												onClick: () =>
-													handleSubmit(
-														'rejected'
-													),
+													handleSubmit('rejected'),
 											},
 										]}
 									/>

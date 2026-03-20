@@ -47,10 +47,15 @@ const OrderReport: React.FC = () => {
 			label: __('Order', 'multivendorx'),
 
 			render: (row) => (
-				<a href={getUrl(row.id, 'order')} target="_blank" rel="noopener noreferrer" className="link-item">
+				<a
+					href={getUrl(row.id, 'order')}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="link-item"
+				>
 					#{row.id}
 				</a>
-			)
+			),
 		},
 		store_name: {
 			label: __('Store', 'multivendorx'),

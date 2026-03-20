@@ -332,7 +332,7 @@ const Stores = () => {
 										tinymceApiKey={
 											appLocalizer
 												.settings_databases_value[
-											'overview'
+												'overview'
 											]?.['tinymce_api_section'] ?? ''
 										}
 									/>
@@ -365,15 +365,20 @@ const Stores = () => {
 								>
 									<FileInputUI
 										name="image"
-										accept={'.jpg,.jpeg,.png,.gif,.pdf,.zip'}
+										accept={
+											'.jpg,.jpeg,.png,.gif,.pdf,.zip'
+										}
 										imageSrc={formData.image || ''}
 										imageWidth={75}
 										imageHeight={75}
-										openUploader={__('Upload Image', 'multivendorx')}
+										openUploader={__(
+											'Upload Image',
+											'multivendorx'
+										)}
 										onChange={(image) => {
 											setFormData((prev) => ({
 												...prev,
-												image: image.url
+												image: image.url,
 											}));
 										}}
 									/>

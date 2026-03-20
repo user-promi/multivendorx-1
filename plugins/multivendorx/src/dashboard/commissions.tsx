@@ -13,7 +13,11 @@ import {
 } from 'zyra';
 
 import ViewCommission from './viewCommission';
-import { dashNavigate, downloadCSV, formatLocalDate } from '../services/commonFunction';
+import {
+	dashNavigate,
+	downloadCSV,
+	formatLocalDate,
+} from '../services/commonFunction';
 import { useNavigate } from 'react-router-dom';
 
 type CommissionRow = {
@@ -51,7 +55,7 @@ const StoreCommission: React.FC = () => {
 				>
 					#{row.id}
 				</span>
-			)
+			),
 		},
 		order_id: {
 			label: __('Order', 'multivendorx'),
@@ -59,7 +63,11 @@ const StoreCommission: React.FC = () => {
 			render: (row) => (
 				<span
 					onClick={() =>
-						dashNavigate(navigate, ['orders', 'view', String(row.order_id)])
+						dashNavigate(navigate, [
+							'orders',
+							'view',
+							String(row.order_id),
+						])
 					}
 				>
 					#{row.order_id}
@@ -179,7 +187,7 @@ const StoreCommission: React.FC = () => {
 						count:
 							Number(
 								response.headers[
-								'x-wp-status-partially-refunded'
+									'x-wp-status-partially-refunded'
 								]
 							) || 0,
 					},

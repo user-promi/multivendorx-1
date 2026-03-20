@@ -259,7 +259,10 @@ const AllProduct: React.FC = () => {
 					page: query.paged || 1,
 					row: query.per_page || 10,
 					search: query.searchValue || '',
-					status: query.categoryFilter === 'all' ? 'any' : query.categoryFilter,
+					status:
+						query.categoryFilter === 'all'
+							? 'any'
+							: query.categoryFilter,
 					type: query.filter?.productType,
 					category: query.filter?.category,
 					stock_status: query.filter?.stockStatus,
@@ -363,7 +366,9 @@ const AllProduct: React.FC = () => {
 						titleLink={row.permalink}
 						avatar={{
 							image: row.images?.[0]?.src || '',
-							iconClass: row.images?.[0]?.src ? '' : 'single-product',
+							iconClass: row.images?.[0]?.src
+								? ''
+								: 'single-product',
 						}}
 						descriptions={[
 							{
@@ -373,7 +378,7 @@ const AllProduct: React.FC = () => {
 						]}
 					/>
 				);
-			}
+			},
 		},
 		price: {
 			label: __('Price', 'multivendorx'),
@@ -382,7 +387,7 @@ const AllProduct: React.FC = () => {
 		stock_status: {
 			label: __('Stock', 'multivendorx'),
 			type: 'status',
-			ClassName: 'transparent-status'
+			ClassName: 'transparent-status',
 		},
 		categories: {
 			label: __('Categories', 'multivendorx'),
