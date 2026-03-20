@@ -1,7 +1,7 @@
 /* global appLocalizer */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { DynamicRowSetting, getApiLink } from 'zyra';
+import { DynamicRowSetting, FormGroup, getApiLink, Notice } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 interface ShippingStateRate {
@@ -149,13 +149,16 @@ const ShippingRatesByCountry: React.FC = () => {
 		],
 	};
 
-	if (loading) {
-		return <div>{__('Loading shipping rates...', 'multivendorx')}</div>;
-	}
 	return (
-		<div className="shipping-country-wrapper">
-			{error && <div className="mvx-error">{error}</div>}
-
+		<>
+			{error && 
+				<Notice
+					type="error"
+					message={ error }
+					displayPosition="notice"
+				/>
+			}
+			<FormGroup>
 			<DynamicRowSetting
 				keyName="country-rates"
 				template={countryTemplate}
@@ -189,9 +192,9 @@ const ShippingRatesByCountry: React.FC = () => {
 
 					return (
 						<div className="state-inner-box">
-							<h4 className="state-title">
+							<div className="state-title">
 								{__('State / Region Rates', 'multivendorx')}
-							</h4>
+							</div>
 
 							<DynamicRowSetting
 								keyName={`state-rates-${countryIndex}`}
@@ -221,7 +224,8 @@ const ShippingRatesByCountry: React.FC = () => {
 					);
 				}}
 			/>
-		</div>
+			</FormGroup>
+		</>
 	);
 };
 

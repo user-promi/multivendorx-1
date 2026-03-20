@@ -16,7 +16,7 @@ export default {
 		{
 			type: 'text',
 			key: 'facebook',
-			icon: 'facebook-fill',
+			icon: 'facebook',
 			label: __('Facebook', 'multivendorx'),
 		},
 
@@ -32,7 +32,7 @@ export default {
 		{
 			type: 'text',
 			key: 'linkedin',
-			icon: 'linkedin-border',
+			icon: 'linkedin',
 			label: __('LinkedIn', 'multivendorx'),
 		},
 
@@ -48,7 +48,7 @@ export default {
 		{
 			type: 'text',
 			key: 'instagram',
-			icon: 'mail',
+			icon: 'instagram',
 			label: __('Instagram', 'multivendorx'),
 		},
 
@@ -56,7 +56,7 @@ export default {
 		{
 			type: 'text',
 			key: 'pinterest',
-			icon: 'mail',
+			icon: 'pinterest',
 			label: __('Pinterest', 'multivendorx'),
 		},
 	],

@@ -727,21 +727,6 @@
 
 // dropdown menu end
 
-// shipping by zone
-.shipping-method-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-
-    .shipping-method {
-        display: flex;
-        gap: 0.5rem;
-
-        .admin-badge {
-            cursor: pointer;
-        }
-    }
-}
 
 .checklist-process-wrapper:has(.checklist-wrapper.row) {
     .checklist-icon {

@@ -75,3 +75,19 @@
         margin: 1rem 0;
     }
 }
+
+// shipping by zone (create badge componennt and remove)
+.shipping-method-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+
+    .shipping-method {
+        display: flex;
+        gap: 0.5rem;
+
+        .admin-badge {
+            cursor: pointer;
+        }
+    }
+}
