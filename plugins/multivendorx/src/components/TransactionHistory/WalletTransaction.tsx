@@ -420,6 +420,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 						{recentDebits.length > 0 ? (
 							<>
 								{recentDebits.slice(0, 5).map((txn) => {
+									const hasPaymentMethod = !!txn.payment_method;
 									// Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
 									const formattedPaymentMethod =
 										txn.payment_method
@@ -439,9 +440,11 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 												<div className="details">
 													<div className="name">
 														{formattedPaymentMethod}
+														{hasPaymentMethod && (
 														<div className="admin-badge green">
 															Completed
 														</div>
+														)}
 													</div>
 													<div className="des">
 														{new Date(

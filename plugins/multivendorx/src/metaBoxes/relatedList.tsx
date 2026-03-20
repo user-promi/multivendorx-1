@@ -25,6 +25,10 @@ const RelatedList = ({ product, setProduct, handleChange }) => {
 	);
 };
 
+const productFields =
+	appLocalizer.settings_databases_value?.['product-preferencess']?.products_fields || [];
+
+if (productFields.includes('linked_product')) {
 addFilter(
 	'multivendorx_add_product_middle_section',
 	'multivendorx/related_list',
@@ -42,3 +46,4 @@ addFilter(
 	},
 	40
 );
+}

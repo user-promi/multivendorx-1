@@ -33,6 +33,8 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 			});
 	}, []);
 
+	const typeFields = appLocalizer.settings_databases_value?.['product-preferencess']?.type_options || [];
+
 	return (
 		<Card
 			title={__('Product delivery', 'multivendorx')}
@@ -44,11 +46,15 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 				<FormGroup>
 					<ChoiceToggleUI
 						options={[
-							{
-								key: 'physical',
-								value: 'physical',
-								label: __('Physical', 'multivendorx'),
-							},
+							...(!typeFields.includes('virtual')
+								? [
+										{
+											key: 'physical',
+											value: 'physical',
+											label: __('Physical', 'multivendorx'),
+										},
+								]
+								: []),
 							{
 								key: 'downloadable',
 								value: 'downloadable',
@@ -72,7 +78,7 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 						}}
 					/>
 				</FormGroup>
-				{productType === 'physical' && (
+				{productType === 'physical' && !typeFields.includes('virtual') && (
 					<>
 						{/* Weight & Shipping class */}
 						<FormGroup
@@ -180,13 +186,11 @@ addFilter(
 		return (
 			<>
 				{content}
-				{!product.virtual && (
 					<ShippingCard
 						product={product}
 						setProduct={setProduct}
 						handleChange={handleChange}
 					/>
-				)}
 			</>
 		);
 	},

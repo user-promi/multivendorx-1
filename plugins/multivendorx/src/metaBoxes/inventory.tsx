@@ -117,20 +117,25 @@ const Inventory = ({ product, setProduct, handleChange }) => {
 	);
 };
 
-addFilter(
-	'multivendorx_add_product_middle_section',
-	'multivendorx/inventory',
-	(content, product, setProduct, handleChange) => {
-		return (
-			<>
-				{content}
-				<Inventory
-					product={product}
-					setProduct={setProduct}
-					handleChange={handleChange}
-				/>
-			</>
-		);
-	},
-	10
-);
+const productFields =
+	appLocalizer.settings_databases_value?.['product-preferencess']?.products_fields || [];
+
+if (productFields.includes('inventory')) {
+	addFilter(
+		'multivendorx_add_product_middle_section',
+		'multivendorx/inventory',
+		(content, product, setProduct, handleChange) => {
+			return (
+				<>
+					{content}
+					<Inventory
+						product={product}
+						setProduct={setProduct}
+						handleChange={handleChange}
+					/>
+				</>
+			);
+		},
+		10
+	);
+}

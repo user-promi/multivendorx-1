@@ -45,6 +45,10 @@ const ProductTag = ({ product, setProduct }) => {
 	);
 };
 
+const productFields =
+	appLocalizer.settings_databases_value?.['product-preferencess']?.products_fields || [];
+
+if (productFields.includes('product_tag')) {
 addFilter(
 	'multivendorx_add_product_right_section',
 	'multivendorx/product_tag',
@@ -58,3 +62,4 @@ addFilter(
 	},
 	40
 );
+}

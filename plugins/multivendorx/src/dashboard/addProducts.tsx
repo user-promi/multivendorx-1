@@ -213,6 +213,8 @@ const AddProduct = () => {
 	const completedCount = checklistValues.filter(Boolean).length;
 	const totalCount = checklistValues.length;
 
+	const productFields = appLocalizer.settings_databases_value?.['product-preferencess']?.products_fields || [];
+
 	return (
 		<>
 			{translation
@@ -441,43 +443,47 @@ const AddProduct = () => {
 								/>
 							</FormGroup>
 
-							<FormGroup
-								label={__(
-									'Product short description',
-									'multivendorx'
-								)}
-								desc={__(
-									'A short description displayed on product and checkout pages',
-									'multivendorx'
-								)}
-							>
-								<TextAreaUI
-									name="short_description"
-									value={product.short_description}
-									onChange={(value) =>
-										handleChange('short_description', value)
-									}
-								/>
-							</FormGroup>
+							{ productFields.includes('general') && (
+								<>
+								<FormGroup
+									label={__(
+										'Product short description',
+										'multivendorx'
+									)}
+									desc={__(
+										'A short description displayed on product and checkout pages',
+										'multivendorx'
+									)}
+								>
+									<TextAreaUI
+										name="short_description"
+										value={product.short_description}
+										onChange={(value) =>
+											handleChange('short_description', value)
+										}
+									/>
+								</FormGroup>
 
-							<FormGroup
-								label={__(
-									'Product description',
-									'multivendorx'
-								)}
-							>
-								<TextAreaUI
-									name="description"
-									value={product.description}
-									onChange={(value) =>
-										handleChange('description', value)
-									}
-								/>
-							</FormGroup>
+								<FormGroup
+									label={__(
+										'Product description',
+										'multivendorx'
+									)}
+								>
+									<TextAreaUI
+										name="description"
+										value={product.description}
+										onChange={(value) =>
+											handleChange('description', value)
+										}
+									/>
+								</FormGroup>
+								</>
+							)}
 						</FormGroupWrapper>
 					</Card>
 
-					{product?.type === 'simple' && (
+					{product?.type === 'simple' && productFields.includes('general') && (
 						<Card title={__('Price', 'multivendorx')}>
 							<FormGroupWrapper>
 								<FormGroup
