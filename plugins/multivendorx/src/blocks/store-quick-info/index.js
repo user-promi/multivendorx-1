@@ -5,8 +5,7 @@ import {
 	BlockControls,
 	AlignmentToolbar,
 } from '@wordpress/block-editor';
-import { render } from '@wordpress/element';
-import { BrowserRouter } from 'react-router-dom';
+import { createRoot  } from '@wordpress/element';
 import StoreQuickInfo from './StoreQuickInfo';
 
 registerBlockType('multivendorx/store-quick-info', {
@@ -86,17 +85,11 @@ registerBlockType('multivendorx/store-quick-info', {
 		return <div id="multivendorx-store-quick-info"></div>;
 	},
 });
-document.addEventListener('DOMContentLoaded', () => {
+
+window.addEventListener('load', () => {
 	const el = document.getElementById('multivendorx-store-quick-info');
+	if (!el) return;
 
-	if (!el) {
-		return;
-	}
-
-	render(
-		<BrowserRouter>
-			<StoreQuickInfo />
-		</BrowserRouter>,
-		el
-	);
+	const root = createRoot(el);
+	root.render(<StoreQuickInfo/>);
 });

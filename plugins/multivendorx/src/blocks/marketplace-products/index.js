@@ -1,8 +1,7 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { render } from '@wordpress/element';
-import { BrowserRouter } from 'react-router-dom';
+import { createRoot } from '@wordpress/element';
 import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
 import MarketplaceProductList from './marketplaceProductList';
 
@@ -106,17 +105,13 @@ registerBlockType('multivendorx/marketplace-products', {
 });
 
 // Render on frontend
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
 	const element = document.getElementById('marketplace-products');
 	if (element) {
 		const attributes = JSON.parse(
 			element.getAttribute('data-attributes') || '{}'
 		);
-		render(
-			<BrowserRouter>
-				<MarketplaceProductList {...attributes} />
-			</BrowserRouter>,
-			element
-		);
+		const root = createRoot(element);
+		root.render(<MarketplaceProductList {...attributes} />);
 	}
 });
