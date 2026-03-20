@@ -87,22 +87,18 @@
                 height: 3.5rem;
                 box-shadow: 0 0.125rem 0.5rem 0 #423e4e1f;
                 margin-top: -4rem;
-                background: #fff;
+                background: $background-white;
                 border-radius: $border-radius-small;
                 z-index: 1;
                 position: relative;
 
                 // edit logo section
-                .edit-section {
+                .popup {
                     right: -0.5rem;
                     bottom: -0.5rem;
 
-                    .dropdown {
+                    .popup-content {
                         left: 0;
-                    }
-
-                    .admin-btn {
-                        padding: 0.5rem;
                     }
                 }
 

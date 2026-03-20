@@ -416,15 +416,15 @@ const EditStore = () => {
 										<div className="default-img-1500x900" />
 									) : null}
 
-									
-									<PopupUI position="menu-dropdown" toggleIcon="edit theme-background">
+
+									<PopupUI position="menu-dropdown" tooltipName={__('Banner', 'multivendorx')} toggleIcon="edit theme-background">
 										<ItemListUI
 											items={[
 												{
 													id: 'upload',
 													title: __('Upload', 'multivendorx'),
 													icon: 'cloud-upload',
-													action: (item, e) => { 
+													action: (item, e) => {
 														e?.stopPropagation();
 														runUploader('banner');
 														setBannerMenu(false);
@@ -458,119 +458,38 @@ const EditStore = () => {
 											) : (
 												<div className="placeholder-400x400" />
 											)}
-
-											<div className="edit-section">
-												<div
-													className="icon-wrapper edit-wrapper"
-													ref={logoRef}
-												>
-													<span
-														className="admin-btn btn-purple"
-														onClick={(e) => {
-															e.stopPropagation();
-															setLogoMenu(
-																(prev) => !prev
-															);
-															setBannerMenu(
-																false
-															);
-														}}
-													>
-														<i className="adminfont-edit"></i>
-													</span>
-													{logoMenu && (
-														<div className="dropdown">
-															<div className="dropdown-body">
-																<ul>
-																	<li
-																		onClick={(
-																			e
-																		) => {
-																			e.stopPropagation();
-																			runUploader(
-																				'image'
-																			);
-																			setLogoMenu(
-																				false
-																			);
-																		}}
-																	>
-																		<div className="item">
-																			<i className="adminfont-cloud-upload"></i>{' '}
-																			{__(
-																				'Upload',
-																				'multivendorx'
-																			)}
-																		</div>
-																	</li>
-																	<li
-																		className="delete"
-																		onClick={(
-																			e
-																		) => {
-																			e.stopPropagation();
-																			const updated =
-																			{
-																				...data,
-																				image: '',
-																			};
-																			setData(
-																				updated
-																			);
-																			autoSave(
-																				updated
-																			);
-																			setLogoMenu(
-																				false
-																			);
-																		}}
-																	>
-																		<div className="item">
-																			<i className="adminfont-delete"></i>{' '}
-																			{__(
-																				'Delete',
-																				'multivendorx'
-																			)}
-																		</div>
-																	</li>
-																</ul>
-															</div>
-														</div>
-													)}
-												</div>
-											</div>
-											<PopupUI position="menu-dropdown" toggleIcon="edit theme-background">
-										<ItemListUI
-											items={[
-												{
-													id: 'upload',
-													title: __('Upload', 'multivendorx'),
-													icon: 'cloud-upload',
-													action: (item, e) => { 
-														e?.stopPropagation();
-														runUploader('banner');
-														setBannerMenu(false);
-													}
-												},
-												{
-													id: 'delete',
-													title: __('Delete', 'multivendorx'),
-													icon: 'delete',
-													className: 'delete',
-													action: (item, e) => {
-														e?.stopPropagation();
-														const updated = {
-															...data,
-															image: '',
-														};
-														setData(updated);
-														autoSave(updated);
-														setLogoMenu(false);
-													}
-												},
-											]}
-										/>
-									</PopupUI>
+											<PopupUI position="menu-dropdown" tooltipName={__('Logo', 'multivendorx')}  toggleIcon="edit theme-background">
+												<ItemListUI
+													items={[
+														{
+															id: 'upload',
+															title: __('Upload', 'multivendorx'),
+															icon: 'cloud-upload',
+															action: (item, e) => {
+																e?.stopPropagation();
+																runUploader('image');
+																setBannerMenu(false);
+															}
+														},
+														{
+															id: 'delete',
+															title: __('Delete', 'multivendorx'),
+															icon: 'delete',
+															className: 'delete',
+															action: (item, e) => {
+																e?.stopPropagation();
+																const updated = {
+																	...data,
+																	image: '',
+																};
+																setData(updated);
+																autoSave(updated);
+																setLogoMenu(false);
+															}
+														},
+													]}
+												/>
+											</PopupUI>
 										</div>
 
 										<div className="details">
