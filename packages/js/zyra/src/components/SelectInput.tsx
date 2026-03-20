@@ -461,11 +461,15 @@ const SelectInput: FieldComponent = {
                 selectDeselectLabel="Select / Deselect All"
                 options={ formattedOptions }
                 value={ coerceToString( value ) }
-                onChange={ ( val ) => {
-                    if ( canAccess ) {
-                        onChange( val );
+                onChange={(val) => {
+                    if (!canAccess) return;
+
+                    if (JSON.stringify(val) === JSON.stringify(value)) {
+                        return; // prevent unnecessary update
                     }
-                } }
+
+                    onChange(val);
+                }}
                 menuContent={ field.menuContent }
                 keepMenuOpenOnMenuContentClick={
                     field.keepMenuOpenOnMenuContentClick

@@ -76,13 +76,16 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
 
     const settingHasChanged = useRef( false );
     const initialLoad = useRef( true );
+    const isInternalUpdate = useRef(false);
     const blocksRef = useRef( blocks );
     blocksRef.current = blocks;
-    useEffect( () => {
-        if ( JSON.stringify( externalBlocks ) !== JSON.stringify( blocks ) ) {
-            setBlocks( externalBlocks );
+    useEffect(() => {
+        if (!isInternalUpdate.current) {
+            if (externalBlocks !== blocksRef.current) {
+                setBlocks(externalBlocks);
+            }
         }
-    }, [ externalBlocks ] );
+    }, [externalBlocks]);
 
     useEffect( () => {
         if ( initialLoad.current ) {
@@ -92,8 +95,9 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
         if ( settingHasChanged.current ) {
             onChange( blocks );
             settingHasChanged.current = false;
+            isInternalUpdate.current = false;
         }
-    }, [ blocks, onChange ] );
+    }, [ blocks ] );
 
     const markChanged = useCallback( () => {
         settingHasChanged.current = true;
@@ -102,6 +106,7 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
     const columnManager = useColumnManager( {
         blocks,
         onBlocksUpdate: ( updated ) => {
+            isInternalUpdate.current = true;
             setBlocks( updated );
             markChanged();
         },
@@ -154,6 +159,7 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
             };
         } );
 
+        isInternalUpdate.current = true;
         setBlocks( next );
         markChanged();
     }, [ markChanged ] );
@@ -201,14 +207,44 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
             if ( proSettingChange() ) {
                 return;
             }
-            setBlocks( ( prev ) => {
-                const next = [ ...prev ];
-                next[ index ] = { ...next[ index ], ...patch } as Block;
-                if ( openBlock?.id === next[ index ].id ) {
-                    setOpenBlock( next[ index ] );
+            setBlocks((prev) => {
+                const current = prev[index];
+
+                const isEqualValue = (
+                    previousValue: unknown,
+                    nextValue: unknown
+                ): boolean => {
+                    if (Array.isArray(previousValue) && Array.isArray(nextValue)) {
+                        if (previousValue.length !== nextValue.length) {
+                            return false;
+                        }
+
+                        return previousValue.every(
+                            (item, idx) => item === nextValue[idx]
+                        );
+                    }
+
+                    return previousValue === nextValue;
+                };
+
+                const hasChanged = Object.keys(patch).some(
+                    (key) => !isEqualValue(current[key as keyof Block], patch[key as keyof Block])
+                );
+
+                if (!hasChanged) {
+                    return prev;
+                }
+
+                isInternalUpdate.current = true;
+
+                const next = [...prev];
+                next[index] = { ...current, ...patch } as Block;
+
+                if (openBlock?.id === next[index].id) {
+                    setOpenBlock(next[index]);
                 }
                 return next;
-            } );
+            });
             markChanged();
         },
         [ proSettingChange, openBlock?.id, markChanged ]
@@ -221,7 +257,10 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
                 return;
             }
             const deleted = blocks[ index ];
-            setBlocks( ( prev ) => prev.filter( ( _, i ) => i !== index ) );
+            setBlocks((prev) => {
+                isInternalUpdate.current = true;
+                return prev.filter((_, i) => i !== index);
+            });
             markChanged();
             if ( openBlock?.id === deleted?.id ) {
                 setOpenBlock( null );
@@ -233,9 +272,17 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
 
     const handleChildMutate = useCallback(
         ( index: number, updated: ColumnsBlock ) => {
-            setBlocks( ( prev ) =>
-                prev.map( ( b, i ) => ( i === index ? updated : b ) )
-            );
+            setBlocks((prev) => {
+                isInternalUpdate.current = true;
+                return prev.map((b, i) => {
+                    if (i !== index) return b;
+
+                    // prevent unnecessary update
+                    if (b === updated) return b;
+
+                    isInternalUpdate.current = true;
+                    return updated;
+                });            });
             markChanged();
         },
         [ markChanged ]
@@ -338,10 +385,10 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
                                         if ( proSettingChange() ) {
                                             return;
                                         }
-                                        setBlocks( ( prev ) => [
-                                            ...prev,
-                                            createBlock( item, context ),
-                                        ] );
+                                        setBlocks((prev) => {
+                                            isInternalUpdate.current = true;
+                                            return [...prev, createBlock(item, context)];
+                                        });
                                         markChanged();
                                     } }
                                 >
