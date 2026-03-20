@@ -210,16 +210,25 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
             setBlocks((prev) => {
                 const current = prev[index];
 
-                const isEqual = (a: any, b: any) => {
-                    if (Array.isArray(a) && Array.isArray(b)) {
-                        if (a.length !== b.length) return false;
-                        return a.every((v, i) => v === b[i]);
+                const isEqualValue = (
+                    previousValue: unknown,
+                    nextValue: unknown
+                ): boolean => {
+                    if (Array.isArray(previousValue) && Array.isArray(nextValue)) {
+                        if (previousValue.length !== nextValue.length) {
+                            return false;
+                        }
+
+                        return previousValue.every(
+                            (item, idx) => item === nextValue[idx]
+                        );
                     }
-                    return a === b;
+
+                    return previousValue === nextValue;
                 };
 
                 const hasChanged = Object.keys(patch).some(
-                    (key) => !isEqual(current[key as keyof Block], patch[key as keyof Block])
+                    (key) => !isEqualValue(current[key as keyof Block], patch[key as keyof Block])
                 );
 
                 if (!hasChanged) {

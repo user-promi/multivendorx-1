@@ -98,7 +98,6 @@ export const FileInputUI: React.FC< FileInputProps > = ( props ) => {
     };
 
     const handleUpload = () => {
-        const wp = ( window as any )?.wp;
         if ( ! wp?.media ) {
             return inputRef.current?.click();
         }
