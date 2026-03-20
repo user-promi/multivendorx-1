@@ -65,7 +65,7 @@ export type TableHeaderConfig = {
     /**
      * Custom renderer (overrides type)
      */
-    render?: ( row?: {} ) => React.ReactNode;
+    render?: ( row?: TableRow ) => React.ReactNode;
 
     /**
      * Inline editing
@@ -93,6 +93,14 @@ export type TableRow = {
     [ key: string ]: string | number | boolean | React.ReactNode;
 };
 
+export type CurrencyConfig = {
+    currencySymbol?: string;
+    priceDecimals?: number;
+    decimalSeparator?: string;
+    thousandSeparator?: string;
+    currencyPosition?: 'left' | 'left_space' | 'right' | 'right_space';
+};
+
 /**
  * Props shared between TableProps and TableCardProps.
  */
@@ -108,7 +116,7 @@ type CommonTableProps = {
     /**
      * An array of arrays of display/value object pairs (see `Table` props).
      */
-    rows?: Array< {} >;
+    rows?: Array< TableRow >;
     /**
      * Additional CSS classes.
      */
@@ -143,7 +151,7 @@ export type TableProps = CommonTableProps & {
     isLoading?: boolean;
     enableBulkSelect?: boolean;
     format?: string;
-    currency?: {};
+    currency?: CurrencyConfig;
 };
 
 // export type TableSummaryProps = {
@@ -167,7 +175,7 @@ export type TableCardProps = CommonTableProps & {
     /**
      * A function which returns a callback function to update the query string for a given `param`.
      */
-    onQueryChange?: ( param: string ) => ( ...props: any ) => void;
+    onQueryChange?: ( param: string ) => (value?: string, direction?: string) => void;
     /**
      * A function which returns a callback function which is called upon the user changing the visibility of columns.
      */
@@ -207,7 +215,7 @@ export type TableCardProps = CommonTableProps & {
     };
     onQueryUpdate?: ( query: QueryProps ) => void;
     filters?: RealtimeFilterConfig[];
-    categoryCounts?: categoryCount[];
+    categoryCounts?: CategoryCount[];
     activeCategory?: string; // optional
     onCategoryClick?: ( value: string ) => void;
     showColumnToggleIcon?: boolean;
