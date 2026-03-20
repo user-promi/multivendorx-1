@@ -15,8 +15,7 @@ import {
 	ToolbarGroup,
 } from '@wordpress/components';
 import StoreReview from './StoreReview';
-import { render } from '@wordpress/element';
-import { BrowserRouter } from 'react-router-dom';
+import { createRoot } from '@wordpress/element';
 
 registerBlockType('multivendorx/store-review', {
 	attributes: {
@@ -336,7 +335,7 @@ registerBlockType('multivendorx/store-review', {
 	},
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
 	const activeModules = StoreInfo.activeModules;
 
 	if (!activeModules.includes('store-review')) {
@@ -354,11 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			sortOrder,
 		};
 
-		render(
-			<BrowserRouter>
-				<StoreReview {...props} />
-			</BrowserRouter>,
-			el
-		);
+		const root = createRoot(el);
+		root.render(<StoreReview {...props} />);
 	});
 });
