@@ -20,7 +20,7 @@ export default {
 			),
 			type: 'nested',
 			single: true,
-			moduleEnabled: 'advertisement',
+			moduleEnabled: 'advertise-product',
 			proSetting: true,
 			nestedFields: [
 				{
@@ -88,7 +88,7 @@ export default {
 			},
 			postText: __('days', 'multivendorx'),
 			size: '8rem',
-			moduleEnabled: 'advertisement',
+			moduleEnabled: 'advertise-product',
 			proSetting: true,
 		},
 		{

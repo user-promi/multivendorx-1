@@ -429,7 +429,7 @@ const ProductReport: React.FC = () => {
 						isLoading={isDashboardLoading}
 					/>
 
-					<Card title="Revenue & Sales Comparison">
+					<Card title={__( 'Revenue & Sales Comparison','multivendorx')}>
 						{error ? (
 							<p>{error}</p>
 						) : chartData.length > 0 ? (
@@ -511,7 +511,7 @@ const ProductReport: React.FC = () => {
 									{openReviewedCards[product.id] && (
 										<div className="top-items">
 											<div className="items">
-												<div className="left-side flex items-center">
+												<div className="left-side">
 													<div className="avatar">
 														{product.images
 															?.length ? (
@@ -534,7 +534,7 @@ const ProductReport: React.FC = () => {
 														)}
 													</div>
 
-													<div className="details text-sm leading-6">
+													<div className="details">
 														<div>
 															{__(
 																'Price:',
