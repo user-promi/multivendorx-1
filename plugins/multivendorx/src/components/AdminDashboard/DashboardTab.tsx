@@ -143,19 +143,19 @@ const DashboardTab: React.FC<object> = () => {
 					title: __('Success!', 'multivendorx'),
 					message: existingPlugin
 						? sprintf(
-								__(
-									'Plugin "%s" activated successfully!',
-									'multivendorx'
-								),
-								slug
-							)
-						: sprintf(
-								__(
-									'Plugin "%s" installed & activated successfully!',
-									'multivendorx'
-								),
-								slug
+							__(
+								'Plugin "%s" activated successfully!',
+								'multivendorx'
 							),
+							slug
+						)
+						: sprintf(
+							__(
+								'Plugin "%s" installed & activated successfully!',
+								'multivendorx'
+							),
+							slug
+						),
 					type: 'success',
 					position: 'float',
 				});
@@ -187,7 +187,7 @@ const DashboardTab: React.FC<object> = () => {
 				'Step-by-step guides to set up and manage your marketplace.',
 				'multivendorx'
 			),
-			iconClass: 'knowledge',
+			iconClass: 'knowledgebase',
 			linkText: __('Explore Docs', 'multivendorx'),
 			href: 'https://multivendorx.com/docs/knowledgebase/',
 		},
@@ -231,7 +231,7 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'commission',
-			linkText: __('Join Discord', 'multivendorx'),			
+			linkText: __('Join Discord', 'multivendorx'),
 		},
 		{
 			title: __('Verified stores only', 'multivendorx'),
@@ -240,7 +240,7 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'verification3',
-			linkText: __('Join Discord', 'multivendorx'),			
+			linkText: __('Join Discord', 'multivendorx'),
 		},
 		{
 			title: __('Diversified marketplace', 'multivendorx'),
@@ -249,7 +249,7 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'marketplace',
-			linkText: __('Explore Docs', 'multivendorx'),			
+			linkText: __('Explore Docs', 'multivendorx'),
 		},
 		{
 			title: __('Vacation mode for stores', 'multivendorx'),
@@ -258,7 +258,7 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'vacation',
-			linkText: __('Explore Docs', 'multivendorx'),			
+			linkText: __('Explore Docs', 'multivendorx'),
 		},
 		{
 			title: __('Never run out of stock', 'multivendorx'),
@@ -267,7 +267,7 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'global-community',
-			linkText: __('Book Consultation', 'multivendorx'),			
+			linkText: __('Book Consultation', 'multivendorx'),
 		},
 		{
 			title: __('Autopilot notifications', 'multivendorx'),
@@ -276,7 +276,7 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'notification',
-			linkText: __('Join Discord', 'multivendorx'),			
+			linkText: __('Join Discord', 'multivendorx'),
 		},
 	];
 
@@ -307,8 +307,8 @@ const DashboardTab: React.FC<object> = () => {
 								<div
 									className="admin-btn"
 									onClick={() =>
-										(window.location.href =
-											'?page=multivendorx-setup')
+									(window.location.href =
+										'?page=multivendorx-setup')
 									}
 								>
 									{__(
@@ -492,21 +492,21 @@ const DashboardTab: React.FC<object> = () => {
 																: 'auto',
 														opacity:
 															installing ===
-															'woocommerce-catalog-enquiry'
+																'woocommerce-catalog-enquiry'
 																? 0.6
 																: 1,
 													}}
 												>
 													{installing ===
-													'woocommerce-catalog-enquiry'
+														'woocommerce-catalog-enquiry'
 														? __(
-																'Installing...',
-																'multivendorx'
-															)
+															'Installing...',
+															'multivendorx'
+														)
 														: __(
-																'Install',
-																'multivendorx'
-															)}
+															'Install',
+															'multivendorx'
+														)}
 												</a>
 											</>
 										),
@@ -594,21 +594,21 @@ const DashboardTab: React.FC<object> = () => {
 																: 'auto',
 														opacity:
 															installing ===
-															'woocommerce-product-stock-alert'
+																'woocommerce-product-stock-alert'
 																? 0.6
 																: 1,
 													}}
 												>
 													{installing ===
-													'woocommerce-product-stock-alert'
+														'woocommerce-product-stock-alert'
 														? __(
-																'Installing...',
-																'multivendorx'
-															)
+															'Installing...',
+															'multivendorx'
+														)
 														: __(
-																'Install',
-																'multivendorx'
-															)}
+															'Install',
+															'multivendorx'
+														)}
 												</a>
 											</>
 										),
@@ -623,21 +623,27 @@ const DashboardTab: React.FC<object> = () => {
 				<Card
 					title={__('Need help getting started?', 'multivendorx')}
 				>
-					<div className="cards-wrapper quick-link">
-						{resources.map((res, index) => (
-							<div className="cards" key={index}>
-								<div className="header">
-									<i
-										className={`icon adminfont-${res.iconClass}`}
-									></i>
-									<a href={res.href} target="blank">
-										{__(res.linkText, 'multivendorx')}
-										<i className="adminfont-external"></i>
-									</a>
-								</div>
-								<h3>{__(res.title, 'multivendorx')}</h3>
-								<p>{__(res.desc, 'multivendorx')}</p>
-							</div>
+					<div className="quick-link">
+						{resources.map((res) => (
+							<ItemListUI
+								className="mini-card list"
+								border
+								items={[
+									{
+										title: __(res.title, 'multivendorx'),
+										desc: __(res.desc, 'multivendorx'),
+										icon: res.iconClass,
+										tags: (
+											<>
+												<a href={res.href} target="blank">
+													{__(res.linkText, 'multivendorx')}
+													<i className="adminfont-external"></i>
+												</a>
+											</>
+										),
+									},
+								]}
+							/>
 						))}
 					</div>
 				</Card>

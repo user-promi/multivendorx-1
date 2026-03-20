@@ -144,6 +144,7 @@
                 font-size: 1.25rem;
                 margin-bottom: 0.5rem;
                 border-radius: $border-radius-small;
+                color: $theme-color;
             }
 
             .item-title {
@@ -170,6 +171,9 @@
                     font-size: 0.813rem;
                     font-weight: 500;
                     color: $theme-color;
+                    display: flex;
+                    gap: 0.5rem;
+                    align-items: center;
                 }
             }
         }
@@ -197,6 +201,10 @@
 
     }
 
+    // admin dashboard quick link
+    &.list{
+        padding: 0;                      
+    }   
     &.price-list {
         .item {
             .details {

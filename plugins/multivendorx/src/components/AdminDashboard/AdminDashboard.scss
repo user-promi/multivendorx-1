@@ -105,61 +105,61 @@
     }
 }
 
-.cards-wrapper {
-    display: flex;
-    gap: 0.85rem;
-    justify-content: space-between;
+// .cards-wrapper {
+//     display: flex;
+//     gap: 0.85rem;
+//     justify-content: space-between;
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        padding: 0;
-        background: transparent;
-    }
+//     .header {
+//         display: flex;
+//         justify-content: space-between;
+//         padding: 0;
+//         background: transparent;
+//     }
 
-    .cards {
-        padding: 0.85rem;
-        border-radius: $border-radius-small;
-        background: transparent;
-        border: $border-light-small;
+//     .cards {
+//         padding: 0.85rem;
+//         border-radius: $border-radius-small;
+//         background: transparent;
+//         border: $border-light-small;
 
-        a {
-            font-size: 0.813rem;
-            font-weight: 500;
-            color: $theme-color;
-        }
+//         a {
+//             font-size: 0.813rem;
+//             font-weight: 500;
+//             color: $theme-color;
+//         }
 
-        h3 {
-            font-size: 0.83rem;
-            padding-bottom: 0.125rem;
-        }
+//         h3 {
+//             font-size: 0.83rem;
+//             padding-bottom: 0.125rem;
+//         }
 
-        img {
-            height: 1.75rem;
-            width: auto;
-        }
-    }
+//         img {
+//             height: 1.75rem;
+//             width: auto;
+//         }
+//     }
 
-    &.quick-link {
-        flex-direction: column;
-        gap: 0;
+//     &.quick-link {
+//         flex-direction: column;
+//         gap: 0;
 
-        .icon {
-            font-size: 1.313rem;
-            color: $theme-color;
-        }
+//         .icon {
+//             font-size: 1.313rem;
+//             color: $theme-color;
+//         }
 
-        .header a {
-            display: flex;
-            gap: 0.313rem;
-            align-items: center;
+//         .header a {
+//             display: flex;
+//             gap: 0.313rem;
+//             align-items: center;
 
-            i {
-                font-size: 0.813rem;
-            }
-        }
-    }
-}
+//             i {
+//                 font-size: 0.813rem;
+//             }
+//         }
+//     }
+// }
 
 // top items start (check product report and delete)
 .top-items {
