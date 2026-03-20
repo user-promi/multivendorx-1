@@ -246,8 +246,8 @@ const Table: React.FC< TableProps > = ( {
                     { isLoading ? (
                         Array.from( {
                             length: Number( query.per_page ) || 5,
-                        } ).map( ( _, rowIndex ) => (
-                            <tr className="admin-row">
+                        } ).map( ( row, rowIndex ) => (
+                            <tr className="admin-row" key = { row.id ?? rowIndex }>
                                 { enableBulkSelect && (
                                     <td className="admin-column select">
                                         <Skeleton width={ 20 } height={ 20 } />
@@ -256,7 +256,7 @@ const Table: React.FC< TableProps > = ( {
 
                                 { Object.entries( headers ).map(
                                     ( [ key ], colIndex ) => (
-                                        <td className="admin-column">
+                                        <td className="admin-column" key = { key || colIndex }>
                                             <Skeleton width="100%" />
                                         </td>
                                     )
@@ -286,7 +286,7 @@ const Table: React.FC< TableProps > = ( {
                                 { Object.entries( headers ).map(
                                     ( [ key, header ], colIndex ) => {
                                         const rowId = row.id;
-                                        const cell = row[ header.key ];
+                                        const cell = row[ header.key ] || row[ key ];
                                         if (
                                             typeof header.render === 'function'
                                         ) {

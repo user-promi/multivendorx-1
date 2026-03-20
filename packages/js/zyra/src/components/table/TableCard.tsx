@@ -17,8 +17,6 @@ export interface CategoryItem {
     count: number;
 }
 
-const defaultOnColumnsChange = ( showCols: string[], key?: string ): void => {};
-
 /**
  * Pure React TableCard
  */
@@ -28,7 +26,7 @@ const TableCard: React.FC< TableCardProps > = ( {
     headers = {},
     ids = [],
     isLoading = false,
-    onColumnsChange = defaultOnColumnsChange,
+    onColumnsChange,
     onSort,
     bulkActions = [],
     onBulkActionApply,
@@ -144,6 +142,7 @@ const TableCard: React.FC< TableCardProps > = ( {
      */
     const getShowCols = ( headersObj: TableCardProps[ 'headers' ] = {} ) => {
         return Object.entries( headersObj )
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
             .filter( ( [ _, config ] ) => config.visible !== false )
             .map( ( [ key ] ) => key );
     };
@@ -167,6 +166,7 @@ const TableCard: React.FC< TableCardProps > = ( {
             // Reset sorting if hiding currently sorted column
             if ( query.orderby === key ) {
                 const defaultSort = Object.entries( headers ).find(
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     ( [ _, config ] ) => config.defaultSort
                 );
 
@@ -181,7 +181,7 @@ const TableCard: React.FC< TableCardProps > = ( {
         }
 
         setShowCols( updated );
-        onColumnsChange( updated, key );
+        onColumnsChange?.( updated, key );
     };
 
     /**
@@ -203,7 +203,7 @@ const TableCard: React.FC< TableCardProps > = ( {
             ( [ key, config ] ) =>
                 showCols.includes( key ) && config.tableDisplay !== false // only include if table !== false (default true)
         )
-        .map( ( [ key, { csvDisplay, tableDisplay, ...rest } ] ) => ( {
+        .map( ( [ key, { ...rest } ] ) => ( {
             key,
             ...rest, // spread everything else except csv and table
         } ) );

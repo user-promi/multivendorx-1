@@ -20,7 +20,7 @@ type FormFieldValue =
     | number
     | boolean
     | Option[]
-    | Record< string, any >;
+    | Record< string, string | number | boolean >;
 type SettingFieldKey =
     | keyof FormField
     | 'value'

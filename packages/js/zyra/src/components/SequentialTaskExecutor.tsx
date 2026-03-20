@@ -143,7 +143,7 @@ const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {
 
         try {
             // ⭐ UPDATED: Payload now supports generic injection
-            const payload: Record< string, any > = {
+            const payload: Record< string, unknown > = {
                 action: currentTask.action,
             };
 
