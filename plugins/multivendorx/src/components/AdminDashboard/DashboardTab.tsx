@@ -231,7 +231,6 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'commission',
-			linkText: __('Join Discord', 'multivendorx'),
 		},
 		{
 			title: __('Verified stores only', 'multivendorx'),
@@ -240,7 +239,6 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'verification3',
-			linkText: __('Join Discord', 'multivendorx'),
 		},
 		{
 			title: __('Diversified marketplace', 'multivendorx'),
@@ -249,7 +247,6 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'marketplace',
-			linkText: __('Explore Docs', 'multivendorx'),
 		},
 		{
 			title: __('Vacation mode for stores', 'multivendorx'),
@@ -258,7 +255,6 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'vacation',
-			linkText: __('Explore Docs', 'multivendorx'),
 		},
 		{
 			title: __('Never run out of stock', 'multivendorx'),
@@ -267,7 +263,6 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'global-community',
-			linkText: __('Book Consultation', 'multivendorx'),
 		},
 		{
 			title: __('Autopilot notifications', 'multivendorx'),
@@ -276,7 +271,6 @@ const DashboardTab: React.FC<object> = () => {
 				'multivendorx'
 			),
 			icon: 'notification',
-			linkText: __('Join Discord', 'multivendorx'),
 		},
 	];
 
