@@ -70,7 +70,7 @@ const AddOrder = () => {
 			},
 		};
 		axios
-			.put(
+			.post(
 				`${appLocalizer.apiUrl}/wc/v3/customers/${selectedCustomer?.id}`,
 				payload,
 				{
@@ -98,7 +98,7 @@ const AddOrder = () => {
 			},
 		};
 		axios
-			.put(
+			.post(
 				`${appLocalizer.apiUrl}/wc/v3/customers/${selectedCustomer?.id}`,
 				payload,
 				{

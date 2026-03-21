@@ -203,7 +203,7 @@ const OrderDetails: React.FC = () => {
 
 	const handleStatusChange = (newStatus) => {
 		axios
-			.put(
+			.post(
 				`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
 				{ status: newStatus },
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
@@ -259,7 +259,7 @@ const OrderDetails: React.FC = () => {
 
 	const saveShipmentToOrder = () => {
 		axios
-			.put(
+			.post(
 				`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
 				{
 					meta_data: [

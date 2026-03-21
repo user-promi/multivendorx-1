@@ -229,7 +229,7 @@ const AllCoupon: React.FC = () => {
 		};
 
 		const request = formData.id
-			? axios.put(
+			? axios.post(
 					`${appLocalizer.apiUrl}/wc/v3/coupons/${formData.id}`,
 					payload,
 					{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }

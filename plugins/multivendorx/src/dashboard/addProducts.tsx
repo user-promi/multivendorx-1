@@ -132,7 +132,7 @@ const AddProduct = () => {
 		};
 
 		axios
-			.put(
+			.post(
 				`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
 				payload,
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }

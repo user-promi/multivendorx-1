@@ -56,7 +56,7 @@ const StoreReview: React.FC = () => {
 		}
 		try {
 			await axios
-				.put(
+				.post(
 					getApiLink(appLocalizer, `review/${selectedReview.id}`),
 					{
 						reply: replyText,
