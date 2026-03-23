@@ -31,12 +31,12 @@ type SettingsNavigatorProps = {
     settingContent: SettingContent[];
     className?: string;
     currentSetting: string;
-    getForm: ( settingId: string ) => ReactNode;
-    prepareUrl: ( settingId: string ) => string;
+    getForm: (settingId: string) => ReactNode;
+    prepareUrl: (settingId: string) => string;
     HeaderSection?: () => JSX.Element;
-    Link: React.ElementType< LinkProps >;
+    Link: React.ElementType<LinkProps>;
     settingName?: string;
-    onNavigate?: ( url: string ) => void;
+    onNavigate?: (url: string) => void;
     settingTitleSection?: React.ReactNode;
     menuIcon?: boolean;
     variant?: 'default' | 'compact' | 'card' | 'settings';
@@ -70,15 +70,15 @@ interface NavigatorHeaderProps {
     headerCustomContent?: React.ReactNode;
 }
 
-export const NavigatorHeader: React.FC< NavigatorHeaderProps > = ( {
+export const NavigatorHeader: React.FC<NavigatorHeaderProps> = ({
     headerIcon,
     headerTitle,
     headerDescription,
     showPremiumLink,
     buttons = [],
     headerCustomContent,
-} ) => {
-    if ( ! headerTitle && ! headerDescription ) {
+}) => {
+    if (!headerTitle && !headerDescription) {
         return null;
     }
 
@@ -86,76 +86,72 @@ export const NavigatorHeader: React.FC< NavigatorHeaderProps > = ( {
         <div className="title-section">
             <div className="title-wrapper">
                 <div className="title">
-                    { headerIcon && (
-                        <i
-                            className={ `title-icon adminfont-${ headerIcon }` }
-                        ></i>
-                    ) }
-                    { headerTitle }
+                    {headerIcon && (
+                        <i className={`title-icon adminfont-${headerIcon}`}></i>
+                    )}
+                    {headerTitle}
                 </div>
-                { headerDescription && (
-                    <div className="description">{ headerDescription }</div>
-                ) }
+                {headerDescription && (
+                    <div className="description">{headerDescription}</div>
+                )}
             </div>
 
-            { showPremiumLink && (
-                <a href={ showPremiumLink } className="tab pro-btn">
+            {showPremiumLink && (
+                <a href={showPremiumLink} className="tab pro-btn">
                     <i className="adminfont-pro-tag"></i>
                     Upgrade
                     <i className="adminfont-arrow-right"></i>
                 </a>
-            ) }
-            { buttons.length > 0 && (
+            )}
+            {buttons.length > 0 && (
                 <ButtonInputUI
-                    buttons={ buttons.map( ( button ) => ( {
+                    buttons={buttons.map((button) => ({
                         text: button.label,
                         icon: button.icon,
                         color: button.color,
                         onClick: button.onClick,
-                    } ) ) }
+                    }))}
                 />
-            ) }
-            { headerCustomContent && headerCustomContent }
+            )}
+            {headerCustomContent && headerCustomContent}
         </div>
     );
 };
 
-interface BreadcrumbProps< T > {
+interface BreadcrumbProps<T> {
     renderBreadcrumb?: () => React.ReactNode;
-    renderMenuItems?: ( items: T[] ) => React.ReactNode;
+    renderMenuItems?: (items: T[]) => React.ReactNode;
     settingContent?: T[];
     customContent?: React.ReactNode;
     action?: React.ReactNode;
 }
 
-const Breadcrumb = < T, >( {
+const Breadcrumb = <T,>({
     renderBreadcrumb,
     renderMenuItems,
     settingContent = [],
     customContent,
     action,
-}: BreadcrumbProps< T > ) => {
+}: BreadcrumbProps<T>) => {
     return (
         <>
-            { renderBreadcrumb && (
-                <div className="breadcrumbs">{ renderBreadcrumb() }</div>
-            ) }
+            {renderBreadcrumb && (
+                <div className="breadcrumbs">{renderBreadcrumb()}</div>
+            )}
 
-            { renderMenuItems && settingContent.length > 0 && (
+            {renderMenuItems && settingContent.length > 0 && (
                 <div className="tabs-wrapper">
                     <div className="tabs-item">
-                        { renderMenuItems( settingContent ) }
+                        {renderMenuItems(settingContent)}
                     </div>
 
-                    { customContent && (
-                        <div className="custom-content">{ customContent }</div>
-                    ) }
+                    {customContent && (
+                        <div className="custom-content">{customContent}</div>
+                    )}
 
-                    { action && (
-                        <div className="action-wrapper">{ action }</div>
-                    ) }
+                    {action && <div className="action-wrapper">{action}</div>}
                 </div>
-            ) }
+            )}
         </>
     );
 };
@@ -172,7 +168,7 @@ const isFolder = (
 ): item is SettingContent & { content: SettingContent[] } =>
     item.type === 'folder';
 
-const SettingsNavigator: React.FC< SettingsNavigatorProps > = ( {
+const SettingsNavigator: React.FC<SettingsNavigatorProps> = ({
     settingContent,
     className = '',
     currentSetting,
@@ -191,8 +187,8 @@ const SettingsNavigator: React.FC< SettingsNavigatorProps > = ( {
     headerIcon,
     showPremiumLink = false,
     customContent,
-} ) => {
-    const [ activeSetting, setActiveSetting ] = useState( currentSetting );
+}) => {
+    const [activeSetting, setActiveSetting] = useState(currentSetting);
     /**
      * Pre-calculates navigation maps for O(1) lookups during render and navigation.
      */
@@ -201,11 +197,11 @@ const SettingsNavigator: React.FC< SettingsNavigatorProps > = ( {
         siblingLevelMap,
         hierarchyPathMap,
         folderToFirstFileMap,
-    } = useMemo( () => {
-        const flatContent: Record< string, Content > = {};
-        const siblings: Record< string, SettingContent[] > = {};
-        const paths: Record< string, SettingContent[] > = {};
-        const firstFiles: Record< string, string > = {};
+    } = useMemo(() => {
+        const flatContent: Record<string, Content> = {};
+        const siblings: Record<string, SettingContent[]> = {};
+        const paths: Record<string, SettingContent[]> = {};
+        const firstFiles: Record<string, string> = {};
 
         const traverse = (
             items: SettingContent[],
@@ -213,77 +209,76 @@ const SettingsNavigator: React.FC< SettingsNavigatorProps > = ( {
         ) => {
             let firstFileInThisLevel: string | null = null;
 
-            items.forEach( ( item ) => {
-                if ( isFile( item ) ) {
+            items.forEach((item) => {
+                if (isFile(item)) {
                     const id = item.content.id;
-                    flatContent[ id ] = item.content;
-                    siblings[ id ] = items;
-                    paths[ id ] = [ ...currentPath, item ];
-                    if ( ! firstFileInThisLevel ) {
+                    flatContent[id] = item.content;
+                    siblings[id] = items;
+                    paths[id] = [...currentPath, item];
+                    if (!firstFileInThisLevel) {
                         firstFileInThisLevel = id;
                     }
-                } else if ( isFolder( item ) ) {
-                    const folderFirstFileId = traverse( item.content, [
+                } else if (isFolder(item)) {
+                    const folderFirstFileId = traverse(item.content, [
                         ...currentPath,
                         item,
-                    ] );
-                    if ( folderFirstFileId ) {
-                        firstFiles[ item.name || '' ] = folderFirstFileId;
-                        if ( ! firstFileInThisLevel ) {
+                    ]);
+                    if (folderFirstFileId) {
+                        firstFiles[item.name || ''] = folderFirstFileId;
+                        if (!firstFileInThisLevel) {
                             firstFileInThisLevel = folderFirstFileId;
                         }
                     }
                 }
-            } );
+            });
             return firstFileInThisLevel;
         };
 
-        traverse( settingContent );
+        traverse(settingContent);
         return {
             flatContentMap: flatContent,
             siblingLevelMap: siblings,
             hierarchyPathMap: paths,
             folderToFirstFileMap: firstFiles,
         };
-    }, [ settingContent ] );
+    }, [settingContent]);
 
-    const activeSettingPath = hierarchyPathMap[ activeSetting ] || [];
-    const activeFile = flatContentMap[ activeSetting ];
-    const currentMenu = siblingLevelMap[ activeSetting ] || settingContent;
+    const activeSettingPath = hierarchyPathMap[activeSetting] || [];
+    const activeFile = flatContentMap[activeSetting];
+    const currentMenu = siblingLevelMap[activeSetting] || settingContent;
     const showSubmenu = activeSettingPath.length > 1;
 
-    const navigate = ( settingId?: string ) => {
-        if ( ! settingId || settingId === activeSetting ) {
+    const navigate = (settingId?: string) => {
+        if (!settingId || settingId === activeSetting) {
             return;
         }
-        setActiveSetting( settingId );
-        const url = prepareUrl( settingId );
-        if ( onNavigate ) {
-            onNavigate( url );
+        setActiveSetting(settingId);
+        const url = prepareUrl(settingId);
+        if (onNavigate) {
+            onNavigate(url);
         } else {
-            window.history.pushState( null, '', url );
+            window.history.pushState(null, '', url);
         }
     };
 
-    const handleBreadcrumbClick = ( index: number, e: React.MouseEvent ) => {
+    const handleBreadcrumbClick = (index: number, e: React.MouseEvent) => {
         e.preventDefault();
-        if ( index === 0 ) {
+        if (index === 0) {
             const firstRootFile =
-                folderToFirstFileMap[ 'root' ] ||
-                Object.keys( flatContentMap )[ 0 ];
-            navigate( firstRootFile );
+                folderToFirstFileMap['root'] || Object.keys(flatContentMap)[0];
+            navigate(firstRootFile);
             return;
         }
 
-        const targetItem = activeSettingPath[ index - 1 ];
-        if ( ! targetItem ) {
+        const targetItem = activeSettingPath[index - 1];
+        if (!targetItem) {
             return;
         }
 
-        if ( isFile( targetItem ) ) {
-            navigate( targetItem.content.id );
-        } else if ( isFolder( targetItem ) ) {
-            navigate( folderToFirstFileMap[ targetItem.name || '' ] );
+        if (isFile(targetItem)) {
+            navigate(targetItem.content.id);
+        } else if (isFolder(targetItem)) {
+            navigate(folderToFirstFileMap[targetItem.name || '']);
         }
     };
 
@@ -292,112 +287,108 @@ const SettingsNavigator: React.FC< SettingsNavigatorProps > = ( {
             { name: settingName, id: 'root', type: 'root' },
         ];
 
-        activeSettingPath.forEach( ( item ) => {
-            crumbs.push( {
-                name: isFile( item )
-                    ? item.content.headerTitle
-                    : item.name || '',
-                id: isFile( item ) ? item.content.id : item.name || '',
+        activeSettingPath.forEach((item) => {
+            crumbs.push({
+                name: isFile(item) ? item.content.headerTitle : item.name || '',
+                id: isFile(item) ? item.content.id : item.name || '',
                 type: item.type,
-            } );
-        } );
+            });
+        });
 
-        return crumbs.map( ( crumb, index ) => (
-            <span key={ `${ crumb.id }-${ index }` }>
-                { index > 0 && ' / ' }
+        return crumbs.map((crumb, index) => (
+            <span key={`${crumb.id}-${index}`}>
+                {index > 0 && ' / '}
                 <Link
-                    to={ crumb.type === 'file' ? prepareUrl( crumb.id ) : '#' }
-                    onClick={ ( e ) => handleBreadcrumbClick( index, e ) }
+                    to={crumb.type === 'file' ? prepareUrl(crumb.id) : '#'}
+                    onClick={(e) => handleBreadcrumbClick(index, e)}
                 >
-                    { crumb.name }
+                    {crumb.name}
                 </Link>
             </span>
-        ) );
+        ));
     };
 
-    const renderSingleMenuItem = ( item: SettingContent, index: number ) => {
-        if ( isHeading( item ) ) {
+    const renderSingleMenuItem = (item: SettingContent, index: number) => {
+        if (isHeading(item)) {
             return (
-                <div key={ index } className="tab-heading">
-                    { item.content.headerTitle }
+                <div key={index} className="tab-heading">
+                    {item.content.headerTitle}
                 </div>
             );
         }
 
-        if ( isFile( item ) ) {
+        if (isFile(item)) {
             const setting = item.content;
             return (
                 <Link
-                    key={ setting.id }
-                    to={ prepareUrl( setting.id ) }
-                    className={ `tab ${
+                    key={setting.id}
+                    to={prepareUrl(setting.id)}
+                    className={`tab ${
                         activeSetting === setting.id ? 'active-tab' : ''
-                    }` }
-                    onClick={ ( e ) => {
-                        if ( e.button === 0 && ! e.metaKey && ! e.ctrlKey ) {
+                    }`}
+                    onClick={(e) => {
+                        if (e.button === 0 && !e.metaKey && !e.ctrlKey) {
                             e.preventDefault();
-                            navigate( setting.id );
+                            navigate(setting.id);
                         }
-                    } }
+                    }}
                 >
                     <p className="tab-name">
-                        { menuIcon && setting.headerIcon && (
+                        {menuIcon && setting.headerIcon && (
                             <i
-                                className={ `adminfont-${ setting.headerIcon }` }
+                                className={`adminfont-${setting.headerIcon}`}
                             ></i>
-                        ) }
-                        <span>{ setting.count }</span>
-                        { setting.headerTitle }
+                        )}
+                        <span>{setting.count}</span>
+                        {setting.headerTitle}
                     </p>
-                    { variant !== 'default' &&
+                    {variant !== 'default' &&
                         variant !== 'settings' &&
                         setting.headerDescription && (
                             <div className="des">
-                                { setting.headerDescription }
+                                {setting.headerDescription}
                             </div>
-                        ) }
+                        )}
                 </Link>
             );
         }
 
-        if ( isFolder( item ) ) {
-            const firstInFolderId = folderToFirstFileMap[ item.name || '' ];
+        if (isFolder(item)) {
+            const firstInFolderId = folderToFirstFileMap[item.name || ''];
             const isPartOfActivePath = activeSettingPath.some(
-                ( pathItem ) => pathItem === item
+                (pathItem) => pathItem === item
             );
 
             return (
                 <Link
-                    key={ index }
-                    to={ firstInFolderId ? prepareUrl( firstInFolderId ) : '#' }
-                    className={ `tab ${
-                        isPartOfActivePath ? 'active-tab' : ''
-                    }` }
-                    onClick={ ( e ) => {
+                    key={index}
+                    to={firstInFolderId ? prepareUrl(firstInFolderId) : '#'}
+                    className={`tab ${isPartOfActivePath ? 'active-tab' : ''}`}
+                    onClick={(e) => {
                         if (
                             firstInFolderId &&
                             e.button === 0 &&
-                            ! e.metaKey &&
-                            ! e.ctrlKey
+                            !e.metaKey &&
+                            !e.ctrlKey
                         ) {
                             e.preventDefault();
-                            navigate( firstInFolderId );
+                            navigate(firstInFolderId);
                         }
-                    } }
+                    }}
                 >
-                    <p className="tab-name">{ item.name }</p>
+                    <p className="tab-name">{item.name}</p>
                 </Link>
             );
         }
         return null;
     };
 
-    const renderAllMenuItems = ( items: SettingContent[] ) =>
-        items.map( renderSingleMenuItem );
+    const renderAllMenuItems = (items: SettingContent[]) =>
+        items.map(renderSingleMenuItem);
 
     const renderSettingHeaderInfo = () => {
         if (
-            ! activeFile ||
+            !activeFile ||
             activeFile.id === 'support' ||
             activeFile.hideSettingHeader
         ) {
@@ -406,7 +397,7 @@ const SettingsNavigator: React.FC< SettingsNavigatorProps > = ( {
 
         return (
             <SectionUI
-                title={ activeFile.settingTitle ?? activeFile.headerTitle }
+                title={activeFile.settingTitle ?? activeFile.headerTitle}
                 desc={
                     activeFile.settingSubTitle ?? activeFile.headerDescription
                 }
@@ -414,27 +405,27 @@ const SettingsNavigator: React.FC< SettingsNavigatorProps > = ( {
         );
     };
 
-    useEffect( () => {
-        if ( currentSetting ) {
-            setActiveSetting( currentSetting );
+    useEffect(() => {
+        if (currentSetting) {
+            setActiveSetting(currentSetting);
         } else {
-            const availableSettings = Object.keys( flatContentMap );
-            if ( availableSettings.length > 0 ) {
-                const firstAvailableId = availableSettings[ 0 ];
-                setActiveSetting( firstAvailableId );
-                const url = prepareUrl( firstAvailableId );
-                window.history.replaceState( null, '', url );
+            const availableSettings = Object.keys(flatContentMap);
+            if (availableSettings.length > 0) {
+                const firstAvailableId = availableSettings[0];
+                setActiveSetting(firstAvailableId);
+                const url = prepareUrl(firstAvailableId);
+                window.history.replaceState(null, '', url);
             }
         }
-    }, [ currentSetting, flatContentMap, prepareUrl ] );
+    }, [currentSetting, flatContentMap, prepareUrl]);
 
     return (
         <>
             <div
-                className={ `settings-wrapper ${ className }` }
-                data-template={ variant }
+                className={`settings-wrapper ${className}`}
+                data-template={variant}
             >
-                { settingTitleSection && <>{ settingTitleSection }</> }
+                {settingTitleSection && <>{settingTitleSection}</>}
 
                 <NavigatorHeader
                     headerIcon={
@@ -447,9 +438,9 @@ const SettingsNavigator: React.FC< SettingsNavigatorProps > = ( {
                             ? activeFile?.headerTitle
                             : headerTitle
                     }
-                    headerDescription={ headerDescription }
+                    headerDescription={headerDescription}
                     showPremiumLink={
-                        ! ZyraVariable.khali_dabba && showPremiumLink
+                        !ZyraVariable.khali_dabba && showPremiumLink
                             ? ZyraVariable.shop_url
                             : undefined
                     }
@@ -461,27 +452,25 @@ const SettingsNavigator: React.FC< SettingsNavigatorProps > = ( {
                             ? renderBreadcrumbLinks
                             : undefined
                     }
-                    renderMenuItems={ () =>
-                        renderAllMenuItems( settingContent )
-                    }
-                    settingContent={ settingContent }
-                    action={ action }
-                    customContent={ customContent }
+                    renderMenuItems={() => renderAllMenuItems(settingContent)}
+                    settingContent={settingContent}
+                    action={action}
+                    customContent={customContent}
                 />
                 <Container general>
-                    { HeaderSection && <HeaderSection /> }
+                    {HeaderSection && <HeaderSection />}
 
-                    { showSubmenu && (
+                    {showSubmenu && (
                         <div id="tabs-wrapper" className="tabs-wrapper">
                             <div className="tabs-item">
-                                { renderAllMenuItems( currentMenu ) }
+                                {renderAllMenuItems(currentMenu)}
                             </div>
                         </div>
-                    ) }
+                    )}
 
                     <div className="tab-content">
-                        { renderSettingHeaderInfo() }
-                        { getForm( activeSetting ) }
+                        {renderSettingHeaderInfo()}
+                        {getForm(activeSetting)}
                     </div>
                 </Container>
             </div>

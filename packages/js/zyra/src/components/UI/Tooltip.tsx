@@ -9,21 +9,21 @@ interface TooltipProps {
     className?: string;
 }
 
-const Tooltip: React.FC< TooltipProps > = ( {
+const Tooltip: React.FC<TooltipProps> = ({
     text,
     children,
     position = 'top',
     withArrow = true,
     className = '',
-} ) => {
+}) => {
     return (
         <div
-            className={ `tooltip-wrapper ${ position } ${
+            className={`tooltip-wrapper ${position} ${
                 withArrow ? 'with-arrow' : ''
-            } ${ className }` }
+            } ${className}`}
         >
-            { children }
-            <span className="tooltip-name">{ text }</span>
+            {children}
+            <span className="tooltip-name">{text}</span>
         </div>
     );
 };

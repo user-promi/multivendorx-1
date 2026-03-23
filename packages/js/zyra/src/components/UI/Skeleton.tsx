@@ -10,12 +10,12 @@ interface SkeletonProps {
     className?: string;
 }
 
-const Skeleton: React.FC< SkeletonProps > = ( {
+const Skeleton: React.FC<SkeletonProps> = ({
     variant = 'text',
     width,
     height,
     className = '',
-} ) => {
+}) => {
     const styles: React.CSSProperties = {
         width,
         height,
@@ -23,8 +23,8 @@ const Skeleton: React.FC< SkeletonProps > = ( {
 
     return (
         <span
-            className={ `skeleton skeleton-${ variant } ${ className }` }
-            style={ styles }
+            className={`skeleton skeleton-${variant} ${className}`}
+            style={styles}
         />
     );
 };

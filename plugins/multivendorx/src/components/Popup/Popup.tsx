@@ -18,6 +18,13 @@ interface PopupProps {
 	plugin?: string;
 }
 
+const formatModuleName = (name: string): string => {
+	return name
+		.split('-')
+		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ');
+};
+
 const proPopupContent = {
 	messages: [
 		{
@@ -243,7 +250,7 @@ const ShowProPopup: React.FC<PopupProps> = (props) => {
 						<h2>
 							{sprintf(
 								__('Activate %s', 'multivendorx'),
-								props.moduleName
+								formatModuleName(props.moduleName)
 							)}
 						</h2>
 						<p>
@@ -252,7 +259,7 @@ const ShowProPopup: React.FC<PopupProps> = (props) => {
 									'This feature is currently unavailable. To activate it, please enable the %s',
 									'multivendorx'
 								),
-								props.moduleName
+								formatModuleName(props.moduleName)
 							)}
 						</p>
 

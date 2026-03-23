@@ -13,7 +13,7 @@ interface ComponentStatusViewProps {
     className?: string;
 }
 
-const ComponentStatusView: React.FC< ComponentStatusViewProps > = ( {
+const ComponentStatusView: React.FC<ComponentStatusViewProps> = ({
     icon = 'info',
     iconColor = 'red',
     title,
@@ -23,20 +23,20 @@ const ComponentStatusView: React.FC< ComponentStatusViewProps > = ( {
     buttonTarget = '_self',
     onButtonClick,
     className = '',
-} ) => {
+}) => {
     return (
-        <div className={ `permission-wrapper ${ className }` }>
-            <i className={ `adminfont-${ icon } ${ iconColor }` }></i>
+        <div className={`permission-wrapper ${className}`}>
+            <i className={`adminfont-${icon} ${iconColor}`}></i>
 
-            <div className="title">{ title }</div>
+            <div className="title">{title}</div>
 
-            { desc && <div className="desc">{ desc }</div> }
+            {desc && <div className="desc">{desc}</div>}
 
-            { buttonText &&
-                ( buttonLink ? (
+            {buttonText &&
+                (buttonLink ? (
                     <a
-                        href={ buttonLink }
-                        target={ buttonTarget }
+                        href={buttonLink}
+                        target={buttonTarget}
                         rel={
                             buttonTarget === '_blank'
                                 ? 'noopener noreferrer'
@@ -44,21 +44,21 @@ const ComponentStatusView: React.FC< ComponentStatusViewProps > = ( {
                         }
                         className="admin-btn btn-purple"
                     >
-                        { buttonText }
+                        {buttonText}
                     </a>
                 ) : (
                     <div
                         className="admin-btn btn-purple"
                         role="button"
-                        onClick={ () => {
-                            if ( onButtonClick ) {
+                        onClick={() => {
+                            if (onButtonClick) {
                                 onButtonClick();
                             }
-                        } }
+                        }}
                     >
-                        { buttonText }
+                        {buttonText}
                     </div>
-                ) ) }
+                ))}
         </div>
     );
 };

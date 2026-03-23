@@ -14,8 +14,8 @@ interface Item {
     tags?: React.ReactNode;
     targetBlank?: boolean;
     action?: (item: Item, e?: React.MouseEvent) => void;
-    onApprove?: ( item: Item ) => void;
-    onReject?: ( item: Item ) => void;
+    onApprove?: (item: Item) => void;
+    onReject?: (item: Item) => void;
     desc?: string;
     value?: string;
     className?: string; // notification | checklist | feature-list | mini-card | price-list | documentation | badge-list
@@ -26,148 +26,146 @@ interface ItemListUIProps {
     className?: string;
     background?: boolean;
     border?: boolean;
-    onItemClick?: ( item: Item ) => void;
+    onItemClick?: (item: Item) => void;
 }
 
-export const ItemListUI: React.FC< ItemListUIProps > = ( {
+export const ItemListUI: React.FC<ItemListUIProps> = ({
     items,
     background,
     border,
     className,
     onItemClick,
-} ) => {
+}) => {
     return (
-        <div className={ `item-list ${ className || 'default' }` }>
-            { items &&
-                items.map( ( item ) => {
-                    const handleClick = ( e: React.MouseEvent ) => {
+        <div className={`item-list ${className || 'default'}`}>
+            {items &&
+                items.map((item) => {
+                    const handleClick = (e: React.MouseEvent) => {
                         e.stopPropagation();
-                        if ( item.action ) {
+                        if (item.action) {
                             item.action(item, e);
                         }
-                        if ( onItemClick ) {
-                            onItemClick( item );
+                        if (onItemClick) {
+                            onItemClick(item);
                         }
                     };
 
                     return (
                         <React.Fragment key={item.id}>
-                            { item.link ? (
+                            {item.link ? (
                                 <a
-                                    href={ item.link }
+                                    href={item.link}
                                     target={
                                         item.targetBlank ? '_blank' : '_self'
                                     }
-                                    className={ `item ${
+                                    className={`item ${
                                         background ? 'background' : ''
-                                    } ${ border ? 'border' : '' } ${
+                                    } ${border ? 'border' : ''} ${
                                         item.className || ''
-                                    }` }
-                                    onClick={ handleClick }
+                                    }`}
+                                    onClick={handleClick}
                                 >
-                                    { item.icon && (
+                                    {item.icon && (
                                         <i
-                                            className={ `item-icon adminfont-${ item.icon }` }
+                                            className={`item-icon adminfont-${item.icon}`}
                                         ></i>
-                                    ) }
-                                    { item.title }
+                                    )}
+                                    {item.title}
                                 </a>
                             ) : (
                                 <div
-                                    className={ `item ${
+                                    className={`item ${
                                         background ? 'background' : ''
-                                    } ${ border ? 'border' : '' } ${
+                                    } ${border ? 'border' : ''} ${
                                         item.className || ''
-                                    }` }
-                                    onClick={ () => {
-                                        item.action?.( item );
-                                        if ( onItemClick ) {
-                                            onItemClick( item );
+                                    }`}
+                                    onClick={() => {
+                                        item.action?.(item);
+                                        if (onItemClick) {
+                                            onItemClick(item);
                                         }
-                                    } }
+                                    }}
                                 >
-                                    { item.icon && (
+                                    {item.icon && (
                                         <i
-                                            className={ `item-icon adminfont-${ item.icon }` }
+                                            className={`item-icon adminfont-${item.icon}`}
                                         ></i>
-                                    ) }
-                                    { item.img && (
+                                    )}
+                                    {item.img && (
                                         <img
-                                            src={ item.img }
-                                            alt={ item.title || 'item image' }
+                                            src={item.img}
+                                            alt={item.title || 'item image'}
                                         />
-                                    ) }
+                                    )}
 
                                     <div className="details">
                                         <div className="item-title">
-                                            { item.title }
+                                            {item.title}
                                         </div>
-                                        { item.value && (
+                                        {item.value && (
                                             <div className="value">
-                                                { item.value }
+                                                {item.value}
                                             </div>
-                                        ) }
-                                        { item.desc && (
+                                        )}
+                                        {item.desc && (
                                             <div className="desc">
-                                                { item.desc }
+                                                {item.desc}
                                             </div>
-                                        ) }
+                                        )}
                                     </div>
 
-                                    { className === 'notification' && (
+                                    {className === 'notification' && (
                                         <>
                                             <i
                                                 className="check-icon adminfont-check color-green"
-                                                onClick={ ( e ) => {
+                                                onClick={(e) => {
                                                     e.stopPropagation();
-                                                    item.onApprove?.( item );
-                                                } }
+                                                    item.onApprove?.(item);
+                                                }}
                                             />
                                             <i
                                                 className="check-icon adminfont-cross color-red"
-                                                onClick={ ( e ) => {
+                                                onClick={(e) => {
                                                     e.stopPropagation();
-                                                    item.onReject?.( item );
-                                                } }
+                                                    item.onReject?.(item);
+                                                }}
                                             />
                                         </>
-                                    ) }
+                                    )}
 
-                                    { item.tags && (
-                                        <div className="tags">
-                                            { item.tags }
-                                        </div>
-                                    ) }
+                                    {item.tags && (
+                                        <div className="tags">{item.tags}</div>
+                                    )}
                                 </div>
-                            ) }
+                            )}
                         </React.Fragment>
                     );
-                } ) }
+                })}
         </div>
     );
 };
 
 const ItemList: FieldComponent = {
-    render: ( { field, value, onChange, canAccess } ) => {
-        const items = Array.isArray( value ) ? value : field.items || [];
+    render: ({ field, value, onChange, canAccess }) => {
+        const items = Array.isArray(value) ? value : field.items || [];
 
         return (
             <ItemListUI
-                items={ items }
-                className={ field.className }
-                background={ field.background }
-                border={ field.border }
-                onItemClick={ ( item ) => {
-                    if ( ! canAccess ) {
+                items={items}
+                className={field.className}
+                background={field.background}
+                border={field.border}
+                onItemClick={(item) => {
+                    if (!canAccess) {
                         return;
                     }
 
-                    if ( item.action ) {
-                        item.action( item );
+                    if (item.action) {
+                        item.action(item);
                     }
 
-                    onChange?.( item );
-                } }
+                    onChange?.(item);
+                }}
             />
         );
     },

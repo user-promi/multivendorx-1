@@ -375,22 +375,13 @@ const Stores = () => {
 											'multivendorx'
 										)}
 										onChange={(val) => {
-											if (!val || (Array.isArray(val) && val.length === 0)) {
-												// ✅ REMOVE case
-												handleRemoveImage('image');
-											} else {
-												// ✅ ADD / REPLACE case
-												const file = Array.isArray(val) ? val[0] : val;
+											const [file] = Array.isArray(val) ? val : [val];
+											const url = file?.url || '';
 
-												const url = typeof file === 'string' ? file : file?.url;
-
-												setFormData((prev) => ({
-													...prev,
-													image: url || '',
-												}));
-
-												setImagePreview(url || '');
-											}
+											setFormData((prev) => ({
+												...prev,
+												image: url,
+											}));
 										}}
 									/>
 								</FormGroup>

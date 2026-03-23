@@ -22,7 +22,7 @@ export type CardProps = {
     isLoading?: true;
 };
 
-const Card = ( {
+const Card = ({
     title,
     desc,
     className,
@@ -37,16 +37,16 @@ const Card = ( {
     badges = [],
     children,
     isLoading,
-}: CardProps ) => {
-    const [ bodyVisible, setBodyVisible ] = useState( defaultExpanded );
+}: CardProps) => {
+    const [bodyVisible, setBodyVisible] = useState(defaultExpanded);
 
     // Update bodyVisible if defaultExpanded changes
-    useEffect( () => {
-        setBodyVisible( defaultExpanded );
-    }, [ defaultExpanded ] );
+    useEffect(() => {
+        setBodyVisible(defaultExpanded);
+    }, [defaultExpanded]);
 
     const getToggleIcon = () => {
-        if ( iconName ) {
+        if (iconName) {
             return iconName;
         }
         return bodyVisible ? 'pagination-right-arrow' : 'keyboard-arrow-down';
@@ -54,29 +54,29 @@ const Card = ( {
 
     return (
         <div
-            { ...( id ? { id } : {} ) }
-            className={ `card-content ${ transparent ? 'transparent' : '' } ${
+            {...(id ? { id } : {})}
+            className={`card-content ${transparent ? 'transparent' : ''} ${
                 contentWidth ? 'content-width' : ''
-            } ${ className ? className : '' }` }
+            } ${className ? className : ''}`}
         >
-            { isLoading ? (
+            {isLoading ? (
                 <>
                     <div className="card-header">
                         <div className="left">
-                            <Skeleton width={ 100 } />
-                            <Skeleton width={ 160 } />
+                            <Skeleton width={100} />
+                            <Skeleton width={160} />
                         </div>
 
                         <div className="right">
                             <Skeleton
                                 variant="circular"
-                                width={ 24 }
-                                height={ 24 }
+                                width={24}
+                                height={24}
                             />
                         </div>
                     </div>
 
-                    { /* Body skeleton */ }
+                    {/* Body skeleton */}
                     <div className="card-body">
                         <Skeleton width="90%" />
                         <Skeleton width="85%" />
@@ -85,60 +85,60 @@ const Card = ( {
                 </>
             ) : (
                 <>
-                    { ( title || iconName || action || toggle ) && (
+                    {(title || iconName || action || toggle) && (
                         <div className="card-header">
                             <div className="left">
-                                { title && (
+                                {title && (
                                     <div className="title">
-                                        { title }
-                                        { badges.map( ( b, i ) => (
+                                        {title}
+                                        {badges.map((b, i) => (
                                             <span
-                                                key={ i }
-                                                className={ `admin-badge ${
+                                                key={i}
+                                                className={`admin-badge ${
                                                     b.color ?? ''
-                                                }` }
+                                                }`}
                                             >
-                                                { b.text }
+                                                {b.text}
                                             </span>
-                                        ) ) }
+                                        ))}
                                     </div>
-                                ) }
-                                { desc && <div className="des">{ desc }</div> }
+                                )}
+                                {desc && <div className="des">{desc}</div>}
                             </div>
 
                             <div className="right">
-                                { action }
+                                {action}
 
-                                { toggle && ! action && (
+                                {toggle && !action && (
                                     <i
-                                        className={ `adminfont-${ getToggleIcon() }` }
-                                        onClick={ () => {
-                                            setBodyVisible( ! bodyVisible );
+                                        className={`adminfont-${getToggleIcon()}`}
+                                        onClick={() => {
+                                            setBodyVisible(!bodyVisible);
                                             onIconClick?.();
-                                        } }
+                                        }}
                                     />
-                                ) }
+                                )}
 
-                                { iconName && ! toggle && ! action && (
+                                {iconName && !toggle && !action && (
                                     <i
-                                        className={ `adminfont-${ iconName }` }
-                                        onClick={ () => onIconClick?.() }
-                                        style={ {
+                                        className={`adminfont-${iconName}`}
+                                        onClick={() => onIconClick?.()}
+                                        style={{
                                             cursor: onIconClick
                                                 ? 'pointer'
                                                 : 'default',
-                                        } }
+                                        }}
                                     />
-                                ) }
+                                )}
                             </div>
                         </div>
-                    ) }
+                    )}
 
-                    { bodyVisible && children && (
-                        <div className="card-body">{ children }</div>
-                    ) }
+                    {bodyVisible && children && (
+                        <div className="card-body">{children}</div>
+                    )}
                 </>
-            ) }
+            )}
         </div>
     );
 };

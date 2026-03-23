@@ -47,6 +47,8 @@ class Frontend {
         add_action( 'template_redirect', array( $this, 'set_multivendorx_user_cookies' ), 10 );
         add_action( 'template_redirect', array( $this, 'multivendorx_store_visitors_stats' ), 20 );
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
+        // user information before registration.
+        add_filter('multivendorx_add_content_before_form', array( $this, 'add_woocommerce_login_from' ));
     }
 
 	/**
@@ -296,6 +298,9 @@ class Frontend {
      * @return string
      */
     public function redirect_store_dashboard( $redirect ) {
+        if ( Utill::is_store_registration_page() ) {
+            return $redirect;
+        }
         if ( in_array( 'store_owner', MultiVendorX()->current_user->roles, true ) && MultiVendorX()->active_store ) {
             return get_permalink( MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) );
         }
@@ -466,4 +471,22 @@ class Frontend {
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
+
+    public function add_woocommerce_login_from( $content ) {
+        ob_start();
+        if ( is_user_logged_in() ) {
+            ?>
+            <p class="woocommerce">
+                Welcome <?php echo esc_html( MultiVendorX()->current_user->display_name ); ?>
+            </p>
+            <?php
+        } else {
+            echo '<div class="multivendorx-registration woocommerce">';
+            echo '<div class="woocommerce-notices-wrapper"><div class="woocommerce-error">  <div class="wc-block-components-notice-banner__content"><strong> Kindly login before registration </strong></div></div></div>';
+            wc_get_template( 'myaccount/form-login.php' );
+            echo '</div>';
+        }
+
+        return ob_get_clean();
+    }
 }

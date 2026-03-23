@@ -28,20 +28,20 @@ interface BasicInputProps {
     size?: string;
     minNumber?: number;
     maxNumber?: number;
-    onChange: ( value: InputValue ) => void;
-    onClick?: ( e: MouseEvent< HTMLInputElement > ) => void;
-    onMouseOver?: ( e: MouseEvent< HTMLInputElement > ) => void;
-    onMouseOut?: ( e: MouseEvent< HTMLInputElement > ) => void;
-    onFocus?: ( e: FocusEvent< HTMLInputElement > ) => void;
-    onBlur?: ( e: FocusEvent< HTMLInputElement > ) => void;
-    onKeyDown?: ( e: React.KeyboardEvent< HTMLInputElement > ) => void;
+    onChange: (value: InputValue) => void;
+    onClick?: (e: MouseEvent<HTMLInputElement>) => void;
+    onMouseOver?: (e: MouseEvent<HTMLInputElement>) => void;
+    onMouseOut?: (e: MouseEvent<HTMLInputElement>) => void;
+    onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
+    onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     rangeUnit?: string;
     preText?: string;
     postText?: string;
     multiple?: boolean;
 }
 
-export const BasicInputUI = forwardRef< HTMLInputElement, BasicInputProps >(
+export const BasicInputUI = forwardRef<HTMLInputElement, BasicInputProps>(
     (
         {
             id,
@@ -75,25 +75,25 @@ export const BasicInputUI = forwardRef< HTMLInputElement, BasicInputProps >(
         return (
             <>
                 <div
-                    className={ `setting-form-input input-wrapper ${
+                    className={`setting-form-input input-wrapper ${
                         wrapperClass || ''
-                    } ` }
-                    style={ { width: size || '' } }
+                    } `}
+                    style={{ width: size || '' }}
                 >
-                    { preText && (
+                    {preText && (
                         <span
                             className="pre"
-                            dangerouslySetInnerHTML={ { __html: preText } }
+                            dangerouslySetInnerHTML={{ __html: preText }}
                         />
-                    ) }
+                    )}
 
                     <input
-                        ref={ ref }
-                        id={ id }
-                        className={ `basic-input ${ inputClass ?? '' }` }
-                        type={ type }
-                        name={ name }
-                        placeholder={ placeholder }
+                        ref={ref}
+                        id={id}
+                        className={`basic-input ${inputClass ?? ''}`}
+                        type={type}
+                        name={name}
+                        placeholder={placeholder}
                         min={
                             type === 'number' || type === 'range'
                                 ? minNumber
@@ -104,77 +104,79 @@ export const BasicInputUI = forwardRef< HTMLInputElement, BasicInputProps >(
                                 ? maxNumber
                                 : undefined
                         }
-                        value={ value }
-                        onChange={ ( e ) => onChange( e.target.value ) }
-                        onClick={ onClick }
-                        onMouseOver={ onMouseOver }
-                        onMouseOut={ onMouseOut }
-                        onFocus={ onFocus }
-                        onBlur={ onBlur }
-                        onKeyDown={ onKeyDown }
-                        disabled={ disabled }
-                        readOnly={ readOnly }
-                        required={ required }
-                        multiple={ multiple }
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
+                        onClick={onClick}
+                        onMouseOver={onMouseOver}
+                        onMouseOut={onMouseOut}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
+                        onKeyDown={onKeyDown}
+                        disabled={disabled}
+                        readOnly={readOnly}
+                        required={required}
+                        multiple={multiple}
                     />
 
-                    { type === 'color' && (
+                    {type === 'color' && (
                         <label htmlFor="" className="color-value">
-                         {inputLabel && <span className="title"> {inputLabel} </span> }
-                            { value ?? '' }
-                        </label>                            
-                    ) }
+                            {inputLabel && (
+                                <span className="title"> {inputLabel} </span>
+                            )}
+                            {value ?? ''}
+                        </label>
+                    )}
 
-                    { postText && (
+                    {postText && (
                         <span
                             className="parameter"
-                            dangerouslySetInnerHTML={ { __html: postText } }
+                            dangerouslySetInnerHTML={{ __html: postText }}
                         />
-                    ) }
+                    )}
                 </div>
 
-                { type === 'range' && (
+                {type === 'range' && (
                     <output className="settings-metabox-description">
-                        { value ?? '' }
-                        { rangeUnit }
+                        {value ?? ''}
+                        {rangeUnit}
                     </output>
-                ) }
+                )}
             </>
         );
     }
 );
 
 const BasicInput: FieldComponent = {
-    render: ( { field, value, onChange, canAccess } ) => (
+    render: ({ field, value, onChange, canAccess }) => (
         <BasicInputUI
-            wrapperClass={ field.wrapperClass }
-            inputClass={ field.class }
-            id={ field.id }
-            name={ field.name }
-            type={ field.type }
-            placeholder={ field.placeholder }
-            inputLabel={ field.inputLabel }
-            rangeUnit={ field.rangeUnit }
-            minNumber={ field.minNumber ?? 0 }
-            maxNumber={ field.maxNumber ?? 50 }
-            preText={ field.preText }
-            postText={ field.postText }
-            value={ value }
-            size={ field.size }
-            multiple={ field.multiple }
-            readOnly={ field.readOnly }
-            onChange={ ( val ) => {
-                if ( ! canAccess ) {
+            wrapperClass={field.wrapperClass}
+            inputClass={field.class}
+            id={field.id}
+            name={field.name}
+            type={field.type}
+            placeholder={field.placeholder}
+            inputLabel={field.inputLabel}
+            rangeUnit={field.rangeUnit}
+            minNumber={field.minNumber ?? 0}
+            maxNumber={field.maxNumber ?? 50}
+            preText={field.preText}
+            postText={field.postText}
+            value={value}
+            size={field.size}
+            multiple={field.multiple}
+            readOnly={field.readOnly}
+            onChange={(val) => {
+                if (!canAccess) {
                     return;
                 }
-                onChange( val );
-            } }
+                onChange(val);
+            }}
         />
     ),
 
-    validate: ( field, value ) => {
-        if ( field.required && ! value?.[ field.key ] ) {
-            return `${ field.label } is required`;
+    validate: (field, value) => {
+        if (field.required && !value?.[field.key]) {
+            return `${field.label} is required`;
         }
 
         return null;

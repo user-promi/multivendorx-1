@@ -27,81 +27,78 @@ interface ShortCodeTableProps {
     icon?: string; // Icon as string
 }
 
-const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
+const ShortCodeTableUI: React.FC<ShortCodeTableProps> = (props) => {
     const { options, optionLabel } = props;
 
-    const handleCopy = ( text: string ) => {
-        navigator.clipboard.writeText( text );
+    const handleCopy = (text: string) => {
+        navigator.clipboard.writeText(text);
     };
 
     const headers = optionLabel;
 
     return (
         <>
-            { options.map( ( option, index ) => (
-                <div
-                    className="shortcode-wrapper"
-                    key={ option.label || index }
-                >
+            {options.map((option, index) => (
+                <div className="shortcode-wrapper" key={option.label || index}>
                     <div className="shortcode-details">
                         <div className="shortcode-title">
                             { option.name } - <CopyToClipboardUI text={option.label}/>                            
                         </div>
 
-                        <div className="des">{ option.desc }</div>
+                        <div className="des">{option.desc}</div>
                     </div>
 
                     <div className="shortcode-table">
                         <table>
-                            { option.arguments &&
+                            {option.arguments &&
                                 option.arguments.length > 0 && (
                                     <thead>
                                         <tr>
-                                            { headers.map( ( header, idx ) => (
-                                                <th key={ idx }>{ header }</th>
-                                            ) ) }
+                                            {headers.map((header, idx) => (
+                                                <th key={idx}>{header}</th>
+                                            ))}
                                         </tr>
                                     </thead>
-                                ) }
+                                )}
                             <tbody>
-                                { Array.isArray( option.arguments ) &&
+                                {Array.isArray(option.arguments) &&
                                 option.arguments.length > 0 ? (
-                                    option.arguments.map( ( arg, index ) => (
-                                        <tr key={ index }>
+                                    option.arguments.map((arg, index) => (
+                                        <tr key={index}>
                                             <td>
-                                                <b>{ arg.attribute }</b>
+                                                <b>{arg.attribute}</b>
                                             </td>
-                                            <td>{ arg.description }</td>
-                                            <td>{ arg.accepted }</td>
-                                            <td>{ arg.default }</td>
+                                            <td>{arg.description}</td>
+                                            <td>{arg.accepted}</td>
+                                            <td>{arg.default}</td>
                                         </tr>
-                                    ) )
+                                    ))
                                 ) : (
                                     <tr>
                                         <td
-                                            colSpan={ headers.length }
+                                            colSpan={headers.length}
                                             className="no-args"
                                         >
                                             No arguments required
                                         </td>
                                     </tr>
-                                ) }
+                                )}
                             </tbody>
                         </table>
                     </div>
                 </div>
-            ) ) }
+            ))}
         </>
     );
 };
 
 const ShortCodeTable: FieldComponent = {
-    render: ( { field } ) => (
+    render: ({ field }) => (
         <ShortCodeTableUI
-            key={ field.key }
-            icon={ field.icon }
-            options={ Array.isArray( field.options ) ? field.options : [] }
-            optionLabel={ field.optionLabel } // Label header for the options column
+            key={field.key}
+            icon={field.icon}
+            options={Array.isArray(field.options) ? field.options : []}
+            optionLabel={field.optionLabel} // Label header for the options column
         />
     ),
     validate: () => null,
