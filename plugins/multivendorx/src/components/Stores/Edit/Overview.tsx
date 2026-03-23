@@ -21,6 +21,7 @@ import {
 	TextAreaUI,
 	ChoiceToggleUI,
 	ItemListUI,
+	TableCard,
 } from 'zyra';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './LatestReview';
@@ -170,6 +171,28 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 	const handleCloseForm = () => {
 		setVacation(false);
 	}
+
+	// business hours table (dynamic and remove)
+	const scheduleColumns = {
+		day: {
+			label: 'Day',
+		},
+		time: {
+			label: 'Working Hours',
+		},
+		break: {
+			label: 'Break',
+		},
+	};
+	const scheduleRows = [
+		{ day: 'Mon', time: '9:00 AM–7:00 PM', break: 'Lunch' },
+		{ day: 'Tue', time: '9:00 AM–7:00 PM', break: 'Lunch' },
+		{ day: 'Wed', time: '9:00 AM–7:00 PM', break: '-' },
+		{ day: 'Thu', time: '9:00 AM–7:00 PM', break: 'Lunch' },
+		{ day: 'Fri', time: '9:00 AM–6:00 PM', break: 'Lunch' },
+		{ day: 'Sat', time: '10:00 AM–4:00 PM', break: '-' },
+		{ day: 'Sun', time: 'Closed', break: '-' },
+	];
 	return (
 		<>
 			<Container>
@@ -363,20 +386,20 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							/>
 						</FormGroupWrapper>
 						<ButtonInputUI
-								buttons={[
-									{
-										icon: 'vacation',
-										text: __('Change plan', 'multivendorx'),
-										// onClick: () => setVacation(true),
-									},
-									{
-										icon: 'vacation',
-										text: __('Assign Manually', 'multivendorx'),
-										color: 'purple'
-										// onClick: () => setVacation(true),
-									},
-								]}
-							/>
+							buttons={[
+								{
+									icon: 'vacation',
+									text: __('Change plan', 'multivendorx'),
+									// onClick: () => setVacation(true),
+								},
+								{
+									icon: 'vacation',
+									text: __('Assign Manually', 'multivendorx'),
+									color: 'purple'
+									// onClick: () => setVacation(true),
+								},
+							]}
+						/>
 					</Card>
 					<Card
 						title={__('Store status', 'multivendorx')}
@@ -542,31 +565,11 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								'multivendorx'
 							)}
 						>
-							<div className="store-time-wrapper">
-								<div className="card-wrapper">
-									<div className="time-wrapper">
-										<div className="des">
-											{__(
-												'Current status',
-												'multivendorx'
-											)}
-										</div>
-										<div className="time">
-											<span className="admin-badge green">
-												{__('Open', 'multivendorx')}
-											</span>
-										</div>
-									</div>
-									<div className="time-wrapper">
-										<div className="des">
-											{__('Next opening', 'multivendorx')}
-										</div>
-										<div className="time">
-											{__('Mon 9:00 AM', 'multivendorx')}
-										</div>
-									</div>
-								</div>
-							</div>
+							<TableCard
+								headers={scheduleColumns}
+								rows={scheduleRows}
+								showMenu={false}
+							/>
 						</Card>
 					)}
 
