@@ -380,7 +380,7 @@ const TableCard: React.FC< TableCardProps > = ( {
                 </div>
             ) }
 
-            { selectedIds.length <= 2 && filters.length > 0 && (
+            { selectedIds.length <= 1 && filters.length > 0 && (
                 <RealtimeFilters
                     filters={ filters }
                     query={ query.filter || {} }
@@ -397,7 +397,7 @@ const TableCard: React.FC< TableCardProps > = ( {
                 />
             ) }
 
-            { selectedIds.length > 2 &&
+            { selectedIds.length > 1 &&
                 ( bulkActions.length > 0 || onSelectCsvDownloadApply ) && (
                     <BulkActionDropdown
                         actions={ bulkActions }
