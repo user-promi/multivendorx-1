@@ -1507,7 +1507,7 @@ class Install {
 
         $previous_spmv_settings = get_option( 'mvx_spmv_pages_tab_settings', array() );
         if ( ! empty( $previous_spmv_settings['is_singleproductmultiseller'] ) ) {
-            $general_settings['store_selling_mode'] = 'single_product_multiple_vendor';
+            $general_settings['store_selling_mode'] = 'shared_listing';
         }
 
 		if ( ! empty( $previous_spmv_settings['singleproductmultiseller_show_order'] ) ) {

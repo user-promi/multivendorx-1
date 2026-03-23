@@ -214,6 +214,7 @@ const AddProduct = () => {
 	const totalCount = checklistValues.length;
 
 	const productFields = appLocalizer.settings_databases_value?.['product-preferencess']?.products_fields || [];
+	const typeFields = appLocalizer.settings_databases_value?.['product-preferencess']?.type_options || [];
 
 	return (
 		<>
@@ -519,7 +520,9 @@ const AddProduct = () => {
 						product,
 						setProduct,
 						handleChange,
-						modules
+						productFields,
+						typeFields,
+						modules,
 					)}
 				</Column>
 
@@ -530,6 +533,7 @@ const AddProduct = () => {
 						product,
 						setProduct,
 						handleChange,
+						productFields,
 						setErrorMsg
 					)}
 

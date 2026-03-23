@@ -13,7 +13,7 @@ import {
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const ShippingCard = ({ product, setProduct, handleChange }) => {
+const ShippingCard = ({ product, setProduct, handleChange, productFields, typeFields }) => {
 	const { modules } = useModules();
 	const [shippingClasses, setShippingClasses] = useState([]);
 	const [productType, setProductType] = useState('physical');
@@ -32,8 +32,6 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 				setShippingClasses(options);
 			});
 	}, []);
-
-	const typeFields = appLocalizer.settings_databases_value?.['product-preferencess']?.type_options || [];
 
 	return (
 		<Card
@@ -182,7 +180,7 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 addFilter(
 	'multivendorx_add_product_middle_section',
 	'multivendorx/shipping',
-	(content, product, setProduct, handleChange) => {
+	(content, product, setProduct, handleChange, productFields, typeFields) => {
 		return (
 			<>
 				{content}
@@ -190,6 +188,8 @@ addFilter(
 						product={product}
 						setProduct={setProduct}
 						handleChange={handleChange}
+						productFields={productFields}
+						typeFields={typeFields}
 					/>
 			</>
 		);

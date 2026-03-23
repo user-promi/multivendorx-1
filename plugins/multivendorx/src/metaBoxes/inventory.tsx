@@ -117,25 +117,22 @@ const Inventory = ({ product, setProduct, handleChange }) => {
 	);
 };
 
-const productFields =
-	appLocalizer.settings_databases_value?.['product-preferencess']?.products_fields || [];
-
-if (productFields.includes('inventory')) {
-	addFilter(
-		'multivendorx_add_product_middle_section',
-		'multivendorx/inventory',
-		(content, product, setProduct, handleChange) => {
-			return (
-				<>
-					{content}
+addFilter(
+	'multivendorx_add_product_middle_section',
+	'multivendorx/inventory',
+	(content, product, setProduct, handleChange, productFields) => {
+		return (
+			<>
+				{content}
+				{productFields.includes('inventory') &&
 					<Inventory
 						product={product}
 						setProduct={setProduct}
 						handleChange={handleChange}
 					/>
-				</>
-			);
-		},
-		10
-	);
-}
+				}
+			</>
+		);
+	},
+	10
+);
