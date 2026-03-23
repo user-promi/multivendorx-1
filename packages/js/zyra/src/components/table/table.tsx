@@ -247,7 +247,7 @@ const Table: React.FC< TableProps > = ( {
                         Array.from( {
                             length: Number( query.per_page ) || 5,
                         } ).map( ( row, rowIndex ) => (
-                            <tr className="admin-row" key = { row.id ?? rowIndex }>
+                            <tr className="admin-row" key = { rowIndex ?? row.id }>
                                 { enableBulkSelect && (
                                     <td className="admin-column select">
                                         <Skeleton width={ 20 } height={ 20 } />

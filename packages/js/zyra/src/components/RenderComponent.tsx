@@ -67,7 +67,7 @@ interface DependentCondition {
 interface PopupProps {
     moduleName?: string;
     settings?: string;
-    plugin?: string | {};
+    plugin?: string | Record<string, unknown>;
 }
 
 interface RenderProps {
@@ -176,7 +176,7 @@ const RenderComponent: React.FC< RenderProps > = ( {
         proFeaturesEnabled: boolean,
         hasDependentModule?: string,
         hasDependentSetting?: string,
-        hasDependentPlugin?: string
+        // hasDependentPlugin?: string
     ) => {
         if ( proFeaturesEnabled && ! ZyraVariable?.khali_dabba ) {
             return false;
@@ -371,8 +371,8 @@ const RenderComponent: React.FC< RenderProps > = ( {
     const renderFieldInternal = (
         field: InputField,
         parentField: InputField,
-        value: any,
-        onChange: ( key: string, value: any ) => void,
+        value: SettingValue | Record<string, unknown>,
+        onChange: ( key: string, value: SettingValue | Record<string, unknown> ) => void,
         canAccess: boolean
     ): JSX.Element | null => {
         if (field.component) {
@@ -385,14 +385,14 @@ const RenderComponent: React.FC< RenderProps > = ( {
 
         const Render = fieldComponent.render;
 
-        const handleInternalChange = ( val: any ) => {
+        const handleInternalChange = ( val: SettingValue ) => {
             if ( ! isCompositeField( parentField ) ) {
                 onChange( field.key, val );
                 return;
             }
 
             onChange( parentField.key, {
-                ...( value ?? {} ),
+                ...( value ?? ({} as Record<string, unknown>) ),
                 [ field.key ]: val,
             } );
         };
@@ -410,13 +410,13 @@ const RenderComponent: React.FC< RenderProps > = ( {
                 // appLocalizer={appLocalizer}
                 modules={ modules }
                 settings={ setting }
-                onOptionsChange={ ( opts: any[] ) => {
+                onOptionsChange={ ( opts: Record<string, unknown>[] ) => {
                     settingChanged.current = true;
                     updateSetting( `${ field.key }_options`, opts );
                 } }
                 onBlocked={ (
                     type: 'pro' | 'module' | 'plugin',
-                    payload?: string | {}
+                    payload?: string | Record<string, unknown>
                 ) => {
                     if ( type === 'pro' ) {
                         openProPopup();
@@ -433,7 +433,7 @@ const RenderComponent: React.FC< RenderProps > = ( {
         );
     };
 
-    const validateField = ( field: InputField, value: any ): string | null => {
+    const validateField = ( field: InputField, value: SettingValue | Record<string, unknown> ): string | null => {
         const component = FIELD_REGISTRY[ field.type ];
         if ( ! component?.validate ) {
             return null;
