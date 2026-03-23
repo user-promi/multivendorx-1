@@ -1,0 +1,70 @@
+{
+  "apiVersion": 2,
+  "name": "multivendorx/store-business-hours",
+  "title": "Store Business Hours",
+  "category": "multivendorx",
+  "icon": "clock",
+  "description": "Display the store’s business hours so customers know when the vendor is available.",
+  "keywords": ["business hours", "store hours", "opening hours"],
+  "editorScript": "file:./index.js",
+  "supports": {
+    "align": true,
+    "alignWide": false,
+    "html": false,
+    "color": {
+      "text": true,
+      "__experimentalDefaultControls": {
+        "text": true
+      }
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "__experimentalDefaultControls": {
+        "fontSize": true
+      }
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "__experimentalDefaultControls": {
+        "margin": true,
+        "padding": true
+      }
+    },
+    "__experimentalBorder": {
+      "color": true,
+      "style": true,
+      "width": true,
+      "__experimentalDefaultControls": {
+        "color": true,
+        "style": true,
+        "width": true
+      }
+    }
+  },
+  "styles": [
+    {
+      "name": "default",
+      "label": "Default",
+      "isDefault": true,
+      "attributes": {
+        "showIcon": true
+      }
+    },
+    {
+      "name": "no-icon",
+      "label": "Text Only",
+      "attributes": {
+        "showIcon": false
+      }
+    },
+    {
+      "name": "compact",
+      "label": "Compact",
+      "attributes": {
+        "showIcon": true
+      }
+    }
+  ]
+}
