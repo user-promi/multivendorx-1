@@ -344,7 +344,39 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							>
 								{__('3 (pkoro)', 'multivendorx')}
 							</FormGroup>
+							<ItemListUI
+								className="mini-card"
+								background
+								items={[
+									{
+										title: __(
+											'Membership Plan',
+											'multivendorx'
+										),
+										desc: __(
+											'Renews on Dec 15, 2024',
+											'multivendorx'
+										),
+										value: __('Gold Plan', 'multivendorx'),
+									},
+								]}
+							/>
 						</FormGroupWrapper>
+						<ButtonInputUI
+								buttons={[
+									{
+										icon: 'vacation',
+										text: __('Change plan', 'multivendorx'),
+										// onClick: () => setVacation(true),
+									},
+									{
+										icon: 'vacation',
+										text: __('Assign Manually', 'multivendorx'),
+										color: 'purple'
+										// onClick: () => setVacation(true),
+									},
+								]}
+							/>
 					</Card>
 					<Card
 						title={__('Store status', 'multivendorx')}
@@ -537,43 +569,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</div>
 						</Card>
 					)}
-					<Card
-						title={__('Membership Plan', 'multivendorx')}
-						iconName="external icon"
-					>
-						<ItemListUI
-							className="mini-card"
-							background
-							items={[
-								{
-									title: __(
-										'Active Plan',
-										'multivendorx'
-									),
-									desc: __(
-										'Renews on Dec 15, 2024',
-										'multivendorx'
-									),
-									value: __('Gold Plan', 'multivendorx'),
-								},
-							]}
-						/>
-						<ButtonInputUI
-							buttons={[
-								{
-									icon: 'vacation',
-									text: __('Change plan', 'multivendorx'),
-									// onClick: () => setVacation(true),
-								},
-								{
-									icon: 'vacation',
-									text: __('Assign Manually', 'multivendorx'),
-									color: 'purple'
-									// onClick: () => setVacation(true),
-								},
-							]}
-						/>
-					</Card>
+
 					{/* <Card
 						title={__('Store staff', 'multivendorx')}
 						iconName="external icon"

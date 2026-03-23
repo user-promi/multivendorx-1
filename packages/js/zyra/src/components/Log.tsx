@@ -7,6 +7,7 @@ import { getApiLink } from '../utils/apiService';
 import '../styles/web/Log.scss';
 import { FieldComponent, ZyraVariable } from './fieldUtils';
 import { ButtonInputUI } from './ButtonInput';
+import { CopyToClipboardUI } from './UI/CopyToClipboard';
 
 // Types
 interface LogProps {
@@ -84,7 +85,7 @@ export const LogUI: React.FC<LogProps> = ({
     };
 
     const handleCopyToClipboard = (
-        event: React.MouseEvent<HTMLButtonElement>
+        event: React.MouseEvent
     ) => {
         event.preventDefault();
         const logText = logData
@@ -141,34 +142,12 @@ export const LogUI: React.FC<LogProps> = ({
                     <p className="log-viewer-text">
                         {ZyraVariable.tab_name} - log viewer
                     </p>
-                    <ButtonInputUI
-                        position="left"
-                        buttons={[
-                            {
-                                icon: 'copy',
-                                text: copyBtnText,
-                                color: 'purple',
-                                onClick: (e) => {
-                                    handleCopyToClipboard?.(e);
-                                },
-                                children: (
-                                    <span
-                                        className={
-                                            !copied
-                                                ? 'tooltip'
-                                                : 'tooltip tool-clip'
-                                        }
-                                    >
-                                        {!copied ? (
-                                            'Copy to clipboard'
-                                        ) : (
-                                            <i className="adminfont-success-notification"></i>
-                                        )}
-                                        {!copied ? '' : 'Copied'}
-                                    </span>
-                                ),
-                            },
-                        ]}
+                    
+                    <CopyToClipboardUI
+                        variant="button"
+                        copyButtonLabel={copyBtnText}
+                        copiedLabel="Copied"
+                        onCopy={handleCopyToClipboard}
                     />
                 </div>
                 <div className="wrapper-body">

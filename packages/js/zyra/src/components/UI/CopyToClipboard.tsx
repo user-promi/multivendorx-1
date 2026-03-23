@@ -6,28 +6,60 @@ import '../../styles/web/UI/CopyToClipboard.scss';
 // Types
 interface CopyToClipboardProps {
     text?: string;
+    variant?: 'code' | 'button';
+    copyButtonLabel?: string;
+    copiedLabel?: string;
+    onCopy?: () => string | void;
 }
 
 export const CopyToClipboardUI: React.FC<CopyToClipboardProps> = ({
-    text
+    text,
+    variant = 'code',
+    copyButtonLabel = 'Copy',
+    copiedLabel = 'Copied!',
+    onCopy,
 }) => {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = async () => {
-        if (!text) return;
-
         try {
-            await navigator.clipboard.writeText(text);
-            setCopied(true);
+            let valueToCopy = text;
+            if (onCopy) {
+                const result = onCopy();
+                if (typeof result === 'string') {
+                    valueToCopy = result;
+                }
+            }
 
+            if (!valueToCopy) return;
+
+            await navigator.clipboard.writeText(valueToCopy);
+            setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             console.error('Copy failed', err);
         }
     };
 
+    if (variant === 'button') {
+        return (
+            <div className="buttons-wrapper">
+                <div
+                    className="admin-btn btn-purple"
+                    onClick={handleCopy}
+                >
+                    <i className="adminfont-vendor-form-copy"></i>
+
+                    <span className="copy-success">
+                        {copied ? copiedLabel : copyButtonLabel}
+                    </span>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className={`copy-to-clipboard`}>
+        <div className="copy-to-clipboard">
             <code>{text}</code>
 
             <i
@@ -47,6 +79,10 @@ const CopyToClipboard: FieldComponent = {
     render: ({ field }) => (
         <CopyToClipboardUI
             text={field.text}
+            variant={field.variant || 'code'}
+            copyButtonLabel={field.copyButtonLabel}
+            copiedLabel={field.copiedLabel}
+            onCopy={field.onCopy}
         />
     ),
     validate: () => null,
