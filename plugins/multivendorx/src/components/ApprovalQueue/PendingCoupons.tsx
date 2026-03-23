@@ -13,7 +13,7 @@ import {
 	InfoItem,
 } from 'zyra';
 
-import { setSession, toWcIsoDate } from '@/services/commonFunction';
+import { getUrl, setSession, toWcIsoDate } from '@/services/commonFunction';
 import { useRef } from '@wordpress/element';
 type StoreOption = {
 	label: string;
@@ -35,6 +35,7 @@ const PendingCoupons: React.FC<object> = () => {
 		axios
 			.get(getApiLink(appLocalizer, 'store'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: { options: true },
 			})
 			.then((response) => {
 				const options = (response.data || []).map((store) => ({
@@ -111,6 +112,7 @@ const PendingCoupons: React.FC<object> = () => {
 				return (
 					<InfoItem
 						title={row.code}
+						titleLink={getUrl(row.id, 'coupon') || ''}
 						descriptions={[
 							{
 								label: __('By', 'multivendorx'),

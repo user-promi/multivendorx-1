@@ -66,6 +66,7 @@ const PendingRefund: React.FC<{ setCount?: (count: number) => void }> = ({
 		axios
 			.get(getApiLink(appLocalizer, 'store'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: { options: true },
 			})
 			.then((response) => {
 				const options = (response.data || []).map(
