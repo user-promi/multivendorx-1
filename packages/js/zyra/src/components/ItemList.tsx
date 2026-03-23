@@ -18,7 +18,7 @@ interface Item {
     onReject?: ( item: Item ) => void;
     desc?: string;
     value?: string;
-    className?: string; // notification | checklist | feature-list | mini-card | price-list
+    className?: string; // notification | checklist | feature-list | mini-card | price-list | documentation | badge-list
 }
 
 interface ItemListUIProps {
@@ -51,7 +51,7 @@ export const ItemListUI: React.FC< ItemListUIProps > = ( {
                     };
 
                     return (
-                        <React.Fragment key={item.id || index}>
+                        <React.Fragment key={item.id}>
                             { item.link ? (
                                 <a
                                     href={ item.link }

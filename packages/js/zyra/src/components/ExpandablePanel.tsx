@@ -15,6 +15,8 @@ import FormGroup from './UI/FormGroup';
 import { ButtonInputUI } from './ButtonInput';
 import FormGroupWrapper from './UI/FormGroupWrapper';
 import { BasicInputUI } from './BasicInput';
+import { PopupUI } from './Popup';
+import { ItemListUI } from './ItemList';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -346,7 +348,7 @@ const PanelHeader: React.FC = () => {
             ) }
 
             <div
-                className="details"
+                className="header-details"
                 onClick={ () =>
                     dispatch( {
                         type: 'SET_ACTIVE_TAB',
@@ -715,70 +717,51 @@ const PanelControls: React.FC = () => {
             { /* 3-dot dropdown — non-custom, enabled methods */ }
             { ! method.isCustom && isOn && (
                 <div className="icon-wrapper">
-                    <i
-                        className="admin-icon adminfont-more-vertical"
-                        onClick={ ( e ) => {
-                            e.stopPropagation();
-                            dispatch( {
-                                type: 'SET_OPEN_DROPDOWN',
-                                id:
-                                    state.openDropdown === method.id
-                                        ? null
-                                        : method.id,
-                            } );
-                        } }
-                    />
-                    { state.openDropdown === method.id && (
-                        <div
-                            className="dropdown"
-                            onClick={ ( e ) => e.stopPropagation() }
-                        >
-                            <div className="dropdown-body">
-                                <ul>
-                                    { method.disableBtn && hasFields && (
-                                        <li
-                                            onClick={ () => {
-                                                dispatch( {
-                                                    type: 'SET_ACTIVE_TAB',
-                                                    id: isOpen
-                                                        ? null
-                                                        : method.id,
-                                                } );
-                                                dispatch( {
-                                                    type: 'SET_OPEN_DROPDOWN',
-                                                    id: null,
-                                                } );
-                                            } }
-                                        >
-                                            <span className="item">
-                                                <i className="adminfont-setting" />{ ' ' }
-                                                Settings
-                                            </span>
-                                        </li>
-                                    ) }
-                                    <li
-                                        className="delete"
-                                        onClick={ () => {
-                                            handleChange(
-                                                method.id,
-                                                'enable',
-                                                false
-                                            );
-                                            dispatch( {
+                    <PopupUI position="menu-dropdown" toggleIcon="more-vertical">
+                            <ItemListUI
+                                items={[
+                                    ...(method.disableBtn && hasFields
+                                        ? [
+                                            {
+                                                id: 'settings',
+                                                title:'Settings',
+                                                icon: 'setting',
+                                                action: (item, e) => {
+                                                    e?.stopPropagation();
+
+                                                    dispatch({
+                                                        type: 'SET_ACTIVE_TAB',
+                                                        id: isOpen ? null : method.id,
+                                                    });
+
+                                                    dispatch({
+                                                        type: 'SET_OPEN_DROPDOWN',
+                                                        id: null,
+                                                    });
+                                                },
+                                            },
+                                        ]
+                                        : []),
+
+                                    {
+                                        id: 'disable',
+                                        title: 'Disable',
+                                        icon: 'eye-blocked',
+                                        className: 'delete',
+                                        action: (item, e) => {
+                                            e?.stopPropagation();
+
+                                            handleChange(method.id, 'enable', false);
+
+                                            dispatch({
                                                 type: 'SET_OPEN_DROPDOWN',
                                                 id: null,
-                                            } );
-                                        } }
-                                    >
-                                        <div className="item">
-                                            <i className="adminfont-eye-blocked" />{ ' ' }
-                                            Disable
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    ) }
+                                            });
+                                        },
+                                    },
+                                ]}
+                            />
+                    </PopupUI>
                 </div>
             ) }
         </div>

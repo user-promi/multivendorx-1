@@ -202,9 +202,10 @@
     }
 
     // admin dashboard quick link
-    &.list{
-        padding: 0;                      
-    }   
+    &.list {
+        padding: 0;
+    }
+
     &.price-list {
         .item {
             .details {
@@ -241,26 +242,48 @@
             margin: 0;
             transition: all .5s ease;
 
-            .item-title{
+            .item-title {
                 font-size: 1rem;
             }
-            .desc{
+
+            .desc {
                 padding-top: 0.25rem;
             }
 
-            &:hover{
+            &:hover {
                 background: #f3f3f3;
             }
         }
     }
 
     // dashboard Documentation
-    &.documentation{
+    &.documentation {
         width: calc(33% - 0.25rem);
         box-sizing: border-box;
         margin-bottom: 0.5rem;
     }
 
+    // badge list (add new zone list)
+    &.badge-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.625rem;
+
+        .item {
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 0.95;
+            padding: 0.45rem;
+            border-radius: $border-radius-small;
+            border: 0.063rem solid;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            width: fit-content;
+            background: map-get(map-get($color-palette, yellow), light-color);
+            color: map-get(map-get($color-palette, yellow), color);
+        }
+    }
 
     .border {
         border: $border-light-small;

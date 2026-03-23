@@ -54,8 +54,8 @@ class Admin {
 
             // Include only allowed zones.
             $formatted[] = array(
-                'name' => $zone_name,
-                'url'  => admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=' . $zone_id ),
+                'title' => $zone_name,
+                'link'  => admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=' . $zone_id ),
             );
         }
 

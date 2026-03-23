@@ -8,6 +8,7 @@ type FormGroupProps = {
     htmlFor?: string;
     desc?: React.ReactNode;
     icon?: string;
+    iconRight?: string;
     children: React.ReactNode;
     className?: string;
     cols?: 1 | 2 | 3 | 4;
@@ -21,6 +22,7 @@ const FormGroup: React.FC< FormGroupProps > = ( {
     label,
     desc = '',
     icon,
+    iconRight,
     htmlFor = '',
     children,
     className = '',
@@ -39,11 +41,12 @@ const FormGroup: React.FC< FormGroupProps > = ( {
                 <label className="settings-form-label" htmlFor={ htmlFor }>
                     <div className="title">
                         { icon && (
-                            <i
-                                className={ `adminfont-${ icon } form-icon` }
-                            ></i>
+                            <i className={ `adminfont-${ icon } form-icon` } />
                         ) }
                         { label }
+                        { iconRight && (
+                            <i className={ `adminfont-${ iconRight } form-icon` } />
+                        ) }
                     </div>
                     { labelDes && (
                         <div className="settings-metabox-description">

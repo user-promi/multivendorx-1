@@ -13,19 +13,8 @@
         .shortcode-title {
             padding-bottom: 0.625rem;
             font-size: 1.125rem;
-
-            code {
-                font-weight: 500;
-                color: $theme-color;
-                background: $theme-background-color;
-                padding: 0.313rem;
-                margin-right: 0.625rem;
-            }
-
-            i {
-                font-size: 1rem;
-                cursor: pointer;
-            }
+            display: flex;
+            gap: 0.5rem;
         }
     }
 

@@ -120,12 +120,10 @@ class StripeConnect {
                 ),
                 array(
                     'key'        => 'redirect_url',
-                    'type'       => 'notice',
+                    'type'       => 'copy-to-clipboard',
                     'label'      => __( 'Redirect url', 'multivendorx' ),
-                    'title'      => __( 'Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx' ),
-                    'message'    => $redirect_url,
-                    'noticeType' => 'info',
-					'display'    => 'notice',
+                    'text'    => $redirect_url,
+                    'desc'      => __( 'Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx' ),
                 ),
             ),
         );

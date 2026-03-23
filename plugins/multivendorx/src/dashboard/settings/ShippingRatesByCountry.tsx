@@ -151,13 +151,13 @@ const ShippingRatesByCountry: React.FC = () => {
 
 	return (
 		<>
-			{error && 
+			{/* {error && 
 				<Notice
 					type="error"
 					message={ error }
 					displayPosition="notice"
 				/>
-			}
+			} */}
 			<FormGroup>
 			<DynamicRowSetting
 				keyName="country-rates"

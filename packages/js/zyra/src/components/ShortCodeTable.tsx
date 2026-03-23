@@ -4,6 +4,7 @@ import React from 'react';
 // Internal dependencies
 import '../styles/web/ShortCodeTable.scss';
 import { FieldComponent } from './fieldUtils';
+import { CopyToClipboardUI } from './UI/CopyToClipboard';
 
 // Types
 interface ArgumentRow {
@@ -44,13 +45,7 @@ const ShortCodeTableUI: React.FC< ShortCodeTableProps > = ( props ) => {
                 >
                     <div className="shortcode-details">
                         <div className="shortcode-title">
-                            { option.name } - <code>{ option.label }</code>
-                            <i
-                                className="adminfont-vendor-form-copy"
-                                onClick={ () =>
-                                    option.label && handleCopy( option.label )
-                                }
-                            ></i>
+                            { option.name } - <CopyToClipboardUI text={option.label}/>                            
                         </div>
 
                         <div className="des">{ option.desc }</div>

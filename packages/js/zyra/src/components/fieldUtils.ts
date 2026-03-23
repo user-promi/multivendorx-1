@@ -353,6 +353,7 @@ import Tabs from './Tabs';
 import TextArea from './TextArea';
 import ChoiceToggle from './ChoiceToggle';
 import RandomInputKeyGenerator from './RandomInputKeyGenerator';
+import CopyToClipboard from './UI/CopyToClipboard';
 
 export const FIELD_REGISTRY: Record< string, FieldComponent > = {
     // BasicInput
@@ -428,4 +429,6 @@ export const FIELD_REGISTRY: Record< string, FieldComponent > = {
     google_map: MapProvider,
     mapbox: MapProvider,
     'random-input-key-generator': RandomInputKeyGenerator,
+
+     'copy-to-clipboard': CopyToClipboard,
 };
