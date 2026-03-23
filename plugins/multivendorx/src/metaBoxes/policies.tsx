@@ -67,15 +67,17 @@ const Policies = ({ product, setProduct, handleChange }) => {
 addFilter(
 	'multivendorx_add_product_middle_section',
 	'multivendorx/policies',
-	(content, product, setProduct, handleChange) => {
+	(content, product, setProduct, handleChange, productFields) => {
 		return (
 			<>
 				{content}
-				<Policies
-					product={product}
-					setProduct={setProduct}
-					handleChange={handleChange}
-				/>
+				{productFields.includes('policies') && 
+					<Policies
+						product={product}
+						setProduct={setProduct}
+						handleChange={handleChange}
+					/>
+				}
 			</>
 		);
 	},

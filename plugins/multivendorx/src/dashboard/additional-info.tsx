@@ -58,7 +58,7 @@ const AdditionalInformation = () => {
 	// Auto-save to backend
 	const autoSave = (updatedData: { [key: string] }) => {
 		axios
-			.put(getApiLink(appLocalizer, `store/${id}`), updatedData, {
+			.post(getApiLink(appLocalizer, `store/${id}`), updatedData, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((res) => {

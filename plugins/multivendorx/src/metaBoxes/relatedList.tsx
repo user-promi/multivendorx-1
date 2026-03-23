@@ -28,15 +28,17 @@ const RelatedList = ({ product, setProduct, handleChange }) => {
 addFilter(
 	'multivendorx_add_product_middle_section',
 	'multivendorx/related_list',
-	(content, product, setProduct, handleChange) => {
+	(content, product, setProduct, handleChange, productFields) => {
 		return (
 			<>
 				{content}
-				<RelatedList
-					product={product}
-					setProduct={setProduct}
-					handleChange={handleChange}
-				/>
+				{productFields.includes('linked_product') && 
+					<RelatedList
+						product={product}
+						setProduct={setProduct}
+						handleChange={handleChange}
+					/>
+				}
 			</>
 		);
 	},

@@ -817,7 +817,7 @@ class Install {
 
                     Start setup!",
             'store_selling_mode'             => 'default',
-            'spmv_show_order'                => 'min_price',
+            'shared_listing_display'         => 'min_price',
             'more_offers_display_position'   => 'after',
         );
         update_option( Utill::MULTIVENDORX_SETTINGS['onboarding'], $general_settings );
@@ -1507,18 +1507,18 @@ class Install {
 
         $previous_spmv_settings = get_option( 'mvx_spmv_pages_tab_settings', array() );
         if ( ! empty( $previous_spmv_settings['is_singleproductmultiseller'] ) ) {
-            $general_settings['store_selling_mode'] = 'single_product_multiple_vendor';
+            $general_settings['store_selling_mode'] = 'shared_listing';
         }
 
 		if ( ! empty( $previous_spmv_settings['singleproductmultiseller_show_order'] ) ) {
 			if ( 'min-price' === $previous_spmv_settings['singleproductmultiseller_show_order'] ) {
-				$general_settings['spmv_show_order'] = 'min_price';
+				$general_settings['shared_listing_display'] = 'min_price';
 			}
 			if ( 'max-price' === $previous_spmv_settings['singleproductmultiseller_show_order'] ) {
-				$general_settings['spmv_show_order'] = 'max_price';
+				$general_settings['shared_listing_display'] = 'max_price';
 			}
 			if ( 'top-rated-vendor' === $previous_spmv_settings['singleproductmultiseller_show_order'] ) {
-				$general_settings['spmv_show_order'] = 'top_rated_store';
+				$general_settings['shared_listing_display'] = 'top_rated_store';
 			}
 		}
 
