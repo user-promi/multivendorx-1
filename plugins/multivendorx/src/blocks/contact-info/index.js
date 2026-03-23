@@ -9,7 +9,6 @@ import {
 	PanelRow,
 } from '@wordpress/components';
 import {
-	InnerBlocks,
 	InspectorControls,
 	useBlockProps,
 } from '@wordpress/block-editor';
