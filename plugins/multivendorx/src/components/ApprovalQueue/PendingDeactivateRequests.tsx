@@ -84,6 +84,7 @@ const PendingDeactivateRequests: React.FC<object> = () => {
 					page: query.paged,
 					per_page: query.per_page,
 					deactivate: true,
+					filter_status:'active'
 				},
 			})
 			.then((response) => {
