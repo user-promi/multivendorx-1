@@ -194,12 +194,20 @@ a {
   &:hover {
     background: #e7e6e6cf;
   }
+
+  // for icon background theme color
+  &.theme-background {
+    border-radius: $border-radius-small;
+    background: $theme-background-color;
+    color: $theme-color;
+  }
 }
 
 // all colors loop
 $index: 1;
 
 @each $name, $style in $color-palette {
+
   // color name with background (.red & .admin-color1)
   .#{$name},
   .admin-color#{$index} {

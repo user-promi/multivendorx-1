@@ -21,6 +21,7 @@ export interface PopupProps {
     position?: PopupPosition;
     open?: boolean;
     toggleIcon?: string;
+    tooltipName?: string;
     header?: PopupHeaderProps;
     footer?: React.ReactNode;
     width?: number | string;
@@ -38,6 +39,7 @@ export const PopupUI = forwardRef< HTMLDivElement, PopupProps >(
             position = 'slide-right-to-left',
             open: controlledOpen,
             toggleIcon,
+            tooltipName = "Menu",
             width = 14,
             height = 'fit-content',
             className = '',
@@ -97,7 +99,7 @@ export const PopupUI = forwardRef< HTMLDivElement, PopupProps >(
                 ref={ wrapperRef }
             >
                 { toggleIcon && (
-                    <Tooltip text="Menu" position="bottom">
+                    <Tooltip text={tooltipName} position="bottom">
                         <i
                             onClick={ handleToggle }
                             className={ `popup-icon adminfont-${ toggleIcon }` }
@@ -156,6 +158,7 @@ const Popup: FieldComponent = {
         <PopupUI
             position={ field.position }
             toggleIcon={ field.toggleIcon }
+            tooltipName={ field.tooltipName }
             width={ field.width }
             height={ field.height }
             className={ field.className }
