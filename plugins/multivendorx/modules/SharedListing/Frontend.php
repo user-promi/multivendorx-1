@@ -89,7 +89,7 @@ class Frontend {
     public function get_excluded_product() {
         global $wpdb;
 
-        $priority = MultiVendorX()->setting->get_setting( 'spmv_show_order', 'min_price' );
+        $priority = MultiVendorX()->setting->get_setting( 'shared_listing_display', 'min_price' );
 
         $mapped_ids  = array();
         $primary_ids = array();

@@ -182,7 +182,7 @@ export default {
 			],
 		},
 		{
-			key: 'spmv_show_order',
+			key: 'shared_listing_display',
 			type: 'choice-toggle',
 			label: __(
 				'Co-listed product/listings display priority',
