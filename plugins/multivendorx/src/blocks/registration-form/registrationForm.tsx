@@ -117,12 +117,12 @@ const RegistrationForm = () => {
 	};
 
 	useEffect(() => {
-		const backup = sessionStorage.getItem('formBackup');
+		const backup = sessionStorage.getItem('multivendorxRegistrationForm');
 
 		if (backup) {
 			try {
 				const parsed = JSON.parse(backup);
-				setInputs(parsed); // ✅ restore into FormViewer
+				setInputs(parsed); // restore into FormViewer
 			} catch (e) {
 				console.error('Invalid backup data');
 			}
@@ -132,7 +132,7 @@ const RegistrationForm = () => {
 	const onSubmit = useCallback(
 		(submittedFormData: Record<string, string | number | boolean>) => {
 			sessionStorage.setItem(
-				'formBackup',
+				'multivendorxRegistrationForm',
 				JSON.stringify(submittedFormData)
 			);
 			setInputs(submittedFormData);
@@ -174,7 +174,7 @@ const RegistrationForm = () => {
 						),
 					});
 
-					sessionStorage.removeItem('formBackup');
+					sessionStorage.removeItem('multivendorxRegistrationForm');
 					if (response.data.redirect !== '') {
 						window.open(response.data.redirect, '_self');
 					}
