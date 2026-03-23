@@ -64,7 +64,7 @@ export const Announcements: React.FC = () => {
 		axios
 			.get(getApiLink(appLocalizer, 'store'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: { filter_status: 'active' },
+				params: { options: true },
 			})
 			.then((response) => {
 				const stores = response.data || [];

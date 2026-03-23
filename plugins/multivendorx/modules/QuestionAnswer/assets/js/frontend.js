@@ -83,4 +83,21 @@ jQuery(document).ready(function ($) {
 			}
 		);
 	}
+
+	$(document).on('click', '.qna-vote', function () {
+		const $btn = $(this);
+		const $item = $btn.closest('.qna-item');
+		const qnaId = $item.data('qna');
+		const type = $btn.data('type');
+		$.post(qnaFrontend.ajaxurl, {
+			action: 'qna_vote',
+			qna_id: qnaId,
+			type: type,
+			nonce: qnaFrontend.nonce,
+		}, function (res) {
+			if (res.success) {
+				loadQuestions('');
+			} 
+		});
+	});
 });

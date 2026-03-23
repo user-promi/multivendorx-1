@@ -17,7 +17,8 @@ import {
 	CategoryCount,
 	InfoItem,
 } from 'zyra';
-import { formatLocalDate } from '@/services/commonFunction';
+import { dashNavigate, formatLocalDate } from '@/services/commonFunction';
+import { useNavigate } from 'react-router-dom';
 
 type StoreQnaRow = {
 	id: number;
@@ -44,6 +45,7 @@ const CustomerQuestions: React.FC = () => {
 	const [answer, setAnswer] = useState('');
 	const [qna, setQna] = useState('');
 	const [saving, setSaving] = useState(false);
+	const navigate = useNavigate();
 
 	// Save answer
 	const handleSaveAnswer = () => {
@@ -101,7 +103,13 @@ const CustomerQuestions: React.FC = () => {
 			render: (row: any) => (
 				<InfoItem
 					title={row.product_name}
-					titleLink={row.product_link}
+					onClick={() =>
+						dashNavigate(navigate, [
+							'products',
+							'edit',
+							String(row.id),
+						])
+					}
 					avatar={{
 						image: row.product_image,
 						iconClass: row.product_image ? '' : 'single-product',
