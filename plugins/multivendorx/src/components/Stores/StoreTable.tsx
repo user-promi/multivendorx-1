@@ -208,7 +208,7 @@ const StoreTable: React.FC = () => {
 		}
 
 		axios({
-			method: 'PUT',
+			method: 'POST',
 			url: getApiLink(appLocalizer, `store/${selectedIds[0]}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { action, ids: selectedIds },
