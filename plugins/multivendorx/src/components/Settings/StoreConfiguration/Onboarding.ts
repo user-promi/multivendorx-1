@@ -169,9 +169,9 @@ export default {
 					value: 'default',
 				},
 				{
-					key: 'single_product_multiple_vendor',
+					key: 'shared_listing',
 					label: __('Shared listing', 'multivendorx'),
-					value: 'single_product_multiple_vendor',
+					value: 'shared_listing',
 				},
 				{
 					key: 'franchise',
@@ -191,7 +191,7 @@ export default {
 			dependent: {
 				key: 'store_selling_mode',
 				set: true,
-				value: 'single_product_multiple_vendor',
+				value: 'shared_listing',
 			},
 			desc: __(
 				'Choose which version of co-listed products will be shown as the main listing on the shop page (e.g., top-rated store, min / max priced product).',
@@ -231,7 +231,7 @@ export default {
 			dependent: {
 				key: 'store_selling_mode',
 				set: true,
-				value: 'single_product_multiple_vendor',
+				value: 'shared_listing',
 			},
 			postText: __(' single page product/listings tabs.', 'multivendorx'),
 			options: [

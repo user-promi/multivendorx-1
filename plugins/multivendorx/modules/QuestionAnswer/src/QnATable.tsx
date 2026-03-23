@@ -124,7 +124,7 @@ const Qna: React.FC = () => {
 		}
 
 		axios
-			.put(
+			.post(
 				getApiLink(appLocalizer, `qna/${selectedQna.id}`),
 				{
 					question_text: qna,

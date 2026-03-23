@@ -79,7 +79,7 @@ const ShippingRatesByCountry: React.FC = () => {
 	const autoSave = async (updatedRates: ShippingCountryRate[]) => {
 		setRates(updatedRates);
 		try {
-			await axios.put(
+			await axios.post(
 				getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
 				{
 					multivendorx_shipping_rates: JSON.stringify(updatedRates),

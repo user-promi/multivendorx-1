@@ -13,7 +13,7 @@ import {
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const ShippingCard = ({ product, setProduct, handleChange }) => {
+const ShippingCard = ({ product, setProduct, handleChange, productFields, typeFields }) => {
 	const { modules } = useModules();
 	const [shippingClasses, setShippingClasses] = useState([]);
 	const [productType, setProductType] = useState('physical');
@@ -44,11 +44,15 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 				<FormGroup>
 					<ChoiceToggleUI
 						options={[
-							{
-								key: 'physical',
-								value: 'physical',
-								label: __('Physical', 'multivendorx'),
-							},
+							...(!typeFields.includes('virtual')
+								? [
+										{
+											key: 'physical',
+											value: 'physical',
+											label: __('Physical', 'multivendorx'),
+										},
+								]
+								: []),
 							{
 								key: 'downloadable',
 								value: 'downloadable',
@@ -72,7 +76,7 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 						}}
 					/>
 				</FormGroup>
-				{productType === 'physical' && (
+				{productType === 'physical' && !typeFields.includes('virtual') && (
 					<>
 						{/* Weight & Shipping class */}
 						<FormGroup
@@ -176,17 +180,17 @@ const ShippingCard = ({ product, setProduct, handleChange }) => {
 addFilter(
 	'multivendorx_add_product_middle_section',
 	'multivendorx/shipping',
-	(content, product, setProduct, handleChange) => {
+	(content, product, setProduct, handleChange, productFields, typeFields) => {
 		return (
 			<>
 				{content}
-				{!product.virtual && (
 					<ShippingCard
 						product={product}
 						setProduct={setProduct}
 						handleChange={handleChange}
+						productFields={productFields}
+						typeFields={typeFields}
 					/>
-				)}
 			</>
 		);
 	},

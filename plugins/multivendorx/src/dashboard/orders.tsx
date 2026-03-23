@@ -409,6 +409,16 @@ const Orders: React.FC = () => {
 		})
 	}
 
+	const providers =
+		appLocalizer.settings_databases_value.shipping.shipping_providers || [];
+
+	const formattedProviders = providers.map((provider) => ({
+		value: provider,
+		label: provider
+			.replace(/[-_]/g, ' ')
+			.replace(/\b\w/g, (char) => char.toUpperCase()),
+	}));
+
 	const downloadCSVByQuery = (query: QueryProps) => {
 		axios
 			.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
@@ -553,7 +563,7 @@ const Orders: React.FC = () => {
 							type="single-select"
 							name="provider"
 							value={formData.provider || ''}
-							options={appLocalizer.settings_databases_value.shipping.shipping_provides}
+							options={formattedProviders}
 							onChange={(selected) =>
 								handleChange('provider', selected)
 							}

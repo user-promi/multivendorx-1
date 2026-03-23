@@ -120,15 +120,17 @@ const Inventory = ({ product, setProduct, handleChange }) => {
 addFilter(
 	'multivendorx_add_product_middle_section',
 	'multivendorx/inventory',
-	(content, product, setProduct, handleChange) => {
+	(content, product, setProduct, handleChange, productFields) => {
 		return (
 			<>
 				{content}
-				<Inventory
-					product={product}
-					setProduct={setProduct}
-					handleChange={handleChange}
-				/>
+				{productFields.includes('inventory') &&
+					<Inventory
+						product={product}
+						setProduct={setProduct}
+						handleChange={handleChange}
+					/>
+				}
 			</>
 		);
 	},

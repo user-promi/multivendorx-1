@@ -211,9 +211,9 @@ const SetupWizard: React.FC = () => {
 							value: 'default',
 						},
 						{
-							key: 'single_product_multiple_vendor',
+							key: 'shared_listing',
 							label: __('Shared listing', 'multivendorx'),
-							value: 'single_product_multiple_vendor',
+							value: 'shared_listing',
 						},
 						{
 							key: 'franchise',

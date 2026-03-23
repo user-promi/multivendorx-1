@@ -475,7 +475,7 @@ const AllProduct: React.FC = () => {
 							label: __('Add New', 'multivendorx'),
 							icon: 'plus',
 							onClick: () => {
-								if (modules.includes('shared-listing')) {
+								if (modules.includes('shared-listing') && appLocalizer.settings_databases_value.onboarding?.store_selling_mode == 'shared_listing') {
 									dashNavigate(navigate, ['products', 'add']);
 								} else {
 									createAutoDraftProduct();

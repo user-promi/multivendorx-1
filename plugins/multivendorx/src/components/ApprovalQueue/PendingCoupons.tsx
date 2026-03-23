@@ -63,7 +63,7 @@ const PendingCoupons: React.FC<object> = () => {
 		}
 
 		axios
-			.put(
+			.post(
 				`${appLocalizer.apiUrl}/wc/v3/coupons/${couponId}`,
 				{ status: action },
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
@@ -83,7 +83,7 @@ const PendingCoupons: React.FC<object> = () => {
 		setIsSubmitting(true);
 
 		axios
-			.put(
+			.post(
 				`${appLocalizer.apiUrl}/wc/v3/coupons/${rejectCouponId}`,
 				{
 					status: 'draft',
