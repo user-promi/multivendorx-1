@@ -246,6 +246,40 @@ class Rest extends \WP_REST_Controller {
         }
 
         try {
+            $data   = $request->get_params();
+            /** -----------------------------------------
+             * BULK UPDATE
+             * ----------------------------------------- */
+            if ( ! empty( $data['bulk'] ) && ! empty( $data['ids'] ) && ! empty( $data['action'] ) ) {
+                $action = sanitize_key( $data['action'] );
+                $ids    = array_map( 'absint', $data['ids'] );
+
+                foreach ( $ids as $id ) {
+                    switch ( $action ) {
+                        case 'publish':
+                        case 'pending':
+                            wp_update_post(
+                                array(
+                                    'ID'          => $id,
+                                    'post_status' => $action,
+                                )
+                            );
+                            break;
+
+                        case 'delete':
+                            wp_delete_post( $id, true );
+                            break;
+                    }
+                }
+
+                return rest_ensure_response(
+                    array(
+                        'success' => true,
+                        'bulk'    => true,
+                    )
+                );
+            }
+
             $title   = sanitize_text_field( $request->get_param( 'title' ) );
             $content = wp_kses_post( $request->get_param( 'content' ) );
             $status  = sanitize_key( $request->get_param( 'status' ) ?? 'draft' );
@@ -303,39 +337,6 @@ class Rest extends \WP_REST_Controller {
 
         try {
             $data = $request->get_params();
-
-            /** -----------------------------------------
-             * BULK UPDATE
-             * ----------------------------------------- */
-            if ( ! empty( $data['bulk'] ) && ! empty( $data['ids'] ) && ! empty( $data['action'] ) ) {
-                $action = sanitize_key( $data['action'] );
-                $ids    = array_map( 'absint', $data['ids'] );
-
-                foreach ( $ids as $id ) {
-                    switch ( $action ) {
-                        case 'publish':
-                        case 'pending':
-                            wp_update_post(
-                                array(
-                                    'ID'          => $id,
-                                    'post_status' => $action,
-                                )
-                            );
-                            break;
-
-                        case 'delete':
-                            wp_delete_post( $id, true );
-                            break;
-                    }
-                }
-
-                return rest_ensure_response(
-                    array(
-                        'success' => true,
-                        'bulk'    => true,
-                    )
-                );
-            }
 
             /** -----------------------------------------
              * SINGLE UPDATE

@@ -24,10 +24,6 @@ if ( ! $store_id ) {
 
 get_header( 'shop' );
 
-do_action( 'woocommerce_before_main_content' );
-
-$sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array() );
-
 ?>
 
     <header class="woocommerce-products-header">
@@ -51,7 +47,6 @@ $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array
     ?>
 
 <?php
-do_action( 'woocommerce_after_main_content' );
 
 get_footer( 'shop' );
 ?>

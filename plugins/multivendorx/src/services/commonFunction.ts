@@ -260,26 +260,26 @@ export function getSession(key: string, defaultValue: number | string = 0) {
 
 export const getUrl = (
 	id: string | number,
-	type: 'product' | 'order' | 'store' | 'user' = 'product',
+	type: 'product' | 'order' | 'store' | 'user' | 'coupon' = 'product',
 	mode: 'edit' | 'view' | 'settings' = 'edit',
 	slug?: string
 ) => {
-	if (!id && !slug) {
-		return '#';
-	}
+	if (!id && !slug) return '#';
 
 	const base = appLocalizer.site_url.replace(/\/$/, '');
 
 	if (mode === 'edit') {
 		switch (type) {
+			case 'product':
+			case 'order':
+			case 'coupon':
+				return `${base}/wp-admin/post.php?post=${id}&action=edit`;
+
 			case 'store':
 				return `${base}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${id}`;
 
 			case 'user':
 				return `${base}/wp-admin/user-edit.php?user_id=${id}`;
-
-			case 'order':
-				return `${base}/wp-admin/post.php?post=${id}&action=edit`;
 
 			default:
 				return '#';
@@ -295,7 +295,7 @@ export const getUrl = (
 				return slug ? `${appLocalizer.store_page_url}${slug}` : '#';
 
 			default:
-				return `#`;
+				return '#';
 		}
 	}
 

@@ -124,6 +124,10 @@ const PendingProducts: React.FC<object> = () => {
 								label: __('SKU:', 'multivendorx'),
 								value: row.sku || '—',
 							},
+							{
+								label: __('By', 'multivendorx'),
+								value: row.store_name,
+							},
 						]}
 					/>
 				);
@@ -200,9 +204,9 @@ const PendingProducts: React.FC<object> = () => {
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-								query.filter.created_at.startDate,
-								'start'
-							)
+							query.filter.created_at.startDate,
+							'start'
+						)
 						: undefined,
 
 					before: query.filter?.created_at?.endDate

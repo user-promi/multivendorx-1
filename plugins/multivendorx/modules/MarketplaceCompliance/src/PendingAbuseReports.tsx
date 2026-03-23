@@ -113,6 +113,10 @@ const PendingReportAbuse: React.FC<{ setCount?: (count: number) => void }> = ({
 							label: 'ID',
 							value: row.product?.id,
 						},
+						{
+							label: __('By', 'multivendorx'),
+							value: row.store?.name,
+						},
 					]}
 				/>
 			),
