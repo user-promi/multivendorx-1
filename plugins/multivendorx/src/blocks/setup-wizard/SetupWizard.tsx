@@ -160,6 +160,7 @@ const SetupWizard: React.FC = () => {
 						value: 'rental',
 					},
 				},
+				
 				{
 					key: 'notice_auction',
 					type: 'notice',
@@ -223,22 +224,21 @@ const SetupWizard: React.FC = () => {
 						},
 					],
 				},
-				{
-					key: 'wizardButtons',
-					type: 'button',
-
-					options: [
-						{
-							label: __('Back', 'multivendorx'),
-							color: 'red',
-							action: 'back',
-						},
-						{
-							label: __('Next', 'multivendorx'),
-							action: 'next',
-						},
-					],
-				},
+					{
+						key: 'wizardButtons',
+						type: 'button',
+						options: [
+							{
+								label: __('Back', 'multivendorx'),
+								color: 'red',
+								action: 'back',
+							},
+							{
+								label: __('Next', 'multivendorx'),
+								action: 'next',
+							},
+						],
+					},
 			],
 		},
 		{
@@ -272,7 +272,6 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'wizardButtons',
 					type: 'button',
-
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
@@ -454,11 +453,12 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'wizardButtons',
 					type: 'button',
-
+					position : 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
 							action: 'back',
+							color: 'red'
 						},
 						{
 							label: __('Finish', 'multivendorx'),

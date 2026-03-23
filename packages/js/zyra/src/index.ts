@@ -45,6 +45,8 @@ export { default as DynamicRowSetting } from './components/DynamicRowSetting';
 export { NavigatorHeader } from './components/SettingsNavigator';
 export { default as HeaderSearch } from './components/HeaderSearch';
 export { default as Tooltip } from './components/UI/Tooltip';
+export { default as CopyToClipboard } from './components/UI/CopyToClipboard';
+export { CopyToClipboardUI } from './components/UI/CopyToClipboard';
 
 export { default as Container } from './components/UI/Container';
 export { default as Column } from './components/UI/Column';

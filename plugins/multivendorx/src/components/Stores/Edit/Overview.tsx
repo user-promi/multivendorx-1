@@ -14,6 +14,14 @@ import {
 	Skeleton,
 	FormGroupWrapper,
 	FormGroup,
+	ButtonInputUI,
+	PopupUI,
+	MultiCheckBoxUI,
+	CalendarInputUI,
+	TextAreaUI,
+	ChoiceToggleUI,
+	ItemListUI,
+	TableCard,
 } from 'zyra';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './LatestReview';
@@ -64,6 +72,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
 	const [recentDebits, setRecentDebits] = useState<Transaction[]>([]);
 	const [recentProducts, setRecentProducts] = useState<Product[]>([]);
+	const [Vacation, setVacation] = useState(false);
+	const [vacationMode, setvacationMode] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (!id) {
@@ -158,7 +168,31 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 			text: __('Requested Payout', 'multivendorx'),
 		},
 	];
+	const handleCloseForm = () => {
+		setVacation(false);
+	}
 
+	// business hours table (dynamic and remove)
+	const scheduleColumns = {
+		day: {
+			label: 'Day',
+		},
+		time: {
+			label: 'Working Hours',
+		},
+		break: {
+			label: 'Break',
+		},
+	};
+	const scheduleRows = [
+		{ day: 'Mon', time: '9:00 AM–7:00 PM', break: 'Lunch' },
+		{ day: 'Tue', time: '9:00 AM–7:00 PM', break: 'Lunch' },
+		{ day: 'Wed', time: '9:00 AM–7:00 PM', break: '-' },
+		{ day: 'Thu', time: '9:00 AM–7:00 PM', break: 'Lunch' },
+		{ day: 'Fri', time: '9:00 AM–6:00 PM', break: 'Lunch' },
+		{ day: 'Sat', time: '10:00 AM–4:00 PM', break: '-' },
+		{ day: 'Sun', time: 'Closed', break: '-' },
+	];
 	return (
 		<>
 			<Container>
@@ -225,9 +259,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								const editUrl = `${appLocalizer.site_url.replace(
 									/\/$/,
 									''
-								)}/wp-admin/post.php?post=${
-									product.id
-								}&action=edit`;
+								)}/wp-admin/post.php?post=${product.id
+									}&action=edit`;
 
 								return (
 									<InfoItem
@@ -294,41 +327,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					)}
 				</Column>
 				<Column grid={4}>
-					{appLocalizer.khali_dabba && (
-						<Card
-							title={__('Store hours', 'multivendorx')}
-							desc={__(
-								'Manage your weekly schedule and special hours',
-								'multivendorx'
-							)}
-						>
-							<div className="store-time-wrapper">
-								<div className="card-wrapper">
-									<div className="time-wrapper">
-										<div className="des">
-											{__(
-												'Current status',
-												'multivendorx'
-											)}
-										</div>
-										<div className="time">
-											<span className="admin-badge green">
-												{__('Open', 'multivendorx')}
-											</span>
-										</div>
-									</div>
-									<div className="time-wrapper">
-										<div className="des">
-											{__('Next opening', 'multivendorx')}
-										</div>
-										<div className="time">
-											{__('Mon 9:00 AM', 'multivendorx')}
-										</div>
-									</div>
-								</div>
-							</div>
-						</Card>
-					)}
 					<Card
 						title={__('Store information', 'multivendorx')}
 						iconName="external icon"
@@ -363,6 +361,64 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									storeData.commission?.commission_total ?? 0
 								)}
 							</FormGroup>
+							<FormGroup
+								row
+								label={__('Total products', 'multivendorx')}
+							>
+								{__('3 (pkoro)', 'multivendorx')}
+							</FormGroup>
+							<ItemListUI
+								className="mini-card"
+								background
+								items={[
+									{
+										title: __(
+											'Membership Plan',
+											'multivendorx'
+										),
+										desc: __(
+											'Renews on Dec 15, 2024',
+											'multivendorx'
+										),
+										value: __('Gold Plan', 'multivendorx'),
+									},
+								]}
+							/>
+						</FormGroupWrapper>
+						<ButtonInputUI
+							buttons={[
+								{
+									icon: 'vacation',
+									text: __('Change plan', 'multivendorx'),
+									// onClick: () => setVacation(true),
+								},
+								{
+									icon: 'vacation',
+									text: __('Assign Manually', 'multivendorx'),
+									color: 'purple'
+									// onClick: () => setVacation(true),
+								},
+							]}
+						/>
+					</Card>
+					<Card
+						title={__('Store status', 'multivendorx')}
+						iconName="external icon"
+						onIconClick={() => {
+							navigate(
+								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=store`
+							);
+						}}
+					>
+						<FormGroupWrapper>
+							<FormGroup row label={__('Current status', 'multivendorx')}>
+								<span className="admin-badge green">
+									{__('Open(pkoro)', 'multivendorx')}
+								</span>
+							</FormGroup>
+							<FormGroup row label={__('Next opening', 'multivendorx')} >
+								{__('Mon 9:00 AM (pkoro)', 'multivendorx')}
+							</FormGroup>
 							{appLocalizer.khali_dabba && (
 								<>
 									<FormGroup
@@ -374,29 +430,150 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									>
 										<span className="admin-badge red">
 											{' '}
-											{__('Inactive', 'multivendorx')}
+											{__('Inactive(pkoro)', 'multivendorx')}
 										</span>
 									</FormGroup>
-
-									<div className="title">
-										<i className="adminfont-error"></i>
-										{__('Gold plan', 'multivendorx')}
-										<span className="admin-badge green">
-											{__('Active', 'multivendorx')}
-										</span>
-									</div>
-									<div className="des">
-										{__(
-											'Renews on Dec 15, 2024 (p)',
-											'multivendorx'
-										)}
-									</div>
 								</>
 							)}
-						</FormGroupWrapper>
-					</Card>
 
-					<Card
+							<PopupUI
+								open={Vacation}
+								onClose={handleCloseForm}
+								width={31.25}
+								height={40}
+								header={{
+									icon: 'vacation',
+									title: __('Vacation Mode', 'multivendorx'),
+									description: __(
+										'Temporarily pause your store for a set period',
+										'multivendorx'
+									),
+								}}
+								footer={
+									<ButtonInputUI
+										buttons={[
+											{
+												icon: 'close',
+												text: __('Cancel', 'multivendorx'),
+												color: 'red',
+												onClick: handleCloseForm,
+											},
+											{
+												icon: 'save',
+												text: __('Save Vacation Settings', 'multivendorx'),
+												// onClick: () => handleSubmit(),
+											},
+										]}
+									/>
+								}
+							>
+								<FormGroupWrapper>
+									<FormGroup label={__('Enable Vacation Mode', 'multivendorx')}>
+										<MultiCheckBoxUI
+											look="toggle"
+											value={vacationMode}
+											onChange={(value) => {
+												setvacationMode(value);
+											}}
+											options={[
+												{ label: 'Trial', value: 'trial' },
+											]}
+										/>
+									</FormGroup>
+									<FormGroup cols={2} label={__('Start Date', 'multivendorx')}>
+										<CalendarInputUI
+										// onChange={(range: DateRange) => {
+										// 	setDateRange({
+										// 		startDate: range.startDate,
+										// 		endDate: range.endDate,
+										// 	});
+										// }}
+										/>
+									</FormGroup>
+									<FormGroup cols={2} label={__('End Date', 'multivendorx')}>
+										<CalendarInputUI
+										// onChange={(range: DateRange) => {
+										// 	setDateRange({
+										// 		startDate: range.startDate,
+										// 		endDate: range.endDate,
+										// 	});
+										// }}
+										/>
+									</FormGroup>
+									<FormGroup label={__('Vacation Message', 'multivendorx')}>
+										<TextAreaUI
+											name="answer"
+										// value={answer}
+										// onChange={(value: string) => setAnswer(value)}
+										/>
+									</FormGroup>
+									<FormGroup label={__('Cart Behaviour During Vacation', 'multivendorx')}>
+										<ChoiceToggleUI
+											options={[
+												{
+													key: 'draft',
+													value: 'draft',
+													label: __('Disable Add to Cart', 'multivendorx'),
+												},
+												{
+													key: 'pending',
+													value: 'pending',
+													label: __(
+														'Keep Add to Cart Active',
+														'multivendorx'
+													),
+												},
+												{
+													key: 'publish',
+													value: 'publish',
+													label: __(
+														'Pre-order Mode',
+														'multivendorx'
+													),
+												},
+											]}
+										// value={formData.status}
+										// onChange={(val: string) =>
+										// 	handleChange('status', val)
+										// }
+										/>
+									</FormGroup>
+								</FormGroupWrapper>
+							</PopupUI>
+						</FormGroupWrapper>
+						<ButtonInputUI
+							buttons={[
+								{
+									icon: 'vacation',
+									text: __('Set Vacation', 'multivendorx'),
+									onClick: () => setVacation(true),
+								},
+								{
+									icon: 'vacation',
+									text: __('Edit Hours', 'multivendorx'),
+									color: 'purple'
+									// onClick: () => setVacation(true),
+								},
+							]}
+						/>
+					</Card>
+					{appLocalizer.khali_dabba && (
+						<Card
+							title={__('Store hours', 'multivendorx')}
+							desc={__(
+								'Manage your weekly schedule and special hours',
+								'multivendorx'
+							)}
+						>
+							<TableCard
+								headers={scheduleColumns}
+								rows={scheduleRows}
+								showMenu={false}
+							/>
+						</Card>
+					)}
+
+					{/* <Card
 						title={__('Store staff', 'multivendorx')}
 						iconName="external icon"
 						onIconClick={() => {
@@ -451,7 +628,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								},
 							]}
 						/>
-					</Card>
+					</Card> */}
 				</Column>
 			</Container>
 		</>

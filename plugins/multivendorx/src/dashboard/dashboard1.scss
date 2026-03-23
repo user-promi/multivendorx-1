@@ -25,11 +25,12 @@ body:has(#store-dashboard) input {
     line-height: 0.95rem;
 
     #store-dashboard.collapsed {
+
         .tab-wrapper,
         .top-navbar {
             margin-left: 4rem;
         }
-        
+
         &.minimize {
             .dashboard-tabs-wrapper {
                 width: 4rem;
@@ -266,9 +267,9 @@ a {
                     position: relative;
                     cursor: pointer;
 
-                        &.dark-icon {
-                            font-size: 1.625rem;
-                        }
+                    &.dark-icon {
+                        font-size: 1.625rem;
+                    }
                 }
 
                 // user dropdown start
@@ -301,7 +302,7 @@ a {
         min-height: 100vh;
         padding: 7rem 3rem;
 
-        .title-section{
+        .title-section {
             margin: 0 0 2rem;
         }
     }
@@ -664,6 +665,7 @@ a {
 // progress-bar
 .progress-bar {
     width: 100%;
+
     div {
         width: 80%;
         height: 0.313rem;
@@ -796,13 +798,13 @@ a {
 
 
 // dashboard transparent table strat
-.transparent-table{
-    .admin-table{
+.transparent-table {
+    .admin-table {
         background: transparent;
 
-        .admin-table-body tr{
+        .admin-table-body tr {
             border-top: $border-light-small;
-        }   
+        }
     }
 }
 
@@ -862,3 +864,10 @@ a {
         color: #fff;
     }
 }
+
+
+// AI sections start
+.ai-wrapper {
+    padding: 1rem;
+}
+

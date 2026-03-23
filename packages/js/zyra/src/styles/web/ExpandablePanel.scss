@@ -37,7 +37,7 @@
                 }
             }
 
-            .details {
+            .header-details {
                 display: flex;
                 gap: 0.5rem;
                 align-items: center;
@@ -185,35 +185,6 @@
                 margin: 0;
                 font-size: 0.95rem;
             }
-
-            // .copy-text-wrapper {
-            //     display: flex;
-            //     align-items: center;
-
-            //     code {
-            //         background: $theme-background-color;
-            //         color: $theme-color;
-            //         margin-right: 0.313rem;
-            //     }
-
-            //     i {
-            //         font-size: 1rem;
-            //     }
-
-            //     .copied-msg {
-            //         margin-left: 0.5rem;
-            //         color: green;
-            //         font-size: 0.75rem;
-            //     }
-            // }
-
-            .clickable-list-wrapper {
-                .clickable-items {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 0.5rem;
-                }
-            }
         }
 
         &.add-method {
@@ -245,7 +216,7 @@
     }
 }
 
-// custom icon dropdown start
+// edit icon dropdown start
 .icon-options-list {
     position: absolute;
     width: 40%;
@@ -286,7 +257,7 @@
     }
 }
 
-// custom icon dropdown end
+// edit icon dropdown end
 
 // setup wizard start
 .wizard-container {

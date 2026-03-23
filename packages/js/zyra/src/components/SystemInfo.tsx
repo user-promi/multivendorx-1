@@ -7,6 +7,7 @@ import '../styles/web/SystemInfoAccordion.scss';
 import { getApiLink } from '../utils/apiService';
 import Skeleton from './UI/Skeleton';
 import { FieldComponent, ZyraVariable } from './fieldUtils';
+import { CopyToClipboardUI } from './UI/CopyToClipboard';
 
 // Types
 interface SystemInfoProps {
@@ -34,7 +35,6 @@ export const SystemInfoUI: React.FC<SystemInfoProps> = ({
 }) => {
     const [data, setData] = useState<ApiResponse | null>(null);
     const [openKeys, setOpenKeys] = useState<string[]>([]);
-    const [copied, setCopied] = useState(false);
 
     // Fetch everything at once
     useEffect(() => {
@@ -64,16 +64,6 @@ export const SystemInfoUI: React.FC<SystemInfoProps> = ({
         return output.trim();
     };
 
-    const copyToClipboard = () => {
-        if (!data) {
-            return;
-        }
-        const formatted = formatSystemInfo(data);
-        navigator.clipboard.writeText(formatted).then(() => {
-            setCopied(true);
-        });
-    };
-
     if (!data) {
         return (
             <div className="system-info">
@@ -97,15 +87,15 @@ export const SystemInfoUI: React.FC<SystemInfoProps> = ({
 
     return (
         <div className="system-info">
-            <div className="buttons-wrapper">
-                <div className="admin-btn btn-purple" onClick={copyToClipboard}>
-                    <i className="adminfont-vendor-form-copy"></i>
-
-                    <span className="copy-success">
-                        {copied ? copiedLabel : copyButtonLabel}
-                    </span>
-                </div>
-            </div>
+            <CopyToClipboardUI
+                variant="button"
+                copyButtonLabel={copyButtonLabel}
+                copiedLabel={copiedLabel}
+                onCopy={() => {
+                    if (!data) return '';
+                    return formatSystemInfo(data);
+                }}
+            />
 
             {Object.entries(data).map(([key, section]) => {
                 const isOpen = openKeys.includes(key);
