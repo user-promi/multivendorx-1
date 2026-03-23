@@ -133,6 +133,7 @@ const AdminHeader: React.FC< AdminHeaderProps > = ( {
                     <HeaderSearch
                         search={ search }
                         results={ results }
+                        width={11}
                         onQueryUpdate={ onQueryUpdate }
                         onResultClick={ onResultClick }
                     />

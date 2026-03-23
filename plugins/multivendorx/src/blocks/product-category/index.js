@@ -5,8 +5,7 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { render } from '@wordpress/element';
-import { BrowserRouter } from 'react-router-dom';
+import { createRoot } from '@wordpress/element';
 import ProductCategory from './ProductCategory';
 
 registerBlockType('multivendorx/product-category', {
@@ -87,17 +86,14 @@ registerBlockType('multivendorx/product-category', {
 		);
 	},
 });
-document.addEventListener('DOMContentLoaded', () => {
+
+window.addEventListener('load', () => {
 	const el = document.getElementById('multivendorx-store-product-category');
 
 	if (!el) {
 		return;
 	}
 
-	render(
-		<BrowserRouter>
-			<ProductCategory />
-		</BrowserRouter>,
-		el
-	);
+	const root = createRoot(el);
+	root.render(<ProductCategory />);
 });

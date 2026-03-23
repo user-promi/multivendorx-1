@@ -543,11 +543,6 @@ const RenderComponent: React.FC< RenderProps > = ( {
                         data-cols={ inputField.cols }
                         onClick={ ( e ) => handleGroupClick( e, inputField ) }
                     >
-                        { inputField.icon && (
-                            <i
-                                className={ `adminfont-${ inputField.icon }` }
-                            ></i>
-                        ) }
                         { inputField.label && (
                             <label
                                 className="settings-form-label"
@@ -555,6 +550,9 @@ const RenderComponent: React.FC< RenderProps > = ( {
                                 htmlFor={ inputField.key }
                             >
                                 <div className="title">
+                                    { inputField.icon && (
+                                        <i className={ `adminfont-${ inputField.icon }` } />
+                                    ) }
                                     { inputField.label }
                                 </div>
                                 { inputField.settingDescription && (

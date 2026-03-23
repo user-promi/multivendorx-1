@@ -1,7 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { render } from '@wordpress/element';
-import { BrowserRouter } from 'react-router-dom';
+import { createRoot } from '@wordpress/element';
 import MarketplaceStoreList from './marketplaceStoreList';
 import {
 	PanelBody,
@@ -125,17 +124,13 @@ registerBlockType('multivendorx/marketplace-stores', {
 	},
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
 	const element = document.getElementById('marketplace-stores');
 	if (element) {
 		const attributes = JSON.parse(
 			element.getAttribute('data-attributes') || '{}'
 		);
-		render(
-			<BrowserRouter>
-				<MarketplaceStoreList {...attributes} />
-			</BrowserRouter>,
-			element
-		);
+		const root = createRoot(element);
+		root.render(<MarketplaceStoreList {...attributes} />);
 	}
 });

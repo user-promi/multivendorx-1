@@ -8,6 +8,7 @@ import {
 	useModules,
 	Tooltip,
 	TabsUI,
+	NoticeReceiver,
 } from 'zyra';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import { applyFilters } from '@wordpress/hooks';
@@ -803,6 +804,9 @@ const Dashboard = () => {
 
 				{/* Page content */}
 				<div className="content-wrapper">
+					<NoticeReceiver position="float" />
+					 <NoticeReceiver position="notice" />
+
 					{storeData && storeData.status !== 'active' ? (
 						<ComponentStatusView
 							title={__(

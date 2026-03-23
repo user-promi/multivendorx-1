@@ -483,14 +483,8 @@ class Stores extends \WP_REST_Controller {
             'status' => 'pending',
         );
 
-        $count = $request->get_param( 'count' );
-        if ( $count ) {
-            $args['count'] = true;
-            return rest_ensure_response(
-                (int) StoreUtil::get_store_information( $args )
-            );
-        }
-
+        $response = rest_ensure_response(array());
+        $response->header( 'X-WP-Total', (int) StoreUtil::get_store_information( array_merge($args,array('count' => true)) ) );
         $start_date = $request->get_param( 'start_date' );
         $end_date   = $request->get_param( 'end_date' );
 
@@ -520,8 +514,9 @@ class Stores extends \WP_REST_Controller {
                 )
             );
         }
+        $response->set_data($formatted_stores);
 
-        return rest_ensure_response( $formatted_stores );
+        return $response;
     }
 
     /**
@@ -686,12 +681,29 @@ class Stores extends \WP_REST_Controller {
 
             if ( ! empty( $store_data['store_owners'] ) ) {
                 StoreUtil::set_primary_owner( $store_data['store_owners'], $store_id );
-
                 StoreUtil::add_store_users(
                     array(
                         'store_id' => $store_id,
                         'users'    => array( $store_data['store_owners'] ),
                         'role_id'  => 'store_owner',
+                    )
+                );
+
+                $user = get_user_by('id', $store_data['store_owners']);
+                do_action(
+                    'multivendorx_notify_store_account_created_by_admin',
+                    'store_account_created_by_admin',
+                    array(
+                        'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
+                        'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
+                        'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
+                        'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                        'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'marketplace_name'  => get_bloginfo('name'),
+                        'store_owner_name'  => $user->display_name,
+                        'login_url'  => get_permalink((int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' )),
+                        'store_id'    => $store_id,
+                        'category'    => 'activity',
                     )
                 );
             }
@@ -723,7 +735,7 @@ class Stores extends \WP_REST_Controller {
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                        'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'store_id'    => $store_id,
                         'category'    => 'activity',
                     )
@@ -903,6 +915,23 @@ class Stores extends \WP_REST_Controller {
         }
 
         try {
+            $ids    = $request->get_param( 'ids' );
+            $status = $request->get_param( 'action' );
+
+            if ( ! empty( $ids ) && ! empty( $status ) ) {
+                foreach ( (array) $ids as $store_id ) {
+                    $store = new Store( absint( $store_id ) );
+
+                    $store->set( Utill::STORE_SETTINGS_KEYS['status'], $status );
+                    $store->save();
+                }
+
+                return rest_ensure_response(
+                    array(
+                        'success' => true,
+                    )
+                );
+            }
             $id   = absint( $request->get_param( 'id' ) );
             $data = (array) $request->get_json_params();
 
@@ -924,7 +953,7 @@ class Stores extends \WP_REST_Controller {
                             'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                             'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                             'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                            'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                            'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                             'store_id'    => $id,
                             'category'    => 'activity',
                         )
@@ -934,6 +963,19 @@ class Stores extends \WP_REST_Controller {
                 if ( 'reject' === $action ) {
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_reason'] );
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_request_date'] );
+                    do_action(
+                        'multivendorx_notify_store_deactivation_request_rejected',
+                        'store_deactivation_request_rejected',
+                        array(
+                            'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
+                            'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
+                            'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
+                            'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                            'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                            'store_id'    => $id,
+                            'category'    => 'activity',
+                        )
+                    );
                 }
 
                 $store->save();
@@ -1091,7 +1133,7 @@ class Stores extends \WP_REST_Controller {
                                 'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                                 'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                                 'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                                'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                                'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                                 'store_id'    => $id,
                                 'category'    => 'activity',
                             )
@@ -1107,7 +1149,7 @@ class Stores extends \WP_REST_Controller {
                                 'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                                 'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                                 'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                                'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                                'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                                 'store_id'    => $id,
                                 'category'    => 'activity',
                             )
@@ -1177,6 +1219,19 @@ class Stores extends \WP_REST_Controller {
                         Utill::STORE_SETTINGS_KEYS['deactivation_request_date'],
                         current_time( 'mysql' )
                     );
+                    do_action(
+                    'multivendorx_notify_store_account_deactivation_request',
+                    'store_account_deactivation_request',
+                    array(
+                        'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
+                        'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
+                        'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
+                        'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                        'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'store_id'    => $id,
+                        'category'    => 'activity',
+                    )
+                );
                 }
             }
 
@@ -1192,7 +1247,7 @@ class Stores extends \WP_REST_Controller {
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                        'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'store_id'    => $id,
                         'category'    => 'activity',
                     )
@@ -1208,7 +1263,7 @@ class Stores extends \WP_REST_Controller {
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                        'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'store_id'    => $id,
                         'category'    => 'activity',
                     )
@@ -1224,7 +1279,7 @@ class Stores extends \WP_REST_Controller {
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                        'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'store_id'    => $id,
                         'category'    => 'activity',
                     )
@@ -1240,7 +1295,7 @@ class Stores extends \WP_REST_Controller {
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                        'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'store_id'    => $id,
                         'category'    => 'activity',
                     )
@@ -1264,7 +1319,7 @@ class Stores extends \WP_REST_Controller {
                         'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
                         'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                        'store_name'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                         'store_id'    => $id,
                         'category'    => 'activity',
                     )

@@ -219,7 +219,7 @@ class Rest extends \WP_REST_Controller {
             $items = array();
 
             foreach ( $posts as $post ) {
-                $items[] = $this->prepare_item_for_response( $post );
+                $items[] = $this->prepare_item_for_response( $post, $request );
             }
             $response->set_data( $items );
 
@@ -289,7 +289,7 @@ class Rest extends \WP_REST_Controller {
                 );
             }
 
-            return rest_ensure_response( $this->prepare_item_for_response( $post ) );
+            return rest_ensure_response( $this->prepare_item_for_response( $post,$request ) );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 

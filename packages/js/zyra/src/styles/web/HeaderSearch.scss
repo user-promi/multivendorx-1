@@ -8,6 +8,9 @@
   background: $background-white;
   position: relative;
 
+  .search-action{
+    background: $theme-background-color;
+  }
   .search-section {
     display: flex;
     align-items: center;

@@ -103,32 +103,28 @@ const StoreReview: React.FC = () => {
 			render: (row: any) => (
 				<div className="review-details">
 					<div className="review">
-						{[
-							...Array(
-								Math.round(
-									row.overall_rating || 0
-								)
-							),
-						].map((_, i) => (
-							<i key={`filled-${i}`} className="star-icon adminfont-star" />
-						))}
+						{[...Array(Math.round(row.overall_rating || 0))].map(
+							(_, i) => (
+								<i
+									key={`filled-${i}`}
+									className="star-icon adminfont-star"
+								/>
+							)
+						)}
 
 						{[
-							...Array(
-								5 -
-								Math.round(
-									row.overall_rating ||
-									0
-								)
-							),
+							...Array(5 - Math.round(row.overall_rating || 0)),
 						].map((_, i) => (
-							<i key={`empty-${i}`} className="star-icon adminfont-star-o" />
+							<i
+								key={`empty-${i}`}
+								className="star-icon adminfont-star-o"
+							/>
 						))}
 					</div>
 					<div className="title">{row.review_title}</div>
 					<div className="desc">{row.review_content}</div>
 				</div>
-			)
+			),
 		},
 		status: {
 			label: __('Status', 'multivendorx'),
@@ -181,7 +177,7 @@ const StoreReview: React.FC = () => {
 				params: {
 					page: query.paged || 1,
 					row: query.per_page || 10,
-					status: query.categoryFilter || '',
+					status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
 					search_value: query.searchValue || '',
 					store_id: appLocalizer.store_id,
 					start_date: query.filter?.created_at?.startDate
@@ -318,7 +314,7 @@ const StoreReview: React.FC = () => {
 												...Array(
 													Math.round(
 														selectedReview.overall_rating ||
-															0
+														0
 													)
 												),
 											].map((_, i) => (
@@ -331,10 +327,10 @@ const StoreReview: React.FC = () => {
 											{[
 												...Array(
 													5 -
-														Math.round(
-															selectedReview.overall_rating ||
-																0
-														)
+													Math.round(
+														selectedReview.overall_rating ||
+														0
+													)
 												),
 											].map((_, i) => (
 												<i

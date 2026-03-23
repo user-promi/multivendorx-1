@@ -120,10 +120,12 @@ const CustomerQuestions: React.FC = () => {
 			render: (row: any) => (
 				<div className="question-wrapper">
 					<div className="question">Q: {row.question_text}</div>
-					{row.answer_text && <div className="answer">A: {row.answer_text}</div>}	
+					{row.answer_text && (
+						<div className="answer">A: {row.answer_text}</div>
+					)}
 					<div className="desc">By {row.author_name}</div>
 				</div>
-			)
+			),
 		},
 		question_date: {
 			label: __('Date', 'multivendorx'),
@@ -134,7 +136,7 @@ const CustomerQuestions: React.FC = () => {
 		},
 		question_visibility: {
 			label: __('Visibility', 'multivendorx'),
-			type: 'status'
+			type: 'status',
 		},
 		action: {
 			key: 'action',

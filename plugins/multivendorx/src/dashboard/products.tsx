@@ -126,10 +126,10 @@ const AllProduct: React.FC = () => {
 					result.status === 'fulfilled'
 						? result.value
 						: {
-								value: statuses[index],
-								label: STATUS_LABELS[statuses[index]],
-								count: 0,
-							}
+							value: statuses[index],
+							label: STATUS_LABELS[statuses[index]],
+							count: 0,
+						}
 				)
 			);
 		} catch (error) {
@@ -259,14 +259,18 @@ const AllProduct: React.FC = () => {
 					page: query.paged || 1,
 					row: query.per_page || 10,
 					search: query.searchValue || '',
+					status:
+						query.categoryFilter === 'all'
+							? 'any'
+							: query.categoryFilter,
 					type: query.filter?.productType,
 					category: query.filter?.category,
 					stock_status: query.filter?.stockStatus,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-								query.filter.created_at.startDate,
-								'start'
-							)
+							query.filter.created_at.startDate,
+							'start'
+						)
 						: undefined,
 					before: query.filter?.created_at?.endDate
 						? toWcIsoDate(query.filter.created_at.endDate, 'end')
@@ -329,7 +333,7 @@ const AllProduct: React.FC = () => {
 			],
 		},
 		{
-			key: 'stock_status',
+			key: 'stockStatus',
 			type: 'select',
 			label: __('Stock Status', 'multivendorx'),
 			options: [
@@ -355,12 +359,17 @@ const AllProduct: React.FC = () => {
 		name: {
 			label: __('Product Name', 'multivendorx'),
 			width: 18,
-			render: (row: any) => {
-				console.log(row)
+			render: (row) => {
 				return (
 					<InfoItem
 						title={row.name}
-						titleLink={row.permalink}
+						onClick={() =>
+							dashNavigate(navigate, [
+								'products',
+								'edit',
+								String(row.id),
+							])
+						}
 						avatar={{
 							image: row.images?.[0]?.src || '',
 							iconClass: row.images?.[0]?.src ? '' : 'single-product',
@@ -373,7 +382,7 @@ const AllProduct: React.FC = () => {
 						]}
 					/>
 				);
-			}
+			},
 		},
 		price: {
 			label: __('Price', 'multivendorx'),
@@ -382,7 +391,7 @@ const AllProduct: React.FC = () => {
 		stock_status: {
 			label: __('Stock', 'multivendorx'),
 			type: 'status',
-			ClassName: 'transparent-status'
+			ClassName: 'transparent-status',
 		},
 		categories: {
 			label: __('Categories', 'multivendorx'),
@@ -427,7 +436,7 @@ const AllProduct: React.FC = () => {
 						onClick: (row: ProductRow) =>
 							navigator.clipboard
 								.writeText(row.permalink)
-								.catch(() => {}),
+								.catch(() => { }),
 					},
 					{
 						label: __('Delete', 'multivendorx'),
@@ -453,13 +462,13 @@ const AllProduct: React.FC = () => {
 					[
 						...(modules.includes('import-export')
 							? [
-									{
-										custom: applyFilters(
-											'product_import_export',
-											null
-										),
-									},
-								]
+								{
+									custom: applyFilters(
+										'product_import_export',
+										null
+									),
+								},
+							]
 							: []),
 
 						{

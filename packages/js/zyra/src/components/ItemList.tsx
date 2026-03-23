@@ -13,7 +13,7 @@ interface Item {
     link?: string;
     tags?: React.ReactNode;
     targetBlank?: boolean;
-    action?: ( item: Item ) => void;
+    action?: (item: Item, e?: React.MouseEvent) => void;
     onApprove?: ( item: Item ) => void;
     onReject?: ( item: Item ) => void;
     desc?: string;
@@ -43,7 +43,7 @@ export const ItemListUI: React.FC< ItemListUIProps > = ( {
                     const handleClick = ( e: React.MouseEvent ) => {
                         e.stopPropagation();
                         if ( item.action ) {
-                            item.action( item );
+                            item.action(item, e);
                         }
                         if ( onItemClick ) {
                             onItemClick( item );
@@ -51,7 +51,7 @@ export const ItemListUI: React.FC< ItemListUIProps > = ( {
                     };
 
                     return (
-                        <>
+                        <React.Fragment key={item.id || index}>
                             { item.link ? (
                                 <a
                                     href={ item.link }
@@ -140,7 +140,7 @@ export const ItemListUI: React.FC< ItemListUIProps > = ( {
                                     ) }
                                 </div>
                             ) }
-                        </>
+                        </React.Fragment>
                     );
                 } ) }
         </div>
