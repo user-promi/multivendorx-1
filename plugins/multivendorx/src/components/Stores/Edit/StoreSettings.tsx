@@ -490,7 +490,7 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 								}
 							>
 								<EmailsInput
-									value={data?.emails ? [data.emails] : []}
+									value={data?.emails || []}
 									primary={data?.primary_email || ''}
 									enablePrimary={true}
 									onChange={(list, primary) =>

@@ -2,7 +2,7 @@
 /**
  * Template to display the more offers tab in single product page.
  *
- * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/spmv-single-product-tab.php
+ * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/shared-listing-single-product-tab.php
  *
  * @package     MultiVendorX/Templates
  * @version     PRODUCT_VERSION

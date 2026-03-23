@@ -276,7 +276,7 @@ export const getUrl = (
 				return `${base}/wp-admin/post.php?post=${id}&action=edit`;
 
 			case 'store':
-				return `${base}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${id}`;
+				return `/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${id}`;
 
 			case 'user':
 				return `${base}/wp-admin/user-edit.php?user_id=${id}`;

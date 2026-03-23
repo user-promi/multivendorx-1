@@ -98,7 +98,7 @@ class Frontend {
         /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared */
         $maps = $wpdb->get_results( "SELECT product_map FROM {$table}" );
         foreach ( $maps as $map ) {
-            $ids = json_decode( $map->product_map, true );
+            $ids = maybe_unserialize( $map->product_map );
 
             if ( empty( $ids ) ) {
                 continue;
@@ -192,27 +192,42 @@ class Frontend {
 	 * @return void
 	 */
 	public function woocommerce_product_spmv_tab() {
-		global $product, $wpdb;
+        global $product, $wpdb;
 
-		$table = $wpdb->prefix . Utill::TABLES['products_map'];
+        $table = $wpdb->prefix . Utill::TABLES['products_map'];
+        $product_id = (int) $product->get_id();
 
-		$row         = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        // Search serialized data
+        $like = '%' . $wpdb->esc_like( 'i:' . $product_id . ';' ) . '%';
+
+        $row = $wpdb->get_row(
             $wpdb->prepare(
-                "SELECT product_map FROM {$table} WHERE JSON_CONTAINS(product_map, %s)", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-                wp_json_encode( (int) $product->get_id() )
+                "SELECT product_map FROM {$table} WHERE product_map LIKE %s",
+                $like
             )
-		);
-		$product_ids = array_diff(
-            wp_json_decode( $row->product_map, true ),
-            array( (int) $product->get_id() )
-		);
+        );
 
-		if ( count( $product_ids ) <= 1 ) {
-			return;
-		}
+        if ( ! $row ) {
+            return;
+        }
 
-		MultiVendorX()->util->get_template( 'store/spmv-single-product-tab.php', array( 'product_ids' => $product_ids ) );
-	}
+        $map_array = maybe_unserialize( $row->product_map );
+        if ( ! is_array( $map_array ) ) {
+            return;
+        }
+
+        $product_ids = array_diff(
+            $map_array,
+            array( $product_id )
+        );
+
+        if ( count( $product_ids ) < 1 ) {
+            return;
+        }
+
+        MultiVendorX()->util->get_template('store/shared-listing-single-product-tab.php', array( 'product_ids' => $product_ids ));
+    }
+
     /**
      * Display the "More Stores" button on the single product page.
      *

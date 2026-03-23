@@ -61,18 +61,16 @@ class Rest {
         $existing_map_id = get_post_meta( $original_id, 'multivendorx_spmv_id', true );
 
         if ( empty( $existing_map_id ) ) {
-            $map_data = wp_json_encode(
-                array(
+            $map_data = array(
                     $original_id,
                     $duplicate_id,
-                )
-            );
+                );
 
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->insert(
                 $table,
                 array(
-                    'product_map' => $map_data,
+                    'product_map' => maybe_serialize($map_data),
                 ),
                 array( '%s' )
             );
@@ -96,7 +94,7 @@ class Rest {
             );
 
             if ( $row ) {
-                $map_array = json_decode( $row->product_map, true );
+                $map_array = maybe_unserialize( $row->product_map, true );
 
                 if ( ! is_array( $map_array ) ) {
                     $map_array = array();
@@ -109,7 +107,7 @@ class Rest {
                 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $wpdb->update(
                     $table,
-                    array( 'product_map' => wp_json_encode( $map_array ) ),
+                    array( 'product_map' => maybe_serialize( $map_array ) ),
                     array( 'ID' => $existing_map_id ),
                     array( '%s' ),
                     array( '%d' )
