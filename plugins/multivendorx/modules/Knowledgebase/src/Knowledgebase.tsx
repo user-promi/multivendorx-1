@@ -174,11 +174,10 @@ export const KnowledgeBase: React.FC = () => {
 			? getApiLink(appLocalizer, `knowledge/${editId}`)
 			: getApiLink(appLocalizer, 'knowledge');
 
-		const method = editId ? 'PUT' : 'POST';
 		const payload = { ...formData, status };
 
 		axios({
-			method,
+			method: 'POST',
 			url: endpoint,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: payload,
