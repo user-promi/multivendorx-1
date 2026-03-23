@@ -88,7 +88,7 @@ class Shortcode {
             if ( ( 'no' === get_option( Utill::WOO_SETTINGS['generate_password'] ) && ! is_user_logged_in() ) ) {
                 wp_enqueue_script( 'wc-password-strength-meter' );
             }
-            echo '<div class="mvx-dashboard woocommerce">';
+            echo '<div class="multivendorx-registration woocommerce">';
             wc_get_template( 'myaccount/form-login.php' );
             echo '</div>';
         } else {
@@ -108,18 +108,10 @@ class Shortcode {
         }
 
         ob_start();
-        if ( is_user_logged_in() ) {
-            ?>
-            <div id="multivendorx-registration-form" class="woocommerce">
-            </div>
-            <?php
-        } else {
-            echo '<div class="mvx-dashboard woocommerce">';
-            echo '<div class="woocommerce-notices-wrapper"><div class="woocommerce-error">  <div class="wc-block-components-notice-banner__content"><strong> Kindly login before registration </strong></div></div></div>';
-            wc_get_template( 'myaccount/form-login.php' );
-            echo '</div>';
-        }
-
+        ?>
+        <div id="multivendorx-registration-form" class="woocommerce">
+        </div>
+        <?php
         // Return the output buffer content.
         return ob_get_clean();
     }

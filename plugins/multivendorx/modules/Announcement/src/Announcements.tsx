@@ -225,15 +225,13 @@ export const Announcements: React.FC = () => {
 			? getApiLink(appLocalizer, `announcement/${editId}`)
 			: getApiLink(appLocalizer, 'announcement');
 
-		const method = editId ? 'PUT' : 'POST';
-
 		const payload = {
 			...formData,
 			stores: formData.stores,
 		};
 
 		axios({
-			method,
+			method: 'POST',
 			url: endpoint,
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: payload,

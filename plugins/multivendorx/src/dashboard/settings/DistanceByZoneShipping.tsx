@@ -244,7 +244,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			}
 
 			const isUpdate = isEditing && editingMethod;
-			const method = isUpdate ? 'PUT' : 'POST';
 			const url = isUpdate
 				? getApiLink(
 						appLocalizer,
@@ -266,7 +265,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			}
 
 			const response = await axios({
-				method: method,
+				method: 'POST',
 				url: url,
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,

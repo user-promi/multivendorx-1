@@ -116,8 +116,27 @@ const RegistrationForm = () => {
 		setStoreData(dataMatch || {});
 	};
 
+	useEffect(() => {
+		const backup = sessionStorage.getItem('multivendorxRegistrationForm');
+
+		if (backup) {
+			try {
+				const parsed = JSON.parse(backup);
+				setInputs(parsed); // restore into FormViewer
+			} catch (e) {
+				console.error('Invalid backup data');
+			}
+		}
+	}, []);
+
 	const onSubmit = useCallback(
 		(submittedFormData: Record<string, string | number | boolean>) => {
+			sessionStorage.setItem(
+				'multivendorxRegistrationForm',
+				JSON.stringify(submittedFormData)
+			);
+			setInputs(submittedFormData);
+
 			const mappedData: Record<string, string | number | boolean> = {};
 
 			if (submittedFormData['name']) {
@@ -154,6 +173,8 @@ const RegistrationForm = () => {
 							'multivendorx'
 						),
 					});
+
+					sessionStorage.removeItem('multivendorxRegistrationForm');
 					if (response.data.redirect !== '') {
 						window.open(response.data.redirect, '_self');
 					}
@@ -199,8 +220,11 @@ const RegistrationForm = () => {
 				</>
 			)}
 
-			<div>{registrationForm.content_before_form}</div>
-
+			<div
+				dangerouslySetInnerHTML={{
+					__html: registrationForm.content_before_form,
+				}}
+			/>
 			<FormViewer
 				formFields={formData.settings}
 				response={inputs}
@@ -208,7 +232,11 @@ const RegistrationForm = () => {
 				countryList={memoizedCountryList}
 				stateList={memoizedStateList}
 			/>
-			<div>{registrationForm.content_after_form}</div>
+			<div
+				dangerouslySetInnerHTML={{
+					__html: registrationForm.content_after_form,
+				}}
+			/>
 			{responseMessage && (
 				<div className="woocommerce-notices-wrapper">
 					<ul
