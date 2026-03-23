@@ -10,34 +10,32 @@ interface PrePostTextProps {
     postText?: string;
 }
 
-const PrePostTextUI: React.FC< PrePostTextProps > = ( {
+const PrePostTextUI: React.FC<PrePostTextProps> = ({
     textType,
     preText,
     postText,
-} ) => {
+}) => {
     return (
         <>
-            { textType == 'pre' && <span className="before">{ preText }</span> }
-            { textType == 'post' && (
-                <span className="after">{ postText }</span>
-            ) }
+            {textType == 'pre' && <span className="before">{preText}</span>}
+            {textType == 'post' && <span className="after">{postText}</span>}
         </>
     );
 };
 
 const PrePostText: FieldComponent = {
-    render: ( { field } ) => (
+    render: ({ field }) => (
         <PrePostTextUI
-            type={ field.type }
-            textType={ field.textType }
-            preText={ field.preText }
-            postText={ field.postText }
+            type={field.type}
+            textType={field.textType}
+            preText={field.preText}
+            postText={field.postText}
         />
     ),
 
-    validate: ( field, value ) => {
-        if ( field.required && ! value?.[ field.key ] ) {
-            return `${ field.label } is required`;
+    validate: (field, value) => {
+        if (field.required && !value?.[field.key]) {
+            return `${field.label} is required`;
         }
         return null;
     },

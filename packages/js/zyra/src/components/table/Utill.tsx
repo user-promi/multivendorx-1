@@ -18,9 +18,7 @@ export const renderCell = (
             const formattedValue = String(value)
                 .toLowerCase()
                 .split(/[-_]/)
-                .map(
-                    (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                )
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
 
             return (
@@ -77,9 +75,7 @@ export const renderCell = (
             const numberValue =
                 typeof value === 'number'
                     ? value
-                    : parseFloat(
-                        value.toString().replace(/[^0-9.-]+/g, '')
-                    );
+                    : parseFloat(value.toString().replace(/[^0-9.-]+/g, ''));
 
             if (isNaN(numberValue)) {
                 return <span>{value}</span>;
@@ -104,9 +100,7 @@ export const renderCell = (
             );
 
             const formattedNumber =
-                decimals > 0
-                    ? parts.join(decimalSeparator ?? '.')
-                    : parts[0];
+                decimals > 0 ? parts.join(decimalSeparator ?? '.') : parts[0];
 
             let finalValue: string;
             if ('left' === currencyPosition) {

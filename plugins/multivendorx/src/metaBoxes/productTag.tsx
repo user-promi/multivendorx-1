@@ -48,11 +48,13 @@ const ProductTag = ({ product, setProduct }) => {
 addFilter(
 	'multivendorx_add_product_right_section',
 	'multivendorx/product_tag',
-	(content, product, setProduct) => {
+	(content, product, setProduct, handleChange, productFields) => {
 		return (
 			<>
 				{content}
-				<ProductTag product={product} setProduct={setProduct} />
+				{productFields.includes('product_tag') && 
+					<ProductTag product={product} setProduct={setProduct} />
+				}
 			</>
 		);
 	},

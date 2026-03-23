@@ -16,7 +16,7 @@ export type QueryProps = {
      * Allowing string for backward compatibility
      */
     paged?: number | string;
-    filter?: Record< string, FilterValue >;
+    filter?: Record<string, FilterValue>;
     categoryFilter?: string;
 };
 
@@ -65,7 +65,7 @@ export type TableHeaderConfig = {
     /**
      * Custom renderer (overrides type)
      */
-    render?: ( row?: {} ) => React.ReactNode;
+    render?: (row?: TableRow) => React.ReactNode;
 
     /**
      * Inline editing
@@ -90,7 +90,15 @@ export type TableHeaderConfig = {
 
 export type TableRow = {
     id?: string | number;
-    [ key: string ]: string | number | boolean | React.ReactNode;
+    [key: string]: string | number | boolean | React.ReactNode;
+};
+
+export type CurrencyConfig = {
+    currencySymbol?: string;
+    priceDecimals?: number;
+    decimalSeparator?: string;
+    thousandSeparator?: string;
+    currencyPosition?: 'left' | 'left_space' | 'right' | 'right_space';
 };
 
 /**
@@ -104,11 +112,11 @@ type CommonTableProps = {
     /**
      * An array of column headers (see `Table` props).
      */
-    headers?: Record< string, TableHeaderConfig >;
+    headers?: Record<string, TableHeaderConfig>;
     /**
      * An array of arrays of display/value object pairs (see `Table` props).
      */
-    rows?: Array< {} >;
+    rows?: Array<TableRow>;
     /**
      * Additional CSS classes.
      */
@@ -116,7 +124,7 @@ type CommonTableProps = {
     /**
      * A function called when sortable table headers are clicked, gets the `header.key` as argument.
      */
-    onSort?: ( key: string, direction: string ) => void;
+    onSort?: (key: string, direction: string) => void;
 };
 
 export type TableProps = CommonTableProps & {
@@ -129,11 +137,11 @@ export type TableProps = CommonTableProps & {
     /**
      * Additional classnames
      */
-    classNames?: string | Record< string, string >;
-    ids?: Array< number >;
-    selectedIds?: Array< number >;
-    onSelectRow?: ( id: number, selected: boolean ) => void;
-    onSelectAll?: ( selected: boolean ) => void;
+    classNames?: string | Record<string, string>;
+    ids?: Array<number>;
+    selectedIds?: Array<number>;
+    onSelectRow?: (id: number, selected: boolean) => void;
+    onSelectAll?: (selected: boolean) => void;
     rowActions?: ActionItem[];
     onCellEdit?: (
         key: string,
@@ -143,7 +151,7 @@ export type TableProps = CommonTableProps & {
     isLoading?: boolean;
     enableBulkSelect?: boolean;
     format?: string;
-    currency?: {};
+    currency?: CurrencyConfig;
 };
 
 // export type TableSummaryProps = {
@@ -158,7 +166,7 @@ export type TableCardProps = CommonTableProps & {
     /**
      * A list of IDs, matching to the row list so that ids[ 0 ] contains the object ID for the object displayed in row[ 0 ].
      */
-    ids?: Array< number >;
+    ids?: Array<number>;
     /**
      * Defines if the table contents are loading.
      * It will display `TablePlaceholder` component instead of `Table` if that's the case.
@@ -167,11 +175,13 @@ export type TableCardProps = CommonTableProps & {
     /**
      * A function which returns a callback function to update the query string for a given `param`.
      */
-    onQueryChange?: ( param: string ) => ( ...props: any ) => void;
+    onQueryChange?: (
+        param: string
+    ) => (value?: string, direction?: string) => void;
     /**
      * A function which returns a callback function which is called upon the user changing the visibility of columns.
      */
-    onColumnsChange?: ( showCols: Array< string >, key?: string ) => void;
+    onColumnsChange?: (showCols: Array<string>, key?: string) => void;
     /**
      * A callback function that is invoked when the current page is changed.
      */
@@ -196,8 +206,8 @@ export type TableCardProps = CommonTableProps & {
      * The total number of rows (across all pages).
      */
     totalRows: number;
-    bulkActions?: Array< { label: string; value: string } >;
-    onBulkActionApply?: ( action: string, selectedIds: number[] ) => void;
+    bulkActions?: Array<{ label: string; value: string }>;
+    onBulkActionApply?: (action: string, selectedIds: number[]) => void;
     search?: {
         placeholder?: string;
         options?: {
@@ -205,14 +215,14 @@ export type TableCardProps = CommonTableProps & {
             value: string;
         }[];
     };
-    onQueryUpdate?: ( query: QueryProps ) => void;
+    onQueryUpdate?: (query: QueryProps) => void;
     filters?: RealtimeFilterConfig[];
-    categoryCounts?: categoryCount[];
+    categoryCounts?: CategoryCount[];
     activeCategory?: string; // optional
-    onCategoryClick?: ( value: string ) => void;
+    onCategoryClick?: (value: string) => void;
     showColumnToggleIcon?: boolean;
     rowActions?: ActionItem[];
-    onSelectCsvDownloadApply?: ( selectedIds: number[] ) => void;
+    onSelectCsvDownloadApply?: (selectedIds: number[]) => void;
     onCellEdit?: (
         key: string,
         row: TableRow,

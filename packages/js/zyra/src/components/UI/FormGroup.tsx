@@ -17,7 +17,7 @@ type FormGroupProps = {
     noticeType?: 'error' | 'success' | 'warning' | 'info';
 };
 
-const FormGroup: React.FC< FormGroupProps > = ( {
+const FormGroup: React.FC<FormGroupProps> = ({
     label,
     desc = '',
     icon,
@@ -29,51 +29,49 @@ const FormGroup: React.FC< FormGroupProps > = ( {
     row = false,
     notice,
     noticeType = 'error',
-} ) => {
+}) => {
     return (
         <div
-            className={ `form-group ${ row ? 'row' : '' } ${ className }` }
-            data-cols={ cols }
+            className={`form-group ${row ? 'row' : ''} ${className}`}
+            data-cols={cols}
         >
-            { label && (
-                <label className="settings-form-label" htmlFor={ htmlFor }>
+            {label && (
+                <label className="settings-form-label" htmlFor={htmlFor}>
                     <div className="title">
-                        { icon && (
-                            <i
-                                className={ `adminfont-${ icon } form-icon` }
-                            ></i>
-                        ) }
-                        { label }
+                        {icon && (
+                            <i className={`adminfont-${icon} form-icon`}></i>
+                        )}
+                        {label}
                     </div>
-                    { labelDes && (
+                    {labelDes && (
                         <div className="settings-metabox-description">
-                            { labelDes }
+                            {labelDes}
                         </div>
-                    ) }
+                    )}
                 </label>
-            ) }
+            )}
             <div className="settings-input-content">
-                { children }
+                {children}
 
-                { notice && (
+                {notice && (
                     <Notice
-                        type={ noticeType }
-                        message={ notice }
+                        type={noticeType}
+                        message={notice}
                         displayPosition="inline"
                     />
-                ) }
+                )}
 
-                { desc && (
+                {desc && (
                     <div className="settings-metabox-description">
-                        { /* Check if desc is a string or React node */ }
-                        { typeof desc === 'string' ? (
-                            <p dangerouslySetInnerHTML={ { __html: desc } } />
+                        {/* Check if desc is a string or React node */}
+                        {typeof desc === 'string' ? (
+                            <p dangerouslySetInnerHTML={{ __html: desc }} />
                         ) : (
                             // Render React nodes directly
                             desc
-                        ) }
+                        )}
                     </div>
-                ) }
+                )}
             </div>
         </div>
     );

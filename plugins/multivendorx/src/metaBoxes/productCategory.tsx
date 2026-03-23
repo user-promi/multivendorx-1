@@ -433,7 +433,7 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 addFilter(
 	'multivendorx_add_product_right_section',
 	'multivendorx/product_category',
-	(content, product, setProduct, handleChange, setErrorMsg) => {
+	(content, product, setProduct, handleChange, productFields, setErrorMsg) => {
 		return (
 			<>
 				{content}

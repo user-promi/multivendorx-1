@@ -15,16 +15,16 @@ export interface TextContentBlockData {
 }
 
 // View Component - Renders the actual content
-export const TextContentView: React.FC< {
+export const TextContentView: React.FC<{
     field: TextContentBlockData;
-    onChange: ( updates: Partial< TextContentBlockData > ) => void;
+    onChange: (updates: Partial<TextContentBlockData>) => void;
     editable?: boolean;
-} > = ( { field, onChange, editable = true } ) => {
-    if ( ! field ) {
+}> = ({ field, onChange, editable = true }) => {
+    if (!field) {
         return null;
     }
 
-    const styles = generateBlockStyles( field.style, { includeText: true } );
+    const styles = generateBlockStyles(field.style, { includeText: true });
 
     const enhancedStyles = {
         ...styles,
@@ -33,26 +33,26 @@ export const TextContentView: React.FC< {
         width: '100%',
     };
 
-    const handleBlur = ( e: React.FocusEvent< HTMLElement > ) => {
-        if ( field.type === 'heading' ) {
-            onChange( { text: e.currentTarget.textContent || '' } );
+    const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
+        if (field.type === 'heading') {
+            onChange({ text: e.currentTarget.textContent || '' });
         } else {
-            onChange( { html: e.currentTarget.innerHTML } );
+            onChange({ html: e.currentTarget.innerHTML });
         }
     };
 
     // Render heading
-    if ( field.type === 'heading' ) {
-        const Tag = `h${ field.level || 2 }` as keyof JSX.IntrinsicElements;
+    if (field.type === 'heading') {
+        const Tag = `h${field.level || 2}` as keyof JSX.IntrinsicElements;
         return (
             <Tag
                 className="email-heading"
-                style={ enhancedStyles }
-                contentEditable={ editable }
+                style={enhancedStyles}
+                contentEditable={editable}
                 suppressContentEditableWarning
-                onBlur={ handleBlur }
+                onBlur={handleBlur}
             >
-                { field.text || 'Heading Text' }
+                {field.text || 'Heading Text'}
             </Tag>
         );
     }
@@ -61,40 +61,40 @@ export const TextContentView: React.FC< {
     return (
         <div
             className="email-text"
-            style={ enhancedStyles }
-            contentEditable={ editable }
+            style={enhancedStyles}
+            contentEditable={editable}
             suppressContentEditableWarning
-            onBlur={ handleBlur }
-            dangerouslySetInnerHTML={ {
+            onBlur={handleBlur}
+            dangerouslySetInnerHTML={{
                 __html: field.html || 'This is a demo text',
-            } }
+            }}
         />
     );
 };
 
 // Main Render Component - Matches FieldComponent interface
-export const TextContentUI: React.FC< {
+export const TextContentUI: React.FC<{
     field: TextContentBlockData;
-    value?: Partial< TextContentBlockData >;
-    onChange: ( value: Partial< TextContentBlockData > ) => void;
+    value?: Partial<TextContentBlockData>;
+    onChange: (value: Partial<TextContentBlockData>) => void;
     canAccess?: boolean;
     modules?: string[];
-    settings?: Record< string, string | number | boolean | null >;
-    onBlocked?: ( type: 'pro' | 'module', payload?: string ) => void;
-} > = ( { field, onChange } ) => {
-    if ( ! field ) {
+    settings?: Record<string, string | number | boolean | null>;
+    onBlocked?: (type: 'pro' | 'module', payload?: string) => void;
+}> = ({ field, onChange }) => {
+    if (!field) {
         return null;
     }
 
-    const handleChange = ( updates: Partial< TextContentBlockData > ) => {
-        onChange( updates );
+    const handleChange = (updates: Partial<TextContentBlockData>) => {
+        onChange(updates);
     };
 
     return (
         <TextContentView
-            field={ field }
-            onChange={ handleChange }
-            editable={ true }
+            field={field}
+            onChange={handleChange}
+            editable={true}
         />
     );
 };

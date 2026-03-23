@@ -43,18 +43,18 @@ export const formatSpacing = (
     type: 'padding' | 'margin',
     style: BlockStyle
 ): string => {
-    const top = style[ `${ type }Top` ] ?? 0.85;
-    const right = style[ `${ type }Right` ] ?? 0.85;
-    const bottom = style[ `${ type }Bottom` ] ?? 0.85;
-    const left = style[ `${ type }Left` ] ?? 0.85;
-    return `${ top }rem ${ right }rem ${ bottom }rem ${ left }rem`;
+    const top = style[`${type}Top`] ?? 0.85;
+    const right = style[`${type}Right`] ?? 0.85;
+    const bottom = style[`${type}Bottom`] ?? 0.85;
+    const left = style[`${type}Left`] ?? 0.85;
+    return `${top}rem ${right}rem ${bottom}rem ${left}rem`;
 };
 
 // Generate CSS properties for color styles
 export const generateColorStyles = (
     style?: BlockStyle
 ): React.CSSProperties => {
-    if ( ! style ) {
+    if (!style) {
         return {};
     }
     return {
@@ -67,12 +67,12 @@ export const generateColorStyles = (
 export const generateSpacingStyles = (
     style?: BlockStyle
 ): React.CSSProperties => {
-    if ( ! style ) {
+    if (!style) {
         return {};
     }
     return {
-        padding: formatSpacing( 'padding', style ),
-        margin: formatSpacing( 'margin', style ),
+        padding: formatSpacing('padding', style),
+        margin: formatSpacing('margin', style),
     };
 };
 
@@ -80,34 +80,32 @@ export const generateSpacingStyles = (
 export const generateBorderStyles = (
     style?: BlockStyle
 ): React.CSSProperties => {
-    if ( ! style ) {
+    if (!style) {
         return {};
     }
     return {
         borderWidth:
             style.borderWidth !== undefined
-                ? `${ style.borderWidth }rem`
+                ? `${style.borderWidth}rem`
                 : undefined,
         borderColor: style.borderColor,
         borderStyle: style.borderStyle,
         borderRadius:
             style.borderRadius !== undefined
-                ? `${ style.borderRadius }rem`
+                ? `${style.borderRadius}rem`
                 : undefined,
     };
 };
 
 // Generate CSS properties for text styles
-export const generateTextStyles = (
-    style?: BlockStyle
-): React.CSSProperties => {
-    if ( ! style ) {
+export const generateTextStyles = (style?: BlockStyle): React.CSSProperties => {
+    if (!style) {
         return {};
     }
     return {
         textAlign: style.textAlign,
         fontSize:
-            style.fontSize !== undefined ? `${ style.fontSize }rem` : undefined,
+            style.fontSize !== undefined ? `${style.fontSize}rem` : undefined,
         fontFamily: style.fontFamily,
         lineHeight: style.lineHeight,
         fontWeight: style.fontWeight,
@@ -119,7 +117,7 @@ export const generateTextStyles = (
 export const generateDimensionStyles = (
     style?: BlockStyle
 ): React.CSSProperties => {
-    if ( ! style ) {
+    if (!style) {
         return {};
     }
     return {
@@ -136,22 +134,22 @@ export const generateBlockStyles = (
         includeDimensions?: boolean;
     } = {}
 ): React.CSSProperties => {
-    if ( ! style ) {
+    if (!style) {
         return {};
     }
     const { includeText = true, includeDimensions = true } = options;
 
     return {
-        ...generateColorStyles( style ),
-        ...generateSpacingStyles( style ),
-        ...generateBorderStyles( style ),
-        ...( includeText ? generateTextStyles( style ) : {} ),
-        ...( includeDimensions ? generateDimensionStyles( style ) : {} ),
+        ...generateColorStyles(style),
+        ...generateSpacingStyles(style),
+        ...generateBorderStyles(style),
+        ...(includeText ? generateTextStyles(style) : {}),
+        ...(includeDimensions ? generateDimensionStyles(style) : {}),
     };
 };
 
 // Default style values for new blocks
-export const DEFAULT_BLOCK_STYLES: Partial< BlockStyle > = {
+export const DEFAULT_BLOCK_STYLES: Partial<BlockStyle> = {
     backgroundColor: '#ffffff',
     color: '#000000',
     fontSize: 16,

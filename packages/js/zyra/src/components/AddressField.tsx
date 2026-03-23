@@ -38,7 +38,7 @@ const DEFAULT_ADDRESS_FIELDS = [
         key: 'country',
         label: 'Country',
         type: 'select',
-        options: [ 'India', 'USA', 'UK', 'Canada' ],
+        options: ['India', 'USA', 'UK', 'Canada'],
         required: false,
     },
     {
@@ -46,7 +46,7 @@ const DEFAULT_ADDRESS_FIELDS = [
         key: 'state',
         label: 'State',
         type: 'select',
-        options: [ 'Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu' ],
+        options: ['Karnataka', 'Maharashtra', 'Delhi', 'Tamil Nadu'],
         required: false,
     },
     {
@@ -77,7 +77,7 @@ export interface AddressFormField {
     type: string;
     label: string;
     fields?: SubField[];
-    value?: Record< string, string >;
+    value?: Record<string, string>;
     readonly?: boolean;
     context?: string; // Add context to determine when to use defaults
 }
@@ -85,61 +85,58 @@ export interface AddressFormField {
 interface AddressFieldProps {
     formField: AddressFormField;
     opendInput: SubField | null;
-    setOpendInput: React.Dispatch< React.SetStateAction< SubField | null > >;
+    setOpendInput: React.Dispatch<React.SetStateAction<SubField | null>>;
 }
 
-const AddressFieldUI: React.FC< AddressFieldProps > = ( {
+const AddressFieldUI: React.FC<AddressFieldProps> = ({
     formField,
     opendInput,
     setOpendInput,
-} ) => {
+}) => {
     // Use default fields if no fields are provided and context is registration
-    const [ subFields, setSubFields ] = useState< SubField[] >(
+    const [subFields, setSubFields] = useState<SubField[]>(
         formField.fields?.length
             ? formField.fields
             : formField.context === 'form'
-            ? DEFAULT_ADDRESS_FIELDS
-            : []
+              ? DEFAULT_ADDRESS_FIELDS
+              : []
     );
 
-    useEffect( () => {
+    useEffect(() => {
         // Update local state when formField.fields changes
         // If no fields and context is registration, use defaults
-        if ( formField.fields?.length ) {
-            setSubFields( formField.fields );
-        } else if (
-            ! formField.fields?.length &&
-            formField.context === 'form'
-        ) {
-            setSubFields( DEFAULT_ADDRESS_FIELDS );
+        if (formField.fields?.length) {
+            setSubFields(formField.fields);
+        } else if (!formField.fields?.length && formField.context === 'form') {
+            setSubFields(DEFAULT_ADDRESS_FIELDS);
         } else {
-            setSubFields( [] );
+            setSubFields([]);
         }
-    }, [ formField.fields, formField.context ] );
+    }, [formField.fields, formField.context]);
 
     // Update parent
-    const updateParent = ( updated: SubField[] ) => {
-        setSubFields( updated );
+    const updateParent = (updated: SubField[]) => {
+        setSubFields(updated);
     };
 
     const FieldRenderers = {
-        text: ( field: SubField ) => (
+        text: (field: SubField) => (
             <>
-                <p>{ field.label }</p>
-                <BasicInputUI placeholder={ field.placeholder } />
+                <p>{field.label}</p>
+                <BasicInputUI placeholder={field.placeholder} />
             </>
         ),
-        select: ( field: SubField ) => {
+        select: (field: SubField) => {
             return (
                 <div className="address-field-item">
-                    <label className="field-label">{ field.label }</label>
+                    <label className="field-label">{field.label}</label>
                     <SelectInputUI
                         type="single-select"
                         options={
-                            field.options?.map( ( opt ) => ( {
+                            field.options?.map((opt) => ({
                                 value: opt,
                                 label: opt,
-                            } ) ) || []
+                            })) || []
                         }
                     />
                 </div>
@@ -147,59 +144,57 @@ const AddressFieldUI: React.FC< AddressFieldProps > = ( {
         },
     };
 
-    if ( ! subFields.length ) {
+    if (!subFields.length) {
         return null;
     }
 
     return (
         // <div className="address-field-wrapper">
         //     <h4 className="address-section-title">{ formField.label }</h4>
-            <ReactSortable
-                list={ subFields }
-                setList={ updateParent }
-                handle=".drag-handle"
-                animation={ 150 }
-            >
-                { subFields.map( ( field ) => (
-                    <div
-                        key={ field.id }
-                        className={ `form-field ${
-                            opendInput?.id === field.id ? 'active' : ''
-                        }` }
-                        onClick={ ( e ) => {
-                            e.stopPropagation();
-                            setOpendInput( {
-                                ...field,
-                                readonly: formField.readonly,
-                                parentId: formField.id,
-                            } );
-                        } }
-                    >
-                        <div className="meta-menu">
-                            <span className="admin-badge blue drag-handle">
-                                <i className="admin-font adminfont-drag"></i>
-                            </span>
-                        </div>
-
-                        { FieldRenderers[ field.type ]?.( field ) }
+        <ReactSortable
+            list={subFields}
+            setList={updateParent}
+            handle=".drag-handle"
+            animation={150}
+        >
+            {subFields.map((field) => (
+                <div
+                    key={field.id}
+                    className={`form-field ${
+                        opendInput?.id === field.id ? 'active' : ''
+                    }`}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setOpendInput({
+                            ...field,
+                            readonly: formField.readonly,
+                            parentId: formField.id,
+                        });
+                    }}
+                >
+                    <div className="meta-menu">
+                        <span className="admin-badge blue drag-handle">
+                            <i className="admin-font adminfont-drag"></i>
+                        </span>
                     </div>
-                ) ) }
-            </ReactSortable>
-        // </div> 
+
+                    {FieldRenderers[field.type]?.(field)}
+                </div>
+            ))}
+        </ReactSortable>
+        // </div>
     );
 };
 
 const AddressField: FieldComponent = {
-    render: ( { field } ) => {
-        const [ openedInput, setOpenedInput ] = useState< SubField | null >(
-            null
-        );
+    render: ({ field }) => {
+        const [openedInput, setOpenedInput] = useState<SubField | null>(null);
 
         return (
             <AddressFieldUI
-                formField={ field as AddressFormField }
-                opendInput={ openedInput }
-                setOpendInput={ setOpenedInput }
+                formField={field as AddressFormField}
+                opendInput={openedInput}
+                setOpendInput={setOpenedInput}
             />
         );
     },

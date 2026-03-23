@@ -47,10 +47,10 @@ type SettingValue =
     | boolean
     | string[]
     | number[]
-    | Record< string, unknown >
+    | Record<string, unknown>
     | null;
 
-type Settings = Record< string, SettingValue >;
+type Settings = Record<string, SettingValue>;
 
 interface ApiResponse {
     type?: string;
@@ -67,129 +67,125 @@ interface DependentCondition {
 interface PopupProps {
     moduleName?: string;
     settings?: string;
-    plugin?: string | {};
+    plugin?: string | Record<string, unknown>;
 }
 
 interface RenderProps {
     settings: SettingsType;
     proSetting: SettingsType;
     setting: Settings;
-    updateSetting: ( key: string, value: SettingValue ) => void;
+    updateSetting: (key: string, value: SettingValue) => void;
     modules: string[];
-    Popup: React.ComponentType< PopupProps >;
-    storeTabSetting?: Record< string, string[] >;
+    Popup: React.ComponentType<PopupProps>;
+    storeTabSetting?: Record<string, string[]>;
 }
 
 const PENALTY = 10;
 const COOLDOWN = 1;
 
-const RenderComponent: React.FC< RenderProps > = ( {
+const RenderComponent: React.FC<RenderProps> = ({
     setting,
     updateSetting,
     settings,
     Popup,
     storeTabSetting,
-} ) => {
+}) => {
     const { modal, submitUrl, id } = settings;
-    const settingChanged = useRef< boolean >( false );
-    const counter = useRef< number >( 0 );
-    const counterId = useRef< ReturnType< typeof setInterval > | null >( null );
-    const [ modelOpen, setModelOpen ] = useState< boolean >( false );
-    const [ modulePopupData, setModulePopupData ] = useState< PopupProps >( {
+    const settingChanged = useRef<boolean>(false);
+    const counter = useRef<number>(0);
+    const counterId = useRef<ReturnType<typeof setInterval> | null>(null);
+    const [modelOpen, setModelOpen] = useState<boolean>(false);
+    const [modulePopupData, setModulePopupData] = useState<PopupProps>({
         moduleName: '',
         settings: '',
         plugin: '',
-    } );
+    });
     const { modules } = useModules();
-    const [ errors, setErrors ] = useState< Record< string, string | null > >(
-        {}
-    );
+    const [errors, setErrors] = useState<Record<string, string | null>>({});
 
-    useEffect( () => {
-        if ( settingChanged.current ) {
+    useEffect(() => {
+        if (settingChanged.current) {
             settingChanged.current = false;
 
             // Set counter by penalty
             counter.current = PENALTY;
 
             // Clear previous counter
-            if ( counterId.current ) {
-                clearInterval( counterId.current );
+            if (counterId.current) {
+                clearInterval(counterId.current);
             }
 
             // Create new interval
-            const intervalId = setInterval( () => {
+            const intervalId = setInterval(() => {
                 counter.current -= COOLDOWN;
 
                 // Cooldown complete, time for DB request
-                if ( counter.current < 0 ) {
+                if (counter.current < 0) {
                     sendApiResponse(
                         ZyraVariable,
-                        getApiLink( ZyraVariable, submitUrl ),
+                        getApiLink(ZyraVariable, submitUrl),
                         {
                             setting,
                             settingName: id,
                         }
-                    ).then( ( response: unknown ) => {
+                    ).then((response: unknown) => {
                         const apiResponse = response as ApiResponse;
-                        if ( apiResponse.message ) {
-                            NoticeManager.add(
-                                {
-                                    title: 'Great!',
-                                    message: apiResponse.message,
-                                    type: apiResponse.type || 'success',
-                                    position: 'float',
-                                }
-                            );
+                        if (apiResponse.message) {
+                            NoticeManager.add({
+                                title: 'Great!',
+                                message: apiResponse.message,
+                                type: apiResponse.type || 'success',
+                                position: 'float',
+                            });
                         }
 
-                        if ( apiResponse.redirect_link ) {
-                            window.open( apiResponse.redirect_link, '_self' );
+                        if (apiResponse.redirect_link) {
+                            window.open(apiResponse.redirect_link, '_self');
                         }
-                    } );
+                    });
 
-                    clearInterval( intervalId );
+                    clearInterval(intervalId);
                     counterId.current = null;
                 }
-            }, 50 );
+            }, 50);
 
             // Store the interval ID
             counterId.current = intervalId;
         }
-    }, [ setting, submitUrl, id ] );
+    }, [setting, submitUrl, id]);
 
-    useEffect( () => {
-        if ( modelOpen === false ) {
-            const timeout = setTimeout( () => {
-                setModulePopupData( {
+    useEffect(() => {
+        if (modelOpen === false) {
+            const timeout = setTimeout(() => {
+                setModulePopupData({
                     moduleName: '',
                     settings: '',
                     plugin: '',
-                } );
-            }, 100 );
+                });
+            }, 100);
 
-            return () => clearTimeout( timeout );
+            return () => clearTimeout(timeout);
         }
-    }, [ modelOpen ] );
+    }, [modelOpen]);
 
     const hasAccess = (
         proFeaturesEnabled: boolean,
         hasDependentModule?: string,
-        hasDependentSetting?: string,
-        hasDependentPlugin?: string
+        hasDependentSetting?: string
+        // hasDependentPlugin?: string
     ) => {
-        if ( proFeaturesEnabled && ! ZyraVariable?.khali_dabba ) {
+        if (proFeaturesEnabled && !ZyraVariable?.khali_dabba) {
             return false;
         }
 
-        if ( hasDependentModule && ! modules.includes( hasDependentModule ) ) {
+        if (hasDependentModule && !modules.includes(hasDependentModule)) {
             return false;
         }
 
         if (
             hasDependentSetting &&
-            Array.isArray( setting[ hasDependentSetting ] ) &&
-            setting[ hasDependentSetting ].length === 0
+            Array.isArray(setting[hasDependentSetting]) &&
+            setting[hasDependentSetting].length === 0
         ) {
             return false;
         }
@@ -204,30 +200,27 @@ const RenderComponent: React.FC< RenderProps > = ( {
     };
 
     const handleGroupClick = (
-        e: React.MouseEvent< HTMLDivElement >,
+        e: React.MouseEvent<HTMLDivElement>,
         field: InputField
     ) => {
         // Stop if already handled by inner elements (optional)
         // But we want to trigger popup on ANY click inside the group
 
         // 1. Pro Setting
-        if ( field.proSetting && ! ZyraVariable?.khali_dabba ) {
-            setModelOpen( true );
+        if (field.proSetting && !ZyraVariable?.khali_dabba) {
+            setModelOpen(true);
             e.stopPropagation();
             return;
         }
 
         // 2. Module Enabled but not active
-        if (
-            field.moduleEnabled &&
-            ! modules.includes( field.moduleEnabled )
-        ) {
-            setModulePopupData( {
+        if (field.moduleEnabled && !modules.includes(field.moduleEnabled)) {
+            setModulePopupData({
                 moduleName: field.moduleEnabled,
                 settings: '',
                 plugin: '',
-            } );
-            setModelOpen( true );
+            });
+            setModelOpen(true);
             e.stopPropagation();
             return;
         }
@@ -235,15 +228,15 @@ const RenderComponent: React.FC< RenderProps > = ( {
         // 3. Dependent Setting (empty array)
         if (
             field.dependentSetting &&
-            Array.isArray( setting[ field.dependentSetting ] ) &&
-            setting[ field.dependentSetting ].length === 0
+            Array.isArray(setting[field.dependentSetting]) &&
+            setting[field.dependentSetting].length === 0
         ) {
-            setModulePopupData( {
+            setModulePopupData({
                 moduleName: '',
                 settings: field.dependentSetting,
                 plugin: '',
-            } );
-            setModelOpen( true );
+            });
+            setModelOpen(true);
             e.stopPropagation();
             return;
         }
@@ -253,40 +246,40 @@ const RenderComponent: React.FC< RenderProps > = ( {
         key: string,
         value: string | number | boolean | null = null
     ): boolean => {
-        const settingValue = setting[ key ];
+        const settingValue = setting[key];
 
         // If settingValue is an array
-        if ( Array.isArray( settingValue ) ) {
+        if (Array.isArray(settingValue)) {
             // If value is null and settingValue has elements, return true
-            if ( value === null && settingValue.length > 0 ) {
+            if (value === null && settingValue.length > 0) {
                 return true;
             }
 
-            return settingValue.includes( value );
+            return settingValue.includes(value);
         }
 
         // If settingValue is not an array
-        if ( value === null && Boolean( settingValue ) ) {
+        if (value === null && Boolean(settingValue)) {
             return true;
         }
 
         return settingValue === value;
     };
 
-    const shouldRender = ( dependent: DependentCondition ): boolean =>
-        ! (
-            ( dependent.set === true && ! isContain( dependent.key ) ) ||
-            ( dependent.set === false && isContain( dependent.key ) ) ||
-            ( dependent.value !== undefined &&
-                ! isContain( dependent.key, dependent.value ) )
+    const shouldRender = (dependent: DependentCondition): boolean =>
+        !(
+            (dependent.set === true && !isContain(dependent.key)) ||
+            (dependent.set === false && isContain(dependent.key)) ||
+            (dependent.value !== undefined &&
+                !isContain(dependent.key, dependent.value))
         );
 
     const handleModelClose = () => {
-        setModelOpen( false );
+        setModelOpen(false);
     };
 
-    const isProSetting = ( proDependent: boolean ): boolean => {
-        return proDependent && ! ZyraVariable?.khali_dabba;
+    const isProSetting = (proDependent: boolean): boolean => {
+        return proDependent && !ZyraVariable?.khali_dabba;
     };
 
     type MultiSelectOption = { value: string; proSetting?: boolean };
@@ -295,353 +288,355 @@ const RenderComponent: React.FC< RenderProps > = ( {
         key: string,
         value: string | string[] | number[] | MultiSelectOption[]
     ) => {
-        console.log( 'save' );
+        console.log('save');
         settingChanged.current = true;
 
-        const field = modal.find( ( f ) => f.key === key );
-        if ( ! field ) {
+        const field = modal.find((f) => f.key === key);
+        if (!field) {
             return;
         }
 
-        if ( field.type === 'nested' ) {
-            updateSetting( key, value );
+        if (field.type === 'nested') {
+            updateSetting(key, value);
             return;
         }
 
         // Multi-select select / deselect-all logic
         if (
-            Array.isArray( value ) &&
+            Array.isArray(value) &&
             value.length > 0 &&
-            typeof value[ 0 ] === 'object'
+            typeof value[0] === 'object'
         ) {
-            if (
-                Array.isArray( setting[ key ] ) &&
-                setting[ key ].length > 0
-            ) {
-                updateSetting( key, [] as string[] );
+            if (Array.isArray(setting[key]) && setting[key].length > 0) {
+                updateSetting(key, [] as string[]);
                 return;
             }
 
             const newValue: string[] = value
-                .filter(
-                    ( option ) => ! isProSetting( option.proSetting ?? false )
-                )
-                .map( ( option ) => option.value );
+                .filter((option) => !isProSetting(option.proSetting ?? false))
+                .map((option) => option.value);
 
-            updateSetting( key, newValue );
+            updateSetting(key, newValue);
             return;
         }
 
         // Normal input change (value is now SettingValue)
-        const error = validateField( field, value );
+        const error = validateField(field, value);
 
-        setErrors( ( prev ) => ( {
+        setErrors((prev) => ({
             ...prev,
-            [ key ]: error,
-        } ) );
+            [key]: error,
+        }));
 
-        if ( error ) {
+        if (error) {
             return;
         }
 
-        updateSetting( key, value );
+        updateSetting(key, value);
     };
 
-    const VALUE_ADDON_TYPES = [ 'select', 'text' ];
+    const VALUE_ADDON_TYPES = ['select', 'text'];
 
-    const isCompositeField = ( field: InputField ) =>
-        VALUE_ADDON_TYPES.includes( field.beforeElement?.type ) ||
-        VALUE_ADDON_TYPES.includes( field.afterElement?.type );
+    const isCompositeField = (field: InputField) =>
+        VALUE_ADDON_TYPES.includes(field.beforeElement?.type) ||
+        VALUE_ADDON_TYPES.includes(field.afterElement?.type);
 
     const openProPopup = () => {
-        setModulePopupData( { moduleName: '', settings: '', plugin: '' } );
-        setModelOpen( true );
+        setModulePopupData({ moduleName: '', settings: '', plugin: '' });
+        setModelOpen(true);
     };
 
-    const openModulePopup = ( module: string ) => {
-        setModulePopupData( { moduleName: module, settings: '', plugin: '' } );
-        setModelOpen( true );
+    const openModulePopup = (module: string) => {
+        setModulePopupData({ moduleName: module, settings: '', plugin: '' });
+        setModelOpen(true);
     };
 
-    const openPluginPopup = ( plugin: {} ) => {
-        setModulePopupData( { moduleName: '', settings: '', plugin: plugin } );
-        setModelOpen( true );
+    const openPluginPopup = (plugin: {}) => {
+        setModulePopupData({ moduleName: '', settings: '', plugin: plugin });
+        setModelOpen(true);
     };
 
     const renderFieldInternal = (
         field: InputField,
         parentField: InputField,
-        value: any,
-        onChange: ( key: string, value: any ) => void,
+        value: SettingValue | Record<string, unknown>,
+        onChange: (
+            key: string,
+            value: SettingValue | Record<string, unknown>
+        ) => void,
         canAccess: boolean
     ): JSX.Element | null => {
         if (field.component) {
             return field.component;
         }
-        const fieldComponent = FIELD_REGISTRY[ field.type ];
-        if ( ! fieldComponent ) {
+        const fieldComponent = FIELD_REGISTRY[field.type];
+        if (!fieldComponent) {
             return null;
         }
 
         const Render = fieldComponent.render;
 
-        const handleInternalChange = ( val: any ) => {
-            if ( ! isCompositeField( parentField ) ) {
-                onChange( field.key, val );
+        const handleInternalChange = (val: SettingValue) => {
+            if (!isCompositeField(parentField)) {
+                onChange(field.key, val);
                 return;
             }
 
-            onChange( parentField.key, {
-                ...( value ?? {} ),
-                [ field.key ]: val,
-            } );
+            onChange(parentField.key, {
+                ...(value ?? ({} as Record<string, unknown>)),
+                [field.key]: val,
+            });
         };
 
-        const fieldValue = isCompositeField( parentField )
-            ? value?.[ field.key ] ?? ''
-            : value ?? '';
+        const fieldValue = isCompositeField(parentField)
+            ? (value?.[field.key] ?? '')
+            : (value ?? '');
 
         return (
             <Render
-                field={ field }
-                value={ fieldValue }
-                onChange={ handleInternalChange }
-                canAccess={ canAccess }
+                field={field}
+                value={fieldValue}
+                onChange={handleInternalChange}
+                canAccess={canAccess}
                 // appLocalizer={appLocalizer}
-                modules={ modules }
-                settings={ setting }
-                onOptionsChange={ ( opts: any[] ) => {
+                modules={modules}
+                settings={setting}
+                onOptionsChange={(opts: Record<string, unknown>[]) => {
                     settingChanged.current = true;
-                    updateSetting( `${ field.key }_options`, opts );
-                } }
-                onBlocked={ (
+                    updateSetting(`${field.key}_options`, opts);
+                }}
+                onBlocked={(
                     type: 'pro' | 'module' | 'plugin',
-                    payload?: string | {}
+                    payload?: string | Record<string, unknown>
                 ) => {
-                    if ( type === 'pro' ) {
+                    if (type === 'pro') {
                         openProPopup();
                     }
-                    if ( type === 'module' && payload ) {
-                        openModulePopup( payload );
+                    if (type === 'module' && payload) {
+                        openModulePopup(payload);
                     }
-                    if ( type === 'plugin' && payload ) {
-                        openPluginPopup( payload );
+                    if (type === 'plugin' && payload) {
+                        openPluginPopup(payload);
                     }
-                } }
-                storeTabSetting={ storeTabSetting }
+                }}
+                storeTabSetting={storeTabSetting}
             />
         );
     };
 
-    const validateField = ( field: InputField, value: any ): string | null => {
-        const component = FIELD_REGISTRY[ field.type ];
-        if ( ! component?.validate ) {
+    const validateField = (
+        field: InputField,
+        value: SettingValue | Record<string, unknown>
+    ): string | null => {
+        const component = FIELD_REGISTRY[field.type];
+        if (!component?.validate) {
             return null;
         }
 
-        if ( ! isCompositeField( field ) ) {
-            return component.validate( field, value );
+        if (!isCompositeField(field)) {
+            return component.validate(field, value);
         }
 
-        return component.validate( field, value ?? {} );
+        return component.validate(field, value ?? {});
     };
 
     const renderForm = () => {
-        return modal.map( ( inputField: InputField ) => {
+        return modal.map((inputField: InputField) => {
             // const value: unknown = setting[inputField.key] ?? '';
-            const composite = isCompositeField( inputField );
+            const composite = isCompositeField(inputField);
 
             const value = composite
-                ? setting[ inputField.key ] ?? {}
-                : setting[ inputField.key ] ?? '';
+                ? (setting[inputField.key] ?? {})
+                : (setting[inputField.key] ?? '');
 
             // Filter dependent conditions
-            if ( Array.isArray( inputField.dependent ) ) {
-                for ( const dependent of inputField.dependent ) {
-                    if ( ! shouldRender( dependent ) ) {
+            if (Array.isArray(inputField.dependent)) {
+                for (const dependent of inputField.dependent) {
+                    if (!shouldRender(dependent)) {
                         return null;
                     }
                 }
-            } else if ( inputField.dependent ) {
-                if ( ! shouldRender( inputField.dependent ) ) {
+            } else if (inputField.dependent) {
+                if (!shouldRender(inputField.dependent)) {
                     return null;
                 }
             }
 
             const access = hasAccess(
                 inputField.proSetting ?? false,
-                String( inputField.moduleEnabled ?? '' ),
-                String( inputField.dependentSetting ?? '' ),
-                String( inputField.dependentPlugin ?? '' )
+                String(inputField.moduleEnabled ?? ''),
+                String(inputField.dependentSetting ?? ''),
+                String(inputField.dependentPlugin ?? '')
             );
 
             // const input = renderFieldInternal(inputField, value, handleChange, access );
             const input = (
                 <>
-                    { inputField.beforeElement &&
+                    {inputField.beforeElement &&
                         renderFieldInternal(
                             inputField.beforeElement,
                             inputField,
                             value,
                             handleChange,
                             access
-                        ) }
+                        )}
 
-                    { renderFieldInternal(
+                    {renderFieldInternal(
                         inputField,
                         inputField,
                         value,
                         handleChange,
                         access
-                    ) }
+                    )}
 
-                    { inputField.afterElement &&
+                    {inputField.afterElement &&
                         renderFieldInternal(
                             inputField.afterElement,
                             inputField,
                             value,
                             handleChange,
                             access
-                        ) }
+                        )}
                 </>
             );
 
             // const input = renderField(inputField, value, handleChange, access);
 
             const isLocked =
-                ( inputField.proSetting && ! ZyraVariable?.khali_dabba ) ||
-                ( inputField.moduleEnabled &&
-                    ! modules.includes( inputField.moduleEnabled ) ) ||
-                ( inputField.dependentSetting &&
-                    ( () => {
+                (inputField.proSetting && !ZyraVariable?.khali_dabba) ||
+                (inputField.moduleEnabled &&
+                    !modules.includes(inputField.moduleEnabled)) ||
+                (inputField.dependentSetting &&
+                    (() => {
                         const dependentValue =
-                            setting[ inputField.dependentSetting ];
+                            setting[inputField.dependentSetting];
                         return (
-                            Array.isArray( dependentValue ) &&
+                            Array.isArray(dependentValue) &&
                             dependentValue.length === 0
                         );
-                    } )() );
+                    })());
             // (inputField.dependentPlugin &&
             //     !appLocalizer[`${inputField.dependentPlugin}_active`]);
 
             const fieldContent =
                 inputField.type === 'section' ? (
-                    <>{ input }</>
+                    <>{input}</>
                 ) : (
                     <div
-                        key={ inputField.key }
-                        className={ `form-group ${
+                        key={inputField.key}
+                        className={`form-group ${
                             inputField.row === false ? '' : 'row'
-                        }  ${ inputField.classes ? inputField.classes : '' } ${
+                        }  ${inputField.classes ? inputField.classes : ''} ${
                             inputField.proSetting ? 'pro-setting' : ''
                         } ${
                             inputField.moduleEnabled &&
-                            ! modules.includes( inputField.moduleEnabled )
+                            !modules.includes(inputField.moduleEnabled)
                                 ? 'module-enabled'
                                 : ''
-                        }` }
-                        data-cols={ inputField.cols }
-                        onClick={ ( e ) => handleGroupClick( e, inputField ) }
+                        }`}
+                        data-cols={inputField.cols}
+                        onClick={(e) => handleGroupClick(e, inputField)}
                     >
-                        { inputField.label && (
+                        {inputField.label && (
                             <label
                                 className="settings-form-label"
-                                key={ inputField.key }
-                                htmlFor={ inputField.key }
+                                key={inputField.key}
+                                htmlFor={inputField.key}
                             >
                                 <div className="title">
-                                    { inputField.icon && (
-                                        <i className={ `adminfont-${ inputField.icon }` } />
-                                    ) }
-                                    { inputField.label }
+                                    {inputField.icon && (
+                                        <i
+                                            className={`adminfont-${inputField.icon}`}
+                                        />
+                                    )}
+                                    {inputField.label}
                                 </div>
-                                { inputField.settingDescription && (
+                                {inputField.settingDescription && (
                                     <div className="settings-metabox-description">
-                                        { inputField.settingDescription }
+                                        {inputField.settingDescription}
                                     </div>
-                                ) }
+                                )}
                             </label>
-                        ) }
+                        )}
                         <div className="settings-input-content">
-                            { isLocked &&
+                            {isLocked &&
                             React.isValidElement<
-                                React.HTMLAttributes< HTMLElement >
-                            >( input )
-                                ? React.cloneElement( input, {
-                                      onClick: ( e ) => {
+                                React.HTMLAttributes<HTMLElement>
+                            >(input)
+                                ? React.cloneElement(input, {
+                                      onClick: (e) => {
                                           e.stopPropagation();
                                       },
-                                  } )
-                                : input }
+                                  })
+                                : input}
 
-                            { errors[ inputField.key ] && (
+                            {errors[inputField.key] && (
                                 <Notice
-                                    uniqueKey={ `error-${ inputField.key }` }
+                                    uniqueKey={`error-${inputField.key}`}
                                     type="error"
                                     displayPosition="inline"
-                                    message={ errors[ inputField.key ] }
+                                    message={errors[inputField.key]}
                                 />
-                            ) }
-                            { inputField.desc && (
+                            )}
+                            {inputField.desc && (
                                 <p
                                     className="settings-metabox-description"
-                                    dangerouslySetInnerHTML={ {
+                                    dangerouslySetInnerHTML={{
                                         __html: inputField.desc,
-                                    } }
+                                    }}
                                 />
-                            ) }
+                            )}
                         </div>
-                        { ( ( inputField.proSetting &&
-                            ZyraVariable?.khali_dabba ) ||
-                            ! inputField.proSetting ) &&
+                        {((inputField.proSetting &&
+                            ZyraVariable?.khali_dabba) ||
+                            !inputField.proSetting) &&
                             inputField.moduleEnabled &&
-                            ! modules.includes( inputField.moduleEnabled ) && (
+                            !modules.includes(inputField.moduleEnabled) && (
                                 <span className="admin-pro-tag module">
                                     <i
-                                        className={ `adminfont-${ inputField.moduleEnabled }` }
+                                        className={`adminfont-${inputField.moduleEnabled}`}
                                     ></i>
-                                    { String( inputField.moduleEnabled )
-                                        .split( '-' )
+                                    {String(inputField.moduleEnabled)
+                                        .split('-')
                                         .map(
-                                            ( word: string ) =>
-                                                word.charAt( 0 ).toUpperCase() +
-                                                word.slice( 1 )
+                                            (word: string) =>
+                                                word.charAt(0).toUpperCase() +
+                                                word.slice(1)
                                         )
-                                        .join( ' ' ) }
+                                        .join(' ')}
                                     <i className="adminfont-lock"></i>
                                 </span>
-                            ) }
-                        { inputField.proSetting &&
-                            ! ZyraVariable.khali_dabba && (
-                                <span className="admin-pro-tag">
-                                    <i className="adminfont-pro-tag"></i>Pro
-                                </span>
-                            ) }
+                            )}
+                        {inputField.proSetting && !ZyraVariable.khali_dabba && (
+                            <span className="admin-pro-tag">
+                                <i className="adminfont-pro-tag"></i>Pro
+                            </span>
+                        )}
                     </div>
                 );
 
             return fieldContent;
-        } );
+        });
     };
 
     return (
         <>
-            { modelOpen && (
+            {modelOpen && (
                 <PopupUI
                     position="lightbox"
-                    open={ modelOpen }
-                    onClose={ handleModelClose }
-                    width={ 31.25 }
+                    open={modelOpen}
+                    onClose={handleModelClose}
+                    width={31.25}
                     height="auto"
                 >
                     <Popup
-                        moduleName={ String( modulePopupData.moduleName ) }
-                        settings={ modulePopupData.settings }
-                        plugin={ modulePopupData.plugin }
+                        moduleName={String(modulePopupData.moduleName)}
+                        settings={modulePopupData.settings}
+                        plugin={modulePopupData.plugin}
                     />
                 </PopupUI>
-            ) }
-            <FormGroupWrapper>{ renderForm() }</FormGroupWrapper>
+            )}
+            <FormGroupWrapper>{renderForm()}</FormGroupWrapper>
         </>
     );
 };

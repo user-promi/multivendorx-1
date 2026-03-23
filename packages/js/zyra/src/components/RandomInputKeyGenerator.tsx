@@ -4,35 +4,35 @@ import { FieldComponent } from './fieldUtils';
 interface RandomInputKeyGeneratorProps {
     value?: string;
     length?: number;
-    onChange: ( value: string ) => void;
+    onChange: (value: string) => void;
 }
 
-const generateRandomKey = ( len: number ): string =>
-    Array.from( { length: len }, () =>
+const generateRandomKey = (len: number): string =>
+    Array.from({ length: len }, () =>
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.charAt(
-            Math.floor( Math.random() * 62 )
+            Math.floor(Math.random() * 62)
         )
-    ).join( '' );
+    ).join('');
 
 export const RandomInputKeyGeneratorUI: React.FC<
     RandomInputKeyGeneratorProps
-> = ( { value = '', length = 8, onChange } ) => {
+> = ({ value = '', length = 8, onChange }) => {
     const handleGenerate = () => {
-        const key = generateRandomKey( length );
-        onChange( key );
+        const key = generateRandomKey(length);
+        onChange(key);
     };
 
     const handleCopy = () => {
-        navigator.clipboard.writeText( value );
+        navigator.clipboard.writeText(value);
     };
 
     const handleDelete = () => {
-        onChange( '' );
+        onChange('');
     };
 
-    if ( ! value ) {
+    if (!value) {
         return (
-            <button type="button" onClick={ handleGenerate }>
+            <button type="button" onClick={handleGenerate}>
                 Generate
             </button>
         );
@@ -40,11 +40,11 @@ export const RandomInputKeyGeneratorUI: React.FC<
 
     return (
         <>
-            <button type="button" onClick={ handleCopy }>
+            <button type="button" onClick={handleCopy}>
                 Copy
             </button>
 
-            <button type="button" onClick={ handleDelete }>
+            <button type="button" onClick={handleDelete}>
                 Delete
             </button>
         </>
@@ -52,11 +52,11 @@ export const RandomInputKeyGeneratorUI: React.FC<
 };
 
 const RandomInputKeyGenerator: FieldComponent = {
-    render: ( { field, value, onChange } ) => (
+    render: ({ field, value, onChange }) => (
         <RandomInputKeyGeneratorUI
-            value={ value }
-            length={ field.length }
-            onChange={ onChange }
+            value={value}
+            length={field.length}
+            onChange={onChange}
         />
     ),
 };

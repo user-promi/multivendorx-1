@@ -17,67 +17,59 @@ type AnalyticsProps = {
     isLoading?: boolean;
 };
 
-const Analytics: React.FC< AnalyticsProps > = ( {
+const Analytics: React.FC<AnalyticsProps> = ({
     data,
     variant = 'default',
     cols,
     isLoading = false,
-} ) => {
+}) => {
     return (
         <div
-            className={ `analytics-container ${ cols ? `flex-wrap` : '' }` }
-            data-template={ variant }
+            className={`analytics-container ${cols ? `flex-wrap` : ''}`}
+            data-template={variant}
         >
-            { data.map( ( item, idx ) => (
+            {data.map((item, idx) => (
                 <div
-                    key={ idx }
-                    className={ `analytics-item ${
-                        cols ? `col-${ cols }` : ''
-                    } ${ item.colorClass || '' }` }
+                    key={idx}
+                    className={`analytics-item ${
+                        cols ? `col-${cols}` : ''
+                    } ${item.colorClass || ''}`}
                 >
                     <div className="analytics-icon">
-                        { isLoading ? (
-                            <Skeleton width={ 60 } height={ 60 } />
+                        {isLoading ? (
+                            <Skeleton width={60} height={60} />
                         ) : (
                             item.icon && (
                                 <i
-                                    className={ `adminfont-${ item.icon } ${
+                                    className={`adminfont-${item.icon} ${
                                         item.iconClass || ''
-                                    }` }
+                                    }`}
                                 />
                             )
-                        ) }
+                        )}
                     </div>
 
                     <div className="details">
                         <div className="number">
-                            { isLoading ? (
-                                <Skeleton width={ 80 } />
-                            ) : (
-                                item.number
-                            ) }
+                            {isLoading ? <Skeleton width={80} /> : item.number}
                         </div>
 
                         <div className="text">
-                            { isLoading ? (
-                                <Skeleton width={ 100 } />
-                            ) : (
-                                item.text
-                            ) }
+                            {isLoading ? <Skeleton width={100} /> : item.text}
                         </div>
 
-                        { variant === 'dashboard' && (
+                        {variant === 'dashboard' && (
                             <div className="report">
-                                { isLoading ? (
-                                    <Skeleton width={ 60 } />
+                                {isLoading ? (
+                                    <Skeleton width={60} />
                                 ) : (
                                     item.extra
-                                ) }
+                                )}
                             </div>
-                        ) }
+                        )}
                     </div>
                 </div>
-            ) ) }
+            ))}
         </div>
     );
 };

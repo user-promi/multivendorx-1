@@ -9,7 +9,7 @@ import { ButtonInputUI } from './ButtonInput';
 // Types
 type FieldType = 'text' | 'number' | 'file' | 'select' | 'button';
 
-type RowValue = Record< string, string | number | File | RowValue[] | null >;
+type RowValue = Record<string, string | number | File | RowValue[] | null>;
 
 interface FieldConfig {
     key: string;
@@ -18,11 +18,11 @@ interface FieldConfig {
     placeholder?: string;
     options?: { label: string; value: string; children?: RowValue[] }[];
     width?: string;
-    onClick?: ( params: {
+    onClick?: (params: {
         row: RowValue;
         rowIndex: number;
-        updateRow: ( patch: Partial< RowValue > ) => void;
-    } ) => void;
+        updateRow: (patch: Partial<RowValue>) => void;
+    }) => void;
 }
 
 interface RowConfig {
@@ -34,7 +34,7 @@ export interface DynamicRowSettingProps {
     keyName: string;
     template: RowConfig;
     value: RowValue[];
-    onChange: ( rows: RowValue[] ) => void;
+    onChange: (rows: RowValue[]) => void;
     addLabel?: string;
     emptyText?: string;
     childrenRenderer?: (
@@ -44,7 +44,7 @@ export interface DynamicRowSettingProps {
     canAccess?: boolean;
 }
 
-const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
+const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
     wrapperClass = '',
     template,
     value,
@@ -53,13 +53,13 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
     emptyText = 'No items added yet',
     childrenRenderer = () => false,
     canAccess = true,
-} ) => {
+}) => {
     const handleAdd = () => {
         const emptyRow: RowValue = {};
-        template.fields.forEach( ( field ) => {
-            emptyRow[ field.key ] = field.type === 'file' ? null : '';
-        } );
-        onChange( [ ...value, emptyRow ] );
+        template.fields.forEach((field) => {
+            emptyRow[field.key] = field.type === 'file' ? null : '';
+        });
+        onChange([...value, emptyRow]);
     };
 
     const handleChange = (
@@ -67,121 +67,117 @@ const DynamicRowSetting: React.FC< DynamicRowSettingProps > = ( {
         fieldKey: string,
         newVal: string | number | File | RowValue[] | null
     ) => {
-        const updatedRows = [ ...value ];
-        updatedRows[ rowIndex ] = {
-            ...updatedRows[ rowIndex ],
-            [ fieldKey ]: newVal,
+        const updatedRows = [...value];
+        updatedRows[rowIndex] = {
+            ...updatedRows[rowIndex],
+            [fieldKey]: newVal,
         };
-        onChange( updatedRows );
+        onChange(updatedRows);
     };
 
-    const handleDelete = ( rowIndex: number ) => {
-        onChange( value.filter( ( _, i ) => i !== rowIndex ) );
+    const handleDelete = (rowIndex: number) => {
+        onChange(value.filter((_, i) => i !== rowIndex));
     };
 
-    function renderField(
-        field: FieldConfig,
-        row: RowValue,
-        rowIndex: number
-    ) {
-        const fieldComponent = FIELD_REGISTRY[ field.type ];
-        if ( ! fieldComponent ) {
+    function renderField(field: FieldConfig, row: RowValue, rowIndex: number) {
+        const fieldComponent = FIELD_REGISTRY[field.type];
+        if (!fieldComponent) {
             return null;
         }
         const Render = fieldComponent.render;
-        const fieldValue = row?.[ field.key ];
+        const fieldValue = row?.[field.key];
 
         const handleInternalChange = (
             val: string | number | File | RowValue[] | null
         ) => {
-            handleChange( rowIndex, field.key, val );
+            handleChange(rowIndex, field.key, val);
             return;
         };
 
-        const updateRow = ( patch: Partial< RowValue > ) => {
-            const updatedRows = [ ...value ];
-            updatedRows[ rowIndex ] = {
-                ...updatedRows[ rowIndex ],
+        const updateRow = (patch: Partial<RowValue>) => {
+            const updatedRows = [...value];
+            updatedRows[rowIndex] = {
+                ...updatedRows[rowIndex],
                 ...patch,
             };
-            onChange( updatedRows );
+            onChange(updatedRows);
         };
 
         return (
             <>
-                {field.label && <label>{ field.label }</label> }
+                {field.label && <label>{field.label}</label>}
                 <Render
-                    field={ {
+                    field={{
                         ...field,
                         onClick: field.onClick
                             ? () =>
-                                  field.onClick( {
+                                  field.onClick({
                                       row,
                                       rowIndex,
                                       updateRow,
-                                  } )
+                                  })
                             : field.onClick,
-                    } }
-                    value={ fieldValue }
-                    onChange={ handleInternalChange }
-                    canAccess={ canAccess }
+                    }}
+                    value={fieldValue}
+                    onChange={handleInternalChange}
+                    canAccess={canAccess}
                 />
             </>
         );
     }
     return (
         <>
-            <div className={ `repeater-field-wrapper ${ wrapperClass }` }>
-                { value.length === 0 ? (
-                    <div className="no-shipping-data">{ emptyText }</div>
+            <div className={`repeater-field-wrapper ${wrapperClass}`}>
+                {value.length === 0 ? (
+                    <div className="no-shipping-data">{emptyText}</div>
                 ) : (
-                    value.map( ( row, rowIndex ) => {
+                    value.map((row, rowIndex) => {
                         const nestedChildren = childrenRenderer?.(
                             row,
                             rowIndex
                         );
 
                         return (
-                            <div key={ rowIndex } className="repeater-field">
+                            <div key={rowIndex} className="repeater-field">
                                 <div className="field">
-                                    { template.fields.map( ( field ) =>
-                                        renderField( field, row, rowIndex )
-                                    ) }
+                                    {template.fields.map((field) =>
+                                        renderField(field, row, rowIndex)
+                                    )}
 
                                     <ButtonInputUI
                                         position="left"
-                                        buttons={ [
+                                        buttons={[
                                             {
                                                 icon: 'delete',
                                                 text: 'Delete',
                                                 color: 'red',
                                                 onClick: () =>
-                                                    handleDelete( rowIndex ),
+                                                    handleDelete(rowIndex),
                                             },
-                                        ] }
+                                        ]}
                                     />
                                 </div>
 
-                                { nestedChildren && (
+                                {nestedChildren && (
                                     <div className="repeater-field-nested">
-                                        { nestedChildren }
+                                        {nestedChildren}
                                     </div>
-                                ) }
+                                )}
                             </div>
                         );
-                    } )
-                ) }
+                    })
+                )}
 
                 <ButtonInputUI
                     position="left"
-                    buttons={ [
+                    buttons={[
                         {
                             icon: 'plus',
                             text: addLabel,
                             color: 'purple',
                             onClick: handleAdd,
                         },
-                    ] }
+                    ]}
                 />
             </div>
         </>
