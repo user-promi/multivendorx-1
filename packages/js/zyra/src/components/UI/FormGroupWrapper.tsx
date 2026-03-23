@@ -8,15 +8,11 @@ type FormGroupWrapperProps = {
     className?: string;
 };
 
-const FormGroupWrapper: React.FC< FormGroupWrapperProps > = ( {
+const FormGroupWrapper: React.FC<FormGroupWrapperProps> = ({
     children,
     className = '',
-} ) => {
-    return (
-        <div className={ `form-group-wrapper ${ className }` }>
-            { children }
-        </div>
-    );
+}) => {
+    return <div className={`form-group-wrapper ${className}`}>{children}</div>;
 };
 
 export default FormGroupWrapper;

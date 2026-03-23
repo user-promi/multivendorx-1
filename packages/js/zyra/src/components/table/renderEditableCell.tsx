@@ -19,25 +19,25 @@ type Props = {
     onSave: (value: string | number | boolean) => void;
 };
 
-export const renderEditableCell = ( {
+export const renderEditableCell = ({
     header,
     cell,
     isEditing,
     onSave,
-}: Props ) => {
+}: Props) => {
     const value = cell.value;
 
-    if ( ! isEditing ) {
-        return <>{ cell.display ?? value }</>;
+    if (!isEditing) {
+        return <>{cell.display ?? value}</>;
     }
 
-    switch ( header.editType ) {
+    switch (header.editType) {
         case 'toggle':
             return (
                 <input
                     type="checkbox"
-                    defaultChecked={ Boolean( value ) }
-                    onChange={ ( e ) => onSave( e.target.checked ) }
+                    defaultChecked={Boolean(value)}
+                    onChange={(e) => onSave(e.target.checked)}
                     autoFocus
                 />
             );
@@ -45,15 +45,15 @@ export const renderEditableCell = ( {
         case 'select':
             return (
                 <select
-                    defaultValue={ String( value ) }
-                    onBlur={ ( e ) => onSave( e.target.value ) }
+                    defaultValue={String(value)}
+                    onBlur={(e) => onSave(e.target.value)}
                     autoFocus
                 >
-                    { header.options?.map( ( opt ) => (
-                        <option key={ opt.value } value={ opt.value }>
-                            { opt.label }
+                    {header.options?.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                            {opt.label}
                         </option>
-                    ) ) }
+                    ))}
                 </select>
             );
 
@@ -61,8 +61,8 @@ export const renderEditableCell = ( {
             return (
                 <input
                     type="text"
-                    defaultValue={ String( value ?? '' ) }
-                    onBlur={ ( e ) => onSave( e.target.value ) }
+                    defaultValue={String(value ?? '')}
+                    onBlur={(e) => onSave(e.target.value)}
                     autoFocus
                 />
             );

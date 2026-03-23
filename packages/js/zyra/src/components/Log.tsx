@@ -17,99 +17,93 @@ interface LogProps {
     deleteBtnText?: string;
 }
 
-export const LogUI: React.FC< LogProps > = ( {
+export const LogUI: React.FC<LogProps> = ({
     apiLink,
     downloadFileName,
     downloadBtnText = 'Download',
     copyBtnText = 'Copy',
     deleteBtnText = 'Delete',
-} ) => {
-    const [ logData, setLogData ] = useState< string[] >( [] );
-    const [ copied, setCopied ] = useState< boolean >( false );
+}) => {
+    const [logData, setLogData] = useState<string[]>([]);
+    const [copied, setCopied] = useState<boolean>(false);
     const apiConfig = {
-        url: getApiLink( ZyraVariable, apiLink ),
+        url: getApiLink(ZyraVariable, apiLink),
         method: 'GET',
         headers: { 'X-WP-Nonce': ZyraVariable.nonce },
     };
     const logRegex = /^([^:]+:[^:]+:[^:]+):(.*)$/;
 
-    useEffect( () => {
-        axios( {
+    useEffect(() => {
+        axios({
             ...apiConfig,
             params: {
                 logcount: 100,
             },
-        } ).then( ( response ) => {
-            setLogData( response.data );
-        } );
-    }, [ apiLink ] );
+        }).then((response) => {
+            setLogData(response.data);
+        });
+    }, [apiLink]);
 
-    const handleDownloadLog = (
-        event: React.MouseEvent< HTMLButtonElement >
-    ) => {
+    const handleDownloadLog = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const fileName = downloadFileName;
-        axios( {
+        axios({
             ...apiConfig,
             params: {
                 action: 'download',
                 file: fileName,
             },
             responseType: 'blob',
-        } )
-            .then( ( response ) => {
-                const blob = new Blob( [ response.data ], {
-                    type: response.headers[ 'content-type' ],
-                } );
-                const url = window.URL.createObjectURL( blob );
-                const link = document.createElement( 'a' );
+        })
+            .then((response) => {
+                const blob = new Blob([response.data], {
+                    type: response.headers['content-type'],
+                });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute( 'download', fileName );
-                document.body.appendChild( link );
+                link.setAttribute('download', fileName);
+                document.body.appendChild(link);
                 link.click();
-                document.body.removeChild( link );
-            } )
-            .catch( ( error ) =>
-                console.error( 'Error downloading file:', error )
-            );
+                document.body.removeChild(link);
+            })
+            .catch((error) => console.error('Error downloading file:', error));
     };
 
-    const handleClearLog = ( event: React.MouseEvent< HTMLButtonElement > ) => {
+    const handleClearLog = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        axios( {
+        axios({
             ...apiConfig,
             params: {
                 logcount: 100,
                 action: 'clear',
             },
-        } ).then( () => {
-            setLogData( [] );
-        } );
+        }).then(() => {
+            setLogData([]);
+        });
     };
 
     const handleCopyToClipboard = (
-        event: React.MouseEvent< HTMLButtonElement >
+        event: React.MouseEvent<HTMLButtonElement>
     ) => {
         event.preventDefault();
         const logText = logData
-            .map( ( log ) => {
-                const match = log.match( logRegex );
-                return match
-                    ? `${ match[ 1 ].trim() } : ${ match[ 2 ].trim() }`
-                    : log;
-            } )
-            .join( '\n' );
+            .map((log) => {
+                const match = log.match(logRegex);
+                return match ? `${match[1].trim()} : ${match[2].trim()}` : log;
+            })
+            .join('\n');
 
         navigator.clipboard
-            .writeText( logText )
-            .then( () => setCopied( true ) )
-            .catch( ( error ) => {
-                setCopied( false );
+            .writeText(logText)
+            .then(() => setCopied(true))
+            .catch((error) => {
+                setCopied(false);
 
-                console.error( 'Error copying logs to clipboard:', error );
-            } );
+                console.error('Error copying logs to clipboard:', error);
+            });
 
-        setTimeout( () => setCopied( false ), 10000 );
+        setTimeout(() => setCopied(false), 10000);
     };
 
     return (
@@ -117,83 +111,83 @@ export const LogUI: React.FC< LogProps > = ( {
             <div className="buttons-wrapper">
                 <ButtonInputUI
                     position="left"
-                    buttons={ [
+                    buttons={[
                         {
                             icon: 'import',
                             text: downloadBtnText,
                             color: 'purple',
-                            onClick: ( e ) => {
-                                handleDownloadLog?.( e );
+                            onClick: (e) => {
+                                handleDownloadLog?.(e);
                             },
                         },
-                    ] }
+                    ]}
                 />
                 <ButtonInputUI
                     position="left"
-                    buttons={ [
+                    buttons={[
                         {
                             icon: 'delete',
                             text: deleteBtnText,
                             color: 'red',
-                            onClick: ( e ) => {
-                                handleClearLog?.( e );
+                            onClick: (e) => {
+                                handleClearLog?.(e);
                             },
                         },
-                    ] }
+                    ]}
                 />
             </div>
             <div className="log-container-wrapper">
                 <div className="wrapper-header">
                     <p className="log-viewer-text">
-                        { ZyraVariable.tab_name } - log viewer
+                        {ZyraVariable.tab_name} - log viewer
                     </p>
                     <ButtonInputUI
                         position="left"
-                        buttons={ [
+                        buttons={[
                             {
                                 icon: 'copy',
                                 text: copyBtnText,
                                 color: 'purple',
-                                onClick: ( e ) => {
-                                    handleCopyToClipboard?.( e );
+                                onClick: (e) => {
+                                    handleCopyToClipboard?.(e);
                                 },
                                 children: (
                                     <span
                                         className={
-                                            ! copied
+                                            !copied
                                                 ? 'tooltip'
                                                 : 'tooltip tool-clip'
                                         }
                                     >
-                                        { ! copied ? (
+                                        {!copied ? (
                                             'Copy to clipboard'
                                         ) : (
                                             <i className="adminfont-success-notification"></i>
-                                        ) }
-                                        { ! copied ? '' : 'Copied' }
+                                        )}
+                                        {!copied ? '' : 'Copied'}
                                     </span>
                                 ),
                             },
-                        ] }
+                        ]}
                     />
                 </div>
                 <div className="wrapper-body">
-                    { logData.map( ( log, index ) => {
-                        const match = log.match( logRegex );
-                        if ( match ) {
+                    {logData.map((log, index) => {
+                        const match = log.match(logRegex);
+                        if (match) {
                             return (
-                                <div className="log-row" key={ index }>
+                                <div className="log-row" key={index}>
                                     <span className="log-creation-date">
-                                        { match[ 1 ].trim() } :
+                                        {match[1].trim()} :
                                     </span>
                                     <span className="log-details">
-                                        { match[ 2 ].trim() }
+                                        {match[2].trim()}
                                     </span>
                                 </div>
                             );
                         }
                         return null;
-                    } ) }
+                    })}
                 </div>
             </div>
         </div>
@@ -201,14 +195,14 @@ export const LogUI: React.FC< LogProps > = ( {
 };
 
 const Log: FieldComponent = {
-    render: ( { field } ) => (
+    render: ({ field }) => (
         <LogUI
             // appLocalizer={appLocalizer}
-            apiLink={ String( field.apiLink ) }
-            downloadFileName={ String( field.fileName ) }
-            downloadBtnText={ field.downloadBtnText }
-            copyBtnText={ field.copyBtnText }
-            deleteBtnText={ field.deleteBtnText }
+            apiLink={String(field.apiLink)}
+            downloadFileName={String(field.fileName)}
+            downloadBtnText={field.downloadBtnText}
+            copyBtnText={field.copyBtnText}
+            deleteBtnText={field.deleteBtnText}
         />
     ),
 

@@ -33,13 +33,13 @@ export interface PopupProps {
     children?: React.ReactNode;
 }
 
-export const PopupUI = forwardRef< HTMLDivElement, PopupProps >(
+export const PopupUI = forwardRef<HTMLDivElement, PopupProps>(
     (
         {
             position = 'slide-right-to-left',
             open: controlledOpen,
             toggleIcon,
-            tooltipName = "Menu",
+            tooltipName = 'Menu',
             width = 14,
             height = 'fit-content',
             className = '',
@@ -52,124 +52,120 @@ export const PopupUI = forwardRef< HTMLDivElement, PopupProps >(
         },
         ref
     ) => {
-        const [ internalOpen, setInternalOpen ] = useState( false );
-        const wrapperRef = useRef< HTMLDivElement >( null );
+        const [internalOpen, setInternalOpen] = useState(false);
+        const wrapperRef = useRef<HTMLDivElement>(null);
         const isControlled = controlledOpen !== undefined;
         const open = isControlled ? controlledOpen : internalOpen;
 
         const handleOpen = () => {
-            if ( ! isControlled ) {
-                setInternalOpen( true );
+            if (!isControlled) {
+                setInternalOpen(true);
             }
             onOpen?.();
         };
 
         const handleClose = () => {
-            if ( ! isControlled ) {
-                setInternalOpen( false );
+            if (!isControlled) {
+                setInternalOpen(false);
             }
             onClose?.();
         };
 
-        const handleToggle = ( e: React.MouseEvent ) => {
+        const handleToggle = (e: React.MouseEvent) => {
             e.stopPropagation();
-            if ( open ) {
+            if (open) {
                 handleClose();
             } else {
                 handleOpen();
             }
         };
 
-        useOutsideClick( wrapperRef, () => {
-            if ( open ) {
+        useOutsideClick(wrapperRef, () => {
+            if (open) {
                 handleClose();
             }
-        } );
+        });
 
         const styles: React.CSSProperties = {
-            minWidth: typeof width === 'number' ? `${ width }rem` : width,
-            height: typeof height === 'number' ? `${ height }rem` : height,
+            minWidth: typeof width === 'number' ? `${width}rem` : width,
+            height: typeof height === 'number' ? `${height}rem` : height,
         };
 
         return (
             <div
-                className={ `popup ${ className } ${
-                    open ? 'popup-open' : ''
-                }` }
-                ref={ wrapperRef }
+                className={`popup ${className} ${open ? 'popup-open' : ''}`}
+                ref={wrapperRef}
             >
-                { toggleIcon && (
+                {toggleIcon && (
                     <Tooltip text={tooltipName} position="bottom">
                         <i
-                            onClick={ handleToggle }
-                            className={ `popup-icon adminfont-${ toggleIcon }` }
+                            onClick={handleToggle}
+                            className={`popup-icon adminfont-${toggleIcon}`}
                         />
                     </Tooltip>
-                ) }
+                )}
 
-                { showBackdrop && ! toggleIcon && open && (
-                    <div className="popup-backdrop" onClick={ handleClose } />
-                ) }
+                {showBackdrop && !toggleIcon && open && (
+                    <div className="popup-backdrop" onClick={handleClose} />
+                )}
 
-                { open && (
+                {open && (
                     <div
-                        className={ `popup-content` }
-                        style={ styles }
-                        data-position={ position }
-                        onClick={ ( e ) => e.stopPropagation() }
-                        ref={ ref }
+                        className={`popup-content`}
+                        style={styles}
+                        data-position={position}
+                        onClick={(e) => e.stopPropagation()}
+                        ref={ref}
                     >
-                        { header && (
+                        {header && (
                             <div className="popup-header">
                                 <div className="popup-title">
-                                    { header.icon && (
+                                    {header.icon && (
                                         <i
-                                            className={ `adminfont-${ header.icon }` }
+                                            className={`adminfont-${header.icon}`}
                                         ></i>
-                                    ) }
-                                    { header.title }
+                                    )}
+                                    {header.title}
                                 </div>
-                                { header.description && (
+                                {header.description && (
                                     <div className="desc">
-                                        { header.description }
+                                        {header.description}
                                     </div>
-                                ) }
+                                )}
                                 <i
-                                    onClick={ handleClose }
+                                    onClick={handleClose}
                                     className="icon adminfont-close"
                                 ></i>
                             </div>
-                        ) }
+                        )}
 
-                        <div className="popup-body">{ children }</div>
+                        <div className="popup-body">{children}</div>
 
-                        { footer && (
-                            <div className="popup-footer">{ footer }</div>
-                        ) }
+                        {footer && <div className="popup-footer">{footer}</div>}
                     </div>
-                ) }
+                )}
             </div>
         );
     }
 );
 
 const Popup: FieldComponent = {
-    render: ( { field } ) => (
+    render: ({ field }) => (
         <PopupUI
-            position={ field.position }
-            toggleIcon={ field.toggleIcon }
-            tooltipName={ field.tooltipName }
-            width={ field.width }
-            height={ field.height }
-            className={ field.className }
-            showBackdrop={ field.showBackdrop }
-            open={ field.open }
-            onClose={ field.onClose }
-            onOpen={ field.onOpen }
-            header={ field.header }
-            footer={ field.footer }
+            position={field.position}
+            toggleIcon={field.toggleIcon}
+            tooltipName={field.tooltipName}
+            width={field.width}
+            height={field.height}
+            className={field.className}
+            showBackdrop={field.showBackdrop}
+            open={field.open}
+            onClose={field.onClose}
+            onOpen={field.onOpen}
+            header={field.header}
+            footer={field.footer}
         >
-            { field.children }
+            {field.children}
         </PopupUI>
     ),
 };

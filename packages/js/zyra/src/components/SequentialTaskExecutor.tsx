@@ -25,18 +25,18 @@ interface SequentialTaskExecutorProps {
     failureMessage?: string;
     tasks: Task[];
     onComplete?: () => void;
-    onError?: ( error: unknown ) => void;
-    onTaskComplete?: ( task: Task, response: unknown ) => void;
+    onError?: (error: unknown) => void;
+    onTaskComplete?: (task: Task, response: unknown) => void;
 }
 
 interface DynamicResponse {
     success: boolean;
     data?: unknown;
     message?: string;
-    [ key: string ]: unknown;
+    [key: string]: unknown;
 }
 
-const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {
+const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
     buttonText,
     apilink,
     action,
@@ -47,38 +47,38 @@ const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {
     onComplete,
     onError,
     onTaskComplete,
-} ) => {
-    const [ loading, setLoading ] = useState( false );
-    const [ taskSequence, setTaskSequence ] = useState<
+}) => {
+    const [loading, setLoading] = useState(false);
+    const [taskSequence, setTaskSequence] = useState<
         {
             message: string;
             status: 'running' | 'success' | 'failed';
             successMessage?: string;
             failureMessage?: string;
         }[]
-    >( [] );
-    const [ processStatus, setProcessStatus ] = useState( '' );
+    >([]);
+    const [processStatus, setProcessStatus] = useState('');
 
-    const processStarted = useRef( false );
-    const taskIndex = useRef( 0 );
+    const processStarted = useRef(false);
+    const taskIndex = useRef(0);
 
     // ⭐ ADDED: Import context storage
-    const lastResult = useRef< string >( '' );
+    const lastResult = useRef<string>('');
 
-    const sleep = ( ms: number ) =>
-        new Promise( ( resolve ) => setTimeout( resolve, ms ) );
+    const sleep = (ms: number) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
 
     const updateTaskStatus = (
         status: 'running' | 'success' | 'failed',
         customMessage?: string
     ) => {
-        setTaskSequence( ( prev ) => {
-            const updated = [ ...prev ];
-            const lastTask = updated[ updated.length - 1 ];
+        setTaskSequence((prev) => {
+            const updated = [...prev];
+            const lastTask = updated[updated.length - 1];
 
-            if ( lastTask ) {
+            if (lastTask) {
                 lastTask.status = status;
-                if ( customMessage ) {
+                if (customMessage) {
                     lastTask[
                         status === 'success'
                             ? 'successMessage'
@@ -87,7 +87,7 @@ const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {
                 }
             }
             return updated;
-        } );
+        });
     };
 
     const handleTaskResponse = async (
@@ -102,34 +102,34 @@ const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {
               'Task completed'
             : currentTask.failureMessage || response?.message || 'Task failed';
 
-        if ( isSuccess ) {
+        if (isSuccess) {
             // ⭐ ADDED: Store successful task data into context
-            if ( isSuccess && response?.data !== undefined ) {
+            if (isSuccess && response?.data !== undefined) {
                 lastResult.current = response.data;
             }
 
-            onTaskComplete?.( currentTask, response );
+            onTaskComplete?.(currentTask, response);
         } else {
-            onError?.( { task: currentTask, response, error: message } );
+            onError?.({ task: currentTask, response, error: message });
         }
 
-        updateTaskStatus( isSuccess ? 'success' : 'failed', message );
+        updateTaskStatus(isSuccess ? 'success' : 'failed', message);
 
         return isSuccess ? 'success' : 'failed';
     };
 
-    const executeSequentialTasks = useCallback( async () => {
-        if ( taskIndex.current >= tasks.length ) {
-            setProcessStatus( 'completed' );
-            setLoading( false );
+    const executeSequentialTasks = useCallback(async () => {
+        if (taskIndex.current >= tasks.length) {
+            setProcessStatus('completed');
+            setLoading(false);
             processStarted.current = false;
             onComplete?.();
             return;
         }
 
-        const currentTask = tasks[ taskIndex.current ];
+        const currentTask = tasks[taskIndex.current];
 
-        setTaskSequence( ( prev ) => [
+        setTaskSequence((prev) => [
             ...prev,
             {
                 message: currentTask.message,
@@ -137,22 +137,22 @@ const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {
                 successMessage: currentTask.successMessage,
                 failureMessage: currentTask.failureMessage,
             },
-        ] );
+        ]);
 
-        await sleep( interval );
+        await sleep(interval);
 
         try {
             // ⭐ UPDATED: Payload now supports generic injection
-            const payload: Record< string, unknown > = {
+            const payload: Record<string, unknown> = {
                 action: currentTask.action,
             };
 
-            if ( currentTask.requiresResponeData ) {
+            if (currentTask.requiresResponeData) {
                 payload.responseData = lastResult.current;
             }
 
             const response = await axios.post(
-                getApiLink( ZyraVariable, apilink ),
+                getApiLink(ZyraVariable, apilink),
                 payload,
                 {
                     headers: {
@@ -173,70 +173,62 @@ const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {
                 formattedResponse
             );
 
-            if ( status === 'failed' ) {
-                setProcessStatus( 'failed' );
-                setLoading( false );
+            if (status === 'failed') {
+                setProcessStatus('failed');
+                setLoading(false);
                 processStarted.current = false;
                 return;
             }
 
             taskIndex.current++;
             await executeSequentialTasks();
-        } catch ( error ) {
-            console.error( 'Task execution failed:', error );
-            updateTaskStatus( 'failed', 'Task execution failed' );
-            setProcessStatus( 'failed' );
-            setLoading( false );
+        } catch (error) {
+            console.error('Task execution failed:', error);
+            updateTaskStatus('failed', 'Task execution failed');
+            setProcessStatus('failed');
+            setLoading(false);
             processStarted.current = false;
-            onError?.( { task: currentTask, error } );
+            onError?.({ task: currentTask, error });
         }
-    }, [
-        tasks,
-        interval,
-        apilink,
-        action,
-        onComplete,
-        onError,
-        onTaskComplete,
-    ] );
+    }, [tasks, interval, apilink, action, onComplete, onError, onTaskComplete]);
 
-    const startProcess = useCallback( () => {
-        if ( processStarted.current ) {
+    const startProcess = useCallback(() => {
+        if (processStarted.current) {
             return;
         }
 
         processStarted.current = true;
-        setLoading( true );
-        setTaskSequence( [] );
-        setProcessStatus( '' );
+        setLoading(true);
+        setTaskSequence([]);
+        setProcessStatus('');
         taskIndex.current = 0;
 
         // ⭐ ADDED: Reset context on new run
         lastResult.current = {};
 
         executeSequentialTasks();
-    }, [ executeSequentialTasks ] );
+    }, [executeSequentialTasks]);
 
-    const handleButtonClick = ( e: React.MouseEvent ) => {
+    const handleButtonClick = (e: React.MouseEvent) => {
         e.preventDefault();
         startProcess();
     };
 
     const getItemListItems = () => {
-        return taskSequence.map( ( task, index ) => ( {
-            id: `task-${ index }`,
+        return taskSequence.map((task, index) => ({
+            id: `task-${index}`,
             title: task.message,
             desc: task.status,
             icon: task.status,
-            className: `task-status-${ task.status }`,
-        } ) );
+            className: `task-status-${task.status}`,
+        }));
     };
 
     return (
         <>
             <div className="loader-wrapper">
                 <ButtonInputUI
-                    buttons={ [
+                    buttons={[
                         {
                             text: buttonText,
                             color: 'purple-bg',
@@ -244,26 +236,23 @@ const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {
                             disabled: loading,
                             icon: loading ? 'spinner' : 'play',
                         },
-                    ] }
+                    ]}
                     position="left"
                 />
 
-                { loading && (
+                {loading && (
                     <div className="loader">
                         <div className="three-body-dot" />
                     </div>
-                ) }
+                )}
             </div>
 
-            { taskSequence.length > 0 && (
-                <ItemListUI
-                    items={ getItemListItems() }
-                    className="task-list"
-                />
-            ) }
-            { processStatus && (
+            {taskSequence.length > 0 && (
+                <ItemListUI items={getItemListItems()} className="task-list" />
+            )}
+            {processStatus && (
                 <Notice
-                    type={ processStatus === 'failed' ? 'error' : 'success' }
+                    type={processStatus === 'failed' ? 'error' : 'success'}
                     displayPosition="notice"
                     message={
                         processStatus === 'failed'
@@ -271,7 +260,7 @@ const SequentialTaskExecutor: React.FC< SequentialTaskExecutorProps > = ( {
                             : successMessage
                     }
                 />
-            ) }
+            )}
         </>
     );
 };

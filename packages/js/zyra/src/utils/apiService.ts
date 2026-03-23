@@ -18,15 +18,15 @@ type AppLocalizer = {
  *
  * @return API response data or null in case of an error
  */
-export const getApiResponse = async < T >(
+export const getApiResponse = async <T>(
     url: string,
     headers: AxiosRequestConfig = {}
-): Promise< T | null > => {
+): Promise<T | null> => {
     try {
-        const result = await axios.get< T >( url, headers );
+        const result = await axios.get<T>(url, headers);
         return result.data;
-    } catch ( error ) {
-        console.error( `❌ Error fetching data from ${ url }`, error );
+    } catch (error) {
+        console.error(`❌ Error fetching data from ${url}`, error);
         return null;
     }
 };
@@ -41,12 +41,12 @@ export const getApiResponse = async < T >(
  *
  * @return API response data or null in case of an error
  */
-export const sendApiResponse = async < T >(
+export const sendApiResponse = async <T>(
     appLocalizer: AppLocalizer,
     url: string,
     data: unknown,
     headers: AxiosRequestConfig = {}
-): Promise< T | null > => {
+): Promise<T | null> => {
     try {
         const config: AxiosRequestConfig = {
             headers: {
@@ -55,10 +55,10 @@ export const sendApiResponse = async < T >(
             },
             ...headers,
         };
-        const result = await axios.post< T >( url, data, config );
+        const result = await axios.post<T>(url, data, config);
         return result.data;
-    } catch ( error ) {
-        console.error( `❌ Error sending data to ${ url }`, error );
+    } catch (error) {
+        console.error(`❌ Error sending data to ${url}`, error);
         return null;
     }
 };
@@ -79,7 +79,7 @@ export const getApiLink = (
     namespace?: string,
     rootUrl?: string
 ): string => {
-    return `${ rootUrl || appLocalizer.apiUrl }/${
+    return `${rootUrl || appLocalizer.apiUrl}/${
         namespace || appLocalizer.restUrl
-    }/${ endpoint }`;
+    }/${endpoint}`;
 };

@@ -1,13 +1,13 @@
 import { useEffect, FC, RefObject } from 'react';
 
 export interface FieldComponent {
-    render: FC< any >;
-    validate?: ( field: any, value: any ) => string | null;
-    normalize?: ( value: any ) => any;
+    render: FC<any>;
+    validate?: (field: any, value: any) => string | null;
+    normalize?: (value: any) => any;
 }
 
-export const ZyraVariable = ( () => {
-    const localizer = ( window as any ).appLocalizer || {};
+export const ZyraVariable = (() => {
+    const localizer = (window as any).appLocalizer || {};
 
     return {
         nonce: localizer.nonce, // system info, modules, renderComponent, module context
@@ -20,7 +20,7 @@ export const ZyraVariable = ( () => {
         site_url: localizer.site_url, // renderComponent
         tinymceApiKey: localizer.tinymceApiKey, // text area
     } as const;
-} )();
+})();
 
 export const CountryCodesObject = {
     AF: { name: 'Afghanistan', dial_code: '+93' },
@@ -284,19 +284,19 @@ export const CountryCodesObject = {
     ZW: { name: 'Zimbabwe', dial_code: '+263' },
 } as const;
 
-export const getFlagEmoji = ( countryCode: string ): string =>
+export const getFlagEmoji = (countryCode: string): string =>
     countryCode
         .toUpperCase()
-        .replace( /./g, ( char ) =>
-            String.fromCodePoint( 127397 + char.charCodeAt( 0 ) )
+        .replace(/./g, (char) =>
+            String.fromCodePoint(127397 + char.charCodeAt(0))
         );
 
 // Export an array for dropdowns if needed
-export const CountryCodes = Object.entries( CountryCodesObject ).map(
-    ( [ code, { name, dial_code } ] ) => ( {
-        label: `${ getFlagEmoji( code ) } ${ name } ${ dial_code }`,
+export const CountryCodes = Object.entries(CountryCodesObject).map(
+    ([code, { name, dial_code }]) => ({
+        label: `${getFlagEmoji(code)} ${name} ${dial_code}`,
         value: dial_code,
-    } )
+    })
 );
 
 /**
@@ -307,22 +307,22 @@ export const CountryCodes = Object.entries( CountryCodesObject ).map(
  */
 
 export const useOutsideClick = (
-    ref: RefObject< HTMLElement | null >,
+    ref: RefObject<HTMLElement | null>,
     callback: () => void
 ) => {
-    useEffect( () => {
-        const handleClick = ( e: MouseEvent ) => {
-            if ( ref.current && ! ref.current.contains( e.target as Node ) ) {
+    useEffect(() => {
+        const handleClick = (e: MouseEvent) => {
+            if (ref.current && !ref.current.contains(e.target as Node)) {
                 callback();
             }
         };
 
-        document.addEventListener( 'mousedown', handleClick );
+        document.addEventListener('mousedown', handleClick);
 
         return () => {
-            document.removeEventListener( 'mousedown', handleClick );
+            document.removeEventListener('mousedown', handleClick);
         };
-    }, [ ref, callback ] );
+    }, [ref, callback]);
 };
 
 import AddressField from './AddressField';
@@ -354,7 +354,7 @@ import TextArea from './TextArea';
 import ChoiceToggle from './ChoiceToggle';
 import RandomInputKeyGenerator from './RandomInputKeyGenerator';
 
-export const FIELD_REGISTRY: Record< string, FieldComponent > = {
+export const FIELD_REGISTRY: Record<string, FieldComponent> = {
     // BasicInput
     text: BasicInput,
     number: BasicInput,

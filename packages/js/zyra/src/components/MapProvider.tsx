@@ -18,7 +18,7 @@ interface MapProviderProps {
     locationLat: string;
     locationLng: string;
     isUserLocation?: boolean;
-    onLocationUpdate: ( data: {
+    onLocationUpdate: (data: {
         location_address: string;
         location_lat: string;
         location_lng: string;
@@ -27,7 +27,7 @@ interface MapProviderProps {
         state?: string;
         country?: string;
         zip?: string;
-    } ) => void;
+    }) => void;
     placeholderSearch: string;
     stores: { data: Store[] } | null;
     mapProvider: string;
@@ -45,7 +45,7 @@ type MarkerInstance = google.maps.Marker | window.mapboxgl.Marker;
 type MapProviderType = 'google_map' | 'mapbox';
 
 interface MapAdapter {
-    loadScript( apiKey: string ): Promise< void >;
+    loadScript(apiKey: string): Promise<void>;
 
     createMap(
         container: HTMLElement,
@@ -63,22 +63,19 @@ interface MapAdapter {
 
     onDragEnd(
         marker: MarkerInstance,
-        cb: ( lat: number, lng: number ) => void
+        cb: (lat: number, lng: number) => void
     ): void;
 
-    onMapClick(
-        map: MapInstance,
-        cb: ( lat: number, lng: number ) => void
-    ): void;
+    onMapClick(map: MapInstance, cb: (lat: number, lng: number) => void): void;
 
-    reverseGeocode( lat: number, lng: number ): Promise< unknown >;
+    reverseGeocode(lat: number, lng: number): Promise<unknown>;
 
-    extractAddress( result: unknown ): AddressResult;
+    extractAddress(result: unknown): AddressResult;
 }
 
 interface MapboxFeature {
     geometry: {
-        coordinates: [ number, number ];
+        coordinates: [number, number];
     };
     properties?: {
         full_address?: string;
@@ -105,101 +102,88 @@ const DEFAULT_LOCATION = { lat: 40.7128, lng: -74.006 };
 /* ---------------- GOOGLE ADAPTER ---------------- */
 
 const googleAdapter: MapAdapter = {
-    async loadScript( apiKey: string ) {
-        if ( window.google?.maps ) {
+    async loadScript(apiKey: string) {
+        if (window.google?.maps) {
             return;
         }
 
-        if ( document.getElementById( 'google-map-script' ) ) {
+        if (document.getElementById('google-map-script')) {
             return;
         }
 
-        const script = document.createElement( 'script' );
+        const script = document.createElement('script');
         script.id = 'google-map-script';
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${ apiKey }&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
         script.async = true;
         script.defer = true;
 
-        document.head.appendChild( script );
+        document.head.appendChild(script);
 
-        await new Promise( ( res ) => ( script.onload = res ) );
+        await new Promise((res) => (script.onload = res));
     },
 
-    createMap(
-        container: HTMLElement,
-        lat: number,
-        lng: number,
-        zoom: number
-    ) {
-        return new window.google.maps.Map( container, {
+    createMap(container: HTMLElement, lat: number, lng: number, zoom: number) {
+        return new window.google.maps.Map(container, {
             center: { lat, lng },
             zoom,
-        } );
+        });
     },
 
-    createMarker(
-        map: MapInstance,
-        lat: number,
-        lng: number,
-        isUser?: boolean
-    ) {
-        return new window.google.maps.Marker( {
+    createMarker(map: MapInstance, lat: number, lng: number, isUser?: boolean) {
+        return new window.google.maps.Marker({
             map,
             position: { lat, lng },
             draggable: true,
-            ...( isUser && {
+            ...(isUser && {
                 icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-            } ),
-        } );
+            }),
+        });
     },
 
-    onDragEnd(
-        marker: MarkerInstance,
-        cb: ( lat: number, lng: number ) => void
-    ) {
-        marker.addListener( 'dragend', () => {
+    onDragEnd(marker: MarkerInstance, cb: (lat: number, lng: number) => void) {
+        marker.addListener('dragend', () => {
             const p = marker.getPosition();
-            cb( p.lat(), p.lng() );
-        } );
+            cb(p.lat(), p.lng());
+        });
     },
 
-    onMapClick( map: MapInstance, cb: ( lat: number, lng: number ) => void ) {
-        map.addListener( 'click', ( e: google.maps.MapMouseEvent ) =>
-            cb( e.latLng.lat(), e.latLng.lng() )
+    onMapClick(map: MapInstance, cb: (lat: number, lng: number) => void) {
+        map.addListener('click', (e: google.maps.MapMouseEvent) =>
+            cb(e.latLng.lat(), e.latLng.lng())
         );
     },
 
-    async reverseGeocode( lat: number, lng: number ) {
-        return new Promise( ( resolve ) => {
+    async reverseGeocode(lat: number, lng: number) {
+        return new Promise((resolve) => {
             new window.google.maps.Geocoder().geocode(
                 { location: { lat, lng } },
                 (
                     results: google.maps.GeocoderResult[],
                     status: google.maps.GeocoderStatus
-                ) => resolve( status === 'OK' ? results[ 0 ] : null )
+                ) => resolve(status === 'OK' ? results[0] : null)
             );
-        } );
+        });
     },
 
-    extractAddress( result: google.maps.GeocoderAddressComponent | null ) {
-        if ( ! result ) {
+    extractAddress(result: google.maps.GeocoderAddressComponent | null) {
+        if (!result) {
             return {};
         }
 
-        const components: Record< string, string > = {};
+        const components: Record<string, string> = {};
 
         result.address_components?.forEach(
-            ( c: google.maps.GeocoderAddressComponent ) => {
-                if ( c.types.includes( 'locality' ) ) {
+            (c: google.maps.GeocoderAddressComponent) => {
+                if (c.types.includes('locality')) {
                     components.city = c.long_name;
                 }
-                if ( c.types.includes( 'administrative_area_level_1' ) ) {
+                if (c.types.includes('administrative_area_level_1')) {
                     components.state = c.long_name;
                 }
-                if ( c.types.includes( 'country' ) ) {
+                if (c.types.includes('country')) {
                     components.country = c.short_name;
                 }
-                if ( c.types.includes( 'postal_code' ) ) {
+                if (c.types.includes('postal_code')) {
                     components.zip = c.long_name;
                 }
             }
@@ -219,75 +203,67 @@ const googleAdapter: MapAdapter = {
 /* ---------------- MAPBOX ADAPTER ---------------- */
 
 const mapboxAdapter: MapAdapter = {
-    async loadScript( apiKey: string ) {
-        if ( window.mapboxgl ) {
+    async loadScript(apiKey: string) {
+        if (window.mapboxgl) {
             window.mapboxgl.accessToken = apiKey;
             return;
         }
 
-        const script = document.createElement( 'script' );
+        const script = document.createElement('script');
         script.src = 'https://api.mapbox.com/mapbox-gl-js/v3.18.1/mapbox-gl.js';
 
-        document.head.appendChild( script );
+        document.head.appendChild(script);
 
-        await new Promise( ( r ) => ( script.onload = r ) );
+        await new Promise((r) => (script.onload = r));
 
         window.mapboxgl.accessToken = apiKey;
 
-        const css = document.createElement( 'link' );
+        const css = document.createElement('link');
         css.rel = 'stylesheet';
         css.href = 'https://api.mapbox.com/mapbox-gl-js/v3.18.1/mapbox-gl.css';
 
-        document.head.appendChild( css );
+        document.head.appendChild(css);
     },
 
-    createMap(
-        container: HTMLElement,
-        lat: number,
-        lng: number,
-        zoom: number
-    ) {
-        return new window.mapboxgl.Map( {
+    createMap(container: HTMLElement, lat: number, lng: number, zoom: number) {
+        return new window.mapboxgl.Map({
             container,
             style: 'mapbox://styles/mapbox/standard',
-            center: [ lng, lat ],
+            center: [lng, lat],
             zoom,
-        } );
+        });
     },
 
-    createMarker( map: MapInstance, lat: number, lng: number ) {
-        return new window.mapboxgl.Marker( { draggable: true } )
-            .setLngLat( [ lng, lat ] )
-            .addTo( map );
+    createMarker(map: MapInstance, lat: number, lng: number) {
+        return new window.mapboxgl.Marker({ draggable: true })
+            .setLngLat([lng, lat])
+            .addTo(map);
     },
 
-    onDragEnd(
-        marker: MarkerInstance,
-        cb: ( lat: number, lng: number ) => void
-    ) {
-        marker.on( 'dragend', () => {
+    onDragEnd(marker: MarkerInstance, cb: (lat: number, lng: number) => void) {
+        marker.on('dragend', () => {
             const { lat, lng } = marker.getLngLat();
-            cb( lat, lng );
-        } );
+            cb(lat, lng);
+        });
     },
 
-    onMapClick( map: MapInstance, cb: ( lat: number, lng: number ) => void ) {
-        map.on( 'click', ( e: { lngLat: { lat: number; lng: number } } ) =>
-            cb( e.lngLat.lat, e.lngLat.lng )
+    onMapClick(map: MapInstance, cb: (lat: number, lng: number) => void) {
+        map.on('click', (e: { lngLat: { lat: number; lng: number } }) =>
+            cb(e.lngLat.lat, e.lngLat.lng)
         );
     },
 
-    async reverseGeocode( lat: number, lng: number ) {
+    async reverseGeocode(lat: number, lng: number) {
         const res = await fetch(
-            `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${ lng }&latitude=${ lat }&access_token=${ window.mapboxgl.accessToken }`
+            `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${lng}&latitude=${lat}&access_token=${window.mapboxgl.accessToken}`
         );
 
         const data = await res.json();
-        return data.features?.[ 0 ];
+        return data.features?.[0];
     },
 
-    extractAddress( result: MapboxFeature ) {
-        if ( ! result ) {
+    extractAddress(result: MapboxFeature) {
+        if (!result) {
             return {};
         }
 
@@ -308,14 +284,14 @@ const mapboxAdapter: MapAdapter = {
 
 /* ---------------- PROVIDER REGISTRY ---------------- */
 
-const PROVIDERS: Record< MapProviderType, MapAdapter > = {
+const PROVIDERS: Record<MapProviderType, MapAdapter> = {
     google_map: googleAdapter,
     mapbox: mapboxAdapter,
 };
 
 /* ---------------- MAIN COMPONENT ---------------- */
 
-export const MapProviderUI = ( {
+export const MapProviderUI = ({
     apiKey,
     locationLat,
     locationLng,
@@ -323,122 +299,113 @@ export const MapProviderUI = ( {
     onLocationUpdate,
     placeholderSearch,
     stores,
-}: MapProviderProps ) => {
-    const provider = PROVIDERS[ mapProvider ] || googleAdapter;
+}: MapProviderProps) => {
+    const provider = PROVIDERS[mapProvider] || googleAdapter;
 
-    const containerRef = useRef< HTMLDivElement >( null );
-    const mapRef = useRef< MapInstance | null >( null );
-    const markerRef = useRef< MarkerInstance | null >( null );
-    const inputRef = useRef< HTMLInputElement >( null );
+    const containerRef = useRef<HTMLDivElement>(null);
+    const mapRef = useRef<MapInstance | null>(null);
+    const markerRef = useRef<MarkerInstance | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const debounceRef = useRef< ReturnType< typeof setTimeout > | null >(
-        null
-    );
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const [ query, setQuery ] = useState( '' );
-    const [ suggestions, setSuggestions ] = useState< MapboxSuggestion[] >(
-        []
-    );
-    const [ googleLoaded, setGoogleLoaded ] = useState( false );
+    const [query, setQuery] = useState('');
+    const [suggestions, setSuggestions] = useState<MapboxSuggestion[]>([]);
+    const [googleLoaded, setGoogleLoaded] = useState(false);
 
-    const lat = locationLat ? parseFloat( locationLat ) : DEFAULT_LOCATION.lat;
-    const lng = locationLng ? parseFloat( locationLng ) : DEFAULT_LOCATION.lng;
+    const lat = locationLat ? parseFloat(locationLat) : DEFAULT_LOCATION.lat;
+    const lng = locationLng ? parseFloat(locationLng) : DEFAULT_LOCATION.lng;
 
     /* -------- UPDATE LOCATION -------- */
 
-    const updateLocation = async ( lat: number, lng: number ) => {
-        const result = await provider.reverseGeocode( lat, lng );
+    const updateLocation = async (lat: number, lng: number) => {
+        const result = await provider.reverseGeocode(lat, lng);
 
-        const address = provider.extractAddress( result );
+        const address = provider.extractAddress(result);
 
-        onLocationUpdate( {
+        onLocationUpdate({
             ...address,
             location_lat: lat.toString(),
             location_lng: lng.toString(),
-        } );
+        });
     };
 
     /* -------- MAP INIT -------- */
 
-    useEffect( () => {
-        if ( ! containerRef.current ) {
+    useEffect(() => {
+        if (!containerRef.current) {
             return;
         }
 
         const init = async () => {
-            await provider.loadScript( apiKey );
-            if ( mapProvider === 'google_map' ) {
-                setGoogleLoaded( true );
+            await provider.loadScript(apiKey);
+            if (mapProvider === 'google_map') {
+                setGoogleLoaded(true);
             }
 
-            const map = provider.createMap(
-                containerRef.current!,
-                lat,
-                lng,
-                12
-            );
-            const marker = provider.createMarker( map, lat, lng );
+            const map = provider.createMap(containerRef.current!, lat, lng, 12);
+            const marker = provider.createMarker(map, lat, lng);
 
             mapRef.current = map;
             markerRef.current = marker;
 
-            provider.onDragEnd( marker, updateLocation );
-            provider.onMapClick( map, updateLocation );
+            provider.onDragEnd(marker, updateLocation);
+            provider.onMapClick(map, updateLocation);
 
             /* store markers */
 
-            stores?.data?.forEach( ( s ) => {
-                if ( ! s.location_lat || ! s.location_lng ) {
+            stores?.data?.forEach((s) => {
+                if (!s.location_lat || !s.location_lng) {
                     return;
                 }
 
                 provider.createMarker(
                     map,
-                    parseFloat( s.location_lat ),
-                    parseFloat( s.location_lng )
+                    parseFloat(s.location_lat),
+                    parseFloat(s.location_lng)
                 );
-            } );
+            });
         };
 
         init();
-    }, [] );
+    }, []);
 
-    useEffect( () => {
-        if ( ! mapRef.current || ! markerRef.current ) {
+    useEffect(() => {
+        if (!mapRef.current || !markerRef.current) {
             return;
         }
 
-        const lat = parseFloat( locationLat );
-        const lng = parseFloat( locationLng );
+        const lat = parseFloat(locationLat);
+        const lng = parseFloat(locationLng);
 
-        if ( ! lat || ! lng ) {
+        if (!lat || !lng) {
             return;
         }
 
-        if ( mapProvider === 'google_map' ) {
-            mapRef.current.setCenter( { lat, lng } );
-            markerRef.current.setPosition( { lat, lng } );
-        } else if ( mapProvider === 'mapbox' ) {
-            mapRef.current.setCenter( [ lng, lat ] );
-            markerRef.current.setLngLat( [ lng, lat ] );
+        if (mapProvider === 'google_map') {
+            mapRef.current.setCenter({ lat, lng });
+            markerRef.current.setPosition({ lat, lng });
+        } else if (mapProvider === 'mapbox') {
+            mapRef.current.setCenter([lng, lat]);
+            markerRef.current.setLngLat([lng, lat]);
         }
-    }, [ locationLat, locationLng ] );
+    }, [locationLat, locationLng]);
 
-    useEffect( () => {
-        if ( mapProvider !== 'google_map' ) {
+    useEffect(() => {
+        if (mapProvider !== 'google_map') {
             return;
         }
-        if ( ! googleLoaded ) {
+        if (!googleLoaded) {
             return;
         }
-        if ( ! inputRef.current ) {
+        if (!inputRef.current) {
             return;
         }
 
         const autocomplete = new window.google.maps.places.Autocomplete(
             inputRef.current,
             {
-                types: [ 'geocode' ],
+                types: ['geocode'],
                 fields: [
                     'formatted_address',
                     'geometry',
@@ -448,112 +415,112 @@ export const MapProviderUI = ( {
             }
         );
 
-        autocomplete.addListener( 'place_changed', () => {
+        autocomplete.addListener('place_changed', () => {
             const place = autocomplete.getPlace();
 
-            if ( ! place.geometry?.location ) {
+            if (!place.geometry?.location) {
                 return;
             }
 
             const lat = place.geometry.location.lat();
             const lng = place.geometry.location.lng();
 
-            if ( mapRef.current && markerRef.current ) {
-                mapRef.current.setCenter( { lat, lng } );
-                markerRef.current.setPosition( { lat, lng } );
-                mapRef.current.setZoom( 17 );
+            if (mapRef.current && markerRef.current) {
+                mapRef.current.setCenter({ lat, lng });
+                markerRef.current.setPosition({ lat, lng });
+                mapRef.current.setZoom(17);
             }
 
-            const address = googleAdapter.extractAddress( place );
+            const address = googleAdapter.extractAddress(place);
 
-            onLocationUpdate( {
+            onLocationUpdate({
                 ...address,
                 location_lat: lat.toString(),
                 location_lng: lng.toString(),
-            } );
-        } );
-    }, [ mapProvider, googleLoaded ] );
+            });
+        });
+    }, [mapProvider, googleLoaded]);
 
     /* -------- MAPBOX SEARCH -------- */
 
     const sessionToken = useRef(
-        Math.random().toString( 36 ).substring( 2 )
+        Math.random().toString(36).substring(2)
     ).current;
 
-    const handleMapboxSearch = ( text: string ) => {
-        clearTimeout( debounceRef.current );
+    const handleMapboxSearch = (text: string) => {
+        clearTimeout(debounceRef.current);
 
-        debounceRef.current = setTimeout( async () => {
+        debounceRef.current = setTimeout(async () => {
             const res = await fetch(
-                `https://api.mapbox.com/search/searchbox/v1/suggest?q=${ encodeURIComponent(
+                `https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(
                     text
-                ) }&access_token=${ apiKey }&session_token=${ sessionToken }`
+                )}&access_token=${apiKey}&session_token=${sessionToken}`
             );
 
             const data = await res.json();
 
-            setSuggestions( data.suggestions || [] );
-        }, 300 );
+            setSuggestions(data.suggestions || []);
+        }, 300);
     };
 
-    const selectMapboxSuggestion = async ( suggestion: MapboxSuggestion ) => {
+    const selectMapboxSuggestion = async (suggestion: MapboxSuggestion) => {
         const res = await fetch(
-            `https://api.mapbox.com/search/searchbox/v1/retrieve/${ suggestion.mapbox_id }?access_token=${ apiKey }&session_token=${ sessionToken }`
+            `https://api.mapbox.com/search/searchbox/v1/retrieve/${suggestion.mapbox_id}?access_token=${apiKey}&session_token=${sessionToken}`
         );
 
         const data = await res.json();
 
-        const feature = data.features?.[ 0 ];
+        const feature = data.features?.[0];
 
-        if ( ! feature ) {
+        if (!feature) {
             return;
         }
 
-        const [ lng, lat ] = feature.geometry.coordinates;
+        const [lng, lat] = feature.geometry.coordinates;
 
-        if ( mapRef.current && markerRef.current ) {
-            markerRef.current.setLngLat( [ lng, lat ] );
-            mapRef.current.setCenter( [ lng, lat ] );
-            mapRef.current.setZoom( 17 );
+        if (mapRef.current && markerRef.current) {
+            markerRef.current.setLngLat([lng, lat]);
+            mapRef.current.setCenter([lng, lat]);
+            mapRef.current.setZoom(17);
         }
 
-        updateLocation( lat, lng );
+        updateLocation(lat, lng);
 
-        setSuggestions( [] );
-        setQuery( feature.properties?.full_address || suggestion.name );
+        setSuggestions([]);
+        setQuery(feature.properties?.full_address || suggestion.name);
     };
 
     return (
         <div className="map-wrapper">
             <div className="input-field">
                 <input
-                    ref={ inputRef }
-                    defaultValue={ query }
-                    placeholder={ placeholderSearch }
+                    ref={inputRef}
+                    defaultValue={query}
+                    placeholder={placeholderSearch}
                     className="basic-input"
-                    onChange={ ( e ) => {
-                        setQuery( e.target.value );
-                        if ( mapProvider === 'mapbox' ) {
-                            handleMapboxSearch( e.target.value );
+                    onChange={(e) => {
+                        setQuery(e.target.value);
+                        if (mapProvider === 'mapbox') {
+                            handleMapboxSearch(e.target.value);
                         }
-                    } }
+                    }}
                 />
 
-                { suggestions.length > 0 && (
+                {suggestions.length > 0 && (
                     <ul>
-                        { suggestions.map( ( s ) => (
+                        {suggestions.map((s) => (
                             <li
-                                key={ s.mapbox_id }
-                                onClick={ () => selectMapboxSuggestion( s ) }
+                                key={s.mapbox_id}
+                                onClick={() => selectMapboxSuggestion(s)}
                             >
-                                { s.name }
+                                {s.name}
                             </li>
-                        ) ) }
+                        ))}
                     </ul>
-                ) }
+                )}
             </div>
 
-            <div ref={ containerRef } className="map" />
+            <div ref={containerRef} className="map" />
         </div>
     );
 };
@@ -561,17 +528,17 @@ export const MapProviderUI = ( {
 /* ---------------- FIELD REGISTRATION ---------------- */
 
 const MapProvider: FieldComponent = {
-    render: ( { field, value, onChange } ) => (
+    render: ({ field, value, onChange }) => (
         <MapProviderUI
-            apiKey={ field.apiKey }
-            locationAddress={ value?.location_address || '' }
-            locationLat={ value?.location_lat || '' }
-            locationLng={ value?.location_lng || '' }
-            isUserLocation={ field.isUserLocation }
-            onLocationUpdate={ onChange }
-            placeholderSearch={ field.placeholderSearch || 'Search location' }
-            stores={ field.stores || null }
-            mapProvider={ field.type }
+            apiKey={field.apiKey}
+            locationAddress={value?.location_address || ''}
+            locationLat={value?.location_lat || ''}
+            locationLng={value?.location_lng || ''}
+            isUserLocation={field.isUserLocation}
+            onLocationUpdate={onChange}
+            placeholderSearch={field.placeholderSearch || 'Search location'}
+            stores={field.stores || null}
+            mapProvider={field.type}
         />
     ),
 };
