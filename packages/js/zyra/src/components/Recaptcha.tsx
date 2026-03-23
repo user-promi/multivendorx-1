@@ -7,14 +7,11 @@ import { FieldComponent } from './fieldUtils';
 // Types
 interface RecaptchaProps {
     formField?: { sitekey?: string };
-    onChange?: (
-        field: string,
-        value: string | boolean | number | null
-    ) => void;
+    onChange?: (field: string, value: string | boolean | number | null) => void;
 }
 
-export const RecaptchaUI: React.FC< RecaptchaProps > = ( { formField } ) => {
-    if ( ! formField?.sitekey ) {
+export const RecaptchaUI: React.FC<RecaptchaProps> = ({ formField }) => {
+    if (!formField?.sitekey) {
         return (
             <div className="main-input-wrapper recaptcha">
                 <p>
@@ -35,9 +32,9 @@ export const RecaptchaUI: React.FC< RecaptchaProps > = ( { formField } ) => {
 const Recaptcha: FieldComponent = {
     render: RecaptchaUI,
 
-    validate: ( field, value ) => {
-        if ( field.required && ! value?.[ field.key ] ) {
-            return `${ field.label } is required`;
+    validate: (field, value) => {
+        if (field.required && !value?.[field.key]) {
+            return `${field.label} is required`;
         }
 
         return null;

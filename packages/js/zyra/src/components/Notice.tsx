@@ -66,10 +66,7 @@ export const NoticeManager = {
         return () => subscribers.delete(cb);
     },
 
-    add(
-        notice: Omit<NoticeItem, 'expiresAt'>,
-        validity?: number | 'lifetime'
-    ) {
+    add(notice: Omit<NoticeItem, 'expiresAt'>, validity?: number | 'lifetime') {
         const uniqueKey = notice.uniqueKey || Date.now().toString();
         if (noticeQueue.some((n) => n.uniqueKey === uniqueKey)) {
             return;
@@ -84,7 +81,9 @@ export const NoticeManager = {
         }
 
         const expiresAt =
-            finalValidity === 'lifetime' ? undefined : Date.now() + (finalValidity as number);
+            finalValidity === 'lifetime'
+                ? undefined
+                : Date.now() + (finalValidity as number);
 
         noticeQueue.push({
             ...notice,
@@ -123,34 +122,37 @@ const renderNoticeContent = (item: NoticeItem, onClose?: () => void) => (
         <div className="notice-details">
             {item.title && <div className="notice-text">{item.title}</div>}
 
-            {Array.isArray(item.message)
-                ? (
-                    <>
-                        {item.message.map((msg, i) => (
-                            <div key={i} className="notice-desc">
-                                <span dangerouslySetInnerHTML={{ __html: msg }} />
-                                {item.actionLabel && (
-                                    <div
-                                        className="banner-btn"
-                                        onClick={item.onAction}
-                                    >
-                                        {item.actionLabel}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
+            {Array.isArray(item.message) ? (
+                <>
+                    {item.message.map((msg, i) => (
+                        <div key={i} className="notice-desc">
+                            <span dangerouslySetInnerHTML={{ __html: msg }} />
+                            {item.actionLabel && (
+                                <div
+                                    className="banner-btn"
+                                    onClick={item.onAction}
+                                >
+                                    {item.actionLabel}
+                                </div>
+                            )}
+                        </div>
+                    ))}
 
-                        {onClose && (
-                            <i
-                                className="close-icon adminfont-close"
-                                onClick={onClose}
-                            />
-                        )}
-                    </>
+                    {onClose && (
+                        <i
+                            className="close-icon adminfont-close"
+                            onClick={onClose}
+                        />
+                    )}
+                </>
+            ) : (
+                item.message && (
+                    <div
+                        className="notice-desc"
+                        dangerouslySetInnerHTML={{ __html: item.message }}
+                    />
                 )
-                : item.message && (
-                      <div  className="notice-desc"  dangerouslySetInnerHTML={{ __html: item.message }} />
-                  ) }
+            )}
         </div>
     </>
 );
@@ -198,11 +200,7 @@ export const Notice: React.FC<NoticeProps> = ({
         setIsVisible(false);
     }, []);
 
-    if (
-        displayPosition !== 'inline' ||
-        !isVisible ||
-        (!title && !message)
-    ) {
+    if (displayPosition !== 'inline' || !isVisible || (!title && !message)) {
         return null;
     }
 
@@ -217,9 +215,7 @@ export const Notice: React.FC<NoticeProps> = ({
     };
 
     return (
-        <div
-            className={`ui-notice type-${type} display-${displayPosition}`}
-        >
+        <div className={`ui-notice type-${type} display-${displayPosition}`}>
             {renderNoticeContent(item, () => setIsVisible(false))}
         </div>
     );
@@ -231,9 +227,7 @@ interface NoticeReceiverProps {
     position: NoticePosition;
 }
 
-export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({
-    position,
-}) => {
+export const NoticeReceiver: React.FC<NoticeReceiverProps> = ({ position }) => {
     const [items, setItems] = useState<NoticeItem[]>([]);
 
     useEffect(() => {

@@ -15,9 +15,7 @@ type ThemeContextValue = ThemeState & {
 };
 
 // theme context object.
-const ThemeContext = createContext< ThemeContextValue | undefined >(
-    undefined
-);
+const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 /**
  * dispatch function for theme related operation.
@@ -25,8 +23,8 @@ const ThemeContext = createContext< ThemeContextValue | undefined >(
  * @param {*} action name of action for state variable.
  * @returns
  */
-const themeReducer = ( state: ThemeState, action: ThemeAction ) => {
-    switch ( action.type ) {
+const themeReducer = (state: ThemeState, action: ThemeAction) => {
+    switch (action.type) {
         case 'TOGGLE_THEME':
             return {
                 ...state,
@@ -43,19 +41,19 @@ const themeReducer = ( state: ThemeState, action: ThemeAction ) => {
  * @returns
  */
 
-const ThemeProvider: React.FC< React.PropsWithChildren > = ( { children } ) => {
-    const [ state, dispatch ] = useReducer( themeReducer, { theme: 'light' } );
+const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+    const [state, dispatch] = useReducer(themeReducer, { theme: 'light' });
 
     /**
      * toggle the theme if dark then toogle to light. vice versa.
      */
     const toggleTheme = () => {
-        dispatch( { type: 'TOGGLE_THEME' } );
+        dispatch({ type: 'TOGGLE_THEME' });
     };
 
     return (
-        <ThemeContext.Provider value={ { ...state, toggleTheme } }>
-            { children }
+        <ThemeContext.Provider value={{ ...state, toggleTheme }}>
+            {children}
         </ThemeContext.Provider>
     );
 };
@@ -65,9 +63,9 @@ const ThemeProvider: React.FC< React.PropsWithChildren > = ( { children } ) => {
  * @returns [ state, toggleTheme ]
  */
 const useTheme = () => {
-    const context = useContext( ThemeContext );
-    if ( ! context ) {
-        throw new Error( 'useTheme must be used within a ThemeProvider' );
+    const context = useContext(ThemeContext);
+    if (!context) {
+        throw new Error('useTheme must be used within a ThemeProvider');
     }
     return context;
 };

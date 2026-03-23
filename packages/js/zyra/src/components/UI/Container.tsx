@@ -9,18 +9,18 @@ type ContainerProps = {
     general?: boolean;
 };
 
-const Container: React.FC< ContainerProps > = ( {
+const Container: React.FC<ContainerProps> = ({
     column = false,
     general = false,
     children,
-} ) => {
+}) => {
     return (
         <div
-            className={ `container-wrapper ${ column ? 'column' : '' } ${
+            className={`container-wrapper ${column ? 'column' : ''} ${
                 general ? 'general-wrapper' : ''
-            }` }
+            }`}
         >
-            { children }
+            {children}
         </div>
     );
 };

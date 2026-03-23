@@ -28,8 +28,8 @@ type Setting = {
  *                             May include folders with nested settings.
  * @return {Setting[]}           The sorted array of settings by priority in ascending order.
  */
-const getSettingsByPriority = ( settings: Setting[] ): Setting[] => {
-    if ( ! Array.isArray( settings ) ) {
+const getSettingsByPriority = (settings: Setting[]): Setting[] => {
+    if (!Array.isArray(settings)) {
         return [];
     }
 
@@ -77,30 +77,27 @@ const getSettingsByPriority = ( settings: Setting[] ): Setting[] => {
  *
  * @return {Setting[]} - A new array containing only the settings with matching IDs or folders with matching nested contents.
  */
-const filterSettingByIds = (
-    settings: Setting[],
-    ids: string[]
-): Setting[] => {
+const filterSettingByIds = (settings: Setting[], ids: string[]): Setting[] => {
     const filterSettings: Setting[] = [];
 
-    if ( Array.isArray( settings ) && Array.isArray( ids ) ) {
-        for ( const setting of settings ) {
-            if ( setting.type === 'folder' ) {
+    if (Array.isArray(settings) && Array.isArray(ids)) {
+        for (const setting of settings) {
+            if (setting.type === 'folder') {
                 const settingContent = filterSettingByIds(
                     setting.content as Setting[],
                     ids
                 );
-                if ( settingContent.length ) {
-                    filterSettings.push( {
+                if (settingContent.length) {
+                    filterSettings.push({
                         ...setting,
                         content: settingContent,
-                    } );
+                    });
                 }
                 continue;
             }
 
-            if ( ids.includes( ( setting.content as SettingContent ).id ) ) {
-                filterSettings.push( setting );
+            if (ids.includes((setting.content as SettingContent).id)) {
+                filterSettings.push(setting);
             }
         }
     }
@@ -122,26 +119,26 @@ const filterSettingByIds = (
  *
  * @return {Setting[]} - A new array of default (free) settings.
  */
-const getDefaultSettings = ( settings: Setting[] ): Setting[] => {
+const getDefaultSettings = (settings: Setting[]): Setting[] => {
     const filterSettings: Setting[] = [];
 
-    if ( Array.isArray( settings ) ) {
-        settings.forEach( ( setting ) => {
-            if ( setting.type === 'folder' ) {
+    if (Array.isArray(settings)) {
+        settings.forEach((setting) => {
+            if (setting.type === 'folder') {
                 setting.content = getDefaultSettings(
                     setting.content as Setting[]
                 );
-                if ( ( setting.content as Setting[] ).length ) {
-                    filterSettings.push( setting );
+                if ((setting.content as Setting[]).length) {
+                    filterSettings.push(setting);
                 }
                 return;
             }
 
             const content = setting.content as SettingContent;
-            if ( ! content.pro_dependent && ! content.module_dependent ) {
-                filterSettings.push( setting );
+            if (!content.pro_dependent && !content.module_dependent) {
+                filterSettings.push(setting);
             }
-        } );
+        });
     }
 
     return filterSettings;
@@ -163,10 +160,10 @@ const getAvailableSettings = (
     settings: Setting[],
     ids: string[] = []
 ): Setting[] => {
-    return getSettingsByPriority( [
-        ...getDefaultSettings( settings ),
-        ...filterSettingByIds( settings, ids ),
-    ] );
+    return getSettingsByPriority([
+        ...getDefaultSettings(settings),
+        ...filterSettingByIds(settings, ids),
+    ]);
 };
 
 /**
@@ -184,21 +181,21 @@ const getSettingById = (
     settings: Setting[],
     settingId: string
 ): SettingContent | null => {
-    if ( Array.isArray( settings ) ) {
-        for ( const setting of settings ) {
-            if ( setting.type === 'folder' ) {
+    if (Array.isArray(settings)) {
+        for (const setting of settings) {
+            if (setting.type === 'folder') {
                 const found = getSettingById(
                     setting.content as Setting[],
                     settingId
                 );
-                if ( found ) {
+                if (found) {
                     return found;
                 }
                 continue;
             }
 
             const content = setting.content as SettingContent;
-            if ( content.id === settingId ) {
+            if (content.id === settingId) {
                 return content;
             }
         }
@@ -226,14 +223,14 @@ const isActiveSetting = (
     proActive: boolean,
     ids: string[]
 ): boolean => {
-    if ( ! setting.module_dependent ) {
+    if (!setting.module_dependent) {
         return true;
     }
-    if ( ids.includes( setting.id ) ) {
-        if ( ! setting.pro_dependent ) {
+    if (ids.includes(setting.id)) {
+        if (!setting.pro_dependent) {
             return true;
         }
-        if ( proActive ) {
+        if (proActive) {
             return true;
         }
     }

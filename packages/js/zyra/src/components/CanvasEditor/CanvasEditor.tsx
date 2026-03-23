@@ -15,38 +15,38 @@ import { TabsUI } from '../Tabs';
 
 interface CanvasEditorProps {
     blocks: Block[];
-    onChange: ( blocks: Block[] ) => void;
-    blockGroups: Array< {
+    onChange: (blocks: Block[]) => void;
+    blockGroups: Array<{
         id: string;
         label: string;
         icon?: string;
-        blocks: Array< {
+        blocks: Array<{
             id: string;
             icon: string;
             value: string;
             label: string;
             fixedName?: string;
             placeholder?: string;
-        } >;
-    } >;
+        }>;
+    }>;
     visibleGroups?: string[];
-    templates?: Array< {
+    templates?: Array<{
         id: string;
         name: string;
         previewText?: string;
         blocks?: Block[];
-    } >;
+    }>;
     activeTemplateId?: string;
-    onTemplateSelect?: ( id: string ) => void;
+    onTemplateSelect?: (id: string) => void;
     showTemplatesTab?: boolean;
     groupName: string;
     proSettingChange?: () => boolean;
     context?: string;
-    inputTypeList?: Array< { value: string; label: string } >;
+    inputTypeList?: Array<{ value: string; label: string }>;
 }
-type SortableItem = Partial< Block > | BlockConfig;
+type SortableItem = Partial<Block> | BlockConfig;
 
-export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
+export const CanvasEditor: React.FC<CanvasEditorProps> = ({
     blocks: externalBlocks,
     onChange,
     blockGroups,
@@ -59,25 +59,22 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
     proSettingChange = () => false,
     context = 'default',
     inputTypeList,
-} ) => {
-    const [ blocks, setBlocks ] = useState< Block[] >( externalBlocks );
-    const [ openBlock, setOpenBlock ] = useState< Block | null >( null );
-    const [ openGroups, setOpenGroups ] = useState< Record< string, boolean > >(
-        () =>
-            Object.fromEntries(
-                ( visibleGroups.length
-                    ? blockGroups.filter( ( g ) =>
-                          visibleGroups.includes( g.id )
-                      )
-                    : blockGroups
-                ).map( ( g ) => [ g.id, true ] )
-            )
+}) => {
+    const [blocks, setBlocks] = useState<Block[]>(externalBlocks);
+    const [openBlock, setOpenBlock] = useState<Block | null>(null);
+    const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
+        Object.fromEntries(
+            (visibleGroups.length
+                ? blockGroups.filter((g) => visibleGroups.includes(g.id))
+                : blockGroups
+            ).map((g) => [g.id, true])
+        )
     );
 
-    const settingHasChanged = useRef( false );
-    const initialLoad = useRef( true );
+    const settingHasChanged = useRef(false);
+    const initialLoad = useRef(true);
     const isInternalUpdate = useRef(false);
-    const blocksRef = useRef( blocks );
+    const blocksRef = useRef(blocks);
     blocksRef.current = blocks;
     useEffect(() => {
         if (!isInternalUpdate.current) {
@@ -87,42 +84,42 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
         }
     }, [externalBlocks]);
 
-    useEffect( () => {
-        if ( initialLoad.current ) {
+    useEffect(() => {
+        if (initialLoad.current) {
             initialLoad.current = false;
             return;
         }
-        if ( settingHasChanged.current ) {
-            onChange( blocks );
+        if (settingHasChanged.current) {
+            onChange(blocks);
             settingHasChanged.current = false;
             isInternalUpdate.current = false;
         }
-    }, [ blocks ] );
+    }, [blocks]);
 
-    const markChanged = useCallback( () => {
+    const markChanged = useCallback(() => {
         settingHasChanged.current = true;
-    }, [] );
+    }, []);
 
-    const columnManager = useColumnManager( {
+    const columnManager = useColumnManager({
         blocks,
-        onBlocksUpdate: ( updated ) => {
+        onBlocksUpdate: (updated) => {
             isInternalUpdate.current = true;
-            setBlocks( updated );
+            setBlocks(updated);
             markChanged();
         },
         openBlock,
         setOpenBlock,
-    } );
+    });
 
-    const pendingDrag = useRef< {
+    const pendingDrag = useRef<{
         canvas?: Block[];
         /** key: `${parentIdx}-${colIdx}` */
-        columns: Map< string, Block[] >;
-    } | null >( null );
-    const dragFlushPending = useRef( false );
+        columns: Map<string, Block[]>;
+    } | null>(null);
+    const dragFlushPending = useRef(false);
 
-    const flushDrag = useCallback( () => {
-        if ( ! pendingDrag.current ) {
+    const flushDrag = useCallback(() => {
+        if (!pendingDrag.current) {
             return;
         }
         const { canvas, columns } = pendingDrag.current;
@@ -130,72 +127,72 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
         dragFlushPending.current = false;
 
         // 1. Start from new canvas list or current state
-        let next: Block[] = canvas ? [ ...canvas ] : [ ...blocksRef.current ];
+        let next: Block[] = canvas ? [...canvas] : [...blocksRef.current];
 
         // 2. Apply each column update onto its parent block
-        columns.forEach( ( newCol, key ) => {
-            const [ pi, ci ] = key.split( '-' ).map( Number );
-            next = next.map( ( b, i ) => {
-                if ( i !== pi || b.type !== 'columns' ) {
+        columns.forEach((newCol, key) => {
+            const [pi, ci] = key.split('-').map(Number);
+            next = next.map((b, i) => {
+                if (i !== pi || b.type !== 'columns') {
                     return b;
                 }
-                const cols = safeColumns( b as ColumnsBlock );
-                cols[ ci ] = newCol;
-                return { ...( b as ColumnsBlock ), columns: cols };
-            } );
-        } );
+                const cols = safeColumns(b as ColumnsBlock);
+                cols[ci] = newCol;
+                return { ...(b as ColumnsBlock), columns: cols };
+            });
+        });
 
-        const topLevelIds = new Set( next.map( ( b ) => b.id ) );
-        next = next.map( ( b ) => {
-            if ( b.type !== 'columns' ) {
+        const topLevelIds = new Set(next.map((b) => b.id));
+        next = next.map((b) => {
+            if (b.type !== 'columns') {
                 return b;
             }
             const cb = b as ColumnsBlock;
             return {
                 ...cb,
-                columns: safeColumns( cb ).map( ( col ) =>
-                    col.filter( ( c ) => ! topLevelIds.has( c.id ) )
+                columns: safeColumns(cb).map((col) =>
+                    col.filter((c) => !topLevelIds.has(c.id))
                 ),
             };
-        } );
+        });
 
         isInternalUpdate.current = true;
-        setBlocks( next );
+        setBlocks(next);
         markChanged();
-    }, [ markChanged ] );
+    }, [markChanged]);
 
     const scheduleDragFlush = () => {
-        if ( ! dragFlushPending.current ) {
+        if (!dragFlushPending.current) {
             dragFlushPending.current = true;
-            Promise.resolve().then( flushDrag );
+            Promise.resolve().then(flushDrag);
         }
     };
 
     const handleCanvasSetList = useCallback(
-        ( rawList: SortableItem[] ) => {
-            if ( proSettingChange() ) {
+        (rawList: SortableItem[]) => {
+            if (proSettingChange()) {
                 return;
             }
-            if ( ! pendingDrag.current ) {
+            if (!pendingDrag.current) {
                 pendingDrag.current = { columns: new Map() };
             }
-            pendingDrag.current.canvas = rawList.map( ( item ) =>
-                createBlock( item, context )
+            pendingDrag.current.canvas = rawList.map((item) =>
+                createBlock(item, context)
             );
             scheduleDragFlush();
         },
-        [ proSettingChange, context ]
+        [proSettingChange, context]
     );
 
     /** Column-level ReactSortable setList — called from ColumnRenderer */
     const handleColumnSetList = useCallback(
-        ( parentIdx: number, colIdx: number, rawList: SortableItem[] ) => {
-            if ( ! pendingDrag.current ) {
+        (parentIdx: number, colIdx: number, rawList: SortableItem[]) => {
+            if (!pendingDrag.current) {
                 pendingDrag.current = { columns: new Map() };
             }
             pendingDrag.current.columns.set(
-                `${ parentIdx }-${ colIdx }`,
-                rawList.map( ( item ) => createBlock( item ) )
+                `${parentIdx}-${colIdx}`,
+                rawList.map((item) => createBlock(item))
             );
             scheduleDragFlush();
         },
@@ -203,8 +200,8 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
     );
 
     const updateBlock = useCallback(
-        ( index: number, patch: BlockPatch ) => {
-            if ( proSettingChange() ) {
+        (index: number, patch: BlockPatch) => {
+            if (proSettingChange()) {
                 return;
             }
             setBlocks((prev) => {
@@ -214,7 +211,10 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
                     previousValue: unknown,
                     nextValue: unknown
                 ): boolean => {
-                    if (Array.isArray(previousValue) && Array.isArray(nextValue)) {
+                    if (
+                        Array.isArray(previousValue) &&
+                        Array.isArray(nextValue)
+                    ) {
                         if (previousValue.length !== nextValue.length) {
                             return false;
                         }
@@ -228,7 +228,11 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
                 };
 
                 const hasChanged = Object.keys(patch).some(
-                    (key) => !isEqualValue(current[key as keyof Block], patch[key as keyof Block])
+                    (key) =>
+                        !isEqualValue(
+                            current[key as keyof Block],
+                            patch[key as keyof Block]
+                        )
                 );
 
                 if (!hasChanged) {
@@ -247,72 +251,75 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
             });
             markChanged();
         },
-        [ proSettingChange, openBlock?.id, markChanged ]
+        [proSettingChange, openBlock?.id, markChanged]
     );
 
     const deleteBlock = useCallback(
-        ( index: number, e?: React.MouseEvent ) => {
+        (index: number, e?: React.MouseEvent) => {
             e?.stopPropagation();
-            if ( proSettingChange() ) {
+            if (proSettingChange()) {
                 return;
             }
-            const deleted = blocks[ index ];
+            const deleted = blocks[index];
             setBlocks((prev) => {
                 isInternalUpdate.current = true;
                 return prev.filter((_, i) => i !== index);
             });
             markChanged();
-            if ( openBlock?.id === deleted?.id ) {
-                setOpenBlock( null );
+            if (openBlock?.id === deleted?.id) {
+                setOpenBlock(null);
                 columnManager.clearSelection();
             }
         },
-        [ proSettingChange, blocks, openBlock?.id, columnManager, markChanged ]
+        [proSettingChange, blocks, openBlock?.id, columnManager, markChanged]
     );
 
     const handleChildMutate = useCallback(
-        ( index: number, updated: ColumnsBlock ) => {
+        (index: number, updated: ColumnsBlock) => {
             setBlocks((prev) => {
                 isInternalUpdate.current = true;
                 return prev.map((b, i) => {
-                    if (i !== index) return b;
+                    if (i !== index) {
+                        return b;
+                    }
 
                     // prevent unnecessary update
-                    if (b === updated) return b;
+                    if (b === updated) {
+                        return b;
+                    }
 
                     isInternalUpdate.current = true;
                     return updated;
-                });            });
+                });
+            });
             markChanged();
         },
-        [ markChanged ]
+        [markChanged]
     );
 
     const handleSettingsChange = useCallback(
-        ( key: keyof Block, value: Block[ keyof Block ] ) => {
-            if ( proSettingChange() ) {
+        (key: keyof Block, value: Block[keyof Block]) => {
+            if (proSettingChange()) {
                 return;
             }
-            if ( columnManager.selectedLocation ) {
+            if (columnManager.selectedLocation) {
                 const { parentIndex, columnIndex, childIndex } =
                     columnManager.selectedLocation;
                 columnManager.handleChildUpdate(
                     parentIndex,
                     columnIndex,
                     childIndex,
-                    { [ key ]: value }
+                    { [key]: value }
                 );
             } else {
-                const index = blocks.findIndex(
-                    ( b ) => b.id === openBlock?.id
-                );
-                if ( index < 0 ) {
+                const index = blocks.findIndex((b) => b.id === openBlock?.id);
+                if (index < 0) {
                     return;
                 }
-                if ( key === 'layout' && blocks[ index ].type === 'columns' ) {
-                    columnManager.handleLayoutChange( index, value );
+                if (key === 'layout' && blocks[index].type === 'columns') {
+                    columnManager.handleLayoutChange(index, value);
                 } else {
-                    updateBlock( index, { [ key ]: value } );
+                    updateBlock(index, { [key]: value });
                 }
             }
             markChanged();
@@ -328,82 +335,82 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
     );
 
     const toggleGroup = useCallback(
-        ( id: string ) =>
-            setOpenGroups( ( prev ) => ( { ...prev, [ id ]: ! prev[ id ] } ) ),
+        (id: string) => setOpenGroups((prev) => ({ ...prev, [id]: !prev[id] })),
         []
     );
 
-    const getInputTypeList = useCallback( () => {
-        if ( inputTypeList ) {
+    const getInputTypeList = useCallback(() => {
+        if (inputTypeList) {
             return inputTypeList;
         }
-        return ( blockGroups[ 0 ]?.blocks ?? [] ).map( ( b ) => ( {
+        return (blockGroups[0]?.blocks ?? []).map((b) => ({
             value: b.value,
             label: b.label,
-        } ) );
-    }, [ inputTypeList, blockGroups ] );
+        }));
+    }, [inputTypeList, blockGroups]);
 
     const groupsToShow = visibleGroups.length
-        ? blockGroups.filter( ( g ) => visibleGroups.includes( g.id ) )
+        ? blockGroups.filter((g) => visibleGroups.includes(g.id))
         : blockGroups;
 
     const renderBlocksContent = () => (
         <>
-            { groupsToShow.map( ( { id, label, icon, blocks: palette } ) => (
-                <aside key={ id } className="elements-section">
+            {groupsToShow.map(({ id, label, icon, blocks: palette }) => (
+                <aside key={id} className="elements-section">
                     <div
                         className="section-meta"
-                        onClick={ () => toggleGroup( id ) }
+                        onClick={() => toggleGroup(id)}
                     >
                         <div className="elements-title">
-                            { icon && <i className={ icon } /> }
-                            { label } <span>({ palette.length })</span>
+                            {icon && <i className={icon} />}
+                            {label} <span>({palette.length})</span>
                         </div>
                         <i
-                            className={ `adminfont-pagination-right-arrow ${
-                                openGroups[ id ] ? 'rotate' : ''
-                            }` }
+                            className={`adminfont-pagination-right-arrow ${
+                                openGroups[id] ? 'rotate' : ''
+                            }`}
                         />
                     </div>
-                    { openGroups[ id ] && (
+                    {openGroups[id] && (
                         <ReactSortable
-                            list={ palette }
-                            setList={ () => {} }
-                            sort={ false }
-                            group={ {
+                            list={palette}
+                            setList={() => {}}
+                            sort={false}
+                            group={{
                                 name: groupName,
                                 pull: 'clone',
                                 put: false,
-                            } }
+                            }}
                             className="section-container open"
                         >
-                            { palette.map( ( item ) => (
+                            {palette.map((item) => (
                                 <div
-                                    key={ item.id || item.value }
+                                    key={item.id || item.value}
                                     className="elements-items"
-                                    onClick={ () => {
-                                        if ( proSettingChange() ) {
+                                    onClick={() => {
+                                        if (proSettingChange()) {
                                             return;
                                         }
                                         setBlocks((prev) => {
                                             isInternalUpdate.current = true;
-                                            return [...prev, createBlock(item, context)];
+                                            return [
+                                                ...prev,
+                                                createBlock(item, context),
+                                            ];
                                         });
                                         markChanged();
-                                    } }
+                                    }}
                                 >
-                                    <i
-                                        className={ `adminfont-${ item.icon }` }
-                                    />
+                                    <i className={`adminfont-${item.icon}`} />
                                     <p className="elements-name">
-                                        { item.value }
+                                        {item.value}
                                     </p>
                                 </div>
-                            ) ) }
+                            ))}
                         </ReactSortable>
-                    ) }
+                    )}
                 </aside>
-            ) ) }
+            ))}
         </>
     );
 
@@ -411,26 +418,26 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
         <aside className="elements-section">
             <div className="section-meta">
                 <h2>
-                    Templates <span>({ templates.length })</span>
+                    Templates <span>({templates.length})</span>
                 </h2>
             </div>
             <main className="section-container open">
-                { templates.map( ( { id, name, previewText } ) => (
+                {templates.map(({ id, name, previewText }) => (
                     <div
-                        key={ id }
-                        className={ `template-item ${
+                        key={id}
+                        className={`template-item ${
                             id === activeTemplateId ? 'active' : ''
-                        }` }
-                        onClick={ () => onTemplateSelect?.( id ) }
+                        }`}
+                        onClick={() => onTemplateSelect?.(id)}
                     >
-                        <div className="template-name">{ name }</div>
-                        { previewText && (
+                        <div className="template-name">{name}</div>
+                        {previewText && (
                             <div className="template-preview">
-                                { previewText }
+                                {previewText}
                             </div>
-                        ) }
+                        )}
                     </div>
-                ) ) }
+                ))}
             </main>
         </aside>
     );
@@ -439,79 +446,77 @@ export const CanvasEditor: React.FC< CanvasEditorProps > = ( {
         <div className="registration-from-wrapper">
             <div className="elements-wrapper">
                 <TabsUI
-                    tabs={ [
+                    tabs={[
                         {
                             label: 'Blocks',
                             content: renderBlocksContent(),
                         },
-                        ...( showTemplatesTab && templates.length
+                        ...(showTemplatesTab && templates.length
                             ? [
                                   {
                                       label: 'Templates',
                                       content: renderTemplatesContent(),
                                   },
                               ]
-                            : [] ),
-                    ] }
+                            : []),
+                    ]}
                 />
             </div>
 
             <div className="canvas-editor">
                 <ReactSortable
-                    list={ blocks }
-                    setList={ handleCanvasSetList }
-                    group={ { name: groupName, pull: true, put: true } }
+                    list={blocks}
+                    setList={handleCanvasSetList}
+                    group={{ name: groupName, pull: true, put: true }}
                     handle=".drag-handle"
-                    animation={ 150 }
+                    animation={150}
                 >
-                    { blocks.map( ( block, index ) =>
+                    {blocks.map((block, index) =>
                         block.type === 'columns' ? (
                             <ColumnRenderer
-                                key={ block.id }
-                                block={ block as ColumnsBlock }
-                                parentIndex={ index }
-                                isActive={ openBlock?.id === block.id }
-                                groupName={ groupName }
-                                openBlock={ openBlock }
-                                setOpenBlock={ setOpenBlock }
-                                onColumnSetList={ handleColumnSetList }
-                                onChildMutate={ ( updated ) =>
-                                    handleChildMutate( index, updated )
+                                key={block.id}
+                                block={block as ColumnsBlock}
+                                parentIndex={index}
+                                isActive={openBlock?.id === block.id}
+                                groupName={groupName}
+                                openBlock={openBlock}
+                                setOpenBlock={setOpenBlock}
+                                onColumnSetList={handleColumnSetList}
+                                onChildMutate={(updated) =>
+                                    handleChildMutate(index, updated)
                                 }
-                                onSelect={ () => {
-                                    setOpenBlock( block );
+                                onSelect={() => {
+                                    setOpenBlock(block);
                                     columnManager.clearSelection();
-                                } }
-                                onDelete={ () => deleteBlock( index ) }
+                                }}
+                                onDelete={() => deleteBlock(index)}
                             />
                         ) : (
                             <BlockRenderer
-                                key={ block.id }
-                                block={ block }
-                                isActive={ openBlock?.id === block.id }
-                                onSelect={ () => {
-                                    setOpenBlock( block );
+                                key={block.id}
+                                block={block}
+                                isActive={openBlock?.id === block.id}
+                                onSelect={() => {
+                                    setOpenBlock(block);
                                     columnManager.clearSelection();
-                                } }
-                                onChange={ ( patch ) =>
-                                    updateBlock( index, patch )
-                                }
-                                onDelete={ ( e ) => deleteBlock( index, e ) }
+                                }}
+                                onChange={(patch) => updateBlock(index, patch)}
+                                onDelete={(e) => deleteBlock(index, e)}
                             />
                         )
-                    ) }
+                    )}
                 </ReactSortable>
             </div>
 
             <div className="settings-panel-wrapper">
-                { openBlock && (
+                {openBlock && (
                     <SettingMetaBox
-                        formField={ openBlock }
-                        opened={ { click: true } }
-                        onChange={ handleSettingsChange }
-                        inputTypeList={ getInputTypeList() }
+                        formField={openBlock}
+                        opened={{ click: true }}
+                        onChange={handleSettingsChange}
+                        inputTypeList={getInputTypeList()}
                     />
-                ) }
+                )}
             </div>
         </div>
     );

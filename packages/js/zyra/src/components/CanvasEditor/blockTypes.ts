@@ -79,16 +79,16 @@ export interface BlockConfig {
 }
 
 // Helper Types
-export type BlockPatch< T extends Block = Block > = Partial< T >;
+export type BlockPatch<T extends Block = Block> = Partial<T>;
 export type FieldValue =
     | string
     | number
     | boolean
     | FieldValue[]
-    | { [ key: string ]: FieldValue };
+    | { [key: string]: FieldValue };
 
-export const getColumnCount = ( layout: ColumnLayout ): number => {
-    switch ( layout ) {
+export const getColumnCount = (layout: ColumnLayout): number => {
+    switch (layout) {
         case '1':
             return 1;
         case '2-50':
