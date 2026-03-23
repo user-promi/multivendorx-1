@@ -82,34 +82,35 @@ registerBlockType('multivendorx/store-business-hours', {
 /**
  * FRONTEND — dynamic business hours injection
  */
-document.addEventListener('DOMContentLoaded', () => {
-	console.log('test',StoreInfo);
-	if (!window.StoreInfo || !StoreInfo.storeDetails?.businessHours) {
-		document
-			.querySelectorAll('.multivendorx-store-business-hours-wrapper')
-			.forEach((block) => block.remove());
-		return;
-	}
+window.addEventListener('load', () => {
+    if (!window.StoreInfo?.storeDetails?.businessHours) {
+        // No business hours, remove blocks
+        document
+            .querySelectorAll('.multivendorx-store-business-hours-wrapper')
+            .forEach((block) => block.remove());
+        return;
+    }
 
-	const businessHours = StoreInfo.storeDetails.businessHours;
+    const businessHours = StoreInfo.storeDetails.businessHours;
 
-	document
-		.querySelectorAll('.multivendorx-store-business-hours-wrapper')
-		.forEach((block) => {
-			const container = block.querySelector('.multivendorx-store-business-hours');
+    document
+        .querySelectorAll('.multivendorx-store-business-hours-wrapper')
+        .forEach((block) => {
+            const container = block.querySelector('.multivendorx-store-business-hours');
+            if (!container) return;
 
-			let html = '';
-			Object.entries(businessHours).forEach(([day, time]) => {
-				if (time) {
-					html += `<div class="mvx-business-hour-row"><strong>${day}:</strong> ${time}</div>`;
-				}
-			});
+            let html = '';
+            Object.entries(businessHours).forEach(([day, time]) => {
+                if (time) {
+                    html += `<div class="mvx-business-hour-row"><strong>${day}:</strong> ${time}</div>`;
+                }
+            });
 
-			if (!html) {
-				block.remove();
-				return;
-			}
+            if (!html) {
+                block.remove();
+                return;
+            }
 
-			container.innerHTML = html;
-		});
+            container.innerHTML = html;
+        });
 });
