@@ -149,7 +149,7 @@ const coerceToString = ( v: unknown ): string | string[] | undefined => {
     if ( Array.isArray( v ) ) {
         // Handle Option[]
         if ( v.length && typeof v[ 0 ] === 'object' && 'value' in v[ 0 ] ) {
-            return ( v as any[] ).map( ( o ) => String( o.value ) );
+            return ( v as { value: unknown }[] ).map( ( o ) => String( o.value ) );
         }
 
         return v.map( String );
@@ -241,7 +241,7 @@ const CustomMenuList = ( props: MenuListProps< SelectOption, boolean > ) => {
     );
 };
 
-const CustomNoOptionsMessage = ( props: any ) => (
+const CustomNoOptionsMessage = ( props: React.ComponentProps<typeof components.NoOptionsMessage> & { selectProps: { noOptionsText?: string } }) => (
     <components.NoOptionsMessage { ...props }>
         <span className="no-options">
             { props.selectProps.noOptionsText ?? 'No options available' }

@@ -51,7 +51,7 @@ export const ItemListUI: React.FC< ItemListUIProps > = ( {
                     };
 
                     return (
-                        <React.Fragment key={item.id || index}>
+                        <React.Fragment key={item.id }>
                             { item.link ? (
                                 <a
                                     href={ item.link }

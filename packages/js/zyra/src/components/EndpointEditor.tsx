@@ -94,7 +94,7 @@ const EndpointEditorUI: React.FC< EndpointEditorProps > = ( {
 
         const existing = endpoints
             .filter( ( [ k ] ) => k !== currentKey )
-            .map( ( [ _, item ] ) => item.slug );
+            .map( ( [ , item ] ) => item.slug );
 
         let slug = base;
         let counter = 1;

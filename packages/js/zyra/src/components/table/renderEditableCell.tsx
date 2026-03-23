@@ -1,10 +1,22 @@
 import { TableRow } from './types';
 
+type EditType = 'toggle' | 'select' | 'text';
+
+type SelectOption = {
+    label: string;
+    value: string | number;
+};
+
+type TableHeader = {
+    editType?: EditType;
+    options?: SelectOption[];
+};
+
 type Props = {
-    header: any;
+    header: TableHeader;
     cell: TableRow;
     isEditing: boolean;
-    onSave: ( value: any ) => void;
+    onSave: (value: string | number | boolean) => void;
 };
 
 export const renderEditableCell = ( {
@@ -37,7 +49,7 @@ export const renderEditableCell = ( {
                     onBlur={ ( e ) => onSave( e.target.value ) }
                     autoFocus
                 >
-                    { header.options?.map( ( opt: any ) => (
+                    { header.options?.map( ( opt ) => (
                         <option key={ opt.value } value={ opt.value }>
                             { opt.label }
                         </option>
