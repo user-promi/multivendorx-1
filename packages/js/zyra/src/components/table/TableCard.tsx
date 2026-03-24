@@ -9,6 +9,7 @@ import HeaderSearch from '../HeaderSearch';
 import Skeleton from '../UI/Skeleton';
 import { PopupUI } from '../Popup';
 import '../../styles/web/Table.scss';
+import { ItemListUI } from '../ItemList';
 
 // Category item interface
 export interface CategoryItem {
@@ -276,35 +277,26 @@ const TableCard: React.FC<TableCardProps> = ({
                                 position="menu-dropdown"
                                 toggleIcon="more-vertical"
                             >
-                                <ul>
-                                    {Object.entries(headers).map(
-                                        ([key, config]) => {
-                                            const { label, required } = config;
-                                            if (required) {
-                                                return null;
-                                            }
-
-                                            return (
-                                                <li key={key}>
-                                                    <label>
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={showCols.includes(
-                                                                key
-                                                            )}
-                                                            onChange={() =>
-                                                                onColumnToggle(
-                                                                    key
-                                                                )
-                                                            }
-                                                        />
-                                                        {label}
-                                                    </label>
-                                                </li>
-                                            );
-                                        }
-                                    )}
-                                </ul>
+                                <ItemListUI
+                                    className="default table-menu"
+                                    items={Object.entries(headers)
+                                        .filter(([_, config]) => !config.required)
+                                        .map(([key, config]) => ({
+                                            id: key,
+                                            title: config.label,
+                                            action: () => onColumnToggle(key),
+                                            tags: (
+                                                <input
+                                                    type="checkbox"
+                                                    checked={showCols.includes(key)}
+                                                    onChange={(e) => {
+                                                        e.stopPropagation();
+                                                        onColumnToggle(key);
+                                                    }}
+                                                />
+                                            ),
+                                        }))}
+                                />
                             </PopupUI>
                         )}
                     </div>

@@ -65,6 +65,7 @@ const PendingDeactivateRequests: React.FC<object> = () => {
 							{
 								icon: 'close',
 								text: __('Reject', 'multivendorx'),
+								color: 'red',
 								onClick: (row: any) =>
 									handleSingleAction('reject', row.id),
 							},

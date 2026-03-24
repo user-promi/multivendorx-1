@@ -305,6 +305,11 @@
         }
     }
 
+    // table menu action 
+    &.table-menu .item{
+        flex-direction: row-reverse;
+        justify-content: start;
+    }
     .border {
         border: $border-light-small;
         padding: 0.85rem;
