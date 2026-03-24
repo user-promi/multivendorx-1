@@ -29,11 +29,6 @@ interface ShortCodeTableProps {
 
 const ShortCodeTableUI: React.FC<ShortCodeTableProps> = (props) => {
     const { options, optionLabel } = props;
-
-    const handleCopy = (text: string) => {
-        navigator.clipboard.writeText(text);
-    };
-
     const headers = optionLabel;
 
     return (

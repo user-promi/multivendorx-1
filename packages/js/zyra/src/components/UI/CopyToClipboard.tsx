@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { FieldComponent } from '../fieldUtils';
 import '../../styles/web/UI/CopyToClipboard.scss';
+import Tooltip from './Tooltip';
 
 // Types
 interface CopyToClipboardProps {
@@ -62,15 +63,16 @@ export const CopyToClipboardUI: React.FC<CopyToClipboardProps> = ({
         <div className="copy-to-clipboard">
             <code>{text}</code>
 
-            <i
-                className={
-                    copied
-                        ? 'adminfont-check'
-                        : 'adminfont-vendor-form-copy'
-                }
-                onClick={handleCopy}
-                title={copied ? 'Copied!' : 'Copy'}
-            ></i>
+            <Tooltip text={copied ? copiedLabel : copyButtonLabel}>
+                <i
+                    className={
+                        copied
+                            ? 'adminfont-check'
+                            : 'adminfont-vendor-form-copy'
+                    }
+                    onClick={handleCopy}
+                />
+            </Tooltip>
         </div>
     );
 };

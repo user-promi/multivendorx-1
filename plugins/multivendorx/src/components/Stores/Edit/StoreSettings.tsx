@@ -401,7 +401,6 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 					phone: __('Invalid phone number', 'multivendorx'),
 				}));
 			}
-
 			return;
 		}
 
