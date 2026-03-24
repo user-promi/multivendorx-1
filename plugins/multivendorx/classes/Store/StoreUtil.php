@@ -659,64 +659,41 @@ class StoreUtil {
         return false;
     }
 
-	/**
-	 * Get store visitors statistics.
-	 *
-	 * @param int $store_id Store ID.
-	 * @return array Array with total, last_30_days, and previous_30_days visitor counts.
-	 */
-	public static function get_store_visitors( $store_id ) {
-		global $wpdb;
+    /**
+     * Get store visitors statistics based on date range.
+     *
+     * @param int   $store_id Store ID.
+     * @param array $args     Arguments (start_date, end_date).
+     * @return array
+     */
+    public static function get_store_visitors( $store_id, $args = array() ) {
+        global $wpdb;
 
-		$table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+        $table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
 
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		// Total users (all-time).
-		$total_users = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare(
-                "
-            SELECT COUNT(DISTINCT user_id)
+        $start_date = ! empty( $args['start_date'] ) ? $args['start_date'] : null;
+        $end_date   = ! empty( $args['end_date'] ) ? $args['end_date'] : null;
+
+        $query  = "
+            SELECT COUNT(DISTINCT user_id) as total
             FROM {$table_name}
             WHERE store_id = %d
-            ",
-                $store_id
-            )
-		);
+        ";
 
-		// Last 30 days.
-		$last_30_days = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare(
-                "
-            SELECT COUNT(DISTINCT user_id)
-            FROM {$table_name}
-            WHERE store_id = %d
-            AND created >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-            ",
-                $store_id
-            )
-		);
+        $params = array( $store_id );
 
-		// Previous 30 days (30–60 days ago).
-		$previous_30_days = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare(
-                "
-            SELECT COUNT(DISTINCT user_id)
-            FROM {$table_name}
-            WHERE store_id = %d
-            AND created >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
-            AND created < DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-            ",
-                $store_id
-            )
-		);
-		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        if ( $start_date && $end_date ) {
+            $query   .= " AND created BETWEEN %s AND %s";
+            $params[] = $start_date;
+            $params[] = $end_date;
+        }
 
-		return array(
-			'total'            => (int) $total_users,
-			'last_30_days'     => (int) $last_30_days,
-			'previous_30_days' => (int) $previous_30_days,
-		);
-	}
+        $result = $wpdb->get_var(
+            $wpdb->prepare( $query, $params )
+        );
+
+        return (int) $result;
+    }
 
 	/**
 	 * Get formatted phone number from phone meta data.
@@ -793,4 +770,69 @@ class StoreUtil {
 		 */
 		return apply_filters( 'multivendorx_store_info', $info, $store_obj );
 	}
+
+    /**
+     * Get store IDs within a given radius from a location.
+     *
+     * Uses the Haversine formula to calculate distance between
+     * the provided latitude/longitude and store coordinates
+     * stored in store meta.
+     * @param float  $lat    Latitude of the search origin.
+     * @param float  $lng    Longitude of the search origin.
+     * @param float  $radius Search radius distance.
+     * @param string $unit   Distance unit. Accepts 'kilometers' or 'miles'.
+     *
+     * @return array List of store IDs within the radius.
+     */
+    public static function get_stores_by_radius( $lat, $lng, $radius, $unit = 'kilometers' ) {
+        global $wpdb;
+
+        $store_table = $wpdb->prefix . Utill::TABLES['store'];
+        $meta_table  = $wpdb->prefix . Utill::TABLES['store_meta'];
+
+        // Determine earth radius based on unit.
+        $earth_radius = ( 'miles' === $unit ) ? 3959 : 6371;
+
+        $lat_key = Utill::STORE_SETTINGS_KEYS['location_lat'];
+        $lng_key = Utill::STORE_SETTINGS_KEYS['location_lng'];
+
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $sql = $wpdb->prepare(
+            "
+            SELECT s.ID,
+            (
+                %f * ACOS(
+                    COS( RADIANS( %f ) ) *
+                    COS( RADIANS( lat.meta_value ) ) *
+                    COS( RADIANS( lng.meta_value ) - RADIANS( %f ) ) +
+                    SIN( RADIANS( %f ) ) *
+                    SIN( RADIANS( lat.meta_value ) )
+                )
+            ) AS distance
+            FROM {$store_table} s
+            INNER JOIN {$meta_table} lat
+                ON s.ID = lat.store_id
+                AND lat.meta_key = %s
+                AND lat.meta_value != ''
+            INNER JOIN {$meta_table} lng
+                ON s.ID = lng.store_id
+                AND lng.meta_key = %s
+                AND lng.meta_value != ''
+            WHERE s.status = 'active'
+            HAVING distance <= %f
+            ORDER BY distance ASC
+            ",
+            $earth_radius,
+            $lat,
+            $lng,
+            $lat,
+            $lat_key,
+            $lng_key,
+            $radius
+        );
+        // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        return $wpdb->get_col( $sql );
+    }
 }

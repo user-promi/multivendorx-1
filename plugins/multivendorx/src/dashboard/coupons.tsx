@@ -21,7 +21,6 @@ import {
 } from 'zyra';
 
 import axios from 'axios';
-import Popup from '../components/Popup/Popup';
 import { toWcIsoDate } from '@/services/commonFunction';
 
 const COUPON_STATUS_MAP: Record<string, string> = {
@@ -75,6 +74,9 @@ const AllCoupon: React.FC = () => {
 				{
 					headers: {
 						'X-WP-Nonce': appLocalizer.nonce,
+					},
+					params: {
+						force: true,
 					},
 				}
 			)
@@ -241,7 +243,7 @@ const AllCoupon: React.FC = () => {
 
 		request
 			.then(() => {
-				// Close popup & reset form
+				doRefreshTableData({});
 				setAddCoupon(false);
 				setFormData({
 					title: '',
@@ -264,7 +266,6 @@ const AllCoupon: React.FC = () => {
 					customer_email: '',
 					id: '',
 				});
-				doRefreshTableData({});
 			})
 			.catch((err) => {
 				console.error('Error saving coupon:', err);
@@ -615,7 +616,7 @@ const AllCoupon: React.FC = () => {
 
 	useEffect(() => {
 		fetchCouponStatusCounts();
-	}, []);
+	}, [handleSave]);
 
 	const bulkActions = [{ label: 'Delete', value: 'delete' }];
 
@@ -630,40 +631,45 @@ const AllCoupon: React.FC = () => {
 							handleEditCoupon(row.id)
 						}
 						descriptions={
-				[
-				{
-					label: __('By', 'multivendorx'),
-					value: row.store_name,
-				},
-						]}
-			/>
+							[
+								{
+									label: __('By', 'multivendorx'),
+									value: row.store_name,
+								},
+							]}
+					/>
 				);
 			},
 		},
-discount_type: {
-	label: __('Coupon Type', 'multivendorx'),
+		discount_type: {
+			label: __('Discount Type', 'multivendorx'),
+			type: 'status',
 		},
-amount: {
-	label: __('Amount', 'multivendorx'),
-		type: 'currency',
+		amount: {
+			label: __('Amount', 'multivendorx'),
+			type: 'currency',
 		},
-description: {
-	label: __('Description', 'multivendorx'),
+		description: {
+			label: __('Description', 'multivendorx'),
 		},
-usage_limit: {
-	label: __('Usage / Limit', 'multivendorx'),
+		usage_limit: {
+			label: __('Usage / Limit', 'multivendorx'),
 		},
-date_expires: {
-	label: __('Expiry Date', 'multivendorx'),
-		type: 'date',
+		date_created: {
+			label: __('Date created', 'multivendorx'),
+			type: 'date',
 		},
-status: {
-	label: __('Status', 'multivendorx'),
-		type: 'status',
+		date_expires: {
+			label: __('Expiry Date', 'multivendorx'),
+			type: 'date',
 		},
-action: {
-	type: 'action',
-		label: __('Action', 'multivendorx'),
+		status: {
+			label: __('Status', 'multivendorx'),
+			type: 'status',
+		},
+		action: {
+			type: 'action',
+			label: __('Action', 'multivendorx'),
 			actions: [
 				{
 					label: __('Edit', 'multivendorx'),
@@ -683,282 +689,255 @@ action: {
 		},
 	};
 
-const doRefreshTableData = (query: QueryProps) => {
-	setIsLoading(true);
-	axios
-		.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-			params: {
-				page: query.paged || 1,
-				row: query.per_page || 10,
-				status: query.categoryFilter || '',
-				search: query.searchValue || '',
-				after: query.filter?.created_at?.startDate
-					? toWcIsoDate(
-						query.filter.created_at.startDate,
-						'start'
-					)
-					: undefined,
+	const doRefreshTableData = (query: QueryProps) => {
+		setIsLoading(true);
+		axios
+			.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					page: query.paged || 1,
+					row: query.per_page || 10,
+					status: query.categoryFilter || '',
+					search: query.searchValue || '',
+					after: query.filter?.created_at?.startDate
+						? toWcIsoDate(
+							query.filter.created_at.startDate,
+							'start'
+						)
+						: undefined,
 
-				before: query.filter?.created_at?.endDate
-					? toWcIsoDate(query.filter.created_at.endDate, 'end')
-					: undefined,
-				discount_type: query.filter?.couponType,
-				meta_key: 'multivendorx_store_id',
-				value: appLocalizer.store_id,
-			},
-		})
-		.then((response) => {
-			const items = response.data || [];
-			const ids = items
-				.filter((item) => item?.id != null)
-				.map((item) => item.id);
-
-			setRowIds(ids);
-
-			setRows(items);
-			setTotalRows(Number(response.headers['x-wp-total']) || 0);
-			setIsLoading(false);
-		})
-		.catch(() => {
-			setRows([]);
-			setTotalRows(0);
-			setIsLoading(false);
-		});
-};
-
-const filters = [
-	{
-		key: 'couponType',
-		label: __('Status', 'multivendorx'),
-		type: 'select',
-		options: [
-			{
-				label: __('Percentage Discount', 'multivendorx'),
-				value: 'percent',
-			},
-			{
-				label: __('Fixed Cart Discount', 'multivendorx'),
-				value: 'fixed_cart',
-			},
-			{
-				label: __('Fixed Product Discount', 'multivendorx'),
-				value: 'fixed_product',
-			},
-		],
-	},
-	{
-		key: 'created_at',
-		label: __('Created Date', 'multivendorx'),
-		type: 'date',
-	},
-];
-return (
-	<>
-		<NavigatorHeader
-			headerTitle={__('Coupons', 'multivendorx')}
-			headerDescription={__(
-				'Create, view, and manage all your store coupons from one place.',
-				'multivendorx'
-			)}
-			buttons={[
-				{
-					label: __('Add New', 'multivendorx'),
-					icon: 'plus',
-					onClick: () => {
-						setFormData({ ...defaultFormData });
-						setAddCoupon(true);
-					},
+					before: query.filter?.created_at?.endDate
+						? toWcIsoDate(query.filter.created_at.endDate, 'end')
+						: undefined,
+					discount_type: query.filter?.couponType,
+					meta_key: 'multivendorx_store_id',
+					value: appLocalizer.store_id,
 				},
-			]}
-		/>
+			})
+			.then((response) => {
+				const items = response.data || [];
+				const ids = items
+					.filter((item) => item?.id != null)
+					.map((item) => item.id);
 
-		{AddCoupon && (
+				setRowIds(ids);
+
+				setRows(items);
+				setTotalRows(Number(response.headers['x-wp-total']) || 0);
+				setIsLoading(false);
+			})
+			.catch(() => {
+				setRows([]);
+				setTotalRows(0);
+				setIsLoading(false);
+			});
+	};
+
+	const filters = [
+		{
+			key: 'couponType',
+			label: __('Status', 'multivendorx'),
+			type: 'select',
+			options: [
+				{
+					label: __('Percentage Discount', 'multivendorx'),
+					value: 'percent',
+				},
+				{
+					label: __('Fixed Cart Discount', 'multivendorx'),
+					value: 'fixed_cart',
+				},
+				{
+					label: __('Fixed Product Discount', 'multivendorx'),
+					value: 'fixed_product',
+				},
+			],
+		},
+		{
+			key: 'created_at',
+			label: __('Created Date', 'multivendorx'),
+			type: 'date',
+		},
+	];
+	return (
+		<>
+			<NavigatorHeader
+				headerTitle={__('Coupons', 'multivendorx')}
+				headerDescription={__(
+					'Create, view, and manage all your store coupons from one place.',
+					'multivendorx'
+				)}
+				buttons={[
+					{
+						label: __('Add New', 'multivendorx'),
+						icon: 'plus',
+						onClick: () => {
+							setFormData({ ...defaultFormData });
+							setAddCoupon(true);
+						},
+					},
+				]}
+			/>
+
+			{AddCoupon && (
+				<PopupUI
+					open={AddCoupon}
+					onClose={() => setAddCoupon(false)}
+					width={31.25}
+					header={{
+						icon: 'coupon',
+						title: __('Add Coupon', 'multivendorx'),
+						description: __(
+							'Set code, discount, and usage limits, then activate.',
+							'multivendorx'
+						),
+					}}
+					footer={
+						<ButtonInputUI
+							buttons={[
+								{
+									icon: 'contact-form',
+									text: __('Draft', 'multivendorx'),
+									color: 'red',
+									onClick: () => handleSave('draft'),
+								},
+								{
+									icon: 'save',
+									text: __('Publish', 'multivendorx'),
+									onClick: () => handleSave('publish'),
+								},
+							]}
+						/>
+					}
+				>
+					<>
+						<FormGroupWrapper>
+							<FormGroup
+								label={__('Coupon code', 'multivendorx')}
+								htmlFor="title"
+							>
+								<BasicInputUI
+									type="text"
+									name="title"
+									value={formData.title}
+									generate={true}
+									onChange={(value) =>
+										setFormData({
+											...formData,
+											title: value,
+										})
+									}
+								/>
+								<RandomInputKeyGeneratorUI
+									length="10"
+									onChange={(value) => {
+										setFormData({
+											...formData,
+											title: value,
+										});
+									}}
+								/>
+								{validationErrors.title && (
+									<div className="invalid-massage">
+										{validationErrors.title}
+									</div>
+								)}
+							</FormGroup>
+
+							<FormGroup
+								label={__(
+									'Description (optional)',
+									'multivendorx'
+								)}
+								htmlFor="title"
+							>
+								<TextAreaUI
+									name="content"
+									rowNumber={6}
+									value={formData.content}
+									onChange={(value) =>
+										setFormData({
+											...formData,
+											content: value,
+										})
+									}
+								/>
+							</FormGroup>
+						</FormGroupWrapper>
+						<TabsUI
+							tabs={tabs.map((tab) => ({
+								label: __(tab.label, 'multivendorx'),
+								content: tab.content,
+							}))}
+						/>
+					</>
+				</PopupUI>
+			)}
 			<PopupUI
-				open={AddCoupon}
-				onClose={() => setAddCoupon(false)}
-				width={31.25}
+				position="lightbox"
+				open={confirmOpen}
+				onClose={() => {
+					setConfirmOpen(false);
+					setSelectedCoupon(null);
+				}}
+				showBackdrop={true}
 				header={{
-					icon: 'coupon',
-					title: __('Add Coupon', 'multivendorx'),
-					description: __(
-						'Set code, discount, and usage limits, then activate.',
-						'multivendorx'
-					),
+					icon: 'warning',
+					title: __('Are you sure?', 'multivendorx'),
 				}}
 				footer={
 					<ButtonInputUI
 						buttons={[
 							{
-								icon: 'contact-form',
-								text: __('Draft', 'multivendorx'),
+								icon: 'close',
+								text: __('Cancel', 'multivendorx'),
 								color: 'red',
-								onClick: () => handleSave('draft'),
+								onClick: () => {
+									setConfirmOpen(false);
+									setSelectedCoupon(null);
+								},
 							},
 							{
-								icon: 'save',
-								text: __('Publish', 'multivendorx'),
-								onClick: () => handleSave('publish'),
+								icon: 'cross',
+								text: __('Delete', 'multivendorx'),
+								onClick: handleConfirmDelete,
 							},
 						]}
 					/>
 				}
 			>
-				<>
-					<FormGroupWrapper>
-						<FormGroup
-							label={__('Coupon code', 'multivendorx')}
-							htmlFor="title"
-						>
-							<BasicInputUI
-								type="text"
-								name="title"
-								value={formData.title}
-								generate={true}
-								onChange={(value) =>
-									setFormData({
-										...formData,
-										title: value,
-									})
-								}
-							/>
-							<RandomInputKeyGeneratorUI
-								length="10"
-								onChange={(value) => {
-									setFormData({
-										...formData,
-										title: value,
-									});
-								}}
-							/>
-							{validationErrors.title && (
-								<div className="invalid-massage">
-									{validationErrors.title}
-								</div>
-							)}
-						</FormGroup>
-
-						<FormGroup
-							label={__(
-								'Description (optional)',
-								'multivendorx'
-							)}
-							htmlFor="title"
-						>
-							<TextAreaUI
-								name="content"
-								rowNumber={6}
-								value={formData.content}
-								onChange={(value) =>
-									setFormData({
-										...formData,
-										content: value,
-									})
-								}
-							/>
-						</FormGroup>
-					</FormGroupWrapper>
-					<TabsUI
-						tabs={tabs.map((tab) => ({
-							label: __(tab.label, 'multivendorx'),
-							content: tab.content,
-						}))}
-					/>
-				</>
+				<p>
+					{__(
+						'Are you sure you want to delete this coupon?',
+						'multivendorx'
+					)}
+				</p>
 			</PopupUI>
-		)}
-
-		<PopupUI
-			position="lightbox"
-			open={confirmOpen}
-			onClose={() => setConfirmOpen(false)}
-			width={31.25}
-		>
-			<Popup
-				confirmMode
-				title={__('Are you sure?', 'multivendorx')}
-				confirmMessage={
-					selectedCoupon
-						? __(
-							`Are you sure you want to delete coupon "${selectedCoupon.code}"?`,
-							'multivendorx'
-						)
-						: ''
-				}
-				confirmYesText={__('Delete', 'multivendorx')}
-				confirmNoText={__('Cancel', 'multivendorx')}
-				onConfirm={handleConfirmDelete}
-				onCancel={() => {
-					setConfirmOpen(false);
-					setSelectedCoupon(null);
+			<TableCard
+				headers={headers}
+				rows={rows}
+				totalRows={totalRows}
+				isLoading={isLoading}
+				onQueryUpdate={doRefreshTableData}
+				ids={rowIds}
+				categoryCounts={categoryCounts}
+				search={{}}
+				filters={filters}
+				bulkActions={bulkActions}
+				onBulkActionApply={(action: string, selectedIds: []) => {
+					handleBulkAction(action, selectedIds);
+				}}
+				format={appLocalizer.date_format}
+				currency={{
+					currencySymbol: appLocalizer.currency_symbol,
+					priceDecimals: appLocalizer.price_decimals,
+					decimalSeparator: appLocalizer.decimal_separator,
+					thousandSeparator: appLocalizer.thousand_separator,
+					currencyPosition: appLocalizer.currency_position,
 				}}
 			/>
-		</PopupUI>
-		<PopupUI
-			position="lightbox"
-			open={confirmOpen}
-			onClose={() => {
-				setConfirmOpen(false);
-				setSelectedCoupon(null);
-			}}
-			showBackdrop={true}
-			header={{
-				icon: 'warning',
-				title: __('Are you sure?', 'multivendorx'),
-			}}
-			footer={
-				<ButtonInputUI
-					buttons={[
-						{
-							icon: 'close',
-							text: __('Cancel', 'multivendorx'),
-							color: 'red',
-							onClick: () => {
-								setConfirmOpen(false);
-								setSelectedCoupon(null);
-							},
-						},
-						{
-							icon: 'cross',
-							text: __('Delete', 'multivendorx'),
-							onClick: handleConfirmDelete,
-						},
-					]}
-				/>
-			}
-		>
-			<p>
-				{__(
-					'Are you sure you want to delete this coupon?',
-					'multivendorx'
-				)}
-			</p>
-		</PopupUI>
-		<TableCard
-			headers={headers}
-			rows={rows}
-			totalRows={totalRows}
-			isLoading={isLoading}
-			onQueryUpdate={doRefreshTableData}
-			ids={rowIds}
-			categoryCounts={categoryCounts}
-			search={{}}
-			filters={filters}
-			bulkActions={bulkActions}
-			onBulkActionApply={(action: string, selectedIds: []) => {
-				handleBulkAction(action, selectedIds);
-			}}
-			format={appLocalizer.date_format}
-			currency={{
-				currencySymbol: appLocalizer.currency_symbol,
-				priceDecimals: appLocalizer.price_decimals,
-				decimalSeparator: appLocalizer.decimal_separator,
-				thousandSeparator: appLocalizer.thousand_separator,
-				currencyPosition: appLocalizer.currency_position,
-			}}
-		/>
-	</>
-);
+		</>
+	);
 };
 
 export default AllCoupon;

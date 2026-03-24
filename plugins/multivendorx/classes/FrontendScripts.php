@@ -175,6 +175,7 @@ class FrontendScripts {
             'store-policy',
             'product-category',
             'store-quick-info',
+            'store-list'
         );
 
         $register_scripts = apply_filters(
