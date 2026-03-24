@@ -704,6 +704,8 @@ class Stores extends \WP_REST_Controller {
             $fetch_user    = $request->get_param( 'fetch_user' );
             $dashboard     = $request->get_param( 'dashboard' );
             $registrations = (bool) $request->get_header( 'registrations' );
+            $start_date    = $request->get_param( 'start_date' );
+            $end_date      = $request->get_param( 'end_date' );
 
             if ( $id && 'switch' === $action ) {
                 update_user_meta(
@@ -746,8 +748,13 @@ class Stores extends \WP_REST_Controller {
                     StoreUtil::get_store_registration_form( $store->get_id() )
                 );
             }
+            $args = array();
 
-            $commission = CommissionUtil::get_commission_summary_for_store( $id );
+            if ( $start_date && $end_date ) {
+                $args['start_date'] = $start_date;
+                $args['end_date']   = $end_date;
+            }
+            $commission = CommissionUtil::get_commission_summary_for_store( $id,false,false,3,$args );
 
             $primary_owner_id   = StoreUtil::get_primary_owner( $id );
             $primary_owner_info = $primary_owner_id
@@ -755,11 +762,13 @@ class Stores extends \WP_REST_Controller {
                 : null;
 
             if ( $dashboard ) {
-                if ( get_transient( 'multivendorx_dashboard_data_' . $id ) ) {
-                    return get_transient( 'multivendorx_dashboard_data_' . $id );
+                $transient_key = Utill::MULTIVENDORX_TRANSIENT_KEYS['dashboard_transient'] . $id . '_' . implode('_', [$args['start_date'], $args['end_date']]);
+
+                if ( get_transient( $transient_key ) ) {
+                    return get_transient( $transient_key );
                 }
 
-                $visitors = StoreUtil::get_store_visitors( $id );
+                $visitors = StoreUtil::get_store_visitors( $id, $args );
 
                 $response = array(
                     'id'                 => $store->get_id(),
@@ -769,7 +778,7 @@ class Stores extends \WP_REST_Controller {
                     'visitors'           => $visitors,
                 );
 
-                set_transient( 'multivendorx_dashboard_data_' . $id, $response, DAY_IN_SECONDS );
+                set_transient( $transient_key, $response, DAY_IN_SECONDS );
 
                 return rest_ensure_response( $response );
             }

@@ -115,6 +115,7 @@ class Utill {
         'review_transient'       => 'multivendorx_review_data_',
         'report_transient'       => 'multivendorx_report_data_',
         'withdrawal_transient'   => 'multivendorx_withdrawal_data_',
+        'dashboard_transient'    =>'multivendorx_dashboard_data_',
     );
 
     const WOO_SETTINGS = array(
@@ -490,14 +491,23 @@ class Utill {
         $end_date   = '';
 
         if ( $start_raw && $end_raw ) {
-            // Site timezone (WordPress standard).
-            $timezone = wp_timezone();
+            try {
+                $timezone = wp_timezone();
 
-            $start_dt = new \DateTime( $start_raw . ' 00:00:00', $timezone );
-            $end_dt   = new \DateTime( $end_raw . ' 23:59:59', $timezone );
+                // 1. Create objects from the raw strings (PHP handles the 'T' and 'Z' automatically)
+                $start_dt = new \DateTime( $start_raw, $timezone );
+                $end_dt   = new \DateTime( $end_raw, $timezone );
 
-            $start_date = $start_dt->format( 'Y-m-d H:i:s' );
-            $end_date   = $end_dt->format( 'Y-m-d H:i:s' );
+                // 2. Override the time to cover the full day
+                $start_dt->setTime( 0, 0, 0 );
+                $end_dt->setTime( 23, 59, 59 );
+
+                $start_date = $start_dt->format( 'Y-m-d H:i:s' );
+                $end_date   = $end_dt->format( 'Y-m-d H:i:s' );
+            } catch ( \Exception $e ) {
+                // Log error or handle invalid date format
+                return array( 'start_date' => '', 'end_date' => '' );
+            }
         }
 
         return array(

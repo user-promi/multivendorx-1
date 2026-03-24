@@ -113,6 +113,7 @@ class Commissions extends \WP_REST_Controller {
         try {
             // Check if CSV download is requested.
             $store_id = $request->get_param( 'store_id' );
+            $format = $request->get_param( 'format' );
 
             if ( 'reports' === $format ) {
                 $top_stores = $request->get_param( 'top_stores' );
@@ -125,12 +126,13 @@ class Commissions extends \WP_REST_Controller {
                 );
 
                 if ( $dashboard ) {
-                    if ( get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['report_transient'] . $store_id ) ) {
-                        return get_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['report_transient'] . $store_id );
+                    $transient_key = Utill::MULTIVENDORX_TRANSIENT_KEYS['report_transient'] . $store_id . '_' . implode('_', [$args['start_date'], $args['end_date']]);
+                    if ( get_transient( $transient_key ) ) {
+                        return get_transient( $transient_key );
                     }
                     $results = CommissionUtil::get_commission_summary_for_store( $store_id, $dashboard, false, null, $args );
                     if ( ! empty( $results ) ) {
-                        set_transient( Utill::MULTIVENDORX_TRANSIENT_KEYS['report_transient'] . $store_id, $results, DAY_IN_SECONDS );
+                        set_transient( $transient_key, $results, DAY_IN_SECONDS );
                     }
                     return $results;
                 }

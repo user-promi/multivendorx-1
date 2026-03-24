@@ -32,7 +32,7 @@ import {
 } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { formatCurrency, formatTimeAgo } from '@/services/commonFunction';
+import { formatCurrency, formatDate, formatTimeAgo, truncateText } from '@/services/commonFunction';
 import VisitorsMap from './visitorsMap';
 
 const getCSSVar = (name) =>
@@ -62,7 +62,7 @@ const Dashboard: React.FC = () => {
 	const [announcement, setAnnouncement] = useState<[]>([]);
 	const [revenueData, setRevenueData] = useState([]);
 	const [store, setStore] = useState<[]>([]);
-	const [totalOrder, setTotalOrder] = useState<number>(0);
+	const [storePreviousYear, setStorePreviousYear] = useState<[]>([]);
 	const [customers, setCustomers] = useState<[]>([]);
 	const [lastWithdraws, setLastWithdraws] = useState<[]>([]);
 	const [activities, setActivities] = useState<[]>([]);
@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
 
 	const access =
 		appLocalizer.settings_databases_value?.['privacy']?.[
-			'customer_information_access'
+		'customer_information_access'
 		];
 	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
 
@@ -100,10 +100,10 @@ const Dashboard: React.FC = () => {
 			render: (row) =>
 				row.products && row.products.length > 0
 					? row.products.map((product, index) => (
-							<div key={index} className="product-wrapper">
-								{product.name}
-							</div>
-						))
+						<div key={index} className="product-wrapper">
+							{product.name}
+						</div>
+					))
 					: '-',
 		},
 		amount: {
@@ -170,6 +170,46 @@ const Dashboard: React.FC = () => {
 		return __('Good Night', 'multivendorx');
 	};
 	useEffect(() => {
+		// Current range
+		axios
+			.get(getApiLink(appLocalizer, `store/${appLocalizer.store_id}`), {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					dashboard: true,
+					id: appLocalizer.store_id,
+					start_date: dateRange?.startDate,
+					end_date: dateRange?.endDate,
+				},
+			})
+			.then((res) => {
+				setStore(res.data || {});
+			});
+
+		// Previous year range
+		axios
+			.get(getApiLink(appLocalizer, `store/${appLocalizer.store_id}`), {
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					dashboard: true,
+					id: appLocalizer.store_id,
+					start_date: new Date(
+						new Date(dateRange?.startDate).setFullYear(
+							new Date(dateRange?.startDate).getFullYear() - 1
+						)
+					),
+					end_date: new Date(
+						new Date(dateRange?.endDate).setFullYear(
+							new Date(dateRange?.endDate).getFullYear() - 1
+						)
+					),
+				},
+			})
+			.then((res) => {
+				setStorePreviousYear(res.data || {});
+			});
+	}, [dateRange]);
+
+	useEffect(() => {
 		setIsLoading(true);
 
 		// Reviews
@@ -188,7 +228,7 @@ const Dashboard: React.FC = () => {
 				},
 			})
 			.then((response) => {
-				const items = response.data.items || [];
+				const items = response.data || [];
 				setReview(items);
 			})
 			.catch(() => {
@@ -321,38 +361,6 @@ const Dashboard: React.FC = () => {
 				setRecentOrderIds(orders.map((o) => o.id));
 			});
 
-		// Store Data
-		axios
-			.get(getApiLink(appLocalizer, `store/${appLocalizer.store_id}`), {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: { dashboard: true, id: appLocalizer.store_id },
-			})
-			.then((res) => {
-				const data = res.data || {};
-				setStore(data);
-			});
-
-		// Total Orders
-		axios
-			.get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					per_page: 1,
-					meta_key: 'multivendorx_store_id',
-					value: appLocalizer.store_id,
-					after: dateRange.startDate.toISOString().replace('Z', ''),
-					before: dateRange.endDate.toISOString().replace('Z', ''),
-				},
-			})
-			.then((response) => {
-				const totalOrders =
-					parseInt(response.headers['x-wp-total']) || 0;
-				setTotalOrder(totalOrders);
-			})
-			.catch(() => {
-				setTotalOrder(0);
-			});
-
 		// Last Withdrawals - keep using InfoItem (no TableCard needed)
 		axios
 			.get(getApiLink(appLocalizer, 'transaction'), {
@@ -367,11 +375,10 @@ const Dashboard: React.FC = () => {
 					order: 'DESC',
 					start_date: dateRange.startDate,
 					end_date: dateRange.endDate,
-					dashboard: true,
 				},
 			})
 			.then((response) => {
-				const withdrawals = response.data.transaction || [];
+				const withdrawals = response.data || [];
 				setLastWithdraws(withdrawals);
 			})
 			.catch(() => setLastWithdraws([]));
@@ -457,9 +464,7 @@ const Dashboard: React.FC = () => {
 				},
 			})
 			.then((response) => {
-				setRevenueData(
-					Array.isArray(response.data.data) ? response.data.data : []
-				);
+				setRevenueData(response.data || []);
 			});
 	}, [dateRange, modules]);
 
@@ -469,38 +474,28 @@ const Dashboard: React.FC = () => {
 			number: formatCurrency(store?.commission?.total_order_amount || 0),
 			text: 'Total Revenue',
 			color: 'primary',
-			last30: formatCurrency(store?.commission?.last_30_days?.total || 0),
-			prev30: formatCurrency(
-				store?.commission?.previous_30_days?.total || 0
-			),
+			prev30: formatCurrency(storePreviousYear?.commission?.total_order_amount || 0),
 		},
 		{
 			icon: 'order',
-			number: totalOrder,
+			number: store?.commission?.order_count || 0,
 			text: 'Total Orders',
 			color: 'secondary',
-			last30: store?.commission?.last_30_days?.orders || 0,
-			prev30: store?.commission?.previous_30_days?.orders || 0,
+			prev30: storePreviousYear?.commission?.order_count || 0,
 		},
 		{
 			icon: 'store-seo',
-			number: store?.visitors?.total || 0,
+			number: store?.visitors,
 			text: 'Store Views',
 			color: 'accent',
-			last30: store?.visitors?.last_30_days || 0,
-			prev30: store?.visitors?.previous_30_days || 0,
+			prev30: storePreviousYear?.visitors,
 		},
 		{
 			icon: 'commission',
 			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Commission Earned',
 			color: 'support',
-			last30: formatCurrency(
-				store?.commission?.last_30_days?.commission || 0
-			),
-			prev30: formatCurrency(
-				store?.commission?.previous_30_days?.commission || 0
-			),
+			prev30: formatCurrency(storePreviousYear?.commission?.commission_total || 0),
 		},
 	];
 
@@ -537,6 +532,7 @@ const Dashboard: React.FC = () => {
 				}
 				headerCustomContent={
 					<CalendarInputUI
+						value={dateRange}
 						onChange={(range: DateRange) => {
 							setDateRange({
 								startDate: range.startDate,
@@ -647,20 +643,20 @@ const Dashboard: React.FC = () => {
 										key={item.id}
 										title={
 											item.payment_method ===
-											'stripe-connect'
+												'stripe-connect'
 												? __('Stripe', 'multivendorx')
 												: item.payment_method ===
-													  'bank-transfer'
+													'bank-transfer'
 													? __(
-															'Direct to Local Bank (INR)',
+														'Direct to Local Bank (INR)',
+														'multivendorx'
+													)
+													: item.payment_method ===
+														'paypal-payout'
+														? __(
+															'PayPal',
 															'multivendorx'
 														)
-													: item.payment_method ===
-														  'paypal-payout'
-														? __(
-																'PayPal',
-																'multivendorx'
-															)
 														: ''
 										}
 										isLoading={isLoading}
@@ -844,7 +840,7 @@ const Dashboard: React.FC = () => {
 						>
 							<div className="notification-wrapper">
 								{Array.isArray(announcement) &&
-								announcement.length > 0 ? (
+									announcement.length > 0 ? (
 									<ul>
 										{announcement.map((item, index) => (
 											<li key={item.id}>
@@ -907,7 +903,7 @@ const Dashboard: React.FC = () => {
 													</div>
 													<div className="order-number">
 														{customer.reason} |{' '}
-														{customer.time}
+														{formatDate(customer.time)}
 													</div>
 												</div>
 											</div>
@@ -967,12 +963,12 @@ const Dashboard: React.FC = () => {
 					<Card title={__('Store Activity', 'multivendorx')}>
 						<div className="activity-log">
 							{Array.isArray(activities) &&
-							activities.length > 0 ? (
+								activities.length > 0 ? (
 								activities.slice(0, 5).map((a, i) => (
 									<div key={i} className="activity">
 										<div className="title">{a.title}</div>
 										<div className="des">{a.message}</div>
-										<span>{a.created_at}</span>
+										<span>{formatDate(a.created_at)}</span>
 									</div>
 								))
 							) : (
@@ -1019,13 +1015,11 @@ const Dashboard: React.FC = () => {
 														)
 													)}
 													<span>
-														{
-															reviewItem.date_created
-														}
+														{formatDate(reviewItem.date_created)}
 													</span>
 												</div>
 												<div className="des">
-													{reviewItem.review_content}
+													{truncateText(reviewItem.review_content, 5)}
 												</div>
 											</div>
 										</div>

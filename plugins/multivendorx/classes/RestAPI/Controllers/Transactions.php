@@ -117,6 +117,7 @@ class Transactions extends \WP_REST_Controller {
                 $request->get_param( 'start_date' ),
                 $request->get_param( 'end_date' )
 			);
+
 			$ids                = $request->get_param( 'ids' );
 			$sec_fetch_site     = $request->get_header( 'sec_fetch_site' );
 			$referer            = $request->get_header( 'referer' );
@@ -152,7 +153,7 @@ class Transactions extends \WP_REST_Controller {
 			if ( $ids ) {
 				$args['id'] = $ids;
 			}
-
+file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: args: " . var_export($args, true) . "\n", FILE_APPEND);
 			$transactions = Transaction::get_transaction_information( $args );
 			$formatted    = array_map(
                 function ( $row ) {

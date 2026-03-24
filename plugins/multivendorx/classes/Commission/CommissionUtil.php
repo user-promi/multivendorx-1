@@ -259,7 +259,7 @@ class CommissionUtil {
                 COUNT(DISTINCT order_id) AS orders
             FROM {$table_name} 
             WHERE store_id = %d
-        ";
+            ";
 
 			$params = array( $store_id );
 
@@ -272,7 +272,7 @@ class CommissionUtil {
 			$query .= '
             GROUP BY YEAR(created_at), MONTH(created_at)
             ORDER BY created_at ASC
-        ';
+            ';
 
 			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
@@ -291,8 +291,11 @@ class CommissionUtil {
 		}
 
 		// Summary for a specific store.
-		$query = "
+        $params = array();
+
+        $query = "
         SELECT 
+            COUNT(DISTINCT order_id) AS order_count,
             COALESCE(SUM(total_order_value), 0) AS total_order_amount,
             COALESCE(SUM(facilitator_fee), 0) AS facilitator_fee,
             COALESCE(SUM(gateway_fee), 0) AS gateway_fee,
@@ -301,77 +304,31 @@ class CommissionUtil {
             COALESCE(SUM(store_shipping_tax), 0) AS shipping_tax_amount,
             COALESCE(SUM(store_payable), 0) AS commission_total,
             COALESCE(SUM(store_refunded), 0) AS commission_refunded
-        FROM {$table_name} 
-    ";
+        FROM {$table_name}
+        WHERE 1=1
+        ";
 
-		if ( ! empty( $store_id ) ) {
-			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
-			$query .= $wpdb->prepare( ' WHERE store_id = %d', $store_id );
-			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
-		}
+        if ( ! empty( $store_id ) ) {
+            $query   .= " AND store_id = %d";
+            $params[] = $store_id;
+        }
 
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
-		$result = $wpdb->get_row( $query );
-		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
-		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+        if ( ! empty( $args['start_date'] ) && ! empty( $args['end_date'] ) ) {
+            $query   .= " AND DATE(created_at) BETWEEN %s AND %s";
+            $params[] = $args['start_date'];
+            $params[] = $args['end_date'];
+        }
+        
+        $result = $wpdb->get_row(
+            $wpdb->prepare( $query, $params )
+        );
 
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
 			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
 
-		// Last 30 days.
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-		$last_30_days = $wpdb->get_row(
-            $wpdb->prepare(
-                "
-            SELECT
-                COUNT(DISTINCT order_id) AS orders,
-                ROUND(SUM(store_payable), 2) AS commission,
-                ROUND(SUM(total_order_value), 2) AS total
-            FROM {$table_name} 
-            WHERE store_id = %d
-            AND created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-            ",
-                $store_id
-            ),
-            ARRAY_A
-		);
-		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
-
-		// Previous 30 Days.
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-		$previous_30_days = $wpdb->get_row(
-            $wpdb->prepare(
-                "
-            SELECT
-                COUNT(DISTINCT order_id) AS orders,
-                ROUND(SUM(store_payable), 2) AS commission,
-                ROUND(SUM(total_order_value), 2) AS total
-            FROM {$table_name} 
-            WHERE store_id = %d
-            AND created_at >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
-            AND created_at < DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-            ",
-                $store_id
-            ),
-            ARRAY_A
-		);
-		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
-
 		return array(
+            'order_count'         => intval( $result->order_count ),
 			'total_order_amount'  => floatval( $result->total_order_amount ),
 			'facilitator_fee'     => floatval( $result->facilitator_fee ),
 			'gateway_fee'         => floatval( $result->gateway_fee ),
@@ -380,8 +337,6 @@ class CommissionUtil {
 			'shipping_tax_amount' => floatval( $result->shipping_tax_amount ),
 			'commission_total'    => floatval( $result->commission_total ),
 			'commission_refunded' => floatval( $result->commission_refunded ),
-			'last_30_days'        => $last_30_days,
-			'previous_30_days'    => $previous_30_days,
 		);
 	}
 }

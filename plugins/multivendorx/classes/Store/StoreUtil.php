@@ -659,64 +659,41 @@ class StoreUtil {
         return false;
     }
 
-	/**
-	 * Get store visitors statistics.
-	 *
-	 * @param int $store_id Store ID.
-	 * @return array Array with total, last_30_days, and previous_30_days visitor counts.
-	 */
-	public static function get_store_visitors( $store_id ) {
-		global $wpdb;
+    /**
+     * Get store visitors statistics based on date range.
+     *
+     * @param int   $store_id Store ID.
+     * @param array $args     Arguments (start_date, end_date).
+     * @return array
+     */
+    public static function get_store_visitors( $store_id, $args = array() ) {
+        global $wpdb;
 
-		$table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+        $table_name = $wpdb->prefix . Utill::TABLES['visitors_stats'];
 
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		// Total users (all-time).
-		$total_users = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare(
-                "
-            SELECT COUNT(DISTINCT user_id)
+        $start_date = ! empty( $args['start_date'] ) ? $args['start_date'] : null;
+        $end_date   = ! empty( $args['end_date'] ) ? $args['end_date'] : null;
+
+        $query  = "
+            SELECT COUNT(DISTINCT user_id) as total
             FROM {$table_name}
             WHERE store_id = %d
-            ",
-                $store_id
-            )
-		);
+        ";
 
-		// Last 30 days.
-		$last_30_days = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare(
-                "
-            SELECT COUNT(DISTINCT user_id)
-            FROM {$table_name}
-            WHERE store_id = %d
-            AND created >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-            ",
-                $store_id
-            )
-		);
+        $params = array( $store_id );
 
-		// Previous 30 days (30–60 days ago).
-		$previous_30_days = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare(
-                "
-            SELECT COUNT(DISTINCT user_id)
-            FROM {$table_name}
-            WHERE store_id = %d
-            AND created >= DATE_SUB(CURDATE(), INTERVAL 60 DAY)
-            AND created < DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-            ",
-                $store_id
-            )
-		);
-		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        if ( $start_date && $end_date ) {
+            $query   .= " AND created BETWEEN %s AND %s";
+            $params[] = $start_date;
+            $params[] = $end_date;
+        }
 
-		return array(
-			'total'            => (int) $total_users,
-			'last_30_days'     => (int) $last_30_days,
-			'previous_30_days' => (int) $previous_30_days,
-		);
-	}
+        $result = $wpdb->get_var(
+            $wpdb->prepare( $query, $params )
+        );
+
+        return (int) $result;
+    }
 
 	/**
 	 * Get formatted phone number from phone meta data.
