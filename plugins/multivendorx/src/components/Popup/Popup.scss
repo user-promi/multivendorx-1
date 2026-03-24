@@ -34,6 +34,9 @@
 
 
 // pro popup
+.popup-content:has(.top-section){
+    overflow: hidden !important; // for overwrite zyra style
+}
 .popup-wrapper {
     .top-section {
         padding: 2.5rem 2rem;
@@ -120,6 +123,8 @@
 
                     i{
                         padding-right: 0.45rem;
+                        color: $theme-color;
+                        font-size: 1.25rem;
                     }
                 }
             }

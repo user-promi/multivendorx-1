@@ -77,6 +77,8 @@
                         bottom: 0.313rem;
                         left: 2.5rem;
                         font-size: 0.95rem;
+                        opacity: 0;
+                        transition: all 0.5s ease;
                     }
                 }
 
@@ -160,6 +162,10 @@
                     min-width: 11rem;
                     max-width: 11rem;
                 }
+            }
+
+            &:hover{
+                opacity: 1;
             }
         }
 
