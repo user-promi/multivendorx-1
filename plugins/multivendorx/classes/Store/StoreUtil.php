@@ -636,7 +636,7 @@ class StoreUtil {
 
         $status           = $store->get( 'status' );
         $review_settings  = MultiVendorX()->setting->get_setting( 'restriction_for_under_review', array() );
-        $suspend_settings = MultiVendorX()->setting->get_setting( 'restriction_for_sunspended', array() );
+        $suspend_settings = MultiVendorX()->setting->get_setting( 'restriction_for_suspended', array() );
 
         if ( $check_payouts ) {
             if ( 'under_review' === $status && in_array( 'hold_payments_release', $review_settings, true ) ) {

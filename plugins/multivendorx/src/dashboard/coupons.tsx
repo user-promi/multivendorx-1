@@ -264,7 +264,7 @@ const AllCoupon: React.FC = () => {
 					product_categories: [],
 					exclude_product_categories: [],
 					customer_email: '',
-					id: '',
+					id: null,
 				});
 			})
 			.catch((err) => {
