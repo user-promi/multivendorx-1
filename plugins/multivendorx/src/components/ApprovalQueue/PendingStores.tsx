@@ -16,7 +16,6 @@ import {
 } from 'zyra';
 
 import {
-	formatDate,
 	formatLocalDate,
 	setSession,
 } from '@/services/commonFunction';

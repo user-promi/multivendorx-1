@@ -15,7 +15,6 @@ import {
 	TextAreaUI,
 	FileInputUI,
 	NavigatorHeader,
-	Notice,
 	PopupUI,
 	ButtonInputUI,
 	SectionUI,
@@ -228,7 +227,7 @@ const AddProduct = () => {
 
 	const generatedAiClose = () => {
 		setgeneratedAi(false);
-	}
+	};
 
 	return (
 		<>

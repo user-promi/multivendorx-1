@@ -407,7 +407,7 @@ const Orders: React.FC = () => {
 		.then(() => {
 			setTracking(false);
 		})
-	}
+	};
 
 	const providers =
 		appLocalizer.settings_databases_value.shipping.shipping_providers || [];

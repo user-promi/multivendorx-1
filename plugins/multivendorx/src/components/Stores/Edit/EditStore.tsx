@@ -32,8 +32,6 @@ import { applyFilters } from '@wordpress/hooks';
 
 const EditStore = () => {
 	const [data, setData] = useState({});
-	const [bannerMenu, setBannerMenu] = useState(false);
-	const [logoMenu, setLogoMenu] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [deleteOption, setDeleteOption] = useState('');
 	const [editName, setEditName] = useState(false);
@@ -60,14 +58,6 @@ const EditStore = () => {
 		}
 		setEditName(false);
 		setEditDesc(false);
-	});
-
-	useOutsideClick(bannerRef, () => {
-		setBannerMenu(false);
-	});
-
-	useOutsideClick(logoRef, () => {
-		setLogoMenu(false);
 	});
 
 	const hash = location.hash.replace(/^#/, '');
@@ -427,7 +417,6 @@ const EditStore = () => {
 													action: (item, e) => {
 														e?.stopPropagation();
 														runUploader('banner');
-														setBannerMenu(false);
 													}
 												},
 												{
@@ -443,7 +432,6 @@ const EditStore = () => {
 														};
 														setData(updated);
 														autoSave(updated);
-														setBannerMenu(false);
 													}
 												},
 											]}
@@ -468,7 +456,6 @@ const EditStore = () => {
 															action: (item, e) => {
 																e?.stopPropagation();
 																runUploader('image');
-																setBannerMenu(false);
 															}
 														},
 														{
@@ -484,7 +471,6 @@ const EditStore = () => {
 																};
 																setData(updated);
 																autoSave(updated);
-																setLogoMenu(false);
 															}
 														},
 													]}

@@ -11,8 +11,6 @@ import {
 	SectionUI,
 	TableCard,
 	TableRow,
-	Container,
-	Column,
 	FormGroup,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';

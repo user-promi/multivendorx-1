@@ -11,7 +11,6 @@ import {
 	getApiLink,
 	InfoItem,
 	useModules,
-	Skeleton,
 	FormGroupWrapper,
 	FormGroup,
 	ButtonInputUI,
@@ -170,7 +169,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 	];
 	const handleCloseForm = () => {
 		setVacation(false);
-	}
+	};
 
 	// business hours table (dynamic and remove)
 	const scheduleColumns = {
