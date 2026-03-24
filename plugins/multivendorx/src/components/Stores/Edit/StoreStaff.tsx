@@ -94,7 +94,9 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 								value={formData.store_owners || []}
 								size="20rem"
 								onChange={(store_owners: string | string[]) => {
-									const ownersArray = Array.isArray(store_owners)
+									const ownersArray = Array.isArray(
+										store_owners
+									)
 										? store_owners
 										: store_owners
 											? [store_owners]
@@ -148,8 +150,12 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 									name="primary_owner"
 									options={appLocalizer?.store_owners || []}
 									value={formData.primary_owner}
-									onChange={(primary_owner: string | string[]) => {
-										if (Array.isArray(primary_owner)) return;
+									onChange={(
+										primary_owner: string | string[]
+									) => {
+										if (Array.isArray(primary_owner)) {
+											return;
+										}
 
 										const updated = {
 											...formData,

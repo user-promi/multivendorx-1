@@ -13,7 +13,13 @@ import {
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
-const ShippingCard = ({ product, setProduct, handleChange, productFields, typeFields }) => {
+const ShippingCard = ({
+	product,
+	setProduct,
+	handleChange,
+	productFields,
+	typeFields,
+}) => {
 	const { modules } = useModules();
 	const [shippingClasses, setShippingClasses] = useState([]);
 	const [productType, setProductType] = useState('physical');
@@ -49,9 +55,12 @@ const ShippingCard = ({ product, setProduct, handleChange, productFields, typeFi
 										{
 											key: 'physical',
 											value: 'physical',
-											label: __('Physical', 'multivendorx'),
+											label: __(
+												'Physical',
+												'multivendorx'
+											),
 										},
-								]
+									]
 								: []),
 							{
 								key: 'downloadable',
@@ -76,94 +85,95 @@ const ShippingCard = ({ product, setProduct, handleChange, productFields, typeFi
 						}}
 					/>
 				</FormGroup>
-				{productType === 'physical' && !typeFields.includes('virtual') && (
-					<>
-						{/* Weight & Shipping class */}
-						<FormGroup
-							cols={2}
-							label={__('Weight (kg)', 'multivendorx')}
-							htmlFor="Weight"
-						>
-							<BasicInputUI
-								name="weight"
-								value={product.weight}
-								onChange={(value) => {
-									handleChange('weight', value);
-								}}
-							/>
-						</FormGroup>
-						<FormGroup
-							cols={2}
-							label={__('Shipping classes', 'multivendorx')}
-							htmlFor="shipping-classes"
-						>
-							<SelectInputUI
-								name="shipping_class"
-								options={shippingClasses}
-								value={product.shipping_class}
-								onChange={(value) =>
-									handleChange('shipping_class', value)
-								}
-							/>
-						</FormGroup>
-						<FormGroup
-							cols={3}
-							label={`${__('Length', 'multivendorx')} (${appLocalizer.dimension_unit})`}
-						>
-							<BasicInputUI
-								name="product_length"
-								value={product.dimensions?.length || ''}
-								placeholder={__('Length', 'multivendorx')}
-								onChange={(value) =>
-									handleChange('dimensions', {
-										...product.dimensions,
-										length: value,
-									})
-								}
-							/>
-						</FormGroup>
+				{productType === 'physical' &&
+					!typeFields.includes('virtual') && (
+						<>
+							{/* Weight & Shipping class */}
+							<FormGroup
+								cols={2}
+								label={__('Weight (kg)', 'multivendorx')}
+								htmlFor="Weight"
+							>
+								<BasicInputUI
+									name="weight"
+									value={product.weight}
+									onChange={(value) => {
+										handleChange('weight', value);
+									}}
+								/>
+							</FormGroup>
+							<FormGroup
+								cols={2}
+								label={__('Shipping classes', 'multivendorx')}
+								htmlFor="shipping-classes"
+							>
+								<SelectInputUI
+									name="shipping_class"
+									options={shippingClasses}
+									value={product.shipping_class}
+									onChange={(value) =>
+										handleChange('shipping_class', value)
+									}
+								/>
+							</FormGroup>
+							<FormGroup
+								cols={3}
+								label={`${__('Length', 'multivendorx')} (${appLocalizer.dimension_unit})`}
+							>
+								<BasicInputUI
+									name="product_length"
+									value={product.dimensions?.length || ''}
+									placeholder={__('Length', 'multivendorx')}
+									onChange={(value) =>
+										handleChange('dimensions', {
+											...product.dimensions,
+											length: value,
+										})
+									}
+								/>
+							</FormGroup>
 
-						<FormGroup
-							cols={3}
-							label={`${__('Width', 'multivendorx')} (${appLocalizer.dimension_unit})`}
-						>
-							<BasicInputUI
-								name="product_width"
-								value={product.dimensions?.width}
-								placeholder={__('Width', 'multivendorx')}
-								onChange={(value) =>
-									handleChange('dimensions', {
-										...product.dimensions,
-										width: value,
-									})
-								}
-							/>
-						</FormGroup>
+							<FormGroup
+								cols={3}
+								label={`${__('Width', 'multivendorx')} (${appLocalizer.dimension_unit})`}
+							>
+								<BasicInputUI
+									name="product_width"
+									value={product.dimensions?.width}
+									placeholder={__('Width', 'multivendorx')}
+									onChange={(value) =>
+										handleChange('dimensions', {
+											...product.dimensions,
+											width: value,
+										})
+									}
+								/>
+							</FormGroup>
 
-						<FormGroup
-							cols={3}
-							label={`${__('Height', 'multivendorx')} (${appLocalizer.dimension_unit})`}
-						>
-							<BasicInputUI
-								name="product_height"
-								value={product.dimensions?.height}
-								placeholder={__('Height', 'multivendorx')}
-								onChange={(value) =>
-									handleChange('dimensions', {
-										...product.dimensions,
-										height: value,
-									})
-								}
-							/>
-						</FormGroup>
-						{applyFilters(
-							'multivendorx_product_shipping_meta',
-							null,
-							product,
-							modules
-						)}
-					</>
-				)}
+							<FormGroup
+								cols={3}
+								label={`${__('Height', 'multivendorx')} (${appLocalizer.dimension_unit})`}
+							>
+								<BasicInputUI
+									name="product_height"
+									value={product.dimensions?.height}
+									placeholder={__('Height', 'multivendorx')}
+									onChange={(value) =>
+										handleChange('dimensions', {
+											...product.dimensions,
+											height: value,
+										})
+									}
+								/>
+							</FormGroup>
+							{applyFilters(
+								'multivendorx_product_shipping_meta',
+								null,
+								product,
+								modules
+							)}
+						</>
+					)}
 				{productType === 'downloadable' &&
 					applyFilters(
 						'product_downloadable',
@@ -184,13 +194,13 @@ addFilter(
 		return (
 			<>
 				{content}
-					<ShippingCard
-						product={product}
-						setProduct={setProduct}
-						handleChange={handleChange}
-						productFields={productFields}
-						typeFields={typeFields}
-					/>
+				<ShippingCard
+					product={product}
+					setProduct={setProduct}
+					handleChange={handleChange}
+					productFields={productFields}
+					typeFields={typeFields}
+				/>
 			</>
 		);
 	},

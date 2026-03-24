@@ -124,13 +124,13 @@ addFilter(
 		return (
 			<>
 				{content}
-				{productFields.includes('inventory') &&
+				{productFields.includes('inventory') && (
 					<Inventory
 						product={product}
 						setProduct={setProduct}
 						handleChange={handleChange}
 					/>
-				}
+				)}
 			</>
 		);
 	},

@@ -95,8 +95,10 @@ class Frontend {
         $primary_ids = array();
 
         $table = $wpdb->prefix . Utill::TABLES['products_map'];
+        $limit = apply_filters( 'multivendorx_shared_listing_product_map_query_limit', 10000 );
         /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared */
-        $maps = $wpdb->get_results( "SELECT product_map FROM {$table}" );
+        $query = $wpdb->prepare( "SELECT product_map FROM {$table} LIMIT %d", $limit );
+        $maps  = $wpdb->get_results( $query );
         foreach ( $maps as $map ) {
             $ids = maybe_unserialize( $map->product_map );
 
@@ -194,7 +196,7 @@ class Frontend {
 	public function woocommerce_product_more_offers_tab() {
         global $product, $wpdb;
 
-        $table = $wpdb->prefix . Utill::TABLES['products_map'];
+        $table      = $wpdb->prefix . Utill::TABLES['products_map'];
         $product_id = (int) $product->get_id();
 
         // Search serialized data
@@ -215,9 +217,15 @@ class Frontend {
         if ( ! is_array( $map_array ) ) {
             return;
         }
+        $sanitized_ids = array_filter(
+            array_map( 'intval', $map_array ),
+            function ( $id ) {
+                return $id > 0;
+            }
+        );
 
         $product_ids = array_diff(
-            $map_array,
+            array_unique( $sanitized_ids ),
             array( $product_id )
         );
 
@@ -225,7 +233,7 @@ class Frontend {
             return;
         }
 
-        MultiVendorX()->util->get_template('store/shared-listing-single-product-tab.php', array( 'product_ids' => $product_ids ));
+        MultiVendorX()->util->get_template( 'store/shared-listing-single-product-tab.php', array( 'product_ids' => $product_ids ) );
     }
 
     /**
@@ -237,9 +245,8 @@ class Frontend {
         global $product;
 
         if ( get_post_meta( $product->get_id(), 'multivendorx_spmv_id', true ) ) {
-            echo '<div> <button type="button" class="goto_more_offer_tab button">More Stores</button> </div>';
-        }
-    }
+			echo '<div> <button type="button" class="goto_more_offer_tab button">' . esc_html__( 'More Stores', 'multivendorx' ) . '</button> </div>';        }
+	}
 
     /**
      * Load scripts

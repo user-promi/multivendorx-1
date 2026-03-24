@@ -48,7 +48,7 @@ class Frontend {
         add_action( 'template_redirect', array( $this, 'multivendorx_store_visitors_stats' ), 20 );
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
         // user information before registration.
-        add_filter('multivendorx_add_content_before_form', array( $this, 'add_woocommerce_login_from' ));
+        add_filter( 'multivendorx_add_content_before_form', array( $this, 'add_woocommerce_login_from' ) );
     }
 
 	/**

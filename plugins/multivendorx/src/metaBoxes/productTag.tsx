@@ -52,9 +52,9 @@ addFilter(
 		return (
 			<>
 				{content}
-				{productFields.includes('product_tag') && 
+				{productFields.includes('product_tag') && (
 					<ProductTag product={product} setProduct={setProduct} />
-				}
+				)}
 			</>
 		);
 	},

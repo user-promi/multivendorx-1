@@ -184,7 +184,7 @@ const Table: React.FC<TableProps> = ({
                                 isSortable && 'sortable',
                                 isSorted && 'sorted',
                                 isNumeric && 'numeric',
-                                config.type && config.type,
+                                config.type,
                             ]
                                 .filter(Boolean)
                                 .join(' ');

@@ -29,6 +29,7 @@ interface ShortCodeTableProps {
 
 const ShortCodeTableUI: React.FC<ShortCodeTableProps> = (props) => {
     const { options, optionLabel } = props;
+
     const headers = optionLabel;
 
     return (

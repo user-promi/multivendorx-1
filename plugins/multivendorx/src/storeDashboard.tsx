@@ -53,7 +53,7 @@ const Dashboard = () => {
 	const [showStoreList, setShowStoreList] = useState(false);
 	const [isDarkMode, setIsDarkMode] = useState(false);
 	const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
-	const [isMenuMinmize, setisMenuMinmize] = useState(false);
+	const [isMenuMinimize, setisMenuMinimize] = useState(false);
 	const [noPermission, setNoPermission] = useState(false);
 	const [newProductId, setNewProductId] = useState<number | null>(null);
 
@@ -62,7 +62,7 @@ const Dashboard = () => {
 
 	const DEFAULT_TAB = 'dashboard';
 
-	const hasCapability = (capability): boolean => {
+	const hasCapability = (capability: string | string[] | null): boolean => {
 		if (!capability) {
 			return true;
 		}
@@ -83,7 +83,7 @@ const Dashboard = () => {
 		return userCaps[capability] === true;
 	};
 
-	const isModuleActive = (requiredModules): boolean => {
+	const isModuleActive = (requiredModules: string[]): boolean => {
 		if (!requiredModules) {
 			return true;
 		}
@@ -325,22 +325,22 @@ const Dashboard = () => {
 			className={[
 				isDarkMode ? 'dark' : 'light',
 				isMenuCollapsed ? 'collapsed' : '',
-				isMenuMinmize ? 'minimize' : '',
+				isMenuMinimize ? 'minimize' : '',
 			]
 				.filter(Boolean)
 				.join(' ')}
 		>
 			<div
 				className="dashboard-tabs-wrapper"
-				onMouseEnter={() => setisMenuMinmize(false)}
-				onMouseLeave={() => setisMenuMinmize(true)}
+				onMouseEnter={() => setisMenuMinimize(false)}
+				onMouseLeave={() => setisMenuMinimize(true)}
 			>
 				<div className="logo-wrapper">
 					{store_dashboard_logo ? (
 						<img src={store_dashboard_logo.url} alt="Site Logo" />
 					) : (
 						<span className="site-name">
-							{isMenuCollapsed && isMenuMinmize
+							{isMenuCollapsed && isMenuMinimize
 								? appLocalizer.site_name.charAt(0).toUpperCase()
 								: appLocalizer.site_name}
 						</span>
@@ -444,7 +444,7 @@ const Dashboard = () => {
 								onClick={() => {
 									setIsMenuCollapsed((prev) => {
 										const next = !prev;
-										setisMenuMinmize(next);
+										setisMenuMinimize(next);
 										return next;
 									});
 								}}
@@ -804,7 +804,7 @@ const Dashboard = () => {
 				{/* Page content */}
 				<div className="content-wrapper">
 					<NoticeReceiver position="float" />
-					 <NoticeReceiver position="notice" />
+					<NoticeReceiver position="notice" />
 
 					{storeData && storeData.status !== 'active' ? (
 						<ComponentStatusView

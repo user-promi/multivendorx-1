@@ -15,7 +15,6 @@ import {
 	TextAreaUI,
 	FileInputUI,
 	NavigatorHeader,
-	Notice,
 	PopupUI,
 	ButtonInputUI,
 	SectionUI,
@@ -219,8 +218,12 @@ const AddProduct = () => {
 	const completedCount = checklistValues.filter(Boolean).length;
 	const totalCount = checklistValues.length;
 
-	const productFields = appLocalizer.settings_databases_value?.['product-preferencess']?.products_fields || [];
-	const typeFields = appLocalizer.settings_databases_value?.['product-preferencess']?.type_options || [];
+	const productFields =
+		appLocalizer.settings_databases_value?.['product-preferencess']
+			?.products_fields || [];
+	const typeFields =
+		appLocalizer.settings_databases_value?.['product-preferencess']
+			?.type_options || [];
 
 	const handleCloseForm = () => {
 		setgenerateAi(false);
@@ -228,7 +231,7 @@ const AddProduct = () => {
 
 	const generatedAiClose = () => {
 		setgeneratedAi(false);
-	}
+	};
 
 	return (
 		<>
@@ -308,13 +311,12 @@ const AddProduct = () => {
 				</div>
 			</PopupUI>
 
-
 			{/* 2nd screen */}
 			<PopupUI
 				open={generatedAi}
 				onClose={generatedAiClose}
 				position="lightbox"
-				width={"70%"}
+				width={'70%'}
 				height={80}
 			>
 				<div className="ai-content-wrapper">
@@ -322,19 +324,44 @@ const AddProduct = () => {
 						<div className="product">Product 1</div>
 						{/* <img src="" alt="" /> */}
 						<div className="product-image"></div>
-						<SectionUI title={__('Product Details', 'multivendorx')} />
+						<SectionUI
+							title={__('Product Details', 'multivendorx')}
+						/>
 
 						<div className="title">Short Description</div>
-						<div className="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae natus voluptatem temporibus facere dignissimos optio sit, vero harum nobis suscipit ea ipsa repellendus, commodi architecto?</div>
+						<div className="desc">
+							Lorem ipsum dolor sit amet consectetur adipisicing
+							elit. Quae natus voluptatem temporibus facere
+							dignissimos optio sit, vero harum nobis suscipit ea
+							ipsa repellendus, commodi architecto?
+						</div>
 
 						<div className="title">Description</div>
-						<div className="desc">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa ipsam atque accusantium voluptatibus. Quasi maiores officiis ipsa? Nulla doloribus quae iusto est perspiciatis cumque sequi maiores voluptates dolor possimus, voluptate fugiat sed corrupti nihil cum distinctio suscipit voluptas placeat. Harum incidunt assumenda cum, perferendis facilis accusantium sapiente iusto cupiditate quidem?	</div>
+						<div className="desc">
+							Lorem ipsum dolor, sit amet consectetur adipisicing
+							elit. Ipsa ipsam atque accusantium voluptatibus.
+							Quasi maiores officiis ipsa? Nulla doloribus quae
+							iusto est perspiciatis cumque sequi maiores
+							voluptates dolor possimus, voluptate fugiat sed
+							corrupti nihil cum distinctio suscipit voluptas
+							placeat. Harum incidunt assumenda cum, perferendis
+							facilis accusantium sapiente iusto cupiditate
+							quidem?{' '}
+						</div>
 					</div>
 					<div className="section right">
 						<div className="generated-product">
 							<div className="product">
-								<div className="title">Lorem ipsum dolor sit amet.</div>
-								<div className="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, perferendis. Rerum explicabo ducimus, praesentium a excepturi ut! Aliquam quidem exercitationem ipsum! Placeat, molestias? Ea, animi.</div>
+								<div className="title">
+									Lorem ipsum dolor sit amet.
+								</div>
+								<div className="desc">
+									Lorem ipsum dolor sit amet consectetur
+									adipisicing elit. Dolor, perferendis. Rerum
+									explicabo ducimus, praesentium a excepturi
+									ut! Aliquam quidem exercitationem ipsum!
+									Placeat, molestias? Ea, animi.
+								</div>
 
 								<ButtonInputUI
 									buttons={[
@@ -347,8 +374,16 @@ const AddProduct = () => {
 								/>
 							</div>
 							<div className="product">
-								<div className="title">Lorem ipsum dolor sit amet.</div>
-								<div className="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, perferendis. Rerum explicabo ducimus, praesentium a excepturi ut! Aliquam quidem exercitationem ipsum! Placeat, molestias? Ea, animi.</div>
+								<div className="title">
+									Lorem ipsum dolor sit amet.
+								</div>
+								<div className="desc">
+									Lorem ipsum dolor sit amet consectetur
+									adipisicing elit. Dolor, perferendis. Rerum
+									explicabo ducimus, praesentium a excepturi
+									ut! Aliquam quidem exercitationem ipsum!
+									Placeat, molestias? Ea, animi.
+								</div>
 
 								<ButtonInputUI
 									buttons={[
@@ -588,11 +623,14 @@ const AddProduct = () => {
 							>
 								<PopupUI
 									position="menu-dropdown"
-									toggleIcon='star-notifima'
+									toggleIcon="star-notifima"
 									width={20}
 									header={{
 										icon: 'form-textarea',
-										title: __('Change Name', 'multivendorx'),
+										title: __(
+											'Change Name',
+											'multivendorx'
+										),
 									}}
 								>
 									<div className="ai-wrapper">
@@ -628,7 +666,10 @@ const AddProduct = () => {
 											name="short_description"
 											value={product.short_description}
 											onChange={(value) =>
-												handleChange('short_description', value)
+												handleChange(
+													'short_description',
+													value
+												)
 											}
 										/>
 									</FormGroup>
@@ -645,7 +686,10 @@ const AddProduct = () => {
 											name="description"
 											value={product.description}
 											onChange={(value) =>
-												handleChange('description', value)
+												handleChange(
+													'description',
+													value
+												)
 											}
 										/>
 									</FormGroup>
@@ -654,36 +698,46 @@ const AddProduct = () => {
 						</FormGroupWrapper>
 					</Card>
 
-					{product?.type === 'simple' && productFields.includes('general') && (
-						<Card title={__('Price', 'multivendorx')}>
-							<FormGroupWrapper>
-								<FormGroup
-									cols={2}
-									label={__('Regular price', 'multivendorx')}
-								>
-									<BasicInputUI
-										name="regular_price"
-										value={product.regular_price}
-										onChange={(value) =>
-											handleChange('regular_price', value)
-										}
-									/>
-								</FormGroup>
-								<FormGroup
-									cols={2}
-									label={__('Sale price', 'multivendorx')}
-								>
-									<BasicInputUI
-										name="sale_price"
-										value={product.sale_price}
-										onChange={(value) =>
-											handleChange('sale_price', value)
-										}
-									/>
-								</FormGroup>
-							</FormGroupWrapper>
-						</Card>
-					)}
+					{product?.type === 'simple' &&
+						productFields.includes('general') && (
+							<Card title={__('Price', 'multivendorx')}>
+								<FormGroupWrapper>
+									<FormGroup
+										cols={2}
+										label={__(
+											'Regular price',
+											'multivendorx'
+										)}
+									>
+										<BasicInputUI
+											name="regular_price"
+											value={product.regular_price}
+											onChange={(value) =>
+												handleChange(
+													'regular_price',
+													value
+												)
+											}
+										/>
+									</FormGroup>
+									<FormGroup
+										cols={2}
+										label={__('Sale price', 'multivendorx')}
+									>
+										<BasicInputUI
+											name="sale_price"
+											value={product.sale_price}
+											onChange={(value) =>
+												handleChange(
+													'sale_price',
+													value
+												)
+											}
+										/>
+									</FormGroup>
+								</FormGroupWrapper>
+							</Card>
+						)}
 					{applyFilters(
 						'multivendorx_add_product_middle_section',
 						null,
@@ -692,7 +746,7 @@ const AddProduct = () => {
 						handleChange,
 						productFields,
 						typeFields,
-						modules,
+						modules
 					)}
 				</Column>
 				<Column grid={3}>
@@ -820,7 +874,9 @@ const AddProduct = () => {
 											icon: 'star-notifima',
 											text: 'Generate Now',
 											color: 'purple',
-											onClick: () => { setgenerateAiImage(true); },
+											onClick: () => {
+												setgenerateAiImage(true);
+											},
 										},
 									]}
 								/>
@@ -830,7 +886,7 @@ const AddProduct = () => {
 									open={generateAiImage}
 									onClose={generatedAiClose}
 									position="lightbox"
-									width={"70%"}
+									width={'70%'}
 									height={80}
 								>
 									<div className="ai-content-wrapper image">
@@ -838,7 +894,6 @@ const AddProduct = () => {
 										{/* <div className="section left left1">
 											<div className="image"></div>
 										</div> */}
-
 
 										{/* multi image  */}
 										<div className="section left left2">
@@ -849,7 +904,12 @@ const AddProduct = () => {
 										</div>
 										<div className="section right">
 											<FormGroupWrapper>
-												<FormGroup label={__( 'Describe your image', 'multivendorx')}>
+												<FormGroup
+													label={__(
+														'Describe your image',
+														'multivendorx'
+													)}
+												>
 													<TextAreaUI
 														name="reject_reason"
 														placeholder={__(

@@ -47,7 +47,7 @@ const Transactions: React.FC = () => {
 			label: __('Transaction Type', 'multivendorx'),
 			render: (row) =>
 				row.transaction_type?.toLowerCase() === 'commission' &&
-					row.commission_id ? (
+				row.commission_id ? (
 					<span
 						className="link-item"
 						onClick={() => setModalCommission(row)}
@@ -59,7 +59,8 @@ const Transactions: React.FC = () => {
 					<span>
 						{row.narration
 							?.replace(/-/g, ' ')
-							.replace(/\b\w/g, (c: string) => c.toUpperCase()) || '-'}
+							.replace(/\b\w/g, (c: string) => c.toUpperCase()) ||
+							'-'}
 					</span>
 				),
 		},

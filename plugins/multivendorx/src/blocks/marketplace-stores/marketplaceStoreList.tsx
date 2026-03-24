@@ -168,7 +168,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 				row: perPage,
 				filters: true,
 				...filters,
-				filter_status:'active'
+				filter_status: 'active',
 			},
 		})
 			.then((response) => {

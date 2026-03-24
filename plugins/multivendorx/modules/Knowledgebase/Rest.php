@@ -246,7 +246,7 @@ class Rest extends \WP_REST_Controller {
         }
 
         try {
-            $data   = $request->get_params();
+            $data = $request->get_params();
             /** -----------------------------------------
              * BULK UPDATE
              * ----------------------------------------- */

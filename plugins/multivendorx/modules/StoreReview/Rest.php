@@ -488,17 +488,17 @@ class Rest extends \WP_REST_Controller {
             // 💾 Save to DB (replace with your helper function).
             $updated = Util::update_review( $id, $data_to_update );
 
-            $store = new Store($review->store_id);
-            $user = get_user_by('id', $review->customer_id);
+            $store = new Store( $review->store_id );
+            $user  = get_user_by( 'id', $review->customer_id );
             do_action(
                 'multivendorx_notify_review_reply',
                 'review_reply',
                 array(
                     'customer_email' => $user->user_email,
 					'customer_phone' => get_user_meta( $review->customer_id, 'billing_phone', true ),
-                    'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                    'customer_name' => $user->display_name,
-                    'category'    => 'activity',
+                    'store_name'     => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                    'customer_name'  => $user->display_name,
+                    'category'       => 'activity',
                 )
             );
 
