@@ -75,7 +75,6 @@ const StoreCommission: React.FC = () => {
 				>
 					#{row.order_id}
 				</span>
-				
 			),
 		},
 		total_order_amount: {
@@ -108,7 +107,9 @@ const StoreCommission: React.FC = () => {
 						},
 						{
 							title: 'Marketplace Commission',
-							value: '-' + formatCurrency(row.marketplace_commission),
+							value:
+								'-' +
+								formatCurrency(row.marketplace_commission),
 						},
 						{
 							title: 'Store Discount',
@@ -201,7 +202,7 @@ const StoreCommission: React.FC = () => {
 						count:
 							Number(
 								response.headers[
-								'x-wp-status-partially-refunded'
+									'x-wp-status-partially-refunded'
 								]
 							) || 0,
 					},

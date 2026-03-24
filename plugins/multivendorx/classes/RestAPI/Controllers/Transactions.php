@@ -118,9 +118,9 @@ class Transactions extends \WP_REST_Controller {
                 $request->get_param( 'end_date' )
 			);
 
-			$ids                = $request->get_param( 'ids' );
-			$sec_fetch_site     = $request->get_header( 'sec_fetch_site' );
-			$referer            = $request->get_header( 'referer' );
+			$ids            = $request->get_param( 'ids' );
+			$sec_fetch_site = $request->get_header( 'sec_fetch_site' );
+			$referer        = $request->get_header( 'referer' );
 
 			$args = array_filter(
 				array(

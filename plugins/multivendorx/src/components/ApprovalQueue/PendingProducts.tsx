@@ -205,9 +205,9 @@ const PendingProducts: React.FC<object> = () => {
 					value: query?.filter?.store_id,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-							query.filter.created_at.startDate,
-							'start'
-						)
+								query.filter.created_at.startDate,
+								'start'
+							)
 						: undefined,
 
 					before: query.filter?.created_at?.endDate

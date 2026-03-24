@@ -115,7 +115,7 @@ class Utill {
         'review_transient'       => 'multivendorx_review_data_',
         'report_transient'       => 'multivendorx_report_data_',
         'withdrawal_transient'   => 'multivendorx_withdrawal_data_',
-        'dashboard_transient'    =>'multivendorx_dashboard_data_',
+        'dashboard_transient'    => 'multivendorx_dashboard_data_',
     );
 
     const WOO_SETTINGS = array(
@@ -506,7 +506,10 @@ class Utill {
                 $end_date   = $end_dt->format( 'Y-m-d H:i:s' );
             } catch ( \Exception $e ) {
                 // Log error or handle invalid date format
-                return array( 'start_date' => '', 'end_date' => '' );
+                return array(
+					'start_date' => '',
+					'end_date'   => '',
+				);
             }
         }
 

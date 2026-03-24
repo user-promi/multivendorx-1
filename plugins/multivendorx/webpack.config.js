@@ -95,8 +95,8 @@ module.exports = {
 				vendors: {
 					test: /[\\/]node_modules[\\/]/,
 					name(module) {
-						const path = module.context;
-						const match = path.match(
+						const modulePath = module.context;
+						const match = modulePath.match(
 							/[\\/]node_modules[\\/](?:\.pnpm[\\/])?((@[^\\/]+[\\/][^\\/]+)|([^\\/]+))/
 						);
 						if (!match) return 'externals/vendor-unknown';

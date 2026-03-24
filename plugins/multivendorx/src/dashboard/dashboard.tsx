@@ -32,7 +32,12 @@ import {
 } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { formatCurrency, formatDate, formatTimeAgo, truncateText } from '@/services/commonFunction';
+import {
+	formatCurrency,
+	formatDate,
+	formatTimeAgo,
+	truncateText,
+} from '@/services/commonFunction';
 import VisitorsMap from './visitorsMap';
 
 const getCSSVar = (name) =>
@@ -82,7 +87,7 @@ const Dashboard: React.FC = () => {
 
 	const access =
 		appLocalizer.settings_databases_value?.['privacy']?.[
-		'customer_information_access'
+			'customer_information_access'
 		];
 	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
 
@@ -100,10 +105,10 @@ const Dashboard: React.FC = () => {
 			render: (row) =>
 				row.products && row.products.length > 0
 					? row.products.map((product, index) => (
-						<div key={index} className="product-wrapper">
-							{product.name}
-						</div>
-					))
+							<div key={index} className="product-wrapper">
+								{product.name}
+							</div>
+						))
 					: '-',
 		},
 		amount: {
@@ -474,7 +479,9 @@ const Dashboard: React.FC = () => {
 			number: formatCurrency(store?.commission?.total_order_amount || 0),
 			text: 'Total Revenue',
 			color: 'primary',
-			prev30: formatCurrency(storePreviousYear?.commission?.total_order_amount || 0),
+			prev30: formatCurrency(
+				storePreviousYear?.commission?.total_order_amount || 0
+			),
 		},
 		{
 			icon: 'order',
@@ -495,7 +502,9 @@ const Dashboard: React.FC = () => {
 			number: formatCurrency(store?.commission?.commission_total || 0),
 			text: 'Commission Earned',
 			color: 'support',
-			prev30: formatCurrency(storePreviousYear?.commission?.commission_total || 0),
+			prev30: formatCurrency(
+				storePreviousYear?.commission?.commission_total || 0
+			),
 		},
 	];
 
@@ -643,20 +652,20 @@ const Dashboard: React.FC = () => {
 										key={item.id}
 										title={
 											item.payment_method ===
-												'stripe-connect'
+											'stripe-connect'
 												? __('Stripe', 'multivendorx')
 												: item.payment_method ===
-													'bank-transfer'
+													  'bank-transfer'
 													? __(
-														'Direct to Local Bank (INR)',
-														'multivendorx'
-													)
-													: item.payment_method ===
-														'paypal-payout'
-														? __(
-															'PayPal',
+															'Direct to Local Bank (INR)',
 															'multivendorx'
 														)
+													: item.payment_method ===
+														  'paypal-payout'
+														? __(
+																'PayPal',
+																'multivendorx'
+															)
 														: ''
 										}
 										isLoading={isLoading}
@@ -840,7 +849,7 @@ const Dashboard: React.FC = () => {
 						>
 							<div className="notification-wrapper">
 								{Array.isArray(announcement) &&
-									announcement.length > 0 ? (
+								announcement.length > 0 ? (
 									<ul>
 										{announcement.map((item, index) => (
 											<li key={item.id}>
@@ -903,7 +912,9 @@ const Dashboard: React.FC = () => {
 													</div>
 													<div className="order-number">
 														{customer.reason} |{' '}
-														{formatDate(customer.time)}
+														{formatDate(
+															customer.time
+														)}
 													</div>
 												</div>
 											</div>
@@ -963,7 +974,7 @@ const Dashboard: React.FC = () => {
 					<Card title={__('Store Activity', 'multivendorx')}>
 						<div className="activity-log">
 							{Array.isArray(activities) &&
-								activities.length > 0 ? (
+							activities.length > 0 ? (
 								activities.slice(0, 5).map((a, i) => (
 									<div key={i} className="activity">
 										<div className="title">{a.title}</div>
@@ -1015,11 +1026,16 @@ const Dashboard: React.FC = () => {
 														)
 													)}
 													<span>
-														{formatDate(reviewItem.date_created)}
+														{formatDate(
+															reviewItem.date_created
+														)}
 													</span>
 												</div>
 												<div className="des">
-													{truncateText(reviewItem.review_content, 5)}
+													{truncateText(
+														reviewItem.review_content,
+														5
+													)}
 												</div>
 											</div>
 										</div>

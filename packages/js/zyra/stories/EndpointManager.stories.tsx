@@ -46,13 +46,11 @@ export const WithProSettings: Story = {
         proSettingChanged: () => true,
     },
     render: (args) => {
-        const [data, setData] = useState({});
         return (
             <EndpointManager
                 {...args}
                 onChange={(updated) => {
                     console.log('Updated endpoints (Pro):', updated);
-                    setData(updated);
                 }}
             />
         );

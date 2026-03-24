@@ -15,11 +15,7 @@ import {
 	InfoItem,
 } from 'zyra';
 
-import {
-	formatDate,
-	formatLocalDate,
-	setSession,
-} from '@/services/commonFunction';
+import { formatLocalDate, setSession } from '@/services/commonFunction';
 import { useRef } from '@wordpress/element';
 
 const PendingStores: React.FC<object> = () => {

@@ -39,7 +39,7 @@ export default {
 							label: 'Shipping Zones',
 							type: 'itemlist',
 							className: 'badge-list',
-							items: appLocalizer.zones_list
+							items: appLocalizer.zones_list,
 						},
 						{
 							key: 'add_new_zone',

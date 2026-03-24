@@ -128,7 +128,15 @@ const MinMax = ({ product, setProduct }) => {
 addFilter(
 	'multivendorx_add_product_middle_section',
 	'multivendorx/min_max',
-	(content, product, setProduct, handleChange,  productFields, typeFields, modules) => {
+	(
+		content,
+		product,
+		setProduct,
+		handleChange,
+		productFields,
+		typeFields,
+		modules
+	) => {
 		return (
 			<>
 				{content}

@@ -11,7 +11,6 @@ import {
 	getApiLink,
 	InfoItem,
 	useModules,
-	Skeleton,
 	FormGroupWrapper,
 	FormGroup,
 	ButtonInputUI,
@@ -170,7 +169,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 	];
 	const handleCloseForm = () => {
 		setVacation(false);
-	}
+	};
 
 	// business hours table (dynamic and remove)
 	const scheduleColumns = {
@@ -259,8 +258,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								const editUrl = `${appLocalizer.site_url.replace(
 									/\/$/,
 									''
-								)}/wp-admin/post.php?post=${product.id
-									}&action=edit`;
+								)}/wp-admin/post.php?post=${
+									product.id
+								}&action=edit`;
 
 								return (
 									<InfoItem
@@ -395,7 +395,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								{
 									icon: 'vacation',
 									text: __('Assign Manually', 'multivendorx'),
-									color: 'purple'
+									color: 'purple',
 									// onClick: () => setVacation(true),
 								},
 							]}
@@ -411,12 +411,18 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 						}}
 					>
 						<FormGroupWrapper>
-							<FormGroup row label={__('Current status', 'multivendorx')}>
+							<FormGroup
+								row
+								label={__('Current status', 'multivendorx')}
+							>
 								<span className="admin-badge green">
 									{__('Open(pkoro)', 'multivendorx')}
 								</span>
 							</FormGroup>
-							<FormGroup row label={__('Next opening', 'multivendorx')} >
+							<FormGroup
+								row
+								label={__('Next opening', 'multivendorx')}
+							>
 								{__('Mon 9:00 AM (pkoro)', 'multivendorx')}
 							</FormGroup>
 							{appLocalizer.khali_dabba && (
@@ -430,7 +436,10 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									>
 										<span className="admin-badge red">
 											{' '}
-											{__('Inactive(pkoro)', 'multivendorx')}
+											{__(
+												'Inactive(pkoro)',
+												'multivendorx'
+											)}
 										</span>
 									</FormGroup>
 								</>
@@ -454,13 +463,19 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 										buttons={[
 											{
 												icon: 'close',
-												text: __('Cancel', 'multivendorx'),
+												text: __(
+													'Cancel',
+													'multivendorx'
+												),
 												color: 'red',
 												onClick: handleCloseForm,
 											},
 											{
 												icon: 'save',
-												text: __('Save Vacation Settings', 'multivendorx'),
+												text: __(
+													'Save Vacation Settings',
+													'multivendorx'
+												),
 												// onClick: () => handleSubmit(),
 											},
 										]}
@@ -468,7 +483,12 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								}
 							>
 								<FormGroupWrapper>
-									<FormGroup label={__('Enable Vacation Mode', 'multivendorx')}>
+									<FormGroup
+										label={__(
+											'Enable Vacation Mode',
+											'multivendorx'
+										)}
+									>
 										<MultiCheckBoxUI
 											look="toggle"
 											value={vacationMode}
@@ -476,11 +496,17 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 												setvacationMode(value);
 											}}
 											options={[
-												{ label: 'Trial', value: 'trial' },
+												{
+													label: 'Trial',
+													value: 'trial',
+												},
 											]}
 										/>
 									</FormGroup>
-									<FormGroup cols={2} label={__('Start Date', 'multivendorx')}>
+									<FormGroup
+										cols={2}
+										label={__('Start Date', 'multivendorx')}
+									>
 										<CalendarInputUI
 										// onChange={(range: DateRange) => {
 										// 	setDateRange({
@@ -490,7 +516,10 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 										// }}
 										/>
 									</FormGroup>
-									<FormGroup cols={2} label={__('End Date', 'multivendorx')}>
+									<FormGroup
+										cols={2}
+										label={__('End Date', 'multivendorx')}
+									>
 										<CalendarInputUI
 										// onChange={(range: DateRange) => {
 										// 	setDateRange({
@@ -500,20 +529,33 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 										// }}
 										/>
 									</FormGroup>
-									<FormGroup label={__('Vacation Message', 'multivendorx')}>
+									<FormGroup
+										label={__(
+											'Vacation Message',
+											'multivendorx'
+										)}
+									>
 										<TextAreaUI
 											name="answer"
-										// value={answer}
-										// onChange={(value: string) => setAnswer(value)}
+											// value={answer}
+											// onChange={(value: string) => setAnswer(value)}
 										/>
 									</FormGroup>
-									<FormGroup label={__('Cart Behaviour During Vacation', 'multivendorx')}>
+									<FormGroup
+										label={__(
+											'Cart Behaviour During Vacation',
+											'multivendorx'
+										)}
+									>
 										<ChoiceToggleUI
 											options={[
 												{
 													key: 'draft',
 													value: 'draft',
-													label: __('Disable Add to Cart', 'multivendorx'),
+													label: __(
+														'Disable Add to Cart',
+														'multivendorx'
+													),
 												},
 												{
 													key: 'pending',
@@ -532,10 +574,10 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 													),
 												},
 											]}
-										// value={formData.status}
-										// onChange={(val: string) =>
-										// 	handleChange('status', val)
-										// }
+											// value={formData.status}
+											// onChange={(val: string) =>
+											// 	handleChange('status', val)
+											// }
 										/>
 									</FormGroup>
 								</FormGroupWrapper>
@@ -551,7 +593,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								{
 									icon: 'vacation',
 									text: __('Edit Hours', 'multivendorx'),
-									color: 'purple'
+									color: 'purple',
 									// onClick: () => setVacation(true),
 								},
 							]}

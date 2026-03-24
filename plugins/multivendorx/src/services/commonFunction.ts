@@ -264,7 +264,9 @@ export const getUrl = (
 	mode: 'edit' | 'view' | 'settings' = 'edit',
 	slug?: string
 ) => {
-	if (!id && !slug) return '#';
+	if (!id && !slug) {
+		return '#';
+	}
 
 	const base = appLocalizer.site_url.replace(/\/$/, '');
 

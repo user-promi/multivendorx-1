@@ -134,7 +134,9 @@ const Commission: React.FC = () => {
 						},
 						{
 							title: 'Marketplace Commission',
-							value: '-' + formatCurrency(row.marketplace_commission),
+							value:
+								'-' +
+								formatCurrency(row.marketplace_commission),
 						},
 						{
 							title: 'Store Discount',

@@ -323,7 +323,9 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							row
 							label={__('Order Status', 'multivendorx')}
 						>
-							<span className={`admin-badge badge-${orderData?.status}`}>
+							<span
+								className={`admin-badge badge-${orderData?.status}`}
+							>
 								{orderData?.status
 									? orderData.status
 											.replace(/^wc-/, '') // remove 'wc-' prefix if exists

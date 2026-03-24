@@ -55,28 +55,28 @@ class Tracking extends \WP_REST_Controller {
         return current_user_can( 'create_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
-    public function create_item($request) {
-        $data = $request->get_param('formData');
-        $order_id = $request->get_param('order_id');
+    public function create_item( $request ) {
+        $data     = $request->get_param( 'formData' );
+        $order_id = $request->get_param( 'order_id' );
         $store_id = MultiVendorX()->active_store;
-        $store = new Store($store_id);
+        $store    = new Store( $store_id );
 
         do_action(
             'multivendorx_notify_shipment_tracking_added',
             'shipment_tracking_added',
             array(
-                'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-                'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-                'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-                'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                'order_id'  => $order_id,
-                'tracking_url'  => $data['tracking_url'],
-                'tracking_number'  => $data['tracking_number'],
-                'provider'  => $data['provider'],
-                'date'  => $data['date'],
-                'store_id'    => $store_id,
-                'category'    => 'notification',
+                'admin_email'     => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
+                'admin_phone'     => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
+                'store_phone'     => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
+                'store_email'     => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                'store_name'      => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                'order_id'        => $order_id,
+                'tracking_url'    => $data['tracking_url'],
+                'tracking_number' => $data['tracking_number'],
+                'provider'        => $data['provider'],
+                'date'            => $data['date'],
+                'store_id'        => $store_id,
+                'category'        => 'notification',
             )
         );
     }

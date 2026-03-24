@@ -309,16 +309,16 @@ class CommissionUtil {
         ";
 
         if ( ! empty( $store_id ) ) {
-            $query   .= " AND store_id = %d";
+            $query   .= ' AND store_id = %d';
             $params[] = $store_id;
         }
 
         if ( ! empty( $args['start_date'] ) && ! empty( $args['end_date'] ) ) {
-            $query   .= " AND DATE(created_at) BETWEEN %s AND %s";
+            $query   .= ' AND DATE(created_at) BETWEEN %s AND %s';
             $params[] = $args['start_date'];
             $params[] = $args['end_date'];
         }
-        
+
         $result = $wpdb->get_row(
             $wpdb->prepare( $query, $params )
         );

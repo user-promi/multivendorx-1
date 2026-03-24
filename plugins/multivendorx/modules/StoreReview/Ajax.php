@@ -115,7 +115,7 @@ class Ajax {
 		// Insert review with image data.
 		$review_id = Util::insert_review( $store_id, $user_id, $review_title, $review_content, $overall, $order_id, $uploaded_images );
 		Util::insert_ratings( $review_id, $ratings );
-		$store = new Store($store_id);
+		$store = new Store( $store_id );
 		do_action(
 			'multivendorx_notify_new_store_review',
 			'new_store_review',

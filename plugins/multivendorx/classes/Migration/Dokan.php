@@ -44,12 +44,12 @@ class Dokan {
 
             // Get all user meta.
             $profile_settings = get_user_meta( $user_id, 'dokan_profile_settings', true );
-            $userdata   = get_userdata( $user_id );
-            $status = 'active';
+            $userdata         = get_userdata( $user_id );
+            $status           = 'active';
 
             // Store create.
             $store = new Store();
-            $store->set( 'name', get_user_meta( $user_id, 'dokan_store_name', true) );
+            $store->set( 'name', get_user_meta( $user_id, 'dokan_store_name', true ) );
             $store->set( 'slug', $userdata->user_nicename );
             $store->set( 'status', $status );
             $store->set( 'who_created', $user_id );
@@ -93,15 +93,18 @@ class Dokan {
                     $store->update_meta( 'state', $address['state'] );
                 }
 
-                $country = $profile_settings['address']['country'] ?? '';
+                $country      = $profile_settings['address']['country'] ?? '';
                 $wc_countries = new \WC_Countries();
                 $calling_code = $wc_countries->get_country_calling_code( $country );
                 $calling_code = ! empty( $calling_code ) ? '+' . $calling_code : '';
-                
-                $store->update_meta( 'phone', array(
-                    'country_code' => $calling_code,
-                    'phone'        => preg_replace( '/[^0-9]/', '', $profile_settings['phone'] ),
-                ) );
+
+                $store->update_meta(
+                    'phone',
+                    array(
+						'country_code' => $calling_code,
+						'phone'        => preg_replace( '/[^0-9]/', '', $profile_settings['phone'] ),
+                    )
+                );
             }
 
             if ( ! empty( $profile_settings['banner'] ) ) {
@@ -117,7 +120,6 @@ class Dokan {
                     $store->update_meta( 'image', $logo_url );
                 }
             }
-
         }
     }
 
@@ -144,33 +146,35 @@ class Dokan {
 
     public function migrate_orders_and_commissions() {
         global $wpdb;
-        $table = $wpdb->prefix . 'dokan_orders';
+        $table      = $wpdb->prefix . 'dokan_orders';
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];
 
         $dokan_orders = $wpdb->get_results( "SELECT * FROM {$table}" );
 
         foreach ( $dokan_orders as $row ) {
             $order_id = $row->order_id;
-            $order = wc_get_order( $order_id );
-            if ( ! $order ) continue;
+            $order    = wc_get_order( $order_id );
+            if ( ! $order ) {
+				continue;
+            }
 
             $seller_id = $row->seller_id;
-            $store_id = get_user_meta( $seller_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+            $store_id  = get_user_meta( $seller_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
 
             $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $table_name,
                 array(
-					'order_id'                 => $order_id,
-                    'store_id'                 => $store_id,
-                    'customer_id'              => $order->get_customer_id(),
-                    'total_order_value'        => $row->order_total,
-                    'net_items_cost'           => $row->order_total,
-                    'marketplace_commission'   => $row->net_amount,
-                    'store_earning'            => $row->order_total - $row->net_amount,
-                    'store_payable'            => $row->order_total - $row->net_amount,
-                    'marketplace_payable'      => $row->net_amount,
-                    'currency'                 => $order->get_currency(),
-                    'status'                   => 'paid',
+					'order_id'               => $order_id,
+                    'store_id'               => $store_id,
+                    'customer_id'            => $order->get_customer_id(),
+                    'total_order_value'      => $row->order_total,
+                    'net_items_cost'         => $row->order_total,
+                    'marketplace_commission' => $row->net_amount,
+                    'store_earning'          => $row->order_total - $row->net_amount,
+                    'store_payable'          => $row->order_total - $row->net_amount,
+                    'marketplace_payable'    => $row->net_amount,
+                    'currency'               => $order->get_currency(),
+                    'status'                 => 'paid',
                 ),
                 array(
 					'%d',

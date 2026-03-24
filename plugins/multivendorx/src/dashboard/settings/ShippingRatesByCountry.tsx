@@ -1,7 +1,7 @@
 /* global appLocalizer */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { DynamicRowSetting, FormGroup, getApiLink, Notice } from 'zyra';
+import { DynamicRowSetting, FormGroup, getApiLink } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
 interface ShippingStateRate {
@@ -25,8 +25,6 @@ interface CountryItem {
 }
 const ShippingRatesByCountry: React.FC = () => {
 	const [rates, setRates] = useState<ShippingCountryRate[]>([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
 
 	const countries = appLocalizer?.country_list || {};
 	const statesByCountry = appLocalizer?.state_list || {};
@@ -37,9 +35,6 @@ const ShippingRatesByCountry: React.FC = () => {
 		}
 
 		const fetchShippingRates = async () => {
-			setLoading(true);
-			setError(null);
-
 			try {
 				const response = await axios.get(
 					getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
@@ -66,10 +61,6 @@ const ShippingRatesByCountry: React.FC = () => {
 						states: Array.isArray(r.states) ? r.states : [],
 					}))
 				);
-			} catch {
-				setError('Failed to load shipping rates');
-			} finally {
-				setLoading(false);
 			}
 		};
 
@@ -91,8 +82,6 @@ const ShippingRatesByCountry: React.FC = () => {
 					},
 				}
 			);
-		} catch {
-			setError('Failed to save shipping rates.');
 		}
 	};
 

@@ -73,20 +73,20 @@ class Ajax {
         // Insert question using Util class.
         $inserted = Util::insert_question( $data );
         if ( $inserted ) {
-            $store = new Store($store_id);
+            $store   = new Store( $store_id );
             $product = wc_get_product( $product_id );
 
             do_action(
                 'multivendorx_notify_product_question_submitted',
                 'product_question_submitted',
                 array(
-                    'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-                    'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-                    'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-                    'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
-                    'product_name' => $product->get_name(),
-                    'customer_name' => get_user_by('id', $user_id)->display_name,
-                    'category'    => 'activity',
+                    'admin_email'   => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
+                    'admin_phone'   => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
+                    'store_phone'   => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
+                    'store_email'   => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                    'product_name'  => $product->get_name(),
+                    'customer_name' => get_user_by( 'id', $user_id )->display_name,
+                    'category'      => 'activity',
                 )
             );
             wp_send_json_success( array( 'message' => 'Question submitted successfully.' ) );
