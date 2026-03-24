@@ -150,7 +150,6 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 								
 									{/* Default Shipping Price */}
 									<FormGroup
-										row
 										label={__(
 											`Default Shipping Price (${appLocalizer.currency_symbol})`,
 											'multivendorx'
@@ -187,7 +186,6 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 									</FormGroup>
 									{/* Per Product Additional Price */}
 									<FormGroup
-										row
 										label={__(
 											`Per Product Additional Price (${appLocalizer.currency_symbol})`,
 											'multivendorx'
@@ -221,7 +219,6 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 
 									{/* Per Qty Additional Price */}
 									<FormGroup
-										row
 										label={__(
 											`Per Qty Additional Price (${appLocalizer.currency_symbol})`,
 											'multivendorx'
@@ -255,7 +252,6 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 
 									{/* Free Shipping Minimum Order Amount */}
 									<FormGroup
-										row
 										label={__(
 											`Free Shipping Minimum Order Amount (${appLocalizer.currency_symbol})`,
 											'multivendorx'
@@ -288,7 +284,6 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 
 									{/* Local Pickup Cost */}
 									<FormGroup
-										row
 										label={__(
 											`Local Pickup Cost (${appLocalizer.currency_symbol})`,
 											'multivendorx'
@@ -473,29 +468,31 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 													{
 														key: 'max_distance',
 														type: 'number',
-														label: __(
-															'Up to',
-															'multivendorx'
-														),
+														// label: __(
+														// 	'Up to',
+														// 	'multivendorx'
+														// ),
 														placeholder: __(
 															'Up to',
 															'multivendorx'
 														),
+														size: '8rem',
 														step: '0.1',
 														min: '0',
 													},
 													{
 														key: 'cost',
 														type: 'number',
-														label: __(
-															`Cost (${appLocalizer.currency_symbol})`,
-															'multivendorx'
-														),
+														// label: __(
+														// 	`Cost (${appLocalizer.currency_symbol})`,
+														// 	'multivendorx'
+														// ),
 														placeholder: __(
 															`Cost ${appLocalizer.currency_symbol}`,
 															'multivendorx'
 														),
 														step: '0.01',
+														size: '8rem',
 														min: '0',
 													},
 												],

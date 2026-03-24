@@ -398,7 +398,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 							isEditing
 								? __('Edit Shipping', 'multivendorx')
 								: __('Add Shipping', 'multivendorx')
-						} — ${selectedZone.zone_name}`,
+						} - ${selectedZone.zone_name}`,
 					}}
 					footer={
 						<ButtonInputUI

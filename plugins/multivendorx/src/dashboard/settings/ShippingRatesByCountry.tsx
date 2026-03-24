@@ -114,6 +114,7 @@ const ShippingRatesByCountry: React.FC = () => {
 				type: 'select',
 				label: __('Country', 'multivendorx'),
 				placeholder: __('Select Country', 'multivendorx'),
+				size: '14rem',
 				options: [
 					{
 						label: __('Everywhere Else', 'multivendorx'),
@@ -125,6 +126,7 @@ const ShippingRatesByCountry: React.FC = () => {
 			{
 				key: 'cost',
 				type: 'number',
+				size: '8rem',
 				label: __('Cost', 'multivendorx'),
 				placeholder: '0.00',
 			},
@@ -136,6 +138,7 @@ const ShippingRatesByCountry: React.FC = () => {
 			{
 				key: 'state',
 				type: 'select',
+				size: '14rem',
 				label: __('State', 'multivendorx'),
 				placeholder: __('Select State', 'multivendorx'),
 				options: [],

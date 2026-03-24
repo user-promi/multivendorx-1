@@ -2,6 +2,7 @@
 
 .item-list {
     padding: 0.5rem 0;
+    width: 100%;
 
     &.default {
         .item {
@@ -206,7 +207,11 @@
         padding: 0;
     }
 
+    // Commission Summary (table)
     &.price-list {
+        transition: all 0.5s ease;
+        position: relative;
+
         .item {
             .details {
                 display: flex;
@@ -225,6 +230,21 @@
                     font-weight: 600;
                 }
             }
+        }
+
+        &.expanded{
+            max-height: 3.5rem;
+        }
+        .more-btn {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            background: $theme-background-color;
+            font-size: 0.813rem;
+            padding: 0.125rem 0.5rem;
+            color: $theme-color;
+            border-radius: 0.313rem;
+            font-weight: 600;
         }
     }
 
