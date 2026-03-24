@@ -455,8 +455,9 @@ const Dashboard = () => {
 							{/* Dark mode toggle */}
 							<li onClick={() => setIsDarkMode((prev) => !prev)}>
 								<div
-									className={`adminfont-icon admin-icon dark-icon adminfont-${isDarkMode ? 'light' : 'moon'
-										}`}
+									className={`adminfont-icon admin-icon dark-icon adminfont-${
+										isDarkMode ? 'light' : 'moon'
+									}`}
 								></div>
 							</li>
 
@@ -672,90 +673,38 @@ const Dashboard = () => {
 													</li>
 													{availableStores.length >
 														0 && (
-															<li className="switch-store-wrapper">
-																<a
-																	href="#"
-																	onClick={(
-																		e
-																	) => {
-																		e.preventDefault();
-																		setShowStoreList(
-																			(
-																				prev
-																			) =>
-																				!prev
-																		);
-																	}}
-																>
-																	<i className="adminfont-switch-store"></i>
-																	Switch stores
-																	{firstTwoStores.length >
-																		0 && (
-																			<span className="switch-store-preview">
-																				{!showStoreList && (
-																					<>
-																						{firstTwoStores.map(
-																							(
-																								store,
-																								index
-																							) => (
-																								<span
-																									className={`store-icon admin-color${index + 2}`}
-																									key={
-																										store.id
-																									}
-																								>
-																									{store.name
-																										.charAt(
-																											0
-																										)
-																										.toUpperCase()}
-																								</span>
-																							)
-																						)}
-
-																						{availableStores.length >
-																							2 && (
-																								<span className="store-icon number">
-																									+
-																									{availableStores.length -
-																										2}
-																								</span>
-																							)}
-																					</>
-																				)}
-																				<span className="adminfont-keyboard-arrow-down arrow-icon"></span>
-																			</span>
-																		)}
-																</a>
-
-																{showStoreList && (
-																	<div className="switch-store-list">
-																		{availableStores.map(
-																			(
-																				store,
-																				index
-																			) => (
-																				<div
-																					className="store"
-																					key={
-																						store.id
-																					}
-																				>
-																					<a
-																						href="#"
-																						className="switch-store"
-																						onClick={(
-																							e
-																						) => {
-																							e.preventDefault();
-																							switchStore(
-																								store.id
-																							);
-																						}}
-																					>
+														<li className="switch-store-wrapper">
+															<a
+																href="#"
+																onClick={(
+																	e
+																) => {
+																	e.preventDefault();
+																	setShowStoreList(
+																		(
+																			prev
+																		) =>
+																			!prev
+																	);
+																}}
+															>
+																<i className="adminfont-switch-store"></i>
+																Switch stores
+																{firstTwoStores.length >
+																	0 && (
+																	<span className="switch-store-preview">
+																		{!showStoreList && (
+																			<>
+																				{firstTwoStores.map(
+																					(
+																						store,
+																						index
+																					) => (
 																						<span
 																							className={`store-icon admin-color${index + 2}`}
+																							key={
+																								store.id
+																							}
 																						>
 																							{store.name
 																								.charAt(
@@ -763,21 +712,73 @@ const Dashboard = () => {
 																								)
 																								.toUpperCase()}
 																						</span>
-																						<div className="details-wrapper">
-																							<div className="store-name">
-																								{
-																									store.name
-																								}
-																							</div>
-																						</div>
-																					</a>
-																				</div>
-																			)
+																					)
+																				)}
+
+																				{availableStores.length >
+																					2 && (
+																					<span className="store-icon number">
+																						+
+																						{availableStores.length -
+																							2}
+																					</span>
+																				)}
+																			</>
 																		)}
-																	</div>
+																		<span className="adminfont-keyboard-arrow-down arrow-icon"></span>
+																	</span>
 																)}
-															</li>
-														)}
+															</a>
+
+															{showStoreList && (
+																<div className="switch-store-list">
+																	{availableStores.map(
+																		(
+																			store,
+																			index
+																		) => (
+																			<div
+																				className="store"
+																				key={
+																					store.id
+																				}
+																			>
+																				<a
+																					href="#"
+																					className="switch-store"
+																					onClick={(
+																						e
+																					) => {
+																						e.preventDefault();
+																						switchStore(
+																							store.id
+																						);
+																					}}
+																				>
+																					<span
+																						className={`store-icon admin-color${index + 2}`}
+																					>
+																						{store.name
+																							.charAt(
+																								0
+																							)
+																							.toUpperCase()}
+																					</span>
+																					<div className="details-wrapper">
+																						<div className="store-name">
+																							{
+																								store.name
+																							}
+																						</div>
+																					</div>
+																				</a>
+																			</div>
+																		)
+																	)}
+																</div>
+															)}
+														</li>
+													)}
 												</ul>
 											</div>
 
@@ -826,7 +827,7 @@ const Dashboard = () => {
 								'multivendorx'
 							)}
 							buttonText={__('Contact Admin', 'multivendorx')}
-							onButtonClick={() => { }}
+							onButtonClick={() => {}}
 						/>
 					) : (
 						loadComponent(currentTab)

@@ -338,17 +338,28 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 				return (
 					<div className="shipping-method-wrapper">
 						{methodsArray.map((method: ShippingMethod) => (
-							<div key={method.instance_id} className="shipping-method">
-								<div className="admin-badge yellow">{method.title}</div>
+							<div
+								key={method.instance_id}
+								className="shipping-method"
+							>
+								<div className="admin-badge yellow">
+									{method.title}
+								</div>
 								<i
 									onClick={() => handleEdit(method)}
 									className="admin-badge blue adminfont-edit"
-									style={{ cursor: 'pointer', marginLeft: '8px' }}
+									style={{
+										cursor: 'pointer',
+										marginLeft: '8px',
+									}}
 								></i>
 								<i
 									onClick={() => handleDelete(method, zone)}
 									className="admin-badge red adminfont-delete"
-									style={{ cursor: 'pointer', marginLeft: '8px' }}
+									style={{
+										cursor: 'pointer',
+										marginLeft: '8px',
+									}}
 								></i>
 							</div>
 						))}
@@ -373,16 +384,18 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 
 	return (
 		<>
-			<SectionUI title={__('Zone-wise Shipping Configuration', 'multivendorx')}/>
+			<SectionUI
+				title={__('Zone-wise Shipping Configuration', 'multivendorx')}
+			/>
 			<FormGroup>
-					<TableCard
-						headers={headers}
-						rows={rows}
-						isLoading={false}
-						showMenu={false}
-						onQueryUpdate={() => {}}
-						emptyMessage={__('No shipping zones found', 'multivendorx')}
-					/>
+				<TableCard
+					headers={headers}
+					rows={rows}
+					isLoading={false}
+					showMenu={false}
+					onQueryUpdate={() => {}}
+					emptyMessage={__('No shipping zones found', 'multivendorx')}
+				/>
 			</FormGroup>
 			{addShipping && selectedZone && (
 				<PopupUI

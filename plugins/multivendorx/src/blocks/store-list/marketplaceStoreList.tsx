@@ -35,7 +35,10 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	});
 	const geoSettings = storesList?.settings_databases_value?.geolocation || {};
 
-	const mapApiKey = geoSettings.choose_map_api === 'google_map' ? geoSettings.google_map_api_key : geoSettings.mapbox_api_key;
+	const mapApiKey =
+		geoSettings.choose_map_api === 'google_map'
+			? geoSettings.google_map_api_key
+			: geoSettings.mapbox_api_key;
 	const radiusConfig = geoSettings?.radius_search_distance?.[0] || {};
 	const radiusMax = radiusConfig.radius_search_max_distance || 500;
 	const radiusUnit = radiusConfig.radius_search_unit || 'kilometers';
@@ -83,17 +86,22 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 							setPage(1);
 						}}
 					/>
-					{mapApiKey && (<div className="store-map">
-						<MapProviderUI
-							apiKey={mapApiKey}
-							locationAddress={mapLocation.location_address}
-							locationLat={mapLocation.location_lat}
-							locationLng={mapLocation.location_lng}
-							mapProvider={geoSettings.choose_map_api}
-							onLocationUpdate={(loc) => setMapLocation(loc)}
-							placeholderSearch={__('Search location...', 'multivendorx')}
-						/>
-					</div>)}
+					{mapApiKey && (
+						<div className="store-map">
+							<MapProviderUI
+								apiKey={mapApiKey}
+								locationAddress={mapLocation.location_address}
+								locationLat={mapLocation.location_lat}
+								locationLng={mapLocation.location_lng}
+								mapProvider={geoSettings.choose_map_api}
+								onLocationUpdate={(loc) => setMapLocation(loc)}
+								placeholderSearch={__(
+									'Search location...',
+									'multivendorx'
+								)}
+							/>
+						</div>
+					)}
 				</div>
 
 				<p>
@@ -127,13 +135,19 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 												<h4>{store.store_name}</h4>
 
 												<div className="review-rating">
-													{store.rating !== undefined && (
+													{store.rating !==
+														undefined && (
 														<div
 															className="star-rating"
 															role="img"
 															aria-label={sprintf(
-																__('Rated %s out of 5', 'multivendorx'),
-																store.rating.toFixed(2)
+																__(
+																	'Rated %s out of 5',
+																	'multivendorx'
+																),
+																store.rating.toFixed(
+																	2
+																)
 															)}
 														>
 															<span
@@ -141,11 +155,19 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 																	width: `${(store.rating / 5) * 100}%`,
 																}}
 															>
-																{__('Rated', 'multivendorx')}{' '}
+																{__(
+																	'Rated',
+																	'multivendorx'
+																)}{' '}
 																<strong className="rating">
-																	{store.rating.toFixed(2)}
+																	{store.rating.toFixed(
+																		2
+																	)}
 																</strong>{' '}
-																{__('out of 5', 'multivendorx')}
+																{__(
+																	'out of 5',
+																	'multivendorx'
+																)}
 															</span>
 														</div>
 													)}
@@ -186,7 +208,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 									<li>
 										<button
 											disabled={page === 1}
-											onClick={() => setPage((p) => p - 1)}
+											onClick={() =>
+												setPage((p) => p - 1)
+											}
 											className="page-numbers"
 										>
 											{__('Previous', 'multivendorx')}
@@ -202,7 +226,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 									<li>
 										<button
 											disabled={page >= totalPages}
-											onClick={() => setPage((p) => p + 1)}
+											onClick={() =>
+												setPage((p) => p + 1)
+											}
 											className="page-numbers"
 										>
 											{__('Next', 'multivendorx')}

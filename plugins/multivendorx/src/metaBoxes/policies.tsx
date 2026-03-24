@@ -71,13 +71,13 @@ addFilter(
 		return (
 			<>
 				{content}
-				{productFields.includes('policies') && 
+				{productFields.includes('policies') && (
 					<Policies
 						product={product}
 						setProduct={setProduct}
 						handleChange={handleChange}
 					/>
-				}
+				)}
 			</>
 		);
 	},

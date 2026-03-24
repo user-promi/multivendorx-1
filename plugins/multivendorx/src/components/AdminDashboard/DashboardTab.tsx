@@ -143,19 +143,19 @@ const DashboardTab: React.FC<object> = () => {
 					title: __('Success!', 'multivendorx'),
 					message: existingPlugin
 						? sprintf(
-							__(
-								'Plugin "%s" activated successfully!',
-								'multivendorx'
-							),
-							slug
-						)
+								__(
+									'Plugin "%s" activated successfully!',
+									'multivendorx'
+								),
+								slug
+							)
 						: sprintf(
-							__(
-								'Plugin "%s" installed & activated successfully!',
-								'multivendorx'
+								__(
+									'Plugin "%s" installed & activated successfully!',
+									'multivendorx'
+								),
+								slug
 							),
-							slug
-						),
 					type: 'success',
 					position: 'float',
 				});
@@ -281,10 +281,7 @@ const DashboardTab: React.FC<object> = () => {
 					<div className="pro-banner-wrapper">
 						<div className="content">
 							<div className="heading">
-								{__(
-									'Welcome to MultiVendorX',
-									'multivendorx'
-								)}
+								{__('Welcome to MultiVendorX', 'multivendorx')}
 							</div>
 							<div className="description">
 								{__(
@@ -301,14 +298,11 @@ const DashboardTab: React.FC<object> = () => {
 								<div
 									className="admin-btn"
 									onClick={() =>
-									(window.location.href =
-										'?page=multivendorx-setup')
+										(window.location.href =
+											'?page=multivendorx-setup')
 									}
 								>
-									{__(
-										'Launch Setup Wizard',
-										'multivendorx'
-									)}
+									{__('Launch Setup Wizard', 'multivendorx')}
 									<i className="adminfont-import"></i>
 								</div>
 							</div>
@@ -426,10 +420,7 @@ const DashboardTab: React.FC<object> = () => {
 											<>
 												<span className="admin-badge red">
 													<i className="adminfont-pro-tag"></i>{' '}
-													{__(
-														'Pro',
-														'multivendorx'
-													)}
+													{__('Pro', 'multivendorx')}
 												</span>
 												<a
 													href="https://catalogx.com/pricing/"
@@ -452,10 +443,7 @@ const DashboardTab: React.FC<object> = () => {
 								background
 								items={[
 									{
-										title: __(
-											'CatalogX',
-											'multivendorx'
-										),
+										title: __('CatalogX', 'multivendorx'),
 										desc: __(
 											'Turn your store into a product catalog with enquiry-based sales',
 											'multivendorx'
@@ -464,10 +452,7 @@ const DashboardTab: React.FC<object> = () => {
 										tags: (
 											<>
 												<span className="admin-badge green">
-													{__(
-														'Free',
-														'multivendorx'
-													)}
+													{__('Free', 'multivendorx')}
 												</span>
 												<a
 													href="#"
@@ -486,21 +471,21 @@ const DashboardTab: React.FC<object> = () => {
 																: 'auto',
 														opacity:
 															installing ===
-																'woocommerce-catalog-enquiry'
+															'woocommerce-catalog-enquiry'
 																? 0.6
 																: 1,
 													}}
 												>
 													{installing ===
-														'woocommerce-catalog-enquiry'
+													'woocommerce-catalog-enquiry'
 														? __(
-															'Installing...',
-															'multivendorx'
-														)
+																'Installing...',
+																'multivendorx'
+															)
 														: __(
-															'Install',
-															'multivendorx'
-														)}
+																'Install',
+																'multivendorx'
+															)}
 												</a>
 											</>
 										),
@@ -528,10 +513,7 @@ const DashboardTab: React.FC<object> = () => {
 											<>
 												<span className="admin-badge red">
 													<i className="adminfont-pro-tag"></i>{' '}
-													{__(
-														'Pro',
-														'multivendorx'
-													)}
+													{__('Pro', 'multivendorx')}
 												</span>
 												<a
 													href="https://notifima.com/pricing/"
@@ -554,10 +536,7 @@ const DashboardTab: React.FC<object> = () => {
 								background
 								items={[
 									{
-										title: __(
-											'Notifima',
-											'multivendorx'
-										),
+										title: __('Notifima', 'multivendorx'),
 										desc: __(
 											'Advanced stock alerts and wishlist features for WooCommerce',
 											'multivendorx'
@@ -566,10 +545,7 @@ const DashboardTab: React.FC<object> = () => {
 										tags: (
 											<>
 												<span className="admin-badge green">
-													{__(
-														'Free',
-														'multivendorx'
-													)}
+													{__('Free', 'multivendorx')}
 												</span>
 												<a
 													href="#"
@@ -588,21 +564,21 @@ const DashboardTab: React.FC<object> = () => {
 																: 'auto',
 														opacity:
 															installing ===
-																'woocommerce-product-stock-alert'
+															'woocommerce-product-stock-alert'
 																? 0.6
 																: 1,
 													}}
 												>
 													{installing ===
-														'woocommerce-product-stock-alert'
+													'woocommerce-product-stock-alert'
 														? __(
-															'Installing...',
-															'multivendorx'
-														)
+																'Installing...',
+																'multivendorx'
+															)
 														: __(
-															'Install',
-															'multivendorx'
-														)}
+																'Install',
+																'multivendorx'
+															)}
 												</a>
 											</>
 										),
@@ -614,9 +590,7 @@ const DashboardTab: React.FC<object> = () => {
 				</Card>
 
 				{/* Quick Links */}
-				<Card
-					title={__('Need help getting started?', 'multivendorx')}
-				>
+				<Card title={__('Need help getting started?', 'multivendorx')}>
 					<div className="quick-link">
 						{resources.map((res) => (
 							<ItemListUI
@@ -629,8 +603,14 @@ const DashboardTab: React.FC<object> = () => {
 										icon: res.iconClass,
 										tags: (
 											<>
-												<a href={res.href} target="blank">
-													{__(res.linkText, 'multivendorx')}
+												<a
+													href={res.href}
+													target="blank"
+												>
+													{__(
+														res.linkText,
+														'multivendorx'
+													)}
 													<i className="adminfont-external"></i>
 												</a>
 											</>

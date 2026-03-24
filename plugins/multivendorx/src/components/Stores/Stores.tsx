@@ -375,7 +375,9 @@ const Stores = () => {
 											'multivendorx'
 										)}
 										onChange={(val) => {
-											const [file] = Array.isArray(val) ? val : [val];
+											const [file] = Array.isArray(val)
+												? val
+												: [val];
 											const url = file?.url || '';
 
 											setFormData((prev) => ({

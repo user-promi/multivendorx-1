@@ -32,13 +32,13 @@ addFilter(
 		return (
 			<>
 				{content}
-				{productFields.includes('linked_product') && 
+				{productFields.includes('linked_product') && (
 					<RelatedList
 						product={product}
 						setProduct={setProduct}
 						handleChange={handleChange}
 					/>
-				}
+				)}
 			</>
 		);
 	},

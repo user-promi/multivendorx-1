@@ -2,11 +2,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { createRoot } from '@wordpress/element';
 import MarketplaceStoreList from './marketplaceStoreList';
-import {
-	PanelBody,
-	SelectControl,
-	TextControl,
-} from '@wordpress/components';
+import { PanelBody, SelectControl, TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 const EditBlock = (props) => {
@@ -24,9 +20,18 @@ const EditBlock = (props) => {
 						label={__('Sort by', 'multivendorx')}
 						value={attributes.orderby}
 						options={[
-							{ label: __('Name', 'multivendorx'), value: 'name' },
-							{ label: __('Registered Date', 'multivendorx'), value: 'create_time' },
-							{ label: __('Rating', 'multivendorx'), value: 'rating' },
+							{
+								label: __('Name', 'multivendorx'),
+								value: 'name',
+							},
+							{
+								label: __('Registered Date', 'multivendorx'),
+								value: 'create_time',
+							},
+							{
+								label: __('Rating', 'multivendorx'),
+								value: 'rating',
+							},
 						]}
 						onChange={(value) => setAttributes({ orderby: value })}
 					/>
@@ -35,8 +40,14 @@ const EditBlock = (props) => {
 						label={__('Order', 'multivendorx')}
 						value={attributes.order}
 						options={[
-							{ label: __('Ascending', 'multivendorx'), value: 'asc' },
-							{ label: __('Descending', 'multivendorx'), value: 'desc' },
+							{
+								label: __('Ascending', 'multivendorx'),
+								value: 'asc',
+							},
+							{
+								label: __('Descending', 'multivendorx'),
+								value: 'desc',
+							},
 						]}
 						onChange={(value) => setAttributes({ order: value })}
 					/>

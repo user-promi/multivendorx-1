@@ -135,19 +135,28 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 									}
 								/>
 							</FormGroup>
-						
 
-						{/* //zone by shipping */}
-						{formData.shipping_options === 'shipping_by_zone' && (
-							<DistanceByZoneShipping id={id} />
-						)}
+							{/* //zone by shipping */}
+							{formData.shipping_options ===
+								'shipping_by_zone' && (
+								<DistanceByZoneShipping id={id} />
+							)}
 
-						{/* country wise shipping */}
-						{formData.shipping_options ===
-							'shipping_by_country' && (
-							<>
-								<SectionUI title={__('Default Shipping Rules', 'multivendorx')} desc={__( 'Set base rates that apply to all orders','multivendorx')}/>
-								
+							{/* country wise shipping */}
+							{formData.shipping_options ===
+								'shipping_by_country' && (
+								<>
+									<SectionUI
+										title={__(
+											'Default Shipping Rules',
+											'multivendorx'
+										)}
+										desc={__(
+											'Set base rates that apply to all orders',
+											'multivendorx'
+										)}
+									/>
+
 									{/* Default Shipping Price */}
 									<FormGroup
 										label={__(
@@ -312,16 +321,30 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 											}
 										/>
 									</FormGroup>
-								<SectionUI title={__('Country-Specific Rates', 'multivendorx')} desc={__( 'Country-specific rates will be added to the Default Shipping Price. If state/region rates are defined, the final shipping cost will be State Rate + Default Shipping Price.','multivendorx')}/>
-								
-								<ShippingRatesByCountry />
-							</>
-						)}
+									<SectionUI
+										title={__(
+											'Country-Specific Rates',
+											'multivendorx'
+										)}
+										desc={__(
+											'Country-specific rates will be added to the Default Shipping Price. If state/region rates are defined, the final shipping cost will be State Rate + Default Shipping Price.',
+											'multivendorx'
+										)}
+									/>
 
-						{formData.shipping_options ===
-							'shipping_by_distance' && (
-							<>
-									<SectionUI title={__('Distance-wise Shipping Configuration', 'multivendorx')}/>
+									<ShippingRatesByCountry />
+								</>
+							)}
+
+							{formData.shipping_options ===
+								'shipping_by_distance' && (
+								<>
+									<SectionUI
+										title={__(
+											'Distance-wise Shipping Configuration',
+											'multivendorx'
+										)}
+									/>
 
 									{/* Default Cost */}
 									<FormGroup
@@ -339,7 +362,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 												'0.00',
 												'multivendorx'
 											)}
-											size={"8rem"}
+											size={'8rem'}
 											value={
 												formData.distance_default_cost ||
 												''
@@ -399,7 +422,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 										<BasicInputUI
 											type="number"
 											name="distance_max"
-											size={"8rem"}
+											size={'8rem'}
 											placeholder={__(
 												'0',
 												'multivendorx'
@@ -427,7 +450,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 										<BasicInputUI
 											type="number"
 											name="distance_local_pickup_cost"
-											size={"8rem"}
+											size={'8rem'}
 											placeholder={__(
 												'0.00',
 												'multivendorx'
@@ -508,8 +531,8 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 											}}
 										/>
 									</FormGroup>
-							</>
-						)}
+								</>
+							)}
 						</FormGroupWrapper>
 					</Card>
 				</Column>

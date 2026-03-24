@@ -177,7 +177,10 @@ const StoreReview: React.FC = () => {
 				params: {
 					page: query.paged || 1,
 					row: query.per_page || 10,
-					status: query.categoryFilter === 'all' ? '' : query.categoryFilter,
+					status:
+						query.categoryFilter === 'all'
+							? ''
+							: query.categoryFilter,
 					search_value: query.searchValue || '',
 					store_id: appLocalizer.store_id,
 					start_date: query.filter?.created_at?.startDate
@@ -314,7 +317,7 @@ const StoreReview: React.FC = () => {
 												...Array(
 													Math.round(
 														selectedReview.overall_rating ||
-														0
+															0
 													)
 												),
 											].map((_, i) => (
@@ -327,10 +330,10 @@ const StoreReview: React.FC = () => {
 											{[
 												...Array(
 													5 -
-													Math.round(
-														selectedReview.overall_rating ||
-														0
-													)
+														Math.round(
+															selectedReview.overall_rating ||
+																0
+														)
 												),
 											].map((_, i) => (
 												<i
