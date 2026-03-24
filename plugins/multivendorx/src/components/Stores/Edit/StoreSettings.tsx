@@ -401,7 +401,6 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 					phone: __('Invalid phone number', 'multivendorx'),
 				}));
 			}
-
 			return;
 		}
 
@@ -499,7 +498,7 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 								/>
 							</FormGroup>
 
-							<FormGroup label={__('Phone', 'multivendorx')}>
+							<FormGroup label={__('Phone', 'multivendorx')} notice={errorMsg.phone}>
 								<SelectInputUI
 									type="single-select"
 									name="country_code"
@@ -522,11 +521,6 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 										handleChange('phone', value)
 									}
 								/>
-								{errorMsg.phone && (
-									<p className="invalid-massage">
-										{errorMsg.phone}
-									</p>
-								)}
 							</FormGroup>
 							{/* Hidden coordinates */}
 							<input
@@ -666,6 +660,7 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 									'Current storefront link',
 									'multivendorx'
 								)}
+								notice={errorMsg.slug}
 							>
 								<BasicInputUI
 									name="slug"
@@ -686,11 +681,6 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 										<i className="adminfont-external"></i>
 									</a>
 								</div>
-								{errorMsg.slug && (
-									<p className="invalid-massage">
-										{errorMsg.slug}
-									</p>
-								)}
 							</FormGroup>
 						</FormGroupWrapper>
 					</Card>

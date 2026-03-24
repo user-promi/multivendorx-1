@@ -1,5 +1,6 @@
 import React from 'react';
 import { FieldComponent } from './fieldUtils';
+import { ButtonInputUI } from './ButtonInput';
 
 interface RandomInputKeyGeneratorProps {
     value?: string;
@@ -32,9 +33,15 @@ export const RandomInputKeyGeneratorUI: React.FC<
 
     if (!value) {
         return (
-            <button type="button" onClick={handleGenerate}>
-                Generate
-            </button>
+            <ButtonInputUI
+                buttons={[
+                    {
+                        icon: 'star-icon',
+                        text: 'Generate',
+                        onClick: handleGenerate,
+                    }
+                ]}
+            />
         );
     }
 

@@ -1121,44 +1121,8 @@ $index: 1;
   }
 }
 
-// input invalid error
-// .invalid-massage {
-//   color: $accent-color;
-//   position: relative;
-//   padding-left: 1.125rem;
-//   font-weight: 500;
-//   padding-top: 0.125rem;
-//   margin: 0;
 
-//   &::before {
-//     position: absolute;
-//     font-family: adminfonts, sans-serif;
-//     content: "\e807";
-//     top: 0.125rem;
-//     left: 0;
-//     font-size: 1rem;
-//   }
-// }
-
-// .success-massage {
-//   color: #008000;
-//   position: relative;
-//   padding-left: 1.125rem;
-//   font-weight: 500;
-//   padding-top: 0.125rem;
-//   margin: 0;
-
-//   &::before {
-//     font-family: adminfonts, sans-serif;
-//     position: absolute;
-//     content: "\e809";
-//     top: 0.125rem;
-//     left: 0;
-//     font-size: 1rem;
-//   }
-// }
-
-// filter tabs (module , notification)  -----common html
+//filter tabs (module , notification)  -----common html
 .category-filter {
   display: flex;
   gap: 0.5rem;

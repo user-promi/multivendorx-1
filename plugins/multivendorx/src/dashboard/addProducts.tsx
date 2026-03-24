@@ -248,7 +248,7 @@ const AddProduct = () => {
 						</div>
 					</div>
 				))}
-			{/* <Notice type="error" displayPosition="notice" message={errorMsg} /> */}
+			<Notice type="error" validity="lifetime" displayPosition="notice" message={errorMsg}/>
 			<NavigatorHeader
 				headerTitle={__('Add Product', 'multivendorx')}
 				headerDescription={__(
@@ -749,7 +749,6 @@ const AddProduct = () => {
 						modules
 					)}
 				</Column>
-
 				<Column grid={3}>
 					{applyFilters(
 						'multivendorx_add_product_right_section',

@@ -44,27 +44,31 @@
             padding: 0.75rem;
             align-items: start;
             border-bottom: $border-light-small;
+            position: relative;
 
-            &:hover {
-                background: #f3f3f3;
-            }
-
-            .icon {
-                padding: 0.313rem;
+            .item-icon {
+                padding: 0.45rem;
                 border-radius: 50%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-
-                i {
-                    font-size: 1.5rem;
-                }
+                font-size: 1.5rem;
             }
 
-            i {
-                font-size: 1.625rem;
-                padding: 0.45rem;
-                border-radius: 50%;
+            .check-icon {
+                position: absolute;
+                top: 0;
+                font-size: 1.12rem;
+                opacity: 0;
+                transition: all 0.3s ease;
+                cursor: pointer;
+
+                &.adminfont-check{
+                     right: 1.5rem;
+                }   
+                &.adminfont-cross{
+                    right: 0.125rem;
+                }
             }
 
             .details {
@@ -72,19 +76,15 @@
                     display: block;
                 }
 
-                .title {
-                    font-size: 0.95rem;
-                    color: $text-color
+                .item-title {
+                    font-size: 1rem;
+                    color: $text-color;
+                    font-weight: 500;
+                    padding-bottom: 0.25rem;
                 }
 
-                .message {
-                    color: #00000082;
-                    padding: 0.313rem 0;
-                }
-
-                .time {
-                    font-size: 0.813rem;
-                    color: #0000004a;
+                .desc {
+                    padding: 0;
                 }
             }
 
@@ -92,6 +92,16 @@
                 position: absolute;
                 top: 0.5rem;
                 right: 0.5rem;
+                font-size: 0.813rem;
+                color: #0000004a;
+            }
+
+            &:hover {
+                background: #f3f3f3;
+
+                .check-icon{
+                    opacity: 1;
+                }
             }
         }
     }
@@ -232,9 +242,10 @@
             }
         }
 
-        &.expanded{
+        &.expanded {
             max-height: 3.5rem;
         }
+
         .more-btn {
             position: absolute;
             bottom: 0;
@@ -306,10 +317,11 @@
     }
 
     // table menu action 
-    &.table-menu .item{
+    &.table-menu .item {
         flex-direction: row-reverse;
         justify-content: start;
     }
+
     .border {
         border: $border-light-small;
         padding: 0.85rem;

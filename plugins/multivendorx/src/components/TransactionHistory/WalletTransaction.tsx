@@ -696,6 +696,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 							<FormGroup
 								label={__('Amount', 'multivendorx')}
 								htmlFor="Amount"
+								notice={validationErrors.amount}
 							>
 								<BasicInputUI
 									type="number"
@@ -748,12 +749,6 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 										</span>
 									)}
 								</div>
-
-								{validationErrors.amount && (
-									<div className="invalid-massage">
-										{validationErrors.amount}
-									</div>
-								)}
 							</FormGroup>
 							<FormGroup
 								label={__('Note', 'multivendorx')}

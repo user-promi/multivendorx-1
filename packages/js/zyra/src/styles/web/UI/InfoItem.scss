@@ -22,11 +22,10 @@
         gap: 0.75rem;
 
         .avatar{
-            background: $theme-background-color;
-            border-radius: $border-radius-small;
-
             i{
                 color: $theme-color;
+                background: $theme-background-color;
+                border-radius: $border-radius-small;
             }
         }
         .details {

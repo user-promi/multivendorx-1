@@ -282,6 +282,7 @@ const AllCoupon: React.FC = () => {
 						<FormGroup
 							label={__('Discount type', 'multivendorx')}
 							htmlFor="discount_type"
+							notice={validationErrors.discount_type}
 						>
 							<SelectInputUI
 								name="discount_type"
@@ -294,11 +295,6 @@ const AllCoupon: React.FC = () => {
 									})
 								}
 							/>
-							{validationErrors.discount_type && (
-								<div className="invalid-massage">
-									{validationErrors.discount_type}
-								</div>
-							)}
 						</FormGroup>
 
 						<FormGroup
@@ -812,6 +808,8 @@ const AllCoupon: React.FC = () => {
 							<FormGroup
 								label={__('Coupon code', 'multivendorx')}
 								htmlFor="title"
+								className="copy-btn"
+								notice={validationErrors.title}
 							>
 								<BasicInputUI
 									type="text"
@@ -834,11 +832,6 @@ const AllCoupon: React.FC = () => {
 										});
 									}}
 								/>
-								{validationErrors.title && (
-									<div className="invalid-massage">
-										{validationErrors.title}
-									</div>
-								)}
 							</FormGroup>
 
 							<FormGroup

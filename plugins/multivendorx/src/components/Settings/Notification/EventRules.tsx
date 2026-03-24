@@ -461,6 +461,7 @@ const EventRules: React.FC = () => {
 						<TableCard
 							headers={headers}
 							rows={filteredNotifications}
+							showMenu={false}
 							isLoading={isLoading}
 							onQueryUpdate={fetchNotifications}
 							format={appLocalizer.date_format}

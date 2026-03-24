@@ -484,7 +484,7 @@ export default {
 				{
 					key: 'free_withdrawals', // updated key
 					type: 'number',
-					size: '5rem',
+					size: '8rem',
 					options: [
 						{
 							key: 'free_withdrawals',
@@ -508,7 +508,7 @@ export default {
 				{
 					key: 'withdrawal_fixed', // updated key
 					type: 'number',
-					size: '5rem',
+					size: '8rem',
 					preText: appLocalizer.currency_symbol,
 					beforeElement: {
 						type: 'preposttext',
@@ -524,7 +524,7 @@ export default {
 				{
 					key: 'withdrawal_percentage', // updated key
 					type: 'number',
-					size: '5rem',
+					size: '8rem',
 					postText: __('%', 'multivendorx'),
 					beforeElement: {
 						type: 'preposttext',

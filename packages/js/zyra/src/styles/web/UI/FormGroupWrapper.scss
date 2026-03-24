@@ -184,6 +184,23 @@
             border-top: $border-light-small;
         }
 
+        // copy btn 
+        &.copy-btn{
+            .settings-input-content{
+                flex-wrap: nowrap;
+                gap: 0;
+
+                .input-wrapper{
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+                .admin-btn{
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+            }
+        }
+        
         .button-wrapper {
             display: flex;
             justify-content: start;

@@ -101,7 +101,7 @@ a {
 
         img {
             width: auto;
-            height: 1.8rem;
+            height: 2.625rem;
         }
 
         .site-name {
@@ -736,26 +736,26 @@ a {
     }
 }
 
-.avatar {
-    padding: 0.5rem;
-    border-radius: 50%;
-    background: $theme-color;
-    width: 1.5rem;
-    height: 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+// .avatar {
+//     padding: 0.5rem;
+//     border-radius: 50%;
+//     background: $theme-color;
+//     width: 1.5rem;
+//     height: 1.5rem;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
 
-    span {
-        color: #fff;
-        font-size: 1.25rem;
-        font-weight: 600;
-    }
+//     span {
+//         color: #fff;
+//         font-size: 1.25rem;
+//         font-weight: 600;
+//     }
 
-    img {
-        width: 3rem;
-    }
-}
+//     img {
+//         width: 3rem;
+//     }
+// }
 
 // store profile end
 

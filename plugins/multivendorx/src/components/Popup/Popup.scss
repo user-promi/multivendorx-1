@@ -34,6 +34,10 @@
 
 
 // pro popup
+.popup-content:has(.top-section) {
+    overflow: hidden !important; // for overwrite zyra style
+}
+
 .popup-wrapper {
     .top-section {
         padding: 2.5rem 2rem;
@@ -118,8 +122,10 @@
                     color: #000000e0;
                     padding: 0.313rem 0;
 
-                    i{
+                    i {
                         padding-right: 0.45rem;
+                        color: $theme-color;
+                        font-size: 1.25rem;
                     }
                 }
             }
@@ -135,7 +141,8 @@
         }
     }
 }
-.popup-content:has(.top-section){
+
+.popup-content:has(.top-section) {
     width: 40rem !important;
     height: 75% !important;
 }
@@ -186,5 +193,26 @@
         font-size: 0.95rem;
         line-height: 1.45rem;
         color: $sub-text-color;
+    }
+}
+
+
+// requied plugin popup
+.required-popup {
+    padding: 1.5rem 1.5rem 5.5rem;
+
+    .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem;
+        background: #edececa3;
+        border-radius: $border-radius-small;
+        margin-top: 0.625rem;
+
+        .plugin-name{
+            font-size: 1.063rem;
+            font-weight: 500;
+        }
     }
 }

@@ -369,38 +369,41 @@ const TableCard: React.FC<TableCardProps> = ({
                 </div>
             )}
 
-            { selectedIds.length <= 1 && filters.length > 0 && (
-                <RealtimeFilters
-                    filters={filters}
-                    query={query.filter || {}}
-                    onFilterChange={onFilterChange}
-                    rows={rows}
-                    onResetFilters={() =>
-                        setQuery((prev) => ({
-                            ...prev,
-                            filter: {},
-                            paged: 1,
-                        }))
-                    }
-                    format={format}
-                />
-            )}
 
-            { selectedIds.length > 1 &&
-                ( bulkActions.length > 0 || onSelectCsvDownloadApply ) && (
-                    <BulkActionDropdown
-                        actions={bulkActions}
-                        selectedIds={selectedIds}
-                        onApply={handleBulkApply}
-                        onClearSelection={() => setSelectedIds([])}
-                        onSelectCsvDownloadApply={onSelectCsvDownloadApply}
-                        totalIds={ids}
-                        onToggleSelectAll={(select) =>
-                            setSelectedIds(select ? [...ids] : [])
+            <div className="filter-wrapper">
+                { selectedIds.length <= 1 && filters.length > 0 && (
+                    <RealtimeFilters
+                        filters={filters}
+                        query={query.filter || {}}
+                        onFilterChange={onFilterChange}
+                        rows={rows}
+                        onResetFilters={() =>
+                            setQuery((prev) => ({
+                                ...prev,
+                                filter: {},
+                                paged: 1,
+                            }))
                         }
-                        showDropdown={bulkActions.length > 0}
+                        format={format}
                     />
                 )}
+
+                { selectedIds.length > 1 &&
+                    ( bulkActions.length > 0 || onSelectCsvDownloadApply ) && (
+                        <BulkActionDropdown
+                            actions={bulkActions}
+                            selectedIds={selectedIds}
+                            onApply={handleBulkApply}
+                            onClearSelection={() => setSelectedIds([])}
+                            onSelectCsvDownloadApply={onSelectCsvDownloadApply}
+                            totalIds={ids}
+                            onToggleSelectAll={(select) =>
+                                setSelectedIds(select ? [...ids] : [])
+                            }
+                            showDropdown={bulkActions.length > 0}
+                        />
+                    )}
+            </div>
         </div>
     );
 };
