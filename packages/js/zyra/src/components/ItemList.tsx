@@ -18,7 +18,7 @@ interface Item {
     onReject?: (item: Item) => void;
     desc?: string;
     value?: string;
-    className?: string; // notification | checklist | feature-list | mini-card | price-list | documentation | badge-list | price-list
+    className?: string; // notification | checklist | feature-list | mini-card | price-list | documentation | badge-list 
 }
 
 interface ItemListUIProps {
