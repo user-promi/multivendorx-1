@@ -8,6 +8,7 @@ import { SelectInputUI } from './SelectInput';
 import { PopupUI } from './Popup';
 import { NoticeManager } from './Notice';
 import { ZyraVariable } from './fieldUtils';
+import { ButtonInputUI } from './ButtonInput';
 
 interface Module {
     id: string;
@@ -242,24 +243,42 @@ const Modules: React.FC<ModuleProps> = ({
                     open={true}
                     onClose={() => setRequirePopup(null)}
                     width={28}
-                    height="auto"
                     header={{
-                        title: `Required Plugin`,
-                        description: `This module requires the following plugin(s)`,
+                        icon: 'verification11',
+                        title: `Required plugins missing`,
+                        description: `This module needs the following plugins to work.`,
                     }}
+                    footer={
+                        <ButtonInputUI
+                            buttons={[
+                                {
+                                    icon: 'close',
+                                    text: 'Cancel',
+                                    color: 'red',
+                                    // onClick: setRequirePopup(null),
+                                },
+                                {
+                                    icon: 'import',
+                                    text: 'Install All',
+                                    // onClick: () => handleSubmit(),
+                                },
+                            ]}
+                        />
+                    }
                 >
-                    <div className="required-plugin-popup">
+                    <div className="required-popup">
+                        <div className="title">Plugins required</div>
                         {requirePopup.plugins.map((plugin, idx) => (
-                            <div key={idx} className="required-plugin-item">
-                                <span>{plugin.name}</span>
+                            <div key={idx} className="item">
+                                <span className="plugin-name">{plugin.name}</span>
 
                                 <a
                                     href={plugin.link}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="install-link"
+                                    className="admin-btn btn-purple"
                                 >
-                                    Install
+                                   <i className="adminfont-import" /> Install
                                 </a>
                             </div>
                         ))}

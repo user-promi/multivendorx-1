@@ -465,7 +465,7 @@ export default {
 			label: 'Marketplace Boosters',
 		},
 		{
-			id: 'marketplace-intelligence',
+			id: 'intelligence',
 			name: __('Intelligence', 'multivendorx'),
 			desc: 'Let stores create high-converting product descriptions and images instantly using AI.',
 			settingsLink: `${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=intelligence`,
@@ -474,7 +474,7 @@ export default {
 			category: 'marketplace_boosters',
 		},
 		{
-			id: 'marketplace-compliance',
+			id: 'compliance',
 			name: __('Compliance', 'multivendorx'),
 			desc: 'Ensure stores meet marketplace requirements with automated policy checks.',
 			docLink: 'https://multivendorx.com/docs/knowledgebase/NA',
