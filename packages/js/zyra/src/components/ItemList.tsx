@@ -4,6 +4,7 @@ import React from 'react';
 // Internal Dependencies
 import { FieldComponent } from './fieldUtils';
 import '../styles/web/UI/ItemList.scss';
+import Skeleton from './UI/Skeleton';
 
 interface Item {
     id?: string;
@@ -27,18 +28,39 @@ interface ItemListUIProps {
     background?: boolean;
     border?: boolean;
     onItemClick?: (item: Item) => void;
+    loading?: boolean;
+    skeletonCount?: number; 
 }
+
 export const ItemListUI: React.FC<ItemListUIProps> = ({
     items,
     background,
     border,
     className,
     onItemClick,
+    loading = false,
+    skeletonCount = 5,
 }) => {
-    const [isExpanded, setIsExpanded] = React.useState( className === 'price-list');
+    const [isExpanded, setIsExpanded] = React.useState(className === 'price-list');
+
+    if (loading) {
+        return (
+            <div className={`item-list ${className || 'default'}`}>
+                {Array.from({ length: skeletonCount }).map((_, index) => (
+                    <div key={index} className="item skeleton-item">
+                        <Skeleton variant="circular" width={32} height={32} />
+                        <div className="details">
+                            <Skeleton width="60%" height={12} />
+                            <Skeleton width="40%" height={10} />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+    }
 
     return (
-        <div className={`item-list ${className || 'default'} ${ isExpanded ? 'expanded' : ''}`}>
+        <div className={`item-list ${className || 'default'} ${isExpanded ? 'expanded' : ''}`}>
             {items &&
                 items.map((item) => {
                     const handleClick = (e: React.MouseEvent) => {
@@ -55,26 +77,18 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                             {item.link ? (
                                 <a
                                     href={item.link}
-                                    target={
-                                        item.targetBlank ? '_blank' : '_self'
-                                    }
-                                    className={`item ${background ? 'background' : ''
-                                        } ${border ? 'border' : ''} ${item.className || ''
-                                        }`}
+                                    target={item.targetBlank ? '_blank' : '_self'}
+                                    className={`item ${background ? 'background' : ''} ${border ? 'border' : ''} ${item.className || ''}`}
                                     onClick={handleClick}
                                 >
                                     {item.icon && (
-                                        <i
-                                            className={`item-icon adminfont-${item.icon}`}
-                                        ></i>
+                                        <i className={`item-icon adminfont-${item.icon}`}></i>
                                     )}
                                     {item.title}
                                 </a>
                             ) : (
                                 <div
-                                    className={`item ${background ? 'background' : ''
-                                        } ${border ? 'border' : ''} ${item.className || ''
-                                        }`}
+                                    className={`item ${background ? 'background' : ''} ${border ? 'border' : ''} ${item.className || ''}`}
                                     onClick={() => {
                                         item.action?.(item);
                                         if (onItemClick) {
@@ -83,9 +97,7 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                                     }}
                                 >
                                     {item.icon && (
-                                        <i
-                                            className={`item-icon adminfont-${item.icon}`}
-                                        ></i>
+                                        <i className={`item-icon adminfont-${item.icon}`}/>
                                     )}
                                     {item.img && (
                                         <img
@@ -113,14 +125,14 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                                     {className === 'notification' && (
                                         <>
                                             <i
-                                                className="check-icon adminfont-check color-green"
+                                                className="check-icon adminfont-check green-color"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     item.onApprove?.(item);
                                                 }}
                                             />
                                             <i
-                                                className="check-icon adminfont-cross color-red"
+                                                className="check-icon adminfont-cross red-color"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     item.onReject?.(item);
@@ -131,31 +143,29 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
 
                                     {item.tags && (
                                         <div className="tags">{item.tags}</div>
-                                    )}
-                                </div>
                             )}
                         </React.Fragment>
                     );
                 })}
             {className === 'price-list' && (
-                    <span
-                        className="more-btn"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setIsExpanded((prev) => !prev);
-                        }}
-                    >
-                        {isExpanded ? (
-                            <>
-                                More <i className="adminfont-arrow-down" />
-                            </>
-                        ) : (
-                            <>
-                                Less <i className="adminfont-arrow-up" />
-                            </>
-                        )}
-                    </span>
-                )}
+                <span
+                    className="more-btn"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsExpanded((prev) => !prev);
+                    }}
+                >
+                    {isExpanded ? (
+                        <>
+                            More <i className="adminfont-arrow-down" />
+                        </>
+                    ) : (
+                        <>
+                            Less <i className="adminfont-arrow-up" />
+                        </>
+                    )}
+                </span>
+            )}
         </div>
     );
 };
@@ -170,10 +180,9 @@ const ItemList: FieldComponent = {
                 className={field.className}
                 background={field.background}
                 border={field.border}
+                loading={field.loading}
                 onItemClick={(item) => {
-                    if (!canAccess) {
-                        return;
-                    }
+                    if (!canAccess) return;
 
                     if (item.action) {
                         item.action(item);

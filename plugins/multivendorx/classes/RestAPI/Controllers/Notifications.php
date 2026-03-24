@@ -139,10 +139,10 @@ class Notifications extends \WP_REST_Controller {
 
                 $formated_notifications = array();
 
-                foreach ( $results as $row ) {
+                foreach ( $results as $index => $row ) {
                     $formated_notifications[] = array(
                         'id'      => (int) $row['id'],
-                        'icon'    => 'adminfont-cart',
+                        'icon'    => 'cart admin-color' . ( $index + 1 ),
                         'title'   => $row['title'],
                         'message' => $row['message'],
                         'time'    => $this->time_ago( $row->created_at ),

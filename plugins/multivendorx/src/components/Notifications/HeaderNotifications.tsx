@@ -1,6 +1,6 @@
 /* global appLocalizer */
 import React, { useEffect, useState } from 'react';
-import { getApiLink, ItemListUI, Skeleton } from 'zyra';
+import { ComponentStatusView, getApiLink, ItemListUI } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 
@@ -66,34 +66,14 @@ const NotificationTabContent: React.FC<{
 			);
 	};
 
-	if (loading) {
-		return (
-			<>
-				<li>
-					<div className="item">
-						<Skeleton width={400} height={70} />
-					</div>
-					<div className="item">
-						<Skeleton width={400} height={70} />
-					</div>
-					<div className="item">
-						<Skeleton width={400} height={70} />
-					</div>
-					<div className="item">
-						<Skeleton width={400} height={70} />
-					</div>
-				</li>
-			</>
-		);
-	}
-
 	if (items.length === 0) {
-		return <div>{__('No notifications', 'multivendorx')}</div>;
+		return ( <ComponentStatusView title={__( 'No notifications', 'multivendorx' )}/> )
 	}
 
 	return (
 		<ItemListUI
 			className="notification"
+			loading={loading}
 			items={items.map((item) => ({
 				id: item.id,
 				title: item.title,
@@ -103,34 +83,11 @@ const NotificationTabContent: React.FC<{
 				onApprove: (item) => {
 					markRead(item.id);
 				},
-
 				onReject: (item) => {
 					dismissItem(item.id);
 				},
 			}))}
 		/>
-
-		// <ul className="notification-list">
-		//   {items.map(item => (
-		//     <li key={item.id}>
-		//       <div className="item" onClick={() => markRead(item.id)}>
-		//         <i className={item.icon || 'adminfont-user-network-icon green'}></i>
-		//         <div className="details">
-		//           <span className="heading">{item.title}</span>
-		//           <span className="message">{item.message}</span>
-		//           <span className="time">{item.time}</span>
-		//         </div>
-		//         <i
-		//           className="check-icon adminfont-cross color-red"
-		//           onClick={e => {
-		//             e.stopPropagation();
-		//             dismissItem(item.id);
-		//           }}
-		//         />
-		//       </div>
-		//     </li>
-		//   ))}
-		// </ul>
 	);
 };
 
