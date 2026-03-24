@@ -81,7 +81,6 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 			}
 		});
 	};
-	console.log()
 	return (
 		<>
 			<Container>
