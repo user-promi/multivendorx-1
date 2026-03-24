@@ -30,7 +30,6 @@ class Block {
      * @return void
      */
     public function __construct() {
-        $this->blocks = $this->initialize_blocks();
         // Register block category.
         add_filter( 'block_categories_all', array( $this, 'register_block_category' ) );
         // Register the block.
@@ -39,6 +38,13 @@ class Block {
         add_action( 'enqueue_block_assets', array( $this, 'enqueue_all_block_assets' ) );
         // Localize in frontend.
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+    }
+
+    public function get_blocks() {
+        if ( is_null( $this->blocks ) ) {
+            $this->blocks = $this->initialize_blocks();
+        }
+        return $this->blocks;
     }
 
     /**
@@ -95,7 +101,7 @@ class Block {
      */
     public function enqueue_all_block_assets() {
         FrontendScripts::load_scripts();
-        foreach ( $this->blocks as $block_script ) {
+        foreach ( $this->get_blocks() as $block_script ) {
             FrontendScripts::localize_scripts( $block_script['textdomain'] . '-' . $block_script['name'] . '-editor-script' );
             FrontendScripts::localize_scripts( $block_script['textdomain'] . '-' . $block_script['name'] . '-script' );
         }
@@ -114,7 +120,7 @@ class Block {
     public function enqueue_scripts() {
         global $post;
         FrontendScripts::load_scripts();
-        foreach ( $this->blocks as $block_script ) {
+        foreach ( $this->get_blocks() as $block_script ) {
             $block_name = $block_script['textdomain'] . '/' . $block_script['name'];
 
             if ( has_block( $block_name, $post ) ) {
@@ -152,7 +158,7 @@ class Block {
      * @return void
      */
     public function register_blocks() {
-        foreach ( $this->blocks as $block ) {
+        foreach ( $this->get_blocks() as $block ) {
             register_block_type( $block['block_path'] . $block['name'] );
         }
     }

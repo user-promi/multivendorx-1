@@ -155,7 +155,8 @@ const AddOrder = () => {
 					const storeId = p.meta_data?.find(
 						(m) => m.key === 'multivendorx_store_id'
 					)?.value;
-					return storeId === appLocalizer.store_id || !storeId;
+
+					return storeId === appLocalizer.store_id;
 				});
 
 				setAllProducts(filtered);
