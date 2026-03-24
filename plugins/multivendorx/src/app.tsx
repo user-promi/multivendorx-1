@@ -196,7 +196,7 @@ const App = () => {
 				{
 					id: 'notifications',
 					label: __('Notifications', 'multivendorx'),
-					icon: 'adminfont-notification',
+					icon: 'notification',
 					content: <NotificationTabContent type="notification" />,
 					footer: {
 						url: '?page=multivendorx#&tab=notifications&subtab=notifications',
@@ -207,7 +207,7 @@ const App = () => {
 				{
 					id: 'activities',
 					label: __('Activities', 'multivendorx'),
-					icon: 'adminfont-activity',
+					icon: 'activity',
 					content: <NotificationTabContent type="activity" />,
 					footer: {
 						url: '?page=multivendorx#&tab=notifications&subtab=activities',
