@@ -171,7 +171,6 @@ const PaymentSettings: React.FC<PaymentSettingsProps> = ({ id, data }) => {
 			}
 		});
 	};
-	console.log(paymentOptions);
 	return (
 		<>
 			<Container>
