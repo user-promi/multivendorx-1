@@ -192,7 +192,7 @@ export const TabsUI: React.FC<TabsProps> = ({
 
             {/* Footer */}
             {tabs[activeIndex]?.footer && (
-                <div className="footer">
+                <div className="tabs-footer">
                     <a
                         href={tabs[activeIndex].footer.url}
                         className="admin-btn btn-purple"

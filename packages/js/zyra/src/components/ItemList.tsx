@@ -29,7 +29,7 @@ interface ItemListUIProps {
     border?: boolean;
     onItemClick?: (item: Item) => void;
     loading?: boolean;
-    skeletonCount?: number; 
+    skeletonCount?: number;
 }
 
 export const ItemListUI: React.FC<ItemListUIProps> = ({
@@ -47,7 +47,7 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
         return (
             <div className={`item-list ${className || 'default'}`}>
                 {Array.from({ length: skeletonCount }).map((_, index) => (
-                    <div key={index} className="item skeleton-item">
+                    <div key={index} className="item">
                         <Skeleton variant="circular" width={32} height={32} />
                         <div className="details">
                             <Skeleton width="60%" height={12} />
@@ -97,7 +97,9 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                                     }}
                                 >
                                     {item.icon && (
-                                        <i className={`item-icon adminfont-${item.icon}`}/>
+                                        <i
+                                            className={`item-icon adminfont-${item.icon}`}
+                                        ></i>
                                     )}
                                     {item.img && (
                                         <img
@@ -143,6 +145,8 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
 
                                     {item.tags && (
                                         <div className="tags">{item.tags}</div>
+                                    )}
+                                </div>
                             )}
                         </React.Fragment>
                     );
