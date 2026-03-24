@@ -146,6 +146,9 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
         }
 
         const { key, value } = col.visibleWhen;
+        if (Array.isArray(value)) {
+            return value.includes(context?.[key]);
+        }
         return context?.[key] === value;
     };
 
@@ -195,8 +198,8 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
         flatRows.map((row) => {
             const isRowActive = row.enabledKey
                 ? ((setting[row.enabledKey] as string[] | undefined)?.includes(
-                      row.key
-                  ) ?? false)
+                    row.key
+                ) ?? false)
                 : true;
 
             const handleRowToggle = (checked: boolean) => {
@@ -262,11 +265,10 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
                         <div className="header-title">
                             {group.label}
                             <i
-                                className={`adminfont-${
-                                    isOpen
+                                className={`adminfont-${isOpen
                                         ? 'keyboard-arrow-down'
                                         : 'pagination-right-arrow'
-                                }`}
+                                    }`}
                             />
                         </div>
                     </div>
