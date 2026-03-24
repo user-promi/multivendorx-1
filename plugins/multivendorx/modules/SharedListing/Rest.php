@@ -62,15 +62,15 @@ class Rest {
 
         if ( empty( $existing_map_id ) ) {
             $map_data = array(
-                    $original_id,
-                    $duplicate_id,
-                );
+				$original_id,
+				$duplicate_id,
+			);
 
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->insert(
                 $table,
                 array(
-                    'product_map' => maybe_serialize($map_data),
+                    'product_map' => maybe_serialize( $map_data ),
                 ),
                 array( '%s' )
             );

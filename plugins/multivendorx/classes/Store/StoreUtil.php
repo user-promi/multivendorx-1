@@ -674,7 +674,7 @@ class StoreUtil {
         $start_date = ! empty( $args['start_date'] ) ? $args['start_date'] : null;
         $end_date   = ! empty( $args['end_date'] ) ? $args['end_date'] : null;
 
-        $query  = "
+        $query = "
             SELECT COUNT(DISTINCT user_id) as total
             FROM {$table_name}
             WHERE store_id = %d
@@ -683,7 +683,7 @@ class StoreUtil {
         $params = array( $store_id );
 
         if ( $start_date && $end_date ) {
-            $query   .= " AND created BETWEEN %s AND %s";
+            $query   .= ' AND created BETWEEN %s AND %s';
             $params[] = $start_date;
             $params[] = $end_date;
         }
@@ -777,6 +777,7 @@ class StoreUtil {
      * Uses the Haversine formula to calculate distance between
      * the provided latitude/longitude and store coordinates
      * stored in store meta.
+     *
      * @param float  $lat    Latitude of the search origin.
      * @param float  $lng    Longitude of the search origin.
      * @param float  $radius Search radius distance.

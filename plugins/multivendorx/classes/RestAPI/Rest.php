@@ -645,117 +645,117 @@ class Rest {
      * @param bool             $creating True if the product is being created; false if updating.
      */
     public function generate_sku_data_in_product( $product, $request, $creating ) {
-        if (!defined('REST_REQUEST')) {
+        if ( ! defined( 'REST_REQUEST' ) ) {
             return;
         }
 
         $referer = $_SERVER['HTTP_REFERER'] ?? '';
-        $path = parse_url($referer, PHP_URL_PATH);
-        if (strpos($path, 'products') == false) {
+        $path    = parse_url( $referer, PHP_URL_PATH );
+        if ( strpos( $path, 'products' ) == false ) {
             return;
         }
 
         $old_status = $product->get_status();
-        $new_status = $request->get_param('status');
+        $new_status = $request->get_param( 'status' );
 
         $store = new Store( get_post_meta( $product->get_id(), Utill::POST_META_SETTINGS['store_id'], true ) );
-        if ($creating && $new_status == 'pending') {
+        if ( $creating && $new_status == 'pending' ) {
             do_action(
                 'multivendorx_notify_product_submitted',
                 'product_submitted',
                 array(
-                    'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-                    'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-                    'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-                    'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                    'admin_email'  => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
+                    'admin_phone'  => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
+                    'store_phone'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
+                    'store_email'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
                     'product_name' => $product->get_name(),
-                    'category'    => 'activity',
+                    'category'     => 'activity',
                 )
             );
         }
 
-        if ($old_status == 'pending' && $new_status == 'publish') {
+        if ( $old_status == 'pending' && $new_status == 'publish' ) {
             do_action(
                 'multivendorx_notify_product_approved',
                 'product_approved',
                 array(
-                    'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-                    'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-                    'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-                    'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                    'admin_email'  => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
+                    'admin_phone'  => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
+                    'store_phone'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
+                    'store_email'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
                     'product_name' => $product->get_name(),
-                    'category'    => 'activity',
+                    'category'     => 'activity',
                 )
             );
         }
 
-        if ($old_status == 'publish' && $new_status == 'draft') {
+        if ( $old_status == 'publish' && $new_status == 'draft' ) {
             do_action(
                 'multivendorx_notify_product_rejected',
                 'product_rejected',
                 array(
-                    'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-                    'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-                    'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-                    'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                    'admin_email'  => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
+                    'admin_phone'  => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
+                    'store_phone'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
+                    'store_email'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
                     'product_name' => $product->get_name(),
-                    'category'    => 'activity',
+                    'category'     => 'activity',
                 )
             );
         }
-        if (($old_status == 'pending' || $old_status =='draft') && $new_status == 'publish') {
+        if ( ( $old_status == 'pending' || $old_status == 'draft' ) && $new_status == 'publish' ) {
             $followers = $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] ?? array();
-            foreach($followers as $follower) {
-                $user = get_user_by('id', $follower['id']);
+            foreach ( $followers as $follower ) {
+                $user = get_user_by( 'id', $follower['id'] );
                 do_action(
                     'multivendorx_notify_store_new_product_to_followers',
                     'store_new_product_to_followers',
                     array(
                         'customer_email' => $user->user_email,
                         'customer_phone' => get_user_meta( $follower['id'], 'billing_phone', true ),
-                        'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                        'customer_name' => $user->display_name,
-                        'product_name' => $product->get_name(),
-                        'category'    => 'notification',
+                        'store_name'     => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'customer_name'  => $user->display_name,
+                        'product_name'   => $product->get_name(),
+                        'category'       => 'notification',
                     )
                 );
             }
         }
 
-        if ( !$creating ) {
+        if ( ! $creating ) {
             $this->multivendorx_save_generated_sku( $product );
         }
     }
 
     public function send_notifications( $coupon, $request ) {
-        if (!defined('REST_REQUEST')) {
+        if ( ! defined( 'REST_REQUEST' ) ) {
             return;
         }
 
         $referer = $_SERVER['HTTP_REFERER'] ?? '';
-        $path = parse_url($referer, PHP_URL_PATH);
-        if (strpos($path, 'coupons') == false) {
+        $path    = parse_url( $referer, PHP_URL_PATH );
+        if ( strpos( $path, 'coupons' ) == false ) {
             return;
         }
 
         $old_status = get_post_status( $coupon->get_id() );
-        $new_status = $request->get_param('status');
+        $new_status = $request->get_param( 'status' );
 
         $store = new Store( get_post_meta( $coupon->get_id(), Utill::POST_META_SETTINGS['store_id'], true ) );
-        if (($old_status == 'pending' || $old_status =='draft') && $new_status == 'publish') {
+        if ( ( $old_status == 'pending' || $old_status == 'draft' ) && $new_status == 'publish' ) {
             $followers = $store->meta_data[ Utill::STORE_SETTINGS_KEYS['followers'] ] ?? array();
-            foreach($followers as $follower) {
-                $user = get_user_by('id', $follower['id']);
+            foreach ( $followers as $follower ) {
+                $user = get_user_by( 'id', $follower['id'] );
                 do_action(
                     'multivendorx_notify_store_new_coupon_to_followers',
                     'store_new_coupon_to_followers',
                     array(
                         'customer_email' => $user->user_email,
                         'customer_phone' => get_user_meta( $follower['id'], 'billing_phone', true ),
-                        'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                        'customer_name' => $user->display_name,
-                        'coupon_code' => $coupon->get_code(),
-                        'category'    => 'notification',
+                        'store_name'     => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+                        'customer_name'  => $user->display_name,
+                        'coupon_code'    => $coupon->get_code(),
+                        'category'       => 'notification',
                     )
                 );
             }

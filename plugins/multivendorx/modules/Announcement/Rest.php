@@ -289,7 +289,7 @@ class Rest extends \WP_REST_Controller {
                 );
             }
 
-            return rest_ensure_response( $this->prepare_item_for_response( $post,$request ) );
+            return rest_ensure_response( $this->prepare_item_for_response( $post, $request ) );
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
 
@@ -323,7 +323,7 @@ class Rest extends \WP_REST_Controller {
         }
 
         try {
-            $data   = $request->get_params();
+            $data = $request->get_params();
             /**
              * ----------------------------------------------------------
              *  BULK UPDATE

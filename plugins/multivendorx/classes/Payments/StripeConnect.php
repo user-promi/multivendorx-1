@@ -119,11 +119,11 @@ class StripeConnect {
                     ),
                 ),
                 array(
-                    'key'        => 'redirect_url',
-                    'type'       => 'copy-to-clipboard',
-                    'label'      => __( 'Redirect url', 'multivendorx' ),
-                    'text'    => $redirect_url,
-                    'desc'      => __( 'Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx' ),
+                    'key'   => 'redirect_url',
+                    'type'  => 'copy-to-clipboard',
+                    'label' => __( 'Redirect url', 'multivendorx' ),
+                    'text'  => $redirect_url,
+                    'desc'  => __( 'Copy this URL and add it to your Stripe dashboard as a redirect URL.', 'multivendorx' ),
                 ),
             ),
         );
@@ -141,13 +141,13 @@ class StripeConnect {
             $store             = new Store( $store_id );
             $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );
             $fields            = array(
-                   array(
-                    'key'             => 'registration_page',
-                    'type'            => 'notice',
-                    'message'         => __( '<b>Stripe Status:</b> ' . ( $stripe_account_id ? 'Connected' : 'Not Connected' ), 'multivendorx' ),
-                    'noticeType'      => $stripe_account_id ? 'success' : 'error',
-                    'displayPosition' => 'notice',
-                ),                
+				array(
+					'key'             => 'registration_page',
+					'type'            => 'notice',
+					'message'         => __( '<b>Stripe Status:</b> ' . ( $stripe_account_id ? 'Connected' : 'Not Connected' ), 'multivendorx' ),
+					'noticeType'      => $stripe_account_id ? 'success' : 'error',
+					'displayPosition' => 'notice',
+				),
             );
 
             if ( ! is_admin() ) {
