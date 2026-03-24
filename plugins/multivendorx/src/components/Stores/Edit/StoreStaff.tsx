@@ -81,7 +81,6 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 			}
 		});
 	};
-
 	return (
 		<>
 			<Container>
@@ -94,30 +93,19 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 								type="multi-select"
 								value={formData.store_owners || []}
 								size="20rem"
-								onChange={(
-									selected: StoreOwner[] | string[] | string
-								) => {
-									const storeOwnersArray = Array.isArray(
-										selected
-									)
-										? selected
-										: selected
-											? [selected]
+								onChange={(store_owners: string | string[]) => {
+									const ownersArray = Array.isArray(store_owners)
+										? store_owners
+										: store_owners
+											? [store_owners]
 											: [];
-
-									const store_owners = storeOwnersArray.map(
-										(option: StoreOwner | string) =>
-											typeof option === 'object' &&
-											option !== null
-												? option.value
-												: String(option)
-									);
 
 									const updated = {
 										...formData,
-										store_owners,
+										store_owners: ownersArray,
 										state: '',
 									};
+
 									setFormData(updated);
 									autoSave(updated);
 								}}
@@ -160,26 +148,14 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 									name="primary_owner"
 									options={appLocalizer?.store_owners || []}
 									value={formData.primary_owner}
-									onChange={(
-										newValue: StoreOwner | string | null
-									) => {
-										if (
-											!newValue ||
-											Array.isArray(newValue)
-										) {
-											return;
-										}
-
-										const primaryOwnerValue =
-											typeof newValue === 'object' &&
-											newValue !== null
-												? newValue.value
-												: String(newValue);
+									onChange={(primary_owner: string | string[]) => {
+										if (Array.isArray(primary_owner)) return;
 
 										const updated = {
 											...formData,
-											primary_owner: primaryOwnerValue,
+											primary_owner: primary_owner || '',
 										};
+
 										setFormData(updated);
 										autoSave(updated);
 									}}

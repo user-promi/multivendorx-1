@@ -296,109 +296,25 @@ class Stores extends \WP_REST_Controller {
                 $args['order_by'] = sanitize_text_field( $order_by );
                 $args['order']    = sanitize_text_field( $request->get_param( 'order' ) );
             }
+            $lat    = $request->get_param( 'location_lat' );
+            $lng    = $request->get_param( 'location_lng' );
+            $radius = $request->get_param( 'radius_max' );
+            $unit   = $request->get_param( 'radius_unit' );
+            if ( ! empty( $lat ) && ! empty( $lng ) && ! empty( $radius ) ) {
+                $store_ids = StoreUtil::get_stores_by_radius(
+                    floatval( $lat ),
+                    floatval( $lng ),
+                    floatval( $radius ),
+                    $unit
+                );
 
-            // Advanced filters.
-            $filter_flag = $request->get_param( 'filters' );
-
-            if ( ! empty( $filter_flag ) ) {
-                $args['order_by'] = $request->get_param( 'sort' ) ?? $args['order_by'] ?? '';
-                $args['order']    = $request->get_param( 'order' ) ?? '';
-
-				$lat    = $request->get_param( 'location_lat' ) !== null ? $request->get_param( 'location_lat' ) : 0;
-				$lng    = $request->get_param( 'location_lng' ) !== null ? $request->get_param( 'location_lng' ) : 0;
-				$radius = $request->get_param( 'distance' ) !== null ? $request->get_param( 'distance' ) : 0;
-				$unit   = $request->get_param( 'miles' ) !== null ? $request->get_param( 'miles' ) : 'km';
-
-                switch ( $unit ) {
-                    case 'miles':
-                        $earth_radius = 3959;
-                        break;
-                    case 'nm':
-                        $earth_radius = 3440;
-                        break;
-                    default:
-                        $earth_radius = 6371;
-                }
-
-                $limit  = $request->get_param( 'limit' );
-                $offset = $request->get_param( 'offset' );
-
-                if ( ! empty( $limit ) ) {
-                    $args['limit'] = absint( $limit );
-                }
-
-                if ( ! empty( $offset ) ) {
-                    $args['offset'] = absint( $offset );
-                }
-
-                // Category filter.
-                $category = $request->get_param( 'category' );
-                if ( ! empty( $category ) ) {
-                    $product_ids = wc_get_products(
-                        array(
-                            'return'      => 'ids',
-                            'numberposts' => -1,
-                            'tax_query'   => array(// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-                                array(
-                                    'taxonomy' => 'product_cat',
-                                    'field'    => 'term_id',
-                                    'terms'    => $category,
-                                ),
-                            ),
-                        )
-                    );
-
-                    $store_ids = array_unique(
-                        array_filter(
-                            array_map(
-                                fn( $pid ) => get_post_meta(
-                                    $pid,
-                                    Utill::POST_META_SETTINGS['store_id'],
-                                    true
-                                ),
-                                $product_ids
-                            )
-                        )
-                    );
-
+                if ( !empty( $store_ids ) ) {
                     $args['ID'] = $store_ids;
-                }
-
-                // Product filter.
-                $product = $request->get_param( 'product' );
-                if ( ! empty( $product ) ) {
-                    $args['ID'] = get_post_meta(
-                        $product,
-                        Utill::POST_META_SETTINGS['store_id'],
-                        true
-                    );
                 }
             }
             // Fetch & format stores.
             $stores = StoreUtil::get_store_information( $args );
 
-            if ( $lat && $lng && $radius ) {
-                $stores = array_filter(
-                    $stores,
-                    function ( $store ) use ( $lat, $lng, $radius, $earth_radius ) {
-						$store_id   = (int) $store['ID'];
-						$store_meta = Store::get_store( $store_id );
-						$store_lat  = $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['location_lat'] ] ?? 0.00;
-						$store_lng  = $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['location_lng'] ] ?? 0.00;
-						if ( ! $store_lat || ! $store_lng ) {
-							return false;
-						}
-						$delta_latitude  = deg2rad( $store_lat - $lat );
-						$delta_longitude = deg2rad( $store_lng - $lng );
-						$haversine       = sin( $delta_latitude / 2 ) ** 2 +
-                        cos( deg2rad( $lat ) ) * cos( deg2rad( $store_lat ) ) *
-                        sin( $delta_longitude / 2 ) ** 2;
-						$distance        = $earth_radius * ( 2 * atan2( sqrt( $haversine ), sqrt( 1 - $haversine ) ) );
-						return $distance <= $radius;
-					}
-                );
-                $stores = array_values( $stores );
-            }
             $formatted_stores = array();
             foreach ( $stores as $store ) {
                 $store_id           = (int) $store['ID'];
@@ -788,6 +704,8 @@ class Stores extends \WP_REST_Controller {
             $fetch_user    = $request->get_param( 'fetch_user' );
             $dashboard     = $request->get_param( 'dashboard' );
             $registrations = (bool) $request->get_header( 'registrations' );
+            $start_date    = $request->get_param( 'start_date' );
+            $end_date      = $request->get_param( 'end_date' );
 
             if ( $id && 'switch' === $action ) {
                 update_user_meta(
@@ -830,8 +748,13 @@ class Stores extends \WP_REST_Controller {
                     StoreUtil::get_store_registration_form( $store->get_id() )
                 );
             }
+            $args = array();
 
-            $commission = CommissionUtil::get_commission_summary_for_store( $id );
+            if ( $start_date && $end_date ) {
+                $args['start_date'] = $start_date;
+                $args['end_date']   = $end_date;
+            }
+            $commission = CommissionUtil::get_commission_summary_for_store( $id,false,false,3,$args );
 
             $primary_owner_id   = StoreUtil::get_primary_owner( $id );
             $primary_owner_info = $primary_owner_id
@@ -839,21 +762,29 @@ class Stores extends \WP_REST_Controller {
                 : null;
 
             if ( $dashboard ) {
-                if ( get_transient( 'multivendorx_dashboard_data_' . $id ) ) {
-                    return get_transient( 'multivendorx_dashboard_data_' . $id );
+                $transient_key = Utill::MULTIVENDORX_TRANSIENT_KEYS['dashboard_transient'];
+
+                $date_range_label = $args['start_date'] . '_' . $args['end_date'];
+
+                $cached_data = get_transient( $transient_key ) ?: [];
+                $cached_data[$id] = $cached_data[$id] ?? [];
+
+                if ( isset( $cached_data[$id][$date_range_label] ) ) {
+                    return rest_ensure_response( $cached_data[$id][$date_range_label] );
                 }
 
-                $visitors = StoreUtil::get_store_visitors( $id );
+                $visitors = StoreUtil::get_store_visitors( $id, $args );
 
-                $response = array(
+                $response = [
                     'id'                 => $store->get_id(),
                     'name'               => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                     'commission'         => $commission,
                     'primary_owner_info' => $primary_owner_info,
                     'visitors'           => $visitors,
-                );
+                ];
 
-                set_transient( 'multivendorx_dashboard_data_' . $id, $response, DAY_IN_SECONDS );
+                $cached_data[$id][$date_range_label] = $response;
+                set_transient( $transient_key, $cached_data, DAY_IN_SECONDS );
 
                 return rest_ensure_response( $response );
             }

@@ -181,7 +181,7 @@ class Frontend {
             $tabs['singleproductmultistore'] = array(
                 'title'    => __( 'More Offers', 'multivendorx' ),
                 'priority' => 50,
-                'callback' => array( $this, 'woocommerce_product_spmv_tab' ),
+                'callback' => array( $this, 'woocommerce_product_more_offers_tab' ),
             );
         }
         return $tabs;
@@ -191,7 +191,7 @@ class Frontend {
 	 *
 	 * @return void
 	 */
-	public function woocommerce_product_spmv_tab() {
+	public function woocommerce_product_more_offers_tab() {
         global $product, $wpdb;
 
         $table = $wpdb->prefix . Utill::TABLES['products_map'];

@@ -117,6 +117,7 @@ class Transactions extends \WP_REST_Controller {
                 $request->get_param( 'start_date' ),
                 $request->get_param( 'end_date' )
 			);
+
 			$ids                = $request->get_param( 'ids' );
 			$sec_fetch_site     = $request->get_header( 'sec_fetch_site' );
 			$referer            = $request->get_header( 'referer' );
@@ -152,7 +153,6 @@ class Transactions extends \WP_REST_Controller {
 			if ( $ids ) {
 				$args['id'] = $ids;
 			}
-
 			$transactions = Transaction::get_transaction_information( $args );
 			$formatted    = array_map(
                 function ( $row ) {
