@@ -153,7 +153,6 @@ class Transactions extends \WP_REST_Controller {
 			if ( $ids ) {
 				$args['id'] = $ids;
 			}
-file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: args: " . var_export($args, true) . "\n", FILE_APPEND);
 			$transactions = Transaction::get_transaction_information( $args );
 			$formatted    = array_map(
                 function ( $row ) {
