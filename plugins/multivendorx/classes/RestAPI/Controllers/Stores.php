@@ -762,23 +762,29 @@ class Stores extends \WP_REST_Controller {
                 : null;
 
             if ( $dashboard ) {
-                $transient_key = Utill::MULTIVENDORX_TRANSIENT_KEYS['dashboard_transient'] . $id . '_' . implode('_', [$args['start_date'], $args['end_date']]);
+                $transient_key = Utill::MULTIVENDORX_TRANSIENT_KEYS['dashboard_transient'];
 
-                if ( get_transient( $transient_key ) ) {
-                    return get_transient( $transient_key );
+                $date_range_label = $args['start_date'] . '_' . $args['end_date'];
+
+                $cached_data = get_transient( $transient_key ) ?: [];
+                $cached_data[$id] = $cached_data[$id] ?? [];
+
+                if ( isset( $cached_data[$id][$date_range_label] ) ) {
+                    return rest_ensure_response( $cached_data[$id][$date_range_label] );
                 }
 
                 $visitors = StoreUtil::get_store_visitors( $id, $args );
 
-                $response = array(
+                $response = [
                     'id'                 => $store->get_id(),
                     'name'               => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
                     'commission'         => $commission,
                     'primary_owner_info' => $primary_owner_info,
                     'visitors'           => $visitors,
-                );
+                ];
 
-                set_transient( $transient_key, $response, DAY_IN_SECONDS );
+                $cached_data[$id][$date_range_label] = $response;
+                set_transient( $transient_key, $cached_data, DAY_IN_SECONDS );
 
                 return rest_ensure_response( $response );
             }
