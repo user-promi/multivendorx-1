@@ -5,21 +5,21 @@ interface TooltipProps {
     text: string;
     children: React.ReactNode;
     position?: 'top' | 'bottom';
-    withArrow?: boolean;
-    className?: string;
+    withOutArrow?: boolean;
+    className?: string;  // hidden (opacity 0)
 }
 
 const Tooltip: React.FC<TooltipProps> = ({
     text,
     children,
     position = 'top',
-    withArrow = true,
+    withOutArrow = false,
     className = '',
 }) => {
     return (
         <div
             className={`tooltip-wrapper ${position} ${
-                withArrow ? 'with-arrow' : ''
+                withOutArrow ? 'with-out-arrow' : ''
             } ${className}`}
         >
             {children}

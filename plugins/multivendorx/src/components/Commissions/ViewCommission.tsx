@@ -228,41 +228,40 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 		>
 			<div className="content multi">
 				<div className="section left">
-					<div className="vendor-details">
-						<div className="name">
-							{storeData?.id ? (
-								<a
-									href={`${appLocalizer.site_url.replace(
-										/\/$/,
-										''
-									)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
-										storeData.id
-									}`}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="store-link"
-								>
-									{storeData.name}
-								</a>
-							) : (
-								(storeData?.name ?? '-')
-							)}
-						</div>
-						<div className="details">
-							{storeData?.email && (
-								<div className="email">
-									<i className="adminfont-mail"></i>
-									<b>{__('Email:', 'multivendorx')}</b>{' '}
-									{storeData.email.split(/\s*[\n,]\s*/)[0]}
-								</div>
-							)}
-						</div>
+					<div className="title">
+						{storeData?.id ? (
+							<a
+								href={`${appLocalizer.site_url.replace(
+									/\/$/,
+									''
+								)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
+									storeData.id
+								}`}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="store-link"
+							>
+								{storeData.name}
+							</a>
+						) : (
+							(storeData?.name ?? '-')
+						)}
+					</div>
+					<div className="details">
+						{storeData?.email && (
+							<div className="desc">
+								<i className="adminfont-mail"></i>
+								<b>{__('Email:', 'multivendorx')}</b>{' '}
+								{storeData.email.split(/\s*[\n,]\s*/)[0]}
+							</div>
+						)}
 					</div>
 
 					<SectionUI title={__('Order Details', 'multivendorx')} />
 					<TableCard
 						headers={popupColumns}
 						rows={orderItems}
+						showMenu={false}
 						currency={{
 							currencySymbol: appLocalizer.currency_symbol,
 							priceDecimals: appLocalizer.price_decimals,
@@ -324,11 +323,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							row
 							label={__('Order Status', 'multivendorx')}
 						>
-							<span className="admin-badge blue">
+							<span className={`admin-badge badge-${orderData?.status}`}>
 								{orderData?.status
 									? orderData.status
 											.replace(/^wc-/, '') // remove 'wc-' prefix if exists
-											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/[-_]/g, ' ') // replace underscores with spaces
 											.replace(/\b\w/g, (c) =>
 												c.toUpperCase()
 											) // capitalize first letter of each word

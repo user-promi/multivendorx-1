@@ -18,7 +18,7 @@ interface Item {
     onReject?: (item: Item) => void;
     desc?: string;
     value?: string;
-    className?: string; // notification | checklist | feature-list | mini-card | price-list | documentation | badge-list
+    className?: string; // notification | checklist | feature-list | mini-card | price-list | documentation | badge-list 
 }
 
 interface ItemListUIProps {
@@ -28,7 +28,6 @@ interface ItemListUIProps {
     border?: boolean;
     onItemClick?: (item: Item) => void;
 }
-
 export const ItemListUI: React.FC<ItemListUIProps> = ({
     items,
     background,
@@ -36,8 +35,10 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
     className,
     onItemClick,
 }) => {
+    const [isExpanded, setIsExpanded] = React.useState( className === 'price-list');
+
     return (
-        <div className={`item-list ${className || 'default'}`}>
+        <div className={`item-list ${className || 'default'} ${ isExpanded ? 'expanded' : ''}`}>
             {items &&
                 items.map((item) => {
                     const handleClick = (e: React.MouseEvent) => {
@@ -49,7 +50,6 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                             onItemClick(item);
                         }
                     };
-
                     return (
                         <React.Fragment key={item.id}>
                             {item.link ? (
@@ -58,11 +58,9 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                                     target={
                                         item.targetBlank ? '_blank' : '_self'
                                     }
-                                    className={`item ${
-                                        background ? 'background' : ''
-                                    } ${border ? 'border' : ''} ${
-                                        item.className || ''
-                                    }`}
+                                    className={`item ${background ? 'background' : ''
+                                        } ${border ? 'border' : ''} ${item.className || ''
+                                        }`}
                                     onClick={handleClick}
                                 >
                                     {item.icon && (
@@ -74,11 +72,9 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                                 </a>
                             ) : (
                                 <div
-                                    className={`item ${
-                                        background ? 'background' : ''
-                                    } ${border ? 'border' : ''} ${
-                                        item.className || ''
-                                    }`}
+                                    className={`item ${background ? 'background' : ''
+                                        } ${border ? 'border' : ''} ${item.className || ''
+                                        }`}
                                     onClick={() => {
                                         item.action?.(item);
                                         if (onItemClick) {
@@ -141,6 +137,25 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                         </React.Fragment>
                     );
                 })}
+            {className === 'price-list' && (
+                    <span
+                        className="more-btn"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsExpanded((prev) => !prev);
+                        }}
+                    >
+                        {isExpanded ? (
+                            <>
+                                More <i className="adminfont-arrow-down" />
+                            </>
+                        ) : (
+                            <>
+                                Less <i className="adminfont-arrow-up" />
+                            </>
+                        )}
+                    </span>
+                )}
         </div>
     );
 };

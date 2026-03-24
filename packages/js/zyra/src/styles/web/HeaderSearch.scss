@@ -8,18 +8,25 @@
   background: $background-white;
   position: relative;
 
-  .search-action{
+  .search-action {
     background: $theme-background-color;
   }
+
   .search-section {
     display: flex;
     align-items: center;
+    padding-left: 0.5rem;
 
     i {
       font-size: 1.25rem;
       color: $theme-color;
       padding-right: 0.5rem;
 
+    }
+
+    input {
+      padding-left: 0;
+      background: none;
     }
 
     input,
@@ -137,20 +144,5 @@
     overflow: auto;
     box-shadow: $box-shadow;
     border-radius: $border-radius-small;
-  }
-}
-
-.search-section {
-  display: flex;
-  align-items: center;
-  padding-left: 0.5rem;
-
-  i {
-    font-size: 1.25rem;
-  }
-
-  input {
-    padding-left: 0;
-    background: none;
   }
 }

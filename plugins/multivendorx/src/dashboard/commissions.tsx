@@ -16,6 +16,7 @@ import ViewCommission from './viewCommission';
 import {
 	dashNavigate,
 	downloadCSV,
+	formatCurrency,
 	formatLocalDate,
 } from '../services/commonFunction';
 import { useNavigate } from 'react-router-dom';
@@ -46,6 +47,7 @@ const StoreCommission: React.FC = () => {
 	const headers = {
 		id: {
 			label: __('ID', 'multivendorx'),
+			type: 'id',
 			isSortable: true,
 			render: (row) => (
 				<span
@@ -62,6 +64,7 @@ const StoreCommission: React.FC = () => {
 			isSortable: true,
 			render: (row) => (
 				<span
+					className="link-item"
 					onClick={() =>
 						dashNavigate(navigate, [
 							'orders',
@@ -72,6 +75,7 @@ const StoreCommission: React.FC = () => {
 				>
 					#{row.order_id}
 				</span>
+				
 			),
 		},
 		total_order_amount: {
@@ -81,30 +85,40 @@ const StoreCommission: React.FC = () => {
 		},
 		commission_summary: {
 			label: __('Commission Summary', 'multivendorx'),
+			width: 20,
 			render: (row) => (
 				<ItemListUI
-					className="feature-list"
-					items={Object.entries(row)
-						.filter(([key]) =>
-							[
-								'store_earning',
-								'shipping_amount',
-								'tax_amount',
-								'gateway_fee',
-								'marketplace_commission',
-							].includes(key)
-						)
-						.map(([key, val]) => ({
-							icon: 'adminfont-commissions',
-							title: key
-								.split('_')
-								.map(
-									(w) =>
-										w.charAt(0).toUpperCase() + w.slice(1)
-								)
-								.join(' '),
-							desc: val,
-						}))}
+					className="price-list"
+					items={[
+						{
+							title: 'Store Earning',
+							value: formatCurrency(row.store_earning),
+						},
+						{
+							title: 'Shipping Amount',
+							value: '+' + formatCurrency(row.shipping_amount),
+						},
+						{
+							title: 'Tax Amount',
+							value: '+' + formatCurrency(row.tax_amount),
+						},
+						{
+							title: 'Gateway Fee',
+							value: '-' + formatCurrency(row.gateway_fee),
+						},
+						{
+							title: 'Marketplace Commission',
+							value: '-' + formatCurrency(row.marketplace_commission),
+						},
+						{
+							title: 'Store Discount',
+							value: '-' + formatCurrency(row.store_discount),
+						},
+						{
+							title: 'Admin Discount',
+							value: formatCurrency(row.admin_discount),
+						},
+					]}
 				/>
 			),
 			csvDisplay: false,
@@ -187,7 +201,7 @@ const StoreCommission: React.FC = () => {
 						count:
 							Number(
 								response.headers[
-									'x-wp-status-partially-refunded'
+								'x-wp-status-partially-refunded'
 								]
 							) || 0,
 					},
