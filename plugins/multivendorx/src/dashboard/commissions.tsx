@@ -303,13 +303,6 @@ const StoreCommission: React.FC = () => {
 					'Details of commissions earned by your store for every order, including order amount, commission rate and payout status.',
 					'multivendorx'
 				)}
-				buttons={[
-					{
-						label: __('Export', 'multivendorx'),
-						icon: 'export',
-						// onClick: handleExportAll
-					},
-				]}
 			/>
 
 			<TableCard
