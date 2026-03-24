@@ -151,6 +151,7 @@ const PendingCoupons: React.FC<object> = () => {
 							{
 								icon: 'close',
 								text: __('Reject', 'multivendorx'),
+								color: 'red',
 								onClick: () =>
 									handleSingleAction('reject', row.id),
 							},

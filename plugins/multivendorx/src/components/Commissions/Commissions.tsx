@@ -16,6 +16,7 @@ import {
 import ViewCommission from './ViewCommission';
 import {
 	downloadCSV,
+	formatCurrency,
 	formatLocalDate,
 	getUrl,
 } from '../../services/commonFunction';
@@ -114,28 +115,36 @@ const Commission: React.FC = () => {
 			render: (row) => (
 				<ItemListUI
 					className="price-list"
-					items={Object.entries(row)
-						.filter(([key]) =>
-							[
-								'store_earning',
-								'shipping_amount',
-								'tax_amount',
-								'gateway_fee',
-								'marketplace_commission',
-								'store_discount',
-								'admin_discount',
-							].includes(key)
-						)
-						.map(([key, val]) => ({
-							title: key
-								.split('_')
-								.map(
-									(w) =>
-										w.charAt(0).toUpperCase() + w.slice(1)
-								)
-								.join(' '),
-							value: val,
-						}))}
+					items={[
+						{
+							title: 'Store Earning',
+							value: formatCurrency(row.store_earning),
+						},
+						{
+							title: 'Shipping Amount',
+							value: '+' + formatCurrency(row.shipping_amount),
+						},
+						{
+							title: 'Tax Amount',
+							value: '+' + formatCurrency(row.tax_amount),
+						},
+						{
+							title: 'Gateway Fee',
+							value: '-' + formatCurrency(row.gateway_fee),
+						},
+						{
+							title: 'Marketplace Commission',
+							value: '-' + formatCurrency(row.marketplace_commission),
+						},
+						{
+							title: 'Store Discount',
+							value: '-' + formatCurrency(row.store_discount),
+						},
+						{
+							title: 'Admin Discount',
+							value: formatCurrency(row.admin_discount),
+						},
+					]}
 				/>
 			),
 			csvDisplay: false,

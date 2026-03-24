@@ -131,6 +131,7 @@ const PendingStores: React.FC<object> = () => {
 							{
 								icon: 'close',
 								text: __('Declined', 'multivendorx'),
+								color: 'red',
 								onClick: () =>
 									handleSingleAction('declined', row.id),
 							},

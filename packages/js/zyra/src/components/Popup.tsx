@@ -97,7 +97,7 @@ export const PopupUI = forwardRef<HTMLDivElement, PopupProps>(
                 ref={wrapperRef}
             >
                 {toggleIcon && (
-                    <Tooltip text={tooltipName} position="bottom">
+                    <Tooltip text={tooltipName} position="bottom"  className={open ? 'hidden' : ''}>
                         <i
                             onClick={handleToggle}
                             className={`popup-icon adminfont-${toggleIcon}`}
