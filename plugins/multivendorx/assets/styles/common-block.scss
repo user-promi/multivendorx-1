@@ -232,9 +232,9 @@
                     display: flex;
                     gap: 1rem;
 
-                    &::before {
-                        display: none;
-                    }
+                    // &::before {
+                    //     display: none;
+                    // }
 
                     .type-product {
                         margin: 0;
@@ -313,9 +313,9 @@
         height: 25rem;
     }
 }
-.stores-list-edit-panel .store-products{
-    display: none;
-}
+// .stores-list-edit-panel .store-products{
+//     display: none;
+// }
 // map end
 
 // store list end

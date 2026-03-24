@@ -286,7 +286,6 @@ const Dashboard = () => {
 	const store_dashboard_logo =
 		appLocalizer.settings_databases_value['appearance']
 			?.store_dashboard_site_logo || '';
-
 	const availableStores = appLocalizer.store_ids.filter((store) => {
 		return appLocalizer.store_id
 			? store.id !== String(appLocalizer.store_id)
@@ -338,7 +337,7 @@ const Dashboard = () => {
 			>
 				<div className="logo-wrapper">
 					{store_dashboard_logo ? (
-						<img src={store_dashboard_logo} alt="Site Logo" />
+						<img src={store_dashboard_logo.url} alt="Site Logo" />
 					) : (
 						<span className="site-name">
 							{isMenuCollapsed && isMenuMinmize
