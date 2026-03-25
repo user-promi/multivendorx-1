@@ -11,6 +11,7 @@ import React, {
 // Internal dependencies
 import '../styles/web/EmailsInput.scss';
 import { BasicInputUI } from './BasicInput';
+import { FieldComponent } from './fieldUtils';
 
 export interface EmailsInputProps {
     mode?: 'single' | 'multiple';
@@ -22,7 +23,7 @@ export interface EmailsInputProps {
     onChange?: (emails: string[], primary: string) => void;
 }
 
-const EmailsInput = forwardRef<HTMLInputElement, EmailsInputProps>(
+const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
     (
         {
             mode = 'multiple',
@@ -202,5 +203,29 @@ const EmailsInput = forwardRef<HTMLInputElement, EmailsInputProps>(
         );
     }
 );
+
+
+const EmailsInput: FieldComponent = {
+    render: ({ field, value, onChange }) => (
+        <EmailsInputUI
+            mode={field.mode}
+            max={field.max}
+            value={value?.emails || []}
+            primary={value?.primary || ''}
+            enablePrimary={field.enablePrimary}
+            placeholder={field.placeholder}
+            onChange={(emails, primary) =>
+                onChange?.({
+                    emails,
+                    primary,
+                })
+            }
+        />
+    ),
+
+    validate: () => {
+        return null;
+    },
+};
 
 export default EmailsInput;
