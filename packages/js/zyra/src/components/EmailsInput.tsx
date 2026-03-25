@@ -20,7 +20,7 @@ export interface EmailsInputProps {
     primary?: string;
     enablePrimary?: boolean;
     placeholder?: string;
-    onChange?: (emails: string[], primary: string) => void;
+    onChange?: (list: string[], primary: string) => void;
 }
 
 export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
@@ -36,7 +36,7 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
         },
         ref
     ) => {
-        const [emails, setEmails] = useState<string[]>(value);
+        const [list, setlist] = useState<string[]>(value);
         const [primaryEmail, setPrimaryEmail] = useState<string>(
             enablePrimary ? primary : ''
         );
@@ -45,11 +45,11 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
         const inputRef = useRef<HTMLInputElement>(null);
 
         const isMultiple = mode === 'multiple';
-        const hasEmail = emails.length > 0;
+        const hasEmail = list.length > 0;
 
         // Sync with parent props
         useEffect(() => {
-            setEmails(value);
+            setlist(value);
         }, [value]);
 
         useEffect(() => {
@@ -70,14 +70,14 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
                 if (
                     !email ||
                     !isValidEmail(email) ||
-                    emails.includes(email) ||
-                    (max && emails.length >= max)
+                    list.includes(email) ||
+                    (max && list.length >= max)
                 ) {
                     return;
                 }
 
-                const updated = [...emails, email];
-                setEmails(updated);
+                const updated = [...list, email];
+                setlist(updated);
 
                 let newPrimary = primaryEmail;
 
@@ -90,7 +90,7 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
                 onChange?.(updated, newPrimary);
             },
             [
-                emails,
+                list,
                 max,
                 isValidEmail,
                 enablePrimary,
@@ -102,16 +102,16 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
 
         const removeEmail = useCallback(
             (email: string) => {
-                const updated = emails.filter((e) => e !== email);
+                const updated = list.filter((e) => e !== email);
 
                 if (enablePrimary && primaryEmail === email) {
                     setPrimaryEmail(updated[0] || '');
                 }
 
-                setEmails(updated);
+                setlist(updated);
                 onChange?.(updated, enablePrimary ? updated[0] || '' : '');
             },
-            [emails, primaryEmail, enablePrimary, onChange]
+            [list, primaryEmail, enablePrimary, onChange]
         );
 
         const togglePrimary = useCallback(
@@ -120,9 +120,9 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
                     return;
                 }
                 setPrimaryEmail(email);
-                onChange?.(emails, email);
+                onChange?.(list, email);
             },
-            [enablePrimary, isMultiple, emails, onChange]
+            [enablePrimary, isMultiple, list, onChange]
         );
 
         const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -139,14 +139,14 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
             !isInputReadOnly &&
             trimmedInput &&
             isValidEmail(trimmedInput) &&
-            (!isMultiple || !emails.includes(trimmedInput));
+            (!isMultiple || !list.includes(trimmedInput));
 
         return (
             <div
                 className="emails-section"
                 onClick={() => !isInputReadOnly && inputRef.current?.focus()}
             >
-                {emails.map((email) => (
+                {list.map((email) => (
                     <div
                         className={`email ${
                             enablePrimary && primaryEmail === email
@@ -210,13 +210,13 @@ const EmailsInput: FieldComponent = {
         <EmailsInputUI
             mode={field.mode}
             max={field.max}
-            value={value?.emails || []}
+            value={value?.list || []}
             primary={value?.primary || ''}
             enablePrimary={field.enablePrimary}
             placeholder={field.placeholder}
-            onChange={(emails, primary) =>
+            onChange={(list, primary) =>
                 onChange?.({
-                    emails,
+                    list,
                     primary,
                 })
             }
