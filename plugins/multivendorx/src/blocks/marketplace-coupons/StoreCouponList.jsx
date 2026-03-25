@@ -30,6 +30,7 @@ const StoreCouponList = ({
 	perPage = 10,
 	orderby = 'date',
 	order = 'DESC',
+	storeId,
 	isPreview = false,
 }) => {
 	const [coupons, setCoupons] = useState([]);
@@ -63,6 +64,10 @@ const StoreCouponList = ({
 			meta_key: 'multivendorx_store_id',
 		};
 
+		if(storeId){
+			params.value = storeId;
+		}
+		
 		if (couponList?.storeDetails?.storeId) {
 			params.value = couponList.storeDetails.storeId;
 		}

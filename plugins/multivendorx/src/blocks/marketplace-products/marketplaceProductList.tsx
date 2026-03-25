@@ -18,6 +18,7 @@ interface MarketplaceProductListProps {
 	operator?: string;
 	product_visibility?: string;
 	store_id?: string;
+	storeId?: string|number;
 }
 
 const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
@@ -27,6 +28,7 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 	category = '',
 	operator = 'IN',
 	product_visibility = '',
+	storeId,
 }) => {
 	const [products, setProducts] = useState<Product[]>([]);
 	const [page, setPage] = useState(1);
@@ -48,6 +50,10 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 			product_visibility,
 			meta_key: 'multivendorx_store_id',
 		};
+
+		if (storeId) {
+			params.value = storeId;
+		}
 
 		if (productList?.storeDetails?.storeId) {
 			params.value = productList.storeDetails.storeId;
