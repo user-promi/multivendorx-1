@@ -451,72 +451,158 @@ const EditStore = () => {
 										/>
 									</PopupUI>
 								</div>
-								<div className="details-wrapper">
-									<div className="left-section">
-										<div className="store-logo">
-											{data?.image ? (
-												<img src={data.image} alt="" />
-											) : (
-												<div className="placeholder-400x400" />
+
+								<div className="logo-wrapper">
+									<div className="store-logo">
+										{data?.image ? (
+											<img src={data.image} alt="" />
+										) : (
+											<div className="placeholder-400x400" />
+										)}
+										<PopupUI
+											position="menu-dropdown"
+											tooltipName={__(
+												'Logo',
+												'multivendorx'
 											)}
-											<PopupUI
-												position="menu-dropdown"
-												tooltipName={__(
-													'Logo',
+											toggleIcon="edit theme-background"
+										>
+											<ItemListUI
+												items={[
+													{
+														id: 'upload',
+														title: __(
+															'Upload',
+															'multivendorx'
+														),
+														icon: 'cloud-upload',
+														action: (
+															item,
+															e
+														) => {
+															e?.stopPropagation();
+															runUploader(
+																'image'
+															);
+														},
+													},
+													{
+														id: 'delete',
+														title: __(
+															'Delete',
+															'multivendorx'
+														),
+														icon: 'delete',
+														className: 'delete',
+														action: (
+															item,
+															e
+														) => {
+															e?.stopPropagation();
+															const updated =
+															{
+																...data,
+																image: '',
+															};
+															setData(
+																updated
+															);
+															autoSave(
+																updated
+															);
+														},
+													},
+												]}
+											/>
+										</PopupUI>
+									</div>
+
+									<div className="tag-wrapper">
+										{data.status === 'active' ? (
+											<span className="status admin-badge green">
+												{__(
+													'Active',
 													'multivendorx'
 												)}
-												toggleIcon="edit theme-background"
-											>
-												<ItemListUI
-													items={[
-														{
-															id: 'upload',
-															title: __(
-																'Upload',
-																'multivendorx'
-															),
-															icon: 'cloud-upload',
-															action: (
-																item,
-																e
-															) => {
-																e?.stopPropagation();
-																runUploader(
-																	'image'
-																);
-															},
-														},
-														{
-															id: 'delete',
-															title: __(
-																'Delete',
-																'multivendorx'
-															),
-															icon: 'delete',
-															className: 'delete',
-															action: (
-																item,
-																e
-															) => {
-																e?.stopPropagation();
-																const updated =
-																{
-																	...data,
-																	image: '',
-																};
-																setData(
-																	updated
-																);
-																autoSave(
-																	updated
-																);
-															},
-														},
-													]}
-												/>
-											</PopupUI>
-										</div>
+											</span>
+										) : data.status ===
+											'pending' ? (
+											<span className="status admin-badge yellow">
+												{__(
+													'Pending',
+													'multivendorx'
+												)}
+											</span>
+										) : data.status ===
+											'rejected' ? (
+											<span className="status admin-badge red">
+												{__(
+													'Rejected',
+													'multivendorx'
+												)}
+											</span>
+										) : data.status ===
+											'suspended' ? (
+											<span className="status admin-badge blue">
+												{__(
+													'Suspended',
+													'multivendorx'
+												)}
+											</span>
+										) : data.status ===
+											'permanently_rejected' ? (
+											<span className="status admin-badge red">
+												{__(
+													'Permanently Rejected',
+													'multivendorx'
+												)}
+											</span>
+										) : data.status ===
+											'under_review' ? (
+											<span className="status admin-badge yellow">
+												{__(
+													'Under Review',
+													'multivendorx'
+												)}
+											</span>
+										) : data.status ===
+											'deactivated' ? (
+											<span className="status admin-badge red">
+												{__(
+													'Permanently Deactivated',
+													'multivendorx'
+												)}
+											</span>
+										) : (
+											<Skeleton width={100} />
+										)}
 
+										{modules.includes(
+											'marketplace-compliance'
+										) && (
+												<>
+													<div className="admin-badge green">
+														<i className="adminfont-store-inventory"></i>
+														{__('Gold Plan', 'multivendorx')}
+													</div>
+													<div className="admin-badge blue">
+														<i className="adminfont-geo-my-wp"></i>
+														{__('On Vacation', 'multivendorx')}
+													</div>
+													<div className="admin-badge yellow">
+														<i className="adminfont-staff-manager"></i>
+														{__('Closed', 'multivendorx')}
+													</div>
+													<div className="admin-badge yellow">
+														<i className="adminfont-staff-manager"></i>
+														{__('Complained', 'multivendorx')}
+													</div>
+												</>
+											)}
+									</div>
+								</div>
+								<div className="details-wrapper">
+									<div className="left-section">
 										<div className="details">
 											<div className="heading">
 												<div
@@ -775,96 +861,12 @@ const EditStore = () => {
 											</div>
 
 											<div className="desc store-info">
-													<i className="adminfont-user-circle"></i>
-													<b> Primary Owner: </b> Store1
-												</div>
+												<i className="adminfont-user-circle"></i>
+												<b> Primary Owner: </b> Store1
+											</div>
 										</div>
 									</div>
 									<div className="right-section">
-										<div className="tag-wrapper">
-											{data.status === 'active' ? (
-												<span className="status admin-badge green">
-													{__(
-														'Active',
-														'multivendorx'
-													)}
-												</span>
-											) : data.status ===
-												'pending' ? (
-												<span className="status admin-badge yellow">
-													{__(
-														'Pending',
-														'multivendorx'
-													)}
-												</span>
-											) : data.status ===
-												'rejected' ? (
-												<span className="status admin-badge red">
-													{__(
-														'Rejected',
-														'multivendorx'
-													)}
-												</span>
-											) : data.status ===
-												'suspended' ? (
-												<span className="status admin-badge blue">
-													{__(
-														'Suspended',
-														'multivendorx'
-													)}
-												</span>
-											) : data.status ===
-												'permanently_rejected' ? (
-												<span className="status admin-badge red">
-													{__(
-														'Permanently Rejected',
-														'multivendorx'
-													)}
-												</span>
-											) : data.status ===
-												'under_review' ? (
-												<span className="status admin-badge yellow">
-													{__(
-														'Under Review',
-														'multivendorx'
-													)}
-												</span>
-											) : data.status ===
-												'deactivated' ? (
-												<span className="status admin-badge red">
-													{__(
-														'Permanently Deactivated',
-														'multivendorx'
-													)}
-												</span>
-											) : (
-												<Skeleton width={100} />
-											)}
-
-											{modules.includes(
-												'marketplace-compliance'
-											) && (
-													<>
-														<div className="admin-badge green">
-															<i className="adminfont-store-inventory"></i>
-															{__('Gold Plan', 'multivendorx')}
-														</div>
-														<div className="admin-badge blue">
-															<i className="adminfont-geo-my-wp"></i>
-															{__('On Vacation', 'multivendorx')}
-														</div>
-														<div className="admin-badge yellow">
-															<i className="adminfont-staff-manager"></i>
-															{__('Closed', 'multivendorx')}
-														</div>
-														<div className="admin-badge yellow">
-															<i className="adminfont-staff-manager"></i>
-															{__('Complained', 'multivendorx')}
-														</div>
-													</>
-												)}
-										</div>
-
 										{modules.includes(
 											'store-review'
 										) && (
@@ -912,11 +914,11 @@ const EditStore = () => {
 										<div className="details-box">
 											<div className="details">
 												<div className="number"><i className="adminfont-single-product blue"></i> 15</div>
-												<div className="desc">Product</div>
+												<div className="desc">Products</div>
 											</div>
 											<div className="details">
 												<div className="number"><i className="adminfont-order pink"></i> 15</div>
-												<div className="desc">Order</div>
+												<div className="desc">Orders</div>
 											</div>
 										</div>
 									</div>

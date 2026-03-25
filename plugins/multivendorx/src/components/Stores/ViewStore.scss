@@ -71,6 +71,48 @@
         z-index: 99;
     }
 
+    .logo-wrapper {
+        padding: 0 1.5rem;
+        margin-top: -2.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+
+        .store-logo {
+            min-width: 3.5rem;
+            width: 3.5rem;
+            padding: 0.5rem;
+            height: 3.5rem;
+            box-shadow: 0 0.125rem 0.5rem 0 #423e4e1f;
+
+            background: $background-white;
+            border-radius: $border-radius-small;
+            z-index: 1;
+            position: relative;
+
+            // edit logo section
+            .popup {
+                right: -0.5rem;
+                bottom: -0.5rem;
+
+                .popup-content {
+                    left: 0;
+                }
+            }
+
+            img {
+                width: 100%;
+            }
+        }
+
+        .tag-wrapper {
+            display: flex;
+            gap: 0.625rem;
+            justify-content: end;
+            margin-bottom: -0.625rem;
+        }
+    }
+
     .details-wrapper {
         display: flex;
         justify-content: space-between;
@@ -80,35 +122,7 @@
             display: flex;
             gap: 1rem;
             width: 70%;
-            margin-top: -4rem;
             flex-direction: column;
-
-            .store-logo {
-                min-width: 3.5rem;
-                width: 3.5rem;
-                padding: 0.5rem;
-                height: 3.5rem;
-                box-shadow: 0 0.125rem 0.5rem 0 #423e4e1f;
-                
-                background: $background-white;
-                border-radius: $border-radius-small;
-                z-index: 1;
-                position: relative;
-
-                // edit logo section
-                .popup {
-                    right: -0.5rem;
-                    bottom: -0.5rem;
-
-                    .popup-content {
-                        left: 0;
-                    }
-                }
-
-                img {
-                    width: 100%;
-                }
-            }
 
             .read-more-btn {
                 margin-left: 0.5rem;
@@ -188,11 +202,9 @@
         }
 
         .right-section {
-            .tag-wrapper {
-                display: flex;
-                gap: 0.625rem;
-                justify-content: end;
-            }
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
 
             .reviews-wrapper {
                 padding-top: 0.85rem;
@@ -328,21 +340,18 @@
     padding-top: 0.85rem;
 
     .details {
-        padding: 0.65rem;
+        padding: 0.65rem 1rem;
         width: 4rem;
-        text-align: end;
         font-size: 1.313rem;
         font-weight: 500;
         line-height: 1;
         border-radius: $border-radius-small;
-        border: $border-light-small;
+        background: #fff4ff;
 
-        .number{
+        .number {
             padding-bottom: 0.313rem;
-            display: flex;
-            justify-content: space-between;
 
-            i{
+            i {
                 color: $theme-color;
             }
         }
