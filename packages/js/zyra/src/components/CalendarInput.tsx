@@ -23,7 +23,7 @@ interface CalendarInputProps {
     showInput?: boolean;
     numberOfMonths?: number;
     fullYear?: boolean;
-    maxFutureMonths?: number; // New prop: number of months from today
+    maxFutureMonths?: number;
     showCompare?: boolean;
 }
 
@@ -298,6 +298,7 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
                             className= 'rmdp-input'
                             onFocus={openCalendar}
                             readOnly
+                            name="calendar-input"
                             value={getDisplayValue()}
                         />
                     )}
@@ -325,8 +326,8 @@ const CalendarInput: FieldComponent = {
             fullYear={field.fullYear}
             value={value}
             onChange={onChange}
-            maxFutureMonths={field.maxFutureMonths} // Pass the new prop
-            showCompare={field.showCompare} // Pass the new prop
+            maxFutureMonths={field.maxFutureMonths}
+            showCompare={field.showCompare}
         />
     ),
 };
