@@ -95,7 +95,7 @@ class Frontend {
         $primary_ids = array();
 
         $table = $wpdb->prefix . Utill::TABLES['products_map'];
-        $limit = apply_filters( 'multivendorx_shared_listing_product_map_query_limit', 10000 );
+        $limit = apply_filters( 'multivendorx_shared_listing_product_map_query_limit', 100 );
         /* phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared */
         $query = $wpdb->prepare( "SELECT product_map FROM {$table} LIMIT %d", $limit );
         $maps  = $wpdb->get_results( $query );

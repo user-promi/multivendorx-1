@@ -150,6 +150,12 @@ class Block {
             'slug'  => 'multivendorx-store-shop',
             'title' => 'MultiVendorX Store Page Builder',
         );
+
+        $categories[] = array(
+            'slug'  => 'multivendorx-shortcodes',
+            'title' => 'MultiVendorX Shortcodes',
+        );
+        
         return $categories;
     }
 
