@@ -295,7 +295,7 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
                     placeholder={format}
                     render={(value, openCalendar) => (
                         <input
-                            className={inputClass}
+                            className= 'rmdp-input'
                             onFocus={openCalendar}
                             readOnly
                             value={getDisplayValue()}
