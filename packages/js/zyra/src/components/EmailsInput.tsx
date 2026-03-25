@@ -36,7 +36,7 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
         },
         ref
     ) => {
-        const [list, setlist] = useState<string[]>(value);
+        const [list, setList] = useState<string[]>(value);
         const [primaryEmail, setPrimaryEmail] = useState<string>(
             enablePrimary ? primary : ''
         );
@@ -49,7 +49,7 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
 
         // Sync with parent props
         useEffect(() => {
-            setlist(value);
+            setList(value);
         }, [value]);
 
         useEffect(() => {
@@ -77,7 +77,7 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
                 }
 
                 const updated = [...list, email];
-                setlist(updated);
+                setList(updated);
 
                 let newPrimary = primaryEmail;
 
@@ -108,7 +108,7 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
                     setPrimaryEmail(updated[0] || '');
                 }
 
-                setlist(updated);
+                setList(updated);
                 onChange?.(updated, enablePrimary ? updated[0] || '' : '');
             },
             [list, primaryEmail, enablePrimary, onChange]
