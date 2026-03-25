@@ -80,6 +80,8 @@
             display: flex;
             gap: 1rem;
             width: 70%;
+            margin-top: -4rem;
+            flex-direction: column;
 
             .store-logo {
                 min-width: 3.5rem;
@@ -87,7 +89,7 @@
                 padding: 0.5rem;
                 height: 3.5rem;
                 box-shadow: 0 0.125rem 0.5rem 0 #423e4e1f;
-                margin-top: -4rem;
+                
                 background: $background-white;
                 border-radius: $border-radius-small;
                 z-index: 1;
@@ -327,7 +329,7 @@
 
     .details {
         padding: 0.65rem;
-        width: 18%;
+        width: 4rem;
         text-align: end;
         font-size: 1.313rem;
         font-weight: 500;
