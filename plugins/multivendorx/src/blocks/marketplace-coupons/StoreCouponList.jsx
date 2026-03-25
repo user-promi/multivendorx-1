@@ -27,7 +27,7 @@ const previewCoupons = [
 	},
 ];
 const StoreCouponList = ({
-	perPage = 10,
+	perPage = 5,
 	orderby = 'date',
 	order = 'DESC',
 	storeId,

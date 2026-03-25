@@ -23,7 +23,7 @@ registerBlockType('multivendorx/marketplace-coupons', {
 	attributes: {
 		perPage: {
 			type: 'number',
-			default: 10,
+			default: 5,
 		},
 		orderby: {
 			type: 'string',
@@ -90,7 +90,7 @@ registerBlockType('multivendorx/marketplace-coupons', {
 							value={attributes.perPage}
 							onChange={(value) =>
 								setAttributes({
-									perPage: parseInt(value, 10) || 10,
+									perPage: parseInt(value, 10) || 5,
 								})
 							}
 						/>

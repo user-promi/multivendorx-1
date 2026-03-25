@@ -22,7 +22,7 @@ interface MarketplaceProductListProps {
 }
 
 const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
-	perPage = 12,
+	perPage = 5,
 	orderby = 'title',
 	order = 'asc',
 	category = '',
