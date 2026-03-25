@@ -758,18 +758,26 @@ const EditStore = () => {
 													></i>
 												</span>
 											</div>
-											<div className="desc store-info">
-												<i className="adminfont-form-phone"></i>
-												Registered since 2020
+
+											<div className="contact-info">
+												<div className="desc store-info">
+													<i className="adminfont-form-phone"></i>
+													Registered since 2020
+												</div>
+												<div className="desc store-info">
+													<i className="adminfont-form-phone"></i>
+													9874563135
+												</div>
+												<div className="desc store-info">
+													<i className="adminfont-mail"></i>
+													test@gmail.com
+												</div>
 											</div>
+
 											<div className="desc store-info">
-												<i className="adminfont-form-phone"></i>
-												9874563135
-											</div>
-											<div className="desc store-info">
-												<i className="adminfont-mail"></i>
-												test@gmail.com
-											</div>
+													<i className="adminfont-user-circle"></i>
+													<b> Primary Owner: </b> Store1
+												</div>
 										</div>
 									</div>
 									<div className="right-section">
@@ -901,34 +909,16 @@ const EditStore = () => {
 												</div>
 											)}
 
-										<Column row>
-											<ItemListUI
-												className="mini-card"
-												background
-												items={[
-													{
-														title: __('No of Product', 'multivendorx'),
-														desc: __(
-															'5',
-															'multivendorx'
-														)
-													},
-												]}
-											/>
-											<ItemListUI
-												className="mini-card"
-												background
-												items={[
-													{
-														title: __('No of Order', 'multivendorx'),
-														desc: __(
-															'56',
-															'multivendorx'
-														)
-													},
-												]}
-											/>
-										</Column>
+										<div className="details-box">
+											<div className="details">
+												<div className="number"><i className="adminfont-single-product blue"></i> 15</div>
+												<div className="desc">Product</div>
+											</div>
+											<div className="details">
+												<div className="number"><i className="adminfont-order pink"></i> 15</div>
+												<div className="desc">Order</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

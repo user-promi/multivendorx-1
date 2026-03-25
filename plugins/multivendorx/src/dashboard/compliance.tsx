@@ -78,11 +78,26 @@ const Compliance = (React.FC = () => {
                                     message={__('3 of your products are missing descriptions or have low-quality images. Fix them to avoid listing suspension.', 'multivendorx')}
                                 />
                             </Card>
+                            <Card 
+                                title={__('Product Authenticity Certificates', 'multivendorx')} 
+                                desc={__('Each product listing must have at least one clear image and an accurate description matching the actual item being sold.', 'multivendorx')}
+                                action={
+                                    <>
+                                        <span className="admin-badge red">Incomplete</span>
+                                    </>
+                                }
+                            >
+                                <Notice
+                                    type="info"
+                                    displayPosition="notice"
+                                    message={__('3 of your products are missing descriptions or have low-quality images. Fix them to avoid listing suspension.', 'multivendorx')}
+                                />
+                            </Card>
                         </Column>
 
                         <Column grid={6}>
                             <Card 
-                            title={__('Product Images & Descriptions', 'multivendorx')} 
+                            title={__('Product Authenticity Certificates', 'multivendorx')} 
                                 desc={__('Each product listing must have at least one clear image and an accurate description matching the actual item being sold.', 'multivendorx')}
                                 action={
                                     <>

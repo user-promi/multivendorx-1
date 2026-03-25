@@ -119,9 +119,11 @@
 
             .details {
                 width: 100%;
-                .heading{
+
+                .heading {
                     display: flex;
                 }
+
                 .name {
                     display: flex;
                     gap: 0.5rem;
@@ -159,11 +161,13 @@
                     opacity: 0;
                     transition: all 0.4s ease;
                 }
-                .storefront-link{
+
+                .storefront-link {
                     display: flex;
                     align-items: end;
                     gap: 0.313rem;
                 }
+
                 .store-name:hover,
                 .des:hover,
                 .storefront-link:hover {
@@ -173,6 +177,12 @@
                     }
                 }
             }
+
+            .contact-info {
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
         }
 
         .right-section {
@@ -181,9 +191,12 @@
                 gap: 0.625rem;
                 justify-content: end;
             }
-            .reviews-wrapper{
+
+            .reviews-wrapper {
                 padding-top: 0.85rem;
+                justify-content: end;
             }
+
             .status-wrapper {
                 display: flex;
                 gap: 0.5rem;
@@ -294,13 +307,43 @@
     }
 }
 
-.store-info{
+.store-info {
     margin-bottom: 0.5rem;
     display: flex;
     gap: 0.5rem;
 
-    i{
+    i {
         font-size: 1.063rem;
         color: $theme-color;
     }
+}
+
+
+.details-box {
+    display: flex;
+    gap: 0.625rem;
+    justify-content: end;
+    padding-top: 0.85rem;
+
+    .details {
+        padding: 0.65rem;
+        width: 18%;
+        text-align: end;
+        font-size: 1.313rem;
+        font-weight: 500;
+        line-height: 1;
+        border-radius: $border-radius-small;
+        border: $border-light-small;
+
+        .number{
+            padding-bottom: 0.313rem;
+            display: flex;
+            justify-content: space-between;
+
+            i{
+                color: $theme-color;
+            }
+        }
+    }
+
 }
