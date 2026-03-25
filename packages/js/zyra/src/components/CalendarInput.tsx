@@ -301,7 +301,7 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
                             value={getDisplayValue()}
                         />
                     )}
-                    />
+                />
             ) : (
                 <Calendar
                     className={`calendar-wrapper ${
