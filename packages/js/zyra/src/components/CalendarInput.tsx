@@ -109,6 +109,21 @@ const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format }) => {
 
     const lastMonthEnd = endOfMonth(lastMonthStart);
 
+    const startOfQuarter = (date: Date) => {
+        const month = date.getMonth();
+        const quarterStartMonth = Math.floor(month / 3) * 3;
+        return new Date(date.getFullYear(), quarterStartMonth, 1);
+    };
+
+    const startOfYear = (date: Date) => {
+        return new Date(date.getFullYear(), 0, 1);
+    };
+
+    const weekToDateStart = startOfWeek(now);
+    const monthToDateStart = startOfMonth(now);
+    const quarterToDateStart = startOfQuarter(now);
+    const yearToDateStart = startOfYear(now);
+
     return (
         <div className="range-picker-wrapper">
             <div onClick={() => apply([now])}>Today</div>
@@ -126,6 +141,22 @@ const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format }) => {
             </div>
             <div onClick={() => apply([lastMonthStart, lastMonthEnd])}>
                 Last Month
+            </div>
+
+            <div onClick={() => apply([weekToDateStart, now])}>
+                Week to date
+            </div>
+
+            <div onClick={() => apply([monthToDateStart, now])}>
+                Month to date
+            </div>
+
+            <div onClick={() => apply([quarterToDateStart, now])}>
+                Quarter to date
+            </div>
+
+            <div onClick={() => apply([yearToDateStart, now])}>
+                Year to date
             </div>
         </div>
     );
