@@ -21,12 +21,32 @@ defined( 'ABSPATH' ) || exit;
  * @author      MultiVendorX
  */
 class Dokan {
+    /**
+     * Constructor.
+     *
+     * Initializes the migration process by running vendor,
+     * product, and order/commission migrations.
+     *
+     * @return void
+     */
     public function __construct() {
         $this->migrate_vendors();
         $this->migrate_products();
         $this->migrate_orders_and_commissions();
     }
-
+	/**
+	 * Migrate Dokan vendors to MultiVendorX stores.
+	 *
+	 * This method:
+	 * - Retrieves users with the `seller` role.
+	 * - Converts their role to `store_owner`.
+	 * - Creates a corresponding store entry.
+	 * - Assigns the user as the primary store owner.
+	 * - Migrates vendor profile data such as address, phone, banner, and logo
+	 *   into the MultiVendorX store meta.
+	 *
+	 * @return void
+	 */
     public function migrate_vendors() {
         $vendors = get_users(
             array(
@@ -122,7 +142,15 @@ class Dokan {
             }
         }
     }
-
+	/**
+	 * Migrate products to associate them with MultiVendorX stores.
+	 *
+	 * Retrieves all WooCommerce products and checks the author of each product.
+	 * If the author has the `seller` role, the product is linked to the vendor's
+	 * active store by updating the store ID in the product meta.
+	 *
+	 * @return void
+	 */
     public function migrate_products() {
         $products = wc_get_products(
             array(
@@ -143,13 +171,30 @@ class Dokan {
             }
         }
     }
-
+	/**
+	 * Migrate orders, commissions, and transactions from Dokan to MultiVendorX.
+	 *
+	 * This method performs the following operations:
+	 * - Reads order records from the Dokan orders table.
+	 * - Creates corresponding commission entries in the MultiVendorX commission table.
+	 * - Updates WooCommerce order meta with store and commission references.
+	 * - Removes legacy Dokan order metadata.
+	 * - Migrates vendor balance records into the MultiVendorX transaction table
+	 *   (commission, withdrawal, and refund transactions).
+	 *
+	 * Note: This migration directly queries Dokan database tables and inserts
+	 * records into MultiVendorX custom tables.
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 *
+	 * @return void
+	 */
     public function migrate_orders_and_commissions() {
         global $wpdb;
         $table      = $wpdb->prefix . 'dokan_orders';
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];
 
-        $dokan_orders = $wpdb->get_results( "SELECT * FROM {$table}" );
+        $dokan_orders = $wpdb->get_results( "SELECT * FROM {$table}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
         foreach ( $dokan_orders as $row ) {
             $order_id = $row->order_id;
@@ -199,31 +244,29 @@ class Dokan {
             $order->save();
         }
 
-        $balance_table = $wpdb->prefix . 'dokan_vendor_balance';
-        $dokan_vendor_balances = $wpdb->get_results( "SELECT * FROM {$balance_table}" );
-
+        $balance_table         = $wpdb->prefix . 'dokan_vendor_balance';
+        $dokan_vendor_balances = $wpdb->get_results( "SELECT * FROM {$balance_table}" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         foreach ( $dokan_vendor_balances as $row ) {
             $order_id = $row->trn_id;
             $order    = wc_get_order( $order_id );
-            $store_id  = get_user_meta( $row->vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+            $store_id = get_user_meta( $row->vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
 
-            if ($row->debit > 0) {
-                $entry_type = 'Cr';
+            if ( $row->debit > 0 ) {
+                $entry_type       = 'Cr';
                 $transaction_type = 'Commission';
-                $amount = $row->debit;
-            } 
-            
-            if ($row->credit > 0 && $row->trn_type == 'dokan_withdraw') {
-                $entry_type = 'Dr';
-                $transaction_type = 'Withdraw';
-                $amount = $row->credit;
-            } 
+                $amount           = $row->debit;
+            }
+			if ( $row->credit > 0 && 'dokan_withdraw' === $row->trn_type ) {
+				$entry_type       = 'Dr';
+				$transaction_type = 'Withdraw';
+				$amount           = $row->credit;
+			}
 
-            if ($row->credit > 0 && $row->trn_type == 'dokan_refund') {
-                $entry_type = 'Dr';
-                $transaction_type = 'Refund';
-                $amount = $row->credit;
-            } 
+			if ( $row->credit > 0 && 'dokan_refund' === $row->trn_type ) {
+				$entry_type       = 'Dr';
+				$transaction_type = 'Refund';
+				$amount           = $row->credit;
+			}
 
             $data = array(
                 'store_id'         => (int) $store_id,
@@ -233,7 +276,7 @@ class Dokan {
                 'transaction_type' => $transaction_type,
                 'amount'           => (float) $amount,
                 'currency'         => $order->get_currency(),
-                'payment_method'    =>$order->get_payment_method(),
+                'payment_method'   => $order->get_payment_method(),
                 'narration'        => $row->perticulars,
                 'status'           => 'Completed',
             );

@@ -69,7 +69,7 @@ const EditBlock = (props) => {
 						value={attributes.perpage}
 						onChange={(value) =>
 							setAttributes({
-								perpage: parseInt(value, 12) || 12,
+								perpage: parseInt(value, 12) || 5,
 							})
 						}
 					/>
@@ -108,7 +108,7 @@ registerBlockType('multivendorx/marketplace-stores', {
 		orderby: { type: 'string', default: 'name' },
 		order: { type: 'string', default: 'asc' },
 		category: { type: 'string', default: '' },
-		perpage: { type: 'number', default: 12 },
+		perpage: { type: 'number', default: 5 },
 		showMap: { type: 'boolean', default: true },
 	},
 
