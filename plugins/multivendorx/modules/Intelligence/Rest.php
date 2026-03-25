@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\RestAPI\Controllers;
+namespace MultiVendorX\Intelligence;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,9 +14,9 @@ defined( 'ABSPATH' ) || exit;
  *
  * REST controller for AI Assistant operations.
  *
- * @package MultiVendorX\RestAPI\Controllers
+ * @package MultiVendorX\Intelligence
  */
-class AI extends \WP_REST_Controller {
+class Rest extends \WP_REST_Controller {
 
     /**
      * Route Base.

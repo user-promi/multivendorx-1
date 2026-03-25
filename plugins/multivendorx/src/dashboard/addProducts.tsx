@@ -18,6 +18,7 @@ import {
 	PopupUI,
 	ButtonInputUI,
 	SectionUI,
+	Notice,
 } from 'zyra';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';

@@ -17,7 +17,6 @@ use MultiVendorX\RestAPI\Controllers\Notifications;
 use MultiVendorX\RestAPI\Controllers\Transactions;
 use MultiVendorX\RestAPI\Controllers\Tour;
 use MultiVendorX\RestAPI\Controllers\Logs;
-use MultiVendorX\RestAPI\Controllers\AI;
 use MultiVendorX\RestAPI\Controllers\Tracking;
 
 use MultiVendorX\Store\Store;
@@ -808,7 +807,6 @@ class Rest {
             'notifications'     => new Notifications(),
             'tour'              => new Tour(),
             'logs'              => new Logs(),
-            'ai_assistant'      => new AI(),
             'import_dummy_data' => new ImportDummyData(),
             'Tracking'          => new Tracking(),
         );
