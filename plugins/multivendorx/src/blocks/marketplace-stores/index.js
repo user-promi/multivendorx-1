@@ -101,7 +101,7 @@ registerBlockType('multivendorx/marketplace-stores', {
 	apiVersion: 2,
 	title: __('Stores List', 'multivendorx'),
 	icon: 'store',
-	category: 'multivendorx',
+	category: 'multivendorx-shortcodes',
 	supports: { html: false },
 
 	attributes: {
