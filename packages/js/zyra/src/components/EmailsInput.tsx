@@ -23,7 +23,7 @@ export interface EmailsInputProps {
     onChange?: (emails: string[], primary: string) => void;
 }
 
-const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
+export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
     (
         {
             mode = 'multiple',
