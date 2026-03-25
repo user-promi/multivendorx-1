@@ -24,6 +24,7 @@ interface CalendarInputProps {
     numberOfMonths?: number;
     fullYear?: boolean;
     maxFutureMonths?: number; // New prop: number of months from today
+    showCompare?: boolean;
 }
 
 const convertToDateObjectRange = (
@@ -140,6 +141,7 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
     numberOfMonths = 1,
     fullYear,
     maxFutureMonths, // New prop
+    showCompare = false,
 }) => {
     const pickerRef = useRef<DatePickerRef>(null);
     const maxDate = calculateMaxDate(maxFutureMonths);
@@ -212,6 +214,47 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
         fullYear,
     };
 
+    const getPrevYearDate = (date: Date) => {
+        const d = new Date(date);
+        d.setFullYear(d.getFullYear() - 1);
+        return d;
+    };
+
+    const formatDate = (date: Date) => {
+        const d = date instanceof Date ? date : new Date(date);
+
+        return d.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+        });
+    };
+
+    const getDisplayValue = () => {
+        if (!value?.startDate) return '';
+
+        const start = value.startDate;
+        const end = value.endDate || value.startDate;
+
+        const isSameDay = start === end;
+
+        const currentText = isSameDay
+            ? formatDate(start)
+        : `${formatDate(start)} ~ ${formatDate(end)}`;
+
+        if (!showCompare) return currentText;
+
+        const prevStart = getPrevYearDate(start);
+        const prevEnd = getPrevYearDate(end);
+
+        const prevText = isSameDay
+            ? formatDate(prevStart)
+        : `${formatDate(prevStart)} ~ ${formatDate(prevEnd)}`;
+
+
+        return `${currentText}  vs ${prevText}`;
+    };
+
     return (
         <div className="settings-calender">
             {showInput ? (
@@ -219,7 +262,15 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
                     {...commonProps}
                     className={inputClass}
                     placeholder={format}
-                />
+                    render={(value, openCalendar) => (
+                        <input
+                            className={inputClass}
+                            onFocus={openCalendar}
+                            readOnly
+                            value={getDisplayValue()}
+                        />
+                    )}
+                    />
             ) : (
                 <Calendar
                     className={`calendar-wrapper ${
@@ -244,6 +295,7 @@ const CalendarInput: FieldComponent = {
             value={value}
             onChange={onChange}
             maxFutureMonths={field.maxFutureMonths} // Pass the new prop
+            showCompare={field.showCompare} // Pass the new prop
         />
     ),
 };
