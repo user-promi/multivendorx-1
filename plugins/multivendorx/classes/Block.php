@@ -39,7 +39,14 @@ class Block {
         // Localize in frontend.
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
     }
-
+    /**
+     * Get the list of initialized blocks.
+     *
+     * If the blocks have not been initialized yet, this method calls
+     * `initialize_blocks()` to populate them.
+     *
+     * @return array List of blocks.
+     */
     public function get_blocks() {
         if ( is_null( $this->blocks ) ) {
             $this->blocks = $this->initialize_blocks();
@@ -155,7 +162,7 @@ class Block {
             'slug'  => 'multivendorx-shortcodes',
             'title' => 'MultiVendorX Shortcodes',
         );
-        
+
         return $categories;
     }
 

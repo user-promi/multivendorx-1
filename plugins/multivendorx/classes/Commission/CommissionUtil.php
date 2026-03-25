@@ -319,9 +319,8 @@ class CommissionUtil {
             $params[] = $args['end_date'];
         }
 
-        $result = $wpdb->get_row(
-            $wpdb->prepare( $query, $params )
-        );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+        $result = $wpdb->get_row( $wpdb->prepare( $query, $params ) );
 
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
 			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
