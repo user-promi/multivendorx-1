@@ -238,7 +238,9 @@ const AddProduct = () => {
 						</div>
 					</div>
 				))}
-			<Notice type="error" validity="lifetime" displayPosition="notice" message={errorMsg} />
+			{errorMsg &&
+				<Notice type="error" validity="lifetime" displayPosition="notice" message={errorMsg} />
+			}
 			<NavigatorHeader
 				headerTitle={__('Add Product', 'multivendorx')}
 				headerDescription={__(

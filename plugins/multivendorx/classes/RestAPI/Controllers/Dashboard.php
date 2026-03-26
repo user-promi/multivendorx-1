@@ -269,6 +269,12 @@ class Dashboard extends \WP_REST_Controller {
                 ),
                 'capability' => array( 'read_products' ),
             ),
+            'compliance'       => array(
+                'name'       => 'Compliance',
+                'slug'       => 'compliance',
+                'icon'       => 'coupon',
+                'capability' => array( 'read_products' ),
+            ),
         );
 
         $saved_endpoints = MultiVendorX()->setting->get_setting( 'menu_manager' );
