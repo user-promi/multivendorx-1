@@ -13,6 +13,8 @@ interface AiButtonSectionProps {
     modules: string[];
 }
 
+const AI_STORAGE_KEY = 'mvx_ai_product_suggestions';
+
 const AiButtonSection: React.FC<AiButtonSectionProps> = ({
     product,
     setProduct,
@@ -34,6 +36,37 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
     const handleCloseForm = () => setgenerateAi(false);
     const generatedAiClose = () => setgeneratedAi(false);
 
+    /* ---------------- LOCAL STORAGE HELPERS ---------------- */
+
+    const getStoredSuggestions = () => {
+        const allData = localStorage.getItem(AI_STORAGE_KEY);
+        if (!allData) return null;
+
+        const parsed = JSON.parse(allData);
+        return parsed[product?.id || 'new-product'] || null;
+    };
+
+    const saveSuggestions = (data) => {
+        const allData = localStorage.getItem(AI_STORAGE_KEY);
+        const parsed = allData ? JSON.parse(allData) : {};
+
+        parsed[product?.id || 'new-product'] = data;
+
+        localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(parsed));
+    };
+
+    const removeStoredSuggestions = () => {
+        const allData = localStorage.getItem(AI_STORAGE_KEY);
+        if (!allData) return;
+
+        const parsed = JSON.parse(allData);
+        delete parsed[product?.id || 'new-product'];
+
+        localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(parsed));
+    };
+
+    /* ---------------- AI BUTTON REGISTER ---------------- */
+
     useEffect(() => {
         const filterName = 'multivendorx/add-ai-button';
 
@@ -45,14 +78,25 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                     label: __('Generate with AI', 'multivendorx'),
                     icon: 'star-notifima',
                     color: 'purple',
-                    onClick: () => setgenerateAi(true),
+                    onClick: () => {
+                        const saved = getStoredSuggestions();
+
+                        if (saved) {
+                            setAiSuggestions(saved);
+                            setgeneratedAi(true);
+                        } else {
+                            setgenerateAi(true);
+                        }
+                    },
                 },
                 ...buttons,
             ]
         );
 
         return () => removeFilter('multivendorx_product_button', filterName);
-    }, []);
+    }, [product]);
+
+    /* ---------------- API CALL ---------------- */
 
     const generateSuggestions = () => {
         if (!userPrompt.trim()) return;
@@ -80,6 +124,8 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                     };
 
                     setAiSuggestions(newSuggestions);
+                    saveSuggestions(newSuggestions); // store per product
+
                     setSelectedIndex(0);
                     setgenerateAi(false);
                     setgeneratedAi(true);
@@ -139,44 +185,88 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                 height={80}
             >
                 {aiSuggestions ? (
-                    <div className="ai-content-wrapper">
-                        {/* LEFT PREVIEW */}
-                        <div className="section left">
-                            <div className="product">
-                                {aiSuggestions.productName[selectedIndex]}
+                    aiSuggestions.productName.map((name, index) => (
+                        <div className="ai-content-wrapper" key={index}>
+                            <div className="section left">
+                                {/* Product Name */}
+                                <div className="product">
+                                    {name}
+
+                                    <ButtonInputUI
+                                        buttons={[
+                                            {
+                                                icon: 'plus-circle',
+                                                text: 'Add',
+                                                color: 'purple',
+                                                onClick: () => {
+                                                    setProduct({
+                                                        ...product,
+                                                        title: aiSuggestions.productName[index],
+                                                    });
+                                                },
+                                            },
+                                        ]}
+                                    />
+                                </div>
+
+                                <div className="product-image"></div>
+
+                                <SectionUI title={__('Product Details', 'multivendorx')} />
+
+                                {/* Short Description */}
+                                <div className="title">
+                                    Short Description
+
+                                    <ButtonInputUI
+                                        buttons={[
+                                            {
+                                                icon: 'plus-circle',
+                                                text: 'Add',
+                                                color: 'purple',
+                                                onClick: () => {
+                                                    setProduct({
+                                                        ...product,
+                                                        short_description:
+                                                            aiSuggestions.shortDescription[index],
+                                                    });
+                                                },
+                                            },
+                                        ]}
+                                    />
+                                </div>
+
+                                <div className="desc">
+                                    {aiSuggestions.shortDescription[index]}
+                                </div>
+
+                                {/* Description */}
+                                <div className="title">
+                                    Description
+
+                                    <ButtonInputUI
+                                        buttons={[
+                                            {
+                                                icon: 'plus-circle',
+                                                text: 'Add',
+                                                color: 'purple',
+                                                onClick: () => {
+                                                    setProduct({
+                                                        ...product,
+                                                        description:
+                                                            aiSuggestions.productDescription[index],
+                                                    });
+                                                },
+                                            },
+                                        ]}
+                                    />
+                                </div>
+
+                                <div className="desc">
+                                    {aiSuggestions.productDescription[index]}
+                                </div>
                             </div>
-
-                            <div className="product-image"></div>
-
-                            <SectionUI title={__('Product Details', 'multivendorx')} />
-
-                            <div className="title">Short Description</div>
-                            <div className="desc">
-                                {aiSuggestions.shortDescription[selectedIndex]}
-                            </div>
-
-                            <div className="title">Description</div>
-                            <div className="desc">
-                                {aiSuggestions.productDescription[selectedIndex]}
-                            </div>
-                        </div>
-
-                        {/* RIGHT LIST */}
-                        <div className="section right">
-                            {aiSuggestions.productName.map((name, index) => (
-                                <div
-                                    className="generated-product"
-                                    key={index}
-                                    onClick={() => {
-                                        setSelectedIndex(index);
-                                        setProduct({
-                                            ...product,
-                                            title: name,
-                                            short_description: aiSuggestions.shortDescription[index],
-                                            description: aiSuggestions.productDescription[index],
-                                        });
-                                    }}
-                                >
+                            <div className="section right">
+                                <div className="generated-product">
                                     <div className="product">
                                         {name}
 
@@ -187,15 +277,14 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                                                     text: 'Append the product',
                                                     color: 'purple',
                                                     onClick: () => {
-                                                        handleChange('title', name);
-                                                        handleChange(
-                                                            'short_description',
-                                                            aiSuggestions.shortDescription[index]
-                                                        );
-                                                        handleChange(
-                                                            'description',
-                                                            aiSuggestions.productDescription[index]
-                                                        );
+                                                        setProduct({
+                                                            ...product,
+                                                            title: name,
+                                                            short_description:
+                                                                aiSuggestions.shortDescription[index],
+                                                            description:
+                                                                aiSuggestions.productDescription[index],
+                                                        });
                                                         setgeneratedAi(false);
                                                     },
                                                 },
@@ -203,9 +292,9 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                                         />
                                     </div>
                                 </div>
-                            ))}
+                            </div>
                         </div>
-                    </div>
+                    ))
                 ) : null}
 
                 <ButtonInputUI
@@ -214,7 +303,11 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                             icon: 'plus-circle',
                             text: 'Regenerate',
                             color: 'purple',
-                            onClick: generateSuggestions,
+                            onClick: () => {
+                                removeStoredSuggestions();
+                                setgeneratedAi(false);
+                                setgenerateAi(true);
+                            },
                         },
                     ]}
                 />

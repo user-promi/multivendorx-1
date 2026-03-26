@@ -52,7 +52,7 @@ class Util {
                 'timeout' => 20,
             )
         );
-
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($response, true) . "\n", FILE_APPEND);
         if ( is_wp_error( $response ) ) {
             return array( 'error' => $response->get_error_message() );
         }
