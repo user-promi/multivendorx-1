@@ -151,6 +151,17 @@ const ButtonInput: FieldComponent = {
             if (!canAccess) {
                 return;
             }
+            if (field.action === 'open_modal') {
+                window.dispatchEvent(
+                    new CustomEvent('multivendorx:action', {
+                        detail: {
+                            type: 'open_modal',
+                            key: field.key,
+                        },
+                    })
+                );
+                return;
+            }
             // Redirect url
             if (field.redirect_url) {
                 window.open(field.redirect_url, '_self');
