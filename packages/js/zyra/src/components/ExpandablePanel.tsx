@@ -834,6 +834,7 @@ const PanelItem: React.FC<{
     idx: number;
 }> = ({ method, idx }) => {
     const { state, value } = usePanel();
+    const itemRef = useRef<HTMLDivElement>(null);
 
     // Cache methodValue once - KEY OPTIMIZATION
     const methodValue = value[method.id] ?? {};
@@ -848,6 +849,17 @@ const PanelItem: React.FC<{
     const title = (methodValue.title as string) || method.label;
     const desc = (methodValue.description as string) || method.desc;
     const cntFlds = method.formFields?.filter(isCountableField) ?? [];
+    useEffect(() => {
+    if (isOpen && itemRef.current) {
+        const top =
+            itemRef.current.getBoundingClientRect().top + window.scrollY;
+
+        window.scrollTo({
+            top: top - 20,
+            behavior: 'smooth',
+        });
+    }
+}, [isOpen]);
 
     const itemContextValue: PanelItemContextType = {
         method,
@@ -866,6 +878,7 @@ const PanelItem: React.FC<{
     return (
         <PanelItemContext.Provider value={itemContextValue}>
             <div
+                ref={itemRef}
                 className={[
                     'expandable-item',
                     method.disableBtn && !isOn ? 'disable' : '',
