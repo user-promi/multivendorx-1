@@ -46,6 +46,7 @@ class Module {
      */
     public function init_classes() {
         $this->container['rest'] = new Rest();
+        $this->container['util'] = new Util();
     }
 
     /**

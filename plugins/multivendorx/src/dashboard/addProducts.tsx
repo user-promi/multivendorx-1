@@ -444,16 +444,6 @@ const AddProduct = () => {
 								className="ai-form"
 								iconRight="star-notifima"
 							>
-								{applyFilters(
-									'multivendorx_ai_field_popup',
-									null,                          
-									{
-										fieldName: 'name',        
-										product,                   
-										handleChange,              
-									}
-								)}
-								
 								<PopupUI
 									position="menu-dropdown"
 									toggleIcon="star-notifima"

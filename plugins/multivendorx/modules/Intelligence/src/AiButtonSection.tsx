@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ButtonInputUI, PopupUI, FormGroupWrapper, FormGroup, TextAreaUI, SectionUI } from 'zyra';
+import { ButtonInputUI, PopupUI, FormGroupWrapper, FormGroup, TextAreaUI, SectionUI, getApiLink } from 'zyra';
 import { __ } from '@wordpress/i18n';
-import { applyFilters, addFilter } from '@wordpress/hooks'; // add addFilter import
+import { addFilter, removeFilter } from '@wordpress/hooks';
+import axios from 'axios';
 
 interface AiButtonSectionProps {
     product: any;
@@ -16,40 +17,82 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
     product,
     setProduct,
     handleChange,
-    productFields,
-    typeFields,
-    modules,
 }) => {
     const [generateAi, setgenerateAi] = useState(false);
     const [generatedAi, setgeneratedAi] = useState(false);
-    const [generateAiImage, setgenerateAiImage] = useState(false);
 
-    const handleCloseForm = () => {
-        setgenerateAi(false);
-    };
-    const generatedAiClose = () => {
-        setgeneratedAi(false);
-    };
+    const [userPrompt, setUserPrompt] = useState('');
+    const [aiSuggestions, setAiSuggestions] = useState<{
+        productName: string[];
+        shortDescription: string[];
+        productDescription: string[];
+    } | null>(null);
+
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [loading, setLoading] = useState(false);
+
+    const handleCloseForm = () => setgenerateAi(false);
+    const generatedAiClose = () => setgeneratedAi(false);
 
     useEffect(() => {
-        // Add AI button dynamically on mount
+        const filterName = 'multivendorx/add-ai-button';
+
         addFilter(
             'multivendorx_product_button',
-            'my-plugin/add-ai-button',
-            (buttons, context) => {
-                buttons.unshift({
+            filterName,
+            (buttons) => [
+                {
                     label: __('Generate with AI', 'multivendorx'),
                     icon: 'star-notifima',
                     color: 'purple',
                     onClick: () => setgenerateAi(true),
-                });
-                return buttons;
-            }
+                },
+                ...buttons,
+            ]
         );
+
+        return () => removeFilter('multivendorx_product_button', filterName);
     }, []);
+
+    const generateSuggestions = () => {
+        if (!userPrompt.trim()) return;
+
+        setLoading(true);
+
+        axios({
+            method: 'POST',
+            url: getApiLink(appLocalizer, 'intelligence'),
+            headers: {
+                'X-WP-Nonce': appLocalizer.nonce,
+                'Content-Type': 'application/json',
+            },
+            params: {
+                endpoint: 'suggestions',
+                user_prompt: userPrompt,
+            },
+        })
+            .then((response) => {
+                if (response.data && response.data.productName) {
+                    const newSuggestions = {
+                        productName: response.data.productName.filter((s) => s && s.trim()),
+                        shortDescription: response.data.shortDescription.filter((s) => s && s.trim()),
+                        productDescription: response.data.productDescription.filter((s) => s && s.trim()),
+                    };
+
+                    setAiSuggestions(newSuggestions);
+                    setSelectedIndex(0);
+                    setgenerateAi(false);
+                    setgeneratedAi(true);
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
 
     return (
         <>
+            {/* First Popup */}
             <PopupUI
                 open={generateAi}
                 onClose={handleCloseForm}
@@ -64,26 +107,22 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                     <FormGroupWrapper>
                         <FormGroup>
                             <TextAreaUI
-                                name="reject_reason"
-                                placeholder={__(
-                                    'Enter reason for rejecting this store...',
-                                    'multivendorx'
-                                )}
+                                name="ai_prompt"
+                                value={userPrompt}
+                                onChange={(val) => setUserPrompt(val)}
+                                placeholder={__('Enter product idea or prompt...', 'multivendorx')}
                                 rows={5}
                             />
                         </FormGroup>
+
                         <ButtonInputUI
                             buttons={[
                                 {
                                     icon: 'star-notifima',
-                                    text: 'Generate Now',
+                                    text: loading ? 'Generating...' : 'Generate Now',
                                     color: 'purple',
-                                    onClick: () => {
-                                        setgenerateAi(false);
-                                        setTimeout(() => {
-                                            setgeneratedAi(true);
-                                        }, 0);
-                                    },
+                                    onClick: generateSuggestions,
+                                    disabled: loading,
                                 },
                             ]}
                         />
@@ -91,7 +130,7 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                 </div>
             </PopupUI>
 
-            {/* 2nd screen */}
+            {/* Second Popup */}
             <PopupUI
                 open={generatedAi}
                 onClose={generatedAiClose}
@@ -99,203 +138,89 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                 width={'70%'}
                 height={80}
             >
-                <div className="ai-content-wrapper">
-                    <div className="section left">
-                        <div className="product">Product 1</div>
-                        {/* <img src="" alt="" /> */}
-                        <div className="product-image"></div>
-                        <SectionUI
-                            title={__('Product Details', 'multivendorx')}
-                        />
-
-                        <div className="title">Short Description</div>
-                        <div className="desc">
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Quae natus voluptatem temporibus facere
-                            dignissimos optio sit, vero harum nobis suscipit ea
-                            ipsa repellendus, commodi architecto?
-                        </div>
-
-                        <div className="title">Description</div>
-                        <div className="desc">
-                            Lorem ipsum dolor, sit amet consectetur adipisicing
-                            elit. Ipsa ipsam atque accusantium voluptatibus.
-                            Quasi maiores officiis ipsa? Nulla doloribus quae
-                            iusto est perspiciatis cumque sequi maiores
-                            voluptates dolor possimus, voluptate fugiat sed
-                            corrupti nihil cum distinctio suscipit voluptas
-                            placeat. Harum incidunt assumenda cum, perferendis
-                            facilis accusantium sapiente iusto cupiditate
-                            quidem?{' '}
-                        </div>
-                    </div>
-                    <div className="section right">
-                        <div className="generated-product">
+                {aiSuggestions ? (
+                    <div className="ai-content-wrapper">
+                        {/* LEFT PREVIEW */}
+                        <div className="section left">
                             <div className="product">
-                                <div className="title">
-                                    Lorem ipsum dolor sit amet.
-                                </div>
-                                <div className="desc">
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Dolor, perferendis. Rerum
-                                    explicabo ducimus, praesentium a excepturi
-                                    ut! Aliquam quidem exercitationem ipsum!
-                                    Placeat, molestias? Ea, animi.
-                                </div>
-
-                                <ButtonInputUI
-                                    buttons={[
-                                        {
-                                            icon: 'plus-circle',
-                                            text: 'Append the product',
-                                            color: 'purple',
-                                        },
-                                    ]}
-                                />
+                                {aiSuggestions.productName[selectedIndex]}
                             </div>
-                            <div className="product">
-                                <div className="title">
-                                    Lorem ipsum dolor sit amet.
-                                </div>
-                                <div className="desc">
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Dolor, perferendis. Rerum
-                                    explicabo ducimus, praesentium a excepturi
-                                    ut! Aliquam quidem exercitationem ipsum!
-                                    Placeat, molestias? Ea, animi.
-                                </div>
 
-                                <ButtonInputUI
-                                    buttons={[
-                                        {
-                                            icon: 'refresh',
-                                            text: 'Regenerate Product',
-                                            color: 'blue',
-                                        },
-                                        {
-                                            icon: 'plus-circle',
-                                            text: 'Append the product',
-                                            color: 'purple',
-                                        },
-                                    ]}
-                                />
+                            <div className="product-image"></div>
+
+                            <SectionUI title={__('Product Details', 'multivendorx')} />
+
+                            <div className="title">Short Description</div>
+                            <div className="desc">
+                                {aiSuggestions.shortDescription[selectedIndex]}
+                            </div>
+
+                            <div className="title">Description</div>
+                            <div className="desc">
+                                {aiSuggestions.productDescription[selectedIndex]}
                             </div>
                         </div>
 
-                        <ButtonInputUI
-                            buttons={[
-                                {
-                                    icon: 'close',
-                                    text: 'Cancel',
-                                    color: 'red',
-                                    // onClick: () =>
-                                    //     dispatch( {
-                                    //         type: 'SET_ACTIVE_TAB',
-                                    //         id: isOpen ? null : method.id,
-                                    //     } ),
-                                },
-                                {
-                                    icon: 'plus-circle',
-                                    text: 'Append the product',
-                                    color: 'purple-bg',
-                                    // onClick: () =>
-                                    //     dispatch( {
-                                    //         type: 'SET_ACTIVE_TAB',
-                                    //         id: isOpen ? null : method.id,
-                                    //     } ),
-                                },
-                            ]}
-                        />
-                    </div>
-                </div>
-            </PopupUI>
+                        {/* RIGHT LIST */}
+                        <div className="section right">
+                            {aiSuggestions.productName.map((name, index) => (
+                                <div
+                                    className="generated-product"
+                                    key={index}
+                                    onClick={() => {
+                                        setSelectedIndex(index);
+                                        setProduct({
+                                            ...product,
+                                            title: name,
+                                            short_description: aiSuggestions.shortDescription[index],
+                                            description: aiSuggestions.productDescription[index],
+                                        });
+                                    }}
+                                >
+                                    <div className="product">
+                                        {name}
 
-            {/* image generate popup */}
-            <PopupUI
-                open={generateAiImage}
-                onClose={generatedAiClose}
-                position="lightbox"
-                width={'70%'}
-                height={80}
-            >
-                <div className="ai-content-wrapper image">
-                    {/* single image  */}
-                    {/* <div className="section left left1">
-											<div className="image"></div>
-										</div> */}
+                                        <ButtonInputUI
+                                            buttons={[
+                                                {
+                                                    icon: 'plus-circle',
+                                                    text: 'Append the product',
+                                                    color: 'purple',
+                                                    onClick: () => {
+                                                        handleChange('title', name);
+                                                        handleChange(
+                                                            'short_description',
+                                                            aiSuggestions.shortDescription[index]
+                                                        );
+                                                        handleChange(
+                                                            'description',
+                                                            aiSuggestions.productDescription[index]
+                                                        );
+                                                        setgeneratedAi(false);
+                                                    },
+                                                },
+                                            ]}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : null}
 
-                    {/* multi image  */}
-                    <div className="section left left2">
-                        <div className="image"></div>
-                        <div className="image"></div>
-                        <div className="image"></div>
-                        <div className="image"></div>
-                    </div>
-                    <div className="section right">
-                        <FormGroupWrapper>
-                            <FormGroup
-                                label={__(
-                                    'Describe your image',
-                                    'multivendorx'
-                                )}
-                            >
-                                <TextAreaUI
-                                    name="reject_reason"
-                                    placeholder={__(
-                                        'Enter reason for rejecting this store...',
-                                        'multivendorx'
-                                    )}
-                                    rows={5}
-                                />
-                            </FormGroup>
-                        </FormGroupWrapper>
-                        <ButtonInputUI
-                            buttons={[
-                                {
-                                    icon: 'close',
-                                    text: 'Cancel',
-                                    color: 'red',
-                                    // onClick: () =>
-                                    //     dispatch( {
-                                    //         type: 'SET_ACTIVE_TAB',
-                                    //         id: isOpen ? null : method.id,
-                                    //     } ),
-                                },
-                                {
-                                    icon: 'plus-circle',
-                                    text: 'Append the product',
-                                    color: 'purple-bg',
-                                    // onClick: () =>
-                                    //     dispatch( {
-                                    //         type: 'SET_ACTIVE_TAB',
-                                    //         id: isOpen ? null : method.id,
-                                    //     } ),
-                                },
-                            ]}
-                        />
-                    </div>
-                </div>
+                <ButtonInputUI
+                    buttons={[
+                        {
+                            icon: 'plus-circle',
+                            text: 'Regenerate',
+                            color: 'purple',
+                            onClick: generateSuggestions,
+                        },
+                    ]}
+                />
             </PopupUI>
         </>
     );
 };
 
 export default AiButtonSection;
-
-addFilter(
-    'multivendorx_ai_field_popup',  // same filter used in AddProduct
-    'my-plugin/ai-field-popup',     // unique namespace
-    (content, args) => {
-        // args = { fieldName, product, handleChange }
-        return (
-            <AiButtonSection
-                product={args.product}
-                setProduct={() => {}}        // optional, pass if you want to update full product
-                handleChange={args.handleChange}
-                productFields={[]}          // optional
-                typeFields={[]}             // optional
-                modules={[]}                // optional
-            />
-        );
-    }
-);
