@@ -17,30 +17,55 @@ namespace MultiVendorX\Intelligence;
 class Util {
 
     /**
-     * Gemini API for text
+     * Gemini API (text / image / enhance-image / multimodal)
      *
-     * @param string $key The API key.
-     * @param string $prompt The prompt to use.
+     * @param string $key   API key.
+     * @param string $prompt Prompt text.
+     * @param string $type  text|image|enhance-image.
+     * @param array  $input Optional extra inputs (image, etc).
      */
-    public static function call_gemini_api( $key, $prompt ) {
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+    public static function call_gemini_api( $key, $prompt, $type = 'text', $input = array() ) {
+
+        $model = 'gemini-2.5-flash';
+
+        if ( $type === 'image' || $type === 'enhance-image' ) {
+            $model = 'gemini-2.5-flash-image';
+        }
+
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent";
+
+        $parts = array();
+
+        if ( $prompt ) {
+            $parts[] = array(
+                'text' => $prompt,
+            );
+        }
+
+        if ( ! empty( $input['image'] ) ) {
+            $parts[] = array(
+                'inlineData' => array(
+                    'mimeType' => $input['mimeType'] ?? 'image/png',
+                    'data'     => $input['image'],
+                ),
+            );
+        }
 
         $body = array(
-            'contents'         => array(
+            'contents' => array(
                 array(
-                    'parts' => array(
-                        array( 'text' => $prompt ),
-                    ),
+                    'parts' => $parts,
                 ),
             ),
             'generationConfig' => array(
-                'temperature'        => 0.7,
-                'topK'               => 40,
-                'topP'               => 0.95,
-                'maxOutputTokens'    => 1024,
-                'response_mime_type' => 'application/json',
+                'temperature'    => 0.7,
+                'candidateCount' => 1,
             ),
         );
+
+        if ( $type === 'image' || $type === 'enhance-image' ) {
+            $body['generationConfig']['responseModalities'] = array( 'IMAGE' );
+        }
 
         $response = wp_remote_post(
             $url . '?key=' . $key,
@@ -52,35 +77,77 @@ class Util {
                 'timeout' => 20,
             )
         );
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export($response, true) . "\n", FILE_APPEND);
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:gemeni : " . var_export($response, true) . "\n", FILE_APPEND);
         if ( is_wp_error( $response ) ) {
-            return array( 'error' => $response->get_error_message() );
+            return '';
         }
 
-        $data = json_decode( wp_remote_retrieve_body( $response ), true );
+        $body_raw = wp_remote_retrieve_body( $response );
+        $data     = json_decode( $body_raw, true );
 
-        // Directly access parsed JSON (NO regex, NO trimming).
-        $result = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
-
-        if ( ! $result ) {
-            return array( 'error' => 'Invalid Gemini response' );
+        if ( empty( $data['candidates'][0]['content']['parts'][0]['text'] ) ) {
+            return '';
         }
-        return $result;
+
+        $text = $data['candidates'][0]['content']['parts'][0]['text'];
+
+        // Remove markdown JSON fences if present
+        $text = preg_replace('/```json|```/', '', $text);
+        $text = trim($text);
+
+        return $text; // return clean JSON string
     }
 
     /**
-     * OpenAI API for text
+     * OpenAI API (text / image / enhance-image)
      *
-     * @param string $key The API key.
-     * @param string $prompt The prompt to use.
+     * @param string $key
+     * @param string $prompt
+     * @param string $type text|image|enhance-image
+     * @param array  $input
      */
-    public static function call_openai_api( $key, $prompt ) {
+    public static function call_openai_api( $key, $prompt, $type = 'text', $input = array() ) {
+
+        // MODEL SELECTION
+        $model = 'gpt-5-nano';
+
+        if ( $type === 'image' || $type === 'enhance-image' ) {
+            $model = 'gpt-image-1';
+        }
+
         $url = 'https://api.openai.com/v1/responses';
 
+        $input_parts = array();
+
+        if ( $prompt ) {
+            $input_parts[] = array(
+                'role'    => 'user',
+                'content' => array(
+                    array(
+                        'type' => 'input_text',
+                        'text' => $prompt,
+                    ),
+                ),
+            );
+        }
+
+        // Image input (for enhance)
+        if ( ! empty( $input['image'] ) ) {
+            $input_parts[0]['content'][] = array(
+                'type'      => 'input_image',
+                'image_url' => 'data:' . ( $input['mimeType'] ?? 'image/png' ) . ';base64,' . $input['image'],
+            );
+        }
+
         $body = array(
-            'model' => 'gpt-5-nano',
-            'input' => $prompt,
+            'model' => $model,
+            'input' => $input_parts,
         );
+
+        // IMAGE OUTPUT
+        if ( $type === 'image' || $type === 'enhance-image' ) {
+            $body['modalities'] = array( 'image', 'text' );
+        }
 
         $response = wp_remote_post(
             $url,
@@ -93,29 +160,54 @@ class Util {
                 'timeout' => 45,
             )
         );
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:openai : " . var_export($response, true) . "\n", FILE_APPEND);
 
         if ( is_wp_error( $response ) ) {
-            return array( 'error' => $response->get_error_message() );
+            return '';
         }
 
         $data = json_decode( wp_remote_retrieve_body( $response ), true );
 
-        $result = $data['output'][0]['content'][0]['text'] ?? '';
-
-        if ( ! $result ) {
-            return array( 'error' => 'Invalid OpenAI response' );
+        if ( empty( $data['output'] ) ) {
+            return '';
         }
 
-        return $result;
+        foreach ( $data['output'] as $item ) {
+
+            if ( empty( $item['content'] ) ) {
+                continue;
+            }
+
+            foreach ( $item['content'] as $content ) {
+
+                // TEXT RESPONSE
+                if ( isset( $content['text'] ) ) {
+                    $text = $content['text'];
+
+                    $text = preg_replace('/```json|```/', '', $text);
+                    return trim($text);
+                }
+
+                // IMAGE RESPONSE
+                if ( isset( $content['image_base64'] ) ) {
+                    return $content['image_base64'];
+                }
+            }
+        }
+
+        return '';
     }
 
     /**
-     * OpenRouter API for text
+     * OpenRouter API (text / image / enhance-image)
      *
-     * @param string $key The API key.
-     * @param string $prompt The prompt to use.
+     * @param string $key
+     * @param string $prompt
+     * @param string $type text|image|enhance-image
+     * @param array  $input
      */
-    public static function call_openrouter_api( $key, $prompt ) {
+    public static function call_openrouter_api( $key, $prompt, $type = 'text', $input = array() ) {
+
         $url = 'https://openrouter.ai/api/v1/chat/completions';
 
         $model = MultiVendorX()->setting->get_setting( 'openrouter_api_model' );
@@ -123,20 +215,53 @@ class Util {
             $model = 'openai/gpt-4o-mini';
         }
 
-        $body = array(
-            'model'           => $model,
-            'messages'        => array(
-                array(
-                    'role'    => 'system',
-                    'content' => 'You must respond ONLY with valid JSON. No explanations.',
-                ),
-                array(
-                    'role'    => 'user',
-                    'content' => $prompt,
-                ),
+        $messages = array(
+            array(
+                'role'    => 'system',
+                'content' => 'Return only valid JSON. No markdown. No explanations.',
             ),
-            'response_format' => array( 'type' => 'json_object' ),
+            array(
+                'role'    => 'user',
+                'content' => $prompt,
+            ),
         );
+
+        // IMAGE INPUT (for enhance)
+        if ( $type === 'enhance-image' && ! empty( $input['image'] ) ) {
+            $messages[1]['content'] = array(
+                array(
+                    'type' => 'text',
+                    'text' => $prompt,
+                ),
+                array(
+                    'type'      => 'image_url',
+                    'image_url' => array(
+                        'url' => 'data:' . ( $input['mimeType'] ?? 'image/png' ) . ';base64,' . $input['image'],
+                    ),
+                ),
+            );
+        }
+
+        $body = array(
+            'model'    => $model,
+            'messages' => $messages,
+        );
+
+        // TEXT JSON MODE
+        if ( $type === 'text' ) {
+            $body['response_format'] = array(
+                'type' => 'json_object',
+            );
+        }
+
+        // IMAGE GENERATION MODE
+        if ( $type === 'image' ) {
+            $body['modalities'] = array( 'image', 'text' );
+        }
+
+        if ( $type === 'enhance-image' ) {
+            $body['modalities'] = array( 'image', 'text' );
+        }
 
         $response = wp_remote_post(
             $url,
@@ -151,19 +276,31 @@ class Util {
                 'timeout' => 30,
             )
         );
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders:open router : " . var_export($response, true) . "\n", FILE_APPEND);
 
         if ( is_wp_error( $response ) ) {
-            return array( 'error' => $response->get_error_message() );
+            return '';
         }
 
         $data = json_decode( wp_remote_retrieve_body( $response ), true );
 
-        $result = $data['choices'][0]['message']['content'] ?? '';
-
-        if ( ! $result ) {
-            return array( 'error' => 'Invalid OpenRouter response' );
+        if ( empty( $data['choices'][0]['message'] ) ) {
+            return '';
         }
 
-        return (string) $result;
+        $message = $data['choices'][0]['message'];
+
+        // TEXT RESPONSE
+        if ( isset( $message['content'] ) && is_string( $message['content'] ) ) {
+            $text = preg_replace('/```json|```/', '', $message['content']);
+            return trim($text);
+        }
+
+        // IMAGE RESPONSE
+        if ( isset( $data['choices'][0]['message']['images'][0]['image_base64'] ) ) {
+            return $data['choices'][0]['message']['images'][0]['image_base64'];
+        }
+
+        return '';
     }
 }
