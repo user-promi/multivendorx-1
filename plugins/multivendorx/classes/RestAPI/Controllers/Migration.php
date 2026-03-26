@@ -76,9 +76,16 @@ class Migration extends \WP_REST_Controller {
         }
 
         $action = $request->get_param( 'action' );
-
-        if ( method_exists( $this, $action ) ) {
-            return $this->$action( $request );
+        if ( is_array($action) ) {
+            foreach ( $action as $act ) {
+                if ( method_exists( $this, $act ) ) {
+                    return $this->$act( $request );
+                }
+            }
+        } else {
+            if ( method_exists( $this, $action ) ) {
+                return $this->$action( $request );
+            }
         }
 
         return array(
