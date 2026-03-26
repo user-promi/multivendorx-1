@@ -198,11 +198,11 @@ export default {
 				'Choose your preferred AI model for image enhancement from OpenRouter.',
 				'multivendorx'
 			),
-			dependent: {
-				key: 'image_enhancement_provider',
-				set: true,
-				value: 'openrouter_api',
-			},
+			// dependent: {
+			// 	key: 'image_enhancement_provider',
+			// 	set: true,
+			// 	value: 'openrouter_api',
+			// },
 
 			options: [
 				{

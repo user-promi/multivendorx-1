@@ -151,24 +151,21 @@ class Rest extends \WP_REST_Controller {
                 case 'gemini_api':
                     $json_response = Util::call_gemini_api(
                         MultiVendorX()->setting->get_setting( 'gemini_api_key' ),
-                        $base_prompt,
-                        'text'
+                        $base_prompt
                     );
                     break;
 
                 case 'openai_api':
                     $json_response = Util::call_openai_api(
                         MultiVendorX()->setting->get_setting( 'openai_api_key' ),
-                        $base_prompt,
-                        'text'
+                        $base_prompt
                     );
                     break;
 
                 case 'openrouter_api':
                     $json_response = Util::call_openrouter_api(
                         MultiVendorX()->setting->get_setting( 'openrouter_api_key' ),
-                        $base_prompt,
-                        'text'
+                        $base_prompt
                     );
                     break;
 
@@ -214,23 +211,24 @@ class Rest extends \WP_REST_Controller {
 
     private function generate_image( $request ) {
         try {
-
             $type        = sanitize_text_field( $request->get_param( 'type' ) );
             $product     = (array) $request->get_param( 'product' );
             $image       = $request->get_param( 'image_base64' );
             $user_prompt = sanitize_textarea_field( $request->get_param( 'prompt' ) );
 
-            if ( empty( $product ) ) {
+            // Validate input: must have either product or prompt
+            if ( empty( $product ) && empty( $user_prompt ) ) {
                 return new \WP_REST_Response(
                     array(
                         'success' => false,
-                        'code'    => 'product_missing',
-                        'message' => __( 'Product data is required.', 'multivendorx' ),
+                        'code'    => 'input_missing',
+                        'message' => __( 'Either product data or prompt is required.', 'multivendorx' ),
                     ),
                     400
                 );
             }
 
+            // Extract product fields if product is provided
             $name        = sanitize_text_field( $product['name'] ?? '' );
             $description = wp_strip_all_tags( $product['description'] ?? '' );
             $category    = sanitize_text_field( $product['category'] ?? '' );
@@ -243,7 +241,6 @@ class Rest extends \WP_REST_Controller {
             */
 
             if ( $type === 'enhance' ) {
-
                 if ( empty( $image ) ) {
                     return new \WP_REST_Response(
                         array(
@@ -255,38 +252,32 @@ class Rest extends \WP_REST_Controller {
                     );
                 }
 
-                $prompt =
-                    "Enhance this ecommerce product image.\n\n"
-                    . "Product: {$name}\n"
-                    . "Category: {$category}\n\n"
-                    . "User request: {$user_prompt}\n\n"
-                    . "Improve:\n"
-                    . "- Lighting\n"
-                    . "- Sharpness\n"
-                    . "- Background\n"
-                    . "- Professional marketplace quality";
+                $prompt = "Enhance this ecommerce product image.\n\n";
+                if ( ! empty( $product ) ) {
+                    $prompt .= "Product: {$name}\nCategory: {$category}\n\n";
+                }
+                if ( ! empty( $user_prompt ) ) {
+                    $prompt .= "User request: {$user_prompt}\n\n";
+                }
+                $prompt .= "- Improve lighting\n- Improve sharpness\n- Clean background\n- Professional marketplace quality";
 
                 $api_type = 'enhance-image';
-
-                $extra = array(
+                $extra    = array(
                     'image'    => $image,
                     'mimeType' => 'image/png',
                 );
 
             } else {
-
-                $prompt =
-                    "Create a professional ecommerce product image.\n\n"
-                    . "Product: {$name}\n"
-                    . "Category: {$category}\n"
-                    . "Description: {$description}\n"
-                    . "Attributes JSON: {$attributes}\n\n"
-                    . "User request: {$user_prompt}\n\n"
-                    . "Requirements:\n"
-                    . "- Studio lighting\n"
-                    . "- Clean background\n"
-                    . "- High resolution\n"
-                    . "- Ecommerce ready";
+                // Normal image generation
+                $prompt = '';
+                if ( ! empty( $product ) ) {
+                    $prompt .= "Create a professional ecommerce product image.\n\n";
+                    $prompt .= "Product: {$name}\nCategory: {$category}\nDescription: {$description}\nAttributes JSON: {$attributes}\n\n";
+                }
+                if ( ! empty( $user_prompt ) ) {
+                    $prompt .= "User request: {$user_prompt}\n\n";
+                }
+                $prompt .= "- Studio lighting\n- Clean background\n- High resolution\n- Ecommerce ready";
 
                 $api_type = 'image';
                 $extra    = array();
@@ -301,7 +292,6 @@ class Rest extends \WP_REST_Controller {
             $provider = MultiVendorX()->setting->get_setting( 'choose_ai_provider' );
 
             switch ( $provider ) {
-
                 case 'gemini_api':
                     $response = Util::call_gemini_api(
                         MultiVendorX()->setting->get_setting( 'gemini_api_key' ),
@@ -360,6 +350,14 @@ class Rest extends \WP_REST_Controller {
 
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
+            return new \WP_REST_Response(
+                array(
+                    'success' => false,
+                    'code'    => 'exception',
+                    'message' => __( 'An exception occurred while generating the image.', 'multivendorx' ),
+                ),
+                500
+            );
         }
     }
 }

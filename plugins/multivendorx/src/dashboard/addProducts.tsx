@@ -690,19 +690,6 @@ const AddProduct = () => {
 										setGalleryImages(formatted);
 									}}
 								/>
-
-								<ButtonInputUI
-									buttons={[
-										{
-											icon: 'star-notifima',
-											text: 'Generate Now',
-											color: 'purple',
-											onClick: () => {
-												// setgenerateAiImage(true);
-											},
-										},
-									]}
-								/>
 							</FormGroup>
 						</FormGroupWrapper>
 					</Card>
