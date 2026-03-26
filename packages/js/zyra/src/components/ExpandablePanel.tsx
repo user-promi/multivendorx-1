@@ -700,11 +700,16 @@ const PanelControls: React.FC = () => {
                 {/* Progress counter (non-disableBtn methods only) */}
                 {!method.disableBtn &&
                     method.countBtn &&
-                    cntFlds.length > 0 && (
-                        <div className="admin-badge red">
-                            {state.progress[idx] || 0}/{cntFlds.length}
-                        </div>
-                    )}
+                    cntFlds.length > 0 && (() => {
+                        const completed = (state.progress[idx] || 0) === cntFlds.length;
+
+                        return (
+                            <div className={`admin-badge ${completed ? 'green' : 'red'}`}>
+                                <i className={`adminfont-${completed ? 'check' : 'error'}`} />
+                                {state.progress[idx] || 0}/{cntFlds.length}
+                            </div>
+                        );
+                    })()}
             </ul>
 
             {/* 3-dot dropdown — non-custom, enabled methods */}
@@ -771,7 +776,7 @@ const PanelBody: React.FC = () => {
     if (!hasFields) {
         return null;
     }
-    if (!(method.openForm || (isOpen && (isOn || method.isCustom)))) {
+    if (!(isOpen && (isOn || method.isCustom || method.openForm))) {
         return null;
     }
 
