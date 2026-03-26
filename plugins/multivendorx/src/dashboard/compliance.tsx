@@ -280,6 +280,11 @@ const Compliance = (React.FC = () => {
             case 'product-compliance':
                 return (
                     <Container>
+                        <Notice
+                            type="info"
+                            displayPosition="inline-notice"
+                            message={__('All product listings must follow platform guidelines. Branded or regulated products require authenticity certificates. Upload the required documents to keep your listings active.', 'multivendorx')}
+                        />
                         <Column row>
                             <Card
                                 title={__('Product Images & Descriptions', 'multivendorx')}
@@ -291,8 +296,8 @@ const Compliance = (React.FC = () => {
                                 }
                             >
                                 <Notice
-                                    type="info"
-                                    displayPosition="notice"
+                                    type="warning"
+                                    displayPosition="inline-notice"
                                     message={__('3 of your products are missing descriptions or have low-quality images. Fix them to avoid listing suspension.', 'multivendorx')}
                                 />
                             </Card>
@@ -391,6 +396,11 @@ const Compliance = (React.FC = () => {
                                         }
                                     ]}
                                 />
+                                <Notice
+                                    type="info"
+                                    displayPosition="inline-notice"
+                                    message={__('Recommended for electronics, cosmetics, and baby products to build buyer confidence.', 'multivendorx')}
+                                />
                             </Card>
 
                             <Card
@@ -404,6 +414,11 @@ const Compliance = (React.FC = () => {
                                         { title: __('Offensive content', 'multivendorx') },
                                         { title: __('Misleading images', 'multivendorx') },
                                     ]} />
+                                <Notice
+                                    type="warning"
+                                    displayPosition="inline-notice"
+                                    message={__('Multiple reports can result in product removal or account penalties. Ensure all listings comply with platform guidelines.', 'multivendorx')}
+                                />
                             </Card>
                         </Column>
                     </Container>
@@ -411,6 +426,12 @@ const Compliance = (React.FC = () => {
             case 'tax-compliance':
                 return (
                     <Container>
+                         <Notice
+                            type="error"
+                            displayPosition="inline-notice"
+                            title={__('Payouts Currently On Hold', 'multivendorx')}
+                            message={__('Your bank account verification is pending. Payouts will be released within 2–3 business days once your bank details and tax documents are verified by our team.', 'multivendorx')}
+                        />
                         <Column grid={6}>
                             <Card
                                 title={__('Bank Account Details', 'multivendorx')}
@@ -576,15 +597,22 @@ const Compliance = (React.FC = () => {
                 );
             case 'my-products':
                 return (
-                    <Analytics
-                        cols={3}
-                        data={overviewData.map((item, idx) => ({
-                            icon: item.icon,
-                            iconClass: `admin-color${idx + 2}`,
-                            number: item.count,
-                            text: __(item.label, 'multivendorx'),
-                        }))}
-                    />
+                    <>
+                        <Analytics
+                            cols={3}
+                            data={overviewData.map((item, idx) => ({
+                                icon: item.icon,
+                                iconClass: `admin-color${idx + 2}`,
+                                number: item.count,
+                                text: __(item.label, 'multivendorx'),
+                            }))}
+                        />
+                        <Notice
+                            type="error"
+                            displayPosition="inline-notice"
+                            message={__('5 products have compliance issues. Fix them to keep listings active and avoid restrictions.', 'multivendorx')}
+                        />
+                    </>
                 );
             case 'store-verification':
                 return (
@@ -675,31 +703,31 @@ const Compliance = (React.FC = () => {
                         <Column grid={6}>
                             <Card title={__('Social Verification', 'multivendorx')}>
                                 <ExpandablePanelUI
-										key={inputField.key}
-										name={inputField.key}
-										// proSetting={isProSetting(inputField.proSetting ?? false)}
-										// proSettingChanged={() =>
-										// 	proSettingChanged(inputField.proSetting ?? false)
-										// }
-										apilink={String(inputField.apiLink)}
-										appLocalizer={appLocalizer}
-										methods={methods}
-										buttonEnable={inputField.buttonEnable}
-										moduleEnabled={inputField.moduleEnabled}
-										value={value}
-										onChange={(data: any) => {
-											// if (hasAccess()) {
-											// 	settingChanged.current = true;
-											// 	updateSetting(inputField.key, data);
-											// }
-										}}
-									/>
+                                    key={inputField.key}
+                                    name={inputField.key}
+                                    // proSetting={isProSetting(inputField.proSetting ?? false)}
+                                    // proSettingChanged={() =>
+                                    // 	proSettingChanged(inputField.proSetting ?? false)
+                                    // }
+                                    apilink={String(inputField.apiLink)}
+                                    appLocalizer={appLocalizer}
+                                    methods={methods}
+                                    buttonEnable={inputField.buttonEnable}
+                                    moduleEnabled={inputField.moduleEnabled}
+                                    value={value}
+                                    onChange={(data: any) => {
+                                        // if (hasAccess()) {
+                                        // 	settingChanged.current = true;
+                                        // 	updateSetting(inputField.key, data);
+                                        // }
+                                    }}
+                                />
                             </Card>
                         </Column>
                     </Container>
                 );
             case 'legal-compliance':
-                return(
+                return (
                     <div>store-verification</div>
                 );
             default:
