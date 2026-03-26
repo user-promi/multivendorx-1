@@ -442,26 +442,16 @@ const AddProduct = () => {
 									'multivendorx'
 								)}
 								className="ai-form"
-								iconRight="star-notifima"
 							>
-								<PopupUI
-									position="menu-dropdown"
-									toggleIcon="star-notifima"
-									width={20}
-									header={{
-										icon: 'form-textarea',
-										title: __(
-											'Change Name',
-											'multivendorx'
-										),
-									}}
-								>
-									<div className="ai-wrapper">
-										<div className="title">Product 1</div>
-										<div className="title">Product 2</div>
-										<div className="title">Product 3</div>
-									</div>
-								</PopupUI>
+								{applyFilters(
+									'multivendorx_product_field_suggestions',
+									null,
+									{
+										product,
+										setProduct,
+										field: 'name',
+									}
+								)}
 								<BasicInputUI
 									name="name"
 									value={product.name}
@@ -483,8 +473,16 @@ const AddProduct = () => {
 											'multivendorx'
 										)}
 										className="ai-form"
-										iconRight="star-notifima"
 									>
+										{applyFilters(
+											'multivendorx_product_field_suggestions',
+											null,
+											{
+												product,
+												setProduct,
+												field: 'short_description',
+											}
+										)}
 										<TextAreaUI
 											name="short_description"
 											value={product.short_description}
@@ -503,8 +501,16 @@ const AddProduct = () => {
 											'multivendorx'
 										)}
 										className="ai-form"
-										iconRight="star-notifima"
 									>
+										{applyFilters(
+											'multivendorx_product_field_suggestions',
+											null,
+											{
+												product, 
+												setProduct, 
+												field: 'description',
+											}
+										)}
 										<TextAreaUI
 											name="description"
 											value={product.description}
@@ -658,6 +664,7 @@ const AddProduct = () => {
 										currentImage: featuredImage ?? null,
 										isFeaturedImage: true,
 										setImage: setFeaturedImage,
+										product: product
 									}
 								)}
 							</FormGroup>

@@ -209,113 +209,99 @@ class Rest extends \WP_REST_Controller {
         }
     }
 
+    /**
+     * Generate or enhance an image via AI provider
+     *
+     * Supports 'openrouter_api' and 'gemini_api'.
+     *
+     * @param \WP_REST_Request $request
+     * @return \WP_REST_Response
+     */
     private function generate_image( $request ) {
         try {
-            $type        = sanitize_text_field( $request->get_param( 'type' ) );
-            $product     = (array) $request->get_param( 'product' );
-            $image       = $request->get_param( 'image_base64' );
-            $user_prompt = sanitize_textarea_field( $request->get_param( 'prompt' ) );
+            $type        = sanitize_text_field( $request->get_param( 'type' ) ); // 'enhance' or 'generate'
+            $product     = (array) $request->get_param( 'product' );             // optional for generate
+            $image       = $request->get_param( 'image_base64' );                // required for enhance
+            $user_prompt = sanitize_textarea_field( $request->get_param( 'prompt' ));
 
-            // Validate input: must have either product or prompt
-            if ( empty( $product ) && empty( $user_prompt ) ) {
+            // Validation
+            if ( $type === 'generate' && empty( $product ) && empty( $user_prompt ) ) {
                 return new \WP_REST_Response(
                     array(
                         'success' => false,
                         'code'    => 'input_missing',
-                        'message' => __( 'Either product data or prompt is required.', 'multivendorx' ),
+                        'message' => __( 'Either product data or prompt is required for image generation.', 'multivendorx' ),
                     ),
                     400
                 );
             }
 
-            // Extract product fields if product is provided
-            $name        = sanitize_text_field( $product['name'] ?? '' );
-            $description = wp_strip_all_tags( $product['description'] ?? '' );
-            $category    = sanitize_text_field( $product['category'] ?? '' );
-            $attributes  = ! empty( $product['attributes'] ) ? wp_json_encode( $product['attributes'] ) : '';
-
-            /*
-            |--------------------------------------------------------------------------
-            | Prompt Builder
-            |--------------------------------------------------------------------------
-            */
-
-            if ( $type === 'enhance' ) {
-                if ( empty( $image ) ) {
-                    return new \WP_REST_Response(
-                        array(
-                            'success' => false,
-                            'code'    => 'image_missing',
-                            'message' => __( 'Image required for enhancement.', 'multivendorx' ),
-                        ),
-                        400
-                    );
-                }
-
-                $prompt = "Enhance this ecommerce product image.\n\n";
-                if ( ! empty( $product ) ) {
-                    $prompt .= "Product: {$name}\nCategory: {$category}\n\n";
-                }
-                if ( ! empty( $user_prompt ) ) {
-                    $prompt .= "User request: {$user_prompt}\n\n";
-                }
-                $prompt .= "- Improve lighting\n- Improve sharpness\n- Clean background\n- Professional marketplace quality";
-
-                $api_type = 'enhance-image';
-                $extra    = array(
-                    'image'    => $image,
-                    'mimeType' => 'image/png',
+            if ( $type === 'enhance' && empty( $image ) ) {
+                return new \WP_REST_Response(
+                    array(
+                        'success' => false,
+                        'code'    => 'image_missing',
+                        'message' => __( 'Image required for enhancement.', 'multivendorx' ),
+                    ),
+                    400
                 );
-
-            } else {
-                // Normal image generation
-                $prompt = '';
-                if ( ! empty( $product ) ) {
-                    $prompt .= "Create a professional ecommerce product image.\n\n";
-                    $prompt .= "Product: {$name}\nCategory: {$category}\nDescription: {$description}\nAttributes JSON: {$attributes}\n\n";
-                }
-                if ( ! empty( $user_prompt ) ) {
-                    $prompt .= "User request: {$user_prompt}\n\n";
-                }
-                $prompt .= "- Studio lighting\n- Clean background\n- High resolution\n- Ecommerce ready";
-
-                $api_type = 'image';
-                $extra    = array();
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | Provider Call
-            |--------------------------------------------------------------------------
-            */
+            $prompt = '';
+            if ( $type === 'enhance' ) {
+                $prompt .= "Enhance this ecommerce product image.\n";
 
-            $provider = MultiVendorX()->setting->get_setting( 'choose_ai_provider' );
+                if ( ! empty( $product ) && is_array($product) ) {
+                    $name        = sanitize_text_field($product['name'] ?? '');
+                    $description = wp_strip_all_tags($product['description'] ?? '');
+                    $category    = '';
+                    if (!empty($product['categories']) && is_array($product['categories'])) {
+                        $category = sanitize_text_field($product['categories'][0]['name'] ?? '');
+                    }
+                    $attributes = !empty($product['attributes']) ? wp_json_encode($product['attributes']) : '';
+
+                    $prompt .= "Product: {$name}\n";
+                    $prompt .= "Category: {$category}\n";
+                    $prompt .= "Description: {$description}\n";
+                    if (!empty($attributes)) {
+                        $prompt .= "Attributes: {$attributes}\n";
+                    }
+                    $prompt .= "\n";
+                }
+
+                if ( ! empty( $user_prompt ) ) {
+                    $prompt .= "User request: {$user_prompt}\n\n";
+                }
+
+                $prompt .= "- Improve lighting\n- Improve sharpness\n- Clean background\n- Professional marketplace quality";
+            } else {
+                $prompt .= "Create a professional ecommerce product image.\n";
+                if ( ! empty( $user_prompt ) ) {
+                    $prompt .= "User request: {$user_prompt}\n\n";
+                }
+
+                $prompt .= "- Studio lighting\n- Clean background\n- High resolution\n- Ecommerce ready";
+            }
+
+            $provider = MultiVendorX()->setting->get_setting('image_enhancement_provider');
+            $image_data = ($type === 'enhance') ? $image : null;
 
             switch ( $provider ) {
+                case 'openrouter_api':
+                    $response = Util::call_openrouter_image_api(
+                        MultiVendorX()->setting->get_setting( 'openrouter_api_key' ),
+                        MultiVendorX()->setting->get_setting('openrouter_api_image_model'),
+                        $prompt,
+                        '',
+                        $image_data
+                    );
+                    break;
+
                 case 'gemini_api':
-                    $response = Util::call_gemini_api(
+                    $response = Util::call_gemini_image_api(
                         MultiVendorX()->setting->get_setting( 'gemini_api_key' ),
                         $prompt,
-                        $api_type,
-                        $extra
-                    );
-                    break;
-
-                case 'openai_api':
-                    $response = Util::call_openai_api(
-                        MultiVendorX()->setting->get_setting( 'openai_api_key' ),
-                        $prompt,
-                        $api_type,
-                        $extra
-                    );
-                    break;
-
-                case 'openrouter_api':
-                    $response = Util::call_openrouter_api(
-                        MultiVendorX()->setting->get_setting( 'openrouter_api_key' ),
-                        $prompt,
-                        $api_type,
-                        $extra
+                        $image_data
                     );
                     break;
 
@@ -330,12 +316,12 @@ class Rest extends \WP_REST_Controller {
                     );
             }
 
-            if ( empty( $response ) ) {
+            if ( empty( $response['image_base64'] ) ) {
                 return new \WP_REST_Response(
                     array(
                         'success' => false,
                         'code'    => 'ai_failed',
-                        'message' => __( 'AI failed to generate image.', 'multivendorx' ),
+                        'message' => $response['error'] ?? __( 'AI failed to generate image.', 'multivendorx' ),
                     ),
                     500
                 );
@@ -344,7 +330,8 @@ class Rest extends \WP_REST_Controller {
             return rest_ensure_response(
                 array(
                     'success' => true,
-                    'image'   => $response,
+                    'image'   => $response['image_base64'],
+                    'mime'    => $response['mime_type'] ?? 'image/png',
                 )
             );
 

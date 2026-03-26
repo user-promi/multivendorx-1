@@ -1,6 +1,7 @@
 import { addFilter } from '@wordpress/hooks';
 import AiButtonSection from './AiButtonSection';
 import FeaturedImageButton from './FeaturedImageButton';
+import AiField from './AiField';
 
 addFilter(
   'multivendorx_add_product_middle_section',
@@ -39,4 +40,16 @@ addFilter(
         }
         return existing;
     }
+);
+
+addFilter(
+  'multivendorx_product_field_suggestions',
+  'multivendorx/ai-field',
+  (existing, props) => {
+    const { product, setProduct, field } = props;
+    if (['name', 'short_description', 'description'].includes(field)) {
+      return <AiField product={product} setProduct={setProduct} field={field} />;
+    }
+    return existing;
+  }
 );

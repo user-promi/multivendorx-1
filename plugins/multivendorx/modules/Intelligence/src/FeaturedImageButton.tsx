@@ -39,44 +39,32 @@ const FeaturedImageButton: React.FC<FeaturedImageButtonProps> = ({
         }
     };
 
-    const generateAiImages = (options: { prompt?: string; product?: any; type?: 'image' | 'enhance'; image?: string }) => {
-        const { prompt, product: prod, type = 'image', image } = options;
-        if (!prod && !prompt && type !== 'enhance') return;
-
+    const generateAiImages = (payload: Record<string, any>) => {
         setLoading(true);
 
         axios
-            .post(
-                getApiLink(appLocalizer, 'intelligence'),
-                {
-                    endpoint: 'image',
-                    type,
-                    prompt: prompt || '',
-                    product: prod || undefined,
-                    image_base64: image || undefined,
+            .post(getApiLink(appLocalizer, 'intelligence'), null, {
+                headers: {
+                    'X-WP-Nonce': appLocalizer.nonce,
+                    'Content-Type': 'application/json',
                 },
-                {
-                    headers: {
-                        'X-WP-Nonce': appLocalizer.nonce,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            )
+                params: payload,
+            })
             .then((res) => {
                 if (res.data.success && res.data.image) {
                     const images: AiImage[] = Array.isArray(res.data.image)
                         ? res.data.image.map((img: string, i: number) => ({
-                              id: i + 1,
-                              src: img,
-                              thumbnail: img,
-                          }))
+                            id: i + 1,
+                            src: img,
+                            thumbnail: img,
+                        }))
                         : [
-                              {
-                                  id: 1,
-                                  src: res.data.image,
-                                  thumbnail: res.data.image,
-                              },
-                          ];
+                            {
+                                id: 1,
+                                src: res.data.image,
+                                thumbnail: res.data.image,
+                            },
+                        ];
                     setAiImages(images);
                     setPromptPopup(false);
                     setResultPopup(true);
@@ -91,12 +79,31 @@ const FeaturedImageButton: React.FC<FeaturedImageButtonProps> = ({
             .finally(() => setLoading(false));
     };
 
-    const handleGenerateNow = () => generateAiImages({ prompt: userPrompt });
-    const handleGenerateFromProduct = () => product && generateAiImages({ product });
+    const handleGenerateNow = () => {
+        if (!userPrompt.trim()) return;
+        generateAiImages({
+            endpoint: 'image',
+            type: 'generate',
+            prompt: userPrompt.trim(),
+        });
+    };
+
+    const handleGenerateFromProduct = () => {
+        if (!product) return;
+        generateAiImages({
+            endpoint: 'image',
+            type: 'generate',
+            product,
+        });
+    };
 
     const handleEnhanceImage = (image: AiImage) => {
-        const promptText = userPrompt || '';
-        generateAiImages({ prompt: promptText, type: 'enhance', image: image.src });
+        generateAiImages({
+            endpoint: 'image',
+            type: 'enhance',
+            image: image.src,
+            prompt: userPrompt.trim() || undefined,
+        });
     };
 
     return (
@@ -120,44 +127,42 @@ const FeaturedImageButton: React.FC<FeaturedImageButtonProps> = ({
                 width={33}
                 header={{ icon: 'star-notifima', title: __('Generate Image with AI', 'my-plugin') }}
             >
-                <div className="ai-wrapper">
-                    <FormGroupWrapper>
-                        <FormGroup>
-                            <TextAreaUI
-                                name="ai_image_prompt"
-                                value={userPrompt}
-                                onChange={(val) => setUserPrompt(val)}
-                                placeholder={__('Describe the image you want...', 'my-plugin')}
-                                rows={5}
-                            />
-                        </FormGroup>
+                <FormGroupWrapper>
+                    <FormGroup>
+                        <TextAreaUI
+                            name="ai_image_prompt"
+                            value={userPrompt}
+                            onChange={(val) => setUserPrompt(val)}
+                            placeholder={__('Describe the image you want...', 'my-plugin')}
+                            rows={5}
+                        />
+                    </FormGroup>
 
-                        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                            <ButtonInputUI
-                                buttons={[
-                                    {
-                                        icon: 'star-notifima',
-                                        text: loading ? 'Generating...' : 'Generate Now',
-                                        color: 'purple',
-                                        onClick: handleGenerateNow,
-                                        disabled: loading,
-                                    },
-                                ]}
-                            />
-                            <ButtonInputUI
-                                buttons={[
-                                    {
-                                        icon: 'star-notifima',
-                                        text: 'Generate from Product',
-                                        color: 'purple',
-                                        onClick: handleGenerateFromProduct,
-                                        disabled: loading || !product,
-                                    },
-                                ]}
-                            />
-                        </div>
-                    </FormGroupWrapper>
-                </div>
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <ButtonInputUI
+                            buttons={[
+                                {
+                                    icon: 'star-notifima',
+                                    text: loading ? 'Generating...' : 'Generate Now',
+                                    color: 'purple',
+                                    onClick: handleGenerateNow,
+                                    disabled: loading || !userPrompt.trim(),
+                                },
+                            ]}
+                        />
+                        <ButtonInputUI
+                            buttons={[
+                                {
+                                    icon: 'star-notifima',
+                                    text: 'Generate from Product',
+                                    color: 'purple',
+                                    onClick: handleGenerateFromProduct,
+                                    disabled: loading || !product,
+                                },
+                            ]}
+                        />
+                    </div>
+                </FormGroupWrapper>
             </PopupUI>
 
             {/* Second Popup */}

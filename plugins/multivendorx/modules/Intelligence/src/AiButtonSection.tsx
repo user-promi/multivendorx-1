@@ -13,7 +13,7 @@ interface AiButtonSectionProps {
     modules: string[];
 }
 
-const AI_STORAGE_KEY = 'mvx_ai_product_suggestions';
+const AI_STORAGE_KEY = 'multivendorx_ai_product_suggestions';
 
 const AiButtonSection: React.FC<AiButtonSectionProps> = ({
     product,
@@ -279,7 +279,7 @@ const AiButtonSection: React.FC<AiButtonSectionProps> = ({
                                                     onClick: () => {
                                                         setProduct({
                                                             ...product,
-                                                            title: name,
+                                                            name: aiSuggestions.productName[index],
                                                             short_description:
                                                                 aiSuggestions.shortDescription[index],
                                                             description:
