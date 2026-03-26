@@ -15,6 +15,7 @@ import {
 	NoticeManager,
 	Analytics,
 	ItemListUI,
+	Notice,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import React from 'react';
@@ -466,6 +467,11 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								),
 							},
 						]}
+					/>
+					<Notice
+						type="info"
+						displayPosition="inline-notice"
+						message={__('ℹ Stores must provide valid bank account details and tax documents (PAN, GST, VAT, TIN) to receive payouts. Payment processor verification may be required. Non-compliant stores may be restricted from payouts.', 'multivendorx')}
 					/>
 				</Card>
 			</Column>
