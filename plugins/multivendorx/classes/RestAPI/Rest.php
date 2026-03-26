@@ -22,6 +22,7 @@ use MultiVendorX\RestAPI\Controllers\Tracking;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\RestAPI\Controllers\Migration;
 use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
@@ -807,6 +808,7 @@ class Rest {
             'logs'              => new Logs(),
             'ai_assistant'      => new AI(),
             'import_dummy_data' => new ImportDummyData(),
+            'Migration'         => new Migration(),
             'Tracking'          => new Tracking(),
         );
     }
