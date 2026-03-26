@@ -1,7 +1,7 @@
 /* global appLocalizer */
 import React, { useState, useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Analytics, ButtonInputUI, Card, Column, Container, ItemListUI, Notice, SettingsNavigator } from 'zyra';
+import { Analytics, ButtonInputUI, Card, Column, Container, ExpandablePanelUI, ItemListUI, Notice, SettingsNavigator } from 'zyra';
 import Counter from '@/services/Counter';
 
 const Compliance = (React.FC = () => {
@@ -56,29 +56,225 @@ const Compliance = (React.FC = () => {
                 headerIcon: 'announcement',
             },
         },
+        {
+            type: 'file',
+            content: {
+                id: 'store-verification',
+                headerTitle: __('Store Verification', 'multivendorx'),
+                hideSettingHeader: true,
+                headerIcon: 'announcement',
+            },
+        },
+        {
+            type: 'file',
+            content: {
+                id: 'legal-compliance',
+                headerTitle: __('Legal Compliance', 'multivendorx'),
+                hideSettingHeader: true,
+                headerIcon: 'announcement',
+            },
+        },
     ];
     const overviewData = [
+        {
+            id: 'total_order_amount',
+            label: __('Total Products', 'multivendorx'),
+            count: 24,
+            icon: 'order',
+        },
+        {
+            id: 'facilitator_fee',
+            label: __('Issues Found', 'multivendorx'),
+            count: 5,
+            icon: 'facilitator',
+            module: 'facilitator',
+        },
+        {
+            id: 'gateway_fee',
+            label: __('Compliant', 'multivendorx'),
+            count: 20,
+            icon: 'credit-card',
+            condition: false,
+        }
+    ];
+
+    // expendable
+    const [value, setValue] = useState({
+        marketplace_setup: {
+            store_selling_mode: 'default',
+        },
+        commission_setup: {
+            disbursement_order_status: ['completed'],
+        },
+        store_setup: {
+            approve_store: 'manually',
+        },
+    });
+
+    const inputField = {
+        key: 'setup_wizard',
+        proSetting: false,
+        apiLink: 'settings',
+        modal: [],
+    };
+
+    const methods = [
+        {
+            id: 'marketplace_setup',
+            label: __(
+                'Choose what kind of marketplace you are building',
+                'multivendorx'
+            ),
+            icon: 'storefront',
+            desc: __(
+                'This helps us tailor features for your business.',
+                'multivendorx'
+            ),
+            disableBtn: true,
+            formFields: [
+                {
+                    key: 'marketplace_model',
+                    type: 'multi-select',
+                    label: __(
+                        'What kind of marketplace you are building',
+                        'multivendorx'
+                    ),
+                    options: [
                         {
-                            id: 'total_order_amount',
-                            label: __('Total Products', 'multivendorx'),
-                            count: 24,
-                            icon: 'order',
+                            key: 'general',
+                            label: __('General marketplace', 'multivendorx'),
+                            value: 'general',
                         },
                         {
-                            id: 'facilitator_fee',
-                            label: __('Issues Found', 'multivendorx'),
-                            count: 5,
-                            icon: 'facilitator',
-                            module: 'facilitator',
+                            key: 'product',
+                            label: __('Product marketplace', 'multivendorx'),
+                            value: 'product',
                         },
                         {
-                            id: 'gateway_fee',
-                            label: __('Compliant', 'multivendorx'),
-                            count: 20,
-                            icon: 'credit-card',
-                            condition: false,
-                        }
-                    ];
+                            key: 'rental',
+                            label: __('Rental marketplace', 'multivendorx'),
+                            value: 'rental',
+                        },
+                        {
+                            key: 'auction',
+                            label: __('Auction marketplace', 'multivendorx'),
+                            value: 'auction',
+                        },
+                        {
+                            key: 'subscription',
+                            label: __(
+                                'Subscription marketplace',
+                                'multivendorx'
+                            ),
+                            value: 'subscription',
+                        },
+                        {
+                            key: 'service',
+                            label: __('Service marketplace', 'multivendorx'),
+                            value: 'service',
+                        },
+                        {
+                            key: 'mixed',
+                            label: __('Mixed marketplace', 'multivendorx'),
+                            value: 'mixed',
+                        },
+                    ],
+                }
+            ],
+        },
+        {
+            id: 'store_setup',
+            label: __('Configure Your Store', 'multivendorx'),
+            icon: 'storefront',
+            desc: __('How stores sell on your marketplace.', 'multivendorx'),
+            formFields: [
+                {
+                    key: 'approve_store',
+                    type: 'choice-toggle',
+
+                    label: __('Store registration approval', 'multivendorx'),
+
+                    options: [
+                        {
+                            key: 'manually',
+                            label: __('Manual', 'multivendorx'),
+                            value: 'manually',
+                        },
+                        {
+                            key: 'automatically',
+                            label: __('Automatic', 'multivendorx'),
+                            value: 'automatically',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            id: 'commission_setup',
+            label: __(
+                'How marketplace commission is calculated',
+                'multivendorx'
+            ),
+            icon: 'storefront',
+            desc: __(
+                'Decide how your marketplace earns money.',
+                'multivendorx'
+            ),
+            formFields: [
+                {
+                    key: 'commission_type',
+                    type: 'choice-toggle',
+                    label: __('How commission is calculated', 'multivendorx'),
+                    settingDescription: __(
+                        'Choose how marketplace commission is applied.',
+                        'multivendorx'
+                    ),
+                    desc: `<ul>
+                                <li>${__('Store order based - Calculated on the full order amount of each store.', 'multivendorx')}</li>
+                                <li>${__('Per item based - Applied to each product in the order.', 'multivendorx')}</li>
+                                </ul>`,
+                    options: [
+                        {
+                            key: 'store_order',
+                            label: __('Store order based', 'multivendorx'),
+                            value: 'store_order',
+                        },
+                        {
+                            key: 'per_item',
+                            label: __('Per item based', 'multivendorx'),
+                            value: 'per_item',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            id: 'more_settings',
+            label: __('Want to configure more settings?', 'multivendorx'),
+            icon: 'storefront',
+            desc: __(
+                "You're all set with the basics! Use the quick links below to fine-tune your marketplace now — or come back later anytime.",
+                'multivendorx'
+            ),
+            formFields: [
+                {
+                    key: 'commission_settings',
+                    type: 'button',
+                    name: __('Setup', 'multivendorx'),
+                    desc: __(
+                        'Adjust commission rules and payout behavior.',
+                        'multivendorx'
+                    ),
+                    onClick: () => {
+                        window.open(
+                            `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`,
+                            '_blank'
+                        );
+                    },
+                },
+            ],
+        },
+    ];
     const getForm = (tabId: string) => {
         switch (tabId) {
             case 'product-compliance':
@@ -374,21 +570,137 @@ const Compliance = (React.FC = () => {
                                     ]}
                                 />
                             </Card>
-<div>  </div>
+                            <div>  </div>
                         </Column>
                     </Container>
                 );
             case 'my-products':
                 return (
                     <Analytics
-						cols={3}
-						data={overviewData.map((item, idx) => ({
-							icon: item.icon,
-							iconClass: `admin-color${idx + 2}`,
-							number: item.count,
-							text: __(item.label, 'multivendorx'),
-						}))}
-					/>
+                        cols={3}
+                        data={overviewData.map((item, idx) => ({
+                            icon: item.icon,
+                            iconClass: `admin-color${idx + 2}`,
+                            number: item.count,
+                            text: __(item.label, 'multivendorx'),
+                        }))}
+                    />
+                );
+            case 'store-verification':
+                return (
+                    <Container>
+                        <Column grid={6}>
+                            <Card
+                                title={__('Identity Verification', 'multivendorx')}>
+                                <ItemListUI
+                                    className="mini-card"
+                                    // background
+                                    border
+                                    items={[
+                                        {
+                                            title: __('Business Registration Certificate', 'multivendorx'),
+                                            desc: __(
+                                                'Confirms the store is legally registered as a business entity.',
+                                                'multivendorx'
+                                            ),
+                                            tags: (
+                                                <>
+                                                    <span className="admin-badge green">
+                                                        {__('Under Review', 'multivendorx')}
+                                                    </span>
+                                                    <ButtonInputUI
+                                                        buttons={[
+                                                            {
+                                                                icon: 'export',
+                                                                text: __('Replace', 'multivendorx'),
+                                                                color: 'red'
+                                                            },
+                                                        ]}
+                                                    />
+                                                </>
+                                            ),
+                                        },
+                                        {
+                                            title: __('Trade License or Permit', 'multivendorx'),
+                                            desc: __(
+                                                'Validates the store is authorised to operate and conduct business legally.',
+                                                'multivendorx'
+                                            ),
+                                            tags: (
+                                                <>
+                                                    {/* <span className="admin-badge green">
+                                                        {__('Under Review', 'multivendorx')}
+                                                    </span> */}
+                                                    <ButtonInputUI
+                                                        buttons={[
+                                                            {
+                                                                icon: 'export',
+                                                                text: __('Replace', 'multivendorx'),
+                                                                color: 'red'
+                                                            },
+                                                        ]}
+                                                    />
+                                                </>
+                                            ),
+                                        },
+                                        {
+                                            title: __('Address Proof of Business Location', 'multivendorx'),
+                                            desc: __(
+                                                'Confirms the stores physical or operational business address.',
+                                                'multivendorx'
+                                            ),
+                                            tags: (
+                                                <>
+                                                    {/* <span className="admin-badge green">
+                                                        {__('Under Review', 'multivendorx')}
+                                                    </span> */}
+                                                    <ButtonInputUI
+                                                        buttons={[
+                                                            {
+                                                                icon: 'export',
+                                                                text: __('Upload', 'multivendorx'),
+                                                                color: 'green'
+                                                            },
+                                                        ]}
+                                                    />
+                                                </>
+                                            ),
+                                        }
+                                    ]}
+                                />
+                            </Card>
+
+                        </Column>
+
+                        <Column grid={6}>
+                            <Card title={__('Social Verification', 'multivendorx')}>
+                                <ExpandablePanelUI
+										key={inputField.key}
+										name={inputField.key}
+										// proSetting={isProSetting(inputField.proSetting ?? false)}
+										// proSettingChanged={() =>
+										// 	proSettingChanged(inputField.proSetting ?? false)
+										// }
+										apilink={String(inputField.apiLink)}
+										appLocalizer={appLocalizer}
+										methods={methods}
+										buttonEnable={inputField.buttonEnable}
+										moduleEnabled={inputField.moduleEnabled}
+										value={value}
+										onChange={(data: any) => {
+											// if (hasAccess()) {
+											// 	settingChanged.current = true;
+											// 	updateSetting(inputField.key, data);
+											// }
+										}}
+									/>
+                            </Card>
+                        </Column>
+                    </Container>
+                );
+            case 'legal-compliance':
+                return(
+                    <div>store-verification</div>
                 );
             default:
                 return <div></div>;
