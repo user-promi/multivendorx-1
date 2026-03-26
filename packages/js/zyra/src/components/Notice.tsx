@@ -77,7 +77,7 @@ export const NoticeManager = {
         if (validity !== undefined) {
             finalValidity = validity;
         } else {
-            finalValidity = notice.position === 'float' ? 3000 : 'lifetime';
+            finalValidity = notice.position === 'float' ? 2000 : 'lifetime';
         }
 
         const expiresAt =
@@ -176,7 +176,7 @@ export const Notice: React.FC<NoticeProps> = ({
     displayPosition = 'notice',
     actionLabel,
     onAction,
-    validity = 5000,
+    validity = 2000,
 }) => {
     const [isVisible, setIsVisible] = useState(true);
 
