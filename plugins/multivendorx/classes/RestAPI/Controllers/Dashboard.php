@@ -275,6 +275,12 @@ class Dashboard extends \WP_REST_Controller {
                 'icon'       => 'coupon',
                 'capability' => array( 'read_products' ),
             ),
+            'affiliate'       => array(
+                'name'       => 'Affiliate',
+                'slug'       => 'affiliate',
+                'icon'       => 'coupon',
+                'capability' => array( 'read_products' ),
+            ),
         );
 
         $saved_endpoints = MultiVendorX()->setting->get_setting( 'menu_manager' );
