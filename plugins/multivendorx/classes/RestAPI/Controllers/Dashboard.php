@@ -72,6 +72,14 @@ class Dashboard extends \WP_REST_Controller {
                     'capability' => array( 'read_products' ),
                     'filename'   => 'view-notifications',
                 ),
+                 'setup-wizard' => array(
+                    'name'       => '',
+                    'icon'       => '',
+                    'slug'       => 'setup-wizard',
+                    'submenu'    => array(),
+                    'capability' => array( 'read_products' ),
+                    'filename'   => 'setup-wizard',
+                ),
             )
         );
 

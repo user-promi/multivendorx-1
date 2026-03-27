@@ -46,12 +46,358 @@ const SetupWizard: React.FC = () => {
 		buttonEnable: true,
 	};
 
+	// const methods = [
+	// 	{
+	// 		id: 'marketplace_setup',
+	// 		label: __('Store Profile', 'multivendorx'),
+	// 		icon: 'adminfont-storefront',
+	// 		desc: __('Set up how your store appears', 'multivendorx'),
+	// 		countBtn: true,
+	// 		isWizardMode: true,
+	// 		openForm: true,
+	// 		formFields: [
+	// 			{
+	// 				key: 'store_name',
+	// 				type: 'text',
+	// 				label: __('Store name', 'multivendorx'),
+	// 				desc: __(
+	// 					'The name shown on your store page and product listings.',
+	// 					'multivendorx'
+	// 				),
+	// 			},
+	// 			{
+	// 				key: 'store_description',
+	// 				type: 'textarea',
+	// 				label: __('Store description', 'multivendorx'),
+	// 				desc: __(
+	// 					'Describe your store to help customers understand your business.',
+	// 					'multivendorx'
+	// 				),
+	// 			},
+	// 			{
+	// 				key: 'store_dashboard_site_logo',
+	// 				type: 'attachment',
+	// 				label: __('Store logo', 'multivendorx'),
+	// 				size: 'small',
+	// 			},
+	// 			{
+	// 				key: 'store_dashboard_banner',
+	// 				type: 'attachment',
+	// 				label: __('Banner image (optional)', 'multivendorx'),
+	// 				size: 'small',
+	// 			},
+	// 			{
+	// 				key: 'contact_phone',
+	// 				type: 'text',
+	// 				label: __('Contact phone', 'multivendorx'),
+	// 			},
+	// 			// {
+	// 			// 	key: 'timezone_mode',
+	// 			// 	type: 'choice-toggle',
+	// 			// 	label: __('Timezone', 'multivendorx'),
+	// 			// 	options: [
+	// 			// 		{
+	// 			// 			key: 'manually',
+	// 			// 			label: __('Manual', 'multivendorx'),
+	// 			// 			value: 'manually',
+	// 			// 		},
+	// 			// 		{
+	// 			// 			key: 'automatically',
+	// 			// 			label: __('Automatic', 'multivendorx'),
+	// 			// 			value: 'automatically',
+	// 			// 		},
+	// 			// 	],
+	// 			// },
+	// 			{
+	// 				key: 'wizardButtons',
+	// 				type: 'buttons',
+	// 				options: [
+	// 					{
+	// 						label: __('Back', 'multivendorx'),
+	// 						action: 'back',
+	// 						btnClass: 'admin-btn btn-red',
+	// 					},
+	// 					{
+	// 						label: __('Next', 'multivendorx'),
+	// 						action: 'next',
+	// 						btnClass: 'admin-btn btn-purple',
+	// 					},
+	// 				],
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		id: 'store_setup',
+	// 		label: __('Business Location', 'multivendorx'),
+	// 		icon: 'adminfont-storefront',
+	// 		desc: __('Confirm your operating address', 'multivendorx'),
+	// 		countBtn: true,
+	// 		isWizardMode: true,
+	// 		openForm: true,
+	// 		formFields: [
+	// 			{
+	// 				key: 'store_country',
+	// 				type: 'select',
+	// 				label: __('Country', 'multivendorx'),
+	// 				options: [
+	// 					{
+	// 						label: __('United States', 'multivendorx'),
+	// 						value: 'us',
+	// 					},
+	// 					{
+	// 						label: __('United Kingdom', 'multivendorx'),
+	// 						value: 'uk',
+	// 					},
+	// 					{ label: __('Canada', 'multivendorx'), value: 'ca' },
+	// 					{ label: __('Australia', 'multivendorx'), value: 'au' },
+	// 				],
+	// 			},
+	// 			{
+	// 				key: 'store_address',
+	// 				type: 'textarea',
+	// 				label: __('Address', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'store_city',
+	// 				type: 'text',
+	// 				label: __('City', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'store_postcode',
+	// 				type: 'text',
+	// 				label: __('Postcode / ZIP', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'wizardButtons',
+	// 				type: 'buttons',
+	// 				options: [
+	// 					{
+	// 						label: __('Back', 'multivendorx'),
+	// 						action: 'back',
+	// 						btnClass: 'admin-btn btn-red',
+	// 					},
+	// 					{
+	// 						label: __('Next', 'multivendorx'),
+	// 						action: 'next',
+	// 						btnClass: 'admin-btn btn-purple',
+	// 					},
+	// 				],
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		id: 'commission_setup',
+	// 		label: __('Payout Method', 'multivendorx'),
+	// 		icon: 'adminfont-storefront',
+	// 		desc: __('Choose how you receive earnings', 'multivendorx'),
+	// 		countBtn: true,
+	// 		isWizardMode: true,
+	// 		openForm: true,
+	// 		formFields: [
+	// 			{
+	// 				key: 'bank_transfer',
+	// 				type: 'setup',
+	// 				title: __('Bank Transfer', 'multivendorx'),
+	// 				desc: __('Click to configure', 'multivendorx'),
+	// 				hideCheckbox: true,
+	// 				link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+	// 			},
+	// 			{
+	// 				key: 'paypal',
+	// 				type: 'setup',
+	// 				title: __('PayPal', 'multivendorx'),
+	// 				desc: __('Click to configure', 'multivendorx'),
+	// 				hideCheckbox: true,
+	// 				link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+	// 			},
+	// 			{
+	// 				key: 'stripe',
+	// 				type: 'setup',
+	// 				title: __('Stripe', 'multivendorx'),
+	// 				desc: __('Click to configure', 'multivendorx'),
+	// 				hideCheckbox: true,
+	// 				link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+	// 			},
+	// 			{
+	// 				key: 'other_methods',
+	// 				type: 'setup',
+	// 				title: __('Other Methods', 'multivendorx'),
+	// 				desc: __('Click to configure', 'multivendorx'),
+	// 				hideCheckbox: true,
+	// 				link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+	// 			},
+	// 			{
+	// 				key: 'wizardButtons',
+	// 				type: 'buttons',
+	// 				options: [
+	// 					{
+	// 						label: __('Back', 'multivendorx'),
+	// 						action: 'back',
+	// 						btnClass: 'admin-btn btn-red',
+	// 					},
+	// 					{
+	// 						label: __('Next', 'multivendorx'),
+	// 						action: 'next',
+	// 						btnClass: 'admin-btn btn-purple',
+	// 					},
+	// 				],
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		id: 'more_settings',
+	// 		label: __('Store Policies', 'multivendorx'),
+	// 		icon: 'adminfont-storefront',
+	// 		desc: __('Set your selling rules', 'multivendorx'),
+	// 		countBtn: true,
+	// 		isWizardMode: true,
+	// 		openForm: true,
+	// 		formFields: [
+	// 			{
+	// 				key: 'refund_policy',
+	// 				type: 'textarea',
+	// 				label: __('Refund & return policy', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'shipping_terms',
+	// 				type: 'textarea',
+	// 				label: __('Shipping terms', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'store_terms',
+	// 				type: 'textarea',
+	// 				label: __('Store terms and conditions', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'wizardButtons',
+	// 				type: 'buttons',
+	// 				options: [
+	// 					{
+	// 						label: __('Back', 'multivendorx'),
+	// 						action: 'back',
+	// 						btnClass: 'admin-btn btn-red',
+	// 					},
+	// 					{
+	// 						label: __('Next', 'multivendorx'),
+	// 						action: 'next',
+	// 						btnClass: 'admin-btn btn-purple',
+	// 					},
+	// 				],
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		id: 'identity_verification',
+	// 		label: __('Identity Verification', 'multivendorx'),
+	// 		icon: 'adminfont-storefront',
+	// 		desc: __('Verify your store details', 'multivendorx'),
+	// 		countBtn: true,
+	// 		isWizardMode: true,
+	// 		openForm: true,
+	// 		formFields: [
+	// 			{
+	// 				key: 'government_id',
+	// 				type: 'file',
+	// 				label: __('Government-issued ID', 'multivendorx'),
+	// 				size: 'small',
+	// 			},
+	// 			{
+	// 				key: 'address_proof',
+	// 				type: 'file',
+	// 				label: __('Business address proof', 'multivendorx'),
+	// 				size: 'small',
+	// 			},
+	// 			{
+	// 				key: 'tax_document',
+	// 				type: 'file',
+	// 				label: __('Registration or tax documents', 'multivendorx'),
+	// 				size: 'small',
+	// 			},
+	// 			{
+	// 				key: 'wizardButtons',
+	// 				type: 'buttons',
+	// 				options: [
+	// 					{
+	// 						label: __('Back', 'multivendorx'),
+	// 						action: 'back',
+	// 						btnClass: 'admin-btn btn-red',
+	// 					},
+	// 					{
+	// 						label: __('Next', 'multivendorx'),
+	// 						action: 'next',
+	// 						btnClass: 'admin-btn btn-purple',
+	// 					},
+	// 				],
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		id: 'first_product',
+	// 		label: __('First Product', 'multivendorx'),
+	// 		icon: 'adminfont-storefront',
+	// 		desc: __('Add at least one item', 'multivendorx'),
+	// 		countBtn: true,
+	// 		isWizardMode: true,
+	// 		openForm: true,
+	// 		formFields: [
+	// 			{
+	// 				key: 'product_title',
+	// 				type: 'text',
+	// 				label: __('Product title', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'product_description',
+	// 				type: 'textarea',
+	// 				label: __('Product description', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'product_price',
+	// 				type: 'number',
+	// 				label: __('Price', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'product_inventory',
+	// 				type: 'number',
+	// 				label: __('Inventory', 'multivendorx'),
+	// 			},
+	// 			{
+	// 				key: 'product_images',
+	// 				type: 'file',
+	// 				label: __('Product images', 'multivendorx'),
+	// 				size: 'small',
+	// 			},
+	// 			{
+	// 				key: 'wizardButtons',
+	// 				type: 'buttons',
+	// 				options: [
+	// 					{
+	// 						label: __('Back', 'multivendorx'),
+	// 						action: 'back',
+	// 						btnClass: 'admin-btn btn-red',
+	// 					},
+	// 					{
+	// 						label: __('Finish', 'multivendorx'),
+	// 						action: 'next',
+	// 						btnClass: 'admin-btn btn-purple',
+	// 						redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=modules`,
+	// 					},
+	// 				],
+	// 			},
+	// 		],
+	// 	},
+	// ];
 	const methods = [
 		{
 			id: 'marketplace_setup',
-			label: __('Store Profile', 'multivendorx'),
-			icon: 'adminfont-storefront',
-			desc: __('Set up how your store appears', 'multivendorx'),
+			label: __(
+				'Store Profile',
+				'multivendorx'
+			),
+			icon: 'storefront',
+			desc: __(
+				'Set up how your store appears',
+				'multivendorx'
+			),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -92,35 +438,18 @@ const SetupWizard: React.FC = () => {
 					label: __('Contact phone', 'multivendorx'),
 				},
 				{
-					key: 'timezone_mode',
-					type: 'choice-toggle',
-					label: __('Timezone', 'multivendorx'),
-					options: [
-						{
-							key: 'manually',
-							label: __('Manual', 'multivendorx'),
-							value: 'manually',
-						},
-						{
-							key: 'automatically',
-							label: __('Automatic', 'multivendorx'),
-							value: 'automatically',
-						},
-					],
-				},
-				{
 					key: 'wizardButtons',
-					type: 'buttons',
+					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
+							color: 'red',
 							action: 'back',
-							btnClass: 'admin-btn btn-red',
 						},
 						{
 							label: __('Next', 'multivendorx'),
 							action: 'next',
-							btnClass: 'admin-btn btn-purple',
 						},
 					],
 				},
@@ -128,9 +457,9 @@ const SetupWizard: React.FC = () => {
 		},
 		{
 			id: 'store_setup',
-			label: __('Business Location', 'multivendorx'),
-			icon: 'adminfont-storefront',
-			desc: __('Confirm your operating address', 'multivendorx'),
+			label: __('Configure Your Store', 'multivendorx'),
+			icon: 'storefront',
+			desc: __('How stores sell on your marketplace.', 'multivendorx'),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -169,17 +498,16 @@ const SetupWizard: React.FC = () => {
 				},
 				{
 					key: 'wizardButtons',
-					type: 'buttons',
+					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
 							action: 'back',
-							btnClass: 'admin-btn btn-red',
 						},
 						{
 							label: __('Next', 'multivendorx'),
 							action: 'next',
-							btnClass: 'admin-btn btn-purple',
 						},
 					],
 				},
@@ -187,9 +515,15 @@ const SetupWizard: React.FC = () => {
 		},
 		{
 			id: 'commission_setup',
-			label: __('Payout Method', 'multivendorx'),
-			icon: 'adminfont-storefront',
-			desc: __('Choose how you receive earnings', 'multivendorx'),
+			label: __(
+				'Payout Method',
+				'multivendorx'
+			),
+			icon: 'storefront',
+			desc: __(
+				'Choose how you receive earnings',
+				'multivendorx'
+			),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -228,27 +562,26 @@ const SetupWizard: React.FC = () => {
 				},
 				{
 					key: 'wizardButtons',
-					type: 'buttons',
+					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
 							action: 'back',
-							btnClass: 'admin-btn btn-red',
 						},
 						{
 							label: __('Next', 'multivendorx'),
 							action: 'next',
-							btnClass: 'admin-btn btn-purple',
 						},
 					],
 				},
 			],
 		},
 		{
-			id: 'more_settings',
+			id: 'migration',
 			label: __('Store Policies', 'multivendorx'),
-			icon: 'adminfont-storefront',
-			desc: __('Set your selling rules', 'multivendorx'),
+			icon: 'storefront',
+			desc: __('Set your selling rules.', 'multivendorx'),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -270,27 +603,29 @@ const SetupWizard: React.FC = () => {
 				},
 				{
 					key: 'wizardButtons',
-					type: 'buttons',
+					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
 							action: 'back',
-							btnClass: 'admin-btn btn-red',
 						},
 						{
 							label: __('Next', 'multivendorx'),
 							action: 'next',
-							btnClass: 'admin-btn btn-purple',
 						},
 					],
 				},
 			],
 		},
 		{
-			id: 'identity_verification',
+			id: 'more_settings',
 			label: __('Identity Verification', 'multivendorx'),
-			icon: 'adminfont-storefront',
-			desc: __('Verify your store details', 'multivendorx'),
+			icon: 'storefront',
+			desc: __(
+				"You're all set with the basics! Use the quick links below to fine-tune your marketplace now — or come back later anytime.",
+				'multivendorx'
+			),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -315,27 +650,43 @@ const SetupWizard: React.FC = () => {
 				},
 				{
 					key: 'wizardButtons',
-					type: 'buttons',
+					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
 							action: 'back',
-							btnClass: 'admin-btn btn-red',
 						},
 						{
 							label: __('Next', 'multivendorx'),
 							action: 'next',
-							btnClass: 'admin-btn btn-purple',
 						},
 					],
 				},
+				// {
+				// 	key: 'wizardButtons',
+				// 	type: 'button',
+				// 	position: 'right',
+				// 	options: [
+				// 		{
+				// 			label: __('Back', 'multivendorx'),
+				// 			action: 'back',
+				// 			color: 'red',
+				// 		},
+				// 		{
+				// 			label: __('Finish', 'multivendorx'),
+				// 			action: 'next',
+				// 			redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=modules`,
+				// 		},
+				// 	],
+				// },
 			],
 		},
 		{
-			id: 'first_product',
+			id: 'more_settings',
 			label: __('First Product', 'multivendorx'),
-			icon: 'adminfont-storefront',
-			desc: __('Add at least one item', 'multivendorx'),
+			icon: 'storefront',
+			desc: __( "Add at least one item", 'multivendorx'),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -368,17 +719,17 @@ const SetupWizard: React.FC = () => {
 				},
 				{
 					key: 'wizardButtons',
-					type: 'buttons',
+					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
 							action: 'back',
-							btnClass: 'admin-btn btn-red',
+							color: 'red',
 						},
 						{
 							label: __('Finish', 'multivendorx'),
 							action: 'next',
-							btnClass: 'admin-btn btn-purple',
 							redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=modules`,
 						},
 					],
@@ -386,7 +737,6 @@ const SetupWizard: React.FC = () => {
 			],
 		},
 	];
-
 	const updateSetting = (key: string, data: WizardData) => {
 		setValue(data);
 	};
