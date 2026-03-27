@@ -227,6 +227,7 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'wizardButtons',
 					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
@@ -272,6 +273,7 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'wizardButtons',
 					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
@@ -399,6 +401,7 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'wizardButtons',
 					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
@@ -441,6 +444,7 @@ const SetupWizard: React.FC = () => {
 				{
 					key: 'wizardButtons',
 					type: 'button',
+					position: 'right',
 					options: [
 						{
 							label: __('Back', 'multivendorx'),
