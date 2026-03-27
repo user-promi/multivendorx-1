@@ -868,6 +868,8 @@ class Stores extends \WP_REST_Controller {
 
             $store = new Store( $id );
 
+            $data = apply_filters( 'multivendorx_before_store_update', $data, $store, $request );
+
             // Deactivation handling.
             if ( ! empty( $data['deactivate'] ) ) {
                 $action = $data['action'] ?? '';
