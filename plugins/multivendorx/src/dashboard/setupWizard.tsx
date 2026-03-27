@@ -743,41 +743,39 @@ const SetupWizard: React.FC = () => {
 
 	return (
 		<div className="wizard-container">
-			<div>
-				<div className="welcome-wrapper">
-					<h4 className="wizard-title">
-						{__(
-							'Welcome to the MultivendorX family!',
-							'multivendorx'
-						)}
-					</h4>
-					<div className="des">
-						{__(
-							'Thank you for choosing MultiVendorX! This quick setup wizard will help you configure the basic settings and have your marketplace ready in no time. It’s completely optional and shouldn’t take longer than five minutes.',
-							'multivendorx'
-						)}
-					</div>
+			<div className="welcome-wrapper">
+				<h4 className="wizard-title">
+					{__(
+						'Welcome to the MultivendorX family!',
+						'multivendorx'
+					)}
+				</h4>
+				<div className="des">
+					{__(
+						'Thank you for choosing MultiVendorX! This quick setup wizard will help you configure the basic settings and have your marketplace ready in no time. It’s completely optional and shouldn’t take longer than five minutes.',
+						'multivendorx'
+					)}
 				</div>
-				<ExpandablePanelUI
-					key={inputField.key}
-					name={inputField.key}
-					apilink={String(inputField.apiLink)}
-					appLocalizer={appLocalizer}
-					methods={methods}
-					value={value}
-					onChange={(data) => {
-						settingChanged.current = true;
-						updateSetting(inputField.key, data);
-					}}
-					isWizardMode={true}
-					canAccess={true}
-				/>
-
-				{/* <div className="welcome-wrapper">
-                    <div className="wizard-title">! Well Done</div>
-                    <div className="des">Thank you for choosing MultiVendorX!</div>
-                </div> */}
 			</div>
+			<ExpandablePanelUI
+				key={inputField.key}
+				name={inputField.key}
+				apilink={String(inputField.apiLink)}
+				appLocalizer={appLocalizer}
+				methods={methods}
+				value={value}
+				onChange={(data) => {
+					settingChanged.current = true;
+					updateSetting(inputField.key, data);
+				}}
+				isWizardMode={true}
+				canAccess={true}
+			/>
+
+			{/* <div className="welcome-wrapper">
+				<div className="wizard-title">! Well Done</div>
+				<div className="des">Thank you for choosing MultiVendorX!</div>
+			</div> */}
 		</div>
 	);
 };
