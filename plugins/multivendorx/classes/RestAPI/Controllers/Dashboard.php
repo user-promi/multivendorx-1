@@ -238,7 +238,7 @@ class Dashboard extends \WP_REST_Controller {
                 'capability' => array( 'manage_store_settings' ),
             ),
             'appointment'   => array(
-                'name'       => 'Appointment (Pro)',
+                'name'       => 'Rental (pro)',
                 'slug'       => 'appointment',
                 'icon'       => 'report',
                 'submenu'    => array(
@@ -278,6 +278,12 @@ class Dashboard extends \WP_REST_Controller {
             'affiliate'       => array(
                 'name'       => 'Affiliate',
                 'slug'       => 'affiliate',
+                'icon'       => 'coupon',
+                'capability' => array( 'read_products' ),
+            ),
+            'add-appointment'       => array(
+                'name'       => 'Add Appointment (Pro)',
+                'slug'       => 'add-appointment',
                 'icon'       => 'coupon',
                 'capability' => array( 'read_products' ),
             ),
