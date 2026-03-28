@@ -209,6 +209,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
                     checked={value.includes(field.rowKey)}
                     onChange={(e) => {
                         if (!isBlocked(field, modules, onBlocked)) {
+                            console.log("checkbox trigger");
                             onChange(e.target.checked);
                         }
                     }}
