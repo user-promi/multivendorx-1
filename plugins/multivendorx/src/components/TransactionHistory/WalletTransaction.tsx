@@ -413,7 +413,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			onClickWithQuery: downloadTransactionCSVByQuery,
 		},
 	];
-	console.log(recentDebits)
+
 	return (
 		<>
 			<Container>
