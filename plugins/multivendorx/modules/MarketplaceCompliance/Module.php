@@ -43,6 +43,7 @@ class Module {
      * @return void
      */
     public function init_classes() {
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export('test', true) . "\n", FILE_APPEND);
         $this->container['frontend'] = new Frontend();
         $this->container['ajax']     = new Ajax();
         $this->container['util']     = new Util();
