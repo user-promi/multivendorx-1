@@ -130,15 +130,37 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
 
         return updated;
     };
+    const turnOnParents = (
+        selected: string[],
+        options: Option[],
+        childValue: string
+    ): string[] => {
+        let updated = [...selected];
 
+        const option = options.find((opt) => opt.value === childValue);
+
+        if (option?.dependent) {
+            if (!updated.includes(option.dependent)) {
+                updated.push(option.dependent);
+            }
+            updated = turnOnParents(updated, options, option.dependent);
+        }
+
+        return updated;
+    };
     const toggle = (val: string) => {
-        let updated = value.includes(val)
-            ? value.filter((v) => v !== val)
-            : [...value, val];
+        let updated: string[];
 
         if (value.includes(val)) {
+            // turning OFF.
+            updated = value.filter((v) => v !== val);
             updated = turnOffChildren(updated, options, val);
+        } else {
+            // turning ON.
+            updated = [...value, val];
+            updated = turnOnParents(updated, options, val);
         }
+
         onChange(updated);
     };
 
@@ -345,7 +367,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
                                                             setEditIndex(index);
                                                             setEditValue(
                                                                 option.label ??
-                                                                    option.value
+                                                                option.value
                                                             );
                                                         }}
                                                     />
@@ -423,18 +445,18 @@ const MultiCheckBox: FieldComponent = {
         const normalizedValue: string[] = Array.isArray(value)
             ? value.filter((v) => v?.trim())
             : typeof value === 'string' && value.trim()
-              ? [value]
-              : [];
+                ? [value]
+                : [];
 
         // Prefer live options from settings over static field definition
         const sourceOptions =
             settings?.[`${field.key}_options`] ?? field.options;
         const normalizedOptions: Option[] = Array.isArray(sourceOptions)
             ? sourceOptions.map((opt) => ({
-                  ...opt,
-                  value: String(opt.value),
-                  edit: opt.edit ?? !!field.addNewBtnText,
-              }))
+                ...opt,
+                value: String(opt.value),
+                edit: opt.edit ?? !!field.addNewBtnText,
+            }))
             : [];
 
         return (
@@ -443,8 +465,8 @@ const MultiCheckBox: FieldComponent = {
                     field.look === 'toggle'
                         ? 'toggle-btn'
                         : field.selectDeselect === true
-                          ? 'checkbox-list-side-by-side'
-                          : 'simple-checkbox'
+                            ? 'checkbox-list-side-by-side'
+                            : 'simple-checkbox'
                 }
                 inputInnerWrapperClass={
                     field.look === 'toggle'
