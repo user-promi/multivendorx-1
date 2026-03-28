@@ -481,6 +481,7 @@ const AddProduct = () => {
 										onChange={(value) =>
 											handleChange('name', value)
 										}
+										disabled={modules.includes('shared-listing')}
 									/>
 									<div className="settings-metabox-description">{__('A unique name for your product', 'multivendorx')}</div>
 								</div>
