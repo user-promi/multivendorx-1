@@ -1227,9 +1227,11 @@ body.dark {
 
 .prompt-wrapper {
     position: fixed;
-    bottom: 0;
+    bottom: 3.5rem;
     width: 100%;
     box-sizing: border-box;
+    background: #fff;
+    z-index: 999;
 
     .ai-suggestion-item {
         .desc {
