@@ -130,7 +130,8 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
 
         return updated;
     };
-    const turnOnParents = (
+
+    const dependentSibling = (
         selected: string[],
         options: Option[],
         childValue: string
@@ -148,6 +149,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
 
         return updated;
     };
+
     const toggle = (val: string) => {
         let updated: string[];
 
@@ -158,7 +160,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
         } else {
             // turning ON.
             updated = [...value, val];
-            updated = turnOnParents(updated, options, val);
+            updated = dependentSibling(updated, options, val);
         }
 
         onChange(updated);
