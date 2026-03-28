@@ -20,7 +20,6 @@ const PendingWithdrawal: React.FC<object> = () => {
 	const firstLoadRef = useRef(true);
 
 	const handleSingleAction = (action: string, row) => {
-		console.log(row)
 		if (!row?.id) {
 			return;
 		}
