@@ -293,7 +293,6 @@ const EditStore = () => {
 	const displayText = expanded
 		? data?.description
 		: words.slice(0, 50).join(' ');
-console.log('data', data)
 	const getForm = useCallback(
 		(tabId: string) => {
 			switch (tabId) {
