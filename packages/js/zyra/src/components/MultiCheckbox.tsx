@@ -114,7 +114,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
 
     const allSelected = value.length === options.length;
 
-    const turnOffChildren = (
+    const turnOffSiblings = (
         selected: string[],
         options: Option[],
         parent: string
@@ -125,13 +125,13 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
 
         children.forEach((child) => {
             updated = updated.filter((v) => v !== child.value);
-            updated = turnOffChildren(updated, options, child.value);
+            updated = turnOffSiblings(updated, options, child.value);
         });
 
         return updated;
     };
 
-    const dependentSibling = (
+    const turnOnSiblings = (
         selected: string[],
         options: Option[],
         childValue: string
@@ -156,11 +156,11 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
         if (value.includes(val)) {
             // turning OFF.
             updated = value.filter((v) => v !== val);
-            updated = turnOffChildren(updated, options, val);
+            updated = turnOffSiblings(updated, options, val);
         } else {
             // turning ON.
             updated = [...value, val];
-            updated = dependentSibling(updated, options, val);
+            updated = turnOnSiblings(updated, options, val);
         }
 
         onChange(updated);
