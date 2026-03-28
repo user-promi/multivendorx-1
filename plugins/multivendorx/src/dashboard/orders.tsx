@@ -303,9 +303,6 @@ const Orders: React.FC = () => {
 		},
 	];
 
-	console.log("set", privacy)
-	console.log("head", headers)
-
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 
