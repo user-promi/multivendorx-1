@@ -262,7 +262,7 @@ class StripeConnect {
             'https://connect.stripe.com/oauth/authorize'
         );
 
-        wp_safe_redirect( $url );
+        wp_redirect( $url );
         exit;
     }
 
