@@ -31,16 +31,27 @@ const getStored = (): NoticeItem[] => {
         if (!data) {
             return [];
         }
+
+        const now = Date.now();
+
         const parsed: NoticeItem[] = JSON.parse(data);
-        return parsed.filter((n) => typeof n.expiresAt === 'number');
+
+        return parsed.filter(
+            (n) =>
+                typeof n.expiresAt === 'number' &&
+                n.expiresAt > now
+        );
     } catch {
         return [];
     }
 };
 
 const persist = () => {
+    const now = Date.now();
+
     const persistable = noticeQueue.filter(
-        (n) => typeof n.expiresAt === 'number'
+        (n) => typeof n.expiresAt === 'number' &&
+            n.expiresAt > now
     );
     if (persistable.length === 0) {
         localStorage.removeItem(STORAGE_KEY);
@@ -162,7 +173,7 @@ export interface NoticeProps {
     title?: string;
     message?: string | string[];
     type?: 'info' | 'success' | 'warning' | 'error' | 'banner';
-    displayPosition?: 'inline' | NoticePosition;
+    displayPosition?: 'inline' | 'inline-notice' | NoticePosition;
     actionLabel?: string;
     onAction?: () => void;
     validity?: number | 'lifetime';
@@ -176,12 +187,12 @@ export const Notice: React.FC<NoticeProps> = ({
     displayPosition = 'notice',
     actionLabel,
     onAction,
-    validity = 2000,
+    validity,
 }) => {
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        if (displayPosition === 'inline') {
+        if (displayPosition === 'inline' || displayPosition === 'inline-notice') {
             return;
         }
         NoticeManager.add(
@@ -200,9 +211,11 @@ export const Notice: React.FC<NoticeProps> = ({
         setIsVisible(false);
     }, []);
 
-    if (displayPosition !== 'inline' || !isVisible || (!title && !message)) {
-        return null;
-    }
+    const isInline = ['inline', 'inline-notice'].includes(displayPosition);
+
+        if (!isInline || !isVisible || (!title && !message)) {
+            return null;
+        }
 
     const item: NoticeItem = {
         uniqueKey: uniqueKey || 'inline',

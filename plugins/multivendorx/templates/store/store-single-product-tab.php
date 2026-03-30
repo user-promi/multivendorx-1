@@ -11,6 +11,7 @@
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Privacy\Util;
+use MultiVendorX\Store\StoreUtil;
 
 global $product;
 $html  = '';
@@ -35,8 +36,7 @@ if ( $store ) {
 
             $heading_text = sprintf(
                 // translators: %1$s is the vendor/owner name, %2$s is the clickable store name link.
-                __( 'Meet our %1$s of shop %2$s', 'multivendorx' ),
-                esc_html( $details['owner_name'] ),
+                __( 'Meet our shop %1$s', 'multivendorx' ),
                 $store_name_link
             );
         } else {
@@ -90,7 +90,7 @@ if ( $store ) {
 
         if ( in_array( 'show_store_phone', $store_contact_details, true ) && ! empty( $details['phone'] ) ) {
             $html .= '<div class="store-info"><i class="dashicons dashicons-phone"></i>'
-                . esc_html( $details['phone'] ) .
+                . esc_html( StoreUtil::get_phone($details['phone']) ) .
             '</div>';
         }
 
