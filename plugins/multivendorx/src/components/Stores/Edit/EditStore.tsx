@@ -934,6 +934,7 @@ const EditStore = () => {
 					<PopupUI
 						position="menu-dropdown"
 						toggleIcon="more-vertical"
+						tooltipName={__('Settings', 'multivendorx')}
 					>
 						<ItemListUI items={actionItems} />
 					</PopupUI>
