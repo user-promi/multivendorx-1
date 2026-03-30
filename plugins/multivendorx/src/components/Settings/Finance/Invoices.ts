@@ -471,6 +471,7 @@ export default {
 					value: 'use_store_address',
 				},
 			],
+			moduleEnabled: 'invoice',
 			proSetting: true,
 			selectDeselect: true,
 		},
