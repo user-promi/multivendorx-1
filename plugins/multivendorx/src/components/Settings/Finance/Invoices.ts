@@ -261,17 +261,13 @@ export default {
 			cols: 2,
 			addNewBtn: true,
 			addNewTemplate: {
-				label: 'New Tax information',
-				formFields: [
-					{
-						key: 'label',
-						type: 'text',
-						label: 'Tax information',
-						placeholder: 'Enter tax information',
-					},
-				],
+				label: 'New tax information',
+				editableFields: {
+					title: true,
+					description: false,
+				},
+				disableBtn: true,
 			},
-			modal: [],
 		},
 		{
 			key: 'multivendorx_tinymce_api_section',
