@@ -5,8 +5,6 @@ import PendingReportAbuse from './PendingAbuseReports';
 import axios from 'axios';
 import { getApiLink } from 'zyra';
 
-window.__multivendorxPendingCounts = window.__multivendorxPendingCounts || {};
-
 axios
     .get(getApiLink(appLocalizer, 'report-abuse'), {
         headers: { 'X-WP-Nonce': appLocalizer.nonce },
@@ -14,12 +12,7 @@ axios
     })
     .then((res) => {
         const count = Number(res.headers['x-wp-total']) || 0;
-        window.__multivendorxPendingCounts['report-abuse'] = count;
-        window.dispatchEvent(
-            new CustomEvent('multivendorx:count-update', {
-                detail: { id: 'report-abuse', count },
-            })
-        );
+        window.multivendorxStore?.setCount('report-abuse', count);
     });
 
 addFilter(
@@ -45,7 +38,7 @@ addFilter(
                     'multivendorx'
                 ),
                 headerIcon: 'product indigo',
-                count: 0,
+                count: window.multivendorxStore?.counts?.['report-abuse'] || 0,
             },
         });
 
@@ -59,16 +52,7 @@ addFilter(
     (defaultForm, { tabId }) => {
         if (tabId === 'report-abuse') {
             return (
-                <PendingReportAbuse
-                    setCount={(count) => {
-                        window.__multivendorxPendingCounts['report-abuse'] = count;
-                        window.dispatchEvent(
-                            new CustomEvent('multivendorx:count-update', {
-                                detail: { id: 'report-abuse', count },
-                            })
-                        );
-                    }}
-                />
+                <PendingReportAbuse />
             );
         }
 

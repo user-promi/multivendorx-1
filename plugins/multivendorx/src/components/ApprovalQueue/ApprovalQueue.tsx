@@ -11,29 +11,56 @@ import PendingCoupons from './PendingCoupons';
 import PendingWithdrawal from './PendingWithdrawalRequests';
 import PendingDeactivateRequests from './PendingDeactivateRequests';
 
+if (!window.multivendorxStore) {
+	window.multivendorxStore = {
+		counts: {},
+		listeners: [],
+		setCount(id, count) {
+			if (this.counts[id] === count) return;
+			this.counts[id] = count;
+			this.listeners.forEach((fn) => fn(this.counts));
+		},
+		subscribe(fn) {
+			this.listeners.push(fn);
+			return () => {
+				this.listeners = this.listeners.filter((l) => l !== fn);
+			};
+		},
+	};
+}
+
 const ApprovalQueue = () => {
-	const [storeCount, setStoreCount] = useState<number>(0);
-	const [productCount, setProductCount] = useState<number>(0);
-	const [couponCount, setCouponCount] = useState<number>(0);
-	const [withdrawCount, setWithdrawCount] = useState<number>(0);
-	const [deactivateCount, setDeactivateCount] = useState<number>(0);
-	const [moduleTabCounts, setModuleTabCounts] = useState<Record<string, number>>({});
+	const [counts, setCounts] = useState<Record<string, number>>({});
 
 	useEffect(() => {
+		const store = window.multivendorxStore;
+
+		// initial
+		setCounts({ ...store.counts });
+
+		// subscribe
+		return store.subscribe((newCounts) => {
+			setCounts({ ...newCounts });
+		});
+	}, []);
+
+	// Initial API fetch (only once)
+	useEffect(() => {
 		const fetchPendingCount = () => {
+			const store = window.multivendorxStore;
+
 			axios({
 				method: 'GET',
 				url: getApiLink(appLocalizer, 'store'),
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { status: 'pending', page: 1, row: 1 },
-			})
-				.then((res) => {
-					const pendingCount =
-						Number(res.headers['x-wp-status-pending']) || 0;
+			}).then((res) => {
+				store.setCount(
+					'stores',
+					Number(res.headers['x-wp-status-pending']) || 0
+				);
+			});
 
-					setStoreCount(pendingCount);
-				});
-		
 			axios
 				.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
@@ -44,9 +71,11 @@ const ApprovalQueue = () => {
 					},
 				})
 				.then((res) =>
-					setProductCount(parseInt(res.headers['x-wp-total']) || 0)
+					store.setCount(
+						'products',
+						parseInt(res.headers['x-wp-total']) || 0
+					)
 				);
-		
 
 			axios
 				.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
@@ -58,60 +87,44 @@ const ApprovalQueue = () => {
 					},
 				})
 				.then((res) =>
-					setCouponCount(parseInt(res.headers['x-wp-total']) || 0)
+					store.setCount(
+						'coupons',
+						parseInt(res.headers['x-wp-total']) || 0
+					)
 				);
-		
+
 			axios
 				.get(getApiLink(appLocalizer, 'store'), {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					params: {
-						page: 1,
-						row: 1,
-						pending_withdraw: true,
-					},
+					params: { page: 1, row: 1, pending_withdraw: true },
 				})
-				.then((res) => {
-					setWithdrawCount(Number(res.headers['x-wp-total']) || 0);
-				});
-		
-		axios
-			.get(getApiLink(appLocalizer, 'store'), {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				params: {
-					page: 1,
-					row: 1,
-					deactivate: true,
-				},
-			})
-			.then((res) => {
-				setDeactivateCount(Number(res.headers['x-wp-total']) || 0);
-			});
-	
+				.then((res) =>
+					store.setCount(
+						'withdrawal',
+						Number(res.headers['x-wp-total']) || 0
+					)
+				);
+
+			axios
+				.get(getApiLink(appLocalizer, 'store'), {
+					headers: { 'X-WP-Nonce': appLocalizer.nonce },
+					params: { page: 1, row: 1, deactivate: true },
+				})
+				.then((res) =>
+					store.setCount(
+						'deactivate-requests',
+						Number(res.headers['x-wp-total']) || 0
+					)
+				);
 		};
+
 		fetchPendingCount();
-
-		// Replay counts that fired before this component mounted
-        if (window.__multivendorxPendingCounts) {
-            setModuleTabCounts({ ...window.__multivendorxPendingCounts });
-        }
-
-        // Listen for future updates
-        const handler = (e: CustomEvent) => {
-            const { id, count } = e.detail;
-            setModuleTabCounts((prev) => {
-				if (prev[id] === count) return prev;
-				return { ...prev, [id]: count };
-			});
-        };
-
-        window.addEventListener('multivendorx:count-update', handler as EventListener);
-        return () => window.removeEventListener('multivendorx:count-update', handler as EventListener);
 	}, []);
 
 	const { modules } = useModules();
 	const settings = appLocalizer.settings_databases_value || {};
-
 	const location = new URLSearchParams(useLocation().hash.substring(1));
+
 	const baseSettingContent = [
 		{
 			type: 'file',
@@ -129,15 +142,12 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'storefront yellow',
-				count: storeCount,
+				count: counts['stores'] || 0,
 			},
 		},
 		{
 			type: 'file',
-			condition:
-				settings?.['store-permissions']?.products?.includes(
-					'publish_products'
-				),
+			condition: settings?.['store-permissions']?.products?.includes('publish_products'),
 			content: {
 				id: 'products',
 				headerTitle: __('Products', 'multivendorx'),
@@ -148,15 +158,12 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'multi-product red',
-				count: productCount,
+				count: counts['products'] || 0,
 			},
 		},
 		{
 			type: 'file',
-			condition:
-				settings?.['store-permissions']?.coupons?.includes(
-					'publish_coupons'
-				),
+			condition: settings?.['store-permissions']?.coupons?.includes('publish_coupons'),
 			content: {
 				id: 'coupons',
 				headerTitle: __('Coupons', 'multivendorx'),
@@ -167,7 +174,7 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'coupon green',
-				count: couponCount,
+				count: counts['coupons'] || 0,
 			},
 		},
 		{
@@ -189,7 +196,7 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'bank orange',
-				count: withdrawCount,
+				count: counts['withdrawal'] || 0,
 			},
 		},
 		{
@@ -210,7 +217,7 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'rejecte teal',
-				count: deactivateCount,
+				count: counts['deactivate-requests'] || 0,
 			},
 		},
 	];
@@ -221,36 +228,25 @@ const ApprovalQueue = () => {
 		{ settings, modules }
 	);
 
-	 const settingContent = filteredSettings.filter(
-            (tab) =>
-                (!tab.module || modules.includes(tab.module)) &&
-                (tab.condition === undefined || tab.condition)
-        ).map((tab) => {
-            const liveCount = moduleTabCounts[tab.content?.id];
-            if (liveCount !== undefined) {
-                return { ...tab, content: { ...tab.content, count: liveCount } };
-            }
-            return tab;
-        });
-		
+	const settingContent = filteredSettings.filter(
+		(tab) =>
+			(!tab.module || modules.includes(tab.module)) &&
+			(tab.condition === undefined || tab.condition)
+	);
+
 	const getForm = (tabId: string) => {
 		const defaultForm = (() => {
 			switch (tabId) {
 				case 'stores':
-					return <PendingStores onCountChange={setStoreCount}/>;
-
+					return <PendingStores />;
 				case 'products':
-					return <PendingProducts onCountChange={setProductCount}/>;
-
+					return <PendingProducts />;
 				case 'coupons':
-					return <PendingCoupons onCountChange={setCouponCount}/>;
-
+					return <PendingCoupons />;
 				case 'withdrawal':
-					return <PendingWithdrawal onCountChange={setWithdrawCount}/>;
-
+					return <PendingWithdrawal />;
 				case 'deactivate-requests':
-					return <PendingDeactivateRequests onCountChange={setDeactivateCount} />;
-
+					return <PendingDeactivateRequests />;
 				default:
 					return null;
 			}

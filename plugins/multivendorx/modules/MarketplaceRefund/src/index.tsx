@@ -4,8 +4,6 @@ import { __ } from '@wordpress/i18n';
 import PendingRefund from './PendingRefund';
 import axios from 'axios';
 
-window.__multivendorxPendingCounts = window.__multivendorxPendingCounts || {};
-
 axios
     .get(`${appLocalizer.apiUrl}/wc/v3/orders`, {
         headers: { 'X-WP-Nonce': appLocalizer.nonce },
@@ -18,12 +16,7 @@ axios
     })
     .then((res) => {
         const count = Number(res.headers['x-wp-total']) || 0;
-        window.__multivendorxPendingCounts['refund-requests'] = count;
-        window.dispatchEvent(
-            new CustomEvent('multivendorx:count-update', {
-                detail: { id: 'refund-requests', count },
-            })
-        );
+        window.multivendorxStore?.setCount('refund-requests', count);
     });
 
 addFilter(
@@ -43,7 +36,7 @@ addFilter(
                     'multivendorx'
                 ),
                 headerIcon: 'marketplace-refund blue',
-                count: 0,
+                count: window.multivendorxStore?.counts?.['refund-requests'] || 0,
             },
         });
 
@@ -57,17 +50,7 @@ addFilter(
     (defaultForm, { tabId }) => {
         if (tabId === 'refund-requests') {
             return (
-                <PendingRefund
-                    setCount={(count) => {
-                        window.__multivendorxPendingCounts['refund-requests'] = count;
-
-                        window.dispatchEvent(
-                            new CustomEvent('multivendorx:count-update', {
-                                detail: { id: 'refund-requests', count },
-                            })
-                        );
-                    }}
-                />
+                <PendingRefund />
             );
         }
 
