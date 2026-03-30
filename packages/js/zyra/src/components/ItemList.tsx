@@ -48,10 +48,10 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
             <div className={`item-list ${className || 'default'}`}>
                 {Array.from({ length: skeletonCount }).map((_, index) => (
                     <div key={index} className="item">
-                        <Skeleton variant="circular" width={32} height={32} />
+                        <Skeleton variant="circular" width={2} height={2} />
                         <div className="details">
-                            <Skeleton width="60%" height={12} />
-                            <Skeleton width="40%" height={10} />
+                            <Skeleton width="60%" height={0.75} />
+                            <Skeleton width="40%" height={0.625} />
                         </div>
                     </div>
                 ))}

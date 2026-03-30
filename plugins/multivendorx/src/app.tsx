@@ -18,6 +18,7 @@ import { getTourSteps } from './components/Tour/Tours';
 import NotificationTabContent from './components/Notifications/HeaderNotifications';
 import './routeRegistry';
 import './routes';
+import { tooltip } from 'leaflet';
 
 // Auto-load all modules src folder.
 const modulesContext = require.context(
@@ -193,6 +194,7 @@ const App = () => {
 	const utilityListWithTab = [
 		{
 			toggleIcon: 'notification',
+			tooltipName: __('Notifications', 'multivendorx'),
 			tabs: [
 				{
 					id: 'notifications',
@@ -223,6 +225,7 @@ const App = () => {
 	const utilityList = [
 		{
 			toggleIcon: 'admin-icon adminfont-user-circle',
+			tooltipName: __('Support', 'multivendorx'),
 			items: profileItems,
 		},
 	];

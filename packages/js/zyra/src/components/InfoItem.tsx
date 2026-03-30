@@ -107,7 +107,7 @@ const InfoItem: React.FC<InfoItemProps> = ({
 
                             <div className="details">
                                 <div className="name">
-                                    <Skeleton width={180} height={24} />
+                                    <Skeleton width={11.25} height={1.5} />
                                     {badges.length > 0 && (
                                         <Skeleton
                                             variant="rectangular"
