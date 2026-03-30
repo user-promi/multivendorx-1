@@ -315,7 +315,7 @@ const OrderDetails: React.FC = () => {
 				order_id: orderId,
 			},
 		}).then(() => {
-			setTracking(false);
+			
 		});
 
 	};
