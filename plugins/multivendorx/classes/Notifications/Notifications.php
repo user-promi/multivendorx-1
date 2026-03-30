@@ -485,7 +485,7 @@ class Notifications {
 				// PRO.
 				'product_low_stock'                  => array(
 					'name'             => 'Product low stock',
-					'desc'             => '',
+					'desc'             => 'Product stock running low.',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
 					'admin_enabled'    => false,
@@ -501,7 +501,7 @@ class Notifications {
 				// PRO.
 				'product_out_of_stock'               => array(
 					'name'             => 'Product out of stock',
-					'desc'             => '',
+					'desc'             => 'Product is currently unavailable due to no stock.',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
 					'admin_enabled'    => false,
@@ -643,7 +643,7 @@ class Notifications {
 				// STORE FOLLOWER NOTIFICATIONS.
 				'store_followed'                     => array(
 					'name'             => 'Store followed',
-					'desc'             => '',
+					'desc'             => 'Customer started following the store.',
 					'customer_enabled' => false,
 					'store_enabled'    => true,
 					'admin_enabled'    => false,
@@ -661,7 +661,7 @@ class Notifications {
 
 				'store_new_product_to_followers'     => array(
 					'name'             => 'New product from followed store',
-					'desc'             => '',
+					'desc'             => 'New product published by a followed store.',
 					'customer_enabled' => true,
 					'store_enabled'    => false,
 					'admin_enabled'    => false,
@@ -679,7 +679,7 @@ class Notifications {
 
 				'store_new_coupon_to_followers'      => array(
 					'name'             => 'New coupon from followed store',
-					'desc'             => '',
+					'desc'             => 'New coupon created by a followed store.',
 					'customer_enabled' => true,
 					'store_enabled'    => false,
 					'admin_enabled'    => false,
@@ -697,7 +697,7 @@ class Notifications {
 				// Pro.
 				'store_vacation_alert_to_followers'  => array(
 					'name'             => 'Store vacation alert',
-					'desc'             => '',
+					'desc'             => 'Followed store marked as on vacation.',
 					'customer_enabled' => true,
 					'store_enabled'    => false,
 					'admin_enabled'    => false,
