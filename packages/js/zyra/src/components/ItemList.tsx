@@ -145,7 +145,7 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                                     )}
 
                                     {item.tags && (
-                                        <div className="tags">{item.tags}</div>
+                                        <div className="tags" dangerouslySetInnerHTML={{ __html: item.tags }} />
                                     )}
                                 </div>
                             )}

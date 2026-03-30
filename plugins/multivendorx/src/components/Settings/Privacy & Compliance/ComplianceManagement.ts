@@ -27,12 +27,39 @@ export default {
 					moduleEnabled: 'marketplace-compliance',
 					formFields: [
 						{
-							key: 'enable_advertisement_in_subscription',
-							type: 'setup',
-							title: 'Identity verification',
-							des: 'Store is verified through official business documents like trade license or permit.',
-							link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-identity`,
+							key: 'paid_promotion_limit',
+							label: __('Account capabilities', 'multivendorx'),
+							type: 'itemlist',
+							className: 'mini-card',
+							items: [
+								{
+									title: __('Identity verification', 'multivendorx'),
+									desc: __('Store is verified through official business documents like trade license or permit.', 'multivendorx'),
+									tags: `<a href="${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-identity">${__('Set Up', 'multivendorx')}</a>`,
+								},
+								{
+									title: __(
+										'Cannot access selling privileges',
+										'multivendorx'
+									),
+									icon: 'cross',
+								},
+								{
+									title: __(
+										'Cannot view or manage product listings',
+										'multivendorx'
+									),
+									icon: 'cross',
+								},
+							],
 						},
+						// {
+						// 	key: 'enable_advertisement_in_subscription',
+						// 	type: 'setup',
+						// 	title: '',
+						// 	des: '',
+						// 	link: ,
+						// },
 						{
 							key: 'display_advertised_product_on_top',
 							type: 'setup',
