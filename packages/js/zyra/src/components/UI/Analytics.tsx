@@ -37,7 +37,7 @@ const Analytics: React.FC<AnalyticsProps> = ({
                 >
                     <div className="analytics-icon">
                         {isLoading ? (
-                            <Skeleton width={60} height={60} />
+                            <Skeleton width={3.75} height={3.75} />
                         ) : (
                             item.icon && (
                                 <i

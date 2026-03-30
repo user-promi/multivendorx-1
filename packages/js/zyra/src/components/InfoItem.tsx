@@ -99,8 +99,8 @@ const InfoItem: React.FC<InfoItemProps> = ({
                                 <div className="avatar">
                                     <Skeleton
                                         variant="circular"
-                                        width={30}
-                                        height={30}
+                                        width={1.875}
+                                        height={1.875}
                                     />
                                 </div>
                             )}
@@ -111,8 +111,8 @@ const InfoItem: React.FC<InfoItemProps> = ({
                                     {badges.length > 0 && (
                                         <Skeleton
                                             variant="rectangular"
-                                            width={60}
-                                            height={20}
+                                            width={3.75}
+                                            height={1.25}
                                         />
                                     )}
                                 </div>
@@ -129,7 +129,7 @@ const InfoItem: React.FC<InfoItemProps> = ({
                         {amount !== undefined && (
                             <div className="right-details">
                                 <div className="price">
-                                    <Skeleton width={70} />
+                                    <Skeleton width={4.375} />
                                 </div>
                             </div>
                         )}

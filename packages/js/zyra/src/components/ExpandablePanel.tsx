@@ -422,7 +422,6 @@ const PanelHeader: React.FC = () => {
                     <div className="expandable-header-info">
                         {/* Title (inline-editable for custom) */}
                         <div className="title-wrapper">
-                            <span className="title">
                                 {editing &&
                                 editField === 'title' &&
                                 canEditField(
@@ -511,7 +510,6 @@ const PanelHeader: React.FC = () => {
                                     </div>
                                 )}
                             </span>
-                        </div>
 
                         {/* Description (inline-editable for custom) */}
                         <div className="panel-description">
