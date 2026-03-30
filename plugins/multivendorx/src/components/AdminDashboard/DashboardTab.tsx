@@ -275,7 +275,7 @@ const DashboardTab: React.FC<object> = () => {
 	];
 
 	return (
-		<Container className="dashboard-tab">
+		<Container>
 			<Column grid={8}>
 				<Card>
 					<div className="pro-banner-wrapper">
