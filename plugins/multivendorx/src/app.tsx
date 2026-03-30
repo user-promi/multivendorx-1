@@ -210,7 +210,7 @@ const App = () => {
 				{
 					id: 'activities',
 					label: __('Activities', 'multivendorx'),
-					icon: 'activity',
+					icon: 'storefront',
 					content: <NotificationTabContent type="activity" />,
 					footer: {
 						url: '?page=multivendorx#&tab=notifications&subtab=activities',
