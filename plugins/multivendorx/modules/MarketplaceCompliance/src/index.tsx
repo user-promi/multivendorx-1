@@ -1,15 +1,25 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import PendingReportAbuse from './PendingAbuseReports';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { getApiLink } from 'zyra';
 
-const reportAbuseState = {
-	count: 0,
-};
+const [reportAbuseCount, setReportAbuseCount] = useState<number>(0);
 
-// function to update count
-const setReportAbuseCount = (count: number) => {
-	reportAbuseState.count = count;
-};
+useEffect(() => {
+	axios
+		.get(getApiLink(appLocalizer, 'report-abuse'), {
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			params: {
+				page: 1,
+				row: 1,
+			},
+		})
+		.then((res) => {
+			setReportAbuseCount(Number(res.headers['x-wp-total']) || 0);
+		});
+}, []);
 
 addFilter(
 	'multivendorx_approval_queue_tab',
@@ -34,7 +44,7 @@ addFilter(
 					'multivendorx'
 				),
 				headerIcon: 'product indigo',
-				count: reportAbuseState.count,
+				count: reportAbuseCount,
 			},
 		});
 
