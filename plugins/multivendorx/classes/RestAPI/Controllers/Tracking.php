@@ -85,5 +85,6 @@ class Tracking extends \WP_REST_Controller {
                 'category'        => 'notification',
             )
         );
+        
     }
 }
