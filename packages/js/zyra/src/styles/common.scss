@@ -1248,6 +1248,7 @@ $index: 1;
     display: flex;
     align-items: center;
     gap: 1rem;
+    white-space: nowrap;
 
     .showing-number {
       padding-top: 0.125rem;

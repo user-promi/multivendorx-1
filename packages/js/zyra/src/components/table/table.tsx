@@ -305,7 +305,7 @@ const Table: React.FC<TableProps> = ({
                                             return (
                                                 <td
                                                     key={`action-${rowId}`}
-                                                    className="admin-column actions"
+                                                    className="admin-column action"
                                                 >
                                                     <TableRowActions
                                                         row={row}

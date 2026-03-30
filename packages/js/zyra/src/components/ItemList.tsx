@@ -145,7 +145,13 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                                     )}
 
                                     {item.tags && (
-                                        <div className="tags" dangerouslySetInnerHTML={{ __html: item.tags }} />
+                                        <div className="tags">
+                                            {typeof item.tags === 'string' ? (
+                                                <div dangerouslySetInnerHTML={{ __html: item.tags }} />
+                                            ) : (
+                                                item.tags
+                                            )}
+                                        </div>
                                     )}
                                 </div>
                             )}
