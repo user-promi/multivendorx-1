@@ -24,6 +24,7 @@ import axios from 'axios';
 import { formatCurrency } from '../services/commonFunction';
 import { useParams, useNavigate } from 'react-router-dom';
 import { dashNavigate } from '../services/commonFunction';
+import { applyFilters } from '@wordpress/hooks';
 
 const OrderDetails: React.FC = () => {
 	const [isRefundLoading, setIsRefundLoading] = useState(false);
@@ -615,6 +616,13 @@ const OrderDetails: React.FC = () => {
 														'multivendorx'
 													),
 													value: 'cancelled',
+												},
+												{
+													label: __(
+														'Shipped',
+														'multivendorx'
+													),
+													value: 'shipped',
 												},
 											]}
 											value={orderData?.status}
@@ -1279,15 +1287,21 @@ const OrderDetails: React.FC = () => {
 
 								<ButtonInputUI
 									position="left"
-									buttons={{
-										icon: 'plus',
-										text: __(
-											'Create Shipment',
-											'multivendorx'
-										),
-										onClick: saveShipmentToOrder,
-									}}
+									buttons={applyFilters('multivendorx_shippment_button', [
+										{
+											icon: 'plus',
+											text: shipmentData.tracking_url !== ''
+													? __( 'Update Shipment', 'multivendorx' ) 
+													: __( 'Create Shipment', 'multivendorx' ),
+											onClick: saveShipmentToOrder,
+										},
+									],
+									{
+										orderId, shipmentData
+									}
+								)}
 								/>
+
 							</Card>
 
 							{modules.includes('privacy') &&
