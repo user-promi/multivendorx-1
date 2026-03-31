@@ -16,7 +16,9 @@ const ChatIcon = () => (
 const LiveChat: React.FC = () => {
 	return (
 		<button
-			className={`wp-block-button__link has-border-color has-accent-1-border-color wp-element-button multivendorx-store-chat-btn`}
+			className={`wp-block-button__link has-border-color has-accent-1-border-color wp-element-button multivendorx-livechat-btn`}
+			data-store-id="1"
+			data-store-name="Demo Store"
 		>
 			<ChatIcon />
 			{__('Live Chat com', 'multivendorx')}
