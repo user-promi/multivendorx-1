@@ -66,6 +66,7 @@ class Frontend {
 	public function load_scripts() {
 		FrontendScripts::load_scripts();
 		FrontendScripts::enqueue_script( 'multivendorx-store-products-script' );
+		FrontendScripts::enqueue_style( 'multivendorx-store-tabs-style' );
 	}
 
     /**
