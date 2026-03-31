@@ -69,7 +69,7 @@ class Utill {
         'appearance'                    => 'multivendorx_appearance_settings',
         'product-report-abuse'          => 'multivendorx_product_report_abuse_settings',
         'commissions'                   => 'multivendorx_commissions_settings',
-        'inventory'                     => 'multivendorx_inventory_settings',
+        'store-inventory'               => 'multivendorx_store_inventory_settings',
         'store-reviews'                 => 'multivendorx_store_reviews_settings',
         'refunds'                       => 'multivendorx_refunds_settings',
         'product-advertising'           => 'multivendorx_product_advertising_settings',
