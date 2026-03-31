@@ -105,6 +105,25 @@ class Frontend {
             return;
         }
         ?>
+        <div class="woocommerce-info confirm-section" id="confirm-section">
+            <div class="confirm-left">
+                <!-- <div class="confirm-icon">
+                    <span class="dashicons dashicons-trash"></span>
+                </div> -->
+
+                <div class="confirm-heading">
+                  <strong> <?php esc_html_e( 'Did you receive your package?', 'multivendorx' ); ?> </strong> 
+                </div>
+                <div class="confirm-sub">
+                    <?php esc_html_e( 'Let us know once your order has arrived safely.', 'multivendorx' ); ?>
+                </div>
+            </div>
+
+            <button type="button" class="button confirm-btn" id="confirm-btn">
+                <?php esc_html_e( 'Confirm Order Received', 'multivendorx' ); ?>
+            </button>
+
+        </div>
         <section class="woocommerce-customer-details multivendorx-refund-reason">
             <h2 class="woocommerce-column__title">
                 <?php esc_html_e( 'Refund reason', 'multivendorx' ); ?>

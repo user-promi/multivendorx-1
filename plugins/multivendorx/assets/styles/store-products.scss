@@ -646,6 +646,11 @@ $star-color: #d49c00;
 
 
 // my account view order tab start
+// top notice
+#confirm-section{
+    display: flex;
+    justify-content: space-between;
+}
 
 // refund reason section
 .multivendorx-refund-reason {
