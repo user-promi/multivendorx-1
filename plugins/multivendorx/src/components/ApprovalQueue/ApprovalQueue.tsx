@@ -44,81 +44,72 @@ const ApprovalQueue = () => {
 		});
 	}, []);
 
-	// Initial API fetch (only once)
 	useEffect(() => {
-		const fetchPendingCount = () => {
-			const store = window.multivendorxStore;
-
-			axios({
-				method: 'GET',
+		const store = window.multivendorxStore;
+		
+		let apiConfigs: any[] = [
+			{
+				id: 'stores',
 				url: getApiLink(appLocalizer, 'store'),
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { status: 'pending', page: 1, row: 1 },
-			}).then((res) => {
-				store.setCount(
-					'stores',
-					Number(res.headers['x-wp-status-pending']) || 0
-				);
-			});
+				header: 'x-wp-status-pending',
+			},
+			{
+				id: 'products',
+				url: `${appLocalizer.apiUrl}/wc/v3/products`,
+				params: {
+					per_page: 1,
+					meta_key: 'multivendorx_store_id',
+					status: 'pending',
+				},
+				header: 'x-wp-total',
+			},
+			{
+				id: 'coupons',
+				url: `${appLocalizer.apiUrl}/wc/v3/coupons`,
+				params: {
+					per_page: 1,
+					meta_key: 'multivendorx_store_id',
+					status: 'pending',
+				},
+				header: 'x-wp-total',
+			},
+			{
+				id: 'withdrawal',
+				url: getApiLink(appLocalizer, 'store'),
+				params: { page: 1, row: 1, pending_withdraw: true },
+				header: 'x-wp-total',
+			},
+			{
+				id: 'deactivate-requests',
+				url: getApiLink(appLocalizer, 'store'),
+				params: { page: 1, row: 1, deactivate: true },
+				header: 'x-wp-total',
+			},
+		];
 
-			axios
-				.get(`${appLocalizer.apiUrl}/wc/v3/products`, {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					params: {
-						per_page: 1,
-						meta_key: 'multivendorx_store_id',
-						status: 'pending',
-					},
-				})
-				.then((res) =>
-					store.setCount(
-						'products',
-						parseInt(res.headers['x-wp-total']) || 0
-					)
-				);
+		apiConfigs = applyFilters(
+			'multivendorx_approval_queue_api_configs',
+			apiConfigs,
+			{ appLocalizer }
+		);
 
-			axios
-				.get(`${appLocalizer.apiUrl}/wc/v3/coupons`, {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					params: {
-						per_page: 1,
-						meta_key: 'multivendorx_store_id',
-						status: 'pending',
-					},
-				})
-				.then((res) =>
-					store.setCount(
-						'coupons',
-						parseInt(res.headers['x-wp-total']) || 0
-					)
-				);
+		// execute all APIs
+		apiConfigs.forEach((config: any) => {
+			axios({
+				method: config.method || 'GET',
+				url: config.url,
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: config.params || {},
+			})
+				.then((res) => {
+					const count = config.transform
+						? config.transform(res)
+						: Number(res.headers[config.header || 'x-wp-total']) || 0;
 
-			axios
-				.get(getApiLink(appLocalizer, 'store'), {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					params: { page: 1, row: 1, pending_withdraw: true },
-				})
-				.then((res) =>
-					store.setCount(
-						'withdrawal',
-						Number(res.headers['x-wp-total']) || 0
-					)
-				);
-
-			axios
-				.get(getApiLink(appLocalizer, 'store'), {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-					params: { page: 1, row: 1, deactivate: true },
-				})
-				.then((res) =>
-					store.setCount(
-						'deactivate-requests',
-						Number(res.headers['x-wp-total']) || 0
-					)
-				);
-		};
-
-		fetchPendingCount();
+					store.setCount(config.id, count);
+				});
+		});
 	}, []);
 
 	const { modules } = useModules();
@@ -142,7 +133,6 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'storefront yellow',
-				count: counts['stores'] || 0,
 			},
 		},
 		{
@@ -158,7 +148,6 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'multi-product red',
-				count: counts['products'] || 0,
 			},
 		},
 		{
@@ -174,7 +163,6 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'coupon green',
-				count: counts['coupons'] || 0,
 			},
 		},
 		{
@@ -196,7 +184,6 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'bank orange',
-				count: counts['withdrawal'] || 0,
 			},
 		},
 		{
@@ -217,7 +204,6 @@ const ApprovalQueue = () => {
 					'multivendorx'
 				),
 				headerIcon: 'rejecte teal',
-				count: counts['deactivate-requests'] || 0,
 			},
 		},
 	];
@@ -233,6 +219,14 @@ const ApprovalQueue = () => {
 			(!tab.module || modules.includes(tab.module)) &&
 			(tab.condition === undefined || tab.condition)
 	);
+
+	const settingContentWithCounts = settingContent.map((tab) => ({
+		...tab,
+		content: {
+			...tab.content,
+			count: counts[tab.content.id] || 0,
+		},
+	}));
 
 	const getForm = (tabId: string) => {
 		const defaultForm = (() => {
@@ -263,7 +257,7 @@ const ApprovalQueue = () => {
 
 	return (
 		<SettingsNavigator
-			settingContent={settingContent}
+			settingContent={settingContentWithCounts}
 			currentSetting={location.get('subtab') as string}
 			getForm={getForm}
 			prepareUrl={(subTab: string) =>
