@@ -137,7 +137,7 @@ const ApprovalQueue = () => {
 		},
 		{
 			type: 'file',
-			condition: settings?.['store-permissions']?.products?.includes('publish_products'),
+			condition: !settings?.['store-permissions']?.products?.includes('publish_products'),
 			content: {
 				id: 'products',
 				headerTitle: __('Products', 'multivendorx'),
@@ -152,7 +152,7 @@ const ApprovalQueue = () => {
 		},
 		{
 			type: 'file',
-			condition: settings?.['store-permissions']?.coupons?.includes('publish_coupons'),
+			condition: !settings?.['store-permissions']?.coupons?.includes('publish_coupons'),
 			content: {
 				id: 'coupons',
 				headerTitle: __('Coupons', 'multivendorx'),
