@@ -325,10 +325,9 @@ const PanelHeader: React.FC = () => {
 
     return (
         <div className="expandable-header">
-            {method.disableBtn && (
+            {method.disableBtn && !method.isCustom &&(
                 <div className="toggle-icon">
-                    {!method.isCustom &&
-                        isOn && (
+                    {hasFields && isOn && (
                             <i
                                 className={`adminfont-${isOpen
                                         ? 'keyboard-arrow-down'
@@ -346,7 +345,7 @@ const PanelHeader: React.FC = () => {
             )}
 
             <div
-                className="header-details"
+                className={`header-details ${method.disableBtn && !method.isCustom ? 'toggle' : ''}`}
                 onClick={() =>
                     dispatch({
                         type: 'SET_ACTIVE_TAB',
@@ -510,7 +509,7 @@ const PanelHeader: React.FC = () => {
                                         </div>
                                     </div>
                                 )}
-                            </span>
+                            </div>
 
                         {/* Description (inline-editable for custom) */}
                         <div className="panel-description">
