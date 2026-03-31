@@ -49,7 +49,11 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
         // user information before registration.
         add_filter( 'multivendorx_add_content_before_form', array( $this, 'add_woocommerce_login_from' ) );
-
+        // Display custom message in My Account Dashboard.
+        add_action( 'woocommerce_account_dashboard', [ $this, 'custom_my_account_dashboard_message'] );
+        // Restrict media for store dashboard.
+        add_filter('ajax_query_attachments_args', [ $this, 'multivendorx_restrict_store_media' ] );
+      
         add_action( 'woocommerce_view_order', array( $this, 'view_order_content' ) );
     }
 
@@ -604,4 +608,21 @@ class Frontend {
 
 		return ob_get_clean();
 	}
+
+    public function custom_my_account_dashboard_message() {
+        if ( in_array( 'store_owner', MultiVendorX()->current_user->roles, true ) ) {
+            $dashboard_url = get_permalink((int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ));
+            echo '<div class="woocommerce-message">';
+            echo 'Manage your store, orders, and products <a href="' . esc_url($dashboard_url) . '">Open dashboard</a>.';
+            echo '</div>';
+        }
+    }
+
+    public function multivendorx_restrict_store_media($query) {
+        if ( in_array('store_owner', MultiVendorX()->current_user->roles, true) ) {
+            $query['author'] = MultiVendorX()->current_user_id;
+        }
+
+        return $query;
+    }
 }

@@ -5,22 +5,20 @@ import PendingReportAbuse from './PendingAbuseReports';
 import axios from 'axios';
 import { getApiLink } from 'zyra';
 
-window.__multivendorxPendingCounts = window.__multivendorxPendingCounts || {};
+addFilter(
+	'multivendorx_approval_queue_api_configs',
+	'multivendorx/report-abuse-api',
+	(configs, { appLocalizer }) => {
+		configs.push({
+			id: 'report-abuse',
+			url: getApiLink(appLocalizer, 'report-abuse'),
+			params: { page: 1, row: 1 },
+			header: 'x-wp-total',
+		});
 
-axios
-    .get(getApiLink(appLocalizer, 'report-abuse'), {
-        headers: { 'X-WP-Nonce': appLocalizer.nonce },
-        params: { page: 1, row: 1 },
-    })
-    .then((res) => {
-        const count = Number(res.headers['x-wp-total']) || 0;
-        window.__multivendorxPendingCounts['report-abuse'] = count;
-        window.dispatchEvent(
-            new CustomEvent('multivendorx:count-update', {
-                detail: { id: 'report-abuse', count },
-            })
-        );
-    });
+		return configs;
+	}
+);
 
 addFilter(
     'multivendorx_approval_queue_tab',
@@ -45,7 +43,6 @@ addFilter(
                     'multivendorx'
                 ),
                 headerIcon: 'product indigo',
-                count: 0,
             },
         });
 
@@ -59,16 +56,7 @@ addFilter(
     (defaultForm, { tabId }) => {
         if (tabId === 'report-abuse') {
             return (
-                <PendingReportAbuse
-                    setCount={(count) => {
-                        window.__multivendorxPendingCounts['report-abuse'] = count;
-                        window.dispatchEvent(
-                            new CustomEvent('multivendorx:count-update', {
-                                detail: { id: 'report-abuse', count },
-                            })
-                        );
-                    }}
-                />
+                <PendingReportAbuse />
             );
         }
 
