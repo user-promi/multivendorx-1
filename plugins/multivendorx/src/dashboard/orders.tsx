@@ -555,13 +555,12 @@ const Orders: React.FC = () => {
 
 			{tracking && (
 				<PopupUI
-					position="lightbox"
 					open={tracking}
 					onClose={() => setTracking(false)}
 					width={31.25}
-					height="70%"
+					height={40}
 					header={{
-						icon: 'warning',
+						icon: 'tools',
 						title: __('Tracking', 'multivendorx'),
 					}}
 					footer={

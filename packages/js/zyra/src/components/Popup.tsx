@@ -96,7 +96,7 @@ export const PopupUI = forwardRef<HTMLDivElement, PopupProps>(
         return (
             <div
                 className={`popup ${className} ${open ? 'popup-open' : ''}`}
-                ref={wrapperRef}
+                // ref={wrapperRef}
             >
                 {toggleIcon && (
                     <Tooltip text={tooltipName} position={tooltipPosition} className={open ? 'hidden' : ''}>
@@ -107,7 +107,7 @@ export const PopupUI = forwardRef<HTMLDivElement, PopupProps>(
                     </Tooltip>
                 )}
 
-                {showBackdrop && !toggleIcon && open && (
+                {showBackdrop && open && (
                     <div className="popup-backdrop" onClick={handleClose} />
                 )}
 
