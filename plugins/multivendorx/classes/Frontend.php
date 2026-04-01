@@ -53,8 +53,6 @@ class Frontend {
         add_action( 'woocommerce_account_dashboard', [ $this, 'custom_my_account_dashboard_message'] );
         // Restrict media for store dashboard.
         add_filter('ajax_query_attachments_args', [ $this, 'multivendorx_restrict_store_media' ] );
-      
-        add_action( 'woocommerce_view_order', array( $this, 'view_order_content' ) );
     }
 
 	/**
@@ -99,121 +97,6 @@ class Frontend {
         if ( ! empty( $exclude ) ) {
             $q->set( 'post__not_in', $exclude );
         }
-    }
-    public function view_order_content( $order_id ) {
-        if ( ! is_wc_endpoint_url( 'view-order' ) ) {
-            return;
-        }
-        ?>
-        <div class="woocommerce-info confirm-section" id="confirm-section">
-            <div class="confirm-left">
-                <!-- <div class="confirm-icon">
-                    <span class="dashicons dashicons-trash"></span>
-                </div> -->
-
-                <div class="confirm-heading">
-                  <strong> <?php esc_html_e( 'Did you receive your package?', 'multivendorx' ); ?> </strong> 
-                </div>
-                <div class="confirm-sub">
-                    <?php esc_html_e( 'Let us know once your order has arrived safely.', 'multivendorx' ); ?>
-                </div>
-            </div>
-
-            <button type="button" class="button confirm-btn" id="confirm-btn">
-                <?php esc_html_e( 'Confirm Order Received', 'multivendorx' ); ?>
-            </button>
-
-        </div>
-        <section class="woocommerce-customer-details multivendorx-refund-reason">
-            <h2 class="woocommerce-column__title">
-                <?php esc_html_e( 'Refund reason', 'multivendorx' ); ?>
-            </h2>
-
-            <address>
-                <!-- Category -->
-                <p class="category-name">
-                    <strong><?php esc_html_e( 'Category:', 'multivendorx' ); ?></strong><br/>
-                    <span class="multivendorx-badge">
-                        <?php esc_html_e( 'Wrong item received', 'multivendorx' ); ?>
-                    </span>
-                </p>
-
-                <!-- Reason -->
-                <address>
-                    <?php esc_html_e( "I ordered a medium-sized jacket but received a large instead. The tag also shows a different product code than what was listed on the order. I'd like a full refund as the correct size isn't available.", 'multivendorx' ); ?>
-                </address>
-
-                <!-- Attachments -->
-                <p>
-                    <strong><?php esc_html_e( 'Attached images:', 'multivendorx' ); ?></strong>
-                </p>
-                
-                <div class="refund-reason-image">
-                <img src="<?php echo esc_url( wc_placeholder_img_src() ); ?>" alt="" />
-                <img src="<?php echo esc_url( wc_placeholder_img_src() ); ?>" alt="" />
-                <img src="<?php echo esc_url( wc_placeholder_img_src() ); ?>" alt="" />
-                <img src="<?php echo esc_url( wc_placeholder_img_src() ); ?>" alt="" />
-                </div>
-            </address>
-
-        </section>
-
-        <section class="woocommerce-customer-details multivendorx-request-timeline">
-            <h2 class="woocommerce-column__title">
-                <?php esc_html_e( 'Request timeline', 'multivendorx' ); ?>
-            </h2>
-            <address>
-                <div class="multivendorx-timeline">
-                    <!-- Step 1 -->
-                    <div class="multivendorx-timeline-item">
-                        <div class="timeline-icon">
-                            <span class="dashicons dashicons-yes"></span>
-                        </div>
-                        <div class="multivendorx-timeline-content">
-                            <div class="multivendorx-timeline-title">
-                            <strong> <?php esc_html_e( 'Refund requested', 'multivendorx' ); ?> </strong>
-                            </div>
-                            <span class="multivendorx-timeline-time">
-                                Mar 30, 2026 · 10:42 AM
-                            </span>
-                            <div class="multivendorx-timeline-note">
-                                <?php esc_html_e( 'Customer submitted request with 3 attachments.', 'multivendorx' ); ?>
-                            </div>
-                        </div>
-                            
-                    </div>
-
-                    <div class="multivendorx-timeline-item">
-                        <div class="timeline-icon">
-                            <span class="dashicons dashicons-ellipsis"></span>
-                        </div>
-                        <div class="multivendorx-timeline-content">
-                            <div class="multivendorx-timeline-title">
-                            <strong> <?php esc_html_e( 'Under review', 'multivendorx' ); ?> </strong>
-                            </div>
-                            <span class="multivendorx-timeline-time">
-                                Awaiting admin action
-                            </span>
-                            <div class="multivendorx-timeline-note">
-                                <?php esc_html_e( 'Request is pending review by the store admin.', 'multivendorx' ); ?>
-                            </div>
-                        </div>                            
-                    </div>
-
-                    <div class="multivendorx-timeline-item">
-                        <div class="timeline-icon">
-                            <span class="dashicons dashicons-minus"></span>
-                        </div>
-                        <div class="multivendorx-timeline-content">
-                            <div class="multivendorx-timeline-title">
-                            <strong> <?php esc_html_e( 'Decision pending', 'multivendorx' ); ?> </strong>
-                            </div>
-                        </div>                            
-                    </div>
-                </div>
-            </address>
-        </section>
-        <?php
     }
     /**
      * Restrict products from cart

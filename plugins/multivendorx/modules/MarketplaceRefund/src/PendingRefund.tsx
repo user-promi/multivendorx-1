@@ -124,6 +124,10 @@ const PendingRefund: React.FC<object> = () => {
 							key: '_customer_refund_order',
 							value: 'refund_rejected',
 						},
+						{
+							key: 'multivendorx_admin_refund_reject_note',
+							value: formData.content,
+						},
 					],
 				},
 			});
