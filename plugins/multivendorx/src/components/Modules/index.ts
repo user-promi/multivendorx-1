@@ -367,7 +367,7 @@ export default {
 			reqPluging: [
 				{
 					name: 'Per Product Shipping for WooCommerce',
-					slug: 'woocommerce-per-product-shipping/woocommerce-per-product-shipping.php',
+					slug: 'woocommerce-shipping-per-product/woocommerce-shipping-per-product.php',
 					link: 'https://woocommerce.com/products/per-product-shipping/',
 				},
 			],
