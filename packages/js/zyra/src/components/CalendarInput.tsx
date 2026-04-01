@@ -6,7 +6,6 @@ import DatePicker, {
 } from 'react-multi-date-picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import { FieldComponent } from './fieldUtils';
-import TabsUI from './Tabs';
 import '../styles/web/CalendarInput.scss';
 
 export interface CalendarRange {
@@ -185,6 +184,8 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
     presetsProps,
 }) => {
     const [activeTab, setActiveTab] = useState(0);
+    const [showCalendar, setShowCalendar] = useState(false);
+    const localPickerRef = useRef<DatePickerRef>(null);
     
     const tabs = [
         {
@@ -197,6 +198,7 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
                 <Calendar
                     className={`calendar-wrapper ${!showInput ? 'calendar' : ''}`}
                     {...commonProps}
+                    ref={localPickerRef}
                 />
             )
         }
@@ -205,39 +207,36 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
     if (showInput) {
         return (
             <div className="settings-calender">
-                <DatePicker
-                    {...commonProps}
-                    className={inputClass}
+                <input
+                    className={`rmdp-input ${inputClass || ''}`}
+                    onFocus={() => setShowCalendar(true)}
+                    readOnly
+                    name="calendar-input"
+                    value={getDisplayValue ? getDisplayValue() : ''}
                     placeholder={format}
-                    render={(value, openCalendar) => (
-                        <input
-                            className="rmdp-input"
-                            onFocus={openCalendar}
-                            readOnly
-                            name="calendar-input"
-                            value={getDisplayValue ? getDisplayValue() : ''}
-                        />
-                    )}
-                >
-                    <div className="calendar-tabs-container">
-                        <div className="tabs-wrapper">
-                            <div className="tabs-item">
-                                {tabs.map((tab, index) => (
-                                    <button
-                                        key={index}
-                                        className={`tab ${index === activeTab ? 'active-tab' : ''}`}
-                                        onClick={() => setActiveTab(index)}
-                                    >
-                                        {tab.label}
-                                    </button>
-                                ))}
+                />
+                {showCalendar && (
+                    <div className="calendar-popup">
+                        <div className="calendar-tabs-container">
+                            <div className="tabs-wrapper">
+                                <div className="tabs-item">
+                                    {tabs.map((tab, index) => (
+                                        <div
+                                            key={index}
+                                            className={`tab ${index === activeTab ? 'active-tab' : ''}`}
+                                            onClick={() => setActiveTab(index)}
+                                        >
+                                            {tab.label}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="calendar-tab-content">
+                                {tabs[activeTab].content}
                             </div>
                         </div>
-                        <div className="calendar-tab-content">
-                            {tabs[activeTab].content}
-                        </div>
                     </div>
-                </DatePicker>
+                )}
             </div>
         );
     }
@@ -249,13 +248,13 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
                 <div className="tabs-wrapper">
                     <div className="tabs-item">
                         {tabs.map((tab, index) => (
-                            <button
+                            <div
                                 key={index}
                                 className={`tab ${index === activeTab ? 'active-tab' : ''}`}
                                 onClick={() => setActiveTab(index)}
                             >
                                 {tab.label}
-                            </button>
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -310,14 +309,18 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
                     startDate: start.toDate(),
                     endDate: end.toDate(),
                 });
-                pickerRef.current?.closeCalendar();
+                if (pickerRef.current) {
+                    pickerRef.current.closeCalendar();
+                }
             } else if (val instanceof DateObject) {
                 const date = val.toDate();
                 onChange?.({
                     startDate: date,
                     endDate: date,
                 });
-                pickerRef.current?.closeCalendar();
+                if (pickerRef.current) {
+                    pickerRef.current.closeCalendar();
+                }
             }
         }
     };
