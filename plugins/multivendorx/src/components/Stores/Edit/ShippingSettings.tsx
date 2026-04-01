@@ -332,7 +332,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 											)}
 										/>
 
-										<ShippingRatesByCountry />
+										<ShippingRatesByCountry storeId={id} />
 									</>
 								)}
 

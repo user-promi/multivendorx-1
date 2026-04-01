@@ -23,21 +23,24 @@ interface CountryItem {
 		| string;
 	value?: string;
 }
-const ShippingRatesByCountry: React.FC = () => {
+interface ShippingRatesByCountryProps {
+	storeId?: number | string;
+}
+const ShippingRatesByCountry: React.FC<ShippingRatesByCountryProps> = ({ storeId }) => {
+	storeId = appLocalizer?.store_id || storeId;
 	const [rates, setRates] = useState<ShippingCountryRate[]>([]);
 
 	const countries = appLocalizer?.country_list || {};
 	const statesByCountry = appLocalizer?.state_list || {};
-
 	useEffect(() => {
-		if (!appLocalizer?.store_id) {
+		if (!storeId) {
 			return;
 		}
 
 		const fetchShippingRates = async () => {
 			try {
 				const response = await axios.get(
-					getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+					getApiLink(appLocalizer, `store/${storeId}`),
 					{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 				);
 
@@ -73,7 +76,7 @@ const ShippingRatesByCountry: React.FC = () => {
 		setRates(updatedRates);
 		try {
 			await axios.post(
-				getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+				getApiLink(appLocalizer, `store/${storeId}`),
 				{
 					multivendorx_shipping_rates: JSON.stringify(updatedRates),
 				},
