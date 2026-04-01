@@ -6,6 +6,7 @@ import DatePicker, {
 } from 'react-multi-date-picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import { FieldComponent } from './fieldUtils';
+import TabsUI from './Tabs';
 import '../styles/web/CalendarInput.scss';
 
 export interface CalendarRange {
@@ -48,6 +49,7 @@ const convertToDateObjectRange = (
         new DateObject({ date: range.endDate, format }),
     ];
 };
+
 const calculateMaxDate = (maxFutureMonths?: number): Date => {
     if (maxFutureMonths !== undefined) {
         const date = new Date();
@@ -61,9 +63,10 @@ interface PresetsProps {
     setValue: (dates: DateObject[] | DateObject) => void;
     pickerRef: React.RefObject<DatePickerRef>;
     format: string;
+    onClose?: () => void;
 }
 
-const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format }) => {
+const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format, onClose }) => {
     const now = new Date();
 
     const startOfWeek = (date: Date) => {
@@ -89,6 +92,7 @@ const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format }) => {
         const result = dates.map((date) => new DateObject({ date, format }));
         setValue(result.length === 1 ? result[0] : result);
         pickerRef.current?.closeCalendar();
+        onClose?.();
     };
 
     const yesterday = new Date(
@@ -162,6 +166,107 @@ const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format }) => {
     );
 };
 
+// Custom component to handle tabs in calendar
+interface CalendarWithTabsProps {
+    commonProps: any;
+    showInput?: boolean;
+    inputClass?: string;
+    format?: string;
+    getDisplayValue?: () => string;
+    presetsProps: PresetsProps;
+}
+
+const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
+    commonProps,
+    showInput,
+    inputClass,
+    format,
+    getDisplayValue,
+    presetsProps,
+}) => {
+    const [activeTab, setActiveTab] = useState(0);
+    
+    const tabs = [
+        {
+            label: 'Presets',
+            content: <Presets {...presetsProps} />
+        },
+        {
+            label: 'Custom',
+            content: (
+                <Calendar
+                    className={`calendar-wrapper ${!showInput ? 'calendar' : ''}`}
+                    {...commonProps}
+                />
+            )
+        }
+    ];
+
+    if (showInput) {
+        return (
+            <div className="settings-calender">
+                <DatePicker
+                    {...commonProps}
+                    className={inputClass}
+                    placeholder={format}
+                    render={(value, openCalendar) => (
+                        <input
+                            className="rmdp-input"
+                            onFocus={openCalendar}
+                            readOnly
+                            name="calendar-input"
+                            value={getDisplayValue ? getDisplayValue() : ''}
+                        />
+                    )}
+                >
+                    <div className="calendar-tabs-container">
+                        <div className="tabs-wrapper">
+                            <div className="tabs-item">
+                                {tabs.map((tab, index) => (
+                                    <button
+                                        key={index}
+                                        className={`tab ${index === activeTab ? 'active-tab' : ''}`}
+                                        onClick={() => setActiveTab(index)}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="calendar-tab-content">
+                            {tabs[activeTab].content}
+                        </div>
+                    </div>
+                </DatePicker>
+            </div>
+        );
+    }
+
+    // For non-input mode (just calendar), show tabs without the input
+    return (
+        <div className="settings-calender">
+            <div className="calendar-tabs-container">
+                <div className="tabs-wrapper">
+                    <div className="tabs-item">
+                        {tabs.map((tab, index) => (
+                            <button
+                                key={index}
+                                className={`tab ${index === activeTab ? 'active-tab' : ''}`}
+                                onClick={() => setActiveTab(index)}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <div className="calendar-tab-content">
+                    {tabs[activeTab].content}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export const CalendarInputUI: React.FC<CalendarInputProps> = ({
     inputClass,
     format = 'MMMM DD YYYY',
@@ -171,7 +276,7 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
     showInput = true,
     numberOfMonths = 1,
     fullYear,
-    maxFutureMonths, // New prop
+    maxFutureMonths,
     showCompare = false,
 }) => {
     const pickerRef = useRef<DatePickerRef>(null);
@@ -220,15 +325,6 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
     const plugins = [];
     if (multiple) {
         plugins.push(<DatePanel key="date-panel" />);
-    } else {
-        plugins.push(
-            <Presets
-                key="presets"
-                setValue={handleChange}
-                pickerRef={pickerRef}
-                format={format} // Pass maxDate to presets
-            />
-        );
     }
 
     const commonProps = {
@@ -239,7 +335,7 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
         numberOfMonths,
         sort: true,
         onChange: handleChange,
-        maxDate, // Use calculated maxDate
+        maxDate,
         multiple,
         plugins,
         fullYear,
@@ -271,7 +367,7 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
 
         const currentText = isSameDay
             ? formatDate(start)
-        : `${formatDate(start)} ~ ${formatDate(end)}`;
+            : `${formatDate(start)} ~ ${formatDate(end)}`;
 
         if (!showCompare) return currentText;
 
@@ -280,38 +376,57 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
 
         const prevText = isSameDay
             ? formatDate(prevStart)
-        : `${formatDate(prevStart)} ~ ${formatDate(prevEnd)}`;
-
+            : `${formatDate(prevStart)} ~ ${formatDate(prevEnd)}`;
 
         return `${currentText}  vs ${prevText}`;
     };
 
+    // For multiple mode, use the original DatePicker without tabs
+    if (multiple) {
+        return (
+            <div className="settings-calender">
+                {showInput ? (
+                    <DatePicker
+                        {...commonProps}
+                        className={inputClass}
+                        placeholder={format}
+                        render={(value, openCalendar) => (
+                            <input
+                                className="rmdp-input"
+                                onFocus={openCalendar}
+                                readOnly
+                                name="calendar-input"
+                                value={getDisplayValue()}
+                            />
+                        )}
+                    />
+                ) : (
+                    <Calendar
+                        className={`calendar-wrapper ${
+                            !showInput ? 'calendar' : ''
+                        }`}
+                        {...commonProps}
+                    />
+                )}
+            </div>
+        );
+    }
+
+    // For range mode, use CalendarWithTabs to show both presets and custom calendar
     return (
-        <div className="settings-calender">
-            {showInput ? (
-                <DatePicker
-                    {...commonProps}
-                    className={inputClass}
-                    placeholder={format}
-                    render={(value, openCalendar) => (
-                        <input
-                            className= 'rmdp-input'
-                            onFocus={openCalendar}
-                            readOnly
-                            name="calendar-input"
-                            value={getDisplayValue()}
-                        />
-                    )}
-                />
-            ) : (
-                <Calendar
-                    className={`calendar-wrapper ${
-                        !showInput ? 'calendar' : ''
-                    }`}
-                    {...commonProps}
-                />
-            )}
-        </div>
+        <CalendarWithTabs
+            commonProps={commonProps}
+            showInput={showInput}
+            inputClass={inputClass}
+            format={format}
+            getDisplayValue={getDisplayValue}
+            presetsProps={{
+                setValue: handleChange,
+                pickerRef,
+                format,
+                onClose: () => pickerRef.current?.closeCalendar(),
+            }}
+        />
     );
 };
 
