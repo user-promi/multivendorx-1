@@ -226,8 +226,7 @@ class Country_Shipping extends \WC_Shipping_Method {
         $price[ $store_id ]['add_product'] = count( $products ) > 1
             ? floatval( $default_shipping_add_price ) * ( count( $products ) - ( 1 + $downloadable_count ) )
             : 0;
-
-        $multivendorx_shipping_rates = isset( $meta[ Utill::STORE_SETTINGS_KEYS['country_shipping_rates'] ] ) ? json_decode( $meta[ Utill::STORE_SETTINGS_KEYS['country_shipping_rates'] ], true ) : array();
+        $multivendorx_shipping_rates = isset( $meta[ Utill::STORE_SETTINGS_KEYS['country_shipping_rates'] ] ) ? $meta[ Utill::STORE_SETTINGS_KEYS['country_shipping_rates'] ] : array();
         $state_rate                  = 0;
         $country_rate                = null;
         $everywhere_rate             = null;

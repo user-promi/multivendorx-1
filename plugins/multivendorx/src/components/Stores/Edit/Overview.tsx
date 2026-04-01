@@ -66,7 +66,14 @@ interface StoreData {
 		};
 	};
 }
-
+const formatMethod = (method) => {
+	if (!method) {
+		return '';
+	}
+	return method
+		.replace(/-/g, ' ') // stripe-connect → stripe connect
+		.replace(/\b\w/g, (c) => c.toUpperCase()); // Stripe connect → Stripe Connect
+};
 const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 	const navigate = useNavigate();
 	const { modules } = useModules();
@@ -449,7 +456,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 										className="sku"
 										onClick={() => {
 											navigate(
-												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=application-details`
+												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=marketplace-compliance`
 											);
 										}}
 									>
@@ -481,7 +488,21 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									row
 									label={__('Payment method', 'multivendorx')}
 								>
-									{__('Bank transfer', 'multivendorx')}
+									{storeData?.payment_method ? (
+										<div className="method">
+											<i className="adminfont-bank"></i>
+											{formatMethod(
+												storeData.payment_method
+											)}
+										</div>
+									) : (
+										<span>
+											{__(
+												'No payment method saved',
+												'multivendorx'
+											)}
+										</span>
+									)}
 								</FormGroup>
 							</FormGroupWrapper>
 						</Card>
@@ -672,10 +693,10 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</FormGroup>
 							</FormGroupWrapper>
 							<TableCard
-										headers={scheduleColumns}
-										rows={scheduleRows}
-										showMenu={false}
-									/>
+								headers={scheduleColumns}
+								rows={scheduleRows}
+								showMenu={false}
+							/>
 							<PopupUI
 								open={hours}
 								onClose={handleClosehours}

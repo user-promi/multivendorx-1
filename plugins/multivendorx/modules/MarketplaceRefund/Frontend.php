@@ -26,6 +26,7 @@ class Frontend {
         add_action( 'woocommerce_order_details_after_order_table', array( $this, 'multivendorx_refund_btn_customer_my_account' ), 10 );
         add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ) );
         add_action( 'wp', array( $this, 'multivendorx_handler_cust_requested_refund' ) );
+        add_action( 'woocommerce_view_order', array( $this, 'view_order_content' ) );
     }
 
     /**
@@ -477,5 +478,186 @@ class Frontend {
         }
 
         wc_add_notice( __( 'Refund request successfully submitted.', 'multivendorx' ) );
+    }
+
+    public function view_order_content( $order_id ) {
+        if ( ! is_wc_endpoint_url( 'view-order' ) ) {
+            return;
+        }
+        $order = wc_get_order( $order_id );
+        $order_status = $order->get_status();
+        $refund_timeline_statuses = array(
+            'refund-requested',
+            'refund-accepted',
+            'refund-rejected',
+            'refunded',
+        );
+
+        if ( !in_array( $order_status, $refund_timeline_statuses, true ) ) return;
+
+        $refund_reason = $order->get_meta( 'multivendorx_customer_refund_reason' );
+        $refund_note   = $order->get_meta( 'multivendorx_customer_refund_addi_info' );
+        $refund_images = $order->get_meta( 'multivendorx_customer_refund_product_imgs' );
+
+        $step1_class = '';
+        $step2_class = '';
+        $step3_class = '';
+
+        $step1_icon = 'dashicons-minus';
+        $step2_icon = 'dashicons-minus';
+        $step3_icon = 'dashicons-minus';
+        switch ( $order_status ) {
+
+            case 'refund-requested':
+                $step1_class = 'active';
+                $step1_icon  = 'dashicons-ellipsis';
+                break;
+
+            case 'refund-accepted':
+                $step1_class = 'completed';
+                $step2_class = 'active';
+                $step1_icon  = 'dashicons-yes';
+                $step2_icon  = 'dashicons-ellipsis';
+                break;
+
+            case 'refunded':
+                $step1_class = 'completed';
+                $step2_class = 'completed';
+                $step3_class = 'completed';
+                $step1_icon  = 'dashicons-yes';
+                $step2_icon  = 'dashicons-yes';
+                $step3_icon  = 'dashicons-yes';
+                break;
+
+            case 'refund-rejected':
+                $step1_class = 'completed';
+                $step3_class = 'rejected';
+                $step1_icon  = 'dashicons-yes';
+                $step3_icon  = 'dashicons-no';
+                break;
+        }
+        $store_reject_note = $order->get_meta( 'multivendorx_store_refund_reject_note' );
+        $admin_reject_note = $order->get_meta( 'multivendorx_admin_refund_reject_note' );
+
+        ?>
+        <section class="woocommerce-customer-details multivendorx-refund-reason">
+            <h2 class="woocommerce-column__title">
+                <?php esc_html_e( 'Refund reason', 'multivendorx' ); ?>
+            </h2>
+
+            <address>
+                <!-- Category -->
+                <p class="category-name">
+                    <strong><?php esc_html_e( 'Category:', 'multivendorx' ); ?></strong><br/>
+                    <span class="multivendorx-badge">
+                        <?php echo esc_html( $refund_reason ? $refund_reason : __( 'N/A', 'multivendorx' ) ); ?>
+                    </span>
+                </p>
+
+                <!-- Reason -->
+                <address>
+                    <?php
+                    echo esc_html(
+                        $refund_note
+                            ? $refund_note
+                            : __( 'No additional information provided.', 'multivendorx' )
+                    );
+                    ?>
+                </address>
+                <!-- Attachments -->
+                <p>
+                    <strong><?php esc_html_e( 'Attached images:', 'multivendorx' ); ?></strong>
+                </p>
+                
+                <div class="refund-reason-image">
+                    <?php foreach ( $refund_images as $img ) : ?>
+                        <?php if ( ! empty( $img ) ) : ?>
+                            <img src="<?php echo esc_url( $img ); ?>" alt="Refund image" />
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </address>
+
+        </section>
+
+        <section class="woocommerce-customer-details multivendorx-request-timeline">
+            <h2 class="woocommerce-column__title">
+                <?php esc_html_e( 'Request timeline', 'multivendorx' ); ?>
+            </h2>
+            <address>
+                <div class="multivendorx-timeline">
+                    <!-- Step 1 -->
+                    <div class="multivendorx-timeline-item <?php echo esc_attr($step1_class); ?>">
+                        <div class="timeline-icon">
+                            <span class="dashicons <?php echo esc_attr($step1_icon); ?>"></span>
+                        </div>
+                        <div class="multivendorx-timeline-content">
+                            <div class="multivendorx-timeline-title">
+                                <strong><?php esc_html_e( 'Refund requested', 'multivendorx' ); ?></strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="multivendorx-timeline-item <?php echo esc_attr($step2_class); ?>">
+                        <div class="timeline-icon">
+                            <span class="dashicons <?php echo esc_attr($step2_icon); ?>"></span>
+                        </div>
+                        <div class="multivendorx-timeline-content">
+                            <div class="multivendorx-timeline-title">
+                                <strong><?php esc_html_e( 'Under review', 'multivendorx' ); ?></strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="multivendorx-timeline-item <?php echo esc_attr($step3_class); ?>">
+                        <div class="timeline-icon">
+                            <span class="dashicons <?php echo esc_attr($step3_icon); ?>"></span>
+                        </div>
+                        <div class="multivendorx-timeline-content">
+                            <div class="multivendorx-timeline-title">
+                                <strong>
+                                    <?php
+                                    if ( $order_status === 'refund-rejected' ) {
+                                        esc_html_e( 'Refund rejected', 'multivendorx' );
+                                    } else {
+                                        esc_html_e( 'Decision pending', 'multivendorx' );
+                                    }
+                                    ?>
+                                </strong>
+                            </div>
+
+                            <?php if ( $order_status === 'refund-rejected' ) : ?>
+                                <div class="multivendorx-timeline-desc">
+                                    <?php if ( $admin_reject_note ) : ?>
+                                        <p>
+                                            <strong><?php esc_html_e( 'Rejected by admin:', 'multivendorx' ); ?></strong>
+                                            <?php echo esc_html( $admin_reject_note ); ?>
+                                        </p>
+                                    <?php elseif ( $store_reject_note ) : ?>
+                                        <p>
+                                            <strong><?php esc_html_e( 'Rejected by store:', 'multivendorx' ); ?></strong>
+                                            <?php echo esc_html( $store_reject_note ); ?>
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php if ( $order_status === 'refunded' ) : ?>
+                        <div class="multivendorx-timeline-item completed">
+                            <div class="timeline-icon">
+                                <span class="dashicons dashicons-yes"></span>
+                            </div>
+                            <div class="multivendorx-timeline-content">
+                                <div class="multivendorx-timeline-title">
+                                    <strong><?php esc_html_e( 'Refund processed', 'multivendorx' ); ?></strong>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </address>
+        </section>
+        <?php
     }
 }
