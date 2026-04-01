@@ -93,101 +93,12 @@ export default {
 			proSetting: true,
 		},
 		{
-			key: 'what_business_information_wholesale_buyers_must_provide',
-			type: 'checkbox',
-			label: __('What business information wholesale buyers must provide', 'multivendorx'),
-			settingDescription: __(
-				'Choose the business details required during wholesale registration.',
-				'multivendorx'
-			),
-			desc: __(
-				'Only the fields enabled below will appear in the registration form.',
-				'multivendorx'
-			),
-			options: [
-				{
-					key: 'business_name',
-					label: __('Business name', 'multivendorx'),
-					value: 'business_name',
-					edit: true,
-				},
-				{
-					key: 'business_type',
-					label: __('Business type', 'multivendorx'),
-					value: 'business_type',
-					edit: true,
-				},
-				{
-					key: 'tax_identification_number',
-					label: __('Tax identification number', 'multivendorx'),
-					value: 'tax_identification_number',
-					edit: true,
-				},
-				{
-					key: 'expected_monthly_volume',
-					label: __('Expected Monthly Volume', 'multivendorx'),
-					value: 'expected_monthly_volume',
-					edit: true,
-				},
-				{
-					key: 'business_address',
-					label: __('Business address', 'multivendorx'),
-					value: 'business_address',
-					edit: true,
-				},
-			],
-			selectDeselect: true,
+			key: 'store_registration_from',
+			type: 'block-builder',
+			classes: 'full-width',
+			visibleGroups: ['registration'],
+			desc: 'Customise personalised store registration form for marketplace.',
+			context: 'form',
 		},
-		{
-			key: 'what_documents_wholesale_buyers_must_submit',
-			type: 'checkbox',
-			label: __(
-				'What documents wholesale buyers must submit',
-				'multivendorx'
-			),
-			settingDescription: __(
-				'Decide which verification documents are required during registration.',
-				'multivendorx'
-			),
-			options: [
-				{
-					key: 'business_registration_certificate',
-					label: __('Business registration certificate', 'multivendorx'),
-					value: 'business_registration_certificate',
-				},
-				{
-					key: 'tax_identification_document',
-					label: __('Tax identification document', 'multivendorx'),
-					value: 'tax_identification_document',
-				},
-				{
-					key: 'address_proof',
-					label: __('Address proof', 'multivendorx'),
-					value: 'address_proof',
-				},
-				{
-					key: 'identity_proof',
-					label: __(
-						'Identity proof (owner / authorized person)',
-						'multivendorx'
-					),
-					value: 'identity_proof',
-				},
-				{
-					key: 'reseller_distributor_certificate',
-					label: __(
-						'Reseller / distributor certificate',
-						'multivendorx'
-					),
-					value: 'reseller_distributor_certificate',
-				},
-				{
-					key: 'other_supporting_document',
-					label: __('Other supporting document', 'multivendorx'),
-					value: 'other_supporting_document',
-				},
-			],
-			selectDeselect: true,
-		}
 	],
 };

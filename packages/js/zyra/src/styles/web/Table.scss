@@ -644,7 +644,8 @@
 .badge-public,
 .badge-publish,
 .badge-published,
-.badge-instock {
+.badge-instock,
+.badge-refund-accepted {
     color: map-get(map-get($color-palette, green), color);
     background: map-get(map-get($color-palette, green), light-color);
 }
