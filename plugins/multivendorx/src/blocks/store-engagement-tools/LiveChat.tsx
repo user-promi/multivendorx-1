@@ -1,3 +1,4 @@
+/* global StoreInfo */
 import { __ } from '@wordpress/i18n';
 import React from 'react';
 
@@ -14,9 +15,19 @@ const ChatIcon = () => (
 );
 
 const LiveChat: React.FC = () => {
+
+	const provider = StoreInfo?.settings_databases_value['live-chat']?.chat_provider;
+	const storeId = StoreInfo?.storeDetails?.storeId;
+	const storeName = StoreInfo?.storeDetails?.storeName;
+
+	if (provider === 'tawk') {
+		return null;
+	}
 	return (
 		<button
-			className={`wp-block-button__link has-border-color has-accent-1-border-color wp-element-button multivendorx-store-chat-btn`}
+			className={`wp-block-button__link has-border-color has-accent-1-border-color wp-element-button multivendorx-livechat-btn`}
+			data-store-id={storeId}
+			data-store-name={storeName}
 		>
 			<ChatIcon />
 			{__('Live Chat com', 'multivendorx')}
