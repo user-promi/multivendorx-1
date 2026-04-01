@@ -15,18 +15,16 @@ import {
 	FormGroup,
 	ButtonInputUI,
 	PopupUI,
-	MultiCheckBoxUI,
 	CalendarInputUI,
 	TextAreaUI,
 	ChoiceToggleUI,
-	ItemListUI,
 	TableCard,
-	Notice,
 	SectionUI,
 } from 'zyra';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './LatestReview';
 import LatestRefundRequest from './LatestRefundRequest';
+import { applyFilters } from '@wordpress/hooks';
 
 interface OverviewProps {
 	id: string | null;
@@ -180,28 +178,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 	const handleCloseForm = () => {
 		setVacation(false);
 	};
-	const handleClosehours = () => {
-		sethours(false);
-	};
 
-	// business hours table (dynamic and remove)
-	const scheduleColumns = {
-		day: {
-			label: 'Day',
-		},
-		time: {
-			label: 'Working Hours',
-		},
-	};
-	const scheduleRows = [
-		{ day: 'Mon', time: '9:00 AM–7:00 PM', break: 'Lunch' },
-		{ day: 'Tue', time: '9:00 AM–7:00 PM', break: 'Lunch' },
-		{ day: 'Wed', time: '9:00 AM–7:00 PM', break: '-' },
-		{ day: 'Thu', time: '9:00 AM–7:00 PM', break: 'Lunch' },
-		{ day: 'Fri', time: '9:00 AM–6:00 PM', break: 'Lunch' },
-		{ day: 'Sat', time: '10:00 AM–4:00 PM', break: '-' },
-		{ day: 'Sun', time: 'Closed', break: '-' },
-	];
 	return (
 		<>
 			<Container>
@@ -463,19 +440,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 										{__('View details', 'multivendorx')}
 									</a>
 								</FormGroup>
-								{/* <SectionUI title={__('Contact', 'multivendorx')} />
-								<FormGroup
-									row
-									label={__('Phone', 'multivendorx')}
-								>
-									{__('02-44801223', 'multivendorx')}
-								</FormGroup>
-								<FormGroup
-									row
-									label={__('Email', 'multivendorx')}
-								>
-									{__('dummy_store5@dokan.com', 'multivendorx')}
-								</FormGroup> */}
 
 								<SectionUI title={__('Settings', 'multivendorx')} />
 								<FormGroup
@@ -507,7 +471,13 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							</FormGroupWrapper>
 						</Card>
 					</div>
-
+					{applyFilters(
+						'multivendorx_store_edit_right_section',
+						null,
+						id,
+						storeData,
+						modules
+					)}
 					<Card
 						title={__('Store availability', 'multivendorx')}
 						action={
@@ -661,7 +631,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 						)}
 					</Card>
 					{/* store hours start */}
-					{appLocalizer.khali_dabba && (
+					{/* {appLocalizer.khali_dabba && (
 						<Card
 							title={__('Store working hours', 'multivendorx')}
 							action={
@@ -740,66 +710,8 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								/>
 							</PopupUI>
 						</Card>
-					)}
+					)} */}
 
-					{/* store hours end */}
-
-					{/* <Card
-						title={__('Store staff', 'multivendorx')}
-						iconName="external icon"
-						onIconClick={() => {
-							navigate(
-								`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`
-							);
-						}}
-					>
-						<InfoItem
-							title={
-								storeData.primary_owner_info?.data
-									?.display_name ?? <Skeleton width={9.375} />
-							}
-							avatar={{
-								iconClass:
-									'item-icon adminfont-person secondary',
-							}}
-							descriptions={[
-								{
-									label: __('Email', 'multivendorx'),
-									value: storeData.primary_owner_info?.data
-										?.user_email ?? (
-										<Skeleton width={9.375} />
-									),
-								},
-							]}
-							badges={[
-								{
-									text: __('Primary Owner', 'multivendorx'),
-									className: 'green',
-								},
-								{
-									text: <i className="adminfont-edit" />,
-									className: 'blue',
-									onClick: () => {
-										navigate(
-											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
-											{
-												state: {
-													highlightTarget:
-														'primary-owner',
-												},
-											}
-										);
-										setTimeout(() => {
-											navigate(
-												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=staff`,
-												{ replace: true }
-											);
-										}, 500);
-									},
-								},
-							]}
-						/>
-					</Card> */}
 				</Column>
 			</Container>
 		</>
