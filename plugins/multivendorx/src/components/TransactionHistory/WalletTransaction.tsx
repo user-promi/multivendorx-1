@@ -188,7 +188,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 	const fee = amount * (percentage / 100) + fixed;
 
 	const headers = {
-		id: { label: __('ID', 'multivendorx') },
+		id: { label: __('ID', 'multivendorx') , type: "id"},
 		status: { label: __('Status', 'multivendorx'), type: 'status' },
 		transaction_type: {
 			label: __('Transaction Type', 'multivendorx'),
