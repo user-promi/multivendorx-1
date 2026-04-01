@@ -43,10 +43,10 @@
       transform: translate(-4.5rem, 2rem);
 
       &:after {
-        top: auto ;
+        top: auto !important;
         bottom: 100%;
-        border-color: transparent transparent #2e2e2e;
-        left: 80%;
+        border-color: transparent transparent #2e2e2e !important;
+        left: 80% !important;
       }
     }
   }

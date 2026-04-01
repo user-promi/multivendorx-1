@@ -713,6 +713,7 @@ const EditStore = () => {
 
 												</div>
 												<div className="storefront-link">
+													<i className="adminfont-storefront"></i>
 													<a href="#" className="link-item">
 														<b>
 															{__(
