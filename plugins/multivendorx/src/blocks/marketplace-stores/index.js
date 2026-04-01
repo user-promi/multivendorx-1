@@ -100,12 +100,12 @@ const EditBlock = (props) => {
 					<div className="store-details">
 						<span className="store-phone">
 							<i className="dashicons dashicons-phone"></i>{' '}
-							{__('+91 7001266603', 'multivendorx')}
+							{__('+91 7001166803', 'multivendorx')}
 						</span>
 
 						<span className="store-location">
 							<i className="dashicons dashicons-location"></i>{' '}
-							{__('Chakdaha, West Bengal, India', 'multivendorx')}
+							{__('Salt Lake, West Bengal, India', 'multivendorx')}
 						</span>
 					</div>
 				</div>

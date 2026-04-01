@@ -346,7 +346,7 @@ export default {
 			docLink:
 				'https://multivendorx.com/docs/knowledgebase/weight-shipping',
 			settingsLink: `${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=shipping`,
-			proModule: false,
+			proModule: true,
 			reqPluging: [
 				{
 					name: 'Table Rate Shipping',
