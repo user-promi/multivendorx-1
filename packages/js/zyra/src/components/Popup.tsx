@@ -22,6 +22,7 @@ export interface PopupProps {
     open?: boolean;
     toggleIcon?: string;
     tooltipName?: string;
+    tooltipPosition?: 'top' | 'bottom' | 'end' | 'start';
     header?: PopupHeaderProps;
     footer?: React.ReactNode;
     width?: number | string;
@@ -40,6 +41,7 @@ export const PopupUI = forwardRef<HTMLDivElement, PopupProps>(
             open: controlledOpen,
             toggleIcon,
             tooltipName = 'Menu',
+            tooltipPosition = 'bottom',
             width = 14,
             height = 'fit-content',
             className = '',
@@ -97,7 +99,7 @@ export const PopupUI = forwardRef<HTMLDivElement, PopupProps>(
                 ref={wrapperRef}
             >
                 {toggleIcon && (
-                    <Tooltip text={tooltipName} position="end"  className={open ? 'hidden' : ''}>
+                    <Tooltip text={tooltipName} position={tooltipPosition} className={open ? 'hidden' : ''}>
                         <i
                             onClick={handleToggle}
                             className={`popup-icon adminfont-${toggleIcon}`}

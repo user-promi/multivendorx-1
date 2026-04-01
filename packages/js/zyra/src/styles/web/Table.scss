@@ -88,7 +88,6 @@
             }
             &.bulk {
                 background: #202020;
-                color: #fff;
                 font-size: 1rem;
                 padding: 0.5rem;
 
@@ -97,6 +96,7 @@
                     transition: all 0.3s ease;
                     border-radius: $border-radius-small;
                     display: flex;
+                     color: #fff;
 
                     .admin-btn {
                         background: transparent;
@@ -124,14 +124,14 @@
                     }
                 }
 
-                select {
-                    color: #fff;
-                    font-size: 0.95rem;
+                // select {
+                //     color: #fff;
+                //     font-size: 0.95rem;
 
-                    option {
-                        background: #fff;
-                    }
-                }
+                //     option {
+                //         background: #fff;
+                //     }
+                // }
             }
 
             .date-picker-section-wrapper {
@@ -535,7 +535,7 @@
 
             &.action {
                 flex-grow: 0;
-                max-width: 4rem;
+                max-width: 5rem;
             }
 
             &.notificaton {

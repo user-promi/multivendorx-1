@@ -430,7 +430,7 @@ const EditStore = () => {
 										<Skeleton
 											variant="rectangular"
 											width="100%"
-											height={200}
+											height={12}
 										/>
 									) : !data.banner ? (
 										<div className="default-img-1500x900" />
@@ -442,6 +442,7 @@ const EditStore = () => {
 											'Banner',
 											'multivendorx'
 										)}
+										tooltipPosition='end'
 										toggleIcon="edit theme-background"
 									>
 										<ItemListUI
@@ -494,6 +495,7 @@ const EditStore = () => {
 												'Logo',
 												'multivendorx'
 											)}
+											tooltipPosition='top'
 											toggleIcon="edit theme-background"
 										>
 											<ItemListUI
@@ -966,6 +968,7 @@ const EditStore = () => {
 						position="menu-dropdown"
 						toggleIcon="more-vertical"
 						tooltipName={__('Settings', 'multivendorx')}
+						tooltipPosition="end"
 					>
 						<ItemListUI items={actionItems} />
 					</PopupUI>

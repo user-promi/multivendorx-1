@@ -305,7 +305,7 @@ const PaymentSettings: React.FC<PaymentSettingsProps> = ({ id, data }) => {
 					>
 						<Notice
 							type="info"
-							displayPosition="notice"
+							displayPosition="inline-notice"
 							message={sprintf(
 								__(
 									'If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.',
