@@ -261,9 +261,9 @@ const EditStore = () => {
 		{
 			type: 'file',
 			content: {
-				id: 'application-details',
-				headerTitle: __('Application Details', 'multivendorx'),
-				headerDescription: __('Application', 'multivendorx'),
+				id: 'marketplace-compliance',
+				headerTitle: __('Marketplace Compliance', 'multivendorx'),
+				headerDescription: __('Marketplace Compliance', 'multivendorx'),
 				hideSettingHeader: true,
 				headerIcon: 'credit-card',
 			},
@@ -286,7 +286,7 @@ const EditStore = () => {
 
 	const visibleTabs = useMemo(() => {
 		const updatedTabs = settingContent.map((tab) =>
-			tab.content.id === 'application-details'
+			tab.content.id === 'marketplace-compliance'
 				? {
 					...tab,
 					content: {
@@ -309,7 +309,7 @@ const EditStore = () => {
 			data?.status === 'permanently_rejected'
 		) {
 			return updatedTabs.filter(
-				(tab) => tab.content.id === 'application-details'
+				(tab) => tab.content.id === 'marketplace-compliance'
 			);
 		}
 
@@ -344,7 +344,7 @@ const EditStore = () => {
 					return <ShippingSettings id={editId} data={data} />;
 				case 'store-policy':
 					return <PolicySettings id={editId} data={data} />;
-				case 'application-details':
+				case 'marketplace-compliance':
 					return <StoreRegistration id={editId} />;
 				case 'store-facilitator':
 					return applyFilters(

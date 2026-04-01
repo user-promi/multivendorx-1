@@ -230,9 +230,8 @@ const App = () => {
 			items: profileItems,
 		},
 	];
-	const handleDismissBanner = () => {
-		localStorage.setItem('banner', 'false');
-	};
+
+	const isBannerDismissed = localStorage.getItem('banner_dismissed') === 'true';
 
     useEffect(() => {
         const handler = (e: any) => {
@@ -430,15 +429,16 @@ const App = () => {
 				appLocalizer={appLocalizer}
 				steps={getTourSteps(appLocalizer)}
 			/>
-			<Notice
-				uniqueKey="banner"
-				type="banner"
-				validity="lifetime"
-				displayPosition="banner"
-				message={bannerItem}
-				actionLabel="Upgrade Now"
-				onAction={() => handleDismissBanner()}
-			/>
+			{!isBannerDismissed && (
+				<Notice
+					uniqueKey="banner"
+					type="banner"
+					validity="lifetime"
+					displayPosition="banner"
+					message={bannerItem}
+					actionLabel="Upgrade Now"
+				/>
+			)}
 
 			{activeModal === 'migrate' && (
 				<>

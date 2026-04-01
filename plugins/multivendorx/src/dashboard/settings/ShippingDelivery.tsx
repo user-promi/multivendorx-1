@@ -375,6 +375,7 @@ const ShippingDelivery = () => {
 										<ChoiceToggleUI
 											options={[
 												{
+													key: 'K',
 													label: __(
 														'Kilometers (km)',
 														'multivendorx'
@@ -382,6 +383,7 @@ const ShippingDelivery = () => {
 													value: 'K',
 												},
 												{
+													key: 'M',
 													label: __(
 														'Miles (mi)',
 														'multivendorx'

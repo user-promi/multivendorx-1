@@ -89,11 +89,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		}
 
 		const provider = settings.geolocation.choose_map_api;
-		setApiKey(settings.geolocation[`${provider}_api_key`] || '');
-
 		setMapConfig({
 			provider: provider || null,
-			apiKey: apiKey,
+			apiKey: settings.geolocation[`${provider}_api_key`],
 		});
 	}, [settings]);
 
@@ -470,40 +468,40 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 												<div className="review-rating">
 													{store.rating !==
 														undefined && (
-														<div
-															className="star-rating"
-															role="img"
-															aria-label={sprintf(
-																__(
-																	'Rated %s out of 5',
-																	'multivendorx'
-																),
-																store.rating.toFixed(
-																	2
-																)
-															)}
-														>
-															<span
-																style={{
-																	width: `${(store.rating / 5) * 100}%`,
-																}}
-															>
-																{__(
-																	'Rated',
-																	'multivendorx'
-																)}{' '}
-																<strong className="rating">
-																	{store.rating.toFixed(
+															<div
+																className="star-rating"
+																role="img"
+																aria-label={sprintf(
+																	__(
+																		'Rated %s out of 5',
+																		'multivendorx'
+																	),
+																	store.rating.toFixed(
 																		2
-																	)}
-																</strong>{' '}
-																{__(
-																	'out of 5',
-																	'multivendorx'
+																	)
 																)}
-															</span>
-														</div>
-													)}
+															>
+																<span
+																	style={{
+																		width: `${(store.rating / 5) * 100}%`,
+																	}}
+																>
+																	{__(
+																		'Rated',
+																		'multivendorx'
+																	)}{' '}
+																	<strong className="rating">
+																		{store.rating.toFixed(
+																			2
+																		)}
+																	</strong>{' '}
+																	{__(
+																		'out of 5',
+																		'multivendorx'
+																	)}
+																</span>
+															</div>
+														)}
 												</div>
 												{store.phone &&
 													store.address && (
@@ -511,9 +509,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 															{store.phone && (
 																<span>
 																	<i className="dashicons dashicons-phone" />{' '}
-																	{
-																		store.phone
-																	}
+																	{store.phone.country_code} {store.phone.phone}
 																</span>
 															)}
 
@@ -586,28 +582,28 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 																	{/* Add star rating if available */}
 																	{p.average_rating >
 																		0 && (
-																		<div
-																			className="star-rating"
-																			role="img"
-																			aria-label={`Rated ${p.average_rating} out of 5`}
-																		>
-																			<span
-																				style={{
-																					width: `${(p.average_rating / 5) * 100}%`,
-																				}}
+																			<div
+																				className="star-rating"
+																				role="img"
+																				aria-label={`Rated ${p.average_rating} out of 5`}
 																			>
-																				Rated{' '}
-																				<strong className="rating">
-																					{
-																						p.average_rating
-																					}
-																				</strong>{' '}
-																				out
-																				of
-																				5
-																			</span>
-																		</div>
-																	)}
+																				<span
+																					style={{
+																						width: `${(p.average_rating / 5) * 100}%`,
+																					}}
+																				>
+																					Rated{' '}
+																					<strong className="rating">
+																						{
+																							p.average_rating
+																						}
+																					</strong>{' '}
+																					out
+																					of
+																					5
+																				</span>
+																			</div>
+																		)}
 
 																	{/* Price HTML */}
 																	{p.price_html && (

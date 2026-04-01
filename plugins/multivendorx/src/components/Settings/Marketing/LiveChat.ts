@@ -32,9 +32,9 @@ export default {
 					value: 'store_info',
 				},
 				{
-					key: 'none',
+					key: 'both',
 					label: __('Both', 'multivendorx'),
-					value: 'none',
+					value: 'both',
 				},
 			],
 			proSetting: true,
@@ -69,51 +69,12 @@ export default {
 					label: __('WhatsApp', 'multivendorx'),
 					value: 'whatsapp',
 				},
-			],
-			proSetting: true,
-		},
-		{
-			key: 'whatsapp_opening_pattern',
-			type: 'choice-toggle',
-			label: __('WhatsApp opening pattern', 'multivendorx'),
-			// desc: __(
-			// 	'Choose whether WhatsApp chats open in browser or app.',
-			// 	'multivendorx'
-			// ),
-			options: [
 				{
-					key: 'browser',
-					label: __('Open in browser', 'multivendorx'),
-					value: 'browser',
-				},
-				{
-					key: 'app',
-					label: __('Open in WhatsApp app', 'multivendorx'),
-					value: 'app',
-				},
+					key: 'tawk',
+					label: __('Tawk.to', 'multivendorx'),
+					value: 'tawk',
+				}
 			],
-			dependent: {
-				key: 'chat_provider',
-				set: true,
-				value: 'whatsapp',
-			},
-			moduleEnabled: 'live-chat',
-			proSetting: true,
-		},
-		{
-			key: 'whatsapp_pre_filled',
-			type: 'textarea',
-			label: __('Pre-filled WhatsApp message', 'multivendorx'),
-			desc: __(
-				'Define default text for the WhatsApp chat window. You can use variables {store_name} and {store_url}.',
-				'multivendorx'
-			),
-			dependent: {
-				key: 'chat_provider',
-				set: true,
-				value: 'whatsapp',
-			},
-			moduleEnabled: 'live-chat',
 			proSetting: true,
 		},
 		{
