@@ -197,8 +197,11 @@
 
     &.mini-card {
         width: 100%;
-
-        .item {
+        .price{
+            font-size: 1.45rem;
+            font-weight: 500;
+        }
+        .item { 
             width: 100%;
             flex-direction: column;
             position: relative;

@@ -12,7 +12,7 @@ import {
 	CategoryCount,
 	InfoItem,
 } from 'zyra';
-import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import axios from 'axios';
 import {
 	formatCurrency,
@@ -195,6 +195,7 @@ const StoreReport: React.FC = () => {
 	const headers = {
 		store_name: {
 			label: __('Store', 'multivendorx'),
+			width: 15,
 			render: (row: any) => (
 				<InfoItem
 					title={row.store_name}
@@ -215,6 +216,7 @@ const StoreReport: React.FC = () => {
 		primary_owner: {
 			key: 'primary_owner',
 			label: __('Primary Owner', 'multivendorx'),
+			width: 15,
 			render: (row) => (
 				<>
 					<InfoItem
@@ -301,11 +303,17 @@ const StoreReport: React.FC = () => {
 									cy="50%"
 									outerRadius={100}
 									dataKey="value"
-								/>
+								>
+									{pieData.map((entry, index) => (
+										<Cell
+											key={`cell-${index}`}
+											className={`admin-color${index + 2}`}
+										/>
+									))}
+								</Pie>
 							)}
-							<Tooltip
-								formatter={(value) => formatCurrency(value)}
-							/>
+
+							<Tooltip formatter={(value: number) => formatCurrency(value)} />
 							<Legend />
 						</PieChart>
 					</ResponsiveContainer>

@@ -226,6 +226,7 @@ const App = () => {
 		{
 			toggleIcon: 'admin-icon adminfont-user-circle',
 			tooltipName: __('Support', 'multivendorx'),
+			tooltipPosition: 'end',
 			items: profileItems,
 		},
 	];
