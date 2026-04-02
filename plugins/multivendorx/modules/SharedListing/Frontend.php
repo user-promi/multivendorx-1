@@ -71,13 +71,13 @@ class Frontend {
         if ( ! $query->is_main_query() || ! ( is_shop() || is_product_category() ) ) {
             return;
         }
-        
+
         $data = $this->get_excluded_product();
-        
+
         if ( empty( $data['exclude'] ) ) {
             return;
         }
-        
+
         $query->set( 'post__not_in', $data['exclude'] );
     }
     /**
@@ -90,9 +90,9 @@ class Frontend {
     */
     public function get_excluded_product() {
         global $wpdb;
-        
+
         $priority = MultiVendorX()->setting->get_setting( 'shared_listing_display', 'min_price' );
-        
+
         $mapped_ids  = array();
         $primary_ids = array();
         
@@ -104,15 +104,15 @@ class Frontend {
         $maps = $wpdb->get_results( $query );
         foreach ( $maps as $map ) {
             $ids = maybe_unserialize( $map->product_map );
-            
+
             if ( empty( $ids ) ) {
                 continue;
             }
-            
+
             $mapped_ids = array_merge( $mapped_ids, $ids );
-            
+
             $selected_id = $this->select_primary_product( $ids, $priority );
-            
+
             if ( $selected_id ) {
                 $primary_ids[] = $selected_id;
             }
@@ -131,8 +131,6 @@ class Frontend {
     * @return int|null Selected primary product ID or null if none found.
     */
     public function select_primary_product( array $ids, string $priority ) {
-        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export('hello', true) . "\n", FILE_APPEND);
-        $selected_id = null;
 
         switch ( $priority ) {
             case 'max_price':
