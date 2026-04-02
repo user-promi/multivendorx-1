@@ -69,7 +69,7 @@ class Hooks {
         add_action( 'woocommerce_order_status_changed', array( $this, 'store_order_to_parent_order_status_sync' ), 10, 4 );
 
         add_action( 'woocommerce_order_status_changed', array( $this, 'trigger_order_status_notifications' ), 50, 4 );
-        add_filter( 'woocommerce_order_item_get_formatted_meta_data', array( $this, 'get_formatted_meta_data' ), 10, 2);
+        add_filter( 'woocommerce_order_item_get_formatted_meta_data', array( $this, 'get_formatted_meta_data' ), 10, 2 );
     }
     /**
      * Skip counting sales for suborders.
@@ -405,10 +405,10 @@ class Hooks {
         }
     }
 
-    public function get_formatted_meta_data($formatted_meta, $item) {
-        foreach ($formatted_meta as $key => $meta) {
-            if ($meta->key === 'multivendorx_sold_by') {
-                $formatted_meta[$key]->display_key = __('Sold by', 'multivendorx');
+    public function get_formatted_meta_data( $formatted_meta, $item ) {
+        foreach ( $formatted_meta as $key => $meta ) {
+            if ( $meta->key === 'multivendorx_sold_by' ) {
+                $formatted_meta[ $key ]->display_key = __( 'Sold by', 'multivendorx' );
             }
         }
 

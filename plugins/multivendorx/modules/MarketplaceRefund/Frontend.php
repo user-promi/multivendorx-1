@@ -330,17 +330,17 @@ class Frontend {
         /* phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized */
         $files = $_FILES['product_img'] ?? null;
 
-        if (!empty($files) && !empty($files['name'])) {
+        if ( ! empty( $files ) && ! empty( $files['name'] ) ) {
             // Normalize safely.
-            $file_names  = array_map('sanitize_file_name', (array) ($files['name'] ?? []));
-            $file_types  = (array) ($files['type'] ?? []);
-            $file_tmp    = (array) ($files['tmp_name'] ?? []);
-            $file_errors = (array) ($files['error'] ?? []);
-            $file_sizes  = (array) ($files['size'] ?? []);
-    
+            $file_names  = array_map( 'sanitize_file_name', (array) ( $files['name'] ?? array() ) );
+            $file_types  = (array) ( $files['type'] ?? array() );
+            $file_tmp    = (array) ( $files['tmp_name'] ?? array() );
+            $file_errors = (array) ( $files['error'] ?? array() );
+            $file_sizes  = (array) ( $files['size'] ?? array() );
+
             require_once ABSPATH . 'wp-admin/includes/file.php';
             require_once ABSPATH . 'wp-admin/includes/image.php';
-    
+
             $max_file_size = 10 * 1024 * 1024; // 10MB
             $allowed_mimes = array(
                 'jpg|jpeg|jpe' => 'image/jpeg',
@@ -348,7 +348,7 @@ class Frontend {
                 'png'          => 'image/png',
                 'webp'         => 'image/webp',
             );
-    
+
             foreach ( $file_names as $index => $name ) {
                 if ( empty( $name ) ||
                     ! isset(
@@ -360,22 +360,22 @@ class Frontend {
                 ) {
                     continue;
                 }
-    
+
                 $sanitized_name = sanitize_file_name( $name );
-    
+
                 if ( UPLOAD_ERR_OK !== (int) $file_errors[ $index ] ) {
                     continue;
                 }
-    
+
                 if ( (int) $file_sizes[ $index ] > $max_file_size ) {
                     continue;
                 }
-    
+
                 $file_type = wp_check_filetype( $sanitized_name, $allowed_mimes );
                 if ( empty( $file_type['type'] ) ) {
                     continue;
                 }
-    
+
                 $file = array(
                     'name'     => $sanitized_name,
                     'type'     => sanitize_mime_type( $file_types[ $index ] ),
@@ -383,12 +383,12 @@ class Frontend {
                     'error'    => (int) $file_errors[ $index ],
                     'size'     => (int) $file_sizes[ $index ],
                 );
-    
+
                 $upload = wp_handle_upload( $file, array( 'test_form' => false ) );
-    
+
                 if ( $upload && ! isset( $upload['error'] ) ) {
                     $uploaded_image_urls[] = esc_url_raw( $upload['url'] );
-    
+
                     $attachment = array(
                         'guid'           => $upload['url'],
                         'post_mime_type' => $upload['type'],
@@ -396,9 +396,9 @@ class Frontend {
                         'post_content'   => '',
                         'post_status'    => 'inherit',
                     );
-    
+
                     $attach_id = wp_insert_attachment( $attachment, $upload['file'] );
-    
+
                     if ( $attach_id ) {
                         $attach_data = wp_generate_attachment_metadata( $attach_id, $upload['file'] );
                         wp_update_attachment_metadata( $attach_id, $attach_data );
@@ -484,8 +484,8 @@ class Frontend {
         if ( ! is_wc_endpoint_url( 'view-order' ) ) {
             return;
         }
-        $order = wc_get_order( $order_id );
-        $order_status = $order->get_status();
+        $order                    = wc_get_order( $order_id );
+        $order_status             = $order->get_status();
         $refund_timeline_statuses = array(
             'refund-requested',
             'refund-accepted',
@@ -493,7 +493,9 @@ class Frontend {
             'refunded',
         );
 
-        if ( !in_array( $order_status, $refund_timeline_statuses, true ) ) return;
+        if ( ! in_array( $order_status, $refund_timeline_statuses, true ) ) {
+			return;
+        }
 
         $refund_reason = $order->get_meta( 'multivendorx_customer_refund_reason' );
         $refund_note   = $order->get_meta( 'multivendorx_customer_refund_addi_info' );
@@ -507,7 +509,6 @@ class Frontend {
         $step2_icon = 'dashicons-minus';
         $step3_icon = 'dashicons-minus';
         switch ( $order_status ) {
-
             case 'refund-requested':
                 $step1_class = 'active';
                 $step1_icon  = 'dashicons-ellipsis';
@@ -589,9 +590,9 @@ class Frontend {
             <address>
                 <div class="multivendorx-timeline">
                     <!-- Step 1 -->
-                    <div class="multivendorx-timeline-item <?php echo esc_attr($step1_class); ?>">
+                    <div class="multivendorx-timeline-item <?php echo esc_attr( $step1_class ); ?>">
                         <div class="timeline-icon">
-                            <span class="dashicons <?php echo esc_attr($step1_icon); ?>"></span>
+                            <span class="dashicons <?php echo esc_attr( $step1_icon ); ?>"></span>
                         </div>
                         <div class="multivendorx-timeline-content">
                             <div class="multivendorx-timeline-title">
@@ -600,9 +601,9 @@ class Frontend {
                         </div>
                     </div>
 
-                    <div class="multivendorx-timeline-item <?php echo esc_attr($step2_class); ?>">
+                    <div class="multivendorx-timeline-item <?php echo esc_attr( $step2_class ); ?>">
                         <div class="timeline-icon">
-                            <span class="dashicons <?php echo esc_attr($step2_icon); ?>"></span>
+                            <span class="dashicons <?php echo esc_attr( $step2_icon ); ?>"></span>
                         </div>
                         <div class="multivendorx-timeline-content">
                             <div class="multivendorx-timeline-title">
@@ -611,9 +612,9 @@ class Frontend {
                         </div>
                     </div>
 
-                    <div class="multivendorx-timeline-item <?php echo esc_attr($step3_class); ?>">
+                    <div class="multivendorx-timeline-item <?php echo esc_attr( $step3_class ); ?>">
                         <div class="timeline-icon">
-                            <span class="dashicons <?php echo esc_attr($step3_icon); ?>"></span>
+                            <span class="dashicons <?php echo esc_attr( $step3_icon ); ?>"></span>
                         </div>
                         <div class="multivendorx-timeline-content">
                             <div class="multivendorx-timeline-title">

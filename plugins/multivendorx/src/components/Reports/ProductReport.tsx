@@ -474,29 +474,31 @@ const ProductReport: React.FC = () => {
 					{/* Top Reviewed Products Section */}
 					<Card title="Top Reviewed Products">
 						{toReviewedProduct.length > 0 ? (
-							toReviewedProduct.map((product: Product, index: number) => (
-								<InfoItem
-									key={`selling-${product.id}`}
-									title={product.name}
-									avatar={{
-										image: product.images?.[0]?.src,
-										text:
-											product.name?.charAt(0) || '?',
-										iconClass: `admin-color${index + 1}`,
-									}}
-									amount= {product.price}
-									descriptions={[
-										{
-											label: __(
-												'Total Sales:',
-												'multivendorx'
-											),
-											value: product.total_sales || 0,
-										},
-									]}
-									isLoading={isDashboardLoading}
-								/>
-							))
+							toReviewedProduct.map(
+								(product: Product, index: number) => (
+									<InfoItem
+										key={`selling-${product.id}`}
+										title={product.name}
+										avatar={{
+											image: product.images?.[0]?.src,
+											text:
+												product.name?.charAt(0) || '?',
+											iconClass: `admin-color${index + 1}`,
+										}}
+										amount={product.price}
+										descriptions={[
+											{
+												label: __(
+													'Total Sales:',
+													'multivendorx'
+												),
+												value: product.total_sales || 0,
+											},
+										]}
+										isLoading={isDashboardLoading}
+									/>
+								)
+							)
 						) : (
 							<ComponentStatusView
 								title={__(

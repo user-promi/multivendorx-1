@@ -28,18 +28,18 @@ $current_tab      = 'products'; // Default.
 $sidebar_position = MultiVendorX()->setting->get_setting( 'store_sidebar', array() );
 
 $current_tab = 'products';
-$tab = sanitize_key(filter_input(INPUT_GET, 'tab') ?? '');
+$tab         = sanitize_key( filter_input( INPUT_GET, 'tab' ) ?? '' );
 // Plain permalink.
-if ($tab) {
+if ( $tab ) {
     $current_tab = $tab;
 } else {
     // Pretty permalink.
-    $request_uri = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL) ?? '';
-    $path        = trim(parse_url($request_uri, PHP_URL_PATH) ?? '', '/');
-    $segments = explode('/', $path);
-    $last     = sanitize_key(end($segments));
+    $request_uri = filter_input( INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL ) ?? '';
+    $path        = trim( parse_url( $request_uri, PHP_URL_PATH ) ?? '', '/' );
+    $segments    = explode( '/', $path );
+    $last        = sanitize_key( end( $segments ) );
 
-    if ($last && isset($store_tabs[$last])) {
+    if ( $last && isset( $store_tabs[ $last ] ) ) {
         $current_tab = $last;
     }
 }

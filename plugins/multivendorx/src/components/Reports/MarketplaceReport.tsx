@@ -366,8 +366,10 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 			},
 		})
 			.then((response) => {
-				const filteredCustomers = response.data.filter(customer => {
-					return customer.orders_count > 0 && customer.total_spend > 0;
+				const filteredCustomers = response.data.filter((customer) => {
+					return (
+						customer.orders_count > 0 && customer.total_spend > 0
+					);
 				});
 
 				setTopCustomers(filteredCustomers);
@@ -487,28 +489,21 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 									}}
 									descriptions={[
 										{
-											label: __(
-												'Used',
-												'multivendorx'
-											),
+											label: __('Used', 'multivendorx'),
 											value: `${coupon.usage_count} ${__('times', 'multivendorx')}`,
 										},
 										{
-											label: __(
-												'Store',
-												'multivendorx'
-											),
+											label: __('Store', 'multivendorx'),
 											value: coupon.store_name,
 										},
 									]}
-									amount={coupon.amount
-												? coupon.discount_type ===
-													'percent'
-													? `${coupon.amount}%`
-													: formatCurrency(
-														coupon.amount
-													)
-												: '-'}
+									amount={
+										coupon.amount
+											? coupon.discount_type === 'percent'
+												? `${coupon.amount}%`
+												: formatCurrency(coupon.amount)
+											: '-'
+									}
 								/>
 							))
 						) : (
@@ -544,7 +539,8 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 													'Orders',
 													'multivendorx'
 												),
-												value: customer.orders_count || 0,
+												value:
+													customer.orders_count || 0,
 											},
 											{
 												label: __(
@@ -554,7 +550,9 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 												value: customer.email,
 											},
 										]}
-										amount={formatCurrency( customer.total_spend || 0 )}
+										amount={formatCurrency(
+											customer.total_spend || 0
+										)}
 									/>
 								)
 							)
@@ -602,7 +600,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 												),
 												value: formatCurrency(
 													store.commission_refunded ||
-													0
+														0
 												),
 											},
 										]}

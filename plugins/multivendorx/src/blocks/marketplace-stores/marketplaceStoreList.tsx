@@ -468,40 +468,40 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 												<div className="review-rating">
 													{store.rating !==
 														undefined && (
-															<div
-																className="star-rating"
-																role="img"
-																aria-label={sprintf(
-																	__(
-																		'Rated %s out of 5',
-																		'multivendorx'
-																	),
-																	store.rating.toFixed(
-																		2
-																	)
-																)}
+														<div
+															className="star-rating"
+															role="img"
+															aria-label={sprintf(
+																__(
+																	'Rated %s out of 5',
+																	'multivendorx'
+																),
+																store.rating.toFixed(
+																	2
+																)
+															)}
+														>
+															<span
+																style={{
+																	width: `${(store.rating / 5) * 100}%`,
+																}}
 															>
-																<span
-																	style={{
-																		width: `${(store.rating / 5) * 100}%`,
-																	}}
-																>
-																	{__(
-																		'Rated',
-																		'multivendorx'
-																	)}{' '}
-																	<strong className="rating">
-																		{store.rating.toFixed(
-																			2
-																		)}
-																	</strong>{' '}
-																	{__(
-																		'out of 5',
-																		'multivendorx'
+																{__(
+																	'Rated',
+																	'multivendorx'
+																)}{' '}
+																<strong className="rating">
+																	{store.rating.toFixed(
+																		2
 																	)}
-																</span>
-															</div>
-														)}
+																</strong>{' '}
+																{__(
+																	'out of 5',
+																	'multivendorx'
+																)}
+															</span>
+														</div>
+													)}
 												</div>
 												{store.phone &&
 													store.address && (
@@ -509,7 +509,16 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 															{store.phone && (
 																<span>
 																	<i className="dashicons dashicons-phone" />{' '}
-																	{store.phone.country_code} {store.phone.phone}
+																	{
+																		store
+																			.phone
+																			.country_code
+																	}{' '}
+																	{
+																		store
+																			.phone
+																			.phone
+																	}
 																</span>
 															)}
 
@@ -582,28 +591,28 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 																	{/* Add star rating if available */}
 																	{p.average_rating >
 																		0 && (
-																			<div
-																				className="star-rating"
-																				role="img"
-																				aria-label={`Rated ${p.average_rating} out of 5`}
+																		<div
+																			className="star-rating"
+																			role="img"
+																			aria-label={`Rated ${p.average_rating} out of 5`}
+																		>
+																			<span
+																				style={{
+																					width: `${(p.average_rating / 5) * 100}%`,
+																				}}
 																			>
-																				<span
-																					style={{
-																						width: `${(p.average_rating / 5) * 100}%`,
-																					}}
-																				>
-																					Rated{' '}
-																					<strong className="rating">
-																						{
-																							p.average_rating
-																						}
-																					</strong>{' '}
-																					out
-																					of
-																					5
-																				</span>
-																			</div>
-																		)}
+																				Rated{' '}
+																				<strong className="rating">
+																					{
+																						p.average_rating
+																					}
+																				</strong>{' '}
+																				out
+																				of
+																				5
+																			</span>
+																		</div>
+																	)}
 
 																	{/* Price HTML */}
 																	{p.price_html && (

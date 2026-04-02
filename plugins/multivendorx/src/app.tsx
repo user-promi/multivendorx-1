@@ -231,21 +231,22 @@ const App = () => {
 		},
 	];
 
-	const isBannerDismissed = localStorage.getItem('banner_dismissed') === 'true';
+	const isBannerDismissed =
+		localStorage.getItem('banner_dismissed') === 'true';
 
-    useEffect(() => {
-        const handler = (e: any) => {
-            if (e.detail?.type === 'open_modal') {
-                setActiveModal(e.detail.key);
-            }
-        };
+	useEffect(() => {
+		const handler = (e: any) => {
+			if (e.detail?.type === 'open_modal') {
+				setActiveModal(e.detail.key);
+			}
+		};
 
-        window.addEventListener('multivendorx:action', handler);
+		window.addEventListener('multivendorx:action', handler);
 
-        return () => {
-            window.removeEventListener('multivendorx:action', handler);
-        };
-    }, []);
+		return () => {
+			window.removeEventListener('multivendorx:action', handler);
+		};
+	}, []);
 
 	return (
 		<>
@@ -461,15 +462,22 @@ const App = () => {
 								label={__('Migration', 'multivendorx')}
 							></FormGroup>
 							<div className="desc">
-								{appLocalizer.multivendor_plugin || 'No multivendor plugin active currently'}
+								{appLocalizer.multivendor_plugin ||
+									'No multivendor plugin active currently'}
 							</div>
 							<SequentialTaskExecutor
 								buttonText={__('Import', 'multivendorx')}
 								apilink="migration"
 								interval={1000}
 								appLocalizer={appLocalizer}
-								successMessage={__('Migrate successfully!', 'multivendorx')}
-								failureMessage={__('Failed to migrate.', 'multivendorx')}
+								successMessage={__(
+									'Migrate successfully!',
+									'multivendorx'
+								)}
+								failureMessage={__(
+									'Failed to migrate.',
+									'multivendorx'
+								)}
 								tasks={[
 									{
 										action: 'import_stores',
@@ -508,7 +516,7 @@ const App = () => {
 						</FormGroupWrapper>
 					</PopupUI>
 				</>
-            )}
+			)}
 
 			<Route />
 		</>

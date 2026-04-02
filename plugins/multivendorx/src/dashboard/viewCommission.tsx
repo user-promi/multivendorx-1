@@ -258,11 +258,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							<span className="admin-badge blue">
 								{orderData?.status
 									? orderData.status
-										.replace(/^wc-/, '') // remove 'wc-' prefix if exists
-										.replace(/_/g, ' ') // replace underscores with spaces
-										.replace(/\b\w/g, (c) =>
-											c.toUpperCase()
-										) // capitalize first letter of each word
+											.replace(/^wc-/, '') // remove 'wc-' prefix if exists
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize first letter of each word
 									: ''}
 							</span>
 						</FormGroup>
@@ -276,18 +276,19 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							label={__('Commission Status', 'multivendorx')}
 						>
 							<span
-								className={`admin-badge ${commissionData?.status === 'paid'
-									? 'green'
-									: 'red'
-									}`}
+								className={`admin-badge ${
+									commissionData?.status === 'paid'
+										? 'green'
+										: 'red'
+								}`}
 							>
 								{commissionData?.status
 									? commissionData.status
-										.replace(/^wc-/, '') // remove any prefix like 'wc-'
-										.replace(/_/g, ' ') // replace underscores with spaces
-										.replace(/\b\w/g, (c) =>
-											c.toUpperCase()
-										) // capitalize each word
+											.replace(/^wc-/, '') // remove any prefix like 'wc-'
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize each word
 									: ''}
 							</span>
 						</FormGroup>

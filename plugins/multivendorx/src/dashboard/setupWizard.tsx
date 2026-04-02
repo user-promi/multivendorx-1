@@ -49,15 +49,9 @@ const SetupWizard: React.FC = () => {
 	const methods = [
 		{
 			id: 'marketplace_setup',
-			label: __(
-				'Store Profile',
-				'multivendorx'
-			),
+			label: __('Store Profile', 'multivendorx'),
 			icon: 'storefront',
-			desc: __(
-				'Set up how your store appears',
-				'multivendorx'
-			),
+			desc: __('Set up how your store appears', 'multivendorx'),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -175,15 +169,9 @@ const SetupWizard: React.FC = () => {
 		},
 		{
 			id: 'commission_setup',
-			label: __(
-				'Payout Method',
-				'multivendorx'
-			),
+			label: __('Payout Method', 'multivendorx'),
 			icon: 'storefront',
-			desc: __(
-				'Choose how you receive earnings',
-				'multivendorx'
-			),
+			desc: __('Choose how you receive earnings', 'multivendorx'),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -346,7 +334,7 @@ const SetupWizard: React.FC = () => {
 			id: 'more_settings',
 			label: __('First Product', 'multivendorx'),
 			icon: 'storefront',
-			desc: __("Add at least one item", 'multivendorx'),
+			desc: __('Add at least one item', 'multivendorx'),
 			countBtn: true,
 			isWizardMode: true,
 			openForm: true,
@@ -405,10 +393,7 @@ const SetupWizard: React.FC = () => {
 		<div className="wizard-container">
 			<div className="welcome-wrapper">
 				<h4 className="wizard-title">
-					{__(
-						'Welcome to the MultivendorX family!',
-						'multivendorx'
-					)}
+					{__('Welcome to the MultivendorX family!', 'multivendorx')}
 				</h4>
 				<div className="des">
 					{__(

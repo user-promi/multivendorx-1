@@ -928,27 +928,27 @@ class Install {
         update_option( Utill::MULTIVENDORX_SETTINGS['privacy'], $privacy_settings );
 
         // $registration_form = array(
-        //     array(
-        //         'id'    => 1,
-        //         'type'  => 'title',
-        //         'label' => 'Registration Form',
-        //     ),
-        //     array(
-        //         'id'          => 2,
-        //         'type'        => 'text',
-        //         'label'       => 'Enter your store name',
-        //         'required'    => false,
-        //         'name'        => 'name',
-        //         'placeholder' => 'text',
-        //         'readonly'    => true,
-        //     ),
-        //     array(
-        //         'id'    => 3,
-        //         'type'  => 'button',
-        //         'label' => 'Submit',
-        //         'text'  => 'Submit',
-        //         'name'  => 'submit',
-        //     ),
+        // array(
+        // 'id'    => 1,
+        // 'type'  => 'title',
+        // 'label' => 'Registration Form',
+        // ),
+        // array(
+        // 'id'          => 2,
+        // 'type'        => 'text',
+        // 'label'       => 'Enter your store name',
+        // 'required'    => false,
+        // 'name'        => 'name',
+        // 'placeholder' => 'text',
+        // 'readonly'    => true,
+        // ),
+        // array(
+        // 'id'    => 3,
+        // 'type'  => 'button',
+        // 'label' => 'Submit',
+        // 'text'  => 'Submit',
+        // 'name'  => 'submit',
+        // ),
         // );
 
         $registration_form = array(
@@ -985,17 +985,37 @@ class Install {
                 'readonly'    => true,
             ),
             array(
-                'id'          => 5,
-                'type'        => 'multi-select',
-                'label'       => 'Expected Monthly Volume',
-                'required'    => false,
-                'name'        => 'name',
-                'options'     => array(
-                    array('id' => '1', 'label' => 'Below ₹50,000', 'value' => 'below_50000'),
-                    array('id' => '2', 'label' => '₹50,000 – ₹2,00,000', 'value' => '50000_200000'),
-                    array('id' => '3', 'label' => '₹2,00,000 – ₹5,00,000', 'value' => '200000_500000'),
-                    array('id' => '4', 'label' => '₹5,00,000 – ₹10,00,000', 'value' => '500000_1000000'),
-                    array('id' => '5', 'label' => 'Above ₹10,00,000', 'value' => 'above_1000000'),
+                'id'       => 5,
+                'type'     => 'multi-select',
+                'label'    => 'Expected Monthly Volume',
+                'required' => false,
+                'name'     => 'name',
+                'options'  => array(
+                    array(
+						'id'    => '1',
+						'label' => 'Below ₹50,000',
+						'value' => 'below_50000',
+					),
+                    array(
+						'id'    => '2',
+						'label' => '₹50,000 – ₹2,00,000',
+						'value' => '50000_200000',
+					),
+                    array(
+						'id'    => '3',
+						'label' => '₹2,00,000 – ₹5,00,000',
+						'value' => '200000_500000',
+					),
+                    array(
+						'id'    => '4',
+						'label' => '₹5,00,000 – ₹10,00,000',
+						'value' => '500000_1000000',
+					),
+                    array(
+						'id'    => '5',
+						'label' => 'Above ₹10,00,000',
+						'value' => 'above_1000000',
+					),
                 ),
             ),
             array(
@@ -1017,32 +1037,32 @@ class Install {
                 'readonly'    => true,
             ),
             array(
-                'id'          => 8,
-                'type'        => 'attachment',
-                'label'       => 'Business Registration Certificate',
-                'required'    => false,
-                'name'        => 'name',
+                'id'       => 8,
+                'type'     => 'attachment',
+                'label'    => 'Business Registration Certificate',
+                'required' => false,
+                'name'     => 'name',
             ),
             array(
-                'id'          => 9,
-                'type'        => 'attachment',
-                'label'       => 'Tax Identification Document ',
-                'required'    => false,
-                'name'        => 'name',
+                'id'       => 9,
+                'type'     => 'attachment',
+                'label'    => 'Tax Identification Document ',
+                'required' => false,
+                'name'     => 'name',
             ),
             array(
-                'id'          => 10,
-                'type'        => 'attachment',
-                'label'       => 'Address Proof',
-                'required'    => false,
-                'name'        => 'name',
+                'id'       => 10,
+                'type'     => 'attachment',
+                'label'    => 'Address Proof',
+                'required' => false,
+                'name'     => 'name',
             ),
             array(
-                'id'          => 11,
-                'type'        => 'attachment',
-                'label'       => 'Identity Proof (Owner / Authorized)',
-                'required'    => false,
-                'name'        => 'name',
+                'id'       => 11,
+                'type'     => 'attachment',
+                'label'    => 'Identity Proof (Owner / Authorized)',
+                'required' => false,
+                'name'     => 'name',
             ),
             array(
                 'id'    => 12,
@@ -2344,39 +2364,39 @@ class Install {
 
                 // country wise shipping.
 				if ( '_mvx_shipping_by_country' === $meta_key ) {
-                     $shipping_meta_map = [
-                        '_mvx_shipping_type_price' => 'multivendorx_shipping_type_price',
-                        '_mvx_additional_product'  => 'multivendorx_additional_product',
-                        '_mvx_additional_qty'      => 'multivendorx_additional_qty',
-                        '_free_shipping_amount'    => 'free_shipping_amount',
-                        '_local_pickup_cost'       => 'local_pickup_cost',
-                    ];
+                    $shipping_meta_map = array(
+						'_mvx_shipping_type_price' => 'multivendorx_shipping_type_price',
+						'_mvx_additional_product'  => 'multivendorx_additional_product',
+						'_mvx_additional_qty'      => 'multivendorx_additional_qty',
+						'_free_shipping_amount'    => 'free_shipping_amount',
+						'_local_pickup_cost'       => 'local_pickup_cost',
+					);
 
-                    foreach ( $meta_values as $item => $value ) {
-                        if ( array_key_exists( $item, $shipping_meta_map ) ) {
-                            $store->update_meta( $shipping_meta_map[ $item ], $value );
-                        }
-                    }
-                    continue;
+					foreach ( $meta_values as $item => $value ) {
+						if ( array_key_exists( $item, $shipping_meta_map ) ) {
+							$store->update_meta( $shipping_meta_map[ $item ], $value );
+						}
+					}
+					continue;
                 }
 
                 if ( '_mvx_country_rates' === $meta_key ) {
-                    $state_rates = get_user_meta( $user_id, '_mvx_state_rates', true);
-                    $result = [];
+                    $state_rates = get_user_meta( $user_id, '_mvx_state_rates', true );
+                    $result      = array();
 
                     if ( ! empty( $meta_values ) ) {
                         foreach ( $meta_values as $country => $cost ) {
-                            $country_obj = new \stdClass();
+                            $country_obj          = new \stdClass();
                             $country_obj->country = $country;
                             $country_obj->cost    = (string) $cost;
-                            $country_obj->states  = [];
+                            $country_obj->states  = array();
 
                             // Check if this country has state data.
                             if ( ! empty( $state_rates[ $country ] ) && is_array( $state_rates[ $country ] ) ) {
                                 foreach ( $state_rates[ $country ] as $state => $state_cost ) {
-                                    $state_obj = new \stdClass();
-                                    $state_obj->state = $state;
-                                    $state_obj->cost  = (string) $state_cost;
+                                    $state_obj             = new \stdClass();
+                                    $state_obj->state      = $state;
+                                    $state_obj->cost       = (string) $state_cost;
                                     $country_obj->states[] = $state_obj;
                                 }
                             }
@@ -2389,39 +2409,38 @@ class Install {
 
                 // Distance wise shipping.
 				if ( '_mvx_shipping_by_distance' === $meta_key ) {
-                     $shipping_meta_map = [
-                        '_default_cost'         => 'distance_default_cost',
-                        '_max_distance'         => 'distance_max',
-                        '_local_pickup_cost'    => 'distance_local_pickup_cost',
-                    ];
+                    $shipping_meta_map = array(
+						'_default_cost'      => 'distance_default_cost',
+						'_max_distance'      => 'distance_max',
+						'_local_pickup_cost' => 'distance_local_pickup_cost',
+					);
 
-                    foreach ( $meta_values as $item => $value ) {
-                        if ( array_key_exists( $item, $shipping_meta_map ) ) {
-                            $store->update_meta( $shipping_meta_map[ $item ], $value );
-                        }
-                    }
-                    continue;
+					foreach ( $meta_values as $item => $value ) {
+						if ( array_key_exists( $item, $shipping_meta_map ) ) {
+							$store->update_meta( $shipping_meta_map[ $item ], $value );
+						}
+					}
+					continue;
                 }
 
                 if ( '_mvx_shipping_by_distance_rates' == $meta_key ) {
-                    $new_meta = [];
-    
+                    $new_meta = array();
+
                     if ( ! empty( $meta_values ) && is_array( $meta_values ) ) {
                         foreach ( $meta_values as $item ) {
                             if ( empty( $item['mvx_distance_unit'] ) || empty( $item['mvx_distance_price'] ) ) {
                                 continue;
                             }
-    
-                            $new_meta[] = [
+
+                            $new_meta[] = array(
                                 'max_distance' => (string) $item['mvx_distance_unit'],
                                 'cost'         => (string) $item['mvx_distance_price'],
-                            ];
+                            );
                         }
                     }
                     $store->update_meta( 'distance_rules', $new_meta );
                     continue;
                 }
-
 
                 // Skip meta keys that are not mapped.
                 if ( ! isset( $map_meta[ $meta_key ] ) ) {
@@ -2436,9 +2455,9 @@ class Install {
                 }
 
                 if ( 'shipping_options' == $new_meta_key ) {
-                    if ($meta_values == 'distance_by_zone' ) {
+                    if ( $meta_values == 'distance_by_zone' ) {
                         $meta_values = 'shipping_by_zone';
-                    } elseif ($meta_values == 'distance_by_shipping' ) {
+                    } elseif ( $meta_values == 'distance_by_shipping' ) {
                         $meta_values = 'shipping_by_distance';
                     } else {
                         $meta_values = 'shipping_by_country';
@@ -2478,16 +2497,16 @@ class Install {
             delete_user_meta( $user_id, 'mvx_customer_follow_vendor' );
         }
 
-        //Shipping zone methods table migrate.
+        // Shipping zone methods table migrate.
         $zone_table = $wpdb->prefix . 'mvx_shipping_zone_methods';
-        $results = $wpdb->get_results( "SELECT * FROM {$zone_table}" );
+        $results    = $wpdb->get_results( "SELECT * FROM {$zone_table}" );
 
         if ( ! empty( $results ) ) {
             foreach ( $results as $row ) {
                 $vendor_id = $row->vendor_id;
-                $store_id = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
-                $meta_key = $row->method_id . '_' . $row->zone_id;
-                $store = new Store($store_id);
+                $store_id  = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+                $meta_key  = $row->method_id . '_' . $row->zone_id;
+                $store     = new Store( $store_id );
                 $store->update_meta( $meta_key, $row->settings );
             }
         }

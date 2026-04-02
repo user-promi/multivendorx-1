@@ -15,8 +15,8 @@ const ChatIcon = () => (
 );
 
 const LiveChat: React.FC = () => {
-
-	const provider = StoreInfo?.settings_databases_value['live-chat']?.chat_provider;
+	const provider =
+		StoreInfo?.settings_databases_value['live-chat']?.chat_provider;
 	const storeId = StoreInfo?.storeDetails?.storeId;
 	const storeName = StoreInfo?.storeDetails?.storeName;
 

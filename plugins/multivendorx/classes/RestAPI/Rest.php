@@ -59,6 +59,7 @@ class Rest {
         add_filter( 'woocommerce_analytics_products_query_args', array( $this, 'analytics_products_filter_low_stock_meta' ), 10, 1 );
         add_action( 'woocommerce_rest_insert_product_object', array( $this, 'generate_sku_data_in_product' ), 10, 3 );
         add_action( 'woocommerce_rest_insert_shop_coupon_object', array( $this, 'send_notifications' ), 10, 2 );
+        add_filter( 'woocommerce_rest_product_shipping_class_query', array( $this, 'filter_shipping_classes_by_meta' ), 10, 2 );
     }
 
     /**
@@ -649,7 +650,7 @@ class Rest {
             return;
         }
 
-        $referer = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL) ?? '';
+        $referer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL ) ?? '';
         $path    = wp_parse_url( $referer, PHP_URL_PATH );
 		if ( false === strpos( $path, 'products' ) ) {
 			return;
@@ -752,8 +753,8 @@ class Rest {
 			return;
 		}
 
-        $referer = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL) ?? '';
-		$path = wp_parse_url( $referer, PHP_URL_PATH ) ?? '';
+        $referer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL ) ?? '';
+		$path    = wp_parse_url( $referer, PHP_URL_PATH ) ?? '';
 
 		if ( false === strpos( $path, 'coupons' ) ) {
 			return;
@@ -935,5 +936,21 @@ class Rest {
         }
 
         return new \WP_Error( sprintf( 'Call to unknown class %s.', $class ) );
+    }
+
+    public function filter_shipping_classes_by_meta( $args, $request ) {
+        $meta_key   = $request->get_param( 'meta_key' );
+        $meta_value = $request->get_param( 'meta_value' );
+
+        if ( ! empty( $meta_key ) ) {
+            $args['meta_query'] = array(
+                array(
+                    'key'     => sanitize_text_field( $meta_key ),
+                    'value'   => sanitize_text_field( $meta_value ),
+                    'compare' => '=',
+                ),
+            );
+        }
+        return $args;
     }
 }

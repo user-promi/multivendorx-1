@@ -12,5 +12,7 @@ jQuery(document).ready(function ($) {
 		}
 	);
 
-	$('.multivendorx-policies-accordion .accordion-item:first .accordion-body').slideDown(0);
+	$(
+		'.multivendorx-policies-accordion .accordion-item:first .accordion-body'
+	).slideDown(0);
 });

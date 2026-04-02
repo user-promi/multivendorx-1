@@ -35,13 +35,13 @@ class Dokan {
 	 * @return int
 	 */
     public function migrate_vendors() {
-        $vendors = get_users(
+        $vendors           = get_users(
             array(
 				'role__in' => array( 'seller' ),
 				'fields'   => array( 'ID' ),
             )
         );
-        $created_store_ids = array(); 
+        $created_store_ids = array();
         foreach ( $vendors as $user ) {
             $user_id = $user->ID;
 
@@ -62,7 +62,7 @@ class Dokan {
             $store->set( 'who_created', $user_id );
             $store_id = $store->save();
 
-            $created_store_ids[] = $store_id; 
+            $created_store_ids[] = $store_id;
             // primary owner set and add store-users table.
             StoreUtil::set_primary_owner( $user_id, $store_id );
             update_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['active_store'], $store_id );
@@ -140,7 +140,7 @@ class Dokan {
 	 * @return int
 	 */
     public function migrate_products() {
-        $products = wc_get_products(
+        $products      = wc_get_products(
             array(
 				'status' => 'any',
 				'return' => 'ids',
@@ -156,7 +156,7 @@ class Dokan {
             if ( in_array( 'seller', (array) $user->roles, true ) ) {
                 $active_store = get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
                 update_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], $active_store );
-                $updated_count++;
+                ++$updated_count;
             }
         }
         return $updated_count;
@@ -278,19 +278,18 @@ class Dokan {
         }
         $this->deactive_previous_multivendor();
 
-		wp_clear_scheduled_hook('multivendorx_order_migration');
+		wp_clear_scheduled_hook( 'multivendorx_order_migration' );
     }
 
     public function deactive_previous_multivendor() {
-		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		// dokan free deactive
-		if ( is_plugin_active('dokan-lite/dokan.php') ) {
-	    	deactivate_plugins('dokan-lite/dokan.php');    
+		if ( is_plugin_active( 'dokan-lite/dokan.php' ) ) {
+	    	deactivate_plugins( 'dokan-lite/dokan.php' );
 	    }
 	    // dokan pro deactive
-	    if ( is_plugin_active('dokan-pro/dokan-pro.php') ) {
-	    	deactivate_plugins('dokan-pro/dokan-pro.php');    
+	    if ( is_plugin_active( 'dokan-pro/dokan-pro.php' ) ) {
+	    	deactivate_plugins( 'dokan-pro/dokan-pro.php' );
 	    }
 	}
-
 }

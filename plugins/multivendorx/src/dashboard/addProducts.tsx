@@ -242,9 +242,14 @@ const AddProduct = () => {
 						</div>
 					</div>
 				))}
-			{errorMsg &&
-				<Notice type="error" validity="lifetime" displayPosition="notice" message={errorMsg} />
-			}
+			{errorMsg && (
+				<Notice
+					type="error"
+					validity="lifetime"
+					displayPosition="notice"
+					message={errorMsg}
+				/>
+			)}
 			<NavigatorHeader
 				headerTitle={__('Add Product', 'multivendorx')}
 				headerDescription={__(
@@ -255,7 +260,8 @@ const AddProduct = () => {
 					{
 						label: __('View', 'multivendorx'),
 						icon: 'save',
-						onClick: () => window.open(product?.permalink, '_blank'),
+						onClick: () =>
+							window.open(product?.permalink, '_blank'),
 					},
 					{
 						label: __('Save', 'multivendorx'),
@@ -444,28 +450,32 @@ const AddProduct = () => {
 				</Column>
 
 				<Column grid={6}>
-				{rejectNote && (
-					<Card title={__('Product Rejected by Admin', 'multivendorx')}
-						// action={
-						// <ButtonInputUI
-						// 	buttons={[
-						// 		{
-						// 			icon: 'plus',
-						// 			text: __('Appeal Decision', 'multivendorx'),
-						// 			color: 'purple',
-						// 			onClick: () => setAppeal(true),
-						// 		},
-						// 	]}
-						// />}
-					>
-						<Notice
-							type="error"
-							title="Admin Note"
-							displayPosition="inline-notice"
-							message={rejectNote}
-						/>
-					</Card>
-				)}
+					{rejectNote && (
+						<Card
+							title={__(
+								'Product Rejected by Admin',
+								'multivendorx'
+							)}
+							// action={
+							// <ButtonInputUI
+							// 	buttons={[
+							// 		{
+							// 			icon: 'plus',
+							// 			text: __('Appeal Decision', 'multivendorx'),
+							// 			color: 'purple',
+							// 			onClick: () => setAppeal(true),
+							// 		},
+							// 	]}
+							// />}
+						>
+							<Notice
+								type="error"
+								title="Admin Note"
+								displayPosition="inline-notice"
+								message={rejectNote}
+							/>
+						</Card>
+					)}
 					<Card title={__('General information', 'multivendorx')}>
 						<FormGroupWrapper>
 							<div className="form-group  ai-form">
@@ -489,18 +499,27 @@ const AddProduct = () => {
 										onChange={(value) =>
 											handleChange('name', value)
 										}
-										disabled={modules.includes('shared-listing')}
+										disabled={modules.includes(
+											'shared-listing'
+										)}
 									/>
-									<div className="settings-metabox-description">{__('A unique name for your product', 'multivendorx')}</div>
+									<div className="settings-metabox-description">
+										{__(
+											'A unique name for your product',
+											'multivendorx'
+										)}
+									</div>
 								</div>
 							</div>
-
 
 							{productFields.includes('general') && (
 								<>
 									<div className="form-group  ai-form">
 										<label className="settings-form-label">
-											{__('Product short description', 'multivendorx')}
+											{__(
+												'Product short description',
+												'multivendorx'
+											)}
 											{applyFilters(
 												'multivendorx_product_field_suggestions',
 												null,
@@ -515,7 +534,9 @@ const AddProduct = () => {
 										<div className="settings-input-content">
 											<TextAreaUI
 												name="short_description"
-												value={product.short_description}
+												value={
+													product.short_description
+												}
 												onChange={(value) =>
 													handleChange(
 														'short_description',
@@ -523,13 +544,21 @@ const AddProduct = () => {
 													)
 												}
 											/>
-											<div className="settings-metabox-description">{__('A short description displayed on product and checkout pages', 'multivendorx')}</div>
+											<div className="settings-metabox-description">
+												{__(
+													'A short description displayed on product and checkout pages',
+													'multivendorx'
+												)}
+											</div>
 										</div>
 									</div>
 
 									<div className="form-group  ai-form">
 										<label className="settings-form-label">
-											{__('Product description', 'multivendorx')}
+											{__(
+												'Product description',
+												'multivendorx'
+											)}
 											{applyFilters(
 												'multivendorx_product_field_suggestions',
 												null,
@@ -552,7 +581,12 @@ const AddProduct = () => {
 													)
 												}
 											/>
-											<div className="settings-metabox-description">{__('A short description displayed on product and checkout pages', 'multivendorx')}</div>
+											<div className="settings-metabox-description">
+												{__(
+													'A short description displayed on product and checkout pages',
+													'multivendorx'
+												)}
+											</div>
 										</div>
 									</div>
 								</>
@@ -561,11 +595,16 @@ const AddProduct = () => {
 					</Card>
 					<PopupUI
 						open={appeal}
-						onClose={() => { setAppeal(false) }}
+						onClose={() => {
+							setAppeal(false);
+						}}
 						width={31.25}
 						header={{
 							icon: 'announcement',
-							title: __('Appeal Rejection Decision', 'multivendorx'),
+							title: __(
+								'Appeal Rejection Decision',
+								'multivendorx'
+							),
 							description: __(
 								'Explain why you believe this product meets marketplace guidelines. Our team will review your appeal within 48 hours.',
 								'multivendorx'
@@ -582,7 +621,10 @@ const AddProduct = () => {
 									},
 									{
 										icon: 'save',
-										text: __('Submit Appeal', 'multivendorx'),
+										text: __(
+											'Submit Appeal',
+											'multivendorx'
+										),
 										// onClick: () => handleSubmit(),
 									},
 								]}
@@ -591,12 +633,13 @@ const AddProduct = () => {
 					>
 						<FormGroupWrapper>
 							<FormGroup
-								label={__('Your appeal message', 'multivendorx')}
+								label={__(
+									'Your appeal message',
+									'multivendorx'
+								)}
 								htmlFor="title"
 							>
-								<TextAreaUI
-									name="content"
-								/>
+								<TextAreaUI name="content" />
 							</FormGroup>
 						</FormGroupWrapper>
 					</PopupUI>
@@ -718,8 +761,8 @@ const AddProduct = () => {
 									)}
 									onChange={(val) => {
 										const [file] = Array.isArray(val)
-												? val
-												: [val];
+											? val
+											: [val];
 										const url = file?.url || '';
 										if (!val) {
 											setFeaturedImage(null);
@@ -733,16 +776,12 @@ const AddProduct = () => {
 									}}
 								/>
 							</FormGroup>
-							{applyFilters(
-								'product_image_enhancement',
-								null,
-								{
-									currentImage: featuredImage ?? null,
-									isFeaturedImage: true,
-									setImage: setFeaturedImage,
-									product: product
-								}
-							)}
+							{applyFilters('product_image_enhancement', null, {
+								currentImage: featuredImage ?? null,
+								isFeaturedImage: true,
+								setImage: setFeaturedImage,
+								product: product,
+							})}
 							<FormGroup
 								label={__('Product gallery', 'multivendorx')}
 							>

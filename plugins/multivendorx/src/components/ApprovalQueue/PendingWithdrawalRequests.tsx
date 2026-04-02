@@ -72,7 +72,7 @@ const PendingWithdrawal: React.FC<object> = () => {
 								text: __('Approve', 'multivendorx'),
 								color: 'purple',
 								onClick: () =>
-                        			handleSingleAction('approve', row),
+									handleSingleAction('approve', row),
 							},
 							{
 								icon: 'close',

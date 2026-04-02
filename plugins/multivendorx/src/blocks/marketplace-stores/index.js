@@ -105,7 +105,10 @@ const EditBlock = (props) => {
 
 						<span className="store-location">
 							<i className="dashicons dashicons-location"></i>{' '}
-							{__('Salt Lake, West Bengal, India', 'multivendorx')}
+							{__(
+								'Salt Lake, West Bengal, India',
+								'multivendorx'
+							)}
 						</span>
 					</div>
 				</div>

@@ -26,7 +26,9 @@ interface CountryItem {
 interface ShippingRatesByCountryProps {
 	storeId?: number | string;
 }
-const ShippingRatesByCountry: React.FC<ShippingRatesByCountryProps> = ({ storeId }) => {
+const ShippingRatesByCountry: React.FC<ShippingRatesByCountryProps> = ({
+	storeId,
+}) => {
 	storeId = appLocalizer?.store_id || storeId;
 	const [rates, setRates] = useState<ShippingCountryRate[]>([]);
 
@@ -64,8 +66,8 @@ const ShippingRatesByCountry: React.FC<ShippingRatesByCountryProps> = ({ storeId
 						states: Array.isArray(r.states) ? r.states : [],
 					}))
 				);
-			}catch(error){
-				console.error(error)
+			} catch (error) {
+				console.error(error);
 			}
 		};
 
@@ -87,8 +89,8 @@ const ShippingRatesByCountry: React.FC<ShippingRatesByCountryProps> = ({ storeId
 					},
 				}
 			);
-		}catch(error){
-			console.error(error)
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
@@ -158,71 +160,72 @@ const ShippingRatesByCountry: React.FC<ShippingRatesByCountryProps> = ({ storeId
 				/>
 			} */}
 			<FormGroup>
-			<DynamicRowSetting
-				keyName="country-rates"
-				template={countryTemplate}
-				value={rates}
-				addLabel={__('Add Country', 'multivendorx')}
-				onChange={(updatedCountries: ShippingCountryRate[]) => {
-					const fixed = updatedCountries.map((r) => ({
-						...r,
-						states: r.states || [],
-					}));
-					autoSave(fixed);
-				}}
-				/** Render nested states inside the country row */
-				childrenRenderer={(
-					countryRow: ShippingCountryRate,
-					countryIndex: string | number
-				) => {
-					const code = countryRow.country?.toUpperCase() || '';
-					const raw = statesByCountry[code];
+				<DynamicRowSetting
+					keyName="country-rates"
+					template={countryTemplate}
+					value={rates}
+					addLabel={__('Add Country', 'multivendorx')}
+					onChange={(updatedCountries: ShippingCountryRate[]) => {
+						const fixed = updatedCountries.map((r) => ({
+							...r,
+							states: r.states || [],
+						}));
+						autoSave(fixed);
+					}}
+					/** Render nested states inside the country row */
+					childrenRenderer={(
+						countryRow: ShippingCountryRate,
+						countryIndex: string | number
+					) => {
+						const code = countryRow.country?.toUpperCase() || '';
+						const raw = statesByCountry[code];
 
-					const stateOptions = raw
-						? Object.entries(raw).map(([value, label]) => ({
-								value,
-								label,
-							}))
-						: [];
+						const stateOptions = raw
+							? Object.entries(raw).map(([value, label]) => ({
+									value,
+									label,
+								}))
+							: [];
 
-					if (stateOptions.length === 0) {
-						return null;
-					}
+						if (stateOptions.length === 0) {
+							return null;
+						}
 
-					return (
-						<div className="state-inner-box">
-							<div className="state-title">
-								{__('State / Region Rates', 'multivendorx')}
+						return (
+							<div className="state-inner-box">
+								<div className="state-title">
+									{__('State / Region Rates', 'multivendorx')}
+								</div>
+
+								<DynamicRowSetting
+									keyName={`state-rates-${countryIndex}`}
+									template={{
+										fields: [
+											{
+												...stateTemplate.fields[0],
+												options: stateOptions,
+											},
+											stateTemplate.fields[1],
+										],
+									}}
+									value={countryRow.states}
+									addLabel={__(
+										'Add State/Region',
+										'multivendorx'
+									)}
+									onChange={(
+										updatedStates: ShippingStateRate[]
+									) => {
+										const clone = [...rates];
+										clone[countryIndex].states =
+											updatedStates;
+										autoSave(clone);
+									}}
+								/>
 							</div>
-
-							<DynamicRowSetting
-								keyName={`state-rates-${countryIndex}`}
-								template={{
-									fields: [
-										{
-											...stateTemplate.fields[0],
-											options: stateOptions,
-										},
-										stateTemplate.fields[1],
-									],
-								}}
-								value={countryRow.states}
-								addLabel={__(
-									'Add State/Region',
-									'multivendorx'
-								)}
-								onChange={(
-									updatedStates: ShippingStateRate[]
-								) => {
-									const clone = [...rates];
-									clone[countryIndex].states = updatedStates;
-									autoSave(clone);
-								}}
-							/>
-						</div>
-					);
-				}}
-			/>
+						);
+					}}
+				/>
 			</FormGroup>
 		</>
 	);
