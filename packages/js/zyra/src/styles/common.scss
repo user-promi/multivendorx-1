@@ -20,7 +20,10 @@ a {
 }
 
 .form-select-field-wrapper {
-
+  img{
+    width: 1.125rem;
+  }
+  
   .select-wrapper {
     display: inline-flex;
     gap: 0.5rem;

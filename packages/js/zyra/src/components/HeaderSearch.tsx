@@ -104,6 +104,8 @@ const HeaderSearch: React.FC<HeaderSearchProps> = ({
                             setAction(value);
                             triggerSearch(query, value);
                         }}
+                        background='var(--theme-background-color)'
+                        color='var(--theme-color)'
                     />
                 </div>
             )}

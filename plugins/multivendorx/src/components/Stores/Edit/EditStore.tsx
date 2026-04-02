@@ -685,7 +685,7 @@ const EditStore = () => {
 														<span
 															className={`edit-icon  ${editName
 																? ''
-																: 'admin-badge blue'
+																: 'blue-color'
 																}`}
 															onClick={(e) => {
 																e.stopPropagation();
@@ -735,7 +735,7 @@ const EditStore = () => {
 																data?.status !=
 																'permanently_rejected' && (
 																	<span
-																		className="edit-icon admin-badge blue"
+																		className="edit-icon blue-color"
 																		onClick={() => {
 																			navigate(
 																				`?page=multivendorx#&tab=stores&edit/${data.id}/&subtab=store`,
@@ -850,7 +850,7 @@ const EditStore = () => {
 												<span
 													className={`edit-icon ${editDesc
 														? ''
-														: 'admin-badge blue'
+														: 'blue-color'
 														}`}
 													onClick={(e) => {
 														e.stopPropagation();
