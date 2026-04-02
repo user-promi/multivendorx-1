@@ -14,11 +14,6 @@ import {
 	FormGroupWrapper,
 	FormGroup,
 	ButtonInputUI,
-	PopupUI,
-	CalendarInputUI,
-	TextAreaUI,
-	ChoiceToggleUI,
-	TableCard,
 	SectionUI,
 } from 'zyra';
 import { formatCurrency } from '../../../services/commonFunction';
@@ -78,9 +73,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
 	const [recentDebits, setRecentDebits] = useState<Transaction[]>([]);
 	const [recentProducts, setRecentProducts] = useState<Product[]>([]);
-	const [Vacation, setVacation] = useState(false);
-	const [vacationMode, setvacationMode] = useState<string[]>([]);
-	const [hours, sethours] = useState(false);
 
 	useEffect(() => {
 		if (!id) {
@@ -175,9 +167,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 			text: __('Requested Payout', 'multivendorx'),
 		},
 	];
-	const handleCloseForm = () => {
-		setVacation(false);
-	};
+
 
 	return (
 		<>
@@ -442,12 +432,12 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								</FormGroup>
 
 								<SectionUI title={__('Settings', 'multivendorx')} />
-								<FormGroup
+								{/* <FormGroup
 									row
 									label={__('Commission', 'multivendorx')}
 								>
 									{__('Category based', 'multivendorx')}
-								</FormGroup>
+								</FormGroup> */}
 								<FormGroup
 									row
 									label={__('Payment method', 'multivendorx')}
@@ -478,240 +468,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 						storeData,
 						modules
 					)}
-					<Card
-						title={__('Store availability', 'multivendorx')}
-						action={
-							<ButtonInputUI
-								buttons={[
-									{
-										icon: 'vacation',
-										text: __('Set Vacation', 'multivendorx'),
-										color: 'purple',
-										onClick: () => setVacation(true),
-									}
-								]}
-							/>
-						}
-					>
-						{appLocalizer.khali_dabba && (
-							<>
-								{/* <FormGroup
-										row
-										label={__(
-											'Vacation mode',
-											'multivendorx'
-										)}
-									>
-										<span className="admin-badge red">
-											{' '}
-											{__(
-												'Inactive(pkoro)',
-												'multivendorx'
-											)}
-										</span>
-									</FormGroup> */}
-								<div className="vacation-wrapper">
-									<span className="adminfont-vacation blue"></span>
-									<div className="vacation-details">
-										<div className="title">Vacation is off</div>
-										<div className="desc">Store is accepting orders normally</div>
-									</div>
-								</div>
-								<PopupUI
-									open={Vacation}
-									onClose={handleCloseForm}
-									width={31.25}
-									height={40}
-									header={{
-										icon: 'vacation',
-										title: __('Store availability', 'multivendorx'),
-										description: __(
-											'Temporarily pause your store for a set period',
-											'multivendorx'
-										),
-									}}
-									footer={
-										<ButtonInputUI
-											buttons={[
-												{
-													icon: 'close',
-													text: __(
-														'Cancel',
-														'multivendorx'
-													),
-													color: 'red',
-													onClick: handleCloseForm,
-												},
-												{
-													icon: 'save',
-													text: __(
-														'Save Vacation Settings',
-														'multivendorx'
-													),
-													// onClick: () => handleSubmit(),
-												},
-											]}
-										/>
-									}
-								>
-									<FormGroupWrapper>
-
-										<FormGroup
-											cols={2}
-											label={__('Start Date', 'multivendorx')}
-										>
-											<CalendarInputUI
-											// onChange={(range: DateRange) => {
-											// 	setDateRange({
-											// 		startDate: range.startDate,
-											// 		endDate: range.endDate,
-											// 	});
-											// }}
-											/>
-										</FormGroup>
-										<FormGroup
-											cols={2}
-											label={__('End Date', 'multivendorx')}
-										>
-											<CalendarInputUI
-											// onChange={(range: DateRange) => {
-											// 	setDateRange({
-											// 		startDate: range.startDate,
-											// 		endDate: range.endDate,
-											// 	});
-											// }}
-											/>
-										</FormGroup>
-										<FormGroup
-											label={__(
-												'Vacation Message',
-												'multivendorx'
-											)}
-										>
-											<TextAreaUI
-												name="answer"
-											// value={answer}
-											// onChange={(value: string) => setAnswer(value)}
-											/>
-										</FormGroup>
-										<FormGroup
-											label={__(
-												'Cart Behaviour During Vacation',
-												'multivendorx'
-											)}
-										>
-											<ChoiceToggleUI
-												options={[
-													{
-														key: 'draft',
-														value: 'draft',
-														label: __(
-															'Disable Add to Cart',
-															'multivendorx'
-														),
-													},
-													{
-														key: 'pending',
-														value: 'pending',
-														label: __(
-															'Keep Add to Cart Active',
-															'multivendorx'
-														),
-													}
-												]}
-											// value={formData.status}
-											// onChange={(val: string) =>
-											// 	handleChange('status', val)
-											// }
-											/>
-										</FormGroup>
-									</FormGroupWrapper>
-								</PopupUI>
-							</>
-						)}
-					</Card>
-					{/* store hours start */}
-					{/* {appLocalizer.khali_dabba && (
-						<Card
-							title={__('Store working hours', 'multivendorx')}
-							action={
-								<ButtonInputUI
-									buttons={[
-										{
-											icon: 'vacation',
-											text: __('Update working hours', 'multivendorx'),
-											color: 'purple',
-											onClick: () => sethours(true),
-										},
-									]}
-								/>
-							}
-						>
-							<FormGroupWrapper>
-								<FormGroup
-								>
-									<div style={{ display: 'flex', gap: '0.5rem' }}>
-										<span className="admin-badge green">Open Now</span>
-										<span className="admin-badge blue">Close 7:00PM</span>
-									</div>
-								</FormGroup>
-								<FormGroup
-									row
-									label={__('Next opening', 'multivendorx')}
-								>
-									{__('Open now (closes at 7:00 PM)', 'multivendorx')}
-								</FormGroup>
-							</FormGroupWrapper>
-							<TableCard
-								headers={scheduleColumns}
-								rows={scheduleRows}
-								showMenu={false}
-							/>
-							<PopupUI
-								open={hours}
-								onClose={handleClosehours}
-								width={31.25}
-								height={40}
-								header={{
-									icon: 'vacation',
-									title: __('Store availability', 'multivendorx'),
-									description: __(
-										'Temporarily pause your store for a set period',
-										'multivendorx'
-									),
-								}}
-								footer={
-									<ButtonInputUI
-										buttons={[
-											{
-												icon: 'close',
-												text: __(
-													'Cancel',
-													'multivendorx'
-												),
-												color: 'red',
-												onClick: handleCloseForm,
-											},
-											{
-												icon: 'save',
-												text: __(
-													'Save Vacation Settings',
-													'multivendorx'
-												),
-											},
-										]}
-									/>
-								}
-							>
-								<TableCard
-									headers={scheduleColumns}
-									rows={scheduleRows}
-									showMenu={false}
-								/>
-							</PopupUI>
-						</Card>
-					)} */}
-
 				</Column>
 			</Container>
 		</>
