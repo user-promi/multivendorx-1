@@ -205,7 +205,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 	};
 
 	const handleSave = async () => {
-		doAction('multivendorx_zone_shipping_after_save');
 		if (!selectedZone) {
 			return;
 		}
@@ -236,6 +235,11 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 				};
 			}
 
+			shippingData.settings = applyFilters(
+				'multivendorx_zone_shipping_settings',
+				shippingData.settings
+			);
+
 			const isUpdate = isEditing && editingMethod;
 			const url = isUpdate
 				? getApiLink(
@@ -256,6 +260,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			if (isUpdate) {
 				requestData.instance_id = editingMethod.instance_id;
 			}
+			doAction('multivendorx_zone_shipping_after_save');
 
 			const response = await axios({
 				method: 'POST',
@@ -312,6 +317,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		shipping_methods: {
 			label: __('Shipping Method(s)', 'multivendorx'),
 			render: (row: TableRow) => {
+				console.log('row',row)
 				const zone = row as Zone;
 				const methodsObj = zone.shipping_methods || {};
 				const methodsArray = Object.values(methodsObj);
@@ -401,8 +407,8 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					header={{
 						icon: 'shipping',
 						title: `${isEditing
-								? __('Edit Shipping', 'multivendorx')
-								: __('Add Shipping', 'multivendorx')
+							? __('Edit Shipping', 'multivendorx')
+							: __('Add Shipping', 'multivendorx')
 							} - ${selectedZone.zone_name}`,
 					}}
 					footer={
@@ -643,6 +649,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 							{
 								zone: selectedZone,
 								shippingMethod: formData.shippingMethod,
+								storeId: id,
 							}
 						)}
 					</div>

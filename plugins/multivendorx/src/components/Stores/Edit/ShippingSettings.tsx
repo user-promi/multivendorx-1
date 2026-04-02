@@ -109,7 +109,9 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 			}
 		});
 	};
-
+	const selectedMethodExists = appLocalizer.shipping_methods.some(
+		(method) => method.value === formData.shipping_options
+	);
 	return (
 		<Container>
 			{appLocalizer.shipping_methods &&
@@ -138,13 +140,13 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 
 							{/* //zone by shipping */}
 							{formData.shipping_options ===
-								'shipping_by_zone' && (
+								'shipping_by_zone' && selectedMethodExists && (
 									<DistanceByZoneShipping id={id} />
 								)}
 
 							{/* country wise shipping */}
 							{formData.shipping_options ===
-								'shipping_by_country' && (
+								'shipping_by_country' && selectedMethodExists && (
 									<>
 										<SectionUI
 											title={__(
@@ -337,7 +339,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 								)}
 
 							{formData.shipping_options ===
-								'shipping_by_distance' && (
+								'shipping_by_distance' && selectedMethodExists && (
 									<>
 										<SectionUI
 											title={__(
