@@ -217,6 +217,7 @@ const Orders: React.FC = () => {
 					onClick={() =>
 						dashNavigate(navigate, ['orders', 'view', String(row.id)])
 					}
+					className="link-item"
 				>
 					#{row.id}
 				</span>
