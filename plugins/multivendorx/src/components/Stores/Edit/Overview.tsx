@@ -168,7 +168,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 		},
 	];
 
-
 	return (
 		<>
 			<Container>
@@ -293,8 +292,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								const editUrl = `${appLocalizer.site_url.replace(
 									/\/$/,
 									''
-								)}/wp-admin/post.php?post=${product.id
-									}&action=edit`;
+								)}/wp-admin/post.php?post=${
+									product.id
+								}&action=edit`;
 
 								return (
 									<InfoItem
@@ -369,7 +369,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									{
 										icon: 'vacation',
 										text: __('Change plan', 'multivendorx'),
-										color: 'purple'
+										color: 'purple',
 										// onClick: () => setVacation(true),
 									},
 								]}
@@ -378,28 +378,31 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					>
 						<div className="plan-wrapper">
 							<div className="plan-details">
-								<div className="icon"><i className="adminfont-verification5" /></div>
+								<div className="icon">
+									<i className="adminfont-verification5" />
+								</div>
 								<div className="name">Gold Plan</div>
 							</div>
 
 							<div className="billing-wrapper">
 								<div className="item">
-									<b>	Next billing:  </b> Dec 15, 2024
+									<b> Next billing: </b> Dec 15, 2024
 								</div>
 								<div className="item">
-									<b>	Billing cycle:  </b> Monthly
+									<b> Billing cycle: </b> Monthly
 								</div>
 							</div>
 
-							<div className="plan-status"><span className="admin-badge green">Active</span></div>
-
+							<div className="plan-status">
+								<span className="admin-badge green">
+									Active
+								</span>
+							</div>
 						</div>
 					</Card>
 
 					<div className="store-details-remove-class">
-						<Card
-							title={__('Store overview', 'multivendorx')}
-						>
+						<Card title={__('Store overview', 'multivendorx')}>
 							<FormGroupWrapper>
 								{/* <FormGroup
 									row
@@ -431,7 +434,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									</a>
 								</FormGroup>
 
-								<SectionUI title={__('Settings', 'multivendorx')} />
+								<SectionUI
+									title={__('Settings', 'multivendorx')}
+								/>
 								{/* <FormGroup
 									row
 									label={__('Commission', 'multivendorx')}

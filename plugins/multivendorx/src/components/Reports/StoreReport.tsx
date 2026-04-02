@@ -12,7 +12,14 @@ import {
 	CategoryCount,
 	InfoItem,
 } from 'zyra';
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import {
+	Cell,
+	Legend,
+	Pie,
+	PieChart,
+	ResponsiveContainer,
+	Tooltip,
+} from 'recharts';
 import axios from 'axios';
 import {
 	formatCurrency,
@@ -311,7 +318,11 @@ const StoreReport: React.FC = () => {
 								</Pie>
 							)}
 
-							<Tooltip formatter={(value: number) => formatCurrency(value)} />
+							<Tooltip
+								formatter={(value: number) =>
+									formatCurrency(value)
+								}
+							/>
 							<Legend />
 						</PieChart>
 					</ResponsiveContainer>

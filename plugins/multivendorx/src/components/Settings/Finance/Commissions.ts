@@ -126,13 +126,21 @@ export default {
 					type: 'choice-toggle',
 					label: 'If',
 					options: [
-						{ key:"price",value: 'price', label: 'Product/listing price' },
 						{
-							key: "quantity",
+							key: 'price',
+							value: 'price',
+							label: 'Product/listing price',
+						},
+						{
+							key: 'quantity',
 							value: 'quantity',
 							label: 'Product/listing quantity',
 						},
-						{ key: "order_value",value: 'order_value', label: 'Order value' },
+						{
+							key: 'order_value',
+							value: 'order_value',
+							label: 'Order value',
+						},
 					],
 					skipFirstRow: true,
 				},
@@ -141,8 +149,12 @@ export default {
 					type: 'choice-toggle',
 					label: 'is',
 					options: [
-						{ key:'rule1', value: 'less_than', label: 'up to' },
-						{ key:'rule2', value: 'more_than', label: 'more than' },
+						{ key: 'rule1', value: 'less_than', label: 'up to' },
+						{
+							key: 'rule2',
+							value: 'more_than',
+							label: 'more than',
+						},
 					],
 					skipFirstRow: true,
 				},

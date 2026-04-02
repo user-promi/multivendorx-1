@@ -29,9 +29,9 @@ interface FormData {
 	distance_local_pickup_cost?: string;
 	distance_rules?: Array<{ max_distance: string; cost: string }>;
 	[key: string]:
-	| string
-	| Array<{ max_distance: string; cost: string }>
-	| undefined;
+		| string
+		| Array<{ max_distance: string; cost: string }>
+		| undefined;
 }
 interface DistanceRule {
 	max_distance: string;
@@ -119,7 +119,7 @@ const ShippingDelivery = () => {
 		<>
 			{/* Only show ChoiceToggle if shipping_methods has options */}
 			{appLocalizer.shipping_methods &&
-				appLocalizer.shipping_methods.length > 0 ? (
+			appLocalizer.shipping_methods.length > 0 ? (
 				<Container>
 					<Column>
 						<FormGroupWrapper>
@@ -144,14 +144,15 @@ const ShippingDelivery = () => {
 							</FormGroup>
 
 							{/* Zone by Shipping */}
-							{formData.shipping_options ===
-								'shipping_by_zone' && selectedMethodExists && (
+							{formData.shipping_options === 'shipping_by_zone' &&
+								selectedMethodExists && (
 									<DistanceByZoneShipping />
 								)}
 
 							{/* Country-wise shipping */}
 							{formData.shipping_options ===
-								'shipping_by_country' && selectedMethodExists && (
+								'shipping_by_country' &&
+								selectedMethodExists && (
 									<>
 										<SectionUI
 											title={__(
@@ -295,7 +296,8 @@ const ShippingDelivery = () => {
 												name="local_pickup_cost"
 												placeholder="0.00"
 												value={
-													formData.local_pickup_cost || ''
+													formData.local_pickup_cost ||
+													''
 												}
 												onChange={(value) =>
 													handleChange(
@@ -323,7 +325,8 @@ const ShippingDelivery = () => {
 
 							{/* Distance-based Shipping */}
 							{formData.shipping_options ===
-								'shipping_by_distance' && selectedMethodExists &&(
+								'shipping_by_distance' &&
+								selectedMethodExists && (
 									<>
 										<SectionUI
 											title={__(
@@ -393,7 +396,9 @@ const ShippingDelivery = () => {
 														value: 'M',
 													},
 												]}
-												value={formData.distance_type || ''}
+												value={
+													formData.distance_type || ''
+												}
 												onChange={(value: string) =>
 													handleToggleChange(
 														value,
@@ -419,7 +424,9 @@ const ShippingDelivery = () => {
 												type="number"
 												name="distance_max"
 												placeholder="0"
-												value={formData.distance_max || ''}
+												value={
+													formData.distance_max || ''
+												}
 												onChange={(value) =>
 													handleChange(
 														'distance_max',
@@ -478,7 +485,8 @@ const ShippingDelivery = () => {
 													'multivendorx'
 												)}
 												value={
-													formData.distance_rules || []
+													formData.distance_rules ||
+													[]
 												}
 												template={{
 													fields: [
