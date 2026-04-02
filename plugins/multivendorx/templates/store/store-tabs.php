@@ -64,7 +64,7 @@ do_action( 'multivendorx_before_store_tabs', $store_id );
     
     <div class="woocommerce">
         <div class="product">
-            <div class="woocommerce-tabs wc-tabs-wrapper">
+            <div class="woocommerce-tabs wc-tabs-wrapper site-main">
                 <ul class="tabs wc-tabs">
                     <?php foreach ( $store_tabs as $tab_key => $tab_item ) : ?>
                         <?php if ( ! empty( $tab_item['url'] ) ) : ?>

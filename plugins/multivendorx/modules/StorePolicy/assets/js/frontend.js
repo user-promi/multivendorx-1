@@ -11,4 +11,6 @@ jQuery(document).ready(function ($) {
 			$currentBody.slideToggle(200);
 		}
 	);
+
+	$('.multivendorx-policies-accordion .accordion-item:first .accordion-body').slideDown(0);
 });
