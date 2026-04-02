@@ -60,7 +60,7 @@ export default {
 							},
 						},
 						{
-							key: 'registration page',
+							key: 'shipping',
 							type: 'notice',
 							message: __(
 								'Create shipping zones in<b> WooCommerce → Shipping using the ‘Add Zone’ button </b>. Assign the shipping method ‘Store shipping’ to let each store set its own shipping costs for that zone.',

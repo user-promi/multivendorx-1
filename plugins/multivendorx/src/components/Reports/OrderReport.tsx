@@ -68,7 +68,7 @@ const OrderReport: React.FC = () => {
 					}}
 					descriptions={[
 						{
-							label: __('Sku', 'multivendorx'),
+							label: __('SKU', 'multivendorx'),
 							value: row.store_sku,
 						},
 					]}
