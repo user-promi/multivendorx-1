@@ -468,7 +468,7 @@ const EditStore = () => {
 													icon: 'delete',
 													className: 'delete',
 													action: (item, e) => {
-														e.stopPropagation();
+														e?.stopPropagation();
 														const updated = {
 															...data,
 															banner: '',

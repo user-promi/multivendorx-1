@@ -217,6 +217,7 @@ const Orders: React.FC = () => {
 					onClick={() =>
 						dashNavigate(navigate, ['orders', 'view', String(row.id)])
 					}
+					className="link-item"
 				>
 					#{row.id}
 				</span>
@@ -555,13 +556,12 @@ const Orders: React.FC = () => {
 
 			{tracking && (
 				<PopupUI
-					position="lightbox"
 					open={tracking}
 					onClose={() => setTracking(false)}
 					width={31.25}
-					height="70%"
+					height={40}
 					header={{
-						icon: 'warning',
+						icon: 'tools',
 						title: __('Tracking', 'multivendorx'),
 					}}
 					footer={
