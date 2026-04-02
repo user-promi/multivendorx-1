@@ -73,7 +73,7 @@ export default {
 					key: 'tawk',
 					label: __('Tawk.to', 'multivendorx'),
 					value: 'tawk',
-				}
+				},
 			],
 			proSetting: true,
 		},

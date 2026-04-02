@@ -54,7 +54,8 @@ const AllProduct: React.FC = () => {
 		{ id: number; name: string }[]
 	>([]);
 	const [newProductId, setNewProductId] = useState<number | null>(null);
-	const [bulkActionContent, setBulkActionContent] = useState<React.ReactNode>(null);
+	const [bulkActionContent, setBulkActionContent] =
+		useState<React.ReactNode>(null);
 	const { modules } = useModules();
 	const navigate = useNavigate();
 
@@ -250,9 +251,9 @@ const AllProduct: React.FC = () => {
 			null,
 			action,
 			selectedIds,
-			appLocalizer,
+			appLocalizer
 		);
-		setBulkActionContent(result); 
+		setBulkActionContent(result);
 	};
 
 	const doRefreshTableData = (query: QueryProps) => {

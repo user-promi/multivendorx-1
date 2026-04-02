@@ -18,7 +18,7 @@ interface MarketplaceProductListProps {
 	operator?: string;
 	product_visibility?: string;
 	store_id?: string;
-	storeId?: string|number;
+	storeId?: string | number;
 }
 
 const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({

@@ -115,7 +115,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 	return (
 		<Container>
 			{appLocalizer.shipping_methods &&
-				appLocalizer.shipping_methods.length > 0 ? (
+			appLocalizer.shipping_methods.length > 0 ? (
 				<Column>
 					<Card title={__('Method type', 'multivendorx')}>
 						<FormGroupWrapper>
@@ -139,14 +139,15 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 							</FormGroup>
 
 							{/* //zone by shipping */}
-							{formData.shipping_options ===
-								'shipping_by_zone' && selectedMethodExists && (
+							{formData.shipping_options === 'shipping_by_zone' &&
+								selectedMethodExists && (
 									<DistanceByZoneShipping id={id} />
 								)}
 
 							{/* country wise shipping */}
 							{formData.shipping_options ===
-								'shipping_by_country' && selectedMethodExists && (
+								'shipping_by_country' &&
+								selectedMethodExists && (
 									<>
 										<SectionUI
 											title={__(
@@ -313,7 +314,8 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 													'multivendorx'
 												)}
 												value={
-													formData.local_pickup_cost || ''
+													formData.local_pickup_cost ||
+													''
 												}
 												onChange={(value: string) =>
 													handleChange(
@@ -339,7 +341,8 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 								)}
 
 							{formData.shipping_options ===
-								'shipping_by_distance' && selectedMethodExists && (
+								'shipping_by_distance' &&
+								selectedMethodExists && (
 									<>
 										<SectionUI
 											title={__(
@@ -404,7 +407,9 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 														value: 'M',
 													},
 												]}
-												value={formData.distance_type || ''}
+												value={
+													formData.distance_type || ''
+												}
 												onChange={(value) =>
 													handleToggleChange(
 														value,
@@ -431,7 +436,9 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 													'0',
 													'multivendorx'
 												)}
-												value={formData.distance_max || ''}
+												value={
+													formData.distance_max || ''
+												}
 												onChange={(value: string) =>
 													handleChange(
 														'distance_max',
@@ -488,7 +495,8 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 													'multivendorx'
 												)}
 												value={
-													formData.distance_rules || []
+													formData.distance_rules ||
+													[]
 												}
 												template={{
 													fields: [

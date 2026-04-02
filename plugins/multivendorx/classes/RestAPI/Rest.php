@@ -650,7 +650,7 @@ class Rest {
             return;
         }
 
-        $referer = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL) ?? '';
+        $referer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL ) ?? '';
         $path    = wp_parse_url( $referer, PHP_URL_PATH );
 		if ( false === strpos( $path, 'products' ) ) {
 			return;
@@ -753,8 +753,8 @@ class Rest {
 			return;
 		}
 
-        $referer = filter_input(INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL) ?? '';
-		$path = wp_parse_url( $referer, PHP_URL_PATH ) ?? '';
+        $referer = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_URL ) ?? '';
+		$path    = wp_parse_url( $referer, PHP_URL_PATH ) ?? '';
 
 		if ( false === strpos( $path, 'coupons' ) ) {
 			return;
@@ -939,17 +939,17 @@ class Rest {
     }
 
     public function filter_shipping_classes_by_meta( $args, $request ) {
-        $meta_key   = $request->get_param('meta_key');
-        $meta_value = $request->get_param('meta_value');
+        $meta_key   = $request->get_param( 'meta_key' );
+        $meta_value = $request->get_param( 'meta_value' );
 
         if ( ! empty( $meta_key ) ) {
-            $args['meta_query'] = [
-                [
+            $args['meta_query'] = array(
+                array(
                     'key'     => sanitize_text_field( $meta_key ),
                     'value'   => sanitize_text_field( $meta_value ),
-                    'compare' => '=' 
-                ]
-            ];
+                    'compare' => '=',
+                ),
+            );
         }
         return $args;
     }

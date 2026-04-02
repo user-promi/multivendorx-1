@@ -498,7 +498,10 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 								/>
 							</FormGroup>
 
-							<FormGroup label={__('Phone', 'multivendorx')} notice={errorMsg.phone}>
+							<FormGroup
+								label={__('Phone', 'multivendorx')}
+								notice={errorMsg.phone}
+							>
 								<SelectInputUI
 									type="single-select"
 									name="country_code"

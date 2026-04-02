@@ -220,8 +220,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			} else if (formData.shippingMethod === 'free_shipping') {
 				shippingData.settings = {
 					title: 'Free Shipping',
-					requires:
-						formData.freeShippingType || '',
+					requires: formData.freeShippingType || '',
 					min_amount: formData.minOrderCost || '0',
 					description: 'Free shipping method',
 				};
@@ -243,9 +242,9 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			const isUpdate = isEditing && editingMethod;
 			const url = isUpdate
 				? getApiLink(
-					appLocalizer,
-					`zone-shipping/${selectedZone.zone_id}`
-				)
+						appLocalizer,
+						`zone-shipping/${selectedZone.zone_id}`
+					)
 				: getApiLink(appLocalizer, 'zone-shipping');
 
 			const requestData = {
@@ -290,15 +289,15 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		} catch (err) {
 			console.error(
 				'Error ' +
-				(isEditing ? 'updating' : 'adding') +
-				' shipping method:',
+					(isEditing ? 'updating' : 'adding') +
+					' shipping method:',
 				err
 			);
 			alert(
 				__(
 					'Error ' +
-					(isEditing ? 'updating' : 'adding') +
-					' shipping method',
+						(isEditing ? 'updating' : 'adding') +
+						' shipping method',
 					'multivendorx'
 				)
 			);
@@ -317,7 +316,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		shipping_methods: {
 			label: __('Shipping Method(s)', 'multivendorx'),
 			render: (row: TableRow) => {
-				console.log('row',row)
+				console.log('row', row);
 				const zone = row as Zone;
 				const methodsObj = zone.shipping_methods || {};
 				const methodsArray = Object.values(methodsObj);
@@ -394,7 +393,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					rows={rows}
 					isLoading={false}
 					showMenu={false}
-					onQueryUpdate={() => { }}
+					onQueryUpdate={() => {}}
 					emptyMessage={__('No shipping zones found', 'multivendorx')}
 				/>
 			</FormGroup>
@@ -406,10 +405,11 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					onClose={() => setAddShipping(false)}
 					header={{
 						icon: 'shipping',
-						title: `${isEditing
-							? __('Edit Shipping', 'multivendorx')
-							: __('Add Shipping', 'multivendorx')
-							} - ${selectedZone.zone_name}`,
+						title: `${
+							isEditing
+								? __('Edit Shipping', 'multivendorx')
+								: __('Add Shipping', 'multivendorx')
+						} - ${selectedZone.zone_name}`,
 					}}
 					footer={
 						<ButtonInputUI
@@ -446,51 +446,51 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								options={
 									isEditing
 										? [
-											{
-												key: formData.shippingMethod,
-												value: formData.shippingMethod,
-												label: __(
-													formData.shippingMethod
-														.replace('_', ' ')
-														.replace(
-															/\b\w/g,
-															(c) =>
-																c.toUpperCase()
-														),
-													'multivendorx'
-												),
-											},
-										]
+												{
+													key: formData.shippingMethod,
+													value: formData.shippingMethod,
+													label: __(
+														formData.shippingMethod
+															.replace('_', ' ')
+															.replace(
+																/\b\w/g,
+																(c) =>
+																	c.toUpperCase()
+															),
+														'multivendorx'
+													),
+												},
+											]
 										: applyFilters(
-											'multivendorx_zone_shipping_methods',
-											[
-												{
-													key: 'local_pickup',
-													value: 'local_pickup',
-													label: __(
-														'Local pickup',
-														'multivendorx'
-													),
-												},
-												{
-													key: 'free_shipping',
-													value: 'free_shipping',
-													label: __(
-														'Free shipping',
-														'multivendorx'
-													),
-												},
-												{
-													key: 'flat_rate',
-													value: 'flat_rate',
-													label: __(
-														'Flat Rate',
-														'multivendorx'
-													),
-												},
-											],
-											modules
-										)
+												'multivendorx_zone_shipping_methods',
+												[
+													{
+														key: 'local_pickup',
+														value: 'local_pickup',
+														label: __(
+															'Local pickup',
+															'multivendorx'
+														),
+													},
+													{
+														key: 'free_shipping',
+														value: 'free_shipping',
+														label: __(
+															'Free shipping',
+															'multivendorx'
+														),
+													},
+													{
+														key: 'flat_rate',
+														value: 'flat_rate',
+														label: __(
+															'Flat Rate',
+															'multivendorx'
+														),
+													},
+												],
+												modules
+											)
 								}
 								disabled={isEditing}
 							/>

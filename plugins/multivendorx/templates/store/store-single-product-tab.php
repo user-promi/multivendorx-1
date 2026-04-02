@@ -90,7 +90,7 @@ if ( $store ) {
 
         if ( in_array( 'show_store_phone', $store_contact_details, true ) && ! empty( $details['phone'] ) ) {
             $html .= '<div class="store-info"><i class="dashicons dashicons-phone"></i>'
-                . esc_html( StoreUtil::get_phone($details['phone']) ) .
+                . esc_html( StoreUtil::get_phone( $details['phone'] ) ) .
             '</div>';
         }
 
