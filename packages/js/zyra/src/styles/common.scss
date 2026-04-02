@@ -23,7 +23,7 @@ a {
   img{
     width: 1.125rem;
   }
-  
+
   .select-wrapper {
     display: inline-flex;
     gap: 0.5rem;
@@ -88,6 +88,11 @@ a {
   h5,
   h6 {
     margin: 0;
+  }
+  
+  // for woocommerce notice
+  .notice p {
+    margin: 0.5em 0;
   }
 
   .basic-input,
@@ -239,7 +244,8 @@ $index: 1;
 .basic-input,
 .basic-select,
 .textarea-input,
-.rmdp-input {
+.rmdp-input,
+.basic-input:-webkit-autofill {
   width: 100%;
   border: $border-light-small !important; // for overwrite wordpress style
   border-radius: $border-radius-small;
@@ -266,7 +272,7 @@ $index: 1;
     border: none;
   }
 }
-
+ 
 .react-select input:focus {
   box-shadow: none;
 }
