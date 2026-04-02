@@ -346,7 +346,7 @@ export default {
 			docLink:
 				'https://multivendorx.com/docs/knowledgebase/weight-shipping',
 			settingsLink: `${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=shipping`,
-			proModule: false,
+			proModule: true,
 			reqPluging: [
 				{
 					name: 'Table Rate Shipping',
@@ -367,7 +367,7 @@ export default {
 			reqPluging: [
 				{
 					name: 'Per Product Shipping for WooCommerce',
-					slug: 'woocommerce-per-product-shipping/woocommerce-per-product-shipping.php',
+					slug: 'woocommerce-shipping-per-product/woocommerce-shipping-per-product.php',
 					link: 'https://woocommerce.com/products/per-product-shipping/',
 				},
 			],

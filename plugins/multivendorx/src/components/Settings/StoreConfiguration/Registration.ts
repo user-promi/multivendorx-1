@@ -21,13 +21,13 @@ export default {
 			noticeType: 'info',
 			displayPosition: 'notice',
 		},
-		{
-			key: 'store_registration_from',
-			type: 'block-builder',
-			classes: 'full-width',
-			visibleGroups: ['registration', 'store'],
-			desc: 'Customise personalised store registration form for marketplace.',
-			context: 'form',
-		},
+		// {
+		// 	key: 'store_registration_from',
+		// 	type: 'block-builder',
+		// 	classes: 'full-width',
+		// 	visibleGroups: ['registration', 'store'],
+		// 	desc: 'Customise personalised store registration form for marketplace.',
+		// 	context: 'form',
+		// },
 	],
 };

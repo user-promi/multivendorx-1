@@ -108,7 +108,7 @@ if ( $store ) {
         $html .= '</div>'; // .mvx-vendor-info
     }
 
-    $html .= apply_filters( 'mvx_after_seller_info_tab', '' );
+    $html .= apply_filters( 'multivendorx_store_info_tab', '' );
 
     echo wp_kses_post( $html );
 

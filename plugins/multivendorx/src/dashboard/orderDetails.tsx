@@ -317,16 +317,16 @@ const OrderDetails: React.FC = () => {
 			Tracking ID: ${shipmentData.tracking_id}
 			`;
 
-			axios.post(
-				`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}/notes`,
-				{
-					note: noteContent,
-					customer_note: false, 
-				},
-				{
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				}
-			);
+		axios.post(
+			`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}/notes`,
+			{
+				note: noteContent,
+				customer_note: false,
+			},
+			{
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			}
+		);
 
 		axios({
 			method: 'POST',
@@ -337,7 +337,7 @@ const OrderDetails: React.FC = () => {
 				order_id: orderId,
 			},
 		}).then(() => {
-			
+
 		});
 
 	};
@@ -349,13 +349,31 @@ const OrderDetails: React.FC = () => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				note: rejectNote,
+				customer_note: false,
+			},
+		});
+
+		axios({
+			method: 'POST',
+			url: `${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			data: {
+				status: 'refund-rejected',
+				meta_data: [
+					{
+						key: 'multivendorx_store_refund_reject_note',
+						value: rejectNote,
+					},
+				],
 			},
 		})
-			.then(response => {
-				handleStatusChange('refund-rejected');
+			.then(() => {
+				setPopupOpen(false);
+				setRejectNote('');
+				fetchOrder();
 			})
-			.catch(err => {
-				console.error('Error adding note:', err);
+			.catch((err) => {
+				console.error('Error rejecting refund:', err);
 			});
 	};
 
@@ -1011,6 +1029,10 @@ const OrderDetails: React.FC = () => {
 											<div className="desc">
 												{orderData.meta_data.find(meta => meta.key === 'multivendorx_customer_refund_reason')?.value}
 											</div>
+											<div className="title">Additional details</div>
+											<div className="desc">
+												{orderData.meta_data.find(meta => meta.key === 'multivendorx_customer_refund_addi_info')?.value}
+											</div>
 										</div>
 									</div>
 									<ButtonInputUI
@@ -1047,7 +1069,7 @@ const OrderDetails: React.FC = () => {
 													{
 														icon: 'save',
 														text: __('Reject', 'multivendorx'),
-														onClick:()=>handleRefunReject(orderData.id)
+														onClick: () => handleRefunReject(orderData.id)
 													},
 												]}
 											/>
@@ -1397,15 +1419,15 @@ const OrderDetails: React.FC = () => {
 										{
 											icon: 'plus',
 											text: shipmentData.tracking_url !== ''
-													? __( 'Update Shipment', 'multivendorx' ) 
-													: __( 'Create Shipment', 'multivendorx' ),
+												? __('Update Shipment', 'multivendorx')
+												: __('Create Shipment', 'multivendorx'),
 											onClick: saveShipmentToOrder,
 										},
 									],
-									{
-										orderId, shipmentData
-									}
-								)}
+										{
+											orderId, shipmentData
+										}
+									)}
 								/>
 
 							</Card>

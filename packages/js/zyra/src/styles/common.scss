@@ -70,6 +70,7 @@ a {
 
 #admin-main-wrapper {
   margin-left: -1.25rem;
+  min-height: 100vh; // for all page scroller add
 }
 
 .admin-main-wrapper,
@@ -213,6 +214,7 @@ $index: 1;
   .admin-color#{$index} {
     background: map-get($style, light-color) !important;
     color: map-get($style, color) !important;
+    fill: map-get($style, color) !important;
   }
 
   // only background color
@@ -229,56 +231,6 @@ $index: 1;
 
   $index: $index + 1;
 }
-
-// copy btn start
-// .copy-btn {
-//   width: 2.2rem;
-//   height: 2.2rem;
-//   padding: 0;
-//   border-radius: $border-radius-small;
-//   background: $background-white;
-//   border: none;
-//   position: relative;
-
-//   .tooltip {
-//     font-size: 0.625rem;
-//     position: absolute;
-//     background: $theme-color;
-//     padding: 0.5rem 0.75rem;
-//     top: -2rem;
-//     border-radius: $border-radius-small;
-//     color: $background-white;
-//     display: none;
-//     width: 5.125rem;
-//     right: 0%;
-
-//     &::after {
-//       position: absolute;
-//       content: "";
-//       bottom: -0.189rem;
-//       transform: translateX(-50%) rotate(45deg);
-//       width: 0.504rem;
-//       height: 0.504rem;
-//       background: $theme-color;
-//       right: 8%;
-//     }
-
-//     &.tool-clip {
-//       display: flex;
-//       gap: 0.313rem;
-//       width: 3rem;
-//     }
-//   }
-
-//   &:hover {
-//     .tooltip {
-//       display: flex;
-//     }
-//   }
-// }
-
-// copy btn end
-
 
 // all input style start
 .basic-input,
