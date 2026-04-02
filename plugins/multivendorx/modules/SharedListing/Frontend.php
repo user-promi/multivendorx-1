@@ -9,6 +9,7 @@ namespace MultiVendorX\SharedListing;
 
 use MultiVendorX\Utill;
 use MultiVendorX\StoreReview\Util;
+use MultiVendorX\Store\Store;
 use MultiVendorX\FrontendScripts;
 
 defined( 'ABSPATH' ) || exit;
@@ -28,72 +29,73 @@ class Frontend {
     public function __construct() {
         add_action( 'pre_get_posts', array( $this, 'filter_duplicate_product' ) );
         add_filter( 'woocommerce_product_tabs', array( $this, 'add_more_offers_tab' ) );
-
+        
         if ( 'above' === MultiVendorX()->setting->get_setting( 'more_offers_display_position', 'none' ) ) {
             add_action( 'woocommerce_single_product_summary', array( $this, 'spmv_tab_link' ), 60 );
         }
-
+        
         if ( 'after' === MultiVendorX()->setting->get_setting( 'more_offers_display_position', 'none' ) ) {
             add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'spmv_tab_link' ), 99 );
         }
-
+        
         add_filter( 'multivendorx_register_scripts', array( $this, 'register_script' ) );
-
+        
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
+        
     }
     /**
      * Register frontend scripts for MultiVendorX Shared Listing module.
-     *
-     * @param array $scripts Existing scripts array.
-     * @return array Modified scripts array including shared listing frontend script.
-     */
+    *
+    * @param array $scripts Existing scripts array.
+    * @return array Modified scripts array including shared listing frontend script.
+    */
     public function register_script( $scripts ) {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
-
+        
         $scripts['multivendorx-sharedlisting-frontend-script'] = array(
             'src'  => $base_url . 'modules/SharedListing/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
             'deps' => array( 'jquery' ),
         );
-
+        
         return $scripts;
     }
     /**
      * Filters duplicate products from the main WooCommerce query.
-     *
-     * Excludes duplicate products based on mapped primary products.
-     *
-     * @param WP_Query $query The WooCommerce query object.
-     * @return void
-     */
+    *
+    * Excludes duplicate products based on mapped primary products.
+    *
+    * @param WP_Query $query The WooCommerce query object.
+    * @return void
+    */
     public function filter_duplicate_product( $query ) {
         if ( ! $query->is_main_query() || ! ( is_shop() || is_product_category() ) ) {
             return;
         }
-
+        
         $data = $this->get_excluded_product();
-
+        
         if ( empty( $data['exclude'] ) ) {
             return;
         }
-
+        
         $query->set( 'post__not_in', $data['exclude'] );
     }
     /**
      * Get primary and excluded products based on MultiVendorX mapping.
-     *
-     * @return array {
-     *     @type array $primary IDs of primary products.
-     *     @type array $exclude IDs of products to exclude.
-     * }
-     */
+    *
+    * @return array {
+    *     @type array $primary IDs of primary products.
+    *     @type array $exclude IDs of products to exclude.
+    * }
+    */
     public function get_excluded_product() {
         global $wpdb;
-
+        
         $priority = MultiVendorX()->setting->get_setting( 'shared_listing_display', 'min_price' );
-
+        
         $mapped_ids  = array();
         $primary_ids = array();
-
+        
         $table = $wpdb->prefix . Utill::TABLES['products_map'];
         $limit = apply_filters( 'multivendorx_shared_listing_product_map_query_limit', 100 );
         // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -102,20 +104,20 @@ class Frontend {
         $maps = $wpdb->get_results( $query );
         foreach ( $maps as $map ) {
             $ids = maybe_unserialize( $map->product_map );
-
+            
             if ( empty( $ids ) ) {
                 continue;
             }
-
+            
             $mapped_ids = array_merge( $mapped_ids, $ids );
-
+            
             $selected_id = $this->select_primary_product( $ids, $priority );
-
+            
             if ( $selected_id ) {
                 $primary_ids[] = $selected_id;
             }
         }
-
+        
         return array(
             'primary' => array_unique( $primary_ids ),
             'exclude' => array_diff( array_unique( $mapped_ids ), $primary_ids ),
@@ -123,12 +125,13 @@ class Frontend {
     }
     /**
      * Select the primary product ID from a set of product IDs based on priority.
-     *
-     * @param int[]  $ids Array of product IDs to evaluate.
-     * @param string $priority Selection criteria: 'max_price', 'top_rated_store', 'min_price'.
-     * @return int|null Selected primary product ID or null if none found.
-     */
+    *
+    * @param int[]  $ids Array of product IDs to evaluate.
+    * @param string $priority Selection criteria: 'max_price', 'top_rated_store', 'min_price'.
+    * @return int|null Selected primary product ID or null if none found.
+    */
     public function select_primary_product( array $ids, string $priority ) {
+        file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":orders: : " . var_export('hello', true) . "\n", FILE_APPEND);
         $selected_id = null;
 
         switch ( $priority ) {
@@ -161,6 +164,41 @@ class Frontend {
                 }
                 break;
 
+            case 'nearby_location':
+                $user_lat = isset($_COOKIE['user_lat']) ? (float) $_COOKIE['user_lat'] : 0;
+                $user_lng = isset($_COOKIE['user_lng']) ? (float) $_COOKIE['user_lng'] : 0;
+
+                // Fallback if user location not available
+                if (!$user_lat || !$user_lng) {
+                    return $this->get_min_price_product($ids);
+                }
+
+                $closest_distance = PHP_FLOAT_MAX;
+
+                foreach ($ids as $pid) {
+                    $store_id = get_post_meta($pid, 'multivendorx_store_id', true);
+
+                    if (!$store_id) continue;
+
+                    $store = new Store($store_id);
+
+                    if (!$store) continue;
+
+                    $store_lat = (float) $store->get_meta('location_lat');
+                    $store_lng = (float) $store->get_meta('location_lng');
+
+                    if (!$store_lat || !$store_lng) continue;
+
+                    // Calculate distance
+                    $distance = $this->calculate_distance($user_lat, $user_lng, $store_lat, $store_lng);
+
+                    if ($distance < $closest_distance) {
+                        $closest_distance = $distance;
+                        $selected_id = $pid;
+                    }
+                }
+                break;
+
             case 'min_price':
             default:
                 $selected_id = $this->get_min_price_product( $ids );
@@ -187,6 +225,21 @@ class Frontend {
         }
 
         return $selected_id;
+    }
+
+    public function calculate_distance($ulat, $ulng, $slat, $slng) {
+        $earth_radius = 6371; // in KM
+
+        $dLat = deg2rad($slat - $ulat);
+        $dLng = deg2rad($slng - $ulng);
+
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($ulat)) * cos(deg2rad($slat)) *
+            sin($dLng / 2) * sin($dLng / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+        return $earth_radius * $c;
     }
 
     /**
