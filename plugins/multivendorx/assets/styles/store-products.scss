@@ -679,12 +679,14 @@ $star-color: #d49c00;
 
 // Request timeline section
 .multivendorx-timeline {
+
     .multivendorx-timeline-item {
         display: flex;
         gap: 1.5rem;
-        border-left: 0.125rem solid var(--theme-background);
+        border-left: 0.125rem dashed #d0c7c7;
         margin-left: 1rem;
         align-items: start;
+        padding-bottom: 2.5rem;
 
         .timeline-icon {
             background: #efebeb;
@@ -693,6 +695,10 @@ $star-color: #d49c00;
             border-radius: 50%;
             margin-left: -1rem;
         }
+    }
+
+    .multivendorx-timeline-item:last-child{
+        border: none;
     }
 }
 

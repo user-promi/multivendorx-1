@@ -565,17 +565,19 @@ class Frontend {
                     ?>
                 </address>
                 <!-- Attachments -->
-                <p>
-                    <strong><?php esc_html_e( 'Attached images:', 'multivendorx' ); ?></strong>
-                </p>
-                
-                <div class="refund-reason-image">
-                    <?php foreach ( $refund_images as $img ) : ?>
-                        <?php if ( ! empty( $img ) ) : ?>
-                            <img src="<?php echo esc_url( $img ); ?>" alt="Refund image" />
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </div>
+                 <?php if ( ! empty( $refund_images ) ) : ?>
+                    <p>
+                        <strong><?php esc_html_e( 'Attached images:', 'multivendorx' ); ?></strong>
+                    </p>
+                    
+                    <div class="refund-reason-image">
+                        <?php foreach ( $refund_images as $img ) : ?>
+                            <?php if ( ! empty( $img ) ) : ?>
+                                <img src="<?php echo esc_url( $img ); ?>" alt="Refund image" />
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </address>
 
         </section>
