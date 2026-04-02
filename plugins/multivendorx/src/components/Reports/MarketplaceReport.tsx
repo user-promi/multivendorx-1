@@ -482,14 +482,9 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 									title={coupon.code}
 									isLoading={isLoading}
 									titleLink={`${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`}
-									// avatar={{
-									// 	text: (
-									// 		store.store_name
-									// 			?.trim()
-									// 			.charAt(0) || ''
-									// 	).toUpperCase(),
-									// 	link: `${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`,
-									// }}
+									avatar={{
+										iconClass: 'coupon',
+									}}
 									descriptions={[
 										{
 											label: __(
@@ -534,14 +529,15 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 										title={customer.username}
 										isLoading={isLoading}
 										titleLink={`${appLocalizer.site_url}//wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
-										// avatar={{
-										// 	text: (
-										// 		store.store_name
-										// 			?.trim()
-										// 			.charAt(0) || ''
-										// 	).toUpperCase(),
-										// 	link: `${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`,
-										// }}
+										avatar={{
+											text: (
+												customer.username
+													?.trim()
+													.charAt(0) || ''
+											).toUpperCase(),
+											iconClass: 'person',
+											link: `${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`,
+										}}
 										descriptions={[
 											{
 												label: __(
@@ -586,6 +582,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 													?.trim()
 													.charAt(0) || ''
 											).toUpperCase(),
+											iconClass: 'storefront',
 											link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`,
 										}}
 										descriptions={[
