@@ -224,9 +224,7 @@ const StoreReport: React.FC = () => {
 						titleLink={getUrl(row.primary_owner.data.ID, 'user')}
 						avatar={{
 							imageHtml: row.primary_owner_image,
-							iconClass: row.primary_owner_image
-								? ''
-								: 'store-inventory',
+							iconClass: 'person',
 						}}
 						descriptions={[
 							{

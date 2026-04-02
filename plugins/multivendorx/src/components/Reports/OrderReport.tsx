@@ -66,6 +66,12 @@ const OrderReport: React.FC = () => {
 					avatar={{
 						iconClass: 'store-inventory',
 					}}
+					descriptions={[
+						{
+							label: __('Sku', 'multivendorx'),
+							value: row.store_sku,
+						},
+					]}
 				/>
 			),
 		},
