@@ -188,7 +188,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 	const fee = amount * (percentage / 100) + fixed;
 
 	const headers = {
-		id: { label: __('ID', 'multivendorx') },
+		id: { label: __('ID', 'multivendorx') , type: "id"},
 		status: { label: __('Status', 'multivendorx'), type: 'status' },
 		transaction_type: {
 			label: __('Transaction Type', 'multivendorx'),
@@ -413,6 +413,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			<Container>
 				<Column fullHeight grid={6}>
 					<Card title="Recent payouts">
+						<div className='recent-payouts'>
 						{recentDebits.length > 0 ? (
 							<>
 								{recentDebits.slice(0, 5).map((txn) => {
@@ -432,35 +433,33 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 											);
 
 									return (
-										<div key={txn.id} className="info-item">
-											<div className="details-wrapper">
-												<div className="details">
-													<div className="name">
-														{formattedPaymentMethod}
-														{hasPaymentMethod && (
-															<div className="admin-badge green">
-																Completed
-															</div>
-														)}
-													</div>
-													<div className="des">
-														{formatDate(txn.created_at)}
-													</div>
-												</div>
-											</div>
-
-											<div className="right-details">
-												<div
-													className={`price ${parseFloat(txn.debit) <
-															0
-															? 'color-red'
-															: 'color-green'
-														}`}
-												>
-													{formatCurrency(txn.debit)}
-												</div>
-											</div>
-										</div>
+										<ItemListUI
+												className="mini-card"
+												items={[
+													{
+														title: formattedPaymentMethod,
+														desc: formatDate(txn.created_at),
+														tags: (
+															<>
+																{hasPaymentMethod && (
+																	<div className="admin-badge green">
+																		{ __('Completed', 'multivendorx')}
+																	</div>
+																)}
+																<div
+																	className={`price ${parseFloat(txn.debit) <
+																			0
+																			? 'color-red'
+																			: 'color-green'
+																		}`}
+																>
+																	{formatCurrency(txn.debit)}
+																</div>
+															</>
+														),
+													},
+												]}
+											/>
 									);
 								})}
 							</>
@@ -472,6 +471,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 								)}
 							/>
 						)}
+						</div>
 					</Card>
 				</Column>
 

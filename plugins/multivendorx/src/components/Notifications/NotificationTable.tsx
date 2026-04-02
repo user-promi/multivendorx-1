@@ -74,7 +74,7 @@ const NotificationTable = (React.FC = () => {
 	};
 
 	return (
-		<Container general>
+		<Container>
 			<Column>
 				{error && <div className="error-notice">{error}</div>}
 				<TableCard
@@ -84,6 +84,7 @@ const NotificationTable = (React.FC = () => {
 					isLoading={isLoading}
 					onQueryUpdate={doRefreshTableData}
 					format={appLocalizer.date_format}
+					showMenu={false}
 				/>
 			</Column>
 		</Container>
