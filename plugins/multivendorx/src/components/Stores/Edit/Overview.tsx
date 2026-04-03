@@ -15,6 +15,7 @@ import {
 	FormGroup,
 	ButtonInputUI,
 	SectionUI,
+	ComponentStatusView,
 } from 'zyra';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './LatestReview';
@@ -321,12 +322,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								);
 							})
 						) : (
-							<p className="no-data">
-								{__(
-									'No recent products found.',
-									'multivendorx'
-								)}
-							</p>
+							<ComponentStatusView title={__( 'No recent products found.', 'multivendorx' )} />
 						)}
 					</Card>
 
@@ -368,7 +364,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								buttons={[
 									{
 										icon: 'vacation',
-										text: __('Change plan', 'multivendorx'),
+										text: __('Change plan(p)', 'multivendorx'),
 										color: 'purple',
 										// onClick: () => setVacation(true),
 									},
@@ -381,91 +377,89 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								<div className="icon">
 									<i className="adminfont-verification5" />
 								</div>
-								<div className="name">Gold Plan</div>
+								<div className="name">Gold Plan (p)</div>
 							</div>
 
 							<div className="billing-wrapper">
 								<div className="item">
-									<b> Next billing: </b> Dec 15, 2024
+									<b> Next billing: </b> Dec 15, 2024 (p)
 								</div>
 								<div className="item">
-									<b> Billing cycle: </b> Monthly
+									<b> Billing cycle: </b> Monthly (p)
 								</div>
 							</div>
 
 							<div className="plan-status">
 								<span className="admin-badge green">
-									Active
+									Active(p)
 								</span>
 							</div>
 						</div>
 					</Card>
 
-					<div className="store-details-remove-class">
-						<Card title={__('Store overview', 'multivendorx')}>
-							<FormGroupWrapper>
-								{/* <FormGroup
-									row
-									label={__('Registered', 'multivendorx')}
+					<Card title={__('Store overview', 'multivendorx')}>
+						<FormGroupWrapper>
+							{/* <FormGroup
+								row
+								label={__('Registered', 'multivendorx')}
+							>
+								{__('Mon 9:00 AM (pkoro)', 'multivendorx')}
+							</FormGroup> */}
+							{/* <FormGroup
+								row
+								label={__('Lifetime earnings', 'multivendorx')}
+							>
+								{formatCurrency(
+									storeData.commission?.commission_total ?? 0
+								)}
+							</FormGroup> */}
+							<FormGroup
+								row
+								label={__('Application', 'multivendorx')}
+							>
+								<a
+									className="sku"
+									onClick={() => {
+										navigate(
+											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=marketplace-compliance`
+										);
+									}}
 								>
-									{__('Mon 9:00 AM (pkoro)', 'multivendorx')}
-								</FormGroup> */}
-								{/* <FormGroup
-									row
-									label={__('Lifetime earnings', 'multivendorx')}
-								>
-									{formatCurrency(
-										storeData.commission?.commission_total ?? 0
-									)}
-								</FormGroup> */}
-								<FormGroup
-									row
-									label={__('Application', 'multivendorx')}
-								>
-									<a
-										className="sku"
-										onClick={() => {
-											navigate(
-												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=marketplace-compliance`
-											);
-										}}
-									>
-										{__('View details', 'multivendorx')}
-									</a>
-								</FormGroup>
+									{__('View details', 'multivendorx')}
+								</a>
+							</FormGroup>
 
-								<SectionUI
-									title={__('Settings', 'multivendorx')}
-								/>
-								{/* <FormGroup
-									row
-									label={__('Commission', 'multivendorx')}
-								>
-									{__('Category based', 'multivendorx')}
-								</FormGroup> */}
-								<FormGroup
-									row
-									label={__('Payment method', 'multivendorx')}
-								>
-									{storeData?.payment_method ? (
-										<div className="method">
-											<i className="adminfont-bank"></i>
-											{formatMethod(
-												storeData.payment_method
-											)}
-										</div>
-									) : (
-										<span>
-											{__(
-												'No payment method saved',
-												'multivendorx'
-											)}
-										</span>
-									)}
-								</FormGroup>
-							</FormGroupWrapper>
-						</Card>
-					</div>
+							<SectionUI
+								title={__('Settings', 'multivendorx')}
+							/>
+							{/* <FormGroup
+								row
+								label={__('Commission', 'multivendorx')}
+							>
+								{__('Category based', 'multivendorx')}
+							</FormGroup> */}
+							<FormGroup
+								row
+								label={__('Payment method', 'multivendorx')}
+							>
+								{storeData?.payment_method ? (
+									<div className="method">
+										<i className="adminfont-bank"></i>
+										{formatMethod(
+											storeData.payment_method
+										)}
+									</div>
+								) : (
+									<span>
+										{__(
+											'No payment method saved',
+											'multivendorx'
+										)}
+									</span>
+								)}
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
 					{applyFilters(
 						'multivendorx_store_edit_right_section',
 						null,

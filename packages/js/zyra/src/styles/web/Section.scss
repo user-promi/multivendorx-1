@@ -1,11 +1,8 @@
 @use '../../global.scss' as *;
 
 .divider-section {
-  margin-top: 1rem;
-
-  //   width: 100%;
   border-bottom: $border-light-small;
-  padding: 1rem 0 0.5rem;
+  // padding: 1rem 0 0.5rem;
 
   .title {
     font-size: 1.15rem;
@@ -47,9 +44,11 @@
 .settings-wrapper{
   &[data-template="default"],
   &[data-template="settings"] {
-    .divider-section {
+    // this style not for card body inner section
+    .divider-section:not(.card-body .divider-section) {
         padding: 1rem 1rem .5rem;
         background: $background-white;
+        margin-top: 1rem;
       }
   }
 

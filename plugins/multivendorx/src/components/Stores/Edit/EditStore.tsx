@@ -414,6 +414,7 @@ const EditStore = () => {
 				getForm={getForm}
 				prepareUrl={prepareUrl}
 				appLocalizer={appLocalizer}
+				className='without-border'
 				settingTitleSection={
 					<>
 						<Container general>

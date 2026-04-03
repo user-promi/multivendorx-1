@@ -539,7 +539,7 @@ const PanelHeader: React.FC = () => {
                                     rows={3}
                                 />
                             ) : (
-                                <p
+                                <div
                                     className={
                                         canEditField(
                                             method,
@@ -591,7 +591,7 @@ const PanelHeader: React.FC = () => {
                                     ) && (
                                             <i className="adminfont-edit inline-edit-icon" />
                                         )}
-                                </p>
+                                </div>
                             )}
                         </div>
                     </div>
