@@ -356,11 +356,20 @@ class Rest {
 
         if ( $store_id > 0 ) {
             $store = new Store( $store_id );
+            $phone_meta = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone']);
+
+            $formatted_phone = '';
+            if ( ! empty( $phone_meta['country_code'] ) && ! empty( $phone_meta['phone'] ) ) {
+                $formatted_phone = $phone_meta['country_code'] . '-' . $phone_meta['phone'];
+            }
 
             $response->data['store_id']   = $store_id;
             $response->data['store_name'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
             $response->data['store_slug'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
+            $response->data['store_address'] = (string) $store->get_meta( Utill::STORE_SETTINGS_KEYS['address'] );
+            $response->data['store_phone'] = $formatted_phone;
         }
+        $response->data['paid_status'] = $order->is_paid();
 
         $commission_id = (int) $order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'] );
 

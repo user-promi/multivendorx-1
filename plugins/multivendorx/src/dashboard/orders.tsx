@@ -22,7 +22,21 @@ import {
 	formatLocalDate,
 	toWcIsoDate,
 	dashNavigate,
+	formatCurrency,
 } from '../services/commonFunction';
+import { pdf } from '@react-pdf/renderer';
+import StoreInvoicePDF from '@/assets/template/invoicePdf/Invoice-1';
+
+const fetchOrderById = async (orderId: number) => {
+  const res = await axios.get(
+    `${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
+    {
+      headers: { 'X-WP-Nonce': appLocalizer.nonce },
+    }
+  );
+
+  return res.data;
+};
 
 const Orders: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
@@ -270,8 +284,48 @@ const Orders: React.FC = () => {
 				{
 					label: __('Download', 'multivendorx'),
 					icon: 'download',
-					onClick: (row) => {
-						window.location.href = `?page=multivendorx#&tab=stores&edit/${row.id}`;
+					onClick: async (row) => {
+						try {
+							// 1. Fetch order
+							const order = await fetchOrderById(row.id);
+
+							// 2. Map order → invoice rows
+							const invoiceRows = order.line_items.map((item) => ({
+								description: item.name,
+								qty: item.quantity,
+								price: formatCurrency(item.price),
+								amount: formatCurrency(item.total),
+							}));
+							console.log('Order Object:', order);
+							// 3. Generate PDF blob
+							const blob = await pdf(
+								<StoreInvoicePDF
+									invoiceRows={invoiceRows}
+									order = {order}
+									colors={{
+										colorPrimary: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorPrimary || '#000',
+										colorSecondary: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorSecondary || '#ccc',
+										colorAccent: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorAccent || '#000',
+										colorSupport: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorSupport || '#999',
+									}}
+								/>
+							).toBlob();
+
+							// 4. Create download link
+							const url = URL.createObjectURL(blob);
+
+							const link = document.createElement('a');
+							link.href = url;
+							link.download = `invoice-${row.id}.pdf`;
+							document.body.appendChild(link);
+							link.click();
+							document.body.removeChild(link);
+
+							URL.revokeObjectURL(url);
+
+						} catch (error) {
+							console.error('Invoice download failed:', error);
+						}
 					},
 				},
 
