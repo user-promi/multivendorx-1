@@ -28,6 +28,10 @@ const ShippingCard = ({
 		axios
 			.get(`${appLocalizer.apiUrl}/wc/v3/products/shipping_classes`, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+				params: {
+					meta_key: 'multivendorx_store_id',
+					meta_value: appLocalizer.store_id,
+				},
 			})
 			.then((res) => {
 				const options = res.data.map((cls) => ({

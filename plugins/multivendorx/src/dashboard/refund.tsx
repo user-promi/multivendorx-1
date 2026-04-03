@@ -19,13 +19,16 @@ const Refund: React.FC = () => {
 	const [totalRows, setTotalRows] = useState<number>(0);
 	const [rowIds, setRowIds] = useState<number[]>([]);
 	const navigate = useNavigate();
-	const privacy = appLocalizer.settings_databases_value?.privacy?.['customer_information_access'];
+	const privacy =
+		appLocalizer.settings_databases_value?.privacy?.[
+			'customer_information_access'
+		];
 	const privacyHeaders = privacy?.includes('name')
 		? {
-			customer_name: {
-				label: __('Customer', 'multivendorx'),
-			},
-		}
+				customer_name: {
+					label: __('Customer', 'multivendorx'),
+				},
+			}
 		: {};
 
 	const headers = {

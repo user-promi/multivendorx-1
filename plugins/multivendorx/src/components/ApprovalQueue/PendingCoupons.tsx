@@ -210,7 +210,10 @@ const PendingCoupons: React.FC<object> = () => {
 
 				setRows(coupons);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
-				window.multivendorxStore?.setCount('coupons', Number(response.headers['x-wp-total']) || 0);
+				window.multivendorxStore?.setCount(
+					'coupons',
+					Number(response.headers['x-wp-total']) || 0
+				);
 				setIsLoading(false);
 			})
 			.catch((error) => {

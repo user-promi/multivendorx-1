@@ -105,7 +105,6 @@ const Stores = () => {
 		});
 
 		clearFieldError(name);
-		
 	};
 
 	const saveEmails = (emailList: string[], primary: string) => {

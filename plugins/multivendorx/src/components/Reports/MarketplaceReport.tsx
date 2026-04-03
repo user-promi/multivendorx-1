@@ -366,8 +366,10 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 			},
 		})
 			.then((response) => {
-				const filteredCustomers = response.data.filter(customer => {
-					return customer.orders_count > 0 && customer.total_spend > 0;
+				const filteredCustomers = response.data.filter((customer) => {
+					return (
+						customer.orders_count > 0 && customer.total_spend > 0
+					);
 				});
 
 				setTopCustomers(filteredCustomers);
@@ -482,38 +484,26 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 									title={coupon.code}
 									isLoading={isLoading}
 									titleLink={`${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`}
-									// avatar={{
-									// 	text: (
-									// 		store.store_name
-									// 			?.trim()
-									// 			.charAt(0) || ''
-									// 	).toUpperCase(),
-									// 	link: `${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`,
-									// }}
+									avatar={{
+										iconClass: 'coupon',
+									}}
 									descriptions={[
 										{
-											label: __(
-												'Used',
-												'multivendorx'
-											),
+											label: __('Used', 'multivendorx'),
 											value: `${coupon.usage_count} ${__('times', 'multivendorx')}`,
 										},
 										{
-											label: __(
-												'Store',
-												'multivendorx'
-											),
+											label: __('Store', 'multivendorx'),
 											value: coupon.store_name,
 										},
 									]}
-									amount={coupon.amount
-												? coupon.discount_type ===
-													'percent'
-													? `${coupon.amount}%`
-													: formatCurrency(
-														coupon.amount
-													)
-												: '-'}
+									amount={
+										coupon.amount
+											? coupon.discount_type === 'percent'
+												? `${coupon.amount}%`
+												: formatCurrency(coupon.amount)
+											: '-'
+									}
 								/>
 							))
 						) : (
@@ -534,21 +524,23 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 										title={customer.username}
 										isLoading={isLoading}
 										titleLink={`${appLocalizer.site_url}//wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
-										// avatar={{
-										// 	text: (
-										// 		store.store_name
-										// 			?.trim()
-										// 			.charAt(0) || ''
-										// 	).toUpperCase(),
-										// 	link: `${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`,
-										// }}
+										avatar={{
+											text: (
+												customer.username
+													?.trim()
+													.charAt(0) || ''
+											).toUpperCase(),
+											iconClass: 'person',
+											link: `${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`,
+										}}
 										descriptions={[
 											{
 												label: __(
 													'Orders',
 													'multivendorx'
 												),
-												value: customer.orders_count || 0,
+												value:
+													customer.orders_count || 0,
 											},
 											{
 												label: __(
@@ -558,7 +550,9 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 												value: customer.email,
 											},
 										]}
-										amount={formatCurrency( customer.total_spend || 0 )}
+										amount={formatCurrency(
+											customer.total_spend || 0
+										)}
 									/>
 								)
 							)
@@ -586,6 +580,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 													?.trim()
 													.charAt(0) || ''
 											).toUpperCase(),
+											iconClass: 'storefront',
 											link: `${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=stores&edit/${store.store_id}/&subtab=store-overview`,
 										}}
 										descriptions={[
@@ -605,7 +600,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 												),
 												value: formatCurrency(
 													store.commission_refunded ||
-													0
+														0
 												),
 											},
 										]}

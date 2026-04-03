@@ -730,7 +730,7 @@ class StoreUtil {
 		if ( empty( $store_slug ) ) {
 			return;
 		}
-		$store_obj  = Store::get_store( $store_slug, 'slug' );
+		$store_obj   = Store::get_store( $store_slug, 'slug' );
 		$store_phone = self::get_phone( $store_obj->get_meta( 'phone' ) );
 
 		ob_start();

@@ -142,7 +142,7 @@ class Utill {
         'commissions_processed'           => 'multivendorx_commissions_processed',
         'commission_id'                   => 'multivendorx_commission_id',
         'shipping_provider'               => 'multivendorx_shipping_provider',
-        'tracking_date'               => 'multivendorx_tracking_date',
+        'tracking_date'                   => 'multivendorx_tracking_date',
         'tracking_url'                    => 'multivendorx_tracking_url',
         'tracking_id'                     => 'multivendorx_tracking_id',
     );
@@ -575,15 +575,15 @@ class Utill {
 	}
 
     public static function get_active_multivendor() {
-        if (Utill::is_active_plugin('dokan-lite/dokan.php')) {
+        if ( self::is_active_plugin( 'dokan-lite/dokan.php' ) ) {
             return 'Dokan';
         }
 
-        if (Utill::is_active_plugin('wc-frontend-manager/wcfm.php')) {
+        if ( self::is_active_plugin( 'wc-frontend-manager/wcfm.php' ) ) {
             return 'WcfmMarketplace';
         }
 
-        if (Utill::is_active_plugin('wc-vendors/class-wc-vendors.php')) {
+        if ( self::is_active_plugin( 'wc-vendors/class-wc-vendors.php' ) ) {
             return 'WcVendors';
         }
 

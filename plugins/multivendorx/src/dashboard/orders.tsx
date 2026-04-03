@@ -40,7 +40,10 @@ const Orders: React.FC = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const hash = location.hash.replace(/^#/, '') || '';
-	const privacy = appLocalizer.settings_databases_value?.privacy?.['customer_information_access'];
+	const privacy =
+		appLocalizer.settings_databases_value?.privacy?.[
+			'customer_information_access'
+		];
 
 	const exportAllOrders = () => {
 		let allOrders = [];
@@ -157,7 +160,7 @@ const Orders: React.FC = () => {
 							status === 'all'
 								? __('All', 'multivendorx')
 								: status.charAt(0).toUpperCase() +
-								status.slice(1),
+									status.slice(1),
 						count: total,
 					};
 				});
@@ -196,17 +199,16 @@ const Orders: React.FC = () => {
 		{ label: 'Failed', value: 'failed' },
 	];
 
-
 	const privacyHeaders = privacy?.includes('name')
 		? {
-			customer: {
-				label: __('Customer', 'multivendorx'),
-				render: (row) =>
-					row.billing?.first_name
-						? `${row.billing.first_name} ${row.billing.last_name || ''}`
-						: 'Guest',
-			},
-		}
+				customer: {
+					label: __('Customer', 'multivendorx'),
+					render: (row) =>
+						row.billing?.first_name
+							? `${row.billing.first_name} ${row.billing.last_name || ''}`
+							: 'Guest',
+				},
+			}
 		: {};
 
 	const headers = {
@@ -215,8 +217,13 @@ const Orders: React.FC = () => {
 			render: (row) => (
 				<span
 					onClick={() =>
-						dashNavigate(navigate, ['orders', 'view', String(row.id)])
+						dashNavigate(navigate, [
+							'orders',
+							'view',
+							String(row.id),
+						])
 					}
+					className="link-item"
 				>
 					#{row.id}
 				</span>
@@ -246,18 +253,18 @@ const Orders: React.FC = () => {
 			actions: [
 				...(appLocalizer.edit_order_capability
 					? [
-						{
-							label: __('View', 'multivendorx'),
-							icon: 'eye',
-							onClick: (row) => {
-								dashNavigate(navigate, [
-									'orders',
-									'view',
-									String(row.id),
-								]);
+							{
+								label: __('View', 'multivendorx'),
+								icon: 'eye',
+								onClick: (row) => {
+									dashNavigate(navigate, [
+										'orders',
+										'view',
+										String(row.id),
+									]);
+								},
 							},
-						},
-					]
+						]
 					: []),
 
 				{
@@ -399,8 +406,12 @@ const Orders: React.FC = () => {
 				const meta = (key: string) =>
 					res.data.meta_data.find((m) => m.key === key)?.value ?? '';
 				setFormData({
-					provider: meta(appLocalizer.order_meta['shipping_provider']),
-					tracking_date: meta(appLocalizer.order_meta['tracking_date']),
+					provider: meta(
+						appLocalizer.order_meta['shipping_provider']
+					),
+					tracking_date: meta(
+						appLocalizer.order_meta['tracking_date']
+					),
 					tracking_url: meta(appLocalizer.order_meta['tracking_url']),
 					tracking_id: meta(appLocalizer.order_meta['tracking_id']),
 				});
@@ -555,13 +566,12 @@ const Orders: React.FC = () => {
 
 			{tracking && (
 				<PopupUI
-					position="lightbox"
 					open={tracking}
 					onClose={() => setTracking(false)}
 					width={31.25}
-					height="70%"
+					height={40}
 					header={{
-						icon: 'warning',
+						icon: 'tools',
 						title: __('Tracking', 'multivendorx'),
 					}}
 					footer={
