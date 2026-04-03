@@ -198,13 +198,14 @@ class Rest extends \WP_REST_Controller {
                             case 'customer':
                                 $name  = strtolower( $order->get_formatted_billing_full_name() );
                                 $email = strtolower( $order->get_billing_email() );
-                                return ( false !== strpos( $name, $search_value ) ) || ( false !== strpos( $email, $search_field ) );
+                                return ( false !== strpos( $name, $search_value ) ) || ( false !== strpos( $email, $search_value ) );
 
                             default:
                                 return true;
                         }
                     }
                 );
+                $refunds = array_values( $refunds );
             }
 
             // Build response data.
