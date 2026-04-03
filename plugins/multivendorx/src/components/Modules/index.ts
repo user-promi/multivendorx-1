@@ -669,21 +669,6 @@ export default {
 			category: 'integration',
 		},
 		{
-			id: 'geo-my-wp',
-			name: __('GEOmyWP', 'multivendorx'),
-			desc: 'Lets stores pinpoint their location on an interactive map, making it easy for customers to discover nearby stores',
-			docLink: 'https://multivendorx.com/docs/knowledgebase/geo-my-wp',
-			proModule: true,
-			reqPluging: [
-				{
-					name: 'GEOmyWP',
-					slug: 'geo-my-wp/geo-my-wp.php',
-					link: 'https://wordpress.org/plugins/geo-my-wp/',
-				},
-			],
-			category: 'integration',
-		},
-		{
 			id: 'wp-affiliate',
 			name: __('WP Affiliate', 'multivendorx'),
 			desc: 'Affiliate program that tracks referrals and commissions for marketplace products.',

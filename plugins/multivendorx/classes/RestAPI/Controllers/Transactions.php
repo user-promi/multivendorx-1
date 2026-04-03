@@ -158,7 +158,7 @@ class Transactions extends \WP_REST_Controller {
                 function ( $row ) {
                     $store = new Store( $row['store_id'] );
                     return array(
-                        'id'               => $row['id'],
+                        'id'               => (int)$row['id'],
                         'commission_id'    => $row['commission_id'],
                         'store_name'       => $store ? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) : '-',
                         'amount'           => $row['amount'],

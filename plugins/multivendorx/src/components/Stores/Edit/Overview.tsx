@@ -361,46 +361,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					)}
 				</Column>
 				<Column grid={4}>
-					<Card
-						title={__('Subscription plan', 'multivendorx')}
-						action={
-							<ButtonInputUI
-								buttons={[
-									{
-										icon: 'vacation',
-										text: __('Change plan', 'multivendorx'),
-										color: 'purple',
-										// onClick: () => setVacation(true),
-									},
-								]}
-							/>
-						}
-					>
-						<div className="plan-wrapper">
-							<div className="plan-details">
-								<div className="icon">
-									<i className="adminfont-verification5" />
-								</div>
-								<div className="name">Gold Plan</div>
-							</div>
-
-							<div className="billing-wrapper">
-								<div className="item">
-									<b> Next billing: </b> Dec 15, 2024
-								</div>
-								<div className="item">
-									<b> Billing cycle: </b> Monthly
-								</div>
-							</div>
-
-							<div className="plan-status">
-								<span className="admin-badge green">
-									Active
-								</span>
-							</div>
-						</div>
-					</Card>
-
 					<div className="store-details-remove-class">
 						<Card title={__('Store overview', 'multivendorx')}>
 							<FormGroupWrapper>
@@ -426,7 +386,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 										className="sku"
 										onClick={() => {
 											navigate(
-												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=marketplace-compliance`
+												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=compliance-records`
 											);
 										}}
 									>
