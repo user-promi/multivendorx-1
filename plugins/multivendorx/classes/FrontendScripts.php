@@ -599,6 +599,16 @@ class FrontendScripts {
                     'use_settings' => true,
                     'object_name'  => 'storesList',
                 ),
+                'multivendorx-store-list-script'   => array(
+                    'object_name'  => 'storesList',
+                    'use_settings' => true,
+                    'use_rest'     => true,
+                    'data'         => array(
+                        'store_page_url'      => MultiVendorX()->store->storeutil->get_store_url( null, '', true ),
+                        'placeholder_url'     => wc_placeholder_img_src(),
+                        'default_user_avatar' => get_avatar_url( 0 ),
+                    ),
+                ),
                 'multivendorx-marketplace-stores-script'   => array(
                     'object_name'  => 'storesList',
                     'use_settings' => true,
