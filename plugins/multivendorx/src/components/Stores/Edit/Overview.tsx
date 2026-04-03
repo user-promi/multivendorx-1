@@ -357,7 +357,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					)}
 				</Column>
 				<Column grid={4}>
-					<div className="store-details-remove-class">
 						<Card title={__('Store overview', 'multivendorx')}>
 							<FormGroupWrapper>
 								{/* <FormGroup
