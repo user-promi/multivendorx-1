@@ -86,7 +86,6 @@ const OrderReport: React.FC = () => {
 		date_created: {
 			label: __('Date', 'multivendorx'),
 			type: 'date',
-			isSortable: true,
 		},
 		status: {
 			label: __('Status', 'multivendorx'),

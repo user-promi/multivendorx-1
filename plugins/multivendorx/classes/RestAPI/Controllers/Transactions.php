@@ -154,6 +154,7 @@ class Transactions extends \WP_REST_Controller {
 				$args['id'] = $ids;
 			}
 			$transactions = Transaction::get_transaction_information( $args );
+            
 			$formatted    = array_map(
                 function ( $row ) {
                     $store = new Store( $row['store_id'] );
