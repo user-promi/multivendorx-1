@@ -357,12 +357,17 @@ const PanelHeader: React.FC = () => {
 
             <div
                 className={`header-details ${showToggleIcon ? 'toggle' : ''}`}
-                onClick={() =>
+                onClick={() => {
+                    // Don't toggle if clicking on editable field
+                    const target = window.event?.target as HTMLElement;
+                    if (target?.closest('.editable-title, .editable-description, .inline-edit-icon')) {
+                        return;
+                    }
                     dispatch({
                         type: 'SET_ACTIVE_TAB',
                         id: isOpen ? null : method.id,
                     })
-                }
+                }}
             >
                 <div className="details-wrapper">
                     {/* Icon picker */}
@@ -374,7 +379,7 @@ const PanelHeader: React.FC = () => {
                                 if (!method.iconEnable) {
                                     return;
                                 }
-                                e.stopPropagation();
+                                // e.stopPropagation();
                                 dispatch({
                                     type: 'SET_ICON_DROPDOWN',
                                     id:
@@ -467,7 +472,7 @@ const PanelHeader: React.FC = () => {
                                                 : ''
                                             }`}
                                         onClick={(e) => {
-                                            e.stopPropagation();
+                                            // e.stopPropagation();
                                             if (
                                                 canEditField(
                                                     method,
@@ -559,7 +564,7 @@ const PanelHeader: React.FC = () => {
                                             : undefined
                                     }
                                     onClick={(e) => {
-                                        e.stopPropagation();
+                                        // e.stopPropagation();
                                         if (
                                             canEditField(
                                                 method,
