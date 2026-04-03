@@ -25,7 +25,7 @@ import {
 	formatCurrency,
 } from '../services/commonFunction';
 import { pdf } from '@react-pdf/renderer';
-import InvoicePDF2 from '@/assets/template/invoicePdf/Invoice-1';
+import StoreInvoicePDF from '@/assets/template/invoicePdf/Invoice-1';
 
 const fetchOrderById = async (orderId: number) => {
   const res = await axios.get(
@@ -290,9 +290,9 @@ const Orders: React.FC = () => {
 								amount: formatCurrency(item.total),
 							}));
 							console.log('Order Object:', order);
-							// 3. Generate PDF blob (IMPORTANT: await)
+							// 3. Generate PDF blob
 							const blob = await pdf(
-								<InvoicePDF2
+								<StoreInvoicePDF
 									invoiceRows={invoiceRows}
 									order = {order}
 									colors={{

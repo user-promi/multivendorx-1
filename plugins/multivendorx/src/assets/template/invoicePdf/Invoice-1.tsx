@@ -20,7 +20,7 @@ interface Props {
 	};
 }
 
-const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors, order }) => {
+const StoreInvoicePDF: React.FC<Props> = ({ invoiceRows, colors, order }) => {
 	const rows: Row[] = invoiceRows || [
 		{
 			description: 'Website Design & Development',
@@ -112,16 +112,16 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors, order }) => {
 								}}
 							>
 								<Text
-									id="company-name"
+									id="store-name"
 									style={{ fontSize: 20, fontWeight: 600 }}
 								>
 									{order?.store_name || 'MarketKit Ltd.'}
 								</Text>
 								<Text id="address">
-									{order?.store_address || '123 Elm Street, Suite 400 · (555) 555-0123'}
+									{order?.store_address || '123 Elm Street, Suite 400'}
 								</Text>
-								<Text id="address">
-									{order?.store_phone || 'Modern products, simple invoices'}
+								<Text id="phone">
+									{order?.store_phone || '(555) 555-0123'}
 								</Text>
 							</View>
 						</View>{' '}
@@ -504,4 +504,4 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors, order }) => {
 	);
 };
 
-export default InvoicePDF2;
+export default StoreInvoicePDF;
