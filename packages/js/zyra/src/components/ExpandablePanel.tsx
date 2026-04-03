@@ -312,6 +312,7 @@ const PanelHeader: React.FC = () => {
         iconPicker,
         handleChange,
         commitEdit,
+        isWizardMode,
     } = usePanel();
 
     const { method, methodValue, isOpen, isOn, hasFields, icon, title, desc } =
@@ -323,29 +324,39 @@ const PanelHeader: React.FC = () => {
     const editDesc = state.editDesc;
     const iconDropdown = state.iconDropdown;
 
+    const showToggleIcon = (method.disableBtn && !method.isCustom) || 
+                          (isWizardMode && method.isWizardMode);
+
+    const shouldShowToggleButton = () => {
+        if (!showToggleIcon) return false;
+        
+        if (isWizardMode && method.isWizardMode) {
+            return hasFields;
+        }
+        return hasFields && isOn;
+    };
+
     return (
         <div className="expandable-header">
-            {method.disableBtn && !method.isCustom &&(
+            {showToggleIcon && shouldShowToggleButton() && (
                 <div className="toggle-icon">
-                    {hasFields && isOn && (
-                            <i
-                                className={`adminfont-${isOpen
-                                        ? 'keyboard-arrow-down'
-                                        : 'pagination-right-arrow'
-                                    }`}
-                                onClick={() =>
-                                    dispatch({
-                                        type: 'SET_ACTIVE_TAB',
-                                        id: isOpen ? null : method.id,
-                                    })
-                                }
-                            />
-                    )}
+                    <i
+                        className={`adminfont-${isOpen
+                                ? 'keyboard-arrow-down'
+                                : 'pagination-right-arrow'
+                            }`}
+                        onClick={() =>
+                            dispatch({
+                                type: 'SET_ACTIVE_TAB',
+                                id: isOpen ? null : method.id,
+                            })
+                        }
+                    />
                 </div>
             )}
 
             <div
-                className={`header-details ${method.disableBtn && !method.isCustom ? 'toggle' : ''}`}
+                className={`header-details ${showToggleIcon ? 'toggle' : ''}`}
                 onClick={() =>
                     dispatch({
                         type: 'SET_ACTIVE_TAB',
@@ -422,7 +433,7 @@ const PanelHeader: React.FC = () => {
                     <div className="expandable-header-info">
                         {/* Title (inline-editable for custom) */}
                         <div className="title-wrapper">
-                                {editing &&
+                            {editing &&
                                 editField === 'title' &&
                                 canEditField(
                                     method,
@@ -447,15 +458,14 @@ const PanelHeader: React.FC = () => {
                                     />
                                 ) : (
                                     <span
-                                        className={`title ${
-                                            canEditField(
-                                                method,
-                                                'title',
-                                                addNewTemplate
-                                            )
+                                        className={`title ${canEditField(
+                                            method,
+                                            'title',
+                                            addNewTemplate
+                                        )
                                                 ? 'editable-title'
                                                 : ''
-                                        }`}
+                                            }`}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             if (
@@ -492,24 +502,23 @@ const PanelHeader: React.FC = () => {
                                             'title',
                                             addNewTemplate
                                         ) && (
-                                            <i className="adminfont-edit inline-edit-icon" />
-                                        )}
+                                                <i className="adminfont-edit inline-edit-icon" />
+                                            )}
                                     </span>
                                 )}
 
-                                {/* Active/Inactive badge — predefined disableBtn methods only */}
-                                {method.disableBtn && !method.isCustom && (
-                                    <div className="panel-badges">
-                                        <div
-                                            className={`admin-badge ${
-                                                isOn ? 'green' : 'red'
+                            {/* Active/Inactive badge — predefined disableBtn methods only */}
+                            {method.disableBtn && !method.isCustom && (
+                                <div className="panel-badges">
+                                    <div
+                                        className={`admin-badge ${isOn ? 'green' : 'red'
                                             }`}
-                                        >
-                                            {isOn ? 'Active' : 'Inactive'}
-                                        </div>
+                                    >
+                                        {isOn ? 'Active' : 'Inactive'}
                                     </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
+                        </div>
 
                         {/* Description (inline-editable for custom) */}
                         <div className="panel-description">

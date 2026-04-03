@@ -175,6 +175,7 @@ a {
   align-items: center;
   gap: 0.25rem;
   width: fit-content;
+  white-space: nowrap;
 
   &.border {
     border: 0.063rem solid;
