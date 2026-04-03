@@ -92,7 +92,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors, order }) => {
 							<View
 								style={{
 									padding: 10,
-									backgroundColor: colors?.colorPrimary, // appLocalizer.settings_databases_value['invoices']['test']['invoice_template_builder']['colors']['colorPrimary']	
+									backgroundColor: colors?.colorPrimary,
 									fontSize: 25,
 									fontWeight: 600,
 									borderRadius: 4,
