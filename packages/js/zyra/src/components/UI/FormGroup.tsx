@@ -67,7 +67,7 @@ const FormGroup: React.FC<FormGroupProps> = ({
                 )}
 
                 {desc && (
-                    <div >
+                    <>
                         {/* Check if desc is a string or React node */}
                         {typeof desc === 'string' ? (
                             <div className="settings-metabox-description" dangerouslySetInnerHTML={{ __html: desc }} />
@@ -75,7 +75,7 @@ const FormGroup: React.FC<FormGroupProps> = ({
                             // Render React nodes directly
                            <div className="settings-metabox-description"> desc </div>
                         )}
-                    </div>
+                    </>
                 )}
             </div>
         </div>
