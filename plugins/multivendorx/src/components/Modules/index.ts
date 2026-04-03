@@ -291,6 +291,7 @@ export default {
 			proModule: true,
 			category: 'payment_management',
 			miniModule: true,
+			reloadOnChange: true,
 		},
 		{
 			id: 'stripe-marketplace',
@@ -302,6 +303,7 @@ export default {
 			proModule: true,
 			category: 'payment_management',
 			miniModule: true,
+			reloadOnChange: true,
 		},
 		// {
 		// 	id: 'mangopay',
