@@ -55,6 +55,7 @@ const AllProduct: React.FC = () => {
 		{ id: number; name: string }[]
 	>([]);
 	const [newProductId, setNewProductId] = useState<number | null>(null);
+	const [prevQuery, setPrevQuery] = useState<QueryProps>({});
 
 	const { modules } = useModules();
 	const navigate = useNavigate();
@@ -456,6 +457,28 @@ const AllProduct: React.FC = () => {
 		},
 	};
 
+
+	const handleQueryUpdate = (query: QueryProps) => {
+		const prevLang = prevQuery.languageFilter || 'all';
+		const prevStatus = prevQuery.categoryFilter || 'all';
+
+		const currLang = query.languageFilter || 'all';
+		const currStatus = query.categoryFilter || 'all';
+
+		let newQuery = { ...query };
+
+		if (currLang !== prevLang) {
+			delete newQuery.categoryFilter;
+		}
+
+		else if (currStatus !== prevStatus) {
+			delete newQuery.languageFilter;
+		}
+
+		setPrevQuery(newQuery);
+		doRefreshTableData(newQuery);
+	};
+
 	return (
 		<>
 			<NavigatorHeader
@@ -506,7 +529,7 @@ const AllProduct: React.FC = () => {
 				rows={rows}
 				totalRows={totalRows}
 				isLoading={isLoading}
-				onQueryUpdate={doRefreshTableData}
+				onQueryUpdate={handleQueryUpdate}
 				ids={rowIds}
 				categoryCounts={categoryCounts}
 				languageFilterCounts={languageCounts}
