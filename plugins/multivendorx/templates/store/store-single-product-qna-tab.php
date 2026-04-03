@@ -40,10 +40,11 @@ $login_url     = add_query_arg( 'redirect_to', $current_url, $myaccount_url );
         </button>
     </div>
     <!-- Success Message -->
-    <div id="qna-success-message" class="qna-notice" style="display:none;">
-        <?php echo esc_html__( 'Your question has been submitted successfully. It will appear once answered.', 'multivendorx' ); ?>
+    <div class="woocommerce-notices-wrapper" style="display:none;" id="qna-success-message">
+        <div class="woocommerce-message" role="alert">
+            <?php echo esc_html__( 'Your question has been submitted successfully. It will appear once answered.', 'multivendorx' ); ?>
+        </div>
     </div>
-
     <!-- Login Prompt Only -->
     <?php if ( ! is_user_logged_in() ) : ?>
         <div class="login-wrapper">

@@ -328,7 +328,7 @@ const PanelHeader: React.FC = () => {
                           (isWizardMode && method.isWizardMode);
 
     const shouldShowToggleButton = () => {
-        if (!showToggleIcon) return false;
+        // if (!showToggleIcon) return false;
         
         if (isWizardMode && method.isWizardMode) {
             return hasFields;
@@ -338,20 +338,23 @@ const PanelHeader: React.FC = () => {
 
     return (
         <div className="expandable-header">
-            {showToggleIcon && shouldShowToggleButton() && (
+           {showToggleIcon && (
                 <div className="toggle-icon">
-                    <i
-                        className={`adminfont-${isOpen
-                                ? 'keyboard-arrow-down'
-                                : 'pagination-right-arrow'
+                    {shouldShowToggleButton() && (
+                        <i
+                            className={`adminfont-${
+                                isOpen
+                                    ? 'keyboard-arrow-down'
+                                    : 'pagination-right-arrow'
                             }`}
-                        onClick={() =>
-                            dispatch({
-                                type: 'SET_ACTIVE_TAB',
-                                id: isOpen ? null : method.id,
-                            })
-                        }
-                    />
+                            onClick={() =>
+                                dispatch({
+                                    type: 'SET_ACTIVE_TAB',
+                                    id: isOpen ? null : method.id,
+                                })
+                            }
+                        />
+                    )}
                 </div>
             )}
 
