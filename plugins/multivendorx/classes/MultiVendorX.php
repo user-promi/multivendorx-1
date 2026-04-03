@@ -130,6 +130,8 @@ final class MultiVendorX {
     public function init_classes() {
         $this->container['current_user']    = wp_get_current_user();
         $this->container['current_user_id'] = get_current_user_id();
+        $admin = get_user_by('email', get_option('admin_email'));
+        $this->container['admin_user_id'] = $admin ? $admin->ID : 0;
 
         $this->container['util']            = new Utill();
         $this->container['setting']         = new Setting();

@@ -291,6 +291,7 @@ export default {
 			proModule: true,
 			category: 'payment_management',
 			miniModule: true,
+			reloadOnChange: true,
 		},
 		{
 			id: 'stripe-marketplace',
@@ -302,6 +303,7 @@ export default {
 			proModule: true,
 			category: 'payment_management',
 			miniModule: true,
+			reloadOnChange: true,
 		},
 		// {
 		// 	id: 'mangopay',
@@ -664,21 +666,6 @@ export default {
 					name: 'Advanced Custom Fields',
 					slug: 'advanced-custom-fields/acf.php',
 					link: 'https://wordpress.org/plugins/advanced-custom-fields/',
-				},
-			],
-			category: 'integration',
-		},
-		{
-			id: 'geo-my-wp',
-			name: __('GEOmyWP', 'multivendorx'),
-			desc: 'Lets stores pinpoint their location on an interactive map, making it easy for customers to discover nearby stores',
-			docLink: 'https://multivendorx.com/docs/knowledgebase/geo-my-wp',
-			proModule: true,
-			reqPluging: [
-				{
-					name: 'GEOmyWP',
-					slug: 'geo-my-wp/geo-my-wp.php',
-					link: 'https://wordpress.org/plugins/geo-my-wp/',
 				},
 			],
 			category: 'integration',

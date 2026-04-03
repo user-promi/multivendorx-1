@@ -75,9 +75,10 @@ class Dokan {
             );
 
             // add meta in store-meta table.
-            $store->update_meta( 'primary_email', $user->email );
-            $store->update_meta( 'emails', array( $user->email ) );
-
+            $store->update_meta( 'store_email', array(
+                'list'    => array( $user->email ),
+                'primary' => $user->email,
+            ) );
             if ( ! empty( $profile_settings['address'] ) && is_array( $profile_settings['address'] ) ) {
                 $address = $profile_settings['address'];
                 if ( ! empty( $address['street_1'] ) ) {

@@ -150,22 +150,6 @@ class Install {
             KEY `idx_type` (`transaction_type`)
         ) $collate;";
 
-        $sql_real_time_transaction = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['real_time_transaction'] . "` (
-            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-            `receiver_id` bigint(20) unsigned NOT NULL,
-            `order_id` bigint(20) unsigned DEFAULT NULL,
-            `commission_id` bigint(20) unsigned DEFAULT NULL,
-            `receiver_type`Text NOT NULL,
-            `amount` float(20,2) NOT NULL,
-            `currency` varchar(10) NOT NULL,
-            `narration` text NOT NULL,
-            `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (`id`),
-            KEY `idx_store` (`receiver_id`),
-            KEY `idx_order` (`order_id`),
-            KEY `idx_commission` (`commission_id`)
-        ) $collate;";
-
         $sql_qna = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['product_qna'] . "` (
             `id` INT NOT NULL AUTO_INCREMENT,
             `product_id` INT NOT NULL,
@@ -313,7 +297,6 @@ class Install {
         dbDelta( $sql_store_users );
         dbDelta( $sql_store_meta );
         dbDelta( $sql_transaction );
-        dbDelta( $sql_real_time_transaction );
         dbDelta( $sql_qna );
         dbDelta( $sql_report_abuse );
         dbDelta( $sql_shipping_zone_locations );
@@ -2319,8 +2302,10 @@ class Install {
             );
 
             // add meta in store-meta table.
-            $store->update_meta( 'primary_email', $user->email );
-            $store->update_meta( 'emails', array( $user->email ) );
+            $store->update_meta( 'store_email', array(
+                'list'    => array( $user->email ),
+                'primary' => $user->email,
+            ) );
 
             foreach ( $user_meta as $meta_key => $meta_values ) {
                 // report abuse table data insert.

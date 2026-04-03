@@ -357,77 +357,38 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					)}
 				</Column>
 				<Column grid={4}>
-					<Card
-						title={__('Subscription plan', 'multivendorx')}
-						action={
-							<ButtonInputUI
-								buttons={[
-									{
-										icon: 'vacation',
-										text: __('Change plan(p)', 'multivendorx'),
-										color: 'purple',
-										// onClick: () => setVacation(true),
-									},
-								]}
-							/>
-						}
-					>
-						<div className="plan-wrapper">
-							<div className="plan-details">
-								<div className="icon">
-									<i className="adminfont-verification5" />
-								</div>
-								<div className="name">Gold Plan (p)</div>
-							</div>
-
-							<div className="billing-wrapper">
-								<div className="item">
-									<b> Next billing: </b> Dec 15, 2024 (p)
-								</div>
-								<div className="item">
-									<b> Billing cycle: </b> Monthly (p)
-								</div>
-							</div>
-
-							<div className="plan-status">
-								<span className="admin-badge green">
-									Active(p)
-								</span>
-							</div>
-						</div>
-					</Card>
-
-					<Card title={__('Store overview', 'multivendorx')}>
-						<FormGroupWrapper>
-							{/* <FormGroup
-								row
-								label={__('Registered', 'multivendorx')}
-							>
-								{__('Mon 9:00 AM (pkoro)', 'multivendorx')}
-							</FormGroup> */}
-							{/* <FormGroup
-								row
-								label={__('Lifetime earnings', 'multivendorx')}
-							>
-								{formatCurrency(
-									storeData.commission?.commission_total ?? 0
-								)}
-							</FormGroup> */}
-							<FormGroup
-								row
-								label={__('Application', 'multivendorx')}
-							>
-								<a
-									className="sku"
-									onClick={() => {
-										navigate(
-											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=marketplace-compliance`
-										);
-									}}
+					<div className="store-details-remove-class">
+						<Card title={__('Store overview', 'multivendorx')}>
+							<FormGroupWrapper>
+								{/* <FormGroup
+									row
+									label={__('Registered', 'multivendorx')}
 								>
-									{__('View details', 'multivendorx')}
-								</a>
-							</FormGroup>
+									{__('Mon 9:00 AM (pkoro)', 'multivendorx')}
+								</FormGroup> */}
+								{/* <FormGroup
+									row
+									label={__('Lifetime earnings', 'multivendorx')}
+								>
+									{formatCurrency(
+										storeData.commission?.commission_total ?? 0
+									)}
+								</FormGroup> */}
+								<FormGroup
+									row
+									label={__('Application', 'multivendorx')}
+								>
+									<a
+										className="sku"
+										onClick={() => {
+											navigate(
+												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=compliance-records`
+											);
+										}}
+									>
+										{__('View details', 'multivendorx')}
+									</a>
+								</FormGroup>
 
 							<SectionUI
 								title={__('Settings', 'multivendorx')}

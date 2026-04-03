@@ -75,6 +75,10 @@ class Transaction {
         }
 
         // If (payment method is stripe or paypal marketplace and the check charges then this function return).
+        if ( $order->get_payment_method() == 'paypal-marketplace' || $order->get_payment_method() == 'stripe-marketplace' ) {
+            return;
+        }
+
         $disbursement_status = MultiVendorX()->setting->get_setting( 'disbursement_order_status' );
         if ( ! empty( $disbursement_status ) && in_array( $new_status, $disbursement_status, true ) ) {
             $commission_id = $order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'], true );

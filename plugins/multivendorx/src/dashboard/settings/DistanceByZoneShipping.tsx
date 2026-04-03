@@ -42,7 +42,6 @@ interface FormData {
 	minOrderCost: string;
 	flatRateCost: string;
 	flatRateClassCost: string;
-	flatRateCalculationType: string;
 }
 
 interface DistanceByZoneShippingProps {
@@ -69,7 +68,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		minOrderCost: '',
 		flatRateCost: '',
 		flatRateClassCost: '',
-		flatRateCalculationType: '',
 	});
 
 	useEffect(() => {
@@ -106,7 +104,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 			minOrderCost: '',
 			flatRateCost: '',
 			flatRateClassCost: '',
-			flatRateCalculationType: '',
 		});
 	};
 
@@ -151,7 +148,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					minOrderCost: '',
 					flatRateCost: '',
 					flatRateClassCost: '',
-					flatRateCalculationType: '',
 				};
 
 				if (data.method_id === 'local_pickup') {
@@ -162,8 +158,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 				} else if (data.method_id === 'flat_rate') {
 					form.flatRateCost = methodConfig.cost || '';
 					form.flatRateClassCost = methodConfig.class_cost || '';
-					form.flatRateCalculationType =
-						methodConfig.calculation_type;
 				}
 
 				setFormData(form);
@@ -231,7 +225,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					title: 'Flat Rate',
 					cost: formData.flatRateCost || '0',
 					class_cost: formData.flatRateClassCost || '',
-					calculation_type: formData.flatRateCalculationType,
 					description: 'Flat rate shipping method',
 				};
 			}
@@ -283,7 +276,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					minOrderCost: '',
 					flatRateCost: '',
 					flatRateClassCost: '',
-					flatRateCalculationType: '',
 				});
 				setEditingMethod(null);
 			}
@@ -626,36 +618,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 										type="info"
 										displayPosition="inline-notice"
 										message={__("Base cost: <b>$2.00</b> + Heavy item: <b>$8.00</b>  Total shipping: <b>$10.00</b> <br> Leave empty if you don't use shipping classes.", 'multivendorx')}
-									/>
-								</FormGroup>
-
-								<FormGroup  label={__('Calculation Type', 'multivendorx')}>
-									<ChoiceToggleUI
-										value={formData.flatRateCalculationType}
-										onChange={(val: string) =>
-											handleChange(
-												'flatRateCalculationType',
-												val
-											)
-										}
-										options={[
-											{
-												key: 'class',
-												value: 'class',
-												label: __(
-													'Per Class',
-													'multivendorx'
-												),
-											},
-											{
-												key: 'order',
-												value: 'order',
-												label: __(
-													'Per Order',
-													'multivendorx'
-												),
-											},
-										]}
 									/>
 								</FormGroup>
 							</>
