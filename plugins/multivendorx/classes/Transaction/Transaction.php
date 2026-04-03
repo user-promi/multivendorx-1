@@ -9,6 +9,7 @@ namespace MultiVendorX\Transaction;
 
 use MultiVendorX\Utill;
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\Payments\RealtimeGateway;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -75,7 +76,10 @@ class Transaction {
         }
 
         // If (payment method is stripe or paypal marketplace and the check charges then this function return).
-        if ( $order->get_payment_method() == 'paypal-marketplace' || $order->get_payment_method() == 'stripe-marketplace' ) {
+        $payment_method = $order->get_payment_method();
+        $gateways = WC()->payment_gateways()->payment_gateways();
+
+        if (isset($gateways[$payment_method]) && $gateways[$payment_method] instanceof RealtimeGateway) {
             return;
         }
 
