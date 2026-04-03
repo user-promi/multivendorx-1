@@ -272,13 +272,6 @@
 }
 
 
-.store-details-remove-class {
-    .divider-section {
-        padding: 0 !important;
-        margin-top: 0.313rem;
-    }
-}
-
 
 // plan wrapper
 .plan-wrapper {
@@ -367,4 +360,13 @@
         }
     }
 
+}
+
+
+
+// store staff
+.additional-owners-wrapper{
+    .info-item-wrapper{
+        margin-bottom: 0.75rem;
+    }
 }

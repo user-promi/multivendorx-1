@@ -94,6 +94,7 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
                                 }
                                 options={options}
                                 value={value}
+                                size={`${filter.size}rem`}
                                 placeholder={`Select ${filter.label}`}
                                 onChange={(selected) => {
                                     onFilterChange(filter.key, selected);

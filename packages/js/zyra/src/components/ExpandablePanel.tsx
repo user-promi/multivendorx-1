@@ -312,6 +312,7 @@ const PanelHeader: React.FC = () => {
         iconPicker,
         handleChange,
         commitEdit,
+        isWizardMode,
     } = usePanel();
 
     const { method, methodValue, isOpen, isOn, hasFields, icon, title, desc } =
@@ -323,35 +324,53 @@ const PanelHeader: React.FC = () => {
     const editDesc = state.editDesc;
     const iconDropdown = state.iconDropdown;
 
+    const showToggleIcon = (method.disableBtn && !method.isCustom) || 
+                          (isWizardMode && method.isWizardMode);
+
+    const shouldShowToggleButton = () => {
+        // if (!showToggleIcon) return false;
+        
+        if (isWizardMode && method.isWizardMode) {
+            return hasFields;
+        }
+        return hasFields && isOn;
+    };
+
     return (
         <div className="expandable-header">
-            {method.disableBtn && !method.isCustom &&(
+           {showToggleIcon && (
                 <div className="toggle-icon">
-                    {hasFields && isOn && (
-                            <i
-                                className={`adminfont-${isOpen
-                                        ? 'keyboard-arrow-down'
-                                        : 'pagination-right-arrow'
-                                    }`}
-                                onClick={() =>
-                                    dispatch({
-                                        type: 'SET_ACTIVE_TAB',
-                                        id: isOpen ? null : method.id,
-                                    })
-                                }
-                            />
+                    {shouldShowToggleButton() && (
+                        <i
+                            className={`adminfont-${
+                                isOpen
+                                    ? 'keyboard-arrow-down'
+                                    : 'pagination-right-arrow'
+                            }`}
+                            onClick={() =>
+                                dispatch({
+                                    type: 'SET_ACTIVE_TAB',
+                                    id: isOpen ? null : method.id,
+                                })
+                            }
+                        />
                     )}
                 </div>
             )}
 
             <div
-                className={`header-details ${method.disableBtn && !method.isCustom ? 'toggle' : ''}`}
-                onClick={() =>
+                className={`header-details ${showToggleIcon ? 'toggle' : ''}`}
+                onClick={() => {
+                    // Don't toggle if clicking on editable field
+                    const target = window.event?.target as HTMLElement;
+                    if (target?.closest('.editable-title, .editable-description, .inline-edit-icon')) {
+                        return;
+                    }
                     dispatch({
                         type: 'SET_ACTIVE_TAB',
                         id: isOpen ? null : method.id,
                     })
-                }
+                }}
             >
                 <div className="details-wrapper">
                     {/* Icon picker */}
@@ -363,7 +382,7 @@ const PanelHeader: React.FC = () => {
                                 if (!method.iconEnable) {
                                     return;
                                 }
-                                e.stopPropagation();
+                                // e.stopPropagation();
                                 dispatch({
                                     type: 'SET_ICON_DROPDOWN',
                                     id:
@@ -422,7 +441,7 @@ const PanelHeader: React.FC = () => {
                     <div className="expandable-header-info">
                         {/* Title (inline-editable for custom) */}
                         <div className="title-wrapper">
-                                {editing &&
+                            {editing &&
                                 editField === 'title' &&
                                 canEditField(
                                     method,
@@ -447,17 +466,16 @@ const PanelHeader: React.FC = () => {
                                     />
                                 ) : (
                                     <span
-                                        className={`title ${
-                                            canEditField(
-                                                method,
-                                                'title',
-                                                addNewTemplate
-                                            )
+                                        className={`title ${canEditField(
+                                            method,
+                                            'title',
+                                            addNewTemplate
+                                        )
                                                 ? 'editable-title'
                                                 : ''
-                                        }`}
+                                            }`}
                                         onClick={(e) => {
-                                            e.stopPropagation();
+                                            // e.stopPropagation();
                                             if (
                                                 canEditField(
                                                     method,
@@ -492,24 +510,23 @@ const PanelHeader: React.FC = () => {
                                             'title',
                                             addNewTemplate
                                         ) && (
-                                            <i className="adminfont-edit inline-edit-icon" />
-                                        )}
+                                                <i className="adminfont-edit inline-edit-icon" />
+                                            )}
                                     </span>
                                 )}
 
-                                {/* Active/Inactive badge — predefined disableBtn methods only */}
-                                {method.disableBtn && !method.isCustom && (
-                                    <div className="panel-badges">
-                                        <div
-                                            className={`admin-badge ${
-                                                isOn ? 'green' : 'red'
+                            {/* Active/Inactive badge — predefined disableBtn methods only */}
+                            {method.disableBtn && !method.isCustom && (
+                                <div className="panel-badges">
+                                    <div
+                                        className={`admin-badge ${isOn ? 'green' : 'red'
                                             }`}
-                                        >
-                                            {isOn ? 'Active' : 'Inactive'}
-                                        </div>
+                                    >
+                                        {isOn ? 'Active' : 'Inactive'}
                                     </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
+                        </div>
 
                         {/* Description (inline-editable for custom) */}
                         <div className="panel-description">
@@ -539,7 +556,7 @@ const PanelHeader: React.FC = () => {
                                     rows={3}
                                 />
                             ) : (
-                                <p
+                                <div
                                     className={
                                         canEditField(
                                             method,
@@ -550,7 +567,7 @@ const PanelHeader: React.FC = () => {
                                             : undefined
                                     }
                                     onClick={(e) => {
-                                        e.stopPropagation();
+                                        // e.stopPropagation();
                                         if (
                                             canEditField(
                                                 method,
@@ -591,7 +608,7 @@ const PanelHeader: React.FC = () => {
                                     ) && (
                                             <i className="adminfont-edit inline-edit-icon" />
                                         )}
-                                </p>
+                                </div>
                             )}
                         </div>
                     </div>

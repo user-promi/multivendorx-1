@@ -189,7 +189,7 @@ const EMAIL_BLOCK_GROUPS = [
                 icon: 't-letter-bold',
                 value: 'richtext',
                 label: 'Text',
-                placeholder: '<p>Enter your text content here</p>',
+                placeholder: 'Enter your text content here',
             },
             { id: 'image', icon: 'image', value: 'image', label: 'Image' },
             {

@@ -896,12 +896,12 @@ const AllCoupon: React.FC = () => {
 					/>
 				}
 			>
-				<p>
+				<div>
 					{__(
 						'Are you sure you want to delete this coupon?',
 						'multivendorx'
 					)}
-				</p>
+				</div>
 			</PopupUI>
 			<TableCard
 				headers={headers}

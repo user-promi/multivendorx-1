@@ -397,7 +397,7 @@ const ProductReport: React.FC = () => {
 	) => {
 		const params = {
 			search: query.searchValue,
-			orderby: 'date',
+			orderby: 'popularity',
 			order: query.order,
 			meta_key: 'multivendorx_store_id',
 			value: query?.filter?.store_id,

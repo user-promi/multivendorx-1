@@ -126,18 +126,18 @@ const StoreReport: React.FC = () => {
 				params: {
 					page: query.paged || 1,
 					row: query.per_page || 10,
-					filterStatus:
+					filter_status:
 						query.categoryFilter === 'all'
 							? ''
 							: query.categoryFilter,
-					searchValue: query.searchValue || '',
-					startDate: query.filter?.created_at?.startDate
+					search_value: query.searchValue || '',
+					start_date: query.filter?.created_at?.startDate
 						? formatLocalDate(query.filter.created_at.startDate)
 						: '',
-					endDate: query.filter?.created_at?.endDate
+					end_date: query.filter?.created_at?.endDate
 						? formatLocalDate(query.filter.created_at.endDate)
 						: '',
-					orderBy: query.orderby,
+					order_by: query.orderby,
 					order: query.order,
 				},
 			})

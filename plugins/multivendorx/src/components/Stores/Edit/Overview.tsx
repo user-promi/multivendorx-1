@@ -15,6 +15,7 @@ import {
 	FormGroup,
 	ButtonInputUI,
 	SectionUI,
+	ComponentStatusView,
 } from 'zyra';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './LatestReview';
@@ -321,12 +322,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								);
 							})
 						) : (
-							<p className="no-data">
-								{__(
-									'No recent products found.',
-									'multivendorx'
-								)}
-							</p>
+							<ComponentStatusView title={__( 'No recent products found.', 'multivendorx' )} />
 						)}
 					</Card>
 
@@ -361,47 +357,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					)}
 				</Column>
 				<Column grid={4}>
-					<Card
-						title={__('Subscription plan', 'multivendorx')}
-						action={
-							<ButtonInputUI
-								buttons={[
-									{
-										icon: 'vacation',
-										text: __('Change plan', 'multivendorx'),
-										color: 'purple',
-										// onClick: () => setVacation(true),
-									},
-								]}
-							/>
-						}
-					>
-						<div className="plan-wrapper">
-							<div className="plan-details">
-								<div className="icon">
-									<i className="adminfont-verification5" />
-								</div>
-								<div className="name">Gold Plan</div>
-							</div>
-
-							<div className="billing-wrapper">
-								<div className="item">
-									<b> Next billing: </b> Dec 15, 2024
-								</div>
-								<div className="item">
-									<b> Billing cycle: </b> Monthly
-								</div>
-							</div>
-
-							<div className="plan-status">
-								<span className="admin-badge green">
-									Active
-								</span>
-							</div>
-						</div>
-					</Card>
-
-					<div className="store-details-remove-class">
 						<Card title={__('Store overview', 'multivendorx')}>
 							<FormGroupWrapper>
 								{/* <FormGroup
@@ -426,7 +381,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 										className="sku"
 										onClick={() => {
 											navigate(
-												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=marketplace-compliance`
+												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=compliance-records`
 											);
 										}}
 									>
@@ -434,38 +389,37 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									</a>
 								</FormGroup>
 
-								<SectionUI
-									title={__('Settings', 'multivendorx')}
-								/>
-								{/* <FormGroup
-									row
-									label={__('Commission', 'multivendorx')}
-								>
-									{__('Category based', 'multivendorx')}
-								</FormGroup> */}
-								<FormGroup
-									row
-									label={__('Payment method', 'multivendorx')}
-								>
-									{storeData?.payment_method ? (
-										<div className="method">
-											<i className="adminfont-bank"></i>
-											{formatMethod(
-												storeData.payment_method
-											)}
-										</div>
-									) : (
-										<span>
-											{__(
-												'No payment method saved',
-												'multivendorx'
-											)}
-										</span>
-									)}
-								</FormGroup>
-							</FormGroupWrapper>
-						</Card>
-					</div>
+							<SectionUI
+								title={__('Settings', 'multivendorx')}
+							/>
+							{/* <FormGroup
+								row
+								label={__('Commission', 'multivendorx')}
+							>
+								{__('Category based', 'multivendorx')}
+							</FormGroup> */}
+							<FormGroup
+								row
+								label={__('Payment method', 'multivendorx')}
+							>
+								{storeData?.payment_method ? (
+									<div className="method">
+										<i className="adminfont-bank"></i>
+										{formatMethod(
+											storeData.payment_method
+										)}
+									</div>
+								) : (
+									<span>
+										{__(
+											'No payment method saved',
+											'multivendorx'
+										)}
+									</span>
+								)}
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
 					{applyFilters(
 						'multivendorx_store_edit_right_section',
 						null,

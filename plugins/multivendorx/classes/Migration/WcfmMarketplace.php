@@ -64,9 +64,10 @@ class WcfmMarketplace {
             );
 
             // add meta in store-meta table.
-            $store->update_meta( 'primary_email', $profile_settings['store_email'] );
-            $store->update_meta( 'emails', array( $profile_settings['store_email'] ) );
-
+            $store->update_meta( 'store_email', array(
+                'list'    => array( $profile_settings['store_email'] ),
+                'primary' => $profile_settings['store_email'],
+            ) );
             if ( ! empty( $profile_settings['address'] ) && is_array( $profile_settings['address'] ) ) {
                 $address = $profile_settings['address'];
                 if ( ! empty( $address['street_1'] ) ) {

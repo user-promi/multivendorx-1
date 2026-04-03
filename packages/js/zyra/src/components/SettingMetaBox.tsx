@@ -454,7 +454,7 @@ const createFieldRenderers = (): Record<
                     onChange={handleChange}
                     className={!isValid ? 'highlight' : ''}
                 />
-                <p>
+                <div>
                     Register your site with Google to obtain the{' '}
                     <a
                         href="https://www.google.com/recaptcha"
@@ -464,7 +464,7 @@ const createFieldRenderers = (): Record<
                         reCAPTCHA script
                     </a>
                     .
-                </p>
+                </div>
             </>
         );
     },

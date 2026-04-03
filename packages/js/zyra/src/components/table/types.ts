@@ -18,6 +18,7 @@ export type QueryProps = {
     paged?: number | string;
     filter?: Record<string, FilterValue>;
     categoryFilter?: string;
+    languageFilter?: string;
 };
 
 export type CategoryCount = {
@@ -219,6 +220,8 @@ export type TableCardProps = CommonTableProps & {
     filters?: RealtimeFilterConfig[];
     categoryCounts?: CategoryCount[];
     activeCategory?: string; // optional
+    languageFilterCounts?: CategoryCount[];
+    activeLanguageFilter?: string;
     onCategoryClick?: (value: string) => void;
     showColumnToggleIcon?: boolean;
     rowActions?: ActionItem[];
@@ -242,6 +245,7 @@ export type RealtimeFilterConfig = {
     key: string;
     label: string;
     type: 'select' | 'date';
+    size: number;
     multiple?: boolean;
     options?: FilterOption[];
 };

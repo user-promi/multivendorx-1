@@ -356,11 +356,20 @@ class Rest {
 
         if ( $store_id > 0 ) {
             $store = new Store( $store_id );
+            $phone_meta = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone']);
+
+            $formatted_phone = '';
+            if ( ! empty( $phone_meta['country_code'] ) && ! empty( $phone_meta['phone'] ) ) {
+                $formatted_phone = $phone_meta['country_code'] . '-' . $phone_meta['phone'];
+            }
 
             $response->data['store_id']   = $store_id;
             $response->data['store_name'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
             $response->data['store_slug'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
+            $response->data['store_address'] = (string) $store->get_meta( Utill::STORE_SETTINGS_KEYS['address'] );
+            $response->data['store_phone'] = $formatted_phone;
         }
+        $response->data['paid_status'] = $order->is_paid();
 
         $commission_id = (int) $order->get_meta( Utill::ORDER_META_SETTINGS['commission_id'] );
 
@@ -662,6 +671,7 @@ class Rest {
 		$store = new Store(
             get_post_meta( $product->get_id(), Utill::POST_META_SETTINGS['store_id'], true )
 		);
+        $store_email = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] );
 
 		if ( isset( $creating ) && true === $creating && 'pending' === $new_status ) {
 			do_action(
@@ -671,7 +681,7 @@ class Rest {
 					'admin_email'  => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
 					'admin_phone'  => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
 					'store_phone'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+					'store_email'  => $store_email['primary'] ?? '',
 					'product_name' => $product->get_name(),
 					'category'     => 'activity',
 				)
@@ -686,7 +696,7 @@ class Rest {
 					'admin_email'  => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
 					'admin_phone'  => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
 					'store_phone'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+					'store_email'  => $store_email['primary'] ?? '',
 					'product_name' => $product->get_name(),
 					'category'     => 'activity',
 				)
@@ -701,7 +711,7 @@ class Rest {
 					'admin_email'  => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
 					'admin_phone'  => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
 					'store_phone'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+					'store_email'  => $store_email['primary'] ?? '',
 					'product_name' => $product->get_name(),
 					'category'     => 'activity',
 				)

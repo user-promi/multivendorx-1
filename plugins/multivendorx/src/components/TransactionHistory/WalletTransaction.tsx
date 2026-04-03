@@ -295,6 +295,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			key: 'transactionType',
 			label: 'Transaction Type',
 			type: 'select',
+			size: 13,
 			options: [
 				{ label: __('Transaction Type', 'multivendorx'), value: '' },
 				{
@@ -317,6 +318,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			key: 'transactionStatus',
 			label: 'Financial Transactions',
 			type: 'select',
+			size: 14,
 			options: [
 				{
 					label: __('Financial Transactions', 'multivendorx'),
@@ -417,76 +419,47 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			<Container>
 				<Column fullHeight grid={6}>
 					<Card title="Recent payouts">
-						<div className="recent-payouts">
-							{recentDebits.length > 0 ? (
-								<>
-									{recentDebits.slice(0, 5).map((txn) => {
-										const hasPaymentMethod =
-											!!txn.payment_method;
-										// Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
-										const formattedPaymentMethod =
-											txn.payment_method
-												? txn.payment_method
-														.replace(/[-_]/g, ' ') // replace - and _ with spaces
-														.replace(
-															/\b\w/g,
-															(char) =>
-																char.toUpperCase()
-														) // capitalize each word
-												: __(
-														'No payment method configured',
-														'multivendorx'
-													);
+						{recentDebits.length > 0 ? (
+							<ItemListUI
+								className="mini-card"
+								items={recentDebits.slice(0, 5).map((txn) => {
+									const hasPaymentMethod = !!txn.payment_method;
+									// Format payment method nicely (e.g., "stripe-connect" -> "Stripe Connect")
+									const formattedPaymentMethod = txn.payment_method
+										? txn.payment_method
+											.replace(/[-_]/g, ' ') // replace - and _ with spaces
+											.replace(/\b\w/g, (char) => char.toUpperCase()) // capitalize each word
+										: __('No payment method configured', 'multivendorx');
 
-										return (
-											<ItemListUI
-												className="mini-card"
-												items={[
-													{
-														title: formattedPaymentMethod,
-														desc: formatDate(
-															txn.created_at
-														),
-														tags: (
-															<>
-																{hasPaymentMethod && (
-																	<div className="admin-badge green">
-																		{__(
-																			'Completed',
-																			'multivendorx'
-																		)}
-																	</div>
-																)}
-																<div
-																	className={`price ${
-																		parseFloat(
-																			txn.debit
-																		) < 0
-																			? 'color-red'
-																			: 'color-green'
-																	}`}
-																>
-																	{formatCurrency(
-																		txn.debit
-																	)}
-																</div>
-															</>
-														),
-													},
-												]}
-											/>
-										);
-									})}
-								</>
-							) : (
-								<ComponentStatusView
-									title={__(
-										'No recent payouts transactions found.',
-										'multivendorx'
-									)}
-								/>
-							)}
-						</div>
+									return {
+										title: formattedPaymentMethod,
+										desc: formatDate(txn.created_at),
+										tags: (
+											<>
+												{hasPaymentMethod && (
+													<div className="admin-badge green">
+														{__('Completed', 'multivendorx')}
+													</div>
+												)}
+												<div
+													className={`price ${
+														parseFloat(txn.debit) < 0
+															? 'color-red'
+															: 'color-green'
+													}`}
+												>
+													{formatCurrency(txn.debit)}
+												</div>
+											</>
+										),
+									};
+								})}
+							/>
+						) : (
+							<ComponentStatusView
+								title={__('No recent payouts transactions found.', 'multivendorx')}
+							/>
+						)}
 					</Card>
 				</Column>
 

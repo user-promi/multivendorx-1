@@ -691,7 +691,8 @@ const AddProduct = () => {
 						handleChange,
 						productFields,
 						typeFields,
-						modules
+						modules,
+						setFeaturedImage
 					)}
 				</Column>
 				<Column grid={3}>

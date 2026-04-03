@@ -2302,8 +2302,10 @@ class Install {
             );
 
             // add meta in store-meta table.
-            $store->update_meta( 'primary_email', $user->email );
-            $store->update_meta( 'emails', array( $user->email ) );
+            $store->update_meta( 'store_email', array(
+                'list'    => array( $user->email ),
+                'primary' => $user->email,
+            ) );
 
             foreach ( $user_meta as $meta_key => $meta_values ) {
                 // report abuse table data insert.
