@@ -147,7 +147,7 @@ class OrderManager {
 
             $store_order->save();
             $store = new Store( $store_id );
-
+            $store_email = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] );
             do_action(
                 'multivendorx_notify_new_order_store',
                 'new_order_store',
@@ -155,7 +155,7 @@ class OrderManager {
                     'admin_email'    => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                     'admin_phone'    => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                     'store_phone'    => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-                    'store_email'    => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                    'store_email'    => $store_email['primary'] ?? '',
                     'customer_email' => $store_order->get_billing_email(),
                     'customer_phone' => $store_order->get_billing_phone(),
                     'order_id'       => $store_order->get_id(),

@@ -328,7 +328,7 @@ class Transactions extends \WP_REST_Controller {
                     'withdrawal_released',
                     array(
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-                        'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                        'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] )['primary'] ?? '',
                         'category'    => 'activity',
                     )
                 );
@@ -338,7 +338,7 @@ class Transactions extends \WP_REST_Controller {
                     'withdrawl_rejected',
                     array(
                         'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-                        'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                        'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] )['primary'] ?? '',
                         'amount'      => $amount,
                         'category'    => 'activity',
                     )
@@ -391,7 +391,7 @@ class Transactions extends \WP_REST_Controller {
                     'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
                     'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
                     'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-                    'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+                    'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] )['primary'] ?? '',
                     'store_name'  => $store->get( 'name' ),
                     'amount'      => $amount,
                     'category'    => 'activity',

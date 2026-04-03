@@ -893,7 +893,7 @@ const EditStore = () => {
 												)}
 												<div className="desc store-info">
 													<i className="adminfont-mail"></i>
-													{data.primary_email}
+													{data?.store_email?.primary}
 												</div>
 											</div>
 

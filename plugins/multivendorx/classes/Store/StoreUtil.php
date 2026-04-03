@@ -742,7 +742,7 @@ class StoreUtil {
 			'storeDescription'   => $store_obj->get( 'description' ),
 			'storeSlug'          => $store_slug,
 			'storeId'            => $store_obj->get_id(),
-			'storeEmail'         => $store_obj->get_meta( 'primary_email' ),
+			'storeEmail'         => $store_obj->get_meta( 'store_email' )['primary'] ?? '',
 			'storePhone'         => $store_phone,
 			'facebook'           => $store_obj->get_meta( 'facebook' ),
 			'twitter'            => $store_obj->get_meta( 'twitter' ),

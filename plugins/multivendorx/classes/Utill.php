@@ -186,7 +186,7 @@ class Utill {
         'registration_data'            => 'multivendorx_registration_data',
         'request_withdrawal_amount'    => 'request_withdrawal_amount',
         'store_reject_note'            => 'store_reject_note',
-        'primary_email'                => 'primary_email',
+        'store_email'                  => 'store_email',
         'phone'                        => 'phone',
         'address'                      => 'address',
         'address_1'                    => 'address_1',
