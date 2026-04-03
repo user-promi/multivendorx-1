@@ -873,33 +873,33 @@
     //     }
     // }
 
-    .details-wrapper {
-        display: flex;
-        border: $border-light-small;
-        // border-radius: $border-radius-small;
-        padding: 1rem;
-        margin-bottom: 1.125rem;
-        gap: 1rem;
-        justify-content: space-between;
+    // .details-wrapper {
+    //     display: flex;
+    //     border: $border-light-small;
+    //     // border-radius: $border-radius-small;
+    //     padding: 1rem;
+    //     margin-bottom: 1.125rem;
+    //     gap: 1rem;
+    //     justify-content: space-between;
 
-        .details {
-            width: fit-content;
+    //     .details {
+    //         width: fit-content;
 
-            .name {
-                font-size: 0.95rem;
-                color: $sub-text-color;
-                font-weight: 500;
-            }
+    //         .name {
+    //             font-size: 0.95rem;
+    //             color: $sub-text-color;
+    //             font-weight: 500;
+    //         }
 
-            .value {
-                font-size: 1rem;
-                padding-top: 0.625rem;
-                display: flex;
-                font-weight: 500;
-                color: $text-color;
-            }
-        }
-    }
+    //         .value {
+    //             font-size: 1rem;
+    //             padding-top: 0.625rem;
+    //             display: flex;
+    //             font-weight: 500;
+    //             color: $text-color;
+    //         }
+    //     }
+    // }
 
     &.multi {
         padding: 0;

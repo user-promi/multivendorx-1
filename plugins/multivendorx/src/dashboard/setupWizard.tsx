@@ -178,35 +178,63 @@ const SetupWizard: React.FC = () => {
 			formFields: [
 				{
 					key: 'bank_transfer',
-					type: 'setup',
-					title: __('Bank Transfer', 'multivendorx'),
-					desc: __('Click to configure', 'multivendorx'),
-					hideCheckbox: true,
-					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+					type: 'button',
+					name: __('Setup', 'multivendorx'),
+					label: __('Bank Transfer', 'multivendorx'),
+					desc: __(
+						'Click to configure',
+						'multivendorx'
+					),
+					onClick: () => {
+						window.open(
+							`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`
+						);
+					},
 				},
 				{
 					key: 'paypal',
-					type: 'setup',
-					title: __('PayPal', 'multivendorx'),
-					desc: __('Click to configure', 'multivendorx'),
-					hideCheckbox: true,
-					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+					type: 'button',
+					name: __('Setup', 'multivendorx'),
+					label: __('PayPal', 'multivendorx'),
+					desc: __(
+						'Click to configure',
+						'multivendorx'
+					),
+					onClick: () => {
+						window.open(
+							`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`
+						);
+					},
 				},
 				{
 					key: 'stripe',
-					type: 'setup',
-					title: __('Stripe', 'multivendorx'),
-					desc: __('Click to configure', 'multivendorx'),
-					hideCheckbox: true,
-					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+					type: 'button',
+					name: __('Setup', 'multivendorx'),
+					label: __('Stripe', 'multivendorx'),
+					desc: __(
+						'Click to configure',
+						'multivendorx'
+					),
+					onClick: () => {
+						window.open(
+							`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`
+						);
+					},
 				},
 				{
 					key: 'other_methods',
-					type: 'setup',
-					title: __('Other Methods', 'multivendorx'),
-					desc: __('Click to configure', 'multivendorx'),
-					hideCheckbox: true,
-					link: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=store-commissions`,
+					type: 'button',
+					name: __('Setup', 'multivendorx'),
+					label: __('Other Methods', 'multivendorx'),
+					desc: __(
+						'Click to configure',
+						'multivendorx'
+					),
+					onClick: () => {
+						window.open(
+							`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`
+						);
+					},
 				},
 				{
 					key: 'wizardButtons',
