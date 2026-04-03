@@ -245,6 +245,7 @@ export type RealtimeFilterConfig = {
     key: string;
     label: string;
     type: 'select' | 'date';
+    size: number;
     multiple?: boolean;
     options?: FilterOption[];
 };

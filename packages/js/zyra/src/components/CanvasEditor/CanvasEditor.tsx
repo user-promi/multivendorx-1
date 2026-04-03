@@ -402,9 +402,9 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                                     }}
                                 >
                                     <i className={`adminfont-${item.icon}`} />
-                                    <p className="elements-name">
+                                    <div className="elements-name">
                                         {item.value}
-                                    </p>
+                                    </div>
                                 </div>
                             ))}
                         </ReactSortable>

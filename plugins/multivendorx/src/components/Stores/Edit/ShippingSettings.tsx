@@ -268,6 +268,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 												`Free Shipping Minimum Order Amount (${appLocalizer.currency_symbol})`,
 												'multivendorx'
 											)}
+											
 											htmlFor="free_shipping_amount"
 											desc={__(
 												"If the customer's order total exceeds this amount, shipping becomes free. Leave this field empty if you do not want to offer free shipping.",
@@ -277,6 +278,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 											<BasicInputUI
 												type="number"
 												name="free_shipping_amount"
+												size="12rem"
 												placeholder={__(
 													'NO Free Shipping',
 													'multivendorx'
@@ -309,6 +311,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 											<BasicInputUI
 												type="number"
 												name="local_pickup_cost"
+												size="12rem"
 												placeholder={__(
 													'0.00',
 													'multivendorx'

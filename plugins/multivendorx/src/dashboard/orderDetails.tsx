@@ -20,6 +20,7 @@ import {
 	TableRow,
 	ItemListUI,
 	PopupUI,
+	ComponentStatusView,
 } from 'zyra';
 import axios from 'axios';
 import { formatCurrency, formatDate } from '../services/commonFunction';
@@ -613,7 +614,7 @@ const OrderDetails: React.FC = () => {
 				title={__('Great!', 'multivendorx')}
 			/>
 			{!appLocalizer.edit_order_capability ? (
-				<p>No access to view the order</p>
+				<div>No access to view the order</div>
 			) : (
 				<>
 					<NavigatorHeader
@@ -709,10 +710,10 @@ const OrderDetails: React.FC = () => {
 										showMenu={false}
 									/>
 								) : (
-									<p>
+									<div>
 										{' '}
 										{__('No items found.', 'multivendorx')}
-									</p>
+									</div>
 								)}
 
 								<div className="coupons-calculation-wrapper">
@@ -1603,12 +1604,7 @@ const OrderDetails: React.FC = () => {
 												}
 											/>
 										) : (
-											<p>
-												{__(
-													'No order notes found.',
-													'multivendorx'
-												)}
-											</p>
+											<ComponentStatusView title={__( 'No order notes found.', 'multivendorx' )} />
 										)}
 									</Card>
 								)}
