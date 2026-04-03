@@ -15,6 +15,7 @@ import {
 	FormGroup,
 	ButtonInputUI,
 	SectionUI,
+	ComponentStatusView,
 } from 'zyra';
 import { formatCurrency } from '../../../services/commonFunction';
 import LatestReview from './LatestReview';
@@ -321,12 +322,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								);
 							})
 						) : (
-							<p className="no-data">
-								{__(
-									'No recent products found.',
-									'multivendorx'
-								)}
-							</p>
+							<ComponentStatusView title={__( 'No recent products found.', 'multivendorx' )} />
 						)}
 					</Card>
 
@@ -394,38 +390,37 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 									</a>
 								</FormGroup>
 
-								<SectionUI
-									title={__('Settings', 'multivendorx')}
-								/>
-								{/* <FormGroup
-									row
-									label={__('Commission', 'multivendorx')}
-								>
-									{__('Category based', 'multivendorx')}
-								</FormGroup> */}
-								<FormGroup
-									row
-									label={__('Payment method', 'multivendorx')}
-								>
-									{storeData?.payment_method ? (
-										<div className="method">
-											<i className="adminfont-bank"></i>
-											{formatMethod(
-												storeData.payment_method
-											)}
-										</div>
-									) : (
-										<span>
-											{__(
-												'No payment method saved',
-												'multivendorx'
-											)}
-										</span>
-									)}
-								</FormGroup>
-							</FormGroupWrapper>
-						</Card>
-					</div>
+							<SectionUI
+								title={__('Settings', 'multivendorx')}
+							/>
+							{/* <FormGroup
+								row
+								label={__('Commission', 'multivendorx')}
+							>
+								{__('Category based', 'multivendorx')}
+							</FormGroup> */}
+							<FormGroup
+								row
+								label={__('Payment method', 'multivendorx')}
+							>
+								{storeData?.payment_method ? (
+									<div className="method">
+										<i className="adminfont-bank"></i>
+										{formatMethod(
+											storeData.payment_method
+										)}
+									</div>
+								) : (
+									<span>
+										{__(
+											'No payment method saved',
+											'multivendorx'
+										)}
+									</span>
+								)}
+							</FormGroup>
+						</FormGroupWrapper>
+					</Card>
 					{applyFilters(
 						'multivendorx_store_edit_right_section',
 						null,

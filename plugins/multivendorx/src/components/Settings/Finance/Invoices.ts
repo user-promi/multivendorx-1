@@ -92,32 +92,7 @@ export default {
 			title: __('Invoice numbering', 'multivendorx'),
 		},
 		{
-			key: 'multivendorx_tinymce_api_section',
-			type: 'text',
-			row: false,
-			cols: 2,
-			label: __('Numbering format', 'multivendorx'),
-			desc: __(
-				'Choose how invoice numbers increase over time.',
-				'multivendorx'
-			),
-			moduleEnabled: 'invoice',
-			size: '25rem',
-			proSetting: true,
-		},
-		{
-			key: 'multivendorx_tinymce_api_section',
-			type: 'text',
-			cols: 2,
-			row: false,
-			label: __('Starting number', 'multivendorx'),
-			placeholder: 'The first invoice number (usually 1 or 1000)',
-			size: '25rem',
-			moduleEnabled: 'invoice',
-			proSetting: true,
-		},
-		{
-			key: 'multivendorx_tinymce_api_section',
+			key: 'invoice_prefix',
 			type: 'text',
 			row: false,
 			cols: 2,
@@ -129,13 +104,12 @@ export default {
 			proSetting: true,
 		},
 		{
-			key: 'multivendorx_tinymce_api_section',
-			type: 'text',
+			key: 'due_days',
+			type: 'number',
 			row: false,
 			cols: 2,
-			label: __('Preview: Next Invoice Number', 'multivendorx'),
-			placeholder:
-				'Text that appears before the number. Example results: INV-2026-0001, INV-MVX-0001',
+			label: __('Due days', 'multivendorx'),
+			placeholder: __('Enter the number of days until the invoice is due', 'multivendorx'),
 			size: '25rem',
 			moduleEnabled: 'invoice',
 			proSetting: true,
@@ -270,7 +244,7 @@ export default {
 			},
 		},
 		{
-			key: 'multivendorx_tinymce_api_section',
+			key: 'vat_tax_number',
 			type: 'number',
 			row: false,
 			cols: 2,
@@ -284,7 +258,7 @@ export default {
 			proSetting: true,
 		},
 		{
-			key: 'multivendorx_tinymce_api_section',
+			key: 'additional_tax_id',
 			type: 'number',
 			row: false,
 			cols: 2,
@@ -298,7 +272,7 @@ export default {
 			proSetting: true,
 		},
 		{
-			key: 'multivendorx_tinymce_api_section',
+			key: 'company_registration_number',
 			type: 'number',
 			row: false,
 			cols: 2,
@@ -312,7 +286,7 @@ export default {
 			proSetting: true,
 		},
 		{
-			key: 'multivendorx_tinymce_api_section',
+			key: 'trade_license_number',
 			type: 'number',
 			row: false,
 			cols: 2,

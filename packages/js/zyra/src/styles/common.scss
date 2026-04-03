@@ -80,7 +80,7 @@ a {
 #multivendorx-setup-wizard {
   font-family: Figtree, sans-serif;
 
-  p,
+  // p,
   h1,
   h2,
   h3,
@@ -91,9 +91,9 @@ a {
   }
   
   // for woocommerce notice
-  .notice p {
-    margin: 0.5em 0;
-  }
+  // .notice p {
+  //   margin: 0.5em 0;
+  // }
 
   .basic-input,
   .basic-select,
@@ -175,6 +175,7 @@ a {
   align-items: center;
   gap: 0.25rem;
   width: fit-content;
+  white-space: nowrap;
 
   &.border {
     border: 0.063rem solid;

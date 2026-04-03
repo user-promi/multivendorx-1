@@ -7,6 +7,7 @@ import {
 	FormGroupWrapper,
 	getApiLink,
 	InfoItem,
+	Notice,
 	PopupUI,
 	SectionUI,
 	TableCard,
@@ -331,10 +332,11 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							<SectionUI
 								title={__('Commission Notes', 'multivendorx')}
 							/>
-							<div className="settings-metabox-note">
-								<i className="adminfont-info"></i>
-								<p>{commissionData?.commission_note}</p>
-							</div>
+							<Notice
+								type="info"
+								displayPosition="inline-notice"
+								message={commissionData?.commission_note}
+							/>
 						</>
 					)}
 				</div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Document, Page, View, Text } from '@react-pdf/renderer';
+import { formatCurrency, formatDate } from '@/services/commonFunction';
 
 interface Row {
 	description: string;
@@ -10,7 +11,8 @@ interface Row {
 
 interface Props {
 	invoiceRows?: Row[];
-	colors: {
+	order?: any;
+	colors?: {
 		colorPrimary: string;
 		colorSecondary: string;
 		colorAccent: string;
@@ -18,7 +20,7 @@ interface Props {
 	};
 }
 
-const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
+const StoreInvoicePDF: React.FC<Props> = ({ invoiceRows, colors, order }) => {
 	const rows: Row[] = invoiceRows || [
 		{
 			description: 'Website Design & Development',
@@ -40,6 +42,17 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 		},
 		{ description: 'Discount', qty: ' ', price: ' ', amount: '−$150.00' },
 	];
+
+	const subtotal = (order?.total || 0) - (order?.total_tax || 0) - (order?.shipping_total || 0);
+	const dueDays = appLocalizer.settings_databases_value?.invoices?.due_days;
+
+	const calculateDueDate = (dateString?: string, days?: number) => {
+		if (!dateString || !days) return null;
+
+		const date = new Date(dateString);
+		date.setDate(date.getDate() + days);
+		return formatDate(date.toISOString());
+	};
 
 	return (
 		<Document>
@@ -79,7 +92,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 							<View
 								style={{
 									padding: 10,
-									backgroundColor: colors.colorPrimary,
+									backgroundColor: colors?.colorPrimary,
 									fontSize: 25,
 									fontWeight: 600,
 									borderRadius: 4,
@@ -99,16 +112,16 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 								}}
 							>
 								<Text
-									id="company-name"
+									id="store-name"
 									style={{ fontSize: 20, fontWeight: 600 }}
 								>
-									MarketKit Ltd.
+									{order?.store_name || 'MarketKit Ltd.'}
 								</Text>
 								<Text id="address">
-									Modern products, simple invoices
+									{order?.store_address || '123 Elm Street, Suite 400'}
 								</Text>
-								<Text id="address">
-									123 Elm Street, Suite 400 · (555) 555-0123
+								<Text id="phone">
+									{order?.store_phone || '(555) 555-0123'}
 								</Text>
 							</View>
 						</View>{' '}
@@ -135,23 +148,25 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 							<Text style={{ fontSize: 12, color: '#555' }}>
 								Invoice #:{' '}
 								<Text style={{ fontWeight: 600 }}>
-									INV-2025-0091
+									{appLocalizer.settings_databases_value?.invoices?.['invoice_prefix'] || 'INV-2025-'}{order?.id || '091'}
 								</Text>
 							</Text>
 
 							<Text style={{ fontSize: 12, color: '#555' }}>
 								Issued:{' '}
 								<Text style={{ fontWeight: 600 }}>
-									October 9, 2025
+									{order?.date_created ? formatDate(order.date_created) : 'October 9, 2025'}
 								</Text>
 							</Text>
 
-							<Text style={{ fontSize: 12, color: '#555' }}>
-								Due:{' '}
-								<Text style={{ fontWeight: 600 }}>
-									October 23, 2025
+							{dueDays ? (
+								<Text style={{ fontSize: 12, color: '#555' }}>
+									Due:{' '}
+									<Text style={{ fontWeight: 600 }}>
+										{calculateDueDate(order?.date_created, Number(dueDays))}
+									</Text>
 								</Text>
-							</Text>
+							) : null}
 
 							<View
 								style={{
@@ -168,7 +183,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 										color: '#92400e',
 									}}
 								>
-									Unpaid
+									{order?.paid_status == true ? 'Paid' : 'Unpaid'}
 								</Text>
 							</View>
 						</View>{' '}
@@ -202,23 +217,22 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 							}}
 						>
 							<Text style={{ fontSize: '12px' }}>Bill To</Text>
-							<Text style={{ fontSize: '12px' }}>
-								Acme Corporation
+							<Text style={{ fontSize: '10px' }}>
+								{order?.billing?.first_name && order?.billing?.last_name ? `${order.billing.first_name} ${order.billing.last_name}` : 'Jane Doe'}
 							</Text>
 							<Text style={{ fontSize: '10px' }}>
-								Attn: Jane Doe
+								{order?.billing?.address_1 || '456 Oak Avenue'}
 							</Text>
 							<Text style={{ fontSize: '10px' }}>
-								456 Oak Avenue
+								{order?.billing?.city && order?.billing?.state && order?.billing?.postcode
+									? `${order.billing.city}, ${order.billing.state} ${order.billing.postcode}`
+									: 'Springfield, IL 62701'}
 							</Text>
 							<Text style={{ fontSize: '10px' }}>
-								Springfield, IL 62701
+								{order?.billing?.email || 'jane.doe@acme.co'}
 							</Text>
 							<Text style={{ fontSize: '10px' }}>
-								jane.doe@acme.co
-							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								(555) 987-6543
+								{order?.billing?.phone || '(555) 987-6543'}
 							</Text>
 						</View>
 
@@ -236,29 +250,13 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 							}}
 						>
 							<Text style={{ fontSize: '12px' }}>Ship To</Text>
-							<Text style={{ fontSize: '12px' }}>
-								Acme Warehouse
+							<Text style={{ fontSize: '10px' }}>
+								{order?.shipping?.address_1 || '789 Distribution Road'}
 							</Text>
 							<Text style={{ fontSize: '10px' }}>
-								789 Distribution Road
-							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								Springfield, IL 62702
-							</Text>
-
-							<Text
-								style={{ fontSize: '12px', marginTop: '10px' }}
-							>
-								Payment
-							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								Bank: First Modern Bank
-							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								Account: 0123456789
-							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								IBAN: US00FM123456
+								{order?.shipping?.city && order?.shipping?.state && order?.shipping?.postcode
+									? `${order.shipping.city}, ${order.shipping.state} ${order.shipping.postcode}`
+									: 'Springfield, IL 62702'}
 							</Text>
 						</View>
 					</View>
@@ -406,7 +404,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 										marginLeft: '10px',
 									}}
 								>
-									$1,000.00
+									{subtotal? formatCurrency(subtotal) : '$4,500.00'}
 								</Text>
 							</View>
 							<View
@@ -418,7 +416,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 								}}
 							>
 								<Text style={{ fontSize: '12px' }}>
-									Sales Tax (8.25%):
+									Total Tax :
 								</Text>
 								<Text
 									style={{
@@ -427,7 +425,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 										marginLeft: '10px',
 									}}
 								>
-									$701.25
+									{order?.total_tax ? formatCurrency(order?.total_tax) : '$1,000.00'}
 								</Text>
 							</View>
 							<View
@@ -448,7 +446,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 										marginLeft: '10px',
 									}}
 								>
-									$0.00
+									{order?.shipping_total ? formatCurrency(order?.shipping_total) : '$0.00'}
 								</Text>
 							</View>
 							<View
@@ -464,7 +462,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 										fontWeight: 'bold',
 									}}
 								>
-									Total Due:
+									Total :
 								</Text>
 								<Text
 									style={{
@@ -473,7 +471,7 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 										marginLeft: '10px',
 									}}
 								>
-									$9,201.25
+									{order?.total ? formatCurrency(order?.total) : '$5,500.00'}
 								</Text>
 							</View>
 						</View>
@@ -506,4 +504,4 @@ const InvoicePDF2: React.FC<Props> = ({ invoiceRows, colors }) => {
 	);
 };
 
-export default InvoicePDF2;
+export default StoreInvoicePDF;

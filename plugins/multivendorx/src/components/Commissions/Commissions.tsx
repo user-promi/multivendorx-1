@@ -79,6 +79,7 @@ const Commission: React.FC = () => {
 	const headers = {
 		id: {
 			label: __('ID', 'multivendorx'),
+			type: 'id',
 			isSortable: true,
 			render: (row) => (
 				<span
@@ -86,6 +87,7 @@ const Commission: React.FC = () => {
 						setSelectedCommissionId(row.id ?? null);
 						setViewCommission(true);
 					}}
+					className="link-item"
 				>
 					#{row.id}
 				</span>
