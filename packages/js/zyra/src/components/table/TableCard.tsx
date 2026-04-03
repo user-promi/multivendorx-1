@@ -240,8 +240,9 @@ const TableCard: React.FC<TableCardProps> = ({
                 (showMenu && showColumnToggleIcon)) && (
                     <div className="admin-top-filter">
                         {/* Category Filter - Integrated directly (was CategoryFilter component) */}
+                        <div className="filter-wrapper">
                         {visibleCategories.length > 0 && (
-                            <div className="filter-wrapper">
+                            <div className="filter category">
                                 {visibleCategories.map(
                                     ({ label, value, count }) => (
                                         <div
@@ -262,7 +263,7 @@ const TableCard: React.FC<TableCardProps> = ({
                             </div>
                         )}
                         {visibleLanguages.length > 0 && (
-                            <div className="filter-wrapper language-filter">
+                            <div className="filter language">
                                 {visibleLanguages.map(({ label, value, count }) => (
                                     <div
                                         key={value}
@@ -277,6 +278,7 @@ const TableCard: React.FC<TableCardProps> = ({
                                 ))}
                             </div>
                         )}
+                        </div>
                         <div className="table-action-wrapper">
                             {buttonActions && (
                                 <ButtonActions
