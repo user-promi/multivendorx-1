@@ -95,7 +95,7 @@ const PendingWithdrawal: React.FC<object> = () => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged,
-					per_page: query.per_page,
+					row: query.per_page,
 					pending_withdraw: true,
 				},
 			})

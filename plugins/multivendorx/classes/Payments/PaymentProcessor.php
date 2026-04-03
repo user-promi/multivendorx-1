@@ -117,7 +117,7 @@ class PaymentProcessor {
 			if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
 				MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 			}
-
+			$store_email = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] );
 			do_action(
                 'multivendorx_notify_payout_failed',
                 'payout_failed',
@@ -125,7 +125,7 @@ class PaymentProcessor {
 					'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
 					'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
 					'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+					'store_email' => $store_email['primary'] ?? '',
 					'store_name'  => $store->get( 'name' ),
 					'amount'      => $amount,
 					'category'    => 'activity',
@@ -186,11 +186,11 @@ class PaymentProcessor {
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
 			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
+		$store_email = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] );
 
 		if ( $result && 'success' === $status ) {
 			$withdrawals_count = (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] );
 			$store->update_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'], $withdrawals_count + 1 );
-
 			do_action(
                 'multivendorx_notify_payout_received',
                 'payout_received',
@@ -198,7 +198,7 @@ class PaymentProcessor {
 					'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
 					'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
 					'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+					'store_email' => $store_email['primary'] ?? '',
 					'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
 					'order_id'    => $order_id,
 					'amount'      => $amount,
@@ -243,7 +243,7 @@ class PaymentProcessor {
 					'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
 					'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
 					'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['primary_email'] ),
+					'store_email' => $store_email['primary'] ?? '',
 					'store_name'  => $store->get( 'name' ),
 					'amount'      => $amount,
 					'category'    => 'activity',
