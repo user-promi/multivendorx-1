@@ -211,6 +211,7 @@ export type TableCardProps = CommonTableProps & {
     onBulkActionApply?: (action: string, selectedIds: number[]) => void;
     search?: {
         placeholder?: string;
+        size?: number;
         options?: {
             label: string;
             value: string;

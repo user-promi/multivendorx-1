@@ -571,6 +571,7 @@ const Orders: React.FC = () => {
 				onQueryUpdate={doRefreshTableData}
 				search={{
 					placeholder: __('Search...', 'multivendorx'),
+					size: 10,
 					options: [
 						{ label: __('All', 'multivendorx'), value: 'all' },
 						{

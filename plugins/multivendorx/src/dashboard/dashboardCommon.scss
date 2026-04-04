@@ -859,7 +859,7 @@ body.dark {
         margin: 2rem 0;
 
         .product {
-            width: 32%;
+            width: calc(33.33% - 0.332rem);
             box-sizing: border-box;
             padding: 1rem;
             border-radius: $border-radius-small;
@@ -1414,3 +1414,17 @@ body.dark {
 }
 
 // media library end
+
+
+// wordpress image uploader start
+.screen-reader-text, .screen-reader-text span, .ui-helper-hidden-accessible{
+    border: 0;
+    clip-path: inset(50%);
+    height: 0.063rem;
+    margin: -0.063rem;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 0.063rem;
+    word-wrap: normal !important;
+} // wordpress image uploader end
