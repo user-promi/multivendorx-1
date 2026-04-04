@@ -910,150 +910,28 @@ class Install {
         );
         update_option( Utill::MULTIVENDORX_SETTINGS['privacy'], $privacy_settings );
 
-        // $registration_form = array(
-        // array(
-        // 'id'    => 1,
-        // 'type'  => 'title',
-        // 'label' => 'Registration Form',
-        // ),
-        // array(
-        // 'id'          => 2,
-        // 'type'        => 'text',
-        // 'label'       => 'Enter your store name',
-        // 'required'    => false,
-        // 'name'        => 'name',
-        // 'placeholder' => 'text',
-        // 'readonly'    => true,
-        // ),
-        // array(
-        // 'id'    => 3,
-        // 'type'  => 'button',
-        // 'label' => 'Submit',
-        // 'text'  => 'Submit',
-        // 'name'  => 'submit',
-        // ),
-        // );
-
         $registration_form = array(
-            array(
-                'id'    => 1,
-                'type'  => 'title',
-                'label' => 'Apply for Wholesale Access',
-            ),
-            array(
-                'id'          => 2,
-                'type'        => 'text',
-                'label'       => 'Business Name',
-                'required'    => false,
-                'name'        => 'name',
-                'placeholder' => 'enter business Name',
-                'readonly'    => true,
-            ),
-            array(
-                'id'          => 3,
-                'type'        => 'text',
-                'label'       => 'Business Type ',
-                'required'    => false,
-                'name'        => 'name',
-                'placeholder' => 'enter business Type ',
-                'readonly'    => true,
-            ),
-            array(
-                'id'          => 4,
-                'type'        => 'text',
-                'label'       => 'GST / Tax Number',
-                'required'    => false,
-                'name'        => 'name',
-                'placeholder' => 'enter GST / Tax Number',
-                'readonly'    => true,
-            ),
-            array(
-                'id'       => 5,
-                'type'     => 'multi-select',
-                'label'    => 'Expected Monthly Volume',
-                'required' => false,
-                'name'     => 'name',
-                'options'  => array(
-                    array(
-						'id'    => '1',
-						'label' => 'Below ₹50,000',
-						'value' => 'below_50000',
-					),
-                    array(
-						'id'    => '2',
-						'label' => '₹50,000 – ₹2,00,000',
-						'value' => '50000_200000',
-					),
-                    array(
-						'id'    => '3',
-						'label' => '₹2,00,000 – ₹5,00,000',
-						'value' => '200000_500000',
-					),
-                    array(
-						'id'    => '4',
-						'label' => '₹5,00,000 – ₹10,00,000',
-						'value' => '500000_1000000',
-					),
-                    array(
-						'id'    => '5',
-						'label' => 'Above ₹10,00,000',
-						'value' => 'above_1000000',
-					),
-                ),
-            ),
-            array(
-                'id'          => 6,
-                'type'        => 'textarea',
-                'label'       => 'Business Address',
-                'required'    => false,
-                'name'        => 'name',
-                'placeholder' => 'enter Business Address',
-                'readonly'    => true,
-            ),
-            array(
-                'id'          => 7,
-                'type'        => 'textarea',
-                'label'       => 'Why do you want wholesale access?',
-                'required'    => false,
-                'name'        => 'name',
-                'placeholder' => 'enter Why do you want wholesale access?',
-                'readonly'    => true,
-            ),
-            array(
-                'id'       => 8,
-                'type'     => 'attachment',
-                'label'    => 'Business Registration Certificate',
-                'required' => false,
-                'name'     => 'name',
-            ),
-            array(
-                'id'       => 9,
-                'type'     => 'attachment',
-                'label'    => 'Tax Identification Document ',
-                'required' => false,
-                'name'     => 'name',
-            ),
-            array(
-                'id'       => 10,
-                'type'     => 'attachment',
-                'label'    => 'Address Proof',
-                'required' => false,
-                'name'     => 'name',
-            ),
-            array(
-                'id'       => 11,
-                'type'     => 'attachment',
-                'label'    => 'Identity Proof (Owner / Authorized)',
-                'required' => false,
-                'name'     => 'name',
-            ),
-            array(
-                'id'    => 12,
-                'type'  => 'button',
-                'label' => 'Submit',
-                'text'  => 'Submit',
-                'name'  => 'submit',
-            ),
+        array(
+        'id'    => 1,
+        'type'  => 'title',
+        'label' => 'Registration Form',
+        ),
+        array(
+        'id'          => 2,
+        'type'        => 'text',
+        'label'       => 'Enter your store name',
+        'required'    => false,
+        'name'        => 'name',
+        'placeholder' => 'text',
+        'readonly'    => true,
+        ),
+        array(
+        'id'    => 3,
+        'type'  => 'button',
+        'label' => 'Submit',
+        'text'  => 'Submit',
+        'name'  => 'submit',
+        ),
         );
 
         $registration_from_settings = array(
