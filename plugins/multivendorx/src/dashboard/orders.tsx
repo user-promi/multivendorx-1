@@ -25,7 +25,7 @@ import {
 	formatCurrency,
 } from '../services/commonFunction';
 import { pdf } from '@react-pdf/renderer';
-import StoreInvoicePDF from '@/assets/template/invoicePdf/Invoice-1';
+// import StoreInvoicePDF from '@/assets/template/invoicePdf/Invoice-1';
 
 const fetchOrderById = async (orderId: number) => {
   const res = await axios.get(
@@ -299,16 +299,16 @@ const Orders: React.FC = () => {
 							console.log('Order Object:', order);
 							// 3. Generate PDF blob
 							const blob = await pdf(
-								<StoreInvoicePDF
-									invoiceRows={invoiceRows}
-									order = {order}
-									colors={{
-										colorPrimary: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorPrimary || '#000',
-										colorSecondary: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorSecondary || '#ccc',
-										colorAccent: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorAccent || '#000',
-										colorSupport: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorSupport || '#999',
-									}}
-								/>
+								// <StoreInvoicePDF
+								// 	invoiceRows={invoiceRows}
+								// 	order = {order}
+								// 	colors={{
+								// 		colorPrimary: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorPrimary || '#000',
+								// 		colorSecondary: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorSecondary || '#ccc',
+								// 		colorAccent: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorAccent || '#000',
+								// 		colorSupport: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorSupport || '#999',
+								// 	}}
+								// />
 							).toBlob();
 
 							// 4. Create download link
