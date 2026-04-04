@@ -44,7 +44,7 @@ export default {
 			type: 'choice-toggle',
 			label: __('Chat platform integration', 'multivendorx'),
 			desc: __(
-				'Select the chat provider you want to connect with your store.',
+				'Select the chat provider you want to connect with your store. For step-by-step setup instructions, please check our documentation.',
 				'multivendorx'
 			),
 
@@ -82,7 +82,7 @@ export default {
 			type: 'text',
 			label: __('TalkJS App ID', 'multivendorx'),
 			desc: __(
-				'Enter the App ID provided in your TalkJS dashboard.',
+				'Enter your TalkJS App ID. Go to the <a href="https://talkjs.com/dashboard" target="_blank">TalkJS dashboard</a> → select your project → copy the App ID.',
 				'multivendorx'
 			),
 			dependent: {
@@ -98,7 +98,7 @@ export default {
 			type: 'text',
 			label: __('TalkJS App Secret', 'multivendorx'),
 			desc: __(
-				'Enter the App Secret from your TalkJS dashboard. You can retrieve both the App ID and Secret from your TalkJS account settings.',
+				'Enter the App Secret for the selected TalkJS project. Copy it from the project settings in your <a href="https://talkjs.com/dashboard" target="_blank">TalkJS dashboard.</a>',
 				'multivendorx'
 			),
 			dependent: {
