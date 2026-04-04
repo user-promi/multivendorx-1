@@ -1015,52 +1015,8 @@ $index: 1;
         }
       }
     }
-  }
-
-  .inline-actions {
-    display: flex;
-    gap: 0.125rem;
-
-    .adminfont-delete {
-      color: $accent-color;
-    }
-  }
+  }  
 }
-
-// tooltip style start
-// .tooltip-btn {
-//   position: relative;
-//   display: inline-block;
-//   cursor: pointer;
-
-//   .tooltip {
-//     position: absolute;
-//     top: -1.125rem;
-//     left: -100%;
-//     width: 6rem;
-//     text-align: center;
-//     display: none;
-//     transition: all 0.4s ease;
-//   }
-
-//   &:hover {
-//     .tooltip {
-//       display: block;
-//       background-color: rgb(46 46 46);
-//       color: #fff;
-//       text-align: center;
-//       padding: 0.313rem;
-//       border-radius: 0.375rem;
-//       position: absolute;
-//       z-index: 1;
-//       font-size: 0.8rem;
-//       inset: 0 auto auto 0;
-//       transform: translate(-2rem, -2.313rem);
-//     }
-//   }
-// }
-
-// tooltip style end
 
 // rating wrapper start
 .rating-wrapper {
