@@ -218,7 +218,7 @@ export default {
 							description:
 								'Display products/listings from a specific store using Store ID or Store Slug.',
 							accepted: 'store_id, store_slug',
-							default: '[marketplace_products store_id="1"]',
+							default: '[marketplace_products storeId="1"]',
 						},
 
 						{
