@@ -191,14 +191,6 @@ export default {
 					),
 					arguments: [
 						{
-							attribute: 'orderby',
-							description: 'Decide how the store list is sorted.',
-							accepted:
-								'name, category, registered (Default: registered)',
-							default:
-								'[marketplace_stores orderby="registered"]',
-						},
-						{
 							attribute: 'order',
 							description: 'Set sorting direction.',
 							accepted: 'ASC, DESC (Default: ASC)',
@@ -214,7 +206,7 @@ export default {
 				},
 				{
 					key: 'marketplace_products',
-					label: '[marketplace_listings]',
+					label: '[marketplace_products]',
 					name: 'Show store listings',
 					desc: __(
 						'Displays all listings added by a store. Use this to create store-specific listings listing pages.',
@@ -222,27 +214,19 @@ export default {
 					),
 					arguments: [
 						{
-							attribute: 'store',
+							attribute: 'storeId',
 							description:
 								'Display products/listings from a specific store using Store ID or Store Slug.',
 							accepted: 'store_id, store_slug',
-							default: '[marketplace_products store_id="1"]',
+							default: '[marketplace_products storeId="1"]',
 						},
 
 						{
-							attribute: 'perpage',
+							attribute: 'perPage',
 							description:
 								'Set how many products/listings appear per page.',
 							accepted: 'Any number (Default = 12)',
 							default: '[marketplace_products perPage="12"]',
-						},
-
-						{
-							attribute: 'columns',
-							description:
-								'Decide how many products/listings appear in one row.',
-							accepted: 'Any number (Default = 4)',
-							default: '[marketplace_products columns="4"]',
 						},
 
 						{
@@ -299,19 +283,11 @@ export default {
 					),
 					arguments: [
 						{
-							attribute: 'store_id',
+							attribute: 'storeId',
 							description:
 								'Display coupons from a specific store using the store ID.',
 							accepted: 'Store ID',
-							default: '[marketplace-coupons store_id="1"]',
-						},
-						{
-							attribute: 'store_slug',
-							description:
-								'Display coupons from a specific store using the store slug.',
-							accepted: 'Store slug',
-							default:
-								'[marketplace-coupons store_slug="john-store"]',
+							default: '[marketplace-coupons storeId="1"]',
 						},
 						{
 							attribute: 'perPage',
