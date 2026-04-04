@@ -117,20 +117,12 @@ class PaymentProcessor {
 			if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
 				MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 			}
-			$store_email = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] );
-			do_action(
-                'multivendorx_notify_payout_failed',
-                'payout_failed',
-                array(
-					'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-					'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-					'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email' => $store_email['primary'] ?? '',
-					'store_name'  => $store->get( 'name' ),
-					'amount'      => $amount,
-					'category'    => 'activity',
-                )
-			);
+
+			MultiVendorX()->notifications->send_notification_helper('payout_failed', $store, null, [
+				'store_name'  => $store->get( 'name' ),
+				'amount'      => $amount,
+				'category'    => 'activity',
+			]);
 			return;
 		}
 
@@ -186,26 +178,17 @@ class PaymentProcessor {
 		if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
 			MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 		}
-		$store_email = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] );
 
 		if ( $result && 'success' === $status ) {
 			$withdrawals_count = (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] );
 			$store->update_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'], $withdrawals_count + 1 );
-			do_action(
-                'multivendorx_notify_payout_received',
-                'payout_received',
-                array(
-					'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-					'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-					'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email' => $store_email['primary'] ?? '',
-					'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-					'order_id'    => $order_id,
-					'amount'      => $amount,
-					'payout_id'   => $wpdb->insert_id,
-					'category'    => 'activity',
-                )
-			);
+			MultiVendorX()->notifications->send_notification_helper('payout_received', $store, null, [
+				'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+				'order_id'    => $order_id,
+				'amount'      => $amount,
+				'payout_id'   => $wpdb->insert_id,
+				'category'    => 'activity',
+			]);
 		}
 
 		if ( 'success' !== $status ) {
@@ -236,19 +219,11 @@ class PaymentProcessor {
 				MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 			}
 
-			do_action(
-                'multivendorx_notify_payout_failed',
-                'payout_failed',
-                array(
-					'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-					'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-					'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email' => $store_email['primary'] ?? '',
-					'store_name'  => $store->get( 'name' ),
-					'amount'      => $amount,
-					'category'    => 'activity',
-                )
-			);
+			MultiVendorX()->notifications->send_notification_helper('payout_failed', $store, null, [
+				'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+				'amount'      => $amount,
+				'category'    => 'activity',
+			]);
 		}
 	}
 

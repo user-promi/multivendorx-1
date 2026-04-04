@@ -1185,4 +1185,36 @@ class Notifications {
 
         return false;
     }
+
+	public function send_notification_helper( $type, $store = null, $order = null, $extra = [] ) {
+		$store_email = '';
+		$store_phone = '';
+		$customer_email = '';
+		$customer_phone = '';
+
+		if ( $store ) {
+			$store_email_meta = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] );
+			$store_email      = $store_email_meta['primary'] ?? '';
+			$store_phone      = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] );
+		}
+
+		if ( $order ) {
+			$customer_email = $order->get_billing_email();
+			$customer_phone = $order->get_billing_phone();
+		}
+
+		$payload = array_merge(
+			[
+				'admin_email'    => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
+				'admin_phone'    => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
+				'store_email'    => $store_email,
+				'store_phone'    => $store_phone,
+				'customer_email' => $customer_email,
+				'customer_phone' => $customer_phone,
+			],
+			$extra
+		);
+
+		do_action( "multivendorx_notify_{$type}", $type, $payload );
+	}
 }
