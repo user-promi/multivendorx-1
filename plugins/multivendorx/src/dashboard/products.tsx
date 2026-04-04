@@ -384,7 +384,7 @@ const AllProduct: React.FC = () => {
 						}}
 						descriptions={[
 							{
-								label: __('SKU:', 'multivendorx'),
+								label: __('SKU', 'multivendorx'),
 								value: row.sku || '—',
 							},
 						]}

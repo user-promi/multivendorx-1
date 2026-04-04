@@ -204,13 +204,13 @@ const Orders: React.FC = () => {
 	}, []);
 
 	const bulkActions = [
-		{ label: 'Pending Payment', value: 'pending' },
-		{ label: 'Processing', value: 'processing' },
-		{ label: 'On Hold', value: 'on-hold' },
-		{ label: 'Completed', value: 'completed' },
-		{ label: 'Cancelled', value: 'cancelled' },
-		{ label: 'Refunded', value: 'refunded' },
-		{ label: 'Failed', value: 'failed' },
+		{ label: __('Pending Payment', 'multivendorx'), value: 'pending' },
+		{ label: __('Processing', 'multivendorx'), value: 'processing' },
+		{ label: __('On Hold', 'multivendorx'), value: 'on-hold' },
+		{ label: __('Completed', 'multivendorx'), value: 'completed' },
+		{ label: __('Cancelled', 'multivendorx'), value: 'cancelled' },
+		{ label: __('Refunded', 'multivendorx'), value: 'refunded' },
+		{ label: __('Failed', 'multivendorx'), value: 'failed' },
 	];
 
 	const privacyHeaders = privacy?.includes('name')
@@ -331,7 +331,7 @@ const Orders: React.FC = () => {
 
 				{
 					label: __('Copy URL', 'multivendorx'),
-					icon: 'eye',
+					icon: 'vendor-form-copy',
 					onClick: () => {
 						navigator.clipboard.writeText(window.location.href);
 					},
@@ -339,7 +339,7 @@ const Orders: React.FC = () => {
 
 				{
 					label: __('Shipping', 'multivendorx'),
-					icon: 'eye',
+					icon: 'shipping',
 					onClick: (row) => {
 						setTracking(true);
 						setTrackingOrderId(row.id);
@@ -348,7 +348,7 @@ const Orders: React.FC = () => {
 
 				{
 					label: __('PDF', 'multivendorx'),
-					icon: 'eye',
+					icon: 'pdf',
 					onClick: (row) => {
 						window.location.href = `?page=multivendorx#&tab=stores&edit/${row.id}`;
 					},

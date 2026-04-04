@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import Qna from './QnATable';
 
 addFilter(
-	'multivendorx_customer_support_tab',
+	'multivendorx_customers-feedback_tab',
 	'multivendorx/question-answer-tab',
 	(tabs) => {
 		tabs.push({
@@ -11,7 +11,7 @@ addFilter(
 			module: 'question-answer',
 			content: {
 				id: 'questions',
-				headerTitle: __('Questions', 'multivendorx'),
+				headerTitle: __('Customer Queries', 'multivendorx'),
 				settingTitle: __('Product questions in queue', 'multivendorx'),
 				settingSubTitle: __(
 					'Waiting for your response',
@@ -26,7 +26,7 @@ addFilter(
 );
 
 addFilter(
-	'multivendorx_customer_support_tab_content',
+	'multivendorx_customers_feedback_tab_content',
 	'multivendorx/question-answer-content',
 	(defaultForm, { tabId }) => {
 		if (tabId === 'questions') {
