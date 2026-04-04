@@ -702,6 +702,20 @@ $star-color: #d49c00;
     }
 }
 
+// order table 
+.multivendorx-store-suborder{
+    li{
+        display: flex;
+        gap: 0.45rem;
+
+        .suborder-buttons{
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+}
+
 // my account view order tab end
 
 
