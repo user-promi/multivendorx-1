@@ -9,7 +9,6 @@ namespace MultiVendorX\Transaction;
 
 use MultiVendorX\Utill;
 use MultiVendorX\Commission\CommissionUtil;
-use MultiVendorX\Payments\RealtimeGateway;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -79,7 +78,7 @@ class Transaction {
         $payment_method = $order->get_payment_method();
         $gateways = WC()->payment_gateways()->payment_gateways();
 
-        if (isset($gateways[$payment_method]) && $gateways[$payment_method] instanceof RealtimeGateway) {
+        if (isset($gateways[$payment_method]) && !empty($gateways[$payment_method]->multivendorx_payment_gateway)) {
             return;
         }
 
