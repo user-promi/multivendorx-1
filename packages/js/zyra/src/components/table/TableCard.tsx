@@ -292,6 +292,7 @@ const TableCard: React.FC<TableCardProps> = ({
                                         placeholder: search.placeholder,
                                         options: search.options,
                                     }}
+                                    width={search.size}
                                     onQueryUpdate={(payload) => {
                                         onQueryChange('searchValue')(
                                             payload.searchValue

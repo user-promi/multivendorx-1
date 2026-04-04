@@ -132,7 +132,7 @@ const PendingCoupons: React.FC<object> = () => {
 			type: 'date',
 		},
 		action: {
-			label: 'Action',
+			label: __('Action', 'multivendorx'),
 			render: (row) => {
 				return (
 					<ButtonInputUI

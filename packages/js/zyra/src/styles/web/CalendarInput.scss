@@ -1,13 +1,16 @@
 @use '../../global.scss' as *;
 
 .settings-calender {
+    position: relative;
     .rmdp-container {
         width: 16.5rem;
     }
 
-    &:has(.calendar-wrapper) {
-        width: 100%;
-    }
+
+
+    // &:has(.calendar-wrapper) {
+    //     width: 100%;
+    // }
 
     // without input calendar start
     .calendar-wrapper {
@@ -128,5 +131,29 @@
             }
         }
         // today yesterday section end
+    }
+
+
+    // tabs 
+    .calendar-tabs-container{
+        position: absolute;
+        z-index: 99;
+        background: $background-white;
+        width: 20rem;
+        right: 0;
+
+        .range-picker-wrapper{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            div{
+                width: calc(50% - 0.5rem);
+                padding: 0.625rem;
+                box-sizing: border-box;
+                background: $theme-background-color;
+                border-radius: $border-radius-small;
+            }
+        }
     }
 }

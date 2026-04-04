@@ -291,7 +291,7 @@ class Dashboard extends \WP_REST_Controller {
             'add-appointment' => array(
                 'name'       => 'Add Appointment (Pro)',
                 'slug'       => 'add-appointment',
-                'icon'       => 'coupon',
+                'icon'       => 'appointment',
                 'capability' => array( 'read_products' ),
             ),
             'media-library'   => array(

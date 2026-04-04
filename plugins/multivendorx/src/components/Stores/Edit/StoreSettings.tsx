@@ -635,6 +635,7 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 						<FormGroupWrapper>
 							<FormGroup
 								label={__('Current status', 'multivendorx')}
+								desc={__('Learn what permissions each status provides, visit Store satus settings', 'multivendorx')}
 							>
 								<SelectInputUI
 									name="status"
@@ -654,10 +655,6 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 									}}
 								/>
 							</FormGroup>
-							<div className="settings-metabox-description slug">
-									{__('Learn what permissions each status provides, visit Store satus settings', 'multivendorx')} :{' '}
-									
-								</div>
 						</FormGroupWrapper>
 					</Card>
 					{/* Manage Storefront Link */}

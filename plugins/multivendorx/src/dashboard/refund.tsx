@@ -4,6 +4,7 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
 	getApiLink,
+	InfoItem,
 	NavigatorHeader,
 	QueryProps,
 	TableCard,
@@ -27,6 +28,27 @@ const Refund: React.FC = () => {
 		? {
 				customer_name: {
 					label: __('Customer', 'multivendorx'),
+					width: 18,
+					render: (row) => {
+						return (
+							<InfoItem
+								title={row.customer_name}
+								// titleLink={getUrl(row.id, 'product') || ''}
+								avatar={{
+									image: row.images?.[0]?.src || '',
+									iconClass: row.images?.[0]?.src
+										? ''
+										: 'person',
+								}}
+								descriptions={[
+									{
+										label: __('Email', 'multivendorx'),
+										value: row.email || '—',
+									}
+								]}
+							/>
+						);
+					},
 				},
 			}
 		: {};
@@ -37,6 +59,7 @@ const Refund: React.FC = () => {
 			isSortable: true,
 			render: (row) => (
 				<span
+					className='link-item'
 					onClick={() =>
 						dashNavigate(navigate, [
 							'orders',
@@ -140,9 +163,10 @@ const Refund: React.FC = () => {
 				ids={rowIds}
 				search={{
 					placeholder: 'Search...',
+					size: 8,
 					options: [
-						{ label: 'Order Id', value: 'order_id' },
-						{ label: 'Customer', value: 'customer' },
+						{ label: __('Order Id', 'multivendorx'), value: 'order_id' },
+    					{ label: __('Customer', 'multivendorx'), value: 'customer' },
 					],
 				}}
 				filters={filters}

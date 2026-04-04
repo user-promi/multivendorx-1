@@ -41,7 +41,7 @@
         padding: 1rem 1rem .5rem;
         background: $background-white;
       }
-      .divider-section:not(:first-child){
+      .divider-section:not(:first-child):not([data-template="settings"] .divider-section) {
         margin-top: 1rem;
       }
   }
