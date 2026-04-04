@@ -1,8 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 import CustomerInvoice1 from '../../../assets/template/customerInvoice/Invoice-1';
-import MarketplaceInvoice1 from '../../../assets/template/marketplaceInvoice/Invoice-1';
-import Invoice1 from '../../../assets/template/invoicePdf/Invoice-1';
 import subscriptionInvoice1 from '../../../assets/template/subscriptionInvoice/subscriptionInvoice1';
 import adminInvoice1 from '../../../assets/template/adminInvoice/adminInvoice1';
 import packingSlip1 from '../../../assets/template/packingSlip/packingSlip1';
@@ -183,6 +181,27 @@ export default {
 				'multivendorx'
 			),
 			title: __('Customer access to invoices', 'multivendorx'),
+		},
+		{
+			key: 'approve_store',
+			type: 'choice-toggle',
+			label: __('Invoice Order Scope', 'multivendorx'),
+			desc: __(
+				'Choose whether customer invoices should be generated for the main order or individual vendor sub-orders.',
+				'multivendorx'
+			),
+			options: [
+				{
+					key: 'main_order_invoice',
+					label: __('Main Order Invoice', 'multivendorx'),
+					value: 'main_order_invoice',
+				},
+				{
+					key: 'vendor_sub_order_invoice',
+					label: __('Vendor Sub-Order Invoice', 'multivendorx'),
+					value: 'vendor_sub_order_invoice',
+				},
+			],
 		},
 		{
 			key: 'customer_access',
@@ -470,7 +489,7 @@ export default {
 			type: 'tab',
 			tabs: [
 				{
-					label: 'Customer',
+					label: 'Customer Invoice',
 					content: [
 						{
 							key: 'invoice_template',
@@ -588,243 +607,7 @@ export default {
 					],
 				},
 				{
-					label: 'Marketplace Fee',
-					content: [
-						{
-							key: 'invoice_template_builder',
-							type: 'color-setting',
-							label: __('Templates and design', 'multivendorx'),
-							classes: 'full-width',
-							moduleEnabled: 'invoice',
-							showPdfButton: true,
-							templates: applyFilters(
-								'multivendorx_invoice_templates',
-								[
-									{
-										key: 'customer_invoice1',
-										label: __(
-											'Customer Invoice',
-											'multivendorx'
-										),
-										preview: MarketplaceInvoice1,
-										component: MarketplaceInvoice1,
-										pdf: MarketplaceInvoice1,
-									},
-								]
-							),
-							predefinedOptions: [
-								{
-									key: 'orchid_bloom',
-									label: 'Orchid Bloom',
-									value: 'orchid_bloom',
-									colors: {
-										colorPrimary: '#FF5959',
-										colorSecondary: '#FADD3A',
-										colorAccent: '#49BEB6',
-										colorSupport: '#075F63',
-									},
-								},
-								{
-									key: 'emerald_edge',
-									label: 'Emerald Edge',
-									value: 'emerald_edge',
-									colors: {
-										colorPrimary: '#e6b924',
-										colorSecondary: '#d888c1',
-										colorAccent: '#6b7923',
-										colorSupport: '#6e97d0',
-									},
-								},
-								{
-									key: 'solar_ember',
-									label: 'Solar Ember',
-									value: 'solar_ember',
-									colors: {
-										colorPrimary: '#fe900d',
-										colorSecondary: '#6030db',
-										colorAccent: '#17cadb',
-										colorSupport: '#a52fff',
-									},
-								},
-								{
-									key: 'crimson_blaze',
-									label: 'Crimson Blaze',
-									value: 'crimson_blaze',
-									colors: {
-										colorPrimary: '#04e762',
-										colorSecondary: '#f5b700',
-										colorAccent: '#dc0073',
-										colorSupport: '#008bf8',
-									},
-								},
-								{
-									key: 'golden_ray',
-									label: 'Golden Ray',
-									value: 'golden_ray',
-									colors: {
-										colorPrimary: '#0E117A',
-										colorSecondary: '#399169',
-										colorAccent: '#12E2A4',
-										colorSupport: '#DCF516',
-									},
-								},
-								{
-									key: 'obsidian_night',
-									label: 'Obsidian Night',
-									value: 'obsidian_night',
-									colors: {
-										colorPrimary: '#00eed0',
-										colorSecondary: '#0197af',
-										colorAccent: '#4b227a',
-										colorSupport: '#02153d',
-									},
-								},
-								{
-									key: 'obsidian',
-									label: 'Obsidian',
-									value: 'obsidian',
-									colors: {
-										colorPrimary: '#7ccc63',
-										colorSecondary: '#f39c12',
-										colorAccent: '#e74c3c',
-										colorSupport: '#2c3e50',
-									},
-								},
-								{
-									key: 'black',
-									label: 'Black Diamond',
-									value: 'black',
-									colors: {
-										colorPrimary: '#2c3e50',
-										colorSecondary: '#2c3e50',
-										colorAccent: '#2c3e50',
-										colorSupport: '#2c3e50',
-									},
-								},
-							],
-						},
-					],
-				},
-				{
-					label: 'Store',
-					content: [
-						{
-							key: 'invoice_template_builder',
-							type: 'color-setting',
-							label: __('Templates and design', 'multivendorx'),
-							classes: 'full-width',
-							moduleEnabled: 'invoice',
-							showPdfButton: true,
-							templates: applyFilters(
-								'multivendorx_invoice_templates',
-								[
-									{
-										key: 'customer_invoice1',
-										label: __(
-											'Customer Invoice',
-											'multivendorx'
-										),
-										preview: Invoice1,
-										component: Invoice1,
-										pdf: Invoice1,
-									},
-								]
-							),
-							predefinedOptions: [
-								{
-									key: 'orchid_bloom',
-									label: 'Orchid Bloom',
-									value: 'orchid_bloom',
-									colors: {
-										colorPrimary: '#FF5959',
-										colorSecondary: '#FADD3A',
-										colorAccent: '#49BEB6',
-										colorSupport: '#075F63',
-									},
-								},
-								{
-									key: 'emerald_edge',
-									label: 'Emerald Edge',
-									value: 'emerald_edge',
-									colors: {
-										colorPrimary: '#e6b924',
-										colorSecondary: '#d888c1',
-										colorAccent: '#6b7923',
-										colorSupport: '#6e97d0',
-									},
-								},
-								{
-									key: 'solar_ember',
-									label: 'Solar Ember',
-									value: 'solar_ember',
-									colors: {
-										colorPrimary: '#fe900d',
-										colorSecondary: '#6030db',
-										colorAccent: '#17cadb',
-										colorSupport: '#a52fff',
-									},
-								},
-								{
-									key: 'crimson_blaze',
-									label: 'Crimson Blaze',
-									value: 'crimson_blaze',
-									colors: {
-										colorPrimary: '#04e762',
-										colorSecondary: '#f5b700',
-										colorAccent: '#dc0073',
-										colorSupport: '#008bf8',
-									},
-								},
-								{
-									key: 'golden_ray',
-									label: 'Golden Ray',
-									value: 'golden_ray',
-									colors: {
-										colorPrimary: '#0E117A',
-										colorSecondary: '#399169',
-										colorAccent: '#12E2A4',
-										colorSupport: '#DCF516',
-									},
-								},
-								{
-									key: 'obsidian_night',
-									label: 'Obsidian Night',
-									value: 'obsidian_night',
-									colors: {
-										colorPrimary: '#00eed0',
-										colorSecondary: '#0197af',
-										colorAccent: '#4b227a',
-										colorSupport: '#02153d',
-									},
-								},
-								{
-									key: 'obsidian',
-									label: 'Obsidian',
-									value: 'obsidian',
-									colors: {
-										colorPrimary: '#7ccc63',
-										colorSecondary: '#f39c12',
-										colorAccent: '#e74c3c',
-										colorSupport: '#2c3e50',
-									},
-								},
-								{
-									key: 'black',
-									label: 'Black Diamond',
-									value: 'black',
-									colors: {
-										colorPrimary: '#2c3e50',
-										colorSecondary: '#2c3e50',
-										colorAccent: '#2c3e50',
-										colorSupport: '#2c3e50',
-									},
-								},
-							],
-						},
-					],
-				},
-				{
-					label: 'Store Subscription',
+					label: 'Admin Commission',
 					content: [
 						{
 							key: 'invoice_template_builder',
@@ -942,7 +725,7 @@ export default {
 					],
 				},
 				{
-					label: 'Admin',
+					label: 'Membership',
 					content: [
 						{
 							key: 'invoice_template_builder',

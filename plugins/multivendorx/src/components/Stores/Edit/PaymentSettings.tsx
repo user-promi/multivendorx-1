@@ -12,6 +12,8 @@ import {
 	BasicInputUI,
 	Notice,
 	NoticeManager,
+	PrePostText,
+	PrePostTextUI,
 } from 'zyra';
 import { __, sprintf } from '@wordpress/i18n';
 
@@ -323,16 +325,17 @@ const PaymentSettings: React.FC<PaymentSettingsProps> = ({ id, data }) => {
 								<BasicInputUI
 									preText={appLocalizer.currency_symbol}
 									name="commission_fixed"
-									afterElement={{
-										type: 'preposttext',
-										textType: 'post',
-										postText: '+',
-									}}
 									value={formData.commission_fixed}
 									onChange={(value) =>
 										handleChange('commission_fixed', value)
 									}
 								/>
+								{/* <PrePostTextUI
+									type="preposttext"
+									textType="post"
+									preText={undefined}
+									postText="+"
+								/> */}
 							</FormGroup>
 							<FormGroup
 								cols={2}

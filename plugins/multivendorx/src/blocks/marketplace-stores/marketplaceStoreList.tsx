@@ -242,21 +242,27 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			return null;
 		}
 
+		if (!MapProviderUI) {
+			console.error('MapProviderUI is undefined');
+			return null;
+		}
+
 		return (
-			<MapProviderUI
-				apiKey={mapConfig.apiKey}
-				locationAddress={addressData.address}
-				locationLat={addressData.location_lat}
-				locationLng={addressData.location_lng}
-				isUserLocation={false}
-				onLocationUpdate={handleLocationUpdate}
-				placeholderSearch={__(
-					'Search for a location...',
-					'multivendorx'
-				)}
-				stores={null}
-				mapProvider={mapConfig.provider}
-			/>
+			console.log('Rendering MapProviderUI with config:', mapConfig) || (
+				<MapProviderUI
+					apiKey={mapConfig.apiKey}
+					locationAddress={addressData.address}
+					locationLat={addressData.location_lat}
+					locationLng={addressData.location_lng}
+					isUserLocation={false}
+					onLocationUpdate={handleLocationUpdate}
+					placeholderSearch={__(
+						'Search for a location...',
+						'multivendorx'
+					)}
+					stores={null}
+					mapProvider={mapConfig.provider}
+				/>)
 		);
 	};
 	return (

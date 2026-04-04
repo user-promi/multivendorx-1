@@ -359,20 +359,6 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 				<Column grid={4}>
 						<Card title={__('Store overview', 'multivendorx')}>
 							<FormGroupWrapper>
-								{/* <FormGroup
-									row
-									label={__('Registered', 'multivendorx')}
-								>
-									{__('Mon 9:00 AM (pkoro)', 'multivendorx')}
-								</FormGroup> */}
-								{/* <FormGroup
-									row
-									label={__('Lifetime earnings', 'multivendorx')}
-								>
-									{formatCurrency(
-										storeData.commission?.commission_total ?? 0
-									)}
-								</FormGroup> */}
 								<FormGroup
 									row
 									label={__('Application', 'multivendorx')}
@@ -388,22 +374,15 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 										{__('View details', 'multivendorx')}
 									</a>
 								</FormGroup>
-
 							<SectionUI
 								title={__('Settings', 'multivendorx')}
 							/>
-							{/* <FormGroup
-								row
-								label={__('Commission', 'multivendorx')}
-							>
-								{__('Category based', 'multivendorx')}
-							</FormGroup> */}
 							<FormGroup
 								row
 								label={__('Payment method', 'multivendorx')}
 							>
 								{storeData?.payment_method ? (
-									<div className="method">
+									<div className="admin-badge purple method">
 										<i className="adminfont-bank"></i>
 										{formatMethod(
 											storeData.payment_method

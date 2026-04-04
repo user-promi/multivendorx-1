@@ -339,23 +339,6 @@ const SetupWizard: React.FC = () => {
 						},
 					],
 				},
-				// {
-				// 	key: 'wizardButtons',
-				// 	type: 'button',
-				// 	position: 'right',
-				// 	options: [
-				// 		{
-				// 			label: __('Back', 'multivendorx'),
-				// 			action: 'back',
-				// 			color: 'red',
-				// 		},
-				// 		{
-				// 			label: __('Finish', 'multivendorx'),
-				// 			action: 'next',
-				// 			redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=modules`,
-				// 		},
-				// 	],
-				// },
 			],
 		},
 		{
@@ -406,7 +389,7 @@ const SetupWizard: React.FC = () => {
 						{
 							label: __('Finish', 'multivendorx'),
 							action: 'next',
-							redirect: `${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=modules`,
+							redirect: `${appLocalizer.dashboard_slug}/dashboard/`,
 						},
 					],
 				},

@@ -9,6 +9,7 @@ import {
 	Tooltip,
 	TabsUI,
 	NoticeReceiver,
+	GuidedTourProvider,
 } from 'zyra';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import { applyFilters } from '@wordpress/hooks';
@@ -16,6 +17,7 @@ import { __ } from '@wordpress/i18n';
 import './metaBoxes';
 import { getDashboardRoutes } from './dashboardConfig';
 import { dashNavigate } from './services/commonFunction';
+import { getTourSteps } from './dashboard/Tours';
 interface SubmenuItem {
 	key: string;
 	name: string;
@@ -340,6 +342,10 @@ const Dashboard = () => {
 				.filter(Boolean)
 				.join(' ')}
 		>
+			<GuidedTourProvider
+				appLocalizer={appLocalizer}
+				steps={getTourSteps(appLocalizer)}
+			/>
 			<div
 				className="dashboard-tabs-wrapper"
 				onMouseEnter={() => setisMenuMinimize(false)}

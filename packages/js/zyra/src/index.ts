@@ -4,6 +4,7 @@ import './styles/common.scss';
 
 export { default as RenderComponent } from './components/RenderComponent';
 export { default as PrePostText } from './components/PrePostText';
+export { PrePostTextUI } from './components/PrePostText';
 export { default as BasicInput } from './components/BasicInput';
 export { BasicInputUI } from './components/BasicInput';
 export { default as CalendarInput } from './components/CalendarInput';
