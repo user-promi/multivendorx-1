@@ -654,6 +654,10 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 									}}
 								/>
 							</FormGroup>
+							<div className="settings-metabox-description slug">
+									{__('Learn what permissions each status provides, visit Store satus settings', 'multivendorx')} :{' '}
+									
+								</div>
 						</FormGroupWrapper>
 					</Card>
 					{/* Manage Storefront Link */}
