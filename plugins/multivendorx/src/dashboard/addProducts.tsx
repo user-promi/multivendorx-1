@@ -259,7 +259,8 @@ const AddProduct = () => {
 				buttons={applyFilters('multivendorx_product_button', [
 					{
 						label: __('View', 'multivendorx'),
-						icon: 'save',
+						icon: 'eye',
+						color: 'yellow',
 						onClick: () =>
 							window.open(product?.permalink, '_blank'),
 					},
@@ -300,101 +301,32 @@ const AddProduct = () => {
 							</div>
 						}
 					>
-						<FormGroupWrapper>
-							<FormGroup>
-								<div className="checklist-wrapper">
-									<ul>
+						<div className="checklist-wrapper">
+							<ul>
+								<li
+									className={
+										checklist.name ? 'checked' : ''
+									}
+								>
+									<div className="check-icon">
+										<span></span>
+									</div>
+									<div className="details">
+										<div className="title">
+											Product Name
+										</div>
+										<div className="des">
+											A clear, descriptive title
+											that helps customers find
+											your product
+										</div>
+									</div>
+								</li>
+								{product.type === 'simple' && (
+									<>
 										<li
 											className={
-												checklist.name ? 'checked' : ''
-											}
-										>
-											<div className="check-icon">
-												<span></span>
-											</div>
-											<div className="details">
-												<div className="title">
-													Product Name
-												</div>
-												<div className="des">
-													A clear, descriptive title
-													that helps customers find
-													your product
-												</div>
-											</div>
-										</li>
-										{product.type === 'simple' && (
-											<>
-												<li
-													className={
-														checklist.price
-															? 'checked'
-															: ''
-													}
-												>
-													<div className="check-icon">
-														<span></span>
-													</div>
-													<div className="details">
-														<div className="title">
-															Price
-														</div>
-														<div className="des">
-															Set competitive
-															prices including any
-															sale or discount
-															options
-														</div>
-													</div>
-												</li>
-
-												<li
-													className={
-														checklist.stock
-															? 'checked'
-															: ''
-													}
-												>
-													<div className="check-icon">
-														<span></span>
-													</div>
-													<div className="details">
-														<div className="title">
-															Stock
-														</div>
-														<div className="des">
-															A clear, descriptive
-															title that helps
-															customers find your
-															product
-														</div>
-													</div>
-												</li>
-											</>
-										)}
-										<li
-											className={
-												checklist.image ? 'checked' : ''
-											}
-										>
-											<div className="check-icon">
-												<span></span>
-											</div>
-											<div className="details">
-												<div className="title">
-													Product Images
-												</div>
-												<div className="des">
-													High-quality photos showing
-													your product from multiple
-													angles
-												</div>
-											</div>
-										</li>
-
-										<li
-											className={
-												checklist.categories
+												checklist.price
 													? 'checked'
 													: ''
 											}
@@ -404,19 +336,20 @@ const AddProduct = () => {
 											</div>
 											<div className="details">
 												<div className="title">
-													Category
+													Price
 												</div>
 												<div className="des">
-													Organize your product to
-													help customers browse your
-													store
+													Set competitive
+													prices including any
+													sale or discount
+													options
 												</div>
 											</div>
 										</li>
 
 										<li
 											className={
-												checklist.policies
+												checklist.stock
 													? 'checked'
 													: ''
 											}
@@ -426,26 +359,90 @@ const AddProduct = () => {
 											</div>
 											<div className="details">
 												<div className="title">
-													Policies
+													Stock
 												</div>
 												<div className="des">
-													A clear, descriptive title
-													that helps customers find
-													your product
+													A clear, descriptive
+													title that helps
+													customers find your
+													product
 												</div>
 											</div>
 										</li>
+									</>
+								)}
+								<li
+									className={
+										checklist.image ? 'checked' : ''
+									}
+								>
+									<div className="check-icon">
+										<span></span>
+									</div>
+									<div className="details">
+										<div className="title">
+											Product Images
+										</div>
+										<div className="des">
+											High-quality photos showing
+											your product from multiple
+											angles
+										</div>
+									</div>
+								</li>
 
-										{applyFilters(
-											'product_checklist_items_render',
-											null,
-											checklist,
-											product
-										)}
-									</ul>
-								</div>
-							</FormGroup>
-						</FormGroupWrapper>
+								<li
+									className={
+										checklist.categories
+											? 'checked'
+											: ''
+									}
+								>
+									<div className="check-icon">
+										<span></span>
+									</div>
+									<div className="details">
+										<div className="title">
+											Category
+										</div>
+										<div className="des">
+											Organize your product to
+											help customers browse your
+											store
+										</div>
+									</div>
+								</li>
+
+								<li
+									className={
+										checklist.policies
+											? 'checked'
+											: ''
+									}
+								>
+									<div className="check-icon">
+										<span></span>
+									</div>
+									<div className="details">
+										<div className="title">
+											Policies
+										</div>
+										<div className="des">
+											A clear, descriptive title
+											that helps customers find
+											your product
+										</div>
+									</div>
+								</li>
+
+								{applyFilters(
+									'product_checklist_items_render',
+									null,
+									checklist,
+									product
+								)}
+							</ul>
+						</div>
 					</Card>
 				</Column>
 

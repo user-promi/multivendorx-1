@@ -24,8 +24,8 @@
 .filter-wrapper {
     display: flex;
     border-radius: $border-radius-small;
-    flex-direction: column;
-    gap: 0.5rem;
+    // flex-direction: column;
+    // gap: 0.5rem;
     background: transparent;
     justify-content: center;
     width: 100%;
@@ -33,11 +33,11 @@
     bottom: 1rem;
     gap: 0.5rem;
 
-    .filter{
-        display: flex;
-        background: #fff;
-       align-items: center;
-    }
+    // .filter{
+    //     display: flex;
+    //     background: #fff;
+    //    align-items: center;
+    // }
     .table-filter-wrapper {
         background: #fff;
         border-radius: $border-radius-small;
@@ -151,28 +151,37 @@
 // admin table filter style
 .filter-wrapper:has(.filter-item) {
     display: flex;
-    font-size: 0.875rem;    
-    padding: 0.45rem;
+    flex-direction: column;
+    font-size: 0.875rem;  
+    align-items: center;
     border-radius: $border-radius-small;
     width: fit-content;
-    gap: 0.313rem;
+    gap: 0.5rem;
 
-    .filter-item {
-        cursor: pointer;
-        border-radius: $border-radius-small;
-        padding: 0.313rem 0.625rem;
-        font-weight: 600;
-        color: #000000af;
-        font-size: 0.95rem;
-        transition: all 0.4s ease;
+    .filter{
+        padding: 0.45rem;
+        background: $background-white;
+        border-radius: $border-light-small;
+        display: flex;
+        gap: 0.313rem;
 
-        &:not(.active):hover {
-            background: #f3f1f1;
-        }
+        .filter-item {
+            cursor: pointer;
+            border-radius: $border-radius-small;
+            padding: 0.313rem 0.625rem;
+            font-weight: 600;
+            color: #000000af;
+            font-size: 0.95rem;
+            transition: all 0.4s ease;
 
-        &.active {
-            background: $theme-background-color;
-            color: $theme-color;
+            &:not(.active):hover {
+                background: #f3f1f1;
+            }
+
+            &.active {
+                background: $theme-background-color;
+                color: $theme-color;
+            }
         }
     }
 }
@@ -451,7 +460,7 @@
                     flex-grow: 1;
                 }
 
-                .admin-column:has(.action-section) {
+                .admin-column:has(.table-action) {
                     overflow: visible;
                     padding: 0 1rem;
                 }
@@ -555,11 +564,19 @@
 }
 
 // action btn style start
-.action-section {
+.table-action {
     display: flex;
     flex-direction: column;
     align-items: start;
 
+    .inline-actions {
+    display: flex;
+    gap: 0.125rem;
+
+    .adminfont-delete {
+      color: $accent-color;
+    }
+  }
     .action-btn {
         display: flex;
         gap: 0.5rem;
@@ -669,7 +686,8 @@
 .badge-under_review,
 .badge-private,
 .badge-upcoming,
-.badge-draft {
+.badge-draft,
+.badge-onbackorder {
     color: map-get(map-get($color-palette, blue), color);
     background: map-get(map-get($color-palette, blue), light-color);
 }
@@ -678,7 +696,8 @@
 .badge-unpaid,
 .badge-cancelled,
 .badge-failed,
-.badge-expired {
+.badge-expired,
+.badge-outofstock {
     color: map-get(map-get($color-palette, red), color);
     background: map-get(map-get($color-palette, red), light-color);
 }
