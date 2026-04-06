@@ -614,13 +614,13 @@ const OrderDetails: React.FC = () => {
 				title={__('Great!', 'multivendorx')}
 			/>
 			{!appLocalizer.edit_order_capability ? (
-				<div>No access to view the order</div>
+					<ComponentStatusView title={__( 'No access to view the order', 'multivendorx')}/>
 			) : (
 				<>
 					<NavigatorHeader
 						headerTitle={
-							<>
-								Order #{orderData?.number ?? orderId ?? '—'}
+							<div className='order-view-title'>
+								{__( 'Order #', 'multivendorx')} {orderData?.number ?? orderId ?? '—'}
 								{!statusSelect && orderData?.status?.trim() && (
 									<div
 										className={statusBadgeClass(
@@ -637,7 +637,7 @@ const OrderDetails: React.FC = () => {
 									</div>
 								)}
 								{statusSelect && (
-									<div className="status-edit">
+									<div className='status-edit'>
 										<SelectInputUI
 											name="status"
 											type="single-select"
@@ -685,7 +685,7 @@ const OrderDetails: React.FC = () => {
 										/>
 									</div>
 								)}
-							</>
+							</div>
 						}
 						headerDescription={formatDateTime(
 							orderData?.date_created
