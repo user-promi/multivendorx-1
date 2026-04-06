@@ -101,17 +101,17 @@ export default {
 			moduleEnabled: 'invoice',
 			proSetting: true,
 		},
-		{
-			key: 'due_days',
-			type: 'number',
-			row: false,
-			cols: 2,
-			label: __('Due days', 'multivendorx'),
-			placeholder: __('Enter the number of days until the invoice is due', 'multivendorx'),
-			size: '25rem',
-			moduleEnabled: 'invoice',
-			proSetting: true,
-		},
+		// {
+		// 	key: 'due_days',
+		// 	type: 'number',
+		// 	row: false,
+		// 	cols: 2,
+		// 	label: __('Due days', 'multivendorx'),
+		// 	placeholder: __('Enter the number of days until the invoice is due', 'multivendorx'),
+		// 	size: '25rem',
+		// 	moduleEnabled: 'invoice',
+		// 	proSetting: true,
+		// },
 		{
 			key: 'separator_content',
 			type: 'section',
@@ -151,24 +151,6 @@ export default {
 					desc: __('Dedicated email with invoice', 'multivendorx'),
 					value: 'downloadable',
 				},
-				{
-					key: 'Notify Stores of Invoice Generation',
-					label: __('Notify stores', 'multivendorx'),
-					desc: __(
-						'Send a copy to the vendor when their sale generates an invoice.',
-						'multivendorx'
-					),
-					value: 'downloadable',
-				},
-				{
-					key: 'Generate Packing Slips',
-					label: __('Include packing slip', 'multivendorx'),
-					desc: __(
-						'Also generate and attach a packing slip with the invoice.',
-						'multivendorx'
-					),
-					value: 'downloadable',
-				},
 			],
 			proSetting: true,
 			selectDeselect: true,
@@ -185,59 +167,80 @@ export default {
 		{
 			key: 'approve_store',
 			type: 'choice-toggle',
-			label: __('Invoice Order Scope', 'multivendorx'),
+			label: __('Generate invoices based on', 'multivendorx'),
 			desc: __(
-				'Choose whether customer invoices should be generated for the main order or individual vendor sub-orders.',
+				'Choose how invoices should be generated when an order includes products from multiple stores:<ul><li>Main order invoice - Generate a single invoice for the entire order, including products from all stores.</li><li>Vendor sub-order invoice - Generate separate invoices for each store based on the products they sold in the order.</li></ul>',
 				'multivendorx'
 			),
 			options: [
 				{
 					key: 'main_order_invoice',
-					label: __('Main Order Invoice', 'multivendorx'),
+					label: __('Main order invoice', 'multivendorx'),
 					value: 'main_order_invoice',
 				},
 				{
 					key: 'vendor_sub_order_invoice',
-					label: __('Vendor Sub-Order Invoice', 'multivendorx'),
+					label: __('Vendor sub-order invoice', 'multivendorx'),
 					value: 'vendor_sub_order_invoice',
 				},
 			],
 		},
 		{
-			key: 'customer_access',
-			type: 'checkbox',
-			row: false,
-			label: __('Customer Access', 'multivendorx'),
+			key: 'commission_invoice_frequency',
+			type: 'choice-toggle',
+			label: __('Commission invoice frequency', 'multivendorx'),
 			desc: __(
-				'Control how customers can access their invoices.',
+				'Choose how often vendors receive commission invoices from the marketplace:<ul><li>Per order - Generate a commission invoice for each order.</li><li>Monthly - Generate a single consolidated commission invoice at the end of each month.</li></ul>',
 				'multivendorx'
 			),
 			options: [
 				{
-					key: 'my_account_download',
-					label: __(
-						'Allow download from "My Account"',
-						'multivendorx'
-					),
-					desc: __(
-						'Customers can access invoices from their dashboard',
-						'multivendorx'
-					),
-					value: 'my_account_download',
+					key: 'per_order',
+					label: __('Per order', 'multivendorx'),
+					value: 'per_order',
 				},
 				{
-					key: 'order_confirmation_download',
-					label: __('Allow download from order list', 'multivendorx'),
-					desc: __(
-						'Include invoice link on the order confirmation page',
-						'multivendorx'
-					),
-					value: 'order_confirmation_download',
+					key: 'monthly',
+					label: __('Monthly', 'multivendorx'),
+					value: 'monthly',
 				},
 			],
-			proSetting: true,
-			selectDeselect: true,
 		},
+		// {
+		// 	key: 'customer_access',
+		// 	type: 'checkbox',
+		// 	row: false,
+		// 	label: __('Customer access location', 'multivendorx'),
+		// 	desc: __(
+		// 		'Control how customers can access their invoices.',
+		// 		'multivendorx'
+		// 	),
+		// 	options: [
+		// 		{
+		// 			key: 'my_account_download',
+		// 			label: __(
+		// 				'Allow download from "My Account"',
+		// 				'multivendorx'
+		// 			),
+		// 			desc: __(
+		// 				'Customers can access invoices from their dashboard',
+		// 				'multivendorx'
+		// 			),
+		// 			value: 'my_account_download',
+		// 		},
+		// 		{
+		// 			key: 'order_confirmation_download',
+		// 			label: __('Allow download from order list', 'multivendorx'),
+		// 			desc: __(
+		// 				'Include invoice link on the order confirmation page',
+		// 				'multivendorx'
+		// 			),
+		// 			value: 'order_confirmation_download',
+		// 		},	
+		// 	],
+		// 	proSetting: true,
+		// 	selectDeselect: true,
+		// },
 		{
 			key: 'separator_content',
 			type: 'section',
