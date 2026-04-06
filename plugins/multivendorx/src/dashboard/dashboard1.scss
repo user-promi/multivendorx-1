@@ -766,9 +766,21 @@ a {
     .admin-table {
         background: transparent;
 
-        .admin-table-body tr
-        .admin-table-body tr:last-child {
+        .admin-table-body tr {
             border-top: $border-light-small;
+        }
+        .admin-row{
+            margin: 0 !important;
+            .admin-column{
+                padding: 0.313rem !important;
+            }
+        }
+        .header-row{
+            height: 2.125rem !important; 
+
+            .header-col{
+                padding: 0 0.313rem !important;
+            }
         }
     }
 }

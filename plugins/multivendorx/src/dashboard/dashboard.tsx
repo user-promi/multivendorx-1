@@ -107,6 +107,7 @@ const Dashboard: React.FC = () => {
 							String(row.id),
 						])
 					}
+					className='link-item'
 				>
 					#{row.id}
 				</span>
@@ -118,6 +119,7 @@ const Dashboard: React.FC = () => {
 		},
 		products: {
 			label: __('Product Name', 'multivendorx'),
+			width: 14,
 			render: (row) =>
 				row.line_items?.length
 					? row.line_items.map((item) => (

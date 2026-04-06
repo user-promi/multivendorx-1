@@ -1184,6 +1184,9 @@ $index: 1;
 // pagination end
 
 // tour start
+.reactour__mask{
+  opacity: 0.3 !important;
+}
 .tour-content {
   .title {
     font-size: 1.25rem;

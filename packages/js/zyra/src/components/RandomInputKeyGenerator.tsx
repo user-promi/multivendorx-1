@@ -47,13 +47,13 @@ export const RandomInputKeyGeneratorUI: React.FC<
 
     return (
         <>
-            <button type="button" onClick={handleCopy}>
-                Copy
-            </button>
+            <div className='clear-btn' onClick={handleCopy}>
+               <i className='adminfont-copy' />
+            </div>
 
-            <button type="button" onClick={handleDelete}>
-                Delete
-            </button>
+            <div className='copy-btn' onClick={handleDelete}>
+                <i className='adminfont-delete' />
+            </div>
         </>
     );
 };

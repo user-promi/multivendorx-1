@@ -342,10 +342,10 @@ const Dashboard = () => {
 				.filter(Boolean)
 				.join(' ')}
 		>
-			{/* <GuidedTourProvider
+			<GuidedTourProvider
 				appLocalizer={appLocalizer}
 				steps={getTourSteps(appLocalizer)}
-			/> */}
+			/>
 			<div
 				className="dashboard-tabs-wrapper"
 				onMouseEnter={() => setisMenuMinimize(false)}

@@ -181,6 +181,11 @@ const GuidedTourProvider: React.FC<GuidedTourProviderProps> = ({
                 TourApi.updateTourStatus(true);
                 sessionStorage.removeItem(STORAGE_KEY);
             }}
+            onClickMask={({ setIsOpen }) => {
+                setIsOpen(false);
+                TourApi.updateTourStatus(true);
+                sessionStorage.removeItem(STORAGE_KEY);
+            }}
             {...rest}
         >
             <GuidedTourController steps={steps} />
