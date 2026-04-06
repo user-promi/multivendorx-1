@@ -127,17 +127,9 @@ class Ajax {
 		$review_id = Util::insert_review( $store_id, $user_id, $review_title, $review_content, $overall, $order_id, $uploaded_images );
 		Util::insert_ratings( $review_id, $ratings );
 		$store = new Store( $store_id );
-		do_action(
-			'multivendorx_notify_new_store_review',
-			'new_store_review',
-			array(
-				'admin_email' => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-				'admin_phone' => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-				'store_phone' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-				'store_email' => $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] )['primary'] ?? '',
-				'category'    => 'activity',
-			)
-		);
+		MultiVendorX()->notifications->send_notification_helper('new_store_review', $store, null, [
+			'category'      => 'activity',
+		]);
 		wp_send_json_success( array( 'message' => __( 'Review submitted successfully!', 'multivendorx' ) ) );
 	}
 

@@ -671,51 +671,26 @@ class Rest {
 		$store = new Store(
             get_post_meta( $product->get_id(), Utill::POST_META_SETTINGS['store_id'], true )
 		);
-        $store_email = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_email'] );
 
 		if ( isset( $creating ) && true === $creating && 'pending' === $new_status ) {
-			do_action(
-				'multivendorx_notify_product_submitted',
-				'product_submitted',
-				array(
-					'admin_email'  => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-					'admin_phone'  => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-					'store_phone'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email'  => $store_email['primary'] ?? '',
-					'product_name' => $product->get_name(),
-					'category'     => 'activity',
-				)
-			);
+            MultiVendorX()->notifications->send_notification_helper('product_submitted', $store, null, [
+				'product_name' => $product->get_name(),
+				'category'    => 'activity',
+			]);
 		}
 
 		if ( 'pending' === $old_status && 'publish' === $new_status ) {
-			do_action(
-				'multivendorx_notify_product_approved',
-				'product_approved',
-				array(
-					'admin_email'  => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-					'admin_phone'  => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-					'store_phone'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email'  => $store_email['primary'] ?? '',
-					'product_name' => $product->get_name(),
-					'category'     => 'activity',
-				)
-			);
+            MultiVendorX()->notifications->send_notification_helper('product_approved', $store, null, [
+				'product_name' => $product->get_name(),
+				'category'    => 'activity',
+			]);
 		}
 
 		if ( 'publish' === $old_status && 'draft' === $new_status ) {
-			do_action(
-				'multivendorx_notify_product_rejected',
-				'product_rejected',
-				array(
-					'admin_email'  => MultiVendorX()->setting->get_setting( 'receiver_email_address' ),
-					'admin_phone'  => MultiVendorX()->setting->get_setting( 'sms_receiver_phone_number' ),
-					'store_phone'  => $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] ),
-					'store_email'  => $store_email['primary'] ?? '',
-					'product_name' => $product->get_name(),
-					'category'     => 'activity',
-				)
-			);
+            MultiVendorX()->notifications->send_notification_helper('product_rejected', $store, null, [
+				'product_name' => $product->get_name(),
+				'category'    => 'activity',
+			]);
 		}
 
 		if ( 'publish' === $new_status && ( 'pending' === $old_status || 'draft' === $old_status ) ) {
