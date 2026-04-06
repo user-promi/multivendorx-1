@@ -248,10 +248,13 @@ class Stores extends \WP_REST_Controller {
                 'options'          => 'get_stores_dropdown',
                 'status'           => 'get_pending_stores',
             );
-
+            $flag_map = apply_filters('multivendorx_rest_store_handlers',$flag_map);
             foreach ( $flag_map as $param => $method ) {
                 if ( $request->get_param( $param ) ) {
-                    return rest_ensure_response( $this->$method( $request ) );
+                    if ( method_exists( $this, $method ) ) {
+                        return rest_ensure_response( $this->$method( $request ) );
+                    }
+                    return apply_filters($method, rest_ensure_response(array()), $request);
                 }
             }
 
