@@ -44,11 +44,7 @@ const ShippingCard = ({
 	}, []);
 
 	return (
-		<Card
-			title={__('Product delivery', 'multivendorx')}
-			// iconName="keyboard-arrow-down arrow-icon icon"
-			// toggle
-		>
+		<Card title={__('Product delivery', 'multivendorx')}>
 			{/* Dimensions */}
 			<FormGroupWrapper>
 				<FormGroup>
@@ -63,6 +59,7 @@ const ShippingCard = ({
 												'Physical',
 												'multivendorx'
 											),
+											desc: __('Customer receives a file — e.g. a PDF, software, or digital artwork.', 'multivendorx'),
 										},
 									]
 								: []),
@@ -70,13 +67,22 @@ const ShippingCard = ({
 								key: 'downloadable',
 								value: 'downloadable',
 								label: __('Downloadable', 'multivendorx'),
+								desc: __("Item is packed and shipped to the customer's address.", 'multivendorx'),
+							},
+							{
+								key: 'digital_product_service',
+								value: 'digital_product_service',
+								label: __('Digital product service', 'multivendorx'),
+								desc: __("Item is packed and shipped to the customer's address.", 'multivendorx'),
 							},
 							{
 								key: 'others',
 								value: 'others',
 								label: __('Others', 'multivendorx'),
+								desc: __("Service, appointment, or something that doesn't fit the above.", 'multivendorx'),
 							},
 						]}
+						custom = {true}
 						value={productType}
 						onChange={(val) => {
 							setProductType(val);
