@@ -490,17 +490,6 @@ const AllProduct: React.FC = () => {
 				buttons={applyFilters(
 					'multivendorx_product_list_header_buttons',
 					[
-						...(modules.includes('import-export')
-							? [
-								{
-									custom: applyFilters(
-										'product_import_export',
-										null
-									),
-								},
-							]
-							: []),
-
 						{
 							label: __('Add New', 'multivendorx'),
 							icon: 'plus',
@@ -523,7 +512,7 @@ const AllProduct: React.FC = () => {
 					navigate
 				)}
 			/>
-
+			{applyFilters('multivendorx_product_list_header_middle_section',null, modules)}
 			<TableCard
 				headers={headers}
 				rows={rows}
