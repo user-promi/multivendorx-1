@@ -71,24 +71,24 @@ export default {
 			],
 			selectDeselect: true,
 		},
-		{
-			key: 'separator_content',
-			type: 'section',
-			desc: __(
-				'Control when invoices are automatically created based on order status.',
-				'multivendorx'
-			),
-			title: __('Automatic invoice generation', 'multivendorx'),
-		},
-		{
-			key: 'separator_content',
-			type: 'section',
-			desc: __(
-				'Set up how your invoice numbers are formatted. This helps with organization and makes invoices easier to track for accounting.',
-				'multivendorx'
-			),
-			title: __('Invoice numbering', 'multivendorx'),
-		},
+		// {
+		// 	key: 'separator_content',
+		// 	type: 'section',
+		// 	desc: __(
+		// 		'Control when invoices are automatically created based on order status.',
+		// 		'multivendorx'
+		// 	),
+		// 	title: __('Automatic invoice generation', 'multivendorx'),
+		// },
+		// {
+		// 	key: 'separator_content',
+		// 	type: 'section',
+		// 	desc: __(
+		// 		'Set up how your invoice numbers are formatted. This helps with organization and makes invoices easier to track for accounting.',
+		// 		'multivendorx'
+		// 	),
+		// 	title: __('Invoice numbering', 'multivendorx'),
+		// },
 		{
 			key: 'invoice_prefix',
 			type: 'text',
@@ -112,14 +112,46 @@ export default {
 		// 	moduleEnabled: 'invoice',
 		// 	proSetting: true,
 		// },
+		
 		{
 			key: 'separator_content',
 			type: 'section',
 			desc: __(
-				'Choose when and how invoices are automatically emailed to customers and vendors.',
+				'Control how and when store commission invoices are generated for the marketplace.',
 				'multivendorx'
 			),
-			title: __('Invoice delivery via email', 'multivendorx'),
+			title: __('Store commission invoices ', 'multivendorx'),
+		},
+
+		{
+			key: 'commission_invoice_frequency',
+			type: 'choice-toggle',
+			label: __('Commission invoice frequency', 'multivendorx'),
+			desc: __(
+				'Choose how often vendors receive commission invoices from the marketplace:<ul><li>Per order - Generate a commission invoice for each order.</li><li>Monthly - Generate a single consolidated commission invoice at the end of each month.</li></ul>',
+				'multivendorx'
+			),
+			options: [
+				{
+					key: 'per_order',
+					label: __('Per order', 'multivendorx'),
+					value: 'per_order',
+				},
+				{
+					key: 'monthly',
+					label: __('Monthly', 'multivendorx'),
+					value: 'monthly',
+				},
+			],
+		},
+		{
+			key: 'separator_content',
+			type: 'section',
+			desc: __(
+				'Control how customers can access and download their order invoices.',
+				'multivendorx'
+			),
+			title: __('Customer access to invoices', 'multivendorx'),
 		},
 		{
 			key: 'invoice_delivery',
@@ -156,15 +188,6 @@ export default {
 			selectDeselect: true,
 		},
 		{
-			key: 'separator_content',
-			type: 'section',
-			desc: __(
-				'This controls where customers can find invoices later.',
-				'multivendorx'
-			),
-			title: __('Customer access to invoices', 'multivendorx'),
-		},
-		{
 			key: 'approve_store',
 			type: 'choice-toggle',
 			label: __('Generate invoices based on', 'multivendorx'),
@@ -182,27 +205,6 @@ export default {
 					key: 'vendor_sub_order_invoice',
 					label: __('Vendor sub-order invoice', 'multivendorx'),
 					value: 'vendor_sub_order_invoice',
-				},
-			],
-		},
-		{
-			key: 'commission_invoice_frequency',
-			type: 'choice-toggle',
-			label: __('Commission invoice frequency', 'multivendorx'),
-			desc: __(
-				'Choose how often vendors receive commission invoices from the marketplace:<ul><li>Per order - Generate a commission invoice for each order.</li><li>Monthly - Generate a single consolidated commission invoice at the end of each month.</li></ul>',
-				'multivendorx'
-			),
-			options: [
-				{
-					key: 'per_order',
-					label: __('Per order', 'multivendorx'),
-					value: 'per_order',
-				},
-				{
-					key: 'monthly',
-					label: __('Monthly', 'multivendorx'),
-					value: 'monthly',
 				},
 			],
 		},

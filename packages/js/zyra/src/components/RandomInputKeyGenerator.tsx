@@ -1,6 +1,7 @@
 import React from 'react';
 import { FieldComponent } from './fieldUtils';
 import { ButtonInputUI } from './ButtonInput';
+import { CopyToClipboardUI } from './UI/CopyToClipboard';
 
 interface RandomInputKeyGeneratorProps {
     value?: string;
@@ -23,9 +24,6 @@ export const RandomInputKeyGeneratorUI: React.FC<
         onChange(key);
     };
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(value);
-    };
 
     const handleDelete = () => {
         onChange('');
@@ -47,13 +45,15 @@ export const RandomInputKeyGeneratorUI: React.FC<
 
     return (
         <>
-            <div className='clear-btn' onClick={handleCopy}>
-               <i className='adminfont-copy' />
-            </div>
-
-            <div className='copy-btn' onClick={handleDelete}>
-                <i className='adminfont-delete' />
-            </div>
+            <CopyToClipboardUI 
+                text={value}
+                variant="icon"
+                copyButtonLabel="Copy"
+                copiedLabel="Copied!"
+            /> 
+            <div className='clear-btn' onClick={handleDelete}>
+                <i className='adminfont-delete color-red' />
+            </div>                       
         </>
     );
 };
