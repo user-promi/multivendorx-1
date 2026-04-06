@@ -19,7 +19,7 @@ const LiveChat: React.FC = () => {
 		StoreInfo?.settings_databases_value['live-chat']?.chat_provider;
 	const storeId = StoreInfo?.storeDetails?.storeId;
 	const storeName = StoreInfo?.storeDetails?.storeName;
-console.log('LiveChat render with provider:', StoreInfo);
+
 
 	const getChatUrl = () => {
 		if (provider === 'whatsapp') {
