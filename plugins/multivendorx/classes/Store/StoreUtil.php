@@ -712,7 +712,7 @@ class StoreUtil {
 		$data = maybe_unserialize( $phone_meta );
 
 		$country = $data['country_code'] ?? '';
-		$phone   = $data['phone'] ?? '';
+		$phone   = $data['phone'] ?? $data['whatsapp_number'] ?? '';
 
 		return $country . ' ' . $phone;
 	}
@@ -732,6 +732,9 @@ class StoreUtil {
 		}
 		$store_obj   = Store::get_store( $store_slug, 'slug' );
 		$store_phone = self::get_phone( $store_obj->get_meta( 'phone' ) );
+        $store_whatsapp = self::get_phone( $store_obj->get_meta( 'whatsapp_number' ) );
+        $whatsapp_message = $store_obj->get_meta( 'whatsapp_pre_filled' );
+        $facebook_page_id = $store_obj->get_meta( 'page_id' );
 
 		ob_start();
 		MultiVendorX()->util->get_template( 'store/store-tabs.php', array( 'store_id' => $store_obj->get_id() ) );
@@ -758,6 +761,9 @@ class StoreUtil {
 			'cancellationPolicy' => $store_obj->get_meta( 'cancellation_policy' ),
 			'storeAddress'       => $store_obj->get_meta( 'address' ),
 			'storeTabs'          => $tabs_html,
+            'whatsapp'           => $store_whatsapp,
+            'whatsapp_message'   => $whatsapp_message,
+            'page_id'            => $facebook_page_id
 		);
 		/**
 		 * Filter store info before returning.
