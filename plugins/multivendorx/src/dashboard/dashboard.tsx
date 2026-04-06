@@ -29,6 +29,7 @@ import {
 	NavigatorHeader,
 	CalendarInputUI,
 	TableRow,
+	ItemListUI,
 } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
@@ -864,42 +865,21 @@ const Dashboard: React.FC = () => {
 								window.open(url, '_blank');
 							}}
 						>
-							<div className="notification-wrapper">
-								{Array.isArray(announcement) &&
-								announcement.length > 0 ? (
-									<ul>
-										{announcement.map((item, index) => (
-											<li key={item.id}>
-												<div className="icon-wrapper">
-													<i
-														className={`adminfont-form-paypal-email admin-badge admin-color${index + 2}`}
-													/>
-												</div>
-												<div className="details">
-													<div className="notification-title">
-														{item.title}
-													</div>
-													<div className="des">
-														{item.content}
-													</div>
-													<span>
-														{formatTimeAgo(
-															item.date_created
-														)}
-													</span>
-												</div>
-											</li>
-										))}
-									</ul>
-								) : (
-									<div className="no-data">
-										{__(
-											'No announcements found.',
-											'multivendorx'
-										)}
-									</div>
-								)}
-							</div>
+							{Array.isArray(announcement) && announcement.length > 0 ? (
+								<ItemListUI
+									className="notification-wrapper"
+									items={announcement.map((item, index) => ({
+										id: item.id || index,
+										title: item.title,
+										desc: item.content,
+										icon: `form-paypal-email admin-badge admin-color${index + 2}`,
+										value: formatTimeAgo(item.date_created),
+									}))}
+								/>
+							) : (
+								<ComponentStatusView title={__('No announcements found.', 'multivendorx')}
+							/>
+							)}
 						</Card>
 					</Column>
 				)}
@@ -967,18 +947,13 @@ const Dashboard: React.FC = () => {
 													text: name
 														.charAt(0)
 														.toUpperCase(),
-													iconClass: 'user-circle',
+													iconClass: 'person',
 												}}
 											/>
 										);
 									})
 								) : (
-									<div className="no-data">
-										{__(
-											'No customers found.',
-											'multivendorx'
-										)}
-									</div>
+									<ComponentStatusView title={__('No customers found.', 'multivendorx')} />
 								)}
 							</Card>
 						</Column>
@@ -996,9 +971,7 @@ const Dashboard: React.FC = () => {
 									</div>
 								))
 							) : (
-								<div className="no-data">
-									{__('No activity found.', 'multivendorx')}
-								</div>
+								<ComponentStatusView title={__('No activity found.', 'multivendorx')} />
 							)}
 						</div>
 					</Card>
@@ -1054,12 +1027,7 @@ const Dashboard: React.FC = () => {
 										</div>
 									))
 								) : (
-									<div className="no-data">
-										{__(
-											'No reviews found.',
-											'multivendorx'
-										)}
-									</div>
+									<ComponentStatusView title={__('No reviews found.', 'multivendorx')} />
 								)}
 							</div>
 						</Card>

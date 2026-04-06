@@ -16,6 +16,7 @@ import {
 	Analytics,
 	ItemListUI,
 	Notice,
+	ComponentStatusView,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import React from 'react';
@@ -591,9 +592,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								</div>
 							))
 						) : (
-							<div className="no-data">
-								{__('No activity found.', 'multivendorx')}
-							</div>
+							<ComponentStatusView title={__('No activity found.', 'multivendorx')} />
 						)}
 					</div>
 				</Card>

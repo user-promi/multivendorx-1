@@ -10,6 +10,7 @@ import {
 	TableRow,
 	QueryProps,
 	InfoItem,
+	NoticeManager,
 } from 'zyra';
 import { getUrl } from '@/services/commonFunction';
 
@@ -17,7 +18,6 @@ const NotificationTable = (React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [totalRows, setTotalRows] = useState(0);
 	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
 
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
@@ -40,7 +40,12 @@ const NotificationTable = (React.FC = () => {
 			})
 			.catch((error) => {
 				console.error('Failed to fetch announcements', error);
-				setError(__('Failed to load announcements', 'multivendorx'));
+				NoticeManager.add({
+					title: __('Error', 'multivendorx'),
+					message: __('Failed to load notifications', 'multivendorx'),
+					type: 'error',
+					position: 'float',
+				});
 				setRows([]);
 				setTotalRows(0);
 				setIsLoading(false);
@@ -76,7 +81,6 @@ const NotificationTable = (React.FC = () => {
 	return (
 		<Container>
 			<Column>
-				{error && <div className="error-notice">{error}</div>}
 				<TableCard
 					headers={headers}
 					rows={rows}

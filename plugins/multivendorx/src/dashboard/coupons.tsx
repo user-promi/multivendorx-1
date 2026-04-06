@@ -21,6 +21,7 @@ import {
 } from 'zyra';
 
 import axios from 'axios';
+import Popup from '../components/Popup/Popup';
 import { toWcIsoDate } from '@/services/commonFunction';
 
 const COUPON_STATUS_MAP: Record<string, string> = {
@@ -860,42 +861,22 @@ const AllCoupon: React.FC = () => {
 			<PopupUI
 				position="lightbox"
 				open={confirmOpen}
-				onClose={() => {
-					setConfirmOpen(false);
-					setSelectedCoupon(null);
-				}}
-				showBackdrop={true}
-				header={{
-					icon: 'warning',
-					title: __('Are you sure?', 'multivendorx'),
-				}}
-				footer={
-					<ButtonInputUI
-						buttons={[
-							{
-								icon: 'close',
-								text: __('Cancel', 'multivendorx'),
-								color: 'red',
-								onClick: () => {
-									setConfirmOpen(false);
-									setSelectedCoupon(null);
-								},
-							},
-							{
-								icon: 'cross',
-								text: __('Delete', 'multivendorx'),
-								onClick: handleConfirmDelete,
-							},
-						]}
-					/>
-				}
+				onClose={() => setConfirmOpen(false)}
+				width={31.25}
+				height="auto"
 			>
-				<div>
-					{__(
-						'Are you sure you want to delete this coupon?',
-						'multivendorx'
-					)}
-				</div>
+				<Popup
+					confirmMode
+					title={__('Delete Coupon', 'multivendorx')}
+					confirmMessage={__('Are you sure?', 'multivendorx')}
+					confirmYesText={__('Delete', 'multivendorx')}
+					confirmNoText={__('Cancel', 'multivendorx')}
+					onConfirm={handleConfirmDelete}
+					onCancel={() => {
+						setConfirmOpen(false);
+						setSelectedCoupon(null);
+					}}
+				/>
 			</PopupUI>
 			<TableCard
 				headers={headers}
