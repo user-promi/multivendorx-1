@@ -568,7 +568,7 @@ const Dashboard: React.FC = () => {
 					/>
 				}
 			/>
-			<Container>
+			<Container className='store-dashboard'>
 				<Column>
 					<Analytics
 						variant="dashboard"

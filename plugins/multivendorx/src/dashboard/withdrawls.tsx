@@ -163,7 +163,7 @@ const Withdrawls: React.FC = () => {
 				)}
 			/>
 
-			<Container>
+			<Container className='store-withdrawals'>
 				<Column grid={6}>
 					<Card title={__('Last Withdrawal', 'multivendorx')}>
 						{lastWithdraws && lastWithdraws.length > 0 ? (
