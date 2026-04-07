@@ -21,6 +21,7 @@ export default {
 			key: 'type_options',
 			type: 'checkbox',
 			label: __('Order stages', 'multivendorx'),
+			row: false,
 			// desc: __(
 			//     'Select which invoices your marketplace should generate. Most stores only need the first option.',
 			//     'multivendorx'

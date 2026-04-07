@@ -43,10 +43,10 @@ export const formatSpacing = (
     type: 'padding' | 'margin',
     style: BlockStyle
 ): string => {
-    const top = style[`${type}Top`] ?? 0.85;
-    const right = style[`${type}Right`] ?? 0.85;
-    const bottom = style[`${type}Bottom`] ?? 0.85;
-    const left = style[`${type}Left`] ?? 0.85;
+    const top = style[`${type}Top`] ?? 0;
+    const right = style[`${type}Right`] ?? 0;
+    const bottom = style[`${type}Bottom`] ?? 0;
+    const left = style[`${type}Left`] ?? 0;
     return `${top}rem ${right}rem ${bottom}rem ${left}rem`;
 };
 
@@ -170,7 +170,7 @@ export const BLOCK_STYLE_PRESETS = {
     button: {
         backgroundColor: '#007bff',
         color: '#ffffff',
-        fontSize: 16,
+        fontSize: 1,
         fontWeight: 'bold',
         paddingTop: 10,
         paddingRight: 20,
