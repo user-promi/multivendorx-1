@@ -234,13 +234,13 @@ const AllCoupon: React.FC = () => {
 
 		const request = formData.id
 			? axios.post(
-					`${appLocalizer.apiUrl}/wc/v3/coupons/${formData.id}`,
-					payload,
-					{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-				)
+				`${appLocalizer.apiUrl}/wc/v3/coupons/${formData.id}`,
+				payload,
+				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+			)
 			: axios.post(`${appLocalizer.apiUrl}/wc/v3/coupons`, payload, {
-					headers: { 'X-WP-Nonce': appLocalizer.nonce },
-				});
+				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+			});
 
 		request
 			.then(() => {
@@ -688,9 +688,9 @@ const AllCoupon: React.FC = () => {
 					search: query.searchValue || '',
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-								query.filter.created_at.startDate,
-								'start'
-							)
+							query.filter.created_at.startDate,
+							'start'
+						)
 						: undefined,
 
 					before: query.filter?.created_at?.endDate
@@ -819,7 +819,8 @@ const AllCoupon: React.FC = () => {
 									}
 								/>
 								<RandomInputKeyGeneratorUI
-									length="10"
+									value={formData.title}
+									length={10}
 									onChange={(value) => {
 										setFormData({
 											...formData,
