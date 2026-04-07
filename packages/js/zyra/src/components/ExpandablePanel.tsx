@@ -43,7 +43,6 @@ interface ExpandablePanelMethod {
     id: string;
     icon: string;
     label: string;
-    settingDescription: string;
     desc: string;
     connected?: boolean;
     formFields?: PanelFormField[];
@@ -830,7 +829,6 @@ const PanelBody: React.FC = () => {
                                     ? field.label
                                     : undefined
                             }
-                            labelDes= {field.settingDescription}
                             desc={field.desc}
                             htmlFor={field.name}
                         >
