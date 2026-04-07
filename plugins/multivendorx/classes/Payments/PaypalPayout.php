@@ -46,6 +46,8 @@ class PaypalPayout {
                     'key'     => 'payment_mode',
                     'type'    => 'choice-toggle',
                     'label'   => __( 'Payment mode', 'multivendorx' ),
+                    'settingDescription'    => __( "Controls whether transactions are real or simulated. Use Sandbox while testing your integration — no real money moves. Switch to Live only when you're ready to accept actual payments.", 'multivendorx' ),
+                    'desc' => __( '<a href="https://developer.paypal.com/tools/sandbox/" class="link-item" target="blank">PayPal Sandbox documentation <i class="adminfont-external"/></a>', 'multivendorx' ),
                     'options' => array(
                         array(
 							'key'   => 'sandbox',
@@ -64,12 +66,16 @@ class PaypalPayout {
                     'type'        => 'text',
                     'label'       => 'Client ID',
                     'placeholder' => 'Enter Client id',
+                    'settingDescription'    => __( "Your app's public identifier issued by PayPal. This is safe to expose on the frontend. Each environment (Sandbox / Live) has a different Client ID — make sure you use the one that matches your selected Payment Mode.", 'multivendorx' ),
+                    'desc' => __( '<a href="https://developer.paypal.com/dashboard/applications" class="link-item" target="blank">Get your Client ID <i class="adminfont-external"/></a>', 'multivendorx' ),
                 ),
                 array(
                     'key'         => 'client_secret',
                     'type'        => 'text',
                     'label'       => 'Client secret key',
                     'placeholder' => 'Enter Secret Key',
+                    'settingDescription'    => __( "A private key that authenticates your server when calling the PayPal API. Never share or expose this publicly — treat it like a password. Like the Client ID, it differs between Sandbox and Live.", 'multivendorx' ),
+                    'desc' => __( '<a href="https://developer.paypal.com/dashboard/applications" class="link-item" target="blank">Get your Client Secret <i class="adminfont-external"/></a>', 'multivendorx' ),
                 ),
             ),
         );

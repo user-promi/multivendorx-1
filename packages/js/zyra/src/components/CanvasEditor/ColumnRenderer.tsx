@@ -11,6 +11,7 @@ import {
     getColumnCount,
 } from './blockTypes';
 import BlockRenderer from './BlockRenderer';
+import { generateBlockStyles, BlockStyle } from './blockStyle';
 
 // Types
 export interface SelectedBlockLocation {
@@ -221,6 +222,13 @@ export const ColumnRenderer: React.FC<ColumnRendererProps> = ({
 
     const columns = safeColumns(block);
     const layout = block.layout || '2-50';
+    const styles = generateBlockStyles(block.style, { includeText: true });
+    const enhancedStyles = {
+        ...styles,
+        display: 'flex',
+        flexDirection: 'column' as const,
+        width: '100%',
+    };
 
     return (
         <div
@@ -245,9 +253,21 @@ export const ColumnRenderer: React.FC<ColumnRendererProps> = ({
             )}
 
             <section className="form-field-container-wrapper">
-                <div className={`email-columns layout-${layout}`}>
+                <div className={`email-columns layout-${layout}`}
+                    style={{
+                        display: 'flex',
+                        width: '100%',
+                        justifyContent: block.style?.justifyContent || 'flex-start',
+                        alignItems: block.style?.alignItems || 'stretch',
+                        gap: block.style?.gap ? `${block.style.gap}rem` : '1rem',
+                    }}
+                >
                     {columns.map((column, colIdx) => (
-                        <div key={colIdx} className="email-column-wrapper">
+                        <div 
+                            key={colIdx} 
+                            className="email-column-wrapper"
+                            style={enhancedStyles}
+                        >
                             <ReactSortable
                                 list={column}
                                 setList={(list) =>

@@ -512,7 +512,7 @@ const Dashboard: React.FC = () => {
 			prev30: storePreviousYear?.commission?.order_count || 0,
 		},
 		{
-			icon: 'store-seo',
+			icon: 'search-discovery',
 			number: store?.visitors,
 			text: 'Store Views',
 			color: 'accent',
