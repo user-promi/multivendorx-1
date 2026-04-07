@@ -309,7 +309,7 @@ const TableCard: React.FC<TableCardProps> = ({
                                 <PopupUI
                                     position="menu-dropdown"
                                     toggleIcon="more-vertical"
-                                    tooltipName="menu"
+                                    tooltipName="Manage display"
                                     tooltipPosition="end"
                                 >
                                     <ItemListUI

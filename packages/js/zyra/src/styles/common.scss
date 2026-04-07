@@ -349,35 +349,35 @@ $index: 1;
       }
     }
 
-    .basic-input {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      margin-right: 0;
-    }
+    // .basic-input {
+    //   border-top-right-radius: 0;
+    //   border-bottom-right-radius: 0;
+    //   margin-right: 0;
+    // }
 
-    .admin-btn {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
+    // .admin-btn {
+    //   border-top-left-radius: 0;
+    //   border-bottom-left-radius: 0;
+    // }
 
-    .copy-btn {
-      background: $theme-background-color;
-      color: $theme-color;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      width: 4rem;
-      cursor: pointer;
-    }
+    // .copy-btn {
+    //   background: $theme-background-color;
+    //   color: $theme-color;
+    //   border-top-left-radius: 0;
+    //   border-bottom-left-radius: 0;
+    //   width: 4rem;
+    //   cursor: pointer;
+    // }
 
-    .clear-btn {
-      background: transparent;
-      font-size: 1.125rem;
-      border: none;
-      border-top: 0.063rem solid #e0e4e9;
-      border-bottom: 0.063rem solid #e0e4e9;
-      color: $accent-color;
-      cursor: pointer;
-    }
+    // .clear-btn {
+    //   background: transparent;
+    //   font-size: 1.125rem;
+    //   border: none;
+    //   border-top: 0.063rem solid #e0e4e9;
+    //   border-bottom: 0.063rem solid #e0e4e9;
+    //   color: $accent-color;
+    //   cursor: pointer;
+    // }
   }
 }
 
@@ -1184,6 +1184,9 @@ $index: 1;
 // pagination end
 
 // tour start
+.reactour__mask{
+  opacity: 0.3 !important;
+}
 .tour-content {
   .title {
     font-size: 1.25rem;

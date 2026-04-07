@@ -55,7 +55,6 @@
                     padding: 0;
                 }
             }
-
             .after,
             .before {
                 font-size: 0.95rem;
@@ -179,14 +178,33 @@
                 flex-wrap: nowrap;
                 gap: 0;
 
-                .input-wrapper {
+                .input-wrapper{
                     border-top-right-radius: 0;
                     border-bottom-right-radius: 0;
                 }
-
                 .admin-btn {
-                    border-top-left-radius: 0;
-                    border-bottom-left-radius: 0;
+                     border-top-left-radius: 0;
+                     border-bottom-left-radius: 0;
+                }
+                .tooltip-wrapper{
+                    padding: 0.38rem 0.45rem;
+                    border-top: $border-light-small;
+                    border-bottom: $border-light-small;
+
+                    i{
+                        font-size: 1.4rem;
+                    }
+                }
+                .clear-btn{
+                    border: $border-light-small;
+                    padding: 0.38rem 0.45rem;
+                    color: map-get(map-get($color-palette, red), color);
+                    border-top-right-radius: $border-radius-small;
+                    border-bottom-right-radius: $border-radius-small;
+                    cursor: pointer;
+                    i{
+                        font-size: 1.4rem;
+                    }
                 }
             }
         }
