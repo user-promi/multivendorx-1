@@ -37,6 +37,10 @@ export interface BlockStyle {
     // Dimensions
     width?: string;
     height?: string | number;
+
+    justifyContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+    alignItems?: 'stretch' | 'flex-start' | 'center' | 'flex-end' | 'baseline';
+    gap?: number;
 }
 
 export const formatSpacing = (
@@ -125,7 +129,17 @@ export const generateDimensionStyles = (
         height: style.height,
     };
 };
-
+// Generate CSS properties for column layout styles
+export const generateColumnStyles = (
+    style?: BlockStyle
+): React.CSSProperties => {
+    if (!style) {
+        return {};
+    }
+    return {
+        justifyContent: style.justifyContent,
+    };
+};
 // Generate complete block styles Combines all style categories
 export const generateBlockStyles = (
     style?: BlockStyle,
@@ -145,6 +159,7 @@ export const generateBlockStyles = (
         ...generateBorderStyles(style),
         ...(includeText ? generateTextStyles(style) : {}),
         ...(includeDimensions ? generateDimensionStyles(style) : {}),
+        ...generateColumnStyles(style),
     };
 };
 

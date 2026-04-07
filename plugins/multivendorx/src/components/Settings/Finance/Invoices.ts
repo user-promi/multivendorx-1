@@ -16,12 +16,26 @@ export default {
 	),
 	headerIcon: 'invoice',
 	submitUrl: 'settings',
+	hideSettingHeader: true,
 	modal: [
+		{
+			key: 'invoice_prefix',
+			type: 'text',
+			row: false,
+			cols: 2,
+			label: __('Invoice prefix', 'multivendorx'),
+			desc: __('Example results: INV-2026-0001, INV-MVX-0001', 'multivendorx'),
+			placeholder: __('Text that appears before the number.', 'multivendorx'),
+			size: '25rem',
+			moduleEnabled: 'invoice',
+			proSetting: true,
+		},
 		{
 			key: 'type_options',
 			type: 'checkbox',
 			label: __('Order stages', 'multivendorx'),
 			row: false,
+			cols: 2,
 			// desc: __(
 			//     'Select which invoices your marketplace should generate. Most stores only need the first option.',
 			//     'multivendorx'
@@ -90,18 +104,7 @@ export default {
 		// 	),
 		// 	title: __('Invoice numbering', 'multivendorx'),
 		// },
-		{
-			key: 'invoice_prefix',
-			type: 'text',
-			row: false,
-			cols: 2,
-			label: __('Invoice prefix', 'multivendorx'),
-			placeholder:
-				'Text that appears before the number. Example results: INV-2026-0001, INV-MVX-0001',
-			size: '25rem',
-			moduleEnabled: 'invoice',
-			proSetting: true,
-		},
+
 		// {
 		// 	key: 'due_days',
 		// 	type: 'number',
@@ -123,7 +126,6 @@ export default {
 			),
 			title: __('Store commission invoices ', 'multivendorx'),
 		},
-
 		{
 			key: 'commission_invoice_frequency',
 			type: 'choice-toggle',

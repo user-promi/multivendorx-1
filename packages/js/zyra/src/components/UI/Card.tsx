@@ -121,7 +121,7 @@ const Card = ({
 
                                 {iconName && !toggle && !action && (
                                     <i
-                                        className={`icon adminfont-${iconName}`}
+                                        className={`adminfont-${iconName}`}
                                         onClick={() => onIconClick?.()}
                                         style={{
                                             cursor: onIconClick

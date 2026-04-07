@@ -22,7 +22,7 @@ const StyleControls: React.FC<StyleControlsProps> = ({
         <>
             {/* Text Styles - Conditionally included */}
             {includeTextStyles && (
-                <Card toggle title="Text">
+                <Card toggle defaultExpanded={false} title="Text">
                     <FormGroupWrapper>
                         <FormGroup label="Text Align">
                             <ChoiceToggleUI
