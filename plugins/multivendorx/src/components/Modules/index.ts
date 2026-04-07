@@ -456,7 +456,7 @@ export default {
 			id: 'search-discovery',
 			name: __('Search & Discovery', 'multivendorx'),
 			desc: 'SEO settings for store pages and products using Rank Math or Yoast SEO.',
-			docLink: 'https://multivendorx.com/docs/knowledgebase/store-seo',
+			docLink: 'https://multivendorx.com/docs/knowledgebase/search-discovery',
 			settingsLink: `${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=search-discovery`,
 			proModule: true,
 			category: ['analytics_tools', 'store_management'],
