@@ -57,8 +57,6 @@ const ratingsField = {
             formFields: [],
         },
     ],
-
-    // addNewBtn: true,
     addNewTemplate: {
         label: 'New Rating Parameters',
         editableFields: {
