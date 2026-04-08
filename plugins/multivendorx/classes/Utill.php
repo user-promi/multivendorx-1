@@ -221,6 +221,7 @@ class Utill {
         'distance_type'                => 'distance_type',
         'shipping_by_country'          => 'shipping_by_country',
         'shipping_by_distance'         => 'shipping_by_distance',
+        'store_tour_completed'         => 'store_tour_completed',
     );
 
     const USER_SETTINGS_KEYS = array(
