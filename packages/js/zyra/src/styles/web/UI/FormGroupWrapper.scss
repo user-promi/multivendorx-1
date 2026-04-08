@@ -15,6 +15,10 @@
         width: 100%;
         position: relative;
         gap: 0.5rem;
+        
+        &:has(label){
+            justify-content: start;
+        }
 
         &[data-cols='1'] {
             flex: 1 1 100%;

@@ -710,8 +710,9 @@ const EditStore = () => {
 												<div className="storefront-link">
 													<i className="adminfont-storefront"></i>
 													<a
-														href="#"
+														href={`${appLocalizer.store_page_url}${data.slug}`}
 														className="link-item"
+														target='blank'
 													>
 														<b>
 															{__(
