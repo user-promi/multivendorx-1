@@ -345,6 +345,7 @@ const Dashboard = () => {
 			<GuidedTourProvider
 				appLocalizer={appLocalizer}
 				steps={getTourSteps(appLocalizer)}
+				storeId={appLocalizer.store_id}
 			/>
 			<div className="dashboard-tabs-wrapper">
 				<div className="logo-wrapper">
