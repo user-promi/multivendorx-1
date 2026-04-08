@@ -388,6 +388,12 @@ export const SelectInputUI: React.FC<SelectProps> = ({
         menuContent,
         keepMenuOpenOnMenuContentClick,
         noOptionsText,
+        menuPortalTarget: document.body, 
+        menuPosition: 'fixed',
+        styles: {
+            ...buildStyles(isMulti, background, color),
+            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+        },
     };
 
     return (

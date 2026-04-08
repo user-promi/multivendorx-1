@@ -27,7 +27,13 @@ $login_url     = add_query_arg( 'redirect_to', $current_url, $myaccount_url );
     </div>
 
     <!-- Questions List (populated via AJAX) -->
-    <ul id="qna-list"></ul>
+     <div class="woocommerce-js">
+        <div id="reviews">
+            <div id="comments">
+                <ol id="qna-list" class="commentlist"></ol>
+            </div>
+        </div>
+    </div>
     <div id="qna-no-results-container" class="qna-empty" style="display:none;">
         <span id="qna-no-results-message">
             <?php echo esc_html__( 'Have not discovered the information you seek', 'multivendorx' ); ?>
