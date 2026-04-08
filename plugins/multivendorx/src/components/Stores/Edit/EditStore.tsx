@@ -774,6 +774,7 @@ const EditStore = () => {
 												onClick={() =>
 													setEditDesc(true)
 												}
+												ref={storeRef}
 											>
 												{editDesc ? (
 													<textarea
@@ -781,26 +782,26 @@ const EditStore = () => {
 															data.description ||
 															''
 														}
-														// onChange={(e) =>
-														// 	setData({
-														// 		...data,
-														// 		description:
-														// 			e.target
-														// 				.value,
-														// 	})
-														// }
-														// onBlur={() => {
-														// 	if (
-														// 		!data?.description?.trim()
-														// 	) {
-														// 		setData({
-														// 			...data,
-														// 			description:
-														// 				prevDesc,
-														// 		});
-														// 	}
-														// 	setEditDesc(false);
-														// }}
+														onChange={(e) =>
+															setData({
+																...data,
+																description:
+																	e.target
+																		.value,
+															})
+														}
+														onBlur={() => {
+															if (
+																!data?.description?.trim()
+															) {
+																setData({
+																	...data,
+																	description:
+																		prevDesc,
+																});
+															}
+															// setEditDesc(false);
+														}}
 														className="textarea-input"
 														autoFocus
 													/>
@@ -880,7 +881,7 @@ const EditStore = () => {
 											<div className="contact-info">
 												<div className="desc store-info">
 													<i className="adminfont-form-phone"></i>
-													{__('Registered since ', 'multivendorx')}
+													{__('Registered since', 'multivendorx')}
 													{
 														data?.create_time?.split(
 															'-'
