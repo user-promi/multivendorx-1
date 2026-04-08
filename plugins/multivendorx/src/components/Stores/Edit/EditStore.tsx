@@ -781,26 +781,26 @@ const EditStore = () => {
 															data.description ||
 															''
 														}
-														onChange={(e) =>
-															setData({
-																...data,
-																description:
-																	e.target
-																		.value,
-															})
-														}
-														onBlur={() => {
-															if (
-																!data?.description?.trim()
-															) {
-																setData({
-																	...data,
-																	description:
-																		prevDesc,
-																});
-															}
-															setEditDesc(false);
-														}}
+														// onChange={(e) =>
+														// 	setData({
+														// 		...data,
+														// 		description:
+														// 			e.target
+														// 				.value,
+														// 	})
+														// }
+														// onBlur={() => {
+														// 	if (
+														// 		!data?.description?.trim()
+														// 	) {
+														// 		setData({
+														// 			...data,
+														// 			description:
+														// 				prevDesc,
+														// 		});
+														// 	}
+														// 	setEditDesc(false);
+														// }}
 														className="textarea-input"
 														autoFocus
 													/>
@@ -880,7 +880,7 @@ const EditStore = () => {
 											<div className="contact-info">
 												<div className="desc store-info">
 													<i className="adminfont-form-phone"></i>
-													Registered since{' '}
+													{__('Registered since ', 'multivendorx')}
 													{
 														data?.create_time?.split(
 															'-'
@@ -901,7 +901,7 @@ const EditStore = () => {
 
 											<div className="desc store-info">
 												<i className="adminfont-user-circle"></i>
-												<b> Primary Owner: </b>{' '}
+												<b> {__('Primary Owner:', 'multivendorx')} </b>{' '}
 												{
 													data.primary_owner_info
 														?.data?.display_name

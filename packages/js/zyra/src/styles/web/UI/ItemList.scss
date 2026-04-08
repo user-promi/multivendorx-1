@@ -123,7 +123,7 @@
                 font-size: 1.125rem;
                 padding-right: 0.5rem;
 
-                &.adminfont-check-fill {
+                &.adminfont-success {
                     color: map-get(map-get($color-palette, green), color);
                 }
 

@@ -352,8 +352,9 @@ const Invoice: React.FC = () => {
 
 
             <Column grid={4}>
-                <Card title={__('Legal and tax information', 'multivendorx')} desc={__('Choose at which order stages invoices should be generated automatically.', 'multivendorx')}>
+                <Card title={__('Legal and tax information', 'multivendorx')} >
                     <FormGroupWrapper>
+                        <FormGroup desc={__('Enter or update your VAT/Tax number, additional tax IDs, and company registration numbers here - all changes will be reflected in future invoices.', 'multivendorx')}>
                         <ExpandablePanelUI
                             name={ratingsField.key}
                             methods={ratingsField.modal}
@@ -364,6 +365,7 @@ const Invoice: React.FC = () => {
                             addNewBtn={ratingsField.addNewBtn}
                             addNewTemplate={ratingsField.addNewTemplate}
                         />
+                        </FormGroup>
                     </FormGroupWrapper>
                 </Card>
                 <Card title={__('Store commission invoices', 'multivendorx')} desc={__('Choose at which order stages invoices should be generated automatically.', 'multivendorx')}>

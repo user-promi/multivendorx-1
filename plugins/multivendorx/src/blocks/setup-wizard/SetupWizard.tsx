@@ -461,28 +461,28 @@ const SetupWizard: React.FC = () => {
 								'<b>Back up your database first — </b> export a full backup before starting. If anything goes wrong, you can restore it.',
 								'multivendorx'
 							),
-							icon: 'check-fill',
+							icon: 'success',
 						},
 						{
 							title: __(
 								'<b>Turn off caching plugins —</b> plugins like WP Rocket or W3 Total Cache can interfere with the import. Disable them temporarily.',
 								'multivendorx'
 							),
-							icon: 'check-fill',
+							icon: 'success',
 						},
 						{
 							title: __(
 								'<b>Keep WCFM Marketplace active for now —</b>it must still be installed and enabled so we can read your existing data.',
 								'multivendorx'
 							),
-							icon: 'check-fill',
+							icon: 'success',
 						},
 						{
 							title: __(
 								'<b>Use a stable internet connection —</b> dropping out mid-migration can leave your data in an incomplete state.',
 								'multivendorx'
 							),
-							icon: 'check-fill',
+							icon: 'success',
 						},
 					],
 				},
