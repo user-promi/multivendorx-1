@@ -39,6 +39,8 @@ export interface ColumnRendererProps {
         list: SortableItem[]
     ) => void;
     onChildMutate: (updated: ColumnsBlock) => void;
+    onChildSelect: (location: SelectedBlockLocation, block: Block) => void;
+    selectedLocation: SelectedBlockLocation | null;
     onSelect: () => void;
     onDelete: () => void;
     showMeta?: boolean;
@@ -136,6 +138,7 @@ export const useColumnManager = ({
 
     return {
         selectedLocation,
+        setSelectedLocation,
         handleChildUpdate,
         handleLayoutChange,
         clearSelection,
@@ -151,13 +154,13 @@ export const ColumnRenderer: React.FC<ColumnRendererProps> = ({
     openBlock,
     setOpenBlock,
     onColumnSetList,
+    onChildSelect,
+    selectedLocation,
     onChildMutate,
     onSelect,
     onDelete,
     showMeta = true,
 }) => {
-    const [selectedLocation, setSelectedLocation] =
-        useState<SelectedBlockLocation | null>(null);
 
     /** Mutate the columns matrix and notify the parent with the new block */
     const mutate = useCallback(
@@ -201,23 +204,21 @@ export const ColumnRenderer: React.FC<ColumnRendererProps> = ({
             );
             if (deleted && openBlock?.id === deleted.id) {
                 setOpenBlock(null);
-                setSelectedLocation(null);
             }
         },
         [block, mutate, openBlock?.id, setOpenBlock]
     );
 
-    const handleChildSelect = useCallback(
-        (child: Block, colIdx: number, childIdx: number) => {
-            setOpenBlock(child);
-            setSelectedLocation({
+    const handleChildSelect = (child: Block, colIdx: number, childIdx: number) => {
+        onChildSelect(
+            {
                 parentIndex,
                 columnIndex: colIdx,
                 childIndex: childIdx,
-            });
-        },
-        [parentIndex, setOpenBlock]
-    );
+            },
+            child
+        );
+    };
 
     const columns = safeColumns(block);
     const layout = block.layout || '2-50';
@@ -281,13 +282,14 @@ export const ColumnRenderer: React.FC<ColumnRendererProps> = ({
                                                 selectedLocation?.childIndex ===
                                                     childIdx
                                             }
-                                            onSelect={() =>
+                                            onSelect={(e) => {
+                                                e?.stopPropagation?.();
                                                 handleChildSelect(
                                                     child,
                                                     colIdx,
                                                     childIdx
                                                 )
-                                            }
+                                            }}
                                             onChange={(patch) =>
                                                 handleChildUpdate(
                                                     colIdx,
