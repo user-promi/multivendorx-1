@@ -185,18 +185,15 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
         pendingDrag.current = null;
         dragFlushPending.current = false;
 
-        // 1. Start from new canvas list or current state
         let next: Block[] = (() => {
             const current = blocksRef.current;
 
             if (!canvas) return current;
 
-            // 🔥 EMAIL → no special handling
             if (context !== 'form') {
                 return [...canvas];
             }
 
-            // 🔥 FORM → preserve system blocks
             const title = current.find(b => b.type === 'title');
             const submit = current.find(b => b.type === 'button');
 
@@ -208,7 +205,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
             return result;
         })();
 
-        // 2. Apply each column update onto its parent block
         columns.forEach((newCol, key) => {
             const [pi, ci] = key.split('-').map(Number);
             next = next.map((b, i) => {
