@@ -310,7 +310,7 @@ const DashboardTab: React.FC<object> = () => {
 
 						<div className="image">
 							<img src={Mascot} alt="" />
-							<div className="title">Lorem ipsum dolor sit amet.</div>
+							<div className="title">Meet "Shaki" – Powering marketplace growth</div>
 						</div>
 					</div>
 				</Card>
