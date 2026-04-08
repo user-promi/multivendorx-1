@@ -25,7 +25,7 @@ const Inventory = ({ product, setProduct, handleChange }) => {
 
 	return (
 		<Card
-			title={__('Inventory', 'multivendorx')}
+			title={__('Stock & inventory', 'multivendorx')}
 			desc={__("Track your available quantity and let customers know what's in stock.", 'multivendorx')}
 			action={
 				<>

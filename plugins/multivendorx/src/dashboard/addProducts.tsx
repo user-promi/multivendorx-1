@@ -273,14 +273,9 @@ const AddProduct = () => {
 			/>
 			<Container>
 				<Column grid={3}>
-					<Card title={__('What kind of product is this?', 'multivendorx')}>
+					<Card title={__('What kind of product is this?', 'multivendorx')} desc={__('Choose the type that best describes what you are selling.', 'multivendorx')}>
 						<FormGroupWrapper>
-							<FormGroup
-								desc={__(
-									'Choose the type that best describes what you are selling.',
-									'multivendorx'
-								)}
-							>
+							<FormGroup>
 								<SelectInputUI
 									name="type"
 									type="single-select"
