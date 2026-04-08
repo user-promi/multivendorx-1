@@ -112,6 +112,7 @@ const AddProduct = () => {
 
 		const payload = {
 			...product,
+			status: appLocalizer.current_user?.allcaps?.publish_products ? 'publish' : 'draft',
 			images: imagePayload,
 			meta_data: [
 				...product.meta_data,
@@ -806,10 +807,10 @@ const AddProduct = () => {
 											? val
 											: [val];
 
-										const formatted = urls.map((url) => ({
-											id: 0,
-											src: url,
-											thumbnail: url,
+										const formatted = urls.map((file) => ({
+											id: file?.id,
+											src: file?.url,
+											thumbnail: file?.url,
 										}));
 
 										setGalleryImages(formatted);
