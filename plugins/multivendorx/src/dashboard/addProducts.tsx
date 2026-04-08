@@ -132,6 +132,7 @@ const AddProduct = () => {
 					key: 'multivendorx_cancellation_policy',
 					value: product.cancellation_policy || '',
 				},
+      			{ key: '_is_auto_draft', value: false }
 			],
 		};
 
@@ -227,6 +228,10 @@ const AddProduct = () => {
 	const rejectNote = product?.meta_data?.find(
 		(m) => m.key === '_reject_note'
 	)?.value;
+
+	const isAutoDraft = product?.meta_data?.some(
+		(m) => m.key === '_is_auto_draft' && m.value === '1'
+		);
 
 	return (
 		<>
@@ -499,7 +504,7 @@ const AddProduct = () => {
 										}
 										disabled={modules.includes(
 											'shared-listing'
-										)}
+										) && !isAutoDraft}
 									/>
 									<div className="settings-metabox-description">
 										{__(
