@@ -61,6 +61,7 @@ $star-color: #d49c00;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #000;
 
     .multivendorx-popup-content {
         width: 50%;
@@ -70,7 +71,11 @@ $star-color: #d49c00;
         position: relative;
         padding: 2rem;
     }
-
+    &.store-support-popup{
+        .multivendorx-popup-content{
+            width: 30%;
+        }
+    }
     .popup-close {
         position: absolute;
         top: 0.5rem;

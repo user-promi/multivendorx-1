@@ -473,7 +473,7 @@ const AddProduct = () => {
 							/>
 						</Card>
 					)}
-					<Card title={__('General information', 'multivendorx')}>
+					<Card title={__('General information', 'multivendorx')} desc={__("Help customers understand what you're selling.", 'multivendorx')}>
 						<FormGroupWrapper>
 							<div className="form-group  ai-form">
 								<label className="settings-form-label">
@@ -642,15 +642,8 @@ const AddProduct = () => {
 					</PopupUI>
 					{product?.type === 'simple' &&
 						productFields.includes('general') && (
-							<Card title={__('Pricing', 'multivendorx')}>
+							<Card title={__('Pricing', 'multivendorx')} desc={__('Set what customers will pay. Add a sale price to show a discount.', 'multivendorx')}>
 								<FormGroupWrapper>
-									<FormGroup
-								desc={__(
-									'NAA',
-									'multivendorx'
-								)}
-							>
-							</FormGroup>
 									<FormGroup
 										cols={2}
 										label={__(

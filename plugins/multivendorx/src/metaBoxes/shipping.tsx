@@ -44,7 +44,7 @@ const ShippingCard = ({
 	}, []);
 
 	return (
-		<Card title={__('Product delivery', 'multivendorx')}>
+		<Card title={__('Product delivery', 'multivendorx')} desc={__('Choose how customers receive this product after purchase.', 'multivendorx')}>
 			{/* Dimensions */}
 			<FormGroupWrapper>
 				<FormGroup>
