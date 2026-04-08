@@ -1,5 +1,5 @@
-import { __ } from '@wordpress/i18n';
-import React from 'react';
+import { __, sprintf } from '@wordpress/i18n';
+import React, { useState } from 'react';
 
 const SupportIcon = () => (
 	<svg
@@ -13,14 +13,94 @@ const SupportIcon = () => (
 	</svg>
 );
 
-const StoreSupport: React.FC = () => {
+interface Props {
+	productName: string;
+	productId: number;
+}
+
+const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
+	const [isOpen, setIsOpen] = useState(false);
+
 	return (
-		<button
-			className={`wp-block-button__link has-border-color has-accent-1-border-color wp-element-button multivendorx-store-support-btn`}
-		>
-			<SupportIcon />
-			{__('Support com', 'multivendorx')}
-		</button>
+		<>
+			<button
+				className="wp-block-button__link has-border-color has-accent-1-border-color wp-element-button multivendorx-store-support-btn"
+				onClick={() => setIsOpen(true)}
+			>
+				<SupportIcon />
+				{__('Support com', 'multivendorx')}
+			</button>
+
+			{isOpen && (
+				<div
+					className="store-support-popup multivendorx-popup"
+					onClick={(e) => {
+						if (e.target === e.currentTarget) setIsOpen(false);
+					}}
+				>
+					<form className="woocommerce-form woocommerce-form-login login multivendorx-popup-content">
+
+						<span
+							className="popup-close"
+							onClick={() => setIsOpen(false)}
+						>
+							<i className="dashicons dashicons-no-alt"></i>
+						</span>
+
+						<h3>{__('Hi Shop2', 'multivendorx')}</h3>
+						<h2>{__('Create a new support', 'multivendorx')}</h2>
+
+						{/* Subject */}
+						<p className="woocommerce-form-row form-row form-row-wide">
+							<label htmlFor="support-subject">
+								{__('Subject', 'multivendorx')}
+							</label>
+							<input
+								type="text"
+								id="support-subject"
+								name="support-subject"
+								className="woocommerce-Input input-text"
+							/>
+						</p>
+
+						{/* Select (NEW) */}
+						<p className="woocommerce-form-row form-row form-row-wide">
+							<label htmlFor="order-id">
+								{__('Order ID', 'multivendorx')}
+							</label>
+							<select
+								id="order-id"
+								name="order-id"
+								className="woocommerce-Input input-select"
+							>
+								<option value="">{__('Select order id', 'multivendorx')}</option>
+								<option value="147">{__('Order #147', 'multivendorx')}</option>
+								<option value="157">{__('Order #157', 'multivendorx')}</option>
+							</select>
+						</p>
+
+						{/* Message */}
+						<p className="woocommerce-form-row form-row form-row-wide">
+							<label htmlFor="support-message">
+								{__('Message', 'multivendorx')}
+							</label>
+							<textarea
+								id="support-message"
+								className="input-text"
+								placeholder={__('Message', 'multivendorx')}
+							/>
+						</p>
+
+						<button
+							type="button"
+							className="submit-report-abuse woocommerce-button button wp-element-button"
+						>
+							{__('Submit', 'multivendorx')}
+						</button>
+					</form>
+				</div>
+			)}
+		</>
 	);
 };
 
