@@ -1179,3 +1179,15 @@
 
     // end setting banner template
 }
+
+
+// common and remove
+.notice-settings{
+    .form-group-wrapper {
+        gap: 1rem !important;
+        .form-group  {
+        padding: 0 !important;
+    }
+    }
+    
+}

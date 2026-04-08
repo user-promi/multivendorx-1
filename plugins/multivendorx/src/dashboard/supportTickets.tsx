@@ -9,6 +9,9 @@ const SupportTickets: React.FC = () => {
 	const [isLoading] = useState(false);
 	const [totalRows] = useState<number>(0);
 	const headers = {
+		topic: {
+			label: __('Topic', 'multivendorx'),
+		},
 		title: {
 			label: __('Title', 'multivendorx'),
 		},

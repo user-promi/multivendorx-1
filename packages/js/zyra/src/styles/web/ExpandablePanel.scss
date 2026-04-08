@@ -145,6 +145,7 @@
                 .settings-btn {
                     display: flex;
                     gap: 0.5rem;
+                    list-style-type: none;
                     .btn-red-color{
                         font-size: 1rem;
                     }
@@ -307,4 +308,10 @@
     // .form-group{
     //     padding: 1rem;
     // }
+}
+
+.card-content:has(.expandable-panel-group){
+    .expandable-panel-group{
+        width: 100%;
+    }
 }

@@ -71,6 +71,9 @@ export { default as EventCalendar } from './components/EventCalendar';
 export { EventCalendarUI } from './components/EventCalendar';
 export { useModules, initializeModules } from './contexts/ModuleContext';
 export { SettingProvider, useSetting } from './contexts/SettingContext';
+export { default as ColorSettingInput } from './components/ColorSettingInput';
+export { ColorSettingInputUI } from './components/ColorSettingInput';
+
 export type { SettingContextType } from './contexts/SettingContext';
 export type {
     QueryProps,

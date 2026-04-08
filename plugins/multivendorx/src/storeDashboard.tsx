@@ -347,11 +347,7 @@ const Dashboard = () => {
 				steps={getTourSteps(appLocalizer)}
 				storeId={appLocalizer.store_id}
 			/>
-			<div
-				className="dashboard-tabs-wrapper"
-				onMouseEnter={() => setisMenuMinimize(false)}
-				onMouseLeave={() => setisMenuMinimize(true)}
-			>
+			<div className="dashboard-tabs-wrapper">
 				<div className="logo-wrapper">
 					{store_dashboard_logo ? (
 						<img src={store_dashboard_logo.url} alt="Site Logo" />

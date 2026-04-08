@@ -531,7 +531,7 @@ const SetupWizard: React.FC = () => {
 								'Per-product commission rates',
 								'multivendorx'
 							),
-							icon: 'advertise-product',
+							icon: 'product-advertising',
 						},
 						{
 							title: __('Vendor commissions', 'multivendorx'),

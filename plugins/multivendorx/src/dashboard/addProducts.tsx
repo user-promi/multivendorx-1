@@ -273,14 +273,9 @@ const AddProduct = () => {
 			/>
 			<Container>
 				<Column grid={3}>
-					<Card title={__('Product type', 'multivendorx')}>
+					<Card title={__('What kind of product is this?', 'multivendorx')} desc={__('Choose the type that best describes what you are selling.', 'multivendorx')}>
 						<FormGroupWrapper>
-							<FormGroup
-								desc={__(
-									'A standalone product with no variant',
-									'multivendorx'
-								)}
-							>
+							<FormGroup>
 								<SelectInputUI
 									name="type"
 									type="single-select"
@@ -473,7 +468,7 @@ const AddProduct = () => {
 							/>
 						</Card>
 					)}
-					<Card title={__('General information', 'multivendorx')}>
+					<Card title={__('General information', 'multivendorx')} desc={__("Help customers understand what you're selling.", 'multivendorx')}>
 						<FormGroupWrapper>
 							<div className="form-group  ai-form">
 								<label className="settings-form-label">
@@ -502,7 +497,7 @@ const AddProduct = () => {
 									/>
 									<div className="settings-metabox-description">
 										{__(
-											'A unique name for your product',
+											'This appears on your store listing and checkout page.',
 											'multivendorx'
 										)}
 									</div>
@@ -514,7 +509,7 @@ const AddProduct = () => {
 									<div className="form-group  ai-form">
 										<label className="settings-form-label">
 											{__(
-												'Product short description',
+												'Short description',
 												'multivendorx'
 											)}
 											{applyFilters(
@@ -543,7 +538,7 @@ const AddProduct = () => {
 											/>
 											<div className="settings-metabox-description">
 												{__(
-													'A short description displayed on product and checkout pages',
+													'Customers see this before clicking into the full product page.',
 													'multivendorx'
 												)}
 											</div>
@@ -553,7 +548,7 @@ const AddProduct = () => {
 									<div className="form-group  ai-form">
 										<label className="settings-form-label">
 											{__(
-												'Product description',
+												'Full description',
 												'multivendorx'
 											)}
 											{applyFilters(
@@ -580,7 +575,7 @@ const AddProduct = () => {
 											/>
 											<div className="settings-metabox-description">
 												{__(
-													'A short description displayed on product and checkout pages',
+													'More detail helps customers feel confident buying.',
 													'multivendorx'
 												)}
 											</div>
@@ -642,7 +637,7 @@ const AddProduct = () => {
 					</PopupUI>
 					{product?.type === 'simple' &&
 						productFields.includes('general') && (
-							<Card title={__('Price', 'multivendorx')}>
+							<Card title={__('Pricing', 'multivendorx')} desc={__('Set what customers will pay. Add a sale price to show a discount.', 'multivendorx')}>
 								<FormGroupWrapper>
 									<FormGroup
 										cols={2}
