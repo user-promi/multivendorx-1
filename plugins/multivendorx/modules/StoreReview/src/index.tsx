@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import StoreReviews from './StoreReviews';
 
 addFilter(
-	'multivendorx_customers-feedback_tab',
+	'multivendorx_customers_tab',
 	'multivendorx/store-review-tab',
 	(tabs) => {
 		tabs.push({
@@ -26,7 +26,7 @@ addFilter(
 );
 
 addFilter(
-	'multivendorx_customers_feedback_tab_content',
+	'multivendorx_customers_tab_content',
 	'multivendorx/store-review-content',
 	(defaultForm, { tabId }) => {
 		if (tabId === 'review') {
