@@ -402,7 +402,7 @@ class Install {
             'announcement',
 			'knowledgebase',
 			'simple',
-			'question-answer',
+			'customer-queries',
 			'privacy',
         );
         update_option( Utill::ACTIVE_MODULES_DB_KEY, array_unique( array_merge( $active_modules, $default_modules ) ) );

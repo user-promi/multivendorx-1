@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\QuestionAnswer;
+namespace MultiVendorX\CustomerQueries;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Utill;

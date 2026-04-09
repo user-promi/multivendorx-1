@@ -184,7 +184,7 @@ class Dashboard extends \WP_REST_Controller {
                         'name'       => 'Product Questions',
                         'slug'       => 'customer-questions',
                         'capability' => array( 'view_customer_questions', 'reply_customer_questions' ),
-                        'module'     => array( 'question-answer' ),
+                        'module'     => array( 'customer-queries' ),
                     ),
                     array(
                         'key'        => 'store-followers',
