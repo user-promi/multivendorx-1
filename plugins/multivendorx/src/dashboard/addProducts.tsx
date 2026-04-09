@@ -140,18 +140,18 @@ const AddProduct = () => {
 			booking_location_type,
 			...productData
 		} = payload;
-		axios
-			.post(
-				`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
-				productData,
-				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-			)
-			.then(() => {
-				window.location.reload();
-			})
-			.catch((error) => {
-				console.error('Error updating product:', error);
-			});
+		// axios
+		// 	.post(
+		// 		`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
+		// 		productData,
+		// 		{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+		// 	)
+		// 	.then(() => {
+		// 		window.location.reload();
+		// 	})
+		// 	.catch((error) => {
+		// 		console.error('Error updating product:', error);
+		// 	});
 	};
 
 	const [checklist, setChecklist] = useState({
