@@ -332,6 +332,7 @@ const Invoice: React.FC = () => {
                                 canAccess={true}
                                 min={ratingsField.min}
                                 addNewBtn={ratingsField.addNewBtn}
+                                editTitleShow={true}
                                 addNewTemplate={ratingsField.addNewTemplate}
                             />
                         </FormGroup>
