@@ -10,7 +10,7 @@ addFilter(
 			type: 'file',
 			module: 'customer-queries',
 			content: {
-				id: 'queries',
+				id: 'customer-queries',
 				headerTitle: __('Queries', 'multivendorx'),
 				settingTitle: __('Product questions in queue', 'multivendorx'),
 				settingSubTitle: __(
@@ -29,7 +29,7 @@ addFilter(
 	'multivendorx_customers_tab_content',
 	'multivendorx/customer-queries-content',
 	(defaultForm, { tabId }) => {
-		if (tabId === 'queries') {
+		if (tabId === 'customer-queries') {
 			return <Queries />;
 		}
 
