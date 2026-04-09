@@ -171,7 +171,7 @@ const Invoice: React.FC = () => {
     return (
         <Container className="notice-settings">
             <Column grid={8}>
-                <Card title={__('PDF format', 'multivendorx')} desc={__('Configure the layout and numbering format used for all generated invoices.', 'multivendorx')}>
+                <Card title={__('Invoices PDF format', 'multivendorx')} desc={__('Configure the layout and numbering format used for all generated invoices.', 'multivendorx')}>
                     <FormGroupWrapper>
                         <FormGroup cols={2} label="Page size">
                             <ChoiceToggleUI
@@ -210,10 +210,10 @@ const Invoice: React.FC = () => {
                                 ]}
                             />
                         </FormGroup>
-                        <FormGroup cols={2} label="Invoice prefix" desc={__('<b>Example results:</b> INV-2026-0001, INV-MVX-0001', 'multivendorx')}>
+                        <FormGroup cols={2} label="Invoice numbers will include this prefix" desc={__('<b>Example results:</b> INV-2026-0001, INV-MVX-0001', 'multivendorx')}>
                             <BasicInputUI
                                 name="name"
-                                placeholder={__('Text that appears before the number.', 'multivendorx')}
+                                placeholder={__('Invoice numbers will include this prefix', 'multivendorx')}
                             // value={formData.name || ''}
                             // onChange={(val) =>
                             //     handleChange('name', val as string)
@@ -224,18 +224,18 @@ const Invoice: React.FC = () => {
                 </Card>
                 <Card title={__('Customer invoice generator', 'multivendorx')} desc={__('Define when invoices should be automatically created and how they are delivered to customers.', 'multivendorx')}>
                     <FormGroupWrapper>
-                        <FormGroup cols={2} label={__('Generate invoices based on', 'multivendorx')}>
+                        <FormGroup cols={2} label={__('Invoices will be created based on', 'multivendorx')}>
                             <ChoiceToggleUI
                                 options={[
                                     {
                                         key: 'public',
                                         value: 'public',
-                                        label: __('Main order invoice', 'multivendorx'),
+                                        label: __('Main order', 'multivendorx'),
                                     },
                                     {
                                         key: 'private',
                                         value: 'private',
-                                        label: __('Vendor sub-order invoice', 'multivendorx'),
+                                        label: __('Store sub-order', 'multivendorx'),
                                     },
                                 ]}
                             />
@@ -303,7 +303,7 @@ const Invoice: React.FC = () => {
                         
                     </FormGroupWrapper>
                 </Card> */}
-                <Card title={__('Invoice content controls', 'multivendorx')} desc={__('Customize additional text that appears on the invoice document.', 'multivendorx')}>
+                <Card title={__('Invoices will include these additional notes', 'multivendorx')} desc={__('Customize additional text that appears on the invoice document when customers download it.', 'multivendorx')}>
                     <FormGroupWrapper>
                         <FormGroup label={__('Invoice footer text', 'multivendorx')} >
                             <TextAreaUI
@@ -321,7 +321,7 @@ const Invoice: React.FC = () => {
 
 
             <Column grid={4}>
-                <Card title={__('Legal and tax details shown on admin invoices.', 'multivendorx')} >
+                <Card title={__('Invoices will display these tax details', 'multivendorx')} >
                     <FormGroupWrapper>
                         <FormGroup desc={__('Enter or update your VAT/Tax number, additional tax IDs, and company registration numbers here - all changes will be reflected in future invoices.', 'multivendorx')}>
                             <ExpandablePanelUI
@@ -338,10 +338,10 @@ const Invoice: React.FC = () => {
                         </FormGroup>
                     </FormGroupWrapper>
                 </Card>
-                <Card title={__('Store invoices', 'multivendorx')} >
+                <Card title={__('Store commission invoices', 'multivendorx')} >
                     <FormGroupWrapper>
-                        <FormGroup label="Commission invoice frequency" desc={__(
-                            'Choose how often vendors receive commission invoices from the marketplace:<ul><li>Per order - Generate a commission invoice for each order.</li><li>Monthly - Generate a single consolidated commission invoice at the end of each month.</li></ul>',
+                        <FormGroup label="Commission invoices will be issued" desc={__(
+                            'Choose how often store receive commission invoices from the marketplace:<ul><li>Per order - Generate a commission invoice for each order.</li><li>Monthly - Generate a single consolidated commission invoice at the end of each month.</li></ul>',
                             'multivendorx'
                         )}>
                             <ChoiceToggleUI
@@ -555,4 +555,3 @@ const Invoice: React.FC = () => {
 }
 
 export default Invoice;
-
