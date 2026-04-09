@@ -10,7 +10,7 @@ addFilter(
 			type: 'file',
 			module: 'store-review',
 			content: {
-				id: 'review',
+				id: 'store-review',
 				headerTitle: __('Store Reviews', 'multivendorx'),
 				headerIcon: 'store-review',
 				settingTitle: __('Store reviews at a glance', 'multivendorx'),
@@ -29,7 +29,7 @@ addFilter(
 	'multivendorx_customers_tab_content',
 	'multivendorx/store-review-content',
 	(defaultForm, { tabId }) => {
-		if (tabId === 'review') {
+		if (tabId === 'store-review') {
 			return <StoreReviews />;
 		}
 
