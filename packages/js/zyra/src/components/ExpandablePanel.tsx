@@ -44,6 +44,7 @@ interface ExpandablePanelMethod {
     icon: string;
     label: string;
     desc: string;
+    settingDescription: string;
     connected?: boolean;
     formFields?: PanelFormField[];
     wrapperClass?: string;
@@ -324,12 +325,12 @@ const PanelHeader: React.FC = () => {
     const editDesc = state.editDesc;
     const iconDropdown = state.iconDropdown;
 
-    const showToggleIcon = (method.disableBtn && !method.isCustom) ||
-        (isWizardMode && method.isWizardMode);
+    const showToggleIcon = (method.disableBtn && !method.isCustom) || 
+                          (isWizardMode && method.isWizardMode);
 
     const shouldShowToggleButton = () => {
         // if (!showToggleIcon) return false;
-
+        
         if (isWizardMode && method.isWizardMode) {
             return hasFields;
         }
@@ -338,14 +339,15 @@ const PanelHeader: React.FC = () => {
 
     return (
         <div className="expandable-header">
-            {showToggleIcon && (
+           {showToggleIcon && (
                 <div className="toggle-icon">
                     {shouldShowToggleButton() && (
                         <i
-                            className={`adminfont-${isOpen
+                            className={`adminfont-${
+                                isOpen
                                     ? 'keyboard-arrow-down'
                                     : 'pagination-right-arrow'
-                                }`}
+                            }`}
                             onClick={() =>
                                 dispatch({
                                     type: 'SET_ACTIVE_TAB',
@@ -411,8 +413,8 @@ const PanelHeader: React.FC = () => {
                                                 key={cls}
                                                 type="button"
                                                 className={`icon-option ${icon === cls
-                                                    ? 'selected'
-                                                    : ''
+                                                        ? 'selected'
+                                                        : ''
                                                     }`}
                                                 onClick={() => {
                                                     handleChange(
@@ -447,72 +449,72 @@ const PanelHeader: React.FC = () => {
                                     'title',
                                     addNewTemplate
                                 ) ? (
-                                <BasicInputUI
-                                    ref={titleRef}
-                                    value={editTitle}
-                                    onChange={(value: string) =>
-                                        dispatch({
-                                            type: 'UPDATE_EDIT_TITLE',
-                                            title: value,
-                                        })
-                                    }
-                                    onKeyDown={(e: React.KeyboardEvent) =>
-                                        e.key === 'Enter' && commitEdit()
-                                    }
-                                    onClick={(e: React.MouseEvent) =>
-                                        e.stopPropagation()
-                                    }
-                                />
-                            ) : (
-                                <span
-                                    className={`title ${canEditField(
-                                        method,
-                                        'title',
-                                        addNewTemplate
-                                    )
-                                        ? 'editable-title'
-                                        : ''
-                                        }`}
-                                    onClick={(e) => {
-                                        // e.stopPropagation();
-                                        if (
+                                    <BasicInputUI
+                                        ref={titleRef}
+                                        value={editTitle}
+                                        onChange={(value: string) =>
+                                            dispatch({
+                                                type: 'UPDATE_EDIT_TITLE',
+                                                title: value,
+                                            })
+                                        }
+                                        onKeyDown={(e: React.KeyboardEvent) =>
+                                            e.key === 'Enter' && commitEdit()
+                                        }
+                                        onClick={(e: React.MouseEvent) =>
+                                            e.stopPropagation()
+                                        }
+                                    />
+                                ) : (
+                                    <span
+                                        className={`title ${canEditField(
+                                            method,
+                                            'title',
+                                            addNewTemplate
+                                        )
+                                                ? 'editable-title'
+                                                : ''
+                                            }`}
+                                        onClick={(e) => {
+                                            // e.stopPropagation();
+                                            if (
+                                                canEditField(
+                                                    method,
+                                                    'title',
+                                                    addNewTemplate
+                                                )
+                                            ) {
+                                                dispatch({
+                                                    type: 'START_EDIT',
+                                                    id: method.id,
+                                                    field: 'title',
+                                                    title:
+                                                        (methodValue.title as string) ||
+                                                        method.label ||
+                                                        '',
+                                                });
+                                            }
+                                        }}
+                                        title={
                                             canEditField(
                                                 method,
                                                 'title',
                                                 addNewTemplate
                                             )
-                                        ) {
-                                            dispatch({
-                                                type: 'START_EDIT',
-                                                id: method.id,
-                                                field: 'title',
-                                                title:
-                                                    (methodValue.title as string) ||
-                                                    method.label ||
-                                                    '',
-                                            });
+                                                ? 'Click to edit'
+                                                : undefined
                                         }
-                                    }}
-                                    title={
-                                        canEditField(
+                                    >
+                                        {title}
+                                        {canEditField(
                                             method,
                                             'title',
                                             addNewTemplate
-                                        )
-                                            ? 'Click to edit'
-                                            : undefined
-                                    }
-                                >
-                                    {title}
-                                    {canEditField(
-                                        method,
-                                        'title',
-                                        addNewTemplate
-                                    ) && (
-                                            <i className="adminfont-edit inline-edit-icon" />
-                                        )}
-                                </span>
-                            )}
+                                        ) && (
+                                                <i className="adminfont-edit inline-edit-icon" />
+                                            )}
+                                    </span>
+                                )}
 
                             {/* Active/Inactive badge — predefined disableBtn methods only */}
                             {method.disableBtn && !method.isCustom && (
@@ -829,6 +831,7 @@ const PanelBody: React.FC = () => {
                                     : undefined
                             }
                             desc={field.desc}
+                            labelDes={field.settingDescription}
                             htmlFor={field.name}
                         >
                             {field.beforeElement &&
@@ -1165,17 +1168,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
                         text: btn.label,
                         color: 'purple',
                         onClick: () => navigateWizard('next', btn.redirect),
-                    }),
-                    nextWithClick: (btn) => ({
-                        ...btn,
-                        text: btn.label,
-                        color: 'purple',
-                        onClick: async () => {
-                            if (btn.onClick) {
-                                await btn.onClick();
-                            }
-                            navigateWizard('next', btn.redirect);
-                        },
                     }),
                     skip: (btn) => ({
                         ...btn,
