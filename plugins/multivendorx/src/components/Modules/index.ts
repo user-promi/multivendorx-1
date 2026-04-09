@@ -410,8 +410,8 @@ export default {
 			category: 'customer_experience',
 		},
 		{
-			id: 'question-answer',
-			name: __('Question & Answer', 'multivendorx'),
+			id: 'customer-queries',
+			name: __('Customer Queries', 'multivendorx'),
 			desc: 'Customers can publicly ask product questions.',
 			docLink: 'https://multivendorx.com/docs/knowledgebase/NA',
 			proModule: false,

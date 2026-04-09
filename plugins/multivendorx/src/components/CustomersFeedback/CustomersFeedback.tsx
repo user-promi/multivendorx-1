@@ -16,13 +16,13 @@ const CustomersFeedback = () => {
 	const location = new URLSearchParams(useLocation().hash.substring(1));
 
 	const settingContent = applyFilters(
-		'multivendorx_customers-feedback_tab',
+		'multivendorx_customers_tab',
 		[]
 	).filter((tab) => !tab.module || modules.includes(tab.module));
 
 	const getForm = (tabId: string) => {
 		return (
-			applyFilters('multivendorx_customers_feedback_tab_content', null, {
+			applyFilters('multivendorx_customers_tab_content', null, {
 				tabId,
 			}) || <div />
 		);
@@ -36,7 +36,7 @@ const CustomersFeedback = () => {
 					currentSetting={location.get('subtab') as string}
 					getForm={getForm}
 					prepareUrl={(subTab: string) =>
-						`?page=multivendorx#&tab=customers-feedback&subtab=${subTab}`
+						`?page=multivendorx#&tab=customers&subtab=${subTab}`
 					}
 					appLocalizer={appLocalizer}
 					Link={Link}
