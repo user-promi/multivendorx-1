@@ -186,7 +186,28 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
     const [activeTab, setActiveTab] = useState(0);
     const [showCalendar, setShowCalendar] = useState(false);
     const localPickerRef = useRef<DatePickerRef>(null);
-    
+    const containerRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [openUpward, setOpenUpward] = useState(false);
+
+    // for auto top bottom popup position
+    const adjustPosition = () => {
+        if (!containerRef.current || !dropdownRef.current) return;
+
+        const rect = containerRef.current.getBoundingClientRect();
+        const dropdownHeight = dropdownRef.current.offsetHeight;
+        const viewportHeight = window.innerHeight;
+
+        const spaceBelow = viewportHeight - rect.bottom;
+        const spaceAbove = rect.top;
+
+        if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
+            setOpenUpward(true);  // open ऊपर
+        } else {
+            setOpenUpward(false); // open नीचे
+        }
+    };
+
     const tabs = [
         {
             label: 'Presets',
@@ -196,7 +217,7 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
             label: 'Custom',
             content: (
                 <Calendar
-                    className={`calendar-wrapper ${!showInput ? 'calendar' : ''}`}
+                    className={`${!showInput ? 'calendar-wrapper' : 'input-calendar'}`}
                     {...commonProps}
                     ref={localPickerRef}
                 />
@@ -208,32 +229,33 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
         return (
             <div className="settings-calender">
                 <input
-                    className={`rmdp-input ${inputClass || ''}`}
-                    onFocus={() => setShowCalendar(true)}
+                    className={`calender-input ${inputClass || ''}`}
+                    onFocus={() => {
+                        setShowCalendar(true);
+                        setTimeout(adjustPosition, 0);
+                    }}
                     readOnly
                     name="calendar-input"
                     value={getDisplayValue ? getDisplayValue() : ''}
                     placeholder={format}
                 />
                 {showCalendar && (
-                    <div className="calendar-popup">
-                        <div className="calendar-tabs-container">
-                            <div className="tabs-wrapper">
-                                <div className="tabs-item">
-                                    {tabs.map((tab, index) => (
-                                        <div
-                                            key={index}
-                                            className={`tab ${index === activeTab ? 'active-tab' : ''}`}
-                                            onClick={() => setActiveTab(index)}
-                                        >
-                                            {tab.label}
-                                        </div>
-                                    ))}
-                                </div>
+                    <div className="calendar-tabs-container">
+                        <div className="tabs-wrapper">
+                            <div className="tabs-item">
+                                {tabs.map((tab, index) => (
+                                    <div
+                                        key={index}
+                                        className={`tab ${index === activeTab ? 'active-tab' : ''}`}
+                                        onClick={() => setActiveTab(index)}
+                                    >
+                                        {tab.label}
+                                    </div>
+                                ))}
                             </div>
-                            <div className="calendar-tab-content">
-                                {tabs[activeTab].content}
-                            </div>
+                        </div>
+                        <div className="calendar-tab-content">
+                            {tabs[activeTab].content}
                         </div>
                     </div>
                 )}
@@ -243,8 +265,8 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
 
     // For non-input mode (just calendar), show tabs without the input
     return (
-        <div className="settings-calender">
-            <div className="calendar-tabs-container">
+        <div className="settings-calender" ref={containerRef}>
+            <div ref={dropdownRef} className={`calendar-tabs-container ${openUpward ? 'open-upward' : 'open-downward'}`} >
                 <div className="tabs-wrapper">
                     <div className="tabs-item">
                         {tabs.map((tab, index) => (
@@ -395,7 +417,7 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
                         placeholder={format}
                         render={(value, openCalendar) => (
                             <input
-                                className="rmdp-input"
+                                className="calender-input"
                                 onFocus={openCalendar}
                                 readOnly
                                 name="calendar-input"
@@ -405,9 +427,8 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
                     />
                 ) : (
                     <Calendar
-                        className={`calendar-wrapper ${
-                            !showInput ? 'calendar' : ''
-                        }`}
+                        className={`calendar-wrapper ${!showInput ? 'calendar' : ''
+                            }`}
                         {...commonProps}
                     />
                 )}
