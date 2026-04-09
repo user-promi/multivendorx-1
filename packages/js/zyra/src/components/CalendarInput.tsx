@@ -202,9 +202,9 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
         const spaceAbove = rect.top;
 
         if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
-            setOpenUpward(true);  // open ऊपर
+            setOpenUpward(true); 
         } else {
-            setOpenUpward(false); // open नीचे
+            setOpenUpward(false);
         }
     };
 

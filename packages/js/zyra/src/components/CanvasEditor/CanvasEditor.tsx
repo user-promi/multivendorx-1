@@ -516,6 +516,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                                 {previewText}
                             </div>
                         )} */}
+                        
                     </div>
                 ))}
             </main>
