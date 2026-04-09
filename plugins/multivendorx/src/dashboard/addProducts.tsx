@@ -447,7 +447,7 @@ const AddProduct = () => {
 					</Card>
 				</Column>
 
-				<Column grid={6}>
+				<Column >
 					{rejectNote && (
 						<Card
 							title={__(
