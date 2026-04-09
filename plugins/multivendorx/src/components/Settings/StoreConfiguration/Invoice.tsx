@@ -445,7 +445,7 @@ const Invoice: React.FC = () => {
             </Column>
 
             <Column>
-                <Card title={__('Invoice', 'multivendorx')} desc={__('Choose when and how invoices are automatically emailed to customers and vendors.    ', 'multivendorx')}>
+                <Card title={__('Invoice preview', 'multivendorx')} desc={__('Preview how the invoice layout will appear to customers and stores', 'multivendorx')}>
                     <TabsUI
                         tabs={[
                             {
