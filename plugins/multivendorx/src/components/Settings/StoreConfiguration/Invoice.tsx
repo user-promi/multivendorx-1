@@ -242,7 +242,7 @@ const Invoice: React.FC = () => {
                 <Card title={__('Invoice generator', 'multivendorx')} desc={__('Define when invoices should be automatically created and how they are delivered to customers.', 'multivendorx')}>
                     <FormGroupWrapper>
                         <FormGroup label={__('Invoice delivery method', 'multivendorx')}>
-                            <MultiCheckBoxUI
+                            {/* <MultiCheckBoxUI
                                 selectDeselect={true}
                                 wrapperClass="checkbox-list-side-by-side"
                                 inputInnerWrapperClass="default-checkbox"
@@ -271,6 +271,25 @@ const Invoice: React.FC = () => {
                                 modules={[]}
                                 onChange={(val: string[]) => setinvoiceEmails(val)}
                                 onMultiSelectDeselectChange={(val: string[]) => setinvoiceEmails(val)}
+                            /> */}
+                             <ChoiceToggleUI
+                                options={[
+                                    {
+                                        key: 'public',
+                                        value: 'public',
+                                        label: __('Attach to email', 'multivendorx'),
+                                    },
+                                    {
+                                        key: 'private',
+                                        value: 'private',
+                                        label: __('Send separate email', 'multivendorx'),
+                                    },
+                                    {
+                                        key: 'private',
+                                        value: 'private',
+                                        label: __('Both', 'multivendorx'),
+                                    },
+                                ]}
                             />
                         </FormGroup>
                         <FormGroup label={__('Order status triggers', 'multivendorx')}>
