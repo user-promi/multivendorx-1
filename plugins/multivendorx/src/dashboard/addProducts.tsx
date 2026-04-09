@@ -112,6 +112,7 @@ const AddProduct = () => {
 
 		const payload = {
 			...product,
+			status: appLocalizer.current_user?.allcaps?.publish_products ? 'publish' : 'draft',
 			images: imagePayload,
 			meta_data: [
 				...product.meta_data,
@@ -131,6 +132,7 @@ const AddProduct = () => {
 					key: 'multivendorx_cancellation_policy',
 					value: product.cancellation_policy || '',
 				},
+      			{ key: '_is_auto_draft', value: false }
 			],
 		};
 
@@ -227,6 +229,10 @@ const AddProduct = () => {
 		(m) => m.key === '_reject_note'
 	)?.value;
 
+	const isAutoDraft = product?.meta_data?.some(
+		(m) => m.key === '_is_auto_draft' && m.value === '1'
+		);
+
 	return (
 		<>
 			{translation
@@ -273,14 +279,9 @@ const AddProduct = () => {
 			/>
 			<Container>
 				<Column grid={3}>
-					<Card title={__('What kind of product is this?', 'multivendorx')}>
+					<Card title={__('What kind of product is this?', 'multivendorx')} desc={__('Choose the type that best describes what you are selling.', 'multivendorx')}>
 						<FormGroupWrapper>
-							<FormGroup
-								desc={__(
-									'Choose the type that best describes what you are selling.',
-									'multivendorx'
-								)}
-							>
+							<FormGroup>
 								<SelectInputUI
 									name="type"
 									type="single-select"
@@ -473,7 +474,7 @@ const AddProduct = () => {
 							/>
 						</Card>
 					)}
-					<Card title={__('General information', 'multivendorx')}>
+					<Card title={__('General information', 'multivendorx')} desc={__("Help customers understand what you're selling.", 'multivendorx')}>
 						<FormGroupWrapper>
 							<div className="form-group  ai-form">
 								<label className="settings-form-label">
@@ -498,7 +499,7 @@ const AddProduct = () => {
 										}
 										disabled={modules.includes(
 											'shared-listing'
-										)}
+										) && !isAutoDraft}
 									/>
 									<div className="settings-metabox-description">
 										{__(
@@ -642,15 +643,8 @@ const AddProduct = () => {
 					</PopupUI>
 					{product?.type === 'simple' &&
 						productFields.includes('general') && (
-							<Card title={__('Pricing', 'multivendorx')}>
+							<Card title={__('Pricing', 'multivendorx')} desc={__('Set what customers will pay. Add a sale price to show a discount.', 'multivendorx')}>
 								<FormGroupWrapper>
-									<FormGroup
-								desc={__(
-									'NAA',
-									'multivendorx'
-								)}
-							>
-							</FormGroup>
 									<FormGroup
 										cols={2}
 										label={__(
@@ -806,10 +800,10 @@ const AddProduct = () => {
 											? val
 											: [val];
 
-										const formatted = urls.map((url) => ({
-											id: 0,
-											src: url,
-											thumbnail: url,
+										const formatted = urls.map((file) => ({
+											id: file?.id,
+											src: file?.url,
+											thumbnail: file?.url,
 										}));
 
 										setGalleryImages(formatted);

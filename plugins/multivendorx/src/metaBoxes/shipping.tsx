@@ -10,6 +10,7 @@ import {
 	SelectInputUI,
 	ChoiceToggleUI,
 	useModules,
+	SectionUI,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 
@@ -44,7 +45,7 @@ const ShippingCard = ({
 	}, []);
 
 	return (
-		<Card title={__('Product delivery', 'multivendorx')}>
+		<Card title={__('How will this be delivered?', 'multivendorx')} desc={__('Choose how customers receive this product after purchase.', 'multivendorx')}>
 			{/* Dimensions */}
 			<FormGroupWrapper>
 				<FormGroup>
@@ -98,6 +99,7 @@ const ShippingCard = ({
 				{productType === 'physical' &&
 					!typeFields.includes('virtual') && (
 						<>
+							<SectionUI title={__('Package dimensions & weight', 'multivendorx' )} desc={__('Used to calculate accurate shipping rates at checkout.', 'multivendorx')}/>
 							{/* Weight & Shipping class */}
 							<FormGroup
 								cols={2}

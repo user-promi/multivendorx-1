@@ -549,11 +549,11 @@ const Orders: React.FC = () => {
 					'multivendorx'
 				)}
 				buttons={[
-					{
-						label: __('Export', 'multivendorx'),
-						icon: 'export',
-						onClick: exportAllOrders,
-					},
+					// {
+					// 	label: __('Export', 'multivendorx'),
+					// 	icon: 'export',
+					// 	onClick: exportAllOrders,
+					// },
 					{
 						label: __('Add New', 'multivendorx'),
 						icon: 'plus',

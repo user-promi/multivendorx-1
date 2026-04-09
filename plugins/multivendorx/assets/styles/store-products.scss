@@ -61,6 +61,7 @@ $star-color: #d49c00;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #000;
 
     .multivendorx-popup-content {
         width: 50%;
@@ -69,6 +70,12 @@ $star-color: #d49c00;
         overflow: auto;
         position: relative;
         padding: 2rem;
+    }
+
+    &.store-support-popup {
+        .multivendorx-popup-content {
+            width: 30%;
+        }
     }
 
     .popup-close {
@@ -314,41 +321,17 @@ $star-color: #d49c00;
         justify-content: space-between;
         flex-direction: column;
     }
-
-    #qna-list {
-        margin: 0;
-        padding: 0;
-
-        li {
-            list-style-type: none;
-            padding: 1rem;
-            border: 0.063rem solid #e0e4e9;
-            border-radius: 0.313rem;
-            margin-bottom: 0.813rem;
-
-            .qna-question {
-                font-weight: 600;
-            }
-
-            .qna-answer {
-                font-size: 0.95rem;
-            }
-
-            .qna-votes {
-                display: flex;
-                align-items: center;
-                gap: 0.625rem;
-                justify-content: end;
-
-                //  span {
-                //      font-size: 1.25rem;
-                //      padding: 0.5rem;
-                //  }
-
-                p {
-                    margin: 0;
-                }
-            }
+    .comment-text {
+        position: relative;
+        .qna-votes {
+            position: absolute;
+            right: 0;
+            display: flex;
+            gap: 0.75rem;
+            align-items: end;
+        }
+        .comment-text{
+            margin: 0;
         }
     }
 
@@ -509,6 +492,7 @@ $star-color: #d49c00;
 
             .rating-count {
                 width: 100%;
+
                 .rating {
                     font-size: 1rem;
                     font-weight: 500;
@@ -649,7 +633,7 @@ $star-color: #d49c00;
 
 // my account view order tab start
 // top notice
-#confirm-section{
+#confirm-section {
     display: flex;
     justify-content: space-between;
 }
@@ -697,18 +681,18 @@ $star-color: #d49c00;
         }
     }
 
-    .multivendorx-timeline-item:last-child{
+    .multivendorx-timeline-item:last-child {
         border: none;
     }
 }
 
 // order table 
-.multivendorx-store-suborder{
-    li{
+.multivendorx-store-suborder {
+    li {
         display: flex;
         gap: 0.45rem;
 
-        .suborder-buttons{
+        .suborder-buttons {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
