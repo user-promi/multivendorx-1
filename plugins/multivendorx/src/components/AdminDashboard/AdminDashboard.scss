@@ -691,8 +691,12 @@
 
 // template-list style start
 .template-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
     .template-item {
-        width: 47%;
+        width: calc(50% - 0.5rem);
         box-sizing: border-box;
         font-size: 0.95rem;
         font-weight: 400;
@@ -1194,5 +1198,3 @@
     }
 
 }
-
-

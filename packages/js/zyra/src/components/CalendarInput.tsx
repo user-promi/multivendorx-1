@@ -202,12 +202,37 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
         const spaceAbove = rect.top;
 
         if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
-            setOpenUpward(true); 
+            setOpenUpward(true);
         } else {
             setOpenUpward(false);
         }
     };
+    useEffect(() => {
+    if (!showCalendar) return;
 
+    const handlePosition = () => {
+        requestAnimationFrame(adjustPosition);
+    };
+
+    const handleClickOutside = (e) => {
+        if (!containerRef.current) return;
+
+        if (!containerRef.current.contains(e.target)) {
+            setShowCalendar(false);
+        }
+    };
+
+    handlePosition();
+    window.addEventListener('scroll', handlePosition, true);
+    window.addEventListener('resize', handlePosition);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+        window.removeEventListener('scroll', handlePosition, true);
+        window.removeEventListener('resize', handlePosition);
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, [showCalendar]);
     const tabs = [
         {
             label: 'Presets',
@@ -227,12 +252,11 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
 
     if (showInput) {
         return (
-            <div className="settings-calender">
+            <div className="settings-calender" ref={containerRef}>
                 <input
                     className={`calender-input ${inputClass || ''}`}
                     onFocus={() => {
                         setShowCalendar(true);
-                        setTimeout(adjustPosition, 0);
                     }}
                     readOnly
                     name="calendar-input"
@@ -240,7 +264,7 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
                     placeholder={format}
                 />
                 {showCalendar && (
-                    <div className="calendar-tabs-container">
+                    <div ref={dropdownRef} className={`calendar-tabs-container ${openUpward ? 'open-upward' : 'open-downward'}`} >
                         <div className="tabs-wrapper">
                             <div className="tabs-item">
                                 {tabs.map((tab, index) => (
@@ -266,7 +290,7 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
     // For non-input mode (just calendar), show tabs without the input
     return (
         <div className="settings-calender" ref={containerRef}>
-            <div ref={dropdownRef} className={`calendar-tabs-container ${openUpward ? 'open-upward' : 'open-downward'}`} >
+            <div className="calendar-tabs-container">
                 <div className="tabs-wrapper">
                     <div className="tabs-item">
                         {tabs.map((tab, index) => (

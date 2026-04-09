@@ -2,11 +2,11 @@ import { __ } from '@wordpress/i18n';
 
 export const temp1 = {
 	id: 'store-registration',
-	name: __('Store Registration', 'multivendorx'),
-	previewText: __(
-		'Welcome to our marketplace! Complete your store setup to get started.',
-		'multivendorx'
-	),
+	name: __('Sales Report', 'multivendorx'),
+	// previewText: __(
+	// 	'Welcome to our marketplace! Complete your store setup to get started.',
+	// 	'multivendorx'
+	// ),
 	blocks: [
 		{
 			id: 1,
