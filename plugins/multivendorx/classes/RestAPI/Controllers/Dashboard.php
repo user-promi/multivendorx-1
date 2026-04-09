@@ -276,12 +276,6 @@ class Dashboard extends \WP_REST_Controller {
                 ),
                 'capability' => array( 'read_products' ),
             ),
-            'compliance'      => array(
-                'name'       => 'Compliance',
-                'slug'       => 'compliance',
-                'icon'       => 'coupon',
-                'capability' => array( 'read_products' ),
-            ),
             'affiliate'       => array(
                 'name'       => 'Affiliate',
                 'slug'       => 'affiliate',
