@@ -210,7 +210,20 @@ const Invoice: React.FC = () => {
                                 ]}
                             />
                         </FormGroup>
-
+                        <FormGroup cols={2} label="Invoice prefix" desc={__('<b>Example results:</b> INV-2026-0001, INV-MVX-0001', 'multivendorx')}>
+                            <BasicInputUI
+                                name="name"
+                                placeholder={__('Text that appears before the number.', 'multivendorx')}
+                            // value={formData.name || ''}
+                            // onChange={(val) =>
+                            //     handleChange('name', val as string)
+                            // }
+                            />
+                        </FormGroup>
+                    </FormGroupWrapper>
+                </Card>
+                <Card title={__('Customer invoice generator', 'multivendorx')} desc={__('Define when invoices should be automatically created and how they are delivered to customers.', 'multivendorx')}>
+                    <FormGroupWrapper>
                         <FormGroup cols={2} label={__('Generate invoices based on', 'multivendorx')}>
                             <ChoiceToggleUI
                                 options={[
@@ -227,72 +240,7 @@ const Invoice: React.FC = () => {
                                 ]}
                             />
                         </FormGroup>
-                        <FormGroup cols={2} label="Invoice prefix" desc={__('<b>Example results:</b> INV-2026-0001, INV-MVX-0001', 'multivendorx')}>
-                            <BasicInputUI
-                                name="name"
-                                placeholder={__('Text that appears before the number.', 'multivendorx')}
-                            // value={formData.name || ''}
-                            // onChange={(val) =>
-                            //     handleChange('name', val as string)
-                            // }
-                            />
-                        </FormGroup>
-                    </FormGroupWrapper>
-                </Card>
-                <Card title={__('Invoice generator', 'multivendorx')} desc={__('Define when invoices should be automatically created and how they are delivered to customers.', 'multivendorx')}>
-                    <FormGroupWrapper>
-                        <FormGroup label={__('Invoice delivery method', 'multivendorx')}>
-                            {/* <MultiCheckBoxUI
-                                selectDeselect={true}
-                                wrapperClass="checkbox-list-side-by-side"
-                                inputInnerWrapperClass="default-checkbox"
-                                inputClass={'basic-checkbox'}
-                                options={[
-                                    {
-                                        key: 'virtual',
-                                        label: __(
-                                            'Attach to order confirmation email',
-                                            'multivendorx'
-                                        ),
-                                        desc: __(
-                                            'Include invoice PDF with the order confirmation customers already receive.',
-                                            'multivendorx'
-                                        ),
-                                        value: 'virtual',
-                                    },
-                                    {
-                                        key: 'Send Separate Invoice Email',
-                                        label: __('Send separate invoice email', 'multivendorx'),
-                                        desc: __('Dedicated email with invoice', 'multivendorx'),
-                                        value: 'downloadable',
-                                    },
-                                ]}
-                                value={invoiceEmails}
-                                modules={[]}
-                                onChange={(val: string[]) => setinvoiceEmails(val)}
-                                onMultiSelectDeselectChange={(val: string[]) => setinvoiceEmails(val)}
-                            /> */}
-                             <ChoiceToggleUI
-                                options={[
-                                    {
-                                        key: 'public',
-                                        value: 'public',
-                                        label: __('Attach to email', 'multivendorx'),
-                                    },
-                                    {
-                                        key: 'private',
-                                        value: 'private',
-                                        label: __('Send separate email', 'multivendorx'),
-                                    },
-                                    {
-                                        key: 'private',
-                                        value: 'private',
-                                        label: __('Both', 'multivendorx'),
-                                    },
-                                ]}
-                            />
-                        </FormGroup>
-                        <FormGroup label={__('Order status triggers', 'multivendorx')}>
+                        <FormGroup label={__('Generate invoice when order status becomes', 'multivendorx')}>
                             <MultiCheckBoxUI
                                 selectDeselect={true}
                                 wrapperClass="checkbox-list-side-by-side"

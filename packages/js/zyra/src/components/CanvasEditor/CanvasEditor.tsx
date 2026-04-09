@@ -491,11 +491,11 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
 
     const renderTemplatesContent = () => (
         <aside className="elements-section">
-            <div className="section-meta">
+            {/* <div className="section-meta">
                 <h2>
                     Templates <span>({templates.length})</span>
                 </h2>
-            </div>
+            </div> */}
             <main className="section-container open">
                 {templates.map(({ id, name, previewText }) => (
                     <div
@@ -505,12 +505,17 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                         }`}
                         onClick={() => onTemplateSelect?.(id)}
                     >
+                        <div className="preview-placeholder">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                         <div className="template-name">{name}</div>
-                        {previewText && (
+                        {/* {previewText && (
                             <div className="template-preview">
                                 {previewText}
                             </div>
-                        )}
+                        )} */}
                     </div>
                 ))}
             </main>

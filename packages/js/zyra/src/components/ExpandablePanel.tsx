@@ -531,6 +531,7 @@ const PanelHeader: React.FC = () => {
 
                         {/* Description (inline-editable for custom) */}
                         <div className="panel-description">
+                            <b> {title}: </b>
                             {editing &&
                                 editField === 'description' &&
                                 canEditField(
