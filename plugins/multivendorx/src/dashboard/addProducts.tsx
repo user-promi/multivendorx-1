@@ -474,7 +474,7 @@ const AddProduct = () => {
 							/>
 						</Card>
 					)}
-					<Card title={__('General information', 'multivendorx')} desc={__("Help customers understand what you're selling.", 'multivendorx')}>
+					<Card title={__('General information - Tell customers what you are selling', 'multivendorx')} desc={__("A good name and description help people find your product and feel confident buying it.", 'multivendorx')}>
 						<FormGroupWrapper>
 							<div className="form-group  ai-form">
 								<label className="settings-form-label">
@@ -503,7 +503,7 @@ const AddProduct = () => {
 									/>
 									<div className="settings-metabox-description">
 										{__(
-											'This appears on your store listing and checkout page.',
+											'Use names your customers would actually search for.',
 											'multivendorx'
 										)}
 									</div>
@@ -515,7 +515,7 @@ const AddProduct = () => {
 									<div className="form-group  ai-form">
 										<label className="settings-form-label">
 											{__(
-												'Short description',
+												'Short description - One-line summary',
 												'multivendorx'
 											)}
 											{applyFilters(
@@ -544,7 +544,7 @@ const AddProduct = () => {
 											/>
 											<div className="settings-metabox-description">
 												{__(
-													'Customers see this before clicking into the full product page.',
+													'This short texts appears with the product - keep it punchy.',
 													'multivendorx'
 												)}
 											</div>
@@ -643,7 +643,7 @@ const AddProduct = () => {
 					</PopupUI>
 					{product?.type === 'simple' &&
 						productFields.includes('general') && (
-							<Card title={__('Pricing', 'multivendorx')} desc={__('Set what customers will pay. Add a sale price to show a discount.', 'multivendorx')}>
+							<Card title={__('Pricing - How much does it cost?', 'multivendorx')} desc={__('Set your normal price. If you are running a promotion, you can add sale price', 'multivendorx')}>
 								<FormGroupWrapper>
 									<FormGroup
 										cols={2}
