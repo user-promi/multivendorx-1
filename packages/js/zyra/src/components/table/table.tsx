@@ -20,14 +20,14 @@ const Table: React.FC<TableProps> = ({
     headers = {},
     rows = [],
     // caption,
-    className,
+    className ='',
     onSort = () => {},
     query = {},
     ids = [],
     selectedIds = [],
     onSelectRow,
     onSelectAll,
-    classNames,
+    classNames = '',
     onCellEdit,
     isLoading,
     enableBulkSelect = false,
@@ -287,7 +287,7 @@ const Table: React.FC<TableProps> = ({
                                             return (
                                                 <td
                                                     key={`${rowId}-${colIndex}`}
-                                                    className={`admin-column ${className} ${header.type}`}
+                                                    className={`admin-column ${className} ${header?.type || ''}`}
                                                     style={
                                                         header.width
                                                             ? {
@@ -327,7 +327,7 @@ const Table: React.FC<TableProps> = ({
                                         return (
                                             <td
                                                 key={`${rowId}-${colIndex}`}
-                                                className={`admin-column ${className} ${header.type}`}
+                                               className={`admin-column ${className} ${header?.type || ''}`}
                                             >
                                                 {header.isEditable
                                                     ? renderEditableCell({
