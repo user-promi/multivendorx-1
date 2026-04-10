@@ -26,8 +26,6 @@ interface FieldOption {
     desc?: string;
     action?: string;
     redirect?: string;
-    color?: string;
-    icon?: string;
 }
 
 interface PanelFormField {
