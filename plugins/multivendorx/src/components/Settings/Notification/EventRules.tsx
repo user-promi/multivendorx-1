@@ -678,8 +678,8 @@ const EventRules: React.FC = () => {
 				<PopupUI
 					open={!!editingNotification}
 					onClose={() => setEditingNotification(null)}
-					width={31.25}
-					height="70%"
+					width={60.25}
+					height="80%"
 					header={{
 						icon: 'notification',
 						title: `${__('Settings', 'multivendorx')} - ${editNotification?.event ?? ''}`,
