@@ -312,7 +312,6 @@ const DashboardTab: React.FC<object> = () => {
 							<img src={Mascot} alt="" />
 						</div>
 					</div>
-					<div className="title pro-banner-title">{__('Meet "Shaki" – Powering marketplace growth', 'multivendorx')} </div>
 				</Card>
 				{!appLocalizer.khali_dabba && (
 					<Card

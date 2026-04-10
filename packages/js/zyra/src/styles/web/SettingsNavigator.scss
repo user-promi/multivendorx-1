@@ -369,6 +369,14 @@
       .tab-content {
         box-sizing: border-box;
       }
+      .form-group-wrapper {
+        gap: 1rem;
+        padding: 1rem;
+        box-sizing: border-box;
+        .form-group{
+          padding: 0;
+        }
+      }
     }
   }
 
