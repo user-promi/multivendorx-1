@@ -13,9 +13,12 @@ import {
 	Container,
 	Column,
 	QueryProps,
+	BlockBuilderUI
 } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
+import { temp1 } from '../../../assets/template/emailTemplate/temp1';
+
 
 const RECIPIENT_CONFIG: Record<string, { icon: string; badge: string }> = {
 	Store: { icon: 'storefront', badge: 'blue' },
@@ -278,6 +281,19 @@ const EventRules: React.FC = () => {
 		});
 	};
 
+	const handleEmailSave = async (id, data) => {
+	await apiRequest('POST', `notifications/${id}`, {
+		formData: {
+			id: data.id,
+				email_subject: data.email_subject,
+				email_body: data.email_body,
+				sms_content: data.sms_content,
+				system_message: data.system_message,
+			},
+		},
+	);
+};
+
 	const trackCursor = (
 		e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>,
 		field: string
@@ -516,27 +532,34 @@ const EventRules: React.FC = () => {
 									)}
 									htmlFor="system-message"
 								>
-									<TextAreaUI
-										name="system_message"
+									<BlockBuilderUI
+										key={formData.id}
+										name="system_message_builder"
 										value={
-											formData.system_message || ''
+											formData.email_body
+												? JSON.parse(formData.email_body)
+												: {
+													emailTemplates: [temp1],
+													activeEmailTemplateId: 'store-registration',
+												}
 										}
-										onClick={(e) =>
-											trackCursor(e, 'system_message')
-										}
-										onChange={(value) => {
-											// system: onChange does NOT autosave — only onBlur/onKeyDown do
-											setFormData({
+										onChange={(data) => {
+											const updatedForm = {
 												...formData,
-												system_message: value,
-											});
+												email_body_builder: data,
+												email_body: JSON.stringify(data),
+											};
+											if (!updatedForm.id) return;
+
+											setFormData(updatedForm);
+											handleEmailSave(updatedForm.id, updatedForm);
 										}}
-										onBlur={() =>
-											handleAutoSave(formData.id)
-										}
-										onKeyDown={() =>
-											handleAutoSave(formData.id)
-										}
+										field={{
+											key: 'email_body_builder',
+											context: 'email', 
+											visibleGroups: ['email'], 
+											emailTemplates: [temp1],
+										}}
 									/>
 								</FormGroup>
 							)}
