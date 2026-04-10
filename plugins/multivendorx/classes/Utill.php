@@ -590,4 +590,15 @@ class Utill {
 
         return '';
     }
+
+    public function get_permissions() {
+        $permissions = array(
+            'hide_store_products' => false,
+            'disable_product_upload' => false,
+            'disable_payouts' => false,
+            'disable_checkout' => false,
+        );
+
+        return apply_filters( 'multivendorx_modify_permissions', $permissions );
+    }
 }
