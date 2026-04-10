@@ -20,19 +20,19 @@
             justify-content: start;
         }
 
-        &[data-cols='1'] {
+        &[data-col='1'] {
             flex: 1 1 100%;
         }
 
-        &[data-cols='2'] {
+        &[data-col='2'] {
             flex: 1 1 calc(50% - 1rem);
         }
 
-        &[data-cols='3'] {
+        &[data-col='3'] {
             flex: 1 1 calc(33.333% - 1rem);
         }
 
-        &[data-cols='4'] {
+        &[data-col='4'] {
             flex: 1 1 calc(25% - 1rem);
         }
 
@@ -250,7 +250,7 @@
     padding-top: 0.45rem;
     color: $sub-text-color;
     width: 100%;
-    line-height: 1;
+    line-height: 1.313;
     margin: 0;
     font-size: 0.813rem;
 

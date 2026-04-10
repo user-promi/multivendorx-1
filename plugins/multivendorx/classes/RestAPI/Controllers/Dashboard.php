@@ -184,7 +184,7 @@ class Dashboard extends \WP_REST_Controller {
                         'name'       => 'Product Questions',
                         'slug'       => 'customer-questions',
                         'capability' => array( 'view_customer_questions', 'reply_customer_questions' ),
-                        'module'     => array( 'question-answer' ),
+                        'module'     => array( 'customer-queries' ),
                     ),
                     array(
                         'key'        => 'store-followers',
@@ -274,12 +274,6 @@ class Dashboard extends \WP_REST_Controller {
                         'capability' => array( 'read_products' ),
                     ),
                 ),
-                'capability' => array( 'read_products' ),
-            ),
-            'compliance'      => array(
-                'name'       => 'Compliance',
-                'slug'       => 'compliance',
-                'icon'       => 'coupon',
                 'capability' => array( 'read_products' ),
             ),
             'affiliate'       => array(

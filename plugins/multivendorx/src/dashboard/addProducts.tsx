@@ -112,6 +112,7 @@ const AddProduct = () => {
 
 		const payload = {
 			...product,
+			status: appLocalizer.current_user?.allcaps?.publish_products ? 'publish' : 'draft',
 			images: imagePayload,
 			meta_data: [
 				...product.meta_data,
@@ -131,6 +132,7 @@ const AddProduct = () => {
 					key: 'multivendorx_cancellation_policy',
 					value: product.cancellation_policy || '',
 				},
+      			{ key: '_is_auto_draft', value: false }
 			],
 		};
 
@@ -226,6 +228,10 @@ const AddProduct = () => {
 	const rejectNote = product?.meta_data?.find(
 		(m) => m.key === '_reject_note'
 	)?.value;
+
+	const isAutoDraft = product?.meta_data?.some(
+		(m) => m.key === '_is_auto_draft' && m.value === '1'
+		);
 
 	return (
 		<>
@@ -493,7 +499,7 @@ const AddProduct = () => {
 										}
 										disabled={modules.includes(
 											'shared-listing'
-										)}
+										) && !isAutoDraft}
 									/>
 									<div className="settings-metabox-description">
 										{__(
@@ -794,10 +800,10 @@ const AddProduct = () => {
 											? val
 											: [val];
 
-										const formatted = urls.map((url) => ({
-											id: 0,
-											src: url,
-											thumbnail: url,
+										const formatted = urls.map((file) => ({
+											id: file?.id,
+											src: file?.url,
+											thumbnail: file?.url,
 										}));
 
 										setGalleryImages(formatted);

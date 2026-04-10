@@ -64,7 +64,11 @@ const AllProduct: React.FC = () => {
 		axios
 			.post(
 				`${appLocalizer.apiUrl}/wc/v3/products/`,
-				{ name: 'Auto Draft', status: 'draft' },
+				{ name: 'Auto Draft', status: 'draft',
+					meta_data: [
+						{ key: '_is_auto_draft', value: true }
+					]
+				 },
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
 			.then((res) => setNewProductId(res.data.id))
@@ -490,17 +494,6 @@ const AllProduct: React.FC = () => {
 				buttons={applyFilters(
 					'multivendorx_product_list_header_buttons',
 					[
-						...(modules.includes('import-export')
-							? [
-								{
-									custom: applyFilters(
-										'product_import_export',
-										null
-									),
-								},
-							]
-							: []),
-
 						{
 							label: __('Add New', 'multivendorx'),
 							icon: 'plus',
@@ -523,7 +516,7 @@ const AllProduct: React.FC = () => {
 					navigate
 				)}
 			/>
-
+			{applyFilters('multivendorx_product_list_header_middle_section',null, modules)}
 			<TableCard
 				headers={headers}
 				rows={rows}

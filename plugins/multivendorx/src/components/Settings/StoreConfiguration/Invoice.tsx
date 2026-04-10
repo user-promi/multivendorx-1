@@ -22,7 +22,7 @@ const ratingsField = {
     modal: [
         {
             id: 'quality',
-            label: __('VAT / Tax number', 'multivendorx'),
+            label: __('Marketplace VAT / Tax number', 'multivendorx'),
             desc: __('DE987654321', 'multivendorx'),
             isCustom: true,
             disableBtn: true,
@@ -31,7 +31,7 @@ const ratingsField = {
         },
         {
             id: 'delivery',
-            label: __('Additional Tax ID', 'multivendorx'),
+            label: __('Marketplace tax ID', 'multivendorx'),
             desc: __('GB123456789', 'multivendorx'),
             isCustom: true,
             disableBtn: true,
@@ -40,7 +40,7 @@ const ratingsField = {
         },
         {
             id: 'service',
-            label: __('Company registration number', 'multivendorx'),
+            label: __('Marketplace registration number', 'multivendorx'),
             desc: __('GB123456789', 'multivendorx'),
             isCustom: true,
             disableBtn: true,
@@ -171,9 +171,25 @@ const Invoice: React.FC = () => {
     return (
         <Container className="notice-settings">
             <Column grid={8}>
-                <Card title={__('Automatic invoice generation', 'multivendorx')} desc={__('Choose at which order stages invoices should be generated automatically.', 'multivendorx')}>
+                <Card title={__('Customer invoice', 'multivendorx')} desc={__('Define when invoices should be automatically created and how they are delivered to customers.', 'multivendorx')}>
                     <FormGroupWrapper>
-                        <FormGroup cols={2} label={__('Order stages', 'multivendorx')}>
+                        <FormGroup cols={2} label={__('Invoices will be created based on', 'multivendorx')}>
+                            <ChoiceToggleUI
+                                options={[
+                                    {
+                                        key: 'public',
+                                        value: 'public',
+                                        label: __('Main order', 'multivendorx'),
+                                    },
+                                    {
+                                        key: 'private',
+                                        value: 'private',
+                                        label: __('Store sub-order', 'multivendorx'),
+                                    },
+                                ]}
+                            />
+                        </FormGroup>
+                        <FormGroup label={__('Generate invoice when order status becomes', 'multivendorx')}>
                             <MultiCheckBoxUI
                                 selectDeselect={true}
                                 wrapperClass="checkbox-list-side-by-side"
@@ -229,169 +245,16 @@ const Invoice: React.FC = () => {
                                 onMultiSelectDeselectChange={(val: string[]) => setPaymentCapability(val)}
                             />
                         </FormGroup>
-                        <FormGroup cols={2} label="Invoice prefix" desc={__('<b>Example results:</b> INV-2026-0001, INV-MVX-0001', 'multivendorx')}>
-                            <BasicInputUI
-                                name="name"
-                                placeholder={__('Text that appears before the number.', 'multivendorx')}
-                            // value={formData.name || ''}
-                            // onChange={(val) =>
-                            //     handleChange('name', val as string)
-                            // }
-                            />
-                        </FormGroup>
                     </FormGroupWrapper>
                 </Card>
-                <Card title={__('Customer access to invoices', 'multivendorx')} desc={__('Control how customers can access and download their order invoices.', 'multivendorx')}>
+                {/* <Card title={__('Customer access to invoices', 'multivendorx')} desc={__('Control how customers can access and download their order invoices.', 'multivendorx')}>
                     <FormGroupWrapper>
-                        <FormGroup cols={2} label={__('Order stages', 'multivendorx')}>
-                            <MultiCheckBoxUI
-                                selectDeselect={true}
-                                wrapperClass="checkbox-list-side-by-side"
-                                inputInnerWrapperClass="default-checkbox"
-                                inputClass={'basic-checkbox'}
-                                options={[
-                                    {
-                                        key: 'virtual',
-                                        label: __(
-                                            'Attach to order confirmation email',
-                                            'multivendorx'
-                                        ),
-                                        desc: __(
-                                            'Include invoice PDF with the order confirmation customers already receive.',
-                                            'multivendorx'
-                                        ),
-                                        value: 'virtual',
-                                    },
-                                    {
-                                        key: 'Send Separate Invoice Email',
-                                        label: __('Send separate invoice email', 'multivendorx'),
-                                        desc: __('Dedicated email with invoice', 'multivendorx'),
-                                        value: 'downloadable',
-                                    },
-                                ]}
-                                value={invoiceEmails}
-                                modules={[]}
-                                onChange={(val: string[]) => setinvoiceEmails(val)}
-                                onMultiSelectDeselectChange={(val: string[]) => setinvoiceEmails(val)}
-                            />
-                        </FormGroup>
-                        <FormGroup cols={2} label={__('Generate invoices based on', 'multivendorx')}>
-                            <ChoiceToggleUI
-                                options={[
-                                    {
-                                        key: 'public',
-                                        value: 'public',
-                                        label: __('Main order invoice', 'multivendorx'),
-                                    },
-                                    {
-                                        key: 'private',
-                                        value: 'private',
-                                        label: __('Vendor sub-order invoice', 'multivendorx'),
-                                    },
-                                ]}
-                            />
-                        </FormGroup>
+                        
                     </FormGroupWrapper>
-                </Card>
-                <Card title={__('PDF format', 'multivendorx')} desc={__('A4 is standard internationally, Letter is standard in North America', 'multivendorx')}>
+                </Card> */}
+                <Card title={__('Packing slip generator', 'multivendorx')}>
                     <FormGroupWrapper>
-                        <FormGroup cols={2} label="Page size">
-                            <ChoiceToggleUI
-                                options={[
-                                    {
-                                        key: 'public',
-                                        value: 'public',
-                                        label: __('A4 (210 × 297 mm)', 'multivendorx'),
-                                    },
-                                    {
-                                        key: 'private',
-                                        value: 'private',
-                                        label: __('Letter (8.5 × 11 in)', 'multivendorx'),
-                                    },
-                                    {
-                                        key: 'private',
-                                        value: 'private',
-                                        label: __('Legal (8.5 × 14 in)', 'multivendorx'),
-                                    },
-                                ]}
-                            />
-                        </FormGroup>
-                        <FormGroup cols={2} label="Orientation">
-                            <ChoiceToggleUI
-                                options={[
-                                    {
-                                        key: 'public',
-                                        value: 'public',
-                                        label: __('Portrait (Vertical)', 'multivendorx'),
-                                    },
-                                    {
-                                        key: 'private',
-                                        value: 'private',
-                                        label: __('Landscape (Horizontal)', 'multivendorx'),
-                                    },
-                                ]}
-                            />
-                        </FormGroup>
-                    </FormGroupWrapper>
-                </Card>
-                <Card title={__('Invoice Content Controls', 'multivendorx')} desc={__('Choose at which order stages invoices should be generated automatically.', 'multivendorx')}>
-                    <FormGroupWrapper>
-                        <FormGroup label={__('Invoice footer text', 'multivendorx')} >
-                            <TextAreaUI
-                                name="content"
-                            />
-                        </FormGroup>
-                        <FormGroup label={__('Terms and conditions', 'multivendorx')}>
-                            <TextAreaUI
-                                name="content"
-                            />
-                        </FormGroup>
-                    </FormGroupWrapper>
-                </Card>
-            </Column>
-
-
-            <Column grid={4}>
-                <Card title={__('Legal and tax information', 'multivendorx')} desc={__('Choose at which order stages invoices should be generated automatically.', 'multivendorx')}>
-                    <FormGroupWrapper>
-                        <ExpandablePanelUI
-                            name={ratingsField.key}
-                            methods={ratingsField.modal}
-                            value={value}
-                            onChange={setValue}
-                            canAccess={true}
-                            min={ratingsField.min}
-                            addNewBtn={ratingsField.addNewBtn}
-                            addNewTemplate={ratingsField.addNewTemplate}
-                        />
-                    </FormGroupWrapper>
-                </Card>
-                <Card title={__('Store commission invoices', 'multivendorx')} desc={__('Choose at which order stages invoices should be generated automatically.', 'multivendorx')}>
-                    <FormGroupWrapper>
-                        <FormGroup label="Commission invoice frequency" desc={__(
-                            'Choose how often vendors receive commission invoices from the marketplace:<ul><li>Per order - Generate a commission invoice for each order.</li><li>Monthly - Generate a single consolidated commission invoice at the end of each month.</li></ul>',
-                            'multivendorx'
-                        )}>
-                            <ChoiceToggleUI
-                                options={[
-                                    {
-                                        key: 'public',
-                                        value: 'public',
-                                        label: __('Per order', 'multivendorx'),
-                                    },
-                                    {
-                                        key: 'private',
-                                        value: 'private',
-                                        label: __('Monthly', 'multivendorx'),
-                                    },
-                                ]}
-                            />
-                        </FormGroup>
-                    </FormGroupWrapper>
-                </Card>
-                <Card title={__('Customer access to invoices', 'multivendorx')} desc={__('Control how customers can access and download their order invoices.', 'multivendorx')}>
-                    <FormGroupWrapper>
-                        <FormGroup cols={2} label={__('Packing slip settings', 'multivendorx')}>
+                        <FormGroup cols={2} label={__('What appears on packing slips', 'multivendorx')}>
                             <MultiCheckBoxUI
                                 selectDeselect={true}
                                 wrapperClass="checkbox-list-side-by-side"
@@ -428,7 +291,118 @@ const Invoice: React.FC = () => {
                         </FormGroup>
                     </FormGroupWrapper>
                 </Card>
-                <Card title={__('Company logo', 'multivendorx')} desc={__('Choose at which order stages invoices should be generated automatically.', 'multivendorx')}>
+                <Card title={__('Store commission invoices', 'multivendorx')} >
+                    <FormGroupWrapper>
+                        <FormGroup label="Commission invoices will be issued" desc={__(
+                            'Choose how often store receive commission invoices from the marketplace:<ul><li>Per order - Generate a commission invoice for each order.</li><li>Monthly - Generate a single consolidated commission invoice at the end of each month.</li></ul>',
+                            'multivendorx'
+                        )}>
+                            <ChoiceToggleUI
+                                options={[
+                                    {
+                                        key: 'public',
+                                        value: 'public',
+                                        label: __('Per order', 'multivendorx'),
+                                    },
+                                    {
+                                        key: 'private',
+                                        value: 'private',
+                                        label: __('Monthly', 'multivendorx'),
+                                    },
+                                ]}
+                            />
+                        </FormGroup>
+                    </FormGroupWrapper>
+                </Card>
+                
+                <Card title={__('Invoices will include these additional notes', 'multivendorx')} desc={__('Customize additional text that appears on the invoice document when customers download it.', 'multivendorx')}>
+                    <FormGroupWrapper>
+                        <FormGroup label={__('Invoice footer text', 'multivendorx')} >
+                            <TextAreaUI
+                                name="content"
+                            />
+                        </FormGroup>
+                        <FormGroup label={__('Terms and conditions', 'multivendorx')}>
+                            <TextAreaUI
+                                name="content"
+                            />
+                        </FormGroup>
+                    </FormGroupWrapper>
+                </Card>
+            </Column>
+
+
+            <Column grid={4}>
+                <Card title={__('Invoices will display these tax details', 'multivendorx')} >
+                    <FormGroupWrapper>
+                        <FormGroup 
+                            desc={__("Choose which tax details invoices can include. <br> <b> For each field you enable: </b> <br> <ul> <li>Stores can enter their own value for their invoices. </li> <li>You can enter the marketplace value for marketplace invoices. </li> </ul> <b> How the values appear: </b><br>  <ul><li> Main order invoices show the marketplace value entered here. </li> <li> Store order invoices show the value provided by the store.</li> </ul>", 'multivendorx')}>
+                            <ExpandablePanelUI
+                                name={ratingsField.key}
+                                methods={ratingsField.modal}
+                                value={value}
+                                onChange={setValue}
+                                canAccess={true}
+                                min={ratingsField.min}
+                                addNewBtn={ratingsField.addNewBtn}
+                                editTitleShow={true}
+                                addNewTemplate={ratingsField.addNewTemplate}
+                            />
+                        </FormGroup>
+                    </FormGroupWrapper>
+                </Card>
+                <Card title={__('Invoices PDF format', 'multivendorx')} desc={__('Configure the layout and numbering format used for all generated invoices.', 'multivendorx')}>
+                    <FormGroupWrapper>
+                        <FormGroup  label="Page size">
+                            <ChoiceToggleUI
+                                options={[
+                                    {
+                                        key: 'public',
+                                        value: 'public',
+                                        label: __('A4 (210 × 297 mm)', 'multivendorx'),
+                                    },
+                                    {
+                                        key: 'private',
+                                        value: 'private',
+                                        label: __('Letter (8.5 × 11 in)', 'multivendorx'),
+                                    },
+                                    {
+                                        key: 'private',
+                                        value: 'private',
+                                        label: __('Legal (8.5 × 14 in)', 'multivendorx'),
+                                    },
+                                ]}
+                            />
+                        </FormGroup>
+                        <FormGroup  label="Orientation">
+                            <ChoiceToggleUI
+                                options={[
+                                    {
+                                        key: 'public',
+                                        value: 'public',
+                                        label: __('Portrait (Vertical)', 'multivendorx'),
+                                    },
+                                    {
+                                        key: 'private',
+                                        value: 'private',
+                                        label: __('Landscape (Horizontal)', 'multivendorx'),
+                                    },
+                                ]}
+                            />
+                        </FormGroup>
+                        <FormGroup cols={2} label="Invoice numbers will include this prefix" desc={__('<b>Example results:</b> INV-2026-0001, INV-MVX-0001', 'multivendorx')}>
+                            <BasicInputUI
+                                name="name"
+                                placeholder={__('Invoice numbers will include this prefix', 'multivendorx')}
+                            // value={formData.name || ''}
+                            // onChange={(val) =>
+                            //     handleChange('name', val as string)
+                            // }
+                            />
+                        </FormGroup>
+                    </FormGroupWrapper>
+                </Card>
+                <Card title={__('Invoice branding: logo & signature', 'multivendorx')} >
                     <FormGroupWrapper>
                         <FormGroup label="Company logo" desc={__('', 'multivendorx')}>
                             <FileInputUI />
@@ -441,7 +415,7 @@ const Invoice: React.FC = () => {
             </Column>
 
             <Column>
-                <Card title={__('Invoice', 'multivendorx')} desc={__('Choose when and how invoices are automatically emailed to customers and vendors.    ', 'multivendorx')}>
+                <Card title={__('Invoice preview', 'multivendorx')} desc={__('Preview how the invoice layout will appear to customers and stores', 'multivendorx')}>
                     <TabsUI
                         tabs={[
                             {
@@ -541,7 +515,7 @@ const Invoice: React.FC = () => {
                                     />
                                 ),
                             },
-                             {
+                            {
                                 label: __('Packing Slip', 'multivendorx'),
                                 content: (
                                     <ColorSettingInputUI
@@ -583,4 +557,3 @@ const Invoice: React.FC = () => {
 }
 
 export default Invoice;
-

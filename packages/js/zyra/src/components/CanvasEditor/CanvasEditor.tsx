@@ -76,10 +76,69 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
     const isInternalUpdate = useRef(false);
     const blocksRef = useRef(blocks);
     blocksRef.current = blocks;
+
+    const isFormBuilder = context === 'form';
+
+    const titleBlock = isFormBuilder
+        ? blocks.find(b => b.type === 'title')
+        : null;
+
+    const submitBlock = isFormBuilder
+        ? blocks.find(b => b.type === 'button')
+        : null;
+
+    const dynamicBlocks = isFormBuilder
+        ? blocks.filter(b => b.type !== 'button' && b.type !== 'title')
+        : blocks;
+    useEffect(() => {
+        if (context !== 'form') return;
+        setBlocks(prev => {
+            const hasSubmit = prev.some(b => b.type === 'button');
+
+            if (hasSubmit) return prev;
+
+            return [
+                ...prev,
+                createBlock({
+                    value: 'button',
+                    label: 'Submit',
+                    placeholder: 'Submit',
+                }),
+            ];
+        });
+    }, []);
+
+    useEffect(() => {
+        if (context !== 'form') return;
+        setBlocks(prev => {
+            const hasTitle = prev.some(b => b.type === 'title');
+
+            if (hasTitle) return prev;
+
+            return [
+                createBlock({
+                    value: 'title',
+                    label: 'Registration Form',
+                }),
+                ...prev,
+            ];
+        });
+    }, []);
+
     useEffect(() => {
         if (!isInternalUpdate.current) {
             if (externalBlocks !== blocksRef.current) {
-                setBlocks(externalBlocks);
+                setBlocks(
+                    externalBlocks.map((b) => {
+                        // ✅ If already a valid block → use as is
+                        if (b?.id && b?.type) {
+                            return b;
+                        }
+
+                        // fallback only if needed
+                        return createBlock(b, context);
+                    })
+                );
             }
         }
     }, [externalBlocks]);
@@ -126,10 +185,26 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
         pendingDrag.current = null;
         dragFlushPending.current = false;
 
-        // 1. Start from new canvas list or current state
-        let next: Block[] = canvas ? [...canvas] : [...blocksRef.current];
+        let next: Block[] = (() => {
+            const current = blocksRef.current;
 
-        // 2. Apply each column update onto its parent block
+            if (!canvas) return current;
+
+            if (context !== 'form') {
+                return [...canvas];
+            }
+
+            const title = current.find(b => b.type === 'title');
+            const submit = current.find(b => b.type === 'button');
+
+            let result = [...canvas];
+
+            if (title) result = [title, ...result];
+            if (submit) result = [...result, submit];
+
+            return result;
+        })();
+
         columns.forEach((newCol, key) => {
             const [pi, ci] = key.split('-').map(Number);
             next = next.map((b, i) => {
@@ -142,19 +217,19 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
             });
         });
 
-        const topLevelIds = new Set(next.map((b) => b.id));
-        next = next.map((b) => {
-            if (b.type !== 'columns') {
-                return b;
-            }
-            const cb = b as ColumnsBlock;
-            return {
-                ...cb,
-                columns: safeColumns(cb).map((col) =>
-                    col.filter((c) => !topLevelIds.has(c.id))
-                ),
-            };
-        });
+        // const topLevelIds = new Set(next.map((b) => b.id));
+        // next = next.map((b) => {
+        //     if (b.type !== 'columns') {
+        //         return b;
+        //     }
+        //     const cb = b as ColumnsBlock;
+        //     return {
+        //         ...cb,
+        //         columns: safeColumns(cb).map((col) =>
+        //             col.filter((c) => !topLevelIds.has(c.id))
+        //         ),
+        //     };
+        // });
 
         isInternalUpdate.current = true;
         setBlocks(next);
@@ -366,15 +441,14 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                             {label} <span>({palette.length})</span>
                         </div>
                         <i
-                            className={`adminfont-pagination-right-arrow ${
-                                openGroups[id] ? 'rotate' : ''
-                            }`}
+                            className={`adminfont-pagination-right-arrow ${openGroups[id] ? 'rotate' : ''
+                                }`}
                         />
                     </div>
                     {openGroups[id] && (
                         <ReactSortable
                             list={palette}
-                            setList={() => {}}
+                            setList={() => { }}
                             sort={false}
                             group={{
                                 name: groupName,
@@ -416,26 +490,30 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
 
     const renderTemplatesContent = () => (
         <aside className="elements-section">
-            <div className="section-meta">
+            {/* <div className="section-meta">
                 <h2>
                     Templates <span>({templates.length})</span>
                 </h2>
-            </div>
-            <main className="section-container open">
-                {templates.map(({ id, name, previewText }) => (
+            </div> */}
+            <main className="template-list">
+                {templates.map(({ id, name }) => (
                     <div
                         key={id}
-                        className={`template-item ${
-                            id === activeTemplateId ? 'active' : ''
-                        }`}
+                        className={`template-item ${id === activeTemplateId ? 'active' : ''
+                            }`}
                         onClick={() => onTemplateSelect?.(id)}
                     >
                         <div className="template-name">{name}</div>
-                        {previewText && (
-                            <div className="template-preview">
-                                {previewText}
+
+                        <div className="template-image-wrapper">
+                            <div className="template-image">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
                             </div>
-                        )}
+                        </div>
                     </div>
                 ))}
             </main>
@@ -453,25 +531,38 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                         },
                         ...(showTemplatesTab && templates.length
                             ? [
-                                  {
-                                      label: 'Templates',
-                                      content: renderTemplatesContent(),
-                                  },
-                              ]
+                                {
+                                    label: 'Templates',
+                                    content: renderTemplatesContent(),
+                                },
+                            ]
                             : []),
                     ]}
                 />
             </div>
 
             <div className="canvas-editor">
+                {isFormBuilder && titleBlock && (
+                    <BlockRenderer
+                        block={titleBlock}
+                        isActive={openBlock?.id === titleBlock.id}
+                        onSelect={() => setOpenBlock(titleBlock)}
+                        onChange={(patch) => {
+                            const index = blocks.findIndex(b => b.id === titleBlock.id);
+                            updateBlock(index, patch);
+                        }}
+                        showMeta={false} // 🚀 no drag, no delete
+                    />
+                )}
+
                 <ReactSortable
-                    list={blocks}
+                    list={dynamicBlocks}
                     setList={handleCanvasSetList}
                     group={{ name: groupName, pull: true, put: true }}
                     handle=".drag-handle"
                     animation={150}
                 >
-                    {blocks.map((block, index) =>
+                    {dynamicBlocks.map((block, index) =>
                         block.type === 'columns' ? (
                             <ColumnRenderer
                                 key={block.id}
@@ -485,6 +576,11 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                                 onChildMutate={(updated) =>
                                     handleChildMutate(index, updated)
                                 }
+                                selectedLocation={columnManager.selectedLocation}
+                                onChildSelect={(location, child) => {
+                                    setOpenBlock(child);
+                                    columnManager.setSelectedLocation(location);
+                                }}
                                 onSelect={() => {
                                     setOpenBlock(block);
                                     columnManager.clearSelection();
@@ -506,6 +602,18 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                         )
                     )}
                 </ReactSortable>
+                {isFormBuilder && submitBlock && (
+                    <BlockRenderer
+                        block={submitBlock}
+                        isActive={openBlock?.id === submitBlock.id}
+                        onSelect={() => setOpenBlock(submitBlock)}
+                        onChange={(patch) => {
+                            const index = blocks.findIndex(b => b.id === submitBlock.id);
+                            updateBlock(index, patch);
+                        }}
+                        showMeta={false} // no drag, no delete
+                    />
+                )}
             </div>
 
             <div className="settings-panel-wrapper">
