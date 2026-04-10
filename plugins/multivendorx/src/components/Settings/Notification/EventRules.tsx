@@ -94,7 +94,7 @@ const RecipientBadge: React.FC<RecipientBadgeProps> = ({ recipient }) => {
 	const { icon, badge } =
 		RECIPIENT_CONFIG[recipient.label] ?? RECIPIENT_CONFIG.default;
 	return (
-		<div className={`admin-badge ${badge}`} role="button" tabIndex={0}>
+		<div className={`admin-badge`} role="button" tabIndex={0}>
 			<i className={`adminfont-${icon}`}></i>
 			<span>{recipient.label}</span>
 		</div>
@@ -310,6 +310,7 @@ const EventRules: React.FC = () => {
 	const headers = {
 		event: {
 			label: __('Event', 'multivendorx'),
+			width: "55%",
 			render: (row: Notification) => (
 				<div className="notification-details">
 					<span className={`notification-icon ${row.icon}`}></span>
@@ -338,19 +339,23 @@ const EventRules: React.FC = () => {
 		},
 		recipients: {
 			label: __('Recipients', 'multivendorx'),
+			width: "15%",
 			render: (row: Notification) => (
 				<div className="recipients-list">
 					{(row.recipients || []).map((recipient: Recipient) => (
+						<>
 						<RecipientBadge
 							key={recipient.id}
 							recipient={recipient}
 						/>
+						</>
 					))}
 				</div>
 			),
 		},
 		system: {
 			label: __('System', 'multivendorx'),
+			width: "10%",
 			render: (row: Notification) => (
 				<div className="system-column">
 					{Object.entries(row.channels || {}).map(

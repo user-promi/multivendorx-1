@@ -203,8 +203,11 @@ const Table: React.FC<TableProps> = ({
                                     style={
                                         config.width
                                             ? {
-                                                  minWidth: `${config.width}rem`,
-                                              }
+                                                minWidth:
+                                                    typeof config.width === 'number'
+                                                        ? `${config.width}rem`
+                                                        : config.width,
+                                            }
                                             : {}
                                     }
                                 >
@@ -291,8 +294,11 @@ const Table: React.FC<TableProps> = ({
                                                     style={
                                                         header.width
                                                             ? {
-                                                                  minWidth: `${header.width}rem`,
-                                                              }
+                                                                minWidth:
+                                                                    typeof header.width === 'number'
+                                                                        ? `${header.width}rem`
+                                                                        : header.width,
+                                                            }
                                                             : {}
                                                     }
                                                 >
