@@ -25,15 +25,18 @@
         }
 
         &[data-col='2'] {
-            flex: 1 1 calc(50% - 1rem);
+            flex: 1 1 calc(50% - 0.5rem);
+            max-width: calc(50% - 0.5rem);
         }
 
         &[data-col='3'] {
-            flex: 1 1 calc(33.333% - 1rem);
+            flex: 1 1 calc(33.333% - 0.5rem);
+            max-width: calc(33.333% - 0.5rem);
         }
 
         &[data-col='4'] {
-            flex: 1 1 calc(25% - 1rem);
+            flex: 1 1 calc(25% - 0.5rem);
+            max-width: calc(25% - 0.5rem);
         }
 
         .settings-form-label {
