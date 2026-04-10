@@ -13,6 +13,7 @@ import {
 	Container,
 	Column,
 	QueryProps,
+	BlockBuilderUI
 } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
@@ -532,6 +533,21 @@ const EventRules: React.FC = () => {
 										onKeyDown={() =>
 											handleAutoSave(formData.id)
 										}
+									/>
+									<BlockBuilderUI
+										name="system_message_builder"
+										value={formData.system_message_builder || {}}
+										onChange={(data) => {
+											setFormData({
+												...formData,
+												system_message_builder: data,
+											});
+										}}
+										field={{
+											key: 'system_message_builder',
+											context: 'email', // IMPORTANT (or 'email' if needed)
+											visibleGroups: ['email'], // optional control
+										}}
 									/>
 								</FormGroup>
 							)}
