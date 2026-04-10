@@ -44,6 +44,10 @@ class Ajax {
      * @return void
      */
     public function export_csv_data( $argument = array() ) {
+        if ( ! check_ajax_referer( 'export_subscribers_nonce', 'nonce', false ) ) {
+            wp_send_json_error( 'Invalid security token sent.' );
+            wp_die();
+        }
         $get_subscribed_user = array();
 
         // Merge the arguments with default arguments.
