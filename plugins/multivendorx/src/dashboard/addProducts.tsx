@@ -19,7 +19,7 @@ import {
 	ButtonInputUI,
 	Notice,
 } from 'zyra';
-import { applyFilters } from '@wordpress/hooks';
+import { applyFilters, doAction } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { dashNavigate } from '@/services/commonFunction';
 
@@ -132,14 +132,19 @@ const AddProduct = () => {
 					key: 'multivendorx_cancellation_policy',
 					value: product.cancellation_policy || '',
 				},
-      			{ key: '_is_auto_draft', value: false }
+				{ key: '_is_auto_draft', value: false }
 			],
 		};
-
+		doAction('multivendorx_before_product_save');
+		const {
+			booking_location_type,
+			booking_duration_unit,
+			...productData
+		} = payload;
 		axios
 			.post(
 				`${appLocalizer.apiUrl}/wc/v3/products/${productId}`,
-				payload,
+				productData,
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
 			.then(() => {
@@ -231,7 +236,7 @@ const AddProduct = () => {
 
 	const isAutoDraft = product?.meta_data?.some(
 		(m) => m.key === '_is_auto_draft' && m.value === '1'
-		);
+	);
 
 	return (
 		<>
@@ -447,24 +452,24 @@ const AddProduct = () => {
 					</Card>
 				</Column>
 
-				<Column grid={6}>
+				<Column >
 					{rejectNote && (
 						<Card
 							title={__(
 								'Product Rejected by Admin',
 								'multivendorx'
 							)}
-							// action={
-							// <ButtonInputUI
-							// 	buttons={[
-							// 		{
-							// 			icon: 'plus',
-							// 			text: __('Appeal Decision', 'multivendorx'),
-							// 			color: 'purple',
-							// 			onClick: () => setAppeal(true),
-							// 		},
-							// 	]}
-							// />}
+						// action={
+						// <ButtonInputUI
+						// 	buttons={[
+						// 		{
+						// 			icon: 'plus',
+						// 			text: __('Appeal Decision', 'multivendorx'),
+						// 			color: 'purple',
+						// 			onClick: () => setAppeal(true),
+						// 		},
+						// 	]}
+						// />}
 						>
 							<Notice
 								type="error"
