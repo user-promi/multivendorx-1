@@ -2672,7 +2672,7 @@ class Install {
 		$new_ledger_table = $wpdb->prefix . Utill::TABLES['transaction'];
 
 		$transactions = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare( "SELECT * FROM {$old_ledger_table}" ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            "SELECT * FROM {$old_ledger_table}", ARRAY_A // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		);
         $store_cache  = array();
 
