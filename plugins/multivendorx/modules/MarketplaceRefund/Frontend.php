@@ -72,7 +72,7 @@ class Frontend {
 
         $refund_settings       = MultiVendorX()->setting->get_option( 'multivendorx_order_actions_refunds_settings', array() );
         $refund_reason_options = MultiVendorX()->setting->get_setting( 'refund_reasons', array() );
-        $refund_button_text    = apply_filters( 'mvx_customer_my_account_refund_request_button_text', __( 'Request a refund', 'multivendorx' ), $order );
+        $refund_button_text    = apply_filters( 'multivendorx_my_account_refund_request_button_text', __( 'Request a refund', 'multivendorx' ), $order );
         // Print refund messages, if any.
         $msg_data = $this->multivendorx_get_customer_refund_order_msg( $order, $refund_settings );
 
@@ -123,7 +123,7 @@ class Frontend {
                     <?php
                     echo esc_html(
                         apply_filters(
-                            'mvx_customer_my_account_refund_reason_label',
+                            'multivendorx_my_account_refund_reason_label',
                             __( 'Please mention your reason for refund', 'multivendorx' ),
                             $order
                         )
@@ -220,7 +220,7 @@ class Frontend {
             return false;
         }
         $default_msg = apply_filters(
-            'mvx_customer_my_account_refund_order_messages',
+            'multivendorx_my_account_refund_order_messages',
             array(
 				'order_status_not_allowed'      => __( 'Refund is not allowed for the current order status.', 'multivendorx' ),
 				'order_refund_period_overed'    => __( 'Your refund period has expired', 'multivendorx' ),
@@ -233,7 +233,7 @@ class Frontend {
         );
 
         $cust_refund_status = $order->get_meta( '_customer_refund_order', true ) ? $order->get_meta( '_customer_refund_order', true ) : '';
-        $refund_days_limit  = MultiVendorX()->setting->get_setting( 'refund_days' ) ? absint( MultiVendorX()->setting->get_setting( 'refund_days' ) ) : apply_filters( 'mvx_customer_refund_order_default_days_limit', 10, $order );
+        $refund_days_limit  = MultiVendorX()->setting->get_setting( 'refund_days' ) ? absint( MultiVendorX()->setting->get_setting( 'refund_days' ) ) : apply_filters( 'multivendorx_refund_order_default_days_limit', 10, $order );
         $order_date         = $order->get_date_created()->format( 'Y-m-d' );
         $order_place_days   = time() - strtotime( $order_date );
         $message            = array();

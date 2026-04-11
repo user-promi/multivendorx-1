@@ -17,14 +17,14 @@ global $product;
 $html  = '';
 $store = Store::get_store( $product->get_id(), 'product' );
 if ( $store ) {
-    $html .= apply_filters( 'mvx_before_seller_info_tab', '' );
+    $html .= apply_filters( 'multivendorx_before_seller_info_tab', '' );
 
     $details                = Util::show_store_info( $product->get_id() );
     $store_branding_details = MultiVendorX()->setting->get_setting( 'store_branding_details', array() );
 
     if ( $details ) {
         // Filter to control whether to show "Meet our ..." format.
-        $show_meet_text = apply_filters( 'mvx_show_meet_seller_text', true, $details );
+        $show_meet_text = apply_filters( 'multivendorx_show_meet_seller_text', true, $details );
 
         if ( $show_meet_text ) {
             $store_url       = esc_url( MultiVendorX()->store->storeutil->get_store_url( $store->get_id() ) );

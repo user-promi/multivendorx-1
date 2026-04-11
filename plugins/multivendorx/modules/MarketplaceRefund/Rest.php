@@ -360,7 +360,7 @@ class Rest extends \WP_REST_Controller {
             }
 
             if ( ! empty( $parent_line_items ) ) {
-                if ( apply_filters( 'mvx_allow_refund_parent_order', true ) ) {
+                if ( apply_filters( 'multivendorx_allow_refund_parent_order', true ) ) {
                     $parent_refund = wc_create_refund(
                         array(
                             'amount'         => $refund_amount,
