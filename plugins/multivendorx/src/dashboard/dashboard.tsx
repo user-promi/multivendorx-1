@@ -658,7 +658,7 @@ const Dashboard: React.FC = () => {
 							</ResponsiveContainer>
 						) : (
 							<ComponentStatusView
-								title={__('No sales found.', 'multivendorx')}
+								title={__('Your first sale is just around the corner!', 'multivendorx')}
 							/>
 						)}
 					</Card>
@@ -764,7 +764,7 @@ const Dashboard: React.FC = () => {
 							/>
 						) : (
 							<div className="no-data">
-								{__('No products found.', 'multivendorx')}
+								{__('Ready to receive your first order!', 'multivendorx')}
 							</div>
 						)}
 					</Card>
@@ -794,7 +794,7 @@ const Dashboard: React.FC = () => {
 							/>
 						) : (
 							<div className="no-data">
-								{__('No sales data yet', 'multivendorx')}
+								{__('Start selling to discover your top products!', 'multivendorx')}
 							</div>
 						)}
 					</Card>
@@ -880,7 +880,7 @@ const Dashboard: React.FC = () => {
 									}))}
 								/>
 							) : (
-								<ComponentStatusView title={__('No announcements found.', 'multivendorx')}
+								<ComponentStatusView title={__('You're all caught up - check back for updates!', 'multivendorx')}
 							/>
 							)}
 						</Card>
@@ -974,7 +974,7 @@ const Dashboard: React.FC = () => {
 									</div>
 								))
 							) : (
-								<ComponentStatusView title={__('No activity found.', 'multivendorx')} />
+								<ComponentStatusView title={__('Activity will show up here as your store grows!', 'multivendorx')} />
 							)}
 						</div>
 					</Card>

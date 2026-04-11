@@ -189,9 +189,9 @@ class Rewrites {
 
         if ( $store ) {
             $status              = $store->get( 'status' );
-            $restricted_statuses = MultiVendorX()->setting->get_setting( 'restriction_for_under_review', array() );
+            $permissions = MultiVendorX()->util->get_permissions();
 
-            if ( in_array( $status, array( 'under_review', 'suspended' ), true ) && in_array( 'hide_store_products', $restricted_statuses, true ) ) {
+            if ( in_array( $status, array( 'under_review', 'suspended' ), true ) || $permissions['hide_store_products'] ) {
                 wp_safe_redirect( wc_get_page_permalink( 'shop' ) );
                 exit();
             }
