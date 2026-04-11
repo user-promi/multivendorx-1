@@ -880,8 +880,7 @@ const Dashboard: React.FC = () => {
 									}))}
 								/>
 							) : (
-								<ComponentStatusView title={__('You're all caught up - check back for updates!', 'multivendorx')}
-							/>
+								<ComponentStatusView title={__("You're all caught up - check back for updates!", 'multivendorx')} />
 							)}
 						</Card>
 					</Column>
