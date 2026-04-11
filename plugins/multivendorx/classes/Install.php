@@ -27,15 +27,6 @@ class Install {
      * Class constructor
      */
     public function __construct() {
-
-        if ( ! get_option( 'multivendorx_version', false ) ) {
-            $this->create_database_table();
-            $this->create_database_triggers();
-            $this->plugin_create_pages();
-            $this->set_default_modules();
-            $this->set_default_settings();
-        }
-
         add_action( 'init', [$this, 'run_migration'] );
         
         $this->do_migration();
@@ -53,6 +44,14 @@ class Install {
     }
 
     public function run_migration() {
+        if ( ! get_option( 'multivendorx_version', false ) ) {
+            $this->create_database_table();
+            $this->create_database_triggers();
+            $this->plugin_create_pages();
+            $this->set_default_modules();
+            $this->set_default_settings();
+        }
+        
         if ( get_option( 'dc_product_vendor_plugin_db_version' ) ) {
             $this->migrate_mvx_to_multivendorx();
         }
@@ -2673,7 +2672,7 @@ class Install {
 		$new_ledger_table = $wpdb->prefix . Utill::TABLES['transaction'];
 
 		$transactions = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare( "SELECT * FROM {$old_ledger_table}" ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            "SELECT * FROM {$old_ledger_table}", ARRAY_A // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		);
         $store_cache  = array();
 

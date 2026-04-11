@@ -598,6 +598,8 @@ class Utill {
             'disable_product_upload' => false,
             'disable_payouts' => false,
             'disable_checkout' => false,
+            'restrict_store_access' => false,
+            'hide_store_from_view' => false,
         );
 
         return apply_filters( 'multivendorx_modify_permissions', $permissions );

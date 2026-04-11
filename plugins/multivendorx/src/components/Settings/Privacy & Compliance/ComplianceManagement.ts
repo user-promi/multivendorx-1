@@ -53,55 +53,44 @@ export default {
 									),
 									tags: `<a class="admin-btn btn-purple" href="${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-identity">${__('Set Up', 'multivendorx')}<i class="adminfont-arrow-right"/> </a>`,
 								},
-								{
-									title: __(
-										'Email verification',
-										'multivendorx'
-									),
-									desc: __(
-										'The registered email address is verified to confirm the authenticity.',
-										'multivendorx'
-									),
-									tags: `<a class="admin-btn btn-purple" href="${appLocalizer.site_url}/wp-admin/admin.php?page=multivendorx#&tab=settings&subtab=store-identity">${__('Set Up', 'multivendorx')}<i class="adminfont-arrow-right"/> </a>`,
-								},
 							],
 						},
 						{
-							key: 'required_tasks',
+							key: 'non_compliance_action',
 							type: 'checkbox',
 							label: __('Non-Compliance action', 'multivendorx'),
 							options: [
 								{
-									key: 'block_dashboard_access',
+									key: 'restrict_store_access',
 									label: __(
-										'Block dashboard access',
+										'Restrict Store Access',
 										'multivendorx'
 									),
-									value: 'block_dashboard_access',
+									value: 'restrict_store_access',
 									desc: __(
 										'Prevents the store from accessing its dashboard until verification is completed.',
 										'multivendorx'
 									),
 								},
 								{
-									key: 'hide_store_from_view',
+									key: 'hide_store_products',
 									label: __(
-										'Hide store from view',
+										'Hide store and products',
 										'multivendorx'
 									),
-									value: 'hide_store_from_view',
+									value: 'hide_store_products',
 									desc: __(
 										'Hides the store from customers until verification is completed.',
 										'multivendorx'
 									),
 								},
 								{
-									key: 'disable_product',
+									key: 'disable_product_upload',
 									label: __(
 										'Disable product upload',
 										'multivendorx'
 									),
-									value: 'disable_product',
+									value: 'disable_product_upload',
 									desc: __(
 										'Temporarily disables product sales and order fulfillment while the review is in progress.',
 										'multivendorx'
@@ -284,24 +273,12 @@ export default {
 							label: __('Non-Compliance action', 'multivendorx'),
 							options: [
 								{
-									key: 'block_store_access',
+									key: 'restrict_store_access',
 									label: __(
-										'Block store access',
+										'Restrict Store Access',
 										'multivendorx'
 									),
-									value: 'BlockStoreAccess',
-									desc: __(
-										'Prevents the store from accessing its account until compliance issues are resolved.',
-										'multivendorx'
-									),
-								},
-								{
-									key: 'restrict_marketplace_features',
-									label: __(
-										'Restrict features',
-										'multivendorx'
-									),
-									value: 'RestrictMarketplaceFeatures',
+									value: 'restrict_store_access',
 									desc: __(
 										'Limits specific store features while still allowing basic access.',
 										'multivendorx'
