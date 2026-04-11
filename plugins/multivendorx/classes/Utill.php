@@ -97,6 +97,7 @@ class Utill {
     );
 
     const MULTIVENDORX_OTHER_SETTINGS = array(
+        'run_installer'          => 'multivendorx_run_installer',
         'installed'              => 'multivendorx_installed',
         'plugin_activated'       => 'multivendorx_plugin_activated',
         'plugin_db_version'      => 'multivendorx_version',
