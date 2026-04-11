@@ -205,7 +205,7 @@ const Withdrawls: React.FC = () => {
 							))
 						) : (
 							<div className="no-data">
-								{__('No withdrawals found.', 'multivendorx')}
+								{__('Earnings will appear here once you make a withdrawal.', 'multivendorx')}
 							</div>
 						)}
 
