@@ -592,7 +592,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								</div>
 							))
 						) : (
-							<ComponentStatusView title={__('No activity found.', 'multivendorx')} />
+							<ComponentStatusView title={__('Activity will show up here as your store grows!', 'multivendorx')} />
 						)}
 					</div>
 				</Card>

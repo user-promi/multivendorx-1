@@ -140,7 +140,7 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 								))
 							) : (
 								<div>
-									{__('No products found.', 'multivendorx')}
+									{__('Ready to receive your first order!', 'multivendorx')}
 								</div>
 							)}
 						</ul>
