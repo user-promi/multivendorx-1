@@ -76,12 +76,18 @@ class Frontend {
         if ( in_array( 'hide_store_products', $review_settings, true ) || in_array( 'hide_store_products', $suspend_settings, true ) ) {
             $permissions['hide_store_products'] = true;
         }
+        
+        return $permissions;
     }
 
     public function hide_menu( $menu ) {
         $permissions = MultiVendorX()->util->get_permissions();
         if ($permissions['disable_payouts']) {
             unset( $menu['wallet'] );
+        }
+
+        if ($permissions['disable_product_upload']) {
+            unset( $menu['products'] );
         }
 
         return $menu;
