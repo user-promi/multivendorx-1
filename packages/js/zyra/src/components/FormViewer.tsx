@@ -445,11 +445,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                             type="email"
                             name={name}
                             className="input-text"
-                            value={
-                                (getDefaultPlaceholder('email') ??
-                                    (inputs[name] as string) ??
-                                    '') as string
-                            }
+                            value={(inputs[name] as string) || getDefaultPlaceholder('email') || ''}
                             placeholder={field.placeholder}
                             onChange={(e) => handleChange(name, e.target.value)}
                             required={field.required}
@@ -705,7 +701,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                     options = countryList || [];
                                 } else if (subField.key === 'state') {
                                     const selectedCountry =
-                                        inputs[`${field.name}_country`];
+                                        inputs['country'];
                                     const rawStates =
                                         stateList?.[selectedCountry as string];
 
