@@ -416,6 +416,9 @@ const App = () => {
 								),
 							},
 						]}
+						onTaskComplete={(task,response) =>{
+							console.log(task.action, response);
+						}}
 						onComplete={(data) => {
 							console.log('Import completed', data);
 						}}

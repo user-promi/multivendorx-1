@@ -250,10 +250,10 @@ class ImportDummyData extends \WP_REST_Controller {
             $store_slug = sanitize_title( (string) $store->slug );
 
             // CHECK IF STORE ALREADY EXISTS BY SLUG.
-            if ( \MultiVendorX\Store\Store::store_slug_exists( $store_slug ) ) {
-                // Store already exists → skip creation.
-                continue;
-            }
+            // if ( \MultiVendorX\Store\Store::store_slug_exists( $store_slug ) ) {
+            //     // Store already exists → skip creation.
+            //     continue;
+            // }
 
             // Create store object.
             $store_obj = new \MultiVendorX\Store\Store();

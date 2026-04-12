@@ -63,7 +63,7 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
     const taskIndex = useRef(0);
 
     // ⭐ ADDED: Import context storage
-    const lastResult = useRef<string>('');
+    const lastResult = useRef<any>(null);
 
     const sleep = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
@@ -104,9 +104,10 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
 
         if (isSuccess) {
             // ⭐ ADDED: Store successful task data into context
-            if (isSuccess && response?.data !== undefined) {
-                lastResult.current = response.data;
-            }
+            if (isSuccess && Array.isArray(response?.data) && response.data.length > 0) {
+    lastResult.current = response.data;
+}
+            console.log("LAST RESULT BEFORE REVIEWS:", lastResult.current);
 
             onTaskComplete?.(currentTask, response);
         } else {
