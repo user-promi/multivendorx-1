@@ -63,7 +63,7 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
     const taskIndex = useRef(0);
 
     // ⭐ ADDED: Import context storage
-    const lastResult = useRef<any>(null);
+    const lastResult = useRef<string>('');
 
     const sleep = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
