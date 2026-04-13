@@ -50,7 +50,7 @@ export default {
 			options: [
 				{
 					key: 'general',
-					label: __('General', 'multivendorx'),
+					label: __('General information', 'multivendorx'),
 					desc: __(
 						'Store can add description, and price of the product/listing.',
 						'multivendorx'
@@ -59,7 +59,7 @@ export default {
 				},
 				{
 					key: 'inventory',
-					label: __('Inventory', 'multivendorx'),
+					label: __('Stock & inventory', 'multivendorx'),
 					desc: __(
 						'Stores can configure stock management options like SKU, stock levels, and availability.',
 						'multivendorx'
@@ -68,30 +68,12 @@ export default {
 				},
 				{
 					key: 'linked_product',
-					label: __('Linked product', 'multivendorx'),
+					label: __('Related product', 'multivendorx'),
 					desc: __(
 						'Let stores link related products, upsells, and cross-sells.',
 						'multivendorx'
 					),
 					value: 'linked_product',
-				},
-				{
-					key: 'attribute',
-					label: __('Attribute', 'multivendorx'),
-					desc: __(
-						'Give stores the option to add product/listing features such as size, color, or material.',
-						'multivendorx'
-					),
-					value: 'attribute',
-				},
-				{
-					key: 'advanced',
-					label: __('Advanced', 'multivendorx'),
-					desc: __(
-						'Provide extra settings like purchase notes and catalog/order visibility.',
-						'multivendorx'
-					),
-					value: 'advanced',
 				},
 				{
 					key: 'policies',
@@ -110,15 +92,6 @@ export default {
 						'multivendorx'
 					),
 					value: 'product_tag',
-				},
-				{
-					key: 'GTIN',
-					label: __('GTIN', 'multivendorx'),
-					desc: __(
-						'Global Trade Item Number (barcode/identifier) can be assigned for product/listing tracking.',
-						'multivendorx'
-					),
-					value: 'GTIN',
 				},
 			],
 			selectDeselect: true,
