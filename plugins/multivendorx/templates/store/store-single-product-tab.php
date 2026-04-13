@@ -105,7 +105,7 @@ if ( $store ) {
             // translators: %1$s is the store/vendor name.
             . sprintf( __( 'More Products from %1$s', 'multivendorx' ), $store->get( 'name' ) ) . '</a>';
 
-        $html .= '</div>'; // .mvx-vendor-info
+        $html .= '</div>';
     }
 
     $html .= apply_filters( 'multivendorx_store_info_tab', '' );
