@@ -697,7 +697,7 @@ const Dashboard: React.FC = () => {
 							) : (
 								<div className="no-data">
 									{__(
-										'No withdrawals found.',
+										'Earnings will appear here once you make a withdrawal.',
 										'multivendorx'
 									)}
 								</div>
@@ -922,7 +922,7 @@ const Dashboard: React.FC = () => {
 								) : (
 									<div className="no-data">
 										{__(
-											'No pending refunds found.',
+											'Refund requests will appear here when submitted.',
 											'multivendorx'
 										)}
 									</div>

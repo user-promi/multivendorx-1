@@ -81,48 +81,42 @@ export default {
 					key: 'mainorder',
 					label: __('Main Order (Combined)', 'multivendorx'),
 					desc: __(
-						'Sends a single order and invoice for the entire purchase',
+						'Customers receive one combined order and one invoice for their entire purchase.',
 						'multivendorx'
 					),
 					icon: 'cart',
 					value: 'mainorder',
 					customHtml: `<div class="choice-toggle-notice">
-					<div><strong>What it does:</strong> Sends a single order and invoice for the entire purchase.</div>
-					<div><strong>My Account:</strong> Shows one combined order.</div>
-					<div><strong>Use this if:</strong> You want a simplified, all-in-one order view for customers.</div>
+					<div><strong>Best for: </strong> Marketplaces that want a simple checkout and order experience for customers.</div>
 				</div>`,
 				},
 				{
 					key: 'suborders',
 					label: __('Sub-Orders (Per Store)', 'multivendorx'),
 					desc: __(
-						'Sends separate orders and invoices for each store',
+						'Customers receive separate orders and invoices for each store they buy from.',
 						'multivendorx'
 					),
 					icon: 'order',
 					value: 'suborders',
 					customHtml: `<div class="choice-toggle-notice">
-					<div><strong>What it does:</strong> Sends separate orders and invoices for each store.</div>
-					<div><strong>My Account:</strong> Shows multiple orders (one per store).</div>
-					<div><strong>Use this if:</strong> You want customers to see individual store orders and receipts.</div>
+					<div><strong>Best for: </strong> Marketplaces where each store manages its own orders and invoices.</div>
 				</div>`,
 				},
 				{
 					key: 'main_sub',
 					label: __(
-						'Main + Sub Orders (Combined + Separate)',
+						'Main + Sub Orders (Combined + Store)',
 						'multivendorx'
 					),
 					desc: __(
-						'Sends both a combined order and separate store orders with invoices',
+						'Customers receive both a single marketplace order and individual store orders with invoices.',
 						'multivendorx'
 					),
 					icon: 'order-completed',
 					value: 'main_sub',
 					customHtml: `<div class="choice-toggle-notice">
-					<div><strong>What it does:</strong> Sends both a combined order and separate store orders with invoices.</div>
-					<div><strong>My Account:</strong> Shows combined + individual orders.</div>
-					<div><strong>Use this if:</strong> You want full transparency for both marketplace and individual store orders.</div>
+					<div><strong>Best for: </strong> Marketplaces that want full transparency for both marketplace and store purchases.</div>
 				</div>`,
 				},
 			],
