@@ -336,7 +336,7 @@ const Invoice: React.FC = () => {
                 <Card title={__('Invoices will display these tax details', 'multivendorx')} >
                     <FormGroupWrapper>
                         <FormGroup 
-                            desc={__("Choose which tax details invoices can include. <br> <b> For each field you enable: </b> <br> <ul> <li>Stores can enter their own value for their invoices. </li> <li>You can enter the marketplace value for marketplace invoices. </li> </ul> <b> How the values appear: </b><br>  <ul><li> Main order invoices show the marketplace value entered here. </li> <li> Store order invoices show the value provided by the store.</li> </ul>", 'multivendorx')}>
+                            desc={__("Click <b>Show</b> to enable a tax field so it appears on invoices. Once enabled:<br> <ul> <li>The marketplace to add its value for marketplace invoices. </li> <li>Stores to add their own value for their invoices.</li> </ul> <b> How these values appear on invoices: </b><br><ul><li> Main order invoices display the marketplace value entered here.</li> <li> Store order invoices display the value provided by the store.</li> </ul>", 'multivendorx')}>
                             <ExpandablePanelUI
                                 name={ratingsField.key}
                                 methods={ratingsField.modal}

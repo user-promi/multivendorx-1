@@ -93,7 +93,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 id: 'radio',
                 icon: 'radio icon-form-radio',
                 value: 'radio',
-                label: 'Radio',
+                label: 'Nature Of Business',
                 options: OPTION_PRESETS,
             },
             {

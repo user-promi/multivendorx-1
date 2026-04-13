@@ -23,8 +23,8 @@ class Shortcode {
      * Shortcode class construct function
      */
     public function __construct() {
-        add_shortcode( 'multivendorx_store_dashboard', array( $this, 'display_store_dashboard' ) );
-        add_shortcode( 'multivendorx_store_registration', array( $this, 'display_store_registration' ) );
+        add_shortcode( 'marketplace_dashboard', array( $this, 'display_store_dashboard' ) );
+        add_shortcode( 'marketplace_registration', array( $this, 'display_store_registration' ) );
         add_shortcode( 'marketplace_stores', array( $this, 'marketplace_stores' ) );
         add_shortcode( 'marketplace_products', array( $this, 'marketplace_products' ) );
         add_shortcode( 'marketplace_coupons', array( $this, 'marketplace_coupons' ) );
@@ -126,9 +126,11 @@ class Shortcode {
         if ( ( $attributes['orderby'] ?? null ) === 'registered' ) {
             $attributes['orderby'] = 'create_time';
         }
-        $json_attrs = esc_attr( wp_json_encode( $attributes ) );
-        FrontendScripts::load_scripts();
 
+        $attributes = $this->snake_to_camel_case( $attributes );
+        $json_attrs = esc_attr( wp_json_encode( $attributes ) );
+
+        FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-marketplace-stores-script' );
         FrontendScripts::enqueue_style( 'multivendorx-common-block-style' );
         FrontendScripts::localize_scripts( 'multivendorx-marketplace-stores-script' );
@@ -142,9 +144,10 @@ class Shortcode {
      * @return string HTML container for marketplace products.
      */
     public function marketplace_products( $attributes ) {
+        $attributes = $this->snake_to_camel_case( $attributes );
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
+    
         FrontendScripts::load_scripts();
-
         FrontendScripts::enqueue_script( 'multivendorx-marketplace-products-script' );
         FrontendScripts::localize_scripts( 'multivendorx-marketplace-products-script' );
 
@@ -157,12 +160,23 @@ class Shortcode {
      * @return string HTML container for marketplace coupons.
      */
     public function marketplace_coupons( $attributes ) {
+        $attributes = $this->snake_to_camel_case( $attributes );
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
-        FrontendScripts::load_scripts();
 
+        FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-marketplace-coupons-script' );
         FrontendScripts::localize_scripts( 'multivendorx-marketplace-coupons-script' );
 
         return '<div id="marketplace-coupons" data-attributes="' . $json_attrs . '"></div>';
+    }
+
+    public function snake_to_camel_case( $array ) {
+        $result = [];
+        foreach ( $array as $key => $value ) {
+            $camelKey = lcfirst( str_replace( ' ', '', ucwords( str_replace( '_', ' ', $key ) ) ) );
+            $result[ $camelKey ] = $value;
+        }
+
+        return $result;
     }
 }
