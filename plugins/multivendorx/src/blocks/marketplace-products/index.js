@@ -53,7 +53,7 @@ const EditBlock = (props) => {
 					/>
 					<SelectControl
 						label="Sort by"
-						value={attributes.orderby}
+						value={attributes.orderBy}
 						options={[
 							{
 								label: __('Popularity', 'multivendorx'),
@@ -76,7 +76,7 @@ const EditBlock = (props) => {
 								value: 'on_sale',
 							},
 						]}
-						onChange={(value) => setAttributes({ orderby: value })}
+						onChange={(value) => setAttributes({ orderBy: value })}
 					/>
 					<SelectControl
 						label="Order"
@@ -103,7 +103,7 @@ const EditBlock = (props) => {
 
 			{/* Render the Product List with attributes */}
 			<MarketplaceProductList
-				orderby={attributes.orderby}
+				orderBy={attributes.orderBy}
 				order={attributes.order}
 				category={attributes.category}
 				perPage={attributes.perPage}
@@ -121,7 +121,7 @@ registerBlockType('multivendorx/marketplace-products', {
 	supports: { html: false },
 
 	attributes: {
-		orderby: { type: 'string', default: 'title' },
+		orderBy: { type: 'string', default: 'title' },
 		order: { type: 'string', default: 'asc' },
 		category: { type: 'string', default: '' },
 		perPage: { type: 'number', default: 5 },

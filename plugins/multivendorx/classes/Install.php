@@ -755,7 +755,7 @@ class Install {
 				'post_status' => 'publish',
 				'fields'      => 'ids',
 				'numberposts' => 1,
-				's'           => '[multivendorx_store_dashboard]',
+				's'           => '[marketplace_dashboard]',
             )
         );
 
@@ -767,7 +767,7 @@ class Install {
 				'post_status' => 'publish',
 				'fields'      => 'ids',
 				'numberposts' => 1,
-				's'           => '[multivendorx_store_registration]',
+				's'           => '[marketplace_registration]',
             )
         );
 
@@ -1068,12 +1068,12 @@ class Install {
             array(
                 'slug'      => 'dashboard',
                 'title'     => 'Store Dashboard',
-                'shortcode' => '[multivendorx_store_dashboard]',
+                'shortcode' => '[marketplace_dashboard]',
             ),
             array(
                 'slug'      => 'store-registration',
                 'title'     => 'Store Registration',
-                'shortcode' => '[multivendorx_store_registration]',
+                'shortcode' => '[marketplace_registration]',
             ),
         );
 

@@ -28,7 +28,7 @@ const previewCoupons = [
 ];
 const StoreCouponList = ({
 	perPage = 5,
-	orderby = 'date',
+	orderBy = 'date',
 	order = 'DESC',
 	storeId,
 	isPreview = false,
@@ -40,7 +40,7 @@ const StoreCouponList = ({
 	// Reset page when filters change
 	useEffect(() => {
 		setPage(1);
-	}, [perPage, orderby, order]);
+	}, [perPage, orderBy, order]);
 
 	useEffect(() => {
 		if (copiedCode) {
@@ -59,7 +59,7 @@ const StoreCouponList = ({
 		const params = {
 			per_page: perPage,
 			page,
-			orderby,
+			orderby: orderBy,
 			order: order?.toLowerCase() === 'asc' ? 'asc' : 'desc',
 			meta_key: 'multivendorx_store_id',
 		};
@@ -85,7 +85,7 @@ const StoreCouponList = ({
 			.catch(() => {
 				setCoupons([]);
 			});
-	}, [page, perPage, orderby, order]);
+	}, [page, perPage, orderBy, order]);
 
 	useEffect(() => {
 		if (isPreview) {

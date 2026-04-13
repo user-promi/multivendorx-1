@@ -21,7 +21,7 @@ registerBlockType('multivendorx/marketplace-coupons', {
 			type: 'number',
 			default: 5,
 		},
-		orderby: {
+		orderBy: {
 			type: 'string',
 			default: 'date',
 		},
@@ -93,7 +93,7 @@ registerBlockType('multivendorx/marketplace-coupons', {
 
 						<SelectControl
 							label={__('Order By', 'multivendorx')}
-							value={attributes.orderby}
+							value={attributes.orderBy}
 							options={[
 								{
 									label: __('Date', 'multivendorx'),
@@ -117,7 +117,7 @@ registerBlockType('multivendorx/marketplace-coupons', {
 								},
 							]}
 							onChange={(value) =>
-								setAttributes({ orderby: value })
+								setAttributes({ orderBy: value })
 							}
 						/>
 
