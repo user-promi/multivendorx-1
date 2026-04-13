@@ -95,6 +95,7 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
         response: DynamicResponse
     ) => {
         const isSuccess = response?.success === true;
+		
         const message = isSuccess
             ? currentTask.successMessage ||
               response?.message ||
