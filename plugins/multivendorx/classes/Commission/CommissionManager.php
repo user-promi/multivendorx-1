@@ -702,7 +702,14 @@ class CommissionManager {
 
             $wpdb->update( $wpdb->prefix . Utill::TABLES['commission'], $data, array( 'ID' => $commission_id ), $format );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching,
 
-            do_action( 'multivendorx_after_create_commission_refunds', $store_order, $commission_id );
+            do_action( 'multivendorx_after_insert_commission_refunds', $store_order, $commission_id );
+            
+            $payment_method = $store_order->get_payment_method();
+            $gateways = WC()->payment_gateways()->payment_gateways();
+
+            if (isset($gateways[$payment_method]) && !empty($gateways[$payment_method]->multivendorx_payment_gateway)) {
+                return;
+            }
 
             $refund_status = MultiVendorX()->setting->get_setting( 'customer_refund_status' );
             if ( ! empty( $refund_status ) && in_array( $store_order->get_status(), $refund_status, true ) ) {
