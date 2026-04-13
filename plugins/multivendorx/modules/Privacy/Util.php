@@ -60,8 +60,9 @@ class Util {
             $logo_html = '';
 
             if ( in_array( 'show_store_logo_next_to_products', $store_details, true ) ) {
-                $logo_url = $store->get_meta( 'image' );
-
+                $logo = $store->get_meta( 'image' );
+                $logo_url = is_array( $logo ) ? ($logo['url'] ?? '') : $logo;
+                
                 if ( ! empty( $logo_url ) ) {
                     $logo_html = '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( $name ) . '" />';
                 } else {

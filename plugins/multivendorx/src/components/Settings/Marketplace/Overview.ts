@@ -81,48 +81,42 @@ export default {
 					key: 'mainorder',
 					label: __('Main Order (Combined)', 'multivendorx'),
 					desc: __(
-						'Sends a single order and invoice for the entire purchase',
+						'Customers receive one combined order and one invoice for their entire purchase.',
 						'multivendorx'
 					),
 					icon: 'cart',
 					value: 'mainorder',
 					customHtml: `<div class="choice-toggle-notice">
-					<div><strong>What it does:</strong> Sends a single order and invoice for the entire purchase.</div>
-					<div><strong>My Account:</strong> Shows one combined order.</div>
-					<div><strong>Use this if:</strong> You want a simplified, all-in-one order view for customers.</div>
+					<div><strong>Best for: </strong> Marketplaces that want a simple checkout and order experience for customers.</div>
 				</div>`,
 				},
 				{
 					key: 'suborders',
 					label: __('Sub-Orders (Per Store)', 'multivendorx'),
 					desc: __(
-						'Sends separate orders and invoices for each store',
+						'Customers receive separate orders and invoices for each store they buy from.',
 						'multivendorx'
 					),
 					icon: 'order',
 					value: 'suborders',
 					customHtml: `<div class="choice-toggle-notice">
-					<div><strong>What it does:</strong> Sends separate orders and invoices for each store.</div>
-					<div><strong>My Account:</strong> Shows multiple orders (one per store).</div>
-					<div><strong>Use this if:</strong> You want customers to see individual store orders and receipts.</div>
+					<div><strong>Best for: </strong> Marketplaces where each store manages its own orders and invoices.</div>
 				</div>`,
 				},
 				{
 					key: 'main_sub',
 					label: __(
-						'Main + Sub Orders (Combined + Separate)',
+						'Main + Sub Orders (Combined + Store)',
 						'multivendorx'
 					),
 					desc: __(
-						'Sends both a combined order and separate store orders with invoices',
+						'Customers receive both a single marketplace order and individual store orders with invoices.',
 						'multivendorx'
 					),
 					icon: 'order-completed',
 					value: 'main_sub',
 					customHtml: `<div class="choice-toggle-notice">
-					<div><strong>What it does:</strong> Sends both a combined order and separate store orders with invoices.</div>
-					<div><strong>My Account:</strong> Shows combined + individual orders.</div>
-					<div><strong>Use this if:</strong> You want full transparency for both marketplace and individual store orders.</div>
+					<div><strong>Best for: </strong> Marketplaces that want full transparency for both marketplace and store purchases.</div>
 				</div>`,
 				},
 			],
@@ -194,10 +188,10 @@ export default {
 							default: '[marketplace_stores order="ASC"]',
 						},
 						{
-							attribute: 'perpage',
+							attribute: 'per_page',
 							description: 'Set how many stores appear per page.',
 							accepted: 'Any number (Default: 12)',
-							default: '[marketplace_stores perpage="12"]',
+							default: '[marketplace_stores per_page="12"]',
 						},
 					],
 				},
@@ -211,28 +205,28 @@ export default {
 					),
 					arguments: [
 						{
-							attribute: 'storeId',
+							attribute: 'store_id',
 							description:
 								'Display products/listings from a specific store using Store ID or Store Slug.',
-							accepted: 'store_id, store_slug',
-							default: '[marketplace_products storeId="1"]',
+							accepted: 'Store ID',
+							default: '[marketplace_products store_id="1"]',
 						},
 
 						{
-							attribute: 'perPage',
+							attribute: 'per_page',
 							description:
 								'Set how many products/listings appear per page.',
 							accepted: 'Any number (Default = 12)',
-							default: '[marketplace_products perPage="12"]',
+							default: '[marketplace_products per_page="12"]',
 						},
 
 						{
-							attribute: 'orderby',
+							attribute: 'order_by',
 							description:
 								'Choose the field used for sorting products/listings.',
 							accepted:
 								'title, date, price, popularity, rating, menu_order (Default = title)',
-							default: '[marketplace_products orderby="title"]',
+							default: '[marketplace_products order_by="title"]',
 						},
 
 						{
@@ -271,8 +265,8 @@ export default {
 					],
 				},
 				{
-					key: 'marketplace-coupons',
-					label: '[marketplace-coupons]',
+					key: 'marketplace_coupons',
+					label: '[marketplace_coupons]',
 					name: 'Show store coupons',
 					desc: __(
 						'Displays coupons created by a store along with their usage details.',
@@ -280,31 +274,31 @@ export default {
 					),
 					arguments: [
 						{
-							attribute: 'storeId',
+							attribute: 'store_id',
 							description:
 								'Display coupons from a specific store using the store ID.',
 							accepted: 'Store ID',
-							default: '[marketplace-coupons storeId="1"]',
+							default: '[marketplace_coupons store_id="1"]',
 						},
 						{
-							attribute: 'perPage',
+							attribute: 'per_page',
 							description:
 								'Set how many coupons appear per page.',
 							accepted: 'Any number (Default = 10)',
-							default: '[marketplace-coupons perPage="10"]',
+							default: '[marketplace_coupons per_page="10"]',
 						},
 						{
-							attribute: 'orderby',
+							attribute: 'order_by',
 							description: 'Choose how coupons are sorted.',
 							accepted:
 								'date, id, title, code, modified (Default = date)',
-							default: '[marketplace-coupons orderby="date"]',
+							default: '[marketplace_coupons order_by="date"]',
 						},
 						{
 							attribute: 'order',
 							description: 'Set the sorting direction.',
 							accepted: 'ASC, DESC (Default = DESC)',
-							default: '[marketplace-coupons order="DESC"]',
+							default: '[marketplace_coupons order="DESC"]',
 						},
 					],
 				},

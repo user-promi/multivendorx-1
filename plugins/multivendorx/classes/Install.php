@@ -756,7 +756,7 @@ class Install {
 				'post_status' => 'publish',
 				'fields'      => 'ids',
 				'numberposts' => 1,
-				's'           => '[multivendorx_store_dashboard]',
+				's'           => '[marketplace_dashboard]',
             )
         );
 
@@ -768,7 +768,7 @@ class Install {
 				'post_status' => 'publish',
 				'fields'      => 'ids',
 				'numberposts' => 1,
-				's'           => '[multivendorx_store_registration]',
+				's'           => '[marketplace_registration]',
             )
         );
 
@@ -1069,12 +1069,12 @@ class Install {
             array(
                 'slug'      => 'dashboard',
                 'title'     => 'Store Dashboard',
-                'shortcode' => '[multivendorx_store_dashboard]',
+                'shortcode' => '[marketplace_dashboard]',
             ),
             array(
                 'slug'      => 'store-registration',
                 'title'     => 'Store Registration',
-                'shortcode' => '[multivendorx_store_registration]',
+                'shortcode' => '[marketplace_registration]',
             ),
         );
 
@@ -2191,7 +2191,7 @@ class Install {
                 // report abuse table data insert.
                 if ( 'report_abuse_data' === $meta_key ) {
                     $table = $wpdb->prefix . Utill::TABLES['report_abuse'];
-
+                    $meta_values = unserialize($meta_values);
                     foreach ( $meta_values as $value ) {
                         // Sanitize and prepare data.
                         $insert_data = array(
