@@ -2190,7 +2190,7 @@ class Install {
                 // report abuse table data insert.
                 if ( 'report_abuse_data' === $meta_key ) {
                     $table = $wpdb->prefix . Utill::TABLES['report_abuse'];
-
+                    $meta_values = unserialize($meta_values);
                     foreach ( $meta_values as $value ) {
                         // Sanitize and prepare data.
                         $insert_data = array(
