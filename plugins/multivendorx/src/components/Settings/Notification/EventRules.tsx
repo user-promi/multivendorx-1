@@ -497,8 +497,8 @@ const EventRules: React.FC = () => {
 				<PopupUI
 					open={!!openChannel}
 					onClose={() => setOpenChannel(null)}
-					width={31.25}
-					height="70%"
+					width="90%"
+					height="90%"
 					header={{
 						icon: 'cart',
 						title: `${

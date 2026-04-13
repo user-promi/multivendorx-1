@@ -1409,6 +1409,10 @@ body.dark {
 
         .media-info {
             padding: 0.625rem;
+            .title{
+                display: flex;
+                justify-content: space-between;
+            }
         }
 
         .media-meta {
