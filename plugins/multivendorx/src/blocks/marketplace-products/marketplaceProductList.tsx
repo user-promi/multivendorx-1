@@ -12,22 +12,21 @@ interface Product {
 
 interface MarketplaceProductListProps {
 	perPage?: number;
-	orderby?: string;
+	orderBy?: string;
 	order?: 'asc' | 'desc';
 	category?: string;
 	operator?: string;
-	product_visibility?: string;
-	store_id?: string;
+	productVisibility?: string;
 	storeId?: string | number;
 }
 
 const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 	perPage = 5,
-	orderby = 'title',
+	orderBy = 'title',
 	order = 'asc',
 	category = '',
 	operator = 'IN',
-	product_visibility = '',
+	productVisibility = '',
 	storeId,
 }) => {
 	const [products, setProducts] = useState<Product[]>([]);
@@ -36,18 +35,18 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 
 	useEffect(() => {
 		setPage(1);
-	}, [perPage, orderby, order, category, product_visibility]);
+	}, [perPage, orderBy, order, category, productVisibility]);
 
 	const fetchProducts = useCallback(async () => {
 		setLoading(true);
 		const params = {
 			per_page: perPage,
 			page,
-			orderby,
+			orderBy,
 			order,
 			cat: category,
 			operator,
-			product_visibility,
+			product_visibility : productVisibility,
 			meta_key: 'multivendorx_store_id',
 		};
 
@@ -74,7 +73,7 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 			console.error('Error fetching products:', error);
 			setLoading(false);
 		}
-	}, [page, perPage, orderby, order, category, operator, product_visibility]);
+	}, [page, perPage, orderBy, order, category, operator, productVisibility]);
 
 	useEffect(() => {
 		fetchProducts();
