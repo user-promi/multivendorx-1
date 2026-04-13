@@ -84,7 +84,7 @@ export const TransactionHistory: React.FC = () => {
 				) : null;
 			case 'direct-transaction':
 				return applyFilters(
-					'direct_transaction_output',
+					'multivendorx_direct_transaction',
 					null,
 					selectedStoreId
 				);

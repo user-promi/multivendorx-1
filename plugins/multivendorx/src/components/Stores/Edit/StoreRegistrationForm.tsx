@@ -800,7 +800,15 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 												formData.store_application_note ||
 												''
 											}
-											onChange={handleChange}
+											onChange={(val) =>
+												handleChange({
+													target: {
+														name: 'store_application_note',
+														value: val,
+														type: 'textarea',
+													},
+												} as React.ChangeEvent<HTMLTextAreaElement>)
+											}
 										/>
 									</FormGroup>
 									<FormGroup>

@@ -261,7 +261,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
                 continue;
             }
             // Filter shipping methods (optional).
-            $shipping_methods = apply_filters( 'mvx_get_shipping_methods_for_shipping_address', $shipping_methods, $package, $store_id );
+            $shipping_methods = apply_filters( 'multivendorx_get_shipping_methods_for_shipping_address', $shipping_methods, $package, $store_id );
             foreach ( $shipping_methods as $key => $method ) {
                 $tax_rate  = ( 'none' === $method['settings']['tax_status'] ) ? false : '';
                 $has_costs = false;
@@ -370,7 +370,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
         }
 
         // Apply filters.
-        $rates = apply_filters( 'mvx_get_rates_for_custom_shipping', $rates, $package );
+        $rates = apply_filters( 'multivendorx_get_rates_for_custom_shipping', $rates, $package );
 
         // Send rates to WooCommerce.
         if ( is_array( $rates ) && count( $rates ) > 0 ) {
@@ -431,7 +431,7 @@ class Zone_Shipping extends \WC_Shipping_Method {
             if ( $total >= $min_amount ) {
 				$has_met_min_amount = true;
             }
-            return apply_filters( 'mvx_shipping_free_shipping_is_available', $has_met_min_amount, $package, $method );
+            return apply_filters( 'multivendorx_free_shipping_is_available', $has_met_min_amount, $package, $method );
         }
     }
 
