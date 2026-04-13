@@ -1080,7 +1080,7 @@ class Notifications {
 						'system_action'    => $key,
 						'email_subject'    => $event['email_subject'] ?? '',
 						'email_body'       => $event['email_body'] ?? '',
-						'email_body_builder' => '',
+						'email_body_builder' => $event['email_body_builder'] ?? '',
 					'sms_content'      => $event['sms_content'] ?? '',
 						'system_message'   => $event['system_message'] ?? '',
 						'status'           => 'active',
