@@ -1044,7 +1044,9 @@ class Stores extends \WP_REST_Controller {
                     )
                 );
 
+                $old_owner = StoreUtil::get_primary_owner( $id );
                 StoreUtil::set_primary_owner( $data['primary_owner'], $id );
+                StoreUtil::reassign_attachments_to_new_owner( $old_owner, $data['primary_owner'] );
 
                 unset( $data['store_owners'], $data['primary_owner'] );
             }

@@ -1,35 +1,82 @@
 import { __ } from '@wordpress/i18n';
-import { useState } from 'react';
-import { Analytics, Column, Container, NavigatorHeader } from 'zyra';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Column, Container, NavigatorHeader, PopupUI } from 'zyra';
+import Popup from '../components/Popup/Popup';
 
 const MediaLibrary = () => {
-	const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
-	const overviewData = [
-		{
-			icon: 'submission-message',
-			number: '1',
-			text: __('Total Files', 'multivendorx'),
-			iconClass: 'primary',
-		},
-		{
-			icon: 'image',
-			number: '0',
-			text: __('Images', 'multivendorx'),
-			iconClass: 'green',
-		},
-		{
-			icon: 'save',
-			number: '1',
-			text: __('Videos', 'multivendorx'),
-			iconClass: 'orange',
-		},
-		{
-			icon: 'document',
-			number: '1',
-			text: __('Documents', 'multivendorx'),
-			iconClass: 'yellow',
-		},
-	];
+	const [media, setMedia] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [selectedMedia, setSelectedMedia] = useState<{ id: number } | null>(null);
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+	useEffect(() => {
+		fetchMedia();
+	}, []);
+
+	const fetchMedia = () => {
+		setLoading(true);
+		axios
+			.get(`${appLocalizer.apiUrl}/wp/v2/media`, {
+				params: {
+					author: appLocalizer?.current_user?.data?.ID,
+					per_page: 100,
+				},
+				headers: {
+					'X-WP-Nonce': appLocalizer.nonce,
+				},
+			})
+			.then((res) => {
+				setMedia(res.data || []);
+				setLoading(false);
+			})
+			.catch(() => {
+				setMedia([]);
+				setLoading(false);
+			});
+		};
+
+	const formattedMedia = media.map((item) => {
+		const mime = item.mime_type || '';
+
+		let type = 'file';
+		if (mime.startsWith('image')) type = 'image';
+		else if (mime.startsWith('video')) type = 'video';
+
+		return {
+			id: item.id,
+			name: item.title?.rendered || 'Untitled',
+			size: item.media_details?.filesize
+				? (item.media_details.filesize / 1024 / 1024).toFixed(2) + ' MB'
+				: '—',
+			category: type === 'image' ? 'Images' : type === 'video' ? 'Videos' : 'Files',
+			type,
+			src: item.source_url,
+		};
+	});
+	
+	const deleteMedia = () => {
+		if (!selectedMedia) {
+			return;
+		}
+
+		axios
+			.delete(`${appLocalizer.apiUrl}/wp/v2/media/${selectedMedia.id}`, {
+				headers: {
+					'X-WP-Nonce': appLocalizer.nonce,
+				},
+			})
+			.then(() => {
+				setMedia((prev) => prev.filter((item) => item.id !== id));
+			})
+			.catch((err) => {
+				console.error(err);
+				setConfirmOpen(false);
+				setSelectedMedia(null);
+			});
+	};
+
 	return (
 		<>
 			<NavigatorHeader
@@ -38,146 +85,107 @@ const MediaLibrary = () => {
 					"Manage your store's media assetsManage your rental inventory items",
 					'multivendorx'
 				)}
-				buttons={[
-					{
-						label: __('Upload Media', 'multivendorx'),
-						icon: 'export',
-					},
-				]}
 			/>
 			<Container general>
 				<Column>
-					<Analytics data={overviewData} />
-				</Column>
-				<Column>
-					<div className="choice-toggle-wrapper view-toggle">
-						<div className="tabs-wrapper">
-							{(['list', 'grid'] as const).map((mode) => (
-								<div
-									key={mode}
-									role="button"
-									tabIndex={0}
-									onClick={() => setViewMode(mode)}
-									onKeyDown={(e) =>
-										e.key === 'Enter' && setViewMode(mode)
-									}
-									className="toggle-option"
-								>
-									<input
-										className="choice-toggle-form-input"
-										type="radio"
-										id={`${mode}-view`}
-										name="view-mode"
-										value={mode}
-										checked={viewMode === mode}
-										readOnly
+					<div className="media-library-grid">
+						{loading && <p>Loading...</p>}
+
+						{!loading && formattedMedia.map((item) => (
+							<div key={item.id} className={`media-item media-${item.type}`}
+								onClick={() => {
+									setPreviewUrl(item.src);
+								}}
+							>
+
+								{item.type === 'image' && (
+									<div
+										className="media-preview"
+										style={{ backgroundImage: `url(${item.src})` }}
 									/>
-									<label htmlFor={`${mode}-view`}>
-										<i
-											className={
-												mode === 'list'
-													? 'adminfont-editor-list-ul'
-													: 'adminfont-module'
-											}
-										></i>
-									</label>
-								</div>
-							))}
-						</div>
-					</div>
-					{viewMode === 'grid' && (
-						<div className="media-library-grid">
-							{[
-								{
-									name: 'Product Photo 1',
-									size: '2.4 MB',
-									category: 'Products',
-									type: 'image',
-									src: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400',
-								},
-								{
-									name: 'Store Banner',
-									size: '3.1 MB',
-									category: 'Marketing',
-									type: 'image',
-									src: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400',
-								},
-								{
-									name: 'Product Video',
-									size: '15.2 MB',
-									category: 'Products',
-									type: 'video',
-								},
-								{
-									name: 'Logo Vector',
-									size: '0.8 MB',
-									category: 'Branding',
-									type: 'file',
-								},
-								{
-									name: 'Product Photo 1',
-									size: '2.4 MB',
-									category: 'Products',
-									type: 'image',
-									src: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400',
-								},
-								{
-									name: 'Store Banner',
-									size: '3.1 MB',
-									category: 'Marketing',
-									type: 'image',
-									src: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400',
-								},
-								{
-									name: 'Product Video',
-									size: '15.2 MB',
-									category: 'Products',
-									type: 'video',
-								},
-								{
-									name: 'Logo Vector',
-									size: '0.8 MB',
-									category: 'Branding',
-									type: 'file',
-								},
-							].map((item, index) => (
-								<div
-									key={index}
-									className={`media-item media-${item.type}`}
-								>
-									{item.type === 'image' && (
-										<div
-											className="media-preview"
-											style={{
-												backgroundImage: `url(${item.src})`,
-											}}
-										/>
-									)}
+								)}
 
-									{item.type === 'video' && (
-										<div className="media-icon">
-											<i className="adminfont-image"></i>
-										</div>
-									)}
+								{item.type === 'video' && (
+									<div className="media-icon">
+										<i className="adminfont-video"></i>
+									</div>
+								)}
 
-									{item.type === 'file' && (
-										<div className="media-icon">
-											<i className="adminfont-document"></i>
-										</div>
-									)}
+								{item.type === 'file' && (
+									<div className="media-icon">
+										<i className="adminfont-document"></i>
+									</div>
+								)}
 
-									<div className="media-info">
-										<div className="title">{item.name}</div>
-										<div className="media-meta">
-											<span>{item.size}</span>
-											<span>{item.category}</span>
-										</div>
+								<div className="media-info">
+									<div className="title">
+										{item.name}
+										<span className="admin-badge-red"
+											onClick={(e) => {
+												e.stopPropagation();
+												setSelectedMedia({ id: item.id });
+												setConfirmOpen(true);
+											}}>
+											<i className="adminfont-delete"></i>
+										</span>
+									</div>
+
+									<div className="media-meta">
+										<span>{item.size}</span>
+										<span>{item.category}</span>
 									</div>
 								</div>
-							))}
-						</div>
-					)}
+							</div>
+						))}
+					</div>
 				</Column>
+
+				<PopupUI
+				position="lightbox"
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+				width={31.25}
+				height="auto"
+			>
+				<Popup
+					confirmMode
+					title={__('Delete Media', 'multivendorx')}
+					confirmMessage={__('Are you sure?', 'multivendorx')}
+					confirmYesText={__('Delete', 'multivendorx')}
+					confirmNoText={__('Cancel', 'multivendorx')}
+					onConfirm={deleteMedia}
+					onCancel={() => {
+						setConfirmOpen(false);
+					}}
+				/>
+			</PopupUI>
+
+			<PopupUI
+				position="lightbox"
+				open={!!previewUrl}
+				onClose={() => setPreviewUrl(null)}
+				width="80%"
+				height="80%"
+				header={{
+					title: 'Document Preview',
+				}}
+			>
+				{previewUrl && (
+					previewUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+						<img
+							src={previewUrl}
+							alt="preview"
+							style={{ width: '100%', height: 'auto' }}
+						/>
+					) : (
+						<iframe
+							src={previewUrl}
+							title="Document"
+							style={{ width: '100%', height: '100%' }}
+						/>
+					)
+				)}
+			</PopupUI>
 			</Container>
 		</>
 	);

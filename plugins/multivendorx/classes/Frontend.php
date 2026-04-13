@@ -55,6 +55,7 @@ class Frontend {
 
         add_filter( 'multivendorx_modify_permissions', [$this, 'modify_permissions'] );
         add_filter( 'multivendorx_dashboard_menu', [ $this, 'hide_menu'], 20 );
+        add_filter( 'wp_insert_attachment_data', [ $this, 'attach_store_owner_id'], 10, 1 );
     }
 
     public function modify_permissions($permissions) {
@@ -556,5 +557,40 @@ class Frontend {
         }
 
         return $query;
+    }
+
+    public function attach_store_owner_id( $data ) {
+        if ( ! empty( array_intersect( [ 'store_manager', 'product_manager', 'customer_support', 'order_assistant', 'inactive_staff' ], MultiVendorX()->current_user->roles )) ) {
+            $store = new Store(MultiVendorX()->active_store);
+            $primary_owner = StoreUtil::get_primary_owner(MultiVendorX()->active_store);
+
+            if ( !empty($primary_owner) ) {
+                $data['post_author'] = (int) $primary_owner;
+            }
+
+            $total_size = $this->get_user_media_space_used( $primary_owner );
+            $store->update_meta('media_space_used', $total_size);
+        }
+        return $data;
+    }
+
+    public function get_user_media_space_used($user_id) {
+        $attachments = get_posts(array(
+            'post_type'      => 'attachment',
+            'posts_per_page' => -1,
+            'author'         => $user_id,
+            'fields'         => 'ids',
+        ));
+
+        $total_size = 0;
+        foreach ($attachments as $attachment_id) {
+            $file_path = get_attached_file($attachment_id);
+            if (file_exists($file_path)) {
+                $total_size += filesize($file_path);
+            }
+        }
+
+        // Return size in MB
+        return round($total_size / 1024 / 1024, 2);
     }
 }
