@@ -91,8 +91,8 @@ class Frontend {
             return;
         }
 
-        if ( apply_filters( 'mvx_show_report_abuse_link', true, $product ) ) {
-            $report_abuse_text = apply_filters( 'mvx_report_abuse_text', __( 'Report Abuse', 'multivendorx' ), $product );
+        if ( apply_filters( 'multivendorx_show_report_abuse_link', true, $product ) ) {
+            $report_abuse_text = apply_filters( 'multivendorx_report_abuse_text', __( 'Report Abuse', 'multivendorx' ), $product );
             ?>
             <div class="multivendorx-report-abuse-wrapper">
                 <a href="javascript:void(0);" class="open-popup open-report-abuse"><?php echo esc_html( $report_abuse_text ); ?></a>

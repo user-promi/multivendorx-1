@@ -348,7 +348,7 @@ const EditStore = () => {
 					return <StoreRegistration id={editId} />;
 				case 'store-facilitator':
 					return applyFilters(
-						'add_facilitator_content',
+						'multivendorx_add_facilitator_content',
 						null,
 						editId,
 						data
