@@ -829,4 +829,28 @@ class StoreUtil {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         return $wpdb->get_col( $sql );
     }
+
+    public static function reassign_attachments_to_new_owner( $old_owner, $new_owner ) {
+        if ( ! $old_owner || ! $new_owner || $old_owner == $new_owner ) {
+            return;
+        }
+
+        $attachments = get_posts( [
+            'post_type'      => 'attachment',
+            'posts_per_page' => -1,
+            'author'         => $old_owner,
+            'fields'         => 'ids',
+        ] );
+
+        if ( empty( $attachments ) ) {
+            return;
+        }
+
+        foreach ( $attachments as $attachment_id ) {
+            wp_update_post( [
+                'ID'          => $attachment_id,
+                'post_author' => $new_owner,
+            ] );
+        }
+    }
 }
