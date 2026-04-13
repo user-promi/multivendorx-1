@@ -579,7 +579,7 @@ body.dark {
             width: 100%;
 
             tr {
-                height:1.85rem;
+                height: 1.85rem;
 
                 td {
                     font-size: 1rem;
@@ -665,6 +665,10 @@ body.dark {
 .tax-wrapper {
     .title {
         padding: 1.5rem 0 0.625rem 0;
+    }
+
+    .buttons-wrapper {
+        margin-top: 1rem;
     }
 }
 
@@ -1388,18 +1392,21 @@ body.dark {
     gap: 1rem;
 
     .media-item {
-        width: 16rem;
+        width: calc(20% - 1rem);
         border: $border-light-small;
         border-radius: $border-radius-small;
 
         .media-preview,
         .media-icon {
-            width: 16rem;
+            width: 100%;
             height: 16rem;
             background: $theme-background-color;
             display: flex;
             justify-content: center;
             align-items: center;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
 
             i {
                 font-size: 4rem;
@@ -1409,9 +1416,14 @@ body.dark {
 
         .media-info {
             padding: 0.625rem;
-            .title{
+
+            .title {
                 display: flex;
                 justify-content: space-between;
+            }
+            .adminfont-delete{
+                color: #d60626d0;
+                cursor: pointer;
             }
         }
 
@@ -1444,3 +1456,14 @@ body.dark {
 }
 
 // wordpress image uploader end
+
+
+// media uploader popup
+.image-preview-container{
+    width: 100%;
+    height: 100%;
+    min-height: 30rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

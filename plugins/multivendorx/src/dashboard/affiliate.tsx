@@ -38,7 +38,7 @@ const Affiliate: React.FC = () => {
 				onClose={() => setAddAffiliate(false)}
 				width={31.25}
 				header={{
-					icon: 'coupon',
+					icon: 'wp-affiliate',
 					title: __('Request Vendor Affiliate', 'multivendorx'),
 					description: __(
 						'Expand your earning potential by partnering with existing vendors in your marketplace. When you add affiliates, you can earn commissions on sales generated through your referral links while vendors benefit from increased product visibility and sales.',

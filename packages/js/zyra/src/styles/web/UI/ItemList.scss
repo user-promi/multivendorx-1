@@ -329,6 +329,8 @@
     &.table-menu .item {
         flex-direction: row-reverse;
         justify-content: start;
+        align-items: center;
+        padding: 0.625rem 0.75rem;
     }
 
     .border {

@@ -63,6 +63,7 @@ interface PresetsProps {
     pickerRef: React.RefObject<DatePickerRef>;
     format: string;
     onClose?: () => void;
+    closeDropdown?: () => void;
 }
 
 const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format, onClose }) => {
@@ -92,6 +93,7 @@ const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format, onClose 
         setValue(result.length === 1 ? result[0] : result);
         pickerRef.current?.closeCalendar();
         onClose?.();
+        closeDropdown?.();
     };
 
     const yesterday = new Date(
@@ -233,10 +235,22 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
         document.removeEventListener('mousedown', handleClickOutside);
     };
 }, [showCalendar]);
+    const enhancedProps = {
+        ...commonProps,
+        onChange: (val: any) => {
+            commonProps.onChange(val);
+            if (
+                (Array.isArray(val) && val.length === 2) ||
+                val instanceof DateObject
+            ) {
+                setShowCalendar(false);
+            }
+        },
+    };
     const tabs = [
         {
             label: 'Presets',
-            content: <Presets {...presetsProps} />
+            content: <Presets {...presetsProps} closeDropdown={() => setShowCalendar(false)}/>
         },
         {
             label: 'Custom',
@@ -244,6 +258,7 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
                 <Calendar
                     className={`${!showInput ? 'calendar-wrapper' : 'input-calendar'}`}
                     {...commonProps}
+                    {...enhancedProps}
                     ref={localPickerRef}
                 />
             )

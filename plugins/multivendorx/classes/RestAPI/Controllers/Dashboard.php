@@ -247,7 +247,7 @@ class Dashboard extends \WP_REST_Controller {
             'appointment'     => array(
                 'name'       => 'Rental (pro)',
                 'slug'       => 'appointment',
-                'icon'       => 'report',
+                'icon'       => 'appointments',
                 'submenu'    => array(
                     array(
                         'key'        => 'all-inventory',
@@ -279,19 +279,19 @@ class Dashboard extends \WP_REST_Controller {
             'affiliate'       => array(
                 'name'       => 'Affiliate',
                 'slug'       => 'affiliate',
-                'icon'       => 'coupon',
+                'icon'       => 'wp-affiliate',
                 'capability' => array( 'read_products' ),
             ),
             'add-appointment' => array(
                 'name'       => 'Add Appointment (Pro)',
                 'slug'       => 'add-appointment',
-                'icon'       => 'appointment',
+                'icon'       => 'legal-compliance',
                 'capability' => array( 'read_products' ),
             ),
             'media-library'   => array(
                 'name'       => 'Media Library',
                 'slug'       => 'media-library',
-                'icon'       => 'coupon',
+                'icon'       => 'image',
                 'capability' => array( 'read_products' ),
             ),
         );

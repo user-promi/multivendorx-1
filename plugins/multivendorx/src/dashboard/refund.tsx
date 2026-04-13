@@ -43,7 +43,7 @@ const Refund: React.FC = () => {
 								descriptions={[
 									{
 										label: __('Email', 'multivendorx'),
-										value: row.email || '—',
+										value: row.email,
 									}
 								]}
 							/>
