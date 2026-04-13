@@ -818,23 +818,15 @@ const PanelBody: React.FC = () => {
                         label="Mandatory"
                         desc="Mark this item as mandatory"
                     >
-                        <label 
-                            className="mandatory-checkbox-field"
-                            style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                        >
-                            <input
-                                type="checkbox"
-                                checked={method.mandatory || false}
-                                onChange={(e) => {
-                                    const isChecked = e.target.checked;
-                                    handleChange(method.id, 'mandatory', isChecked);
-                                }}
-                                onClick={(e) => e.stopPropagation()}
-                            />
-                            <span style={{ marginLeft: '8px' }}>
-                                {method.mandatory ? 'Mandatory item' : 'Optional item'}
-                            </span>
-                        </label>
+                        <input
+                            type="checkbox"
+                            checked={method.mandatory || false}
+                            onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                handleChange(method.id, 'mandatory', isChecked);
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                        />
                     </FormGroup>
                 )}
 
@@ -967,6 +959,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
 }) => {
     const tplFields = addNewTemplate?.formFields ?? [];
 
+   // ── useReducer ────────────────────────────────────────────────────────────
     const [state, dispatch] = useReducer(panelReducer, {
         methods: initialMethods.map((m) =>
             m.isCustom ? mergeTemplateFields(m, tplFields) : m
@@ -982,10 +975,12 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         editDesc: '',
     });
 
+    // ── Refs ──────────────────────────────────────────────────────────────────
     const titleRef = useRef<HTMLInputElement>(null);
     const descRef = useRef<HTMLTextAreaElement>(null);
     const iconPicker = useRef<HTMLDivElement>(null);
 
+    // ── Core handler (memoized) ───────────────────────────────────────────────
     const handleChange = useCallback(
         (methodId: string, key: string, val: unknown) => {
             if (key === 'wizardButtons') {
@@ -999,6 +994,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         [onChange, value]
     );
 
+    // ── Helper to commit edit ─────────────────────────────────────────────────
     const commitEdit = useCallback(() => {
         if (
             state.editId &&
@@ -1019,6 +1015,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         handleChange,
     ]);
 
+    // ── CRUD helpers ──────────────────────────────────────────────────────────
     const canDelete = useCallback(
         () =>
             min === undefined ||
@@ -1046,7 +1043,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
             iconOptions: addNewTemplate.iconOptions ?? [],
             connected: false,
             isCustom: true,
-            mandatory: addNewTemplate.editableFields?.mandatory ?? false,
             disableBtn: addNewTemplate.disableBtn ?? false,
             formFields: addNewTemplate.formFields?.map((f) => ({ ...f })) ?? [],
         };
@@ -1060,7 +1056,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
             description: newMethod.desc,
             label: newMethod.label,
             desc: newMethod.desc,
-            mandatory: newMethod.mandatory,
         };
         if (addNewTemplate.icon) {
             init.icon = addNewTemplate.icon;
@@ -1085,6 +1080,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         [canDelete, onChange, value]
     );
 
+    // ── Wizard ────────────────────────────────────────────────────────────────
     const saveWizard = useCallback(() => {
         if (!apilink || !ZyraVariable?.nonce) {
             return;
@@ -1097,6 +1093,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         }).catch(console.error);
     }, [apilink, value]);
 
+    // ── Dependent-field helpers ───────────────────────────────────────────────
     const isContain = (
         key: string,
         methodId: string,
@@ -1171,6 +1168,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         [state.wizardIndex, state.methods, saveWizard]
     );
 
+    // ── Field renderer ────────────────────────────────────────────────────────
     const renderField = useCallback(
         (methodId: string, field: PanelFormField): JSX.Element | null => {
             const comp = FIELD_REGISTRY[field.type];
@@ -1246,6 +1244,9 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         ]
     );
 
+    // ── Effects ───────────────────────────────────────────────────────────────
+
+    // Focus the active edit input
     useEffect(() => {
         if (state.editField === 'title') {
             titleRef.current?.focus();
@@ -1257,6 +1258,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         }
     }, [state.editId, state.editField]);
 
+    // Keyboard shortcuts while editing
     useEffect(() => {
         if (!state.editId) {
             return;
@@ -1277,6 +1279,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         return () => document.removeEventListener('keydown', handler);
     }, [state.editId, state.editField, commitEdit]);
 
+    // Click outside commits the edit
     useEffect(() => {
         if (!state.editId) {
             return;
@@ -1294,6 +1297,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         return () => document.removeEventListener('mousedown', handler);
     }, [state.editId, commitEdit]);
 
+    // Close 3-dot dropdown on outside click
     useEffect(() => {
         if (!state.openDropdown) {
             return;
@@ -1303,6 +1307,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         return () => document.removeEventListener('click', close);
     }, [state.openDropdown]);
 
+    // Close icon picker on outside click or Escape
     useEffect(() => {
         if (!state.iconDropdown) {
             return;
@@ -1328,6 +1333,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         };
     }, [state.iconDropdown]);
 
+    // Wizard: recalculate field-fill progress
     useEffect(() => {
         if (!isWizardMode) {
             return;
@@ -1341,6 +1347,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         dispatch({ type: 'SET_PROGRESS', progress: newProgress });
     }, [value, state.methods, isWizardMode]);
 
+    // Sync methods state with persisted value (restores config-only props)
     useEffect(() => {
         const methodsFromValue = new Map(
             Object.entries(value).map(([id, m]) => [
@@ -1357,7 +1364,6 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
                 methodMap.set(id, {
                     ...existingMethod,
                     ...persistedMethod,
-                    mandatory: persistedMethod.mandatory ?? existingMethod?.mandatory ?? false, 
                     disableBtn:
                         persistedMethod.disableBtn ??
                         existingMethod?.disableBtn ??
@@ -1389,6 +1395,8 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         }
     }, [value, addNewTemplate, tplFields]);
 
+    // ── Context Value ─────────────────────────────────────────────────────────
+
     const contextValue: PanelContextType = {
         state,
         dispatch,
@@ -1409,6 +1417,9 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
         editTitleShow: editTitleShow ?? false,
     };
 
+    // ── Render ────────────────────────────────────────────────────────────────
+
+    // Wizard mode: only show steps up to current index
     const visible = isWizardMode
         ? state.methods.slice(0, state.wizardIndex + 1)
         : state.methods;
@@ -1434,6 +1445,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
                 )}
             </div>
 
+            {/* Wizard navigation buttons (rendered outside the panel list) */}
             {isWizardMode &&
                 (() => {
                     const step = state.methods[state.wizardIndex];
