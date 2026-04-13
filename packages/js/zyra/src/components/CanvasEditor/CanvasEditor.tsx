@@ -335,10 +335,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
             if (proSettingChange()) {
                 return;
             }
-            const deleted = blocks[index];
+            const blockToDelete = dynamicBlocks[index];
+
             setBlocks((prev) => {
-                isInternalUpdate.current = true;
-                return prev.filter((_, i) => i !== index);
+                return prev.filter((b) => b.id !== blockToDelete.id);
             });
             markChanged();
             if (openBlock?.id === deleted?.id) {

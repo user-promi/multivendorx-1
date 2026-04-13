@@ -395,7 +395,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
         switch (field.type) {
             case 'title':
-                return <h2 key={field.id}>{field.label}</h2>;
+                return <h2 key={field.id}>{field.text}</h2>;
 
             case 'section':
                 return (

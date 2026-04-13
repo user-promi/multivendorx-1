@@ -914,8 +914,8 @@ class Install {
         $registration_form = array(
         array(
         'id'    => 1,
-        'type'  => 'title',
-        'label' => 'Registration Form',
+        'type'  => 'heading',
+        'label' => '',
         ),
         array(
         'id'          => 2,
@@ -929,7 +929,7 @@ class Install {
         array(
         'id'    => 3,
         'type'  => 'button',
-        'label' => 'Submit',
+        'label' => '',
         'text'  => 'Submit',
         'name'  => 'submit',
         ),

@@ -92,6 +92,29 @@ export const renderBlockContent = (
     if (!block?.type) {
         return <div>Invalid block</div>;
     }
+    if (block?.type == 'radio') {
+        return (
+            <div className="radio-group">
+                {block.options?.map((opt: any, i: number) => (
+                    <label key={i} className="radio-option">
+                        <input
+                            type="radio"
+                            name={block.name || `radio-${block.id}`}
+                            value={opt.value}
+                            checked={block.value === opt.value}
+                            onChange={() =>
+                                onChange({
+                                    id: block.id,
+                                    value: opt.value,
+                                })
+                            }
+                        />
+                        {opt.label}
+                    </label>
+                ))}
+            </div>
+        );
+    }
     const Component = FIELD_REGISTRY[block.type]?.render;
     if (!Component) {
         return <div>Unknown type: {block.type}</div>;
@@ -152,7 +175,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </section>
         )}
         <section className="form-field-container-wrapper">
-            {block.label && (
+            {block.label && block.type !== 'title' && block.type !== 'button' &&(
                 <label className="settings-form-label">
                     <div className="title">{block.label}</div>
                 </label>
