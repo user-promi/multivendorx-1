@@ -194,10 +194,10 @@ export default {
 							default: '[marketplace_stores order="ASC"]',
 						},
 						{
-							attribute: 'perpage',
+							attribute: 'per_page',
 							description: 'Set how many stores appear per page.',
 							accepted: 'Any number (Default: 12)',
-							default: '[marketplace_stores perpage="12"]',
+							default: '[marketplace_stores per_page="12"]',
 						},
 					],
 				},
@@ -211,28 +211,28 @@ export default {
 					),
 					arguments: [
 						{
-							attribute: 'storeId',
+							attribute: 'store_id',
 							description:
 								'Display products/listings from a specific store using Store ID or Store Slug.',
-							accepted: 'store_id, store_slug',
-							default: '[marketplace_products storeId="1"]',
+							accepted: 'Store ID',
+							default: '[marketplace_products store_id="1"]',
 						},
 
 						{
-							attribute: 'perPage',
+							attribute: 'per_page',
 							description:
 								'Set how many products/listings appear per page.',
 							accepted: 'Any number (Default = 12)',
-							default: '[marketplace_products perPage="12"]',
+							default: '[marketplace_products per_page="12"]',
 						},
 
 						{
-							attribute: 'orderby',
+							attribute: 'order_by',
 							description:
 								'Choose the field used for sorting products/listings.',
 							accepted:
 								'title, date, price, popularity, rating, menu_order (Default = title)',
-							default: '[marketplace_products orderby="title"]',
+							default: '[marketplace_products order_by="title"]',
 						},
 
 						{
@@ -271,8 +271,8 @@ export default {
 					],
 				},
 				{
-					key: 'marketplace-coupons',
-					label: '[marketplace-coupons]',
+					key: 'marketplace_coupons',
+					label: '[marketplace_coupons]',
 					name: 'Show store coupons',
 					desc: __(
 						'Displays coupons created by a store along with their usage details.',
@@ -280,31 +280,31 @@ export default {
 					),
 					arguments: [
 						{
-							attribute: 'storeId',
+							attribute: 'store_id',
 							description:
 								'Display coupons from a specific store using the store ID.',
 							accepted: 'Store ID',
-							default: '[marketplace-coupons storeId="1"]',
+							default: '[marketplace_coupons store_id="1"]',
 						},
 						{
-							attribute: 'perPage',
+							attribute: 'per_page',
 							description:
 								'Set how many coupons appear per page.',
 							accepted: 'Any number (Default = 10)',
-							default: '[marketplace-coupons perPage="10"]',
+							default: '[marketplace_coupons per_page="10"]',
 						},
 						{
-							attribute: 'orderby',
+							attribute: 'order_by',
 							description: 'Choose how coupons are sorted.',
 							accepted:
 								'date, id, title, code, modified (Default = date)',
-							default: '[marketplace-coupons orderby="date"]',
+							default: '[marketplace_coupons order_by="date"]',
 						},
 						{
 							attribute: 'order',
 							description: 'Set the sorting direction.',
 							accepted: 'ASC, DESC (Default = DESC)',
-							default: '[marketplace-coupons order="DESC"]',
+							default: '[marketplace_coupons order="DESC"]',
 						},
 					],
 				},
