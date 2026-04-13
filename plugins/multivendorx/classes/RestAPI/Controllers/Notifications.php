@@ -348,12 +348,13 @@ class Notifications extends \WP_REST_Controller {
                 $data = array(
                     'email_subject'  => $form_data['email_subject'],
                     'email_body'     => $form_data['email_body'],
+                    'email_body_builder' => $form_data['email_body_builder'],
                     'sms_content'    => $form_data['sms_content'],
                     'system_message' => $form_data['system_message'],
                 );
 
                 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-                $updated = $wpdb->update( "{$wpdb->prefix}" . Utill::TABLES['system_events'], $data, array( 'id' => $form_data['id'] ), array( '%s', '%s', '%s', '%s' ), array( '%d' ) );
+                $updated = $wpdb->update( "{$wpdb->prefix}" . Utill::TABLES['system_events'], $data, array( 'id' => $form_data['id'] ), array( '%s', '%s', '%s', '%s', '%s' ), array( '%d' ) );
 
                 return rest_ensure_response(
                     array(

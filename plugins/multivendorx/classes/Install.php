@@ -252,6 +252,7 @@ class Install {
             `custom_emails` JSON NULL,
             `email_subject` VARCHAR(255) NULL,
             `email_body` TEXT NULL,
+            `email_body_builder` LONGTEXT NULL,
             `sms_content` VARCHAR(500) NULL,
             `system_message` TEXT NULL,
             `system_action` VARCHAR(255) NULL,

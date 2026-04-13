@@ -13,7 +13,8 @@ import {
 	Container,
 	Column,
 	QueryProps,
-	BlockBuilderUI
+	BlockBuilderUI,
+	renderBlocksToHTML,
 } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
@@ -73,6 +74,7 @@ interface FormData {
 	sms_content?: string;
 	email_subject?: string;
 	email_body?: string;
+	email_body_builder?: string;
 	[key: string]: string | number | boolean | undefined;
 }
 
@@ -287,6 +289,7 @@ const EventRules: React.FC = () => {
 			id: data.id,
 				email_subject: data.email_subject,
 				email_body: data.email_body,
+				email_body_builder: data.email_body_builder,
 				sms_content: data.sms_content,
 				system_message: data.system_message,
 			},
@@ -536,19 +539,34 @@ const EventRules: React.FC = () => {
 										key={formData.id}
 										name="system_message_builder"
 										value={
-											formData.email_body
-												? JSON.parse(formData.email_body)
+											formData.email_body_builder
+												? JSON.parse(formData.email_body_builder)
 												: {
 													emailTemplates: [temp1],
 													activeEmailTemplateId: 'store-registration',
 												}
 										}
+
 										onChange={(data) => {
+											const activeTemplate = data.emailTemplates?.find(
+												(t) => t.id === data.activeEmailTemplateId
+											);
+
+											const blocks = activeTemplate?.blocks || [];
+
+											// generate HTML
+											const html = renderBlocksToHTML(blocks);
+
 											const updatedForm = {
 												...formData,
-												email_body_builder: data,
-												email_body: JSON.stringify(data),
+
+												// SAVE BUILDER JSON (STRING)
+												email_body_builder: JSON.stringify(data),
+
+												// SAVE HTML
+												email_body: html,
 											};
+
 											if (!updatedForm.id) return;
 
 											setFormData(updatedForm);

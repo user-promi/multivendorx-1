@@ -57,6 +57,7 @@ class Cron {
 				'store_enabled'  => true,
 				'email_subject'  => 'Custom event',
 				'email_body'     => 'This is custom event.',
+                'email_body_builder' => 'This is custom event.',
 				'sms_content'    => 'This is custom event.',
 				'system_message' => 'Custom event',
 				'tag'            => 'Store',
