@@ -95,7 +95,6 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
         response: DynamicResponse
     ) => {
         const isSuccess = response?.success === true;
-
         const message = isSuccess
             ? currentTask.successMessage ||
               response?.message ||
@@ -104,9 +103,9 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
 
         if (isSuccess) {
             // ⭐ ADDED: Store successful task data into context
-            if (isSuccess && Array.isArray(response?.data) && response.data.length > 0) {
-    lastResult.current = response.data;
-}
+            if (isSuccess && response?.data !== undefined) {
+                lastResult.current = response.data;
+            }
             console.log("LAST RESULT BEFORE REVIEWS:", lastResult.current);
 
             onTaskComplete?.(currentTask, response);

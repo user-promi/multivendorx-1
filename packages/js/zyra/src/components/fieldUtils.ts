@@ -374,6 +374,7 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
     'creatable-multi': SelectInput,
 
     // Content
+    title: Content,
     heading: Content,
     richtext: Content,
 

@@ -5,7 +5,7 @@ import { generateBlockStyles, BlockStyle } from './CanvasEditor/blockStyle';
 // Unified interface that handles both types
 export interface TextContentBlockData {
     id: number;
-    type: 'richtext' | 'heading';
+    type: 'richtext' | 'heading' | 'title';
     // For richtext
     html?: string;
     // For heading
@@ -34,7 +34,7 @@ export const TextContentView: React.FC<{
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
-        if (field.type === 'heading') {
+        if (field.type === 'heading' || field.type === 'title') {
             onChange({ text: e.currentTarget.textContent || '' });
         } else {
             onChange({ html: e.currentTarget.innerHTML });
@@ -42,7 +42,7 @@ export const TextContentView: React.FC<{
     };
 
     // Render heading
-    if (field.type === 'heading') {
+    if (field.type === 'heading' || field.type === 'title') {
         const Tag = `h${field.level || 2}` as keyof JSX.IntrinsicElements;
         return (
             <Tag
