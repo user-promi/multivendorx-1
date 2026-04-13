@@ -83,12 +83,20 @@ class Frontend {
 
                 printf(
                     // '<li><strong><a href="%s" title="%s">#%s</a></strong> &ndash; <small class="multivendorx-order-for-vendor">%s %s</small></li>',
-                    '<li><mark class="%s tips" data-tip="%s">%s</mark> <span class="store-suborder">$70 for 3qty</span> <div class="suborder-buttons"><button class="woocommerce-button button">View</button> <button class="woocommerce-button button">Invoive</button> </div></li>',
+                    '<li>
+                        <mark class="%s tips" data-tip="%s">%s</mark>
+                        <span class="store-suborder">$70 for 3qty</span>
+                        <div class="suborder-buttons">
+                            <button class="woocommerce-button button">View</button>
+                            <button class="woocommerce-button mvx-download-invoice button" data-order-id="%d">Invoice</button>
+                        </div>
+                    </li>',
                     esc_url( $order_uri ),
                     esc_attr( sanitize_title( $suborder->get_status() ) ),
                     esc_html( $suborder->get_order_number() ),
                     esc_html_x( 'for', 'Order table details', 'multivendorx' ),
-                    esc_html( $store->get( 'name' ) )
+                    esc_html( $store->get( 'name' ) ),
+                    $suborder->get_id()
                 );
 
                 do_action( 'multivendorx_after_add_suborder_details_my_account', $suborder );
