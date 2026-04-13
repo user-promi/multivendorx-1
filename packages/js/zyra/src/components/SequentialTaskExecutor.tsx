@@ -106,7 +106,6 @@ const SequentialTaskExecutor: React.FC<SequentialTaskExecutorProps> = ({
             if (isSuccess && response?.data !== undefined) {
                 lastResult.current = response.data;
             }
-            console.log("LAST RESULT BEFORE REVIEWS:", lastResult.current);
 
             onTaskComplete?.(currentTask, response);
         } else {
