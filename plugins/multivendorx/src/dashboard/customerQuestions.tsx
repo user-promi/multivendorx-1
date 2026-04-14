@@ -183,22 +183,20 @@ const CustomerQuestions: React.FC = () => {
 			.get(getApiLink(appLocalizer, 'qna'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
-					params: {
-						page: query.paged || 1,
-						row: query.per_page || 10,
-						status: query.categoryFilter || '',
-						search_value: query.searchValue || '',
-						store_id: appLocalizer.store_id,
-						start_date: query.filter?.created_at?.startDate
-							? formatLocalDate(query.filter.created_at.startDate)
-							: '',
-						end_date: query.filter?.created_at?.endDate
-							? formatLocalDate(query.filter.created_at.endDate)
-							: '',
-						question_visibility: query?.filter?.questionVisibility,
-						order_by: query.orderby,
-						order: query.order,
-					},
+					page: query.paged || 1,
+					row: query.per_page || 10,
+					status: query.categoryFilter || '',
+					search_value: query.searchValue || '',
+					store_id: appLocalizer.store_id,
+					start_date: query.filter?.created_at?.startDate
+						? formatLocalDate(query.filter.created_at.startDate)
+						: '',
+					end_date: query.filter?.created_at?.endDate
+						? formatLocalDate(query.filter.created_at.endDate)
+						: '',
+					question_visibility: query?.filter?.questionVisibility,
+					order_by: query.orderby,
+					order: query.order,
 				},
 			})
 			.then((response) => {

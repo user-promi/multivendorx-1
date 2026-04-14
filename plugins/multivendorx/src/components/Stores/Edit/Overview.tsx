@@ -330,7 +330,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							iconName="external icon"
 							onIconClick={() => {
 								navigate(
-									`?page=multivendorx#&tab=customer-support&subtab=review`
+									`?page=multivendorx#&tab=customers&subtab=store-review`
 								);
 							}}
 						>

@@ -25,17 +25,18 @@ import {
 	formatCurrency,
 } from '../services/commonFunction';
 import { pdf } from '@react-pdf/renderer';
+import { applyFilters } from '@wordpress/hooks';
 // import StoreInvoicePDF from '@/assets/template/invoicePdf/Invoice-1';
 
 const fetchOrderById = async (orderId: number) => {
-  const res = await axios.get(
-    `${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
-    {
-      headers: { 'X-WP-Nonce': appLocalizer.nonce },
-    }
-  );
+	const res = await axios.get(
+		`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
+		{
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		}
+	);
 
-  return res.data;
+	return res.data;
 };
 
 const Orders: React.FC = () => {
@@ -56,7 +57,7 @@ const Orders: React.FC = () => {
 	const hash = location.hash.replace(/^#/, '') || '';
 	const privacy =
 		appLocalizer.settings_databases_value?.privacy?.[
-			'customer_information_access'
+		'customer_information_access'
 		];
 
 	const exportAllOrders = () => {
@@ -174,7 +175,7 @@ const Orders: React.FC = () => {
 							status === 'all'
 								? __('All', 'multivendorx')
 								: status.charAt(0).toUpperCase() +
-									status.slice(1),
+								status.slice(1),
 						count: total,
 					};
 				});
@@ -215,14 +216,14 @@ const Orders: React.FC = () => {
 
 	const privacyHeaders = privacy?.includes('name')
 		? {
-				customer: {
-					label: __('Customer', 'multivendorx'),
-					render: (row) =>
-						row.billing?.first_name
-							? `${row.billing.first_name} ${row.billing.last_name || ''}`
-							: 'Guest',
-				},
-			}
+			customer: {
+				label: __('Customer', 'multivendorx'),
+				render: (row) =>
+					row.billing?.first_name
+						? `${row.billing.first_name} ${row.billing.last_name || ''}`
+						: 'Guest',
+			},
+		}
 		: {};
 
 	const headers = {
@@ -264,79 +265,33 @@ const Orders: React.FC = () => {
 		action: {
 			type: 'action',
 			label: 'Action',
-			actions: [
+			actions: applyFilters('multivendorx_order_actions', [
 				...(appLocalizer.edit_order_capability
 					? [
-							{
-								label: __('View', 'multivendorx'),
-								icon: 'eye',
-								onClick: (row) => {
-									dashNavigate(navigate, [
-										'orders',
-										'view',
-										String(row.id),
-									]);
-								},
+						{
+							label: __('View', 'multivendorx'),
+							icon: 'eye',
+							onClick: (row) => {
+								dashNavigate(navigate, [
+									'orders',
+									'view',
+									String(row.id),
+								]);
 							},
-						]
+						},
+					]
 					: []),
 
 				{
 					label: __('Download', 'multivendorx'),
 					icon: 'download',
-					onClick: async (row) => {
-						try {
-							// 1. Fetch order
-							const order = await fetchOrderById(row.id);
-
-							// 2. Map order → invoice rows
-							const invoiceRows = order.line_items.map((item) => ({
-								description: item.name,
-								qty: item.quantity,
-								price: formatCurrency(item.price),
-								amount: formatCurrency(item.total),
-							}));
-							console.log('Order Object:', order);
-							// 3. Generate PDF blob
-							const blob = await pdf(
-								// <StoreInvoicePDF
-								// 	invoiceRows={invoiceRows}
-								// 	order = {order}
-								// 	colors={{
-								// 		colorPrimary: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorPrimary || '#000',
-								// 		colorSecondary: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorSecondary || '#ccc',
-								// 		colorAccent: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorAccent || '#000',
-								// 		colorSupport: appLocalizer.settings_databases_value?.invoices?.test.invoice_template.colors.colorSupport || '#999',
-								// 	}}
-								// />
-							).toBlob();
-
-							// 4. Create download link
-							const url = URL.createObjectURL(blob);
-
-							const link = document.createElement('a');
-							link.href = url;
-							link.download = `invoice-${row.id}.pdf`;
-							document.body.appendChild(link);
-							link.click();
-							document.body.removeChild(link);
-
-							URL.revokeObjectURL(url);
-
-						} catch (error) {
-							console.error('Invoice download failed:', error);
-						}
+					onClick: (row) => {
+						const singleOrderQuery = {
+							searchValue: String(row.id),
+						};
+						downloadCSVByQuery(singleOrderQuery);
 					},
 				},
-
-				{
-					label: __('Copy URL', 'multivendorx'),
-					icon: 'vendor-form-copy',
-					onClick: () => {
-						navigator.clipboard.writeText(window.location.href);
-					},
-				},
-
 				{
 					label: __('Shipping', 'multivendorx'),
 					icon: 'shipping',
@@ -344,16 +299,8 @@ const Orders: React.FC = () => {
 						setTracking(true);
 						setTrackingOrderId(row.id);
 					},
-				},
-
-				{
-					label: __('PDF', 'multivendorx'),
-					icon: 'pdf',
-					onClick: (row) => {
-						window.location.href = `?page=multivendorx#&tab=stores&edit/${row.id}`;
-					},
-				},
-			],
+				}
+			]),
 		},
 	};
 	const filters = [

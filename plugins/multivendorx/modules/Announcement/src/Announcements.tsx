@@ -1,5 +1,5 @@
 /* global appLocalizer */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
@@ -97,6 +97,10 @@ export const Announcements: React.FC = () => {
 		id: number;
 	} | null>(null);
 	const [confirmOpen, setConfirmOpen] = useState(false);
+
+	useEffect(() => {
+		fetchStoreOptions();
+	}, [])
 
 	const handleConfirmDelete = () => {
 		if (!selectedAn) {
@@ -198,7 +202,6 @@ export const Announcements: React.FC = () => {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
-				fetchStoreOptions();
 				setFormData({
 					title: response.data.title || '',
 					url: response.data.url || '',
@@ -319,6 +322,7 @@ export const Announcements: React.FC = () => {
 					end_date: query.filter?.created_at?.endDate
 						? formatLocalDate(query.filter.created_at.endDate)
 						: '',
+					store_id: query.filter?.store_id || '',
 				},
 			})
 			.then((response) => {
@@ -372,6 +376,12 @@ export const Announcements: React.FC = () => {
 
 	const filters = [
 		{
+			key: 'store_id',
+			label: __('Stores', 'multivendorx'),
+			type: 'select',
+			options: storeOptions,
+		},
+		{
 			key: 'created_at',
 			label: __('Created Date', 'multivendorx'),
 			type: 'date',
@@ -412,7 +422,6 @@ export const Announcements: React.FC = () => {
 						icon: 'plus',
 						onClick: () => {
 							setValidationErrors({});
-							fetchStoreOptions();
 							setAddAnnouncements(true);
 						},
 					},
@@ -482,7 +491,7 @@ export const Announcements: React.FC = () => {
 							usePlainText={false}
 							tinymceApiKey={
 								appLocalizer.settings_databases_value[
-									'overview'
+								'overview'
 								]['tinymce_api_section'] ?? ''
 							}
 							msg={{
