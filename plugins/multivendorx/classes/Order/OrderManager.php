@@ -146,11 +146,13 @@ class OrderManager {
             }
 
             $store_order->save();
-            $store = new Store( $store_id );
-            MultiVendorX()->notifications->send_notification_helper('new_order_store', $store, $store_order, [
-                'order_id'       => $store_order->get_id(),
-                'category'       => 'activity',
-            ]);
+            if ( MultiVendorX()->setting->get_setting( 'display_customer_order' ) !== 'mainorder' ) {
+                $store = new Store( $store_id );
+                MultiVendorX()->notifications->send_notification_helper('new_order_store', $store, $store_order, [
+                    'order_id'       => $store_order->get_id(),
+                    'category'       => 'activity',
+                ]);
+            }
         }
     }
 
