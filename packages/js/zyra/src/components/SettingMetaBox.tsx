@@ -123,11 +123,20 @@ const InputField: React.FC<{
     className?: string;
     readonly?: boolean;
     placeholder?: string;
-}> = ({ label, value, onChange, readonly = false, placeholder }) => (
+}> = ({ label, type, value, onChange, readonly = false, placeholder }) => (
     <FormGroup label={label}>
         <BasicInputUI
+            type={type as
+                | 'text'
+                | 'number'
+                | 'color'
+                | 'password'
+                | 'email'
+                | 'file'
+                | 'range'
+                | undefined}
             value={value || ''}
-            onChange={(value) => onChange(value)}
+            onChange={(value) => onChange(String(value))}
             readOnly={readonly}
             placeholder={placeholder}
         />
@@ -582,6 +591,8 @@ const createFieldRenderers = (): Record<
     default: () => null,
 });
 
+const FIELD_RENDERERS = createFieldRenderers();
+
 // MAIN COMPONENT
 const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
     formField,
@@ -594,9 +605,8 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
 }) => {
     const [hasOpened, setHasOpened] = useState(opened.click);
 
-    const fieldRenderers = createFieldRenderers();
     const FieldRenderer =
-        fieldRenderers[formField?.type || 'default'] || fieldRenderers.default;
+        FIELD_RENDERERS[formField?.type || 'default'] || FIELD_RENDERERS.default;
 
     useEffect(() => {
         setHasOpened(opened.click);

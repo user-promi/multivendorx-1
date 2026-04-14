@@ -22,14 +22,25 @@ defined( 'ABSPATH' ) || exit;
  * @author      MultiVendorX
  */
 class Install {
-
+    const BATCH_SIZE = 100;
+    const LOCK_KEY   = 'mvx_migration_lock';
     /**
      * Class constructor
      */
     public function __construct() {
         add_action( 'init', [$this, 'run_migration'] );
         $this->do_migration();
+        add_action('mvx_full_migration', [$this, 'run_migration_cron']);
+        add_filter('cron_schedules', [$this, 'add_custom_schedules'] );
         do_action( 'multivendorx_after_installed' );
+    }
+
+    public function add_custom_schedules($schedules) {
+        $schedules['minute'] = [
+            'interval' => 60,
+            'display'  => 'Every Minute',
+        ];
+        return $schedules;
     }
 
     /**
@@ -50,6 +61,10 @@ class Install {
         
         if ( get_option( 'dc_product_vendor_plugin_db_version' ) ) {
             $this->migrate_mvx_to_multivendorx();
+
+             if (!wp_next_scheduled('mvx_full_migration')) {
+                wp_schedule_event(time(), 'minute', 'mvx_full_migration');
+            }
         }
 
         update_option( 'multivendorx_version', MULTIVENDORX_PLUGIN_VERSION );
@@ -1118,7 +1133,6 @@ class Install {
         $this->migrate_old_modules();
         $this->migrate_old_settings();
         $this->migrate_product_category_settings();
-        $this->migrate_tables();
 
         delete_option( 'dc_product_vendor_plugin_db_version' );
     }
@@ -2123,15 +2137,290 @@ class Install {
      *
      * @return void
      */
+    public function run_migration_cron() {
+        if ( get_transient( self::LOCK_KEY ) ) return;
+            set_transient( self::LOCK_KEY, 1, 600);
+
+            $this->migrate_vendors();
+            $this->migrate_followers();
+            $this->migrate_tables();
+            $this->migrate_commissions();
+            $this->migrate_refunds();
+            $this->migrate_ledger();
+           
+            delete_transient( self::LOCK_KEY );
+    }
+
     public function migrate_tables() {
         global $wpdb;
-        // Vendor migration.
-        $vendors = get_users(
-            array(
-				'role__in' => array( 'dc_vendor', 'dc_pending_vendor', 'dc_rejected_vendor' ),
-				'fields'   => array( 'ID' ),
+
+        // Shipping zone methods table migrate.
+        $offset = (int) get_option( 'mvx_zone_offset', 0 );
+        $zone_table = $wpdb->prefix . 'mvx_shipping_zone_methods';
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$zone_table} LIMIT %d OFFSET %d",
+                self::BATCH_SIZE,
+                $offset
             )
         );
+        if ( ! empty( $results ) ) {
+            foreach ( $results as $row ) {
+                $vendor_id = $row->vendor_id;
+                $store_id  = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+                $meta_key  = $row->method_id . '_' . $row->zone_id;
+                $store     = new Store( $store_id );
+                $store->update_meta( $meta_key, $row->settings );
+            }
+            update_option( 'mvx_zone_offset', $offset + count( $results ) );
+        }
+
+        // Announcement table migrate.
+        $offset = (int) get_option( 'mvx_announcement_offset', 0 );
+
+        $args = array(
+            'post_type'   => 'mvx_vendor_notice',
+            'post_status' => 'any',
+            'fields'      => 'ids',
+            'posts_per_page' => self::BATCH_SIZE,
+            'offset'      => $offset,
+        );
+
+        $announcements = get_posts( $args );
+
+        foreach ( $announcements as $post_id ) {
+            wp_update_post(
+                array(
+					'ID'        => $post_id,
+					'post_type' => 'multivendorx_an',
+                )
+            );
+
+            $vendors = get_post_meta( $post_id, '_mvx_vendor_notices_vendors', true );
+
+            $stores = array();
+
+            foreach ( $vendors as $vendor_id ) {
+                $active_store = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+
+                if ( ! empty( $active_store ) ) {
+                    $stores[] = (int) $active_store;
+                }
+            }
+
+            update_post_meta( $post_id, 'multivendorx_announcement_stores', array_unique( $stores ) );
+
+            delete_post_meta( $post_id, '_mvx_vendor_notices_vendors' );
+        }
+
+        update_option( 'mvx_announcement_offset', $offset + count( $announcements ) );
+
+        // Knowledgebase table migrate.
+        $offset = (int) get_option( 'mvx_kb_offset', 0 );
+        
+        $args = array(
+            'post_type'   => 'mvx_university',
+            'post_status' => 'any',
+            'fields'      => 'ids',
+            'posts_per_page' => self::BATCH_SIZE,
+            'offset'      => $offset,
+        );
+
+        $knowledgebase = get_posts( $args );
+
+        foreach ( $knowledgebase as $post_id ) {
+            wp_update_post(
+                array(
+					'ID'        => $post_id,
+					'post_type' => 'multivendorx_kb',
+                )
+            );
+        }
+        update_option( 'mvx_kb_offset', $offset + count( $knowledgebase ) );
+
+
+        // Visitor stats table migrate.
+        $offset = (int) get_option( 'mvx_visitors_offset', 0 );
+
+		$old_visitors_table = $wpdb->prefix . 'mvx_visitors_stats';
+		$new_visitors_table = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$old_visitors_table} LIMIT %d OFFSET %d",
+                self::BATCH_SIZE,
+                $offset
+            )
+        );
+
+		$store_cache = array();
+		foreach ( $rows as $row ) {
+			$author_id = (int) $row->vendor_id;
+
+			if ( ! isset( $store_cache[ $author_id ] ) ) {
+				$store_cache[ $author_id ] = (int) get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+			}
+
+			$store_id = ! empty( $store_cache[ $author_id ] ) ? $store_cache[ $author_id ] : 0;
+
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$new_visitors_table,
+				array(
+					'store_id'    => $store_id,
+					'user_id'     => (int) $row->user_id,
+					'user_cookie' => $row->user_cookie,
+					'session_id'  => $row->session_id,
+					'ip'          => $row->ip,
+					'lat'         => $row->lat,
+					'lon'         => $row->lon,
+					'city'        => $row->city,
+					'zip'         => $row->zip,
+					'regionCode'  => $row->regionCode, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+                'region'          => $row->region,
+                'countryCode'     => $row->countryCode, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+                'country'         => $row->country,
+                'isp'             => $row->isp,
+                'timezone'        => $row->timezone,
+                'created'         => $row->created,
+				)
+			);
+		}
+        update_option( 'mvx_visitors_offset', $offset + count( $rows ) );
+
+        // Questions and answers table migration.
+		$questions_table = $wpdb->prefix . 'mvx_cust_questions';
+		$answers_table   = $wpdb->prefix . 'mvx_cust_answers';
+		$new_qna_table   = $wpdb->prefix . Utill::TABLES['product_qna'];
+        $offset = (int) get_option( 'mvx_qna_offset', 0 );
+
+        $questions = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$questions_table} LIMIT %d OFFSET %d",
+                self::BATCH_SIZE,
+                $offset
+            )
+        );
+
+		foreach ( $questions as $question ) {
+			$answer = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->prepare(
+                    "SELECT * FROM {$answers_table} WHERE ques_ID = %d ORDER BY ans_created ASC LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                    $question->ques_ID // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+				)
+			);
+
+			$ques_votes = $question->ques_vote ? maybe_unserialize( $question->ques_vote ) : array();
+			$ans_votes  = $answer ? maybe_unserialize( $answer->ans_vote ) : array();
+
+			$merged_votes = array_merge( $ques_votes, $ans_votes );
+			$total_votes  = count( $merged_votes );
+
+			$store_id = get_post_meta( $question->product_ID, Utill::POST_META_SETTINGS['store_id'], true ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$new_qna_table,
+				array(
+					'id'                  => (int) $question->ques_ID, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					'product_id'          => (int) $question->product_ID, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					'store_id'            => $store_id,
+					'question_text'       => $question->ques_details,
+					'question_by'         => (int) $question->ques_by,
+					'question_date'       => $question->ques_created,
+					'answer_text'         => $answer ? $answer->ans_details : null,
+					'answer_by'           => $answer ? (int) $answer->ans_by : null,
+					'answer_date'         => $answer ? $answer->ans_created : null,
+					'total_votes'         => $total_votes,
+					'voters'              => maybe_serialize( $merged_votes ),
+					'question_visibility' => 'public',
+					'created_at'          => $question->ques_created,
+					'updated_at'          => $answer ? $answer->ans_created : $question->ques_created,
+				),
+				array(
+					'%d',
+					'%d',
+					'%d',
+					'%s',
+					'%d',
+					'%s',
+					'%s',
+					'%d',
+					'%s',
+					'%d',
+					'%s',
+					'%s',
+					'%s',
+				)
+			);
+		}
+
+        update_option( 'mvx_qna_offset', $offset + count( $questions ) );
+
+
+        // SPMV table migration.
+		$old_spmv_table = $wpdb->prefix . 'mvx_products_map';
+		$new_spmv_table = $wpdb->prefix . Utill::TABLES['products_map'];
+        $offset = (int) get_option( 'mvx_spmv_offset', 0 );
+
+        $spmv_products = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT product_map_id, product_id, created 
+                FROM {$old_spmv_table}
+                ORDER BY product_map_id, ID
+                LIMIT %d OFFSET %d",
+                self::BATCH_SIZE,
+                $offset
+            )
+        );
+
+        $maps          = array();
+        foreach ( $spmv_products as $row ) {
+            $map_id     = (int) $row->product_map_id;
+            $product_id = (int) $row->product_id;
+
+            if ( ! isset( $maps[ $map_id ] ) ) {
+                $maps[ $map_id ] = array(
+                    'products' => array(),
+                    'created'  => $row->created,
+                );
+            }
+
+            $maps[ $map_id ]['products'][] = $product_id;
+        }
+
+        foreach ( $maps as $map_id => $data ) {
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+                $new_spmv_table,
+                array(
+					'ID'          => $map_id,
+					'product_map' => wp_json_encode( array_values( $data['products'] ) ),
+					'created'     => $data['created'],
+                ),
+                array(
+					'%d',
+					'%s',
+					'%s',
+                )
+			);
+
+            foreach ( $data['products'] as $product_id ) {
+                update_post_meta( $product_id, 'multivendorx_spmv_id', $map_id );
+                delete_post_meta( $product_id, '_mvx_spmv_map_id' );
+                delete_post_meta( $product_id, '_mvx_spmv_product' );
+            }
+        }
+
+        update_option( 'mvx_spmv_offset', $offset + count( $spmv_products ) );
+		
+    }
+
+    public function migrate_vendors() {
+        $offset = (int) get_option('mvx_vendor_offset', 0);
+
+        $vendors = get_users([
+            'role__in' => ['dc_vendor','dc_pending_vendor','dc_rejected_vendor'],
+            'fields'   => ['ID'],
+            'number'   => self::BATCH_SIZE,
+            'offset'   => $offset,
+        ]);
 
         $map_meta = $this->old_new_meta_map();
 
@@ -2335,14 +2624,19 @@ class Install {
             }
         }
 
-        // follow store customer side migration.
-		$users = get_users(
-            array(
-				'meta_key' => 'mvx_customer_follow_vendor', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+        update_option('mvx_vendor_offset', $offset + count($vendors));
+    }
+
+    public function migrate_followers() {
+        $offset = (int) get_option('mvx_follow_offset',0);
+
+        $users = get_users([
+            'meta_key' => 'mvx_customer_follow_vendor',
             'meta_compare' => 'EXISTS',
-            'fields'       => 'ID',
-            )
-		);
+            'fields' => 'ID',
+            'number' => self::BATCH_SIZE,
+            'offset' => $offset,
+        ]);
 
         foreach ( $users as $user_id ) {
             $results  = array();
@@ -2364,82 +2658,24 @@ class Install {
             delete_user_meta( $user_id, 'mvx_customer_follow_vendor' );
         }
 
-        // Shipping zone methods table migrate.
-        $zone_table = $wpdb->prefix . 'mvx_shipping_zone_methods';
-        $results    = $wpdb->get_results( "SELECT * FROM {$zone_table}" );
+        update_option('mvx_follow_offset', $offset + count($users));
+    }
 
-        if ( ! empty( $results ) ) {
-            foreach ( $results as $row ) {
-                $vendor_id = $row->vendor_id;
-                $store_id  = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
-                $meta_key  = $row->method_id . '_' . $row->zone_id;
-                $store     = new Store( $store_id );
-                $store->update_meta( $meta_key, $row->settings );
-            }
-        }
+    public function migrate_commissions() {
+        global $wpdb;
 
-        // Announcement table migrate.
-        $args = array(
-            'post_type'   => 'mvx_vendor_notice',
-            'post_status' => 'any',
-            'fields'      => 'ids',
-        );
-
-        $announcements = get_posts( $args );
-
-        foreach ( $announcements as $post_id ) {
-            wp_update_post(
-                array(
-					'ID'        => $post_id,
-					'post_type' => 'multivendorx_an',
-                )
-            );
-
-            $vendors = get_post_meta( $post_id, '_mvx_vendor_notices_vendors', true );
-
-            $stores = array();
-
-            foreach ( $vendors as $vendor_id ) {
-                $active_store = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
-
-                if ( ! empty( $active_store ) ) {
-                    $stores[] = (int) $active_store;
-                }
-            }
-
-            update_post_meta( $post_id, 'multivendorx_announcement_stores', array_unique( $stores ) );
-
-            delete_post_meta( $post_id, '_mvx_vendor_notices_vendors' );
-        }
-
-        // Knowledgebase table migrate.
-        $args = array(
-            'post_type'   => 'mvx_university',
-            'post_status' => 'any',
-            'fields'      => 'ids',
-        );
-
-        $knowledgebase = get_posts( $args );
-
-        foreach ( $knowledgebase as $post_id ) {
-            wp_update_post(
-                array(
-					'ID'        => $post_id,
-					'post_type' => 'multivendorx_kb',
-                )
-            );
-        }
-
-        // Commissions and orders meta and refund migration.
+        $offset = (int) get_option('mvx_commission_offset',0);
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];
 
         $args = array(
             'post_type' => 'dc_commission',
             'fields'    => 'ids',
-            'posts_per_page' => -1
+            'posts_per_page' => self::BATCH_SIZE,
+            'offset' => $offset
         );
 
         $commission_ids = get_posts( $args );
+        if (empty($commission_ids)) return;
 
         foreach ( $commission_ids as $commission_id ) {
             $commission_vendor   = get_post_meta( $commission_id, '_commission_vendor', true );
@@ -2505,12 +2741,20 @@ class Install {
             $order->save();
         }
 
-        // Fetch all refund orders.
+        update_option('mvx_commission_offset', $offset + count($commission_ids));
+    }
+
+    public function migrate_refunds() {
+
+        $offset = (int) get_option('mvx_refund_offset',0);
+
         $refund_ids = wc_get_orders(
             array(
 				'type'   => 'shop_order_refund',
 				'status' => array_keys( wc_get_order_statuses() ),
 				'return' => 'ids',
+                'limit'  => self::BATCH_SIZE,
+                'offset' => $offset,
             )
         );
 
@@ -2524,158 +2768,24 @@ class Install {
             $refund->save();
         }
 
-        // Visitor stats table migrate.
-		$old_visitors_table = $wpdb->prefix . 'mvx_visitors_stats';
-		$new_visitors_table = $wpdb->prefix . Utill::TABLES['visitors_stats'];
+        update_option('mvx_refund_offset', $offset + count($refund_ids));
+    }
 
-		$rows = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            "SELECT * FROM {$old_visitors_table}" // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		);
+    public function migrate_ledger() {
+        global $wpdb;
+        $offset = (int) get_option('mvx_ledger_offset',0);
 
-		$store_cache = array();
-
-		foreach ( $rows as $row ) {
-			$author_id = (int) $row->vendor_id;
-
-			if ( ! isset( $store_cache[ $author_id ] ) ) {
-				$store_cache[ $author_id ] = (int) get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
-			}
-
-			$store_id = ! empty( $store_cache[ $author_id ] ) ? $store_cache[ $author_id ] : 0;
-
-			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-				$new_visitors_table,
-				array(
-					'store_id'    => $store_id,
-					'user_id'     => (int) $row->user_id,
-					'user_cookie' => $row->user_cookie,
-					'session_id'  => $row->session_id,
-					'ip'          => $row->ip,
-					'lat'         => $row->lat,
-					'lon'         => $row->lon,
-					'city'        => $row->city,
-					'zip'         => $row->zip,
-					'regionCode'  => $row->regionCode, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-                'region'          => $row->region,
-                'countryCode'     => $row->countryCode, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-                'country'         => $row->country,
-                'isp'             => $row->isp,
-                'timezone'        => $row->timezone,
-                'created'         => $row->created,
-				)
-			);
-		}
-
-        // Questions and answers table migration.
-		$questions_table = $wpdb->prefix . 'mvx_cust_questions';
-		$answers_table   = $wpdb->prefix . 'mvx_cust_answers';
-		$new_qna_table   = $wpdb->prefix . Utill::TABLES['product_qna'];
-
-		$questions = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            "SELECT * FROM {$questions_table}" // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		);
-		foreach ( $questions as $question ) {
-			$answer = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-				$wpdb->prepare(
-                    "SELECT * FROM {$answers_table} WHERE ques_ID = %d ORDER BY ans_created ASC LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-                    $question->ques_ID // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-				)
-			);
-
-			$ques_votes = $question->ques_vote ? maybe_unserialize( $question->ques_vote ) : array();
-			$ans_votes  = $answer ? maybe_unserialize( $answer->ans_vote ) : array();
-
-			$merged_votes = array_merge( $ques_votes, $ans_votes );
-			$total_votes  = count( $merged_votes );
-
-			$store_id = get_post_meta( $question->product_ID, Utill::POST_META_SETTINGS['store_id'], true ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-				$new_qna_table,
-				array(
-					'id'                  => (int) $question->ques_ID, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-					'product_id'          => (int) $question->product_ID, // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-					'store_id'            => $store_id,
-					'question_text'       => $question->ques_details,
-					'question_by'         => (int) $question->ques_by,
-					'question_date'       => $question->ques_created,
-					'answer_text'         => $answer ? $answer->ans_details : null,
-					'answer_by'           => $answer ? (int) $answer->ans_by : null,
-					'answer_date'         => $answer ? $answer->ans_created : null,
-					'total_votes'         => $total_votes,
-					'voters'              => maybe_serialize( $merged_votes ),
-					'question_visibility' => 'public',
-					'created_at'          => $question->ques_created,
-					'updated_at'          => $answer ? $answer->ans_created : $question->ques_created,
-				),
-				array(
-					'%d',
-					'%d',
-					'%d',
-					'%s',
-					'%d',
-					'%s',
-					'%s',
-					'%d',
-					'%s',
-					'%d',
-					'%s',
-					'%s',
-					'%s',
-				)
-			);
-		}
-
-        // SPMV table migration.
-		$old_spmv_table = $wpdb->prefix . 'mvx_products_map';
-		$new_spmv_table = $wpdb->prefix . Utill::TABLES['products_map'];
-
-		$spmv_products = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare( "SELECT product_map_id, product_id, created FROM {$old_spmv_table} ORDER BY product_map_id, ID" ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		);
-        $maps          = array();
-        foreach ( $spmv_products as $row ) {
-            $map_id     = (int) $row->product_map_id;
-            $product_id = (int) $row->product_id;
-
-            if ( ! isset( $maps[ $map_id ] ) ) {
-                $maps[ $map_id ] = array(
-                    'products' => array(),
-                    'created'  => $row->created,
-                );
-            }
-
-            $maps[ $map_id ]['products'][] = $product_id;
-        }
-
-        foreach ( $maps as $map_id => $data ) {
-			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-                $new_spmv_table,
-                array(
-					'ID'          => $map_id,
-					'product_map' => wp_json_encode( array_values( $data['products'] ) ),
-					'created'     => $data['created'],
-                ),
-                array(
-					'%d',
-					'%s',
-					'%s',
-                )
-			);
-
-            foreach ( $data['products'] as $product_id ) {
-                update_post_meta( $product_id, 'multivendorx_spmv_id', $map_id );
-                delete_post_meta( $product_id, '_mvx_spmv_map_id' );
-                delete_post_meta( $product_id, '_mvx_spmv_product' );
-            }
-        }
-
-        // Vendor ledger(Transactions) table migrate.
-		$old_ledger_table = $wpdb->prefix . 'mvx_vendor_ledger';
+        $old_ledger_table = $wpdb->prefix . 'mvx_vendor_ledger';
 		$new_ledger_table = $wpdb->prefix . Utill::TABLES['transaction'];
 
-		$transactions = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            "SELECT * FROM {$old_ledger_table}", ARRAY_A // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		);
+        $transactions = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$old_ledger_table} LIMIT %d OFFSET %d",
+                self::BATCH_SIZE,
+                $offset
+            ), ARRAY_A
+        );
+
         $store_cache  = array();
 
         foreach ( $transactions as $row ) {
@@ -2725,5 +2835,7 @@ class Install {
                 )
 			);
         }
+
+        update_option('mvx_ledger_offset', $offset + count($transactions));
     }
 }

@@ -195,6 +195,7 @@ class Utill {
         'state'                        => 'state',
         'country'                      => 'country',
         'postcode'                     => 'postcode',
+        'zip'                          => 'zip',
         'create_time'                  => 'create_time',
         'deactivation_reason'          => 'deactivation_reason',
         'deactivation_request_date'    => 'deactivation_request_date',

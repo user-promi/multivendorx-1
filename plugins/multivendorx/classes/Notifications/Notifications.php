@@ -79,12 +79,50 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store application is under review',
-					'email_body'       => '
-						<p>Hello,</p>
-						<p>Your store <strong>[store_name]</strong> has been successfully submitted.</p>
-						<p>The marketplace team is reviewing your application. You will be notified once the review process is completed.</p>
-						<p>Thank you for your patience.</p>',
+					'email_body'       => "
+							<table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313rem'>
+								<tr> <td valign='top' style='padding:10px;'><h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313rem'>
+									Store application rejected
+								</h1><div style='color:#e92525;font-size:0.95rem'>
+									Action required - Review policy requirements
+								</div></td>
+								</tr>
+							</table>
+						<h1 style='font-size:1.25;padding-bottom:1'>
+									Hello,
+								</h1><div style='font-size:1;line-height:1.25rem;padding-top:1.25'>
+									We've reviewed your store application [store_name] and unfortunately it does not meet our current marketplace requirements at this time.
+								</div><div style='line-height:1.25rem;font-size:0.95rem;padding-top:1.5rem;font-weight:500'>
+									To help you understand next steps, please review the key areas below before reapplying
+								</div>
+							<table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31rem'>
+								<tr>
+									
+										<td valign='top' style='padding:10px;'>
+											<h1 style='font-size:1.313rem'>
+									
+												Common reasons for rejection            
+								
+								</h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+									i) Store details or descriptions don't meet content policy guidelines
+								</div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+									ii) Missing or incomplete merchant verification documentation
+								</div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+									iii) Product listings don't comply with restricted products policy
+								</div>
+										</td>
+									
+								</tr>
+							</table>
+						<div style='color:#2d3748;font-size:1rem;margin-top:4rem;line-height:1.125;margin-bottom:3rem'>
+									Once you've addressed the relevant requirements, you're welcome to resubmit your application through the Play Console.
+								</div>",
 					'sms_content'      => 'Store [store_name] is pending approval.',
+					'available_placeholder' => [
+						'[store_name]',
+						'[store_name]',
+						'[store_name]',
+					],
 					'system_message'   => 'Your store is currently under admin review.',
 					'tag'              => 'Store',
 					'category'         => 'activity',
@@ -98,9 +136,13 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store application was rejected',
-					'email_body'       => '<p>Hello,</p>
-											<p>Unfortunately your store application <strong>[store_name]</strong> has been rejected.</p>
-											<p>Please review marketplace requirements and reapply if applicable.</p>',
+					'email_body'       => '<h1 style="font-size:1.125">
+												Hello,
+											</h1><div style="color:#2d3748;font-size:0.9">
+												Unfortunately your store application [store_name] has been rejected.
+											</div><div style="font-size:0.9rem;padding-top:2rem;font-weight:600">
+												Please review marketplace requirements and reapply if applicable.
+											</div>',
 					'sms_content'      => 'Store application rejected.',
 					'system_message'   => 'Your store application has been rejected.',
 					'tag'              => 'Store',
