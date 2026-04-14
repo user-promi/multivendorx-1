@@ -141,7 +141,7 @@ const REGISTRATION_BLOCK_GROUPS = [
         icon: 'store',
         blocks: [
             {
-                id: 'store-name',
+                id: 'name',
                 icon: 't-letter-bold',
                 value: 'text',
                 label: 'Store Name',
@@ -149,7 +149,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 placeholder: 'Enter your store name',
             },
             {
-                id: 'store-description',
+                id: 'description',
                 icon: 'text ',
                 value: 'textarea',
                 label: 'Store Desc',

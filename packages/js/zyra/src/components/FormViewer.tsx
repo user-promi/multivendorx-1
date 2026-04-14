@@ -693,7 +693,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                     ? field.fields
                     : [
                           {
-                              key: 'address_1',
+                              key: 'address',
                               label: 'Address Line 1',
                               type: 'text',
                               required: true,
@@ -709,10 +709,10 @@ const FormViewer: React.FC<FormViewerProps> = ({
                               type: 'text',
                               required: true,
                           },
-                          { key: 'state', label: 'State', type: 'select' },
                           { key: 'country', label: 'Country', type: 'select' },
+                          { key: 'state', label: 'State', type: 'select' },
                           {
-                              key: 'postcode',
+                              key: 'zip',
                               label: 'Postal Code',
                               type: 'text',
                               required: true,

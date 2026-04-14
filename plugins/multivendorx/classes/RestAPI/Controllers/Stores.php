@@ -534,14 +534,13 @@ class Stores extends \WP_REST_Controller {
             $registration_allowed_meta = array(
                 Utill::STORE_SETTINGS_KEYS['phone'],
                 Utill::STORE_SETTINGS_KEYS['paypal_email'],
-                Utill::STORE_SETTINGS_KEYS['address_1'],
+                Utill::STORE_SETTINGS_KEYS['address'],
                 Utill::STORE_SETTINGS_KEYS['address_2'],
                 Utill::STORE_SETTINGS_KEYS['city'],
                 Utill::STORE_SETTINGS_KEYS['state'],
                 Utill::STORE_SETTINGS_KEYS['country'],
-                Utill::STORE_SETTINGS_KEYS['postcode'],
+                Utill::STORE_SETTINGS_KEYS['zip'],
             );
-
             $non_core_fields = array();
 
             foreach ( $file_data as $file ) {
@@ -560,8 +559,8 @@ class Stores extends \WP_REST_Controller {
             $registration_meta_map = array(
                 'store-paypal'   => Utill::STORE_SETTINGS_KEYS['paypal_email'],
                 'store-phone'    => Utill::STORE_SETTINGS_KEYS['phone'],
-                
             );
+file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":store data: : " . var_export($store_data, true) . "\n", FILE_APPEND);
 
             foreach ( $store_data as $key => $value ) {
                 if (isset($registration_meta_map[ $key ])) {
