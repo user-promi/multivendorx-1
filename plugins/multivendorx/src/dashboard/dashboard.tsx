@@ -1019,7 +1019,7 @@ const Dashboard: React.FC = () => {
 										</div>
 									))
 								) : (
-									<ComponentStatusView title={__('No reviews found.', 'multivendorx')} />
+									<ComponentStatusView title={__("No reviews yet - they'll show up here once received.", "multivendorx")} />
 								)}
 							</div>
 						</Card>
