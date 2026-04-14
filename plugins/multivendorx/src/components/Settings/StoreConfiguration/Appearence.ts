@@ -47,19 +47,19 @@ export default {
 			templates: [
 				{
 					key: 'banner1',
-					label: __('Banner 1', 'multivendorx'),
+					label: __('Luxe Display', 'multivendorx'),
 					preview: BannerTemplate1,
 					component: BannerTemplate1,
 				},
 				{
 					key: 'banner2',
-					label: __('Banner 2', 'multivendorx'),
+					label: __('Signature View', 'multivendorx'),
 					preview: BannerTemplate2,
 					component: BannerTemplate2,
 				},
 				{
 					key: 'banner3',
-					label: __('Banner 3', 'multivendorx'),
+					label: __('Dynamic Showcase', 'multivendorx'),
 					preview: BannerTemplate3,
 					component: BannerTemplate3,
 				},

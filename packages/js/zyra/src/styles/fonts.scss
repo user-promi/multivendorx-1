@@ -20,11 +20,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.adminfont-media:before {
-  content: "\e968";
+
+.adminfont-answer:before {
+  content: "\e96a";
 }
-.adminfont-refresh:before {
-  content: "\e969";
+.adminfont-ai:before {
+  content: "\e96b";
 }
 .adminfont-cart:before {
   content: "\8907";
@@ -409,6 +410,12 @@
 }
 .adminfont-wholesale-buyer-rejected:before {
   content: "\e967";
+}
+.adminfont-media:before {
+  content: "\e968";
+}
+.adminfont-refresh:before {
+  content: "\e969";
 }
 .adminfont-accommodation:before {
   content: "\ef35";

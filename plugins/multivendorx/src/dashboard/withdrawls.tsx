@@ -16,6 +16,7 @@ import {
 	ItemListUI,
 	NoticeManager,
 	TextAreaUI,
+	ComponentStatusView,
 } from 'zyra';
 import { formatCurrency } from '../services/commonFunction';
 interface WithdrawalData {
@@ -301,9 +302,7 @@ const Withdrawls: React.FC = () => {
 										]}
 									/>
 								) : (
-									<div className="no-pending-status">
-										{__('No pending earning in clearence', 'multivendorx')}
-									</div>
+										<ComponentStatusView title={__('No pending earning in clearence', 'multivendorx')} />
 								)}
 
 								{data?.withdrawal_setting?.length > 0 && (

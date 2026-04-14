@@ -192,7 +192,7 @@ const AIButtonSection: React.FC<AIButtonSectionProps> = ({ product, setProduct, 
         addFilter('multivendorx_product_button', B_HOOK, (buttons) => [
             {
                 label: __('Generate with AI', 'multivendorx'),
-                icon: 'star-notifima',
+                icon: 'ai',
                 color: 'purple',
                 onClick: openPopup,
             },
@@ -285,7 +285,7 @@ const AIButtonSection: React.FC<AIButtonSectionProps> = ({ product, setProduct, 
             position="lightbox"
             width={50}
             height={80}
-            header={{ icon: 'star-notifima', title: __('Create Product With AI', 'multivendorx') }}
+            header={{ icon: 'ai', title: __('Create Product With AI', 'multivendorx') }}
             footer={
                 <>
                     <ButtonInputUI
@@ -368,7 +368,7 @@ const AIButtonSection: React.FC<AIButtonSectionProps> = ({ product, setProduct, 
                 </div>
             ) :
                 <div className='empty-icon'>
-                    <i className="adminfont-star-notifima" />
+                    <i className="adminfont-ai" />
                     <div className="title">{__('What product would you like to create?', 'multivendorx')}</div>
                 </div>
             }
