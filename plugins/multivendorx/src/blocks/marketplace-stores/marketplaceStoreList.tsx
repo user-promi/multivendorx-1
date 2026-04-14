@@ -8,6 +8,9 @@ interface StoreRow {
 	id: number;
 	name: string;
 	store_slug: string;
+	store_name?: string;
+	location_lat?: string;
+	location_lng?: string;
 	topProducts?: string[];
 }
 
@@ -242,6 +245,15 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			return null;
 		}
 
+		const mapStores = {
+			data: data.map((store) => ({
+				id: store.id,
+				store_name: store.store_name || store.name,
+				location_lat: store.location_lat,
+				location_lng: store.location_lng,
+			})),
+		};
+
 		return (
 			<MapProviderUI
 				apiKey={mapConfig.apiKey}
@@ -254,7 +266,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 					'Search for a location...',
 					'multivendorx'
 				)}
-				stores={null}
+				stores={mapStores}
 				mapProvider={mapConfig.provider}
 			/>
 		);

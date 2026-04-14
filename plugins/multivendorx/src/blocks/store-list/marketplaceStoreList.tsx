@@ -8,6 +8,9 @@ interface StoreRow {
 	id: number;
 	name: string;
 	store_slug: string;
+	store_name?: string;
+	location_lat?: string;
+	location_lng?: string;
 	topProducts?: string[];
 }
 
@@ -41,8 +44,19 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	const radiusConfig = geoSettings?.radius_search_distance?.[0] || {};
 	const radiusMax = radiusConfig.radius_search_max_distance || 500;
 	const radiusUnit = radiusConfig.radius_search_unit || 'kilometers';
+	const hasLocationFilter =
+		!!mapLocation.location_lat && !!mapLocation.location_lng;
 
 	const totalPages = Math.ceil(total / perPage);
+
+	const mapStores = {
+		data: data.map((store) => ({
+			id: store.id,
+			store_name: store.store_name || store.name,
+			location_lat: store.location_lat,
+			location_lng: store.location_lng,
+		})),
+	};
 
 	useEffect(() => {
 		axios({
@@ -52,8 +66,12 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			params: {
 				page: page,
 				row: perPage,
-				order_by: orderby,
-				order: order,
+				...(hasLocationFilter
+					? {}
+					: {
+						order_by: orderby,
+						order: order,
+					}),
 				search_value: search,
 				filters: true,
 				location_lat: mapLocation.location_lat,
@@ -94,6 +112,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 								locationLng={mapLocation.location_lng}
 								mapProvider={geoSettings.choose_map_api}
 								onLocationUpdate={(loc) => setMapLocation(loc)}
+								stores={mapStores}
 								placeholderSearch={__(
 									'Search location...',
 									'multivendorx'

@@ -294,7 +294,7 @@ class Stores extends \WP_REST_Controller {
                 $args['status'] = $status;
             }
 
-            $order_by = $request->get_param( 'order_dy' );
+            $order_by = $request->get_param( 'order_by' );
             if ( ! empty( $order_by ) ) {
                 $args['order_by'] = sanitize_text_field( $order_by );
                 $args['order']    = sanitize_text_field( $request->get_param( 'order' ) );
@@ -313,10 +313,29 @@ class Stores extends \WP_REST_Controller {
 
                 if ( ! empty( $store_ids ) ) {
                     $args['ID'] = $store_ids;
+                    // Keep nearest-first order from radius query.
+                    unset( $args['order_by'], $args['order'] );
                 }
             }
             // Fetch & format stores.
             $stores = StoreUtil::get_store_information( $args );
+
+            if ( ! empty( $store_ids ) ) {
+                $store_order = array_flip( array_map( 'intval', $store_ids ) );
+                usort(
+                    $stores,
+                    function( $a, $b ) use ( $store_order ) {
+                        $a_pos = $store_order[ (int) $a['ID'] ] ?? PHP_INT_MAX;
+                        $b_pos = $store_order[ (int) $b['ID'] ] ?? PHP_INT_MAX;
+
+                        if ( $a_pos === $b_pos ) {
+                            return 0;
+                        }
+
+                        return ( $a_pos < $b_pos ) ? -1 : 1;
+                    }
+                );
+            }
 
             $formatted_stores = array();
             foreach ( $stores as $store ) {

@@ -43,6 +43,7 @@ type MapInstance = google.maps.Map | window.mapboxgl.Map;
 type MarkerInstance = google.maps.Marker | window.mapboxgl.Marker;
 
 type MapProviderType = 'google_map' | 'mapbox';
+type MarkerType = 'default' | 'user' | 'store';
 
 interface MapAdapter {
     loadScript(apiKey: string): Promise<void>;
@@ -58,7 +59,7 @@ interface MapAdapter {
         map: MapInstance,
         lat: number,
         lng: number,
-        isUser?: boolean
+        markerType?: MarkerType
     ): MarkerInstance;
 
     onDragEnd(
@@ -128,14 +129,27 @@ const googleAdapter: MapAdapter = {
             zoom,
         });
     },
+    
 
-    createMarker(map: MapInstance, lat: number, lng: number, isUser?: boolean) {
+    createMarker(
+        map: MapInstance,
+        lat: number,
+        lng: number,
+        markerType: MarkerType = 'default'
+    ) {
+        const markerIcon =
+            markerType === 'user'
+                ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                : markerType === 'store'
+                    ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                    : undefined;
+
         return new window.google.maps.Marker({
             map,
             position: { lat, lng },
             draggable: true,
-            ...(isUser && {
-                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+            ...(markerIcon && {
+                icon: markerIcon,
             }),
         });
     },
@@ -234,8 +248,20 @@ const mapboxAdapter: MapAdapter = {
         });
     },
 
-    createMarker(map: MapInstance, lat: number, lng: number) {
-        return new window.mapboxgl.Marker({ draggable: true })
+    createMarker(
+        map: MapInstance,
+        lat: number,
+        lng: number,
+        markerType: MarkerType = 'default'
+    ) {
+        const color =
+            markerType === 'user'
+                ? '#2563eb'
+                : markerType === 'store'
+                    ? '#16a34a'
+                    : '#ef4444';
+
+        return new window.mapboxgl.Marker({ draggable: true, color })
             .setLngLat([lng, lat])
             .addTo(map);
     },
@@ -305,6 +331,7 @@ export const MapProviderUI = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<MapInstance | null>(null);
     const markerRef = useRef<MarkerInstance | null>(null);
+    const storeMarkersRef = useRef<MarkerInstance[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -344,7 +371,7 @@ export const MapProviderUI = ({
             }
 
             const map = provider.createMap(containerRef.current!, lat, lng, 12);
-            const marker = provider.createMarker(map, lat, lng);
+            const marker = provider.createMarker(map, lat, lng, 'default');
 
             mapRef.current = map;
             markerRef.current = marker;
@@ -352,23 +379,45 @@ export const MapProviderUI = ({
             provider.onDragEnd(marker, updateLocation);
             provider.onMapClick(map, updateLocation);
 
-            /* store markers */
-
-            stores?.data?.forEach((s) => {
-                if (!s.location_lat || !s.location_lng) {
-                    return;
-                }
-
-                provider.createMarker(
-                    map,
-                    parseFloat(s.location_lat),
-                    parseFloat(s.location_lng)
-                );
-            });
         };
 
         init();
     }, []);
+
+    useEffect(() => {
+        if (!mapRef.current) {
+            return;
+        }
+
+        // Clear previously rendered store markers.
+        storeMarkersRef.current.forEach((marker) => {
+            if ('setMap' in marker) {
+                marker.setMap(null);
+                return;
+            }
+
+            if ('remove' in marker) {
+                marker.remove();
+            }
+        });
+        storeMarkersRef.current = [];
+
+        // Render fresh store markers.
+        stores?.data?.forEach((s) => {
+            if (!s.location_lat || !s.location_lng) {
+                return;
+            }
+
+            const marker = provider.createMarker(
+                mapRef.current as MapInstance,
+                parseFloat(s.location_lat),
+                parseFloat(s.location_lng),
+                'store'
+            );
+
+            storeMarkersRef.current.push(marker);
+        });
+    }, [stores, provider]);
 
     useEffect(() => {
         if (!mapRef.current || !markerRef.current) {
