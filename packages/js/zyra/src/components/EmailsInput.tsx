@@ -168,7 +168,7 @@ export const EmailsInputUI = forwardRef<HTMLInputElement, EmailsInputProps>(
                         )}
                         <span>{email}</span>
                         <i
-                            className="adminfont-close close-icon"
+                            className="adminfont-close close"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 removeEmail(email);

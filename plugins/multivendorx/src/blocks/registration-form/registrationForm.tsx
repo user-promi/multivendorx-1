@@ -1,8 +1,10 @@
+// RegistrationForm.tsx
 /* global registrationForm, */
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { FormViewer, getApiLink, ChoiceToggle } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
+
 type StoreOption = {
 	label: string;
 	value: string | number;
@@ -43,6 +45,17 @@ const RegistrationForm = () => {
 	const [allStoreData, setAllStoreData] = useState<StoreData[]>([]);
 	const [storeData, setStoreData] = useState<StoreData | null>(null);
 	const formData = registrationForm;
+
+	// Step wizard state
+	const [currentStep, setCurrentStep] = useState<1 | 2>(1);
+	const [step1Completed, setStep1Completed] = useState<boolean>(false);
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+	// Check if step 1 has content to show
+	const hasBeforeFormContent = registrationForm.content_before_form && 
+		registrationForm.content_before_form.trim().length > 0;
+	const hasStoreSelector = stores.length > 0;
+	const shouldShowStep1 = hasBeforeFormContent || hasStoreSelector;
 
 	useEffect(() => {
 		axios({
@@ -98,6 +111,11 @@ const RegistrationForm = () => {
 					}
 				}
 			}
+
+			// Auto-complete step 1 if there's nothing to show
+			if (!shouldShowStep1) {
+				setStep1Completed(true);
+			}
 		});
 	}, []);
 
@@ -129,8 +147,27 @@ const RegistrationForm = () => {
 		}
 	}, []);
 
+	// Navigate to next step
+	const goToNextStep = () => {
+		if (currentStep === 1 && shouldShowStep1) {
+			setStep1Completed(true);
+			setCurrentStep(2);
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+	};
+
+	// Navigate to previous step
+	const goToPreviousStep = () => {
+		if (currentStep === 2) {
+			setCurrentStep(1);
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+	};
+
 	const onSubmit = useCallback(
 		(submittedFormData: Record<string, string | number | boolean>) => {
+			setIsSubmitting(true);
+			
 			sessionStorage.setItem(
 				'multivendorxRegistrationForm',
 				JSON.stringify(submittedFormData)
@@ -173,6 +210,7 @@ const RegistrationForm = () => {
 							'multivendorx'
 						),
 					});
+					setIsSubmitting(false);
 
 					sessionStorage.removeItem('multivendorxRegistrationForm');
 					if (response.data.redirect !== '') {
@@ -184,6 +222,7 @@ const RegistrationForm = () => {
 						type: 'error',
 						message: __('Error creating store', 'multivendorx'),
 					});
+					setIsSubmitting(false);
 				});
 		},
 		[]
@@ -195,62 +234,234 @@ const RegistrationForm = () => {
 	);
 	const memoizedStateList = useMemo(() => registrationForm.state_list, []);
 
-	return (
-		<div className="woocommerce">
-			{stores.length > 0 && (
-				<>
-					<div className="store-selector">
-						<ChoiceToggle
-							options={stores}
-							value={selectedStore?.value || ''}
-							onChange={(val) => handleStoreChange(val)}
-						/>
-					</div>
+	// If there's no step 1 content, just show the form directly
+	if (!shouldShowStep1) {
+		return (
+			<div className="woocommerce">
+				{stores.length > 0 && (
+					<>
+						<div className="store-selector">
+							<ChoiceToggle
+								options={stores}
+								value={selectedStore?.value || ''}
+								onChange={(val) => handleStoreChange(val)}
+							/>
+						</div>
 
-					{storeData?.note?.[0]?.note && (
-						<div>
-							<h4>{__('Store Note', 'multivendorx')}</h4>
-
-							<div className="store-note">
-								<strong>{__('Note', 'multivendorx')}:</strong>{' '}
-								{storeData.note[0].note}
+						{storeData?.note?.[0]?.note && (
+							<div>
+								<h4>{__('Store Note', 'multivendorx')}</h4>
+								<div className="store-note">
+									<strong>{__('Note', 'multivendorx')}:</strong>{' '}
+									{storeData.note[0].note}
+								</div>
 							</div>
+						)}
+					</>
+				)}
+
+				<FormViewer
+					formFields={formData.settings}
+					response={inputs}
+					onSubmit={onSubmit}
+					countryList={memoizedCountryList}
+					stateList={memoizedStateList}
+				/>
+				<div
+					dangerouslySetInnerHTML={{
+						__html: registrationForm.content_after_form,
+					}}
+				/>
+				{responseMessage && (
+					<div className="woocommerce-notices-wrapper">
+						<ul
+							className={
+								responseMessage.type === 'success'
+									? 'woocommerce-message'
+									: 'woocommerce-error'
+							}
+							role="alert"
+						>
+							<li>{responseMessage.message}</li>
+						</ul>
+					</div>
+				)}
+			</div>
+		);
+	}
+
+	return (
+		<div className="woocommerce multivendorx-step-registration">
+			{/* Step Wizard Header */}
+			<div className="multivendorxstep-wizard">
+				<div className="multivendorxsteps-container">
+					{/* Step 1 */}
+					<div 
+						className={`multivendorxstep-item ${currentStep === 1 ? 'active' : ''} ${step1Completed ? 'completed' : ''}`}
+						onClick={() => currentStep === 2 && goToPreviousStep()}
+					>
+						<div className="multivendorxstep-number">
+							{step1Completed ? (
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+									<polyline points="20 6 9 17 4 12"></polyline>
+								</svg>
+							) : (
+								<span>1</span>
+							)}
+						</div>
+						<div className="multivendorxstep-info">
+							<span className="multivendorxstep-label">Step 1</span>
+							<span className="multivendorxstep-title">Getting Started</span>
+						</div>
+					</div>
+					
+					<div className="multivendorxstep-connector"></div>
+					
+					{/* Step 2 */}
+					<div 
+						className={`multivendorxstep-item ${currentStep === 2 ? 'active' : ''}`}
+					>
+						<div className="multivendorxstep-number">
+							<span>2</span>
+						</div>
+						<div className="multivendorxstep-info">
+							<span className="multivendorxstep-label">Step 2</span>
+							<span className="multivendorxstep-title">Store Details</span>
+						</div>
+					</div>
+				</div>
+				<div className="multivendorxprogress-bar">
+					<div 
+						className="multivendorxprogress-fill" 
+						style={{ width: currentStep === 1 ? '50%' : '100%' }}
+					></div>
+				</div>
+			</div>
+
+			{/* Step 1: Content Before Form */}
+			{currentStep === 1 && (
+				<div className="multivendorxstep-content multivendorxstep-1-content">
+					{stores.length > 0 && (
+						<div className="multivendorxstore-selector-section">
+							<h3>{__('Select Your Store', 'multivendorx')}</h3>
+							<div className="store-selector">
+								<ChoiceToggle
+									options={stores}
+									value={selectedStore?.value || ''}
+									onChange={(val) => handleStoreChange(val)}
+								/>
+							</div>
+
+							{storeData?.note?.[0]?.note && (
+								<div className="multivendorxstore-note">
+									<h4>{__('Store Note', 'multivendorx')}</h4>
+									<div className="store-note">
+										<strong>{__('Note', 'multivendorx')}:</strong>{' '}
+										{storeData.note[0].note}
+									</div>
+								</div>
+							)}
 						</div>
 					)}
-				</>
-			)}
 
-			<div
-				dangerouslySetInnerHTML={{
-					__html: registrationForm.content_before_form,
-				}}
-			/>
-			<FormViewer
-				formFields={formData.settings}
-				response={inputs}
-				onSubmit={onSubmit}
-				countryList={memoizedCountryList}
-				stateList={memoizedStateList}
-			/>
-			<div
-				dangerouslySetInnerHTML={{
-					__html: registrationForm.content_after_form,
-				}}
-			/>
-			{responseMessage && (
-				<div className="woocommerce-notices-wrapper">
-					<ul
-						className={
-							responseMessage.type === 'success'
-								? 'woocommerce-message'
-								: 'woocommerce-error'
-						}
-						role="alert"
-					>
-						<li>{responseMessage.message}</li>
-					</ul>
+					{/* Step 1 Main Content: content_before_form */}
+					{registrationForm.content_before_form && (
+						<div 
+							className="multivendorxbefore-form-content"
+							dangerouslySetInnerHTML={{
+								__html: registrationForm.content_before_form,
+							}}
+						/>
+					)}
+
+					<div className="multivendorxstep-actions">
+						<button 
+							className="multivendorxbtn multivendorxbtn-primary"
+							onClick={goToNextStep}
+						>
+							{__('Continue to Store Details', 'multivendorx')} →
+						</button>
+					</div>
 				</div>
 			)}
+
+			{/* Step 2: FormViewer */}
+			{currentStep === 2 && (
+				<div className="multivendorxstep-content multivendorxstep-2-content">
+					<div className="multivendorxform-header">
+						<h3>{__('Tell us about your store', 'multivendorx')}</h3>
+						<p>{__('This information will be reviewed by our team before your store goes live. Please fill it in accurately.', 'multivendorx')}</p>
+					</div>
+					
+					{/* Store selector and note (if any) for step 2 */}
+					{stores.length > 0 && selectedStore && (
+						<div className="multivendorxselected-store-info">
+							<strong>{__('Selected Store:', 'multivendorx')}</strong> {selectedStore.label}
+						</div>
+					)}
+
+					<FormViewer
+						formFields={formData.settings}
+						response={inputs}
+						onSubmit={onSubmit}
+						countryList={memoizedCountryList}
+						stateList={memoizedStateList}
+					/>
+					
+					{/* After Form Content */}
+					{registrationForm.content_after_form && (
+						<div 
+							className="multivendorxafter-form-content"
+							dangerouslySetInnerHTML={{
+								__html: registrationForm.content_after_form,
+							}}
+						/>
+					)}
+
+					{/* Response Message */}
+					{responseMessage && (
+						<div className="woocommerce-notices-wrapper">
+							<ul
+								className={
+									responseMessage.type === 'success'
+										? 'woocommerce-message'
+										: 'woocommerce-error'
+								}
+								role="alert"
+							>
+								<li>{responseMessage.message}</li>
+							</ul>
+						</div>
+					)}
+
+					<div className="multivendorxstep-actions multivendorxstep-actions-between">
+						<button 
+							className="multivendorxbtn multivendorxbtn-secondary"
+							onClick={goToPreviousStep}
+							disabled={isSubmitting}
+						>
+							← {__('Back', 'multivendorx')}
+						</button>
+						<button 
+							type="submit"
+							form="multivendorxform-viewer"
+							className="multivendorxbtn multivendorxbtn-primary"
+							disabled={isSubmitting}
+							onClick={() => {
+								// Trigger form submission
+								const form = document.querySelector('form');
+								if (form) {
+									const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+									form.dispatchEvent(submitEvent);
+								}
+							}}
+						>
+							{isSubmitting ? __('Submitting...', 'multivendorx') : __('Submit Registration →', 'multivendorx')}
+						</button>
+					</div>
+				</div>
+			)}
+
 		</div>
 	);
 };

@@ -22,6 +22,7 @@ interface BlockBuilderProps {
         visibleGroups?: string[];
         defaultTemplateId?: string;
         emailTemplates?: EmailTemplate[];
+        availablePlaceholder?: string;
     };
     setting?: Record<string, BuilderValue>;
     proSettingChange?: (...args: unknown[]) => boolean;
@@ -350,6 +351,7 @@ export const BlockBuilderUI: React.FC<BlockBuilderProps> = ({
                 onTemplateSelect: handleTemplateSelect,
                 showTemplatesTab: true,
             })}
+            availablePlaceholder ={field.availablePlaceholder}
         />
     );
 };
