@@ -5,6 +5,7 @@ import type { MultiValue, SingleValue } from 'react-select';
 
 // Internal dependencies
 import { ButtonInputUI } from './ButtonInput';
+import { CountryCodes } from './fieldUtils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -14,6 +15,7 @@ type InputValue =
     | boolean
     | File
     | string[]
+    | { country_code: string; phone: string }
     | null
     | undefined;
 
@@ -374,12 +376,12 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
         setErrors({});
 
-        const submitData: Record<string, string | number | File | undefined> =
+        const submitData: Record<string, string | number | File| { country_code: string; phone: string } | undefined> =
             {};
         for (const key in inputs) {
             const value = inputs[key];
             if (value !== undefined && value !== null) {
-                submitData[key] = value as string | number | File | undefined;
+                submitData[key] = value as string | number | File | { country_code: string; phone: string } | undefined;
             }
         }
         onSubmit(submitData);
@@ -415,25 +417,74 @@ const FormViewer: React.FC<FormViewerProps> = ({
                 );
 
             case 'text':
-                return (
-                    <FormRow
-                        key={field.id}
-                        label={field.label}
-                        fieldName={name}
-                        error={error}
-                    >
-                        <input
-                            type="text"
-                            name={name}
-                            className="input-text"
-                            value={(inputs[name] as string) || ''}
-                            placeholder={field.placeholder}
-                            onChange={(e) => handleChange(name, e.target.value)}
-                            required={field.required}
-                            maxLength={field.charlimit}
+    // ✅ SPECIAL HANDLING FOR STORE PHONE
+    if (name === 'store-phone') {
+        const value =
+            (inputs[name] as { country_code?: string; phone?: string }) || {};
+
+        return (
+            <FormRow
+                key={field.id}
+                label={field.label}
+                fieldName={name}
+                error={error}
+            >
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    
+                    {/* Country Code Dropdown */}
+                    <div style={{ minWidth: '140px' }}>
+                        <Select
+                            options={CountryCodes}
+                            value={CountryCodes.find(
+                                (opt) => opt.value === value.country_code
+                            )}
+                            onChange={(selected) =>
+                                handleChange(name, {
+                                    ...value,
+                                    country_code: selected?.value || '',
+                                })
+                            }
                         />
-                    </FormRow>
-                );
+                    </div>
+
+                    {/* Phone Input */}
+                    <input
+                        type="text"
+                        className="input-text"
+                        value={value.phone || ''}
+                        placeholder={field.placeholder}
+                        onChange={(e) =>
+                            handleChange(name, {
+                                ...value,
+                                phone: e.target.value,
+                            })
+                        }
+                    />
+                </div>
+            </FormRow>
+        );
+    }
+
+    // ✅ DEFAULT TEXT FIELD
+    return (
+        <FormRow
+            key={field.id}
+            label={field.label}
+            fieldName={name}
+            error={error}
+        >
+            <input
+                type="text"
+                name={name}
+                className="input-text"
+                value={(inputs[name] as string) || ''}
+                placeholder={field.placeholder}
+                onChange={(e) => handleChange(name, e.target.value)}
+                required={field.required}
+                maxLength={field.charlimit}
+            />
+        </FormRow>
+    );
 
             case 'email':
                 return (

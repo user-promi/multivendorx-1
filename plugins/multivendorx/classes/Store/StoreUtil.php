@@ -389,7 +389,17 @@ class StoreUtil {
 			'store_permanent_reject' => 'permanently_rejected' === $store->get( Utill::STORE_SETTINGS_KEYS['status'] ),
         );
 
+        $registration_meta_map = array(
+            'store-phone'   => Utill::STORE_SETTINGS_KEYS['phone'],
+            'store-paypal'  => Utill::STORE_SETTINGS_KEYS['paypal_email'],
+        );
+        $reverse_map = array_flip( $registration_meta_map );
+
         foreach ( $submitted_data as $field_name => $field_value ) {
+            if ( isset( $reverse_map[ $field_name ] ) ) {
+        $field_name = $reverse_map[ $field_name ];
+    }
+    
             $label = $name_label_map[ $field_name ] ?? $field_name;
             $value = is_array( $field_value )
                 ? implode(
@@ -417,6 +427,8 @@ class StoreUtil {
                 $response['registration_data'][ $label ] = $value;
             }
         }
+
+
 
         return $response;
     }

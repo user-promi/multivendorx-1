@@ -45,6 +45,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 't-letter-bold',
                 value: 'text',
                 label: 'Enter the text',
+                fixedName: 'text',
                 placeholder: 'Enter your text here',
             },
             {
@@ -52,6 +53,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'unread',
                 value: 'email',
                 label: 'Email',
+                fixedName: 'email',
                 placeholder: 'Enter your email here',
             },
             {
@@ -59,6 +61,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'text',
                 value: 'textarea',
                 label: 'Enter your text',
+                fixedName: 'textarea',
                 placeholder: 'Enter your message here',
             },
             {
@@ -66,6 +69,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'calendar',
                 value: 'date',
                 label: 'Date Picker',
+                fixedName: 'date',
                 placeholder: 'Select a date',
             },
             {
@@ -73,6 +77,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'alarm ',
                 value: 'time',
                 label: 'Time Picker',
+                fixedName: 'time',
                 placeholder: 'Select a time',
             },
             {
@@ -80,6 +85,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'checkbox',
                 value: 'checkboxes',
                 label: 'Nature Of Business',
+                fixedName: 'checkboxes',
                 options: OPTION_PRESETS,
             },
             {
@@ -87,6 +93,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'multi-select',
                 value: 'multi-select',
                 label: 'Multi Select',
+                fixedName: 'multi-select',
                 options: OPTION_PRESETS,
             },
             {
@@ -94,6 +101,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'radio icon-form-radio',
                 value: 'radio',
                 label: 'Nature Of Business',
+                fixedName: 'radio',
                 options: OPTION_PRESETS,
             },
             {
@@ -101,6 +109,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'dropdown-checklist',
                 value: 'dropdown',
                 label: 'Dropdown',
+                fixedName: 'dropdown',
                 options: OPTION_PRESETS,
             },
             {
@@ -108,13 +117,21 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'submission-message ',
                 value: 'attachment',
                 label: 'Attachment',
+                fixedName: 'attachment',
             },
-            { id: 'section', icon: 'form-section', value: 'section' },
+            {
+                id: 'section',
+                icon: 'form-section',
+                value: 'section',
+                label: 'Section',
+                fixedName: 'section',
+            },
             {
                 id: 'recaptcha',
                 icon: 'captcha-automatic-code',
                 value: 'recaptcha',
                 label: 'reCaptcha v3',
+                fixedName: 'recaptcha',
             },
         ],
     },
@@ -176,30 +193,41 @@ const EMAIL_BLOCK_GROUPS = [
                 icon: 'blocks',
                 value: 'columns',
                 label: 'Columns',
+                fixedName: 'columns',
             },
             {
                 id: 'heading',
                 icon: 'form-textarea',
                 value: 'heading',
+                fixedName: 'heading',
                 placeholder: 'Enter your heading here',
             },
             {
                 id: 'richtext',
                 icon: 't-letter-bold',
                 value: 'richtext',
+                fixedName: 'richtext',
                 placeholder: 'Enter your text content here',
             },
-            { id: 'image', icon: 'image', value: 'image', label: 'Image' },
+            {
+                id: 'image',
+                icon: 'image',
+                value: 'image',
+                label: 'Image',
+                fixedName: 'image',
+            },
             {
                 id: 'button',
                 icon: 'button',
                 value: 'button',
+                fixedName: 'button',
                 placeholder: 'Click me',
             },
             {
                 id: 'section',
                 icon: 'section',
                 value: 'section',
+                fixedName: 'section',
             },
         ],
     },

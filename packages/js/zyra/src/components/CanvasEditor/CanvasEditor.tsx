@@ -477,7 +477,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                                 >
                                     <i className={`adminfont-${item.icon}`} />
                                     <div className="elements-name">
-                                        {item.value}
+                                        {item.fixedName}
                                     </div>
                                 </div>
                             ))}
