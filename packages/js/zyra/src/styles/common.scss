@@ -19,8 +19,8 @@ a {
   color: $text-color;
 }
 
-.form-select-field-wrapper {
-  img{
+.form-select-field {
+  img {
     width: 1.125rem;
   }
 
@@ -61,8 +61,8 @@ a {
   }
 }
 
-.form-select-field-wrapper input,
-.form-select-field-wrapper input:focus {
+.form-select-field input,
+.form-select-field input:focus {
   box-shadow: none !important;
   outline: none;
 }
@@ -89,7 +89,7 @@ a {
   h6 {
     margin: 0;
   }
-  
+
   // for woocommerce notice
   // .notice p {
   //   margin: 0.5em 0;
@@ -273,7 +273,7 @@ $index: 1;
     border: none;
   }
 }
- 
+
 .react-select input:focus {
   box-shadow: none;
 }
@@ -470,7 +470,7 @@ $index: 1;
       width: 100%;
 
       label {
-        padding: 0 0 0.313rem 0.313rem;
+        padding: 0 0 0 0.313rem;
         font-size: 0.9rem;
         position: relative;
         display: inline;
@@ -546,7 +546,7 @@ $index: 1;
   gap: 0.125rem;
   z-index: 2;
   border-radius: $border-radius-small;
-  white-space: nowrap;  // for stop word wrapping
+  white-space: nowrap; // for stop word wrapping
 
   &.module {
     background: #d9f5f0;
@@ -705,40 +705,44 @@ $index: 1;
 }
 
 .simple-checkbox {
-  input {
-    display: none;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
 
-  label {
-    border-radius: 4rem;
-    border: $border-light-medium;
-    font-weight: 500;
-    line-height: 1.125;
-    font-size: 0.9rem;
-    color: #9fa1a4;
-    padding: 0.65rem 1.125rem;
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
+  // input {
+  //   display: none;
+  // }
 
-  input:checked+label {
-    color: $theme-color;
-    background: $theme-background-color;
-    border: $border-theme-medium;
-    padding-left: 2rem;
+  // label {
+  //   border-radius: 4rem;
+  //   border: $border-light-medium;
+  //   font-weight: 500;
+  //   line-height: 1.125;
+  //   font-size: 0.9rem;
+  //   color: #9fa1a4;
+  //   padding: 0.65rem 1.125rem;
+  //   cursor: pointer;
+  //   position: relative;
+  //   display: flex;
+  //   align-items: center;
+  // }
 
-    &::before {
-      position: absolute;
-      content: "\e809";
-    }
-  }
+  // input:checked+label {
+  //   color: $theme-color;
+  //   background: $theme-background-color;
+  //   border: $border-theme-medium;
+  //   padding-left: 2rem;
 
-  .toggle-checkbox-header {
-    padding-bottom: 1rem;
-    margin-right: 0;
-  }
+  //   &::before {
+  //     position: absolute;
+  //     content: "\e809";
+  //   }
+  // }
+
+  // .toggle-checkbox-header {
+  //   padding-bottom: 1rem;
+  //   margin-right: 0;
+  // }
 }
 
 // .settings-from-multi-select {
@@ -1016,7 +1020,7 @@ $index: 1;
         }
       }
     }
-  }  
+  }
 }
 
 // rating wrapper start
@@ -1184,9 +1188,10 @@ $index: 1;
 // pagination end
 
 // tour start
-.reactour__mask{
+.reactour__mask {
   opacity: 0.3 !important;
 }
+
 .tour-content {
   .title {
     font-size: 1.25rem;

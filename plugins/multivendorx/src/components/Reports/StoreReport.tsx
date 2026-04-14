@@ -295,6 +295,7 @@ const StoreReport: React.FC = () => {
 						number: <Counter value={item.count} />,
 						text: __(item.label, 'multivendorx'),
 					}))}
+					isLoading={isLoading}
 				/>
 				<Card
 					title={__('Top revenue generating stores', 'multivendorx')}

@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Column, Container, NavigatorHeader, PopupUI } from 'zyra';
+import { Column, Container, NavigatorHeader, PopupUI, Skeleton } from 'zyra';
 import Popup from '../components/Popup/Popup';
 
 const MediaLibrary = () => {
@@ -35,7 +35,7 @@ const MediaLibrary = () => {
 				setMedia([]);
 				setLoading(false);
 			});
-		};
+	};
 
 	const formattedMedia = media.map((item) => {
 		const mime = item.mime_type || '';
@@ -55,7 +55,7 @@ const MediaLibrary = () => {
 			src: item.source_url,
 		};
 	});
-	
+
 	const deleteMedia = () => {
 		if (!selectedMedia) {
 			return;
@@ -76,7 +76,27 @@ const MediaLibrary = () => {
 				setSelectedMedia(null);
 			});
 	};
-
+	const MediaSkeleton = () => (
+		<>
+			{Array.from({ length: 12 }).map((_, index) => (
+				<div key={`skeleton-${index}`} className="media-item media-image">
+					<div className="media-preview">
+						<Skeleton width="100%" height="100%" />
+					</div>
+					<div className="media-info">
+						<div className="title">
+							<Skeleton width="70%" height="20px" />
+							<Skeleton width="24px" height="24px" borderRadius="50%" />
+						</div>
+						<div className="media-meta">
+							<Skeleton width="40%" height="16px" />
+							<Skeleton width="30%" height="16px" />
+						</div>
+					</div>
+				</div>
+			))}
+		</>
+	);
 	return (
 		<>
 			<NavigatorHeader
@@ -86,10 +106,10 @@ const MediaLibrary = () => {
 					'multivendorx'
 				)}
 			/>
-			<Container general>
+			<Container>
 				<Column>
 					<div className="media-library-grid">
-						{loading && <p>Loading...</p>}
+						{loading && <MediaSkeleton />}
 
 						{!loading && formattedMedia.map((item) => (
 							<div key={item.id} className={`media-item media-${item.type}`}
@@ -120,13 +140,12 @@ const MediaLibrary = () => {
 								<div className="media-info">
 									<div className="title">
 										{item.name}
-										<span className="admin-badge-red"
+										<span className="adminfont-delete"
 											onClick={(e) => {
 												e.stopPropagation();
 												setSelectedMedia({ id: item.id });
 												setConfirmOpen(true);
 											}}>
-											<i className="adminfont-delete"></i>
 										</span>
 									</div>
 
@@ -141,51 +160,53 @@ const MediaLibrary = () => {
 				</Column>
 
 				<PopupUI
-				position="lightbox"
-				open={confirmOpen}
-				onClose={() => setConfirmOpen(false)}
-				width={31.25}
-				height="auto"
-			>
-				<Popup
-					confirmMode
-					title={__('Delete Media', 'multivendorx')}
-					confirmMessage={__('Are you sure?', 'multivendorx')}
-					confirmYesText={__('Delete', 'multivendorx')}
-					confirmNoText={__('Cancel', 'multivendorx')}
-					onConfirm={deleteMedia}
-					onCancel={() => {
-						setConfirmOpen(false);
-					}}
-				/>
-			</PopupUI>
+					position="lightbox"
+					open={confirmOpen}
+					onClose={() => setConfirmOpen(false)}
+					width={31.25}
+					height="auto"
+				>
+					<Popup
+						confirmMode
+						title={__('Delete Media', 'multivendorx')}
+						confirmMessage={__('Are you sure?', 'multivendorx')}
+						confirmYesText={__('Delete', 'multivendorx')}
+						confirmNoText={__('Cancel', 'multivendorx')}
+						onConfirm={deleteMedia}
+						onCancel={() => {
+							setConfirmOpen(false);
+						}}
+					/>
+				</PopupUI>
 
-			<PopupUI
-				position="lightbox"
-				open={!!previewUrl}
-				onClose={() => setPreviewUrl(null)}
-				width="80%"
-				height="80%"
-				header={{
-					title: 'Document Preview',
-				}}
-			>
-				{previewUrl && (
-					previewUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
-						<img
-							src={previewUrl}
-							alt="preview"
-							style={{ width: '100%', height: 'auto' }}
-						/>
-					) : (
-						<iframe
-							src={previewUrl}
-							title="Document"
-							style={{ width: '100%', height: '100%' }}
-						/>
-					)
-				)}
-			</PopupUI>
+				<PopupUI
+					position="lightbox"
+					open={!!previewUrl}
+					onClose={() => setPreviewUrl(null)}
+					width="30rem"
+					height="30rem"
+					// header={{
+					// 	title: 'Document Preview',
+					// }}
+				>
+
+					{previewUrl && (
+						previewUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+							<div
+								className="image-preview-container"
+								style={{
+									backgroundImage: `url(${previewUrl})`,
+								}}
+							/>
+						) : (
+							<iframe
+								src={previewUrl}
+								title="Document"
+								style={{ width: '100%', height: '100%', minHeight: '400px', border: 'none' }}
+							/>
+						)
+					)}
+				</PopupUI>
 			</Container>
 		</>
 	);

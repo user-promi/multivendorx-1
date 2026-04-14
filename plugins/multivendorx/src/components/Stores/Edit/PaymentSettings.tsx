@@ -321,6 +321,7 @@ const PaymentSettings: React.FC<PaymentSettingsProps> = ({ id, data }) => {
 								cols={2}
 								label={__('Fixed', 'multivendorx')}
 								htmlFor="Fixed"
+								className="commission-input-group"
 							>
 								<BasicInputUI
 									preText={appLocalizer.currency_symbol}
@@ -330,12 +331,12 @@ const PaymentSettings: React.FC<PaymentSettingsProps> = ({ id, data }) => {
 										handleChange('commission_fixed', value)
 									}
 								/>
-								{/* <PrePostTextUI
+								<PrePostTextUI
 									type="preposttext"
 									textType="post"
 									preText={undefined}
 									postText="+"
-								/> */}
+								/>
 							</FormGroup>
 							<FormGroup
 								cols={2}

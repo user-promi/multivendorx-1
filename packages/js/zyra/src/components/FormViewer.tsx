@@ -677,7 +677,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
                             if (subField.type === 'text') {
                                 return (
-                                    <p key={subField.key} className="form-row">
+                                    <p key={subField.key} className="woocommerce-form-row form-row">
                                         <label>{subField.label}</label>
                                         <input
                                             type="text"
@@ -725,7 +725,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                 return (
                                     <p
                                         key={subField.key}
-                                        className="woocommerce-form-row woocommerce-form-row--last form-row form-row-last"
+                                        className="woocommerce-form-row form-row"
                                     >
                                         <label>{subField.label}</label>
                                         <Multiselect

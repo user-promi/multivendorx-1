@@ -193,6 +193,7 @@ const RefundedOrderReport: React.FC = () => {
 				onQueryUpdate={doRefreshTableData}
 				search={{
 					placeholder: 'Search Products...',
+					size: 8,
 					options: [
 						{ label: __('Order ID', 'multivendorx'), value: 'order_id' },
 						{ label: __('Customer', 'multivendorx'), value: 'customer' },
