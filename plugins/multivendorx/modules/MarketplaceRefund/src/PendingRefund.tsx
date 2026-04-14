@@ -135,7 +135,7 @@ const PendingRefund: React.FC<object> = () => {
 			handleCloseForm();
 			doRefreshTableData({});
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 		} finally {
 			setIsSubmitting(false);
 		}

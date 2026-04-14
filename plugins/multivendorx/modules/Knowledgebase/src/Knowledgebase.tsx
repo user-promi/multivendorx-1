@@ -134,7 +134,7 @@ export const KnowledgeBase: React.FC = () => {
 				doRefreshTableData({});
 			})
 			.catch(() => {
-				console.log(
+				console.error(
 					__('Failed to perform bulk action', 'multivendorx')
 				);
 			});
@@ -155,7 +155,7 @@ export const KnowledgeBase: React.FC = () => {
 				setAddEntry(true);
 			})
 			.catch(() => {
-				console.log(__('Failed to load entry', 'multivendorx'));
+				console.error(__('Failed to load entry', 'multivendorx'));
 			});
 	};
 
@@ -190,7 +190,7 @@ export const KnowledgeBase: React.FC = () => {
 				setSubmitting(false);
 			})
 			.catch(() => {
-				console.log(__('Failed to save entry', 'multivendorx'));
+				console.error(__('Failed to save entry', 'multivendorx'));
 				setSubmitting(false);
 			});
 	};

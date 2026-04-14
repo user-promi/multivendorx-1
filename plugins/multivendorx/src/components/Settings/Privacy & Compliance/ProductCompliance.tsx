@@ -1,13 +1,54 @@
-import { ChoiceToggleUI, ExpandablePanelUI, FormGroup, FormGroupWrapper, SectionUI, SelectInputUI } from "zyra";
+import { ChoiceToggleUI, ExpandablePanelUI, FormGroup, FormGroupWrapper, SectionUI, SelectInputUI, NoticeManager, getApiLink } from "zyra";
 import { __ } from '@wordpress/i18n';
 import { useState, useCallback, useMemo } from "react";
+import axios from "axios";
+
+const autoSave = (updatedData: Record<string, unknown>) => {
+    axios({
+        method: 'POST',
+        url: getApiLink(appLocalizer, 'settings'),
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        data: {
+            setting: updatedData,
+            settingName: 'product_compliance',
+        },
+    }).then((res) => {
+        NoticeManager.add({
+            title: __('Great!', 'multivendorx'),
+            message: __('Settings saved', 'multivendorx'),
+            type: 'success',
+            position: 'float',
+        });
+    })
+        .catch((err) => {
+            console.error('SAVE ERROR:', err);
+        });
+};
+
+
 
 const ProductCompliance: React.FC = () => {
-    const [value, setValue] = useState({});
     const [expandableKey, setExpandableKey] = useState(Date.now());
-    const [triggerWords, setTriggerWords] = useState([]); // For trigger words
-    const [triggerAction, setTriggerAction] = useState('draft'); // For trigger action
-    const [abuseReasons, setAbuseReasons] = useState({});
+
+    const defaultData = {
+        safety_compliance_categories: {},
+        trigger_words: [],
+        trigger_action: 'draft',
+    };
+
+    const [formData, setFormData] = useState(() => {
+        return {
+            ...defaultData,
+            ...(appLocalizer?.settings_databases_value?.['product-compliance'] || {})
+        };
+    });
+    const value = formData.safety_compliance_categories || {};
+
+    const handleChange = (key: string, value: any) => {
+        const updated = { ...formData, [key]: value };
+        setFormData(updated);
+        autoSave(updated);
+    };
 
     // Existing tags (would come from API)
     const existingTags = [
@@ -83,8 +124,8 @@ const ProductCompliance: React.FC = () => {
 
         const newId = generateUniqueId();
 
-        setValue(prev => ({
-            ...prev,
+        handleChange('safety_compliance_categories', {
+            ...formData.safety_compliance_categories,
             [newId]: {
                 enable: true,
                 product_id: product.value,
@@ -92,30 +133,11 @@ const ProductCompliance: React.FC = () => {
                 food_hold_listing: false,
                 electronics_required_documents: []
             }
-        }));
+        });
 
         setExpandableKey(Date.now());
     }, [value, productOptions]);
 
-    const handleAnyBundleChange = useCallback((newData) => {
-        setValue(prev => {
-            const updated = { ...prev };
-
-            Object.keys(prev).forEach(key => {
-                if (!newData[key]) {
-                    delete updated[key];
-                }
-            });
-
-            Object.keys(newData).forEach(key => {
-                if (updated[key]) {
-                    updated[key] = { ...updated[key], ...newData[key] };
-                }
-            });
-
-            return updated;
-        });
-    }, []);
 
     const availableOptions = useMemo(() => {
         const addedProductIds = Object.values(value).map(v => v.product_id);
@@ -134,28 +156,6 @@ const ProductCompliance: React.FC = () => {
         ];
     }, [value, productOptions]);
 
-    const handleAbuseReasonsChange = useCallback((newData) => {
-        setAbuseReasons(prev => {
-            const updated = { ...prev };
-
-            Object.keys(prev).forEach(key => {
-                if (!newData[key]) {
-                    delete updated[key];
-                }
-            });
-
-            Object.keys(newData).forEach(key => {
-                if (updated[key]) {
-                    updated[key] = { ...updated[key], ...newData[key] };
-                } else {
-                    updated[key] = newData[key];
-                }
-            });
-
-            return updated;
-        });
-    }, []);
-
     return (
         <>
             <FormGroupWrapper>
@@ -164,8 +164,8 @@ const ProductCompliance: React.FC = () => {
                     <ExpandablePanelUI
                         name="prohibited_product_categories"
                         methods={ratingsField.modal}
-                        value={value}
-                        onChange={setValue}
+                        value={formData.prohibited_product_categories || {}}
+                        onChange={(val) => handleChange('prohibited_product_categories', val)}
                         canAccess={true}
                         addNewBtn={true}
                         addNewTemplate={ratingsField.addNewTemplate}
@@ -186,10 +186,8 @@ const ProductCompliance: React.FC = () => {
                             label: tag.name,
                         }))}
                         size="100%"
-                        value={triggerWords}
-                        onChange={(list) => {
-                            setTriggerWords(list || []);
-                        }}
+                        value={formData.trigger_words}
+                        onChange={(list) => handleChange('trigger_words', list || [])}
                         placeholder={__('Type tag…', 'multivendorx')}
                         formatCreateLabel={(val) => `Add "${val}"`}
                         size="15rem"
@@ -210,8 +208,8 @@ const ProductCompliance: React.FC = () => {
                                 label: __('Notify only', 'multivendorx'),
                             },
                         ]}
-                        value={triggerAction}
-                        onChange={(val) => setTriggerAction(val)}
+                        value={formData.trigger_action}
+                        onChange={(val) => handleChange('trigger_action', val)}
                     />
                 </FormGroup>
 
@@ -240,8 +238,8 @@ const ProductCompliance: React.FC = () => {
                         key={expandableKey}
                         name="safety_compliance_categories"
                         methods={getAllProductMethods}
-                        value={value}
-                        onChange={handleAnyBundleChange}
+                        value={formData.safety_compliance_categories}
+                        onChange={(val) => handleChange('safety_compliance_categories', val)}
                         canAccess={true}
                         addNewBtn={false}
                     />
@@ -269,10 +267,10 @@ const ProductCompliance: React.FC = () => {
                                 value: 'anyone',
                             },
                         ]}
-                        // value={formData.status}
-                        // onChange={(val: string) =>
-                        //     handleChange('status', val)
-                        // }
+                        value={formData.status}
+                        onChange={(val: string) =>
+                            handleChange('status', val)
+                        }
                     />
                 </FormGroup>
                 <FormGroup row
@@ -283,8 +281,8 @@ const ProductCompliance: React.FC = () => {
                     <ExpandablePanelUI
                         name="abuse_report_reasons"
                         methods={abuseReportReasons.modal || []}
-                        value={abuseReasons}
-                        onChange={handleAbuseReasonsChange}
+                        value={formData.abuse_report_reasons || []}
+                        onChange={(val) => handleChange('abuse_report_reasons', val)}
                         canAccess={true}
                         addNewBtn={true}
                         addNewTemplate={abuseReportReasons.addNewTemplate}
