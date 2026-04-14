@@ -27,6 +27,26 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ) );
         add_action( 'wp', array( $this, 'multivendorx_handler_cust_requested_refund' ) );
         add_action( 'woocommerce_view_order', array( $this, 'view_order_content' ) );
+        add_filter( 'multivendorx_approval_queue_count', array( $this, 'approval_count'), 10 );
+    }
+
+    public function approval_count( $total, $counts ) {
+        $query = wc_get_orders([
+            'status'   => 'wc-refund-requested',
+            'limit'    => 1,
+            'paginate' => true,
+            'return'   => 'ids',
+            'meta_query' => [
+                [
+                    'key'     => 'multivendorx_store_id',
+                    'compare' => 'EXISTS',
+                ],
+            ],
+        ]);
+
+        $refunds = !empty( $query->total ) ? (int) $query->total : 0;
+        $total += $refunds;
+        return $total;
     }
 
     /**

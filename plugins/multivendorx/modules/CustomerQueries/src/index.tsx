@@ -1,6 +1,23 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import Queries from './QueriesTable';
+import {getApiLink} from 'zyra';
+
+addFilter(
+	'multivendorx_customer_api_configs',
+	'multivendorx/customer-api',
+	(configs, { appLocalizer }) => {
+		configs.push({
+			id: 'customer-queries',
+			url: getApiLink(appLocalizer, 'qna'),
+			params: {
+				page: 1, row: 1
+			},
+			header: 'x-wp-status-unanswered',
+		});
+		return configs;
+	}
+);
 
 addFilter(
 	'multivendorx_customers_tab',
