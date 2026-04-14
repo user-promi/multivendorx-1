@@ -123,11 +123,11 @@ const Compliance = () => {
                     <Column>
                         <ComponentStatusView
                             title={__(
-                                'Looks like customer support isn’t set up yet!',
+                                'Looks like the compliance module isn’t active yet!',
                                 'multivendorx'
                             )}
                             desc={__(
-                                'Turn on a support module to start assisting your customers.',
+                                'Enable it to review and manage complaints about stores and products.',
                                 'multivendorx'
                             )}
                             buttonText={__('Enable Now', 'multivendorx')}
