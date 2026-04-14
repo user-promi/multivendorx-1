@@ -757,9 +757,7 @@ const Dashboard: React.FC = () => {
 								}}
 							/>
 						) : (
-							<div className="no-data">
-								{__('Ready to receive your first order!', 'multivendorx')}
-							</div>
+							<ComponentStatusView title={__("Ready to receive your first order!", 'multivendorx')} />
 						)}
 					</Card>
 				</Column>
@@ -787,9 +785,7 @@ const Dashboard: React.FC = () => {
 								showColumnToggleIcon={false}
 							/>
 						) : (
-							<div className="no-data">
-								{__('Start selling to discover your top products!', 'multivendorx')}
-							</div>
+							<ComponentStatusView title={__("Start selling to discover your top products!", 'multivendorx')} />
 						)}
 					</Card>
 				</Column>
