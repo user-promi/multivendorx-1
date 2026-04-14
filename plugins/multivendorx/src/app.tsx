@@ -235,15 +235,15 @@ const App = () => {
 			action: handleOpenFeaturePopup,
 		},
 	];
-	cconst bannerItem = [
-		'<b>Earn from store memberships:</b> Create paid plans and charge stores to join or access special features on your marketplace.',
-		'<b>Automatic tax invoices:</b> Generate clear invoices for orders, commissions, and payouts so your records stay organized.',
-		'<b>Franchise marketplaces:</b> Let partners operate their own local version of your marketplace under your brand.',
-		'<b>Earn recurring income:</b> Allow stores to sell subscription products and generate regular monthly or yearly revenue.',
-		'<b>Sell services and bookings:</b> Let stores accept bookings for services, appointments, rentals, or experiences.',
-		'<b>Create a rental marketplace:</b> Allow products to be rented for specific dates instead of being purchased permanently.',
-		'<b>Verified stores:</b> Verify store identities using documents and badges to help customers trust your marketplace.',
-		'<b>Vacation mode for stores:</b> Stores can temporarily pause orders during holidays while keeping their products visible.',
+	const bannerItem = [
+		__('<b>Earn from store memberships:</b> Create paid plans and charge stores to join or access special features on your marketplace.', 'multivendorx'),
+		__('<b>Automatic tax invoices:</b> Generate clear invoices for orders, commissions, and payouts so your records stay organized.', 'multivendorx'),
+		__('<b>Franchise marketplaces:</b> Let partners operate their own local version of your marketplace under your brand.', 'multivendorx'),
+		__('<b>Earn recurring income:</b> Allow stores to sell subscription products and generate regular monthly or yearly revenue.', 'multivendorx'),
+		__('<b>Sell services and bookings:</b> Let stores accept bookings for services, appointments, rentals, or experiences.', 'multivendorx'),
+		__('<b>Create a rental marketplace:</b> Allow products to be rented for specific dates instead of being purchased permanently.', 'multivendorx'),
+		__('<b>Verified stores:</b> Verify store identities using documents and badges to help customers trust your marketplace.', 'multivendorx'),
+		__('<b>Vacation mode for stores:</b> Stores can temporarily pause orders during holidays while keeping their products visible.', 'multivendorx'),
 	];
 	const utilityListWithTab = [
 		{
