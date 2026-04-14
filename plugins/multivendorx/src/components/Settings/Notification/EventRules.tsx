@@ -15,6 +15,7 @@ import {
 	BlockBuilderUI,
 	renderBlocksToHTML,
 	htmlToBlocks,
+	EmailsInputUI,
 } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
@@ -77,6 +78,7 @@ interface FormData {
 	email_subject?: string;
 	email_body?: string;
 	email_body_builder?: string;
+	available_placeholder?: string[];
 	[key: string]: string | number | boolean | undefined;
 }
 
@@ -287,18 +289,19 @@ const EventRules: React.FC = () => {
 	};
 
 	const handleEmailSave = async (id, data) => {
-	await apiRequest('POST', `notifications/${id}`, {
-		formData: {
-			id: data.id,
+		await apiRequest('POST', `notifications/${id}`, {
+			formData: {
+				id: data.id,
 				email_subject: data.email_subject,
 				email_body: data.email_body,
 				// email_body_builder: data.email_body_builder,
 				sms_content: data.sms_content,
 				system_message: data.system_message,
+				available_placeholder: data.available_placeholder
 			},
 		},
-	);
-};
+		);
+	};
 
 	const trackCursor = (
 		e: React.MouseEvent<HTMLTextAreaElement | HTMLInputElement>,
@@ -366,10 +369,10 @@ const EventRules: React.FC = () => {
 				<div className="recipients-list">
 					{(row.recipients || []).map((recipient: Recipient) => (
 						<>
-						<RecipientBadge
-							key={recipient.id}
-							recipient={recipient}
-						/>
+							<RecipientBadge
+								key={recipient.id}
+								recipient={recipient}
+							/>
 						</>
 					))}
 				</div>
@@ -507,13 +510,12 @@ const EventRules: React.FC = () => {
 					height="90%"
 					header={{
 						icon: 'cart',
-						title: `${
-							openChannel === 'system'
-								? __('System Notification', 'multivendorx')
-								: openChannel === 'sms'
-									? __('SMS Message', 'multivendorx')
-									: __('Email Message', 'multivendorx')
-						} - ${editNotification?.event ?? ''}`,
+						title: `${openChannel === 'system'
+							? __('System Notification', 'multivendorx')
+							: openChannel === 'sms'
+								? __('SMS Message', 'multivendorx')
+								: __('Email Message', 'multivendorx')
+							} - ${editNotification?.event ?? ''}`,
 					}}
 					footer={
 						<ButtonInputUI
@@ -543,7 +545,7 @@ const EventRules: React.FC = () => {
 										name="system_message_builder"
 										value={(() => {
 											try {
-												
+
 												if (formData.email_body && !useTemplate) {
 													return {
 														emailTemplates: [
@@ -594,13 +596,21 @@ const EventRules: React.FC = () => {
 										}}
 										field={{
 											key: 'email_body_builder',
-											context: 'email', 
-											visibleGroups: ['email'], 
-											emailTemplates: [temp1,temp2],
+											context: 'email',
+											visibleGroups: ['email'],
+											emailTemplates: [temp1, temp2],
+											availablePlaceholder: [
+												'store_name',
+												'vendor_name',
+												'customer_name',
+												'order_id',
+												'order_total',
+												'order_date'
+											]
 										}}
 										onTemplateSelect={(id) => {
-    setUseTemplate(true); // 🔥 force template mode
-}}
+											setUseTemplate(true); // 🔥 force template mode
+										}}
 									/>
 								</FormGroup>
 							)}
@@ -719,8 +729,8 @@ const EventRules: React.FC = () => {
 				<PopupUI
 					open={!!editingNotification}
 					onClose={() => setEditingNotification(null)}
-					width={60.25}
-					height="80%"
+					width={32.25}
+					height="60%"
 					header={{
 						icon: 'notification',
 						title: `${__('Settings', 'multivendorx')} - ${editNotification?.event ?? ''}`,
@@ -789,66 +799,44 @@ const EventRules: React.FC = () => {
 								})}
 							</div>
 						</FormGroup>
-
-						{customRecipients?.length > 0 && (
-							<FormGroup
-								label={__(
-									'Custom Recipients',
+						<FormGroup
+							label={__(
+								'Custom Recipients',
+								'multivendorx'
+							)}
+						>
+							<EmailsInputUI
+								mode="multiple"
+								value={newRecipientValue ? newRecipientValue.split(',').filter(Boolean) : []}
+								placeholder={__(
+									'Type email addresses and press Enter to add...',
 									'multivendorx'
 								)}
-							>
-								<div className="buttons-wrapper left">
-									{customRecipients.map(
-										(r: Recipient) => (
-											<div
-												key={r.id}
-												className={`admin-badge ${r.enabled ? 'purple' : ''}`}
-											>
-												<i className="adminfont-mail"></i>
-												<span>{r.label}</span>
-												<i
-													className="delete-btn adminfont-delete"
-													onClick={() =>
-														deleteRecipient(
-															editingNotification,
-															r.id
-														)
-													}
-												/>
-											</div>
-										)
-									)}
-								</div>
-							</FormGroup>
-						)}
+								onChange={(emails) => {
+									setNewRecipientValue(emails.join(','));
+									if (editingNotification) {
+										const currentNotif = notifications.find(n => n.id === editingNotification);
+										if (currentNotif) {
+											const defaultRecipientsOnly = currentNotif.recipients.filter(
+												r => DEFAULT_RECIPIENT_TYPES.includes(r.type)
+											);
+											const newRecipients = emails.map((email, index) => ({
+												id: Math.max(...defaultRecipientsOnly.map(r => r.id), 0) + index + 1,
+												type: 'extra',
+												label: email,
+												enabled: true,
+												canDelete: true,
+											}));
+											updateNotification(editingNotification, (n) => ({
+												...n,
+												recipients: [...defaultRecipientsOnly, ...newRecipients],
+											}));
+										}
+									}
+								}}
+							/>
+						</FormGroup>
 					</FormGroupWrapper>
-
-					<div className="drawer-add-recipient">
-						<input
-							type="text"
-							className="basic-input"
-							placeholder="Type the email address of the additional recipient you want to notify, then click 'Add'. "
-							value={newRecipientValue}
-							onChange={(e) =>
-								setNewRecipientValue(e.target.value)
-							}
-							onKeyPress={(e) =>
-								e.key === 'Enter' &&
-								addRecipient(editingNotification)
-							}
-						/>
-						<ButtonInputUI
-							buttons={[
-								{
-									icon: 'plus',
-									text: __('Add', 'multivendorx'),
-									color: 'purple',
-									onClick: () =>
-										addRecipient(editingNotification),
-								},
-							]}
-						/>
-					</div>
 				</PopupUI>
 			)}
 
@@ -886,10 +874,10 @@ const EventRules: React.FC = () => {
 													onDelete={
 														r.canDelete
 															? () =>
-																	deleteRecipient(
-																		notif.id,
-																		r.id
-																	)
+																deleteRecipient(
+																	notif.id,
+																	r.id
+																)
 															: undefined
 													}
 												/>

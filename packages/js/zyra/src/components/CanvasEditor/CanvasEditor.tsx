@@ -40,6 +40,7 @@ interface CanvasEditorProps {
     onTemplateSelect?: (id: string) => void;
     showTemplatesTab?: boolean;
     groupName: string;
+    availablePlaceholder?: string[];
     proSettingChange?: () => boolean;
     context?: string;
     inputTypeList?: Array<{ value: string; label: string }>;
@@ -59,6 +60,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
     proSettingChange = () => false,
     context = 'default',
     inputTypeList,
+    availablePlaceholder
 }) => {
     const [blocks, setBlocks] = useState<Block[]>(externalBlocks);
     const [openBlock, setOpenBlock] = useState<Block | null>(null);
@@ -541,81 +543,89 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                 />
             </div>
 
-            <div className="canvas-editor">
-                {isFormBuilder && titleBlock && (
-                    <BlockRenderer
-                        block={titleBlock}
-                        isActive={openBlock?.id === titleBlock.id}
-                        onSelect={() => setOpenBlock(titleBlock)}
-                        onChange={(patch) => {
-                            const index = blocks.findIndex(b => b.id === titleBlock.id);
-                            updateBlock(index, patch);
-                        }}
-                        showMeta={false} // 🚀 no drag, no delete
-                    />
-                )}
-
-                <ReactSortable
-                    list={dynamicBlocks}
-                    setList={handleCanvasSetList}
-                    group={{ name: groupName, pull: true, put: true }}
-                    handle=".drag-handle"
-                    animation={150}
-                >
-                    {dynamicBlocks.map((block, index) =>
-                        block.type === 'columns' ? (
-                            <ColumnRenderer
-                                key={block.id}
-                                block={block as ColumnsBlock}
-                                parentIndex={index}
-                                isActive={openBlock?.id === block.id}
-                                groupName={groupName}
-                                openBlock={openBlock}
-                                setOpenBlock={setOpenBlock}
-                                onColumnSetList={handleColumnSetList}
-                                onChildMutate={(updated) =>
-                                    handleChildMutate(index, updated)
-                                }
-                                selectedLocation={columnManager.selectedLocation}
-                                onChildSelect={(location, child) => {
-                                    setOpenBlock(child);
-                                    columnManager.setSelectedLocation(location);
-                                }}
-                                onSelect={() => {
-                                    setOpenBlock(block);
-                                    columnManager.clearSelection();
-                                }}
-                                onDelete={() => deleteBlock(index)}
-                            />
-                        ) : (
-                            <BlockRenderer
-                                key={block.id}
-                                block={block}
-                                isActive={openBlock?.id === block.id}
-                                onSelect={() => {
-                                    setOpenBlock(block);
-                                    columnManager.clearSelection();
-                                }}
-                                onChange={(patch) => updateBlock(index, patch)}
-                                onDelete={(e) => deleteBlock(index, e)}
-                            />
-                        )
+            <div className="canvas-editor-wrapper">
+                <div className="canvas-editor">
+                    {isFormBuilder && titleBlock && (
+                        <BlockRenderer
+                            block={titleBlock}
+                            isActive={openBlock?.id === titleBlock.id}
+                            onSelect={() => setOpenBlock(titleBlock)}
+                            onChange={(patch) => {
+                                const index = blocks.findIndex(b => b.id === titleBlock.id);
+                                updateBlock(index, patch);
+                            }}
+                            showMeta={false} // 🚀 no drag, no delete
+                        />
                     )}
-                </ReactSortable>
-                {isFormBuilder && submitBlock && (
-                    <BlockRenderer
-                        block={submitBlock}
-                        isActive={openBlock?.id === submitBlock.id}
-                        onSelect={() => setOpenBlock(submitBlock)}
-                        onChange={(patch) => {
-                            const index = blocks.findIndex(b => b.id === submitBlock.id);
-                            updateBlock(index, patch);
-                        }}
-                        showMeta={false} // no drag, no delete
-                    />
+
+                    <ReactSortable
+                        list={dynamicBlocks}
+                        setList={handleCanvasSetList}
+                        group={{ name: groupName, pull: true, put: true }}
+                        handle=".drag-handle"
+                        animation={150}
+                    >
+                        {dynamicBlocks.map((block, index) =>
+                            block.type === 'columns' ? (
+                                <ColumnRenderer
+                                    key={block.id}
+                                    block={block as ColumnsBlock}
+                                    parentIndex={index}
+                                    isActive={openBlock?.id === block.id}
+                                    groupName={groupName}
+                                    openBlock={openBlock}
+                                    setOpenBlock={setOpenBlock}
+                                    onColumnSetList={handleColumnSetList}
+                                    onChildMutate={(updated) =>
+                                        handleChildMutate(index, updated)
+                                    }
+                                    selectedLocation={columnManager.selectedLocation}
+                                    onChildSelect={(location, child) => {
+                                        setOpenBlock(child);
+                                        columnManager.setSelectedLocation(location);
+                                    }}
+                                    onSelect={() => {
+                                        setOpenBlock(block);
+                                        columnManager.clearSelection();
+                                    }}
+                                    onDelete={() => deleteBlock(index)}
+                                />
+                            ) : (
+                                <BlockRenderer
+                                    key={block.id}
+                                    block={block}
+                                    isActive={openBlock?.id === block.id}
+                                    onSelect={() => {
+                                        setOpenBlock(block);
+                                        columnManager.clearSelection();
+                                    }}
+                                    onChange={(patch) => updateBlock(index, patch)}
+                                    onDelete={(e) => deleteBlock(index, e)}
+                                />
+                            )
+                        )}
+                    </ReactSortable>
+                    {isFormBuilder && submitBlock && (
+                        <BlockRenderer
+                            block={submitBlock}
+                            isActive={openBlock?.id === submitBlock.id}
+                            onSelect={() => setOpenBlock(submitBlock)}
+                            onChange={(patch) => {
+                                const index = blocks.findIndex(b => b.id === submitBlock.id);
+                                updateBlock(index, patch);
+                            }}
+                            showMeta={false} // no drag, no delete
+                        />
+                    )}
+                </div>
+                {availablePlaceholder && (
+                    <div className="available-placeholder">
+                        {availablePlaceholder?.map((item, index) => (
+                            <span className={`admin-badge`} key={index}>{item}</span>
+                        ))}
+                    </div>
                 )}
             </div>
-
             <div className="settings-panel-wrapper">
                 {openBlock && (
                     <SettingMetaBox
