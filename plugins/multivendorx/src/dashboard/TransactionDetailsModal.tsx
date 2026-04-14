@@ -21,7 +21,6 @@ type Props = {
 };
 
 const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
-	console.log('transaction', transaction)
 	return (
 		<>
 			<PopupUI

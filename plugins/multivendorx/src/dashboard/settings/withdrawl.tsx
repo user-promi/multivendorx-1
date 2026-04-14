@@ -205,16 +205,8 @@ const Withdrawl: React.FC = () => {
 											}
 										>
 											<ConnectAccountOnboarding
-												onExit={() =>
-													console.log(
-														'Onboarding exited'
-													)
-												}
+												onExit={() =>{}}
 												onStepChange={({ step }) => {
-													console.log(
-														'Current step:',
-														step
-													);
 													if (step === 'complete') {
 														axios
 															.post(
@@ -234,12 +226,6 @@ const Withdrawl: React.FC = () => {
 																	res.data
 																		.success
 																) {
-																	console.log(
-																		__(
-																			'Stripe onboarding marked complete!',
-																			'multivendorx'
-																		)
-																	);
 																	window.location.reload();
 																} else {
 																	console.error(

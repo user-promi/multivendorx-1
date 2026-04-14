@@ -1,10 +1,11 @@
-import { BasicInputUI, Card, ChoiceToggleUI, ColorSettingInputUI, Column, Container, ExpandablePanelUI, FileInputUI, FormGroup, FormGroupWrapper, MultiCheckBoxUI, TabsUI, TextAreaUI } from "zyra";
+import { BasicInputUI, Card, ChoiceToggleUI, ColorSettingInputUI, Column, Container, ExpandablePanelUI, FileInputUI, FormGroup, FormGroupWrapper, MultiCheckBoxUI, TabsUI, TextAreaUI, NoticeManager, getApiLink } from "zyra";
 import { __ } from '@wordpress/i18n';
 import { useState } from "react";
 import CustomerInvoice1 from '../../../assets/template/customerInvoice/Invoice-1';
 import subscriptionInvoice1 from '../../../assets/template/subscriptionInvoice/subscriptionInvoice1';
 import adminInvoice1 from '../../../assets/template/adminInvoice/adminInvoice1';
 import packingSlip1 from '../../../assets/template/packingSlip/packingSlip1';
+import axios from "axios";
 
 const ratingsField = {
     key: 'ratings_parameters',
@@ -21,7 +22,7 @@ const ratingsField = {
     ),
     modal: [
         {
-            id: 'quality',
+            id: 'vat-number',
             label: __('Marketplace VAT / Tax number', 'multivendorx'),
             desc: __('DE987654321', 'multivendorx'),
             isCustom: true,
@@ -30,7 +31,7 @@ const ratingsField = {
             formFields: [],
         },
         {
-            id: 'delivery',
+            id: 'tax-id',
             label: __('Marketplace tax ID', 'multivendorx'),
             desc: __('GB123456789', 'multivendorx'),
             isCustom: true,
@@ -39,7 +40,7 @@ const ratingsField = {
             formFields: [],
         },
         {
-            id: 'service',
+            id: 'registration-number',
             label: __('Marketplace registration number', 'multivendorx'),
             desc: __('GB123456789', 'multivendorx'),
             isCustom: true,
@@ -48,7 +49,7 @@ const ratingsField = {
             formFields: [],
         },
         {
-            id: 'service',
+            id: 'company-number',
             label: __('Company registration number', 'multivendorx'),
             desc: __('GB123456789', 'multivendorx'),
             isCustom: true,
@@ -158,16 +159,55 @@ const COLOR_PALETTES = [
     },
 ];
 
+const autoSave = (updatedData: Record<string, unknown>) => {
+    axios({
+        method: 'POST',
+        url: getApiLink(appLocalizer, 'settings'),
+        headers: { 'X-WP-Nonce': appLocalizer.nonce },
+        data: {
+            setting: updatedData,
+            settingName: 'invoices'
+        },
+    }).then((res) => {
+            NoticeManager.add({
+                title: __('Great!', 'multivendorx'),
+                message: __('Settings saved', 'multivendorx'),
+                type: 'success',
+                position: 'float',
+            });
+    })
+    .catch((err) => {
+        console.error('SAVE ERROR:', err);
+    });
+};
+
+
 
 const Invoice: React.FC = () => {
-    const [paymentCapability, setPaymentCapability] = useState<string[]>([]);
-    const [invoiceEmails, setinvoiceEmails] = useState<string[]>([]);
-    const [PackingSlip, setPackingSlip] = useState<string[]>([]);
-    const [value, setValue] = useState({
-        quality: { enable: true },
-        delivery: { enable: true },
-        service: { enable: true },
+    const defaultData = {
+        paymentCapability: [],
+        PackingSlip: [],
+        invoice_prefix: '',
+        invoice_footer: '',
+        value: {
+            quality: { enable: true },
+            delivery: { enable: true },
+            service: { enable: true },
+        },
+    };
+
+    const [formData, setFormData] = useState(() => {
+        return {
+            ...defaultData,
+            ...(appLocalizer?.settings_databases_value?.invoices || {})
+        };
     });
+
+    const handleChange = (key: string, value: any) => {
+        const updated = { ...formData, [key]: value };
+        setFormData(updated);
+        autoSave(updated);
+    };
     return (
         <Container className="notice-settings">
             <Column grid={8}>
@@ -177,16 +217,18 @@ const Invoice: React.FC = () => {
                             <ChoiceToggleUI
                                 options={[
                                     {
-                                        key: 'public',
-                                        value: 'public',
+                                        key: 'main-order',
+                                        value: 'main-order',
                                         label: __('Main order', 'multivendorx'),
                                     },
                                     {
-                                        key: 'private',
-                                        value: 'private',
+                                        key: 'sub-order',
+                                        value: 'sub-order',
                                         label: __('Store sub-order', 'multivendorx'),
                                     },
                                 ]}
+                                value = {formData.invoice_creation_basis || 'main-order'}
+                                onChange={(val) => handleChange('invoice_creation_basis', val)}
                             />
                         </FormGroup>
                         <FormGroup label={__('Generate invoice when order status becomes', 'multivendorx')}>
@@ -239,10 +281,10 @@ const Invoice: React.FC = () => {
                                         ),
                                     },
                                 ]}
-                                value={paymentCapability}
+                                value={formData.paymentCapability}
                                 modules={[]} // required prop
-                                onChange={(val: string[]) => setPaymentCapability(val)}
-                                onMultiSelectDeselectChange={(val: string[]) => setPaymentCapability(val)}
+                                onChange={(val: string[]) => handleChange('paymentCapability', val)}
+                                onMultiSelectDeselectChange={(val: string[]) => handleChange('paymentCapability', val)}
                             />
                         </FormGroup>
                     </FormGroupWrapper>
@@ -283,10 +325,10 @@ const Invoice: React.FC = () => {
                                         value: 'use_store_address',
                                     },
                                 ]}
-                                value={PackingSlip}
+                                value={formData.PackingSlip}
                                 modules={[]}
-                                onChange={(val: string[]) => setPackingSlip(val)}
-                                onMultiSelectDeselectChange={(val: string[]) => setPackingSlip(val)}
+                                onChange={(val: string[]) => handleChange('PackingSlip', val)}
+                                onMultiSelectDeselectChange={(val: string[]) => handleChange('PackingSlip', val)}
                             />
                         </FormGroup>
                     </FormGroupWrapper>
@@ -319,7 +361,9 @@ const Invoice: React.FC = () => {
                     <FormGroupWrapper>
                         <FormGroup label={__('Invoice footer text', 'multivendorx')} >
                             <TextAreaUI
-                                name="content"
+                                name="invoice_footer"
+                                value={formData.invoice_footer || ''}
+                                onChange={(val) => handleChange('invoice_footer', val)}
                             />
                         </FormGroup>
                         <FormGroup label={__('Terms and conditions', 'multivendorx')}>
@@ -336,12 +380,12 @@ const Invoice: React.FC = () => {
                 <Card title={__('Invoices will display these tax details', 'multivendorx')} >
                     <FormGroupWrapper>
                         <FormGroup 
-                            desc={__("Click <b>Show</b> to enable a tax field so it appears on invoices. Once enabled:<br> <ul> <li>The marketplace to add its value for marketplace invoices. </li> <li>Stores to add their own value for their invoices.</li> </ul> <b> How these values appear on invoices: </b><br><ul><li> Main order invoices display the marketplace value entered here.</li> <li> Store order invoices display the value provided by the store.</li> </ul>", 'multivendorx')}>
+                            desc={__("Choose which tax details invoices can include. <br> <b> For each field you enable: </b> <br> <ul> <li>Stores can enter their own value for their invoices. </li> <li>You can enter the marketplace value for marketplace invoices. </li> </ul> <b> How the values appear: </b><br>  <ul><li> Main order invoices show the marketplace value entered here. </li> <li> Store order invoices show the value provided by the store.</li> </ul>", 'multivendorx')}>
                             <ExpandablePanelUI
                                 name={ratingsField.key}
                                 methods={ratingsField.modal}
-                                value={value}
-                                onChange={setValue}
+                                value={formData.value}
+                                onChange={(val) => handleChange('value', val)}
                                 canAccess={true}
                                 min={ratingsField.min}
                                 addNewBtn={ratingsField.addNewBtn}
@@ -392,7 +436,9 @@ const Invoice: React.FC = () => {
                         </FormGroup>
                         <FormGroup cols={2} label="Invoice numbers will include this prefix" desc={__('<b>Example results:</b> INV-2026-0001, INV-MVX-0001', 'multivendorx')}>
                             <BasicInputUI
-                                name="name"
+                                name="invoice_prefix"
+                                value={formData.invoice_prefix || ''}
+                                onChange={(val) => handleChange('invoice_prefix', val)}
                                 placeholder={__('Invoice numbers will include this prefix', 'multivendorx')}
                             // value={formData.name || ''}
                             // onChange={(val) =>
@@ -444,7 +490,7 @@ const Invoice: React.FC = () => {
                                             templateKey: 'customer_invoice1',
                                         }}
                                         onChange={(e) => {
-                                            console.log('Updated Value:', e.target.value);
+                                            handleChange('invoice_template', e.target.value);
                                         }}
                                     />
                                 ),
@@ -453,7 +499,7 @@ const Invoice: React.FC = () => {
                                 label: __('Admin Commission', 'multivendorx'),
                                 content: (
                                     <ColorSettingInputUI
-                                        filedKey="invoice_template_builder"
+                                        filedKey="admin_template"
                                         wrapperClass="form-group-color-setting"
                                         inputClass="setting-form-input"
                                         templateSelector={false}
@@ -477,7 +523,7 @@ const Invoice: React.FC = () => {
                                         }}
 
                                         onChange={(e) => {
-                                            console.log('Updated:', e.target.value);
+                                            handleChange('admin_template', e.target.value);
                                         }}
                                     />
                                 ),
@@ -486,7 +532,7 @@ const Invoice: React.FC = () => {
                                 label: __('Membership', 'multivendorx'),
                                 content: (
                                     <ColorSettingInputUI
-                                        filedKey="invoice_template_builder"
+                                        filedKey="membership_template"
                                         wrapperClass="form-group-color-setting"
                                         inputClass="setting-form-input"
                                         templateSelector={false}
@@ -510,7 +556,7 @@ const Invoice: React.FC = () => {
                                         }}
 
                                         onChange={(e) => {
-                                            console.log(e.target.value);
+                                            handleChange('membership_template', e.target.value);
                                         }}
                                     />
                                 ),
@@ -519,7 +565,7 @@ const Invoice: React.FC = () => {
                                 label: __('Packing Slip', 'multivendorx'),
                                 content: (
                                     <ColorSettingInputUI
-                                        filedKey="invoice_template_builder"
+                                        filedKey="packing_template"
                                         wrapperClass="form-group-color-setting"
                                         inputClass="setting-form-input"
                                         templateSelector={false}
@@ -543,7 +589,7 @@ const Invoice: React.FC = () => {
                                         }}
 
                                         onChange={(e) => {
-                                            console.log(e.target.value);
+                                            handleChange('packing_template', e.target.value);
                                         }}
                                     />
                                 ),

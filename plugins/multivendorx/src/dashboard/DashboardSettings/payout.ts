@@ -65,7 +65,6 @@ const generateAllPaymentFields = (): PaymentField[] => {
 								publishableKey: field.publish,
 								clientSecret: field.client_secret,
 								onComplete: () => {
-									console.log('Stripe onboarding completed');
 									window.location.reload();
 								},
 							}
