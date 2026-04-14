@@ -426,6 +426,80 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
         }));
     }, [inputTypeList, blockGroups]);
 
+    const resolvePlaceholderToken = useCallback((value: string) => {
+        const trimmed = value.trim();
+        if (!trimmed) {
+            return '';
+        }
+
+        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+            return trimmed;
+        }
+
+        return `[${trimmed}]`;
+    }, []);
+
+    const getPlaceholderFieldKey = useCallback((block: Block): keyof Block => {
+        switch (block.type) {
+            case 'richtext':
+                return 'html';
+            case 'heading':
+            case 'button':
+            case 'title':
+                return 'text';
+            default:
+                return 'placeholder';
+        }
+    }, []);
+
+    const insertPlaceholder = useCallback(
+        (value: string) => {
+            if (proSettingChange() || !openBlock) {
+                return;
+            }
+
+            const token = resolvePlaceholderToken(value);
+            if (!token) {
+                return;
+            }
+
+            const fieldKey = getPlaceholderFieldKey(openBlock);
+            const existingValue = openBlock[fieldKey];
+            const nextValue = `${typeof existingValue === 'string' ? existingValue : ''}${token}`;
+
+            if (columnManager.selectedLocation) {
+                const { parentIndex, columnIndex, childIndex } =
+                    columnManager.selectedLocation;
+
+                columnManager.handleChildUpdate(
+                    parentIndex,
+                    columnIndex,
+                    childIndex,
+                    { [fieldKey]: nextValue }
+                );
+                markChanged();
+                return;
+            }
+
+            const index = blocks.findIndex((b) => b.id === openBlock.id);
+            if (index < 0) {
+                return;
+            }
+
+            updateBlock(index, { [fieldKey]: nextValue });
+        },
+        [
+            proSettingChange,
+            openBlock,
+            resolvePlaceholderToken,
+            getPlaceholderFieldKey,
+            columnManager,
+            markChanged,
+            blocks,
+            updateBlock,
+        ]
+    );
+
     const groupsToShow = visibleGroups.length
         ? blockGroups.filter((g) => visibleGroups.includes(g.id))
         : blockGroups;
@@ -621,7 +695,21 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                 {availablePlaceholder && (
                     <div className="available-placeholder">
                         {availablePlaceholder?.map((item, index) => (
-                            <span className={`admin-badge`} key={index}>{item}</span>
+                            <span
+                                className={`admin-badge`}
+                                key={index}
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => insertPlaceholder(item)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        insertPlaceholder(item);
+                                    }
+                                }}
+                            >
+                                {item}
+                            </span>
                         ))}
                     </div>
                 )}
