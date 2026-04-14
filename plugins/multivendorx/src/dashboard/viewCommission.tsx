@@ -176,7 +176,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			open={open}
 			onClose={onClose}
 			width="70%"
-			height="70%"
+			height="80%"
 			header={{
 				icon: 'commission',
 				title: `${__('View Commission', 'multivendorx')}${commissionId ? ` #${commissionId}` : ''}`,
@@ -188,8 +188,8 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 		>
 			<div className="content multi">
 				<div className="section left">
+					<SectionUI title={__('Order Details', 'multivendorx')} />
 					<TableCard
-						title={__('Order Details', 'multivendorx')}
 						headers={popupColumns}
 						rows={orderItems}
 						isLoading={loading}
@@ -200,6 +200,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							thousandSeparator: appLocalizer.thousand_separator,
 							currencyPosition: appLocalizer.currency_position,
 						}}
+						showMenu= {false}
 					/>
 
 					{Array.isArray(shippingItems) &&
@@ -220,6 +221,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 									currencyPosition:
 										appLocalizer.currency_position,
 								}}
+								showMenu= {false}
 							/>
 						)}
 				</div>

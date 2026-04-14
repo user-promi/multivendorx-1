@@ -242,7 +242,7 @@ const TableCard: React.FC<TableCardProps> = ({
                         {/* Category Filter - Integrated directly (was CategoryFilter component) */}
                         <div className="filter-wrapper">
                         {visibleCategories.length > 0 && (
-                            <div className="filter category">
+                            <div className="filters category">
                                 {visibleCategories.map(
                                     ({ label, value, count }) => (
                                         <div

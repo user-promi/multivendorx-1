@@ -65,7 +65,7 @@ const AddAppointment = () => {
 				)}
 			/>
 
-			<Container general>
+			<Container>
 				<Column grid={6}>
 					<Card title={__('Product & Customer', 'multivendorx-pro')}>
 						<FormGroupWrapper>

@@ -370,3 +370,11 @@
         margin-bottom: 0.75rem;
     }
 }
+
+// common and delete
+.commission-input-group{
+    .settings-input-content{
+        gap: 0.75rem !important; 
+        flex-wrap: nowrap !important;
+    }
+}

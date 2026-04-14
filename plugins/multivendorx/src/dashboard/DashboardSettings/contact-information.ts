@@ -37,12 +37,5 @@ export default {
 			key: 'store_email',
 			readOnly: !settings.includes('store_contact'),
 		},
-
-		// Live Chat (conditional)
-		{
-			type: 'text',
-			label: __('Live Chat (Enable, WhatsApp, etc.)', 'multivendorx'),
-			key: 'live_chat',
-		},
 	],
 };

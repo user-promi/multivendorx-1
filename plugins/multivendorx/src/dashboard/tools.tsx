@@ -26,7 +26,7 @@ const Tools: React.FC = () => {
 						{
 							icon: 'delete',
 							text: __('Clear Transients', 'multivendorx'),
-							color: 'purple',
+							color: 'red',
 							// onClick: (e) => {
 							//     handleDownloadLog?.(e);
 							// },

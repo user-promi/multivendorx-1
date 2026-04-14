@@ -695,12 +695,7 @@ const Dashboard: React.FC = () => {
 									/>
 								))
 							) : (
-								<div className="no-data">
-									{__(
-										'Earnings will appear here once you make a withdrawal.',
-										'multivendorx'
-									)}
-								</div>
+								<ComponentStatusView title={__("Earnings will appear here once you make a withdrawal.", 'multivendorx')} />
 							)}
 						</div>
 
@@ -920,12 +915,7 @@ const Dashboard: React.FC = () => {
 										</div>
 									))
 								) : (
-									<div className="no-data">
-										{__(
-											'Refund requests will appear here when submitted.',
-											'multivendorx'
-										)}
-									</div>
+									<ComponentStatusView title={__("Refund requests will appear here when submitted.", 'multivendorx')} />
 								)}
 							</div>
 						</Card>

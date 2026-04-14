@@ -50,6 +50,7 @@ interface ExpandablePanelMethod {
     wrapperClass?: string;
     openForm?: boolean;
     isCustom?: boolean;
+    mandatory?: boolean;
     disableBtn?: boolean;
     hideDeleteBtn?: boolean;
     countBtn?: boolean;
@@ -68,7 +69,9 @@ interface AddNewTemplate {
     editableFields?: {
         title?: boolean;
         description?: boolean;
+        mandatory?: boolean; 
     };
+    showMandatoryCheckbox?: boolean;
 }
 
 interface ExpandablePanelProps {
@@ -167,6 +170,7 @@ interface PanelItemContextType {
     desc: string;
     price: { price: string; unit: string } | null;
     cntFlds: PanelFormField[];
+    showMandatoryBadge?: boolean;
 }
 
 // ── Context Creation ──────────────────────────────────────────────────────────
@@ -320,7 +324,7 @@ const PanelHeader: React.FC = () => {
         editTitleShow
     } = usePanel();
 
-    const { method, methodValue, isOpen, isOn, hasFields, icon, title, desc } =
+    const { method, methodValue, isOpen, isOn, hasFields, icon, title, desc, showMandatoryBadge } =
         usePanelItem();
 
     const editing = state.editId === method.id;
@@ -328,19 +332,23 @@ const PanelHeader: React.FC = () => {
     const editTitle = state.editTitle;
     const editDesc = state.editDesc;
     const iconDropdown = state.iconDropdown;
+    const showMandatoryCheckbox = addNewTemplate?.showMandatoryCheckbox === true;
 
     const showToggleIcon = (method.disableBtn && !method.isCustom) || 
-                          (isWizardMode && method.isWizardMode);
+                      (isWizardMode && method.isWizardMode) ||
+                      (addNewTemplate?.showMandatoryCheckbox === true);
 
     const shouldShowToggleButton = () => {
-        // if (!showToggleIcon) return false;
+        if (addNewTemplate?.showMandatoryCheckbox === true) {
+            return true;
+        }
         
         if (isWizardMode && method.isWizardMode) {
             return hasFields;
         }
         return hasFields && isOn;
     };
-
+    
     return (
         <div className="expandable-header">
            {showToggleIcon && (
@@ -366,9 +374,8 @@ const PanelHeader: React.FC = () => {
             <div
                 className={`header-details ${showToggleIcon ? 'toggle' : ''}`}
                 onClick={() => {
-                    // Don't toggle if clicking on editable field
                     const target = window.event?.target as HTMLElement;
-                    if (target?.closest('.editable-title, .editable-description, .inline-edit-icon')) {
+                    if (target?.closest('.editable-title, .editable-description, .inline-edit-icon, .mandatory-checkbox-field')) {
                         return;
                     }
                     dispatch({
@@ -378,7 +385,6 @@ const PanelHeader: React.FC = () => {
                 }}
             >
                 <div className="details-wrapper">
-                    {/* Icon picker */}
                     {icon && (
                         <div
                             className="expandable-header-icon"
@@ -387,7 +393,6 @@ const PanelHeader: React.FC = () => {
                                 if (!method.iconEnable) {
                                     return;
                                 }
-                                // e.stopPropagation();
                                 dispatch({
                                     type: 'SET_ICON_DROPDOWN',
                                     id:
@@ -444,7 +449,6 @@ const PanelHeader: React.FC = () => {
                     )}
 
                     <div className="expandable-header-info">
-                        {/* Title (inline-editable for custom) */}
                         <div className="title-wrapper">
                             {editing &&
                                 editField === 'title' &&
@@ -480,7 +484,6 @@ const PanelHeader: React.FC = () => {
                                                 : ''
                                             }`}
                                         onClick={(e) => {
-                                            // e.stopPropagation();
                                             if (
                                                 canEditField(
                                                     method,
@@ -520,7 +523,6 @@ const PanelHeader: React.FC = () => {
                                     </span>
                                 )}
 
-                            {/* Active/Inactive badge — predefined disableBtn methods only */}
                             {method.disableBtn && !method.isCustom && (
                                 <div className="panel-badges">
                                     <div
@@ -531,9 +533,14 @@ const PanelHeader: React.FC = () => {
                                     </div>
                                 </div>
                             )}
+                            {(method.mandatory || showMandatoryBadge) && (
+                            <div
+                                className="admin-badge red">
+                                Mandatory
+                            </div>
+)}
                         </div>
 
-                        {/* Description (inline-editable for custom) */}
                         <div className="panel-description">
                             {editTitleShow && ( <b> {title}: </b> )}
                             {editing &&
@@ -573,7 +580,6 @@ const PanelHeader: React.FC = () => {
                                             : undefined
                                     }
                                     onClick={(e) => {
-                                        // e.stopPropagation();
                                         if (
                                             canEditField(
                                                 method,
@@ -642,7 +648,6 @@ const PanelControls: React.FC = () => {
             )}
 
             <ul className="settings-btn">
-                {/* Delete — custom only, respects minimum count */}
                 {method.isCustom && !method.hideDeleteBtn && canDelete() && (
                     <ButtonInputUI
                         buttons={[
@@ -656,7 +661,6 @@ const PanelControls: React.FC = () => {
                     />
                 )}
 
-                {/* PREDEFINED (disableBtn, non-custom) */}
                 {method.disableBtn &&
                     !method.isCustom &&
                     (isOn ? (
@@ -688,7 +692,6 @@ const PanelControls: React.FC = () => {
                         </li>
                     ))}
 
-                {/* CUSTOM (isCustom) */}
                 {method.isCustom &&
                     method.disableBtn &&
                     (isOn ? (
@@ -719,7 +722,6 @@ const PanelControls: React.FC = () => {
                         </li>
                     ))}
 
-                {/* Progress counter (non-disableBtn methods only) */}
                 {!method.disableBtn &&
                     method.countBtn &&
                     cntFlds.length > 0 && (() => {
@@ -736,7 +738,6 @@ const PanelControls: React.FC = () => {
                     })()}
             </ul>
 
-            {/* 3-dot dropdown — non-custom, enabled methods */}
             {!method.isCustom && isOn && (
                 <div className="icon-wrapper">
                     <PopupUI position="menu-dropdown" toggleIcon="more-vertical" tooltipName="Settings">
@@ -791,16 +792,17 @@ const PanelControls: React.FC = () => {
 };
 
 const PanelBody: React.FC = () => {
-    const { isWizardMode, renderField, shouldRender } = usePanel();
+    const { isWizardMode, renderField, shouldRender, handleChange, addNewTemplate } = usePanel();
+    const { method, isOpen, isOn, methodValue } = usePanelItem();
 
-    const { method, isOpen, isOn } = usePanelItem();
+    const showMandatoryCheckboxGlobal = addNewTemplate?.showMandatoryCheckbox === true;
+    const hasFields = Boolean(method.formFields?.length) || showMandatoryCheckboxGlobal;
+    const showMandatoryCheckbox = addNewTemplate?.showMandatoryCheckbox === true;
 
-    const hasFields = Boolean(method.formFields?.length);
-
-    if (!hasFields) {
+    if (!hasFields && !showMandatoryCheckbox) {
         return null;
     }
-    if (!(isOpen && (isOn || method.isCustom || method.openForm))) {
+    if (!(isOpen && (isOn || method.isCustom || method.openForm || showMandatoryCheckboxGlobal))) {
         return null;
     }
 
@@ -810,7 +812,25 @@ const PanelBody: React.FC = () => {
                 } expandable-panel open`.trim()}
         >
             <FormGroupWrapper>
-                {method.formFields!.map((field) => {
+                {showMandatoryCheckbox && (
+                    <FormGroup
+                        row
+                        label="Mandatory"
+                        desc="Mark this item as mandatory"
+                    >
+                        <input
+                            type="checkbox"
+                            checked={method.mandatory || false}
+                            onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                handleChange(method.id, 'mandatory', isChecked);
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                    </FormGroup>
+                )}
+
+                {method.formFields?.map((field) => {
                     if (isWizardMode && field.key === 'wizardButtons') {
                         return null;
                     }
@@ -857,22 +877,25 @@ const PanelItem: React.FC<{
     method: ExpandablePanelMethod;
     idx: number;
 }> = ({ method, idx }) => {
-    const { state, value } = usePanel();
+    const { state, value, addNewTemplate } = usePanel();
     const itemRef = useRef<HTMLDivElement>(null);
 
-    // Cache methodValue once - KEY OPTIMIZATION
     const methodValue = value[method.id] ?? {};
+    const showMandatoryCheckboxGlobal = addNewTemplate?.showMandatoryCheckbox === true;
 
     const isOn = method.isCustom
         ? methodValue.enable !== false
         : Boolean(methodValue.enable);
     const isOpen = state.activeTab === method.id;
-    const hasFields = Boolean(method.formFields?.length);
+    const hasFields = Boolean(method.formFields?.length) || showMandatoryCheckboxGlobal;
     const icon = (methodValue.icon as string) || method.icon;
     const price = formatPrice(methodValue);
     const title = (methodValue.title as string) || method.label;
     const desc = (methodValue.description as string) || method.desc;
     const cntFlds = method.formFields?.filter(isCountableField) ?? [];
+    const hasMandatoryFields = method.formFields?.some(field => field.mandatory === true) ?? false;
+    const showMandatoryBadge = method.mandatory || hasMandatoryFields;
+    
     useEffect(() => {
         if (isOpen && itemRef.current) {
             const top =
@@ -897,6 +920,7 @@ const PanelItem: React.FC<{
         desc,
         price,
         cntFlds,
+        showMandatoryBadge, 
     };
 
     return (
@@ -935,7 +959,7 @@ export const ExpandablePanelUI: React.FC<ExpandablePanelProps> = ({
 }) => {
     const tplFields = addNewTemplate?.formFields ?? [];
 
-    // ── useReducer ────────────────────────────────────────────────────────────
+   // ── useReducer ────────────────────────────────────────────────────────────
     const [state, dispatch] = useReducer(panelReducer, {
         methods: initialMethods.map((m) =>
             m.isCustom ? mergeTemplateFields(m, tplFields) : m
