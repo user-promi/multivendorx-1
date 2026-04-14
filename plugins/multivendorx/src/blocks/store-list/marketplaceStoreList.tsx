@@ -8,6 +8,9 @@ interface StoreRow {
 	id: number;
 	name: string;
 	store_slug: string;
+	store_name?: string;
+	location_lat?: string;
+	location_lng?: string;
 	topProducts?: string[];
 }
 
@@ -45,6 +48,15 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 		!!mapLocation.location_lat && !!mapLocation.location_lng;
 
 	const totalPages = Math.ceil(total / perPage);
+
+	const mapStores = {
+		data: data.map((store) => ({
+			id: store.id,
+			store_name: store.store_name || store.name,
+			location_lat: store.location_lat,
+			location_lng: store.location_lng,
+		})),
+	};
 
 	useEffect(() => {
 		axios({
@@ -100,6 +112,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 								locationLng={mapLocation.location_lng}
 								mapProvider={geoSettings.choose_map_api}
 								onLocationUpdate={(loc) => setMapLocation(loc)}
+								stores={mapStores}
 								placeholderSearch={__(
 									'Search location...',
 									'multivendorx'
