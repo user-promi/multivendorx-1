@@ -84,7 +84,7 @@
         }
 
         .section-meta {
-            padding: 0.625rem 0;
+            padding-bottom: 0.625rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -127,24 +127,25 @@
                 }
             }
 
+            &:has(.settings-form-label) {
+                .form-field-container-wrapper {
+                    padding: 0.5rem;
+                }
+            }
+
             .form-field-container-wrapper {
                 border: 0.063rem dashed transparent;
 
-                // padding: 0.5rem;
                 cursor: grabbing;
                 border-radius: $border-radius-small;
                 display: flex;
 
-                // .setting-form-input {
-                //     width: 100%;
-                // }
-                .email-heading:focus-visible{
+                .email-heading:focus-visible {
                     outline: none !important;
                 }
-                .basic-input {
-                    cursor: pointer;
-                    background: #fff;
-                    width: 100%;
+
+                .input-wrapper {
+                    width: 75%;
                 }
 
                 .attachment-section {
@@ -200,11 +201,13 @@
                         background: #ebebeb;
                     }
                 }
+
                 .email-column-wrapper {
-                    .email-column{
+                    .email-column {
                         flex-direction: column;
                     }
                 }
+
                 &.layout-1 {
                     flex-direction: column;
 
@@ -285,7 +288,7 @@
 
         // email 
         .email-text,
-        .email-text p{
+        .email-text p {
             width: 100%;
         }
     }
@@ -372,4 +375,20 @@
 .recaptcha {
     border: 0.063rem solid $accent-color;
     padding: 0.5rem;
+}
+
+// address field
+.address-fields {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+
+    .input-wrapper {
+        width: 100% !important; // for overwrite default 75% width
+        margin-top: 0.313rem;
+    }
+    .form-select-field{
+        margin-top: 0.313rem;
+    }
 }
