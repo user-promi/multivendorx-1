@@ -6,7 +6,7 @@ import axios from 'axios';
 import { getApiLink } from 'zyra';
 
 addFilter(
-	'multivendorx_approval_queue_api_configs',
+	'multivendorx_compliance_api_configs',
 	'multivendorx/report-abuse-api',
 	(configs, { appLocalizer }) => {
 		configs.push({
@@ -21,7 +21,7 @@ addFilter(
 );
 
 addFilter(
-	'multivendorx_approval_queue_tab',
+	'multivendorx_compliance_tab',
 	'multivendorx/report-abuse-tab',
 	(settingContent) => {
 		settingContent.push({
@@ -51,7 +51,7 @@ addFilter(
 );
 
 addFilter(
-	'multivendorx_approval_queue_tab_content',
+	'multivendorx_compliance_tab_content',
 	'multivendorx/report-abuse-tab-content',
 	(defaultForm, { tabId }) => {
 		if (tabId === 'report-abuse') {

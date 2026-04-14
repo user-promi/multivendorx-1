@@ -104,6 +104,11 @@ class Admin {
                         'subtab'   => '',
                         'priority' => 50,
                     ),
+                    'compliance'      => array(
+                        'name'     => __( 'Compliance', 'multivendorx' ),
+                        'subtab'   => '',
+                        'priority' => 55,
+                    ),
                     'customers'    => array(
                         'name'     => __( 'Customers', 'multivendorx' ),
                         'subtab'   => '',
