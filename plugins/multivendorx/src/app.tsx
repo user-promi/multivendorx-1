@@ -18,7 +18,6 @@ import { getTourSteps } from './components/Tour/Tours';
 import NotificationTabContent from './components/Notifications/HeaderNotifications';
 import './routeRegistry';
 import './routes';
-import { tooltip } from 'leaflet';
 
 // Auto-load all modules src folder.
 const modulesContext = require.context(
@@ -35,6 +34,61 @@ const Route = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [routes, setRoutes] = useState([...window.MULTIVENDORX_ROUTES]);
+
+	useEffect(() => {
+		const complianceStore = window.multivendorxComplianceStore;
+		const approvalStore = window.multivendorxStore;
+		const commissions = window.multivendorxCommissionStore;
+		const customers = window.multivendorxCustomerStore;
+
+		const unsubscribeCompliance = complianceStore?.subscribe((counts) => {
+			const el = document.querySelector(`.mvx-count[data-tab="compliance"]`);
+			if (!el) return;
+			let value = counts || 0;
+			if (typeof value === 'object') {
+				value = Object.values(value).reduce((sum, v) => sum + v, 0);
+			}
+			el.innerText = value;
+		});
+
+		const unsubscribeApproval = approvalStore?.subscribe((counts) => {
+			const el = document.querySelector(`.mvx-count[data-tab="approval-queue"]`);
+			if (!el) return;
+			let value = counts || 0;
+			if (typeof value === 'object') {
+				value = Object.values(value).reduce((sum, v) => sum + v, 0);
+			}
+			el.innerText = value;
+		});
+
+		const unsubscribeCommissions = commissions?.subscribe((counts) => {
+			const el = document.querySelector(`.mvx-count[data-tab="commissions"]`);
+			if (!el) return;
+			let value = counts || 0;
+			if (typeof value === 'object') {
+				value = Object.values(value).reduce((sum, v) => sum + v, 0);
+			}
+			el.innerText = value;
+		});
+
+		const unsubscribeCustomers = customers?.subscribe((counts) => {
+			const el = document.querySelector(`.mvx-count[data-tab="customers"]`);
+			if (!el) return;
+			let value = counts || 0;
+			if (typeof value === 'object') {
+				value = Object.values(value).reduce((sum, v) => sum + v, 0);
+			}
+			el.innerText = value;
+		});
+
+		return () => {
+			unsubscribeCompliance && unsubscribeCompliance();
+			unsubscribeApproval && unsubscribeApproval();
+			unsubscribeCommissions && unsubscribeCommissions();
+			unsubscribeCustomers && unsubscribeCustomers();
+		};
+
+	}, [routes]);
 
 	useEffect(() => {
 		const updateRoutes = () => {

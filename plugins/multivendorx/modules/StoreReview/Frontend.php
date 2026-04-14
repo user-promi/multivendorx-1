@@ -37,6 +37,7 @@ class Frontend {
         add_action( 'woocommerce_order_item_meta_end', array( $this, 'multivendorx_add_store_review_button' ), 10, 3 );
         add_filter( 'multivendorx_store_frontend_localize_scripts', array( $this, 'multivendorx_store_frontend_localize_scripts' ) );
         add_filter( 'multivendorx_stores_details', array( $this, 'multivendorx_stores_details' ), 10, 2 );
+        add_filter( 'multivendorx_customer_tab_count', array( $this, 'customer_count' ), 10 );
     }
 	/**
 	 * Register frontend scripts for the Store Review module.
@@ -247,5 +248,14 @@ class Frontend {
     public function multivendorx_stores_details( $store, $store_id ) {
         $store['rating'] = Util::get_overall_rating( $store_id );
         return $store;
+    }
+
+    public function customer_count($total) {
+        $base_args = ['count' => true];
+        $pending_args = array_merge( $base_args, [
+            'status' => 'pending',
+        ] );
+        $pending_count = Util::get_review_information( $pending_args );
+        return (int) $total + $pending_count;
     }
 }
