@@ -84,7 +84,7 @@ class Notifications {
 						<p>Your store <strong>[store_name]</strong> has been successfully submitted.</p>
 						<p>The marketplace team is reviewing your application. You will be notified once the review process is completed.</p>
 						<p>Thank you for your patience.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store [store_name] is pending approval.',
 					'system_message'   => 'Your store is currently under admin review.',
 					'tag'              => 'Store',
@@ -102,7 +102,7 @@ class Notifications {
 					'email_body'       => '<p>Hello,</p>
 											<p>Unfortunately your store application <strong>[store_name]</strong> has been rejected.</p>
 											<p>Please review marketplace requirements and reapply if applicable.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store application rejected.',
 					'system_message'   => 'Your store application has been rejected.',
 					'tag'              => 'Store',
@@ -118,7 +118,7 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store application has been permanently rejected',
 					'email_body'       => '<p>Hello,</p><p>Your store application <strong>[store_name]</strong> has been permanently rejected due to policy violations.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store application permanently rejected.',
 					'system_message'   => 'Your store application has been permanently rejected.',
 					'tag'              => 'Store',
@@ -144,7 +144,7 @@ class Notifications {
 											<li>Configure shipping and payment settings</li>
 											</ul>
 											<p>If you did not expect this account creation, please contact the marketplace administrator.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Your store account for [store_name] has been created. Please log in to get started.',
 					'system_message'   => 'Your store account for [store_name] has been created by the marketplace admin.',
 					'tag'              => 'Store',
@@ -162,7 +162,7 @@ class Notifications {
 					'email_body'       => '<p>Hello,</p>
 									<p>Your store <strong>[store_name]</strong> is now active and visible to customers.</p>
 									<p>You can now add products and begin receiving orders.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store [store_name] is now active.',
 					'system_message'   => 'Your store has been activated.',
 					'tag'              => 'Store',
@@ -179,7 +179,7 @@ class Notifications {
 					'email_subject'    => 'Your store "[store_name]" is under review',
 					'email_body'       => '<p>Hello,</p>
 										<p>Your store <strong>[store_name]</strong> has been placed under administrative review.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store [store_name] under review.',
 					'system_message'   => 'Your store has been placed under review.',
 					'tag'              => 'Store',
@@ -197,7 +197,7 @@ class Notifications {
 					'email_body'       => '<p>Hello,</p>
 											<p>Your store <strong>[store_name]</strong> has been temporarily suspended.</p>
 											<p>Please contact marketplace support for more information.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store [store_name] suspended.',
 					'system_message'   => 'Your store has been suspended.',
 					'tag'              => 'Store',
@@ -215,7 +215,7 @@ class Notifications {
 					'email_body'       => '<p>Hello,</p>
 											<p>Your store <strong>[store_name]</strong> has been permanently deactivated.</p>
 											',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store [store_name] permanently deactivated.',
 					'system_message'   => 'Your store has been permanently deactivated.',
 					'tag'              => 'Store',
@@ -231,7 +231,7 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Store deactivation request – [store_name]',
 					'email_body'       => '<p>Hello Admin,</p><p>The store <strong>[store_name]</strong> has submitted a request to deactivate their store account.</p> <p>Please review the request and take the appropriate action from the admin dashboard.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store [store_name] requested account deactivation.',
 					'system_message'   => 'Store [store_name] has requested to deactivate their store account.',
 					'tag'              => 'Store',
@@ -249,7 +249,7 @@ class Notifications {
 					'email_body'       => '<p>Hello,</p>
 						<p>Your store <strong>[store_name]</strong> has been permanently deactivated.</p>
 						',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store [store_name] deactivation request has been rejected',
 					'system_message'   => 'Your store deactivation request has been rejected.',
 					'tag'              => 'Store',
@@ -268,7 +268,7 @@ class Notifications {
 											<p>You have received a new order.</p>
 											<p><strong>Order Number:</strong> #[order_id]</p>
 											',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'New order #[order_id] received.',
 					'system_message'   => 'New order received.',
 					'tag'              => 'Order',
@@ -282,7 +282,7 @@ class Notifications {
 					'customer_enabled' => true,
 					'email_subject'    => 'Order processing started',
 					'email_body'       => 'Your order [order_id] is now being processed.',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Order [order_id] is now processing.',
 					'system_message'   => 'Order [order_id] status: Processing.',
 					'tag'              => 'Order',
@@ -296,7 +296,7 @@ class Notifications {
 					'customer_enabled' => true,
 					'email_subject'    => 'Order completed',
 					'email_body'       => 'Order [order_id] has been successfully completed.',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Order [order_id] completed successfully.',
 					'system_message'   => 'Order [order_id] marked as completed.',
 					'tag'              => 'Order',
@@ -311,7 +311,7 @@ class Notifications {
 					'admin_enabled'    => true,
 					'email_subject'    => 'Order cancelled',
 					'email_body'       => 'Order [order_id] has been cancelled.',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Order [order_id] cancelled successfully.',
 					'system_message'   => 'Order [order_id] cancelled.',
 					'tag'              => 'Order',
@@ -325,7 +325,7 @@ class Notifications {
 					'customer_enabled' => true,
 					'email_subject'    => 'Order refunded',
 					'email_body'       => 'Your refund for order [order_id] has been processed.',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Refund for [order_id] processed.',
 					'system_message'   => 'Order [order_id] refunded.',
 					'tag'              => 'Order',
@@ -345,7 +345,7 @@ class Notifications {
 										<p>Hello,</p>
 										<p>Tracking information has been added for your order <strong>#[order_id]</strong>.</p>
 										',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Tracking added for order #[order_id].',
 					'system_message'   => 'Tracking information added to your order.',
 					'tag'              => 'Shipping',
@@ -361,7 +361,7 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Order #[order_id] delivered',
 					'email_body'       => '<p>Hello,</p><p>Your order <strong>#[order_id]</strong> has been delivered successfully.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Order #[order_id] delivered successfully.',
 					'system_message'   => 'Your order #[order_id] has been delivered.',
 					'tag'              => 'Shipping',
@@ -380,7 +380,7 @@ class Notifications {
 					'email_body'       => '
 									<p>Hello,</p><p>A refund request has been submitted for <strong>Order #[order_id]</strong>.</p>
 									',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Refund requested for order #[order_id].',
 					'system_message'   => 'Refund request submitted.',
 					'tag'              => 'Refund',
@@ -399,7 +399,7 @@ class Notifications {
 										<p>Hello,</p>
 										<p>The refund request for <strong>Order #[order_id]</strong> has been approved.</p>
 										',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Refund approved for #[order_id].',
 					'system_message'   => 'Refund approved.',
 					'tag'              => 'Refund',
@@ -417,7 +417,7 @@ class Notifications {
 					'email_body'       => '<p>Hello,</p>
 											<p>The refund request for <strong>Order #[order_id]</strong> has been rejected.</p>
 											',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Refund rejected for #[order_id].',
 					'system_message'   => 'Refund rejected.',
 					'tag'              => 'Refund',
@@ -434,7 +434,7 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'New review received for your store',
 					'email_body'       => '<p>Hello,</p><p>A customer has submitted a new review for your store.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'New review received for your store.',
 					'system_message'   => 'Your store received a new customer review.',
 					'tag'              => 'Review',
@@ -450,7 +450,7 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Marketplace response to your review – [product_name]',
 					'email_body'       => '<p>Hello [customer_name],</p><p>The marketplace team has responded to your review for <strong>[store_name]</strong>.</p><p><a href="[review_url]">View reply</a></p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Marketplace replied to your review.',
 					'system_message'   => 'Admin has replied to your review.',
 					'tag'              => 'Review',
@@ -467,7 +467,7 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Product "[product_name]" submitted for approval',
 					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> has been submitted for review.</p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Product [product_name] submitted for approval.',
 					'system_message'   => 'Your product has been submitted for admin review.',
 					'tag'              => 'Product',
@@ -484,7 +484,7 @@ class Notifications {
 					'email_subject'    => 'Your product "[product_name]" has been approved',
 					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> is now live on the marketplace.</p>
 ',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Product [product_name] approved.',
 					'system_message'   => 'Your product is now live.',
 					'tag'              => 'Product',
@@ -501,7 +501,7 @@ class Notifications {
 					'email_subject'    => 'Product "[product_name]" was rejected',
 					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> has been rejected after review.</p>
 ',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Product [product_name] rejected.',
 					'system_message'   => 'Your product submission was rejected.',
 					'tag'              => 'Product',
@@ -518,7 +518,7 @@ class Notifications {
 					'email_subject'    => 'Low stock alert – [product_name]',
 					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> is running low on stock.</p>
 ',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Low stock alert for [product_name].',
 					'system_message'   => 'Your product stock is running low.',
 					'tag'              => 'Product',
@@ -535,7 +535,7 @@ class Notifications {
 					'email_subject'    => 'Product out of stock – [product_name]',
 					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> is currently out of stock.</p>
 ',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Product [product_name] is out of stock.',
 					'system_message'   => 'Your product is currently out of stock.',
 					'tag'              => 'Product',
@@ -554,7 +554,7 @@ class Notifications {
 						'email_body'       => '<p>Hello,</p><p>A customer has asked a question about the product <strong>[product_name]</strong>.</p>
 <p><strong>Customer:</strong> [customer_name]</p><p>Please review the question and provide a response.</p>
 <p><a href="[question_url]">View question</a></p>',
-						'email_body_builder' => '',
+						
 					'sms_content'      => 'New product question.',
 						'system_message'   => 'Customer asked a question.',
 						'tag'              => 'Product',
@@ -571,7 +571,7 @@ class Notifications {
 					'email_subject'    => 'Answer to your question – [product_name]',
 					'email_body'       => '<p>Hello [customer_name],</p><p>The store <strong>[store_name]</strong> has replied to your question regarding <strong>[product_name]</strong>.</p>
 <p><a href="[question_url]">View reply</a></p>',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Reply to your product question.',
 					'system_message'   => 'Question reply received.',
 					'tag'              => 'Product',
@@ -649,7 +649,7 @@ class Notifications {
 					'customer_enabled' => true,
 					'email_subject'    => 'Product reported',
 					'email_body'       => 'Customer reported “[product_name]” for abuse.',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Product “[product_name]” reported.',
 					'system_message'   => 'Abuse report for “[product_name]” received.',
 					'tag'              => 'Report',
@@ -683,7 +683,7 @@ class Notifications {
 										<p>Hello,</p>
 										<p>A customer has started following your store <strong>[store_name]</strong>.</p>
 										',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'You have a new store follower.',
 					'system_message'   => 'A customer started following your store.',
 					'tag'              => 'Follower',
@@ -702,7 +702,7 @@ class Notifications {
 										<p>Hello,</p>
 										<p>A store you follow has added a new product <strong>[product_name]</strong>.</p>
 										',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'New product from store you follow.',
 					'system_message'   => 'A followed store added a new product.',
 					'tag'              => 'Follower',
@@ -721,7 +721,7 @@ class Notifications {
 											<p>Hello,</p>
 											<p>A store you follow has created a new coupon <strong>[coupon_code]</strong>.</p>
 											',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'New coupon available from followed store.',
 					'system_message'   => 'A store you follow created a new coupon.',
 					'tag'              => 'Follower',
@@ -740,7 +740,7 @@ class Notifications {
 											<p>Hello,</p>
 											<p>The store you follow <strong>[store_name]</strong> is currently on vacation.</p>
 											',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Store you follow is on vacation.',
 					'system_message'   => 'A store you follow is currently on vacation.',
 					'tag'              => 'Follower',
@@ -762,7 +762,7 @@ class Notifications {
 										<p>You can now log in to your account and view <strong>wholesale pricing</strong> on eligible products across the marketplace.</p>
 										<p><a href="[account_url]">Go to your account</a></p>
 										',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Your wholesale access request has been approved. You can now view wholesale prices.',
 					'system_message'   => 'Your wholesale buyer request has been approved. Wholesale pricing is now available to you.',
 					'tag'              => 'Wholesale',
@@ -783,7 +783,7 @@ class Notifications {
 											<p>If you believe this decision was made in error or need further clarification, please contact our support team.</p>
 											<p><a href="[support_url]">Contact support</a></p>
 										',
-					'email_body_builder' => '',
+					
 					'sms_content'      => 'Your wholesale buyer request was not approved. Please contact support for details.',
 					'system_message'   => 'Your wholesale buyer request has been rejected.',
 					'tag'              => 'Wholesale',
@@ -815,7 +815,7 @@ class Notifications {
 					'system_action'    => $key,
 					'email_subject'    => $event['email_subject'] ?? '',
 					'email_body'       => $event['email_body'] ?? '',
-					'email_body_builder' => $event['email_body_builder'] ?? '',
+					
 					'sms_content'      => $event['sms_content'] ?? '',
 					'system_message'   => $event['system_message'] ?? '',
 					'status'           => 'active',
@@ -1080,7 +1080,7 @@ class Notifications {
 						'system_action'    => $key,
 						'email_subject'    => $event['email_subject'] ?? '',
 						'email_body'       => $event['email_body'] ?? '',
-						'email_body_builder' => $event['email_body_builder'] ?? '',
+						
 					'sms_content'      => $event['sms_content'] ?? '',
 						'system_message'   => $event['system_message'] ?? '',
 						'status'           => 'active',

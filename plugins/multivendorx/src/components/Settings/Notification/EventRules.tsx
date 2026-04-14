@@ -10,7 +10,6 @@ import {
 	PopupUI,
 	TextAreaUI,
 	TableCard,
-	Container,
 	Column,
 	QueryProps,
 	BlockBuilderUI,
@@ -539,14 +538,33 @@ const EventRules: React.FC = () => {
 									<BlockBuilderUI
 										key={formData.id}
 										name="system_message_builder"
-										value={
-											htmlToBlocks(formData.email_body)
-												? JSON.parse(formData.email_body)
-												: {
+										value={(() => {
+											try {
+												
+												if (formData.email_body) {
+													return {
+														emailTemplates: [
+															{
+																id: 'store-registration',
+																blocks: htmlToBlocks(formData.email_body),
+															},
+														],
+														activeEmailTemplateId: 'store-registration',
+													};
+												}
+												return {
 													emailTemplates: [temp1],
 													activeEmailTemplateId: 'store-registration',
-												}
-										}
+												};
+											} catch (e) {
+												console.error('Builder load error:', e);
+
+												return {
+													emailTemplates: [temp1],
+													activeEmailTemplateId: 'store-registration',
+												};
+											}
+										})()}
 
 										onChange={(data) => {
 											const activeTemplate = data.emailTemplates?.find(
