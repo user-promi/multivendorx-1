@@ -218,7 +218,6 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 						(item.condition === undefined || item.condition)
 				);
 
-				// Just Admin + Store + Total for Revenue Breakdown
 				const earningSummary = [
 					{
 						id: 'total_order_amount',
