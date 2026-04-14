@@ -62,6 +62,7 @@ class Shortcode {
         if ( Utill::is_store_registration_page() ) {
             FrontendScripts::enqueue_script( 'multivendorx-registration-form-script' );
             FrontendScripts::localize_scripts( 'multivendorx-registration-form-script' );
+            FrontendScripts::enqueue_style( 'multivendorx-store-tabs-style' );
         }
     }
 
