@@ -156,6 +156,11 @@ const AddressFieldUI: React.FC<AddressFieldProps> = ({
             setList={updateParent}
             handle=".drag-handle"
             animation={150}
+            group={{
+                name: `address-${formField.id}`, // unique per block
+                pull: false,  // ❗ prevent dragging OUT
+                put: false,   // ❗ prevent dropping IN from outside
+            }}
         >
             {subFields.map((field) => (
                 <div
