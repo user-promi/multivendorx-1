@@ -61,7 +61,7 @@ const AddProduct = () => {
 		if (modules.includes('wpml')) {
 			axios({
 				method: 'GET',
-				url: getApiLink(appLocalizer, 'multivendorx-wpml'),
+				url: getApiLink(appLocalizer, 'wpml'),
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { product_id: productId },
 			})
@@ -207,7 +207,7 @@ const AddProduct = () => {
 		// CASE 2: Translation does not exist → create or fetch translation
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, 'multivendorx-wpml'),
+			url: getApiLink(appLocalizer, 'wpml'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				product_id: productId,

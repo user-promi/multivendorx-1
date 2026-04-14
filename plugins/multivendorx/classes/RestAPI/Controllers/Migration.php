@@ -49,7 +49,7 @@ class Migration extends \WP_REST_Controller {
      * @param object $request Full details about the request.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'manage_woocommerce' );
+        return current_user_can( 'manage_options' );
     }
 
     /**

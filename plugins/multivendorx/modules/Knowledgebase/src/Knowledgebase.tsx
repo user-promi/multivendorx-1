@@ -69,7 +69,7 @@ export const KnowledgeBase: React.FC = () => {
 
 		axios({
 			method: 'DELETE',
-			url: getApiLink(appLocalizer, `knowledge/${selectedKb.id}`),
+			url: getApiLink(appLocalizer, `knowledgebase/${selectedKb.id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		})
 			.then(() => {
@@ -126,7 +126,7 @@ export const KnowledgeBase: React.FC = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, 'knowledge'),
+			url: getApiLink(appLocalizer, 'knowledgebase'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { bulk: true, action, ids: selectedIds },
 		})
@@ -142,7 +142,7 @@ export const KnowledgeBase: React.FC = () => {
 
 	const handleEdit = (id: number) => {
 		axios
-			.get(getApiLink(appLocalizer, `knowledge/${id}`), {
+			.get(getApiLink(appLocalizer, `knowledgebase/${id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
@@ -171,8 +171,8 @@ export const KnowledgeBase: React.FC = () => {
 		setSubmitting(true);
 
 		const endpoint = editId
-			? getApiLink(appLocalizer, `knowledge/${editId}`)
-			: getApiLink(appLocalizer, 'knowledge');
+			? getApiLink(appLocalizer, `knowledgebase/${editId}`)
+			: getApiLink(appLocalizer, 'knowledgebase');
 
 		const payload = { ...formData, status };
 
@@ -237,7 +237,7 @@ export const KnowledgeBase: React.FC = () => {
 		setIsLoading(true);
 
 		axios
-			.get(getApiLink(appLocalizer, 'knowledge'), {
+			.get(getApiLink(appLocalizer, 'knowledgebase'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				withCredentials: true,
 				params: {

@@ -23,7 +23,7 @@ class Dashboard extends \WP_REST_Controller {
      *
      * @var string
      */
-    protected $rest_base = 'endpoints';
+    protected $rest_base = 'dashboard-menu';
 
     /**
      * Register the routes for the objects of the controller.

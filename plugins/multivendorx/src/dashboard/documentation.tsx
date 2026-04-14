@@ -36,7 +36,7 @@ const Documentation: React.FC = () => {
 		setData([]);
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'knowledge'),
+			url: getApiLink(appLocalizer, 'knowledgebase'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				status: 'publish',

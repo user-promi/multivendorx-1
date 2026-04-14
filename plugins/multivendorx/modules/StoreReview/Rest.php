@@ -22,8 +22,6 @@ defined( 'ABSPATH' ) || exit;
  */
 class Rest extends \WP_REST_Controller {
 
-
-
     /**
      * Route base.
      *
