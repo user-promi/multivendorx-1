@@ -231,7 +231,7 @@ const App = () => {
 		},
 		{
 			title: __('Import Dummy Data', 'multivendorx'),
-			icon: 'import',
+			icon: 'export',
 			action: handleOpenFeaturePopup,
 		},
 	];

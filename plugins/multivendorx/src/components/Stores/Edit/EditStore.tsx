@@ -880,8 +880,8 @@ const EditStore = () => {
 
 											<div className="contact-info">
 												<div className="desc store-info">
-													<i className="adminfont-form-phone"></i>
-													{__('Registered since', 'multivendorx')}
+													<i className="adminfont-clock"></i>
+													<b>{__('Registered since: ', 'multivendorx')}</b>
 													{
 														data?.create_time?.split(
 															'-'

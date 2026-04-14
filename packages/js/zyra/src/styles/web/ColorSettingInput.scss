@@ -114,6 +114,7 @@
 
     .image-list {
         width: 25%;
+        flex-direction: column;
 
         .image-thumbnail {
             display: flex;
