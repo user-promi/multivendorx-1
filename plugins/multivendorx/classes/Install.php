@@ -1775,12 +1775,12 @@ class Install {
                         true
 					) ) {
 					$address_map = array(
-						'vendor_address_1' => 'address_1',
+						'vendor_address_1' => 'address',
 						'vendor_address_2' => 'address_2',
 						'vendor_city'      => 'city',
 						'vendor_state'     => 'state',
 						'vendor_country'   => 'country',
-						'vendor_postcode'  => 'postcode',
+						'vendor_postcode'  => 'zip',
 					);
 
 					$address_fields[] = array(
@@ -2088,7 +2088,7 @@ class Install {
             '_vendor_profile_image'           => '',
             'vendor_connected'                => '',
             'admin_client_id'                 => '',
-            'stripe_user_id'                  => 'stripe_account_id',
+            'stripe_user_id'                  => 'stripe_connect_account_id',
             'access_token'                    => 'stripe_access_token',
             'stripe_publishable_key'          => 'stripe_publishable_key',
             'refresh_token'                   => 'stripe_refresh_token',
