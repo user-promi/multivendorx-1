@@ -314,6 +314,7 @@ a {
 
     .admin-table-wrapper {
         margin: 0;
+        width: 100%;
     }
 
     .header-wrapper {
@@ -347,9 +348,9 @@ a {
 }
 
 
-.content {
-    flex-direction: column;
-}
+// .content {
+//     flex-direction: column;
+// }
 
 // dropdown style common start  common 
 .icon-wrapper {

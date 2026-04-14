@@ -923,6 +923,7 @@ const AddOrder = () => {
 											ids={rowIds}
 											showMenu={false}
 										/>
+
 										<ButtonInputUI
 											buttons={[
 												{
@@ -1038,7 +1039,7 @@ const AddOrder = () => {
 									text: selectedCustomer
 										? selectedCustomer.first_name[0]
 										: 'C',
-									iconClass: 'avatar-text',
+									iconClass: 'person',
 								}}
 								descriptions={
 									selectedCustomer

@@ -170,7 +170,7 @@
             }
 
             .avatar {
-                padding: 0.313rem;
+                // padding: 0.313rem;
                 background: $theme-color;
                 border-radius: 50%;
 
@@ -356,3 +356,22 @@
     min-width: 8rem;
     padding: 0.625rem;
 }
+
+// transaction page payment section start
+.payment-method {
+    .method {
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        padding: 0.5rem 0.75rem;
+        gap: 0.45rem;
+        background: $theme-background-color;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-radius: $border-radius-small;
+        color: $theme-color;
+        border: 0.063rem solid $theme-color;
+    }
+}
+
+// transaction page payment section end

@@ -84,23 +84,23 @@ const SingleButton: React.FC<{ btn: ButtonConfig; index: number }> = ({
         ? mapBlockStyleToCustomStyle(btn.style)
         : {};
     const customStyle = { ...styleFromBlock, ...(btn.customStyle || {}) };
-    const padding = `${customStyle.button_padding_top}px ${customStyle.button_padding_right}px ${customStyle.button_padding_bottom}px ${customStyle.button_padding_left}px`;
+    const padding = `${customStyle.button_padding_top}rem ${customStyle.button_padding_right}rem ${customStyle.button_padding_bottom}rem ${customStyle.button_padding_left}rem`;
 
     // Build margin string with all four values
-    const margin = `${customStyle.button_margin_top}px ${customStyle.button_margin_right}px ${customStyle.button_margin_bottom}px ${customStyle.button_margin_left}px`;
+    const margin = `${customStyle.button_margin_top}rem ${customStyle.button_margin_right}rem ${customStyle.button_margin_bottom}rem ${customStyle.button_margin_left}rem`;
 
     const buttonStyle: React.CSSProperties = {
         border: hovered
-            ? `${customStyle.button_border_size}px solid ${customStyle.button_border_color_onhover}`
-            : `${customStyle.button_border_size}px solid ${customStyle.button_border_color}`,
+            ? `${customStyle.button_border_size}rem solid ${customStyle.button_border_color_onhover}`
+            : `${customStyle.button_border_size}rem solid ${customStyle.button_border_color}`,
         backgroundColor: hovered
             ? customStyle.button_background_color_onhover
             : customStyle.button_background_color,
         color: hovered
             ? customStyle.button_text_color_onhover
             : customStyle.button_text_color,
-        borderRadius: `${customStyle.button_border_radious}px`,
-        fontSize: `${customStyle.button_font_size}px`,
+        borderRadius: `${customStyle.button_border_radious}rem`,
+        fontSize: `${customStyle.button_font_size}rem`,
         fontWeight: customStyle.button_font_width,
         margin: margin,
         padding: padding,

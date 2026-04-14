@@ -10,14 +10,17 @@ import {
 	PopupUI,
 	TextAreaUI,
 	TableCard,
-	Container,
 	Column,
 	QueryProps,
-	BlockBuilderUI
+	BlockBuilderUI,
+	renderBlocksToHTML,
+	htmlToBlocks,
 } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { temp1 } from '../../../assets/template/emailTemplate/temp1';
+import { temp2 } from '../../../assets/template/emailTemplate/temp2';
+
 
 
 const RECIPIENT_CONFIG: Record<string, { icon: string; badge: string }> = {
@@ -73,6 +76,7 @@ interface FormData {
 	sms_content?: string;
 	email_subject?: string;
 	email_body?: string;
+	email_body_builder?: string;
 	[key: string]: string | number | boolean | undefined;
 }
 
@@ -122,6 +126,7 @@ const EventRules: React.FC = () => {
 		field: string | null;
 	}>({ start: 0, end: 0, field: null });
 	const [isLoading, setIsLoading] = useState(true);
+	const [useTemplate, setUseTemplate] = useState(false);
 
 	// Fetch notifications on mount
 	useEffect(() => {
@@ -287,6 +292,7 @@ const EventRules: React.FC = () => {
 			id: data.id,
 				email_subject: data.email_subject,
 				email_body: data.email_body,
+				// email_body_builder: data.email_body_builder,
 				sms_content: data.sms_content,
 				system_message: data.system_message,
 			},
@@ -497,8 +503,8 @@ const EventRules: React.FC = () => {
 				<PopupUI
 					open={!!openChannel}
 					onClose={() => setOpenChannel(null)}
-					width={31.25}
-					height="70%"
+					width="90%"
+					height="90%"
 					header={{
 						icon: 'cart',
 						title: `${
@@ -535,20 +541,52 @@ const EventRules: React.FC = () => {
 									<BlockBuilderUI
 										key={formData.id}
 										name="system_message_builder"
-										value={
-											formData.email_body
-												? JSON.parse(formData.email_body)
-												: {
+										value={(() => {
+											try {
+												
+												if (formData.email_body && !useTemplate) {
+													return {
+														emailTemplates: [
+															{
+																id: 'store-registration',
+																blocks: htmlToBlocks(formData.email_body),
+															},
+														],
+														activeEmailTemplateId: 'store-registration',
+													};
+												}
+												return {
 													emailTemplates: [temp1],
 													activeEmailTemplateId: 'store-registration',
-												}
-										}
+												};
+											} catch (e) {
+												console.error('Builder load error:', e);
+
+												return {
+													emailTemplates: [temp1],
+													activeEmailTemplateId: 'store-registration',
+												};
+											}
+										})()}
+
 										onChange={(data) => {
+											const activeTemplate = data.emailTemplates?.find(
+												(t) => t.id === data.activeEmailTemplateId
+											);
+
+											const blocks = activeTemplate?.blocks || [];
+
+											// generate HTML
+											const html = renderBlocksToHTML(blocks);
+
+
 											const updatedForm = {
 												...formData,
-												email_body_builder: data,
-												email_body: JSON.stringify(data),
+
+												// SAVE HTML
+												email_body: html,
 											};
+
 											if (!updatedForm.id) return;
 
 											setFormData(updatedForm);
@@ -558,8 +596,11 @@ const EventRules: React.FC = () => {
 											key: 'email_body_builder',
 											context: 'email', 
 											visibleGroups: ['email'], 
-											emailTemplates: [temp1],
+											emailTemplates: [temp1,temp2],
 										}}
+										onTemplateSelect={(id) => {
+    setUseTemplate(true); // 🔥 force template mode
+}}
 									/>
 								</FormGroup>
 							)}

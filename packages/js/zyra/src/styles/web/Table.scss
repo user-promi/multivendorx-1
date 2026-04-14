@@ -71,7 +71,9 @@
                     /* for overwrite common style */
                 }
             }
-
+            .calender-input {
+                width: 13rem;
+            }
             .bulk-action {
                 display: flex;
             }
@@ -143,12 +145,13 @@
     width: fit-content;
     gap: 0.5rem;
 
-    .filter{
+    .filters{
         padding: 0.45rem;
         background: $background-white;
         border-radius: $border-light-small;
         display: flex;
         gap: 0.313rem;
+        border-radius: $border-radius-small;
 
         .filter-item {
             cursor: pointer;

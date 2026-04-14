@@ -15,6 +15,7 @@ import { useLocation, Link } from 'react-router-dom';
 import EventRules from './Notification/EventRules.tsx';
 import StoreStatus from './StoreConfiguration/StoreStatus.tsx';
 import Invoice from './StoreConfiguration/Invoice';
+import ProductCompliance from './Privacy & Compliance/ProductCompliance.tsx'
 
 interface SettingsProps {
 	id: string;
@@ -90,6 +91,9 @@ const Settings: React.FC<SettingsProps> = () => {
 		}
 		if (currentTab === 'store-status') {
 			return <StoreStatus />;
+		}
+		if (currentTab === 'product-compliance') {
+			return <ProductCompliance />;
 		}
 		if (currentTab === 'invoices') {
 			return <Invoice />;

@@ -398,7 +398,7 @@ export const SelectInputUI: React.FC<SelectProps> = ({
 
     return (
         <div
-            className={`form-select-field-wrapper ${wrapperClass ?? ''}`}
+            className={`form-select-field ${wrapperClass ?? ''}`}
             style={{ width: size ?? '' }}
         >
             {selectDeselect && (
