@@ -45,7 +45,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 't-letter-bold',
                 value: 'text',
                 label: 'Enter the text',
-                fixedName: 'text',
+                fixedName: 'Text',
                 placeholder: 'Enter your text here',
             },
             {
@@ -53,7 +53,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'unread',
                 value: 'email',
                 label: 'Email',
-                fixedName: 'email',
+                fixedName: 'Email',
                 placeholder: 'Enter your email here',
             },
             {
@@ -61,7 +61,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'text',
                 value: 'textarea',
                 label: 'Enter your text',
-                fixedName: 'textarea',
+                fixedName: 'Textarea',
                 placeholder: 'Enter your message here',
             },
             {
@@ -69,7 +69,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'calendar',
                 value: 'date',
                 label: 'Date Picker',
-                fixedName: 'date',
+                fixedName: 'Date',
                 placeholder: 'Select a date',
             },
             {
@@ -77,7 +77,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'alarm ',
                 value: 'time',
                 label: 'Time Picker',
-                fixedName: 'time',
+                fixedName: 'Time',
                 placeholder: 'Select a time',
             },
             {
@@ -85,7 +85,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'checkbox',
                 value: 'checkboxes',
                 label: 'Nature Of Business',
-                fixedName: 'checkboxes',
+                fixedName: 'Checkboxes',
                 options: OPTION_PRESETS,
             },
             {
@@ -93,7 +93,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'multi-select',
                 value: 'multi-select',
                 label: 'Multi Select',
-                fixedName: 'multi-select',
+                fixedName: 'Multi Select',
                 options: OPTION_PRESETS,
             },
             {
@@ -101,7 +101,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'radio icon-form-radio',
                 value: 'radio',
                 label: 'Nature Of Business',
-                fixedName: 'radio',
+                fixedName: 'Radio',
                 options: OPTION_PRESETS,
             },
             {
@@ -109,7 +109,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'dropdown-checklist',
                 value: 'dropdown',
                 label: 'Dropdown',
-                fixedName: 'dropdown',
+                fixedName: 'Dropdown',
                 options: OPTION_PRESETS,
             },
             {
@@ -117,21 +117,21 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'submission-message ',
                 value: 'attachment',
                 label: 'Attachment',
-                fixedName: 'attachment',
+                fixedName: 'Attachment',
             },
             {
                 id: 'section',
                 icon: 'form-section',
                 value: 'section',
                 label: 'Section',
-                fixedName: 'section',
+                fixedName: 'Section',
             },
             {
                 id: 'recaptcha',
                 icon: 'captcha-automatic-code',
                 value: 'recaptcha',
                 label: 'reCaptcha v3',
-                fixedName: 'recaptcha',
+                fixedName: 'reCaptcha',
             },
         ],
     },
@@ -145,7 +145,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 't-letter-bold',
                 value: 'text',
                 label: 'Store Name',
-                fixedName: 'store-name',
+                fixedName: 'Name',
                 placeholder: 'Enter your store name',
             },
             {
@@ -153,7 +153,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'text ',
                 value: 'textarea',
                 label: 'Store Desc',
-                fixedName: 'store-description',
+                fixedName: 'Description',
                 placeholder: 'Enter your store description',
             },
             {
@@ -161,7 +161,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'form-phone',
                 value: 'text',
                 label: 'Store Phone',
-                fixedName: 'store-phone',
+                fixedName: 'Phone',
                 placeholder: 'Enter your store phone',
             },
             {
@@ -169,7 +169,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'unread ',
                 value: 'email',
                 label: 'Store Paypal Email',
-                fixedName: 'store-paypal',
+                fixedName: 'Paypal Email',
                 placeholder: 'Enter your PayPal email',
             },
             {
@@ -177,7 +177,7 @@ const REGISTRATION_BLOCK_GROUPS = [
                 icon: 'form-address ',
                 value: 'address',
                 label: 'Store Address',
-                fixedName: 'store-address',
+                fixedName: 'Address',
             },
         ],
     },
