@@ -35,7 +35,6 @@ const ProductCompliance: React.FC = () => {
         trigger_words: [],
         trigger_action: 'draft',
     };
-    console.log('product_compliance', appLocalizer?.settings_databases_value);
 
     const [formData, setFormData] = useState(() => {
         return {
