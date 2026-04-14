@@ -674,7 +674,7 @@ const Dashboard = () => {
 
 											<div className="dropdown-body">
 												<ul>
-													<li>
+													{/* <li>
 														<a href="#">
 															<i className="adminfont-person"></i>
 															My Profile
@@ -685,7 +685,7 @@ const Dashboard = () => {
 															<i className="adminfont-setting"></i>
 															Account Setting
 														</a>
-													</li>
+													</li> */}
 													{availableStores.length >
 														0 && (
 														<li className="switch-store-wrapper">

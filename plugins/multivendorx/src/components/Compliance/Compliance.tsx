@@ -5,7 +5,6 @@ import {
     Column,
     ComponentStatusView,
     SettingsNavigator,
-    getApiLink
 } from 'zyra';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -14,8 +13,8 @@ import { applyFilters } from '@wordpress/hooks';
 import { useLocation, Link } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
 
-if (!window.multivendorxStore) {
-	window.multivendorxStore = {
+if (!window.multivendorxComplianceStore) {
+	window.multivendorxComplianceStore = {
 		counts: {},
 		listeners: [],
 		setCount(id, count) {
@@ -38,7 +37,7 @@ const Compliance = () => {
     const [counts, setCounts] = useState<Record<string, number>>({});
 
 	useEffect(() => {
-		const store = window.multivendorxStore;
+		const store = window.multivendorxComplianceStore;
 
 		// initial
 		setCounts({ ...store.counts });
@@ -50,7 +49,7 @@ const Compliance = () => {
 	}, []);
 
 	useEffect(() => {
-		const store = window.multivendorxStore;
+		const store = window.multivendorxComplianceStore;
 
 		let apiConfigs: any[] = [];
 

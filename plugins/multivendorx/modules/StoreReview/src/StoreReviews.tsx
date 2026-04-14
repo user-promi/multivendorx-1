@@ -267,9 +267,11 @@ const StoreReviews: React.FC = () => {
 					.map((item) => item.id);
 
 				setRowIds(ids);
-
 				setRows(items);
-
+				window.multivendorxCustomerStore?.setCount(
+					'store-review',
+					Number(response.headers['x-wp-status-pending']) || 0,
+				);
 				setCategoryCounts([
 					{
 						value: 'all',

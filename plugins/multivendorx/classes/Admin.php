@@ -9,6 +9,7 @@ namespace MultiVendorX;
 
 use MultiVendorX\Store\Store;
 use MultiVendorX\Commission\CommissionUtil;
+use MultiVendorX\Store\StoreUtil;
 use MultiVendorX\Utill;
 
 defined( 'ABSPATH' ) || exit;
@@ -158,6 +159,17 @@ class Admin {
                 }
 
                 $menu_name = $submenu['name'];
+
+                $allowed_tabs = [ 'commissions', 'approval-queue', 'customers', 'compliance' ];
+
+                if ( in_array( $slug, $allowed_tabs ) ) {
+                    $count = $this->multivendorx_get_menu_count( $slug );
+                    $menu_name .= sprintf(
+                        " <span class='mvx-count' data-tab='%s' style='margin-left:6px; background:#d63638; color:#fff; padding:2px 6px; border-radius:10px; font-size:11px;'>%d</span>",
+                        esc_attr( $slug ),
+                        (int) $count
+                    );
+                }
 
                 add_submenu_page(
                     'multivendorx',
@@ -626,6 +638,24 @@ class Admin {
             $order = wc_get_order( $order_id );
             $order->update_meta_data( Utill::ORDER_META_SETTINGS['cod_order_payment'], $selected );
             $order->save();
+        }
+    }
+
+    public function multivendorx_get_menu_count( $tab ) {
+        switch ( $tab ) {
+            case 'commissions':
+                $filter['status'] = 'unpaid';
+                $filter['count'] = true;
+                $count = CommissionUtil::get_commission_information( $filter );
+                return $count;
+            case 'approval-queue':
+                return StoreUtil::get_approval_queue_count();
+            // case 'customers':
+                // return mvx_get_customer_count();
+            case 'compliance':
+                return StoreUtil::get_compliance_tab_count();
+            default:
+                return 0;
         }
     }
 }

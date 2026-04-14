@@ -853,4 +853,70 @@ class StoreUtil {
             ] );
         }
     }
+
+    public static function get_approval_queue_count() {
+        $pending_stores = (int) self::get_store_information( array( 'count' => true, 'status' => 'pending' ) );
+        $product_query = wc_get_products([
+            'status'     => 'pending',
+            'limit'      => 1,
+            'paginate'   => true,
+            'meta_query' => [
+                [
+                    'key'     => 'multivendorx_store_id',
+                    'compare' => 'EXISTS',
+                ],
+            ],
+        ]);
+        $pending_products = !empty( $product_query->total ) ? (int) $product_query->total : 0;
+
+        $query = new \WP_Query([
+            'post_type'      => 'shop_coupon',
+            'post_status'    => 'pending',
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+            'meta_query'     => [
+                [
+                    'key'     => 'multivendorx_store_id',
+                    'compare' => 'EXISTS',
+                ],
+            ],
+        ]);
+
+        $pending_coupons = (int) $query->found_posts;
+
+        $all_stores = StoreUtil::get_store_information();
+        $pending_withdrawal_count = $pending_deactivation_request_count = 0;
+
+        foreach ( $all_stores as $store ) {
+            $store_meta = Store::get_store( (int) $store['ID'] );
+
+            if ( ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] ] ) ) {
+                $pending_withdrawal_count++;
+            }
+
+            if ( ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_reason'] ] ) ) {
+                $pending_deactivation_request_count++;
+            }
+        }
+
+        $total = 
+            $pending_stores +
+            $pending_products +
+            $pending_coupons +
+            $pending_withdrawal_count +
+            $pending_deactivation_request_count;
+
+        return apply_filters(
+            'multivendorx_approval_queue_count',
+            $total
+        );
+    }
+
+    public static function get_compliance_tab_count() {
+        $total = 0;
+        return apply_filters(
+            'multivendorx_compliance_count',
+            $total
+        );
+    }
 }

@@ -25,6 +25,27 @@ type StoreOption = {
 	label: string;
 	value: number;
 };
+
+if (!window.multivendorxCommissionStore) {
+	window.multivendorxCommissionStore = {
+		counts: {},
+		listeners: [],
+		setCount(id, count) {
+			if (this.counts[id] === count) {
+				return;
+			}
+			this.counts[id] = count;
+			this.listeners.forEach((fn) => fn(this.counts));
+		},
+		subscribe(fn) {
+			this.listeners.push(fn);
+			return () => {
+				this.listeners = this.listeners.filter((l) => l !== fn);
+			};
+		},
+	};
+}
+
 const Commission: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -219,7 +240,10 @@ const Commission: React.FC = () => {
 				setRowIds(ids);
 
 				setRows(items);
-
+				window.multivendorxCommissionStore?.setCount(
+					'unpaid',
+					Number(response.headers['x-wp-status-unpaid']) || 0,
+				);
 				setCategoryCounts([
 					{
 						value: 'all',
