@@ -26,10 +26,9 @@ class Frontend {
     public function __construct() {
         // customer's order list (my account).
         add_filter( 'woocommerce_my_account_my_orders_query', array( $this, 'woocommerce_my_account_my_orders_query' ), 99 );
-        add_filter( 'woocommerce_account_orders_columns', array( $this, 'woocommerce_my_account_my_orders_columns' ), 99 );
-        add_action( 'woocommerce_my_account_my_orders_column_multivendorx_suborder', array( $this, 'woocommerce_my_account_my_orders_column_multivendorx_suborder' ), 99 );
-
+        add_filter( 'woocommerce_my_account_my_orders_column_order-number', array( $this, 'add_suborder_tag' ), 99 );
         add_filter( 'woocommerce_customer_available_downloads', array( $this, 'woocommerce_customer_available_downloads' ), 99 );
+        add_filter( 'woocommerce_email_enabled_new_order', array( $this, 'disable_new_order_email_conditionally'), 10, 2 );
     }
 
     /**
@@ -38,72 +37,27 @@ class Frontend {
      * @param array $query Query args.
      */
     public function woocommerce_my_account_my_orders_query( $query ) {
-        if ( ! isset( $query['post_parent'] ) ) {
-            $query['post_parent'] = 0;
+        $display_type = MultiVendorX()->setting->get_setting( 'display_customer_order', '' );
+        if ( $display_type === 'mainorder' ) {
+            $query['meta_query'][] = array(
+                'key'     => 'multivendorx_store_id',
+                'compare' => 'NOT EXISTS',
+            );
+        }
+
+        if ( $display_type === 'suborders' ) {
+            $query['meta_query'][] = array(
+                'key'     => 'multivendorx_store_id',
+                'compare' => 'EXISTS',
+            );
         }
         return $query;
     }
 
-    /**
-     * Add suborders column to order list
-     *
-     * @param  array $columns Order columns.
-     * @return array
-     */
-    public function woocommerce_my_account_my_orders_columns( $columns ) {
-        $suborder_column = array(
-                'multivendorx_suborder' => __( 'Store orders', 'multivendorx' ),
-            );
-            $new_columns = [];
-
-            foreach ( $columns as $key => $label ) {
-                $new_columns[$key] = $label;
-                if ( 'order-actions' === $key ) {
-                    $new_columns['multivendorx_suborder'] = $suborder_column['multivendorx_suborder'];
-                }
-            }
-
-            return $new_columns;
-    }
-
-    /**
-     * Add suborders to order list
-     *
-     * @param  object $order Order object.
-     * @return void
-     */
-    public function woocommerce_my_account_my_orders_column_multivendorx_suborder( $order ) {
-        $multivendorx_suborders = MultiVendorX()->order->get_suborders( $order->get_id(), array( 'type' => 'shop_order' ) );
-
-        if ( $multivendorx_suborders ) {
-            echo '<ul class="multivendorx-store-suborder" style="margin:0;list-style:none;">';
-            foreach ( $multivendorx_suborders as $suborder ) {
-                $store     = Store::get_store( $suborder->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) );
-                $order_uri = esc_url( $suborder->get_view_order_url() );
-
-                printf(
-                    // '<li><strong><a href="%s" title="%s">#%s</a></strong> &ndash; <small class="multivendorx-order-for-vendor">%s %s</small></li>',
-                    '<li>
-                        <mark class="%s tips" data-tip="%s">%s</mark>
-                        <span class="store-suborder">$70 for 3qty</span>
-                        <div class="suborder-buttons">
-                            <button class="woocommerce-button button">View</button>
-                            <button class="woocommerce-button mvx-download-invoice button" data-order-id="%d">Invoice</button>
-                        </div>
-                    </li>',
-                    esc_url( $order_uri ),
-                    esc_attr( sanitize_title( $suborder->get_status() ) ),
-                    esc_html( $suborder->get_order_number() ),
-                    esc_html_x( 'for', 'Order table details', 'multivendorx' ),
-                    esc_html( $store->get( 'name' ) ),
-                    $suborder->get_id()
-                );
-
-                do_action( 'multivendorx_after_add_suborder_details_my_account', $suborder );
-            }
-            echo '</ul>';
-        } else {
-            echo '<span class="na">&ndash;</span>';
+    public function add_suborder_tag( $order ) {
+        echo '<a href="' . esc_url( $order->get_view_order_url() ) . '">#' . esc_html( $order->get_order_number() ) . '</a>';
+        if ( $order->get_parent_id() > 0 ) {
+            echo ' <span class="suborder-label">' . __( 'Store order', 'multivendorx' ) . '</span>';
         }
     }
 
@@ -121,5 +75,17 @@ class Frontend {
             }
         }
         return $parent_downloads;
+    }
+
+    public function disable_new_order_email_conditionally( $enabled, $order ) {
+        if ( MultiVendorX()->setting->get_setting( 'display_customer_order' ) == 'suborders') {
+            return false;
+        }
+
+        if ( ($order->get_parent_id() > 0) && MultiVendorX()->setting->get_setting( 'display_customer_order' ) == 'mainorder' ) {
+            return false;
+        }
+
+        return $enabled;
     }
 }
