@@ -349,7 +349,7 @@ class Transaction {
         }
 
         return array(
-            'balance'         => floatval( max( 0, $result->balance - $minimum_wallet_amount ) ),
+            'balance' => floatval( max( 0, (float) $result->balance - (float) $minimum_wallet_amount ) ),
             'locking_balance' => floatval( $result->locking_balance ),
         );
     }
