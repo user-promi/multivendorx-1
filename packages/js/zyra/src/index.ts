@@ -73,7 +73,7 @@ export { useModules, initializeModules } from './contexts/ModuleContext';
 export { SettingProvider, useSetting } from './contexts/SettingContext';
 export { default as ColorSettingInput } from './components/ColorSettingInput';
 export { ColorSettingInputUI } from './components/ColorSettingInput';
-export { renderBlocksToHTML, htmlToBlocks } from './utils/emailHtmlRenderer';
+export { renderBlocksToHTML, htmlToBlocks } from './utils/blockHtmlConverter';
 
 export type { SettingContextType } from './contexts/SettingContext';
 export type {
