@@ -291,8 +291,7 @@ const RegistrationForm = () => {
 	}
 
 	return (
-		<div className="woocommerce multivendorx-step-registration">
-			{/* Step Wizard Header */}
+		<>
 			<div className="multivendorxstep-wizard">
 				<div className="multivendorxsteps-container">
 					{/* Step 1 */}
@@ -310,8 +309,8 @@ const RegistrationForm = () => {
 							)}
 						</div>
 						<div className="multivendorxstep-info">
-							<span className="multivendorxstep-label">Step 1</span>
-							<span className="multivendorxstep-title">Getting Started</span>
+							<h4 className="multivendorxstep-label"> {__('Step 1', 'multivendorx')}</h4>
+							{/* <span className="multivendorxstep-title">Getting Started</span> */}
 						</div>
 					</div>
 					
@@ -325,8 +324,8 @@ const RegistrationForm = () => {
 							<span>2</span>
 						</div>
 						<div className="multivendorxstep-info">
-							<span className="multivendorxstep-label">Step 2</span>
-							<span className="multivendorxstep-title">Store Details</span>
+							<h4 className="multivendorxstep-label">{__('Step 2', 'multivendorx')}</h4>
+							{/* <span className="multivendorxstep-title">Store Details</span> */}
 						</div>
 					</div>
 				</div>
@@ -338,7 +337,7 @@ const RegistrationForm = () => {
 				</div>
 			</div>
 
-			{/* Step 1: Content Before Form */}
+			{/* Step 1 */}
 			{currentStep === 1 && (
 				<div className="multivendorxstep-content multivendorxstep-1-content">
 					{stores.length > 0 && (
@@ -376,18 +375,18 @@ const RegistrationForm = () => {
 
 					<div className="multivendorxstep-actions">
 						<button 
-							className="multivendorxbtn multivendorxbtn-primary"
+							className=""
 							onClick={goToNextStep}
 						>
-							{__('Continue to Store Details', 'multivendorx')} →
+							{__('Continue to Store Details', 'multivendorx')}
 						</button>
 					</div>
 				</div>
 			)}
 
-			{/* Step 2: FormViewer */}
+			{/* Step 2 */}
 			{currentStep === 2 && (
-				<div className="multivendorxstep-content multivendorxstep-2-content">
+				<div className="multivendorxstep-content">
 					<div className="multivendorxform-header">
 						<h3>{__('Tell us about your store', 'multivendorx')}</h3>
 						<p>{__('This information will be reviewed by our team before your store goes live. Please fill it in accurately.', 'multivendorx')}</p>
@@ -434,35 +433,18 @@ const RegistrationForm = () => {
 						</div>
 					)}
 
-					<div className="multivendorxstep-actions multivendorxstep-actions-between">
+					<div className="multivendorxstep-actions">
 						<button 
 							className="multivendorxbtn multivendorxbtn-secondary"
 							onClick={goToPreviousStep}
 							disabled={isSubmitting}
 						>
-							← {__('Back', 'multivendorx')}
-						</button>
-						<button 
-							type="submit"
-							form="multivendorxform-viewer"
-							className="multivendorxbtn multivendorxbtn-primary"
-							disabled={isSubmitting}
-							onClick={() => {
-								// Trigger form submission
-								const form = document.querySelector('form');
-								if (form) {
-									const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-									form.dispatchEvent(submitEvent);
-								}
-							}}
-						>
-							{isSubmitting ? __('Submitting...', 'multivendorx') : __('Submit Registration →', 'multivendorx')}
+							{__('Back', 'multivendorx')}
 						</button>
 					</div>
 				</div>
 			)}
-
-		</div>
+		</>
 	);
 };
 
