@@ -265,7 +265,7 @@ const Orders: React.FC = () => {
 		action: {
 			type: 'action',
 			label: 'Action',
-			actions: applyFilters('multivendorx_order_actions', [
+			actions: applyFilters('multivendorx_store_order_actions', [
 				...(appLocalizer.edit_order_capability
 					? [
 						{
