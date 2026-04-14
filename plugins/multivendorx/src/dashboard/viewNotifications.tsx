@@ -79,7 +79,7 @@ const ViewNotifications = (React.FC = () => {
 				currentSetting={currentTab}
 				headerTitle={__('Notifications', 'multivendorx')}
 				headerDescription={__(
-					'lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+					'Track important marketplace updates and activities, including order alerts, store notifications, and recent actions across the platform.',
 					'multivendorx'
 				)}
 				getForm={getForm}

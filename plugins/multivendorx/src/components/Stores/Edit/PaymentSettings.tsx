@@ -310,7 +310,7 @@ const PaymentSettings: React.FC<PaymentSettingsProps> = ({ id, data }) => {
 							displayPosition="inline-notice"
 							message={sprintf(
 								__(
-									'If no store-specific commission is set, the <a href="%s">global commission</a> will automatically apply.',
+									'Set the commission the <b>marketplace earns</b> from each store sale. If not set, the <a href="%s">global commission</a> will automatically apply.',
 									'multivendorx'
 								),
 								`${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=store-commissions`
