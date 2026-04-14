@@ -41,6 +41,8 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	const radiusConfig = geoSettings?.radius_search_distance?.[0] || {};
 	const radiusMax = radiusConfig.radius_search_max_distance || 500;
 	const radiusUnit = radiusConfig.radius_search_unit || 'kilometers';
+	const hasLocationFilter =
+		!!mapLocation.location_lat && !!mapLocation.location_lng;
 
 	const totalPages = Math.ceil(total / perPage);
 
@@ -52,8 +54,12 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 			params: {
 				page: page,
 				row: perPage,
-				order_by: orderby,
-				order: order,
+				...(hasLocationFilter
+					? {}
+					: {
+						order_by: orderby,
+						order: order,
+					}),
 				search_value: search,
 				filters: true,
 				location_lat: mapLocation.location_lat,
