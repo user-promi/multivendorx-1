@@ -264,7 +264,10 @@ const Queries: React.FC = () => {
 
 				setRowIds(ids);
 				setRows(items);
-
+				window.multivendorxCustomerStore?.setCount(
+					'customer-queries',
+					Number(response.headers['x-wp-status-unanswered']) || 0,
+				);
 				setCategoryCounts([
 					{
 						value: 'all',

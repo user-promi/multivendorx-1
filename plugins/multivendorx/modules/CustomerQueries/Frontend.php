@@ -26,6 +26,7 @@ class Frontend {
         add_filter( 'multivendorx_register_scripts', array( $this, 'register_script' ) );
         add_filter( 'multivendorx_localize_scripts', array( $this, 'localize_scripts' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
+        add_filter( 'multivendorx_customer_tab_count', array( $this, 'customer_count' ), 10 );
     }
     /**
      * Register the frontend Q&A script for WooCommerce products.
@@ -116,5 +117,14 @@ class Frontend {
     public function multivendorx_product_qna_tab_content() {
         global $product;
         MultiVendorX()->util->get_template( 'store/store-single-product-qna-tab.php', array( 'product_id' => $product->get_id() ) );
+    }
+
+    public function customer_count($total) {
+        $base_args = ['count' => true];
+        $unanswered_args = array_merge( $base_args, [
+            'no_answer' => true,
+        ] );
+        $unanswered_count = (int) Util::get_question_information( $unanswered_args );
+        return (int) $total + $unanswered_count;
     }
 }

@@ -191,7 +191,7 @@ const PendingReportAbuse: React.FC<object> = () => {
 
 				setRows(products);
 				setTotalRows(Number(response.headers['x-wp-total']) || 0);
-				window.multivendorxStore?.setCount(
+				window.multivendorxComplianceStore?.setCount(
 					'report-abuse',
 					Number(response.headers['x-wp-total']) || 0
 				);

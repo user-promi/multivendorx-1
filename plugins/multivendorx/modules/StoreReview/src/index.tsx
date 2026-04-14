@@ -1,6 +1,23 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import StoreReviews from './StoreReviews';
+import {getApiLink} from 'zyra';
+
+addFilter(
+	'multivendorx_customer_api_configs',
+	'multivendorx/store-review-api',
+	(configs, { appLocalizer }) => {
+		configs.push({
+			id: 'store-review',
+			url: getApiLink(appLocalizer, 'review'),
+			params: {
+				page: 1, row: 1
+			},
+			header: 'x-wp-status-pending',
+		});
+		return configs;
+	}
+);
 
 addFilter(
 	'multivendorx_customers_tab',
