@@ -557,7 +557,16 @@ class Stores extends \WP_REST_Controller {
                 $store_data[ $field_key ] = $attachment_id;
             }
 
+            $registration_meta_map = array(
+                'store-paypal'   => Utill::STORE_SETTINGS_KEYS['paypal_email'],
+                'store-phone'    => Utill::STORE_SETTINGS_KEYS['phone'],
+                
+            );
+
             foreach ( $store_data as $key => $value ) {
+                if (isset($registration_meta_map[ $key ])) {
+                    $key = $registration_meta_map[ $key ];
+                }
                 if ( in_array( $key, $core_fields, true ) || 'store_owners' === $key ) {
                     continue;
                 }

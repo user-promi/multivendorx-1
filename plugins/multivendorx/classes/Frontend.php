@@ -533,7 +533,7 @@ class Frontend {
             <?php
             printf(
                 /* translators: %s: Current user display name */
-                esc_html__( 'Welcome %s', 'multivendorx' ),
+                esc_html__( " %s you're one step away from setting up your store. Fill in your business information below to get started.", 'multivendorx' ),
                 esc_html( MultiVendorX()->current_user->display_name )
             );
 			?>
@@ -542,7 +542,7 @@ class Frontend {
 		} else {
 			echo '<div class="multivendorx-registration woocommerce">';
 			echo '<div class="woocommerce-notices-wrapper"><div class="woocommerce-error"><div class="wc-block-components-notice-banner__content"><strong>' .
-            esc_html__( 'Kindly login before registration', 'multivendorx' ) .
+            esc_html__( 'Welcome! To register your store, please log in first. Use the form below to get started.', 'multivendorx' ) .
 			'</strong></div></div></div>';
 			wc_get_template( 'myaccount/form-login.php' );
 			echo '</div>';
