@@ -190,11 +190,11 @@ const Withdrawls: React.FC = () => {
 												'paypal-payout' &&
 												__('PayPal', 'multivendorx')}
 											{item.payment_method ===
-											'bank-transfer'
+												'bank-transfer'
 												? __(
-														'Bank Transfer',
-														'multivendorx'
-													)
+													'Bank Transfer',
+													'multivendorx'
+												)
 												: ''}
 										</div>
 									</div>
@@ -235,63 +235,77 @@ const Withdrawls: React.FC = () => {
 									)}{' '}
 								</div>
 								<div className="desc">
-									<b>{formatCurrency(data?.thresold)} </b>{' '}
-									{__(
-										'minimum required to withdraw',
-										'multivendorx'
-									)}
+									{
+										data?.thresold > 0 ? (
+											<>
+												<b>{formatCurrency(data.thresold)} </b>
+												{__('minimum required to withdraw', 'multivendorx')}
+											</>
+										) : (
+											__('No minimum', 'multivendorx')
+										)
+									}
 								</div>
 								<div className="desc">
-									<b>
-										{formatCurrency(
-											data?.reserve_balance
-										)}{' '}
-									</b>{' '}
-									{__('reserve balance', 'multivendorx')}
+									{data?.reserve_balance > 0 ? (
+										<>
+											<b>{formatCurrency(data.reserve_balance)} </b>
+											{__('reserve balance', 'multivendorx')}
+										</>
+									) : (
+										__('No reserve set', 'multivendorx')
+									)}
 								</div>
 							</div>
 							<Column row>
-								<ItemListUI
-									className="mini-card"
-									background
-									items={[
-										{
-											title: __(
-												'Upcoming Balance',
-												'multivendorx'
-											),
-											desc: (
-												<>
-													{__(
-														'This amount is being processed and will be released ',
-														'multivendorx'
-													)}
-													{data?.payment_schedules ? (
-														<>
-															{
-																data.payment_schedules
-															}{' '}
-															{__(
-																' by the admin.',
-																'multivendorx'
-															)}
-														</>
-													) : (
-														<>
-															{__(
-																'automatically every hour.',
-																'multivendorx'
-															)}
-														</>
-													)}
-												</>
-											),
-											value: formatCurrency(
-												data.locking_balance
-											),
-										},
-									]}
-								/>
+								{Number(data?.locking_balance) > 0 ? (
+									<ItemListUI
+										className="mini-card"
+										background
+										items={[
+											{
+												title: __(
+													'Upcoming Balance',
+													'multivendorx'
+												),
+												desc: (
+													<>
+														{__(
+															'This amount is being processed and will be released ',
+															'multivendorx'
+														)}
+														{data?.payment_schedules ? (
+															<>
+																{
+																	data.payment_schedules
+																}{' '}
+																{__(
+																	' by the admin.',
+																	'multivendorx'
+																)}
+															</>
+														) : (
+															<>
+																{__(
+																	'automatically every hour.',
+																	'multivendorx'
+																)}
+															</>
+														)}
+													</>
+												),
+												value: formatCurrency(
+													data.locking_balance
+												),
+											},
+										]}
+									/>
+								) : (
+									<div className="no-pending-status">
+										{__('No pending earning in clearence', 'multivendorx')}
+									</div>
+								)}
+
 								{data?.withdrawal_setting?.length > 0 && (
 									<ItemListUI
 										className="mini-card"
@@ -336,8 +350,8 @@ const Withdrawls: React.FC = () => {
 																?.withdrawal_setting?.[0]
 																?.free_withdrawals ??
 																0) -
-																(data?.free_withdrawal ??
-																	0)
+															(data?.free_withdrawal ??
+																0)
 														)}{' '}
 														<span>
 															{__(
@@ -364,9 +378,9 @@ const Withdrawls: React.FC = () => {
 								}}
 							/>
 						</div>
-					</Card>
-				</Column>
-			</Container>
+					</Card >
+				</Column >
+			</Container >
 
 			{requestWithdrawal && (
 				<>

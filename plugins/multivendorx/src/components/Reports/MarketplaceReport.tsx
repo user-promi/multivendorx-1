@@ -218,7 +218,6 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 						(item.condition === undefined || item.condition)
 				);
 
-				// Just Admin + Store + Total for Revenue Breakdown
 				const earningSummary = [
 					{
 						id: 'total_order_amount',
@@ -517,51 +516,33 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 					</Card>
 					<Card title={__('Top Customers', 'multivendorx')}>
 						{topCustomers.length > 0 ? (
-							topCustomers.map(
-								(customer: Customer, index: number) => (
-									<InfoItem
-										key={`store-${index}`}
-										title={customer.username}
-										isLoading={isLoading}
-										titleLink={`${appLocalizer.site_url}//wp-admin/user-edit.php?user_id=${customer.user_id}&wp_http_referer=%2Fwp-admin%2Fusers.php`}
-										avatar={{
-											text: (
-												customer.username
-													?.trim()
-													.charAt(0) || ''
-											).toUpperCase(),
-											iconClass: 'person',
-											link: `${appLocalizer.site_url}/wp-admin/post.php?post=${coupon.id}&action=edit`,
-										}}
-										descriptions={[
-											{
-												label: __(
-													'Orders',
-													'multivendorx'
-												),
-												value:
-													customer.orders_count || 0,
-											},
-											{
-												label: __(
-													'Email:',
-													'multivendorx'
-												),
-												value: customer.email,
-											},
-										]}
-										amount={formatCurrency(
-											customer.total_spend || 0
-										)}
-									/>
-								)
-							)
+							topCustomers.map((customer: Customer, index: number) => (
+								<InfoItem
+									key={`customer-${index}`}
+									title={customer.username}
+									isLoading={isLoading}
+									titleLink={`${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}`}
+									avatar={{
+										text: (customer.username?.trim().charAt(0) || '').toUpperCase(),
+										iconClass: 'person',
+										link: `${appLocalizer.site_url}/wp-admin/user-edit.php?user_id=${customer.user_id}`,
+									}}
+									descriptions={[
+										{
+											label: __('Orders', 'multivendorx'),
+											value: customer.orders_count || 0,
+										},
+										{
+											label: __('Email:', 'multivendorx'),
+											value: customer.email,
+										},
+									]}
+									amount={formatCurrency(customer.total_spend || 0)}
+								/>
+							))
 						) : (
 							<ComponentStatusView
-								title={__(
-									'No top customers found.',
-									'multivendorx'
-								)}
+								title={__('No top customers found.', 'multivendorx')}
 							/>
 						)}
 					</Card>
@@ -600,7 +581,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 												),
 												value: formatCurrency(
 													store.commission_refunded ||
-														0
+													0
 												),
 											},
 										]}

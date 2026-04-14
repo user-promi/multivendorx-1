@@ -84,102 +84,43 @@ const DashboardTab: React.FC<object> = () => {
 	};
 
 	const installOrActivatePlugin = (slug: string) => {
-		if (!slug || installing) {
+		if (!slug || installing) return;
+
+		const isInstalled = plugins.some(p => p.plugin?.includes(slug));
+
+		if (isInstalled) {
+			NoticeManager.add({
+				title: __('Redirecting...', 'multivendorx'),
+				message: __('Plugin already installed. Redirecting to activate...', 'multivendorx'),
+				type: 'info',
+				position: 'float',
+			});
+
+			window.open(`${appLocalizer.admin_url}plugins.php?s=${slug}`, '_blank');
 			return;
 		}
 
 		setInstalling(slug);
 
-		let apiUrl = `${appLocalizer.apiUrl}/wp/v2/plugins`;
-		let requestData = { status: 'active' };
-
-		const existingPlugin = plugins.find((plugin) =>
-			plugin.plugin.includes(slug)
-		);
-
-		if (!existingPlugin) {
-			requestData.slug = slug;
-		} else if (existingPlugin.status === 'active') {
-			NoticeManager.add({
-				title: __('Info', 'multivendorx'),
-				message: sprintf(
-					__('Plugin "%s" is already active.', 'multivendorx'),
-					slug
-				),
-				type: 'info',
-				position: 'float',
-			});
-			setInstalling('');
-			return;
-		} else {
-			const encodedFile = encodeURIComponent(existingPlugin.plugin);
-			apiUrl += `/${encodedFile}`;
-		}
-
-		axios
-			.post(apiUrl, requestData, {
-				headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		axios.post(`${appLocalizer.apiUrl}/wp/v2/plugins`,
+			{ slug, status: 'active' },
+			{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+		)
+			.then((res) => {
+				setPlugins(prev => [...prev, res.data]);
+				setPluginStatus(prev => ({ ...prev, [slug]: true }));
+				window.location.reload();
 			})
-			.then((response) => {
-				if (!existingPlugin) {
-					setPlugins((prev) => [...prev, response.data]);
-				} else {
-					setPlugins((prev) =>
-						prev.map((p) =>
-							p.plugin === existingPlugin.plugin
-								? { ...p, status: 'active' }
-								: p
-						)
-					);
-				}
-
-				setPluginStatus((prev) => ({
-					...prev,
-					[slug]: true,
-				}));
-
-				// Show success notice
-				NoticeManager.add({
-					title: __('Success!', 'multivendorx'),
-					message: existingPlugin
-						? sprintf(
-								__(
-									'Plugin "%s" activated successfully!',
-									'multivendorx'
-								),
-								slug
-							)
-						: sprintf(
-								__(
-									'Plugin "%s" installed & activated successfully!',
-									'multivendorx'
-								),
-								slug
-							),
-					type: 'success',
-					position: 'float',
-				});
-			})
-			.catch((error) => {
-				console.error(error);
+			.catch(() => {
 				NoticeManager.add({
 					title: __('Error!', 'multivendorx'),
-					message: sprintf(
-						__(
-							'Failed to install/activate plugin "%s".',
-							'multivendorx'
-						),
-						slug
-					),
+					message: sprintf(__('Could not install "%s".', 'multivendorx'), slug),
 					type: 'error',
 					position: 'float',
 				});
 			})
-			.finally(() => {
-				setInstalling('');
-			});
+			.finally(() => setInstalling(''));
 	};
-
 	const resources = [
 		{
 			title: __('Documentation', 'multivendorx'),
@@ -298,8 +239,8 @@ const DashboardTab: React.FC<object> = () => {
 								<div
 									className="admin-btn"
 									onClick={() =>
-										(window.location.href =
-											'?page=multivendorx-setup')
+									(window.location.href =
+										'?page=multivendorx-setup')
 									}
 								>
 									{__('Launch Setup Wizard', 'multivendorx')}
@@ -471,21 +412,21 @@ const DashboardTab: React.FC<object> = () => {
 																: 'auto',
 														opacity:
 															installing ===
-															'woocommerce-catalog-enquiry'
+																'woocommerce-catalog-enquiry'
 																? 0.6
 																: 1,
 													}}
 												>
 													{installing ===
-													'woocommerce-catalog-enquiry'
+														'woocommerce-catalog-enquiry'
 														? __(
-																'Installing...',
-																'multivendorx'
-															)
+															'Installing...',
+															'multivendorx'
+														)
 														: __(
-																'Install',
-																'multivendorx'
-															)}
+															'Install',
+															'multivendorx'
+														)}
 												</a>
 											</>
 										),
@@ -564,21 +505,21 @@ const DashboardTab: React.FC<object> = () => {
 																: 'auto',
 														opacity:
 															installing ===
-															'woocommerce-product-stock-alert'
+																'woocommerce-product-stock-alert'
 																? 0.6
 																: 1,
 													}}
 												>
 													{installing ===
-													'woocommerce-product-stock-alert'
+														'woocommerce-product-stock-alert'
 														? __(
-																'Installing...',
-																'multivendorx'
-															)
+															'Installing...',
+															'multivendorx'
+														)
 														: __(
-																'Install',
-																'multivendorx'
-															)}
+															'Install',
+															'multivendorx'
+														)}
 												</a>
 											</>
 										),
