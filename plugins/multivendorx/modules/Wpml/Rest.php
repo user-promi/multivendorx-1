@@ -24,7 +24,7 @@ class Rest extends \WP_REST_Controller {
      *
      * @var string
      */
-    protected $rest_base = 'multivendorx-wpml';
+    protected $rest_base = 'wpml';
 
     /**
      * Constructor.
@@ -61,7 +61,7 @@ class Rest extends \WP_REST_Controller {
      * @param object $request Full details about the request.
      */
     public function get_items_permissions_check( $request ) {
-        return current_user_can( 'read_shop_orders' ) || current_user_can( 'edit_shop_orders' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
+        return current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     /**
@@ -70,7 +70,7 @@ class Rest extends \WP_REST_Controller {
      * @param object $request Full details about the request.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'edit_shop_orders' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
+        return current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
 

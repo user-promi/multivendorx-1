@@ -14,7 +14,7 @@ export default {
 		{
 			key: 'menu_manager',
 			type: 'endpoint-editor',
-			apiLink: 'endpoints',
+			apiLink: 'dashboard-menu',
 		},
 	],
 };

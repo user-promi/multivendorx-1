@@ -149,7 +149,7 @@ const AllProduct: React.FC = () => {
 		}
 
 		axios
-			.get(getApiLink(appLocalizer, 'multivendorx-wpml'), {
+			.get(getApiLink(appLocalizer, 'wpml'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {

@@ -129,7 +129,7 @@ const Dashboard = () => {
 	useEffect(() => {
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'endpoints'),
+			url: getApiLink(appLocalizer, 'dashboard-menu'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => setMenu(res.data || {}));
 	}, []);
