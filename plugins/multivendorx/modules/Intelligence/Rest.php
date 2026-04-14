@@ -50,7 +50,7 @@ class Rest extends \WP_REST_Controller {
                 return $this->generate_suggestions( $request );
             }
             if( 'image' === $endpoint ){
-                return apply_filters( 'multivendorx_ai_image_generation', null, $request );
+                return apply_filters( 'multivendorx_ai_image_generation', $request );
             }
 
         } catch ( \Exception $e ) {
@@ -73,9 +73,9 @@ class Rest extends \WP_REST_Controller {
 
         // Strategy Map for providers - Use the Fully Qualified Class Name
         $api_map = array(
-            'gemini_api'     => array( \MultiVendorXPro\Intelligence\Util::class, 'call_gemini_api' ),
-            'openai_api'     => array( \MultiVendorXPro\Intelligence\Util::class, 'call_openai_api' ),
-            'openrouter_api' => array( \MultiVendorXPro\Intelligence\Util::class, 'call_openrouter_api' ),
+            'gemini_api'     => array( \MultiVendorX\Intelligence\Util::class, 'call_gemini_api' ),
+            'openai_api'     => array( \MultiVendorX\Intelligence\Util::class, 'call_openai_api' ),
+            'openrouter_api' => array( \MultiVendorX\Intelligence\Util::class, 'call_openrouter_api' ),
         );
 
         if ( ! isset( $api_map[ $provider ] ) ) {

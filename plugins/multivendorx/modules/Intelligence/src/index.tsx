@@ -3,7 +3,7 @@ import AIButtonSection from './AIButtonSection';
 
 addFilter(
   'multivendorx_add_product_middle_section',
-  'multivendorx-pro/ai-section',
+  'multivendorx/ai-section',
   (content, product, setProduct, handleChange, productFields, typeFields, modules,setFeaturedImage) => {
     return (
       <>
