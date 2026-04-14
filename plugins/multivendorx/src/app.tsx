@@ -18,7 +18,6 @@ import { getTourSteps } from './components/Tour/Tours';
 import NotificationTabContent from './components/Notifications/HeaderNotifications';
 import './routeRegistry';
 import './routes';
-import { tooltip } from 'leaflet';
 
 // Auto-load all modules src folder.
 const modulesContext = require.context(
