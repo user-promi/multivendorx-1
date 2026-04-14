@@ -250,7 +250,7 @@
 
 // change class name and common style (.desc)
 .settings-metabox-description {
-    padding-top: 0.45rem;
+    padding-top: 0.25rem;
     color: $sub-text-color;
     width: 100%;
     line-height: 1.313;
@@ -269,6 +269,7 @@
         list-style-type: none;
         margin: 0;
         margin-left: 1rem;
+        line-height: 1.313rem;
     }
 
     li {

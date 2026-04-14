@@ -603,9 +603,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 										]}
 									/>
 								) : (
-									<div className="no-pending-status">
-										{__('No pending earning in clearence', 'multivendorx')}
-									</div>
+									<ComponentStatusView title={__('No pending earning in clearence', 'multivendorx')} />
 								)}
 							</Column>
 							<ButtonInputUI

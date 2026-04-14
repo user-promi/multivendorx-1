@@ -16,6 +16,7 @@ import {
 	SelectInputUI,
 	BasicInputUI,
 	FormGroup,
+	FormGroupWrapper,
 } from 'zyra';
 import {
 	downloadCSV,
@@ -573,7 +574,7 @@ const Orders: React.FC = () => {
 					width={31.25}
 					height={40}
 					header={{
-						icon: 'tools',
+						icon: 'shipping',
 						title: __('Tracking', 'multivendorx'),
 					}}
 					footer={
@@ -588,7 +589,7 @@ const Orders: React.FC = () => {
 									},
 								},
 								{
-									icon: 'cross',
+									icon: 'send',
 									color: 'purple',
 									text: __('Send', 'multivendorx'),
 									onClick: handleTracking,
@@ -597,60 +598,62 @@ const Orders: React.FC = () => {
 						/>
 					}
 				>
-					<FormGroup
-						cols={2}
-						label={__('Shipping Providers', 'multivendorx-pro')}
-						htmlFor="title"
-					>
-						<SelectInputUI
-							type="single-select"
-							name="provider"
-							value={formData.provider || ''}
-							options={formattedProviders}
-							onChange={(selected) =>
-								handleChange('provider', selected)
-							}
-						/>
-					</FormGroup>
-					<FormGroup
-						cols={2}
-						label={__('Date', 'multivendorx-pro')}
-						htmlFor="title"
-					>
-						<BasicInputUI
-							type="date"
-							value={formData.tracking_date}
-							onChange={(value: any) =>
-								handleChange('date', value)
-							}
-						/>
-					</FormGroup>
-					<FormGroup
-						cols={2}
-						label={__('Tracking URL', 'multivendorx-pro')}
-						htmlFor="title"
-					>
-						<BasicInputUI
-							type="text"
-							value={formData.tracking_url}
-							onChange={(value: any) =>
-								handleChange('tracking_url', value)
-							}
-						/>
-					</FormGroup>
-					<FormGroup
-						cols={2}
-						label={__('Tracking Number', 'multivendorx-pro')}
-						htmlFor="title"
-					>
-						<BasicInputUI
-							type="text"
-							value={formData.tracking_id}
-							onChange={(value: any) =>
-								handleChange('tracking_id', value)
-							}
-						/>
-					</FormGroup>
+					<FormGroupWrapper>
+						<FormGroup
+							cols={2}
+							label={__('Shipping Providers', 'multivendorx-pro')}
+							htmlFor="title"
+						>
+							<SelectInputUI
+								type="single-select"
+								name="provider"
+								value={formData.provider || ''}
+								options={formattedProviders}
+								onChange={(selected) =>
+									handleChange('provider', selected)
+								}
+							/>
+						</FormGroup>
+						<FormGroup
+							cols={2}
+							label={__('Date', 'multivendorx-pro')}
+							htmlFor="title"
+						>
+							<BasicInputUI
+								type="date"
+								value={formData.tracking_date}
+								onChange={(value: any) =>
+									handleChange('date', value)
+								}
+							/>
+						</FormGroup>
+						<FormGroup
+							cols={2}
+							label={__('Tracking URL', 'multivendorx-pro')}
+							htmlFor="title"
+						>
+							<BasicInputUI
+								type="text"
+								value={formData.tracking_url}
+								onChange={(value: any) =>
+									handleChange('tracking_url', value)
+								}
+							/>
+						</FormGroup>
+						<FormGroup
+							cols={2}
+							label={__('Tracking Number', 'multivendorx-pro')}
+							htmlFor="title"
+						>
+							<BasicInputUI
+								type="text"
+								value={formData.tracking_id}
+								onChange={(value: any) =>
+									handleChange('tracking_id', value)
+								}
+							/>
+						</FormGroup>
+					</FormGroupWrapper>
 				</PopupUI>
 			)}
 		</>

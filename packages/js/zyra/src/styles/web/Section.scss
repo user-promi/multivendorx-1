@@ -16,6 +16,7 @@
 
   .desc {
     margin-top: 0.313rem;
+
     a {
       color: $theme-color;
     }
@@ -51,6 +52,12 @@
 
     .divider-section:not(:first-child):not([data-template="settings"] .divider-section) {
       margin-top: 1rem;
+    }
+  }
+
+  &[data-template="settings"] {
+    .divider-section {
+      padding: 1rem 0 .5rem;
     }
   }
 

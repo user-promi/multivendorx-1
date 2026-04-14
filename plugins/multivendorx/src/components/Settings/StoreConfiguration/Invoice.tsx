@@ -23,7 +23,7 @@ const ratingsField = {
     modal: [
         {
             id: 'vat-number',
-            label: __('Marketplace VAT / Tax number', 'multivendorx'),
+            label: __('VAT / Tax number', 'multivendorx'),
             desc: __('DE987654321', 'multivendorx'),
             isCustom: true,
             disableBtn: true,

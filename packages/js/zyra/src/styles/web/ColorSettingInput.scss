@@ -2,6 +2,7 @@
 
 .color-settings-wrapper {
     width: 100%;
+
     .tabs-item {
         border-bottom: $border-light-medium;
     }
@@ -54,6 +55,10 @@
 
             .form-group-setting-wrapper {
                 padding-bottom: 1rem;
+
+                .choice-toggle-container {
+                    margin-top: 0.313rem;
+                }
             }
 
             .color-palette {
@@ -119,14 +124,14 @@
         .image-thumbnail {
             display: flex;
             align-items: center;
-            gap: 0.313rem;
-            padding: 0.5rem;
+            gap: 0.25rem;
+            padding: .625rem 0.85rem;
             margin-bottom: 0.625rem;
             border: $border-light-small;
             cursor: pointer;
             border-radius: $border-radius-small;
 
-            p {
+            label {
                 font-size: 0.95rem;
                 font-weight: 500;
             }
@@ -140,7 +145,7 @@
                 border-color: $theme-color;
                 background: $theme-background-color;
 
-                p {
+                label {
                     color: $theme-color;
                 }
             }

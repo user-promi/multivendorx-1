@@ -84,7 +84,7 @@ const AIField: React.FC<AIFieldProps> = ({ product, setProduct, field, openGener
     return (
         <PopupUI
             position="menu-dropdown"
-            toggleIcon="star-notifima"
+            toggleIcon="ai"
             width={25}
             open={popupOpen}
             onOpen={() => {

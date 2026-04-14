@@ -12,9 +12,9 @@ const ActivitiesTable = (React.FC = () => {
 		title: {
 			label: __('Title', 'multivendorx'),
 		},
-		type: {
-			label: __('Type', 'multivendorx'),
-		},
+		// type: {
+		// 	label: __('Type', 'multivendorx'),
+		// },
 		date: {
 			label: __('Date', 'multivendorx'),
 			type: 'date',

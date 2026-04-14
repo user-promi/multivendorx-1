@@ -33,17 +33,17 @@
         box-sizing: border-box;
     }
 
-    [data-cols='1']  { flex: 0 0 calc(8.3333% - 0.5rem);  max-width: calc(8.3333% - 0.5rem); }
-    [data-cols='2']  { flex: 0 0 calc(16.6667% - 0.5rem); max-width: calc(16.6667% - 0.5rem); }
-    [data-cols='3']  { flex: 0 0 calc(25% - 0.5rem);      max-width: calc(25% - 0.5rem); }
-    [data-cols='4']  { flex: 0 0 calc(33.3333% - 0.5rem); max-width: calc(33.3333% - 0.5rem); }
-    [data-cols='5']  { flex: 0 0 calc(41.6667% - 0.5rem); max-width: calc(41.6667% - 0.5rem); }
-    [data-cols='6']  { flex: 0 0 calc(50% - 0.5rem);      max-width: calc(50% - 0.5rem); }
-    [data-cols='7']  { flex: 0 0 calc(58.3333% - 0.5rem); max-width: calc(58.3333% - 0.5rem); }
-    [data-cols='8']  { flex: 0 0 calc(66.6667% - 0.5rem); max-width: calc(66.6667% - 0.5rem); }
-    [data-cols='9']  { flex: 0 0 calc(75% - 0.5rem);      max-width: calc(75% - 0.5rem); }
-    [data-cols='10'] { flex: 0 0 calc(83.3333% - 0.5rem); max-width: calc(83.3333% - 0.5rem); }
-    [data-cols='11'] { flex: 0 0 calc(91.6667% - 0.5rem); max-width: calc(91.6667% - 0.5rem); }
+    [data-cols='1']  { flex: 0 0 calc(8.3333% - 0.916rem); max-width: calc(8.3333% - 0.916rem); }
+    [data-cols='2']  { flex: 0 0 calc(16.6667% - 0.833rem); max-width: calc(16.6667% - 0.833rem); }
+    [data-cols='3']  { flex: 0 0 calc(25% - 0.75rem); max-width: calc(25% - 0.75rem); }
+    [data-cols='4']  { flex: 0 0 calc(33.3333% - 0.666rem); max-width: calc(33.3333% - 0.666rem); }
+    [data-cols='5']  { flex: 0 0 calc(41.6667% - 0.583rem); max-width: calc(41.6667% - 0.583rem); }
+    [data-cols='6']  { flex: 0 0 calc(50% - 0.5rem); max-width: calc(50% - 0.5rem); }
+    [data-cols='7']  { flex: 0 0 calc(58.3333% - 0.416rem); max-width: calc(58.3333% - 0.416rem); }
+    [data-cols='8']  { flex: 0 0 calc(66.6667% - 0.333rem); max-width: calc(66.6667% - 0.333rem); }
+    [data-cols='9']  { flex: 0 0 calc(75% - 0.25rem); max-width: calc(75% - 0.25rem); }
+    [data-cols='10'] { flex: 0 0 calc(83.3333% - 0.166rem); max-width: calc(83.3333% - 0.166rem); }
+    [data-cols='11'] { flex: 0 0 calc(91.6667% - 0.083rem); max-width: calc(91.6667% - 0.083rem); }
     [data-cols='12'] { flex: 0 0 100%; max-width: 100%; }
 }
 
