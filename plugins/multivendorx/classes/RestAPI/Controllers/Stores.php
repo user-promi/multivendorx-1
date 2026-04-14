@@ -486,6 +486,15 @@ class Stores extends \WP_REST_Controller {
             $file_data     = $request->get_file_params();
             $current_user  = MultiVendorX()->current_user;
 
+            if ( !empty( $store_data['store-name'] ) && !empty( $store_data['name'] ) ) {
+                $store_data['name'] = $store_data['store-name'];
+            }
+
+            if ( !empty( $store_data['Description'] ) && !empty( $store_data['description'] ) ) {
+                $store_data['description'] = $store_data['Description'];
+            }
+
+            unset( $store_data['store-name'], $store_data['Description'] );
             $core_fields = array(
                 Utill::STORE_SETTINGS_KEYS['name'],
                 Utill::STORE_SETTINGS_KEYS['slug'],
@@ -560,7 +569,6 @@ class Stores extends \WP_REST_Controller {
                 'store-paypal'   => Utill::STORE_SETTINGS_KEYS['paypal_email'],
                 'store-phone'    => Utill::STORE_SETTINGS_KEYS['phone'],
             );
-file_put_contents( plugin_dir_path(__FILE__) . "/error.log", date("d/m/Y H:i:s", time()) . ":store data: : " . var_export($store_data, true) . "\n", FILE_APPEND);
 
             foreach ( $store_data as $key => $value ) {
                 if (isset($registration_meta_map[ $key ])) {

@@ -397,9 +397,9 @@ class StoreUtil {
 
         foreach ( $submitted_data as $field_name => $field_value ) {
             if ( isset( $reverse_map[ $field_name ] ) ) {
-        $field_name = $reverse_map[ $field_name ];
-    }
-    
+                $field_name = $reverse_map[ $field_name ];
+            }
+
             $label = $name_label_map[ $field_name ] ?? $field_name;
             $value = is_array( $field_value )
                 ? implode(
