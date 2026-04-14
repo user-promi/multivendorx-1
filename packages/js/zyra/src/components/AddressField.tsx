@@ -157,9 +157,9 @@ const AddressFieldUI: React.FC<AddressFieldProps> = ({
             handle=".drag-handle"
             animation={150}
             group={{
-                name: `address-${formField.id}`, // unique per block
-                pull: false,  // ❗ prevent dragging OUT
-                put: false,   // ❗ prevent dropping IN from outside
+                name: `address-${formField.id}`,
+                pull: false,
+                put: false,
             }}
             className='address-fields'
         >
