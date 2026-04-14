@@ -650,8 +650,8 @@ class Admin {
                 return $count;
             case 'approval-queue':
                 return StoreUtil::get_approval_queue_count();
-            // case 'customers':
-                // return mvx_get_customer_count();
+            case 'customers':
+                return StoreUtil::get_customer_tab_count();
             case 'compliance':
                 return StoreUtil::get_compliance_tab_count();
             default:

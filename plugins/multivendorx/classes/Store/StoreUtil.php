@@ -919,4 +919,12 @@ class StoreUtil {
             $total
         );
     }
+
+    public static function get_customer_tab_count() {
+        $total = 0;
+        return apply_filters(
+            'multivendorx_customer_tab_count',
+            $total
+        );
+    }
 }
