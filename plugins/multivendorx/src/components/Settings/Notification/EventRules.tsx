@@ -19,6 +19,8 @@ import {
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { temp1 } from '../../../assets/template/emailTemplate/temp1';
+import { temp2 } from '../../../assets/template/emailTemplate/temp2';
+
 
 
 const RECIPIENT_CONFIG: Record<string, { icon: string; badge: string }> = {
@@ -124,6 +126,7 @@ const EventRules: React.FC = () => {
 		field: string | null;
 	}>({ start: 0, end: 0, field: null });
 	const [isLoading, setIsLoading] = useState(true);
+	const [useTemplate, setUseTemplate] = useState(false);
 
 	// Fetch notifications on mount
 	useEffect(() => {
@@ -541,7 +544,7 @@ const EventRules: React.FC = () => {
 										value={(() => {
 											try {
 												
-												if (formData.email_body) {
+												if (formData.email_body && !useTemplate) {
 													return {
 														emailTemplates: [
 															{
@@ -593,8 +596,11 @@ const EventRules: React.FC = () => {
 											key: 'email_body_builder',
 											context: 'email', 
 											visibleGroups: ['email'], 
-											emailTemplates: [temp1],
+											emailTemplates: [temp1,temp2],
 										}}
+										onTemplateSelect={(id) => {
+    setUseTemplate(true); // 🔥 force template mode
+}}
 									/>
 								</FormGroup>
 							)}

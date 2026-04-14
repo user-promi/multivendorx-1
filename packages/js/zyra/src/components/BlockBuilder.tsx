@@ -334,6 +334,7 @@ export const BlockBuilderUI: React.FC<BlockBuilderProps> = ({
 
     return (
         <CanvasEditor
+            key={activeEmailTemplateId}
             blocks={initialBlocks}
             onChange={handleBlocksChange}
             blockGroups={
