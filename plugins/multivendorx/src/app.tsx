@@ -235,15 +235,15 @@ const App = () => {
 			action: handleOpenFeaturePopup,
 		},
 	];
-	const bannerItem = [
-		'<b>Marketplace monetization:</b> Create flexible membership plans that let you charge stores for access, features, and growth opportunities.',
-		'<b>Built-in tax compliance:</b> Automatically generate tax-ready invoices for orders, commissions, and payouts to keep your marketplace compliant.',
-		'<b>Franchise-ready scaling:</b> Run multiple regional or franchise marketplaces with centralized control and consistent branding.',
-		'<b>Recurring revenue engine:</b> Enable subscription-based selling so your marketplace benefits from predictable, recurring income.',
-		'<b>Service and booking sales:</b> Allow stores to sell bookings for services, appointments, rentals, and experiences on your platform.',
-		'<b>High-value rentals:</b> Launch rental marketplace with date-based availability and higher order values.',
-		'<b>Verified stores:</b> Verify store identities using documents and badges to build trust and reduce risk on your marketplace.',
-		'<b>Vacation mode:</b> Allow stores to temporarily pause their shop during vacations while keeping their listings intact.',
+	cconst bannerItem = [
+		'<b>Earn from store memberships:</b> Create paid plans and charge stores to join or access special features on your marketplace.',
+		'<b>Automatic tax invoices:</b> Generate clear invoices for orders, commissions, and payouts so your records stay organized.',
+		'<b>Franchise marketplaces:</b> Let partners operate their own local version of your marketplace under your brand.',
+		'<b>Earn recurring income:</b> Allow stores to sell subscription products and generate regular monthly or yearly revenue.',
+		'<b>Sell services and bookings:</b> Let stores accept bookings for services, appointments, rentals, or experiences.',
+		'<b>Create a rental marketplace:</b> Allow products to be rented for specific dates instead of being purchased permanently.',
+		'<b>Verified stores:</b> Verify store identities using documents and badges to help customers trust your marketplace.',
+		'<b>Vacation mode for stores:</b> Stores can temporarily pause orders during holidays while keeping their products visible.',
 	];
 	const utilityListWithTab = [
 		{
