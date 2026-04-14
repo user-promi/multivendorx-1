@@ -1472,7 +1472,12 @@ class Install {
         }
 
         if ( ! empty( $previous_store_settings['choose_map_api'] ) ) {
-            $map_settings['choose_map_api']     = $previous_store_settings['choose_map_api']['value'];
+            if ('google_map_set' == $previous_store_settings['choose_map_api']['value']) {
+                $map_settings['choose_map_api'] = 'google_map';
+            }
+            if ('mapbox_api_set' == $previous_store_settings['choose_map_api']['value']) {
+                $map_settings['choose_map_api'] = 'mapbox';
+            }
             $map_settings['google_map_api_key'] = $previous_store_settings['google_map_api_key'];
             $map_settings['mapbox_api_key']     = $previous_store_settings['mapbox_api_key'];
         }
@@ -1546,7 +1551,7 @@ class Install {
 				$commission_settings['commission_per_item'] = array(
 					array(
 						'commission_fixed'      => '',
-						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_ammount'] ?? '',
+						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_amount'] ?? '',
 					),
 				);
 			}
@@ -1556,7 +1561,7 @@ class Install {
 				$commission_settings['commission_per_item'] = array(
 					array(
 						'commission_fixed'      => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['fixed_ammount'] ?? '',
-						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_ammount'] ?? '',
+						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_amount'] ?? '',
 					),
 				);
 			}
@@ -1566,7 +1571,7 @@ class Install {
 				$commission_settings['commission_per_store_order'] = array(
 					array(
 						'commission_fixed'      => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['fixed_ammount'] ?? '',
-						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_ammount'] ?? '',
+						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_amount'] ?? '',
 					),
 				);
 			}
@@ -1665,8 +1670,7 @@ class Install {
         $old_reasons              = array_map( 'trim', explode( '||', $previous_refund_settings['refund_order_msg'] ?? '' ) );
         if ( ! empty( $old_reasons ) ) {
             foreach ( $old_reasons as $reason ) {
-                $key = strtolower( str_replace( ' ', '-', $reason ) );
-
+                $key = sanitize_title( $reason );
                 $refund_reasons[ $key ] = array(
                     'label'    => $reason,
                     'isCustom' => true,
@@ -1688,8 +1692,7 @@ class Install {
             }
 
             $label = trim( $item['category'] );
-
-            $key = strtolower( preg_replace( '/[^a-z0-9]+/', '-', $label ) );
+            $key   = sanitize_title( $label );
 
 			if ( ! array_key_exists( $key, $ratings_parameters ) ) {
                 $ratings_parameters[ $key ] = array(
@@ -1750,7 +1753,7 @@ class Install {
 					$new_form['store_registration_from']['formfieldlist'][] = array(
 						'id'       => $id_counter++,
 						'type'     => 'title',
-						'label'    => '',
+						'label'    => $field['label'],
 						'chosen'   => '',
 						'selected' => '',
 					);
@@ -2433,6 +2436,7 @@ class Install {
         $args = array(
             'post_type' => 'dc_commission',
             'fields'    => 'ids',
+            'posts_per_page' => -1
         );
 
         $commission_ids = get_posts( $args );
