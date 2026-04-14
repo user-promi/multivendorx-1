@@ -198,7 +198,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 			label: __('Transaction Type', 'multivendorx'),
 			render: (row) =>
 				row.transaction_type?.toLowerCase() === 'commission' &&
-				row.commission_id ? (
+					row.commission_id ? (
 					<span
 						className="link-item"
 						onClick={() => {
@@ -442,11 +442,10 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 													</div>
 												)}
 												<div
-													className={`price ${
-														parseFloat(txn.debit) < 0
-															? 'color-red'
-															: 'color-green'
-													}`}
+													className={`price ${parseFloat(txn.debit) < 0
+														? 'color-red'
+														: 'color-green'
+														}`}
 												>
 													{formatCurrency(txn.debit)}
 												</div>
@@ -481,83 +480,74 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 									{walletLoading ? (
 										<Skeleton width={15.625} />
 									) : (
-										<>
-											<b>
-												{' '}
-												{formatCurrency(
-													wallet?.thresold
-												)}{' '}
-											</b>
-											{__(
-												'minimum required to withdraw',
-												'multivendorx'
-											)}
-										</>
+										wallet?.thresold > 0 ? (
+											<>
+												<b>{formatCurrency(wallet.thresold)} </b>
+												{__('minimum required to withdraw', 'multivendorx')}
+											</>
+										) : (
+											__('No minimum', 'multivendorx')
+										)
 									)}
 								</div>
 								<div className="desc">
 									{walletLoading ? (
 										<Skeleton width={15.625} />
-									) : (
+									) : wallet?.reserve_balance > 0 ? (
 										<>
-											<b>
-												{' '}
-												{formatCurrency(
-													wallet?.reserve_balance
-												)}{' '}
-											</b>
-											{__(
-												'reserve balance',
-												'multivendorx'
-											)}
+											<b>{formatCurrency(wallet.reserve_balance)} </b>
+											{__('reserve balance', 'multivendorx')}
 										</>
+									) : (
+										__('No reserve set', 'multivendorx')
 									)}
 								</div>
 							</div>
 							<Column row>
-								<ItemListUI
-									className="mini-card"
-									background
-									items={[
-										{
-											title: __(
-												'Upcoming Balance',
-												'multivendorx'
-											),
-											desc: (
-												<>
-													{__(
-														'This amount is being processed and will be released ',
-														'multivendorx'
-													)}
-													{wallet?.payment_schedules ? (
-														<>
-															{
-																wallet.payment_schedules
-															}{' '}
-															{__(
-																' by the admin.',
-																'multivendorx'
-															)}
-														</>
-													) : (
-														<>
-															{__(
-																'automatically every hour.',
-																'multivendorx'
-															)}
-														</>
-													)}
-												</>
-											),
-											value: formatCurrency(
-												wallet.locking_balance
-											),
-										},
+								{Number(wallet?.locking_balance) > 0 ? (
+									<ItemListUI
+										className="mini-card"
+										background
+										items={[
+											{
+												title: __(
+													'Upcoming Balance',
+													'multivendorx'
+												),
+												desc: (
+													<>
+														{__(
+															'This amount is being processed and will be released ',
+															'multivendorx'
+														)}
+														{wallet?.payment_schedules ? (
+															<>
+																{
+																	wallet.payment_schedules
+																}{' '}
+																{__(
+																	' by the admin.',
+																	'multivendorx'
+																)}
+															</>
+														) : (
+															<>
+																{__(
+																	'automatically every hour.',
+																	'multivendorx'
+																)}
+															</>
+														)}
+													</>
+												),
+												value: formatCurrency(
+													wallet.locking_balance
+												),
+											},
 
-										...(wallet?.withdrawal_setting?.length >
-										0
-											? [
+											...(wallet?.withdrawal_setting?.length >
+												0
+												? [
 													{
 														title: __(
 															'Free Withdrawals',
@@ -596,8 +586,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 																		?.withdrawal_setting?.[0]
 																		?.free_withdrawals ??
 																		0) -
-																		(wallet?.free_withdrawal ??
-																			0)
+																	(wallet?.free_withdrawal ??
+																		0)
 																)}{' '}
 																<span>
 																	{__(
@@ -609,9 +599,14 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 														),
 													},
 												]
-											: []),
-									]}
-								/>
+												: []),
+										]}
+									/>
+								) : (
+									<div className="no-pending-status">
+										{__('No pending earning in clearence', 'multivendorx')}
+									</div>
+								)}
 							</Column>
 							<ButtonInputUI
 								buttons={{
@@ -702,8 +697,8 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 
 								<div className="free-wrapper">
 									{wallet?.withdrawal_setting?.length > 0 &&
-									wallet?.withdrawal_setting?.[0]
-										?.free_withdrawals ? (
+										wallet?.withdrawal_setting?.[0]
+											?.free_withdrawals ? (
 										<>
 											{freeLeft > 0 ? (
 												<span>
