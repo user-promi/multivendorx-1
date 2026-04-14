@@ -321,8 +321,8 @@ const BusinessAddress = () => {
 					<SelectInputUI
 						value={formData.country}
 						options={appLocalizer.country_list || []}
-						onChange={(e) =>
-							handleAddressChange('country', e.value)
+						onChange={(value) =>
+							handleAddressChange('country', value)
 						}
 					/>
 				</FormGroup>
@@ -337,7 +337,7 @@ const BusinessAddress = () => {
 						name="state"
 						value={formData.state}
 						options={stateOptions}
-						onChange={(e) => handleAddressChange('state', e.value)}
+						onChange={(value) => handleAddressChange('state', value)}
 					/>
 				</FormGroup>
 

@@ -398,7 +398,7 @@ const Dashboard: React.FC = () => {
 					row: 5,
 					store_id: appLocalizer.store_id,
 					transaction_type: 'Withdrawal',
-					transaction_status: 'Completed',
+					status: 'completed',
 					orderBy: 'created_at',
 					order: 'DESC',
 					start_date: dateRange.startDate,
@@ -406,8 +406,7 @@ const Dashboard: React.FC = () => {
 				},
 			})
 			.then((response) => {
-				const withdrawals = response.data || [];
-				setLastWithdraws(withdrawals);
+				setLastWithdraws(response.data || []);
 			})
 			.catch(() => setLastWithdraws([]));
 
@@ -421,7 +420,7 @@ const Dashboard: React.FC = () => {
 					meta_value: appLocalizer.store_id,
 					after: dateRange.startDate.toISOString().split('.')[0], // Cleaner ISO format
 					before: dateRange.endDate.toISOString().split('.')[0],
-					_fields: 'id,customer_id,billing', // ONLY fetch what you need to identify the customer
+					_fields: 'id,customer_id,billing',
 				},
 			})
 			.then(({ data }) => {
@@ -945,7 +944,7 @@ const Dashboard: React.FC = () => {
 										);
 									})
 								) : (
-									<ComponentStatusView title={__('No customers found.', 'multivendorx')} />
+									<ComponentStatusView title={__('Top customers will appear here once you receive orders.', 'multivendorx')} />
 								)}
 							</Card>
 						</Column>

@@ -33,10 +33,10 @@ export default {
 			key: 'description',
 			readOnly: !settings.includes('store_description'),
 		},
-		{
-			type: 'text',
-			label: __('Buyer welcome message after purchase', 'multivendorx'),
-			key: 'messageToBuyer',
-		},
+		// {
+		// 	type: 'text',
+		// 	label: __('Buyer welcome message after purchase', 'multivendorx'),
+		// 	key: 'messageToBuyer',
+		// },
 	],
 };

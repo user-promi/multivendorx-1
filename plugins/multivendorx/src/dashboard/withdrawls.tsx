@@ -69,13 +69,13 @@ const Withdrawls: React.FC = () => {
 				row: 5,
 				store_id: appLocalizer.store_id,
 				transaction_type: 'Withdrawal',
-				transaction_status: 'Completed',
+				status: 'completed',
 				orderBy: 'created_at',
 				order: 'DESC',
 			},
 		})
 			.then((response) => {
-				setLastWithdraws(response.data.transaction || []);
+				setLastWithdraws(response.data || []);
 			})
 			.catch(() => setData([]));
 
