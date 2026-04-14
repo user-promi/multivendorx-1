@@ -30,7 +30,7 @@ class Frontend {
         add_filter( 'multivendorx_approval_queue_count', array( $this, 'approval_count'), 10 );
     }
 
-    public function approval_count( $total, $counts ) {
+    public function approval_count( $total ) {
         $query = wc_get_orders([
             'status'   => 'wc-refund-requested',
             'limit'    => 1,
