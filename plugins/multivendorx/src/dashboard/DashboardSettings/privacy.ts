@@ -10,6 +10,7 @@ export default {
 		'Define your store’s policies so customers clearly understand your shipping, refund, and return terms.',
 		'multivendorx'
 	),
+	module: 'privacy',
 	headerIcon: 'privacy',
 	submitUrl: `store/${appLocalizer.store_id}`,
 	modal: [
@@ -19,7 +20,6 @@ export default {
 			key: 'store_policy',
 			label: __('Store policy', 'multivendorx'),
 			usePlainText: false,
-			moduleEnabled: 'privacy',
 			readOnly: !settings.includes('store'),
 		},
 
@@ -29,7 +29,6 @@ export default {
 			key: 'shipping_policy',
 			label: __('Shipping policy', 'multivendorx'),
 			usePlainText: false,
-			moduleEnabled: 'privacy',
 			readOnly: !settings.includes('shipping'),
 		},
 
@@ -39,7 +38,6 @@ export default {
 			key: 'refund_policy',
 			label: __('Refund policy', 'multivendorx'),
 			usePlainText: false,
-			moduleEnabled: 'privacy',
 			readOnly: !settings.includes('refund'),
 		},
 
@@ -52,7 +50,6 @@ export default {
 				'multivendorx'
 			),
 			usePlainText: false,
-			moduleEnabled: 'privacy',
 			readOnly: !settings.includes('cancellation_return'),
 		},
 

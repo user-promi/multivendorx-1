@@ -225,7 +225,7 @@ class Ajax {
             </div>
             </div>';
 		} else {
-			echo '<p>' . esc_html__( 'No reviews yet.', 'multivendorx' ) . '</p>';
+			echo '<p>' . esc_html__( "No reviews yet — they'll show up here once received.", "multivendorx" ) . '</p>';
 		}
 
 		wp_send_json_success( array( 'html' => ob_get_clean() ) );

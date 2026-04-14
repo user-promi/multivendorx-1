@@ -331,7 +331,7 @@ class Admin {
                 woocommerce_wp_text_input(
                     array(
                         'id'          => 'product_fixed_commission',
-                        'label'       => __( 'Commission Fixed', 'multivendorx' ),
+                        'label'       => __( 'Marketplace commission (fixed)', 'multivendorx' ),
                         'placeholder' => wc_format_localized_price( 0 ),
                         'description' => __( 'Fixed commission.', 'multivendorx' ),
                         'desc_tip'    => true,
@@ -345,7 +345,7 @@ class Admin {
                 woocommerce_wp_text_input(
                     array(
                         'id'          => 'product_percentage_commission',
-                        'label'       => __( 'Commission Percentage', 'multivendorx' ),
+                        'label'       => __( 'Marketplace commission (%)', 'multivendorx' ),
                         'placeholder' => wc_format_localized_price( 0 ),
                         'description' => __( 'Percentage commission.', 'multivendorx' ),
                         'desc_tip'    => true,
