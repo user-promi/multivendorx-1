@@ -235,7 +235,7 @@ const App = () => {
 			action: handleOpenFeaturePopup,
 		},
 	];
-	cconst bannerItem = [
+	const bannerItem = [
 		'<b>Earn from store memberships:</b> Create paid plans and charge stores to join or access special features on your marketplace.',
 		'<b>Automatic tax invoices:</b> Generate clear invoices for orders, commissions, and payouts so your records stay organized.',
 		'<b>Franchise marketplaces:</b> Let partners operate their own local version of your marketplace under your brand.',

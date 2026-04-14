@@ -40,7 +40,7 @@ class Rest extends \WP_REST_Controller {
      */
     public function get_items( $request ) {
         if ( ! wp_verify_nonce( $request->get_header( 'X-WP-Nonce' ), 'wp_rest' ) ) {
-            return $this->error_response( 'invalid_nonce', __( 'Invalid nonce.', 'multivendorx-pro' ), 401 );
+            return $this->error_response( 'invalid_nonce', __( 'Invalid nonce.', 'multivendorx' ), 401 );
         }
 
         try {
@@ -55,7 +55,7 @@ class Rest extends \WP_REST_Controller {
 
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
-            return $this->error_response( 'exception', __( 'Server error.', 'multivendorx-pro' ), 500 );
+            return $this->error_response( 'exception', __( 'Server error.', 'multivendorx' ), 500 );
         }
     }
 
