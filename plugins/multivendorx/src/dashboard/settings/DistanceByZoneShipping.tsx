@@ -310,7 +310,6 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 		shipping_methods: {
 			label: __('Shipping Method(s)', 'multivendorx'),
 			render: (row: TableRow) => {
-				console.log('row', row);
 				const zone = row as Zone;
 				const methodsObj = zone.shipping_methods || {};
 				const methodsArray = Object.values(methodsObj);

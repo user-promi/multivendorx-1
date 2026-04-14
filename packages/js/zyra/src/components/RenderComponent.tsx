@@ -292,7 +292,6 @@ const RenderComponent: React.FC<RenderProps> = ({
         key: string,
         value: string | string[] | number[] | MultiSelectOption[]
     ) => {
-        console.log('save');
         settingChanged.current = true;
 
         const field = modal.find((f) => f.key === key);

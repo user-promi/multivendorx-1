@@ -205,10 +205,9 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
                                     disabled={!isRowActive}
                                     onChange={(e) => {
                                         if (isBlocked(column, modules, onBlocked)) {
-                                            return; // 🚫 block interaction
+                                            return; 
                                         }
-                                        console.log("checkbox trigger");
-                                        handleCheckboxChange(e); // ✅ use existing logic
+                                        handleCheckboxChange(e); 
                                     }}
                                 />
                             );

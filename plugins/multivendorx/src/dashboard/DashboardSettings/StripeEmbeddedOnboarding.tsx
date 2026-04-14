@@ -45,7 +45,7 @@ const StripeEmbeddedOnboarding: React.FC<Props> = ({
 	return (
 		<ConnectComponentsProvider connectInstance={instance}>
 			<ConnectAccountOnboarding
-				onExit={() => console.log('User exited onboarding')}
+				onExit={() => {}}
 				onStepChange={({ step }) => {
 					if (step === 'complete') {
 						onComplete();

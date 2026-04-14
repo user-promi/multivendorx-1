@@ -470,9 +470,6 @@ const App = () => {
 								),
 							},
 						]}
-						onComplete={(data) => {
-							console.log('Import completed', data);
-						}}
 						onError={(error) => {
 							console.error('Import failed', error);
 						}}
