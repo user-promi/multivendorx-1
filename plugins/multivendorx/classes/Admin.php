@@ -164,11 +164,13 @@ class Admin {
 
                 if ( in_array( $slug, $allowed_tabs ) ) {
                     $count = $this->multivendorx_get_menu_count( $slug );
-                    $menu_name .= sprintf(
-                        " <span class='mvx-count' data-tab='%s' style='margin-left:6px; background:#d63638; color:#fff; padding:2px 6px; border-radius:10px; font-size:11px;'>%d</span>",
-                        esc_attr( $slug ),
-                        (int) $count
-                    );
+                    if ( $count > 0 ) {
+                        $menu_name .= sprintf(
+                            " <span class='mvx-count' data-tab='%s' style='margin-left:6px; background:#d63638; color:#fff; padding:2px 6px; border-radius:10px; font-size:11px;'>%d</span>",
+                            esc_attr( $slug ),
+                            (int) $count
+                        );
+                    }
                 }
 
                 add_submenu_page(

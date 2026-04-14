@@ -1,7 +1,7 @@
 import React from 'react';
 import { __ } from '@wordpress/i18n';
 import { FormGroup, FormGroupWrapper, PopupUI, SectionUI } from 'zyra';
-import { formatCurrency } from '@/services/commonFunction';
+import { formatCurrency, formatDate } from '@/services/commonFunction';
 
 type TransactionRow = {
 	id: number;
@@ -21,6 +21,7 @@ type Props = {
 };
 
 const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
+	console.log('transaction', transaction)
 	return (
 		<>
 			<PopupUI
@@ -42,7 +43,7 @@ const TransactionDetailsModal: React.FC<Props> = ({ transaction, onClose }) => {
 
 					<FormGroupWrapper>
 						<FormGroup row label={__('Date', 'multivendorx')}>
-							{transaction.date}
+							{formatDate(transaction.created_at)}
 						</FormGroup>
 						<FormGroup
 							row

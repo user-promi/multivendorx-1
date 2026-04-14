@@ -346,11 +346,13 @@ const Dashboard = () => {
 				.filter(Boolean)
 				.join(' ')}
 		>
-			<GuidedTourProvider
-				appLocalizer={appLocalizer}
-				steps={getTourSteps(appLocalizer)}
-				storeId={appLocalizer.store_id}
-			/>
+			{storeData?.status === 'active' && (
+				<GuidedTourProvider
+					appLocalizer={appLocalizer}
+					steps={getTourSteps(appLocalizer)}
+					storeId={appLocalizer.store_id}
+				/>
+			)}
 			<div className="dashboard-tabs-wrapper">
 				<div className="logo-wrapper">
 					{store_dashboard_logo ? (

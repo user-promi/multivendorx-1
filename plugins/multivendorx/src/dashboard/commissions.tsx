@@ -132,7 +132,7 @@ const StoreCommission: React.FC = () => {
 			},
 			csvDisplay: false,
 		},
-		marketplace_payable: {
+		store_payable: {
 			label: __('Total Earned', 'multivendorx'),
 			isSortable: true,
 			type: 'currency',
