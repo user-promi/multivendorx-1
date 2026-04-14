@@ -12,6 +12,7 @@ import ApprovalQueue from './components/ApprovalQueue/ApprovalQueue';
 import Notifications from './components/Notifications/Notifications';
 import TransactionHistory from './components/TransactionHistory/TransactionHistory';
 import CustomersFeedback from './components/CustomersFeedback/CustomersFeedback';
+import Compliance from './components/Compliance/Compliance';
 
 registerMultiVendorXRoute({ tab: 'dashboard', component: AdminDashboard });
 registerMultiVendorXRoute({ tab: 'settings', component: Settings });
@@ -20,6 +21,7 @@ registerMultiVendorXRoute({ tab: 'modules', component: Modules });
 registerMultiVendorXRoute({ tab: 'stores', component: Stores });
 registerMultiVendorXRoute({ tab: 'commissions', component: Commissions });
 registerMultiVendorXRoute({tab: 'customers',component: CustomersFeedback});
+registerMultiVendorXRoute({tab: 'compliance',component: Compliance});
 registerMultiVendorXRoute({ tab: 'approval-queue', component: ApprovalQueue });
 registerMultiVendorXRoute({
 	tab: 'transaction-history',
