@@ -449,6 +449,7 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 		return (
 			<MapProviderUI
 				apiKey={mapConfig.apiKey}
+				mapId={settings?.geolocation?.google_map_id || ''}
 				locationAddress={addressData.address}
 				locationLat={addressData.location_lat}
 				locationLng={addressData.location_lng}
