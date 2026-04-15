@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import 'zyra/build/index.css';
 import { ExpandablePanelUI } from 'zyra';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import img from '../../assets/images/multivendorx-logo.png';
 interface SettingsState {
 	marketplace_setup: {
@@ -417,6 +417,7 @@ const SetupWizard: React.FC = () => {
 				},
 			],
 		},
+		...(appLocalizer.multivendor_plugin ? [
 		{
 			id: 'migration',
 			label: __('Migration', 'multivendorx'),
@@ -431,19 +432,26 @@ const SetupWizard: React.FC = () => {
 					type: 'notice',
 					label: '',
 					// message: appLocalizer.multivendor_plugin || 'No multivendor plugin active currently',
-					message: __(
-						'We found an active multivendor plugin on your site <span class="admin-badge purple">WCFM Marketplace</span>',
-						'multivendorx'
-					),
+					message: sprintf(
+    						__(
+								'We found an active multivendor plugin on your site <span class="admin-badge purple">%s</span>',
+								'multivendorx'
+							),
+							appLocalizer.multivendor_plugin
+						),
 					noticeType: 'info',
 					display: 'notice',
 				},
 				{
 					key: 'notice',
 					type: 'notice',
-					message: __(
-						"We'll copy all your data from <b>WCFM Marketplace</b> into MultivendorX. Once the import is done, <b>WCFM Marketplace</b> will be turned off automatically to prevent any conflicts. Make sure you're ready before you begin.",
-						'multivendorx'
+					message: sprintf(
+						__(
+							"We'll copy all your data from <b>%s</b> into MultivendorX. Once the import is done, <b>%s</b> will be turned off automatically to prevent any conflicts. Make sure you're ready before you begin.",
+							'multivendorx'
+						),
+						appLocalizer.multivendor_plugin,
+						appLocalizer.multivendor_plugin
 					),
 					noticeType: 'info',
 					display: 'notice',
@@ -473,9 +481,12 @@ const SetupWizard: React.FC = () => {
 							icon: 'success',
 						},
 						{
-							title: __(
-								'<b>Keep WCFM Marketplace active for now —</b>it must still be installed and enabled so we can read your existing data.',
-								'multivendorx'
+							title: sprintf(
+								__(
+									'<b>Keep %s active for now —</b> it must still be installed and enabled so we can read your existing data.',
+									'multivendorx'
+								),
+								appLocalizer.multivendor_plugin
 							),
 							icon: 'success',
 						},
@@ -593,7 +604,7 @@ const SetupWizard: React.FC = () => {
 					],
 				},
 			],
-		},
+		}] : []),
 		{
 			id: 'more_settings',
 			label: __('Want to configure more settings?', 'multivendorx'),

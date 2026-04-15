@@ -22,8 +22,8 @@ if ( ! $store ) {
 }
 
 $meta_data         = $store->get_all_meta();
-$banner            = $meta_data['banner'] ?? '';
-$profile           = $meta_data['image'] ?? '';
+$banner            = $meta_data['banner']['url'] ?? '';
+$profile           = $meta_data['image']['url'] ?? '';
 $description       = $store->get( 'description' );
 $template          = MultiVendorX()->setting->get_setting( 'store_banner_template', array() );
 $selected_template = isset( $template['selectedPalette'] ) ? $template['selectedPalette'] : 'template1';
@@ -33,68 +33,13 @@ $overall_reviews   = Util::get_overall_rating( $store->get_id() );
 $reviews           = Util::get_reviews_by_store( $store->get_id() );
 $rating_value      = $overall_reviews ? number_format( (float) $overall_reviews, 1 ) : 0;
 $review_count      = is_array( $reviews ) ? count( $reviews ) : 0;
-$banner_type       = $meta_data['banner_type'] ?? 'static_image';
-$banner_video      = $meta_data['banner_video'] ?? '';
-$banner_slider     = $meta_data['banner_slider'] ?? array();
-
 ?>
 
 <div class="multivendorx-banner <?php echo esc_attr( $selected_template ); ?>">
     <div class="banner">
-        <?php if ( 'static_image' === $banner_type ) : ?>
-            <?php if ( ! empty( $banner ) && is_string( $banner ) ) : ?>
-                <div class="banner-img" >
-                    <img src="<?php echo esc_url( $banner ); ?>" alt="">
-                </div>
-            <?php endif; ?>
-
-        <?php elseif ( 'slider_image' === $banner_type ) : ?>
-            <div class="banner-slider">
-                <?php
-                if ( ! empty( $banner_slider ) ) :
-                    foreach ( $banner_slider as $slide ) :
-                        echo '<div class="slide"><img src="' . esc_url( $slide ) . '" alt=""></div>';
-                    endforeach;
-                    ?>
-                <?php endif; ?>
-
-        <?php elseif ( 'video' === $banner_type ) : ?>
-            <div class="banner-video">
-                <?php if ( ! empty( $banner_video ) ) : ?>
-                    <?php
-                    $url = trim( $banner_video );
-
-                    // YouTube URL.
-                    if ( preg_match( '/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/', $url, $matches ) ) {
-                        $youtube_id = $matches[1];
-                        ?>
-                        <iframe width="100%" height="500"
-                            src="https://www.youtube.com/embed/<?php echo esc_attr( $youtube_id ); ?>?autoplay=1&mute=1&loop=1&playlist=<?php echo esc_attr( $youtube_id ); ?>"
-                            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                        </iframe>
-                        <?php
-                        // Vimeo URL.
-                    } elseif ( preg_match( '/vimeo\.com\/(\d+)/', $url, $matches ) ) {
-                        $vimeo_id = $matches[1];
-                        ?>
-                        <iframe width="100%" height="500"
-                            src="https://player.vimeo.com/video/<?php echo esc_attr( $vimeo_id ); ?>?autoplay=1&loop=1&muted=1"
-                            frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
-                        </iframe>
-                        <?php
-                        // Direct video file (mp4/webm/etc.).
-                    } else {
-                        ?>
-                        <video autoplay muted loop controls style="width:100%; height:auto;">
-                            <source src="<?php echo esc_url( $url ); ?>" type="video/mp4">
-                            <?php esc_html_e( 'Your browser does not support the video tag.', 'multivendorx' ); ?>
-                        </video>
-                    <?php } ?>
-                <?php else : ?>
-                    <!-- <div class="banner-img" style="background-image='url('"></div> -->
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
+        <div class="banner-img">
+            <img src="<?php echo esc_url( $banner ); ?>" alt="">
+        </div>
     </div>
 
 

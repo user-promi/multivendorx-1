@@ -26,13 +26,22 @@ class Cron {
             wp_schedule_event( time(), 'every_5_minutes', 'multivendorx_order_migration' );
         }
 
+        if ( ! wp_next_scheduled( 'mvx_full_migration' ) ) {
+            wp_schedule_event(time(), 'every_minute', 'mvx_full_migration');
+        }
+
         add_action( 'multivendorx_order_migration', array( $this, 'order_migration' ) );
+        add_action( 'mvx_full_migration', [$this, 'run_table_migration_cron'] );
     }
 
     public function custom_schedules_for_migration( $schedules ) {
         $schedules['every_5_minutes'] = array(
             'interval' => 5 * 60,
             'display'  => __( 'Every 5 Minutes', 'multivendorx' ),
+        );
+        $schedules['every_minute'] = array(
+            'interval' => 60, // in seconds
+            'display'  => __('Every minute', 'multivendorx')
         );
         return $schedules;
     }
@@ -46,5 +55,10 @@ class Cron {
         $class    = "\\MultiVendorX\\Migration\\{$active_plugin}";
         $migrator = new $class();
         $migrator->migrate_orders_and_commissions();
+    }
+
+    public function run_table_migration_cron() {
+        $migrator = new MVX();
+        $migrator->run_migration_cron();
     }
 }

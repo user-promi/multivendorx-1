@@ -72,7 +72,7 @@ class StoreInfo extends Tag {
                 'key'         => 'address',
                 'title'       => __( 'Address', 'multivendorx' ),
                 'text'        => $store_data['storeAddress'],
-                'icon'        => 'mvx-font ico-location-icon',
+                'icon'        => 'multivendorx-font ico-location-icon',
                 'show'        => true,
                 '__dynamic__' => array(
                     'text' => $store_data['storeAddress'],
@@ -82,7 +82,7 @@ class StoreInfo extends Tag {
                 'key'         => 'email',
                 'title'       => __( 'Email', 'multivendorx' ),
                 'text'        => $store_data['storeEmail'],
-                'icon'        => 'mvx-font ico-mail-icon',
+                'icon'        => 'multivendorx-font ico-mail-icon',
                 'show'        => true,
                 '__dynamic__' => array(
                     'text' => $store_data['storeEmail'],
@@ -92,7 +92,7 @@ class StoreInfo extends Tag {
                 'key'         => 'phone',
                 'title'       => __( 'Phone No.', 'multivendorx' ),
                 'text'        => $store_data['storePhone'],
-                'icon'        => 'mvx-font ico-call-icon',
+                'icon'        => 'multivendorx-font ico-call-icon',
                 'show'        => true,
                 '__dynamic__' => array(
                     'text' => $store_data['storePhone'],

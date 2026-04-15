@@ -1,12 +1,6 @@
 /* global appLocalizer */
 import { __ } from '@wordpress/i18n';
 
-const imageOptions = [
-	{ value: 'static_image', label: __('Static Image', 'multivendorx') },
-	{ value: 'slider_image', label: __('Slider Image', 'multivendorx') },
-	{ value: 'video', label: __('Video', 'multivendorx') },
-];
-
 export default {
 	id: 'appearance',
 	priority: 2,
@@ -27,47 +21,12 @@ export default {
 			openUploader: __('Upload Image', 'multivendorx'),
 		},
 		{
-			type: 'select',
-			label: __('Banner / Cover Image', 'multivendorx'),
-			key: 'banner_type',
-			options: imageOptions,
-		},
-		{
 			type: 'attachment',
-			label: __('Static Banner Image', 'multivendorx'),
+			label: __('Banner Image', 'multivendorx'),
 			key: 'banner',
 			imageWidth: 300,
 			imageHeight: 100,
 			openUploader: __('Upload Banner', 'multivendorx'),
-			dependent: {
-				key: 'banner_type',
-				set: true,
-				value: 'static_image',
-			},
-		},
-		{
-			type: 'attachment',
-			label: __('Slider Images', 'multivendorx'),
-			key: 'banner_slider',
-			multiple: true,
-			imageWidth: 150,
-			imageHeight: 100,
-			openUploader: __('Upload Slider Images', 'multivendorx'),
-			dependent: {
-				key: 'banner_type',
-				set: true,
-				value: 'slider_image',
-			},
-		},
-		{
-			type: 'text',
-			label: __('Banner Video URL', 'multivendorx'),
-			key: 'banner_video',
-			dependent: {
-				key: 'banner_type',
-				set: true,
-				value: 'video',
-			},
-		},
+		}
 	],
 };

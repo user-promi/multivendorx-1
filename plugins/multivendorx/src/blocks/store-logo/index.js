@@ -301,7 +301,7 @@ registerBlockType('multivendorx/store-logo', {
 });
 document.addEventListener('DOMContentLoaded', () => {
 	const storeName = StoreInfo?.storeDetails?.storeName || '';
-	const storeLogo = StoreInfo?.storeDetails?.storeLogo || '';
+	const storeLogo = StoreInfo?.storeDetails?.storeLogo.url || '';
 
 	const fallbackText = storeName
 		? storeName.substring(0, 2).toUpperCase()

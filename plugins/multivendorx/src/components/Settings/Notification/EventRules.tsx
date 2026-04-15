@@ -502,89 +502,81 @@ const EventRules: React.FC = () => {
 					}
 				>
 					<>
-						<FormGroupWrapper>
-							{openChannel === 'system' && (
-								<FormGroup
-									label={__(
-										'System Message',
-										'multivendorx'
-									)}
-									htmlFor="system-message"
-								>
-									<BlockBuilderUI
-										key={formData.id}
-										name="system_message_builder"
-										value={(() => {
-											try {
+					{openChannel === 'system' && (
+								<BlockBuilderUI
+									key={formData.id}
+									name="system_message_builder"
+									value={(() => {
+										try {
 
-												if (formData.email_body && !useTemplate) {
-													return {
-														emailTemplates: [
-															{
-																id: 'store-registration',
-																blocks: htmlToBlocks(formData.email_body),
-															},
-														],
-														activeEmailTemplateId: 'store-registration',
-													};
-												}
+											if (formData.email_body && !useTemplate) {
 												return {
-													emailTemplates: [temp1],
-													activeEmailTemplateId: 'store-registration',
-												};
-											} catch (e) {
-												console.error('Builder load error:', e);
-
-												return {
-													emailTemplates: [temp1],
+													emailTemplates: [
+														{
+															id: 'store-registration',
+															blocks: htmlToBlocks(formData.email_body),
+														},
+													],
 													activeEmailTemplateId: 'store-registration',
 												};
 											}
-										})()}
-
-										onChange={(data) => {
-											const activeTemplate = data.emailTemplates?.find(
-												(t) => t.id === data.activeEmailTemplateId
-											);
-
-											const blocks = activeTemplate?.blocks || [];
-
-											// generate HTML
-											const html = renderBlocksToHTML(blocks);
-
-
-											const updatedForm = {
-												...formData,
-
-												// SAVE HTML
-												email_body: html,
+											return {
+												emailTemplates: [temp1],
+												activeEmailTemplateId: 'store-registration',
 											};
+										} catch (e) {
+											console.error('Builder load error:', e);
 
-											if (!updatedForm.id) return;
+											return {
+												emailTemplates: [temp1],
+												activeEmailTemplateId: 'store-registration',
+											};
+										}
+									})()}
 
-											setFormData(updatedForm);
-											handleEmailSave(updatedForm.id, updatedForm);
-										}}
-										field={{
-											key: 'email_body_builder',
-											context: 'email',
-											visibleGroups: ['email'],
-											emailTemplates: [temp1, temp2],
-											availablePlaceholder: [
-												'store_name',
-												'vendor_name',
-												'customer_name',
-												'order_id',
-												'order_total',
-												'order_date'
-											]
-										}}
-										onTemplateSelect={(id) => {
-											setUseTemplate(true); // 🔥 force template mode
-										}}
-									/>
-								</FormGroup>
+									onChange={(data) => {
+										const activeTemplate = data.emailTemplates?.find(
+											(t) => t.id === data.activeEmailTemplateId
+										);
+
+										const blocks = activeTemplate?.blocks || [];
+
+										// generate HTML
+										const html = renderBlocksToHTML(blocks);
+
+
+										const updatedForm = {
+											...formData,
+
+											// SAVE HTML
+											email_body: html,
+										};
+
+										if (!updatedForm.id) return;
+
+										setFormData(updatedForm);
+										handleEmailSave(updatedForm.id, updatedForm);
+									}}
+									field={{
+										key: 'email_body_builder',
+										context: 'email',
+										visibleGroups: ['email'],
+										emailTemplates: [temp1, temp2],
+										availablePlaceholder: [
+											'store_name',
+											'vendor_name',
+											'customer_name',
+											'order_id',
+											'order_total',
+											'order_date'
+										]
+									}}
+									onTemplateSelect={(id) => {
+										setUseTemplate(true); // 🔥 force template mode
+									}}
+								/>
 							)}
+						<FormGroupWrapper>
 							{openChannel === 'sms' && (
 								<FormGroup
 									label={__(

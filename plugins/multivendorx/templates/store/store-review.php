@@ -96,7 +96,7 @@ if ( $is_logged_in && $store_id ) {
                     </div>
 
                     <p>
-                        <button id="review_submit" type="button">
+                        <button id="review_submit" class="elementor-button" type="button">
                             <?php esc_html_e( 'Submit Review', 'multivendorx' ); ?>
                         </button>
                     </p>

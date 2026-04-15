@@ -177,7 +177,7 @@ const HelpSupport: React.FC = () => {
 					</Card>
 				</Column>
 
-				<Column>
+				{/* <Column>
 					<Card>
 						<div className="video-section">
 							<div className="details-wrapper">
@@ -237,7 +237,7 @@ const HelpSupport: React.FC = () => {
 							</div>
 						</div>
 					</Card>
-				</Column>
+				</Column> */}
 			</Container>
 		</>
 	);

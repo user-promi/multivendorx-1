@@ -66,7 +66,7 @@ class Admin {
             case 'multivendorx_suborder':
                 $multivendorx_suborders = MultiVendorX()->order->get_suborders( $post_id );
                 if ( $multivendorx_suborders ) {
-                    echo '<ul class="mvx-order-vendor" style="margin:0;">';
+                    echo '<ul class="multivendorx-store-order" style="margin:0;">';
                     foreach ( $multivendorx_suborders as $suborder ) {
                         if ( $suborder->get_type() === 'shop_order_refund' ) {
                             continue;
@@ -77,7 +77,7 @@ class Admin {
                         $order_uri = apply_filters( 'multivendorx_admin_store_shop_order_edit_url', esc_url( 'admin.php?page=wc-orders&action=edit&id=' . $suborder->get_id() . '' ), $suborder->get_id() );
 
                         printf(
-                            '<li><mark class="%s tips" data-tip="%s">%s</mark> <strong><a href="%s">#%s</a></strong> &ndash; <small class="mvx-order-for-vendor">%s %s</small></li>',
+                            '<li><mark class="%s tips" data-tip="%s">%s</mark> <strong><a href="%s">#%s</a></strong> &ndash; <small class="multivendorx-order-for-store">%s %s</small></li>',
                             esc_attr( sanitize_title( $suborder->get_status() ) ),
                             esc_attr( $suborder->get_status() ),
                             esc_html( $suborder->get_status() ),
