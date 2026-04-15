@@ -23,7 +23,7 @@ const PendingDeactivateRequests: React.FC<object> = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${storeId}`),
+			url: getApiLink(appLocalizer, `stores/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { deactivate: true, action, id: storeId },
 		})
@@ -75,7 +75,7 @@ const PendingDeactivateRequests: React.FC<object> = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged,

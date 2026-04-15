@@ -31,7 +31,7 @@ const StoreTable: React.FC = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,
@@ -207,7 +207,7 @@ const StoreTable: React.FC = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${selectedIds[0]}`),
+			url: getApiLink(appLocalizer, `stores/${selectedIds[0]}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { action, ids: selectedIds },
 		}).then(() => {

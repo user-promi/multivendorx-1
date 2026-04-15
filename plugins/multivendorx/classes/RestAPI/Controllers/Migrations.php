@@ -17,14 +17,14 @@ defined( 'ABSPATH' ) || exit;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-class Migration extends \WP_REST_Controller {
+class Migrations extends \WP_REST_Controller {
 
     /**
      * Route Base.
      *
      * @var string
      */
-    protected $rest_base = 'migration';
+    protected $rest_base = 'migrations';
 
     /**
      * Register AI Assistant API routes.

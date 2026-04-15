@@ -29,7 +29,7 @@ const AnnouncementsTable = (React.FC = () => {
 		setIsLoading(true);
 
 		axios
-			.get(getApiLink(appLocalizer, 'announcement'), {
+			.get(getApiLink(appLocalizer, 'announcements'), {
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					withCredentials: true,

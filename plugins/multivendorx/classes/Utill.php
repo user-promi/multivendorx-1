@@ -582,11 +582,11 @@ class Utill {
         }
 
         if ( self::is_active_plugin( 'wc-frontend-manager/wcfm.php' ) ) {
-            return 'WcfmMarketplace';
+            return 'WCFMMarketplace';
         }
 
         if ( self::is_active_plugin( 'wc-vendors/class-wc-vendors.php' ) ) {
-            return 'WcVendors';
+            return 'WCVendors';
         }
 
         return '';

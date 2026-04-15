@@ -214,7 +214,7 @@ const Dashboard: React.FC = () => {
 	useEffect(() => {
 		// Current range
 		axios
-			.get(getApiLink(appLocalizer, `store/${appLocalizer.store_id}`), {
+			.get(getApiLink(appLocalizer, `stores/${appLocalizer.store_id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					dashboard: true,
@@ -229,7 +229,7 @@ const Dashboard: React.FC = () => {
 
 		// Previous year range
 		axios
-			.get(getApiLink(appLocalizer, `store/${appLocalizer.store_id}`), {
+			.get(getApiLink(appLocalizer, `stores/${appLocalizer.store_id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					dashboard: true,
@@ -257,7 +257,7 @@ const Dashboard: React.FC = () => {
 		// Reviews
 		if (modules.includes('store-review')) {
 			axios
-				.get(getApiLink(appLocalizer, 'review'), {
+				.get(getApiLink(appLocalizer, 'reviews'), {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: {
 						page: 1,
@@ -322,7 +322,7 @@ const Dashboard: React.FC = () => {
 		// Announcements
 		if (modules.includes('announcement')) {
 			axios
-				.get(getApiLink(appLocalizer, 'announcement'), {
+				.get(getApiLink(appLocalizer, 'announcements'), {
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					params: {
 						page: 1,
@@ -391,7 +391,7 @@ const Dashboard: React.FC = () => {
 
 		// Last Withdrawals - keep using InfoItem (no TableCard needed)
 		axios
-			.get(getApiLink(appLocalizer, 'transaction'), {
+			.get(getApiLink(appLocalizer, 'transactions'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: 1,
@@ -478,7 +478,7 @@ const Dashboard: React.FC = () => {
 
 		// Revenue Data
 		axios
-			.get(getApiLink(appLocalizer, 'commission'), {
+			.get(getApiLink(appLocalizer, 'commissions'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					format: 'reports',

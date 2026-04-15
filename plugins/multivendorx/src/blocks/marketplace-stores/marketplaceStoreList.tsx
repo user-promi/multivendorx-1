@@ -162,7 +162,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 	useEffect(() => {
 		axios({
 			method: 'GET',
-			url: getApiLink(storesList, 'store'),
+			url: getApiLink(storesList, 'stores'),
 			headers: { 'X-WP-Nonce': storesList.nonce },
 			params: {
 				page: page,

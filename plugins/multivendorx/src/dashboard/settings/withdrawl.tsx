@@ -68,7 +68,7 @@ const Withdrawl: React.FC = () => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+			url: getApiLink(appLocalizer, `stores/${appLocalizer.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => {
 			const data = res.data || {};
@@ -122,7 +122,7 @@ const Withdrawl: React.FC = () => {
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${appLocalizer?.store_id}`),
+			url: getApiLink(appLocalizer, `stores/${appLocalizer?.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {

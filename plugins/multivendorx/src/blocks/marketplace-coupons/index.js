@@ -42,7 +42,7 @@ registerBlockType('multivendorx/marketplace-coupons', {
 		useEffect(() => {
 			axios({
 				method: 'GET',
-				url: getApiLink(couponList, 'store'),
+				url: getApiLink(couponList, 'stores'),
 				headers: { 'X-WP-Nonce': couponList.nonce },
 				params: { options: true },
 			})

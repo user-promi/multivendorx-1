@@ -9,7 +9,7 @@ addFilter(
 	(configs, { appLocalizer }) => {
 		configs.push({
 			id: 'store-review',
-			url: getApiLink(appLocalizer, 'review'),
+			url: getApiLink(appLocalizer, 'reviews'),
 			params: {
 				page: 1, row: 1
 			},

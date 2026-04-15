@@ -329,7 +329,7 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 	const checkSlugExists = async (slug: string): Promise<boolean> => {
 		try {
 			const response = await axios.get<{ exists: boolean }>(
-				getApiLink(appLocalizer, 'store'),
+				getApiLink(appLocalizer, 'stores'),
 				{
 					params: {
 						slug,
@@ -420,7 +420,7 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		})

@@ -91,7 +91,7 @@ export default {
 		'multivendorx'
 	),
 	headerIcon: 'wallet-open',
-	submitUrl: `store/${appLocalizer.store_id}`,
+	submitUrl: `stores/${appLocalizer.store_id}`,
 	modal: [
 		{
 			key: 'payment_method',

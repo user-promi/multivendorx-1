@@ -65,7 +65,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 		setWalletLoading(true);
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `transaction/${storeId}`),
+			url: getApiLink(appLocalizer, `transactions/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		})
 			.then((response) => {
@@ -78,7 +78,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${storeId}`),
+			url: getApiLink(appLocalizer, `stores/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		})
 			.then((response) => {
@@ -90,7 +90,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'transaction'),
+			url: getApiLink(appLocalizer, 'transactions'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: 1,
@@ -137,7 +137,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 		// Submit request
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `transaction/${storeId}`),
+			url: getApiLink(appLocalizer, `transactions/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				disbursement: true,
@@ -231,7 +231,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'transaction'), {
+			.get(getApiLink(appLocalizer, 'transactions'), {
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 				},
@@ -342,7 +342,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 		}
 
 		axios
-			.get(getApiLink(appLocalizer, 'transaction'), {
+			.get(getApiLink(appLocalizer, 'transactions'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { ids: selectedIds },
 			})
@@ -362,7 +362,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 	const downloadTransactionCSVByQuery = (query: QueryProps) => {
 		// Call the API
 		axios
-			.get(getApiLink(appLocalizer, 'transaction'), {
+			.get(getApiLink(appLocalizer, 'transactions'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: buildQueryParams(query, false),
 			})

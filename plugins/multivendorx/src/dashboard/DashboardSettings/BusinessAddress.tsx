@@ -126,7 +126,7 @@ const BusinessAddress = () => {
 
 		const loadStoreData = async () => {
 			try {
-				const endpoint = getApiLink(appLocalizer, `store/${id}`);
+				const endpoint = getApiLink(appLocalizer, `stores/${id}`);
 
 				const res = await axios.get(endpoint, {
 					headers: {
@@ -222,7 +222,7 @@ const BusinessAddress = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: formattedData,
 		})

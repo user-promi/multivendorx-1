@@ -46,7 +46,7 @@ const ShippingDelivery = () => {
 		}
 
 		axios
-			.get(getApiLink(appLocalizer, `store/${appLocalizer.store_id}`), {
+			.get(getApiLink(appLocalizer, `stores/${appLocalizer.store_id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((res) => {
@@ -98,7 +98,7 @@ const ShippingDelivery = () => {
 	const autoSave = (updatedData: Record<string, unknown>) => {
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+			url: getApiLink(appLocalizer, `stores/${appLocalizer.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {

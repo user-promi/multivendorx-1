@@ -14,7 +14,7 @@ const StoreQuickInfo: React.FC<object> = () => {
 		const fetchRating = async () => {
 			try {
 				const response = await axios.get(
-					getApiLink(StoreInfo, `review/${storeDetails.storeId}`),
+					getApiLink(StoreInfo, `reviews/${storeDetails.storeId}`),
 					{
 						headers: { 'X-WP-Nonce': StoreInfo.nonce },
 						params: { storeId: storeDetails.storeId },

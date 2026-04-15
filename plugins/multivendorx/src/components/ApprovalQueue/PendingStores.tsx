@@ -43,7 +43,7 @@ const PendingStores: React.FC<object> = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${storeId}`),
+			url: getApiLink(appLocalizer, `stores/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { status: statusValue },
 		})
@@ -62,7 +62,7 @@ const PendingStores: React.FC<object> = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${rejectStoreId}`),
+			url: getApiLink(appLocalizer, `stores/${rejectStoreId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				status: 'rejected',
@@ -136,7 +136,7 @@ const PendingStores: React.FC<object> = () => {
 		setIsLoading(true);
 
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,

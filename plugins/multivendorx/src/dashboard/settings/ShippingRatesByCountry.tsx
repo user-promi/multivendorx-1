@@ -42,7 +42,7 @@ const ShippingRatesByCountry: React.FC<ShippingRatesByCountryProps> = ({
 		const fetchShippingRates = async () => {
 			try {
 				const response = await axios.get(
-					getApiLink(appLocalizer, `store/${storeId}`),
+					getApiLink(appLocalizer, `stores/${storeId}`),
 					{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 				);
 
@@ -78,7 +78,7 @@ const ShippingRatesByCountry: React.FC<ShippingRatesByCountryProps> = ({
 		setRates(updatedRates);
 		try {
 			await axios.post(
-				getApiLink(appLocalizer, `store/${storeId}`),
+				getApiLink(appLocalizer, `stores/${storeId}`),
 				{
 					multivendorx_shipping_rates: JSON.stringify(updatedRates),
 				},

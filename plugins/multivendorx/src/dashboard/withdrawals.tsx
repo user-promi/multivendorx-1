@@ -51,7 +51,7 @@ const Withdrawals: React.FC = () => {
 			method: 'GET',
 			url: getApiLink(
 				appLocalizer,
-				`transaction/${appLocalizer.store_id}`
+				`transactions/${appLocalizer.store_id}`
 			),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { id: appLocalizer.store_id },
@@ -62,7 +62,7 @@ const Withdrawals: React.FC = () => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'transaction'),
+			url: getApiLink(appLocalizer, 'transactions'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: 1,
@@ -81,7 +81,7 @@ const Withdrawals: React.FC = () => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+			url: getApiLink(appLocalizer, `stores/${appLocalizer.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		})
 			.then((response) => {
@@ -125,7 +125,7 @@ const Withdrawals: React.FC = () => {
 			method: 'POST',
 			url: getApiLink(
 				appLocalizer,
-				`transaction/${appLocalizer.store_id}`
+				`transactions/${appLocalizer.store_id}`
 			),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {

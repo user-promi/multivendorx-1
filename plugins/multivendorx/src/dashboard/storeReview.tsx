@@ -57,7 +57,7 @@ const StoreReview: React.FC = () => {
 		try {
 			await axios
 				.post(
-					getApiLink(appLocalizer, `review/${selectedReview.id}`),
+					getApiLink(appLocalizer, `reviews/${selectedReview.id}`),
 					{
 						reply: replyText,
 						status: selectedReview.status,
@@ -79,7 +79,7 @@ const StoreReview: React.FC = () => {
 
 	const fetchReviewById = (id: number) => {
 		axios
-			.get(getApiLink(appLocalizer, `review/${id}`), {
+			.get(getApiLink(appLocalizer, `reviews/${id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
@@ -172,7 +172,7 @@ const StoreReview: React.FC = () => {
 		setIsLoading(true);
 
 		axios
-			.get(getApiLink(appLocalizer, 'review'), {
+			.get(getApiLink(appLocalizer, 'reviews'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,

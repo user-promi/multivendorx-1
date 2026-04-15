@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * @version     PRODUCT_VERSION
  * @author      MultiVendorX
  */
-class WcVendors {
+class WCVendors {
     public function migrate_vendors() {
         $vendors           = get_users(
             array(

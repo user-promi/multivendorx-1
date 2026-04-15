@@ -18,7 +18,7 @@ const RefundedOrderReport: React.FC = () => {
 
 	useEffect(() => {
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { options: true },
 			})
@@ -101,7 +101,7 @@ const RefundedOrderReport: React.FC = () => {
 
 	const downloadCSVByQuery = (query: QueryProps) => {
 		axios
-			.get(getApiLink(appLocalizer, 'refund'), {
+			.get(getApiLink(appLocalizer, 'refunds'), {
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 				},
@@ -133,7 +133,7 @@ const RefundedOrderReport: React.FC = () => {
 		setIsLoading(true);
 
 		axios
-			.get(getApiLink(appLocalizer, 'refund'), {
+			.get(getApiLink(appLocalizer, 'refunds'), {
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 				},

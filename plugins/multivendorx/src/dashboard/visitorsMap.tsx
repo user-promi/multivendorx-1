@@ -35,7 +35,7 @@ const VisitorsMap: React.FC<VisitorsMapProps> = ({ dateRange }) => {
 		setLoading(true);
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'store'),
+			url: getApiLink(appLocalizer, 'stores'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				visitorMap: true,

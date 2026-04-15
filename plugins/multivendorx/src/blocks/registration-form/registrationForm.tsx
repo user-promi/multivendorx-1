@@ -194,7 +194,7 @@ const RegistrationForm = () => {
 
 			axios({
 				method: 'POST',
-				url: getApiLink(registrationForm, 'store'),
+				url: getApiLink(registrationForm, 'stores'),
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					'X-WP-Nonce': registrationForm.nonce,

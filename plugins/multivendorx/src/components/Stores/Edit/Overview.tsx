@@ -81,7 +81,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'transaction'),
+			url: getApiLink(appLocalizer, 'transactions'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: {
 				page: 1,

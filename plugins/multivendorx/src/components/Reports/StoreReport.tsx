@@ -49,7 +49,7 @@ const StoreReport: React.FC = () => {
 		const fetchOverviewAndPie = async () => {
 			try {
 				const response = await axios.get(
-					getApiLink(appLocalizer, 'store'),
+					getApiLink(appLocalizer, 'stores'),
 					{
 						headers: { 'X-WP-Nonce': appLocalizer.nonce },
 						params: {
@@ -121,7 +121,7 @@ const StoreReport: React.FC = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,

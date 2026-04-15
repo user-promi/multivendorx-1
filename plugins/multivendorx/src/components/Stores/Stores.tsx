@@ -43,7 +43,7 @@ const Stores = () => {
 	const checkSlugExists = async (slug: string): Promise<boolean> => {
 		try {
 			const response = await axios.get(
-				getApiLink(appLocalizer, 'store'),
+				getApiLink(appLocalizer, 'stores'),
 				{
 					params: { slug },
 					headers: { 'X-WP-Nonce': appLocalizer.nonce },
@@ -174,7 +174,7 @@ const Stores = () => {
 		try {
 			const response = await axios({
 				method: 'POST',
-				url: getApiLink(appLocalizer, 'store'),
+				url: getApiLink(appLocalizer, 'stores'),
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				data: { formData: { ...formData, status: 'active' } },
 			});

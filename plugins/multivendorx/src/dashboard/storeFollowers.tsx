@@ -33,7 +33,7 @@ const StoreFollower: React.FC = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'follow-store'), {
+			.get(getApiLink(appLocalizer, 'follow-stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					store_id: appLocalizer.store_id,

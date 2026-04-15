@@ -126,7 +126,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 	const fetchStoreData = () => {
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: {
 				'X-WP-Nonce': appLocalizer.nonce,
 				registrations: 'registrations',
@@ -166,7 +166,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 	const autoSave = (updatedData: StoreRegistrationFormData) => {
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {
@@ -185,7 +185,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 		const updatedData = { ...formData, status };
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {

@@ -25,7 +25,7 @@ const AdditionalInformation = () => {
 		}
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => {
 			const data = res.data || {};
@@ -58,7 +58,7 @@ const AdditionalInformation = () => {
 	// Auto-save to backend
 	const autoSave = (updatedData: { [key: string] }) => {
 		axios
-			.post(getApiLink(appLocalizer, `store/${id}`), updatedData, {
+			.post(getApiLink(appLocalizer, `stores/${id}`), updatedData, {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((res) => {

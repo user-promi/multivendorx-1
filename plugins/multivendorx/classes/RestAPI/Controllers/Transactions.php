@@ -28,7 +28,7 @@ class Transactions extends \WP_REST_Controller {
      *
      * @var string
      */
-    protected $rest_base = 'transaction';
+    protected $rest_base = 'transactions';
 
     /**
      * Register the routes for transaction.
