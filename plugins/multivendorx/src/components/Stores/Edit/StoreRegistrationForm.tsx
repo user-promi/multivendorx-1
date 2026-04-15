@@ -385,12 +385,7 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 			</Column>
 			<Column grid={4}>
 				<Card
-					title={
-						formData.core_data?.status === 'pending' ||
-							formData.core_data?.status === 'rejected'
-							? __('Registration Details', 'multivendorx')
-							: __('Archive data', 'multivendorx')
-					}
+					title={__('Registration Details', 'multivendorx')}
 					action={
 						formData.registration_data &&
 						Object.keys(formData.registration_data).length > 0 && (

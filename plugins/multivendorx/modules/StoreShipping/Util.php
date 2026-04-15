@@ -42,7 +42,7 @@ class Util {
                 $zones[ $zone->get_id() ]['shipping_methods']        = self::get_shipping_methods( $zone->get_id(), $store_id );
             }
         }
-        // Everywhere zone if has method called vendor shipping.
+        // Everywhere zone if has method called store shipping.
         $overall_zone    = new WC_Shipping_Zone( 0 );
         $enabled_methods = $overall_zone->get_shipping_methods( true );
         $methods_id      = wp_list_pluck( $enabled_methods, 'id' );

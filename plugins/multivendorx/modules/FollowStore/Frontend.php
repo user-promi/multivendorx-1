@@ -22,7 +22,7 @@ class Frontend {
      * Constructor.
      */
     public function __construct() {
-        // Default button on vendor info section.
+        // Default button on store info section.
         add_action( 'multivendorx_after_vendor_information', array( $this, 'render_follow_button' ), 10, 1 );
 
         add_filter( 'multivendorx_register_scripts', array( $this, 'register_script' ) );

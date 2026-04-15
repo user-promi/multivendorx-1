@@ -434,7 +434,7 @@ const Invoice: React.FC = () => {
                                 ]}
                             />
                         </FormGroup>
-                        <FormGroup cols={2} label="Invoice numbers will include this prefix" desc={__('<b>Example results:</b> INV-2026-0001, INV-MVX-0001', 'multivendorx')}>
+                        <FormGroup cols={2} label="Invoice numbers will include this prefix" desc={__('<b>Example results:</b> INV-2026-0001, INV-ORD-0001', 'multivendorx')}>
                             <BasicInputUI
                                 name="invoice_prefix"
                                 value={formData.invoice_prefix || ''}
