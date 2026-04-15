@@ -38,7 +38,7 @@ interface WithdrawalItem {
 	date: string;
 	payment_method: string;
 }
-const Withdrawls: React.FC = () => {
+const Withdrawals: React.FC = () => {
 	const [data, setData] = useState<WithdrawalData>([]);
 	const [amount, setAmount] = useState<number>();
 	const [errors, setErrors] = useState<Record<string, string>>({});
@@ -470,4 +470,4 @@ const Withdrawls: React.FC = () => {
 	);
 };
 
-export default Withdrawls;
+export default Withdrawals;
