@@ -158,9 +158,9 @@ class Dashboard extends \WP_REST_Controller {
                         'capability' => array( 'read_shop_earning', 'view_transactions' ),
                     ),
                     array(
-                        'key'        => 'withdrawls',
-                        'name'       => 'Withdrawls',
-                        'slug'       => 'withdrawls',
+                        'key'        => 'withdrawals',
+                        'name'       => 'Withdrawals',
+                        'slug'       => 'withdrawals',
                         'capability' => array( 'read_shop_earning', 'edit_withdrawl_request' ),
                     ),
                 ),

@@ -56,6 +56,7 @@ class Frontend {
         add_filter( 'multivendorx_modify_permissions', [$this, 'modify_permissions'] );
         add_filter( 'multivendorx_dashboard_menu', [ $this, 'hide_menu'], 20 );
         add_filter( 'wp_insert_attachment_data', [ $this, 'attach_store_owner_id'], 10, 1 );
+        add_action( 'woocommerce_account_dashboard', [ $this, 'add_dashboard_button' ] );
     }
 
     public function modify_permissions($permissions) {
@@ -592,5 +593,23 @@ class Frontend {
 
         // Return size in MB
         return round($total_size / 1024 / 1024, 2);
+    }
+    public function add_dashboard_button() {
+
+        $user = MultiVendorX()->current_user;
+
+        if ( ! in_array( 'store_owner', (array) $user->roles, true ) ) {
+            return;
+        }
+
+        $dashboard_url = home_url( '/dashboard' );
+
+        echo '<h3>' . esc_html__( 'Manage your store', 'multivendorx' ) . '</h3>';
+
+        echo '<p>' . esc_html__( 'To view orders, manage products, and access your full store settings, visit your store dashboard.', 'multivendorx' ) . '</p>';
+
+        echo '<a href="' . esc_url( $dashboard_url ) . '" class="button button-primary">';
+        echo esc_html__( 'Go to store dashboard', 'multivendorx' );
+        echo '</a>';
     }
 }
