@@ -15,6 +15,7 @@ import {
 	NavigatorHeader,
 	ItemListUI,
 	NoticeManager,
+	TextAreaUI,
 	ComponentStatusView,
 } from 'zyra';
 import { formatCurrency } from '../services/commonFunction';
