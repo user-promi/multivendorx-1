@@ -21,7 +21,7 @@ import { formatCurrency } from '../services/commonFunction';
 interface WithdrawalData {
 	available_balance?: number;
 	locking_balance?: number;
-	thresold?: number;
+	threshold?: number;
 	payment_schedules?: string;
 	free_withdrawal?: number;
 	withdrawal_setting?: Array<{
@@ -38,7 +38,7 @@ interface WithdrawalItem {
 	payment_method: string;
 }
 const Withdrawals: React.FC = () => {
-	const [data, setData] = useState<WithdrawalData>([]);
+	const [data, setData] = useState<WithdrawalData>({});
 	const [amount, setAmount] = useState<number>();
 	const [errors, setErrors] = useState<Record<string, string>>({});
 	const [lastWithdraws, setLastWithdraws] = useState<WithdrawalItem[]>([]);
@@ -56,7 +56,7 @@ const Withdrawals: React.FC = () => {
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { id: appLocalizer.store_id },
 		}).then((response) => {
-			setData(response.data || []);
+			setData(response.data || {});
 			setAmount(response.data.available_balance);
 		});
 
@@ -77,7 +77,7 @@ const Withdrawals: React.FC = () => {
 			.then((response) => {
 				setLastWithdraws(response.data || []);
 			})
-			.catch(() => setData([]));
+			.catch(() => setData({}));
 
 		axios({
 			method: 'GET',
@@ -169,7 +169,7 @@ const Withdrawals: React.FC = () => {
 						{lastWithdraws && lastWithdraws.length > 0 ? (
 							lastWithdraws.map((item: WithdrawalItem) => (
 								<div
-									className="last-withdradal-wrapper"
+									className="last-withdrawal-wrapper"
 									key={item.id}
 								>
 									<div className="left">
@@ -236,9 +236,9 @@ const Withdrawals: React.FC = () => {
 								</div>
 								<div className="desc">
 									{
-										data?.thresold > 0 ? (
+										data?.threshold > 0 ? (
 											<>
-												<b>{formatCurrency(data.thresold)} </b>
+												<b>{formatCurrency(data.threshold)} </b>
 												{__('minimum required to withdraw', 'multivendorx')}
 											</>
 										) : (

@@ -14,10 +14,10 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 	const [isEditingVisibility, setIsEditingVisibility] = useState(false);
 	const [isEditingStatus, setIsEditingStatus] = useState(false);
 	const visibilityRef = useRef<HTMLDivElement | null>(null);
-	const [starFill, setstarFill] = useState(false);
+	const [starFill, setStarFill] = useState(false);
 
 	useEffect(() => {
-		setstarFill(product.featured);
+		setStarFill(product.featured);
 	}, []);
 
 	useEffect(() => {
@@ -48,7 +48,7 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 			action={
 				<>
 					<label
-						onClick={() => setstarFill((prev) => !prev)}
+						onClick={() => setStarFill((prev) => !prev)}
 						style={{ cursor: 'pointer' }}
 						className="field-wrapper"
 					>
@@ -93,22 +93,22 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 										{
 											key: 'visible',
 											value: 'visible',
-											label: 'Shop and search results',
+											label: __('Shop and search results', 'multivendorx'),
 										},
 										{
 											key: 'catalog',
 											value: 'catalog',
-											label: 'Shop only',
+											label: __('Shop only', 'multivendorx'),
 										},
 										{
 											key: 'search',
 											value: 'search',
-											label: 'Search results only',
+											label: __('Search results only', 'multivendorx'),
 										},
 										{
 											key: 'hidden',
 											value: 'hidden',
-											label: 'Hidden',
+											label: __('Hidden', 'multivendorx'),
 										},
 									]}
 									value={product.catalog_visibility}
