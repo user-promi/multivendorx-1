@@ -557,7 +557,6 @@ class MVX {
 
         $vendors = get_users([
             'role__in' => ['dc_vendor','dc_pending_vendor','dc_rejected_vendor'],
-            'fields'   => ['ID'],
             'number'   => self::BATCH_SIZE,
             'offset'   => $offset,
         ]);
@@ -574,7 +573,12 @@ class MVX {
             // Get all user meta.
             $user_meta = get_user_meta( $user_id );
             $term_id   = get_user_meta( $user_id, '_vendor_term_id', true );
-            $term      = get_term( $term_id );
+            $term = $wpdb->get_row(
+                $wpdb->prepare(
+                    "SELECT name, slug FROM {$wpdb->terms} WHERE term_id = %d",
+                    $term_id
+                )
+            );
 
             if ( in_array( 'dc_vendor', (array) $user->roles, true ) ) {
                 $status = 'active';
@@ -811,7 +815,8 @@ class MVX {
             'post_type' => 'dc_commission',
             'fields'    => 'ids',
             'posts_per_page' => self::BATCH_SIZE,
-            'offset' => $offset
+            'offset' => $offset,
+            'post_status'    => 'any'
         );
 
         $commission_ids = get_posts( $args );
@@ -859,36 +864,37 @@ class MVX {
                 )
 			);
             $insert_id = $wpdb->insert_id;
-
-            $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-                $wpdb->prefix . Utill::TABLES['transaction'],
-                array(
-					'store_id'         => $store_id,
-					'order_id'         => (int) $commission_order_id,
-					'commission_id'    => $insert_id,
-					'entry_type'       => 'Cr',
-					'transaction_type' => 'Commission',
-					'amount'           => $store_payable,
-					'currency'         => get_woocommerce_currency(),
-					'narration'        => 'Commission received for order ' . $commission_order_id,
-					'status'           => 'Completed',
-					'created_at'       => $created_at,
-                ),
-                array(
-					'%d',
-					'%d',
-					'%d',
-					'%s',
-					'%s',
-					'%f',
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-                )
-			);
-
             $order = wc_get_order( $commission_order_id );
+
+            if ( in_array( $order->get_status(), array( 'completed', 'processing' ), true ) ) {
+                $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+                    $wpdb->prefix . Utill::TABLES['transaction'],
+                    array(
+                        'store_id'         => $store_id,
+                        'order_id'         => (int) $commission_order_id,
+                        'commission_id'    => $insert_id,
+                        'entry_type'       => 'Cr',
+                        'transaction_type' => 'Commission',
+                        'amount'           => $store_payable,
+                        'currency'         => get_woocommerce_currency(),
+                        'narration'        => 'Commission received for order ' . $commission_order_id,
+                        'status'           => 'Completed',
+                        'created_at'       => $created_at,
+                    ),
+                    array(
+                        '%d',
+                        '%d',
+                        '%d',
+                        '%s',
+                        '%s',
+                        '%f',
+                        '%s',
+                        '%s',
+                        '%s',
+                        '%s',
+                    )
+                );
+            }
 
             $meta_map = array(
                 '_commission_id'               => 'multivendorx_commission_id',
@@ -973,18 +979,17 @@ class MVX {
             $is_credit  = ! empty( $row['credit'] );
             $entry_type = $is_credit ? 'Cr' : 'Dr';
             $amount     = $is_credit ? (float) $row['credit'] : (float) $row['debit'];
+            $order = wc_get_order( $row['order_id'] );
 
 			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $new_ledger_table,
                 array(
 					'store_id'         => $store_id,
 					'order_id'         => (int) $row['order_id'],
-					'commission_id'    => $row['ref_id'],
+					'commission_id'    => $order->get_meta('multivendorx_commission_id', true),
 					'entry_type'       => $entry_type,
 					'transaction_type' => $row['ref_type'],
 					'amount'           => $amount,
-					'balance'          => (float) $row['balance'],
-					'locking_balance'  => 0,
 					'currency'         => get_woocommerce_currency(),
 					'narration'        => $row['ref_info'],
 					'status'           => $row['ref_status'],
@@ -993,11 +998,9 @@ class MVX {
                 array(
 					'%d',
 					'%d',
+					'%d',
 					'%s',
 					'%s',
-					'%s',
-					'%f',
-					'%f',
 					'%f',
 					'%s',
 					'%s',
@@ -1011,7 +1014,6 @@ class MVX {
     }
 
     public function migrate_product_coupon_vendor() {
-        $batch_size = self::BATCH_SIZE;
         $offset     = (int) get_option( 'mvx_product_migration_offset', 0 );
 
         $store_owners = get_users( array(
@@ -1024,21 +1026,15 @@ class MVX {
         }
 
         $products = get_posts( array(
-            'post_type'      => 'product',
-            'post_status'    => 'any',
-            'fields'         => 'ids',
-            'posts_per_page' => $batch_size,
-            'offset'         => $offset,
-            'orderby'        => 'ID',
-            'order'          => 'ASC',
+            'post_type' => 'product',
+            'fields'    => 'ids',
+            'posts_per_page' => self::BATCH_SIZE,
+            'offset' => $offset,
+            'post_status'    => 'any'
         ) );
 
-        if ( empty( $products ) ) {
-            return;
-        }
-
         foreach ( $products as $product_id ) {
-            $author_id = (int) get_post_field( 'post_author', $product_id );
+            $author_id = get_post_field( 'post_author', $product_id );
 
             // Only assign if author is store_owner
             if ( in_array( $author_id, $store_owners, true ) ) {
@@ -1047,27 +1043,21 @@ class MVX {
             }
         }
 
-        update_option( 'mvx_product_migration_offset', $offset + $batch_size );
+        update_option( 'mvx_product_migration_offset', $offset + count($products) );
 
         // Migrate coupon vendor.
         $offset = (int) get_option( 'mvx_coupon_migration_offset', 0 );
 
         $coupons = get_posts( array(
             'post_type'      => 'shop_coupon',
-            'post_status'    => 'any',
-            'fields'         => 'ids',
-            'posts_per_page' => $batch_size,
-            'offset'         => $offset,
-            'orderby'        => 'ID',
-            'order'          => 'ASC',
+            'fields'    => 'ids',
+            'posts_per_page' => self::BATCH_SIZE,
+            'offset' => $offset,
+            'post_status'    => 'any'
         ) );
 
-        if ( empty( $coupons ) ) {
-            return;
-        }
-
         foreach ( $coupons as $coupon_id ) {
-            $author_id = (int) get_post_field( 'post_author', $coupon_id );
+            $author_id = get_post_field( 'post_author', $coupon_id );
 
             if ( in_array( $author_id, $store_owners, true ) ) {
                 $active_store = get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
@@ -1075,7 +1065,7 @@ class MVX {
             }
         }
 
-        update_option( 'mvx_coupon_migration_offset', $offset + $batch_size );
+        update_option( 'mvx_coupon_migration_offset', $offset + count($coupons) );
     }
     
     public function migrate_reviews() {
