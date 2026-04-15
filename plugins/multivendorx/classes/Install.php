@@ -205,6 +205,7 @@ class Install {
             `review_content` TEXT NULL DEFAULT NULL,
             `review_images` LONGTEXT NULL DEFAULT NULL,
             `status` ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+            `user_ip` TEXT NULL DEFAULT NULL,
             `reply` TEXT NULL DEFAULT NULL,
             `reply_date` DATETIME NULL DEFAULT NULL,
             `reported` TINYINT(1) NOT NULL DEFAULT 0,
