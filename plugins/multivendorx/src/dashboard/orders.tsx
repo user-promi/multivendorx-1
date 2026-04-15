@@ -27,7 +27,6 @@ import {
 } from '../services/commonFunction';
 import { pdf } from '@react-pdf/renderer';
 import { applyFilters } from '@wordpress/hooks';
-// import StoreInvoicePDF from '@/assets/template/invoicePdf/Invoice-1';
 
 const fetchOrderById = async (orderId: number) => {
 	const res = await axios.get(

@@ -19,8 +19,7 @@ import {
 } from 'zyra';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { temp1 } from '../../../assets/template/emailTemplate/temp1';
-import { temp2 } from '../../../assets/template/emailTemplate/temp2';
+import { salesReport } from '../../../assets/template/emailTemplate/salesReport';
 
 
 
@@ -550,14 +549,14 @@ const EventRules: React.FC = () => {
 												};
 											}
 											return {
-												emailTemplates: [temp1],
+												emailTemplates: [salesReport],
 												activeEmailTemplateId: 'store-registration',
 											};
 										} catch (e) {
 											console.error('Builder load error:', e);
 
 											return {
-												emailTemplates: [temp1],
+												emailTemplates: [salesReport],
 												activeEmailTemplateId: 'store-registration',
 											};
 										}
@@ -590,7 +589,7 @@ const EventRules: React.FC = () => {
 										key: 'email_body_builder',
 										context: 'email',
 										visibleGroups: ['email'],
-										emailTemplates: [temp1, temp2],
+										emailTemplates: [salesReport],
 										availablePlaceholder: [
 											'store_name',
 											'vendor_name',
@@ -793,7 +792,7 @@ const EventRules: React.FC = () => {
 						</FormGroup>
 						<FormGroup
 							label={__(
-								'Custom Recipients',
+								'Additional Recipients',
 								'multivendorx'
 							)}
 						>
@@ -804,6 +803,7 @@ const EventRules: React.FC = () => {
 									'Type email addresses and press Enter to add...',
 									'multivendorx'
 								)}
+								enablePrimary={false}
 								onChange={(emails) => {
 									setNewRecipientValue(emails.join(','));
 									if (editingNotification) {
