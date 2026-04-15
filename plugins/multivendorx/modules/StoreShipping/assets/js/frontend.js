@@ -27,19 +27,29 @@ jQuery(document).ready(function ($) {
 				center: latlng,
 				zoom: parseInt(opts.default_zoom),
 				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				mapId: opts.google_map_id,
 			}
 		);
 
-		var marker = new google.maps.Marker({
+		const markerEl = document.createElement('div');
+		markerEl.style.width = '16px';
+		markerEl.style.height = '16px';
+		markerEl.style.borderRadius = '50%';
+		markerEl.style.background = '#ef4444';
+		markerEl.style.border = '2px solid white';
+		markerEl.style.boxShadow = '0 0 4px rgba(0,0,0,0.4)';
+
+		var marker = new google.maps.marker.AdvancedMarkerElement({
 			map: map,
 			position: latlng,
-			draggable: true,
+			content: markerEl,
+			gmpDraggable: true,
 		});
 
 		var geocoder = new google.maps.Geocoder();
-		var autocomplete = new google.maps.places.Autocomplete(
-			document.getElementById('multivendorx_user_location')
-		);
+		const autocomplete = new google.maps.places.PlaceAutocompleteElement();
+		autocomplete.id = "multivendorx_user_location";
+		autocomplete.placeholder = "Search location";
 
 		autocomplete.bindTo('bounds', map);
 
@@ -49,8 +59,11 @@ jQuery(document).ready(function ($) {
 				return;
 			}
 
-			map.setCenter(place.geometry.location);
-			marker.setPosition(place.geometry.location);
+			map.setCenter({
+				lat: place.geometry.location.lat(),
+				lng: place.geometry.location.lng(),
+			});
+			marker.position = place.geometry.location;
 
 			bindData(
 				place.formatted_address,
@@ -59,15 +72,17 @@ jQuery(document).ready(function ($) {
 			);
 		});
 
-		google.maps.event.addListener(marker, 'dragend', function () {
+		marker.addListener('dragend', function (event) {
+			const position = event.latLng;
+
 			geocoder.geocode(
-				{ location: marker.getPosition() },
+				{ location: position },
 				function (res, status) {
 					if (status === 'OK' && res[0]) {
 						bindData(
 							res[0].formatted_address,
-							marker.getPosition().lat(),
-							marker.getPosition().lng()
+							position.lat(),
+							position.lng()
 						);
 					}
 				}
@@ -155,8 +170,8 @@ jQuery(document).ready(function ($) {
 			$.each(features, function (index, feature) {
 				var li = $(
 					'<li style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;">' +
-						feature.place_name +
-						'</li>'
+					feature.place_name +
+					'</li>'
 				);
 				li.on('click', function () {
 					$('#multivendorx_user_location').val(feature.place_name);
@@ -196,10 +211,10 @@ jQuery(document).ready(function ($) {
 	function reverseGeocodeMapbox(lat, lng) {
 		$.get(
 			'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
-				lng +
-				',' +
-				lat +
-				'.json',
+			lng +
+			',' +
+			lat +
+			'.json',
 			{
 				access_token: opts.mapbox_token,
 				limit: 1,

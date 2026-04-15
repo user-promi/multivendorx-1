@@ -14,6 +14,7 @@ interface Store {
 
 interface MapProviderProps {
     apiKey: string;
+    mapId: string;
     locationAddress: string;
     locationLat: string;
     locationLng: string;
@@ -40,7 +41,7 @@ interface MapboxSuggestion {
 
 type MapInstance = google.maps.Map | window.mapboxgl.Map;
 
-type MarkerInstance = google.maps.Marker | window.mapboxgl.Marker;
+type MarkerInstance = google.maps.marker.AdvancedMarkerElement | window.mapboxgl.Marker;
 
 type MapProviderType = 'google_map' | 'mapbox';
 type MarkerType = 'default' | 'user' | 'store';
@@ -52,7 +53,8 @@ interface MapAdapter {
         container: HTMLElement,
         lat: number,
         lng: number,
-        zoom: number
+        zoom: number,
+        mapId?: string
     ): MapInstance;
 
     createMarker(
@@ -114,7 +116,7 @@ const googleAdapter: MapAdapter = {
 
         const script = document.createElement('script');
         script.id = 'google-map-script';
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,marker`;
         script.async = true;
         script.defer = true;
 
@@ -123,10 +125,11 @@ const googleAdapter: MapAdapter = {
         await new Promise((res) => (script.onload = res));
     },
 
-    createMap(container: HTMLElement, lat: number, lng: number, zoom: number) {
+    createMap(container: HTMLElement, lat: number, lng: number, zoom: number, mapId?: string) {
         return new window.google.maps.Map(container, {
             center: { lat, lng },
             zoom,
+            mapId: mapId ,
         });
     },
     
@@ -135,29 +138,92 @@ const googleAdapter: MapAdapter = {
         map: MapInstance,
         lat: number,
         lng: number,
-        markerType: MarkerType = 'default'
+        markerType: MarkerType = 'default',
+        title?: string
     ) {
-        const markerIcon =
-            markerType === 'user'
-                ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-                : markerType === 'store'
-                    ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-                    : undefined;
+        const position = { lat, lng };
 
-        return new window.google.maps.Marker({
+        let content;
+
+        if (markerType === 'store') {
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'flex';
+            wrapper.style.alignItems = 'center';
+            wrapper.style.gap = '6px';
+
+            const icon = document.createElement('div');
+            icon.style.width = '28px';
+            icon.style.height = '28px';
+            icon.style.borderRadius = '50%';
+            icon.style.background = '#4B96F3';
+            icon.style.display = 'flex';
+            icon.style.alignItems = 'center';
+            icon.style.justifyContent = 'center';
+            icon.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+
+            const img = document.createElement('img');
+            img.src = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/convenience_pinlet.png';
+            img.style.width = '16px';
+
+            icon.appendChild(img);
+
+            // 🔹 label
+            const label = document.createElement('div');
+            label.innerText = title || '';
+            label.style.background = 'white';
+            label.style.padding = '2px 8px';
+            label.style.borderRadius = '6px';
+            label.style.fontSize = '12px';
+            label.style.fontWeight = '500';
+            label.style.whiteSpace = 'nowrap';
+            label.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
+
+            wrapper.appendChild(icon);
+            wrapper.appendChild(label);
+
+            content = wrapper;
+        }
+        else if (markerType === 'default') {
+            const img = document.createElement('img');
+            img.src = 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png';
+            img.style.width = '32px';
+            img.style.height = '32px';
+
+            return new google.maps.marker.AdvancedMarkerElement({
+                map,
+                position,
+                content: img,
+                gmpDraggable: true,
+            });
+        }
+        else {
+            const markerDiv = document.createElement('div');
+
+            markerDiv.style.width = '16px';
+            markerDiv.style.height = '16px';
+            markerDiv.style.borderRadius = '50%';
+
+            markerDiv.style.background =
+                markerType === 'user' ? '#2563eb' : '#ef4444';
+
+            markerDiv.style.border = '2px solid white';
+            markerDiv.style.boxShadow = '0 0 4px rgba(0,0,0,0.4)';
+
+            content = markerDiv;
+        }
+
+        return new google.maps.marker.AdvancedMarkerElement({
             map,
-            position: { lat, lng },
-            draggable: true,
-            ...(markerIcon && {
-                icon: markerIcon,
-            }),
+            position,
+            content,
+            gmpDraggable: markerType !== 'store', 
         });
     },
 
     onDragEnd(marker: MarkerInstance, cb: (lat: number, lng: number) => void) {
-        marker.addListener('dragend', () => {
-            const p = marker.getPosition();
-            cb(p.lat(), p.lng());
+        marker.addListener('dragend', (event:any) => {
+            const position = event.latLng;
+            cb(position.lat(), position.lng());
         });
     },
 
@@ -319,6 +385,7 @@ const PROVIDERS: Record<MapProviderType, MapAdapter> = {
 
 export const MapProviderUI = ({
     apiKey,
+    mapId,
     locationLat,
     locationLng,
     mapProvider,
@@ -370,7 +437,7 @@ export const MapProviderUI = ({
                 setGoogleLoaded(true);
             }
 
-            const map = provider.createMap(containerRef.current!, lat, lng, 12);
+            const map = provider.createMap(containerRef.current!, lat, lng, 12, mapId);
             const marker = provider.createMarker(map, lat, lng, 'default');
 
             mapRef.current = map;
@@ -391,12 +458,9 @@ export const MapProviderUI = ({
 
         // Clear previously rendered store markers.
         storeMarkersRef.current.forEach((marker) => {
-            if ('setMap' in marker) {
-                marker.setMap(null);
-                return;
-            }
-
-            if ('remove' in marker) {
+            if ('map' in marker) {
+                marker.map = null;
+            } else if ('remove' in marker) {
                 marker.remove();
             }
         });
@@ -412,7 +476,8 @@ export const MapProviderUI = ({
                 mapRef.current as MapInstance,
                 parseFloat(s.location_lat),
                 parseFloat(s.location_lng),
-                'store'
+                'store',
+                s.store_name
             );
 
             storeMarkersRef.current.push(marker);
@@ -433,7 +498,7 @@ export const MapProviderUI = ({
 
         if (mapProvider === 'google_map') {
             mapRef.current.setCenter({ lat, lng });
-            markerRef.current.setPosition({ lat, lng });
+            markerRef.current.position = { lat, lng };
         } else if (mapProvider === 'mapbox') {
             mapRef.current.setCenter([lng, lat]);
             markerRef.current.setLngLat([lng, lat]);
@@ -476,7 +541,7 @@ export const MapProviderUI = ({
 
             if (mapRef.current && markerRef.current) {
                 mapRef.current.setCenter({ lat, lng });
-                markerRef.current.setPosition({ lat, lng });
+                markerRef.current.position = { lat, lng };
                 mapRef.current.setZoom(17);
             }
 
@@ -580,6 +645,7 @@ const MapProvider: FieldComponent = {
     render: ({ field, value, onChange }) => (
         <MapProviderUI
             apiKey={field.apiKey}
+            mapId = {field.mapId}
             locationAddress={value?.location_address || ''}
             locationLat={value?.location_lat || ''}
             locationLng={value?.location_lng || ''}

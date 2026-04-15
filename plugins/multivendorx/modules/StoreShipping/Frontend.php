@@ -80,6 +80,7 @@ class Frontend {
                 'mapbox_token' => MultiVendorX()->setting->get_setting( 'mapbox_api_key', '' ),
                 'mapbox_style' => 'mapbox://styles/mapbox/streets-v11',
                 'map_provider' => MultiVendorX()->setting->get_setting( 'choose_map_api', '' ),
+                'google_map_id' => MultiVendorX()->setting->get_setting( 'google_map_id', '' ),
             ),
         );
 
@@ -282,7 +283,7 @@ class Frontend {
             if ( $google_maps_api_key ) {
                 wp_enqueue_script(
                     'google-maps',
-                    'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key . '&libraries=places',
+                    'https://maps.googleapis.com/maps/api/js?key=' . $google_maps_api_key . '&libraries=places,marker',
                     array(),
                     'weekly',
                     true
