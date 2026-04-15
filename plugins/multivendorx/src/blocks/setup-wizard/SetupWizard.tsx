@@ -583,7 +583,7 @@ const SetupWizard: React.FC = () => {
 					type: 'button',
 					name: __('Start migration', 'multivendorx'),
 					label: __('Multivendor migration', 'multivendorx'),
-					apilink: 'migration',
+					apilink: 'migrations',
 					method: 'POST',
 					action: ['import_stores', 'import_products'],
 				},

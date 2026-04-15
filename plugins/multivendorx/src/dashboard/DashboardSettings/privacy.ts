@@ -12,7 +12,7 @@ export default {
 	),
 	module: 'privacy',
 	headerIcon: 'privacy',
-	submitUrl: `store/${appLocalizer.store_id}`,
+	submitUrl: `stores/${appLocalizer.store_id}`,
 	modal: [
 		// Store Policy
 		{

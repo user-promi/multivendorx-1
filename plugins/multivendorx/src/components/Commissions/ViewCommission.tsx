@@ -84,7 +84,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `commission/${commissionId}`),
+			url: getApiLink(appLocalizer, `commissions/${commissionId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		})
 			.then((res) => {
@@ -96,7 +96,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						method: 'GET',
 						url: getApiLink(
 							appLocalizer,
-							`store/${commission.store_id}`
+							`stores/${commission.store_id}`
 						),
 						headers: { 'X-WP-Nonce': appLocalizer.nonce },
 					})

@@ -68,7 +68,7 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			params: { fetch_user: true },
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => {
@@ -106,7 +106,7 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 	const autoSave = (updatedData: StoreSquadFormData) => {
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				...updatedData,

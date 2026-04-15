@@ -27,7 +27,7 @@ class Commissions extends \WP_REST_Controller {
      *
      * @var string
      */
-    protected $rest_base = 'commission';
+    protected $rest_base = 'commissions';
 
     /**
      * Register routes.

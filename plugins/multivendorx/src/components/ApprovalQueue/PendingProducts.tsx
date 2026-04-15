@@ -31,7 +31,7 @@ const PendingProducts: React.FC<object> = () => {
 
 	useEffect(() => {
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { options: true },
 			})

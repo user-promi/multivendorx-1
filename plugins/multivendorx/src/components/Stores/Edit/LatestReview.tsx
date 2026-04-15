@@ -19,7 +19,7 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
 		setIsLoading(true);
 
 		axios
-			.get(getApiLink(appLocalizer, 'review'), {
+			.get(getApiLink(appLocalizer, 'reviews'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,

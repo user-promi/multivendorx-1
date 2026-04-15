@@ -61,7 +61,7 @@ const Verification = () => {
 		try {
 			const response = await axios({
 				method: 'GET',
-				url: getApiLink(appLocalizer, 'store/social-profiles'),
+				url: getApiLink(appLocalizer, 'stores/social-profiles'),
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ const Verification = () => {
 		try {
 			const response = await axios({
 				method: 'POST',
-				url: getApiLink(appLocalizer, 'store/connect-social'),
+				url: getApiLink(appLocalizer, 'stores/connect-social'),
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ const Verification = () => {
 		try {
 			const response = await axios({
 				method: 'POST',
-				url: getApiLink(appLocalizer, 'store/disconnect-social'),
+				url: getApiLink(appLocalizer, 'stores/disconnect-social'),
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					'Content-Type': 'application/json',

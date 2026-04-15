@@ -121,7 +121,7 @@ const Dashboard = () => {
 	useEffect(() => {
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${appLocalizer.store_id}`),
+			url: getApiLink(appLocalizer, `stores/${appLocalizer.store_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => setStoreData(res.data || null));
 	}, [appLocalizer.store_id]);
@@ -313,7 +313,7 @@ const Dashboard = () => {
 	const switchStore = (storeId) => {
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${storeId}`),
+			url: getApiLink(appLocalizer, `stores/${storeId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { action: 'switch' },
 		}).then((res) => {

@@ -132,7 +132,7 @@ const Transactions: React.FC = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'transaction'), {
+			.get(getApiLink(appLocalizer, 'transactions'), {
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 				},
@@ -200,7 +200,7 @@ const Transactions: React.FC = () => {
 		}
 
 		axios
-			.get(getApiLink(appLocalizer, 'transaction'), {
+			.get(getApiLink(appLocalizer, 'transactions'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { ids: selectedIds },
 			})
@@ -220,7 +220,7 @@ const Transactions: React.FC = () => {
 	const downloadTransactionCSVByQuery = (query: QueryProps) => {
 		// Call the API
 		axios
-			.get(getApiLink(appLocalizer, 'transaction'), {
+			.get(getApiLink(appLocalizer, 'transactions'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: buildQueryParams(query, false),
 			})

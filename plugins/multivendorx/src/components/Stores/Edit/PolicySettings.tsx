@@ -48,7 +48,7 @@ const PolicySettings: React.FC<PolicySettingsProps> = ({ id, data }) => {
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {

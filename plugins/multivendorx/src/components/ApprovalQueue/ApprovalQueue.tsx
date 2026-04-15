@@ -52,7 +52,7 @@ const ApprovalQueue = () => {
 		let apiConfigs: any[] = [
 			{
 				id: 'stores',
-				url: getApiLink(appLocalizer, 'store'),
+				url: getApiLink(appLocalizer, 'stores'),
 				params: { status: 'pending', page: 1, row: 1 },
 				header: 'x-wp-status-pending',
 			},
@@ -78,13 +78,13 @@ const ApprovalQueue = () => {
 			},
 			{
 				id: 'withdrawal',
-				url: getApiLink(appLocalizer, 'store'),
+				url: getApiLink(appLocalizer, 'stores'),
 				params: { page: 1, row: 1, pending_withdraw: true },
 				header: 'x-wp-total',
 			},
 			{
 				id: 'deactivate-requests',
-				url: getApiLink(appLocalizer, 'store'),
+				url: getApiLink(appLocalizer, 'stores'),
 				params: { page: 1, row: 1, deactivate: true },
 				header: 'x-wp-total',
 			},

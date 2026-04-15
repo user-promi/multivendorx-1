@@ -24,7 +24,7 @@ const PendingWithdrawal: React.FC<object> = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `transaction/${row.id}`),
+			url: getApiLink(appLocalizer, `transactions/${row.id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				withdraw: true,
@@ -91,7 +91,7 @@ const PendingWithdrawal: React.FC<object> = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged,

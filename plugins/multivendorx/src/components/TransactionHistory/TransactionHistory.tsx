@@ -21,7 +21,7 @@ export const TransactionHistory: React.FC = () => {
 	useEffect(() => {
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'store'),
+			url: getApiLink(appLocalizer, 'stores'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { options: true },
 		})

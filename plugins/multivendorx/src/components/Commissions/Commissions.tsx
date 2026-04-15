@@ -67,7 +67,7 @@ const Commission: React.FC = () => {
 		}
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `commission/${row.order_id}`),
+			url: getApiLink(appLocalizer, `commissions/${row.order_id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { action, order_id: row.order_id },
 		})
@@ -79,7 +79,7 @@ const Commission: React.FC = () => {
 
 	useEffect(() => {
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { options: true },
 			})
@@ -228,7 +228,7 @@ const Commission: React.FC = () => {
 		setIsLoading(true);
 
 		axios
-			.get(getApiLink(appLocalizer, 'commission'), {
+			.get(getApiLink(appLocalizer, 'commissions'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: buildCommissionQueryParams(query),
 			})
@@ -318,7 +318,7 @@ const Commission: React.FC = () => {
 		}
 
 		axios
-			.get(getApiLink(appLocalizer, 'commission'), {
+			.get(getApiLink(appLocalizer, 'commissions'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { ids: selectedIds },
 			})
@@ -337,7 +337,7 @@ const Commission: React.FC = () => {
 	const downloadCommissionsCSVByQuery = (query: QueryProps) => {
 		// Call the API
 		axios
-			.get(getApiLink(appLocalizer, 'commission'), {
+			.get(getApiLink(appLocalizer, 'commissions'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: buildCommissionQueryParams(query, false),
 			})

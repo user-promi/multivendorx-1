@@ -43,7 +43,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 		}
 
 		axios
-			.get(getApiLink(appLocalizer, `store/${id}`), {
+			.get(getApiLink(appLocalizer, `stores/${id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((res) => {
@@ -95,7 +95,7 @@ const ShippingSettings: React.FC<ShippingSettingsProps> = ({ id, data }) => {
 	const autoSave = (updatedData: Record<string, unknown>) => {
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {

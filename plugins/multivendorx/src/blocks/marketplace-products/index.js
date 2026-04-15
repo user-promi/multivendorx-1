@@ -18,7 +18,7 @@ const EditBlock = (props) => {
 	useEffect(() => {
 		axios({
 			method: 'GET',
-			url: getApiLink(productList, 'store'),
+			url: getApiLink(productList, 'stores'),
 			headers: { 'X-WP-Nonce': productList.nonce },
 			params: { options: true },
 		})

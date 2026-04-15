@@ -79,7 +79,7 @@ const EditStore = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${editId}`),
+			url: getApiLink(appLocalizer, `stores/${editId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {
@@ -101,7 +101,7 @@ const EditStore = () => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${editId}`),
+			url: getApiLink(appLocalizer, `stores/${editId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => {
 			const data = res.data || {};
@@ -189,7 +189,7 @@ const EditStore = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${editId}`),
+			url: getApiLink(appLocalizer, `stores/${editId}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: payload,
 		}).then((res) => {

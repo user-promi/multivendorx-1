@@ -136,7 +136,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 		setIsLoading(true);
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'commission'),
+			url: getApiLink(appLocalizer, 'commissions'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { format: 'reports' },
 		})
@@ -314,7 +314,7 @@ const MarketplaceReport: React.FC<MarketplaceReportProps> = () => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'commission'),
+			url: getApiLink(appLocalizer, 'commissions'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { format: 'reports', top_stores: 3 },
 		})

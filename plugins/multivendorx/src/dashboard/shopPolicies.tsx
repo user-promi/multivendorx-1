@@ -25,7 +25,7 @@ const ShopPolicies = () => {
 
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		}).then((res) => {
 			const data = res.data || {};
@@ -45,7 +45,7 @@ const ShopPolicies = () => {
 	const autoSave = (updatedData: { [key: string]: string }) => {
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `store/${id}`),
+			url: getApiLink(appLocalizer, `stores/${id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: updatedData,
 		}).then((res) => {

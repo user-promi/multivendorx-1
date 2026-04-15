@@ -23,7 +23,7 @@ const OrderReport: React.FC = () => {
 	useEffect(() => {
 		// Fetch store list
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { options: true },
 			})

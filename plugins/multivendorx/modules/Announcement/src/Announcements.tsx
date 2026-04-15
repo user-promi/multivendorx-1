@@ -62,7 +62,7 @@ export const Announcements: React.FC = () => {
 
 	const fetchStoreOptions = () => {
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { options: true },
 			})
@@ -109,7 +109,7 @@ export const Announcements: React.FC = () => {
 
 		axios({
 			method: 'DELETE',
-			url: getApiLink(appLocalizer, `announcement/${selectedAn.id}`),
+			url: getApiLink(appLocalizer, `announcements/${selectedAn.id}`),
 			headers: {
 				'X-WP-Nonce': appLocalizer.nonce,
 			},
@@ -182,7 +182,7 @@ export const Announcements: React.FC = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, 'announcement'),
+			url: getApiLink(appLocalizer, 'announcements'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: { bulk: true, action, ids: selectedIds },
 		})
@@ -198,7 +198,7 @@ export const Announcements: React.FC = () => {
 
 	const handleEdit = (id: number) => {
 		axios
-			.get(getApiLink(appLocalizer, `announcement/${id}`), {
+			.get(getApiLink(appLocalizer, `announcements/${id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
@@ -225,8 +225,8 @@ export const Announcements: React.FC = () => {
 		setSubmitting(true);
 
 		const endpoint = editId
-			? getApiLink(appLocalizer, `announcement/${editId}`)
-			: getApiLink(appLocalizer, 'announcement');
+			? getApiLink(appLocalizer, `announcements/${editId}`)
+			: getApiLink(appLocalizer, 'announcements');
 
 		const payload = {
 			...formData,
@@ -306,7 +306,7 @@ export const Announcements: React.FC = () => {
 		setIsLoading(true);
 
 		axios
-			.get(getApiLink(appLocalizer, 'announcement'), {
+			.get(getApiLink(appLocalizer, 'announcements'), {
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 					withCredentials: true,

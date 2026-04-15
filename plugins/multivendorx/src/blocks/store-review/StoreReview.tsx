@@ -40,7 +40,7 @@ const StoreReview: React.FC<StoreReviewProps> = ({
 		setLoading(true);
 
 		axios
-			.get(getApiLink(StoreInfo, 'review'), {
+			.get(getApiLink(StoreInfo, 'reviews'), {
 				headers: { 'X-WP-Nonce': StoreInfo.nonce },
 				params: {
 					page: 1,

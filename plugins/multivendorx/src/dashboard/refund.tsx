@@ -106,7 +106,7 @@ const Refund: React.FC = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'refund'), {
+			.get(getApiLink(appLocalizer, 'refunds'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,

@@ -28,7 +28,7 @@ class Rest extends \WP_REST_Controller {
      *
      * @var string
      */
-    protected $rest_base = 'announcement';
+    protected $rest_base = 'announcements';
 
     /**
      * Constructor.

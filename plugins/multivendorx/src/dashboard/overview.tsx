@@ -68,7 +68,7 @@ const Overview: React.FC<OverviewProps> = () => {
 	const fetchCommissionDetails = async () => {
 		axios({
 			method: 'GET',
-			url: getApiLink(appLocalizer, 'commission'),
+			url: getApiLink(appLocalizer, 'commissions'),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			params: { format: 'reports', store_id: appLocalizer.store_id },
 		})

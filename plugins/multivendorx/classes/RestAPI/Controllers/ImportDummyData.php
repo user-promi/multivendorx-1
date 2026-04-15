@@ -22,7 +22,7 @@ class ImportDummyData extends \WP_REST_Controller {
      *
      * @var string
      */
-    protected $rest_base = 'import-dummy-data';
+    protected $rest_base = 'dummy-data';
 
     /**
      * Register AI Assistant API routes.

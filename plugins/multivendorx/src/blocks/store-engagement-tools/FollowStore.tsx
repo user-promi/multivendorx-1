@@ -37,7 +37,7 @@ const FollowStore: React.FC<FollowStoreProps> = ({
 	const userId = StoreInfo.currentUserId;
 	useEffect(() => {
 		axios
-			.get(getApiLink(StoreInfo, `follow-store/${storeId}`), {
+			.get(getApiLink(StoreInfo, `follow-stores/${storeId}`), {
 				headers: { 'X-WP-Nonce': StoreInfo.nonce },
 				params: {
 					user_id: userId,
@@ -61,7 +61,7 @@ const FollowStore: React.FC<FollowStoreProps> = ({
 
 		axios
 			.post(
-				getApiLink(StoreInfo, `follow-store/${storeId}`),
+				getApiLink(StoreInfo, `follow-stores/${storeId}`),
 				{
 					user_id: userId,
 					store_id: storeId,

@@ -31,7 +31,7 @@ class Stores extends \WP_REST_Controller {
      *
      * @var string
      */
-    protected $rest_base = 'store';
+    protected $rest_base = 'stores';
 
     /**
      * Register the routes for the objects of the controller.

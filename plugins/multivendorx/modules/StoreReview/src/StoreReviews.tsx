@@ -66,7 +66,7 @@ const StoreReviews: React.FC = () => {
 
 		axios({
 			method: 'DELETE',
-			url: getApiLink(appLocalizer, `review/${selectedRv.id}`),
+			url: getApiLink(appLocalizer, `reviews/${selectedRv.id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 		})
 			.then(() => {
@@ -81,7 +81,7 @@ const StoreReviews: React.FC = () => {
 
 	useEffect(() => {
 		axios
-			.get(getApiLink(appLocalizer, 'store'), {
+			.get(getApiLink(appLocalizer, 'stores'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: { options: true },
 			})
@@ -108,7 +108,7 @@ const StoreReviews: React.FC = () => {
 
 		axios({
 			method: 'POST',
-			url: getApiLink(appLocalizer, `review/${selectedReview.id}`),
+			url: getApiLink(appLocalizer, `reviews/${selectedReview.id}`),
 			headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			data: {
 				reply: replyText,
@@ -128,7 +128,7 @@ const StoreReviews: React.FC = () => {
 
 	const fetchReviewById = (id: number) => {
 		axios
-			.get(getApiLink(appLocalizer, `review/${id}`), {
+			.get(getApiLink(appLocalizer, `reviews/${id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
@@ -238,7 +238,7 @@ const StoreReviews: React.FC = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'review'), {
+			.get(getApiLink(appLocalizer, 'reviews'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,
