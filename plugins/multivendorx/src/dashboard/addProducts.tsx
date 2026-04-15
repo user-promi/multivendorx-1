@@ -19,7 +19,7 @@ import {
 	ButtonInputUI,
 	Notice,
 } from 'zyra';
-import { applyFilters, doAction } from '@wordpress/hooks';
+import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { dashNavigate } from '@/services/commonFunction';
 

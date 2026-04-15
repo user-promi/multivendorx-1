@@ -12,7 +12,6 @@ import {
 	BasicInputUI,
 	Notice,
 	NoticeManager,
-	PrePostText,
 	PrePostTextUI,
 } from 'zyra';
 import { __, sprintf } from '@wordpress/i18n';

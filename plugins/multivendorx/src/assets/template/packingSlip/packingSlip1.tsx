@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, View, Text, Svg, Path } from '@react-pdf/renderer';
+import { Document, Page, View, Text } from '@react-pdf/renderer';
 
 type Row = {
 	productName: string;

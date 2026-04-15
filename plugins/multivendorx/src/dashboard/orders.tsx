@@ -23,9 +23,7 @@ import {
 	formatLocalDate,
 	toWcIsoDate,
 	dashNavigate,
-	formatCurrency,
 } from '../services/commonFunction';
-import { pdf } from '@react-pdf/renderer';
 import { applyFilters } from '@wordpress/hooks';
 
 const fetchOrderById = async (orderId: number) => {

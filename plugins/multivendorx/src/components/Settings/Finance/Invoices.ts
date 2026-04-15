@@ -24,7 +24,7 @@ export default {
 			row: false,
 			cols: 2,
 			label: __('Invoice prefix', 'multivendorx'),
-			desc: __('Example results: INV-2026-0001, INV-MVX-0001', 'multivendorx'),
+			desc: __('Example results: INV-2026-0001, INV-PGE-0001', 'multivendorx'),
 			placeholder: __('Text that appears before the number.', 'multivendorx'),
 			size: '25rem',
 			moduleEnabled: 'invoice',
@@ -85,6 +85,7 @@ export default {
 				},
 			],
 			selectDeselect: true,
+			proSetting: true,
 		},
 		// {
 		// 	key: 'separator_content',
@@ -116,7 +117,7 @@ export default {
 		// 	moduleEnabled: 'invoice',
 		// 	proSetting: true,
 		// },
-		
+
 		{
 			key: 'separator_content',
 			type: 'section',
@@ -146,6 +147,8 @@ export default {
 					value: 'monthly',
 				},
 			],
+			proSetting: true,
+
 		},
 		{
 			key: 'separator_content',
@@ -210,6 +213,7 @@ export default {
 					value: 'vendor_sub_order_invoice',
 				},
 			],
+			proSetting: true,
 		},
 		// {
 		// 	key: 'customer_access',
@@ -269,6 +273,8 @@ export default {
 				},
 				disableBtn: true,
 			},
+			proSetting: true,
+
 		},
 		{
 			key: 'vat_tax_number',
@@ -371,6 +377,8 @@ export default {
 			row: false,
 			cols: 2,
 			label: __('Invoice footer text', 'multivendorx'),
+			proSetting: true,
+
 		},
 		{
 			key: 'seller_agreement',
@@ -378,6 +386,8 @@ export default {
 			row: false,
 			cols: 2,
 			label: __('Terms and conditions', 'multivendorx'),
+			proSetting: true,
+
 		},
 		{
 			key: 'separator_content',
@@ -387,6 +397,8 @@ export default {
 				'multivendorx'
 			),
 			title: __('PDF format', 'multivendorx'),
+			proSetting: true,
+
 		},
 		{
 			key: 'commission_type',
@@ -412,6 +424,8 @@ export default {
 					value: 'per_unit',
 				},
 			],
+			proSetting: true,
+
 		},
 		{
 			key: 'commission_type',
@@ -432,6 +446,8 @@ export default {
 					value: 'per_unit',
 				},
 			],
+			proSetting: true,
+
 		},
 		{
 			key: 'separator_content',
@@ -969,6 +985,7 @@ export default {
 					],
 				},
 			],
+			proSetting: true,
 		},
 	],
 };

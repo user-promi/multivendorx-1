@@ -99,8 +99,7 @@ const RecipientBadge: React.FC<RecipientBadgeProps> = ({ recipient }) => {
 	if (!recipient.enabled) {
 		return null;
 	}
-	const { icon, badge } =
-		RECIPIENT_CONFIG[recipient.label] ?? RECIPIENT_CONFIG.default;
+	const icon = RECIPIENT_CONFIG[recipient.label] ?? RECIPIENT_CONFIG.default;
 	return (
 		<div className={`admin-badge`} role="button" tabIndex={0}>
 			<i className={`adminfont-${icon}`}></i>
@@ -185,9 +184,6 @@ const EventRules: React.FC = () => {
 	const defaultRecipients = editNotification?.recipients.filter(
 		(r: Recipient) => DEFAULT_RECIPIENT_TYPES.includes(r.type)
 	);
-	const customRecipients = editNotification?.recipients.filter(
-		(r: Recipient) => !DEFAULT_RECIPIENT_TYPES.includes(r.type)
-	);
 
 	// Fetch notifications function for TableCard
 	const fetchNotifications = (query: QueryProps) => {
@@ -236,31 +232,6 @@ const EventRules: React.FC = () => {
 			...n,
 			recipients: n.recipients.filter((r) => r.id !== recipientId),
 		}));
-
-	const addRecipient = (notifId: number | null) => {
-		if (!newRecipientValue.trim() || notifId == null) {
-			return;
-		}
-		updateNotification(notifId, (n) => {
-			const maxId = n.recipients?.length
-				? Math.max(...n.recipients.map((r) => r.id))
-				: 0;
-			return {
-				...n,
-				recipients: [
-					...(n.recipients || []),
-					{
-						id: maxId + 1,
-						type: 'extra',
-						label: newRecipientValue,
-						enabled: true,
-						canDelete: true,
-					},
-				],
-			};
-		});
-		setNewRecipientValue('');
-	};
 
 	const toggleChannel = (notifId: number, channel: string) =>
 		updateNotification(notifId, (n) => ({

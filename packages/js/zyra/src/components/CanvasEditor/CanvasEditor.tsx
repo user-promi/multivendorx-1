@@ -128,6 +128,26 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
     }, []);
 
     useEffect(() => {
+        if (context !== 'form') return;
+
+        setBlocks(prev => {
+            const hasStoreName = prev.some(b => b.name === 'name');
+
+            if (hasStoreName) return prev;
+
+            return [
+                ...prev,
+                createBlock({
+                    value: 'text',
+                    label: 'Store Name',
+                    fixedName: 'name',
+                    placeholder: 'Enter your store name',
+                }),
+            ];
+        });
+    }, []);
+
+    useEffect(() => {
         if (!isInternalUpdate.current) {
             if (externalBlocks !== blocksRef.current) {
                 setBlocks(
@@ -338,6 +358,9 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                 return;
             }
             const blockToDelete = dynamicBlocks[index];
+            if (blockToDelete?.name === 'name') {
+                return;
+            }
 
             setBlocks((prev) => {
                 return prev.filter((b) => b.id !== blockToDelete.id);
@@ -674,7 +697,11 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                                         columnManager.clearSelection();
                                     }}
                                     onChange={(patch) => updateBlock(index, patch)}
-                                    onDelete={(e) => deleteBlock(index, e)}
+                                        onDelete={
+                                            block.name === 'name'
+                                                ? undefined
+                                                : (e) => deleteBlock(index, e)
+                                        }
                                 />
                             )
                         )}

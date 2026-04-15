@@ -4,8 +4,6 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import {
 	getApiLink,
-	Container,
-	Column,
 	TableCard,
 	PopupUI,
 	TableRow,

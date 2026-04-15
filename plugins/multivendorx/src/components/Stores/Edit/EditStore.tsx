@@ -16,7 +16,6 @@ import {
 	ItemListUI,
 	Container,
 	NoticeManager,
-	Column,
 } from 'zyra';
 
 import StoreSettings from './StoreSettings';

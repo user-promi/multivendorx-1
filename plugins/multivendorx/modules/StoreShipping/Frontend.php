@@ -330,7 +330,7 @@ class Frontend {
     }
 
     /**
-     * Check if any product in cart belongs to a vendor using distance-based shipping.
+     * Check if any product in cart belongs to a store using distance-based shipping.
      */
     public function cart_has_distance_shipping() {
         if ( empty( WC()->cart ) ) {

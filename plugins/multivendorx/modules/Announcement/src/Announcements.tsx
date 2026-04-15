@@ -100,7 +100,7 @@ export const Announcements: React.FC = () => {
 
 	useEffect(() => {
 		fetchStoreOptions();
-	}, [])
+	}, []);
 
 	const handleConfirmDelete = () => {
 		if (!selectedAn) {
