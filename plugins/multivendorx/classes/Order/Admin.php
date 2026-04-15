@@ -173,7 +173,7 @@ class Admin {
 					'transaction_type' => 'Commission',
 					'amount'           => $commission->store_payable,
 					'currency'         => $row->currency,
-					'narration'        => 'Regeneate Commission received for order ' . $order->get_id(),
+					'narration'        => 'Regenerate Commission received for order ' . $order->get_id(),
 					'status'           => 'Completed',
                 ),
                 array( '%d', '%s', '%s', '%f', '%s', '%s', '%s' )
