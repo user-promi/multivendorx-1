@@ -107,6 +107,7 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 						<div className="store-map">
 							<MapProviderUI
 								apiKey={mapApiKey}
+								mapId={settings?.geolocation?.google_map_id || ''}
 								locationAddress={mapLocation.location_address}
 								locationLat={mapLocation.location_lat}
 								locationLng={mapLocation.location_lng}
