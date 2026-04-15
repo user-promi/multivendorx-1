@@ -22,7 +22,7 @@ export default {
 		},
 		{
 			type: 'attachment',
-			label: __('Static Banner Image', 'multivendorx'),
+			label: __('Banner Image', 'multivendorx'),
 			key: 'banner',
 			imageWidth: 300,
 			imageHeight: 100,
