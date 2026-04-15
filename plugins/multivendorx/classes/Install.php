@@ -316,11 +316,11 @@ class Install {
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
         $wpdb->query( 'DROP TRIGGER IF EXISTS update_store_balance' );
-
+        $table = $wpdb->prefix . Utill::TABLES['transaction'];
         // Create the trigger.
         $sql = "
         CREATE TRIGGER update_store_balance
-        BEFORE INSERT ON wp_multivendorx_transactions
+        BEFORE INSERT ON {$table}
         FOR EACH ROW
         BEGIN
             DECLARE last_balance DECIMAL(20,2);
@@ -328,7 +328,7 @@ class Install {
 
             SELECT balance, locking_balance
             INTO last_balance, last_locking_balance
-            FROM wp_multivendorx_transactions
+            FROM {$table}
             WHERE store_id = NEW.store_id
             ORDER BY id DESC
             LIMIT 1;
@@ -385,9 +385,6 @@ class Install {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $wpdb->query( $sql );
 
-        // if ( ! empty( $wpdb->last_error ) && MultivendorX()->show_advanced_log ) {
-        // MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
-        // }
     }
 
     /**
@@ -1292,6 +1289,7 @@ class Install {
 
         $store_permissions['products'] = array();
         $store_permissions['coupons']  = array();
+        $store_permissions['settings']  = array('manage_store_settings');
 
         if ( ! empty( $previous_capability_settings['is_submit_product'] ) ) {
             $store_permissions['products'] = array_merge(

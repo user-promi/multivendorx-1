@@ -571,7 +571,15 @@ class MVX {
             $wp_user->set_role( 'store_owner' );
 
             // Get all user meta.
-            $user_meta = get_user_meta( $user_id );
+            $user_meta = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT meta_key, meta_value 
+                    FROM {$wpdb->usermeta} 
+                    WHERE user_id = %d",
+                    $user_id
+                ),
+                ARRAY_A
+            );
             $term_id   = get_user_meta( $user_id, '_vendor_term_id', true );
             $term = $wpdb->get_row(
                 $wpdb->prepare(
@@ -622,11 +630,13 @@ class MVX {
                 'primary' => $user->email,
             ) );
 
-            foreach ( $user_meta as $meta_key => $meta_values ) {
+            foreach ( $user_meta as $row ) {
+
+                $meta_key   = $row['meta_key'];
+                $meta_values = maybe_unserialize( $row['meta_value'] );
                 // report abuse table data insert.
                 if ( 'report_abuse_data' === $meta_key ) {
                     $table = $wpdb->prefix . Utill::TABLES['report_abuse'];
-                    $meta_values = unserialize($meta_values);
                     foreach ( $meta_values as $value ) {
                         // Sanitize and prepare data.
                         $insert_data = array(
