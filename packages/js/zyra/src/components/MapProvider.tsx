@@ -135,19 +135,25 @@ const googleAdapter: MapAdapter = {
         map: MapInstance,
         lat: number,
         lng: number,
-        markerType: MarkerType = 'default'
+        markerType: MarkerType = 'default',
+        title?: string
     ) {
         const markerIcon =
             markerType === 'user'
                 ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
                 : markerType === 'store'
-                    ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                    ? {
+        url: 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/convenience_pinlet.png'
+        ,
+        scaledSize: new google.maps.Size(40, 40),
+    }
                     : undefined;
 
         return new window.google.maps.Marker({
             map,
             position: { lat, lng },
             draggable: true,
+            title,
             ...(markerIcon && {
                 icon: markerIcon,
             }),
@@ -412,7 +418,8 @@ export const MapProviderUI = ({
                 mapRef.current as MapInstance,
                 parseFloat(s.location_lat),
                 parseFloat(s.location_lng),
-                'store'
+                'store',
+                s.store_name
             );
 
             storeMarkersRef.current.push(marker);
