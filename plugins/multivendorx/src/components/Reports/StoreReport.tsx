@@ -208,7 +208,7 @@ const StoreReport: React.FC = () => {
 					title={row.store_name}
 					titleLink={getUrl(row.id, 'store')}
 					avatar={{
-						image: row.store_image,
+						image: row.store_image.url,
 						iconClass: row.store_image ? '' : 'store-inventory',
 					}}
 					descriptions={[

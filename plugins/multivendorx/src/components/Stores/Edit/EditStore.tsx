@@ -262,8 +262,8 @@ const EditStore = () => {
 			type: 'file',
 			content: {
 				id: 'compliance-records',
-				headerTitle: __('Compliance and records', 'multivendorx'),
-				headerDescription: __('Compliance and records', 'multivendorx'),
+				headerTitle: __('Compliance & records', 'multivendorx'),
+				headerDescription: __('Compliance & records', 'multivendorx'),
 				hideSettingHeader: true,
 				headerIcon: 'credit-card',
 			},
@@ -424,7 +424,7 @@ const EditStore = () => {
 									style={{
 										background:
 											data?.banner &&
-											`url("${data.banner}")`,
+											`url("${data.banner.url}")`,
 									}}
 								>
 									{Object.keys(data).length === 0 ? (
@@ -486,7 +486,7 @@ const EditStore = () => {
 								<div className="logo-wrapper">
 									<div className="store-logo">
 										{data?.image ? (
-											<img src={data.image} alt="" />
+											<img src={data?.image?.url} alt="" />
 										) : (
 											<div className="placeholder-400x400" />
 										)}

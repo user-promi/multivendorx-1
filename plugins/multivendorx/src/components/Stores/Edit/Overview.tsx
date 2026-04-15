@@ -344,7 +344,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							iconName="external icon"
 							onIconClick={() => {
 								navigate(
-									`?page=multivendorx#&tab=customer-support&subtab=refund-requests`
+									`?page=multivendorx#&tab=reports&subtab=refunded-orders`
 								);
 							}}
 						>
@@ -359,7 +359,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							<FormGroupWrapper>
 								<FormGroup
 									row
-									label={__('Application', 'multivendorx')}
+									label={__('Compliance & records', 'multivendorx')}
 								>
 									<a
 										className="sku link-item"
