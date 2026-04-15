@@ -22,7 +22,6 @@ defined( 'ABSPATH' ) || exit;
  */
 class MVX {
     const BATCH_SIZE = 100;
-    const LOCK_KEY   = 'mvx_migration_lock';
 
     /**
 	 * Get mapping of old vendor meta keys to new keys.
@@ -115,9 +114,6 @@ class MVX {
      * @return void
      */
     public function run_migration_cron() {
-        if ( get_transient( self::LOCK_KEY ) ) return;
-
-        set_transient( self::LOCK_KEY, 1, 120);
 
         $before = $this->get_all_offsets();
 
@@ -128,7 +124,8 @@ class MVX {
         $this->migrate_commissions();
         $this->migrate_refunds();
         $this->migrate_ledger();
-        
+        $this->migrate_reviews();
+
         // product and coupon store id save.
         $this->migrate_product_coupon_vendor();
         $after = $this->get_all_offsets();
@@ -137,7 +134,6 @@ class MVX {
             wp_clear_scheduled_hook('mvx_full_migration');
         }
         
-        delete_transient( self::LOCK_KEY );
     }
 
     public function get_all_offsets() {
@@ -156,7 +152,8 @@ class MVX {
             'product'      => (int) get_option('mvx_product_settings_offset', 0),
             'category'     => (int) get_option('mvx_category_settings_offset', 0),
             'coupon'       => (int) get_option('mvx_coupon_migration_offset', 0),
-            'product_store'  => (int) get_option('mvx_product_migration_offset', 0),
+            'product_store' => (int) get_option('mvx_product_migration_offset', 0),
+            'rating'        => (int) get_option('mvx_rating_offset', 0),
         ];
     }
 
@@ -1079,5 +1076,45 @@ class MVX {
         }
 
         update_option( 'mvx_coupon_migration_offset', $offset + $batch_size );
+    }
+    
+    public function migrate_reviews() {
+        global $wpdb;
+
+        $offset = (int) get_option( 'mvx_rating_offset', 0 );
+        $limit  = self::BATCH_SIZE;
+        $table_review = $wpdb->prefix . Utill::TABLES['review'];
+
+        $query = new \WP_Comment_Query( array(
+            'type'    => 'mvx_vendor_rating',
+            'number'  => $limit,
+            'offset'  => $offset,
+            'status'  => 'approve',
+            'orderby' => 'comment_ID',
+            'order'   => 'ASC',
+        ) );
+
+        $comments = $query->comments;
+        foreach ( $comments as $comment ) {
+            $comment_id = $comment->comment_ID;
+            $rating   = get_comment_meta( $comment_id, 'vendor_rating', true );
+            $vendor_id = get_comment_meta( $comment_id, 'vendor_rating_id', true );
+            $store_id = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+
+            $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+                $table_review,
+                array(
+                    'store_id'       => $store_id,
+                    'customer_id'    => $comment->user_id,
+                    'overall_rating' => $rating,
+                    'review_title'   => wp_trim_words( $comment->comment_content, 5, '' ),
+                    'review_content' => $comment->comment_content,
+                    'status'         => 'approved',
+                    'date_created'   => $comment->comment_date,
+                )
+            );
+        }
+        update_option( 'mvx_rating_offset', $offset + count($comments) );
+
     }
 }
