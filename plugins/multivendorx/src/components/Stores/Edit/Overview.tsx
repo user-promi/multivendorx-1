@@ -344,7 +344,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							iconName="external icon"
 							onIconClick={() => {
 								navigate(
-									`?page=multivendorx#&tab=customer-support&subtab=refund-requests`
+									`?page=multivendorx#&tab=reports&subtab=refunded-orders`
 								);
 							}}
 						>
