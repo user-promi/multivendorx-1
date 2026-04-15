@@ -1111,6 +1111,7 @@ class MVX {
                     'review_content' => $comment->comment_content,
                     'status'         => 'approved',
                     'date_created'   => $comment->comment_date,
+                    'user_ip'   => $comment->comment_author_IP,
                 )
             );
         }
