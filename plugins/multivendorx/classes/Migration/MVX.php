@@ -122,12 +122,15 @@ class MVX {
         $before = $this->get_all_offsets();
 
         $this->migrate_vendors();
+        $this->migrate_product_category_settings();
         $this->migrate_followers();
         $this->migrate_other_tables();
         $this->migrate_commissions();
         $this->migrate_refunds();
         $this->migrate_ledger();
-
+        
+        // product and coupon store id save.
+        $this->migrate_product_coupon_vendor();
         $after = $this->get_all_offsets();
 
         if ($before === $after) {
@@ -150,6 +153,10 @@ class MVX {
             'commission'   => (int) get_option('mvx_commission_offset', 0),
             'refund'       => (int) get_option('mvx_refund_offset', 0),
             'ledger'       => (int) get_option('mvx_ledger_offset', 0),
+            'product'      => (int) get_option('mvx_product_settings_offset', 0),
+            'category'     => (int) get_option('mvx_category_settings_offset', 0),
+            'coupon'       => (int) get_option('mvx_coupon_migration_offset', 0),
+            'product_store'  => (int) get_option('mvx_product_migration_offset', 0),
         ];
     }
 
@@ -414,7 +421,141 @@ class MVX {
 		
     }
 
+    /**
+	 * Migrate product, category, and coupon settings from MVX structure.
+	 *
+	 * Handles:
+	 * - Product-level commission meta migration.
+	 * - Product vendor (store) association update.
+	 * - Category-level commission meta migration.
+	 * - Coupon vendor (store) association update.
+	 *
+	 * @return void
+	 */
+    public function migrate_product_category_settings() {
+        $previous_commission_settings = get_option( 'mvx_commissions_tab_settings', array() );
+        $offset = (int) get_option( 'mvx_product_settings_offset', 0 );
+        $limit  = self::BATCH_SIZE;
+
+        $page = floor( $offset / $limit ) + 1;
+
+        $products = wc_get_products( array(
+            'status' => 'any',
+            'return' => 'ids',
+            'limit'  => $limit,
+            'page'   => $page,
+        ) );
+
+        foreach ( $products as $product_id ) {
+			if ( 'fixed' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_value = get_post_meta( $product_id, '_commission_per_product', true );
+
+				if ( empty( $previous_value ) ) {
+					continue;
+				}
+
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_value );
+			}
+
+			if ( 'percent' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_value = get_post_meta( $product_id, '_commission_per_product', true );
+
+				if ( empty( $previous_value ) ) {
+					continue;
+				}
+
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_value );
+			}
+
+			if ( 'fixed_with_percentage_qty' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_percentage_value = get_post_meta( $product_id, '_commission_percentage_per_product', true );
+				$previous_fixed_value      = get_post_meta( $product_id, '_commission_fixed_with_percentage_qty', true );
+
+				if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
+					continue;
+				}
+
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_fixed_value );
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_percentage_value );
+			}
+
+			if ( 'fixed_with_percentage' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_percentage_value = get_post_meta( $product_id, '_commission_percentage_per_product', true );
+				$previous_fixed_value      = get_post_meta( $product_id, '_commission_fixed_with_percentage', true );
+
+				if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
+					continue;
+				}
+
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['fixed_commission'], $previous_fixed_value );
+				update_post_meta( $product_id, Utill::POST_META_SETTINGS['percentage_commission'], $previous_percentage_value );
+			}
+        }
+
+        update_option( 'mvx_product_settings_offset', $offset + count( $products ) );
+
+        $offset = (int) get_option( 'mvx_category_settings_offset', 0 );
+        $terms = get_terms(
+            array(
+				'taxonomy'   => 'product_cat',
+				'hide_empty' => false,
+				'fields'     => 'ids',
+                'number'     => $limit,
+                'offset'     => $offset,
+            )
+        );
+
+        foreach ( $terms as $term_id ) {
+			if ( 'fixed' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_value = get_term_meta( $term_id, 'commission', true );
+
+				if ( empty( $previous_value ) ) {
+					continue;
+				}
+
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_value );
+			}
+
+			if ( 'percent' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_value = get_term_meta( $term_id, 'commission', true );
+
+				if ( empty( $previous_value ) ) {
+					continue;
+				}
+
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_value );
+			}
+
+			if ( 'fixed_with_percentage_qty' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_percentage_value = get_term_meta( $term_id, 'commission_percentage', true );
+				$previous_fixed_value      = get_term_meta( $term_id, 'fixed_with_percentage_qty', true );
+
+				if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
+					continue;
+				}
+
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_fixed_value );
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_percentage_value );
+			}
+
+			if ( 'fixed_with_percentage' === $previous_commission_settings['commission_type']['value'] ) {
+				$previous_percentage_value = get_term_meta( $term_id, 'commission_percentage', true );
+				$previous_fixed_value      = get_term_meta( $term_id, 'fixed_with_percentage', true );
+
+				if ( empty( $previous_fixed_value ) || empty( $previous_percentage_value ) ) {
+					continue;
+				}
+
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_fixed_commission'], $previous_fixed_value );
+				update_term_meta( $term_id, Utill::WORDPRESS_SETTINGS['category_percentage_commission'], $previous_percentage_value );
+			}
+        }
+
+        update_option( 'mvx_category_settings_offset', $offset + count( $products ) );
+    }
+
     public function migrate_vendors() {
+        global $wpdb;
         $offset = (int) get_option('mvx_vendor_offset', 0);
 
         $vendors = get_users([
@@ -688,11 +829,14 @@ class MVX {
             $store_payable       = get_post_meta( $commission_id, '_commission_total', true );
             $status              = get_post_meta( $commission_id, '_paid_status', true );
             $refunded            = abs( (float) get_post_meta( $commission_id, '_commission_refunded', true ) );
-			$created_at          = gmdate( 'Y-m-d H:i:s', get_post_meta( $commission_id, '_paid_date', true ) );
+            $paid_date = get_post_meta( $commission_id, '_paid_date', true );
+            $created_at = ! empty( $paid_date ) && is_numeric( $paid_date )
+                ? gmdate( 'Y-m-d H:i:s', (int) $paid_date )
+                : '';
             $vendor_id           = get_term_meta( $commission_vendor, '_vendor_user_id', true );
             $store_id            = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
 
-			$insert_id = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $table_name,
                 array(
 					'order_id'       => (int) $commission_order_id,
@@ -713,6 +857,35 @@ class MVX {
 					'%f',
 					'%f',
 					'%f',
+					'%s',
+					'%s',
+                )
+			);
+            $insert_id = $wpdb->insert_id;
+
+            $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+                $wpdb->prefix . Utill::TABLES['transaction'],
+                array(
+					'store_id'         => $store_id,
+					'order_id'         => (int) $commission_order_id,
+					'commission_id'    => $insert_id,
+					'entry_type'       => 'Cr',
+					'transaction_type' => 'Commission',
+					'amount'           => $store_payable,
+					'currency'         => get_woocommerce_currency(),
+					'narration'        => 'Commission received for order ' . $commission_order_id,
+					'status'           => 'Completed',
+					'created_at'       => $created_at,
+                ),
+                array(
+					'%d',
+					'%d',
+					'%d',
+					'%s',
+					'%s',
+					'%f',
+					'%s',
+					'%s',
 					'%s',
 					'%s',
                 )
@@ -789,6 +962,9 @@ class MVX {
         $store_cache  = array();
 
         foreach ( $transactions as $row ) {
+            if ($row['ref_status'] !== 'completed') {
+                continue;
+            }
             $author_id = (int) $row['vendor_id'];
 
             if ( ! isset( $store_cache[ $author_id ] ) ) {
@@ -816,7 +992,6 @@ class MVX {
 					'narration'        => $row['ref_info'],
 					'status'           => $row['ref_status'],
 					'created_at'       => $row['created'],
-					'updated_at'       => $row['created'],
                 ),
                 array(
 					'%d',
@@ -831,11 +1006,78 @@ class MVX {
 					'%s',
 					'%s',
 					'%s',
-					'%s',
                 )
 			);
         }
 
         update_option('mvx_ledger_offset', $offset + count($transactions));
+    }
+
+    public function migrate_product_coupon_vendor() {
+        $batch_size = self::BATCH_SIZE;
+        $offset     = (int) get_option( 'mvx_product_migration_offset', 0 );
+
+        $store_owners = get_users( array(
+            'role'   => 'store_owner',
+            'fields' => 'ID',
+        ) );
+
+        if ( empty( $store_owners ) ) {
+            return;
+        }
+
+        $products = get_posts( array(
+            'post_type'      => 'product',
+            'post_status'    => 'any',
+            'fields'         => 'ids',
+            'posts_per_page' => $batch_size,
+            'offset'         => $offset,
+            'orderby'        => 'ID',
+            'order'          => 'ASC',
+        ) );
+
+        if ( empty( $products ) ) {
+            return;
+        }
+
+        foreach ( $products as $product_id ) {
+            $author_id = (int) get_post_field( 'post_author', $product_id );
+
+            // Only assign if author is store_owner
+            if ( in_array( $author_id, $store_owners, true ) ) {
+                $active_store = get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+                update_post_meta( $product_id, Utill::POST_META_SETTINGS['store_id'], $active_store );
+            }
+        }
+
+        update_option( 'mvx_product_migration_offset', $offset + $batch_size );
+
+        // Migrate coupon vendor.
+        $offset = (int) get_option( 'mvx_coupon_migration_offset', 0 );
+
+        $coupons = get_posts( array(
+            'post_type'      => 'shop_coupon',
+            'post_status'    => 'any',
+            'fields'         => 'ids',
+            'posts_per_page' => $batch_size,
+            'offset'         => $offset,
+            'orderby'        => 'ID',
+            'order'          => 'ASC',
+        ) );
+
+        if ( empty( $coupons ) ) {
+            return;
+        }
+
+        foreach ( $coupons as $coupon_id ) {
+            $author_id = (int) get_post_field( 'post_author', $coupon_id );
+
+            if ( in_array( $author_id, $store_owners, true ) ) {
+                $active_store = get_user_meta( $author_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+                update_post_meta( $coupon_id, Utill::POST_META_SETTINGS['store_id'], $active_store );
+            }
+        }
+
+        update_option( 'mvx_coupon_migration_offset', $offset + $batch_size );
     }
 }
