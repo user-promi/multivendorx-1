@@ -80,43 +80,53 @@ class Notifications {
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store application is under review',
 					'email_body'       => "
-							<table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313rem'>
-								<tr> <td valign='top' style='padding:10px;'><h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313rem'>
-									Store application rejected
-								</h1><div style='color:#e92525;font-size:0.95rem'>
-									Action required - Review policy requirements
-								</div></td>
-								</tr>
-							</table>
-						<h1 style='font-size:1.25;padding-bottom:1'>
-									Hello,
-								</h1><div style='font-size:1;line-height:1.25rem;padding-top:1.25'>
-									We've reviewed your store application [store_name] and unfortunately it does not meet our current marketplace requirements at this time.
-								</div><div style='line-height:1.25rem;font-size:0.95rem;padding-top:1.5rem;font-weight:500'>
-									To help you understand next steps, please review the key areas below before reapplying
-								</div>
-							<table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31rem'>
-								<tr>
-									
-										<td valign='top' style='padding:10px;'>
-											<h1 style='font-size:1.313rem'>
-									
-												Common reasons for rejection            
-								
-								</h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
-									i) Store details or descriptions don't meet content policy guidelines
-								</div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
-									ii) Missing or incomplete merchant verification documentation
-								</div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
-									iii) Product listings don't comply with restricted products policy
-								</div>
-										</td>
-									
-								</tr>
-							</table>
-						<div style='color:#2d3748;font-size:1rem;margin-top:4rem;line-height:1.125;margin-bottom:3rem'>
-									Once you've addressed the relevant requirements, you're welcome to resubmit your application through the Play Console.
-								</div>",
+											<table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+												<tr>
+													
+														<td valign='top' style='padding:10px;'>
+															<h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+													
+													
+													Store pending approval
+												
+												
+												</h1><div style='color:#555555;font-size:0.95'>
+													Your store application is awaiting review
+												</div>
+														</td>
+													
+												</tr>
+											</table>
+										<h1 style='font-size:1.25;padding-bottom:1'>Hello,
+																	</h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+													Your store [store_name] has been successfully submitted on [marketplace_name] and is currently pending admin approval.
+												</div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+													The store will become visible to customers once the review process is completed and approval is granted.
+												</div>
+											<table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+												<tr>
+													
+														<td valign='top' style='padding:10px;'>
+															<h1 style='font-size:1.313'>
+													
+													
+													What happens next
+												
+												
+												</h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+													i) The admin will review your store details and submitted information
+												</div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+													ii) You may be contacted if additional details are required
+												</div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+													iii) You will receive a notification once your store is approved or if changes are needed
+												</div>
+														</td>
+													
+												</tr>
+											</table>
+										<div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+													No action is required at this moment. We will notify you once the review process is completed.
+												</div>",
 					'sms_content'      => 'Store [store_name] is pending approval.',
 					'available_placeholder' => [
 						'[store_name]',
@@ -136,13 +146,139 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store application was rejected',
-					'email_body'       => '<h1 style="font-size:1.125">
-												Hello,
-											</h1><div style="color:#2d3748;font-size:0.9">
-												Unfortunately your store application [store_name] has been rejected.
-											</div><div style="font-size:0.9rem;padding-top:2rem;font-weight:600">
-												Please review marketplace requirements and reapply if applicable.
-											</div>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Store application rejected
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Changes are required before resubmission
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello [store_name],
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We’ve reviewed your store <strong data-start='373' data-end='389'>[store_name]</strong> on <strong data-start='393' data-end='415'>[marketplace_name]</strong>, and it does not meet our current marketplace requirements.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                This usually happens when some details are incomplete or do not align with our policies.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									
+												What you can do next            
+								
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Review your store details and descriptions
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Update any missing or incorrect information
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Ensure your store follows marketplace policies before resubmitting
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Once you’ve made the necessary updates, you can submit your application again for review.
+            </div>",
 					'sms_content'      => 'Store application rejected.',
 					'system_message'   => 'Your store application has been rejected.',
 					'tag'              => 'Store',
@@ -157,7 +293,103 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store application has been permanently rejected',
-					'email_body'       => '<p>Hello,</p><p>Your store application <strong>[store_name]</strong> has been permanently rejected due to policy violations.</p>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Store application permanently rejected
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                This decision cannot be reversed
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We’ve reviewed your store [store_name] on [marketplace_name], and it has been permanently rejected due to policy violations.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                This means the application does not meet our marketplace requirements and cannot be approved or resubmitted.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									
+												What this means            
+								
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) The store cannot be activated on the marketplace
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) This decision is final and cannot be changed
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) You will not be able to reapply for this store
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you believe this decision requires clarification, you may contact the marketplace administrator for more details.
+            </div>",
 					'sms_content'      => 'Store application permanently rejected.',
 					'system_message'   => 'Your store application has been permanently rejected.',
 					'tag'              => 'Store',
@@ -171,19 +403,52 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store account has been created – [store_name]',
-					'email_body'       => '<p>Hello [store_owner_name],</p><p>An account has been created for you on <strong>[marketplace_name]</strong> to manage the store <strong>[store_name]</strong>.</p>
-											<p>You can now log in and start setting up your store.</p><p>
-											<strong>Login URL:</strong> <a href="[login_url]">[login_url]</a><br>
-											<strong>Username:</strong> [store_owner_name]
-											</p>
-											<p>After logging in, you can:</p>
-											<ul>
-											<li>Update your store profile</li>
-											<li>Add products</li>
-											<li>Configure shipping and payment settings</li>
-											</ul>
-											<p>If you did not expect this account creation, please contact the marketplace administrator.</p>',
-					'sms_content'      => 'Your store account for [store_name] has been created. Please log in to get started.',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313;color:#703333'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                Store account created
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your store account is now active
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>Hello, </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                An account for your store [store_name] has been created by the admin on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                You can now access your store dashboard and start setting up your store details, products, and preferences.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr><td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>Common reasons for rejection   </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Log in to your store dashboard using your account credentials
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Complete your store profile and business information
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Start adding products and configuring your store settings
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                No further action is required to activate your account. You can begin managing your store immediately.
+            </div>",
+			'sms_content'      => 'Your store account for [store_name] has been created. Please log in to get started.',
 					'system_message'   => 'Your store account for [store_name] has been created by the marketplace admin.',
 					'tag'              => 'Store',
 					'category'         => 'notification',
@@ -197,9 +462,95 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store "[store_name]" is now active',
-					'email_body'       => '<p>Hello,</p>
-									<p>Your store <strong>[store_name]</strong> is now active and visible to customers.</p>
-									<p>You can now add products and begin receiving orders.</p>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313;color:#703333'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                Store account created
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your store account is now active
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                An account for your store [store_name] has been created by the admin on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                You can now access your store dashboard and start setting up your store details, products, and preferences.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									
+												Common reasons for rejection            
+								
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Log in to your store dashboard using your account credentials
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Complete your store profile and business information
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Start adding products and configuring your store settings
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                No further action is required to activate your account. You can begin managing your store immediately.
+            </div>",
 					'sms_content'      => 'Store [store_name] is now active.',
 					'system_message'   => 'Your store has been activated.',
 					'tag'              => 'Store',
@@ -214,9 +565,103 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store "[store_name]" is under review',
-					'email_body'       => '<p>Hello,</p>
-										<p>Your store <strong>[store_name]</strong> has been placed under administrative review.</p>',
-					'sms_content'      => 'Store [store_name] under review.',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#fffce8;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#d4b86a;background-color:#fffce8;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Store under review
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your store application is being reviewed
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Your store [store_name] has been successfully submitted on [marketplace_name] and is currently under review.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Our team is carefully checking your store details to ensure everything meets our marketplace standards and policies.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									
+												Common reasons for rejection            
+								
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) The admin will review your store information and documents
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) You may be contacted if any additional details are required
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) You will receive a notification once the review is completed
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                No action is required from your side at this moment. We will notify you as soon as your store status is updated.
+            </div>",
 					'system_message'   => 'Your store has been placed under review.',
 					'tag'              => 'Store',
 					'category'         => 'activity',
@@ -230,9 +675,87 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store "[store_name]" has been suspended',
-					'email_body'       => '<p>Hello,</p>
-											<p>Your store <strong>[store_name]</strong> has been temporarily suspended.</p>
-											<p>Please contact marketplace support for more information.</p>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e6f4ff;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6e9fd1;background-color:#e6f4ff;font-size:1.313'>
+                
+                
+                
+                
+                
+                Store suspended
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your store has been temporarily suspended
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We would like to inform you that your store [store_name] on [marketplace_name] has been temporarily suspended by the admin due to policy or compliance reasons.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                During this period, your store will not be visible to customers, and new orders cannot be placed.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									
+												Common reasons for rejection            
+								
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Your store is temporarily hidden from the marketplace
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Product listings and sales activities are paused
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Existing orders (if any) will be handled as per marketplace policy
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you believe this action was taken in error or wish to resolve the issue, please contact the marketplace support team for further assistance.
+            </div>",
 					'sms_content'      => 'Store [store_name] suspended.',
 					'system_message'   => 'Your store has been suspended.',
 					'tag'              => 'Store',
@@ -247,9 +770,87 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store "[store_name]" has been permanently deactivated',
-					'email_body'       => '<p>Hello,</p>
-											<p>Your store <strong>[store_name]</strong> has been permanently deactivated.</p>
-											',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                Store permanently deactivated
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your store is no longer active on the marketplace
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We would like to inform you that your store [store_name] on [marketplace_name] has been permanently deactivated by the admin due to policy or compliance reasons.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                This action is final, and the store will no longer be available on the marketplace.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									
+												Common reasons for rejection            
+								
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Your store has been permanently removed from the marketplace
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) All product listings and store activities have been disabled
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Customers will no longer be able to view or purchase from your store
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you need clarification regarding this decision, you may contact the marketplace support team for assistance.
+            </div>",
 					'sms_content'      => 'Store [store_name] permanently deactivated.',
 					'system_message'   => 'Your store has been permanently deactivated.',
 					'tag'              => 'Store',
@@ -264,7 +865,75 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Store deactivation request – [store_name]',
-					'email_body'       => '<p>Hello Admin,</p><p>The store <strong>[store_name]</strong> has submitted a request to deactivate their store account.</p> <p>Please review the request and take the appropriate action from the admin dashboard.</p>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                Store deactivation request received
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                We are processing your store deactivation request
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We have received your request to deactivate your store [store_name] on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Our team is currently reviewing your request to ensure all pending activities are properly handled before deactivation.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+									
+												Common reasons for rejection            
+								
+								
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Your store details and ongoing orders will be reviewed
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) You may be contacted if any clarification or action is required
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) You will be notified once the deactivation process is completed
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                No action is required from your side at this moment. We will update you once your request has been processed.
+            </div>",
 					'sms_content'      => 'Store [store_name] requested account deactivation.',
 					'system_message'   => 'Store [store_name] has requested to deactivate their store account.',
 					'tag'              => 'Store',
@@ -279,9 +948,87 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your store "[store_name]" deactivation request has been rejected',
-					'email_body'       => '<p>Hello,</p>
-						<p>Your store <strong>[store_name]</strong> has been permanently deactivated.</p>
-						',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                Store deactivation rejected
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your store deactivation request was not approved
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We would like to inform you that your request to deactivate your store [store_name] has been reviewed and was not approved by the admin.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Your store will continue to remain active on the marketplace.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									
+												Common reasons for rejection            
+								
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) There are pending orders or ongoing transactions in your store
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Required information or actions are still incomplete
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) The store does not currently meet deactivation conditions as per marketplace policy
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you need further assistance, please contact the marketplace support team for more details or guidance.
+            </div>",
 					'sms_content'      => 'Store [store_name] deactivation request has been rejected',
 					'system_message'   => 'Your store deactivation request has been rejected.',
 					'tag'              => 'Store',
@@ -296,10 +1043,97 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'New order received – Order #[order_id]',
-					'email_body'       => '<p>Hello,</p>
-											<p>You have received a new order.</p>
-											<p><strong>Order Number:</strong> #[order_id]</p>
-											',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+									New order received
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                You have received a new order
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Good news! You have received a new order from a customer on your store [store_name]
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Please review the order details and proceed with fulfillment as soon as possible.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+									
+												Common reasons for rejection            
+								
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) A new order has been placed in your store dashboard
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Customer details and order items are available for review
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Please confirm and process the order within the expected handling time
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Prompt action is recommended to ensure timely delivery and a smooth customer experience.
+            </div>",
 					'sms_content'      => 'New order #[order_id] received.',
 					'system_message'   => 'New order received.',
 					'tag'              => 'Order',
@@ -312,7 +1146,97 @@ class Notifications {
 					'store_enabled'    => true,
 					'customer_enabled' => true,
 					'email_subject'    => 'Order processing started',
-					'email_body'       => 'Your order [order_id] is now being processed.',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#fffce8;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#d4b86a;background-color:#fff7ec;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                Order processing started
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your order is now being prepared
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Your order #[order_id] from [store_name] is now being processed by the seller.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                This means your items are being prepared, packed, and readied for shipment.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									
+												What happens next            
+								
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) The store will prepare and pack order items
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Order will be handed over to the delivery partner
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Customer will receive tracking details once the order is shipped
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    ",
 					'sms_content'      => 'Order [order_id] is now processing.',
 					'system_message'   => 'Order [order_id] status: Processing.',
 					'tag'              => 'Order',
@@ -325,7 +1249,89 @@ class Notifications {
 					'store_enabled'    => true,
 					'customer_enabled' => true,
 					'email_subject'    => 'Order completed',
-					'email_body'       => 'Order [order_id] has been successfully completed.',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+									Order completed
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your order has been successfully delivered
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We’re happy to inform you that your order #[order_id] from [store_name] on [marketplace_name] has been successfully completed.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                We hope you are satisfied with your purchase.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                What’s next
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) You can view your order details in your account
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) You may download your invoice if needed
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) You can leave a review for the product and store experience
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Thank you for shopping with us. We look forward to serving you again.
+            </div>",
 					'sms_content'      => 'Order [order_id] completed successfully.',
 					'system_message'   => 'Order [order_id] marked as completed.',
 					'tag'              => 'Order',
@@ -339,7 +1345,75 @@ class Notifications {
 					'customer_enabled' => true,
 					'admin_enabled'    => true,
 					'email_subject'    => 'Order cancelled',
-					'email_body'       => 'Order [order_id] has been cancelled.',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                Order cancelled
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your order has been cancelled
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We would like to inform you that your order #[order_id] from [store_name] on [marketplace_name] has been cancelled.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                If any payment was made, the refund (if applicable) will be processed as per the marketplace refund policy.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+									
+												Common reasons for rejection            
+								
+								
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) The order will not be processed or shipped
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Any payment made will be refunded if eligible
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) You can place a new order anytime
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you have any questions, please contact our support team for assistance.
+            </div>",
 					'sms_content'      => 'Order [order_id] cancelled successfully.',
 					'system_message'   => 'Order [order_id] cancelled.',
 					'tag'              => 'Order',
@@ -352,7 +1426,81 @@ class Notifications {
 					'store_enabled'    => true,
 					'customer_enabled' => true,
 					'email_subject'    => 'Order refunded',
-					'email_body'       => 'Your refund for order [order_id] has been processed.',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                Order refunded
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your refund has been successfully processed
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We’re happy to inform you that your refund for order #[order_id] from [store_name] on [marketplace_name] has been successfully processed.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                The refunded amount has been returned to your original payment method.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                Refund details
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Refund has been initiated for the eligible amount
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) It may take a few business days to reflect in your account depending on your payment provider
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) You can check the refund status in your order history
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you do not see the refund after the expected time, please contact our support team for assistance.
+            </div>",
 					'sms_content'      => 'Refund for [order_id] processed.',
 					'system_message'   => 'Order [order_id] refunded.',
 					'tag'              => 'Order',
@@ -368,10 +1516,77 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Tracking added – Order #[order_id]',
-					'email_body'       => '
-										<p>Hello,</p>
-										<p>Tracking information has been added for your order <strong>#[order_id]</strong>.</p>
-										',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                 Shipment tracking updated            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your order has been shipped and tracking is now available
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Good news! Your order #[order_id] from [store_name] on [marketplace_name] has been shipped. You can now track your shipment using the details below.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+									
+												Tracking details            
+								
+								
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                Shipping Provider: [shipping_provider_name]
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                Tracking ID: [tracking_id]
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                Tracking URL: [shipping_url]
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                You can use the tracking link above to check real-time delivery updates. We’ll also keep you informed about major status changes.
+            </div>",
 					'sms_content'      => 'Tracking added for order #[order_id].',
 					'system_message'   => 'Tracking information added to your order.',
 					'tag'              => 'Shipping',
@@ -386,7 +1601,79 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Order #[order_id] delivered',
-					'email_body'       => '<p>Hello,</p><p>Your order <strong>#[order_id]</strong> has been delivered successfully.</p>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                Order delivered
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your order has been successfully delivered
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We’re happy to inform you that your order #[order_id] from [store_name] on [marketplace_name] has been successfully delivered.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                We hope your package has reached you safely.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+									
+												Common reasons for rejection            
+								
+								
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Confirm that all items are received in good condition
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Download your invoice from your order history if needed
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Leave a review for the product and seller experience
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Thank you for shopping with us. We hope to see you again soon.
+            </div>",
 					'sms_content'      => 'Order #[order_id] delivered successfully.',
 					'system_message'   => 'Your order #[order_id] has been delivered.',
 					'tag'              => 'Shipping',
@@ -402,9 +1689,105 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Refund requested – Order #[order_id]',
-					'email_body'       => '
-									<p>Hello,</p><p>A refund request has been submitted for <strong>Order #[order_id]</strong>.</p>
-									',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Refund requested
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your refund request has been received
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We have received your refund request for order #[order_id] from [store_name] on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Our team will review your request based on the marketplace refund policy and order details.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                What happens next
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) The refund request will be reviewed by the admin or store owner
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) You may be contacted if additional information is required
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) You will receive an update once the review is completed
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Once you've addressed the relevant requirements, you're welcome to resubmit your application through the Play Console.
+            </div>",
 					'sms_content'      => 'Refund requested for order #[order_id].',
 					'system_message'   => 'Refund request submitted.',
 					'tag'              => 'Refund',
@@ -419,10 +1802,57 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Refund approved – Order #[order_id]',
-					'email_body'       => '
-										<p>Hello,</p>
-										<p>The refund request for <strong>Order #[order_id]</strong> has been approved.</p>
-										',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                Refund approved
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your refund request has been accepted
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Good news! Your refund request for order #[order_id] from [store_name] on [marketplace_name] has been approved.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                The refund process has now been initiated as per the marketplace refund policy.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you have any questions, please contact our support team for further assistance.
+            </div>",
 					'sms_content'      => 'Refund approved for #[order_id].',
 					'system_message'   => 'Refund approved.',
 					'tag'              => 'Refund',
@@ -437,9 +1867,57 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Refund rejected – Order #[order_id]',
-					'email_body'       => '<p>Hello,</p>
-											<p>The refund request for <strong>Order #[order_id]</strong> has been rejected.</p>
-											',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									Refund rejected
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your refund request was not approved
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We would like to inform you that your refund request for order #[order_id] from [store_name] on [marketplace_name] has been reviewed and was not approved as per our refund policy.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                To help you understand next steps, please review the key areas below before reapplying
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you need more clarification, please contact our support team for assistance.
+            </div>",
 					'sms_content'      => 'Refund rejected for #[order_id].',
 					'system_message'   => 'Refund rejected.',
 					'tag'              => 'Refund',
@@ -455,7 +1933,61 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'New review received for your store',
-					'email_body'       => '<p>Hello,</p><p>A customer has submitted a new review for your store.</p>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                New store review received
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                A customer has left a review for your store
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                You have received a new review for your store [store_name] on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Customer feedback helps improve your store reputation and build trust with future buyers.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Keep up the great work and continue delivering a great shopping experience.
+            </div>",
 					'sms_content'      => 'New review received for your store.',
 					'system_message'   => 'Your store received a new customer review.',
 					'tag'              => 'Review',
@@ -470,7 +2002,53 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Marketplace response to your review – [product_name]',
-					'email_body'       => '<p>Hello [customer_name],</p><p>The marketplace team has responded to your review for <strong>[store_name]</strong>.</p><p><a href="[review_url]">View reply</a></p>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#fff7ec;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#d4b86a;background-color:#fff7ec;font-size:1.313'>
+                
+                
+                
+                
+                
+                Admin replied to your review
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your review has received a response
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                The admin has responded to your review for store [store_name] on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                You can view the full reply and any additional details in your account.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Thank you for sharing your feedback. It helps improve the marketplace experience for everyone.
+            </div>",
 					'sms_content'      => 'Marketplace replied to your review.',
 					'system_message'   => 'Admin has replied to your review.',
 					'tag'              => 'Review',
@@ -486,7 +2064,61 @@ class Notifications {
 					'admin_enabled'    => true,
 					'system_enabled'   => true,
 					'email_subject'    => 'Product "[product_name]" submitted for approval',
-					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> has been submitted for review.</p>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                Product submitted for approval
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                A new product is waiting for review
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                A new product has been submitted by store [store_name] on [marketplace_name] and is currently awaiting your approval.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                The product will be visible to customers only after it is approved.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Please review the submission and approve or reject it based on marketplace guidelines.
+            </div>",
 					'sms_content'      => 'Product [product_name] submitted for approval.',
 					'system_message'   => 'Your product has been submitted for admin review.',
 					'tag'              => 'Product',
@@ -501,8 +2133,53 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your product "[product_name]" has been approved',
-					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> is now live on the marketplace.</p>
-',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e6fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                Product approved
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your product is now live on the marketplace
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Good news! Your product [product_name] submitted for [store_name] on [marketplace_name] has been reviewed and approved by the admin.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                The product is now visible to customers and available for purchase on the marketplace.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Your product is now live. Continue adding great products to grow your store.
+            </div>",
 					'sms_content'      => 'Product [product_name] approved.',
 					'system_message'   => 'Your product is now live.',
 					'tag'              => 'Product',
@@ -517,8 +2194,51 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Product "[product_name]" was rejected',
-					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> has been rejected after review.</p>
-',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                Product rejected
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your product was not approved for publishing
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We would like to inform you that your product [product_name] submitted from store [store_name] on [marketplace_name] has been reviewed and was not approved by the admin.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                You may review the product details, make the necessary updates, and submit it again for approval.
+            </div>",
 					'sms_content'      => 'Product [product_name] rejected.',
 					'system_message'   => 'Your product submission was rejected.',
 					'tag'              => 'Product',
@@ -533,8 +2253,53 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Low stock alert – [product_name]',
-					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> is running low on stock.</p>
-',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                Product low stock alert
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your product inventory is running low
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                This is a quick reminder that the stock for your product [product_name] in store [store_name] on [marketplace_name] is running low.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                To avoid missing potential sales, we recommend updating your inventory soon.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Keeping your inventory updated helps ensure a smooth shopping experience for your customers.
+            </div>",
 					'sms_content'      => 'Low stock alert for [product_name].',
 					'system_message'   => 'Your product stock is running low.',
 					'tag'              => 'Product',
@@ -549,8 +2314,53 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Product out of stock – [product_name]',
-					'email_body'       => '<p>Hello,</p><p>Your product <strong>[product_name]</strong> is currently out of stock.</p>
-',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                Product out of stock
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your product is currently unavailable for purchase
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                The product [product_name] from your store [store_name] on [marketplace_name] is now out of stock.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Customers will not be able to purchase this product until the inventory is updated.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Update the product inventory from your store dashboard to make it available for customers again.
+            </div>",
 					'sms_content'      => 'Product [product_name] is out of stock.',
 					'system_message'   => 'Your product is currently out of stock.',
 					'tag'              => 'Product',
@@ -566,9 +2376,53 @@ class Notifications {
 						'admin_enabled'    => true,
 						'system_enabled'   => true,
 						'email_subject'    => 'New product question – [product_name]',
-						'email_body'       => '<p>Hello,</p><p>A customer has asked a question about the product <strong>[product_name]</strong>.</p>
-<p><strong>Customer:</strong> [customer_name]</p><p>Please review the question and provide a response.</p>
-<p><a href="[question_url]">View question</a></p>',
+						'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                New product question received
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                A customer has asked a question about your product.
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                A customer has submitted a question for the product [product_name] from your store [store_name] on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Responding promptly can help customers make informed purchase decisions
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Providing clear and timely answers helps build trust and improve the shopping experience.
+            </div>",
 						'sms_content'      => 'New product question.',
 						'system_message'   => 'Customer asked a question.',
 						'tag'              => 'Product',
@@ -583,8 +2437,55 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Answer to your question – [product_name]',
-					'email_body'       => '<p>Hello [customer_name],</p><p>The store <strong>[store_name]</strong> has replied to your question regarding <strong>[product_name]</strong>.</p>
-<p><a href="[question_url]">View reply</a></p>',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e6f4ff;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6e9fd1;background-color:#e6f4ff;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									Store replied to your question
+								
+            
+            
+            
+            
+            
+            
+            </h1>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                The store [store_name] has replied to your question about the product [product_name] on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                You can now view the response and continue the conversation if needed.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Thank you for engaging with the store. We hope the response helps you make an informed purchase decision.
+            </div>",
 					'sms_content'      => 'Reply to your product question.',
 					'system_message'   => 'Question reply received.',
 					'tag'              => 'Product',
@@ -598,7 +2499,53 @@ class Notifications {
 					'store_enabled'  => true,
 					'admin_enabled'  => true,
 					'email_subject'  => 'Payout received',
-					'email_body'     => 'Payout for order [order_id] has been received successfully.',
+					'email_body'     => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                Payout received
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your earnings have been successfully transferred
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Good news! A payout for your earnings from [store_name] on [marketplace_name] has been successfully processed.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                The amount has been transferred to your registered payout account.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                You can check your earnings and payout history anytime from your dashboard.
+            </div>",
 					'sms_content'    => 'Payout received for [order_id].',
 					'system_message' => 'Payout for [order_id] received.',
 					'tag'            => 'Payment',
@@ -610,7 +2557,69 @@ class Notifications {
 					'desc'           => 'A payout processing attempt has failed.',
 					'admin_enabled'  => true,
 					'email_subject'  => 'Payout failed',
-					'email_body'     => 'Payout of [amount] for store [store_name] failed.',
+					'email_body'     => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                Payout failed
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                We were unable to process your payout
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We attempted to process a payout for your earnings from [store_name] on [marketplace_name], but the transaction could not be completed.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                This may have occurred due to an issue with the payout account or payment details.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                What you can do next
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Review and update your payout account details in the store dashboard
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Ensure your payment information is correct and active
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Contact marketplace support if the issue continues
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                <section class='text-token-text-primary w-full focus:outline-none [--shadow-height:45px] has-data-writing-block:pointer-events-none has-data-writing-block:-mt-(--shadow-height) has-data-writing-block:pt-(--shadow-height) [&amp;:has([data-writing-block])&gt;*]:pointer-events-auto [content-visibility:auto] supports-[content-visibility:auto]:[contain-intrinsic-size:auto_100lvh] R6Vx5W_threadScrollVars scroll-mb-[calc(var(--scroll-root-safe-area-inset-bottom,0px)+var(--thread-response-height))] scroll-mt-[calc(var(--header-height)+min(200px,max(70px,20svh)))]' dir='auto' data-turn-id='request-WEB:22db0298-1437-4f17-98e9-220449f3dc7a-27' data-testid='conversation-turn-56' data-scroll-anchor='false' data-turn='assistant'><div class='text-base my-auto mx-auto pb-10 [--thread-content-margin:var(--thread-content-margin-xs,calc(var(--spacing)*4))] @w-sm/main:[--thread-content-margin:var(--thread-content-margin-sm,calc(var(--spacing)*6))] @w-lg/main:[--thread-content-margin:var(--thread-content-margin-lg,calc(var(--spacing)*16))] px-(--thread-content-margin)'><div class='[--thread-content-max-width:40rem] @w-lg/main:[--thread-content-max-width:48rem] mx-auto max-w-(--thread-content-max-width) flex-1 group/turn-messages focus-visible:outline-hidden relative flex w-full min-w-0 flex-col agent-turn'><div class='flex max-w-full flex-col gap-4 grow'><div data-message-author-role='assistant' data-message-id='603ca372-538d-4e29-9d0f-3442b54fa610' dir='auto' data-message-model-slug='gpt-5-3' class='min-h-8 text-message relative flex w-full flex-col items-end gap-2 text-start break-words whitespace-normal outline-none keyboard-focused:focus-ring [.text-message+&amp;]:mt-1' data-turn-start-message='true' tabindex='0'><div class='flex w-full flex-col gap-1 empty:hidden'><div class='markdown prose dark:prose-invert w-full wrap-break-word light markdown-new-styling'><p data-start='613' data-end='694' data-is-last-node='' data-is-only-node=''>Once the payout details are updated, the payout can be processed again.</p></div></div></div></div><div class='z-0 flex min-h-[46px] justify-start'></div><div class='mt-3 w-full empty:hidden'><div class='text-center'></div></div></div></div></section><div aria-hidden='true' class='pointer-events-none -mt-px h-px translate-y-[calc(var(--scroll-root-safe-area-inset-bottom)-14*var(--spacing))]'></div>
+            </div>",
 					'sms_content'    => 'Payout failed for [store_name].',
 					'system_message' => 'Payout error for [store_name].',
 					'tag'            => 'Payment',
@@ -623,7 +2632,81 @@ class Notifications {
 					'admin_enabled'  => true,
 					'store_enabled'  => true,
 					'email_subject'  => 'Withdrawal request submitted',
-					'email_body'     => 'Store [store_name] requested withdrawal of [amount].',
+					'email_body'     => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                Withdrawal request received
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your payout withdrawal request is under review
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We have received your withdrawal request for earnings from your store [store_name] on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                The request is now being reviewed by the admin before the payout is processed.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                What happens next
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) The admin will review your withdrawal request
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) The payout will be processed once the request is approved
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) You will receive a notification when the payout is completed
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                No action is required from your side at this moment. We will notify you once there is an update on your request.
+            </div>",
 					'sms_content'    => 'Withdrawal request of [amount] submitted.',
 					'system_message' => 'Withdrawal requested by [store_name].',
 					'tag'            => 'Payment',
@@ -635,7 +2718,53 @@ class Notifications {
 					'desc'           => 'A withdrawal is released successfully.',
 					'store_enabled'  => true,
 					'email_subject'  => 'Withdrawal released',
-					'email_body'     => 'Your withdrawal has been released via [payment_processor].',
+					'email_body'     => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                Withdrawal released
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your withdrawal request has been processed
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Your withdrawal request for earnings from your store [store_name] on [marketplace_name] has been approved and the payout has been released.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                The amount has been transferred to your registered payout account.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                You can review your earnings and withdrawal history anytime from your dashboard.
+            </div>",
 					'sms_content'    => 'Withdrawal released successfully.',
 					'system_message' => 'Withdrawal released successfully.',
 					'tag'            => 'Payment',
@@ -647,7 +2776,59 @@ class Notifications {
 					'desc'           => 'A withdrawl request is rejected by the admin.',
 					'store_enabled'  => true,
 					'email_subject'  => 'Withdrawl rejected',
-					'email_body'     => 'A Withdrawl of [amount] has been rejected by your administrator.',
+					'email_body'     => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                Withdrawl rejected
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your withdrawal request was not approved
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We would like to inform you that your withdrawal request for earnings from your store [store_name] on [marketplace_name] has been reviewed and was not approved by the admin.
+            </div><div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Please review your payout details and requirements in the dashboard before submitting a new withdrawal request.
+            </div>",
 					'sms_content'    => 'Withdrawl of [amount] rejected.',
 					'system_message' => 'Withdrawl Payout rejected: [amount].',
 					'tag'            => 'Payment',
@@ -661,7 +2842,99 @@ class Notifications {
 					'store_enabled'    => true,
 					'customer_enabled' => true,
 					'email_subject'    => 'Product reported',
-					'email_body'       => 'Customer reported “[product_name]” for abuse.',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6ddf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                Abuse report received
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                A customer has reported a product for review
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                A customer has submitted an abuse report for the product [product_name] from store [store_name] on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                The report has been recorded and may require your review to ensure marketplace policies are maintained.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									
+												Report details            
+								
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) A customer has reported a product for abuse or policy violation
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) The reported product details are available in the admin panel
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) You can review the report and take appropriate action if necessary
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Please review the report and take the necessary action according to marketplace guidelines.
+            </div>",
 					'sms_content'      => 'Product “[product_name]” reported.',
 					'system_message'   => 'Abuse report for “[product_name]” received.',
 					'tag'              => 'Report',
@@ -675,7 +2948,91 @@ class Notifications {
 					'store_enabled'  => true,
 					'admin_enabled'  => true,
 					'email_subject'  => 'New announcement',
-					'email_body'     => '[announcement_message]',
+					'email_body'     => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#fff7ec;margin-bottom:3;border-radius:0.313;color:#d88c5c'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#d88c5c;background-color:#fff7ec;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									System announcement
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Important update from the marketplace
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello [user_name],
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We would like to inform you about an important update from [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Please review the details below to stay informed about the latest changes or announcements.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									
+												Announcement details            
+								
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) [announcement_point_1]
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) [announcement_point_2]
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) [announcement_point_3]
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you have any questions or need further clarification, please feel free to contact our support team.
+            </div>",
 					'sms_content'    => '[announcement_message]',
 					'system_message' => 'New announcement: [announcement_message]',
 					'tag'            => 'System',
@@ -691,10 +3048,75 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'You have a new store follower',
-					'email_body'       => '
-										<p>Hello,</p>
-										<p>A customer has started following your store <strong>[store_name]</strong>.</p>
-										',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                New store follower
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                A customer has followed your store
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello [customer_name],
+								
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                A customer has started following your store [store_name] on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Followers can receive updates about your store activities, products, and announcements.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                What this means
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) A customer has followed your store
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) They may receive updates about your products and store announcements
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Store followers can help increase visibility and engagement
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Keep your store updated with products and offers to engage your followers.
+            </div>",
 					'sms_content'      => 'You have a new store follower.',
 					'system_message'   => 'A customer started following your store.',
 					'tag'              => 'Follower',
@@ -709,10 +3131,91 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'New product from "[store_name]"',
-					'email_body'       => '
-										<p>Hello,</p>
-										<p>A store you follow has added a new product <strong>[product_name]</strong>.</p>
-										',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									New product from your followed store
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Discover the latest addition from a store you follow
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello [customer_name],
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Good news! A new product has just been added by [store_name], a store you follow on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Be among the first to explore and purchase this latest offering.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									
+												Product highlights            
+								
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Product Name: [product_name]
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Category: [product_category]
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Price: [product_price]
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Visit the store now to check out this new product and stay updated with the latest arrivals.
+            </div>",
 					'sms_content'      => 'New product from store you follow.',
 					'system_message'   => 'A followed store added a new product.',
 					'tag'              => 'Follower',
@@ -727,10 +3230,97 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'New coupon from "[store_name]"',
-					'email_body'       => '
-											<p>Hello,</p>
-											<p>A store you follow has created a new coupon <strong>[coupon_code]</strong>.</p>
-											',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e9fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+									New coupon from your followed store
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Enjoy exclusive savings from your favorite store
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello [customer_name],
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Great news! A new coupon has been offered by [store_name], a store you follow on [marketplace_name].
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Use this coupon to enjoy special discounts on your next purchase.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+									
+												Coupon details            
+								
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Coupon Code: [coupon_code]
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Discount: [discount_details]
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) Valid Until: [expiry_date]
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Don’t miss out on this limited-time offer. Visit the store and start saving today!
+            </div>",
 					'sms_content'      => 'New coupon available from followed store.',
 					'system_message'   => 'A store you follow created a new coupon.',
 					'tag'              => 'Follower',
@@ -745,10 +3335,91 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Store "[store_name]" is on vacation',
-					'email_body'       => '
-											<p>Hello,</p>
-											<p>The store you follow <strong>[store_name]</strong> is currently on vacation.</p>
-											',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#fffce8;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#d4b86a;background-color:#fffce8;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									Store on vacation
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                The store is temporarily unavailable
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello [customer_name],
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Please note that the store [store_name] on [marketplace_name] is currently on vacation and is temporarily not accepting new orders.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                <br>
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									
+												What this means            
+								
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) New orders cannot be placed with this store at the moment
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) The store will resume operations after the vacation period ends
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                <br>
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                We appreciate your understanding and encourage you to check back once the store is active again.
+            </div>",
 					'sms_content'      => 'Store you follow is on vacation.',
 					'system_message'   => 'A store you follow is currently on vacation.',
 					'tag'              => 'Follower',
@@ -764,12 +3435,97 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Your wholesale access has been approved',
-					'email_body'       => '
-										<p>Hello [customer_name],</p>
-										<p>Your request for <strong>wholesale buyer access</strong> has been approved.</p>
-										<p>You can now log in to your account and view <strong>wholesale pricing</strong> on eligible products across the marketplace.</p>
-										<p><a href="[account_url]">Go to your account</a></p>
-										',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#e8fbea;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#6bbf8f;background-color:#e8fbea;font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+									Wholesale buyer approved
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='color:#555555;font-size:0.95'>
+                Your wholesale account is now active
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+                
+									Hello [customer_name],
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                Great news! Your request to become a wholesale buyer on [marketplace_name] has been successfully approved.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                You can now access wholesale pricing, place bulk orders, and enjoy exclusive benefits available to wholesale customers.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+                
+									
+												What you can do now            
+								
+								
+            
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) Log in to your account and explore wholesale pricing
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Place bulk orders with eligible products
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                <br>
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                Your wholesale access is now active. Start exploring and make the most of your wholesale benefits.
+            </div>",
 					'sms_content'      => 'Your wholesale access request has been approved. You can now view wholesale prices.',
 					'system_message'   => 'Your wholesale buyer request has been approved. Wholesale pricing is now available to you.',
 					'tag'              => 'Wholesale',
@@ -784,12 +3540,87 @@ class Notifications {
 					'admin_enabled'    => false,
 					'system_enabled'   => true,
 					'email_subject'    => 'Wholesale access request not approved',
-					'email_body'       => '
-											<p>Hello [customer_name],</p>
-											<p>Your request to register as a <strong>wholesale buyer</strong> could not be approved at this time.</p>
-											<p>If you believe this decision was made in error or need further clarification, please contact our support team.</p>
-											<p><a href="[support_url]">Contact support</a></p>
-										',
+					'email_body'       => "
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#f2cfcf;margin-bottom:3;border-radius:0.313'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='color:#e92525;background-color:#f2cfcf;font-size:1.313'>
+                
+                
+                
+                
+                
+                         Wholesale buyer rejected 
+            
+            
+            
+            
+            
+            </h1><div style='color:#e92525;font-size:0.95'>
+                Your wholesale account request was not approved
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <h1 style='font-size:1.25;padding-bottom:1'>
+                
+                
+                
+                
+                
+                
+                
+									Hello,
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:1;line-height:1.25;padding-top:1.25'>
+                We would like to inform you that your request to become a wholesale buyer on [marketplace_name] has been reviewed and was not approved by the admin.
+            </div><div style='line-height:1.25;font-size:0.95;padding-top:1.5;font-weight:500'>
+                Your account will remain active as a regular customer account.
+            </div>
+        <table width='100%' cellpadding='0' cellspacing='0' style='padding-top:1;padding-bottom:1;padding-right:1;padding-left:1;background-color:#eeeded;margin-top:2;border-radius:0.31'>
+            <tr>
+                
+                    <td valign='top' style='padding:10px;'>
+                        <h1 style='font-size:1.313'>
+                
+                
+                
+                
+                
+                
+                
+									
+												Reason for rejection            
+								
+								
+            
+            
+            
+            
+            
+            
+            </h1><div style='font-size:0.95;padding-left:0.85;padding-top:0.625'>
+                i) The submitted details did not meet wholesale eligibility requirements
+            </div><div style='padding-top:0.313;padding-left:0.85;font-size:0.95'>
+                ii) Some required information or documents may be incomplete
+            </div><div style='font-size:0.95;padding-top:0.313;padding-left:0.85'>
+                iii) The application does not currently align with marketplace policies
+            </div>
+                    </td>
+                
+            </tr>
+        </table>
+    <div style='color:#2d3748;font-size:1;margin-top:4;line-height:1.125;margin-bottom:3'>
+                If you have any questions or wish to reapply, please contact the marketplace support team for further guidance.
+            </div>",
 					'sms_content'      => 'Your wholesale buyer request was not approved. Please contact support for details.',
 					'system_message'   => 'Your wholesale buyer request has been rejected.',
 					'tag'              => 'Wholesale',

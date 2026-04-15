@@ -13,7 +13,7 @@
     // left side
     .elements-wrapper {
         background: #fff;
-        width: 17rem;
+        width: 14rem;
         padding: 1.125rem;
         position: sticky;
         top: 3rem;
@@ -146,7 +146,8 @@
                         outline: none !important;
                     }
 
-                    .input-wrapper {
+                    .input-wrapper,
+                    .textarea-input  {
                         width: 75%;
                     }
 
