@@ -25,12 +25,10 @@ const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
 
 	const [formData, setFormData] = useState({
 		subject: '',
-		orderId: '',
 		message: '',
 	});
 
 	const store = StoreInfo?.storeDetails;
-	const orderOptions = store?.orderOptions || [];
 
 	// Handle input change
 	const handleChange = (field: string, value: string) => {
@@ -50,7 +48,6 @@ const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
 			store_supports: {
 				id: `support_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
 				subject: formData.subject,
-				order_id: formData.orderId,
 				message: formData.message,
 				product_id: productId,
 				status: 'open'
@@ -62,7 +59,7 @@ const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
 			.post(
 				getApiLink(
 					StoreInfo,
-					`store/${StoreInfo?.storeDetails?.storeId}`
+					`store-supports`
 				),
 				payload,
 				{
@@ -72,7 +69,6 @@ const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
 				}
 			)
 			.then((response) => {
-				// Validate response
 				if (!response || response.status !== 200) {
 					throw new Error('Request failed');
 				}
@@ -80,7 +76,6 @@ const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
 				// Reset form
 				setFormData({
 					subject: '',
-					orderId: '',
 					message: '',
 				});
 
@@ -141,37 +136,6 @@ const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
 										handleChange('subject', e.target.value)
 									}
 								/>
-							</p>
-
-							{/* Order Dropdown */}
-							<p className="woocommerce-form-row form-row form-row-wide">
-								<label>{__('Order ID', 'multivendorx')}</label>
-								<select
-									className="woocommerce-Input input-select"
-									value={formData.orderId}
-									onChange={(e) =>
-										handleChange('orderId', e.target.value)
-									}
-								>
-									<option value="">
-										{__('Select order id', 'multivendorx')}
-									</option>
-
-									{orderOptions.length > 0 ? (
-										orderOptions.map((order: any) => (
-											<option
-												key={order.value}
-												value={order.value}
-											>
-												{order.label}
-											</option>
-										))
-									) : (
-										<option disabled>
-											{__('No orders found', 'multivendorx')}
-										</option>
-									)}
-								</select>
 							</p>
 
 							{/* Message */}
