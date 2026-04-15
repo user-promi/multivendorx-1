@@ -1,4 +1,4 @@
-=== MultiVendorX - WooCommerce Multivendor Marketplace Solutions ===
+=== MultiVendorX - WooCommerce Multivendor Marketplace AI Powered Solutions ===
 Contributors: wcmp, purnendu
 Tags: WooCommerce multivendor marketplace, multi seller, multi vendor, multivendor, multivendor marketplace
 Donate link: http://multivendorx.com/donate/
