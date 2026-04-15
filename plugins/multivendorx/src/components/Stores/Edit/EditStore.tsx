@@ -262,8 +262,8 @@ const EditStore = () => {
 			type: 'file',
 			content: {
 				id: 'compliance-records',
-				headerTitle: __('Compliance and records', 'multivendorx'),
-				headerDescription: __('Compliance and records', 'multivendorx'),
+				headerTitle: __('Compliance & records', 'multivendorx'),
+				headerDescription: __('Compliance & records', 'multivendorx'),
 				hideSettingHeader: true,
 				headerIcon: 'credit-card',
 			},

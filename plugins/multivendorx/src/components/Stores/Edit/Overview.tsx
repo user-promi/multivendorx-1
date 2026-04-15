@@ -359,7 +359,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 							<FormGroupWrapper>
 								<FormGroup
 									row
-									label={__('Application', 'multivendorx')}
+									label={__('Compliance & records', 'multivendorx')}
 								>
 									<a
 										className="sku link-item"
