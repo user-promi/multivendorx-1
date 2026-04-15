@@ -379,7 +379,6 @@ export const SelectInputUI: React.FC<SelectProps> = ({
         isClearable,
         onChange: (raw: OnChangeValue<SelectOption, boolean>) =>
             onChange(extractValue(raw ?? (isMulti ? [] : null), isMulti)),
-        styles: buildStyles(isMulti, background, color),
         components: CUSTOM_COMPONENTS,
         formatCreateLabel,
         onOverflowClick: handleOverflowClick,

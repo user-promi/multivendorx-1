@@ -11,7 +11,7 @@ import {
     getColumnCount,
 } from './blockTypes';
 import BlockRenderer from './BlockRenderer';
-import { generateBlockStyles, BlockStyle } from './blockStyle';
+import { generateBlockStyles } from './blockStyle';
 
 // Types
 export interface SelectedBlockLocation {

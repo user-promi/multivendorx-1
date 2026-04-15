@@ -2,7 +2,6 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import PendingReportAbuse from './PendingAbuseReports';
-import axios from 'axios';
 import { getApiLink } from 'zyra';
 
 addFilter(

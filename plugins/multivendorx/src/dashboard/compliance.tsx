@@ -12,7 +12,6 @@ import {
 	Notice,
 	SettingsNavigator,
 } from 'zyra';
-import Counter from '@/services/Counter';
 
 const Compliance = (React.FC = () => {
 	const SimpleLink = ({ to, children, onClick, className }) => (

@@ -8,7 +8,6 @@ import { SelectInputUI } from './SelectInput';
 import { PopupUI } from './Popup';
 import { NoticeManager } from './Notice';
 import { ZyraVariable } from './fieldUtils';
-import { ButtonInputUI } from './ButtonInput';
 
 interface Module {
     id: string;

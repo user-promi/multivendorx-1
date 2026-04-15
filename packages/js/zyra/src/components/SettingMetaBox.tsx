@@ -710,7 +710,7 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                                 onTypeChange={(type) => onTypeChange?.(type)}
                             />
                         ) : ( */}
-                        {!metaType === 'setting-meta' && (
+                        {metaType !== 'setting-meta' && (
                             <InputField
                                 label="Value"
                                 value={option?.value || ''}

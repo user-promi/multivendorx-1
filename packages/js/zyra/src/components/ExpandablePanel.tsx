@@ -332,7 +332,6 @@ const PanelHeader: React.FC = () => {
     const editTitle = state.editTitle;
     const editDesc = state.editDesc;
     const iconDropdown = state.iconDropdown;
-    const showMandatoryCheckbox = addNewTemplate?.showMandatoryCheckbox === true;
 
     const showToggleIcon = (method.disableBtn && !method.isCustom) || 
                       (isWizardMode && method.isWizardMode) ||
@@ -793,7 +792,7 @@ const PanelControls: React.FC = () => {
 
 const PanelBody: React.FC = () => {
     const { isWizardMode, renderField, shouldRender, handleChange, addNewTemplate } = usePanel();
-    const { method, isOpen, isOn, methodValue } = usePanelItem();
+    const { method, isOpen, isOn } = usePanelItem();
 
     const showMandatoryCheckboxGlobal = addNewTemplate?.showMandatoryCheckbox === true;
     const hasFields = Boolean(method.formFields?.length) || showMandatoryCheckboxGlobal;

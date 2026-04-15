@@ -469,7 +469,6 @@ const RenderComponent: React.FC<RenderProps> = ({
                 inputField.proSetting ?? false,
                 String(inputField.moduleEnabled ?? ''),
                 String(inputField.dependentSetting ?? ''),
-                String(inputField.dependentPlugin ?? '')
             );
 
             // const input = renderFieldInternal(inputField, value, handleChange, access );

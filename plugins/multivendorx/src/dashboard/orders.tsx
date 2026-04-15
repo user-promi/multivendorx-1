@@ -23,22 +23,8 @@ import {
 	formatLocalDate,
 	toWcIsoDate,
 	dashNavigate,
-	formatCurrency,
 } from '../services/commonFunction';
-import { pdf } from '@react-pdf/renderer';
 import { applyFilters } from '@wordpress/hooks';
-// import StoreInvoicePDF from '@/assets/template/invoicePdf/Invoice-1';
-
-const fetchOrderById = async (orderId: number) => {
-	const res = await axios.get(
-		`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
-		{
-			headers: { 'X-WP-Nonce': appLocalizer.nonce },
-		}
-	);
-
-	return res.data;
-};
 
 const Orders: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);

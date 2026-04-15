@@ -13,7 +13,6 @@ import {
 	useModules,
 	FormGroupWrapper,
 	FormGroup,
-	ButtonInputUI,
 	SectionUI,
 	ComponentStatusView,
 } from 'zyra';

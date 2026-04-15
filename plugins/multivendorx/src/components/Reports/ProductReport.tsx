@@ -66,20 +66,12 @@ const ProductReport: React.FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [toReviewedProduct, setToReviewedProduct] = useState<Product[]>([]);
 	const [toSellingProduct, setToSellingProduct] = useState<Product[]>([]);
-	const [openReviewedCards, setOpenReviewedCards] = useState<ToggleState>({});
 	const [chartData, setChartData] = useState<ChartDataItem[]>([]);
 	const [inStockCount, setInStockCount] = useState(0);
 	const [outOfStockCount, setOutOfStockCount] = useState(0);
 	const [onBackorderCount, setOnBackorderCount] = useState(0);
 	const [isDashboardLoading, setIsDashboardLoading] = useState(false);
 	const [isTableLoading, setIsTableLoading] = useState(false);
-
-	const toggleReviewedCard = (key: string) => {
-		setOpenReviewedCards((prev) => ({
-			...prev,
-			[key]: !prev[key],
-		}));
-	};
 
 	useEffect(() => {
 		const fetchChartData = async () => {
