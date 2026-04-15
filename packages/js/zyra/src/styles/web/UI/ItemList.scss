@@ -134,6 +134,15 @@
         }
     }
 
+    &.plan-details{
+        flex-direction: column;
+
+        .item{
+            width: 100%;
+            align-items: end;
+        }
+    }
+
     &.full-width{
         .item{
             width: 100%;

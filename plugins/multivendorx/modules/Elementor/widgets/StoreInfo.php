@@ -271,25 +271,29 @@ class Store_Info extends Widget_Icon_List {
 						$this->add_link_attributes( 'link_' . $index, $item['link'] );
 					}
 					?>
-					<li <?php echo esc_attr( $this->get_render_attribute_string( 'item-' . $index ) ); ?>>
-						<?php if ( ! empty( $item['icon'] ) ) : ?>
-							<span class="elementor-icon-list-icon">
-								<?php Icons_Manager::render_icon( $item['icon'], array( 'aria-hidden' => true ) ); ?>
+					<?php if ( ! empty( $item['text'] ) || ! empty( $item['icon'] ) || ! empty( $item['link']['url'] ) ) : ?>
+						<li <?php echo esc_attr( $this->get_render_attribute_string( 'item-' . $index ) ); ?>>
+							
+							<?php if ( ! empty( $item['icon'] ) ) : ?>
+								<span class="elementor-icon-list-icon">
+									<?php Icons_Manager::render_icon( $item['icon'], array( 'aria-hidden' => true ) ); ?>
+								</span>
+							<?php endif; ?>
+
+							<span class="elementor-icon-list-text">
+								<?php if ( ! empty( $item['link']['url'] ) ) : ?>
+									<a <?php echo wp_kses_post( $this->get_render_attribute_string( 'link_' . $index ) ); ?>>
+								<?php endif; ?>
+
+								<?php echo wp_kses_post( $item['text'] ); ?>
+
+								<?php if ( ! empty( $item['link']['url'] ) ) : ?>
+									</a>
+								<?php endif; ?>
 							</span>
-						<?php endif; ?>
 
-						<span class="elementor-icon-list-text">
-							<?php if ( ! empty( $item['link']['url'] ) ) : ?>
-								<a <?php echo wp_kses_post( $this->get_render_attribute_string( 'link_' . $index ) ); ?>>
-							<?php endif; ?>
-
-							<?php echo wp_kses_post( $item['text'] ); ?>
-
-							<?php if ( ! empty( $item['link']['url'] ) ) : ?>
-								</a>
-							<?php endif; ?>
-						</span>
-					</li>
+						</li>
+					<?php endif; ?>
 				<?php endforeach; ?>
 			</ul>
 		</div>
