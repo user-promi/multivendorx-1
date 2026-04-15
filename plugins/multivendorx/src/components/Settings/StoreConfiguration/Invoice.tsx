@@ -1,7 +1,7 @@
 import { BasicInputUI, Card, ChoiceToggleUI, ColorSettingInputUI, Column, Container, ExpandablePanelUI, FileInputUI, FormGroup, FormGroupWrapper, MultiCheckBoxUI, TabsUI, TextAreaUI, NoticeManager, getApiLink } from "zyra";
 import { __ } from '@wordpress/i18n';
 import { useState } from "react";
-import CustomerInvoice1 from '../../../assets/template/customerInvoice/Invoice-1';
+import CustomerInvoice1 from '../../../assets/template/customerInvoice/CustomerInvoice1';
 import subscriptionInvoice1 from '../../../assets/template/subscriptionInvoice/subscriptionInvoice1';
 import adminInvoice1 from '../../../assets/template/adminInvoice/adminInvoice1';
 import packingSlip1 from '../../../assets/template/packingSlip/packingSlip1';

@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { temp1 } from '../../../assets/template/emailTemplate/temp1';
+import { salesReport } from '../../../assets/template/emailTemplate/salesReport';
 
 export default {
 	id: 'email-template-customizer',
@@ -18,7 +18,7 @@ export default {
 			classes: 'full-width',
 			// desc: 'Customise personalised store registration form for marketplace.',
 			// // Add templates configuration with proper content
-			emailTemplates: [temp1],
+			emailTemplates: [salesReport],
 			visibleGroups: ['email'],
 			defaultTemplateId: 'store-registration',
 			context: 'email',

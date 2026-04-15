@@ -187,7 +187,6 @@ const SpmvProducts: React.FC = () => {
 										variant="rectangular"
 										width={4.375}
 										height={2}
-										style={{ borderRadius: 4 }}
 									/>
 								</div>
 								<div className="name">

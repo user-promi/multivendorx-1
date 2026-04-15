@@ -57,7 +57,7 @@
 
   &[data-template="settings"] {
     .divider-section {
-      padding: 1rem 0 .5rem;
+      padding: 1rem 0 .5rem !important; // for overwrite default style
     }
   }
 

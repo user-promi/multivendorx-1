@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 
-export const temp1 = {
+export const salesReport = {
 	id: 'store-registration',
 	name: __('Sales Report', 'multivendorx'),
 	// previewText: __(

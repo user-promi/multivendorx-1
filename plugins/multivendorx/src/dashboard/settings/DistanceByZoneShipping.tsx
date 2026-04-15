@@ -341,18 +341,10 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								<i
 									onClick={() => handleEdit(method)}
 									className="admin-badge blue adminfont-edit"
-									style={{
-										cursor: 'pointer',
-										marginLeft: '8px',
-									}}
 								></i>
 								<i
 									onClick={() => handleDelete(method, zone)}
 									className="admin-badge red adminfont-delete"
-									style={{
-										cursor: 'pointer',
-										marginLeft: '8px',
-									}}
 								></i>
 							</div>
 						))}

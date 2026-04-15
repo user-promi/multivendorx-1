@@ -49,7 +49,6 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 				<>
 					<label
 						onClick={() => setstarFill((prev) => !prev)}
-						style={{ cursor: 'pointer' }}
 						className="field-wrapper"
 					>
 						{__('Featured product', 'multivendorx')}

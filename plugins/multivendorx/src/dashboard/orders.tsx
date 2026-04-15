@@ -26,6 +26,17 @@ import {
 } from '../services/commonFunction';
 import { applyFilters } from '@wordpress/hooks';
 
+const fetchOrderById = async (orderId: number) => {
+	const res = await axios.get(
+		`${appLocalizer.apiUrl}/wc/v3/orders/${orderId}`,
+		{
+			headers: { 'X-WP-Nonce': appLocalizer.nonce },
+		}
+	);
+
+	return res.data;
+};
+
 const Orders: React.FC = () => {
 	const [rows, setRows] = useState<TableRow[][]>([]);
 	const [totalRows, setTotalRows] = useState(0);
