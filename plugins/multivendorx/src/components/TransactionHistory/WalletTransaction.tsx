@@ -20,6 +20,7 @@ import {
 	QueryProps,
 	CategoryCount,
 	ItemListUI,
+	Notice,
 } from 'zyra';
 
 import {
@@ -477,26 +478,24 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 									)}
 								</div>
 								<div className="desc">
+									{__('Minimum required to withdraw - ', 'multivendorx')}
 									{walletLoading ? (
 										<Skeleton width={15.625} />
 									) : (
 										wallet?.thresold > 0 ? (
-											<>
-												<b>{formatCurrency(wallet.thresold)} </b>
-												{__('minimum required to withdraw', 'multivendorx')}
-											</>
+											<b>{formatCurrency(wallet.thresold)} </b>
 										) : (
 											__('No minimum', 'multivendorx')
 										)
 									)}
 								</div>
 								<div className="desc">
+									{__('Reserve balance - ', 'multivendorx')}
 									{walletLoading ? (
 										<Skeleton width={15.625} />
 									) : wallet?.reserve_balance > 0 ? (
 										<>
 											<b>{formatCurrency(wallet.reserve_balance)} </b>
-											{__('reserve balance', 'multivendorx')}
 										</>
 									) : (
 										__('No reserve set', 'multivendorx')
@@ -603,7 +602,14 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 										]}
 									/>
 								) : (
-									<ComponentStatusView title={__('No pending earning in clearence', 'multivendorx')} />
+									<Notice
+										type="info"
+										displayPosition="inline-notice"
+										title={__(
+											'No pending earning in clearence',
+											'multivendorx'
+										)}
+									/>
 								)}
 							</Column>
 							<ButtonInputUI

@@ -153,7 +153,7 @@ const CustomerQuestions: React.FC = () => {
 			actions: [
 				{
 					label: __('Answer', 'multivendorx'),
-					icon: 'eye',
+					icon: 'answer',
 					onClick: (row) => fetchQnaById(row.id),
 				},
 			],
