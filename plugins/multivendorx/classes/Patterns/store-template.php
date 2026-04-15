@@ -37,7 +37,7 @@ return array(
 <!-- /wp:paragraph -->
 
 <!-- wp:multivendorx/store-name -->
-<div class="wp-block-multivendorx-store-name" data-mvx-store-name="true"></div>
+<div class="wp-block-multivendorx-store-name" data-multivendorx-store-name="true"></div>
 <!-- /wp:multivendorx/store-name --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

@@ -7,7 +7,7 @@ import StoreTabs from './StoreTabs';
 const Edit = () => {
 	return (
 		<div className="is-style-minimal  alignwide wp-block-woocommerce-product-details">
-			<div className="components-disabled mvx-store-products-wrapper">
+			<div className="components-disabled multivendorx-store-products-wrapper">
 				<ul className="wc-tabs tabs">
 					<li className="description_tab active">
 						<a> {__('Products', 'multivendorx')} </a>
