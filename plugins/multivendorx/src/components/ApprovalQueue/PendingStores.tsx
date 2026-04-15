@@ -5,8 +5,6 @@ import { __ } from '@wordpress/i18n';
 import {
 	getApiLink,
 	FormGroupWrapper,
-	Container,
-	Column,
 	TableCard,
 	ButtonInputUI,
 	TextAreaUI,

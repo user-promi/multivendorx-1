@@ -330,15 +330,29 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
         const error: Record<string, string> = {};
 
+        const isValidEmail = (email: string) => /^\S+@\S+\.([a-zA-Z]{2,})$/.test(email);
+
         formList.forEach((field) => {
-            if (!field.required || field.disabled || !field.name) {
-                return;
-            }
-            if (field.name === 'name' || field.name === 'email') {
+            if (field.disabled || !field.name) return;
+
+            const value = inputs[field.name];
+
+            if (field.name === 'name') {
+                if (!value || (typeof value === 'string' && !value.trim())) {
+                    error[field.name] = `${field.label || 'Store Name'} is required.`;
+                }
                 return;
             }
 
-            const value = inputs[field.name];
+            if (field.type === 'email') {
+                if (!isValidEmail(value as string)) {
+                    error[field.name] = `Please enter a valid email address.`;
+                }
+                return;
+            }
+
+            // ✅ NORMAL REQUIRED FIELDS
+            if (!field.required) return;
 
             switch (field.type) {
                 case 'text':

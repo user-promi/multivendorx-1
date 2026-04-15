@@ -1,6 +1,5 @@
 import { __ } from '@wordpress/i18n';
 import { temp1 } from '../../../assets/template/emailTemplate/temp1';
-import { temp2 } from '../../../assets/template/emailTemplate/temp2';
 
 export default {
 	id: 'email-template-customizer',

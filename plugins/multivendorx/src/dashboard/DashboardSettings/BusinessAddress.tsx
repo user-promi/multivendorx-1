@@ -7,7 +7,6 @@ import {
 	FormGroupWrapper,
 	getApiLink,
 	MapProviderUI,
-	Notice,
 	NoticeManager,
 	SelectInputUI,
 	useModules,
