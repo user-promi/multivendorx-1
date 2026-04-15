@@ -166,7 +166,7 @@ class Admin {
                     $count = $this->multivendorx_get_menu_count( $slug );
                     if ( $count > 0 ) {
                         $menu_name .= sprintf(
-                            " <span class='mvx-count' data-tab='%s' style='margin-left:6px; background:#d63638; color:#fff; padding:2px 6px; border-radius:10px; font-size:11px;'>%d</span>",
+                            " <span class='multivendorx-count' data-tab='%s' style='margin-left:6px; background:#d63638; color:#fff; padding:2px 6px; border-radius:10px; font-size:11px;'>%d</span>",
                             esc_attr( $slug ),
                             (int) $count
                         );

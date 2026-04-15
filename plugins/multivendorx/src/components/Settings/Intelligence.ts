@@ -25,7 +25,6 @@ export default {
 				'<a href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank">Click here to generate your Gemini API key.</a>',
 				'multivendorx'
 			),
-			proSetting: true,
 			moduleEnabled: 'intelligence',
 		},
 		// --- OpenAI API Key Section ---
@@ -41,7 +40,6 @@ export default {
 				'<a href="https://platform.openai.com/api-keys" target="_blank">Click here to generate your OpenAI API key.</a>',
 				'multivendorx'
 			),
-			proSetting: true,
 			moduleEnabled: 'intelligence',
 		},
 		{
@@ -56,7 +54,6 @@ export default {
 				'<a href="https://openrouter.ai/settings/keys" target="_blank">Generate an OpenRouter API key</a>',
 				'multivendorx'
 			),
-			proSetting: true,
 			moduleEnabled: 'intelligence',
 		},
 		// --- AI Provider Choice ---
@@ -68,7 +65,6 @@ export default {
 				'AI can be used to suggest product titles, descriptions, and other details automatically. The AI provider and model can be selected here.',
 				'multivendorx'
 			),
-			proSetting: true,
 			moduleEnabled: 'intelligence',
 		},
 		{
@@ -104,7 +100,6 @@ export default {
 					icon: 'openrouter',
 				},
 			],
-			proSetting: true,
 			moduleEnabled: 'intelligence',
 		},
 
@@ -135,7 +130,6 @@ export default {
 					value: 'google/gemini-2.0-flash-exp:free',
 				},
 			],
-			proSetting: true,
 			moduleEnabled: 'intelligence',
 			dependent: {
 				key: 'choose_ai_provider',

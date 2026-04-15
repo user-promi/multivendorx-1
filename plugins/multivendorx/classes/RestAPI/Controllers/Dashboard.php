@@ -158,9 +158,9 @@ class Dashboard extends \WP_REST_Controller {
                         'capability' => array( 'read_shop_earning', 'view_transactions' ),
                     ),
                     array(
-                        'key'        => 'withdrawls',
-                        'name'       => 'Withdrawls',
-                        'slug'       => 'withdrawls',
+                        'key'        => 'withdrawals',
+                        'name'       => 'Withdrawals',
+                        'slug'       => 'withdrawals',
                         'capability' => array( 'read_shop_earning', 'edit_withdrawl_request' ),
                     ),
                 ),
@@ -202,21 +202,6 @@ class Dashboard extends \WP_REST_Controller {
                     ),
                 ),
             ),
-
-            'reports'         => array(
-                'name'       => 'Stats / Report',
-                'slug'       => 'reports',
-                'icon'       => 'report',
-                'submenu'    => array(
-                    array(
-                        'key'        => 'overview',
-                        'name'       => 'Overview',
-                        'slug'       => 'overview',
-                        'capability' => array( 'view_store_reports', 'export_store_reports' ),
-                    ),
-                ),
-                'capability' => array( 'read_products' ),
-            ),
             'resources'       => array(
                 'name'       => 'Resources',
                 'icon'       => 'resources',
@@ -243,50 +228,6 @@ class Dashboard extends \WP_REST_Controller {
                 'slug'       => 'settings',
                 'icon'       => 'setting',
                 'capability' => array( 'manage_store_settings' ),
-            ),
-            'appointment'     => array(
-                'name'       => 'Rental (pro)',
-                'slug'       => 'appointment',
-                'icon'       => 'appointments',
-                'submenu'    => array(
-                    array(
-                        'key'        => 'all-inventory',
-                        'name'       => 'All inventory',
-                        'slug'       => 'all-inventory',
-                        'capability' => array( 'read_products' ),
-                    ),
-                    array(
-                        'key'        => 'add-inventory',
-                        'name'       => 'Add inventory',
-                        'slug'       => 'add-inventory',
-                        'capability' => array( 'read_products' ),
-                    ),
-                    array(
-                        'key'        => 'quote-requests',
-                        'name'       => 'Quote requests',
-                        'slug'       => 'quote-requests',
-                        'capability' => array( 'read_products' ),
-                    ),
-                    array(
-                        'key'        => 'calender',
-                        'name'       => 'Calender',
-                        'slug'       => 'Calender',
-                        'capability' => array( 'read_products' ),
-                    ),
-                ),
-                'capability' => array( 'read_products' ),
-            ),
-            'affiliate'       => array(
-                'name'       => 'Affiliate',
-                'slug'       => 'affiliate',
-                'icon'       => 'wp-affiliate',
-                'capability' => array( 'read_products' ),
-            ),
-            'add-appointment' => array(
-                'name'       => 'Add Appointment (Pro)',
-                'slug'       => 'add-appointment',
-                'icon'       => 'legal-compliance',
-                'capability' => array( 'read_products' ),
             ),
             'media-library'   => array(
                 'name'       => 'Media Library',

@@ -42,7 +42,7 @@ const Route = () => {
 		const customers = window.multivendorxCustomerStore;
 
 		const unsubscribeCompliance = complianceStore?.subscribe((counts) => {
-			const el = document.querySelector(`.mvx-count[data-tab="compliance"]`);
+			const el = document.querySelector(`.multivendorx-count[data-tab="compliance"]`);
 			if (!el) return;
 			let value = counts || 0;
 			if (typeof value === 'object') {
@@ -52,7 +52,7 @@ const Route = () => {
 		});
 
 		const unsubscribeApproval = approvalStore?.subscribe((counts) => {
-			const el = document.querySelector(`.mvx-count[data-tab="approval-queue"]`);
+			const el = document.querySelector(`.multivendorx-count[data-tab="approval-queue"]`);
 			if (!el) return;
 			let value = counts || 0;
 			if (typeof value === 'object') {
@@ -62,7 +62,7 @@ const Route = () => {
 		});
 
 		const unsubscribeCommissions = commissions?.subscribe((counts) => {
-			const el = document.querySelector(`.mvx-count[data-tab="commissions"]`);
+			const el = document.querySelector(`.multivendorx-count[data-tab="commissions"]`);
 			if (!el) return;
 			let value = counts || 0;
 			if (typeof value === 'object') {
@@ -72,7 +72,7 @@ const Route = () => {
 		});
 
 		const unsubscribeCustomers = customers?.subscribe((counts) => {
-			const el = document.querySelector(`.mvx-count[data-tab="customers"]`);
+			const el = document.querySelector(`.multivendorx-count[data-tab="customers"]`);
 			if (!el) return;
 			let value = counts || 0;
 			if (typeof value === 'object') {

@@ -159,8 +159,7 @@ const ProductCompliance: React.FC = () => {
     return (
         <>
             <FormGroupWrapper>
-                {/* First Expandable Panel (using modal) */}
-                <FormGroup>
+                {/* <FormGroup>
                     <ExpandablePanelUI
                         name="prohibited_product_categories"
                         methods={ratingsField.modal}
@@ -172,7 +171,6 @@ const ProductCompliance: React.FC = () => {
                     />
                 </FormGroup>
 
-                {/* Trigger Words Section */}
                 <SectionUI
                     title={__('Trigger words', 'multivendorx')}
                     desc={__('When a listing contains these words, the system flags it', 'multivendorx')}
@@ -213,7 +211,6 @@ const ProductCompliance: React.FC = () => {
                     />
                 </FormGroup>
 
-                {/* Safety & Compliance Section */}
                 <SectionUI
                     title={__('Safety & compliance', 'multivendorx')}
                     desc={__('For each product category, decide whether listings should be held for your review or just notify you. You can also require sellers to upload specific documents.', 'multivendorx')}
@@ -243,7 +240,7 @@ const ProductCompliance: React.FC = () => {
                         canAccess={true}
                         addNewBtn={false}
                     />
-                </FormGroup>
+                </FormGroup> */}
 
                 <SectionUI
                     title={__('Product Report Abuse', 'multivendorx')}

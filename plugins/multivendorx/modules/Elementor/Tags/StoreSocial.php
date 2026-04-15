@@ -85,9 +85,9 @@ class StoreSocial extends Tag {
 
         $social_info = $this->get_social_profiles();
 
-        foreach ( $network_map as $mvx_name => $elementor_name ) {
-            if ( ! empty( $social_info[ $mvx_name ] ) ) {
-                $links[ $elementor_name ] = esc_url( $social_info[ $mvx_name ] );
+        foreach ( $network_map as $multivendorx_name => $elementor_name ) {
+            if ( ! empty( $social_info[ $multivendorx_name ] ) ) {
+                $links[ $elementor_name ] = esc_url( $social_info[ $multivendorx_name ] );
             }
         }
 
