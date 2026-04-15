@@ -87,6 +87,17 @@ export default {
 			},
 		},
 		{
+			key: 'google_map_id',
+			type: 'text',
+			label: __('Google map ID', 'multivendorx'),
+			moduleEnabled: 'geo-location',
+			dependent: {
+				key: 'choose_map_api',
+				set: true,
+				value: 'google_map',
+			},
+		},
+		{
 			key: 'mapbox_api_key',
 			type: 'text',
 			label: __('Mapbox access token', 'multivendorx'),
