@@ -52,9 +52,9 @@ export const getTourSteps = (appLocalizer: AppLocalizer): TourStep[] => [
         selector:
             '.settings-wrapper .container-wrapper',
         placement: 'right',
-        title: __('Settings', 'multivendorx'),
+        title: __('Set your store details', 'multivendorx'),
         description: __(
-            "Set up your store name, payouts, shipping & more - get this right once, and you're sorted!",
+            "The store name, description, and link are shown to help customers recognize your store.",
             'multivendorx'
         ),
         next: {
@@ -81,7 +81,7 @@ export const getTourSteps = (appLocalizer: AppLocalizer): TourStep[] => [
         placement: 'right',
         title: __('Withdrawals', 'multivendorx'),
         description: __(
-            "Check your available balance and request a payout — your money, whenever you're ready.",
+            "Check your available balance and request a payout - your money, whenever you're ready.",
             'multivendorx'
         ),
         next: {
@@ -107,7 +107,7 @@ export const getTourSteps = (appLocalizer: AppLocalizer): TourStep[] => [
         placement: 'right',
         title: __('Add Your First Product', 'multivendorx'),
         description: __(
-            "You're all set — let's list your first product and make that first sale happen!",
+            "You're all set - let's list your first product and make that first sale happen!",
             'multivendorx'
         ),
         finish: true,
