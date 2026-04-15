@@ -173,7 +173,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 		if (!method) {
 			return '';
 		}
-		return method
+		return String(method)
 			.replace(/-/g, ' ') // stripe-connect → stripe connect
 			.replace(/\b\w/g, (c) => c.toUpperCase()); // Stripe connect → Stripe Connect
 	};
