@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
 	const navigate = useNavigate();
 	const access =
 		appLocalizer.settings_databases_value?.['privacy']?.[
-			'customer_information_access'
+		'customer_information_access'
 		];
 	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
 
@@ -123,30 +123,30 @@ const Dashboard: React.FC = () => {
 			render: (row) =>
 				row.line_items?.length
 					? row.line_items.map((item) => (
-							<InfoItem
-								key={item.id}
-								title={item.name}
-								onClick={() =>
-									dashNavigate(navigate, [
-										'products',
-										'edit',
-										String(item.product_id),
-									])
-								}
-								avatar={{
-									image: item.image?.src || '',
-									iconClass: item.image?.src
-										? ''
-										: 'single-product',
-								}}
-								descriptions={[
-									{
-										label: __('Qty:', 'multivendorx'),
-										value: item.quantity,
-									},
-								]}
-							/>
-						))
+						<InfoItem
+							key={item.id}
+							title={item.name}
+							onClick={() =>
+								dashNavigate(navigate, [
+									'products',
+									'edit',
+									String(item.product_id),
+								])
+							}
+							avatar={{
+								image: item.image?.src || '',
+								iconClass: item.image?.src
+									? ''
+									: 'single-product',
+							}}
+							descriptions={[
+								{
+									label: __('Qty:', 'multivendorx'),
+									value: item.quantity,
+								},
+							]}
+						/>
+					))
 					: '-',
 		},
 		total: {
@@ -672,20 +672,20 @@ const Dashboard: React.FC = () => {
 										key={item.id}
 										title={
 											item.payment_method ===
-											'stripe-connect'
+												'stripe-connect'
 												? __('Stripe', 'multivendorx')
 												: item.payment_method ===
-													  'bank-transfer'
+													'bank-transfer'
 													? __(
-															'Direct to Local Bank (INR)',
+														'Direct to Local Bank (INR)',
+														'multivendorx'
+													)
+													: item.payment_method ===
+														'paypal-payout'
+														? __(
+															'PayPal',
 															'multivendorx'
 														)
-													: item.payment_method ===
-														  'paypal-payout'
-														? __(
-																'PayPal',
-																'multivendorx'
-															)
 														: ''
 										}
 										isLoading={isLoading}
@@ -708,7 +708,7 @@ const Dashboard: React.FC = () => {
 									),
 									onClick: () => {
 										window.open(
-											'/dashboard/wallet/transactions/'
+											`${appLocalizer.site_url}/dashboard/transactions`
 										);
 									},
 								}}
@@ -949,7 +949,7 @@ const Dashboard: React.FC = () => {
 					<Card title={__('Store Activity', 'multivendorx')}>
 						<div className="activity-log">
 							{Array.isArray(activities) &&
-							activities.length > 0 ? (
+								activities.length > 0 ? (
 								activities.slice(0, 5).map((a, i) => (
 									<div key={i} className="activity">
 										<div className="title">{a.title}</div>

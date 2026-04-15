@@ -150,7 +150,13 @@ const EditStore = () => {
 		frame.on('select', function () {
 			const attachment = frame.state().get('selection').first().toJSON();
 
-			const updated = { ...data, [key]: attachment.url };
+			const updated = {
+				...data,
+				[key]: {
+					id: attachment.id,
+					url: attachment.url,
+				}
+			};
 			setData(updated);
 			autoSave(updated);
 		});
@@ -288,18 +294,18 @@ const EditStore = () => {
 		const updatedTabs = settingContent.map((tab) =>
 			tab.content.id === 'compliance-records'
 				? {
-						...tab,
-						content: {
-							...tab.content,
-							name:
-								data?.status === 'pending' ||
+					...tab,
+					content: {
+						...tab.content,
+						name:
+							data?.status === 'pending' ||
 								data?.status === 'rejected' ||
 								data?.status === 'permanently_rejected'
-									? // data?.status === 'active'
-										'Application Details'
-									: 'Archive Data',
-						},
-					}
+								? // data?.status === 'active'
+								'Application Details'
+								: 'Archive Data',
+					},
+				}
 				: tab
 		);
 
@@ -559,7 +565,7 @@ const EditStore = () => {
 												)}
 											</span>
 										) : data.status ===
-										  'permanently_rejected' ? (
+											'permanently_rejected' ? (
 											<span className="status admin-badge red">
 												{__(
 													'Permanently Rejected',
@@ -587,37 +593,37 @@ const EditStore = () => {
 										{modules.includes(
 											'marketplace-compliance'
 										) && (
-											<>
-												<div className="admin-badge green">
-													<i className="adminfont-store-inventory"></i>
-													{__(
-														'Gold Plan',
-														'multivendorx'
-													)}
-												</div>
-												<div className="admin-badge blue">
-													<i className="adminfont-geo-my-wp"></i>
-													{__(
-														'On Vacation',
-														'multivendorx'
-													)}
-												</div>
-												<div className="admin-badge yellow">
-													<i className="adminfont-staff-manager"></i>
-													{__(
-														'Closed',
-														'multivendorx'
-													)}
-												</div>
-												<div className="admin-badge yellow">
-													<i className="adminfont-staff-manager"></i>
-													{__(
-														'Complained',
-														'multivendorx'
-													)}
-												</div>
-											</>
-										)}
+												<>
+													<div className="admin-badge green">
+														<i className="adminfont-store-inventory"></i>
+														{__(
+															'Gold Plan',
+															'multivendorx'
+														)}
+													</div>
+													<div className="admin-badge blue">
+														<i className="adminfont-geo-my-wp"></i>
+														{__(
+															'On Vacation',
+															'multivendorx'
+														)}
+													</div>
+													<div className="admin-badge yellow">
+														<i className="adminfont-staff-manager"></i>
+														{__(
+															'Closed',
+															'multivendorx'
+														)}
+													</div>
+													<div className="admin-badge yellow">
+														<i className="adminfont-staff-manager"></i>
+														{__(
+															'Complained',
+															'multivendorx'
+														)}
+													</div>
+												</>
+											)}
 									</div>
 								</div>
 								<div className="details-wrapper">
@@ -676,11 +682,10 @@ const EditStore = () => {
 														)}
 
 														<span
-															className={`edit-icon  ${
-																editName
-																	? ''
-																	: 'blue-color'
-															}`}
+															className={`edit-icon  ${editName
+																? ''
+																: 'blue-color'
+																}`}
 															onClick={(e) => {
 																e.stopPropagation();
 																if (
@@ -728,9 +733,9 @@ const EditStore = () => {
 															{data?.status !=
 																'pending' &&
 																data?.status !=
-																	'rejected' &&
+																'rejected' &&
 																data?.status !=
-																	'permanently_rejected' && (
+																'permanently_rejected' && (
 																	<span
 																		className="edit-icon blue-color"
 																		onClick={() => {
@@ -806,14 +811,14 @@ const EditStore = () => {
 														autoFocus
 													/>
 												) : Object.keys(data).length ===
-												  0 ? (
+													0 ? (
 													<Skeleton width={9.375} />
 												) : data?.description ? (
 													<div>
 														<span>
 															{displayText}
 															{shouldTruncate &&
-															!expanded
+																!expanded
 																? '...'
 																: ''}
 														</span>
@@ -828,13 +833,13 @@ const EditStore = () => {
 															>
 																{expanded
 																	? __(
-																			'Read less',
-																			'multivendorx'
-																		)
+																		'Read less',
+																		'multivendorx'
+																	)
 																	: __(
-																			'Read more',
-																			'multivendorx'
-																		)}
+																		'Read more',
+																		'multivendorx'
+																	)}
 															</button>
 														)}
 													</div>
@@ -848,11 +853,10 @@ const EditStore = () => {
 												)}
 
 												<span
-													className={`edit-icon ${
-														editDesc
-															? ''
-															: 'blue-color'
-													}`}
+													className={`edit-icon ${editDesc
+														? ''
+														: 'blue-color'
+														}`}
 													onClick={(e) => {
 														e.stopPropagation();
 														if (
@@ -916,41 +920,37 @@ const EditStore = () => {
 												{[...Array(5)].map((_, i) => (
 													<i
 														key={i}
-														className={`review adminfont-star${
-															data.total_reviews >
-																0 &&
+														className={`review adminfont-star${data.total_reviews >
+															0 &&
 															i <
-																Math.round(
-																	data.overall_reviews
-																)
-																? ''
-																: '-o'
-														}`}
+															Math.round(
+																data.overall_reviews
+															)
+															? ''
+															: '-o'
+															}`}
 													></i>
 												))}
 
 												<span>
 													{data.total_reviews > 0
-														? `${
-																data.overall_reviews
-															} (${
-																data.total_reviews
-															} ${
-																data.total_reviews ===
-																1
-																	? __(
-																			'Review',
-																			'multivendorx'
-																		)
-																	: __(
-																			'Reviews',
-																			'multivendorx'
-																		)
-															})`
-														: `(${__(
-																'0 Review',
+														? `${data.overall_reviews
+														} (${data.total_reviews
+														} ${data.total_reviews ===
+															1
+															? __(
+																'Review',
 																'multivendorx'
-															)})`}
+															)
+															: __(
+																'Reviews',
+																'multivendorx'
+															)
+														})`
+														: `(${__(
+															'0 Review',
+															'multivendorx'
+														)})`}
 												</span>
 											</div>
 										)}

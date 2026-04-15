@@ -56,8 +56,19 @@ class Frontend {
 
     public function add_suborder_tag( $order ) {
         echo '<a href="' . esc_url( $order->get_view_order_url() ) . '">#' . esc_html( $order->get_order_number() ) . '</a>';
+
         if ( $order->get_parent_id() > 0 ) {
-            echo ' <span class="suborder-label">' . __( 'Store order', 'multivendorx' ) . '</span>';
+            $store_id = $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
+
+            if ( $store_id ) {
+                $store = new Store( $store_id );
+                $store_name = $store->get( 'name' );
+
+                echo ' <span class="suborder-label">'
+                    . __( 'Sold by', 'multivendorx' ) . ' '
+                    . esc_html( $store_name )
+                    . '</span>';
+            }
         }
     }
 

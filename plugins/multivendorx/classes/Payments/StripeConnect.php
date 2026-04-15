@@ -50,6 +50,7 @@ class StripeConnect {
      */
     public function get_settings() {
         $redirect_url = admin_url( 'admin-post.php?action=multivendorx_stripe_oauth_callback' );
+
         return array(
             'icon'       => 'stripe-connect',
             'id'         => $this->get_id(),
@@ -58,23 +59,21 @@ class StripeConnect {
             'disableBtn' => true,
             'formFields' => array(
                 array(
-                    'key'     => 'payment_mode',
-                    'type'    => 'choice-toggle',
-                    'label'   => __( 'Payment mode', 'multivendorx' ),
-                     'desc' => __( 'Choose Test to simulate payouts or Live to send real payouts to sellers.', 'multivendorx' ),
-                        'options' => array(
-                    'desc' => __( 'Choose Test to simulate payouts or Live to send real payouts to sellers.', 'multivendorx' ),
+                    'key'   => 'payment_mode',
+                    'type'  => 'choice-toggle',
+                    'label' => __( 'Payment mode', 'multivendorx' ),
+                    'desc'  => __( 'Choose Test to simulate payouts or Live to send real payouts to sellers.', 'multivendorx' ),
                     'options' => array(
                         array(
-							'key'   => 'test',
-							'label' => __( 'Test', 'multivendorx' ),
-							'value' => 'test',
-						),
+                            'key'   => 'test',
+                            'label' => __( 'Test', 'multivendorx' ),
+                            'value' => 'test',
+                        ),
                         array(
-							'key'   => 'live',
-							'label' => __( 'Live', 'multivendorx' ),
-							'value' => 'live',
-						),
+                            'key'   => 'live',
+                            'label' => __( 'Live', 'multivendorx' ),
+                            'value' => 'live',
+                        ),
                     ),
                 ),
                 array(
@@ -83,7 +82,7 @@ class StripeConnect {
                     'label'       => __( 'Stripe client ID', 'multivendorx' ),
                     'placeholder' => __( 'Enter Stripe Client ID', 'multivendorx' ),
                     'settingDescription' => __( "Your application's unique identifier for Stripe Connect OAuth. Matches the selected Payment Mode.", 'multivendorx' ),
-                    'desc' => __( 'Found in your Stripe Dashboard → Developer → API keys / Connect settings.<br/><a href="https://docs.stripe.com/connect/oauth-reference" class="link-item" target="blank">Stripe Connect OAuth reference <i class="adminfont-external"/></a>', 'multivendorx' ), 
+                    'desc' => __( 'Found in your Stripe Dashboard → Developer → API keys / Connect settings.<br/><a href="https://docs.stripe.com/connect/oauth-reference" class="link-item" target="blank">Stripe Connect OAuth reference <i class="adminfont-external"/></a>', 'multivendorx' ),
                     'dependent'   => array(
                         'key'   => 'payment_mode',
                         'set'   => true,
@@ -96,7 +95,7 @@ class StripeConnect {
                     'label'       => __( 'Stripe client ID', 'multivendorx' ),
                     'placeholder' => __( 'Enter Stripe Client ID', 'multivendorx' ),
                     'settingDescription' => __( "Your application's unique identifier for Stripe Connect OAuth. Matches the selected Payment Mode.", 'multivendorx' ),
-                    'desc' => __( 'Found in your Stripe Dashboard → Developer → API keys / Connect settings.<br/><a href="https://docs.stripe.com/connect/oauth-reference" class="link-item" target="blank">Stripe Connect OAuth reference <i class="adminfont-external"/></a>', 'multivendorx' ), 
+                    'desc' => __( 'Found in your Stripe Dashboard → Developer → API keys / Connect settings.<br/><a href="https://docs.stripe.com/connect/oauth-reference" class="link-item" target="blank">Stripe Connect OAuth reference <i class="adminfont-external"/></a>', 'multivendorx' ),
                     'dependent'   => array(
                         'key'   => 'payment_mode',
                         'set'   => true,
@@ -109,7 +108,7 @@ class StripeConnect {
                     'label'       => __( 'Secret key', 'multivendorx' ),
                     'placeholder' => __( 'Enter secret key ', 'multivendorx' ),
                     'settingDescription' => __( "Private key used to authenticate server-to-Stripe requests.", 'multivendorx' ),
-                    'desc' => __( 'Never expose publicly. <br/><a href="https://docs.stripe.com/keys/" class="link-item" target="blank">Stripe API keys documentation <i class="adminfont-external"/></a>', 'multivendorx' ), 
+                    'desc' => __( 'Never expose publicly. <br/><a href="https://docs.stripe.com/keys/" class="link-item" target="blank">Stripe API keys documentation <i class="adminfont-external"/></a>', 'multivendorx' ),
                     'dependent'   => array(
                         'key'   => 'payment_mode',
                         'set'   => true,
@@ -134,9 +133,8 @@ class StripeConnect {
                     'text'  => $redirect_url,
                     'settingDescription' => __( "URL Stripe uses to return sellers after OAuth approval. Must match the Stripe app settings.", 'multivendorx' ),
                     'desc' => __( 'Copy this URL exactly into your Stripe Connect app settings:<br/>https://cus.dualcube.com/mvx1/wp-admin/admin-post.php?action=multivendorx_stripe_oauth_callback<br/><a href="https://docs.stripe.com/connect/oauth-reference" class="link-item" target="blank">Stripe OAuth redirect setup <i class="adminfont-external"/></a>', 'multivendorx' ),
-                    ),
+                ),
             )
-        )
         );
     }
 
