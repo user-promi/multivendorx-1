@@ -833,3 +833,15 @@ $star-color: #d49c00;
         }
     }
 }
+
+// membership ui
+.multivendorx-membership-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    .plan-wrapper {
+        width: calc(25% - 0.4rem);
+    }
+}
