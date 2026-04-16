@@ -860,7 +860,7 @@ class MVX {
             $status              = get_post_meta( $commission_id, '_paid_status', true );
             $refunded            = abs( (float) get_post_meta( $commission_id, '_commission_refunded', true ) );
             $paid_date           = get_post_meta( $commission_id, '_paid_date', true );
-            $created_at          = ! empty( $paid_date ) && is_numeric( $paid_date )
+            $created_at          = ( is_numeric( $paid_date ) && $paid_date > 0 )
                                     ? gmdate( 'Y-m-d H:i:s', (int) $paid_date )
                                     : 0;
             $vendor_id           = get_term_meta( $commission_vendor, '_vendor_user_id', true );
