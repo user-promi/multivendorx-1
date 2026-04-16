@@ -151,10 +151,7 @@ const EditStore = () => {
 
 			const updated = {
 				...data,
-				[key]: {
-					id: attachment.id,
-					url: attachment.url,
-				},
+				[key]: attachment.url,
 			};
 			setData(updated);
 			autoSave(updated);
@@ -429,7 +426,7 @@ const EditStore = () => {
 									style={{
 										background:
 											data?.banner &&
-											`url("${data.banner.url}")`,
+											`url("${data.banner}")`,
 									}}
 								>
 									{Object.keys(data).length === 0 ? (
@@ -492,7 +489,7 @@ const EditStore = () => {
 									<div className="store-logo">
 										{data?.image ? (
 											<img
-												src={data?.image?.url}
+												src={data?.image}
 												alt=""
 											/>
 										) : (

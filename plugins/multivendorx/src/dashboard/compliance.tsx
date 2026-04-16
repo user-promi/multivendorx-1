@@ -108,7 +108,7 @@ const Compliance = (React.FC = () => {
 	];
 
 	// expendable
-	const [value, setValue] = useState({
+	const [value] = useState({
 		marketplace_setup: {
 			store_selling_mode: 'default',
 		},

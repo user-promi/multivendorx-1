@@ -212,6 +212,13 @@ export default {
 			category: 'store_management',
 		},
 		{
+			id: 'media-library',
+			name: __('Media Library', 'multivendorx'),
+			desc: 'Stores can manage, upload, and organize their media files directly from their dashboard.',
+			proModule: true,
+			category: 'store_management',
+		},
+		{
 			id: 'store-policy',
 			name: __('Store Policy', 'multivendorx'),
 			desc: 'Each store publishes its own return, refund, and shipping policies.',
