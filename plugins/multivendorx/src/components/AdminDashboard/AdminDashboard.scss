@@ -38,6 +38,7 @@
         }
     }
 }
+
 // welcome section end
 
 // section pro banner
@@ -1058,13 +1059,16 @@
         width: 60%;
         position: relative;
         padding-bottom: 0.5rem;
-        .item-title{
+
+        .item-title {
             font-size: 1rem;
         }
-        .item-icon{
+
+        .item-icon {
             font-size: 1.25rem;
             color: green;
         }
+
         &:after {
             position: absolute;
             width: 100%;
@@ -1072,6 +1076,30 @@
             content: "";
             background: green;
             bottom: 0;
+        }
+    }
+}
+
+
+.content {
+    max-height: 70vh;
+
+    &.multi {
+
+        .section {
+            padding: 1rem 0;
+
+            .order-overview{
+                width: 50%;
+            }
+            .commission-overview{
+                width: 50%;
+            }
+
+            &.right {
+                display: flex;
+                gap: 1.5rem;
+            }
         }
     }
 }

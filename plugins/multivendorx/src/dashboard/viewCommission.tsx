@@ -175,7 +175,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 		<PopupUI
 			open={open}
 			onClose={onClose}
-			width="70%"
+			width="40%"
 			height="80%"
 			header={{
 				icon: 'commission',
@@ -187,6 +187,131 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 			}}
 		>
 			<div className="content multi">
+				<div className="section right">
+					<div className="order-overview">
+						<FormGroupWrapper>
+							<SectionUI
+								title={__('Order Overview', 'multivendorx')}
+							/>
+
+							<FormGroup
+								row
+								label={__('Associated Order', 'multivendorx')}
+								className="space-between"
+							>
+								{commissionData?.order_id ? (
+									<span
+										className="link-item"
+										onClick={() =>
+											dashNavigate(navigate, [
+												'orders',
+												'view',
+												String(commissionData.order_id),
+											])
+										}
+									>
+										#{commissionData.order_id}
+									</span>
+								) : (
+									'-'
+								)}
+							</FormGroup>
+
+							<FormGroup
+								row
+								label={__('Order Status', 'multivendorx')}
+								className="space-between"
+							>
+								<span className="admin-badge blue">
+									{orderData?.status
+										? orderData.status
+											.replace(/^wc-/, '') // remove 'wc-' prefix if exists
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize first letter of each word
+										: ''}
+								</span>
+							</FormGroup>
+							{commissionData?.commission_note && (
+								<>
+									<SectionUI
+										title={__('Commission Notes', 'multivendorx')}
+									/>
+									<Notice
+										type="info"
+										displayPosition="inline-notice"
+										message={commissionData?.commission_note}
+									/>
+								</>
+							)}
+						</FormGroupWrapper>
+					</div>
+
+					<div className="commission-overview">
+						<FormGroupWrapper>
+							<SectionUI
+								title={__('Commission Overview', 'multivendorx')}
+							/>
+
+							<FormGroup
+								row
+								label={__('Commission Status', 'multivendorx')}
+								className="space-between"
+							>
+								<span
+									className={`admin-badge ${commissionData?.status === 'paid'
+										? 'green'
+										: 'red'
+										}`}
+								>
+									{commissionData?.status
+										? commissionData.status
+											.replace(/^wc-/, '') // remove any prefix like 'wc-'
+											.replace(/_/g, ' ') // replace underscores with spaces
+											.replace(/\b\w/g, (c) =>
+												c.toUpperCase()
+											) // capitalize each word
+										: ''}
+								</span>
+							</FormGroup>
+
+							<FormGroup
+								row
+								label={__('Commission Amount', 'multivendorx')}
+								className="space-between"
+							>
+								<b>{formatCurrency(
+									parseFloat(commissionData?.store_earning ?? 0)
+								)}</b>
+							</FormGroup>
+
+							<FormGroup row label={__('Shipping', 'multivendorx')} className="space-between">
+								<b>{formatCurrency(commissionData?.shipping_amount)}</b>
+							</FormGroup>
+
+							<FormGroup row label={__('Tax', 'multivendorx')} className="space-between">
+								<b>{formatCurrency(
+									Number(commissionData?.tax_amount || 0)
+								)}</b>
+							</FormGroup>
+
+							{commissionData?.store_refunded > 0 && (
+								<FormGroup
+									row
+									label={__('Commission refund', 'multivendorx')}
+									className="space-between"
+								>
+									<b>{formatCurrency(commissionData.store_refunded)}</b>
+								</FormGroup>
+							)}
+
+							<FormGroup row label={__('Total', 'multivendorx')} className="space-between">
+								<b>{formatCurrency(commissionData?.total_order_amount)}</b>
+							</FormGroup>
+						</FormGroupWrapper>
+					</div>
+				</div>
 				<div className="section left">
 					<SectionUI title={__('Order Details', 'multivendorx')} />
 					<TableCard
@@ -200,151 +325,29 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							thousandSeparator: appLocalizer.thousand_separator,
 							currencyPosition: appLocalizer.currency_position,
 						}}
-						showMenu= {false}
+						showMenu={false}
 					/>
 
 					{Array.isArray(shippingItems) &&
-						shippingItems.length > 0 && (
-							<TableCard
-								title={__('Shipping', 'multivendorx')}
-								headers={shippingColumns}
-								rows={shippingItems}
-								isLoading={loading}
-								currency={{
-									currencySymbol:
-										appLocalizer.currency_symbol,
-									priceDecimals: appLocalizer.price_decimals,
-									decimalSeparator:
-										appLocalizer.decimal_separator,
-									thousandSeparator:
-										appLocalizer.thousand_separator,
-									currencyPosition:
-										appLocalizer.currency_position,
-								}}
-								showMenu= {false}
-							/>
-						)}
-				</div>
-
-				<div className="section right">
-					<FormGroupWrapper>
-						<SectionUI
-							title={__('Order Overview', 'multivendorx')}
+					shippingItems.length > 0 && (
+						<TableCard
+							title={__('Shipping', 'multivendorx')}
+							headers={shippingColumns}
+							rows={shippingItems}
+							isLoading={loading}
+							currency={{
+								currencySymbol:
+									appLocalizer.currency_symbol,
+								priceDecimals: appLocalizer.price_decimals,
+								decimalSeparator:
+									appLocalizer.decimal_separator,
+								thousandSeparator:
+									appLocalizer.thousand_separator,
+								currencyPosition:
+									appLocalizer.currency_position,
+							}}
+							showMenu={false}
 						/>
-
-						<FormGroup
-							row
-							label={__('Associated Order', 'multivendorx')}
-							className="space-between"
-						>
-							{commissionData?.order_id ? (
-								<span
-									className="link-item"
-									onClick={() =>
-										dashNavigate(navigate, [
-											'orders',
-											'view',
-											String(commissionData.order_id),
-										])
-									}
-								>
-									#{commissionData.order_id}
-								</span>
-							) : (
-								'-'
-							)}
-						</FormGroup>
-
-						<FormGroup
-							row
-							label={__('Order Status', 'multivendorx')}
-							className="space-between"
-						>
-							<span className="admin-badge blue">
-								{orderData?.status
-									? orderData.status
-											.replace(/^wc-/, '') // remove 'wc-' prefix if exists
-											.replace(/_/g, ' ') // replace underscores with spaces
-											.replace(/\b\w/g, (c) =>
-												c.toUpperCase()
-											) // capitalize first letter of each word
-									: ''}
-							</span>
-						</FormGroup>
-
-						<SectionUI
-							title={__('Commission Overview', 'multivendorx')}
-						/>
-
-						<FormGroup
-							row
-							label={__('Commission Status', 'multivendorx')}
-							className="space-between"
-						>
-							<span
-								className={`admin-badge ${
-									commissionData?.status === 'paid'
-										? 'green'
-										: 'red'
-								}`}
-							>
-								{commissionData?.status
-									? commissionData.status
-											.replace(/^wc-/, '') // remove any prefix like 'wc-'
-											.replace(/_/g, ' ') // replace underscores with spaces
-											.replace(/\b\w/g, (c) =>
-												c.toUpperCase()
-											) // capitalize each word
-									: ''}
-							</span>
-						</FormGroup>
-
-						<FormGroup
-							row
-							label={__('Commission Amount', 'multivendorx')}
-							className="space-between"
-						>
-							<b>{formatCurrency(
-								parseFloat(commissionData?.store_earning ?? 0)
-							)}</b>
-						</FormGroup>
-
-						<FormGroup row label={__('Shipping', 'multivendorx')} className="space-between">
-							<b>{formatCurrency(commissionData?.shipping_amount)}</b>
-						</FormGroup>
-
-						<FormGroup row label={__('Tax', 'multivendorx')} className="space-between">
-							<b>{formatCurrency(
-								Number(commissionData?.tax_amount || 0)
-							)}</b>
-						</FormGroup>
-
-						{commissionData?.store_refunded > 0 && (
-							<FormGroup
-								row
-								label={__('Commission refund', 'multivendorx')}
-								className="space-between"
-							>
-								<b>{formatCurrency(commissionData.store_refunded)}</b>
-							</FormGroup>
-						)}
-
-						<FormGroup row label={__('Total', 'multivendorx')} className="space-between">
-							<b>{formatCurrency(commissionData?.total_order_amount)}</b>
-						</FormGroup>
-					</FormGroupWrapper>
-
-					{commissionData?.commission_note && (
-						<>
-							<SectionUI
-								title={__('Commission Notes', 'multivendorx')}
-							/>
-							<Notice
-								type="info"
-								displayPosition="inline-notice"
-								message={commissionData?.commission_note}
-							/>
-						</>
 					)}
 				</div>
 			</div>
