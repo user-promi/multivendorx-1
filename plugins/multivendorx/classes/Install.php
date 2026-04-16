@@ -1187,56 +1187,42 @@ class Install {
      */
     public function migrate_old_modules() {
         $previous_active_modules = get_option( 'mvx_all_active_module_list', array() );
+        $shipping_settings = get_option( Utill::MULTIVENDORX_SETTINGS['shipping'], array() );
+        $payment_settings  = get_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], array() );
 
-        $shipping_settings['shipping_modules'] = array();
+        $shipping_settings['shipping_modules'] = $shipping_settings['shipping_modules'] ?? array();
+        $payment_settings['payment_methods']   = $payment_settings['payment_methods'] ?? array();
 
         if ( in_array( 'zone-shipping', $previous_active_modules, true ) ) {
-            $shipping_settings['shipping_modules']['zone-wise-shipping'] = array(
-                'enable' => true,
-            );
+            $shipping_settings['shipping_modules']['zone-wise-shipping']['enable'] = true;
         }
 
         if ( in_array( 'country-shipping', $previous_active_modules, true ) ) {
-            $shipping_settings['shipping_modules']['country-wise-shipping'] = array(
-                'enable' => true,
-            );
+            $shipping_settings['shipping_modules']['country-wise-shipping']['enable'] = true;
         }
 
         if ( in_array( 'distance-shipping', $previous_active_modules, true ) ) {
-            $shipping_settings['shipping_modules']['distance-wise-shipping'] = array(
-                'enable' => true,
-            );
+            $shipping_settings['shipping_modules']['distance-wise-shipping']['enable'] = true;
         }
 
-        $payment_settings['payment_methods'] = array();
-
         if ( in_array( 'stripe-connect', $previous_active_modules, true ) ) {
-            $payment_settings['payment_methods']['stripe-connect'] = array(
-                'enable' => true,
-            );
+            $payment_settings['payment_methods']['stripe-connect']['enable'] = true;
         }
 
         if ( in_array( 'bank-payment', $previous_active_modules, true ) ) {
-            $payment_settings['payment_methods']['bank-transfer'] = array(
-                'enable' => true,
-            );
+            $payment_settings['payment_methods']['bank-transfer']['enable'] = true;
         }
 
         if ( in_array( 'paypal-payout', $previous_active_modules, true ) ) {
-            $payment_settings['payment_methods']['paypal-payout'] = array(
-                'enable' => true,
-            );
+            $payment_settings['payment_methods']['paypal-payout']['enable'] = true;
         }
 
         if ( in_array( 'stripe-marketplace', $previous_active_modules, true ) ) {
-            $payment_settings['payment_methods']['stripe-marketplace'] = array(
-                'enable' => true,
-            );
+            $payment_settings['payment_methods']['stripe-marketplace']['enable'] = true;
         }
+
         if ( in_array( 'paypal-marketplace', $previous_active_modules, true ) ) {
-            $payment_settings['payment_methods']['paypal-marketplace'] = array(
-                'enable' => true,
-            );
+            $payment_settings['payment_methods']['paypal-marketplace']['enable'] = true;
         }
 
         update_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], $payment_settings );
@@ -1289,6 +1275,7 @@ class Install {
 
         $store_permissions['products'] = array();
         $store_permissions['coupons']  = array();
+        $store_permissions['orders']  = array();
         $store_permissions['settings']  = array('manage_store_settings');
 
         if ( ! empty( $previous_capability_settings['is_submit_product'] ) ) {
@@ -1463,7 +1450,12 @@ class Install {
         }
 
         if ( ! empty( $previous_store_settings['mvx_store_sidebar_position'] ) ) {
-            $appearance_settings['store_sidebar'] = $previous_store_settings['mvx_store_sidebar_position'];
+            $position = $previous_store_settings['mvx_store_sidebar_position'];
+            if ( $position === 'At Left' ) {
+                $appearance_settings['store_sidebar'] = 'left';
+            } elseif ( $position === 'At Right' ) {
+                $appearance_settings['store_sidebar'] = 'right';
+            }
         }
 
         if ( ! empty( $previous_store_settings['choose_map_api'] ) ) {
@@ -1649,19 +1641,37 @@ class Install {
 		}
 
         $disbursement_settings = array(
-            'commission_lock_period'    => ! empty( $previous_disbursement_settings['commission_threshold_time'] ) ?? 0,
-            'disbursement_order_status' => ! empty( $previous_disbursement_settings['order_withdrawl_status'] ) ? $statuses : array( 'completed' ),
-            'payout_threshold_amount'   => ! empty( $previous_disbursement_settings['commission_threshold'] ) ?? 0,
-            'payment_schedules'         => empty( $previous_disbursement_settings['choose_payment_mode_automatic_disbursal'] ) ? 'mannual' : $previous_disbursement_settings['payment_schedule'],
+            'commission_lock_period'    => ! empty( $previous_disbursement_settings['commission_threshold_time'] )
+                ? $previous_disbursement_settings['commission_threshold_time']
+                : 0,
+
+            'disbursement_order_status' => ! empty( $previous_disbursement_settings['order_withdrawl_status'] )
+                ? $statuses
+                : array( 'completed' ),
+
+            'payout_threshold_amount'   => ! empty( $previous_disbursement_settings['commission_threshold'] )
+                ? $previous_disbursement_settings['commission_threshold']
+                : 0,
+
+            'payment_schedules'         => empty( $previous_disbursement_settings['choose_payment_mode_automatic_disbursal'] )
+                ? 'manual'
+                : $previous_disbursement_settings['payment_schedule'],
+
             'withdrawals_fees'          => array(
                 array(
-                    'free_withdrawals' => ! empty( $previous_disbursement_settings['no_of_orders'] ) ?? '',
-                    'withdrawal_fixed' => ! empty( $previous_disbursement_settings['commission_transfer'] ) ?? '',
+                    'free_withdrawals' => ! empty( $previous_disbursement_settings['no_of_orders'] )
+                        ? $previous_disbursement_settings['no_of_orders']
+                        : '',
+
+                    'withdrawal_fixed' => ! empty( $previous_disbursement_settings['commission_transfer'] )
+                        ? $previous_disbursement_settings['commission_transfer']
+                        : '',
                 ),
             ),
         );
 
         $previous_refund_settings = get_option( 'mvx_refund_management_tab_settings', array() );
+        $refund_settings = get_option( Utill::MULTIVENDORX_SETTINGS['refunds'], array() );
         $old_reasons              = array_map( 'trim', explode( '||', $previous_refund_settings['refund_order_msg'] ?? '' ) );
         if ( ! empty( $old_reasons ) ) {
             foreach ( $old_reasons as $reason ) {
@@ -1671,13 +1681,23 @@ class Install {
                     'isCustom' => true,
                 );
             }
-            $refund_settings['refund_reasons'] = $refund_reasons;
+            $existing = $refund_settings['refund_reasons'] ?? array();
+            foreach ( $refund_reasons as $key => $value ) {
+                if ( ! isset( $existing[ $key ] ) ) {
+                    $existing[ $key ] = $value;
+                }
+            }
+            $refund_settings['refund_reasons'] = $existing;
+            
         }
 
-        $refund_settings = array(
-            'customer_refund_status' => ! empty( $previous_refund_settings['customer_refund_status'] ) ? $previous_refund_settings['customer_refund_status'] : array( 'completed' ),
-            'refund_days'            => ! empty( $previous_refund_settings['refund_days'] ) ? $previous_refund_settings['refund_days'] : 7,
-        );
+        $refund_settings['customer_refund_status'] = ! empty( $previous_refund_settings['customer_refund_status'] )
+            ? $previous_refund_settings['customer_refund_status']
+            : ( $refund_settings['customer_refund_status'] ?? array( 'completed' ) );
+
+        $refund_settings['refund_days'] = ! empty( $previous_refund_settings['refund_days'] )
+            ? $previous_refund_settings['refund_days']
+            : ( $refund_settings['refund_days'] ?? 7 );
 
         $previous_review_settings = get_option( 'mvx_review_management_tab_settings', array() );
         $ratings_parameters       = array();
@@ -1697,13 +1717,17 @@ class Install {
             }
         }
 
+        $review_settings = get_option( Utill::MULTIVENDORX_SETTINGS['store-reviews'], array() );
+
+        $new_review_settings = array(
+            'is_store_review_verified' => ! empty( $previous_review_settings['is_sellerreview_varified'] )
+                ? array( 'is_store_review_verified' ) : array());
+
         if ( ! empty( $ratings_parameters ) ) {
-            $review_settings['ratings_parameters'] = $ratings_parameters;
+            $new_review_settings['ratings_parameters'] = $ratings_parameters;
         }
 
-        $review_settings = array(
-            'is_storereview_varified' => ! empty( $previous_review_settings['is_sellerreview_varified'] ) ? array( 'is_storereview_varified' ) : array(),
-        );
+        $review_settings = array_merge( $review_settings, $new_review_settings );
 
         $previous_policy_settings = get_option( 'mvx_policy_tab_settings', array() );
         $policy_settings          = array(
@@ -1713,21 +1737,32 @@ class Install {
             'cancellation_policy' => ! empty( $previous_policy_settings['cancellation_policy'] ) ? $previous_policy_settings['cancellation_policy'] : '',
         );
 
-        $previous_stripe_settings                              = get_option( 'mvx_payment_stripe_connect_tab_settings', array() );
-        $payment_settings['payment_methods']['stripe-connect'] = array(
+        $payment_settings = get_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], array() );
+        
+        $payment_settings['payment_methods'] = $payment_settings['payment_methods'] ?? array();
+        $existing_stripe = $payment_settings['payment_methods']['stripe-connect'] ?? array();
+
+        $previous_stripe_settings   = get_option( 'mvx_payment_stripe_connect_tab_settings', array() );
+        $new_stripe = array(
             'payment_mode'    => ! empty( $previous_stripe_settings['testmode'] ) ? 'test' : '',
-            'test_client_id'  => ! empty( $previous_stripe_settings['test_client_id'] ) ?? '',
-            'test_secret_key' => ! empty( $previous_stripe_settings['test_secret_key'] ) ?? '',
-            'live_client_id'  => ! empty( $previous_stripe_settings['live_client_id'] ) ?? '',
-            'live_secret_key' => ! empty( $previous_stripe_settings['live_secret_key'] ) ?? '',
+            'test_client_id'  => $previous_stripe_settings['test_client_id'] ?? '',
+            'test_secret_key' => $previous_stripe_settings['test_secret_key'] ?? '',
+            'live_client_id'  => $previous_stripe_settings['live_client_id'] ?? '',
+            'live_secret_key' => $previous_stripe_settings['live_secret_key'] ?? '',
         );
 
-        $previous_paypal_settings                             = get_option( 'mvx_payment_payout_tab_settings', array() );
-        $payment_settings['payment_methods']['paypal-payout'] = array(
+        $payment_settings['payment_methods']['stripe-connect'] = array_merge( $existing_stripe, $new_stripe );
+
+        $previous_paypal_settings = get_option( 'mvx_payment_payout_tab_settings', array() );
+        $existing_paypal = $payment_settings['payment_methods']['paypal-payout'] ?? array();
+
+        $new_paypal = array(
             'payment_mode'  => ! empty( $previous_paypal_settings['is_testmode'] ) ? 'sandbox' : '',
-            'client_id'     => ! empty( $previous_paypal_settings['client_id'] ) ?? '',
-            'client_secret' => ! empty( $previous_paypal_settings['client_secret'] ) ?? '',
+            'client_id'     => $previous_paypal_settings['client_id'] ?? '',
+            'client_secret' => $previous_paypal_settings['client_secret'] ?? '',
         );
+
+        $payment_settings['payment_methods']['paypal-payout'] = array_merge( $existing_paypal, $new_paypal );
 
 		$old_fields = get_option( 'mvx_new_vendor_registration_form_data', array() );
 

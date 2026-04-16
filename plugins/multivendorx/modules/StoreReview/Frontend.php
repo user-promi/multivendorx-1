@@ -208,7 +208,7 @@ class Frontend {
 		$item['loginUrl'] = add_query_arg( 'redirect_to', rawurlencode( get_permalink() ), $myaccount_url );
 
         $storereview = MultiVendorX()->setting->get_setting(
-            'is_storereview_varified',
+            'is_store_review_verified',
             array()
         );
 
