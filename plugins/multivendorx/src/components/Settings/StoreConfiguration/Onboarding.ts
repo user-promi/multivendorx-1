@@ -187,7 +187,7 @@ export default {
 			key: 'shared_listing_display',
 			type: 'choice-toggle',
 			label: __(
-				'Co-listed product/listings display priority',
+				'Shared listings display priority',
 				'multivendorx'
 			),
 			dependent: {

@@ -45,37 +45,42 @@ const ShippingCard = ({
 	}, []);
 
 	return (
+		console.log('typefields',typeFields),
 		<Card title={__('How will this be delivered?', 'multivendorx')} desc={__('Choose how customers receive this product after purchase.', 'multivendorx')}>
 			{/* Dimensions */}
 			<FormGroupWrapper>
 				<FormGroup>
 					<ChoiceToggleUI
 						options={[
-							...(!typeFields.includes('virtual')
-								? [
+								{
+									key: 'physical',
+									value: 'physical',
+									label: __(
+										'Physical - I pack and post it',
+										'multivendorx'
+									),
+									desc: __('Item is packed and shipped to the customer address.', 'multivendorx'),
+								},
+								...(typeFields.includes('downloadable')
+									? [
 										{
-											key: 'physical',
-											value: 'physical',
-											label: __(
-												'Physical - I pack and post it',
-												'multivendorx'
-											),
-											desc: __('Item is packed and shipped to the customer address.', 'multivendorx'),
+											key: 'downloadable',
+											value: 'downloadable',
+											label: __('Downloadable', 'multivendorx'),
+											desc: __("Customer receives a file - e.g. a PDF, software, or digital artwork.", 'multivendorx'),
 										},
 									]
-								: []),
-							{
-								key: 'downloadable',
-								value: 'downloadable',
-								label: __('Downloadable', 'multivendorx'),
-								desc: __("Customer receives a file - e.g. a PDF, software, or digital artwork.", 'multivendorx'),
-							},
-							{
-								key: 'digital_product_service',
-								value: 'digital_product_service',
-								label: __('Digital service - Delivered online', 'multivendorx'),
-								desc: __("Service provided remotely - like coaching, consulting, or custom design. No shipping or file download involved.", 'multivendorx'),
-							},
+									: []),
+								...(typeFields.includes('virtual')
+									? [
+										{
+											key: 'digital_product_service',
+											value: 'digital_product_service',
+											label: __('Digital service - Delivered online', 'multivendorx'),
+											desc: __("Service provided remotely - like coaching, consulting, or custom design. No shipping or file download involved.", 'multivendorx'),
+										},
+									]
+									: []),
 							{
 								key: 'others',
 								value: 'others',
