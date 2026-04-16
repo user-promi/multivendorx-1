@@ -431,7 +431,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                 );
 
             case 'text':
-                if (name === 'store-phone') {
+                if (field.name === 'store-phone' || field.label === 'Store Phone' || field.label === 'Phone') {
                     const value =
                         (inputs[name] as { country_code?: string; phone?: string }) || {};
 
@@ -446,18 +446,23 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
                                 {/* Country Code Dropdown */}
                                 <div style={{ minWidth: '140px' }}>
-                                    <Select
-                                        options={CountryCodes}
-                                        value={CountryCodes.find(
-                                            (opt) => opt.value === value.country_code
-                                        )}
-                                        onChange={(selected) =>
+                                    <select
+                                        value={value.country_code || ''}
+                                        onChange={(e) =>
                                             handleChange(name, {
                                                 ...value,
-                                                country_code: selected?.value || '',
+                                                country_code: e.target.value,
                                             })
                                         }
-                                    />
+                                    >
+                                        <option value="">Select country code</option>
+
+                                        {CountryCodes.map((opt) => (
+                                            <option key={opt.value} value={opt.value}>
+                                                {opt.label}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 {/* Phone Input */}

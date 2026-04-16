@@ -164,6 +164,15 @@
             }
         }
 
+        &.space-between{
+            justify-content: space-between;
+            
+            .settings-form-label,
+            .settings-input-content{
+                width: fit-content;
+            }
+        }
+        
         &.full-width {
             .settings-input-content {
                 width: 100%;

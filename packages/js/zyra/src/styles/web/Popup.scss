@@ -187,17 +187,22 @@
 
             .popup-body {
                 padding: 1rem;
-                margin-bottom: 6rem;
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;
                 max-height: 70vh;
                 overflow: auto;
-
+                margin-bottom: 1rem;
 
                 .heading {
                     font-size: 1.125rem;
                     font-weight: 500;
+                }
+            }
+
+            &:has(.popup-footer){
+                .popup-body{
+                    margin-bottom: 4.5rem;
                 }
             }
         }
@@ -362,7 +367,6 @@
 
 // commission popup style (common and remove)
 .content {
-    // padding: 1rem 2rem;
     max-height: 70vh;
 
 
@@ -420,21 +424,17 @@
         }
     }
     &.multi {
-        padding: 0;
-        display: flex;
 
         .section {
             padding: 1rem 0;
 
             &.left {
-                width: 70%;
                 border-right: $border-light-small;
-                padding-right: 2rem;
+                padding-right: 1rem;
             }
 
             &.right {
-                width: 30%;
-                padding-left: 2rem;
+                padding-left: 1rem;
             }
         }
     }

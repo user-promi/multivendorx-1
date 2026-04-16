@@ -235,6 +235,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<FormGroup
 							row
 							label={__('Associated Order', 'multivendorx')}
+							className="space-between"
 						>
 							{commissionData?.order_id ? (
 								<span
@@ -257,6 +258,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<FormGroup
 							row
 							label={__('Order Status', 'multivendorx')}
+							className="space-between"
 						>
 							<span className="admin-badge blue">
 								{orderData?.status
@@ -277,6 +279,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<FormGroup
 							row
 							label={__('Commission Status', 'multivendorx')}
+							className="space-between"
 						>
 							<span
 								className={`admin-badge ${
@@ -299,33 +302,35 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<FormGroup
 							row
 							label={__('Commission Amount', 'multivendorx')}
+							className="space-between"
 						>
-							{formatCurrency(
+							<b>{formatCurrency(
 								parseFloat(commissionData?.store_earning ?? 0)
-							)}
+							)}</b>
 						</FormGroup>
 
-						<FormGroup row label={__('Shipping', 'multivendorx')}>
-							{formatCurrency(commissionData?.shipping_amount)}
+						<FormGroup row label={__('Shipping', 'multivendorx')} className="space-between">
+							<b>{formatCurrency(commissionData?.shipping_amount)}</b>
 						</FormGroup>
 
-						<FormGroup row label={__('Tax', 'multivendorx')}>
-							{formatCurrency(
+						<FormGroup row label={__('Tax', 'multivendorx')} className="space-between">
+							<b>{formatCurrency(
 								Number(commissionData?.tax_amount || 0)
-							)}
+							)}</b>
 						</FormGroup>
 
 						{commissionData?.store_refunded > 0 && (
 							<FormGroup
 								row
 								label={__('Commission refund', 'multivendorx')}
+								className="space-between"
 							>
-								{formatCurrency(commissionData.store_refunded)}
+								<b>{formatCurrency(commissionData.store_refunded)}</b>
 							</FormGroup>
 						)}
 
-						<FormGroup row label={__('Total', 'multivendorx')}>
-							{formatCurrency(commissionData?.total_order_amount)}
+						<FormGroup row label={__('Total', 'multivendorx')} className="space-between">
+							<b>{formatCurrency(commissionData?.total_order_amount)}</b>
 						</FormGroup>
 					</FormGroupWrapper>
 

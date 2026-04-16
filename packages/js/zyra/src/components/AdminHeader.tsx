@@ -174,7 +174,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                         <>            
                         <div
                             key={i}
-                            className="wp-admin-notice"
                             dangerouslySetInnerHTML={{ __html: html }}
                         />
                         <NoticeReceiver position="notice" />

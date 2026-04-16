@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\Wpml;
+namespace MultiVendorX\WPML;
 
 /**
  * MultiVendorX WPML Module class
