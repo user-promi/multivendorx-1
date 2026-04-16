@@ -601,7 +601,7 @@ class FrontendScripts {
                     'use_settings' => true,
                     'object_name'  => 'storesList',
                 ),
-                'multivendorx-store-list-script'   => array(
+                'multivendorx-store-list-script'           => array(
                     'object_name'  => 'storesList',
                     'use_settings' => true,
                     'use_rest'     => true,

@@ -76,11 +76,16 @@ class Ajax {
             $store   = new Store( $store_id );
             $product = wc_get_product( $product_id );
 
-            MultiVendorX()->notifications->send_notification_helper('product_question_submitted', $store, null, [
-                'product_name'  => $product->get_name(),
-                'customer_name' => get_user_by( 'id', $user_id )->display_name,
-                'category'      => 'activity',
-            ]);
+            MultiVendorX()->notifications->send_notification_helper(
+                'product_question_submitted',
+                $store,
+                null,
+                array(
+					'product_name'  => $product->get_name(),
+					'customer_name' => get_user_by( 'id', $user_id )->display_name,
+					'category'      => 'activity',
+				)
+            );
             wp_send_json_success( array( 'message' => 'Question submitted successfully.' ) );
         } else {
             wp_send_json_error( array( 'message' => 'Failed to submit question.' ) );
@@ -157,9 +162,9 @@ class Ajax {
             wp_send_json_error( array( 'message' => 'You must be logged in to vote.' ) );
         }
 
-        $user_id = MultiVendorX()->current_user_id;
-        $queries_id  = filter_input( INPUT_POST, 'queries_id', FILTER_VALIDATE_INT );
-        $type    = ( filter_input( INPUT_POST, 'type', FILTER_UNSAFE_RAW ) === 'up' ) ? 1 : -1;
+        $user_id    = MultiVendorX()->current_user_id;
+        $queries_id = filter_input( INPUT_POST, 'queries_id', FILTER_VALIDATE_INT );
+        $type       = ( filter_input( INPUT_POST, 'type', FILTER_UNSAFE_RAW ) === 'up' ) ? 1 : -1;
 
         if ( ! $queries_id ) {
             wp_send_json_error( array( 'message' => 'Invalid question ID.' ) );

@@ -115,11 +115,11 @@ class Modules {
 
                 $module_id = $this->camel_to_kebab( $folder );
 
-                $key = array_key_exists($module_id, $this->modules)
+                $key = array_key_exists( $module_id, $this->modules )
                     ? $namespace . '_' . $module_id
                     : $module_id;
 
-                $this->modules[$key] = array(
+                $this->modules[ $key ] = array(
                     'id'           => $module_id,
                     'module_file'  => $module_file,
                     'module_class' => "{$namespace}\\{$folder}\\Module",
@@ -157,7 +157,7 @@ class Modules {
         $active_modules = $this->get_active_modules();
         $all_modules    = $this->get_all_modules();
 
-        $validated_active = [];
+        $validated_active = array();
         foreach ( $active_modules as $module_id ) {
             foreach ( $all_modules as $key => $module ) {
                 // Match same module id (free + pro both)
@@ -171,8 +171,8 @@ class Modules {
                 require_once $module['module_file'];
 
                 try {
-                    $class = $module['module_class'];
-                    $this->container[ $key ] = new $class(); 
+                    $class                   = $module['module_class'];
+                    $this->container[ $key ] = new $class();
                 } catch ( \Throwable $e ) {
                     MultiVendorX()->util->log( $e );
                     continue;

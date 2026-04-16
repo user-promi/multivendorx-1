@@ -50,24 +50,17 @@ const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
 				subject: formData.subject,
 				message: formData.message,
 				product_id: productId,
-				status: 'open'
+				status: 'open',
 			},
 			id: StoreInfo?.storeDetails?.storeId,
 		};
 
 		axios
-			.post(
-				getApiLink(
-					StoreInfo,
-					`store-supports`
-				),
-				payload,
-				{
-					headers: {
-						'X-WP-Nonce': StoreInfo?.nonce,
-					},
-				}
-			)
+			.post(getApiLink(StoreInfo, `store-supports`), payload, {
+				headers: {
+					'X-WP-Nonce': StoreInfo?.nonce,
+				},
+			})
 			.then((response) => {
 				if (!response || response.status !== 200) {
 					throw new Error('Request failed');
@@ -107,7 +100,9 @@ const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
 				<div
 					className="store-support-popup multivendorx-popup"
 					onClick={(e) => {
-						if (e.target === e.currentTarget) setIsOpen(false);
+						if (e.target === e.currentTarget) {
+							setIsOpen(false);
+						}
 					}}
 				>
 					<div className="woocommerce multivendorx-popup-content">
@@ -123,7 +118,9 @@ const StoreSupport: React.FC<Props> = ({ productName, productId }) => {
 							</span>
 
 							<h3>{store?.storeName}</h3>
-							<h2>{__('Create a new support', 'multivendorx')}</h2>
+							<h2>
+								{__('Create a new support', 'multivendorx')}
+							</h2>
 
 							{/* Subject */}
 							<p className="woocommerce-form-row form-row form-row-wide">

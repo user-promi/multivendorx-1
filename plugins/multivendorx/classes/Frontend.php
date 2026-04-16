@@ -53,13 +53,13 @@ class Frontend {
         // Restrict media for store dashboard.
         add_filter( 'ajax_query_attachments_args', array( $this, 'multivendorx_restrict_store_media' ) );
 
-        add_filter( 'multivendorx_modify_permissions', [$this, 'modify_permissions'] );
-        add_filter( 'multivendorx_dashboard_menu', [ $this, 'hide_menu'], 20 );
-        add_filter( 'wp_insert_attachment_data', [ $this, 'attach_store_owner_id'], 10, 1 );
-        add_action( 'woocommerce_account_dashboard', [ $this, 'add_dashboard_button' ] );
+        add_filter( 'multivendorx_modify_permissions', array( $this, 'modify_permissions' ) );
+        add_filter( 'multivendorx_dashboard_menu', array( $this, 'hide_menu' ), 20 );
+        add_filter( 'wp_insert_attachment_data', array( $this, 'attach_store_owner_id' ), 10, 1 );
+        add_action( 'woocommerce_account_dashboard', array( $this, 'add_dashboard_button' ) );
     }
 
-    public function modify_permissions($permissions) {
+    public function modify_permissions( $permissions ) {
         $review_settings  = MultiVendorX()->setting->get_setting( 'restriction_for_under_review', array() );
         $suspend_settings = MultiVendorX()->setting->get_setting( 'restriction_for_suspended', array() );
 
@@ -78,22 +78,21 @@ class Frontend {
         if ( in_array( 'hide_store_products', $review_settings, true ) || in_array( 'hide_store_products', $suspend_settings, true ) ) {
             $permissions['hide_store_products'] = true;
         }
-        
+
         return $permissions;
     }
 
     public function hide_menu( $menu ) {
         $permissions = MultiVendorX()->util->get_permissions();
-        if ($permissions['disable_payouts']) {
+        if ( $permissions['disable_payouts'] ) {
             unset( $menu['wallet'] );
         }
 
-        if ($permissions['disable_product_upload']) {
+        if ( $permissions['disable_product_upload'] ) {
             unset( $menu['products'] );
         }
 
         return $menu;
-
     }
 
 	/**
@@ -561,38 +560,40 @@ class Frontend {
     }
 
     public function attach_store_owner_id( $data ) {
-        if ( ! empty( array_intersect( [ 'store_manager', 'product_manager', 'customer_support', 'order_assistant', 'inactive_staff' ], MultiVendorX()->current_user->roles )) ) {
-            $store = new Store(MultiVendorX()->active_store);
-            $primary_owner = StoreUtil::get_primary_owner(MultiVendorX()->active_store);
+        if ( ! empty( array_intersect( array( 'store_manager', 'product_manager', 'customer_support', 'order_assistant', 'inactive_staff' ), MultiVendorX()->current_user->roles ) ) ) {
+            $store         = new Store( MultiVendorX()->active_store );
+            $primary_owner = StoreUtil::get_primary_owner( MultiVendorX()->active_store );
 
-            if ( !empty($primary_owner) ) {
+            if ( ! empty( $primary_owner ) ) {
                 $data['post_author'] = (int) $primary_owner;
             }
 
             $total_size = $this->get_user_media_space_used( $primary_owner );
-            $store->update_meta('media_space_used', $total_size);
+            $store->update_meta( 'media_space_used', $total_size );
         }
         return $data;
     }
 
-    public function get_user_media_space_used($user_id) {
-        $attachments = get_posts(array(
-            'post_type'      => 'attachment',
-            'posts_per_page' => -1,
-            'author'         => $user_id,
-            'fields'         => 'ids',
-        ));
+    public function get_user_media_space_used( $user_id ) {
+        $attachments = get_posts(
+            array(
+				'post_type'      => 'attachment',
+				'posts_per_page' => -1,
+				'author'         => $user_id,
+				'fields'         => 'ids',
+            )
+        );
 
         $total_size = 0;
-        foreach ($attachments as $attachment_id) {
-            $file_path = get_attached_file($attachment_id);
-            if (file_exists($file_path)) {
-                $total_size += filesize($file_path);
+        foreach ( $attachments as $attachment_id ) {
+            $file_path = get_attached_file( $attachment_id );
+            if ( file_exists( $file_path ) ) {
+                $total_size += filesize( $file_path );
             }
         }
 
         // Return size in MB
-        return round($total_size / 1024 / 1024, 2);
+        return round( $total_size / 1024 / 1024, 2 );
     }
     public function add_dashboard_button() {
 

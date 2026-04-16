@@ -181,10 +181,7 @@ const SetupWizard: React.FC = () => {
 					type: 'button',
 					name: __('Setup', 'multivendorx'),
 					label: __('Bank Transfer', 'multivendorx'),
-					desc: __(
-						'Click to configure',
-						'multivendorx'
-					),
+					desc: __('Click to configure', 'multivendorx'),
 					onClick: () => {
 						window.open(
 							`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`
@@ -196,10 +193,7 @@ const SetupWizard: React.FC = () => {
 					type: 'button',
 					name: __('Setup', 'multivendorx'),
 					label: __('PayPal', 'multivendorx'),
-					desc: __(
-						'Click to configure',
-						'multivendorx'
-					),
+					desc: __('Click to configure', 'multivendorx'),
 					onClick: () => {
 						window.open(
 							`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`
@@ -211,10 +205,7 @@ const SetupWizard: React.FC = () => {
 					type: 'button',
 					name: __('Setup', 'multivendorx'),
 					label: __('Stripe', 'multivendorx'),
-					desc: __(
-						'Click to configure',
-						'multivendorx'
-					),
+					desc: __('Click to configure', 'multivendorx'),
 					onClick: () => {
 						window.open(
 							`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`
@@ -226,10 +217,7 @@ const SetupWizard: React.FC = () => {
 					type: 'button',
 					name: __('Setup', 'multivendorx'),
 					label: __('Other Methods', 'multivendorx'),
-					desc: __(
-						'Click to configure',
-						'multivendorx'
-					),
+					desc: __('Click to configure', 'multivendorx'),
 					onClick: () => {
 						window.open(
 							`${appLocalizer.admin_url}admin.php?page=multivendorx#&tab=settings&subtab=commissions`
@@ -396,7 +384,7 @@ const SetupWizard: React.FC = () => {
 			],
 		},
 	];
-	
+
 	const updateSetting = (key: string, data: WizardData) => {
 		setValue(data);
 	};

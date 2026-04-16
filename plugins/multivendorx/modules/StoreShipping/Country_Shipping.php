@@ -227,12 +227,12 @@ class Country_Shipping extends \WC_Shipping_Method {
             ? floatval( $default_shipping_add_price ) * ( count( $products ) - ( 1 + $downloadable_count ) )
             : 0;
 
-        $raw_data = $meta[ Utill::STORE_SETTINGS_KEYS['country_shipping_rates'] ] ?? array();
+        $raw_data                    = $meta[ Utill::STORE_SETTINGS_KEYS['country_shipping_rates'] ] ?? array();
         $multivendorx_shipping_rates = is_string( $raw_data ) ? json_decode( $raw_data, true ) : $raw_data;
-        
-        $state_rate                        = 0;
-        $country_rate                      = null;
-        $everywhere_rate                   = null;
+
+        $state_rate      = 0;
+        $country_rate    = null;
+        $everywhere_rate = null;
 
         foreach ( $multivendorx_shipping_rates as $rate ) {
             if ( $rate['country'] === $destination_country ) {

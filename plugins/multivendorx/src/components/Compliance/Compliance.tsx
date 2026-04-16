@@ -1,10 +1,10 @@
 /* global appLocalizer */
 import {
-    useModules,
-    Container,
-    Column,
-    ComponentStatusView,
-    SettingsNavigator,
+	useModules,
+	Container,
+	Column,
+	ComponentStatusView,
+	SettingsNavigator,
 } from 'zyra';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -34,7 +34,7 @@ if (!window.multivendorxComplianceStore) {
 }
 
 const Compliance = () => {
-    const [counts, setCounts] = useState<Record<string, number>>({});
+	const [counts, setCounts] = useState<Record<string, number>>({});
 
 	useEffect(() => {
 		const store = window.multivendorxComplianceStore;
@@ -76,12 +76,15 @@ const Compliance = () => {
 		});
 	}, []);
 
-    const { modules } = useModules();
-    const location = new URLSearchParams(useLocation().hash.substring(1));
+	const { modules } = useModules();
+	const location = new URLSearchParams(useLocation().hash.substring(1));
 
-    const settingContent = applyFilters('multivendorx_compliance_tab', []).filter((tab) => !tab.module || modules.includes(tab.module));
+	const settingContent = applyFilters(
+		'multivendorx_compliance_tab',
+		[]
+	).filter((tab) => !tab.module || modules.includes(tab.module));
 
-    const settingContentWithCounts = settingContent.map((tab) => ({
+	const settingContentWithCounts = settingContent.map((tab) => ({
 		...tab,
 		content: {
 			...tab.content,
@@ -89,55 +92,55 @@ const Compliance = () => {
 		},
 	}));
 
-    const getForm = (tabId: string) => {
-        return (
-            applyFilters('multivendorx_compliance_tab_content', null, {
-                tabId,
-            }) || <div />
-        );
-    };
+	const getForm = (tabId: string) => {
+		return (
+			applyFilters('multivendorx_compliance_tab_content', null, {
+				tabId,
+			}) || <div />
+		);
+	};
 
-    return (
-        <>
-            {settingContent.length > 0 ? (
-                <SettingsNavigator
-                    settingContent={settingContentWithCounts}
-                    currentSetting={location.get('subtab') as string}
-                    getForm={getForm}
-                    prepareUrl={(subTab: string) =>
-                        `?page=multivendorx#&tab=compliance&subtab=${subTab}`
-                    }
-                    appLocalizer={appLocalizer}
-                    Link={Link}
-                    variant={'card'}
-                    menuIcon={true}
-                    headerIcon="customer-service"
-                    headerTitle={__('Compliance', 'multivendorx')}
-                    headerDescription={__(
-                        'Manage store reviews, support requests, financial transactions, and reported issues.',
-                        'multivendorx'
-                    )}
-                />
-            ) : (
-                <Container general>
-                    <Column>
-                        <ComponentStatusView
-                            title={__(
-                                'Looks like the compliance module isn’t active yet!',
-                                'multivendorx'
-                            )}
-                            desc={__(
-                                'Enable it to review and manage complaints about stores and products.',
-                                'multivendorx'
-                            )}
-                            buttonText={__('Enable Now', 'multivendorx')}
-                            buttonLink={`${appLocalizer.admin_dashboard_url}#&tab=modules`}
-                        />
-                    </Column>
-                </Container>
-            )}
-        </>
-    );
+	return (
+		<>
+			{settingContent.length > 0 ? (
+				<SettingsNavigator
+					settingContent={settingContentWithCounts}
+					currentSetting={location.get('subtab') as string}
+					getForm={getForm}
+					prepareUrl={(subTab: string) =>
+						`?page=multivendorx#&tab=compliance&subtab=${subTab}`
+					}
+					appLocalizer={appLocalizer}
+					Link={Link}
+					variant={'card'}
+					menuIcon={true}
+					headerIcon="customer-service"
+					headerTitle={__('Compliance', 'multivendorx')}
+					headerDescription={__(
+						'Manage store reviews, support requests, financial transactions, and reported issues.',
+						'multivendorx'
+					)}
+				/>
+			) : (
+				<Container general>
+					<Column>
+						<ComponentStatusView
+							title={__(
+								'Looks like the compliance module isn’t active yet!',
+								'multivendorx'
+							)}
+							desc={__(
+								'Enable it to review and manage complaints about stores and products.',
+								'multivendorx'
+							)}
+							buttonText={__('Enable Now', 'multivendorx')}
+							buttonLink={`${appLocalizer.admin_dashboard_url}#&tab=modules`}
+						/>
+					</Column>
+				</Container>
+			)}
+		</>
+	);
 };
 
 export default Compliance;

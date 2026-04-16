@@ -121,7 +121,7 @@ const AddressFieldUI: React.FC<AddressFieldProps> = ({
 
     const FieldRenderers = {
         text: (field: SubField) => (
-             <div className="address-field-item">
+            <div className="address-field-item">
                 <label className="field-label">{field.label}</label>
                 <BasicInputUI placeholder={field.placeholder} />
             </div>
@@ -161,7 +161,7 @@ const AddressFieldUI: React.FC<AddressFieldProps> = ({
                 pull: false,
                 put: false,
             }}
-            className='address-fields'
+            className="address-fields"
         >
             {subFields.map((field) => (
                 <div

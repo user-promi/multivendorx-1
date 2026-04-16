@@ -37,9 +37,7 @@ const getStored = (): NoticeItem[] => {
         const parsed: NoticeItem[] = JSON.parse(data);
 
         return parsed.filter(
-            (n) =>
-                typeof n.expiresAt === 'number' &&
-                n.expiresAt > now
+            (n) => typeof n.expiresAt === 'number' && n.expiresAt > now
         );
     } catch {
         return [];
@@ -50,8 +48,7 @@ const persist = () => {
     const now = Date.now();
 
     const persistable = noticeQueue.filter(
-        (n) => typeof n.expiresAt === 'number' &&
-            n.expiresAt > now
+        (n) => typeof n.expiresAt === 'number' && n.expiresAt > now
     );
     if (persistable.length === 0) {
         localStorage.removeItem(STORAGE_KEY);
@@ -197,7 +194,10 @@ export const Notice: React.FC<NoticeProps> = ({
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        if (displayPosition === 'inline' || displayPosition === 'inline-notice') {
+        if (
+            displayPosition === 'inline' ||
+            displayPosition === 'inline-notice'
+        ) {
             return;
         }
         NoticeManager.add(
@@ -218,9 +218,9 @@ export const Notice: React.FC<NoticeProps> = ({
 
     const isInline = ['inline', 'inline-notice'].includes(displayPosition);
 
-        if (!isInline || !isVisible || (!title && !message)) {
-            return null;
-        }
+    if (!isInline || !isVisible || (!title && !message)) {
+        return null;
+    }
 
     const item: NoticeItem = {
         uniqueKey: uniqueKey || 'inline',

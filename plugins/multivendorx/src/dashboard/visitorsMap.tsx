@@ -143,9 +143,16 @@ const VisitorsMap: React.FC<VisitorsMapProps> = ({ dateRange }) => {
 								</thead>
 								<tbody className="admin-table-body">
 									{tableRows.map((row) => (
-										<tr className="admin-row" key={row.countryCode}>
-											<td className="admin-column">{row.countryCode}</td>
-											<td className="admin-column">{row.visitors}</td>
+										<tr
+											className="admin-row"
+											key={row.countryCode}
+										>
+											<td className="admin-column">
+												{row.countryCode}
+											</td>
+											<td className="admin-column">
+												{row.visitors}
+											</td>
 										</tr>
 									))}
 								</tbody>

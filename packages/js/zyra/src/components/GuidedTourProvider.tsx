@@ -27,13 +27,12 @@ const headers = { headers: { 'X-WP-Nonce': ZyraVariable.nonce } };
 
 const TourApi = {
     fetchTourStatus: async (storeId?: number) => {
-        const res = await axios.get(getApiLink(ZyraVariable, 'tour'),
-            {
-                ...headers,
-                params: {
-                    store_id: storeId ,
-                },
-            });
+        const res = await axios.get(getApiLink(ZyraVariable, 'tour'), {
+            ...headers,
+            params: {
+                store_id: storeId,
+            },
+        });
         return res.data;
     },
 
@@ -58,7 +57,13 @@ const STORAGE_KEY = 'guided_tour_step';
 /**
  * Controller that runs the tour
  */
-const GuidedTourController = ({ steps, storeId }: { steps: GuidedTourStep[]; storeId?: number; }) => {
+const GuidedTourController = ({
+    steps,
+    storeId,
+}: {
+    steps: GuidedTourStep[];
+    storeId?: number;
+}) => {
     const { setIsOpen, setSteps, setCurrentStep } = useTour();
 
     const handleFinishTour = useCallback(async () => {

@@ -82,7 +82,7 @@ class Transactions extends \WP_REST_Controller {
      * @param object $request Full details about the request.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );;
+        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );
     }
 
 	/**
@@ -154,12 +154,12 @@ class Transactions extends \WP_REST_Controller {
 				$args['id'] = $ids;
 			}
 			$transactions = Transaction::get_transaction_information( $args );
-            
-			$formatted    = array_map(
+
+			$formatted = array_map(
                 function ( $row ) {
                     $store = new Store( $row['store_id'] );
                     return array(
-                        'id'               => (int)$row['id'],
+                        'id'               => (int) $row['id'],
                         'commission_id'    => $row['commission_id'],
                         'store_name'       => $store ? $store->get( Utill::STORE_SETTINGS_KEYS['name'] ) : '-',
                         'amount'           => $row['amount'],
@@ -324,14 +324,24 @@ class Transactions extends \WP_REST_Controller {
         if ( $withdraw ) {
             if ( 'approve' === $action && $threshold_amount < $amount ) {
                 MultiVendorX()->payments->processor->process_payment( $store_id, $amount, null, null, null, true );
-                MultiVendorX()->notifications->send_notification_helper('withdrawal_released', $store, null, [
-                    'category'        => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'withdrawal_released',
+                    $store,
+                    null,
+                    array(
+						'category' => 'activity',
+					)
+                );
             } else {
-                MultiVendorX()->notifications->send_notification_helper('withdrawl_rejected', $store, null, [
-                    'amount'      => $amount,
-                    'category'    => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'withdrawl_rejected',
+                    $store,
+                    null,
+                    array(
+						'amount'   => $amount,
+						'category' => 'activity',
+					)
+                );
             }
 
             $store->delete_meta( Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] );
@@ -373,11 +383,16 @@ class Transactions extends \WP_REST_Controller {
         if ( $should_update_meta && ! empty( $store->get_meta( 'payment_method' ) ) ) {
             $store->update_meta( Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'], $amount );
 
-            MultiVendorX()->notifications->send_notification_helper('withdrawal_requested', $store, null, [
-                'store_name'  => $store->get( 'name' ),    
-                'amount'      => $amount,
-                'category'    => 'activity',
-            ]);
+            MultiVendorX()->notifications->send_notification_helper(
+                'withdrawal_requested',
+                $store,
+                null,
+                array(
+					'store_name' => $store->get( 'name' ),
+					'amount'     => $amount,
+					'category'   => 'activity',
+				)
+            );
         }
 
         return rest_ensure_response(

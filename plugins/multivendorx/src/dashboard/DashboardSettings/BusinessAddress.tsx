@@ -227,12 +227,12 @@ const BusinessAddress = () => {
 			data: formattedData,
 		})
 			.then((res) => {
-				 NoticeManager.add({
-                    title: 'Success!',
-                    message: `Store saved successfully!`,
-                    type: 'success',
-                    position: 'float',
-                });
+				NoticeManager.add({
+					title: 'Success!',
+					message: `Store saved successfully!`,
+					type: 'success',
+					position: 'float',
+				});
 			})
 			.catch((error) => {
 				console.error('Save error:', error);
@@ -269,7 +269,6 @@ const BusinessAddress = () => {
 
 	return (
 		<>
-
 			<FormGroupWrapper>
 				{/* Address */}
 				<FormGroup
@@ -337,7 +336,9 @@ const BusinessAddress = () => {
 						name="state"
 						value={formData.state}
 						options={stateOptions}
-						onChange={(value) => handleAddressChange('state', value)}
+						onChange={(value) =>
+							handleAddressChange('state', value)
+						}
 					/>
 				</FormGroup>
 

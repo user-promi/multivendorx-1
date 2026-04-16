@@ -35,7 +35,7 @@ if (!window.multivendorxCustomerStore) {
 
 const CustomersFeedback = () => {
 	const [counts, setCounts] = useState<Record<string, number>>({});
-	
+
 	useEffect(() => {
 		const store = window.multivendorxCustomerStore;
 

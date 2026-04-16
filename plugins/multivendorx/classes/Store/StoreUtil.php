@@ -390,10 +390,10 @@ class StoreUtil {
         );
 
         $registration_meta_map = array(
-            'store-phone'   => Utill::STORE_SETTINGS_KEYS['phone'],
-            'store-paypal'  => Utill::STORE_SETTINGS_KEYS['paypal_email'],
+            'store-phone'  => Utill::STORE_SETTINGS_KEYS['phone'],
+            'store-paypal' => Utill::STORE_SETTINGS_KEYS['paypal_email'],
         );
-        $reverse_map = array_flip( $registration_meta_map );
+        $reverse_map           = array_flip( $registration_meta_map );
 
         foreach ( $submitted_data as $field_name => $field_value ) {
             if ( isset( $reverse_map[ $field_name ] ) ) {
@@ -427,8 +427,6 @@ class StoreUtil {
                 $response['registration_data'][ $label ] = $value;
             }
         }
-
-
 
         return $response;
     }
@@ -644,12 +642,12 @@ class StoreUtil {
         if ( ! $store_id ) {
             return false;
         }
-        $store = Store::get_store( $store_id );
-        $status           = $store->get( 'status' );
+        $store       = Store::get_store( $store_id );
+        $status      = $store->get( 'status' );
         $permissions = MultiVendorX()->util->get_permissions();
 
         if ( $check_payouts ) {
-            if ( in_array( $status, [ 'suspended', 'under_review' ], true ) || $permissions['disable_payouts'] ) {
+            if ( in_array( $status, array( 'suspended', 'under_review' ), true ) || $permissions['disable_payouts'] ) {
                 return true;
             }
         } else {
@@ -657,7 +655,7 @@ class StoreUtil {
                 return true;
             }
 
-            if ( in_array( $status, [ 'suspended', 'under_review' ], true ) || $permissions['hide_store_products'] ) {
+            if ( in_array( $status, array( 'suspended', 'under_review' ), true ) || $permissions['hide_store_products'] ) {
                 return true;
             }
 
@@ -732,9 +730,9 @@ class StoreUtil {
 		if ( empty( $store_slug ) ) {
 			return;
 		}
-		$store_obj   = Store::get_store( $store_slug, 'slug' );
-		$store_phone = self::get_phone( $store_obj->get_meta( 'phone' ) );
-        $store_whatsapp = self::get_phone( $store_obj->get_meta( 'whatsapp_number' ) );
+		$store_obj        = Store::get_store( $store_slug, 'slug' );
+		$store_phone      = self::get_phone( $store_obj->get_meta( 'phone' ) );
+        $store_whatsapp   = self::get_phone( $store_obj->get_meta( 'whatsapp_number' ) );
         $whatsapp_message = $store_obj->get_meta( 'whatsapp_pre_filled' );
         $facebook_page_id = $store_obj->get_meta( 'page_id' );
 
@@ -765,7 +763,7 @@ class StoreUtil {
 			'storeTabs'          => $tabs_html,
             'whatsapp'           => $store_whatsapp,
             'whatsapp_message'   => $whatsapp_message,
-            'page_id'            => $facebook_page_id
+            'page_id'            => $facebook_page_id,
 		);
 		/**
 		 * Filter store info before returning.
@@ -847,71 +845,84 @@ class StoreUtil {
             return;
         }
 
-        $attachments = get_posts( [
-            'post_type'      => 'attachment',
-            'posts_per_page' => -1,
-            'author'         => $old_owner,
-            'fields'         => 'ids',
-        ] );
+        $attachments = get_posts(
+            array(
+				'post_type'      => 'attachment',
+				'posts_per_page' => -1,
+				'author'         => $old_owner,
+				'fields'         => 'ids',
+            )
+        );
 
         if ( empty( $attachments ) ) {
             return;
         }
 
         foreach ( $attachments as $attachment_id ) {
-            wp_update_post( [
-                'ID'          => $attachment_id,
-                'post_author' => $new_owner,
-            ] );
+            wp_update_post(
+                array(
+					'ID'          => $attachment_id,
+					'post_author' => $new_owner,
+                )
+            );
         }
     }
 
     public static function get_approval_queue_count() {
-        $pending_stores = (int) self::get_store_information( array( 'count' => true, 'status' => 'pending' ) );
-        $product_query = wc_get_products([
-            'status'     => 'pending',
-            'limit'      => 1,
-            'paginate'   => true,
-            'meta_query' => [
-                [
-                    'key'     => 'multivendorx_store_id',
-                    'compare' => 'EXISTS',
-                ],
-            ],
-        ]);
-        $pending_products = !empty( $product_query->total ) ? (int) $product_query->total : 0;
+        $pending_stores   = (int) self::get_store_information(
+            array(
+				'count'  => true,
+				'status' => 'pending',
+            )
+        );
+        $product_query    = wc_get_products(
+            array(
+				'status'     => 'pending',
+				'limit'      => 1,
+				'paginate'   => true,
+				'meta_query' => array(
+					array(
+						'key'     => 'multivendorx_store_id',
+						'compare' => 'EXISTS',
+					),
+				),
+            )
+        );
+        $pending_products = ! empty( $product_query->total ) ? (int) $product_query->total : 0;
 
-        $query = new \WP_Query([
-            'post_type'      => 'shop_coupon',
-            'post_status'    => 'pending',
-            'posts_per_page' => 1,
-            'fields'         => 'ids',
-            'meta_query'     => [
-                [
-                    'key'     => 'multivendorx_store_id',
-                    'compare' => 'EXISTS',
-                ],
-            ],
-        ]);
+        $query = new \WP_Query(
+            array(
+				'post_type'      => 'shop_coupon',
+				'post_status'    => 'pending',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					array(
+						'key'     => 'multivendorx_store_id',
+						'compare' => 'EXISTS',
+					),
+				),
+            )
+        );
 
         $pending_coupons = (int) $query->found_posts;
 
-        $all_stores = StoreUtil::get_store_information();
+        $all_stores               = self::get_store_information();
         $pending_withdrawal_count = $pending_deactivation_request_count = 0;
 
         foreach ( $all_stores as $store ) {
             $store_meta = Store::get_store( (int) $store['ID'] );
 
             if ( ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['request_withdrawal_amount'] ] ) ) {
-                $pending_withdrawal_count++;
+                ++$pending_withdrawal_count;
             }
 
             if ( ! empty( $store_meta->meta_data[ Utill::STORE_SETTINGS_KEYS['deactivation_reason'] ] ) ) {
-                $pending_deactivation_request_count++;
+                ++$pending_deactivation_request_count;
             }
         }
 
-        $total = 
+        $total =
             $pending_stores +
             $pending_products +
             $pending_coupons +

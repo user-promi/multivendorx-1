@@ -129,40 +129,39 @@ class MVX {
         $this->migrate_product_coupon_vendor();
         $after = $this->get_all_offsets();
 
-        if ($before === $after) {
-            wp_clear_scheduled_hook('mvx_full_migration');
+        if ( $before === $after ) {
+            wp_clear_scheduled_hook( 'mvx_full_migration' );
         }
-        
     }
 
     public function get_all_offsets() {
-        return [
-            'vendor'       => (int) get_option('mvx_vendor_offset', 0),
-            'follow'       => (int) get_option('mvx_follow_offset', 0),
-            'zone'         => (int) get_option('mvx_zone_offset', 0),
-            'announcement' => (int) get_option('mvx_announcement_offset', 0),
-            'kb'           => (int) get_option('mvx_kb_offset', 0),
-            'visitors'     => (int) get_option('mvx_visitors_offset', 0),
-            'qna'          => (int) get_option('mvx_qna_offset', 0),
-            'spmv'         => (int) get_option('mvx_spmv_offset', 0),
-            'commission'   => (int) get_option('mvx_commission_offset', 0),
-            'refund'       => (int) get_option('mvx_refund_offset', 0),
-            'ledger'       => (int) get_option('mvx_ledger_offset', 0),
-            'product'      => (int) get_option('mvx_product_settings_offset', 0),
-            'category'     => (int) get_option('mvx_category_settings_offset', 0),
-            'coupon'       => (int) get_option('mvx_coupon_migration_offset', 0),
-            'product_store' => (int) get_option('mvx_product_migration_offset', 0),
-            'rating'        => (int) get_option('mvx_rating_offset', 0),
-        ];
+        return array(
+            'vendor'        => (int) get_option( 'mvx_vendor_offset', 0 ),
+            'follow'        => (int) get_option( 'mvx_follow_offset', 0 ),
+            'zone'          => (int) get_option( 'mvx_zone_offset', 0 ),
+            'announcement'  => (int) get_option( 'mvx_announcement_offset', 0 ),
+            'kb'            => (int) get_option( 'mvx_kb_offset', 0 ),
+            'visitors'      => (int) get_option( 'mvx_visitors_offset', 0 ),
+            'qna'           => (int) get_option( 'mvx_qna_offset', 0 ),
+            'spmv'          => (int) get_option( 'mvx_spmv_offset', 0 ),
+            'commission'    => (int) get_option( 'mvx_commission_offset', 0 ),
+            'refund'        => (int) get_option( 'mvx_refund_offset', 0 ),
+            'ledger'        => (int) get_option( 'mvx_ledger_offset', 0 ),
+            'product'       => (int) get_option( 'mvx_product_settings_offset', 0 ),
+            'category'      => (int) get_option( 'mvx_category_settings_offset', 0 ),
+            'coupon'        => (int) get_option( 'mvx_coupon_migration_offset', 0 ),
+            'product_store' => (int) get_option( 'mvx_product_migration_offset', 0 ),
+            'rating'        => (int) get_option( 'mvx_rating_offset', 0 ),
+        );
     }
 
     public function migrate_other_tables() {
         global $wpdb;
 
         // Shipping zone methods table migrate.
-        $offset = (int) get_option( 'mvx_zone_offset', 0 );
+        $offset     = (int) get_option( 'mvx_zone_offset', 0 );
         $zone_table = $wpdb->prefix . 'mvx_shipping_zone_methods';
-        $results = $wpdb->get_results(
+        $results    = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT * FROM {$zone_table} LIMIT %d OFFSET %d",
                 self::BATCH_SIZE,
@@ -184,11 +183,11 @@ class MVX {
         $offset = (int) get_option( 'mvx_announcement_offset', 0 );
 
         $args = array(
-            'post_type'   => 'mvx_vendor_notice',
-            'post_status' => 'any',
-            'fields'      => 'ids',
+            'post_type'      => 'mvx_vendor_notice',
+            'post_status'    => 'any',
+            'fields'         => 'ids',
             'posts_per_page' => self::BATCH_SIZE,
-            'offset'      => $offset,
+            'offset'         => $offset,
         );
 
         $announcements = get_posts( $args );
@@ -222,13 +221,13 @@ class MVX {
 
         // Knowledgebase table migrate.
         $offset = (int) get_option( 'mvx_kb_offset', 0 );
-        
+
         $args = array(
-            'post_type'   => 'mvx_university',
-            'post_status' => 'any',
-            'fields'      => 'ids',
+            'post_type'      => 'mvx_university',
+            'post_status'    => 'any',
+            'fields'         => 'ids',
             'posts_per_page' => self::BATCH_SIZE,
-            'offset'      => $offset,
+            'offset'         => $offset,
         );
 
         $knowledgebase = get_posts( $args );
@@ -242,7 +241,6 @@ class MVX {
             );
         }
         update_option( 'mvx_kb_offset', $offset + count( $knowledgebase ) );
-
 
         // Visitor stats table migrate.
         $offset = (int) get_option( 'mvx_visitors_offset', 0 );
@@ -296,7 +294,7 @@ class MVX {
 		$questions_table = $wpdb->prefix . 'mvx_cust_questions';
 		$answers_table   = $wpdb->prefix . 'mvx_cust_answers';
 		$new_qna_table   = $wpdb->prefix . Utill::TABLES['customer_queries'];
-        $offset = (int) get_option( 'mvx_qna_offset', 0 );
+        $offset          = (int) get_option( 'mvx_qna_offset', 0 );
 
         $questions = $wpdb->get_results(
             $wpdb->prepare(
@@ -359,11 +357,10 @@ class MVX {
 
         update_option( 'mvx_qna_offset', $offset + count( $questions ) );
 
-
         // SPMV table migration.
 		$old_spmv_table = $wpdb->prefix . 'mvx_products_map';
 		$new_spmv_table = $wpdb->prefix . Utill::TABLES['shared_listing'];
-        $offset = (int) get_option( 'mvx_spmv_offset', 0 );
+        $offset         = (int) get_option( 'mvx_spmv_offset', 0 );
 
         $spmv_products = $wpdb->get_results(
             $wpdb->prepare(
@@ -376,7 +373,7 @@ class MVX {
             )
         );
 
-        $maps          = array();
+        $maps = array();
         foreach ( $spmv_products as $row ) {
             $map_id     = (int) $row->product_map_id;
             $product_id = (int) $row->product_id;
@@ -395,9 +392,9 @@ class MVX {
 			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $new_spmv_table,
                 array(
-					'ID'          => $map_id,
+					'ID'               => $map_id,
 					'listing_products' => wp_json_encode( array_values( $data['products'] ) ),
-					'created'     => $data['created'],
+					'created'          => $data['created'],
                 ),
                 array(
 					'%d',
@@ -414,7 +411,6 @@ class MVX {
         }
 
         update_option( 'mvx_spmv_offset', $offset + count( $spmv_products ) );
-		
     }
 
     /**
@@ -430,17 +426,19 @@ class MVX {
 	 */
     public function migrate_product_category_settings() {
         $previous_commission_settings = get_option( 'mvx_commissions_tab_settings', array() );
-        $offset = (int) get_option( 'mvx_product_settings_offset', 0 );
-        $limit  = self::BATCH_SIZE;
+        $offset                       = (int) get_option( 'mvx_product_settings_offset', 0 );
+        $limit                        = self::BATCH_SIZE;
 
         $page = floor( $offset / $limit ) + 1;
 
-        $products = wc_get_products( array(
-            'status' => 'any',
-            'return' => 'ids',
-            'limit'  => $limit,
-            'page'   => $page,
-        ) );
+        $products = wc_get_products(
+            array(
+				'status' => 'any',
+				'return' => 'ids',
+				'limit'  => $limit,
+				'page'   => $page,
+            )
+        );
 
         foreach ( $products as $product_id ) {
 			if ( 'fixed' === $previous_commission_settings['commission_type']['value'] ) {
@@ -491,7 +489,7 @@ class MVX {
         update_option( 'mvx_product_settings_offset', $offset + count( $products ) );
 
         $offset = (int) get_option( 'mvx_category_settings_offset', 0 );
-        $terms = get_terms(
+        $terms  = get_terms(
             array(
 				'taxonomy'   => 'product_cat',
 				'hide_empty' => false,
@@ -552,13 +550,15 @@ class MVX {
 
     public function migrate_vendors() {
         global $wpdb;
-        $offset = (int) get_option('mvx_vendor_offset', 0);
+        $offset = (int) get_option( 'mvx_vendor_offset', 0 );
 
-        $vendors = get_users([
-            'role__in' => ['dc_vendor','dc_pending_vendor','dc_rejected_vendor'],
-            'number'   => self::BATCH_SIZE,
-            'offset'   => $offset,
-        ]);
+        $vendors = get_users(
+            array(
+				'role__in' => array( 'dc_vendor', 'dc_pending_vendor', 'dc_rejected_vendor' ),
+				'number'   => self::BATCH_SIZE,
+				'offset'   => $offset,
+            )
+        );
 
         $map_meta = $this->old_new_meta_map();
 
@@ -580,7 +580,7 @@ class MVX {
                 ARRAY_A
             );
             $term_id   = get_user_meta( $user_id, '_vendor_term_id', true );
-            $term = $wpdb->get_row(
+            $term      = $wpdb->get_row(
                 $wpdb->prepare(
                     "SELECT name, slug FROM {$wpdb->terms} WHERE term_id = %d",
                     $term_id
@@ -624,10 +624,13 @@ class MVX {
             );
 
             // add meta in store-meta table.
-            $store->update_meta( 'store_email', array(
-                'list'    => array( $user->email ),
-                'primary' => $user->email,
-            ) );
+            $store->update_meta(
+                'store_email',
+                array(
+					'list'    => array( $user->email ),
+					'primary' => $user->email,
+                )
+            );
 
             $country      = get_user_meta( $user_id, '_vendor_country_code', true ) ?? '';
             $wc_countries = new \WC_Countries();
@@ -643,8 +646,7 @@ class MVX {
             );
 
             foreach ( $user_meta as $row ) {
-
-                $meta_key   = $row['meta_key'];
+                $meta_key    = $row['meta_key'];
                 $meta_values = maybe_unserialize( $row['meta_value'] );
                 // report abuse table data insert.
                 if ( 'report_abuse_data' === $meta_key ) {
@@ -790,19 +792,21 @@ class MVX {
             }
         }
 
-        update_option('mvx_vendor_offset', $offset + count($vendors));
+        update_option( 'mvx_vendor_offset', $offset + count( $vendors ) );
     }
 
     public function migrate_followers() {
-        $offset = (int) get_option('mvx_follow_offset',0);
+        $offset = (int) get_option( 'mvx_follow_offset', 0 );
 
-        $users = get_users([
-            'meta_key' => 'mvx_customer_follow_vendor',
-            'meta_compare' => 'EXISTS',
-            'fields' => 'ID',
-            'number' => self::BATCH_SIZE,
-            'offset' => $offset,
-        ]);
+        $users = get_users(
+            array(
+				'meta_key'     => 'mvx_customer_follow_vendor',
+				'meta_compare' => 'EXISTS',
+				'fields'       => 'ID',
+				'number'       => self::BATCH_SIZE,
+				'offset'       => $offset,
+            )
+        );
 
         foreach ( $users as $user_id ) {
             $results  = array();
@@ -824,25 +828,27 @@ class MVX {
             delete_user_meta( $user_id, 'mvx_customer_follow_vendor' );
         }
 
-        update_option('mvx_follow_offset', $offset + count($users));
+        update_option( 'mvx_follow_offset', $offset + count( $users ) );
     }
 
     public function migrate_commissions() {
         global $wpdb;
 
-        $offset = (int) get_option('mvx_commission_offset',0);
+        $offset     = (int) get_option( 'mvx_commission_offset', 0 );
         $table_name = $wpdb->prefix . Utill::TABLES['commission'];
 
         $args = array(
-            'post_type' => 'dc_commission',
-            'fields'    => 'ids',
+            'post_type'      => 'dc_commission',
+            'fields'         => 'ids',
             'posts_per_page' => self::BATCH_SIZE,
-            'offset' => $offset,
-            'post_status'    => 'any'
+            'offset'         => $offset,
+            'post_status'    => 'any',
         );
 
         $commission_ids = get_posts( $args );
-        if (empty($commission_ids)) return;
+        if ( empty( $commission_ids ) ) {
+			return;
+        }
 
         foreach ( $commission_ids as $commission_id ) {
             $commission_vendor   = get_post_meta( $commission_id, '_commission_vendor', true );
@@ -886,7 +892,7 @@ class MVX {
                 )
 			);
             $insert_id = $wpdb->insert_id;
-            $order = wc_get_order( $commission_order_id );
+            $order     = wc_get_order( $commission_order_id );
 
             if ( in_array( $order->get_status(), array( 'completed', 'processing' ), true ) ) {
                 $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
@@ -941,11 +947,11 @@ class MVX {
             $order->save();
         }
 
-        update_option('mvx_commission_offset', $offset + count($commission_ids));
+        update_option( 'mvx_commission_offset', $offset + count( $commission_ids ) );
     }
 
     public function migrate_refunds() {
-        $offset = (int) get_option('mvx_refund_offset',0);
+        $offset     = (int) get_option( 'mvx_refund_offset', 0 );
         $refund_ids = wc_get_orders(
             array(
 				'type'   => 'shop_order_refund',
@@ -966,12 +972,12 @@ class MVX {
             $refund->save();
         }
 
-        update_option('mvx_refund_offset', $offset + count($refund_ids));
+        update_option( 'mvx_refund_offset', $offset + count( $refund_ids ) );
     }
 
     public function migrate_ledger() {
         global $wpdb;
-        $offset = (int) get_option('mvx_ledger_offset',0);
+        $offset = (int) get_option( 'mvx_ledger_offset', 0 );
 
         $old_ledger_table = $wpdb->prefix . 'mvx_vendor_ledger';
 		$new_ledger_table = $wpdb->prefix . Utill::TABLES['transaction'];
@@ -981,13 +987,14 @@ class MVX {
                 "SELECT * FROM {$old_ledger_table} LIMIT %d OFFSET %d",
                 self::BATCH_SIZE,
                 $offset
-            ), ARRAY_A
+            ),
+            ARRAY_A
         );
 
-        $store_cache  = array();
+        $store_cache = array();
 
         foreach ( $transactions as $row ) {
-            if ($row['ref_status'] !== 'completed') {
+            if ( $row['ref_status'] !== 'completed' ) {
                 continue;
             }
             $author_id = (int) $row['vendor_id'];
@@ -1001,14 +1008,14 @@ class MVX {
             $is_credit  = ! empty( $row['credit'] );
             $entry_type = $is_credit ? 'Cr' : 'Dr';
             $amount     = $is_credit ? (float) $row['credit'] : (float) $row['debit'];
-            $order = wc_get_order( $row['order_id'] );
+            $order      = wc_get_order( $row['order_id'] );
 
 			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $new_ledger_table,
                 array(
 					'store_id'         => $store_id,
 					'order_id'         => (int) $row['order_id'],
-					'commission_id'    => $order->get_meta('multivendorx_commission_id', true),
+					'commission_id'    => $order->get_meta( 'multivendorx_commission_id', true ),
 					'entry_type'       => $entry_type,
 					'transaction_type' => $row['ref_type'],
 					'amount'           => $amount,
@@ -1032,28 +1039,32 @@ class MVX {
 			);
         }
 
-        update_option('mvx_ledger_offset', $offset + count($transactions));
+        update_option( 'mvx_ledger_offset', $offset + count( $transactions ) );
     }
 
     public function migrate_product_coupon_vendor() {
-        $offset     = (int) get_option( 'mvx_product_migration_offset', 0 );
+        $offset = (int) get_option( 'mvx_product_migration_offset', 0 );
 
-        $store_owners = get_users( array(
-            'role'   => 'store_owner',
-            'fields' => 'ID',
-        ) );
+        $store_owners = get_users(
+            array(
+				'role'   => 'store_owner',
+				'fields' => 'ID',
+            )
+        );
 
         if ( empty( $store_owners ) ) {
             return;
         }
 
-        $products = get_posts( array(
-            'post_type' => 'product',
-            'fields'    => 'ids',
-            'posts_per_page' => self::BATCH_SIZE,
-            'offset' => $offset,
-            'post_status'    => 'any'
-        ) );
+        $products = get_posts(
+            array(
+				'post_type'      => 'product',
+				'fields'         => 'ids',
+				'posts_per_page' => self::BATCH_SIZE,
+				'offset'         => $offset,
+				'post_status'    => 'any',
+            )
+        );
 
         foreach ( $products as $product_id ) {
             $author_id = get_post_field( 'post_author', $product_id );
@@ -1065,18 +1076,20 @@ class MVX {
             }
         }
 
-        update_option( 'mvx_product_migration_offset', $offset + count($products) );
+        update_option( 'mvx_product_migration_offset', $offset + count( $products ) );
 
         // Migrate coupon vendor.
         $offset = (int) get_option( 'mvx_coupon_migration_offset', 0 );
 
-        $coupons = get_posts( array(
-            'post_type'      => 'shop_coupon',
-            'fields'    => 'ids',
-            'posts_per_page' => self::BATCH_SIZE,
-            'offset' => $offset,
-            'post_status'    => 'any'
-        ) );
+        $coupons = get_posts(
+            array(
+				'post_type'      => 'shop_coupon',
+				'fields'         => 'ids',
+				'posts_per_page' => self::BATCH_SIZE,
+				'offset'         => $offset,
+				'post_status'    => 'any',
+            )
+        );
 
         foreach ( $coupons as $coupon_id ) {
             $author_id = get_post_field( 'post_author', $coupon_id );
@@ -1087,31 +1100,33 @@ class MVX {
             }
         }
 
-        update_option( 'mvx_coupon_migration_offset', $offset + count($coupons) );
+        update_option( 'mvx_coupon_migration_offset', $offset + count( $coupons ) );
     }
-    
+
     public function migrate_reviews() {
         global $wpdb;
 
-        $offset = (int) get_option( 'mvx_rating_offset', 0 );
-        $limit  = self::BATCH_SIZE;
+        $offset       = (int) get_option( 'mvx_rating_offset', 0 );
+        $limit        = self::BATCH_SIZE;
         $table_review = $wpdb->prefix . Utill::TABLES['review'];
 
-        $query = new \WP_Comment_Query( array(
-            'type'    => 'mvx_vendor_rating',
-            'number'  => $limit,
-            'offset'  => $offset,
-            'status'  => 'approve',
-            'orderby' => 'comment_ID',
-            'order'   => 'ASC',
-        ) );
+        $query = new \WP_Comment_Query(
+            array(
+				'type'    => 'mvx_vendor_rating',
+				'number'  => $limit,
+				'offset'  => $offset,
+				'status'  => 'approve',
+				'orderby' => 'comment_ID',
+				'order'   => 'ASC',
+            )
+        );
 
         $comments = $query->comments;
         foreach ( $comments as $comment ) {
             $comment_id = $comment->comment_ID;
-            $rating   = get_comment_meta( $comment_id, 'vendor_rating', true );
-            $vendor_id = get_comment_meta( $comment_id, 'vendor_rating_id', true );
-            $store_id = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+            $rating     = get_comment_meta( $comment_id, 'vendor_rating', true );
+            $vendor_id  = get_comment_meta( $comment_id, 'vendor_rating_id', true );
+            $store_id   = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
 
             $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $table_review,
@@ -1123,11 +1138,10 @@ class MVX {
                     'review_content' => $comment->comment_content,
                     'status'         => 'approved',
                     'date_created'   => $comment->comment_date,
-                    'user_ip'   => $comment->comment_author_IP,
+                    'user_ip'        => $comment->comment_author_IP,
                 )
             );
         }
-        update_option( 'mvx_rating_offset', $offset + count($comments) );
-
+        update_option( 'mvx_rating_offset', $offset + count( $comments ) );
     }
 }

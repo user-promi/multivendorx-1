@@ -46,13 +46,12 @@ class Rest extends \WP_REST_Controller {
         try {
             $endpoint = sanitize_text_field( $request->get_param( 'endpoint' ) );
 
-            if( 'suggestions' === $endpoint ){
+            if ( 'suggestions' === $endpoint ) {
                 return $this->generate_suggestions( $request );
             }
-            if( 'image' === $endpoint ){
+            if ( 'image' === $endpoint ) {
                 return apply_filters( 'multivendorx_ai_image_generation', $request );
             }
-
         } catch ( \Exception $e ) {
             MultiVendorX()->util->log( $e );
             return $this->error_response( 'exception', __( 'Server error.', 'multivendorx' ), 500 );

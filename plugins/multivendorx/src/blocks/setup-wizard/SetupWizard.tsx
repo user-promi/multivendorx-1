@@ -417,194 +417,209 @@ const SetupWizard: React.FC = () => {
 				},
 			],
 		},
-		...(appLocalizer.multivendor_plugin ? [
-		{
-			id: 'migration',
-			label: __('Migration', 'multivendorx'),
-			icon: 'migration',
-			desc: __('Migration.', 'multivendorx'),
-			countBtn: true,
-			isWizardMode: true,
-			openForm: true,
-			formFields: [
-				{
-					key: 'notice',
-					type: 'notice',
-					label: '',
-					// message: appLocalizer.multivendor_plugin || 'No multivendor plugin active currently',
-					message: sprintf(
-    						__(
-								'We found an active multivendor plugin on your site <span class="admin-badge purple">%s</span>',
-								'multivendorx'
-							),
-							appLocalizer.multivendor_plugin
-						),
-					noticeType: 'info',
-					display: 'notice',
-				},
-				{
-					key: 'notice',
-					type: 'notice',
-					message: sprintf(
-						__(
-							"We'll copy all your data from <b>%s</b> into MultivendorX. Once the import is done, <b>%s</b> will be turned off automatically to prevent any conflicts. Make sure you're ready before you begin.",
-							'multivendorx'
-						),
-						appLocalizer.multivendor_plugin,
-						appLocalizer.multivendor_plugin
-					),
-					noticeType: 'info',
-					display: 'notice',
-				},
-				{
-					key: 'paid_promotion_limit',
-					label: __(
-						'Before you begin - quick checklist',
-						'multivendorx'
-					),
-					type: 'itemlist',
-					row: false,
-					className: 'checklist full-width',
-					items: [
-						{
-							title: __(
-								'<b>Back up your database first — </b> export a full backup before starting. If anything goes wrong, you can restore it.',
-								'multivendorx'
-							),
-							icon: 'success',
-						},
-						{
-							title: __(
-								'<b>Turn off caching plugins —</b> plugins like WP Rocket or W3 Total Cache can interfere with the import. Disable them temporarily.',
-								'multivendorx'
-							),
-							icon: 'success',
-						},
-						{
-							title: sprintf(
-								__(
-									'<b>Keep %s active for now —</b> it must still be installed and enabled so we can read your existing data.',
+		...(appLocalizer.multivendor_plugin
+			? [
+					{
+						id: 'migration',
+						label: __('Migration', 'multivendorx'),
+						icon: 'migration',
+						desc: __('Migration.', 'multivendorx'),
+						countBtn: true,
+						isWizardMode: true,
+						openForm: true,
+						formFields: [
+							{
+								key: 'notice',
+								type: 'notice',
+								label: '',
+								// message: appLocalizer.multivendor_plugin || 'No multivendor plugin active currently',
+								message: sprintf(
+									__(
+										'We found an active multivendor plugin on your site <span class="admin-badge purple">%s</span>',
+										'multivendorx'
+									),
+									appLocalizer.multivendor_plugin
+								),
+								noticeType: 'info',
+								display: 'notice',
+							},
+							{
+								key: 'notice',
+								type: 'notice',
+								message: sprintf(
+									__(
+										"We'll copy all your data from <b>%s</b> into MultivendorX. Once the import is done, <b>%s</b> will be turned off automatically to prevent any conflicts. Make sure you're ready before you begin.",
+										'multivendorx'
+									),
+									appLocalizer.multivendor_plugin,
+									appLocalizer.multivendor_plugin
+								),
+								noticeType: 'info',
+								display: 'notice',
+							},
+							{
+								key: 'paid_promotion_limit',
+								label: __(
+									'Before you begin - quick checklist',
 									'multivendorx'
 								),
-								appLocalizer.multivendor_plugin
-							),
-							icon: 'success',
-						},
-						{
-							title: __(
-								'<b>Use a stable internet connection —</b> dropping out mid-migration can leave your data in an incomplete state.',
-								'multivendorx'
-							),
-							icon: 'success',
-						},
-					],
-				},
-				{
-					key: 'paid_promotion_limit',
-					label: __('What gets migrated', 'multivendorx'),
-					type: 'itemlist',
-					row: false,
-					className: 'feature-list',
-					items: [
-						{
-							title: __('Vendors', 'multivendorx'),
-							desc: __(
-								'All vendor accounts and profiles',
-								'multivendorx'
-							),
-							icon: 'storefront',
-						},
-						{
-							title: __('Products', 'multivendorx'),
-							desc: __(
-								'All products listed by vendors',
-								'multivendorx'
-							),
-							icon: 'single-product',
-						},
-						{
-							title: __('Orders', 'multivendorx'),
-							desc: __(
-								'Vendor-specific order history',
-								'multivendorx'
-							),
-							icon: 'order',
-						},
-						{
-							title: __('Store details', 'multivendorx'),
-							desc: __(
-								'Store name, logo, and settings',
-								'multivendorx'
-							),
-							icon: 'store-policy',
-						},
-						{
-							title: __('Product commissions', 'multivendorx'),
-							desc: __(
-								'Per-product commission rates',
-								'multivendorx'
-							),
-							icon: 'product-advertising',
-						},
-						{
-							title: __('Vendor commissions', 'multivendorx'),
-							desc: __(
-								'Per-vendor commission rules',
-								'multivendorx'
-							),
-							icon: 'commission',
-						},
-					],
-				},
-				{
-					key: 'notice',
-					type: 'notice',
-					label: '',
-					message: __(
-						'<b> Orders migrate separately.</b> Marketplace orders are not included in this import — they transfer automatically in the background every 5 minutes. Vendor shipping settings will need to be reconfigured manually, as MultivendorX handles shipping differently.',
-						'multivendorx'
-					),
-					noticeType: 'warning',
-					display: 'notice',
-				},
-				{
-					key: 'notice',
-					type: 'notice',
-					label: '',
-					message: __(
-						"<b>Deleted records can't be recovered. </b>Orders or products that were previously deleted cannot be migrated. Also, <b>do not close or refresh this tab </b> while the migration is running.",
-						'multivendorx'
-					),
-					noticeType: 'error',
-					display: 'notice',
-				},
-				{
-					key: 'migrate',
-					type: 'button',
-					name: __('Start migration', 'multivendorx'),
-					label: __('Multivendor migration', 'multivendorx'),
-					apilink: 'migrations',
-					method: 'POST',
-					action: ['import_stores', 'import_products'],
-				},
-				{
-					key: 'wizardButtons',
-					type: 'button',
-					position: 'right',
-					options: [
-						{
-							label: __('Back', 'multivendorx'),
-							color: 'purple-bg',
-							action: 'back',
-						},
-						{
-							label: __('Next', 'multivendorx'),
-							action: 'next',
-						},
-					],
-				},
-			],
-		}] : []),
+								type: 'itemlist',
+								row: false,
+								className: 'checklist full-width',
+								items: [
+									{
+										title: __(
+											'<b>Back up your database first — </b> export a full backup before starting. If anything goes wrong, you can restore it.',
+											'multivendorx'
+										),
+										icon: 'success',
+									},
+									{
+										title: __(
+											'<b>Turn off caching plugins —</b> plugins like WP Rocket or W3 Total Cache can interfere with the import. Disable them temporarily.',
+											'multivendorx'
+										),
+										icon: 'success',
+									},
+									{
+										title: sprintf(
+											__(
+												'<b>Keep %s active for now —</b> it must still be installed and enabled so we can read your existing data.',
+												'multivendorx'
+											),
+											appLocalizer.multivendor_plugin
+										),
+										icon: 'success',
+									},
+									{
+										title: __(
+											'<b>Use a stable internet connection —</b> dropping out mid-migration can leave your data in an incomplete state.',
+											'multivendorx'
+										),
+										icon: 'success',
+									},
+								],
+							},
+							{
+								key: 'paid_promotion_limit',
+								label: __('What gets migrated', 'multivendorx'),
+								type: 'itemlist',
+								row: false,
+								className: 'feature-list',
+								items: [
+									{
+										title: __('Vendors', 'multivendorx'),
+										desc: __(
+											'All vendor accounts and profiles',
+											'multivendorx'
+										),
+										icon: 'storefront',
+									},
+									{
+										title: __('Products', 'multivendorx'),
+										desc: __(
+											'All products listed by vendors',
+											'multivendorx'
+										),
+										icon: 'single-product',
+									},
+									{
+										title: __('Orders', 'multivendorx'),
+										desc: __(
+											'Vendor-specific order history',
+											'multivendorx'
+										),
+										icon: 'order',
+									},
+									{
+										title: __(
+											'Store details',
+											'multivendorx'
+										),
+										desc: __(
+											'Store name, logo, and settings',
+											'multivendorx'
+										),
+										icon: 'store-policy',
+									},
+									{
+										title: __(
+											'Product commissions',
+											'multivendorx'
+										),
+										desc: __(
+											'Per-product commission rates',
+											'multivendorx'
+										),
+										icon: 'product-advertising',
+									},
+									{
+										title: __(
+											'Vendor commissions',
+											'multivendorx'
+										),
+										desc: __(
+											'Per-vendor commission rules',
+											'multivendorx'
+										),
+										icon: 'commission',
+									},
+								],
+							},
+							{
+								key: 'notice',
+								type: 'notice',
+								label: '',
+								message: __(
+									'<b> Orders migrate separately.</b> Marketplace orders are not included in this import — they transfer automatically in the background every 5 minutes. Vendor shipping settings will need to be reconfigured manually, as MultivendorX handles shipping differently.',
+									'multivendorx'
+								),
+								noticeType: 'warning',
+								display: 'notice',
+							},
+							{
+								key: 'notice',
+								type: 'notice',
+								label: '',
+								message: __(
+									"<b>Deleted records can't be recovered. </b>Orders or products that were previously deleted cannot be migrated. Also, <b>do not close or refresh this tab </b> while the migration is running.",
+									'multivendorx'
+								),
+								noticeType: 'error',
+								display: 'notice',
+							},
+							{
+								key: 'migrate',
+								type: 'button',
+								name: __('Start migration', 'multivendorx'),
+								label: __(
+									'Multivendor migration',
+									'multivendorx'
+								),
+								apilink: 'migrations',
+								method: 'POST',
+								action: ['import_stores', 'import_products'],
+							},
+							{
+								key: 'wizardButtons',
+								type: 'button',
+								position: 'right',
+								options: [
+									{
+										label: __('Back', 'multivendorx'),
+										color: 'purple-bg',
+										action: 'back',
+									},
+									{
+										label: __('Next', 'multivendorx'),
+										action: 'next',
+									},
+								],
+							},
+						],
+					},
+				]
+			: []),
 		{
 			id: 'more_settings',
 			label: __('Want to configure more settings?', 'multivendorx'),

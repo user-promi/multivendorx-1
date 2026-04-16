@@ -46,7 +46,8 @@ const Queries: React.FC = () => {
 		CategoryCount[] | null
 	>(null);
 
-	const [selectedQueries, setSelectedQueries] = useState<StoreQueriesRow | null>(null);
+	const [selectedQueries, setSelectedQueries] =
+		useState<StoreQueriesRow | null>(null);
 	const [answer, setAnswer] = useState('');
 	const [queries, setQueries] = useState('');
 
@@ -126,7 +127,10 @@ const Queries: React.FC = () => {
 
 		axios
 			.post(
-				getApiLink(appLocalizer, `customer-queries/${selectedQueries.id}`),
+				getApiLink(
+					appLocalizer,
+					`customer-queries/${selectedQueries.id}`
+				),
 				{
 					question_text: queries,
 					answer_text: answer,
@@ -266,7 +270,7 @@ const Queries: React.FC = () => {
 				setRows(items);
 				window.multivendorxCustomerStore?.setCount(
 					'customer-queries',
-					Number(response.headers['x-wp-status-unanswered']) || 0,
+					Number(response.headers['x-wp-status-unanswered']) || 0
 				);
 				setCategoryCounts([
 					{
@@ -415,7 +419,8 @@ const Queries: React.FC = () => {
 									},
 								]}
 								value={
-									selectedQueries.question_visibility || 'public'
+									selectedQueries.question_visibility ||
+									'public'
 								}
 								onChange={(value) =>
 									setSelectedQueries((prev) =>

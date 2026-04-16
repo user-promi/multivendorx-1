@@ -175,11 +175,13 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </section>
         )}
         <section className="form-field-container-wrapper">
-            {block.label && block.type !== 'title' && block.type !== 'button' &&(
-                <label className="settings-form-label">
-                    <div className="title">{block.label}</div>
-                </label>
-            )}
+            {block.label &&
+                block.type !== 'title' &&
+                block.type !== 'button' && (
+                    <label className="settings-form-label">
+                        <div className="title">{block.label}</div>
+                    </label>
+                )}
             {renderBlockContent(block, onChange)}
         </section>
     </div>

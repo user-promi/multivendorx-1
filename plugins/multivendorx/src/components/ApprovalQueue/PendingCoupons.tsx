@@ -274,10 +274,7 @@ const PendingCoupons: React.FC<object> = () => {
 								{
 									icon: 'cross',
 									text: isSubmitting
-										? __(
-												'Submitting...',
-												'multivendorx'
-											)
+										? __('Submitting...', 'multivendorx')
 										: __('Reject', 'multivendorx'),
 									disabled: isSubmitting,
 									onClick: submitReject,

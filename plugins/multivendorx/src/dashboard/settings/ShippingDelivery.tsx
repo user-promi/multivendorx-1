@@ -123,7 +123,8 @@ const ShippingDelivery = () => {
 				<Container>
 					<Column>
 						<FormGroupWrapper>
-							<FormGroup row
+							<FormGroup
+								row
 								label={__('Method Type', 'multivendorx')}
 								htmlFor="shipping_options"
 								desc={__(
@@ -165,7 +166,8 @@ const ShippingDelivery = () => {
 											)}
 										/>
 
-										<FormGroup row
+										<FormGroup
+											row
 											label={__(
 												`Default Shipping Price (${appLocalizer.currency_symbol})`,
 												'multivendorx'
@@ -193,7 +195,8 @@ const ShippingDelivery = () => {
 											/>
 										</FormGroup>
 
-										<FormGroup row
+										<FormGroup
+											row
 											label={__(
 												`Per Product Additional Price (${appLocalizer.currency_symbol})`,
 												'multivendorx'
@@ -221,7 +224,8 @@ const ShippingDelivery = () => {
 											/>
 										</FormGroup>
 
-										<FormGroup row
+										<FormGroup
+											row
 											label={__(
 												`Per Qty Additional Price (${appLocalizer.currency_symbol})`,
 												'multivendorx'
@@ -249,7 +253,8 @@ const ShippingDelivery = () => {
 											/>
 										</FormGroup>
 
-										<FormGroup row
+										<FormGroup
+											row
 											label={__(
 												`Free Shipping Minimum Order Amount (${appLocalizer.currency_symbol})`,
 												'multivendorx'
@@ -280,7 +285,8 @@ const ShippingDelivery = () => {
 											/>
 										</FormGroup>
 
-										<FormGroup row
+										<FormGroup
+											row
 											label={__(
 												`Local Pickup Cost (${appLocalizer.currency_symbol})`,
 												'multivendorx'
@@ -336,7 +342,8 @@ const ShippingDelivery = () => {
 										/>
 
 										{/* Default Cost */}
-										<FormGroup row
+										<FormGroup
+											row
 											label={__(
 												`Default Cost (${appLocalizer.currency_symbol}) *`,
 												'multivendorx'
@@ -366,7 +373,8 @@ const ShippingDelivery = () => {
 										</FormGroup>
 
 										{/* Distance Type */}
-										<FormGroup row
+										<FormGroup
+											row
 											label={__(
 												'Distance Type',
 												'multivendorx'
@@ -409,7 +417,8 @@ const ShippingDelivery = () => {
 										</FormGroup>
 
 										{/* Max Distance */}
-										<FormGroup row
+										<FormGroup
+											row
 											label={__(
 												'Max Distance',
 												'multivendorx'
@@ -438,7 +447,8 @@ const ShippingDelivery = () => {
 										</FormGroup>
 
 										{/* Local Pickup Cost */}
-										<FormGroup row
+										<FormGroup
+											row
 											label={__(
 												`Local Pickup Cost (${appLocalizer.currency_symbol}) (Optional)`,
 												'multivendorx'
@@ -468,8 +478,9 @@ const ShippingDelivery = () => {
 										</FormGroup>
 
 										{/* Distance–Cost Rules */}
-										<FormGroup row
- 											label={__(
+										<FormGroup
+											row
+											label={__(
 												'Distance–Cost Rules',
 												'multivendorx'
 											)}

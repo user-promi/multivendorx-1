@@ -270,7 +270,7 @@ const StoreReviews: React.FC = () => {
 				setRows(items);
 				window.multivendorxCustomerStore?.setCount(
 					'store-review',
-					Number(response.headers['x-wp-status-pending']) || 0,
+					Number(response.headers['x-wp-status-pending']) || 0
 				);
 				setCategoryCounts([
 					{

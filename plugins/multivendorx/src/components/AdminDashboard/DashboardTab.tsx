@@ -84,37 +84,50 @@ const DashboardTab: React.FC<object> = () => {
 	};
 
 	const installOrActivatePlugin = (slug: string) => {
-		if (!slug || installing) return;
+		if (!slug || installing) {
+			return;
+		}
 
-		const isInstalled = plugins.some(p => p.plugin?.includes(slug));
+		const isInstalled = plugins.some((p) => p.plugin?.includes(slug));
 
 		if (isInstalled) {
 			NoticeManager.add({
 				title: __('Redirecting...', 'multivendorx'),
-				message: __('Plugin already installed. Redirecting to activate...', 'multivendorx'),
+				message: __(
+					'Plugin already installed. Redirecting to activate...',
+					'multivendorx'
+				),
 				type: 'info',
 				position: 'float',
 			});
 
-			window.open(`${appLocalizer.admin_url}plugins.php?s=${slug}`, '_blank');
+			window.open(
+				`${appLocalizer.admin_url}plugins.php?s=${slug}`,
+				'_blank'
+			);
 			return;
 		}
 
 		setInstalling(slug);
 
-		axios.post(`${appLocalizer.apiUrl}/wp/v2/plugins`,
-			{ slug, status: 'active' },
-			{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
-		)
+		axios
+			.post(
+				`${appLocalizer.apiUrl}/wp/v2/plugins`,
+				{ slug, status: 'active' },
+				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
+			)
 			.then((res) => {
-				setPlugins(prev => [...prev, res.data]);
-				setPluginStatus(prev => ({ ...prev, [slug]: true }));
+				setPlugins((prev) => [...prev, res.data]);
+				setPluginStatus((prev) => ({ ...prev, [slug]: true }));
 				window.location.reload();
 			})
 			.catch(() => {
 				NoticeManager.add({
 					title: __('Error!', 'multivendorx'),
-					message: sprintf(__('Could not install "%s".', 'multivendorx'), slug),
+					message: sprintf(
+						__('Could not install "%s".', 'multivendorx'),
+						slug
+					),
 					type: 'error',
 					position: 'float',
 				});
@@ -239,8 +252,8 @@ const DashboardTab: React.FC<object> = () => {
 								<div
 									className="admin-btn"
 									onClick={() =>
-									(window.location.href =
-										'?page=multivendorx-setup')
+										(window.location.href =
+											'?page=multivendorx-setup')
 									}
 								>
 									{__('Launch Setup Wizard', 'multivendorx')}
@@ -412,21 +425,21 @@ const DashboardTab: React.FC<object> = () => {
 																: 'auto',
 														opacity:
 															installing ===
-																'woocommerce-catalog-enquiry'
+															'woocommerce-catalog-enquiry'
 																? 0.6
 																: 1,
 													}}
 												>
 													{installing ===
-														'woocommerce-catalog-enquiry'
+													'woocommerce-catalog-enquiry'
 														? __(
-															'Installing...',
-															'multivendorx'
-														)
+																'Installing...',
+																'multivendorx'
+															)
 														: __(
-															'Install',
-															'multivendorx'
-														)}
+																'Install',
+																'multivendorx'
+															)}
 												</a>
 											</>
 										),
@@ -505,21 +518,21 @@ const DashboardTab: React.FC<object> = () => {
 																: 'auto',
 														opacity:
 															installing ===
-																'woocommerce-product-stock-alert'
+															'woocommerce-product-stock-alert'
 																? 0.6
 																: 1,
 													}}
 												>
 													{installing ===
-														'woocommerce-product-stock-alert'
+													'woocommerce-product-stock-alert'
 														? __(
-															'Installing...',
-															'multivendorx'
-														)
+																'Installing...',
+																'multivendorx'
+															)
 														: __(
-															'Install',
-															'multivendorx'
-														)}
+																'Install',
+																'multivendorx'
+															)}
 												</a>
 											</>
 										),

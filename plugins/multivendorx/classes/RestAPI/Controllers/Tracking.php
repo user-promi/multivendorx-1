@@ -67,16 +67,21 @@ class Tracking extends \WP_REST_Controller {
         $store_id = MultiVendorX()->active_store;
         $store    = new Store( $store_id );
 
-        MultiVendorX()->notifications->send_notification_helper('shipment_tracking_added', $store, null, [
-            'store_name'      => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-            'order_id'        => $order_id,
-            'tracking_url'    => $data['tracking_url'],
-            'tracking_number' => $data['tracking_number'],
-            'provider'        => $data['provider'],
-            'date'            => $data['date'],
-            'store_id'        => $store_id,
-            'category'        => 'notification',
-        ]);
+        MultiVendorX()->notifications->send_notification_helper(
+            'shipment_tracking_added',
+            $store,
+            null,
+            array(
+				'store_name'      => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+				'order_id'        => $order_id,
+				'tracking_url'    => $data['tracking_url'],
+				'tracking_number' => $data['tracking_number'],
+				'provider'        => $data['provider'],
+				'date'            => $data['date'],
+				'store_id'        => $store_id,
+				'category'        => 'notification',
+			)
+        );
 
         do_action( 'multivendorx_shipment_tracking', $order_id );
     }

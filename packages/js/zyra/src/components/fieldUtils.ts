@@ -434,5 +434,5 @@ export const FIELD_REGISTRY: Record<string, FieldComponent> = {
     mapbox: MapProvider,
     'random-input-key-generator': RandomInputKeyGenerator,
 
-     'copy-to-clipboard': CopyToClipboard,
+    'copy-to-clipboard': CopyToClipboard,
 };

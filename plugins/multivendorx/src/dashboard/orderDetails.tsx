@@ -614,13 +614,16 @@ const OrderDetails: React.FC = () => {
 				title={__('Great!', 'multivendorx')}
 			/>
 			{!appLocalizer.edit_order_capability ? (
-					<ComponentStatusView title={__( 'No access to view the order', 'multivendorx')}/>
+				<ComponentStatusView
+					title={__('No access to view the order', 'multivendorx')}
+				/>
 			) : (
 				<>
 					<NavigatorHeader
 						headerTitle={
-							<div className='order-view-title'>
-								{__( 'Order #', 'multivendorx')} {orderData?.number ?? orderId ?? '—'}
+							<div className="order-view-title">
+								{__('Order #', 'multivendorx')}{' '}
+								{orderData?.number ?? orderId ?? '—'}
 								{!statusSelect && orderData?.status?.trim() && (
 									<div
 										className={statusBadgeClass(
@@ -637,7 +640,7 @@ const OrderDetails: React.FC = () => {
 									</div>
 								)}
 								{statusSelect && (
-									<div className='status-edit'>
+									<div className="status-edit">
 										<SelectInputUI
 											name="status"
 											type="single-select"
@@ -1205,219 +1208,261 @@ const OrderDetails: React.FC = () => {
 						</Column>
 
 						<Column grid={4}>
-							{modules.includes('privacy') && Array.isArray(customer_information_access) && customer_information_access.length > 0 && (
-								<>
-									<Card
-										title={__('Customer details', 'multivendorx')}
-									>
-										<InfoItem
-											title={
-												modules.includes('privacy') &&
-												customer_information_access.length > 0 &&
-												customer_information_access.includes(
-													'name'
-												)
-													? orderData?.billing?.first_name ||
-														orderData?.billing?.last_name
-														? `${orderData?.billing?.first_name ?? ''} ${orderData?.billing?.last_name ?? ''}`
+							{modules.includes('privacy') &&
+								Array.isArray(customer_information_access) &&
+								customer_information_access.length > 0 && (
+									<>
+										<Card
+											title={__(
+												'Customer details',
+												'multivendorx'
+											)}
+										>
+											<InfoItem
+												title={
+													modules.includes(
+														'privacy'
+													) &&
+													customer_information_access.length >
+														0 &&
+													customer_information_access.includes(
+														'name'
+													)
+														? orderData?.billing
+																?.first_name ||
+															orderData?.billing
+																?.last_name
+															? `${orderData?.billing?.first_name ?? ''} ${orderData?.billing?.last_name ?? ''}`
+															: __(
+																	'Guest Customer',
+																	'multivendorx'
+																)
 														: __(
-																'Guest Customer',
+																'Customer',
 																'multivendorx'
 															)
-													: __('Customer', 'multivendorx')
-											}
-											avatar={{
-												image: customerData?.avatar_url,
-											}}
-											descriptions={[
-												{
-													label: __(
-														'Customer ID',
-														'multivendorx'
-													),
-													value:
-														orderData?.customer_id &&
-														orderData.customer_id !== 0
-															? `#${orderData.customer_id}`
-															: '—',
-												},
-												...(modules.includes('privacy') &&
-												customer_information_access.length > 0 &&
-												customer_information_access.includes(
-													'email_address'
-												) &&
-												orderData?.billing?.email
-													? [
-															{
-																value: (
-																	<>
-																		<i className="adminfont-mail" />{' '}
-																		{
-																			orderData
-																				.billing
-																				.email
-																		}
-																	</>
-																),
-															},
-														]
-													: []),
-												...(modules.includes('privacy') &&
-												customer_information_access.length > 0 &&
-												customer_information_access.includes(
-													'phone_number'
-												) &&
-												orderData?.billing?.phone
-													? [
-															{
-																value: (
-																	<>
-																		<i className="adminfont-phone" />{' '}
-																		{
-																			orderData
-																				.billing
-																				.phone
-																		}
-																	</>
-																),
-															},
-														]
-													: []),
-											]}
-										/>
-									</Card>
+												}
+												avatar={{
+													image: customerData?.avatar_url,
+												}}
+												descriptions={[
+													{
+														label: __(
+															'Customer ID',
+															'multivendorx'
+														),
+														value:
+															orderData?.customer_id &&
+															orderData.customer_id !==
+																0
+																? `#${orderData.customer_id}`
+																: '—',
+													},
+													...(modules.includes(
+														'privacy'
+													) &&
+													customer_information_access.length >
+														0 &&
+													customer_information_access.includes(
+														'email_address'
+													) &&
+													orderData?.billing?.email
+														? [
+																{
+																	value: (
+																		<>
+																			<i className="adminfont-mail" />{' '}
+																			{
+																				orderData
+																					.billing
+																					.email
+																			}
+																		</>
+																	),
+																},
+															]
+														: []),
+													...(modules.includes(
+														'privacy'
+													) &&
+													customer_information_access.length >
+														0 &&
+													customer_information_access.includes(
+														'phone_number'
+													) &&
+													orderData?.billing?.phone
+														? [
+																{
+																	value: (
+																		<>
+																			<i className="adminfont-phone" />{' '}
+																			{
+																				orderData
+																					.billing
+																					.phone
+																			}
+																		</>
+																	),
+																},
+															]
+														: []),
+												]}
+											/>
+										</Card>
 
-									<Card title={__('Billing address', 'multivendorx')}>
-										<FormGroupWrapper>
-											<FormGroup
-												row
-												label={__('Address', 'multivendorx')}
-											>
-												<div className="details">
-													{orderData?.billing?.address_1 ||
-													orderData?.billing?.city ||
-													orderData?.billing?.postcode ||
-													orderData?.billing?.country ? (
-														<div className="address">
-															{orderData.billing
-																.first_name ||
-															orderData.billing
-																.last_name ? (
-																<>
-																	{
-																		orderData
+										<Card
+											title={__(
+												'Billing address',
+												'multivendorx'
+											)}
+										>
+											<FormGroupWrapper>
+												<FormGroup
+													row
+													label={__(
+														'Address',
+														'multivendorx'
+													)}
+												>
+													<div className="details">
+														{orderData?.billing
+															?.address_1 ||
+														orderData?.billing
+															?.city ||
+														orderData?.billing
+															?.postcode ||
+														orderData?.billing
+															?.country ? (
+															<div className="address">
+																{orderData
+																	.billing
+																	.first_name ||
+																orderData
+																	.billing
+																	.last_name ? (
+																	<>
+																		{
+																			orderData
+																				.billing
+																				.first_name
+																		}{' '}
+																		{
+																			orderData
+																				.billing
+																				.last_name
+																		}
+																	</>
+																) : null}
+																{orderData
+																	.billing
+																	.company && (
+																	<>
+																		{' '}
+																		,{' '}
+																		{
+																			orderData
+																				.billing
+																				.company
+																		}{' '}
+																	</>
+																)}
+																{orderData
+																	.billing
+																	.address_1 && (
+																	<>
+																		{' '}
+																		,{' '}
+																		{
+																			orderData
+																				.billing
+																				.address_1
+																		}{' '}
+																	</>
+																)}
+																{orderData
+																	.billing
+																	.address_2 && (
+																	<>
+																		{' '}
+																		,{' '}
+																		{
+																			orderData
+																				.billing
+																				.address_2
+																		}{' '}
+																	</>
+																)}
+																{orderData
+																	.billing
+																	.city && (
+																	<>
+																		{
+																			orderData
+																				.billing
+																				.city
+																		}
+																		{orderData
 																			.billing
-																			.first_name
-																	}{' '}
-																	{
-																		orderData
-																			.billing
-																			.last_name
-																	}
-																</>
-															) : null}
-															{orderData.billing
-																.company && (
-																<>
-																	{' '}
-																	,{' '}
-																	{
-																		orderData
-																			.billing
-																			.company
-																	}{' '}
-																</>
-															)}
-															{orderData.billing
-																.address_1 && (
-																<>
-																	{' '}
-																	,{' '}
-																	{
-																		orderData
-																			.billing
-																			.address_1
-																	}{' '}
-																</>
-															)}
-															{orderData.billing
-																.address_2 && (
-																<>
-																	{' '}
-																	,{' '}
-																	{
-																		orderData
-																			.billing
-																			.address_2
-																	}{' '}
-																</>
-															)}
-															{orderData.billing.city && (
-																<>
-																	{
-																		orderData
-																			.billing
-																			.city
-																	}
-																	{orderData.billing
-																		.state
-																		? `, ${orderData.billing.state}`
-																		: ''}
-																</>
-															)}
-															{orderData.billing
-																.postcode && (
-																<>
-																	,{' '}
-																	{
-																		orderData
-																			.billing
-																			.postcode
-																	}{' '}
-																</>
-															)}
-															{orderData.billing
-																.country && (
-																<>
-																	{' '}
-																	,{' '}
-																	{
-																		orderData
-																			.billing
-																			.country
-																	}
-																</>
-															)}
-														</div>
-													) : (
-														<div className="address">
-															{__(
-																'No billing address provided',
+																			.state
+																			? `, ${orderData.billing.state}`
+																			: ''}
+																	</>
+																)}
+																{orderData
+																	.billing
+																	.postcode && (
+																	<>
+																		,{' '}
+																		{
+																			orderData
+																				.billing
+																				.postcode
+																		}{' '}
+																	</>
+																)}
+																{orderData
+																	.billing
+																	.country && (
+																	<>
+																		{' '}
+																		,{' '}
+																		{
+																			orderData
+																				.billing
+																				.country
+																		}
+																	</>
+																)}
+															</div>
+														) : (
+															<div className="address">
+																{__(
+																	'No billing address provided',
+																	'multivendorx'
+																)}
+															</div>
+														)}
+													</div>
+												</FormGroup>
+												<FormGroup
+													row
+													label={__(
+														'Payment method',
+														'multivendorx'
+													)}
+												>
+													<div className="admin-badge blue">
+														{orderData?.payment_method_title ||
+															__(
+																'Not specified',
 																'multivendorx'
 															)}
-														</div>
-													)}
-												</div>
-											</FormGroup>
-											<FormGroup
-												row
-												label={__(
-													'Payment method',
-													'multivendorx'
-												)}
-											>
-												<div className="admin-badge blue">
-													{orderData?.payment_method_title ||
-														__(
-															'Not specified',
-															'multivendorx'
-														)}
-												</div>
-											</FormGroup>
-										</FormGroupWrapper>
-									</Card>
-								</>
-							)}
+													</div>
+												</FormGroup>
+											</FormGroupWrapper>
+										</Card>
+									</>
+								)}
 							{modules.includes('privacy') &&
 								Array.isArray(customer_information_access) &&
 								customer_information_access.includes(
@@ -1602,7 +1647,12 @@ const OrderDetails: React.FC = () => {
 												}
 											/>
 										) : (
-											<ComponentStatusView title={__( 'No order notes found.', 'multivendorx' )} />
+											<ComponentStatusView
+												title={__(
+													'No order notes found.',
+													'multivendorx'
+												)}
+											/>
 										)}
 									</Card>
 								)}

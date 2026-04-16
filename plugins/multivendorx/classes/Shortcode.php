@@ -147,7 +147,7 @@ class Shortcode {
     public function marketplace_products( $attributes ) {
         $attributes = $this->snake_to_camel_case( $attributes );
         $json_attrs = esc_attr( wp_json_encode( $attributes ) );
-    
+
         FrontendScripts::load_scripts();
         FrontendScripts::enqueue_script( 'multivendorx-marketplace-products-script' );
         FrontendScripts::localize_scripts( 'multivendorx-marketplace-products-script' );
@@ -172,9 +172,9 @@ class Shortcode {
     }
 
     public function snake_to_camel_case( $array ) {
-        $result = [];
+        $result = array();
         foreach ( $array as $key => $value ) {
-            $camelKey = lcfirst( str_replace( ' ', '', ucwords( str_replace( '_', ' ', $key ) ) ) );
+            $camelKey            = lcfirst( str_replace( ' ', '', ucwords( str_replace( '_', ' ', $key ) ) ) );
             $result[ $camelKey ] = $value;
         }
 

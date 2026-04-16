@@ -71,15 +71,15 @@ class Frontend {
             'object_name' => 'distanceShippingFrontend',
             'use_ajax'    => true,
             'data'        => array(
-                'default_lat'  => MultiVendorX()->setting->get_setting( 'default_map_lat', '28.6139' ), // Example default lat.
-                'default_lng'  => MultiVendorX()->setting->get_setting( 'default_map_lng', '77.2090' ), // Example default lng.
-                'default_zoom' => 13,
-                'store_icon'   => plugin_dir_url( __FILE__ ) . 'assets/images/store-icon.png',
-                'icon_width'   => 40,
-                'icon_height'  => 40,
-                'mapbox_token' => MultiVendorX()->setting->get_setting( 'mapbox_api_key', '' ),
-                'mapbox_style' => 'mapbox://styles/mapbox/streets-v11',
-                'map_provider' => MultiVendorX()->setting->get_setting( 'choose_map_api', '' ),
+                'default_lat'   => MultiVendorX()->setting->get_setting( 'default_map_lat', '28.6139' ), // Example default lat.
+                'default_lng'   => MultiVendorX()->setting->get_setting( 'default_map_lng', '77.2090' ), // Example default lng.
+                'default_zoom'  => 13,
+                'store_icon'    => plugin_dir_url( __FILE__ ) . 'assets/images/store-icon.png',
+                'icon_width'    => 40,
+                'icon_height'   => 40,
+                'mapbox_token'  => MultiVendorX()->setting->get_setting( 'mapbox_api_key', '' ),
+                'mapbox_style'  => 'mapbox://styles/mapbox/streets-v11',
+                'map_provider'  => MultiVendorX()->setting->get_setting( 'choose_map_api', '' ),
                 'google_map_id' => MultiVendorX()->setting->get_setting( 'google_map_id', '' ),
             ),
         );
@@ -207,9 +207,9 @@ class Frontend {
      * Add map to checkout page
      */
     public function multivendorx_checkout_user_location_map() {
-        if ( ( true === WC()->cart->needs_shipping() ) 
-            && apply_filters( 'multivendorx_is_allow_checkout_user_location', true ) 
-            && $this->cart_has_distance_shipping()) {
+        if ( ( true === WC()->cart->needs_shipping() )
+            && apply_filters( 'multivendorx_is_allow_checkout_user_location', true )
+            && $this->cart_has_distance_shipping() ) {
             echo '<div class="woocommerce-billing-fields__field-wrapper">';
             echo '<div id="multivendorx-user-locaton-map" style="width:100%; height:18.75rem; margin-bottom:1.25rem;"></div>';
             echo '</div>';

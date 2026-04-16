@@ -261,7 +261,6 @@ const adminInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 								42 Commerce Lane, Suite 5, Mumbai 400001, India
 							</Text>
 						</View>
-
 					</View>
 					{/* billing section end */}
 
@@ -284,7 +283,9 @@ const adminInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 						>
 							{/* Description */}
 							<View style={{ flex: 4 }}>
-								<Text style={{ fontWeight: 600 }}>Order ID</Text>
+								<Text style={{ fontWeight: 600 }}>
+									Order ID
+								</Text>
 							</View>
 
 							<Text
@@ -395,7 +396,6 @@ const adminInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 							flexDirection: 'row',
 						}}
 					>
-
 						<View
 							style={{
 								border: '1px solid #ccc',

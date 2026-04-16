@@ -244,14 +244,19 @@ const RenderComponent: React.FC<RenderProps> = ({
 
     const isContain = (
         key: string,
-        value: string | number | boolean | (string | number | boolean)[] | null = null
+        value:
+            | string
+            | number
+            | boolean
+            | (string | number | boolean)[]
+            | null = null
     ): boolean => {
         const settingValue = setting[key];
 
         if (Array.isArray(value)) {
             return value.includes(settingValue as string | number | boolean);
         }
-        
+
         // If settingValue is an array
         if (Array.isArray(settingValue)) {
             // If value is null and settingValue has elements, return true
@@ -468,7 +473,7 @@ const RenderComponent: React.FC<RenderProps> = ({
             const access = hasAccess(
                 inputField.proSetting ?? false,
                 String(inputField.moduleEnabled ?? ''),
-                String(inputField.dependentSetting ?? ''),
+                String(inputField.dependentSetting ?? '')
             );
 
             // const input = renderFieldInternal(inputField, value, handleChange, access );
@@ -526,13 +531,16 @@ const RenderComponent: React.FC<RenderProps> = ({
                 ) : (
                     <div
                         key={inputField.key}
-                        className={`form-group ${inputField.row === false ? '' : 'row'
-                            }  ${inputField.classes ? inputField.classes : ''} ${inputField.proSetting ? 'pro-setting' : ''
-                            } ${inputField.moduleEnabled &&
-                                !modules.includes(inputField.moduleEnabled)
+                        className={`form-group ${
+                            inputField.row === false ? '' : 'row'
+                        }  ${inputField.classes ? inputField.classes : ''} ${
+                            inputField.proSetting ? 'pro-setting' : ''
+                        } ${
+                            inputField.moduleEnabled &&
+                            !modules.includes(inputField.moduleEnabled)
                                 ? 'module-enabled'
                                 : ''
-                            }`}
+                        }`}
                         data-col={inputField.cols}
                         onClick={(e) => handleGroupClick(e, inputField)}
                     >
@@ -559,14 +567,14 @@ const RenderComponent: React.FC<RenderProps> = ({
                         )}
                         <div className="settings-input-content">
                             {isLocked &&
-                                React.isValidElement<
-                                    React.HTMLAttributes<HTMLElement>
-                                >(input)
+                            React.isValidElement<
+                                React.HTMLAttributes<HTMLElement>
+                            >(input)
                                 ? React.cloneElement(input, {
-                                    onClick: (e) => {
-                                        e.stopPropagation();
-                                    },
-                                })
+                                      onClick: (e) => {
+                                          e.stopPropagation();
+                                      },
+                                  })
                                 : input}
 
                             {errors[inputField.key] && (

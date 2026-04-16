@@ -269,7 +269,9 @@ const Modules: React.FC<ModuleProps> = ({
                         <div className="title">Plugins required</div>
                         {requirePopup.plugins.map((plugin, idx) => (
                             <div key={idx} className="item">
-                                <span className="plugin-name">{plugin.name}</span>
+                                <span className="plugin-name">
+                                    {plugin.name}
+                                </span>
 
                                 <a
                                     href={plugin.link}
@@ -277,7 +279,7 @@ const Modules: React.FC<ModuleProps> = ({
                                     rel="noopener noreferrer"
                                     className="admin-btn btn-purple"
                                 >
-                                   <i className="adminfont-import" /> Install
+                                    <i className="adminfont-import" /> Install
                                 </a>
                             </div>
                         ))}

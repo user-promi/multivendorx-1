@@ -42,8 +42,12 @@ const Route = () => {
 		const customers = window.multivendorxCustomerStore;
 
 		const unsubscribeCompliance = complianceStore?.subscribe((counts) => {
-			const el = document.querySelector(`.multivendorx-count[data-tab="compliance"]`);
-			if (!el) return;
+			const el = document.querySelector(
+				`.multivendorx-count[data-tab="compliance"]`
+			);
+			if (!el) {
+				return;
+			}
 			let value = counts || 0;
 			if (typeof value === 'object') {
 				value = Object.values(value).reduce((sum, v) => sum + v, 0);
@@ -52,8 +56,12 @@ const Route = () => {
 		});
 
 		const unsubscribeApproval = approvalStore?.subscribe((counts) => {
-			const el = document.querySelector(`.multivendorx-count[data-tab="approval-queue"]`);
-			if (!el) return;
+			const el = document.querySelector(
+				`.multivendorx-count[data-tab="approval-queue"]`
+			);
+			if (!el) {
+				return;
+			}
 			let value = counts || 0;
 			if (typeof value === 'object') {
 				value = Object.values(value).reduce((sum, v) => sum + v, 0);
@@ -62,8 +70,12 @@ const Route = () => {
 		});
 
 		const unsubscribeCommissions = commissions?.subscribe((counts) => {
-			const el = document.querySelector(`.multivendorx-count[data-tab="commissions"]`);
-			if (!el) return;
+			const el = document.querySelector(
+				`.multivendorx-count[data-tab="commissions"]`
+			);
+			if (!el) {
+				return;
+			}
 			let value = counts || 0;
 			if (typeof value === 'object') {
 				value = Object.values(value).reduce((sum, v) => sum + v, 0);
@@ -72,8 +84,12 @@ const Route = () => {
 		});
 
 		const unsubscribeCustomers = customers?.subscribe((counts) => {
-			const el = document.querySelector(`.multivendorx-count[data-tab="customers"]`);
-			if (!el) return;
+			const el = document.querySelector(
+				`.multivendorx-count[data-tab="customers"]`
+			);
+			if (!el) {
+				return;
+			}
 			let value = counts || 0;
 			if (typeof value === 'object') {
 				value = Object.values(value).reduce((sum, v) => sum + v, 0);
@@ -87,7 +103,6 @@ const Route = () => {
 			unsubscribeCommissions && unsubscribeCommissions();
 			unsubscribeCustomers && unsubscribeCustomers();
 		};
-
 	}, [routes]);
 
 	useEffect(() => {
@@ -236,14 +251,38 @@ const App = () => {
 		},
 	];
 	const bannerItem = [
-		__('<b>Earn from store memberships:</b> Create paid plans and charge stores to join or access special features on your marketplace.', 'multivendorx'),
-		__('<b>Automatic tax invoices:</b> Generate clear invoices for orders, commissions, and payouts so your records stay organized.', 'multivendorx'),
-		__('<b>Franchise marketplaces:</b> Let partners operate their own local version of your marketplace under your brand.', 'multivendorx'),
-		__('<b>Earn recurring income:</b> Allow stores to sell subscription products and generate regular monthly or yearly revenue.', 'multivendorx'),
-		__('<b>Sell services and bookings:</b> Let stores accept bookings for services, appointments, rentals, or experiences.', 'multivendorx'),
-		__('<b>Create a rental marketplace:</b> Allow products to be rented for specific dates instead of being purchased permanently.', 'multivendorx'),
-		__('<b>Verified stores:</b> Verify store identities using documents and badges to help customers trust your marketplace.', 'multivendorx'),
-		__('<b>Vacation mode for stores:</b> Stores can temporarily pause orders during holidays while keeping their products visible.', 'multivendorx'),
+		__(
+			'<b>Earn from store memberships:</b> Create paid plans and charge stores to join or access special features on your marketplace.',
+			'multivendorx'
+		),
+		__(
+			'<b>Automatic tax invoices:</b> Generate clear invoices for orders, commissions, and payouts so your records stay organized.',
+			'multivendorx'
+		),
+		__(
+			'<b>Franchise marketplaces:</b> Let partners operate their own local version of your marketplace under your brand.',
+			'multivendorx'
+		),
+		__(
+			'<b>Earn recurring income:</b> Allow stores to sell subscription products and generate regular monthly or yearly revenue.',
+			'multivendorx'
+		),
+		__(
+			'<b>Sell services and bookings:</b> Let stores accept bookings for services, appointments, rentals, or experiences.',
+			'multivendorx'
+		),
+		__(
+			'<b>Create a rental marketplace:</b> Allow products to be rented for specific dates instead of being purchased permanently.',
+			'multivendorx'
+		),
+		__(
+			'<b>Verified stores:</b> Verify store identities using documents and badges to help customers trust your marketplace.',
+			'multivendorx'
+		),
+		__(
+			'<b>Vacation mode for stores:</b> Stores can temporarily pause orders during holidays while keeping their products visible.',
+			'multivendorx'
+		),
 	];
 	const utilityListWithTab = [
 		{

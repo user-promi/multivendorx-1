@@ -16,7 +16,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
     height = 1,
     className = '',
 }) => {
-    const formatValue = (value: number | string ): string  => {
+    const formatValue = (value: number | string): string => {
         if (typeof value === 'number') {
             return `${value}rem`;
         }

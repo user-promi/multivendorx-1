@@ -250,11 +250,14 @@ class Frontend {
         return $store;
     }
 
-    public function customer_count($total) {
-        $base_args = ['count' => true];
-        $pending_args = array_merge( $base_args, [
-            'status' => 'pending',
-        ] );
+    public function customer_count( $total ) {
+        $base_args     = array( 'count' => true );
+        $pending_args  = array_merge(
+            $base_args,
+            array(
+				'status' => 'pending',
+			)
+        );
         $pending_count = Util::get_review_information( $pending_args );
         return (int) $total + $pending_count;
     }

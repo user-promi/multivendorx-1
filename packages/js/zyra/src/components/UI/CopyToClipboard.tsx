@@ -32,7 +32,9 @@ export const CopyToClipboardUI: React.FC<CopyToClipboardProps> = ({
                 }
             }
 
-            if (!valueToCopy) return;
+            if (!valueToCopy) {
+                return;
+            }
 
             await navigator.clipboard.writeText(valueToCopy);
             setCopied(true);
@@ -45,10 +47,7 @@ export const CopyToClipboardUI: React.FC<CopyToClipboardProps> = ({
     if (variant === 'button') {
         return (
             <div className="buttons-wrapper">
-                <div
-                    className="admin-btn btn-purple"
-                    onClick={handleCopy}
-                >
+                <div className="admin-btn btn-purple" onClick={handleCopy}>
                     <i className="adminfont-vendor-form-copy"></i>
 
                     <span className="copy-success">
@@ -60,25 +59,31 @@ export const CopyToClipboardUI: React.FC<CopyToClipboardProps> = ({
     }
 
     if (variant === 'icon') {
-    return (
-        <Tooltip className={copied ? "copied" : ""} text={copied ? copiedLabel : copyButtonLabel}>
-            <i
-                className={
-                    copied
-                        ? 'adminfont-check'
-                        : 'adminfont-vendor-form-copy'
-                }
-                onClick={handleCopy}
-            />
-        </Tooltip>
-    );
-}
+        return (
+            <Tooltip
+                className={copied ? 'copied' : ''}
+                text={copied ? copiedLabel : copyButtonLabel}
+            >
+                <i
+                    className={
+                        copied
+                            ? 'adminfont-check'
+                            : 'adminfont-vendor-form-copy'
+                    }
+                    onClick={handleCopy}
+                />
+            </Tooltip>
+        );
+    }
 
     return (
         <div className="copy-to-clipboard">
             <code>{text}</code>
 
-            <Tooltip className={copied ? "copied" : ""} text={copied ? copiedLabel : copyButtonLabel}>
+            <Tooltip
+                className={copied ? 'copied' : ''}
+                text={copied ? copiedLabel : copyButtonLabel}
+            >
                 <i
                     className={
                         copied

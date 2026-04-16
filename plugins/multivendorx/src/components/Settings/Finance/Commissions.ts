@@ -67,7 +67,10 @@ export default {
 	id: 'commissions',
 	priority: 1,
 	headerTitle: __('Commissions', 'multivendorx'),
-	settingTitle: __('Commission share from the seller’s product/listing', 'multivendorx'),
+	settingTitle: __(
+		'Commission share from the seller’s product/listing',
+		'multivendorx'
+	),
 	headerDescription: __(
 		'Decide how your marketplace takes commission from sales.',
 		'multivendorx'
@@ -134,7 +137,10 @@ export default {
 						{
 							key: 'quantity',
 							value: 'quantity',
-							label: __('Product/listing quantity', 'multivendorx'),
+							label: __(
+								'Product/listing quantity',
+								'multivendorx'
+							),
 						},
 						{
 							key: 'order_value',
@@ -149,11 +155,15 @@ export default {
 					type: 'choice-toggle',
 					label: __('is', 'multivendorx'),
 					options: [
-						{ key: 'rule1', value: 'less_than', label: __('up to', 'multivendorx') },
+						{
+							key: 'rule1',
+							value: 'less_than',
+							label: __('up to', 'multivendorx'),
+						},
 						{
 							key: 'rule2',
 							value: 'more_than',
-							label: __('more than', 'multivendorx') ,
+							label: __('more than', 'multivendorx'),
 						},
 					],
 					skipFirstRow: true,

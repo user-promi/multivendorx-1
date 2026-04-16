@@ -98,27 +98,27 @@ class Dashboard extends \WP_REST_Controller {
     public function all_endpoints( $menu_only = false ) {
         // Default endpoints.
         $all_endpoints = array(
-            'dashboard'       => array(
+            'dashboard'     => array(
                 'name'       => 'Dashboard',
                 'icon'       => 'module',
                 'slug'       => '',
                 'submenu'    => array(),
                 'capability' => array( 'create_stores' ),
             ),
-            'products'        => array(
+            'products'      => array(
                 'name'       => 'Products',
                 'slug'       => 'products',
                 'icon'       => 'single-product',
                 'submenu'    => array(),
                 'capability' => array( 'read_products', 'add_products', 'publish_products', 'edit_published_products', 'upload_files' ),
             ),
-            'coupons'         => array(
+            'coupons'       => array(
                 'name'       => 'Coupons',
                 'slug'       => 'coupons',
                 'icon'       => 'coupon',
                 'capability' => array( 'read_shop_coupons', 'add_shop_coupons', 'publish_coupons' ),
             ),
-            'sales'           => array(
+            'sales'         => array(
                 'name'       => 'Sales',
                 'slug'       => 'sales',
                 'icon'       => 'sales',
@@ -146,7 +146,7 @@ class Dashboard extends \WP_REST_Controller {
                 'capability' => array( 'view_shop_orders', 'view_commission_history' ),
 
             ),
-            'wallet'          => array(
+            'wallet'        => array(
                 'name'       => 'Wallet',
                 'icon'       => 'wallet',
                 'slug'       => 'wallet',
@@ -167,7 +167,7 @@ class Dashboard extends \WP_REST_Controller {
                 'capability' => array( 'edit_withdrawl_request' ),
             ),
 
-            'store_support'   => array(
+            'store_support' => array(
                 'name'    => 'Store Support',
                 'icon'    => 'customer-service',
                 'slug'    => 'store-support',
@@ -202,7 +202,7 @@ class Dashboard extends \WP_REST_Controller {
                     ),
                 ),
             ),
-            'resources'       => array(
+            'resources'     => array(
                 'name'       => 'Resources',
                 'icon'       => 'resources',
                 'slug'       => 'resources',
@@ -223,13 +223,13 @@ class Dashboard extends \WP_REST_Controller {
                 ),
                 'capability' => array( 'view_documentation' ),
             ),
-            'settings'        => array(
+            'settings'      => array(
                 'name'       => 'Settings',
                 'slug'       => 'settings',
                 'icon'       => 'setting',
                 'capability' => array( 'manage_store_settings' ),
             ),
-            'media-library'   => array(
+            'media-library' => array(
                 'name'       => 'Media Library',
                 'slug'       => 'media-library',
                 'icon'       => 'image',

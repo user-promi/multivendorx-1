@@ -499,7 +499,9 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 									value={data?.store_email?.list || []}
 									primary={data?.store_email?.primary || ''}
 									enablePrimary={true}
-									onChange={(list, primary) => saveEmails(list, primary)}
+									onChange={(list, primary) =>
+										saveEmails(list, primary)
+									}
 								/>
 							</FormGroup>
 
@@ -636,7 +638,10 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 						<FormGroupWrapper>
 							<FormGroup
 								label={__('Current status', 'multivendorx')}
-								desc={__('Learn what permissions each status provides, visit Store satus settings', 'multivendorx')}
+								desc={__(
+									'Learn what permissions each status provides, visit Store satus settings',
+									'multivendorx'
+								)}
 							>
 								<SelectInputUI
 									name="status"
@@ -717,9 +722,9 @@ const StoreSettings: React.FC<StoreSettingsProps> = ({
 											network === 'twitter'
 												? 'X'
 												: network
-													.charAt(0)
-													.toUpperCase() +
-												network.slice(1)
+														.charAt(0)
+														.toUpperCase() +
+													network.slice(1)
 										}
 									>
 										<BasicInputUI

@@ -41,7 +41,8 @@ const CustomerQuestions: React.FC = () => {
 		CategoryCount[] | null
 	>(null);
 
-	const [selectedQueries, setSelectedQueries] = useState<StoreQueriesRow | null>(null);
+	const [selectedQueries, setSelectedQueries] =
+		useState<StoreQueriesRow | null>(null);
 	const [answer, setAnswer] = useState('');
 	const [queries, setQueries] = useState('');
 	const [saving, setSaving] = useState(false);
@@ -55,7 +56,10 @@ const CustomerQuestions: React.FC = () => {
 		setSaving(true);
 		axios
 			.post(
-				getApiLink(appLocalizer, `customer-queries/${selectedQueries.id}`),
+				getApiLink(
+					appLocalizer,
+					`customer-queries/${selectedQueries.id}`
+				),
 				{
 					question_text: queries,
 					answer_text: answer,

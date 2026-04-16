@@ -205,16 +205,16 @@ const PendingReportAbuse: React.FC<object> = () => {
 
 	return (
 		<>
-		<TableCard
-			headers={headers}
-			rows={rows}
-			totalRows={totalRows}
-			isLoading={isLoading}
-			onQueryUpdate={doRefreshTableData}
-			ids={rowIds}
-			filters={filters}
-			format={appLocalizer.date_format}
-		/>
+			<TableCard
+				headers={headers}
+				rows={rows}
+				totalRows={totalRows}
+				isLoading={isLoading}
+				onQueryUpdate={doRefreshTableData}
+				ids={rowIds}
+				filters={filters}
+				format={appLocalizer.date_format}
+			/>
 			<PopupUI
 				position="lightbox"
 				open={confirmOpen}

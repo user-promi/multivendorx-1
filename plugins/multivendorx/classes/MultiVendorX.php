@@ -128,7 +128,7 @@ final class MultiVendorX {
     public function init_plugin() {
         $this->load_plugin_textdomain();
         $this->init_classes();
-        if ( get_option(Utill::MULTIVENDORX_OTHER_SETTINGS['run_installer']) ) {
+        if ( get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['run_installer'] ) ) {
             new Install();
             delete_option( Utill::MULTIVENDORX_OTHER_SETTINGS['run_installer'] );
         }

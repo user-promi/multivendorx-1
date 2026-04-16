@@ -25,7 +25,7 @@ class Install {
      * Class constructor
      */
     public function __construct() {
-        add_action( 'init', [$this, 'run_migration'] );
+        add_action( 'init', array( $this, 'run_migration' ) );
         $this->do_migration();
         do_action( 'multivendorx_after_installed' );
     }
@@ -45,7 +45,7 @@ class Install {
             $this->set_default_modules();
             $this->set_default_settings();
         }
-        
+
         if ( get_option( 'dc_product_vendor_plugin_db_version' ) ) {
             $this->migrate_mvx_to_multivendorx();
         }
@@ -385,7 +385,6 @@ class Install {
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $wpdb->query( $sql );
-
     }
 
     /**
@@ -909,27 +908,27 @@ class Install {
         update_option( Utill::MULTIVENDORX_SETTINGS['privacy'], $privacy_settings );
 
         $registration_form = array(
-        array(
-        'id'    => 1,
-        'type'  => 'heading',
-        'label' => '',
-        ),
-        array(
-        'id'          => 2,
-        'type'        => 'text',
-        'label'       => 'Enter your store name',
-        'required'    => false,
-        'name'        => 'name',
-        'placeholder' => 'text',
-        'readonly'    => true,
-        ),
-        array(
-        'id'    => 3,
-        'type'  => 'button',
-        'label' => '',
-        'text'  => 'Submit',
-        'name'  => 'submit',
-        ),
+			array(
+				'id'    => 1,
+				'type'  => 'heading',
+				'label' => '',
+			),
+			array(
+				'id'          => 2,
+				'type'        => 'text',
+				'label'       => 'Enter your store name',
+				'required'    => false,
+				'name'        => 'name',
+				'placeholder' => 'text',
+				'readonly'    => true,
+			),
+			array(
+				'id'    => 3,
+				'type'  => 'button',
+				'label' => '',
+				'text'  => 'Submit',
+				'name'  => 'submit',
+			),
         );
 
         $registration_from_settings = array(
@@ -1188,8 +1187,8 @@ class Install {
      */
     public function migrate_old_modules() {
         $previous_active_modules = get_option( 'mvx_all_active_module_list', array() );
-        $shipping_settings = get_option( Utill::MULTIVENDORX_SETTINGS['shipping'], array() );
-        $payment_settings  = get_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], array() );
+        $shipping_settings       = get_option( Utill::MULTIVENDORX_SETTINGS['shipping'], array() );
+        $payment_settings        = get_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], array() );
 
         $shipping_settings['shipping_modules'] = $shipping_settings['shipping_modules'] ?? array();
         $payment_settings['payment_methods']   = $payment_settings['payment_methods'] ?? array();
@@ -1276,8 +1275,8 @@ class Install {
 
         $store_permissions['products'] = array();
         $store_permissions['coupons']  = array();
-        $store_permissions['orders']  = array();
-        $store_permissions['settings']  = array('manage_store_settings');
+        $store_permissions['orders']   = array();
+        $store_permissions['settings'] = array( 'manage_store_settings' );
 
         if ( ! empty( $previous_capability_settings['is_submit_product'] ) ) {
             $store_permissions['products'] = array_merge(
@@ -1460,10 +1459,10 @@ class Install {
         }
 
         if ( ! empty( $previous_store_settings['choose_map_api'] ) ) {
-            if ('google_map_set' == $previous_store_settings['choose_map_api']['value']) {
+            if ( 'google_map_set' == $previous_store_settings['choose_map_api']['value'] ) {
                 $map_settings['choose_map_api'] = 'google_map';
             }
-            if ('mapbox_api_set' == $previous_store_settings['choose_map_api']['value']) {
+            if ( 'mapbox_api_set' == $previous_store_settings['choose_map_api']['value'] ) {
                 $map_settings['choose_map_api'] = 'mapbox';
             }
             $map_settings['google_map_api_key'] = $previous_store_settings['google_map_api_key'];
@@ -1672,11 +1671,11 @@ class Install {
         );
 
         $previous_refund_settings = get_option( 'mvx_refund_management_tab_settings', array() );
-        $refund_settings = get_option( Utill::MULTIVENDORX_SETTINGS['refunds'], array() );
+        $refund_settings          = get_option( Utill::MULTIVENDORX_SETTINGS['refunds'], array() );
         $old_reasons              = array_map( 'trim', explode( '||', $previous_refund_settings['refund_order_msg'] ?? '' ) );
         if ( ! empty( $old_reasons ) ) {
             foreach ( $old_reasons as $reason ) {
-                $key = sanitize_title( $reason );
+                $key                    = sanitize_title( $reason );
                 $refund_reasons[ $key ] = array(
                     'label'    => $reason,
                     'isCustom' => true,
@@ -1689,7 +1688,6 @@ class Install {
                 }
             }
             $refund_settings['refund_reasons'] = $existing;
-            
         }
 
         $refund_settings['customer_refund_status'] = ! empty( $previous_refund_settings['customer_refund_status'] )
@@ -1722,7 +1720,8 @@ class Install {
 
         $new_review_settings = array(
             'is_store_review_verified' => ! empty( $previous_review_settings['is_sellerreview_varified'] )
-                ? array( 'is_store_review_verified' ) : array());
+                ? array( 'is_store_review_verified' ) : array(),
+		);
 
         if ( ! empty( $ratings_parameters ) ) {
             $new_review_settings['ratings_parameters'] = $ratings_parameters;
@@ -1739,12 +1738,12 @@ class Install {
         );
 
         $payment_settings = get_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], array() );
-        
-        $payment_settings['payment_methods'] = $payment_settings['payment_methods'] ?? array();
-        $existing_stripe = $payment_settings['payment_methods']['stripe-connect'] ?? array();
 
-        $previous_stripe_settings   = get_option( 'mvx_payment_stripe_connect_tab_settings', array() );
-        $new_stripe = array(
+        $payment_settings['payment_methods'] = $payment_settings['payment_methods'] ?? array();
+        $existing_stripe                     = $payment_settings['payment_methods']['stripe-connect'] ?? array();
+
+        $previous_stripe_settings = get_option( 'mvx_payment_stripe_connect_tab_settings', array() );
+        $new_stripe               = array(
             'payment_mode'    => ! empty( $previous_stripe_settings['testmode'] ) ? 'test' : '',
             'test_client_id'  => $previous_stripe_settings['test_client_id'] ?? '',
             'test_secret_key' => $previous_stripe_settings['test_secret_key'] ?? '',
@@ -1755,7 +1754,7 @@ class Install {
         $payment_settings['payment_methods']['stripe-connect'] = array_merge( $existing_stripe, $new_stripe );
 
         $previous_paypal_settings = get_option( 'mvx_payment_payout_tab_settings', array() );
-        $existing_paypal = $payment_settings['payment_methods']['paypal-payout'] ?? array();
+        $existing_paypal          = $payment_settings['payment_methods']['paypal-payout'] ?? array();
 
         $new_paypal = array(
             'payment_mode'  => ! empty( $previous_paypal_settings['is_testmode'] ) ? 'sandbox' : '',
@@ -1914,5 +1913,4 @@ class Install {
         update_option( Utill::MULTIVENDORX_SETTINGS['developer-tools'], $tool_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], $payment_settings );
     }
-	
 }

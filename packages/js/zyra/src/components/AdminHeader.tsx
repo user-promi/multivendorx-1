@@ -170,15 +170,15 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
             </div>
             <div className="notice-wrapper">
                 {notices.length > 0 &&
-                    notices.map((html, i) => (        
-                        <>            
-                        <div
-                            key={i}
-                            dangerouslySetInnerHTML={{ __html: html }}
-                        />
-                        <NoticeReceiver position="notice" />
+                    notices.map((html, i) => (
+                        <>
+                            <div
+                                key={i}
+                                dangerouslySetInnerHTML={{ __html: html }}
+                            />
+                            <NoticeReceiver position="notice" />
                         </>
-                ))}
+                    ))}
             </div>
             <NoticeReceiver position="float" />
         </>
