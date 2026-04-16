@@ -75,7 +75,10 @@ jQuery(document).ready(function ($) {
 				if (!res.data.has_items && search) {
 					// Show message + button container
 					$('#customer-queries-no-results-container').show();
-					$('#customer-queries-direct-submit').data('question', search);
+					$('#customer-queries-direct-submit').data(
+						'question',
+						search
+					);
 				} else {
 					// Hide if results found
 					$('#customer-queries-no-results-container').hide();

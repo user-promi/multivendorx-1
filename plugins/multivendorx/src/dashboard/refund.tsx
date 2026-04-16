@@ -44,7 +44,7 @@ const Refund: React.FC = () => {
 									{
 										label: __('Email', 'multivendorx'),
 										value: row.email,
-									}
+									},
 								]}
 							/>
 						);
@@ -59,7 +59,7 @@ const Refund: React.FC = () => {
 			isSortable: true,
 			render: (row) => (
 				<span
-					className='link-item'
+					className="link-item"
 					onClick={() =>
 						dashNavigate(navigate, [
 							'orders',
@@ -165,8 +165,14 @@ const Refund: React.FC = () => {
 					placeholder: 'Search...',
 					size: 8,
 					options: [
-						{ label: __('Order Id', 'multivendorx'), value: 'order_id' },
-    					{ label: __('Customer', 'multivendorx'), value: 'customer' },
+						{
+							label: __('Order Id', 'multivendorx'),
+							value: 'order_id',
+						},
+						{
+							label: __('Customer', 'multivendorx'),
+							value: 'customer',
+						},
 					],
 				}}
 				filters={filters}

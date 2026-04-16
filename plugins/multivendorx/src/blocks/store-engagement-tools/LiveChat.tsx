@@ -20,7 +20,6 @@ const LiveChat: React.FC = () => {
 	const storeId = StoreInfo?.storeDetails?.storeId;
 	const storeName = StoreInfo?.storeDetails?.storeName;
 
-
 	const getChatUrl = () => {
 		if (provider === 'whatsapp') {
 			const fullNumber = StoreInfo?.storeDetails?.whatsapp || {};
@@ -34,7 +33,6 @@ const LiveChat: React.FC = () => {
 
 		return '#';
 	};
-
 
 	if (provider === 'tawk') {
 		return null;

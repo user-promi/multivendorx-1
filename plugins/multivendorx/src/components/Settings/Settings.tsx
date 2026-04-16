@@ -15,7 +15,7 @@ import { useLocation, Link } from 'react-router-dom';
 import EventRules from './Notification/EventRules.tsx';
 import StoreStatus from './StoreConfiguration/StoreStatus.tsx';
 import Invoice from './StoreConfiguration/Invoice';
-import ProductCompliance from './Privacy & Compliance/ProductCompliance.tsx'
+import ProductCompliance from './Privacy & Compliance/ProductCompliance.tsx';
 
 interface SettingsProps {
 	id: string;

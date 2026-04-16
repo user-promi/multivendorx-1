@@ -105,12 +105,12 @@ class Admin {
                         'subtab'   => '',
                         'priority' => 50,
                     ),
-                    'compliance'      => array(
+                    'compliance'          => array(
                         'name'     => __( 'Compliance', 'multivendorx' ),
                         'subtab'   => '',
                         'priority' => 55,
                     ),
-                    'customers'    => array(
+                    'customers'           => array(
                         'name'     => __( 'Customers', 'multivendorx' ),
                         'subtab'   => '',
                         'priority' => 60,
@@ -160,7 +160,7 @@ class Admin {
 
                 $menu_name = $submenu['name'];
 
-                $allowed_tabs = [ 'commissions', 'approval-queue', 'customers', 'compliance' ];
+                $allowed_tabs = array( 'commissions', 'approval-queue', 'customers', 'compliance' );
 
                 if ( in_array( $slug, $allowed_tabs ) ) {
                     $count = $this->multivendorx_get_menu_count( $slug );
@@ -647,8 +647,8 @@ class Admin {
         switch ( $tab ) {
             case 'commissions':
                 $filter['status'] = 'unpaid';
-                $filter['count'] = true;
-                $count = CommissionUtil::get_commission_information( $filter );
+                $filter['count']  = true;
+                $count            = CommissionUtil::get_commission_information( $filter );
                 return $count;
             case 'approval-queue':
                 return StoreUtil::get_approval_queue_count();

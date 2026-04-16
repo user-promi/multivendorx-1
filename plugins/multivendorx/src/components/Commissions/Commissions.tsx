@@ -242,7 +242,7 @@ const Commission: React.FC = () => {
 				setRows(items);
 				window.multivendorxCommissionStore?.setCount(
 					'unpaid',
-					Number(response.headers['x-wp-status-unpaid']) || 0,
+					Number(response.headers['x-wp-status-unpaid']) || 0
 				);
 				setCategoryCounts([
 					{

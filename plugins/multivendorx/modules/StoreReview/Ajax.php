@@ -127,9 +127,14 @@ class Ajax {
 		$review_id = Util::insert_review( $store_id, $user_id, $review_title, $review_content, $overall, $order_id, $uploaded_images );
 		Util::insert_ratings( $review_id, $ratings );
 		$store = new Store( $store_id );
-		MultiVendorX()->notifications->send_notification_helper('new_store_review', $store, null, [
-			'category'      => 'activity',
-		]);
+		MultiVendorX()->notifications->send_notification_helper(
+            'new_store_review',
+            $store,
+            null,
+            array(
+				'category' => 'activity',
+			)
+        );
 		wp_send_json_success( array( 'message' => __( 'Review submitted successfully!', 'multivendorx' ) ) );
 	}
 
@@ -225,7 +230,7 @@ class Ajax {
             </div>
             </div>';
 		} else {
-			echo '<p>' . esc_html__( "No reviews yet — they'll show up here once received.", "multivendorx" ) . '</p>';
+			echo '<p>' . esc_html__( "No reviews yet — they'll show up here once received.", 'multivendorx' ) . '</p>';
 		}
 
 		wp_send_json_success( array( 'html' => ob_get_clean() ) );

@@ -27,6 +27,6 @@ export default {
 			imageWidth: 300,
 			imageHeight: 100,
 			openUploader: __('Upload Banner', 'multivendorx'),
-		}
+		},
 	],
 };

@@ -46,7 +46,7 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 			order,
 			cat: category,
 			operator,
-			product_visibility : productVisibility,
+			product_visibility: productVisibility,
 			meta_key: 'multivendorx_store_id',
 		};
 
@@ -139,7 +139,10 @@ const MarketplaceProductList: React.FC<MarketplaceProductListProps> = ({
 								))
 							) : (
 								<div>
-									{__('Ready to receive your first order!', 'multivendorx')}
+									{__(
+										'Ready to receive your first order!',
+										'multivendorx'
+									)}
 								</div>
 							)}
 						</ul>

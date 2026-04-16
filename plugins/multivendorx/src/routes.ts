@@ -20,8 +20,8 @@ registerMultiVendorXRoute({ tab: 'status-tools', component: StatusAndTools });
 registerMultiVendorXRoute({ tab: 'modules', component: Modules });
 registerMultiVendorXRoute({ tab: 'stores', component: Stores });
 registerMultiVendorXRoute({ tab: 'commissions', component: Commissions });
-registerMultiVendorXRoute({tab: 'customers',component: CustomersFeedback});
-registerMultiVendorXRoute({tab: 'compliance',component: Compliance});
+registerMultiVendorXRoute({ tab: 'customers', component: CustomersFeedback });
+registerMultiVendorXRoute({ tab: 'compliance', component: Compliance });
 registerMultiVendorXRoute({ tab: 'approval-queue', component: ApprovalQueue });
 registerMultiVendorXRoute({
 	tab: 'transaction-history',

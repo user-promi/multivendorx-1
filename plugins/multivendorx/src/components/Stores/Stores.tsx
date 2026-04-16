@@ -320,10 +320,16 @@ const Stores = () => {
 									{...getFieldNotice('email')}
 								>
 									<EmailsInputUI
-										value={formData?.store_email?.list || []}
-										primary={formData?.store_email?.primary || ''}
+										value={
+											formData?.store_email?.list || []
+										}
+										primary={
+											formData?.store_email?.primary || ''
+										}
 										enablePrimary={true}
-										onChange={(list, primary) => saveEmails(list, primary)}
+										onChange={(list, primary) =>
+											saveEmails(list, primary)
+										}
 									/>
 								</FormGroup>
 
@@ -344,7 +350,7 @@ const Stores = () => {
 										tinymceApiKey={
 											appLocalizer
 												.settings_databases_value[
-											'overview'
+												'overview'
 											]?.['tinymce_api_section'] ?? ''
 										}
 									/>

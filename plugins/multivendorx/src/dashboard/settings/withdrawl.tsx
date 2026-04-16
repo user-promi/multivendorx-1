@@ -205,7 +205,7 @@ const Withdrawl: React.FC = () => {
 											}
 										>
 											<ConnectAccountOnboarding
-												onExit={() =>{}}
+												onExit={() => {}}
 												onStepChange={({ step }) => {
 													if (step === 'complete') {
 														axios

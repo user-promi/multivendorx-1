@@ -98,11 +98,11 @@ const Dashboard = () => {
 		axios
 			.post(
 				`${appLocalizer.apiUrl}/wc/v3/products/`,
-				{ name: 'Auto Draft', status: 'draft', 
-					meta_data: [
-						{ key: '_is_auto_draft', value: true }
-					]
-				 },
+				{
+					name: 'Auto Draft',
+					status: 'draft',
+					meta_data: [{ key: '_is_auto_draft', value: true }],
+				},
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
 			.then((res) => setNewProductId(res.data.id))

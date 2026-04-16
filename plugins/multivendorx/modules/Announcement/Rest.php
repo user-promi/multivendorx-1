@@ -409,10 +409,15 @@ class Rest extends \WP_REST_Controller {
             foreach ( $stores as $store_id ) {
                 $store = new Store( $store_id );
 
-                MultiVendorX()->notifications->send_notification_helper('system_announcement', $store, null, [
-                    'announcement_message' => $content,
-                    'category'             => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'system_announcement',
+                    $store,
+                    null,
+                    array(
+						'announcement_message' => $content,
+						'category'             => 'activity',
+					)
+                );
             }
 
             return rest_ensure_response(

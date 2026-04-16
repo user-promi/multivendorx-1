@@ -45,13 +45,20 @@ const ShippingCard = ({
 	}, []);
 
 	return (
-		console.log('typefields',typeFields),
-		<Card title={__('How will this be delivered?', 'multivendorx')} desc={__('Choose how customers receive this product after purchase.', 'multivendorx')}>
-			{/* Dimensions */}
-			<FormGroupWrapper>
-				<FormGroup>
-					<ChoiceToggleUI
-						options={[
+		console.log('typefields', typeFields),
+		(
+			<Card
+				title={__('How will this be delivered?', 'multivendorx')}
+				desc={__(
+					'Choose how customers receive this product after purchase.',
+					'multivendorx'
+				)}
+			>
+				{/* Dimensions */}
+				<FormGroupWrapper>
+					<FormGroup>
+						<ChoiceToggleUI
+							options={[
 								{
 									key: 'physical',
 									value: 'physical',
@@ -59,148 +66,191 @@ const ShippingCard = ({
 										'Physical - I pack and post it',
 										'multivendorx'
 									),
-									desc: __('Item is packed and shipped to the customer address.', 'multivendorx'),
+									desc: __(
+										'Item is packed and shipped to the customer address.',
+										'multivendorx'
+									),
 								},
 								...(typeFields.includes('downloadable')
 									? [
-										{
-											key: 'downloadable',
-											value: 'downloadable',
-											label: __('Downloadable', 'multivendorx'),
-											desc: __("Customer receives a file - e.g. a PDF, software, or digital artwork.", 'multivendorx'),
-										},
-									]
+											{
+												key: 'downloadable',
+												value: 'downloadable',
+												label: __(
+													'Downloadable',
+													'multivendorx'
+												),
+												desc: __(
+													'Customer receives a file - e.g. a PDF, software, or digital artwork.',
+													'multivendorx'
+												),
+											},
+										]
 									: []),
 								...(typeFields.includes('virtual')
 									? [
-										{
-											key: 'digital_product_service',
-											value: 'digital_product_service',
-											label: __('Digital service - Delivered online', 'multivendorx'),
-											desc: __("Service provided remotely - like coaching, consulting, or custom design. No shipping or file download involved.", 'multivendorx'),
-										},
-									]
+											{
+												key: 'digital_product_service',
+												value: 'digital_product_service',
+												label: __(
+													'Digital service - Delivered online',
+													'multivendorx'
+												),
+												desc: __(
+													'Service provided remotely - like coaching, consulting, or custom design. No shipping or file download involved.',
+													'multivendorx'
+												),
+											},
+										]
 									: []),
-							{
-								key: 'others',
-								value: 'others',
-								label: __('Something else', 'multivendorx'),
-								desc: __("Anything that does not involve posting a package or delivering a file, that doesn't fit the above.", 'multivendorx'),
-							},
-						]}
-						custom = {true}
-						value={productType}
-						onChange={(val) => {
-							setProductType(val);
-							if (val == 'physical') {
-								handleChange('virtual', false);
-							}
-							if (val == 'downloadable') {
-								handleChange('downloadable', true);
-							}
-						}}
-					/>
-				</FormGroup>
-				{productType === 'physical' &&
-					!typeFields.includes('virtual') && (
-						<>
-							<SectionUI title={__('Package dimensions & weight', 'multivendorx' )} desc={__('Used to calculate accurate shipping rates at checkout.', 'multivendorx')}/>
-							{/* Weight & Shipping class */}
-							<FormGroup
-								cols={2}
-								label={__('Weight (kg)', 'multivendorx')}
-								htmlFor="Weight"
-							>
-								<BasicInputUI
-									name="weight"
-									value={product.weight}
-									onChange={(value) => {
-										handleChange('weight', value);
-									}}
+								{
+									key: 'others',
+									value: 'others',
+									label: __('Something else', 'multivendorx'),
+									desc: __(
+										"Anything that does not involve posting a package or delivering a file, that doesn't fit the above.",
+										'multivendorx'
+									),
+								},
+							]}
+							custom={true}
+							value={productType}
+							onChange={(val) => {
+								setProductType(val);
+								if (val == 'physical') {
+									handleChange('virtual', false);
+								}
+								if (val == 'downloadable') {
+									handleChange('downloadable', true);
+								}
+							}}
+						/>
+					</FormGroup>
+					{productType === 'physical' &&
+						!typeFields.includes('virtual') && (
+							<>
+								<SectionUI
+									title={__(
+										'Package dimensions & weight',
+										'multivendorx'
+									)}
+									desc={__(
+										'Used to calculate accurate shipping rates at checkout.',
+										'multivendorx'
+									)}
 								/>
-							</FormGroup>
-							<FormGroup
-								cols={2}
-								label={__('Shipping classes', 'multivendorx')}
-								htmlFor="shipping-classes"
-							>
-								<SelectInputUI
-									name="shipping_class"
-									options={shippingClasses}
-									value={product.shipping_class}
-									onChange={(value) =>
-										handleChange('shipping_class', value)
-									}
-								/>
-							</FormGroup>
-							<FormGroup
-								cols={3}
-								label={`${__('Length', 'multivendorx')} (${appLocalizer.dimension_unit})`}
-							>
-								<BasicInputUI
-									name="product_length"
-									value={product.dimensions?.length || ''}
-									placeholder={__('Length', 'multivendorx')}
-									onChange={(value) =>
-										handleChange('dimensions', {
-											...product.dimensions,
-											length: value,
-										})
-									}
-								/>
-							</FormGroup>
+								{/* Weight & Shipping class */}
+								<FormGroup
+									cols={2}
+									label={__('Weight (kg)', 'multivendorx')}
+									htmlFor="Weight"
+								>
+									<BasicInputUI
+										name="weight"
+										value={product.weight}
+										onChange={(value) => {
+											handleChange('weight', value);
+										}}
+									/>
+								</FormGroup>
+								<FormGroup
+									cols={2}
+									label={__(
+										'Shipping classes',
+										'multivendorx'
+									)}
+									htmlFor="shipping-classes"
+								>
+									<SelectInputUI
+										name="shipping_class"
+										options={shippingClasses}
+										value={product.shipping_class}
+										onChange={(value) =>
+											handleChange(
+												'shipping_class',
+												value
+											)
+										}
+									/>
+								</FormGroup>
+								<FormGroup
+									cols={3}
+									label={`${__('Length', 'multivendorx')} (${appLocalizer.dimension_unit})`}
+								>
+									<BasicInputUI
+										name="product_length"
+										value={product.dimensions?.length || ''}
+										placeholder={__(
+											'Length',
+											'multivendorx'
+										)}
+										onChange={(value) =>
+											handleChange('dimensions', {
+												...product.dimensions,
+												length: value,
+											})
+										}
+									/>
+								</FormGroup>
 
-							<FormGroup
-								cols={3}
-								label={`${__('Width', 'multivendorx')} (${appLocalizer.dimension_unit})`}
-							>
-								<BasicInputUI
-									name="product_width"
-									value={product.dimensions?.width}
-									placeholder={__('Width', 'multivendorx')}
-									onChange={(value) =>
-										handleChange('dimensions', {
-											...product.dimensions,
-											width: value,
-										})
-									}
-								/>
-							</FormGroup>
+								<FormGroup
+									cols={3}
+									label={`${__('Width', 'multivendorx')} (${appLocalizer.dimension_unit})`}
+								>
+									<BasicInputUI
+										name="product_width"
+										value={product.dimensions?.width}
+										placeholder={__(
+											'Width',
+											'multivendorx'
+										)}
+										onChange={(value) =>
+											handleChange('dimensions', {
+												...product.dimensions,
+												width: value,
+											})
+										}
+									/>
+								</FormGroup>
 
-							<FormGroup
-								cols={3}
-								label={`${__('Height', 'multivendorx')} (${appLocalizer.dimension_unit})`}
-							>
-								<BasicInputUI
-									name="product_height"
-									value={product.dimensions?.height}
-									placeholder={__('Height', 'multivendorx')}
-									onChange={(value) =>
-										handleChange('dimensions', {
-											...product.dimensions,
-											height: value,
-										})
-									}
-								/>
-							</FormGroup>
-							{applyFilters(
-								'multivendorx_product_shipping_meta',
-								null,
-								product,
-								modules
-							)}
-						</>
-					)}
-				{productType === 'downloadable' &&
-					applyFilters(
-						'product_downloadable',
-						null,
-						product,
-						setProduct,
-						handleChange
-					)}
-			</FormGroupWrapper>
-		</Card>
+								<FormGroup
+									cols={3}
+									label={`${__('Height', 'multivendorx')} (${appLocalizer.dimension_unit})`}
+								>
+									<BasicInputUI
+										name="product_height"
+										value={product.dimensions?.height}
+										placeholder={__(
+											'Height',
+											'multivendorx'
+										)}
+										onChange={(value) =>
+											handleChange('dimensions', {
+												...product.dimensions,
+												height: value,
+											})
+										}
+									/>
+								</FormGroup>
+								{applyFilters(
+									'multivendorx_product_shipping_meta',
+									null,
+									product,
+									modules
+								)}
+							</>
+						)}
+					{productType === 'downloadable' &&
+						applyFilters(
+							'product_downloadable',
+							null,
+							product,
+							setProduct,
+							handleChange
+						)}
+				</FormGroupWrapper>
+			</Card>
+		)
 	);
 };
 

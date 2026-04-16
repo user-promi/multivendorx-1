@@ -93,17 +93,26 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 										{
 											key: 'visible',
 											value: 'visible',
-											label: __('Shop and search results', 'multivendorx'),
+											label: __(
+												'Shop and search results',
+												'multivendorx'
+											),
 										},
 										{
 											key: 'catalog',
 											value: 'catalog',
-											label: __('Shop only', 'multivendorx'),
+											label: __(
+												'Shop only',
+												'multivendorx'
+											),
 										},
 										{
 											key: 'search',
 											value: 'search',
-											label: __('Search results only', 'multivendorx'),
+											label: __(
+												'Search results only',
+												'multivendorx'
+											),
 										},
 										{
 											key: 'hidden',

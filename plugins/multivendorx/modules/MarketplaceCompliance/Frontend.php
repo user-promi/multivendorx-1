@@ -26,7 +26,7 @@ class Frontend {
         add_filter( 'multivendorx_register_scripts', array( $this, 'register_script' ) );
         add_filter( 'multivendorx_localize_scripts', array( $this, 'localize_scripts' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-        add_filter( 'multivendorx_compliance_count', array( $this, 'compliance_count'), 10 );
+        add_filter( 'multivendorx_compliance_count', array( $this, 'compliance_count' ), 10 );
     }
 	/**
 	 * Register report abuse frontend script
@@ -151,9 +151,9 @@ class Frontend {
         }
     }
 
-    public function compliance_count($total) {
+    public function compliance_count( $total ) {
         $total_count = Util::get_report_abuse_information( array( 'count' => true ) );
-        $total += $total_count;
+        $total      += $total_count;
 
         return $total;
     }

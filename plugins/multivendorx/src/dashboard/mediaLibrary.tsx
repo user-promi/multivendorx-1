@@ -8,7 +8,9 @@ const MediaLibrary = () => {
 	const [media, setMedia] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [confirmOpen, setConfirmOpen] = useState(false);
-	const [selectedMedia, setSelectedMedia] = useState<{ id: number } | null>(null);
+	const [selectedMedia, setSelectedMedia] = useState<{ id: number } | null>(
+		null
+	);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
 	useEffect(() => {
@@ -41,8 +43,11 @@ const MediaLibrary = () => {
 		const mime = item.mime_type || '';
 
 		let type = 'file';
-		if (mime.startsWith('image')) type = 'image';
-		else if (mime.startsWith('video')) type = 'video';
+		if (mime.startsWith('image')) {
+			type = 'image';
+		} else if (mime.startsWith('video')) {
+			type = 'video';
+		}
 
 		return {
 			id: item.id,
@@ -50,7 +55,12 @@ const MediaLibrary = () => {
 			size: item.media_details?.filesize
 				? (item.media_details.filesize / 1024 / 1024).toFixed(2) + ' MB'
 				: '—',
-			category: type === 'image' ? 'Images' : type === 'video' ? 'Videos' : 'Files',
+			category:
+				type === 'image'
+					? 'Images'
+					: type === 'video'
+						? 'Videos'
+						: 'Files',
 			type,
 			src: item.source_url,
 		};
@@ -79,14 +89,21 @@ const MediaLibrary = () => {
 	const MediaSkeleton = () => (
 		<>
 			{Array.from({ length: 12 }).map((_, index) => (
-				<div key={`skeleton-${index}`} className="media-item media-image">
+				<div
+					key={`skeleton-${index}`}
+					className="media-item media-image"
+				>
 					<div className="media-preview">
 						<Skeleton width="100%" height="100%" />
 					</div>
 					<div className="media-info">
 						<div className="title">
 							<Skeleton width="70%" height="20px" />
-							<Skeleton width="24px" height="24px" borderRadius="50%" />
+							<Skeleton
+								width="24px"
+								height="24px"
+								borderRadius="50%"
+							/>
 						</div>
 						<div className="media-meta">
 							<Skeleton width="40%" height="16px" />
@@ -111,51 +128,58 @@ const MediaLibrary = () => {
 					<div className="media-library-grid">
 						{loading && <MediaSkeleton />}
 
-						{!loading && formattedMedia.map((item) => (
-							<div key={item.id} className={`media-item media-${item.type}`}
-								onClick={() => {
-									setPreviewUrl(item.src);
-								}}
-							>
+						{!loading &&
+							formattedMedia.map((item) => (
+								<div
+									key={item.id}
+									className={`media-item media-${item.type}`}
+									onClick={() => {
+										setPreviewUrl(item.src);
+									}}
+								>
+									{item.type === 'image' && (
+										<div
+											className="media-preview"
+											style={{
+												backgroundImage: `url(${item.src})`,
+											}}
+										/>
+									)}
 
-								{item.type === 'image' && (
-									<div
-										className="media-preview"
-										style={{ backgroundImage: `url(${item.src})` }}
-									/>
-								)}
+									{item.type === 'video' && (
+										<div className="media-icon">
+											<i className="adminfont-video"></i>
+										</div>
+									)}
 
-								{item.type === 'video' && (
-									<div className="media-icon">
-										<i className="adminfont-video"></i>
-									</div>
-								)}
+									{item.type === 'file' && (
+										<div className="media-icon">
+											<i className="adminfont-document"></i>
+										</div>
+									)}
 
-								{item.type === 'file' && (
-									<div className="media-icon">
-										<i className="adminfont-document"></i>
-									</div>
-								)}
+									<div className="media-info">
+										<div className="title">
+											{item.name}
+											<span
+												className="adminfont-delete"
+												onClick={(e) => {
+													e.stopPropagation();
+													setSelectedMedia({
+														id: item.id,
+													});
+													setConfirmOpen(true);
+												}}
+											></span>
+										</div>
 
-								<div className="media-info">
-									<div className="title">
-										{item.name}
-										<span className="adminfont-delete"
-											onClick={(e) => {
-												e.stopPropagation();
-												setSelectedMedia({ id: item.id });
-												setConfirmOpen(true);
-											}}>
-										</span>
-									</div>
-
-									<div className="media-meta">
-										<span>{item.size}</span>
-										<span>{item.category}</span>
+										<div className="media-meta">
+											<span>{item.size}</span>
+											<span>{item.category}</span>
+										</div>
 									</div>
 								</div>
-							</div>
-						))}
+							))}
 					</div>
 				</Column>
 
@@ -189,9 +213,8 @@ const MediaLibrary = () => {
 					// 	title: 'Document Preview',
 					// }}
 				>
-
-					{previewUrl && (
-						previewUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+					{previewUrl &&
+						(previewUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
 							<div
 								className="image-preview-container"
 								style={{
@@ -202,10 +225,14 @@ const MediaLibrary = () => {
 							<iframe
 								src={previewUrl}
 								title="Document"
-								style={{ width: '100%', height: '100%', minHeight: '400px', border: 'none' }}
+								style={{
+									width: '100%',
+									height: '100%',
+									minHeight: '400px',
+									border: 'none',
+								}}
 							/>
-						)
-					)}
+						))}
 				</PopupUI>
 			</Container>
 		</>

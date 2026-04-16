@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
 	const navigate = useNavigate();
 	const access =
 		appLocalizer.settings_databases_value?.['privacy']?.[
-		'customer_information_access'
+			'customer_information_access'
 		];
 	const siteUrl = appLocalizer.site_url.replace(/\/$/, '');
 
@@ -107,7 +107,7 @@ const Dashboard: React.FC = () => {
 							String(row.id),
 						])
 					}
-					className='link-item'
+					className="link-item"
 				>
 					#{row.id}
 				</span>
@@ -123,30 +123,30 @@ const Dashboard: React.FC = () => {
 			render: (row) =>
 				row.line_items?.length
 					? row.line_items.map((item) => (
-						<InfoItem
-							key={item.id}
-							title={item.name}
-							onClick={() =>
-								dashNavigate(navigate, [
-									'products',
-									'edit',
-									String(item.product_id),
-								])
-							}
-							avatar={{
-								image: item.image?.src || '',
-								iconClass: item.image?.src
-									? ''
-									: 'single-product',
-							}}
-							descriptions={[
-								{
-									label: __('Qty:', 'multivendorx'),
-									value: item.quantity,
-								},
-							]}
-						/>
-					))
+							<InfoItem
+								key={item.id}
+								title={item.name}
+								onClick={() =>
+									dashNavigate(navigate, [
+										'products',
+										'edit',
+										String(item.product_id),
+									])
+								}
+								avatar={{
+									image: item.image?.src || '',
+									iconClass: item.image?.src
+										? ''
+										: 'single-product',
+								}}
+								descriptions={[
+									{
+										label: __('Qty:', 'multivendorx'),
+										value: item.quantity,
+									},
+								]}
+							/>
+						))
 					: '-',
 		},
 		total: {
@@ -570,7 +570,7 @@ const Dashboard: React.FC = () => {
 					/>
 				}
 			/>
-			<Container className='store-dashboard'>
+			<Container className="store-dashboard">
 				<Column>
 					<Analytics
 						variant="dashboard"
@@ -657,7 +657,10 @@ const Dashboard: React.FC = () => {
 							</ResponsiveContainer>
 						) : (
 							<ComponentStatusView
-								title={__('Your first sale is just around the corner!', 'multivendorx')}
+								title={__(
+									'Your first sale is just around the corner!',
+									'multivendorx'
+								)}
 							/>
 						)}
 					</Card>
@@ -672,20 +675,20 @@ const Dashboard: React.FC = () => {
 										key={item.id}
 										title={
 											item.payment_method ===
-												'stripe-connect'
+											'stripe-connect'
 												? __('Stripe', 'multivendorx')
 												: item.payment_method ===
-													'bank-transfer'
+													  'bank-transfer'
 													? __(
-														'Direct to Local Bank (INR)',
-														'multivendorx'
-													)
-													: item.payment_method ===
-														'paypal-payout'
-														? __(
-															'PayPal',
+															'Direct to Local Bank (INR)',
 															'multivendorx'
 														)
+													: item.payment_method ===
+														  'paypal-payout'
+														? __(
+																'PayPal',
+																'multivendorx'
+															)
 														: ''
 										}
 										isLoading={isLoading}
@@ -694,7 +697,12 @@ const Dashboard: React.FC = () => {
 									/>
 								))
 							) : (
-								<ComponentStatusView title={__("Earnings will appear here once you make a withdrawal.", 'multivendorx')} />
+								<ComponentStatusView
+									title={__(
+										'Earnings will appear here once you make a withdrawal.',
+										'multivendorx'
+									)}
+								/>
 							)}
 						</div>
 
@@ -757,7 +765,12 @@ const Dashboard: React.FC = () => {
 								}}
 							/>
 						) : (
-							<ComponentStatusView title={__("Ready to receive your first order!", 'multivendorx')} />
+							<ComponentStatusView
+								title={__(
+									'Ready to receive your first order!',
+									'multivendorx'
+								)}
+							/>
 						)}
 					</Card>
 				</Column>
@@ -785,7 +798,12 @@ const Dashboard: React.FC = () => {
 								showColumnToggleIcon={false}
 							/>
 						) : (
-							<ComponentStatusView title={__("Start selling to discover your top products!", 'multivendorx')} />
+							<ComponentStatusView
+								title={__(
+									'Start selling to discover your top products!',
+									'multivendorx'
+								)}
+							/>
 						)}
 					</Card>
 				</Column>
@@ -858,7 +876,8 @@ const Dashboard: React.FC = () => {
 								window.open(url, '_blank');
 							}}
 						>
-							{Array.isArray(announcement) && announcement.length > 0 ? (
+							{Array.isArray(announcement) &&
+							announcement.length > 0 ? (
 								<ItemListUI
 									className="notification-wrapper"
 									items={announcement.map((item, index) => ({
@@ -870,7 +889,12 @@ const Dashboard: React.FC = () => {
 									}))}
 								/>
 							) : (
-								<ComponentStatusView title={__("You're all caught up - check back for updates!", 'multivendorx')} />
+								<ComponentStatusView
+									title={__(
+										"You're all caught up - check back for updates!",
+										'multivendorx'
+									)}
+								/>
 							)}
 						</Card>
 					</Column>
@@ -910,7 +934,12 @@ const Dashboard: React.FC = () => {
 										</div>
 									))
 								) : (
-									<ComponentStatusView title={__("Refund requests will appear here when submitted.", 'multivendorx')} />
+									<ComponentStatusView
+										title={__(
+											'Refund requests will appear here when submitted.',
+											'multivendorx'
+										)}
+									/>
 								)}
 							</div>
 						</Card>
@@ -940,7 +969,12 @@ const Dashboard: React.FC = () => {
 										);
 									})
 								) : (
-									<ComponentStatusView title={__('Top customers will appear here once you receive orders.', 'multivendorx')} />
+									<ComponentStatusView
+										title={__(
+											'Top customers will appear here once you receive orders.',
+											'multivendorx'
+										)}
+									/>
 								)}
 							</Card>
 						</Column>
@@ -949,7 +983,7 @@ const Dashboard: React.FC = () => {
 					<Card title={__('Store Activity', 'multivendorx')}>
 						<div className="activity-log">
 							{Array.isArray(activities) &&
-								activities.length > 0 ? (
+							activities.length > 0 ? (
 								activities.slice(0, 5).map((a, i) => (
 									<div key={i} className="activity">
 										<div className="title">{a.title}</div>
@@ -958,7 +992,12 @@ const Dashboard: React.FC = () => {
 									</div>
 								))
 							) : (
-								<ComponentStatusView title={__('Activity will show up here as your store grows!', 'multivendorx')} />
+								<ComponentStatusView
+									title={__(
+										'Activity will show up here as your store grows!',
+										'multivendorx'
+									)}
+								/>
 							)}
 						</div>
 					</Card>
@@ -1014,7 +1053,12 @@ const Dashboard: React.FC = () => {
 										</div>
 									))
 								) : (
-									<ComponentStatusView title={__("No reviews yet - they'll show up here once received.", "multivendorx")} />
+									<ComponentStatusView
+										title={__(
+											"No reviews yet - they'll show up here once received.",
+											'multivendorx'
+										)}
+									/>
 								)}
 							</div>
 						</Card>

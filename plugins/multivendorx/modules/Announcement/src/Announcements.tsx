@@ -491,7 +491,7 @@ export const Announcements: React.FC = () => {
 							usePlainText={false}
 							tinymceApiKey={
 								appLocalizer.settings_databases_value[
-								'overview'
+									'overview'
 								]['tinymce_api_section'] ?? ''
 							}
 							msg={{

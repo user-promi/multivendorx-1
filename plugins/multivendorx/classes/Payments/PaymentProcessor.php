@@ -118,11 +118,16 @@ class PaymentProcessor {
 				MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 			}
 
-			MultiVendorX()->notifications->send_notification_helper('payout_failed', $store, null, [
-				'store_name'  => $store->get( 'name' ),
-				'amount'      => $amount,
-				'category'    => 'activity',
-			]);
+			MultiVendorX()->notifications->send_notification_helper(
+                'payout_failed',
+                $store,
+                null,
+                array(
+					'store_name' => $store->get( 'name' ),
+					'amount'     => $amount,
+					'category'   => 'activity',
+				)
+            );
 			return;
 		}
 
@@ -182,13 +187,18 @@ class PaymentProcessor {
 		if ( $result && 'success' === $status ) {
 			$withdrawals_count = (int) $store->get_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'] );
 			$store->update_meta( Utill::STORE_SETTINGS_KEYS['withdrawals_count'], $withdrawals_count + 1 );
-			MultiVendorX()->notifications->send_notification_helper('payout_received', $store, null, [
-				'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-				'order_id'    => $order_id,
-				'amount'      => $amount,
-				'payout_id'   => $wpdb->insert_id,
-				'category'    => 'activity',
-			]);
+			MultiVendorX()->notifications->send_notification_helper(
+                'payout_received',
+                $store,
+                null,
+                array(
+					'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+					'order_id'   => $order_id,
+					'amount'     => $amount,
+					'payout_id'  => $wpdb->insert_id,
+					'category'   => 'activity',
+				)
+            );
 		}
 
 		if ( 'success' !== $status ) {
@@ -219,11 +229,16 @@ class PaymentProcessor {
 				MultiVendorX()->util->log( 'Database operation failed', 'ERROR' );
 			}
 
-			MultiVendorX()->notifications->send_notification_helper('payout_failed', $store, null, [
-				'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-				'amount'      => $amount,
-				'category'    => 'activity',
-			]);
+			MultiVendorX()->notifications->send_notification_helper(
+                'payout_failed',
+                $store,
+                null,
+                array(
+					'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+					'amount'     => $amount,
+					'category'   => 'activity',
+				)
+            );
 		}
 	}
 

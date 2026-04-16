@@ -52,14 +52,18 @@ interface StoreSquadProps {
 	id: string | null;
 }
 
-
 const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 	const { modules } = useModules();
 	const [formData, setFormData] = useState<StoreSquadFormData>({});
-	const [showPrimaryOwnerSelect, setShowPrimaryOwnerSelect] = useState<boolean>(true);
-	const [selectedOwnerInfo, setSelectedOwnerInfo] = useState<StoreOwner | null>(null);
-	const [showAdditionalOwnerSelect, setShowAdditionalOwnerSelect] = useState<boolean>(false);
-	const [additionalOwners, setAdditionalOwners] = useState<AdditionalOwner[]>([]);
+	const [showPrimaryOwnerSelect, setShowPrimaryOwnerSelect] =
+		useState<boolean>(true);
+	const [selectedOwnerInfo, setSelectedOwnerInfo] =
+		useState<StoreOwner | null>(null);
+	const [showAdditionalOwnerSelect, setShowAdditionalOwnerSelect] =
+		useState<boolean>(false);
+	const [additionalOwners, setAdditionalOwners] = useState<AdditionalOwner[]>(
+		[]
+	);
 
 	useEffect(() => {
 		if (!id) {
@@ -88,16 +92,18 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 
 			// Load existing additional owners from store_owners array
 			if (data.store_owners && Array.isArray(data.store_owners)) {
-				const loadedOwners = data.store_owners.map((ownerValue: string) => {
-					const owner = (appLocalizer.store_owners || []).find(
-						(opt: StoreOwner) => opt.value === ownerValue
-					);
-					return {
-						id: ownerValue,
-						label: owner?.label || ownerValue,
-						email: owner?.value || ownerValue,
-					};
-				});
+				const loadedOwners = data.store_owners.map(
+					(ownerValue: string) => {
+						const owner = (appLocalizer.store_owners || []).find(
+							(opt: StoreOwner) => opt.value === ownerValue
+						);
+						return {
+							id: ownerValue,
+							label: owner?.label || ownerValue,
+							email: owner?.value || ownerValue,
+						};
+					}
+				);
 				setAdditionalOwners(loadedOwners);
 			}
 		});
@@ -147,7 +153,6 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 		autoSave(updated);
 	};
 
-
 	const handleAddAdditionalOwner = () => {
 		setShowAdditionalOwnerSelect(true);
 	};
@@ -165,17 +170,25 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 				(opt: StoreOwner) => opt.value === newOwner
 			);
 
-			if (ownerInfo && !additionalOwners.some(owner => owner.id === newOwner)) {
+			if (
+				ownerInfo &&
+				!additionalOwners.some((owner) => owner.id === newOwner)
+			) {
 				const newAdditionalOwner: AdditionalOwner = {
 					id: newOwner,
 					label: ownerInfo.label,
 					email: ownerInfo.value,
 				};
 
-				const updatedAdditionalOwners = [...additionalOwners, newAdditionalOwner];
+				const updatedAdditionalOwners = [
+					...additionalOwners,
+					newAdditionalOwner,
+				];
 				setAdditionalOwners(updatedAdditionalOwners);
 
-				const updatedStoreOwners = updatedAdditionalOwners.map(owner => owner.id);
+				const updatedStoreOwners = updatedAdditionalOwners.map(
+					(owner) => owner.id
+				);
 				const updated = {
 					...formData,
 					store_owners: updatedStoreOwners,
@@ -189,10 +202,14 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 	};
 
 	const handleRemoveAdditionalOwner = (ownerId: string) => {
-		const updatedAdditionalOwners = additionalOwners.filter(owner => owner.id !== ownerId);
+		const updatedAdditionalOwners = additionalOwners.filter(
+			(owner) => owner.id !== ownerId
+		);
 		setAdditionalOwners(updatedAdditionalOwners);
 
-		const updatedStoreOwners = updatedAdditionalOwners.map(owner => owner.id);
+		const updatedStoreOwners = updatedAdditionalOwners.map(
+			(owner) => owner.id
+		);
 		const updated = {
 			...formData,
 			store_owners: updatedStoreOwners,
@@ -203,14 +220,12 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 
 	return (
 		<Container>
-			{
-				applyFilters(
-					'multivendorx_store_edit_staff_top_section',
-					null,
-					id,
-					modules
-				)
-			}
+			{applyFilters(
+				'multivendorx_store_edit_staff_top_section',
+				null,
+				id,
+				modules
+			)}
 
 			<Column grid={4}>
 				<Card
@@ -220,40 +235,60 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 					<FormGroupWrapper>
 						<FormGroup
 							label={__('Primary owner', 'multivendorx')}
-							desc={__('Primary owner cannot be removed.', 'multivendorx')}
+							desc={__(
+								'Primary owner cannot be removed.',
+								'multivendorx'
+							)}
 						>
 							<>
 								<InfoItem
-									title={selectedOwnerInfo?.label || __('Store Owner', 'multivendorx')}
+									title={
+										selectedOwnerInfo?.label ||
+										__('Store Owner', 'multivendorx')
+									}
 									titleLink={selectedOwnerInfo?.value || '#'}
 									avatar={{
-										iconClass: "item-icon adminfont-person admin-color-green",
+										iconClass:
+											'item-icon adminfont-person admin-color-green',
 									}}
 									descriptions={[
 										{
 											label: __('Email', 'multivendorx'),
-											value: selectedOwnerInfo?.email || 'owner@example.com',
+											value:
+												selectedOwnerInfo?.email ||
+												'owner@example.com',
 										},
 										{
 											label: __('Phone', 'multivendorx'),
-											value: selectedOwnerInfo?.phone || '+1 234 567 8900',
-										}
+											value:
+												selectedOwnerInfo?.phone ||
+												'+1 234 567 8900',
+										},
 									]}
 									badges={[
 										{
-											text: __('Primary Owner', 'multivendorx'),
+											text: __(
+												'Primary Owner',
+												'multivendorx'
+											),
 											className: 'green',
-										}
+										},
 									]}
 									rightContent={
 										<ButtonInputUI
 											buttons={[
 												{
-													text: __('Transfer', 'multivendorx'),
-													onClick: () => setShowPrimaryOwnerSelect(true),
+													text: __(
+														'Transfer',
+														'multivendorx'
+													),
+													onClick: () =>
+														setShowPrimaryOwnerSelect(
+															true
+														),
 													color: 'blue',
-													icon: 'switch-store'
-												}
+													icon: 'switch-store',
+												},
 											]}
 										/>
 									}
@@ -283,13 +318,19 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 										}}
 										descriptions={[
 											{
-												label: __('Email: ', 'multivendorx'),
+												label: __(
+													'Email: ',
+													'multivendorx'
+												),
 												value: 'earthyways@test.com',
 											},
 										]}
 										badges={[
 											{
-												text: __('Co-owner', 'multivendorx'),
+												text: __(
+													'Co-owner',
+													'multivendorx'
+												),
 												className: 'blue',
 											},
 										]}
@@ -297,10 +338,16 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 											<ButtonInputUI
 												buttons={[
 													{
-														text: __('Remove', 'multivendorx'),
+														text: __(
+															'Remove',
+															'multivendorx'
+														),
 														color: 'red',
 														icon: 'delete',
-														onClick: () => handleRemoveAdditionalOwner(owner.id),
+														onClick: () =>
+															handleRemoveAdditionalOwner(
+																owner.id
+															),
 													},
 												]}
 											/>
@@ -323,7 +370,10 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 							<ButtonInputUI
 								buttons={[
 									{
-										text: __('Add additional owner', 'multivendorx'),
+										text: __(
+											'Add additional owner',
+											'multivendorx'
+										),
 										color: 'purple',
 										icon: 'plus',
 										onClick: handleAddAdditionalOwner,

@@ -30,9 +30,23 @@ const Policies = ({ product, setProduct, handleChange }) => {
 	}, [product?.meta_data]);
 
 	return (
-		<Card title={__('Policies - What should customers know before they buy?', 'multivendorx')} desc={__('Being upfront about shipping, returns, and cancellations builds trust and reduces disputes later.', 'multivendorx')}>
+		<Card
+			title={__(
+				'Policies - What should customers know before they buy?',
+				'multivendorx'
+			)}
+			desc={__(
+				'Being upfront about shipping, returns, and cancellations builds trust and reduces disputes later.',
+				'multivendorx'
+			)}
+		>
 			<FormGroupWrapper>
-				<FormGroup label={__('Shipping policy - How will you ship it and how long will it take?', 'multivendorx')}>
+				<FormGroup
+					label={__(
+						'Shipping policy - How will you ship it and how long will it take?',
+						'multivendorx'
+					)}
+				>
 					<TextAreaUI
 						name="shipping_policy"
 						value={product.shipping_policy}
@@ -41,7 +55,12 @@ const Policies = ({ product, setProduct, handleChange }) => {
 						}
 					/>
 				</FormGroup>
-				<FormGroup label={__('Refund policy - Can customers return or exchange it?', 'multivendorx')}>
+				<FormGroup
+					label={__(
+						'Refund policy - Can customers return or exchange it?',
+						'multivendorx'
+					)}
+				>
 					<TextAreaUI
 						name="refund_policy"
 						value={product.refund_policy}
@@ -50,7 +69,12 @@ const Policies = ({ product, setProduct, handleChange }) => {
 						}
 					/>
 				</FormGroup>
-				<FormGroup label={__('Cancellation policy - Can they cancel their order after placing it?', 'multivendorx')}>
+				<FormGroup
+					label={__(
+						'Cancellation policy - Can they cancel their order after placing it?',
+						'multivendorx'
+					)}
+				>
 					<TextAreaUI
 						name="cancellation_policy"
 						value={product.cancellation_policy}

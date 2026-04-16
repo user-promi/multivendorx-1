@@ -248,13 +248,13 @@ class Stores extends \WP_REST_Controller {
                 'options'          => 'get_stores_dropdown',
                 'status'           => 'get_pending_stores',
             );
-            $flag_map = apply_filters('multivendorx_rest_store_handlers',$flag_map);
+            $flag_map = apply_filters( 'multivendorx_rest_store_handlers', $flag_map );
             foreach ( $flag_map as $param => $method ) {
                 if ( $request->get_param( $param ) ) {
                     if ( method_exists( $this, $method ) ) {
                         return rest_ensure_response( $this->$method( $request ) );
                     }
-                    return apply_filters($method, rest_ensure_response(array()), $request);
+                    return apply_filters( $method, rest_ensure_response( array() ), $request );
                 }
             }
 
@@ -324,7 +324,7 @@ class Stores extends \WP_REST_Controller {
                 $store_order = array_flip( array_map( 'intval', $store_ids ) );
                 usort(
                     $stores,
-                    function( $a, $b ) use ( $store_order ) {
+                    function ( $a, $b ) use ( $store_order ) {
                         $a_pos = $store_order[ (int) $a['ID'] ] ?? PHP_INT_MAX;
                         $b_pos = $store_order[ (int) $b['ID'] ] ?? PHP_INT_MAX;
 
@@ -505,11 +505,11 @@ class Stores extends \WP_REST_Controller {
             $file_data     = $request->get_file_params();
             $current_user  = MultiVendorX()->current_user;
 
-            if ( !empty( $store_data['store-name'] ) && empty( $store_data['name'] ) ) {
+            if ( ! empty( $store_data['store-name'] ) && empty( $store_data['name'] ) ) {
                 $store_data['name'] = $store_data['store-name'];
             }
 
-            if ( !empty( $store_data['Description'] ) && empty( $store_data['description'] ) ) {
+            if ( ! empty( $store_data['Description'] ) && empty( $store_data['description'] ) ) {
                 $store_data['description'] = $store_data['Description'];
             }
 
@@ -569,7 +569,7 @@ class Stores extends \WP_REST_Controller {
                 Utill::STORE_SETTINGS_KEYS['country'],
                 Utill::STORE_SETTINGS_KEYS['zip'],
             );
-            $non_core_fields = array();
+            $non_core_fields           = array();
 
             foreach ( $file_data as $file ) {
                 $field_key                = array_key_first( $file['name'] );
@@ -585,12 +585,12 @@ class Stores extends \WP_REST_Controller {
             }
 
             $registration_meta_map = array(
-                'store-paypal'   => Utill::STORE_SETTINGS_KEYS['paypal_email'],
-                'Phone'          => Utill::STORE_SETTINGS_KEYS['phone'],
+                'store-paypal' => Utill::STORE_SETTINGS_KEYS['paypal_email'],
+                'Phone'        => Utill::STORE_SETTINGS_KEYS['phone'],
             );
 
             foreach ( $store_data as $key => $value ) {
-                if (isset($registration_meta_map[ $key ])) {
+                if ( isset( $registration_meta_map[ $key ] ) ) {
                     $key = $registration_meta_map[ $key ];
                 }
                 if ( in_array( $key, $core_fields, true ) || 'store_owners' === $key ) {
@@ -645,32 +645,47 @@ class Stores extends \WP_REST_Controller {
 
                 $user = get_user_by( 'id', $store_data['store_owners'] );
 
-                MultiVendorX()->notifications->send_notification_helper('store_account_created_by_admin', $store, null, [
-                    'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                    'marketplace_name' => get_bloginfo( 'name' ),
-                    'store_owner_name' => $user->display_name,
-                    'login_url'        => get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ),
-                    'store_id'         => $store_id,
-                    'category'         => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'store_account_created_by_admin',
+                    $store,
+                    null,
+                    array(
+						'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+						'marketplace_name' => get_bloginfo( 'name' ),
+						'store_owner_name' => $user->display_name,
+						'login_url'        => get_permalink( (int) MultiVendorX()->setting->get_setting( 'store_dashboard_page' ) ),
+						'store_id'         => $store_id,
+						'category'         => 'activity',
+					)
+                );
             }
 
             if ( 'active' === $store_data['status'] ) {
                 do_action( 'multivendorx_after_store_active', $store_id );
 
-                MultiVendorX()->notifications->send_notification_helper('store_activated', $store, null, [
-                    'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                    'store_id'         => $store_id,
-                    'category'         => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'store_activated',
+                    $store,
+                    null,
+                    array(
+						'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+						'store_id'   => $store_id,
+						'category'   => 'activity',
+					)
+                );
             }
 
             if ( 'pending' === $store_data['status'] ) {
-                MultiVendorX()->notifications->send_notification_helper('store_pending_approval', $store, null, [
-                    'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                    'store_id'         => $store_id,
-                    'category'         => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'store_pending_approval',
+                    $store,
+                    null,
+                    array(
+						'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+						'store_id'   => $store_id,
+						'category'   => 'activity',
+					)
+                );
             }
 
             return rest_ensure_response(
@@ -893,21 +908,31 @@ class Stores extends \WP_REST_Controller {
                     $store->set( Utill::STORE_SETTINGS_KEYS['status'], 'deactivated' );
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_reason'] );
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_request_date'] );
-                    MultiVendorX()->notifications->send_notification_helper('store_permanently_deactivated', $store, null, [
-                        'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                        'store_id'         => $id,
-                        'category'         => 'activity',
-                    ]);
+                    MultiVendorX()->notifications->send_notification_helper(
+                        'store_permanently_deactivated',
+                        $store,
+                        null,
+                        array(
+							'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+							'store_id'   => $id,
+							'category'   => 'activity',
+						)
+                    );
                 }
 
                 if ( 'reject' === $action ) {
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_reason'] );
                     $store->delete_meta( Utill::STORE_SETTINGS_KEYS['deactivation_request_date'] );
-                    MultiVendorX()->notifications->send_notification_helper('store_deactivation_request_rejected', $store, null, [
-                        'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                        'store_id'         => $id,
-                        'category'         => 'activity',
-                    ]);
+                    MultiVendorX()->notifications->send_notification_helper(
+                        'store_deactivation_request_rejected',
+                        $store,
+                        null,
+                        array(
+							'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+							'store_id'   => $id,
+							'category'   => 'activity',
+						)
+                    );
                 }
 
                 $store->save();
@@ -1003,11 +1028,16 @@ class Stores extends \WP_REST_Controller {
                         $store->save();
 
                         do_action( 'multivendorx_after_store_active', $id );
-                        MultiVendorX()->notifications->send_notification_helper('store_activated', $store, null, [
-                            'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                            'store_id'         => $id,
-                            'category'         => 'activity',
-                        ]);
+                        MultiVendorX()->notifications->send_notification_helper(
+                            'store_activated',
+                            $store,
+                            null,
+                            array(
+								'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+								'store_id'   => $id,
+								'category'   => 'activity',
+							)
+                        );
                         return rest_ensure_response( array( 'success' => true ) );
                     }
                 }
@@ -1049,19 +1079,29 @@ class Stores extends \WP_REST_Controller {
                     $store->save();
 
                     if ( 'permanently_rejected' === $status ) {
-                        MultiVendorX()->notifications->send_notification_helper('store_permanently_rejected', $store, null, [
-                            'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                            'store_id'         => $id,
-                            'category'         => 'activity',
-                        ]);
+                        MultiVendorX()->notifications->send_notification_helper(
+                            'store_permanently_rejected',
+                            $store,
+                            null,
+                            array(
+								'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+								'store_id'   => $id,
+								'category'   => 'activity',
+							)
+                        );
                     }
 
                     if ( 'rejected' === $status ) {
-                        MultiVendorX()->notifications->send_notification_helper('store_rejected', $store, null, [
-                            'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                            'store_id'         => $id,
-                            'category'         => 'activity',
-                        ]);
+                        MultiVendorX()->notifications->send_notification_helper(
+                            'store_rejected',
+                            $store,
+                            null,
+                            array(
+								'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+								'store_id'   => $id,
+								'category'   => 'activity',
+							)
+                        );
                     }
                     return rest_ensure_response( array( 'success' => true ) );
                 }
@@ -1129,12 +1169,17 @@ class Stores extends \WP_REST_Controller {
                         Utill::STORE_SETTINGS_KEYS['deactivation_request_date'],
                         current_time( 'mysql' )
                     );
-                    
-                    MultiVendorX()->notifications->send_notification_helper('store_account_deactivation_request', $store, null, [
-                        'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                        'store_id'         => $id,
-                        'category'         => 'activity',
-                    ]);
+
+                    MultiVendorX()->notifications->send_notification_helper(
+                        'store_account_deactivation_request',
+                        $store,
+                        null,
+                        array(
+							'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+							'store_id'   => $id,
+							'category'   => 'activity',
+						)
+                    );
                 }
             }
 
@@ -1142,35 +1187,55 @@ class Stores extends \WP_REST_Controller {
 
             if ( 'active' === $store->get( Utill::STORE_SETTINGS_KEYS['status'] ) ) {
                 do_action( 'multivendorx_after_store_active', $id );
-                MultiVendorX()->notifications->send_notification_helper('store_activated', $store, null, [
-                    'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                    'store_id'         => $id,
-                    'category'         => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'store_activated',
+                    $store,
+                    null,
+                    array(
+						'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+						'store_id'   => $id,
+						'category'   => 'activity',
+					)
+                );
             }
 
             if ( 'rejected' === ( $data['status'] ?? '' ) ) {
-                MultiVendorX()->notifications->send_notification_helper('store_rejected', $store, null, [
-                    'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                    'store_id'         => $id,
-                    'category'         => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'store_rejected',
+                    $store,
+                    null,
+                    array(
+						'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+						'store_id'   => $id,
+						'category'   => 'activity',
+					)
+                );
             }
 
             if ( 'under_review' === ( $data['status'] ?? '' ) ) {
-                MultiVendorX()->notifications->send_notification_helper('store_under_review', $store, null, [
-                    'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                    'store_id'         => $id,
-                    'category'         => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'store_under_review',
+                    $store,
+                    null,
+                    array(
+						'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+						'store_id'   => $id,
+						'category'   => 'activity',
+					)
+                );
             }
 
             if ( 'suspended' === ( $data['status'] ?? '' ) ) {
-                MultiVendorX()->notifications->send_notification_helper('store_suspended', $store, null, [
-                    'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                    'store_id'         => $id,
-                    'category'         => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'store_suspended',
+                    $store,
+                    null,
+                    array(
+						'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+						'store_id'   => $id,
+						'category'   => 'activity',
+					)
+                );
             }
 
             if ( 'deactivated' === ( $data['status'] ?? '' ) ) {
@@ -1182,11 +1247,16 @@ class Stores extends \WP_REST_Controller {
                     true
                 );
 
-                MultiVendorX()->notifications->send_notification_helper('store_permanently_deactivated', $store, null, [
-                    'store_name'       => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                    'store_id'         => $id,
-                    'category'         => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'store_permanently_deactivated',
+                    $store,
+                    null,
+                    array(
+						'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+						'store_id'   => $id,
+						'category'   => 'activity',
+					)
+                );
             }
 
             return rest_ensure_response(

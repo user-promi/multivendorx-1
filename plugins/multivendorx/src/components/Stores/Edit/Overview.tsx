@@ -209,7 +209,9 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								/>
 							))
 						) : (
-							<ComponentStatusView title={__( 'No recent payout', 'multivendorx' )} />
+							<ComponentStatusView
+								title={__('No recent payout', 'multivendorx')}
+							/>
 						)}
 					</Card>
 					{/* <Card
@@ -319,7 +321,12 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								);
 							})
 						) : (
-							<ComponentStatusView title={__( 'No recent products found.', 'multivendorx' )} />
+							<ComponentStatusView
+								title={__(
+									'No recent products found.',
+									'multivendorx'
+								)}
+							/>
 						)}
 					</Card>
 
@@ -354,26 +361,27 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 					)}
 				</Column>
 				<Column grid={4}>
-						<Card title={__('Store overview', 'multivendorx')}>
-							<FormGroupWrapper>
-								<FormGroup
-									row
-									label={__('Compliance & records', 'multivendorx')}
+					<Card title={__('Store overview', 'multivendorx')}>
+						<FormGroupWrapper>
+							<FormGroup
+								row
+								label={__(
+									'Compliance & records',
+									'multivendorx'
+								)}
+							>
+								<a
+									className="sku link-item"
+									onClick={() => {
+										navigate(
+											`?page=multivendorx#&tab=stores&edit/${id}/&subtab=compliance-records`
+										);
+									}}
 								>
-									<a
-										className="sku link-item"
-										onClick={() => {
-											navigate(
-												`?page=multivendorx#&tab=stores&edit/${id}/&subtab=compliance-records`
-											);
-										}}
-									>
-										{__('View details', 'multivendorx')}
-									</a>
-								</FormGroup>
-							<SectionUI
-								title={__('Settings', 'multivendorx')}
-							/>
+									{__('View details', 'multivendorx')}
+								</a>
+							</FormGroup>
+							<SectionUI title={__('Settings', 'multivendorx')} />
 							<FormGroup
 								row
 								label={__('Payment method', 'multivendorx')}
@@ -381,9 +389,7 @@ const Overview: React.FC<OverviewProps> = ({ id, storeData }) => {
 								{storeData?.payment_method ? (
 									<div className="admin-badge purple method">
 										<i className="adminfont-bank"></i>
-										{formatMethod(
-											storeData.payment_method
-										)}
+										{formatMethod(storeData.payment_method)}
 									</div>
 								) : (
 									<span>
