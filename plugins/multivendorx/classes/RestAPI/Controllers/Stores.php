@@ -586,7 +586,7 @@ class Stores extends \WP_REST_Controller {
 
             $registration_meta_map = array(
                 'store-paypal'   => Utill::STORE_SETTINGS_KEYS['paypal_email'],
-                'store-phone'    => Utill::STORE_SETTINGS_KEYS['phone'],
+                'Phone'          => Utill::STORE_SETTINGS_KEYS['phone'],
             );
 
             foreach ( $store_data as $key => $value ) {
