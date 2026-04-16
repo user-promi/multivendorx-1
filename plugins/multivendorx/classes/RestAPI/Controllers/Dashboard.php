@@ -228,13 +228,7 @@ class Dashboard extends \WP_REST_Controller {
                 'slug'       => 'settings',
                 'icon'       => 'setting',
                 'capability' => array( 'manage_store_settings' ),
-            ),
-            'media-library' => array(
-                'name'       => 'Media Library',
-                'slug'       => 'media-library',
-                'icon'       => 'image',
-                'capability' => array( 'read_products' ),
-            ),
+            )
         );
 
         $saved_endpoints = MultiVendorX()->setting->get_setting( 'menu_manager' );
