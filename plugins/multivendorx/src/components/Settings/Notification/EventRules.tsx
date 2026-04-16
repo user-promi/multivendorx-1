@@ -485,18 +485,6 @@ const EventRules: React.FC = () => {
 									: __('Email Message', 'multivendorx')
 						} - ${editNotification?.event ?? ''}`,
 					}}
-					footer={
-						<ButtonInputUI
-							buttons={[
-								{
-									icon: 'close',
-									text: __('Cancel', 'multivendorx'),
-									color: 'red',
-									onClick: () => setOpenChannel(null),
-								},
-							]}
-						/>
-					}
 				>
 					<>
 						{openChannel === 'system' && (

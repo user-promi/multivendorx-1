@@ -89,7 +89,7 @@ class Store_Banner extends Widget_Image {
 			return;
 		}
 
-		$banner = $store['storeBanner']['url'] ?? '';
+		$banner = $store['storeBanner'] ?? '';
 
 		// If banner stored as attachment ID, convert to URL.
 		if ( is_numeric( $banner ) ) {

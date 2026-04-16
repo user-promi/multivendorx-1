@@ -192,6 +192,7 @@ class Utill {
         'address_1'                    => 'address_1',
         'address_2'                    => 'address_2',
         'image'                        => 'image',
+        'banner'                       => 'banner', 
         'city'                         => 'city',
         'state'                        => 'state',
         'country'                      => 'country',

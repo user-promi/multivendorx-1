@@ -602,7 +602,7 @@ registerBlockType('multivendorx/store-banner', {
 });
 document.addEventListener('DOMContentLoaded', () => {
 	if (window.StoreInfo?.storeDetails) {
-		const bannerUrl = window.StoreInfo.storeDetails.storeBanner.url;
+		const bannerUrl = window.StoreInfo.storeDetails.storeBanner;
 
 		document
 			.querySelectorAll('.multivendorx-store-banner')

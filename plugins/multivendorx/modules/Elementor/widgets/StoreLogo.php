@@ -132,7 +132,7 @@ class Store_Logo extends Widget_Image {
 		}
 
 		// Get logo from existing structure.
-		$logo       = $store['storeLogo']['url'] ?? '';
+		$logo       = $store['storeLogo'] ?? '';
 		$store_name = $store['storeName'] ?? '';
 
 		if ( empty( $logo ) ) {

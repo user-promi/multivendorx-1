@@ -168,7 +168,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
                     ))}
                 </div>
             </div>
-            <div className="notice-wrapper">
+            <div className="notice-wrapper wrap">
                 {notices.length > 0 &&
                     notices.map((html, i) => (
                         <>

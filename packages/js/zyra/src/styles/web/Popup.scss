@@ -109,6 +109,11 @@
                         box-sizing: border-box;
                     }
                 }
+
+                // for form editor in popup
+                .elements-wrapper{
+                    top: 0;
+                }
             }
 
             .popup-header {

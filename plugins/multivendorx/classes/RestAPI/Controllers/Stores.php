@@ -1162,6 +1162,10 @@ class Stores extends \WP_REST_Controller {
                     continue;
                 }
 
+                if ( in_array( $key, [ Utill::STORE_SETTINGS_KEYS['image'], Utill::STORE_SETTINGS_KEYS['banner'] ], true ) ) {
+                    $value = esc_url_raw( (string) ( $value['url'] ?? $value ) );
+                }
+                
                 $store->update_meta( $key, $value );
 
                 if ( Utill::STORE_SETTINGS_KEYS['deactivation_reason'] === $key ) {
