@@ -195,6 +195,7 @@
     &.display-inline-notice:not(.type-banner) {
         padding: 0.5rem 0.8rem;
         display: flex;
+
         // align-items: center;
         gap: 0.5rem;
         border: 0.063rem solid $theme-color;

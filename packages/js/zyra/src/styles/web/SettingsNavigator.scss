@@ -115,6 +115,7 @@
       .tab-content{
         border: $border-light-small ;
         border-radius: 0 0 $border-radius-small $border-radius-small;
+
         // border-top: 0;
       }
       .tab-content:has(.notice-settings){
