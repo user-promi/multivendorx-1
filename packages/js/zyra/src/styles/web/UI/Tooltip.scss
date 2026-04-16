@@ -19,7 +19,7 @@
     inset: 0 auto auto 0;
   }
 
-  &:hover,
+  &:has(i:hover),
   &.copied {
     .tooltip-name {
       opacity: 1;

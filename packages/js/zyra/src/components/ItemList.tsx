@@ -159,23 +159,25 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                     );
                 })}
             {className === 'price-list' && (
-                <span
-                    className="more-btn"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setIsExpanded((prev) => !prev);
-                    }}
-                >
-                    {isExpanded ? (
-                        <>
-                            More <i className="adminfont-arrow-down" />
-                        </>
-                    ) : (
-                        <>
-                            Less <i className="adminfont-arrow-up" />
-                        </>
-                    )}
-                </span>
+                <div className="more-btn-wrapper">
+                    <span
+                        className="more-btn"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsExpanded((prev) => !prev);
+                        }}
+                    >
+                        {isExpanded ? (
+                            <>
+                                More <i className="adminfont-arrow-down" />
+                            </>
+                        ) : (
+                            <>
+                                Less <i className="adminfont-arrow-up" />
+                            </>
+                        )}
+                    </span>
+                </div>
             )}
         </div>
     );

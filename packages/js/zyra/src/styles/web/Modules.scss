@@ -107,7 +107,10 @@
                     justify-content: space-between;
                     margin-top: 0.5rem;
                     border-top: $border-light-small;
-
+                    .price{
+                        font-size: 1.063rem;
+                        font-weight: 500;
+                    }
                     .buttons {
                         display: flex;
                         gap: 0.5rem;

@@ -230,25 +230,6 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 		>
 			<div className="content multi">
 				<div className="section left">
-					{/* <div className="title">
-						{storeData?.id ? (
-							<a
-								href={`${appLocalizer.site_url.replace(
-									/\/$/,
-									''
-								)}/wp-admin/admin.php?page=multivendorx#&tab=stores&view&id=${
-									storeData.id
-								}`}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="store-link"
-							>
-								{storeData.name}
-							</a>
-						) : (
-							(storeData?.name ?? '-')
-						)}
-					</div> */}
 					{storeData?.email && (
 						<div className="desc">
 							<i className="adminfont-mail"></i>
@@ -257,7 +238,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						</div>
 					)}
 
-					<SectionUI title={__('Order Details', 'multivendorx')} />
+					{/* <SectionUI title={__('Order Details', 'multivendorx')} /> */}
 					<TableCard
 						headers={popupColumns}
 						rows={orderItems}
@@ -301,6 +282,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<FormGroup
 							row
 							label={__('Associated Order', 'multivendorx')}
+							className="space-between"
 						>
 							{commissionData?.order_id ? (
 								<a
@@ -322,6 +304,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<FormGroup
 							row
 							label={__('Order Status', 'multivendorx')}
+							className="space-between"
 						>
 							<span
 								className={`admin-badge badge-${orderData?.status}`}
@@ -344,6 +327,7 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<FormGroup
 							row
 							label={__('Commission Status', 'multivendorx')}
+							className="space-between"
 						>
 							<span
 								className={`admin-badge ${
@@ -365,37 +349,39 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 						<FormGroup
 							row
 							label={__('Marketplace Commission', 'multivendorx')}
+							className="space-between"
 						>
-							{formatCurrency(
+						<b>{formatCurrency(
 								parseFloat(
 									commissionData?.marketplace_commission ?? 0
 								)
-							)}
+							)}</b>
 						</FormGroup>
 
-						<FormGroup row label={__('Shipping', 'multivendorx')}>
-							{formatCurrency(commissionData?.shipping_amount)}
+						<FormGroup row label={__('Shipping', 'multivendorx')} className="space-between">
+							<b>{formatCurrency(commissionData?.shipping_amount)}</b>
 						</FormGroup>
 
-						<FormGroup row label={__('Tax', 'multivendorx')}>
-							{formatCurrency(
+						<FormGroup row label={__('Tax', 'multivendorx')} className="space-between">
+							<b>{formatCurrency(
 								Number(commissionData?.tax_amount || 0)
-							)}
+							)}</b>
 						</FormGroup>
 
 						{commissionData?.marketplace_refunded > 0 && (
 							<FormGroup
 								row
 								label={__('Commission refund', 'multivendorx')}
+								className="space-between"
 							>
-								{formatCurrency(
+								<b>{formatCurrency(
 									commissionData.marketplace_refunded
-								)}
+								)}</b>
 							</FormGroup>
 						)}
 
-						<FormGroup row label={__('Total', 'multivendorx')}>
-							{formatCurrency(commissionData?.total_order_amount)}
+						<FormGroup row label={__('Total', 'multivendorx')} className="space-between">
+							<b>{formatCurrency(commissionData?.total_order_amount)}</b>
 						</FormGroup>
 					</FormGroupWrapper>
 
