@@ -111,7 +111,7 @@ const AddProduct = () => {
 		}
 
 		const payload = {
-			...product,
+			...(product.meta_data ?? []),
 			status: appLocalizer.current_user?.allcaps?.publish_products ? 'publish' : 'draft',
 			images: imagePayload,
 			meta_data: [
@@ -230,10 +230,10 @@ const AddProduct = () => {
 	const totalCount = checklistValues.length;
 
 	const productFields =
-		appLocalizer.settings_databases_value?.['product-preferencess']
+		appLocalizer.settings_databases_value?.['product-preferences']
 			?.products_fields || [];
 	const typeFields =
-		appLocalizer.settings_databases_value?.['product-preferencess']
+		appLocalizer.settings_databases_value?.['product-preferences']
 			?.type_options || [];
 
 	const rejectNote = product?.meta_data?.find(
