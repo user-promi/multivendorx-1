@@ -1277,6 +1277,7 @@ class Install {
         $store_permissions['coupons']  = array();
         $store_permissions['orders']   = array();
         $store_permissions['settings'] = array( 'manage_store_settings' );
+        $user_permissions = array();
 
         if ( ! empty( $previous_capability_settings['is_submit_product'] ) ) {
             $store_permissions['products'] = array_merge(
@@ -1897,6 +1898,20 @@ class Install {
 			update_option( Utill::MULTIVENDORX_SETTINGS['registration'], $new_form );
 		}
 
+        $user_permissions = array(
+            'store_owner' => array_values(
+                array_unique(
+                    array_merge(
+                        $store_permissions['products'] ?? [],
+                        $store_permissions['coupons'] ?? [],
+                        $store_permissions['orders'] ?? [],
+                        $store_permissions['settings'] ?? []
+                    )
+                )
+            )
+        );
+
+        update_option( Utill::MULTIVENDORX_SETTINGS['user-permissions'], $user_permissions );
         update_option( Utill::MULTIVENDORX_SETTINGS['refunds'], $refund_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'], $store_permissions );
         update_option( Utill::MULTIVENDORX_SETTINGS['product-preferences'], $product_settings );

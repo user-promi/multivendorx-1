@@ -58,9 +58,10 @@ const Transactions: React.FC = () => {
 				) : (
 					<span>
 						{row.narration
-							?.replace(/-/g, ' ')
-							.replace(/\b\w/g, (c: string) => c.toUpperCase()) ||
-							'-'}
+							?.replace(/<[^>]+>/g, '') // remove HTML
+							.replace(/&ndash;/g, '-') // decode entity
+							.replace(/-/g, ' ')
+							.replace(/\b\w/g, (c: string) => c.toUpperCase())}
 					</span>
 				),
 		},
