@@ -22,7 +22,7 @@ export default {
 			display: 'notice',
 		},
 		{
-			key: 'is_storereview_varified',
+			key: 'is_store_review_verified',
 			type: 'checkbox',
 			label: __('Verified buyer reviews only', 'multivendorx'),
 			desc: __(
@@ -31,8 +31,8 @@ export default {
 			),
 			options: [
 				{
-					key: 'is_storereview_varified',
-					value: 'is_storereview_varified',
+					key: 'is_store_review_verified',
+					value: 'is_store_review_verified',
 				},
 			],
 			look: 'toggle',

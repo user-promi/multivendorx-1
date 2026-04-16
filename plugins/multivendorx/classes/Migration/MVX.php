@@ -37,7 +37,6 @@ class MVX {
             '_vendor_postcode'                => 'zip',
             '_vendor_country_code'            => 'country',
             '_vendor_state_code'              => 'state',
-            '_vendor_phone'                   => 'phone',
             '_vendor_hide_address'            => 'hide_address',
             '_vendor_hide_phone'              => 'hide_phone',
             '_vendor_hide_email'              => 'hide_email',
@@ -630,6 +629,19 @@ class MVX {
                 'primary' => $user->email,
             ) );
 
+            $country      = get_user_meta( $user_id, '_vendor_country_code', true ) ?? '';
+            $wc_countries = new \WC_Countries();
+            $calling_code = $wc_countries->get_country_calling_code( $country );
+            $calling_code = ! empty( $calling_code ) ? '+' . $calling_code : '';
+
+            $store->update_meta(
+                'phone',
+                array(
+                    'country_code' => $calling_code,
+                    'phone'        => preg_replace( '/[^0-9]/', '', get_user_meta( $user_id, '_vendor_phone', true ) ),
+                )
+            );
+
             foreach ( $user_meta as $row ) {
 
                 $meta_key   = $row['meta_key'];
@@ -841,10 +853,10 @@ class MVX {
             $store_payable       = get_post_meta( $commission_id, '_commission_total', true );
             $status              = get_post_meta( $commission_id, '_paid_status', true );
             $refunded            = abs( (float) get_post_meta( $commission_id, '_commission_refunded', true ) );
-            $paid_date = get_post_meta( $commission_id, '_paid_date', true );
-            $created_at = ! empty( $paid_date ) && is_numeric( $paid_date )
-                ? gmdate( 'Y-m-d H:i:s', (int) $paid_date )
-                : '';
+            $paid_date           = get_post_meta( $commission_id, '_paid_date', true );
+            $created_at          = ! empty( $paid_date ) && is_numeric( $paid_date )
+                                    ? gmdate( 'Y-m-d H:i:s', (int) $paid_date )
+                                    : 0;
             $vendor_id           = get_term_meta( $commission_vendor, '_vendor_user_id', true );
             $store_id            = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
 
