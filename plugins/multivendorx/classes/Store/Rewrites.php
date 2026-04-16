@@ -175,7 +175,7 @@ class Rewrites {
     }
 
     public function set_store_page_title( $title ) {
-        if ( is_query_var( $this->custom_store_url ) ) {
+        if ( get_query_var( $this->custom_store_url ) ) {
             $store_slug = get_query_var( $this->custom_store_url );
             $store      = Store::get_store( $store_slug, 'slug' );
             return $store->get('name') . ' | ' . get_bloginfo( 'name' );
