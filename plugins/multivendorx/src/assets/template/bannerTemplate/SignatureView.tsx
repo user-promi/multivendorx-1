@@ -1,4 +1,4 @@
-const BannerTemplate2 = () => {
+const SignatureView = () => {
 	return (
 		<div className="multivendorx-banner template2">
 			<div className="banner-slider"></div>
@@ -80,4 +80,4 @@ const BannerTemplate2 = () => {
 	);
 };
 
-export default BannerTemplate2;
+export default SignatureView;
