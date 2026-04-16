@@ -70,6 +70,7 @@ final class MultiVendorX {
         add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
         // Major update notice.
 		add_action( 'in_plugin_update_message-dc-woocommerce-multi-vendor/dc_product_vendor.php', array( $this, 'multivendorx_plugin_update_message' ) );
+        add_action( 'admin_notices', array( $this, 'free_pro_admin_notice' ) );
     }
 
     /**
@@ -268,6 +269,28 @@ final class MultiVendorX {
             </p>
         </div>
         <?php
+    }
+
+    public function free_pro_admin_notice() {
+        if (
+            version_compare( MULTIVENDORX_PLUGIN_VERSION, '5.0.0', '>=' ) &&
+            defined( 'MULTIVENDORX_PRO_PLUGIN_VERSION' ) &&
+            version_compare( MULTIVENDORX_PRO_PLUGIN_VERSION, '2.0.0', '<' )
+        ) {
+            ?>
+            <div class="notice notice-error">
+                <p>
+                    <strong><?php echo esc_html__( 'MultivendorX Update Required', 'multivendorx' ); ?></strong><br>
+                    <?php echo esc_html__( 'To ensure all the feature compatibility and accessibility, MultiVendorX Pro minimum v2.0.0 is required.', 'multivendorx' ); ?>
+                </p>
+                <p>
+                    <a href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>" class="button button-primary">
+                        <?php echo esc_html__( 'Update Now', 'multivendorx' ); ?>
+                    </a>
+                </p>
+            </div>
+            <?php
+        }
     }
 
     /**
