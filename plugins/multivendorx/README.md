@@ -1,4 +1,4 @@
-# MultiVendorX - WooCommerce Multivendor Marketplace Solutions #
+# MultiVendorX - WooCommerce Multivendor Marketplace AI Powered Solutions #
 **Contributors:** [wcmp](https://profiles.wordpress.org/wcmp/), [purnendu](https://profiles.wordpress.org/purnendu/)  
 **Tags:** WooCommerce multivendor marketplace, multi seller, multi vendor, multivendor, multivendor marketplace  
 **Donate link:** http://multivendorx.com/donate/  
@@ -26,7 +26,7 @@ From digital downloads to physical products, everything you need is included-eve
 * **Regular Updates** for security fixes and better user experience
 * A fabulous **Support Team**
 
-      [Try Our Demo](https://multivendordemo.com/mvx/wp-admin) | [Support](https://multivendorx.com/support-forum/) | [Features](https://multivendorx.com/features/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg) | [Pro](https://multivendorx.com/pricing/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg) | [Videos](https://www.youtube.com/@MultiVendorX/videos) | [Docs](https://multivendorx.com/get-help/knowledgebase/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg)
+      [Try Our Demo](https://multivendordemo.com/multivendorx/wp-admin) | [Support](https://multivendorx.com/support-forum/) | [Features](https://multivendorx.com/features/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg) | [Pro](https://multivendorx.com/pricing/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg) | [Videos](https://www.youtube.com/@MultiVendorX/videos) | [Docs](https://multivendorx.com/get-help/knowledgebase/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg)
 
 ### Marketplaces You Can Set Up with MultiVendorX: ###
 * 🛍️ [Niche Marketplace](https://multivendorx.com/niche-marketplace/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg) like Myntra, Nykaa
@@ -88,7 +88,7 @@ From digital downloads to physical products, everything you need is included-eve
 Discover everything **MultiVendorX's Features** [here](https://multivendorx.com/features/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg) offers to power your multivendor marketplace.
 
 
-👉 Official Demo Link: Try out Free and Pro [**MultiVendorX**](https://multivendordemo.com/mvx/wp-admin) 
+👉 Official Demo Link: Try out Free and Pro [**MultiVendorX**](https://multivendordemo.com/multivendorx/wp-admin) 
 
 ### 🌟 Hear directly from our valued customers! ###
 
@@ -118,7 +118,7 @@ Competition requires the right toolkit. To thrive in today’s dynamic multi ven
 
 👉 UPGRADE TO [**MultiVendorX Pro**](https://multivendorx.com/pricing/?utm_source=wordpress.org&utm_medium=plugindescription&utm_campaign=MultiVendorxWPOrg)
 
-👉 Official Demo Link: Try out Free and Pro [**MultiVendorX**](https://multivendordemo.com/mvx/) 
+👉 Official Demo Link: Try out Free and Pro [**MultiVendorX**](https://multivendordemo.com/multivendorx/) 
 
 ### Migrate to MultiVendorX worry-free! ###
 

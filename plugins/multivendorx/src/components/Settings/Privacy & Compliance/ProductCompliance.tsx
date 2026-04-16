@@ -271,74 +271,53 @@ const ProductCompliance: React.FC = () => {
                         addNewBtn={false}
                     />
                 </FormGroup> */}
+{/* 
+                <SectionUI
+                    title={__('Product Report Abuse', 'multivendorx')}
+                    desc={__('Set rules and options for product abuse reporting.', 'multivendorx')}
+                /> */}
 
-				<SectionUI
-					title={__('Product Report Abuse', 'multivendorx')}
-					desc={__(
-						'Set rules and options for product abuse reporting.',
-						'multivendorx'
-					)}
-				/>
+                <FormGroup row
+                    label={__('Who can report', 'multivendorx')}
+                    labelDes={__('Decide if only logged-in customers can submit abuse reports, or if reporting is open to everyone.', 'multivendorx')}
+                    desc={__('<ul><li>logged-in customers - Only registered and logged-in customers can report products.This helps prevent spam and ensures accountability.</li><li>Anyone - Both logged-in customers and guests can report products. This gives the widest access but may increase the risk of spam submissions.</li></ul>', 'multivendorx')}>
+                    <ChoiceToggleUI
+                        options={[
+                            {
+                                key: 'logged_in',
+                                label: __('logged-in customers', 'multivendorx'),
+                                value: 'logged_in',
+                            },
+                            {
+                                key: 'anyone',
+                                label: __('Anyone', 'multivendorx'),
+                                value: 'anyone',
+                            },
+                        ]}
+                        value={formData.status}
+                        onChange={(val: string) =>
+                            handleChange('status', val)
+                        }
+                    />
+                </FormGroup>
+                <FormGroup row
+                    label={__('Reasons for abuse report', 'multivendorx')}
+                    labelDes={__('Define one or more preset reasons that stores can choose from when submitting an abuse report.', 'multivendorx')}
+                    desc={__('<b>Note</b>: Users can report products for various issues. When enabling logged-in user restriction, anonymous reports will be blocked. Abuse reports are reviewed by administrators who can take appropriate action including product removal or store penalties.', 'multivendorx')}>
 
-				<FormGroup
-					row
-					label={__('Who can report', 'multivendorx')}
-					labelDes={__(
-						'Decide if only logged-in customers can submit abuse reports, or if reporting is open to everyone.',
-						'multivendorx'
-					)}
-					desc={__(
-						'<ul><li>logged-in customers - Only registered and logged-in customers can report products.This helps prevent spam and ensures accountability.</li><li>Anyone - Both logged-in customers and guests can report products. This gives the widest access but may increase the risk of spam submissions.</li></ul>',
-						'multivendorx'
-					)}
-				>
-					<ChoiceToggleUI
-						options={[
-							{
-								key: 'logged_in',
-								label: __(
-									'logged-in customers',
-									'multivendorx'
-								),
-								value: 'logged_in',
-							},
-							{
-								key: 'anyone',
-								label: __('Anyone', 'multivendorx'),
-								value: 'anyone',
-							},
-						]}
-						value={formData.status}
-						onChange={(val: string) => handleChange('status', val)}
-					/>
-				</FormGroup>
-				<FormGroup
-					row
-					label={__('Reasons for abuse report', 'multivendorx')}
-					labelDes={__(
-						'Define one or more preset reasons that stores can choose from when submitting an abuse report.',
-						'multivendorx'
-					)}
-					desc={__(
-						'<b>Note</b>: Users can report products for various issues. When enabling logged-in user restriction, anonymous reports will be blocked. Abuse reports are reviewed by administrators who can take appropriate action including product removal or store penalties.',
-						'multivendorx'
-					)}
-				>
-					<ExpandablePanelUI
-						name="abuse_report_reasons"
-						methods={abuseReportReasons.modal || []}
-						value={formData.abuse_report_reasons || []}
-						onChange={(val) =>
-							handleChange('abuse_report_reasons', val)
-						}
-						canAccess={true}
-						addNewBtn={true}
-						addNewTemplate={abuseReportReasons.addNewTemplate}
-					/>
-				</FormGroup>
-			</FormGroupWrapper>
-		</>
-	);
+                    <ExpandablePanelUI
+                        name="abuse_report_reasons"
+                        methods={abuseReportReasons.modal || []}
+                        value={formData.abuse_report_reasons || []}
+                        onChange={(val) => handleChange('abuse_report_reasons', val)}
+                        canAccess={true}
+                        addNewBtn={true}
+                        addNewTemplate={abuseReportReasons.addNewTemplate}
+                    />
+                </FormGroup>
+            </FormGroupWrapper>
+        </>
+    );
 };
 
 // ratingsField definition outside component
