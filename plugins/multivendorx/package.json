@@ -167,6 +167,7 @@
 		"terser": "^5.46.0",
 		"typescript": "5.9.3",
 		"wireit": "^0.14.12",
-		"wp-readme-to-markdown": "^1.0.1"
+		"wp-readme-to-markdown": "^1.0.1",
+		"stylelint-config-standard-scss": "^17.0.0"
 	}
 }

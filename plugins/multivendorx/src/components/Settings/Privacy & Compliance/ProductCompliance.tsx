@@ -241,11 +241,11 @@ const ProductCompliance: React.FC = () => {
                         addNewBtn={false}
                     />
                 </FormGroup> */}
-
+{/* 
                 <SectionUI
                     title={__('Product Report Abuse', 'multivendorx')}
                     desc={__('Set rules and options for product abuse reporting.', 'multivendorx')}
-                />
+                /> */}
 
                 <FormGroup row
                     label={__('Who can report', 'multivendorx')}
