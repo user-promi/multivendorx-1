@@ -5,7 +5,7 @@
  * @package MultiVendorX
  */
 
-namespace MultiVendorX\MarketplaceGateway;
+namespace MultiVendorX\PaymentGatewayCharge;
 
 /**
  * MultiVendorX Marketplace Fee Module class

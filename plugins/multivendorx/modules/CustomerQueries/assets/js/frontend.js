@@ -1,12 +1,12 @@
-/* global jQuery, qnaFrontend */
+/* global jQuery, customerQueriesFrontend */
 jQuery(document).ready(function ($) {
-	let productId = $('#product-qna').data('product');
+	let productId = $('#product-customer-queries').data('product');
 	let searchTimeout;
 
 	// Load all questions on page load
 	loadQuestions('');
 
-	$(document).on('keyup', '#qna-search', function () {
+	$(document).on('keyup', '#customer-queries-search', function () {
 		const keyword = $(this).val().trim();
 
 		clearTimeout(searchTimeout);
@@ -16,7 +16,7 @@ jQuery(document).ready(function ($) {
 	});
 
 	// Direct question submission
-	$(document).on('click', '#qna-direct-submit', function () {
+	$(document).on('click', '#customer-queries-direct-submit', function () {
 		const $btn = $(this);
 		if ($btn.prop('disabled')) {
 			return;
@@ -26,22 +26,22 @@ jQuery(document).ready(function ($) {
 		let question = $(this).data('question');
 
 		$.post(
-			qnaFrontend.ajaxurl,
+			customerQueriesFrontend.ajaxurl,
 			{
-				action: 'qna_submit',
+				action: 'customer_queries_submit',
 				product_id: productId,
 				question: question,
-				nonce: qnaFrontend.nonce,
+				nonce: customerQueriesFrontend.nonce,
 			},
 			function (res) {
 				if (res.success) {
-					$('#qna-search').val('');
+					$('#customer-queries-search').val('');
 
 					// Hide "no results" message immediately
-					$('#qna-no-results-container').hide();
+					$('#customer-queries-no-results-container').hide();
 
 					// Show success message
-					$('#qna-success-message')
+					$('#customer-queries-success-message')
 						.fadeIn()
 						.delay(2000)
 						.fadeOut(function () {
@@ -58,44 +58,44 @@ jQuery(document).ready(function ($) {
 	});
 	function loadQuestions(search) {
 		$.post(
-			qnaFrontend.ajaxurl,
+			customerQueriesFrontend.ajaxurl,
 			{
-				action: 'qna_search',
+				action: 'customer_queries_search',
 				product_id: productId,
 				search: search || '',
-				nonce: qnaFrontend.nonce,
+				nonce: customerQueriesFrontend.nonce,
 			},
 			function (res) {
 				if (!res.success) {
 					return;
 				}
 
-				$('#qna-list').empty().html(res.data.html);
+				$('#customer-queries-list').empty().html(res.data.html);
 
 				if (!res.data.has_items && search) {
 					// Show message + button container
-					$('#qna-no-results-container').show();
-					$('#qna-direct-submit').data('question', search);
+					$('#customer-queries-no-results-container').show();
+					$('#customer-queries-direct-submit').data('question', search);
 				} else {
 					// Hide if results found
-					$('#qna-no-results-container').hide();
+					$('#customer-queries-no-results-container').hide();
 				}
 			}
 		);
 	}
 
-	$(document).on('click', '.qna-vote', function () {
+	$(document).on('click', '.customer-queries-vote', function () {
 		const $btn = $(this);
-		const $item = $btn.closest('.qna-item');
-		const qnaId = $item.data('qna');
+		const $item = $btn.closest('.customer-queries-item');
+		const queriesId = $item.data('customer-queries');
 		const type = $btn.data('type');
 		$.post(
-			qnaFrontend.ajaxurl,
+			customerQueriesFrontend.ajaxurl,
 			{
-				action: 'qna_vote',
-				qna_id: qnaId,
+				action: 'customer_queries_vote',
+				queries_id: queriesId,
 				type: type,
-				nonce: qnaFrontend.nonce,
+				nonce: customerQueriesFrontend.nonce,
 			},
 			function (res) {
 				if (res.success) {

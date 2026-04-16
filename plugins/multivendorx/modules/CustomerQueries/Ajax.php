@@ -22,13 +22,13 @@ class Ajax {
      * Constructor. Registers AJAX actions and enqueues dashicons.
      */
     public function __construct() {
-        add_action( 'wp_ajax_qna_submit', array( $this, 'submit_question' ) );
-        add_action( 'wp_ajax_nopriv_qna_submit', array( $this, 'submit_question' ) );
+        add_action( 'wp_ajax_customer_queries_submit', array( $this, 'submit_question' ) );
+        add_action( 'wp_ajax_nopriv_customer_queries_submit', array( $this, 'submit_question' ) );
 
-        add_action( 'wp_ajax_qna_search', array( $this, 'search_questions' ) );
-        add_action( 'wp_ajax_nopriv_qna_search', array( $this, 'search_questions' ) );
+        add_action( 'wp_ajax_customer_queries_search', array( $this, 'search_questions' ) );
+        add_action( 'wp_ajax_nopriv_customer_queries_search', array( $this, 'search_questions' ) );
 
-        add_action( 'wp_ajax_qna_vote', array( $this, 'vote_question' ) );
+        add_action( 'wp_ajax_customer_queries_vote', array( $this, 'vote_question' ) );
 
         // Load dashicons on frontend so vote icons are visible.
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_dashicons' ) );
@@ -45,7 +45,7 @@ class Ajax {
      * Submit a question via AJAX
      */
     public function submit_question() {
-        check_ajax_referer( 'multivendorx-qna-frontend-script', 'nonce' );
+        check_ajax_referer( 'multivendorx-customer-queries-frontend-script', 'nonce' );
 
         if ( ! is_user_logged_in() ) {
             wp_send_json_error( array( 'message' => 'You must log in to submit a question.' ) );
@@ -91,7 +91,7 @@ class Ajax {
      * Fetch all answered questions via AJAX
      */
     public function search_questions() {
-        check_ajax_referer( 'multivendorx-qna-frontend-script', 'nonce' );
+        check_ajax_referer( 'multivendorx-customer-queries-frontend-script', 'nonce' );
 
         $product_id = filter_input( INPUT_POST, 'product_id', FILTER_VALIDATE_INT );
         $search_raw = filter_input( INPUT_POST, 'search', FILTER_UNSAFE_RAW );
@@ -117,18 +117,18 @@ class Ajax {
         if ( ! empty( $questions ) ) {
             foreach ( $questions as $row ) {
                 ?>
-                <li data-qna="<?php echo esc_attr( $row['id'] ); ?>" class="qna-item review byuser comment-author-customer">
+                <li data-customer-queries="<?php echo esc_attr( $row['id'] ); ?>" class="customer-queries-item review byuser comment-author-customer">
                     <div class="comment_container">
                         <div class="comment-text">
-                            <p class="qna-question meta">
+                            <p class="customer-queries-question meta">
                                 <strong class="woocommerce-review__author">Q: <?php echo esc_html( $row['question_text'] ); ?> </strong>
                                 <em class="woocommerce-review__verified verified">(By <?php echo esc_html( get_the_author_meta( 'display_name', $row['question_by'] ) ); ?>)</em>
                                 <time class="woocommerce-review__published-date"><?php echo esc_html( human_time_diff( strtotime( $row['question_date'] ), time() ) ) . ' ago'; ?></time>
                             </p>
                             <div class="description"><strong>A:</strong> <?php echo esc_html( $row['answer_text'] ); ?></div>
-                            <div class="qna-votes">
-                                <span class="qna-vote dashicons dashicons-thumbs-up" data-type="up"></span>
-                                <span class="qna-vote dashicons dashicons-thumbs-down" data-type="down"></span>
+                            <div class="customer-queries-votes">
+                                <span class="customer-queries-vote dashicons dashicons-thumbs-up" data-type="up"></span>
+                                <span class="customer-queries-vote dashicons dashicons-thumbs-down" data-type="down"></span>
                                 <p><?php echo intval( $row['total_votes'] ); ?></p>
                             </div>
                         </div>
@@ -151,21 +151,21 @@ class Ajax {
      * Vote on a question via AJAX
      */
     public function vote_question() {
-        check_ajax_referer( 'multivendorx-qna-frontend-script', 'nonce' );
+        check_ajax_referer( 'multivendorx-customer-queries-frontend-script', 'nonce' );
 
         if ( ! is_user_logged_in() ) {
             wp_send_json_error( array( 'message' => 'You must be logged in to vote.' ) );
         }
 
         $user_id = MultiVendorX()->current_user_id;
-        $qna_id  = filter_input( INPUT_POST, 'qna_id', FILTER_VALIDATE_INT );
+        $queries_id  = filter_input( INPUT_POST, 'queries_id', FILTER_VALIDATE_INT );
         $type    = ( filter_input( INPUT_POST, 'type', FILTER_UNSAFE_RAW ) === 'up' ) ? 1 : -1;
 
-        if ( ! $qna_id ) {
+        if ( ! $queries_id ) {
             wp_send_json_error( array( 'message' => 'Invalid question ID.' ) );
         }
 
-        $row = Util::get_question_information( array( 'id' => $qna_id ) )[0] ?? null;
+        $row = Util::get_question_information( array( 'id' => $queries_id ) )[0] ?? null;
 
         if ( ! $row ) {
             wp_send_json_error( array( 'message' => 'Question not found.' ) );
@@ -184,7 +184,7 @@ class Ajax {
         $voters[ $user_id ] = $type;
 
         Util::update_question(
-            $qna_id,
+            $queries_id,
             array(
 				'total_votes' => $total_votes,
 				'voters'      => $voters,

@@ -20,7 +20,7 @@ import {
 import { dashNavigate, formatLocalDate } from '@/services/commonFunction';
 import { useNavigate } from 'react-router-dom';
 
-type StoreQnaRow = {
+type StoreQueriesRow = {
 	id: number;
 	product_name: string;
 	product_link: string;
@@ -41,23 +41,23 @@ const CustomerQuestions: React.FC = () => {
 		CategoryCount[] | null
 	>(null);
 
-	const [selectedQna, setSelectedQna] = useState<StoreQnaRow | null>(null);
+	const [selectedQueries, setSelectedQueries] = useState<StoreQueriesRow | null>(null);
 	const [answer, setAnswer] = useState('');
-	const [qna, setQna] = useState('');
+	const [queries, setQueries] = useState('');
 	const [saving, setSaving] = useState(false);
 	const navigate = useNavigate();
 
 	// Save answer
 	const handleSaveAnswer = () => {
-		if (!selectedQna) {
+		if (!selectedQueries) {
 			return;
 		}
 		setSaving(true);
 		axios
 			.post(
-				getApiLink(appLocalizer, `qna/${selectedQna.id}`),
+				getApiLink(appLocalizer, `customer-queries/${selectedQueries.id}`),
 				{
-					question_text: qna,
+					question_text: queries,
 					answer_text: answer,
 					question_visibility: 'public',
 				},
@@ -65,7 +65,7 @@ const CustomerQuestions: React.FC = () => {
 			)
 			.then(() => {
 				doRefreshTableData({});
-				setSelectedQna(null);
+				setSelectedQueries(null);
 				setAnswer('');
 				setSaving(false);
 			})
@@ -75,14 +75,14 @@ const CustomerQuestions: React.FC = () => {
 			});
 	};
 
-	const fetchQnaById = (id: number) => {
+	const fetchQueriesById = (id: number) => {
 		return axios
-			.get(getApiLink(appLocalizer, `qna/${id}`), {
+			.get(getApiLink(appLocalizer, `customer-queries/${id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
 				const item = response.data;
-				setSelectedQna({
+				setSelectedQueries({
 					id: item.id,
 					product_name: item.product_name,
 					product_link: item.product_link,
@@ -92,7 +92,7 @@ const CustomerQuestions: React.FC = () => {
 					question_date: item.question_date,
 					question_visibility: item.question_visibility || 'public',
 				});
-				setQna(item.question_text);
+				setQueries(item.question_text);
 				setAnswer(item.answer_text || '');
 			});
 	};
@@ -154,7 +154,7 @@ const CustomerQuestions: React.FC = () => {
 				{
 					label: __('Answer', 'multivendorx'),
 					icon: 'answer',
-					onClick: (row) => fetchQnaById(row.id),
+					onClick: (row) => fetchQueriesById(row.id),
 				},
 			],
 		},
@@ -180,7 +180,7 @@ const CustomerQuestions: React.FC = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'qna'), {
+			.get(getApiLink(appLocalizer, 'customer-queries'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,
@@ -263,10 +263,10 @@ const CustomerQuestions: React.FC = () => {
 				filters={filters}
 				format={appLocalizer.date_format}
 			/>
-			{selectedQna && (
+			{selectedQueries && (
 				<PopupUI
-					open={selectedQna}
-					onClose={() => setSelectedQna(null)}
+					open={selectedQueries}
+					onClose={() => setSelectedQueries(null)}
 					width={30}
 					height="70%"
 					header={{
@@ -284,7 +284,7 @@ const CustomerQuestions: React.FC = () => {
 									icon: 'close',
 									text: __('Cancel', 'multivendorx'),
 									color: 'red',
-									onClick: () => setSelectedQna(null),
+									onClick: () => setSelectedQueries(null),
 								},
 								{
 									icon: 'save',
@@ -305,8 +305,8 @@ const CustomerQuestions: React.FC = () => {
 						>
 							<BasicInputUI
 								name="question"
-								value={qna}
-								onChange={(value) => setQna(value)}
+								value={queries}
+								onChange={(value) => setQueries(value)}
 							/>
 						</FormGroup>
 

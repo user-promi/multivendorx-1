@@ -179,7 +179,7 @@ export default {
 					label: __('Franchise', 'multivendorx'),
 					value: 'franchise',
 					// proSetting: true,
-					moduleEnabled: 'franchises-module',
+					moduleEnabled: 'franchises',
 				},
 			],
 		},

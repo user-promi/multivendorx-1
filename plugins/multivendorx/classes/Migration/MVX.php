@@ -295,7 +295,7 @@ class MVX {
         // Questions and answers table migration.
 		$questions_table = $wpdb->prefix . 'mvx_cust_questions';
 		$answers_table   = $wpdb->prefix . 'mvx_cust_answers';
-		$new_qna_table   = $wpdb->prefix . Utill::TABLES['product_qna'];
+		$new_qna_table   = $wpdb->prefix . Utill::TABLES['customer_queries'];
         $offset = (int) get_option( 'mvx_qna_offset', 0 );
 
         $questions = $wpdb->get_results(
@@ -362,7 +362,7 @@ class MVX {
 
         // SPMV table migration.
 		$old_spmv_table = $wpdb->prefix . 'mvx_products_map';
-		$new_spmv_table = $wpdb->prefix . Utill::TABLES['products_map'];
+		$new_spmv_table = $wpdb->prefix . Utill::TABLES['shared_listing'];
         $offset = (int) get_option( 'mvx_spmv_offset', 0 );
 
         $spmv_products = $wpdb->get_results(
@@ -396,7 +396,7 @@ class MVX {
                 $new_spmv_table,
                 array(
 					'ID'          => $map_id,
-					'product_map' => wp_json_encode( array_values( $data['products'] ) ),
+					'listing_products' => wp_json_encode( array_values( $data['products'] ) ),
 					'created'     => $data['created'],
                 ),
                 array(
@@ -407,7 +407,7 @@ class MVX {
 			);
 
             foreach ( $data['products'] as $product_id ) {
-                update_post_meta( $product_id, 'multivendorx_spmv_id', $map_id );
+                update_post_meta( $product_id, 'multivendorx_shared_listing_id', $map_id );
                 delete_post_meta( $product_id, '_mvx_spmv_map_id' );
                 delete_post_meta( $product_id, '_mvx_spmv_product' );
             }

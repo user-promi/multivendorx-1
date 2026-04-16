@@ -561,14 +561,12 @@ const EventRules: React.FC = () => {
 										context: 'email',
 										visibleGroups: ['email'],
 										emailTemplates: [salesReport],
-										availablePlaceholder: [
-											'store_name',
-											'vendor_name',
-											'customer_name',
-											'order_id',
-											'order_total',
-											'order_date'
-										]
+										availablePlaceholder: formData.available_placeholders
+											? formData.available_placeholders
+												.split(',')
+												.map(item => item.replace(/[\[\]]/g, '').trim())
+												.filter(Boolean)
+											: []
 									}}
 									onTemplateSelect={(id) => {
 										setUseTemplate(true); // 🔥 force template mode

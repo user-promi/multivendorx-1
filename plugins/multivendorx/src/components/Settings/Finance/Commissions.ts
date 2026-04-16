@@ -491,7 +491,7 @@ export default {
 				'multivendorx'
 			),
 			rowClass: 'single-line',
-			moduleEnabled: 'marketplace-gateway',
+			moduleEnabled: 'payment-gateway-charge',
 			single: true,
 			desc: __(
 				'<strong>Use this setting</strong> to manage transaction fees for different payment methods. You can set a default fee or define specific fees for each payment mode, such as bank transfer or cash on delivery.<br><strong>Example setup:</strong><br> Total order price = $100<br> Marketplace commission rate = 20%<br> Gateway fees = $10 + 5% <ul> <li>Customer pays = $100</li> <li>Marketplace commission = 20% of $100 = $20</li> <li>Gateway fees = $10 + 5% of $100 = $15</li> <li>Total marketplace earning = $20 + $15 = $35</li> <li>Store receives = $100 - $35 = $65</li> </ul>',

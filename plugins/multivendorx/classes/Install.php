@@ -149,7 +149,7 @@ class Install {
             KEY `idx_type` (`transaction_type`)
         ) $collate;";
 
-        $sql_qna = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['product_qna'] . "` (
+        $sql_qna = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['customer_queries'] . "` (
             `id` INT NOT NULL AUTO_INCREMENT,
             `product_id` INT NOT NULL,
             `store_id` INT NOT NULL,
@@ -188,9 +188,9 @@ class Install {
             PRIMARY KEY (`id`)
         ) $collate;";
 
-        $sql_product_map = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['products_map'] . "` (
+        $sql_shared_listing = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['shared_listing'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-            `product_map` VARCHAR(255) NOT NULL DEFAULT '',
+            `listing_products` VARCHAR(255) NOT NULL DEFAULT '',
             `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`ID`)
         ) $collate;";
@@ -254,6 +254,7 @@ class Install {
             `sms_content` VARCHAR(500) NULL,
             `system_message` TEXT NULL,
             `system_action` VARCHAR(255) NULL,
+            `available_placeholders` VARCHAR(255) NULL,
             `status` ENUM('active', 'inactive') DEFAULT 'active',
             `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -300,7 +301,7 @@ class Install {
         dbDelta( $sql_qna );
         dbDelta( $sql_report_abuse );
         dbDelta( $sql_shipping_zone_locations );
-        dbDelta( $sql_product_map );
+        dbDelta( $sql_shared_listing );
         dbDelta( $sql_review );
         dbDelta( $sql_ratings );
         dbDelta( $sql_notifications );

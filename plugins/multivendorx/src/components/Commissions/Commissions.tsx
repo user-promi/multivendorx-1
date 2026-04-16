@@ -155,7 +155,7 @@ const Commission: React.FC = () => {
 					},
 					{
 						title: 'Gateway Fee',
-						display: modules.includes('marketplace-gateway'),
+						display: modules.includes('payment-gateway-charge'),
 						value: '-' + formatCurrency(row.gateway_fee),
 					},
 					{

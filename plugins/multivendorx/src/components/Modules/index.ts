@@ -26,7 +26,7 @@ export default {
 			category: ['marketplace_types', 'product_types'],
 		},
 		{
-			id: 'appointment',
+			id: 'appointments',
 			name: __('Appointments', 'multivendorx'),
 			desc: 'Dedicated appointment booking functionality.',
 			docLink:
@@ -314,15 +314,15 @@ export default {
 		// 	proModule: true,
 		// 	category: 'payment_management',
 		// },
-		{
-			id: 'razorpay',
-			name: __('Razorpay', 'multivendorx'),
-			desc: 'For clients looking to pay multiple Indian stores instantly',
-			docLink: 'https://multivendorx.com/docs/knowledgebase/payment/',
-			//settingsLink: admin_url('admin.php?page=mvx-setting-admin'),
-			proModule: false,
-			category: 'payment_management',
-		},
+		// {
+		// 	id: 'razorpay',
+		// 	name: __('Razorpay', 'multivendorx'),
+		// 	desc: 'For clients looking to pay multiple Indian stores instantly',
+		// 	docLink: 'https://multivendorx.com/docs/knowledgebase/payment/',
+		// 	//settingsLink: admin_url('admin.php?page=mvx-setting-admin'),
+		// 	proModule: false,
+		// 	category: 'payment_management',
+		// },
 		{
 			type: 'separator',
 			id: 'shipping_management',
@@ -417,21 +417,21 @@ export default {
 			proModule: false,
 			category: 'customer_experience',
 		},
-		{
-			id: 'enquiry',
-			name: __('Enquiry', 'multivendorx'),
-			desc: 'Customers can send private product inquiries.',
-			//docLink: 'https://multivendorx.com/docs/knowledgebase/NA',
-			reqPluging: [
-				{
-					name: 'CatalogX',
-					slug: 'woocommerce-catalog-enquiry/woocommerce-catalog-enquiry.php',
-					link: 'https://catalogx.com/?utm_source=multivendorx&utm_medium=pluginsettings&utm_campaign=multivendorx',
-				},
-			],
-			proModule: true,
-			category: 'customer_experience',
-		},
+		// {
+		// 	id: 'enquiry',
+		// 	name: __('Enquiry', 'multivendorx'),
+		// 	desc: 'Customers can send private product inquiries.',
+		// 	//docLink: 'https://multivendorx.com/docs/knowledgebase/NA',
+		// 	reqPluging: [
+		// 		{
+		// 			name: 'CatalogX',
+		// 			slug: 'woocommerce-catalog-enquiry/woocommerce-catalog-enquiry.php',
+		// 			link: 'https://catalogx.com/?utm_source=multivendorx&utm_medium=pluginsettings&utm_campaign=multivendorx',
+		// 		},
+		// 	],
+		// 	proModule: true,
+		// 	category: 'customer_experience',
+		// },
 		{
 			id: 'marketplace-refund',
 			name: __('Marketplace Refund', 'multivendorx'),
@@ -477,7 +477,7 @@ export default {
 		},
 		{
 			id: 'marketplace-compliance',
-			name: __('Compliance', 'multivendorx'),
+			name: __('Marketplace Compliance', 'multivendorx'),
 			desc: 'Ensure stores meet marketplace requirements with automated policy checks.',
 			docLink: 'https://multivendorx.com/docs/knowledgebase/NA',
 			settingsLink: `${appLocalizer.admin_dashboard_url}#&tab=settings&subtab=compliance`,
@@ -514,7 +514,7 @@ export default {
 			category: 'marketplace_boosters',
 		},
 		{
-			id: 'franchises-module',
+			id: 'franchises',
 			name: __('Franchises', 'multivendorx'),
 			desc: 'Enables franchise-style ordering with store-created orders, admin-product ordering, and automatic store assignment based on customer location.',
 			docLink: 'https://multivendorx.com/docs/knowledgebase/NA',
@@ -525,7 +525,7 @@ export default {
 		},
 
 		{
-			id: 'marketplace-gateway',
+			id: 'payment-gateway-charge',
 			name: __('Payment Gateway Charge', 'multivendorx'),
 			desc: 'Payment gateway fees are deducted from vendor commissions by the admin, ensuring platform costs are covered automatically.',
 			docLink:
@@ -536,7 +536,7 @@ export default {
 		},
 		{
 			id: 'product-advertising',
-			name: __('Advertise Product', 'multivendorx'),
+			name: __('Product Advertising', 'multivendorx'),
 			desc: 'Paid promotion for products within the marketplace, boosting visibility.',
 			docLink:
 				'https://multivendorx.com/docs/knowledgebase/advertise-product/',
@@ -619,22 +619,22 @@ export default {
 			],
 			category: 'integration',
 		},
-		{
-			id: 'buddypress',
-			name: __('Buddypress', 'multivendorx'),
-			desc: 'Adds social networking features to stores (profiles, connections, messaging).',
-			docLink:
-				'https://multivendorx.com/docs/knowledgebase/mvx-buddypress',
-			proModule: false,
-			reqPluging: [
-				{
-					name: 'BuddyPress',
-					slug: 'buddypress/class-buddypress.php',
-					link: 'https://wordpress.org/plugins/buddypress/',
-				},
-			],
-			category: 'integration',
-		},
+		// {
+		// 	id: 'buddypress',
+		// 	name: __('Buddypress', 'multivendorx'),
+		// 	desc: 'Adds social networking features to stores (profiles, connections, messaging).',
+		// 	docLink:
+		// 		'https://multivendorx.com/docs/knowledgebase/mvx-buddypress',
+		// 	proModule: false,
+		// 	reqPluging: [
+		// 		{
+		// 			name: 'BuddyPress',
+		// 			slug: 'buddypress/class-buddypress.php',
+		// 			link: 'https://wordpress.org/plugins/buddypress/',
+		// 		},
+		// 	],
+		// 	category: 'integration',
+		// },
 		{
 			id: 'wpml',
 			name: __('WPML', 'multivendorx'),
@@ -704,7 +704,7 @@ export default {
 			category: 'integration',
 		},
 		{
-			id: 'shipstation-module',
+			id: 'shipstation',
 			name: __('Shipstation', 'multivendorx'),
 			desc: 'Integration with ShipStation for advanced shipping management and label printing.',
 			docLink: 'https://multivendorx.com/docs/knowledgebase/shipstation/',

@@ -40,6 +40,7 @@ class Rewrites {
 
         // Make endpoint behave like a page.
         add_action( 'pre_get_posts', array( $this, 'make_endpoint_virtual_page' ) );
+        add_filter( 'pre_get_document_title', array( $this, 'set_store_page_title' ), 10 );
 
         // Load correct template.
         add_filter( 'template_include', array( $this, 'load_store_template' ) );
@@ -171,6 +172,15 @@ class Rewrites {
                 $query->queried_object_id = $page->ID;
             }
         }
+    }
+
+    public function set_store_page_title( $title ) {
+        if ( is_query_var( $this->custom_store_url ) ) {
+            $store_slug = get_query_var( $this->custom_store_url );
+            $store      = Store::get_store( $store_slug, 'slug' );
+            return $store->get('name') . ' | ' . get_bloginfo( 'name' );
+        }
+        return $title;
     }
 
 	/**

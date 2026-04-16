@@ -68,6 +68,22 @@ final class MultiVendorX {
         add_action( 'woocommerce_loaded', array( $this, 'init_plugin' ) );
         add_action( 'plugins_loaded', array( $this, 'is_woocommerce_loaded' ) );
         add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
+        // Major update notice.
+		add_action( 'in_plugin_update_message-dc-woocommerce-multi-vendor/dc_product_vendor.php', array( $this, 'multivendorx_plugin_update_message' ) );
+    }
+
+    /**
+     * Show a plugin update message on the plugin update screen for major versions.
+     *
+     * This is hooked to display a custom admin notice when the installed version is less than 5.0.0.
+     *
+     * @return void
+     */
+    public function multivendorx_plugin_update_message() {
+        if ( version_compare( get_option( 'MULTIVENDORX_PLUGIN_VERSION' ), '5.0.0', '<' ) ) {
+            echo '<p><strong>Heads up!</strong> 5.0.0 is a major update. Make a full site backup and before upgrading your marketplace to avoid any undesirable situations.</p>';
+            exit;
+        }
     }
 
     /**

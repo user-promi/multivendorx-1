@@ -31,11 +31,11 @@ class Frontend {
         add_filter( 'woocommerce_product_tabs', array( $this, 'add_more_offers_tab' ) );
 
         if ( 'above' === MultiVendorX()->setting->get_setting( 'more_offers_display_position', 'none' ) ) {
-            add_action( 'woocommerce_single_product_summary', array( $this, 'spmv_tab_link' ), 60 );
+            add_action( 'woocommerce_single_product_summary', array( $this, 'shared_listing_tab_link' ), 60 );
         }
 
         if ( 'after' === MultiVendorX()->setting->get_setting( 'more_offers_display_position', 'none' ) ) {
-            add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'spmv_tab_link' ), 99 );
+            add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'shared_listing_tab_link' ), 99 );
         }
 
         add_filter( 'multivendorx_register_scripts', array( $this, 'register_script' ) );
@@ -95,14 +95,14 @@ class Frontend {
         $mapped_ids  = array();
         $primary_ids = array();
 
-        $table = $wpdb->prefix . Utill::TABLES['products_map'];
-        $limit = apply_filters( 'multivendorx_shared_listing_product_map_query_limit', 100 );
+        $table = $wpdb->prefix . Utill::TABLES['shared_listing'];
+        $limit = apply_filters( 'multivendorx_shared_listing_products_query_limit', 100 );
         // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $query = $wpdb->prepare( "SELECT product_map FROM {$table} LIMIT %d", $limit );
+        $query = $wpdb->prepare( "SELECT listing_products FROM {$table} LIMIT %d", $limit );
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $maps = $wpdb->get_results( $query );
         foreach ( $maps as $map ) {
-            $ids = maybe_unserialize( $map->product_map );
+            $ids = maybe_unserialize( $map->listing_products );
 
             if ( empty( $ids ) ) {
                 continue;
@@ -254,7 +254,7 @@ class Frontend {
     public function add_more_offers_tab( $tabs ) {
         global $product;
 
-        if ( get_post_meta( $product->get_id(), 'multivendorx_spmv_id', true ) ) {
+        if ( get_post_meta( $product->get_id(), Utill::POST_META_SETTINGS['shared_listing_id'], true ) ) {
             $tabs['singleproductmultistore'] = array(
                 'title'    => __( 'More Offers', 'multivendorx' ),
                 'priority' => 50,
@@ -271,7 +271,7 @@ class Frontend {
 	public function woocommerce_product_more_offers_tab() {
         global $product, $wpdb;
 
-        $table      = $wpdb->prefix . Utill::TABLES['products_map'];
+        $table      = $wpdb->prefix . Utill::TABLES['shared_listing'];
         $product_id = (int) $product->get_id();
 
 		// Search serialized data.
@@ -280,7 +280,7 @@ class Frontend {
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $row = $wpdb->get_row(
             $wpdb->prepare(
-                "SELECT product_map FROM {$table} WHERE product_map LIKE %s",
+                "SELECT listing_products FROM {$table} WHERE listing_products LIKE %s",
                 $like
             )
         );
@@ -290,7 +290,7 @@ class Frontend {
             return;
         }
 
-        $map_array = maybe_unserialize( $row->product_map );
+        $map_array = maybe_unserialize( $row->listing_products );
         if ( ! is_array( $map_array ) ) {
             return;
         }
@@ -318,10 +318,10 @@ class Frontend {
      *
      * @return void
      */
-    public function spmv_tab_link() {
+    public function shared_listing_tab_link() {
         global $product;
 
-        if ( get_post_meta( $product->get_id(), 'multivendorx_spmv_id', true ) ) {
+        if ( get_post_meta( $product->get_id(), Utill::POST_META_SETTINGS['shared_listing_id'], true ) ) {
 			echo '<div> <button type="button" class="goto_more_offer_tab button">' . esc_html__( 'More Stores', 'multivendorx' ) . '</button> </div>';        }
 	}
 

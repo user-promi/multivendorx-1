@@ -27,7 +27,7 @@ class Rest extends \WP_REST_Controller {
      *
      * @var string
      */
-    protected $rest_base = 'qna';
+    protected $rest_base = 'customer-queries';
 
     /**
      * Constructor.
@@ -102,7 +102,7 @@ class Rest extends \WP_REST_Controller {
 
 
     /**
-     * Get QnA items with optional pagination, date filters, and counters
+     * Get Queries items with optional pagination, date filters, and counters
      *
      * @param  object $request Full data about the request.
      */
@@ -429,10 +429,10 @@ class Rest extends \WP_REST_Controller {
         return rest_ensure_response( array( 'success' => true ) );
     }
     /**
-     * Prepare a single QnA item for REST response.
+     * Prepare a single Queries item for REST response.
      *
-     * @param array $q QnA item data.
-     * @return array Formatted QnA item for REST.
+     * @param array $q Queries item data.
+     * @return array Formatted Queries item for REST.
      */
     public function prepare_rest_item_for_response( $q ) {
         $product       = wc_get_product( $q['product_id'] );

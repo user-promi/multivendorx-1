@@ -9,7 +9,7 @@ addFilter(
 	(configs, { appLocalizer }) => {
 		configs.push({
 			id: 'customer-queries',
-			url: getApiLink(appLocalizer, 'qna'),
+			url: getApiLink(appLocalizer, 'customer-queries'),
 			params: {
 				page: 1, row: 1
 			},
