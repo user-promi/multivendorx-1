@@ -142,6 +142,7 @@ const AddProduct = () => {
 			const {
 				booking_location_type,
 				booking_duration_unit,
+				exclude_global_add_ons,
 				...productData
 			} = payload;
 
