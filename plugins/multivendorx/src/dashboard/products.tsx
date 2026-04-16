@@ -64,11 +64,11 @@ const AllProduct: React.FC = () => {
 		axios
 			.post(
 				`${appLocalizer.apiUrl}/wc/v3/products/`,
-				{ name: 'Auto Draft', status: 'draft',
-					meta_data: [
-						{ key: '_is_auto_draft', value: true }
-					]
-				 },
+				{
+					name: 'Auto Draft',
+					status: 'draft',
+					meta_data: [{ key: '_is_auto_draft', value: true }],
+				},
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
 			.then((res) => setNewProductId(res.data.id))
@@ -132,10 +132,10 @@ const AllProduct: React.FC = () => {
 					result.status === 'fulfilled'
 						? result.value
 						: {
-							value: statuses[index],
-							label: STATUS_LABELS[statuses[index]],
-							count: 0,
-						}
+								value: statuses[index],
+								label: STATUS_LABELS[statuses[index]],
+								count: 0,
+							}
 				)
 			);
 		} catch (error) {
@@ -278,9 +278,9 @@ const AllProduct: React.FC = () => {
 					stock_status: query.filter?.stockStatus,
 					after: query.filter?.created_at?.startDate
 						? toWcIsoDate(
-							query.filter.created_at.startDate,
-							'start'
-						)
+								query.filter.created_at.startDate,
+								'start'
+							)
 						: undefined,
 					before: query.filter?.created_at?.endDate
 						? toWcIsoDate(query.filter.created_at.endDate, 'end')
@@ -448,7 +448,7 @@ const AllProduct: React.FC = () => {
 						onClick: (row: ProductRow) =>
 							navigator.clipboard
 								.writeText(row.permalink)
-								.catch(() => { }),
+								.catch(() => {}),
 					},
 					{
 						label: __('Delete', 'multivendorx'),
@@ -461,7 +461,6 @@ const AllProduct: React.FC = () => {
 		},
 	};
 
-
 	const handleQueryUpdate = (query: QueryProps) => {
 		const prevLang = prevQuery.languageFilter || 'all';
 		const prevStatus = prevQuery.categoryFilter || 'all';
@@ -473,9 +472,7 @@ const AllProduct: React.FC = () => {
 
 		if (currLang !== prevLang) {
 			delete newQuery.categoryFilter;
-		}
-
-		else if (currStatus !== prevStatus) {
+		} else if (currStatus !== prevStatus) {
 			delete newQuery.languageFilter;
 		}
 
@@ -502,7 +499,7 @@ const AllProduct: React.FC = () => {
 									modules.includes('shared-listing') &&
 									appLocalizer.settings_databases_value
 										.onboarding?.store_selling_mode ==
-									'shared_listing'
+										'shared_listing'
 								) {
 									dashNavigate(navigate, ['products', 'add']);
 								} else {
@@ -516,7 +513,11 @@ const AllProduct: React.FC = () => {
 					navigate
 				)}
 			/>
-			{applyFilters('multivendorx_product_list_header_middle_section',null, modules)}
+			{applyFilters(
+				'multivendorx_product_list_header_middle_section',
+				null,
+				modules
+			)}
 			<TableCard
 				headers={headers}
 				rows={rows}

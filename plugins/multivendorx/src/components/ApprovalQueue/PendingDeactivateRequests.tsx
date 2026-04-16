@@ -109,15 +109,15 @@ const PendingDeactivateRequests: React.FC<object> = () => {
 	};
 
 	return (
-			<TableCard
-				headers={headers}
-				rows={rows}
-				totalRows={totalRows}
-				isLoading={isLoading}
-				onQueryUpdate={doRefreshTableData}
-				ids={rowIds}
-				format={appLocalizer.date_format}
-			/>
+		<TableCard
+			headers={headers}
+			rows={rows}
+			totalRows={totalRows}
+			isLoading={isLoading}
+			onQueryUpdate={doRefreshTableData}
+			ids={rowIds}
+			format={appLocalizer.date_format}
+		/>
 	);
 };
 

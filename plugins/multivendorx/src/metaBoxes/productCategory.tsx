@@ -286,7 +286,16 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 	};
 
 	return (
-		<Card title={__('Category - Where does it belong in your shop?', 'multivendorx')} desc={__('Where should this product appear in your store?', 'multivendorx')}>
+		<Card
+			title={__(
+				'Category - Where does it belong in your shop?',
+				'multivendorx'
+			)}
+			desc={__(
+				'Where should this product appear in your store?',
+				'multivendorx'
+			)}
+		>
 			{appLocalizer.settings_databases_value['product-preferences']
 				?.category_selection_method === 'yes' ? (
 				<>

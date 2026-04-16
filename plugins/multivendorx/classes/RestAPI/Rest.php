@@ -355,19 +355,19 @@ class Rest {
         $store_id = (int) $order->get_meta( Utill::POST_META_SETTINGS['store_id'] );
 
         if ( $store_id > 0 ) {
-            $store = new Store( $store_id );
-            $phone_meta = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone']);
+            $store      = new Store( $store_id );
+            $phone_meta = $store->get_meta( Utill::STORE_SETTINGS_KEYS['phone'] );
 
             $formatted_phone = '';
             if ( ! empty( $phone_meta['country_code'] ) && ! empty( $phone_meta['phone'] ) ) {
                 $formatted_phone = $phone_meta['country_code'] . '-' . $phone_meta['phone'];
             }
 
-            $response->data['store_id']   = $store_id;
-            $response->data['store_name'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
-            $response->data['store_slug'] = (string) $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
+            $response->data['store_id']      = $store_id;
+            $response->data['store_name']    = (string) $store->get( Utill::STORE_SETTINGS_KEYS['name'] );
+            $response->data['store_slug']    = (string) $store->get( Utill::STORE_SETTINGS_KEYS['slug'] );
             $response->data['store_address'] = (string) $store->get_meta( Utill::STORE_SETTINGS_KEYS['address'] );
-            $response->data['store_phone'] = $formatted_phone;
+            $response->data['store_phone']   = $formatted_phone;
         }
         $response->data['paid_status'] = $order->is_paid();
 
@@ -673,24 +673,39 @@ class Rest {
 		);
 
 		if ( isset( $creating ) && true === $creating && 'pending' === $new_status ) {
-            MultiVendorX()->notifications->send_notification_helper('product_submitted', $store, null, [
-				'product_name' => $product->get_name(),
-				'category'    => 'activity',
-			]);
+            MultiVendorX()->notifications->send_notification_helper(
+                'product_submitted',
+                $store,
+                null,
+                array(
+					'product_name' => $product->get_name(),
+					'category'     => 'activity',
+				)
+            );
 		}
 
 		if ( 'pending' === $old_status && 'publish' === $new_status ) {
-            MultiVendorX()->notifications->send_notification_helper('product_approved', $store, null, [
-				'product_name' => $product->get_name(),
-				'category'    => 'activity',
-			]);
+            MultiVendorX()->notifications->send_notification_helper(
+                'product_approved',
+                $store,
+                null,
+                array(
+					'product_name' => $product->get_name(),
+					'category'     => 'activity',
+				)
+            );
 		}
 
 		if ( 'publish' === $old_status && 'draft' === $new_status ) {
-            MultiVendorX()->notifications->send_notification_helper('product_rejected', $store, null, [
-				'product_name' => $product->get_name(),
-				'category'    => 'activity',
-			]);
+            MultiVendorX()->notifications->send_notification_helper(
+                'product_rejected',
+                $store,
+                null,
+                array(
+					'product_name' => $product->get_name(),
+					'category'     => 'activity',
+				)
+            );
 		}
 
 		if ( 'publish' === $new_status && ( 'pending' === $old_status || 'draft' === $old_status ) ) {

@@ -417,8 +417,10 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 					}
 				>
 					<FormGroupWrapper>
-						<FormGroup  label={__('Shipping Method', 'multivendorx')}>
-                           <ChoiceToggleUI
+						<FormGroup
+							label={__('Shipping Method', 'multivendorx')}
+						>
+							<ChoiceToggleUI
 								value={formData.shippingMethod}
 								onChange={(val: string) => {
 									if (!isEditing) {
@@ -476,11 +478,11 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								}
 								disabled={isEditing}
 							/>
-                        </FormGroup>
+						</FormGroup>
 
 						{/* Local Pickup */}
 						{formData.shippingMethod === 'local_pickup' && (
-								<FormGroup  label={__('Cost', 'multivendorx')}>
+							<FormGroup label={__('Cost', 'multivendorx')}>
 								<BasicInputUI
 									type="number"
 									name="localPickupCost"
@@ -493,7 +495,10 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								<Notice
 									type="info"
 									displayPosition="inline-notice"
-									message={__("Set the fee customers need to pay when choosing Local Pickup.", 'multivendorx')}
+									message={__(
+										'Set the fee customers need to pay when choosing Local Pickup.',
+										'multivendorx'
+									)}
 								/>
 							</FormGroup>
 						)}
@@ -555,7 +560,10 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 								<Notice
 									type="info"
 									displayPosition="inline-notice"
-									message={__("Free shipping is applied when the order reaches a minimum amount. Enter that value in the Minimum Order Amount field.", 'multivendorx')}
+									message={__(
+										'Free shipping is applied when the order reaches a minimum amount. Enter that value in the Minimum Order Amount field.',
+										'multivendorx'
+									)}
 								/>
 							</>
 						)}
@@ -563,8 +571,7 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 						{/* Flat Rate */}
 						{formData.shippingMethod === 'flat_rate' && (
 							<>
-								<FormGroup  
-									label={__('Cost', 'multivendorx')}>
+								<FormGroup label={__('Cost', 'multivendorx')}>
 									<BasicInputUI
 										type="number"
 										name="flatRateCost"
@@ -576,19 +583,32 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									/>
 									<div className="desc">
 										{__('Enter a ', 'multivendorx')}
-										<b>{__('fixed amount', 'multivendorx')}</b>
+										<b>
+											{__('fixed amount', 'multivendorx')}
+										</b>
 										{__(' or use a ', 'multivendorx')}
 										<b>{__('formula', 'multivendorx')}</b>
-										{__(' if you want shipping to change based on the number of items or order value.', 'multivendorx')}
+										{__(
+											' if you want shipping to change based on the number of items or order value.',
+											'multivendorx'
+										)}
 									</div>
 									<Notice
 										type="info"
 										displayPosition="inline-notice"
-										message={__("<b> 5.00 </b> Flat $5 shipping per order <br><b> 2 + (1.5 × quantity) </b> $2 base + $1.50 per item <br><b>10% of order value </b> Shipping calculated as a percentage <br> If you're unsure, simply enter a <b>fixed amount like 5.00. </b>", 'multivendorx')}
+										message={__(
+											"<b> 5.00 </b> Flat $5 shipping per order <br><b> 2 + (1.5 × quantity) </b> $2 base + $1.50 per item <br><b>10% of order value </b> Shipping calculated as a percentage <br> If you're unsure, simply enter a <b>fixed amount like 5.00. </b>",
+											'multivendorx'
+										)}
 									/>
 								</FormGroup>
 
-								<FormGroup  label={__('Cost of Shipping Class', 'multivendorx')}>
+								<FormGroup
+									label={__(
+										'Cost of Shipping Class',
+										'multivendorx'
+									)}
+								>
 									<BasicInputUI
 										type="text"
 										name="flatRateClassCost"
@@ -603,12 +623,20 @@ const DistanceByZoneShipping: React.FC<DistanceByZoneShippingProps> = ({
 									/>
 									<div className="desc">
 										{__('This amount is', 'multivendorx')}
-										<b>{__('added to the base shipping cost.', 'multivendorx')}</b>
+										<b>
+											{__(
+												'added to the base shipping cost.',
+												'multivendorx'
+											)}
+										</b>
 									</div>
 									<Notice
 										type="info"
 										displayPosition="inline-notice"
-										message={__("Base cost: <b>$2.00</b> + Heavy item: <b>$8.00</b>  Total shipping: <b>$10.00</b> <br> Leave empty if you don't use shipping classes.", 'multivendorx')}
+										message={__(
+											"Base cost: <b>$2.00</b> + Heavy item: <b>$8.00</b>  Total shipping: <b>$10.00</b> <br> Leave empty if you don't use shipping classes.",
+											'multivendorx'
+										)}
 									/>
 								</FormGroup>
 							</>

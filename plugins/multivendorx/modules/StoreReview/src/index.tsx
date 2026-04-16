@@ -1,7 +1,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import StoreReviews from './StoreReviews';
-import {getApiLink} from 'zyra';
+import { getApiLink } from 'zyra';
 
 addFilter(
 	'multivendorx_customer_api_configs',
@@ -11,7 +11,8 @@ addFilter(
 			id: 'store-review',
 			url: getApiLink(appLocalizer, 'reviews'),
 			params: {
-				page: 1, row: 1
+				page: 1,
+				row: 1,
 			},
 			header: 'x-wp-status-pending',
 		});

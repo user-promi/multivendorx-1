@@ -128,7 +128,7 @@ class Util {
 				'review_images'  => ! empty( $images ) ? wp_json_encode( $images ) : null,
 				'status'         => 'pending',
 				'date_created'   => current_time( 'mysql' ),
-				'user_ip'		 => getenv("REMOTE_ADDR")
+				'user_ip'        => getenv( 'REMOTE_ADDR' ),
             )
 		);
 

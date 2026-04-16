@@ -24,8 +24,14 @@ export default {
 			row: false,
 			cols: 2,
 			label: __('Invoice prefix', 'multivendorx'),
-			desc: __('Example results: INV-2026-0001, INV-PGE-0001', 'multivendorx'),
-			placeholder: __('Text that appears before the number.', 'multivendorx'),
+			desc: __(
+				'Example results: INV-2026-0001, INV-PGE-0001',
+				'multivendorx'
+			),
+			placeholder: __(
+				'Text that appears before the number.',
+				'multivendorx'
+			),
 			size: '25rem',
 			moduleEnabled: 'invoice',
 			proSetting: true,
@@ -148,7 +154,6 @@ export default {
 				},
 			],
 			proSetting: true,
-
 		},
 		{
 			key: 'separator_content',
@@ -245,7 +250,7 @@ export default {
 		// 				'multivendorx'
 		// 			),
 		// 			value: 'order_confirmation_download',
-		// 		},	
+		// 		},
 		// 	],
 		// 	proSetting: true,
 		// 	selectDeselect: true,
@@ -274,7 +279,6 @@ export default {
 				disableBtn: true,
 			},
 			proSetting: true,
-
 		},
 		{
 			key: 'vat_tax_number',
@@ -378,7 +382,6 @@ export default {
 			cols: 2,
 			label: __('Invoice footer text', 'multivendorx'),
 			proSetting: true,
-
 		},
 		{
 			key: 'seller_agreement',
@@ -387,7 +390,6 @@ export default {
 			cols: 2,
 			label: __('Terms and conditions', 'multivendorx'),
 			proSetting: true,
-
 		},
 		{
 			key: 'separator_content',
@@ -398,7 +400,6 @@ export default {
 			),
 			title: __('PDF format', 'multivendorx'),
 			proSetting: true,
-
 		},
 		{
 			key: 'commission_type',
@@ -425,7 +426,6 @@ export default {
 				},
 			],
 			proSetting: true,
-
 		},
 		{
 			key: 'commission_type',
@@ -447,7 +447,6 @@ export default {
 				},
 			],
 			proSetting: true,
-
 		},
 		{
 			key: 'separator_content',

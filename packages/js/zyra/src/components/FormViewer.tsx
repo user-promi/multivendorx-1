@@ -256,8 +256,8 @@ const FormViewer: React.FC<FormViewerProps> = ({
     const [captchaError, setCaptchaError] = useState<boolean>(false);
 
     const formList = formFields.formfieldlist || [];
-    const buttonField = formList.find(f => f.type === 'button');
-    const otherFields = formList.filter(f => f.type !== 'button');
+    const buttonField = formList.find((f) => f.type === 'button');
+    const otherFields = formList.filter((f) => f.type !== 'button');
     const recaptchaField = formList.find((f) => f.type === 'recaptcha');
     const siteKey = recaptchaField?.sitekey || null;
     const defaultDate = new Date().getFullYear() + '-01-01';
@@ -330,16 +330,20 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
         const error: Record<string, string> = {};
 
-        const isValidEmail = (email: string) => /^\S+@\S+\.([a-zA-Z]{2,})$/.test(email);
+        const isValidEmail = (email: string) =>
+            /^\S+@\S+\.([a-zA-Z]{2,})$/.test(email);
 
         formList.forEach((field) => {
-            if (field.disabled || !field.name) return;
+            if (field.disabled || !field.name) {
+                return;
+            }
 
             const value = inputs[field.name];
 
             if (field.name === 'name') {
                 if (!value || (typeof value === 'string' && !value.trim())) {
-                    error[field.name] = `${field.label || 'Store Name'} is required.`;
+                    error[field.name] =
+                        `${field.label || 'Store Name'} is required.`;
                 }
                 return;
             }
@@ -352,7 +356,9 @@ const FormViewer: React.FC<FormViewerProps> = ({
             }
 
             // ✅ NORMAL REQUIRED FIELDS
-            if (!field.required) return;
+            if (!field.required) {
+                return;
+            }
 
             switch (field.type) {
                 case 'text':
@@ -390,12 +396,23 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
         setErrors({});
 
-        const submitData: Record<string, string | number | File| { country_code: string; phone: string } | undefined> =
-            {};
+        const submitData: Record<
+            string,
+            | string
+            | number
+            | File
+            | { country_code: string; phone: string }
+            | undefined
+        > = {};
         for (const key in inputs) {
             const value = inputs[key];
             if (value !== undefined && value !== null) {
-                submitData[key] = value as string | number | File | { country_code: string; phone: string } | undefined;
+                submitData[key] = value as
+                    | string
+                    | number
+                    | File
+                    | { country_code: string; phone: string }
+                    | undefined;
             }
         }
         onSubmit(submitData);
@@ -431,9 +448,16 @@ const FormViewer: React.FC<FormViewerProps> = ({
                 );
 
             case 'text':
-                if (field.name === 'store-phone' || field.label === 'Store Phone' || field.label === 'Phone') {
+                if (
+                    field.name === 'store-phone' ||
+                    field.label === 'Store Phone' ||
+                    field.label === 'Phone'
+                ) {
                     const value =
-                        (inputs[name] as { country_code?: string; phone?: string }) || {};
+                        (inputs[name] as {
+                            country_code?: string;
+                            phone?: string;
+                        }) || {};
 
                     return (
                         <FormRow
@@ -443,7 +467,6 @@ const FormViewer: React.FC<FormViewerProps> = ({
                             error={error}
                         >
                             <div style={{ display: 'flex', gap: '10px' }}>
-
                                 {/* Country Code Dropdown */}
                                 <div style={{ minWidth: '140px' }}>
                                     <select
@@ -455,10 +478,15 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                             })
                                         }
                                     >
-                                        <option value="">Select country code</option>
+                                        <option value="">
+                                            Select country code
+                                        </option>
 
                                         {CountryCodes.map((opt) => (
-                                            <option key={opt.value} value={opt.value}>
+                                            <option
+                                                key={opt.value}
+                                                value={opt.value}
+                                            >
                                                 {opt.label}
                                             </option>
                                         ))}
@@ -516,7 +544,11 @@ const FormViewer: React.FC<FormViewerProps> = ({
                             type="email"
                             name={name}
                             className="input-text"
-                            value={(inputs[name] as string) || getDefaultPlaceholder('email') || ''}
+                            value={
+                                (inputs[name] as string) ||
+                                getDefaultPlaceholder('email') ||
+                                ''
+                            }
                             placeholder={field.placeholder}
                             onChange={(e) => handleChange(name, e.target.value)}
                             required={field.required}
@@ -746,7 +778,10 @@ const FormViewer: React.FC<FormViewerProps> = ({
 
                             if (subField.type === 'text') {
                                 return (
-                                    <p key={subField.key} className="woocommerce-form-row form-row">
+                                    <p
+                                        key={subField.key}
+                                        className="woocommerce-form-row form-row"
+                                    >
                                         <label>{subField.label}</label>
                                         <input
                                             type="text"
@@ -771,8 +806,7 @@ const FormViewer: React.FC<FormViewerProps> = ({
                                 if (subField.key === 'country') {
                                     options = countryList || [];
                                 } else if (subField.key === 'state') {
-                                    const selectedCountry =
-                                        inputs['country'];
+                                    const selectedCountry = inputs['country'];
                                     const rawStates =
                                         stateList?.[selectedCountry as string];
 

@@ -34,19 +34,19 @@ class Utill {
      * @var array
      */
     const TABLES = array(
-        'commission'            => 'multivendorx_commissions',
-        'store'                 => 'multivendorx_stores',
-        'store_users'           => 'multivendorx_store_users',
-        'store_meta'            => 'multivendorx_store_meta',
-        'transaction'           => 'multivendorx_transactions',
-        'customer_queries'      => 'multivendorx_customer_queries',
-        'report_abuse'          => 'multivendorx_report_abuse',
-        'review'                => 'multivendorx_store_reviews',
-        'rating'                => 'multivendorx_store_review_ratings',
-        'shared_listing'        => 'multivendorx_shared_listing_mapping',
-        'notifications'         => 'multivendorx_store_activity_notifications',
-        'system_events'         => 'multivendorx_system_events',
-        'visitors_stats'        => 'multivendorx_visitors_stats',
+        'commission'       => 'multivendorx_commissions',
+        'store'            => 'multivendorx_stores',
+        'store_users'      => 'multivendorx_store_users',
+        'store_meta'       => 'multivendorx_store_meta',
+        'transaction'      => 'multivendorx_transactions',
+        'customer_queries' => 'multivendorx_customer_queries',
+        'report_abuse'     => 'multivendorx_report_abuse',
+        'review'           => 'multivendorx_store_reviews',
+        'rating'           => 'multivendorx_store_review_ratings',
+        'shared_listing'   => 'multivendorx_shared_listing_mapping',
+        'notifications'    => 'multivendorx_store_activity_notifications',
+        'system_events'    => 'multivendorx_system_events',
+        'visitors_stats'   => 'multivendorx_visitors_stats',
     );
 
     const MULTIVENDORX_SETTINGS = array(
@@ -72,7 +72,7 @@ class Utill {
         'store-reviews'                 => 'multivendorx_store_reviews_settings',
         'refunds'                       => 'multivendorx_refunds_settings',
         'product-advertising'           => 'multivendorx_product_advertising_settings',
-        'product-preferences'          => 'multivendorx_product_preferences_settings',
+        'product-preferences'           => 'multivendorx_product_preferences_settings',
         'geolocation'                   => 'multivendorx_geolocation_settings',
         'shipping'                      => 'multivendorx_shipping_settings',
         'legal-compliance'              => 'multivendorx_legal_compliance_settings',
@@ -596,12 +596,12 @@ class Utill {
 
     public function get_permissions() {
         $permissions = array(
-            'hide_store_products' => false,
+            'hide_store_products'    => false,
             'disable_product_upload' => false,
-            'disable_payouts' => false,
-            'disable_checkout' => false,
-            'restrict_store_access' => false,
-            'hide_store_from_view' => false,
+            'disable_payouts'        => false,
+            'disable_checkout'       => false,
+            'restrict_store_access'  => false,
+            'hide_store_from_view'   => false,
         );
 
         return apply_filters( 'multivendorx_modify_permissions', $permissions );

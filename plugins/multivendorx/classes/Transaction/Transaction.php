@@ -76,9 +76,9 @@ class Transaction {
 
         // If (payment method is stripe or paypal marketplace and the check charges then this function return).
         $payment_method = $order->get_payment_method();
-        $gateways = WC()->payment_gateways()->payment_gateways();
+        $gateways       = WC()->payment_gateways()->payment_gateways();
 
-        if (isset($gateways[$payment_method]) && !empty($gateways[$payment_method]->multivendorx_payment_gateway)) {
+        if ( isset( $gateways[ $payment_method ] ) && ! empty( $gateways[ $payment_method ]->multivendorx_payment_gateway ) ) {
             return;
         }
 
@@ -349,7 +349,7 @@ class Transaction {
         }
 
         return array(
-            'balance' => floatval( max( 0, (float) $result->balance - (float) $minimum_wallet_amount ) ),
+            'balance'         => floatval( max( 0, (float) $result->balance - (float) $minimum_wallet_amount ) ),
             'locking_balance' => floatval( $result->locking_balance ),
         );
     }

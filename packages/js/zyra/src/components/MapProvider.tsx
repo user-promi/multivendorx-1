@@ -41,7 +41,9 @@ interface MapboxSuggestion {
 
 type MapInstance = google.maps.Map | window.mapboxgl.Map;
 
-type MarkerInstance = google.maps.marker.AdvancedMarkerElement | window.mapboxgl.Marker;
+type MarkerInstance =
+    | google.maps.marker.AdvancedMarkerElement
+    | window.mapboxgl.Marker;
 
 type MapProviderType = 'google_map' | 'mapbox';
 type MarkerType = 'default' | 'user' | 'store';
@@ -125,14 +127,19 @@ const googleAdapter: MapAdapter = {
         await new Promise((res) => (script.onload = res));
     },
 
-    createMap(container: HTMLElement, lat: number, lng: number, zoom: number, mapId?: string) {
+    createMap(
+        container: HTMLElement,
+        lat: number,
+        lng: number,
+        zoom: number,
+        mapId?: string
+    ) {
         return new window.google.maps.Map(container, {
             center: { lat, lng },
             zoom,
-            mapId: mapId ,
+            mapId: mapId,
         });
     },
-    
 
     createMarker(
         map: MapInstance,
@@ -162,7 +169,8 @@ const googleAdapter: MapAdapter = {
             icon.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
 
             const img = document.createElement('img');
-            img.src = 'https://maps.gstatic.com/mapfiles/place_api/icons/v2/convenience_pinlet.png';
+            img.src =
+                'https://maps.gstatic.com/mapfiles/place_api/icons/v2/convenience_pinlet.png';
             img.style.width = '16px';
 
             icon.appendChild(img);
@@ -182,10 +190,10 @@ const googleAdapter: MapAdapter = {
             wrapper.appendChild(label);
 
             content = wrapper;
-        }
-        else if (markerType === 'default') {
+        } else if (markerType === 'default') {
             const img = document.createElement('img');
-            img.src = 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png';
+            img.src =
+                'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png';
             img.style.width = '32px';
             img.style.height = '32px';
 
@@ -195,8 +203,7 @@ const googleAdapter: MapAdapter = {
                 content: img,
                 gmpDraggable: true,
             });
-        }
-        else {
+        } else {
             const markerDiv = document.createElement('div');
 
             markerDiv.style.width = '16px';
@@ -216,12 +223,12 @@ const googleAdapter: MapAdapter = {
             map,
             position,
             content,
-            gmpDraggable: markerType !== 'store', 
+            gmpDraggable: markerType !== 'store',
         });
     },
 
     onDragEnd(marker: MarkerInstance, cb: (lat: number, lng: number) => void) {
-        marker.addListener('dragend', (event:any) => {
+        marker.addListener('dragend', (event: any) => {
             const position = event.latLng;
             cb(position.lat(), position.lng());
         });
@@ -324,8 +331,8 @@ const mapboxAdapter: MapAdapter = {
             markerType === 'user'
                 ? '#2563eb'
                 : markerType === 'store'
-                    ? '#16a34a'
-                    : '#ef4444';
+                  ? '#16a34a'
+                  : '#ef4444';
 
         return new window.mapboxgl.Marker({ draggable: true, color })
             .setLngLat([lng, lat])
@@ -437,7 +444,13 @@ export const MapProviderUI = ({
                 setGoogleLoaded(true);
             }
 
-            const map = provider.createMap(containerRef.current!, lat, lng, 12, mapId);
+            const map = provider.createMap(
+                containerRef.current!,
+                lat,
+                lng,
+                12,
+                mapId
+            );
             const marker = provider.createMarker(map, lat, lng, 'default');
 
             mapRef.current = map;
@@ -445,7 +458,6 @@ export const MapProviderUI = ({
 
             provider.onDragEnd(marker, updateLocation);
             provider.onMapClick(map, updateLocation);
-
         };
 
         init();
@@ -645,7 +657,7 @@ const MapProvider: FieldComponent = {
     render: ({ field, value, onChange }) => (
         <MapProviderUI
             apiKey={field.apiKey}
-            mapId = {field.mapId}
+            mapId={field.mapId}
             locationAddress={value?.location_address || ''}
             locationLat={value?.location_lat || ''}
             locationLng={value?.location_lng || ''}

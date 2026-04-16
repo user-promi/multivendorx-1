@@ -53,7 +53,7 @@ const LatestReview: React.FC<LatestReviewProps> = ({ store_id }) => {
 		},
 		date_created: {
 			label: __('Date', 'multivendorx'),
-			type: 'date'
+			type: 'date',
 		},
 	};
 

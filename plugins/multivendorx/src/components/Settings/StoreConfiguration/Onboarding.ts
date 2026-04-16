@@ -186,10 +186,7 @@ export default {
 		{
 			key: 'shared_listing_display',
 			type: 'choice-toggle',
-			label: __(
-				'Shared listings display priority',
-				'multivendorx'
-			),
+			label: __('Shared listings display priority', 'multivendorx'),
 			dependent: {
 				key: 'store_selling_mode',
 				set: true,

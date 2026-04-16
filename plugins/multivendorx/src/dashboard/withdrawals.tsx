@@ -163,7 +163,7 @@ const Withdrawals: React.FC = () => {
 				)}
 			/>
 
-			<Container className='store-withdrawals'>
+			<Container className="store-withdrawals">
 				<Column grid={6}>
 					<Card title={__('Last Withdrawal', 'multivendorx')}>
 						{lastWithdraws && lastWithdraws.length > 0 ? (
@@ -190,11 +190,11 @@ const Withdrawals: React.FC = () => {
 												'paypal-payout' &&
 												__('PayPal', 'multivendorx')}
 											{item.payment_method ===
-												'bank-transfer'
+											'bank-transfer'
 												? __(
-													'Bank Transfer',
-													'multivendorx'
-												)
+														'Bank Transfer',
+														'multivendorx'
+													)
 												: ''}
 										</div>
 									</div>
@@ -205,7 +205,10 @@ const Withdrawals: React.FC = () => {
 							))
 						) : (
 							<div className="no-data">
-								{__('Earnings will appear here once you make a withdrawal.', 'multivendorx')}
+								{__(
+									'Earnings will appear here once you make a withdrawal.',
+									'multivendorx'
+								)}
 							</div>
 						)}
 
@@ -235,22 +238,34 @@ const Withdrawals: React.FC = () => {
 									)}{' '}
 								</div>
 								<div className="desc">
-									{
-										data?.threshold > 0 ? (
-											<>
-												<b>{formatCurrency(data.threshold)} </b>
-												{__('minimum required to withdraw', 'multivendorx')}
-											</>
-										) : (
-											__('No minimum', 'multivendorx')
-										)
-									}
+									{data?.threshold > 0 ? (
+										<>
+											<b>
+												{formatCurrency(
+													data.threshold
+												)}{' '}
+											</b>
+											{__(
+												'minimum required to withdraw',
+												'multivendorx'
+											)}
+										</>
+									) : (
+										__('No minimum', 'multivendorx')
+									)}
 								</div>
 								<div className="desc">
 									{data?.reserve_balance > 0 ? (
 										<>
-											<b>{formatCurrency(data.reserve_balance)} </b>
-											{__('reserve balance', 'multivendorx')}
+											<b>
+												{formatCurrency(
+													data.reserve_balance
+												)}{' '}
+											</b>
+											{__(
+												'reserve balance',
+												'multivendorx'
+											)}
 										</>
 									) : (
 										__('No reserve set', 'multivendorx')
@@ -301,7 +316,12 @@ const Withdrawals: React.FC = () => {
 										]}
 									/>
 								) : (
-										<ComponentStatusView title={__('No pending earning in clearence', 'multivendorx')} />
+									<ComponentStatusView
+										title={__(
+											'No pending earning in clearence',
+											'multivendorx'
+										)}
+									/>
 								)}
 
 								{data?.withdrawal_setting?.length > 0 && (
@@ -348,8 +368,8 @@ const Withdrawals: React.FC = () => {
 																?.withdrawal_setting?.[0]
 																?.free_withdrawals ??
 																0) -
-															(data?.free_withdrawal ??
-																0)
+																(data?.free_withdrawal ??
+																	0)
 														)}{' '}
 														<span>
 															{__(
@@ -376,9 +396,9 @@ const Withdrawals: React.FC = () => {
 								}}
 							/>
 						</div>
-					</Card >
-				</Column >
-			</Container >
+					</Card>
+				</Column>
+			</Container>
 
 			{requestWithdrawal && (
 				<>

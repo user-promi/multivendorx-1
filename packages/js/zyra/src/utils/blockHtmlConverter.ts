@@ -31,7 +31,9 @@ export interface Block {
 const styleToString = (style: Record<string, any> = {}) => {
     return Object.entries(style)
         .map(([key, val]) => {
-            if (val === undefined || val === null) return '';
+            if (val === undefined || val === null) {
+                return '';
+            }
 
             const cssKey = key.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
 
@@ -87,10 +89,7 @@ const renderBlock = (block: Block): string => {
 
         case 'section':
             return `<div style="${style}">
-                ${(block.columns || [])
-                    .flat()
-                    .map(renderBlock)
-                    .join('')}
+                ${(block.columns || []).flat().map(renderBlock).join('')}
             </div>`;
 
         default:
@@ -122,8 +121,6 @@ const renderColumns = (block: Block): string => {
     `;
 };
 
-
-
 let blockId = Date.now();
 
 const getId = () => blockId++;
@@ -136,7 +133,9 @@ export const htmlToBlocks = (html: string) => {
 
     Array.from(doc.body.children).forEach((node) => {
         const block = parseNode(node);
-        if (block) blocks.push(block);
+        if (block) {
+            blocks.push(block);
+        }
     });
 
     return blocks;
@@ -150,7 +149,9 @@ const parseNode = (node: any): any => {
     if (node.nodeType === 3) {
         // text node
         const text = node.textContent.trim();
-        if (!text) return null;
+        if (!text) {
+            return null;
+        }
 
         return {
             id: getId(),
@@ -159,7 +160,9 @@ const parseNode = (node: any): any => {
         };
     }
 
-    if (node.nodeType !== 1) return null;
+    if (node.nodeType !== 1) {
+        return null;
+    }
 
     const tag = node.tagName.toLowerCase();
 
@@ -227,7 +230,9 @@ const parseNode = (node: any): any => {
 const parseTable = (table: HTMLElement) => {
     const rows = Array.from(table.querySelectorAll('tr'));
 
-    if (!rows.length) return null;
+    if (!rows.length) {
+        return null;
+    }
 
     const columns: any[][] = [];
 
@@ -239,7 +244,9 @@ const parseTable = (table: HTMLElement) => {
 
         cell.childNodes.forEach((child) => {
             const parsed = parseNode(child);
-            if (parsed) colBlocks.push(parsed);
+            if (parsed) {
+                colBlocks.push(parsed);
+            }
         });
 
         columns.push(colBlocks);
@@ -262,11 +269,15 @@ const parseStyle = (node: HTMLElement) => {
     const style: any = {};
     const styleAttr = node.getAttribute('style');
 
-    if (!styleAttr) return style;
+    if (!styleAttr) {
+        return style;
+    }
 
     styleAttr.split(';').forEach((rule) => {
         const [key, value] = rule.split(':');
-        if (!key || !value) return;
+        if (!key || !value) {
+            return;
+        }
 
         const jsKey = key
             .trim()

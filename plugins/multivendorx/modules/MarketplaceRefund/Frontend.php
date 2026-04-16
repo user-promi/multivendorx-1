@@ -27,25 +27,27 @@ class Frontend {
         add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ) );
         add_action( 'wp', array( $this, 'multivendorx_handler_cust_requested_refund' ) );
         add_action( 'woocommerce_view_order', array( $this, 'view_order_content' ) );
-        add_filter( 'multivendorx_approval_queue_count', array( $this, 'approval_count'), 10 );
+        add_filter( 'multivendorx_approval_queue_count', array( $this, 'approval_count' ), 10 );
     }
 
     public function approval_count( $total ) {
-        $query = wc_get_orders([
-            'status'   => 'wc-refund-requested',
-            'limit'    => 1,
-            'paginate' => true,
-            'return'   => 'ids',
-            'meta_query' => [
-                [
-                    'key'     => 'multivendorx_store_id',
-                    'compare' => 'EXISTS',
-                ],
-            ],
-        ]);
+        $query = wc_get_orders(
+            array(
+				'status'     => 'wc-refund-requested',
+				'limit'      => 1,
+				'paginate'   => true,
+				'return'     => 'ids',
+				'meta_query' => array(
+					array(
+						'key'     => 'multivendorx_store_id',
+						'compare' => 'EXISTS',
+					),
+				),
+            )
+        );
 
-        $refunds = !empty( $query->total ) ? (int) $query->total : 0;
-        $total += $refunds;
+        $refunds = ! empty( $query->total ) ? (int) $query->total : 0;
+        $total  += $refunds;
         return $total;
     }
 
@@ -443,10 +445,15 @@ class Frontend {
         $store_id = $order->get_meta( Utill::POST_META_SETTINGS['store_id'], true );
         $store    = new Store( $store_id );
 
-        MultiVendorX()->notifications->send_notification_helper('refund_requested', $store, $order, [
-            'order_id'       => $order->get_id(),
-			'category'       => 'activity',
-        ]);
+        MultiVendorX()->notifications->send_notification_helper(
+            'refund_requested',
+            $store,
+            $order,
+            array(
+				'order_id' => $order->get_id(),
+				'category' => 'activity',
+			)
+        );
 
         // Add order note with proper escaping.
         $user_info = get_userdata( MultiVendorX()->current_user_id );
@@ -576,7 +583,7 @@ class Frontend {
                     ?>
                 </address>
                 <!-- Attachments -->
-                 <?php if ( ! empty( $refund_images ) ) : ?>
+                <?php if ( ! empty( $refund_images ) ) : ?>
                     <p>
                         <strong><?php esc_html_e( 'Attached images:', 'multivendorx' ); ?></strong>
                     </p>

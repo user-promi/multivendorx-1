@@ -85,11 +85,11 @@ class Tour extends \WP_REST_Controller {
             return $error;
         }
         try {
-            $store_id = $request->get_param('store_id');
+            $store_id = $request->get_param( 'store_id' );
 
             // ✅ STORE CONTEXT
             if ( $store_id ) {
-                $store = new \MultiVendorX\Store\Store( $store_id );
+                $store  = new \MultiVendorX\Store\Store( $store_id );
                 $status = $store->get_meta( Utill::STORE_SETTINGS_KEYS['store_tour_completed'] );
 
                 return array(
@@ -131,13 +131,12 @@ class Tour extends \WP_REST_Controller {
             return $error;
         }
         try {
-            $store_id = $request->get_param('store_id');
-            $completed = $request->get_param('completed');
-            
+            $store_id  = $request->get_param( 'store_id' );
+            $completed = $request->get_param( 'completed' );
 
             // ✅ STORE CONTEXT
             if ( $store_id ) {
-                $store    = new \MultiVendorX\Store\Store( $store_id );
+                $store = new \MultiVendorX\Store\Store( $store_id );
                 $store->update_meta(
                     Utill::STORE_SETTINGS_KEYS['store_tour_completed'],
                     $completed

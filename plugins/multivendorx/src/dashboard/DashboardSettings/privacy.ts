@@ -1,7 +1,8 @@
 /* global appLocalizer */
 import { __ } from '@wordpress/i18n';
 const settings =
-	appLocalizer.settings_databases_value['privacy'].store_policy_override || [];
+	appLocalizer.settings_databases_value['privacy'].store_policy_override ||
+	[];
 export default {
 	id: 'privacy',
 	priority: 8,

@@ -195,8 +195,14 @@ const RefundedOrderReport: React.FC = () => {
 					placeholder: 'Search Products...',
 					size: 8,
 					options: [
-						{ label: __('Order ID', 'multivendorx'), value: 'order_id' },
-						{ label: __('Customer', 'multivendorx'), value: 'customer' },
+						{
+							label: __('Order ID', 'multivendorx'),
+							value: 'order_id',
+						},
+						{
+							label: __('Customer', 'multivendorx'),
+							value: 'customer',
+						},
 					],
 				}}
 				filters={filters}

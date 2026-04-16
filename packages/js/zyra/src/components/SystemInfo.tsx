@@ -92,7 +92,9 @@ export const SystemInfoUI: React.FC<SystemInfoProps> = ({
                 copyButtonLabel={copyButtonLabel}
                 copiedLabel={copiedLabel}
                 onCopy={() => {
-                    if (!data) return '';
+                    if (!data) {
+                        return '';
+                    }
                     return formatSystemInfo(data);
                 }}
             />

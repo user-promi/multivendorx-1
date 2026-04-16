@@ -119,11 +119,14 @@ class Frontend {
         MultiVendorX()->util->get_template( 'store/store-single-product-customer-queries-tab.php', array( 'product_id' => $product->get_id() ) );
     }
 
-    public function customer_count($total) {
-        $base_args = ['count' => true];
-        $unanswered_args = array_merge( $base_args, [
-            'no_answer' => true,
-        ] );
+    public function customer_count( $total ) {
+        $base_args        = array( 'count' => true );
+        $unanswered_args  = array_merge(
+            $base_args,
+            array(
+				'no_answer' => true,
+			)
+        );
         $unanswered_count = (int) Util::get_question_information( $unanswered_args );
         return (int) $total + $unanswered_count;
     }

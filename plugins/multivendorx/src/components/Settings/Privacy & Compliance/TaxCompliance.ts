@@ -22,13 +22,19 @@ export default {
 			options: [
 				{
 					key: 'bank_statement',
-					label: __('Bank account statement (last 3–6 months)', 'multivendorx'),
+					label: __(
+						'Bank account statement (last 3–6 months)',
+						'multivendorx'
+					),
 					value: 'bank_statement',
 					edit: true,
 				},
 				{
 					key: 'cancelled_cheque',
-					label: __('Cancelled cheque (with account holder name)', 'multivendorx'),
+					label: __(
+						'Cancelled cheque (with account holder name)',
+						'multivendorx'
+					),
 					value: 'cancelled_cheque',
 					edit: true,
 				},
@@ -40,13 +46,19 @@ export default {
 				},
 				{
 					key: 'bank_verification_letter',
-					label: __('Account verification letter from bank', 'multivendorx'),
+					label: __(
+						'Account verification letter from bank',
+						'multivendorx'
+					),
 					value: 'bank_verification_letter',
 					edit: true,
 				},
 				{
 					key: 'void_cheque',
-					label: __('Void cheque / direct deposit form', 'multivendorx'),
+					label: __(
+						'Void cheque / direct deposit form',
+						'multivendorx'
+					),
 					edit: true,
 					value: 'void_cheque',
 				},
@@ -112,7 +124,10 @@ export default {
 				},
 				{
 					key: 'business_registration',
-					label: __('Business registration certificate', 'multivendorx'),
+					label: __(
+						'Business registration certificate',
+						'multivendorx'
+					),
 					edit: true,
 					value: 'business_registration',
 				},
@@ -124,13 +139,19 @@ export default {
 				},
 				{
 					key: 'moa',
-					label: __('Memorandum of Association (MOA)', 'multivendorx'),
+					label: __(
+						'Memorandum of Association (MOA)',
+						'multivendorx'
+					),
 					edit: true,
 					value: 'moa',
 				},
 				{
 					key: 'partnership_deed',
-					label: __('Partnership deed / LLP agreement', 'multivendorx'),
+					label: __(
+						'Partnership deed / LLP agreement',
+						'multivendorx'
+					),
 					edit: true,
 					value: 'partnership_deed',
 				},

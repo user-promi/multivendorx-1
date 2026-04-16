@@ -352,10 +352,15 @@ class Rest extends \WP_REST_Controller {
             update_user_meta( $user_id, Utill::USER_SETTINGS_KEYS['following_stores'], array_values( $following ) );
             $store->update_meta( Utill::STORE_SETTINGS_KEYS['followers'], array_values( $followers ) );
 
-            MultiVendorX()->notifications->send_notification_helper('store_followed', $store, null, [
-                'store_name'  => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
-                'category'    => 'activity',
-            ]);
+            MultiVendorX()->notifications->send_notification_helper(
+                'store_followed',
+                $store,
+                null,
+                array(
+					'store_name' => $store->get( Utill::STORE_SETTINGS_KEYS['name'] ),
+					'category'   => 'activity',
+				)
+            );
 
             return rest_ensure_response(
                 array(

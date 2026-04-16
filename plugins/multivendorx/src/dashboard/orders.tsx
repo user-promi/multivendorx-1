@@ -55,7 +55,7 @@ const Orders: React.FC = () => {
 	const hash = location.hash.replace(/^#/, '') || '';
 	const privacy =
 		appLocalizer.settings_databases_value?.privacy?.[
-		'customer_information_access'
+			'customer_information_access'
 		];
 
 	const exportAllOrders = () => {
@@ -173,7 +173,7 @@ const Orders: React.FC = () => {
 							status === 'all'
 								? __('All', 'multivendorx')
 								: status.charAt(0).toUpperCase() +
-								status.slice(1),
+									status.slice(1),
 						count: total,
 					};
 				});
@@ -214,14 +214,14 @@ const Orders: React.FC = () => {
 
 	const privacyHeaders = privacy?.includes('name')
 		? {
-			customer: {
-				label: __('Customer', 'multivendorx'),
-				render: (row) =>
-					row.billing?.first_name
-						? `${row.billing.first_name} ${row.billing.last_name || ''}`
-						: 'Guest',
-			},
-		}
+				customer: {
+					label: __('Customer', 'multivendorx'),
+					render: (row) =>
+						row.billing?.first_name
+							? `${row.billing.first_name} ${row.billing.last_name || ''}`
+							: 'Guest',
+				},
+			}
 		: {};
 
 	const headers = {
@@ -266,18 +266,18 @@ const Orders: React.FC = () => {
 			actions: applyFilters('multivendorx_store_order_actions', [
 				...(appLocalizer.edit_order_capability
 					? [
-						{
-							label: __('View', 'multivendorx'),
-							icon: 'eye',
-							onClick: (row) => {
-								dashNavigate(navigate, [
-									'orders',
-									'view',
-									String(row.id),
-								]);
+							{
+								label: __('View', 'multivendorx'),
+								icon: 'eye',
+								onClick: (row) => {
+									dashNavigate(navigate, [
+										'orders',
+										'view',
+										String(row.id),
+									]);
+								},
 							},
-						},
-					]
+						]
 					: []),
 
 				{
@@ -297,7 +297,7 @@ const Orders: React.FC = () => {
 						setTracking(true);
 						setTrackingOrderId(row.id);
 					},
-				}
+				},
 			]),
 		},
 	};

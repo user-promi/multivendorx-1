@@ -3,7 +3,7 @@ import { Card, FormGroupWrapper, SelectInputUI } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const ProductTag = ({ product, setProduct }) => {
 	const [existingTags, setExistingTags] = useState([]);
 

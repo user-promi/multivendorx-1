@@ -69,9 +69,9 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 				...(hasLocationFilter
 					? {}
 					: {
-						order_by: orderby,
-						order: order,
-					}),
+							order_by: orderby,
+							order: order,
+						}),
 				search_value: search,
 				filters: true,
 				location_lat: mapLocation.location_lat,
@@ -192,11 +192,13 @@ const MarketplaceStoreList: React.FC<StoresListProps> = ({
 													)}
 												</div>
 												<div className="contact-wrapper">
-													{store.phone && (														<span>
+													{store.phone && (
+														<span>
 															<i className="dashicons dashicons-phone" />{' '}
-																{typeof store.phone === 'object'
-																	? `${store.phone.country_code || ''} ${store.phone.phone || ''}`
-																	: store.phone}
+															{typeof store.phone ===
+															'object'
+																? `${store.phone.country_code || ''} ${store.phone.phone || ''}`
+																: store.phone}
 														</span>
 													)}
 

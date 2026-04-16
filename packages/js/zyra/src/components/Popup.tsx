@@ -99,7 +99,11 @@ export const PopupUI = forwardRef<HTMLDivElement, PopupProps>(
                 // ref={wrapperRef}
             >
                 {toggleIcon && (
-                    <Tooltip text={tooltipName} position={tooltipPosition} className={open ? 'hidden' : ''}>
+                    <Tooltip
+                        text={tooltipName}
+                        position={tooltipPosition}
+                        className={open ? 'hidden' : ''}
+                    >
                         <i
                             onClick={handleToggle}
                             className={`popup-icon adminfont-${toggleIcon}`}
@@ -136,9 +140,12 @@ export const PopupUI = forwardRef<HTMLDivElement, PopupProps>(
                                 )}
                             </div>
                         )}
-                        {position != "menu-dropdown" && 
-                            <i onClick={handleClose} className="close-icon adminfont-close" />
-                        }
+                        {position != 'menu-dropdown' && (
+                            <i
+                                onClick={handleClose}
+                                className="close-icon adminfont-close"
+                            />
+                        )}
                         <div className="popup-body">{children}</div>
 
                         {footer && <div className="popup-footer">{footer}</div>}

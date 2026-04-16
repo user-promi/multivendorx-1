@@ -126,15 +126,17 @@ const InputField: React.FC<{
 }> = ({ label, type, value, onChange, readonly = false, placeholder }) => (
     <FormGroup label={label}>
         <BasicInputUI
-            type={type as
-                | 'text'
-                | 'number'
-                | 'color'
-                | 'password'
-                | 'email'
-                | 'file'
-                | 'range'
-                | undefined}
+            type={
+                type as
+                    | 'text'
+                    | 'number'
+                    | 'color'
+                    | 'password'
+                    | 'email'
+                    | 'file'
+                    | 'range'
+                    | undefined
+            }
             value={value || ''}
             onChange={(value) => onChange(String(value))}
             readOnly={readonly}
@@ -606,7 +608,8 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
     const [hasOpened, setHasOpened] = useState(opened.click);
 
     const FieldRenderer =
-        FIELD_RENDERERS[formField?.type || 'default'] || FIELD_RENDERERS.default;
+        FIELD_RENDERERS[formField?.type || 'default'] ||
+        FIELD_RENDERERS.default;
 
     useEffect(() => {
         setHasOpened(opened.click);
@@ -674,9 +677,10 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
         <div className="setting-panel" onClick={(e) => e.stopPropagation()}>
             <div className="settings-title">
                 {formField.type
-                    ? `${formField.type.charAt(0).toUpperCase() +
-                    formField.type.slice(1)
-                    } settings`
+                    ? `${
+                          formField.type.charAt(0).toUpperCase() +
+                          formField.type.slice(1)
+                      } settings`
                     : 'Input settings'}
             </div>
             <FormGroupWrapper>
@@ -720,14 +724,17 @@ const SettingMetaBox: React.FC<SettingMetaBoxProps> = ({
                         {/* )} */}
 
                         <InputField
-                            label={metaType === 'setting-meta' ? 'Name' : 'Label'}
+                            label={
+                                metaType === 'setting-meta' ? 'Name' : 'Label'
+                            }
                             value={
                                 metaType === 'setting-meta'
                                     ? formField.name || ''
                                     : option?.label || ''
                             }
                             readonly={
-                                metaType === 'setting-meta' && formField.readonly
+                                metaType === 'setting-meta' &&
+                                formField.readonly
                             }
                             onChange={handleNameChange}
                         />

@@ -1,7 +1,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import Queries from './QueriesTable';
-import {getApiLink} from 'zyra';
+import { getApiLink } from 'zyra';
 
 addFilter(
 	'multivendorx_customer_api_configs',
@@ -11,7 +11,8 @@ addFilter(
 			id: 'customer-queries',
 			url: getApiLink(appLocalizer, 'customer-queries'),
 			params: {
-				page: 1, row: 1
+				page: 1,
+				row: 1,
 			},
 			header: 'x-wp-status-unanswered',
 		});

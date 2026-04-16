@@ -59,7 +59,8 @@ const RealtimeFilters: React.FC<RealtimeFiltersProps> = ({
                     const value = query[filter.key];
 
                     if (filter.type === 'date') {
-                        const range = (value as CalendarRange) || getDefaultDateRange();
+                        const range =
+                            (value as CalendarRange) || getDefaultDateRange();
                         return (
                             <div key={filter.key} className="group-field">
                                 <CalendarInputUI

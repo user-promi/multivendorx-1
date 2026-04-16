@@ -2,7 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
-import { ComponentStatusView, getApiLink, SelectInputUI, SettingsNavigator } from 'zyra';
+import {
+	ComponentStatusView,
+	getApiLink,
+	SelectInputUI,
+	SettingsNavigator,
+} from 'zyra';
 import axios from 'axios';
 import WalletTransaction from './WalletTransaction';
 import { applyFilters } from '@wordpress/hooks';
@@ -137,21 +142,21 @@ export const TransactionHistory: React.FC = () => {
 				headerTitle={
 					selectedStoreId
 						? __(
-							`Storewise Transaction History - ${selectedStoreLabel}`,
-							'multivendorx'
-						)
+								`Storewise Transaction History - ${selectedStoreLabel}`,
+								'multivendorx'
+							)
 						: __('Storewise Transaction History', 'multivendorx')
 				}
 				headerDescription={
 					selectedStoreId
 						? __(
-							`View and manage transactions for ${selectedStoreLabel} store`,
-							'multivendorx'
-						)
+								`View and manage transactions for ${selectedStoreLabel} store`,
+								'multivendorx'
+							)
 						: __(
-							'View and manage storewise transactions',
-							'multivendorx'
-						)
+								'View and manage storewise transactions',
+								'multivendorx'
+							)
 				}
 				customContent={
 					<>

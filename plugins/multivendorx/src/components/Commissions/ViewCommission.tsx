@@ -351,21 +351,38 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 							label={__('Marketplace Commission', 'multivendorx')}
 							className="space-between"
 						>
-						<b>{formatCurrency(
-								parseFloat(
-									commissionData?.marketplace_commission ?? 0
-								)
-							)}</b>
+							<b>
+								{formatCurrency(
+									parseFloat(
+										commissionData?.marketplace_commission ??
+											0
+									)
+								)}
+							</b>
 						</FormGroup>
 
-						<FormGroup row label={__('Shipping', 'multivendorx')} className="space-between">
-							<b>{formatCurrency(commissionData?.shipping_amount)}</b>
+						<FormGroup
+							row
+							label={__('Shipping', 'multivendorx')}
+							className="space-between"
+						>
+							<b>
+								{formatCurrency(
+									commissionData?.shipping_amount
+								)}
+							</b>
 						</FormGroup>
 
-						<FormGroup row label={__('Tax', 'multivendorx')} className="space-between">
-							<b>{formatCurrency(
-								Number(commissionData?.tax_amount || 0)
-							)}</b>
+						<FormGroup
+							row
+							label={__('Tax', 'multivendorx')}
+							className="space-between"
+						>
+							<b>
+								{formatCurrency(
+									Number(commissionData?.tax_amount || 0)
+								)}
+							</b>
 						</FormGroup>
 
 						{commissionData?.marketplace_refunded > 0 && (
@@ -374,14 +391,24 @@ const ViewCommission: React.FC<ViewCommissionProps> = ({
 								label={__('Commission refund', 'multivendorx')}
 								className="space-between"
 							>
-								<b>{formatCurrency(
-									commissionData.marketplace_refunded
-								)}</b>
+								<b>
+									{formatCurrency(
+										commissionData.marketplace_refunded
+									)}
+								</b>
 							</FormGroup>
 						)}
 
-						<FormGroup row label={__('Total', 'multivendorx')} className="space-between">
-							<b>{formatCurrency(commissionData?.total_order_amount)}</b>
+						<FormGroup
+							row
+							label={__('Total', 'multivendorx')}
+							className="space-between"
+						>
+							<b>
+								{formatCurrency(
+									commissionData?.total_order_amount
+								)}
+							</b>
 						</FormGroup>
 					</FormGroupWrapper>
 

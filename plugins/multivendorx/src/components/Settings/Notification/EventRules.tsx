@@ -21,8 +21,6 @@ import axios from 'axios';
 import { __ } from '@wordpress/i18n';
 import { salesReport } from '../../../assets/template/emailTemplate/salesReport';
 
-
-
 const RECIPIENT_CONFIG: Record<string, { icon: string; badge: string }> = {
 	Store: { icon: 'storefront', badge: 'blue' },
 	Admin: { icon: 'person', badge: ' green' },
@@ -267,10 +265,9 @@ const EventRules: React.FC = () => {
 				// email_body_builder: data.email_body_builder,
 				sms_content: data.sms_content,
 				system_message: data.system_message,
-				available_placeholder: data.available_placeholder
+				available_placeholder: data.available_placeholder,
 			},
-		},
-		);
+		});
 	};
 
 	const trackCursor = (
@@ -305,7 +302,7 @@ const EventRules: React.FC = () => {
 	const headers = {
 		event: {
 			label: __('Event', 'multivendorx'),
-			width: "55%",
+			width: '55%',
 			render: (row: Notification) => (
 				<div className="notification-details">
 					<span className={`notification-icon ${row.icon}`}></span>
@@ -334,7 +331,7 @@ const EventRules: React.FC = () => {
 		},
 		recipients: {
 			label: __('Recipients', 'multivendorx'),
-			width: "15%",
+			width: '15%',
 			render: (row: Notification) => (
 				<div className="recipients-list">
 					{(row.recipients || []).map((recipient: Recipient) => (
@@ -350,7 +347,7 @@ const EventRules: React.FC = () => {
 		},
 		system: {
 			label: __('System', 'multivendorx'),
-			width: "10%",
+			width: '10%',
 			render: (row: Notification) => (
 				<div className="system-column">
 					{Object.entries(row.channels || {}).map(
@@ -480,12 +477,13 @@ const EventRules: React.FC = () => {
 					height="90%"
 					header={{
 						icon: 'cart',
-						title: `${openChannel === 'system'
-							? __('System Notification', 'multivendorx')
-							: openChannel === 'sms'
-								? __('SMS Message', 'multivendorx')
-								: __('Email Message', 'multivendorx')
-							} - ${editNotification?.event ?? ''}`,
+						title: `${
+							openChannel === 'system'
+								? __('System Notification', 'multivendorx')
+								: openChannel === 'sms'
+									? __('SMS Message', 'multivendorx')
+									: __('Email Message', 'multivendorx')
+						} - ${editNotification?.event ?? ''}`,
 					}}
 					footer={
 						<ButtonInputUI
@@ -501,85 +499,103 @@ const EventRules: React.FC = () => {
 					}
 				>
 					<>
-					{openChannel === 'system' && (
-								<BlockBuilderUI
-									key={formData.id}
-									name="system_message_builder"
-									value={(() => {
-										try {
-
-											if (formData.email_body && !useTemplate) {
-												return {
-													emailTemplates: [
-														{
-															id: 'store-registration',
-															blocks: htmlToBlocks(formData.email_body),
-														},
-													],
-													activeEmailTemplateId: 'store-registration',
-												};
-											}
+						{openChannel === 'system' && (
+							<BlockBuilderUI
+								key={formData.id}
+								name="system_message_builder"
+								value={(() => {
+									try {
+										if (
+											formData.email_body &&
+											!useTemplate
+										) {
 											return {
-												emailTemplates: [salesReport],
-												activeEmailTemplateId: 'store-registration',
-											};
-										} catch (e) {
-											console.error('Builder load error:', e);
-
-											return {
-												emailTemplates: [salesReport],
-												activeEmailTemplateId: 'store-registration',
+												emailTemplates: [
+													{
+														id: 'store-registration',
+														blocks: htmlToBlocks(
+															formData.email_body
+														),
+													},
+												],
+												activeEmailTemplateId:
+													'store-registration',
 											};
 										}
-									})()}
+										return {
+											emailTemplates: [salesReport],
+											activeEmailTemplateId:
+												'store-registration',
+										};
+									} catch (e) {
+										console.error('Builder load error:', e);
 
-									onChange={(data) => {
-										const activeTemplate = data.emailTemplates?.find(
-											(t) => t.id === data.activeEmailTemplateId
+										return {
+											emailTemplates: [salesReport],
+											activeEmailTemplateId:
+												'store-registration',
+										};
+									}
+								})()}
+								onChange={(data) => {
+									const activeTemplate =
+										data.emailTemplates?.find(
+											(t) =>
+												t.id ===
+												data.activeEmailTemplateId
 										);
 
-										const blocks = activeTemplate?.blocks || [];
+									const blocks = activeTemplate?.blocks || [];
 
-										// generate HTML
-										const html = renderBlocksToHTML(blocks);
+									// generate HTML
+									const html = renderBlocksToHTML(blocks);
 
+									const updatedForm = {
+										...formData,
 
-										const updatedForm = {
-											...formData,
+										// SAVE HTML
+										email_body: html,
+									};
 
-											// SAVE HTML
-											email_body: html,
-										};
+									if (!updatedForm.id) {
+										return;
+									}
 
-										if (!updatedForm.id) return;
-
-										setFormData(updatedForm);
-										handleEmailSave(updatedForm.id, updatedForm);
-									}}
-									field={{
-										key: 'email_body_builder',
-										context: 'email',
-										visibleGroups: ['email'],
-										emailTemplates: [salesReport],
-										availablePlaceholder: formData.available_placeholders
+									setFormData(updatedForm);
+									handleEmailSave(
+										updatedForm.id,
+										updatedForm
+									);
+								}}
+								field={{
+									key: 'email_body_builder',
+									context: 'email',
+									visibleGroups: ['email'],
+									emailTemplates: [salesReport],
+									availablePlaceholder:
+										formData.available_placeholders
 											? formData.available_placeholders
-												.split(',')
-												.map(item => item.replace(/[\[\]]/g, '').trim())
-												.filter(Boolean)
-											: []
-									}}
-									onTemplateSelect={(id) => {
-										setUseTemplate(true); // 🔥 force template mode
-									}}
-								/>
-							)}
+													.split(',')
+													.map((item) =>
+														item
+															.replace(
+																/[\[\]]/g,
+																''
+															)
+															.trim()
+													)
+													.filter(Boolean)
+											: [],
+								}}
+								onTemplateSelect={(id) => {
+									setUseTemplate(true); // 🔥 force template mode
+								}}
+							/>
+						)}
 						<FormGroupWrapper>
 							{openChannel === 'sms' && (
 								<FormGroup
-									label={__(
-										'SMS Content',
-										'multivendorx'
-									)}
+									label={__('SMS Content', 'multivendorx')}
 									htmlFor="sms-content"
 								>
 									<TextAreaUI
@@ -614,14 +630,9 @@ const EventRules: React.FC = () => {
 									>
 										<BasicInputUI
 											name="email_subject"
-											value={
-												formData.email_subject || ''
-											}
+											value={formData.email_subject || ''}
 											onClick={(e) =>
-												trackCursor(
-													e,
-													'email_subject'
-												)
+												trackCursor(e, 'email_subject')
 											}
 											onChange={(value) => {
 												setFormData({
@@ -637,17 +648,12 @@ const EventRules: React.FC = () => {
 									</FormGroup>
 									<FormGroup
 										cols={2}
-										label={__(
-											'Email Body',
-											'multivendorx'
-										)}
+										label={__('Email Body', 'multivendorx')}
 										htmlFor="email-body"
 									>
 										<TextAreaUI
 											name="email_body"
-											value={
-												formData.email_body || ''
-											}
+											value={formData.email_body || ''}
 											onClick={(e) =>
 												trackCursor(e, 'email_body')
 											}
@@ -671,9 +677,7 @@ const EventRules: React.FC = () => {
 										<span
 											key={idx}
 											className="tag-item"
-											onClick={() =>
-												insertAtCursor(tag)
-											}
+											onClick={() => insertAtCursor(tag)}
 										>
 											{tag}
 										</span>
@@ -760,14 +764,17 @@ const EventRules: React.FC = () => {
 							</div>
 						</FormGroup>
 						<FormGroup
-							label={__(
-								'Additional Recipients',
-								'multivendorx'
-							)}
+							label={__('Additional Recipients', 'multivendorx')}
 						>
 							<EmailsInputUI
 								mode="multiple"
-								value={newRecipientValue ? newRecipientValue.split(',').filter(Boolean) : []}
+								value={
+									newRecipientValue
+										? newRecipientValue
+												.split(',')
+												.filter(Boolean)
+										: []
+								}
 								placeholder={__(
 									'Type email addresses and press Enter to add...',
 									'multivendorx'
@@ -776,22 +783,44 @@ const EventRules: React.FC = () => {
 								onChange={(emails) => {
 									setNewRecipientValue(emails.join(','));
 									if (editingNotification) {
-										const currentNotif = notifications.find(n => n.id === editingNotification);
+										const currentNotif = notifications.find(
+											(n) => n.id === editingNotification
+										);
 										if (currentNotif) {
-											const defaultRecipientsOnly = currentNotif.recipients.filter(
-												r => DEFAULT_RECIPIENT_TYPES.includes(r.type)
+											const defaultRecipientsOnly =
+												currentNotif.recipients.filter(
+													(r) =>
+														DEFAULT_RECIPIENT_TYPES.includes(
+															r.type
+														)
+												);
+											const newRecipients = emails.map(
+												(email, index) => ({
+													id:
+														Math.max(
+															...defaultRecipientsOnly.map(
+																(r) => r.id
+															),
+															0
+														) +
+														index +
+														1,
+													type: 'extra',
+													label: email,
+													enabled: true,
+													canDelete: true,
+												})
 											);
-											const newRecipients = emails.map((email, index) => ({
-												id: Math.max(...defaultRecipientsOnly.map(r => r.id), 0) + index + 1,
-												type: 'extra',
-												label: email,
-												enabled: true,
-												canDelete: true,
-											}));
-											updateNotification(editingNotification, (n) => ({
-												...n,
-												recipients: [...defaultRecipientsOnly, ...newRecipients],
-											}));
+											updateNotification(
+												editingNotification,
+												(n) => ({
+													...n,
+													recipients: [
+														...defaultRecipientsOnly,
+														...newRecipients,
+													],
+												})
+											);
 										}
 									}
 								}}
@@ -821,29 +850,27 @@ const EventRules: React.FC = () => {
 										{notif.event}
 									</div>
 									<div className="tag-wrapper">
-										{(notif.recipients || []).map(
-											(r) => (
-												<RecipientBadge
-													key={r.id}
-													recipient={r}
-													onToggle={() =>
-														toggleRecipient(
-															notif.id,
-															r.id
-														)
-													}
-													onDelete={
-														r.canDelete
-															? () =>
+										{(notif.recipients || []).map((r) => (
+											<RecipientBadge
+												key={r.id}
+												recipient={r}
+												onToggle={() =>
+													toggleRecipient(
+														notif.id,
+														r.id
+													)
+												}
+												onDelete={
+													r.canDelete
+														? () =>
 																deleteRecipient(
 																	notif.id,
 																	r.id
 																)
-															: undefined
-													}
-												/>
-											)
-										)}
+														: undefined
+												}
+											/>
+										))}
 									</div>
 									<div className="meta-description">
 										{notif.description}
@@ -856,8 +883,7 @@ const EventRules: React.FC = () => {
 										{Object.entries(
 											notif.channels || {}
 										).map(([channel, enabled]) => {
-											const cfg =
-												CHANNEL_CONFIG[channel];
+											const cfg = CHANNEL_CONFIG[channel];
 											if (!cfg) {
 												return null;
 											}
@@ -886,9 +912,7 @@ const EventRules: React.FC = () => {
 													setEditingNotification(
 														notif.id
 													);
-													setNotificationId(
-														notif.id
-													);
+													setNotificationId(notif.id);
 												},
 											},
 										]}

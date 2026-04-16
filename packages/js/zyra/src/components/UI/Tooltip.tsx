@@ -6,7 +6,7 @@ interface TooltipProps {
     children: React.ReactNode;
     position?: 'top' | 'bottom' | 'end' | 'start';
     withOutArrow?: boolean;
-    className?: string;  // hidden (opacity 0)
+    className?: string; // hidden (opacity 0)
 }
 
 const Tooltip: React.FC<TooltipProps> = ({

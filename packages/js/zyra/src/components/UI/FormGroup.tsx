@@ -40,13 +40,15 @@ const FormGroup: React.FC<FormGroupProps> = ({
             {label && (
                 <label className="settings-form-label" htmlFor={htmlFor}>
                     <div className="title">
-                        { icon && (
-                            <i className={ `adminfont-${ icon } ${icon} form-icon` } />
-                        ) }
-                        { label }
-                        { iconRight && (
-                            <i className={ `adminfont-${ iconRight } form-icon` } />
-                        ) }
+                        {icon && (
+                            <i
+                                className={`adminfont-${icon} ${icon} form-icon`}
+                            />
+                        )}
+                        {label}
+                        {iconRight && (
+                            <i className={`adminfont-${iconRight} form-icon`} />
+                        )}
                     </div>
                     {labelDes && (
                         <div className="settings-metabox-description">
@@ -70,10 +72,16 @@ const FormGroup: React.FC<FormGroupProps> = ({
                     <>
                         {/* Check if desc is a string or React node */}
                         {typeof desc === 'string' ? (
-                            <div className="settings-metabox-description" dangerouslySetInnerHTML={{ __html: desc }} />
+                            <div
+                                className="settings-metabox-description"
+                                dangerouslySetInnerHTML={{ __html: desc }}
+                            />
                         ) : (
                             // Render React nodes directly
-                           <div className="settings-metabox-description"> {desc} </div>
+                            <div className="settings-metabox-description">
+                                {' '}
+                                {desc}{' '}
+                            </div>
                         )}
                     </>
                 )}

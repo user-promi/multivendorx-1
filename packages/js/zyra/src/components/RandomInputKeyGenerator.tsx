@@ -24,7 +24,6 @@ export const RandomInputKeyGeneratorUI: React.FC<
         onChange(key);
     };
 
-
     const handleDelete = () => {
         onChange('');
     };
@@ -37,7 +36,7 @@ export const RandomInputKeyGeneratorUI: React.FC<
                         icon: 'star-icon',
                         text: 'Generate',
                         onClick: handleGenerate,
-                    }
+                    },
                 ]}
             />
         );
@@ -45,15 +44,15 @@ export const RandomInputKeyGeneratorUI: React.FC<
 
     return (
         <>
-            <CopyToClipboardUI 
+            <CopyToClipboardUI
                 text={value}
                 variant="icon"
                 copyButtonLabel="Copy"
                 copiedLabel="Copied!"
-            /> 
-            <div className='clear-btn' onClick={handleDelete}>
-                <i className='adminfont-delete color-red' />
-            </div>                       
+            />
+            <div className="clear-btn" onClick={handleDelete}>
+                <i className="adminfont-delete color-red" />
+            </div>
         </>
     );
 };

@@ -60,10 +60,13 @@ class WCVendors {
             );
 
             // add meta in store-meta table.
-            $store->update_meta( 'store_email', array(
-                'list'    => array( $user->email ),
-                'primary' => $user->email,
-            ) );
+            $store->update_meta(
+                'store_email',
+                array(
+					'list'    => array( $user->email ),
+					'primary' => $user->email,
+                )
+            );
             $address1 = get_user_meta( $user_id, '_wcv_store_address1', true );
             $address2 = get_user_meta( $user_id, '_wcv_store_address2', true );
             $address  = trim( $address1 . ' ' . $address2 );

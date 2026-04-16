@@ -25,10 +25,22 @@ const vendorWrapper = document.getElementById('multivendorx-store-dashboard');
 if (vendorWrapper) {
 	const colors = appLocalizer?.color?.colors || {};
 
-	document.documentElement.style.setProperty('--colorPrimary', colors.colorPrimary || '#00EED0');
-	document.documentElement.style.setProperty('--colorSecondary', colors.colorSecondary || '#0197AF');
-	document.documentElement.style.setProperty('--colorAccent', colors.colorAccent || '#4B227A');
-	document.documentElement.style.setProperty('--colorSupport', colors.colorSupport || '#02153D');
+	document.documentElement.style.setProperty(
+		'--colorPrimary',
+		colors.colorPrimary || '#00EED0'
+	);
+	document.documentElement.style.setProperty(
+		'--colorSecondary',
+		colors.colorSecondary || '#0197AF'
+	);
+	document.documentElement.style.setProperty(
+		'--colorAccent',
+		colors.colorAccent || '#4B227A'
+	);
+	document.documentElement.style.setProperty(
+		'--colorSupport',
+		colors.colorSupport || '#02153D'
+	);
 
 	/**
 	 * Permalink structure support:

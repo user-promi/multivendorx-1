@@ -369,7 +369,7 @@ export const MultiCheckBoxUI: React.FC<MultiCheckBoxProps> = (props) => {
                                                             setEditIndex(index);
                                                             setEditValue(
                                                                 option.label ??
-                                                                option.value
+                                                                    option.value
                                                             );
                                                         }}
                                                     />
@@ -447,18 +447,18 @@ const MultiCheckBox: FieldComponent = {
         const normalizedValue: string[] = Array.isArray(value)
             ? value.filter((v) => v?.trim())
             : typeof value === 'string' && value.trim()
-                ? [value]
-                : [];
+              ? [value]
+              : [];
 
         // Prefer live options from settings over static field definition
         const sourceOptions =
             settings?.[`${field.key}_options`] ?? field.options;
         const normalizedOptions: Option[] = Array.isArray(sourceOptions)
             ? sourceOptions.map((opt) => ({
-                ...opt,
-                value: String(opt.value),
-                edit: opt.edit ?? !!field.addNewBtnText,
-            }))
+                  ...opt,
+                  value: String(opt.value),
+                  edit: opt.edit ?? !!field.addNewBtnText,
+              }))
             : [];
 
         return (
@@ -467,8 +467,8 @@ const MultiCheckBox: FieldComponent = {
                     field.look === 'toggle'
                         ? 'toggle-btn'
                         : field.selectDeselect === true
-                            ? 'checkbox-list-side-by-side'
-                            : 'simple-checkbox'
+                          ? 'checkbox-list-side-by-side'
+                          : 'simple-checkbox'
                 }
                 inputInnerWrapperClass={
                     field.look === 'toggle'

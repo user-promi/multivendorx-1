@@ -112,7 +112,9 @@ const AddProduct = () => {
 
 		const payload = {
 			...(product.meta_data ?? []),
-			status: appLocalizer.current_user?.allcaps?.publish_products ? 'publish' : 'draft',
+			status: appLocalizer.current_user?.allcaps?.publish_products
+				? 'publish'
+				: 'draft',
 			images: imagePayload,
 			meta_data: [
 				...product.meta_data,
@@ -132,11 +134,15 @@ const AddProduct = () => {
 					key: 'multivendorx_cancellation_policy',
 					value: product.cancellation_policy || '',
 				},
-				{ key: '_is_auto_draft', value: false }
+				{ key: '_is_auto_draft', value: false },
 			],
 		};
 
-		const shouldContinue = applyFilters('multivendorx_before_product_save', true, payload);
+		const shouldContinue = applyFilters(
+			'multivendorx_before_product_save',
+			true,
+			payload
+		);
 
 		if (shouldContinue) {
 			const {
@@ -290,7 +296,16 @@ const AddProduct = () => {
 			/>
 			<Container>
 				<Column grid={3}>
-					<Card title={__('What kind of product is this?', 'multivendorx')} desc={__('Choose the type that best describes what you are selling.', 'multivendorx')}>
+					<Card
+						title={__(
+							'What kind of product is this?',
+							'multivendorx'
+						)}
+						desc={__(
+							'Choose the type that best describes what you are selling.',
+							'multivendorx'
+						)}
+					>
 						<FormGroupWrapper>
 							<FormGroup>
 								<SelectInputUI
@@ -315,11 +330,7 @@ const AddProduct = () => {
 					>
 						<div className="checklist-wrapper">
 							<ul>
-								<li
-									className={
-										checklist.name ? 'checked' : ''
-									}
-								>
+								<li className={checklist.name ? 'checked' : ''}>
 									<div className="check-icon">
 										<span></span>
 									</div>
@@ -328,9 +339,8 @@ const AddProduct = () => {
 											Product Name
 										</div>
 										<div className="des">
-											A clear, descriptive title
-											that helps customers find
-											your product
+											A clear, descriptive title that
+											helps customers find your product
 										</div>
 									</div>
 								</li>
@@ -338,9 +348,7 @@ const AddProduct = () => {
 									<>
 										<li
 											className={
-												checklist.price
-													? 'checked'
-													: ''
+												checklist.price ? 'checked' : ''
 											}
 										>
 											<div className="check-icon">
@@ -351,19 +359,16 @@ const AddProduct = () => {
 													Price
 												</div>
 												<div className="des">
-													Set competitive
-													prices including any
-													sale or discount
-													options
+													Set competitive prices
+													including any sale or
+													discount options
 												</div>
 											</div>
 										</li>
 
 										<li
 											className={
-												checklist.stock
-													? 'checked'
-													: ''
+												checklist.stock ? 'checked' : ''
 											}
 										>
 											<div className="check-icon">
@@ -374,19 +379,16 @@ const AddProduct = () => {
 													Stock
 												</div>
 												<div className="des">
-													A clear, descriptive
-													title that helps
-													customers find your
-													product
+													A clear, descriptive title
+													that helps customers find
+													your product
 												</div>
 											</div>
 										</li>
 									</>
 								)}
 								<li
-									className={
-										checklist.image ? 'checked' : ''
-									}
+									className={checklist.image ? 'checked' : ''}
 								>
 									<div className="check-icon">
 										<span></span>
@@ -396,53 +398,42 @@ const AddProduct = () => {
 											Product Images
 										</div>
 										<div className="des">
-											High-quality photos showing
-											your product from multiple
-											angles
+											High-quality photos showing your
+											product from multiple angles
 										</div>
 									</div>
 								</li>
 
 								<li
 									className={
-										checklist.categories
-											? 'checked'
-											: ''
+										checklist.categories ? 'checked' : ''
 									}
 								>
 									<div className="check-icon">
 										<span></span>
 									</div>
 									<div className="details">
-										<div className="title">
-											Category
-										</div>
+										<div className="title">Category</div>
 										<div className="des">
-											Organize your product to
-											help customers browse your
-											store
+											Organize your product to help
+											customers browse your store
 										</div>
 									</div>
 								</li>
 
 								<li
 									className={
-										checklist.policies
-											? 'checked'
-											: ''
+										checklist.policies ? 'checked' : ''
 									}
 								>
 									<div className="check-icon">
 										<span></span>
 									</div>
 									<div className="details">
-										<div className="title">
-											Policies
-										</div>
+										<div className="title">Policies</div>
 										<div className="des">
-											A clear, descriptive title
-											that helps customers find
-											your product
+											A clear, descriptive title that
+											helps customers find your product
 										</div>
 									</div>
 								</li>
@@ -465,17 +456,17 @@ const AddProduct = () => {
 								'Product Rejected by Admin',
 								'multivendorx'
 							)}
-						// action={
-						// <ButtonInputUI
-						// 	buttons={[
-						// 		{
-						// 			icon: 'plus',
-						// 			text: __('Appeal Decision', 'multivendorx'),
-						// 			color: 'purple',
-						// 			onClick: () => setAppeal(true),
-						// 		},
-						// 	]}
-						// />}
+							// action={
+							// <ButtonInputUI
+							// 	buttons={[
+							// 		{
+							// 			icon: 'plus',
+							// 			text: __('Appeal Decision', 'multivendorx'),
+							// 			color: 'purple',
+							// 			onClick: () => setAppeal(true),
+							// 		},
+							// 	]}
+							// />}
 						>
 							<Notice
 								type="error"
@@ -485,7 +476,16 @@ const AddProduct = () => {
 							/>
 						</Card>
 					)}
-					<Card title={__('General information - Tell customers what you are selling', 'multivendorx')} desc={__("A good name and description help people find your product and feel confident buying it.", 'multivendorx')}>
+					<Card
+						title={__(
+							'General information - Tell customers what you are selling',
+							'multivendorx'
+						)}
+						desc={__(
+							'A good name and description help people find your product and feel confident buying it.',
+							'multivendorx'
+						)}
+					>
 						<FormGroupWrapper>
 							<div className="form-group  ai-form">
 								<label className="settings-form-label">
@@ -508,9 +508,11 @@ const AddProduct = () => {
 										onChange={(value) =>
 											handleChange('name', value)
 										}
-										disabled={modules.includes(
-											'shared-listing'
-										) && !isAutoDraft}
+										disabled={
+											modules.includes(
+												'shared-listing'
+											) && !isAutoDraft
+										}
 									/>
 									<div className="settings-metabox-description">
 										{__(
@@ -654,7 +656,16 @@ const AddProduct = () => {
 					</PopupUI>
 					{product?.type === 'simple' &&
 						productFields.includes('general') && (
-							<Card title={__('Pricing - How much does it cost?', 'multivendorx')} desc={__('Set your normal price. If you are running a promotion, you can add sale price', 'multivendorx')}>
+							<Card
+								title={__(
+									'Pricing - How much does it cost?',
+									'multivendorx'
+								)}
+								desc={__(
+									'Set your normal price. If you are running a promotion, you can add sale price',
+									'multivendorx'
+								)}
+							>
 								<FormGroupWrapper>
 									<FormGroup
 										cols={2}

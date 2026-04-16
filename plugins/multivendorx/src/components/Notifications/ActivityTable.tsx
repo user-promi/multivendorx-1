@@ -2,7 +2,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { __ } from '@wordpress/i18n';
-import { getApiLink, Container, Column, TableCard, InfoItem, NoticeManager } from 'zyra';
+import {
+	getApiLink,
+	Container,
+	Column,
+	TableCard,
+	InfoItem,
+	NoticeManager,
+} from 'zyra';
 import { QueryProps, TableRow } from '@/services/type';
 import { getUrl } from '@/services/commonFunction';
 

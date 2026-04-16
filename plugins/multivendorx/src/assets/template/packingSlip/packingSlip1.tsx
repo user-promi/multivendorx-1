@@ -40,7 +40,6 @@ const packingSlip1: React.FC<Props> = ({ invoiceRows, colors }) => {
 			qty: 2,
 			location: 'Shelf C2',
 		},
-		
 	];
 
 	return (
@@ -63,7 +62,7 @@ const packingSlip1: React.FC<Props> = ({ invoiceRows, colors }) => {
 							flexDirection: 'row',
 							justifyContent: 'space-between',
 							gap: '15px',
-							padding: '20px',							
+							padding: '20px',
 						}}
 					>
 						<View
@@ -146,7 +145,6 @@ const packingSlip1: React.FC<Props> = ({ invoiceRows, colors }) => {
 						</View>
 					</View>
 					{/* billing section end */}
-
 
 					{/* table section start */}
 					<View

@@ -312,49 +312,79 @@ class Hooks {
     public function trigger_order_status_notifications( $order_id, $old_status, $new_status, $order ) {
 
         $store_id = $order ? absint( $order->get_meta( Utill::POST_META_SETTINGS['store_id'], true ) ) : 0;
-        $store = new Store( $store_id );
+        $store    = new Store( $store_id );
 
         if ( $order->get_parent_id() > 0 ) {
             if ( 'processing' === $new_status ) {
-                MultiVendorX()->notifications->send_notification_helper('order_processing', $store, $order, [
-                    'order_id'       => $order->get_id(),
-					'category'       => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'order_processing',
+                    $store,
+                    $order,
+                    array(
+						'order_id' => $order->get_id(),
+						'category' => 'activity',
+					)
+                );
             }
 
             if ( 'completed' === $new_status ) {
-                MultiVendorX()->notifications->send_notification_helper('order_completed', $store, $order, [
-                    'order_id'       => $order->get_id(),
-					'category'       => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'order_completed',
+                    $store,
+                    $order,
+                    array(
+						'order_id' => $order->get_id(),
+						'category' => 'activity',
+					)
+                );
             }
 
             if ( 'cancelled' === $new_status ) {
-                MultiVendorX()->notifications->send_notification_helper('order_cancelled', $store, $order, [
-                    'order_id'       => $order->get_id(),
-					'category'       => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'order_cancelled',
+                    $store,
+                    $order,
+                    array(
+						'order_id' => $order->get_id(),
+						'category' => 'activity',
+					)
+                );
             }
 
             if ( 'refunded' === $new_status ) {
-                MultiVendorX()->notifications->send_notification_helper('order_refunded', $store, $order, [
-                    'order_id'       => $order->get_id(),
-					'category'       => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'order_refunded',
+                    $store,
+                    $order,
+                    array(
+						'order_id' => $order->get_id(),
+						'category' => 'activity',
+					)
+                );
             }
 
             if ( 'refund-requested' === $old_status && 'processing' === $new_status ) {
-                MultiVendorX()->notifications->send_notification_helper('refund_rejected', $store, $order, [
-                    'order_id'       => $order->get_id(),
-					'category'       => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'refund_rejected',
+                    $store,
+                    $order,
+                    array(
+						'order_id' => $order->get_id(),
+						'category' => 'activity',
+					)
+                );
             }
 
             if ( 'refund-requested' === $old_status && 'refunded' === $new_status ) {
-                MultiVendorX()->notifications->send_notification_helper('refund_accepted', $store, $order, [
-                    'order_id'       => $order->get_id(),
-					'category'       => 'activity',
-                ]);
+                MultiVendorX()->notifications->send_notification_helper(
+                    'refund_accepted',
+                    $store,
+                    $order,
+                    array(
+						'order_id' => $order->get_id(),
+						'category' => 'activity',
+					)
+                );
             }
         }
     }

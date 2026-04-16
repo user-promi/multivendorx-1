@@ -30,7 +30,7 @@ const settings: React.FC<SettingsProps> = () => {
 	);
 
 	const settingsArray = allSettings.filter((setting) => {
-		 if (setting.content?.hide) {
+		if (setting.content?.hide) {
 			return false;
 		}
 		if (setting.content.module) {

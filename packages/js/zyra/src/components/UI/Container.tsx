@@ -14,7 +14,7 @@ const Container: React.FC<ContainerProps> = ({
     column = false,
     general = false,
     children,
-    className
+    className,
 }) => {
     return (
         <div

@@ -27,7 +27,7 @@ $login_url     = add_query_arg( 'redirect_to', $current_url, $myaccount_url );
     </div>
 
     <!-- Questions List (populated via AJAX) -->
-     <div class="woocommerce-js">
+    <div class="woocommerce-js">
         <div id="reviews">
             <div id="comments">
                 <ol id="customer-queries-list" class="commentlist"></ol>
