@@ -1898,18 +1898,28 @@ class Install {
 			update_option( Utill::MULTIVENDORX_SETTINGS['registration'], $new_form );
 		}
 
-        $user_permissions = array(
-            'store_owner' => array_values(
-                array_unique(
-                    array_merge(
-                        $store_permissions['products'] ?? [],
-                        $store_permissions['coupons'] ?? [],
-                        $store_permissions['orders'] ?? [],
-                        $store_permissions['settings'] ?? []
-                    )
-                )
+        $store_owner_caps = array_unique(
+            array_merge(
+                (array) ( $store_permissions['products'] ?? [] ),
+                (array) ( $store_permissions['coupons'] ?? [] ),
+                (array) ( $store_permissions['orders'] ?? [] ),
+                (array) ( $store_permissions['settings'] ?? [] )
             )
         );
+
+        $user_permissions = array(
+            'store_owner' => $store_owner_caps
+        );
+
+        if ( $role = get_role( 'store_owner' ) ) {
+            foreach ( $role->capabilities as $cap => $_ ) {
+                $role->remove_cap( $cap );
+            }
+
+            foreach ( $store_owner_caps as $cap ) {
+                $role->add_cap( $cap );
+            }
+        }
 
         update_option( Utill::MULTIVENDORX_SETTINGS['user-permissions'], $user_permissions );
         update_option( Utill::MULTIVENDORX_SETTINGS['refunds'], $refund_settings );
