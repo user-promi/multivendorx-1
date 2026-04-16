@@ -126,7 +126,7 @@ const CustomersFeedback = () => {
 								'multivendorx'
 							)}
 							buttonText={__('Enable Now', 'multivendorx')}
-							buttonLink={`${appLocalizer.admin_dashboard_url}#&tab=modules`}
+							buttonLink={`${appLocalizer.admin_dashboard_url}#&tab=modules&module=customer-queries`}
 						/>
 					</Column>
 				</Container>
