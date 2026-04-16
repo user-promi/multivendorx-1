@@ -20,7 +20,7 @@ const Table: React.FC<TableProps> = ({
     headers = {},
     rows = [],
     // caption,
-    className ='',
+    className = '',
     onSort = () => {},
     query = {},
     ids = [],
@@ -203,11 +203,12 @@ const Table: React.FC<TableProps> = ({
                                     style={
                                         config.width
                                             ? {
-                                                minWidth:
-                                                    typeof config.width === 'number'
-                                                        ? `${config.width}rem`
-                                                        : config.width,
-                                            }
+                                                  minWidth:
+                                                      typeof config.width ===
+                                                      'number'
+                                                          ? `${config.width}rem`
+                                                          : config.width,
+                                              }
                                             : {}
                                     }
                                 >
@@ -294,11 +295,12 @@ const Table: React.FC<TableProps> = ({
                                                     style={
                                                         header.width
                                                             ? {
-                                                                minWidth:
-                                                                    typeof header.width === 'number'
-                                                                        ? `${header.width}rem`
-                                                                        : header.width,
-                                                            }
+                                                                  minWidth:
+                                                                      typeof header.width ===
+                                                                      'number'
+                                                                          ? `${header.width}rem`
+                                                                          : header.width,
+                                                              }
                                                             : {}
                                                     }
                                                 >
@@ -333,7 +335,7 @@ const Table: React.FC<TableProps> = ({
                                         return (
                                             <td
                                                 key={`${rowId}-${colIndex}`}
-                                               className={`admin-column ${className} ${header?.type || ''}`}
+                                                className={`admin-column ${className} ${header?.type || ''}`}
                                             >
                                                 {header.isEditable
                                                     ? renderEditableCell({

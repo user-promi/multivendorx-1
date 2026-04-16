@@ -84,9 +84,7 @@ export const LogUI: React.FC<LogProps> = ({
         });
     };
 
-    const handleCopyToClipboard = (
-        event: React.MouseEvent
-    ) => {
+    const handleCopyToClipboard = (event: React.MouseEvent) => {
         event.preventDefault();
         const logText = logData
             .map((log) => {
@@ -142,7 +140,7 @@ export const LogUI: React.FC<LogProps> = ({
                     <div className="log-viewer-text">
                         {ZyraVariable.tab_name} - log viewer
                     </div>
-                    
+
                     <CopyToClipboardUI
                         variant="button"
                         copyButtonLabel={copyBtnText}

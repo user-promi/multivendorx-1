@@ -31,9 +31,9 @@ const TableRowActions: React.FC<TableRowActionsProps> = ({
     });
 
     return (
-        <div className="table-action" ref={containerRef}>                            
-                {showInline ? (
-                    <div className="inline-actions">
+        <div className="table-action" ref={containerRef}>
+            {showInline ? (
+                <div className="inline-actions">
                     {rowActions.map((action) => (
                         <Tooltip text={action.label}>
                             <i
@@ -42,9 +42,9 @@ const TableRowActions: React.FC<TableRowActionsProps> = ({
                             />
                         </Tooltip>
                     ))}
-                    </div>
-                ) : (
-                    <>
+                </div>
+            ) : (
+                <>
                     <div className="action-icons">
                         <i
                             className="adminfont-more-vertical"
@@ -74,9 +74,9 @@ const TableRowActions: React.FC<TableRowActionsProps> = ({
                                 ))}
                             </ul>
                         </div>
-                        </div>
-                    </>
-                )}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

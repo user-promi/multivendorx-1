@@ -182,9 +182,7 @@ const InfoItem: React.FC<InfoItemProps> = ({
                             </div>
                         )}
                         {rightContent && (
-                            <div className="right-content">
-                                {rightContent}
-                            </div>
+                            <div className="right-content">{rightContent}</div>
                         )}
                     </>
                 )}

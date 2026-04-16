@@ -19,7 +19,7 @@ interface Item {
     onReject?: (item: Item) => void;
     desc?: string;
     value?: string;
-    className?: string; // notification | checklist | feature-list | mini-card | price-list | documentation | badge-list 
+    className?: string; // notification | checklist | feature-list | mini-card | price-list | documentation | badge-list
 }
 
 interface ItemListUIProps {
@@ -41,7 +41,9 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
     loading = false,
     skeletonCount = 5,
 }) => {
-    const [isExpanded, setIsExpanded] = React.useState(className === 'price-list');
+    const [isExpanded, setIsExpanded] = React.useState(
+        className === 'price-list'
+    );
 
     if (loading) {
         return (
@@ -60,7 +62,9 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
     }
 
     return (
-        <div className={`item-list ${className || 'default'} ${isExpanded ? 'expanded' : ''}`}>
+        <div
+            className={`item-list ${className || 'default'} ${isExpanded ? 'expanded' : ''}`}
+        >
             {items &&
                 items.map((item) => {
                     const handleClick = (e: React.MouseEvent) => {
@@ -77,12 +81,16 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                             {item.link ? (
                                 <a
                                     href={item.link}
-                                    target={item.targetBlank ? '_blank' : '_self'}
+                                    target={
+                                        item.targetBlank ? '_blank' : '_self'
+                                    }
                                     className={`item ${background ? 'background' : ''} ${border ? 'border' : ''} ${item.className || ''}`}
                                     onClick={handleClick}
                                 >
                                     {item.icon && (
-                                        <i className={`item-icon adminfont-${item.icon}`}></i>
+                                        <i
+                                            className={`item-icon adminfont-${item.icon}`}
+                                        ></i>
                                     )}
                                     {item.title}
                                 </a>
@@ -111,7 +119,9 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                                     <div className="details">
                                         <div
                                             className="item-title"
-                                            dangerouslySetInnerHTML={{ __html: item.title }}
+                                            dangerouslySetInnerHTML={{
+                                                __html: item.title,
+                                            }}
                                         />
                                         {item.value && (
                                             <div className="value">
@@ -147,7 +157,11 @@ export const ItemListUI: React.FC<ItemListUIProps> = ({
                                     {item.tags && (
                                         <div className="tags">
                                             {typeof item.tags === 'string' ? (
-                                                <div dangerouslySetInnerHTML={{ __html: item.tags }} />
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: item.tags,
+                                                    }}
+                                                />
                                             ) : (
                                                 item.tags
                                             )}
@@ -195,7 +209,9 @@ const ItemList: FieldComponent = {
                 border={field.border}
                 loading={field.loading}
                 onItemClick={(item) => {
-                    if (!canAccess) return;
+                    if (!canAccess) {
+                        return;
+                    }
 
                     if (item.action) {
                         item.action(item);

@@ -60,7 +60,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
     proSettingChange = () => false,
     context = 'default',
     inputTypeList,
-    availablePlaceholder
+    availablePlaceholder,
 }) => {
     const [blocks, setBlocks] = useState<Block[]>(externalBlocks);
     const [openBlock, setOpenBlock] = useState<Block | null>(null);
@@ -82,22 +82,26 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
     const isFormBuilder = context === 'form';
 
     const titleBlock = isFormBuilder
-        ? blocks.find(b => b.type === 'title')
+        ? blocks.find((b) => b.type === 'title')
         : null;
 
     const submitBlock = isFormBuilder
-        ? blocks.find(b => b.type === 'button')
+        ? blocks.find((b) => b.type === 'button')
         : null;
 
     const dynamicBlocks = isFormBuilder
-        ? blocks.filter(b => b.type !== 'button' && b.type !== 'title')
+        ? blocks.filter((b) => b.type !== 'button' && b.type !== 'title')
         : blocks;
     useEffect(() => {
-        if (context !== 'form') return;
-        setBlocks(prev => {
-            const hasSubmit = prev.some(b => b.type === 'button');
+        if (context !== 'form') {
+            return;
+        }
+        setBlocks((prev) => {
+            const hasSubmit = prev.some((b) => b.type === 'button');
 
-            if (hasSubmit) return prev;
+            if (hasSubmit) {
+                return prev;
+            }
 
             return [
                 ...prev,
@@ -111,11 +115,15 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
     }, []);
 
     useEffect(() => {
-        if (context !== 'form') return;
-        setBlocks(prev => {
-            const hasTitle = prev.some(b => b.type === 'title');
+        if (context !== 'form') {
+            return;
+        }
+        setBlocks((prev) => {
+            const hasTitle = prev.some((b) => b.type === 'title');
 
-            if (hasTitle) return prev;
+            if (hasTitle) {
+                return prev;
+            }
 
             return [
                 createBlock({
@@ -128,12 +136,16 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
     }, []);
 
     useEffect(() => {
-        if (context !== 'form') return;
+        if (context !== 'form') {
+            return;
+        }
 
-        setBlocks(prev => {
-            const hasStoreName = prev.some(b => b.name === 'name');
+        setBlocks((prev) => {
+            const hasStoreName = prev.some((b) => b.name === 'name');
 
-            if (hasStoreName) return prev;
+            if (hasStoreName) {
+                return prev;
+            }
 
             return [
                 ...prev,
@@ -210,19 +222,25 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
         let next: Block[] = (() => {
             const current = blocksRef.current;
 
-            if (!canvas) return current;
+            if (!canvas) {
+                return current;
+            }
 
             if (context !== 'form') {
                 return [...canvas];
             }
 
-            const title = current.find(b => b.type === 'title');
-            const submit = current.find(b => b.type === 'button');
+            const title = current.find((b) => b.type === 'title');
+            const submit = current.find((b) => b.type === 'button');
 
             let result = [...canvas];
 
-            if (title) result = [title, ...result];
-            if (submit) result = [...result, submit];
+            if (title) {
+                result = [title, ...result];
+            }
+            if (submit) {
+                result = [...result, submit];
+            }
 
             return result;
         })();
@@ -540,14 +558,15 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                             {label} <span>({palette.length})</span>
                         </div>
                         <i
-                            className={`adminfont-pagination-right-arrow ${openGroups[id] ? 'rotate' : ''
-                                }`}
+                            className={`adminfont-pagination-right-arrow ${
+                                openGroups[id] ? 'rotate' : ''
+                            }`}
                         />
                     </div>
                     {openGroups[id] && (
                         <ReactSortable
                             list={palette}
-                            setList={() => { }}
+                            setList={() => {}}
                             sort={false}
                             group={{
                                 name: groupName,
@@ -598,8 +617,9 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                 {templates.map(({ id, name }) => (
                     <div
                         key={id}
-                        className={`template-item ${id === activeTemplateId ? 'active' : ''
-                            }`}
+                        className={`template-item ${
+                            id === activeTemplateId ? 'active' : ''
+                        }`}
                         onClick={() => onTemplateSelect?.(id)}
                     >
                         <div className="template-name">{name}</div>
@@ -630,11 +650,11 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                         },
                         ...(showTemplatesTab && templates.length
                             ? [
-                                {
-                                    label: 'Templates',
-                                    content: renderTemplatesContent(),
-                                },
-                            ]
+                                  {
+                                      label: 'Templates',
+                                      content: renderTemplatesContent(),
+                                  },
+                              ]
                             : []),
                     ]}
                 />
@@ -648,7 +668,9 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                             isActive={openBlock?.id === titleBlock.id}
                             onSelect={() => setOpenBlock(titleBlock)}
                             onChange={(patch) => {
-                                const index = blocks.findIndex(b => b.id === titleBlock.id);
+                                const index = blocks.findIndex(
+                                    (b) => b.id === titleBlock.id
+                                );
                                 updateBlock(index, patch);
                             }}
                             showMeta={false} // 🚀 no drag, no delete
@@ -676,10 +698,14 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                                     onChildMutate={(updated) =>
                                         handleChildMutate(index, updated)
                                     }
-                                    selectedLocation={columnManager.selectedLocation}
+                                    selectedLocation={
+                                        columnManager.selectedLocation
+                                    }
                                     onChildSelect={(location, child) => {
                                         setOpenBlock(child);
-                                        columnManager.setSelectedLocation(location);
+                                        columnManager.setSelectedLocation(
+                                            location
+                                        );
                                     }}
                                     onSelect={() => {
                                         setOpenBlock(block);
@@ -696,12 +722,14 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                                         setOpenBlock(block);
                                         columnManager.clearSelection();
                                     }}
-                                    onChange={(patch) => updateBlock(index, patch)}
-                                        onDelete={
-                                            block.name === 'name'
-                                                ? undefined
-                                                : (e) => deleteBlock(index, e)
-                                        }
+                                    onChange={(patch) =>
+                                        updateBlock(index, patch)
+                                    }
+                                    onDelete={
+                                        block.name === 'name'
+                                            ? undefined
+                                            : (e) => deleteBlock(index, e)
+                                    }
                                 />
                             )
                         )}
@@ -712,7 +740,9 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({
                             isActive={openBlock?.id === submitBlock.id}
                             onSelect={() => setOpenBlock(submitBlock)}
                             onChange={(patch) => {
-                                const index = blocks.findIndex(b => b.id === submitBlock.id);
+                                const index = blocks.findIndex(
+                                    (b) => b.id === submitBlock.id
+                                );
                                 updateBlock(index, patch);
                             }}
                             showMeta={false} // no drag, no delete

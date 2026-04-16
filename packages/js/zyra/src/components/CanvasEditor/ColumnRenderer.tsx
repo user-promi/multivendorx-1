@@ -162,7 +162,6 @@ export const ColumnRenderer: React.FC<ColumnRendererProps> = ({
     onDelete,
     showMeta = true,
 }) => {
-
     /** Mutate the columns matrix and notify the parent with the new block */
     const mutate = useCallback(
         (fn: (cols: Block[][]) => Block[][]) => {
@@ -210,7 +209,11 @@ export const ColumnRenderer: React.FC<ColumnRendererProps> = ({
         [block, mutate, openBlock?.id, setOpenBlock]
     );
 
-    const handleChildSelect = (child: Block, colIdx: number, childIdx: number) => {
+    const handleChildSelect = (
+        child: Block,
+        colIdx: number,
+        childIdx: number
+    ) => {
         onChildSelect(
             {
                 parentIndex,
@@ -254,18 +257,22 @@ export const ColumnRenderer: React.FC<ColumnRendererProps> = ({
             )}
 
             <section className="form-field-container-wrapper">
-                <div className={`email-columns layout-${layout}`}
+                <div
+                    className={`email-columns layout-${layout}`}
                     style={{
                         display: 'flex',
                         width: '100%',
-                        justifyContent: block.style?.justifyContent || 'flex-start',
+                        justifyContent:
+                            block.style?.justifyContent || 'flex-start',
                         alignItems: block.style?.alignItems || 'stretch',
-                        gap: block.style?.gap ? `${block.style.gap}rem` : '1rem',
+                        gap: block.style?.gap
+                            ? `${block.style.gap}rem`
+                            : '1rem',
                     }}
                 >
                     {columns.map((column, colIdx) => (
-                        <div 
-                            key={colIdx} 
+                        <div
+                            key={colIdx}
                             className="email-column-wrapper"
                             style={enhancedStyles}
                         >
@@ -308,7 +315,7 @@ export const ColumnRenderer: React.FC<ColumnRendererProps> = ({
                                                     child,
                                                     colIdx,
                                                     childIdx
-                                                )
+                                                );
                                             }}
                                             onChange={(patch) =>
                                                 handleChildUpdate(

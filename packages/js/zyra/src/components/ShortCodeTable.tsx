@@ -38,7 +38,8 @@ const ShortCodeTableUI: React.FC<ShortCodeTableProps> = (props) => {
                 <div className="shortcode-wrapper" key={option.label || index}>
                     <div className="shortcode-details">
                         <div className="shortcode-title">
-                            { option.name } - <CopyToClipboardUI text={option.label}/>                            
+                            {option.name} -{' '}
+                            <CopyToClipboardUI text={option.label} />
                         </div>
 
                         <div className="des">{option.desc}</div>
@@ -69,7 +70,9 @@ const ShortCodeTableUI: React.FC<ShortCodeTableProps> = (props) => {
                             </table>
                         </div>
                     ) : (
-                        <div className="no-args-message">No arguments required</div>
+                        <div className="no-args-message">
+                            No arguments required
+                        </div>
                     )}
                 </div>
             ))}

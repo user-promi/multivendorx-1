@@ -346,7 +346,7 @@ export const SelectInputUI: React.FC<SelectProps> = ({
     popupTitle,
     popupWidth,
     background,
-    color
+    color,
 }) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [popupOpen, setPopupOpen] = React.useState(false);
@@ -387,7 +387,7 @@ export const SelectInputUI: React.FC<SelectProps> = ({
         menuContent,
         keepMenuOpenOnMenuContentClick,
         noOptionsText,
-        menuPortalTarget: document.body, 
+        menuPortalTarget: document.body,
         menuPosition: 'fixed',
         styles: {
             ...buildStyles(isMulti, background, color),

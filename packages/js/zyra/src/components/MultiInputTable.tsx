@@ -177,26 +177,31 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
         isRowActive: boolean
     ) => {
         const fields = column.fields ?? [{ key: column.key, type: 'checkbox' }];
-    
+
         return (
             <td key={`${column.key}_${rowKey}`}>
                 <div className="multi-field-cell">
                     {fields.map((field) => {
-                        if (column.type == "checkbox") {
+                        if (column.type == 'checkbox') {
                             const roleKey = column.key;
-                            const currentValues: string[] = (setting['role_access_table']?.[roleKey] as string[]) ?? 
-                                (setting[roleKey] as string[]) ?? 
+                            const currentValues: string[] =
+                                (setting['role_access_table']?.[
+                                    roleKey
+                                ] as string[]) ??
+                                (setting[roleKey] as string[]) ??
                                 [];
                             const checked = currentValues.includes(rowKey);
-    
-                            const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+                            const handleCheckboxChange = (
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
                                 const newValues = e.target.checked
                                     ? [...currentValues, rowKey]
                                     : currentValues.filter((k) => k !== rowKey);
-    
+
                                 onChange(roleKey, newValues);
                             };
-    
+
                             return (
                                 <input
                                     key={`${column.key}_${field.key}_${rowKey}`}
@@ -204,10 +209,16 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
                                     checked={checked}
                                     disabled={!isRowActive}
                                     onChange={(e) => {
-                                        if (isBlocked(column, modules, onBlocked)) {
-                                            return; 
+                                        if (
+                                            isBlocked(
+                                                column,
+                                                modules,
+                                                onBlocked
+                                            )
+                                        ) {
+                                            return;
                                         }
-                                        handleCheckboxChange(e); 
+                                        handleCheckboxChange(e);
                                     }}
                                 />
                             );
@@ -242,8 +253,8 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
         flatRows.map((row) => {
             const isRowActive = row.enabledKey
                 ? ((setting[row.enabledKey] as string[] | undefined)?.includes(
-                    row.key
-                ) ?? false)
+                      row.key
+                  ) ?? false)
                 : true;
 
             const handleRowToggle = (checked: boolean) => {
@@ -309,10 +320,11 @@ export const MultiInputTableUI: React.FC<MultiInputTableUIProps> = ({
                         <div className="header-title">
                             {group.label}
                             <i
-                                className={`adminfont-${isOpen
+                                className={`adminfont-${
+                                    isOpen
                                         ? 'keyboard-arrow-down'
                                         : 'pagination-right-arrow'
-                                    }`}
+                                }`}
                             />
                         </div>
                     </div>

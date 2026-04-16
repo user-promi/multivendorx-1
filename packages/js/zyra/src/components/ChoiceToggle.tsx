@@ -169,9 +169,7 @@ export const ChoiceToggleUI: React.FC<ChoiceToggleProps> = ({
                                 {/* Module-locked badge */}
                                 {!option.proSetting &&
                                     option.moduleEnabled &&
-                                    !modules.includes(
-                                        option.moduleEnabled
-                                    ) && (
+                                    !modules.includes(option.moduleEnabled) && (
                                         <span className="admin-pro-tag module">
                                             <i
                                                 className={`adminfont-${option.moduleEnabled}`}

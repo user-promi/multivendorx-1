@@ -66,7 +66,12 @@ interface PresetsProps {
     closeDropdown?: () => void;
 }
 
-const Presets: React.FC<PresetsProps> = ({ setValue, pickerRef, format, onClose }) => {
+const Presets: React.FC<PresetsProps> = ({
+    setValue,
+    pickerRef,
+    format,
+    onClose,
+}) => {
     const now = new Date();
 
     const startOfWeek = (date: Date) => {
@@ -194,7 +199,9 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
 
     // for auto top bottom popup position
     const adjustPosition = () => {
-        if (!containerRef.current || !dropdownRef.current) return;
+        if (!containerRef.current || !dropdownRef.current) {
+            return;
+        }
 
         const rect = containerRef.current.getBoundingClientRect();
         const dropdownHeight = dropdownRef.current.offsetHeight;
@@ -210,31 +217,35 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
         }
     };
     useEffect(() => {
-    if (!showCalendar) return;
-
-    const handlePosition = () => {
-        requestAnimationFrame(adjustPosition);
-    };
-
-    const handleClickOutside = (e) => {
-        if (!containerRef.current) return;
-
-        if (!containerRef.current.contains(e.target)) {
-            setShowCalendar(false);
+        if (!showCalendar) {
+            return;
         }
-    };
 
-    handlePosition();
-    window.addEventListener('scroll', handlePosition, true);
-    window.addEventListener('resize', handlePosition);
-    document.addEventListener('mousedown', handleClickOutside);
+        const handlePosition = () => {
+            requestAnimationFrame(adjustPosition);
+        };
 
-    return () => {
-        window.removeEventListener('scroll', handlePosition, true);
-        window.removeEventListener('resize', handlePosition);
-        document.removeEventListener('mousedown', handleClickOutside);
-    };
-}, [showCalendar]);
+        const handleClickOutside = (e) => {
+            if (!containerRef.current) {
+                return;
+            }
+
+            if (!containerRef.current.contains(e.target)) {
+                setShowCalendar(false);
+            }
+        };
+
+        handlePosition();
+        window.addEventListener('scroll', handlePosition, true);
+        window.addEventListener('resize', handlePosition);
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            window.removeEventListener('scroll', handlePosition, true);
+            window.removeEventListener('resize', handlePosition);
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showCalendar]);
     const enhancedProps = {
         ...commonProps,
         onChange: (val: any) => {
@@ -250,7 +261,12 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
     const tabs = [
         {
             label: 'Presets',
-            content: <Presets {...presetsProps} closeDropdown={() => setShowCalendar(false)}/>
+            content: (
+                <Presets
+                    {...presetsProps}
+                    closeDropdown={() => setShowCalendar(false)}
+                />
+            ),
         },
         {
             label: 'Custom',
@@ -261,8 +277,8 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
                     {...enhancedProps}
                     ref={localPickerRef}
                 />
-            )
-        }
+            ),
+        },
     ];
 
     if (showInput) {
@@ -279,7 +295,10 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
                     placeholder={format}
                 />
                 {showCalendar && (
-                    <div ref={dropdownRef} className={`calendar-tabs-container ${openUpward ? 'open-upward' : 'open-downward'}`} >
+                    <div
+                        ref={dropdownRef}
+                        className={`calendar-tabs-container ${openUpward ? 'open-upward' : 'open-downward'}`}
+                    >
                         <div className="tabs-wrapper">
                             <div className="tabs-item">
                                 {tabs.map((tab, index) => (
@@ -422,7 +441,9 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
     };
 
     const getDisplayValue = () => {
-        if (!value?.startDate) return '';
+        if (!value?.startDate) {
+            return '';
+        }
 
         const start = value.startDate;
         const end = value.endDate || value.startDate;
@@ -433,7 +454,9 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
             ? formatDate(start)
             : `${formatDate(start)} ~ ${formatDate(end)}`;
 
-        if (!showCompare) return currentText;
+        if (!showCompare) {
+            return currentText;
+        }
 
         const prevStart = getPrevYearDate(start);
         const prevEnd = getPrevYearDate(end);
@@ -466,8 +489,9 @@ export const CalendarInputUI: React.FC<CalendarInputProps> = ({
                     />
                 ) : (
                     <Calendar
-                        className={`calendar-wrapper ${!showInput ? 'calendar' : ''
-                            }`}
+                        className={`calendar-wrapper ${
+                            !showInput ? 'calendar' : ''
+                        }`}
                         {...commonProps}
                     />
                 )}

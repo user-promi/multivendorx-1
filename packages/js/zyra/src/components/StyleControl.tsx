@@ -229,7 +229,7 @@ const StyleControls: React.FC<StyleControlsProps> = ({
             <Card toggle defaultExpanded={false} title="Border">
                 <FormGroupWrapper>
                     {/* Border Width */}
-                    <FormGroup label="Width(rem)" cols={2}>  
+                    <FormGroup label="Width(rem)" cols={2}>
                         <BasicInputUI
                             type="number"
                             minNumber={0}
