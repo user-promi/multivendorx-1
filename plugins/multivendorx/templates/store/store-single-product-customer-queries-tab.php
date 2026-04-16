@@ -13,14 +13,14 @@ $myaccount_url = wc_get_page_permalink( 'myaccount' );
 $login_url     = add_query_arg( 'redirect_to', $current_url, $myaccount_url );
 ?>
 
-<div id="product-qna" data-product="<?php echo esc_attr( $product_id ); ?>">
+<div id="product-customer-queries" data-product="<?php echo esc_attr( $product_id ); ?>">
 
     <div class="header">
         <h3><?php echo esc_html__( 'Questions about this product', 'multivendorx' ); ?></h3>
 
-        <form class="woocommerce-form qna-search">
+        <form class="woocommerce-form customer-queries-search">
             <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-                <input type="text" id="qna-search" class="woocommerce-Input woocommerce-Input--text input-text"
+                <input type="text" id="customer-queries-search" class="woocommerce-Input woocommerce-Input--text input-text"
                     placeholder="<?php echo esc_attr__( 'Have a question? Search for an answer.', 'multivendorx' ); ?>">
             </p>
         </form>
@@ -30,23 +30,23 @@ $login_url     = add_query_arg( 'redirect_to', $current_url, $myaccount_url );
      <div class="woocommerce-js">
         <div id="reviews">
             <div id="comments">
-                <ol id="qna-list" class="commentlist"></ol>
+                <ol id="customer-queries-list" class="commentlist"></ol>
             </div>
         </div>
     </div>
-    <div id="qna-no-results-container" class="qna-empty" style="display:none;">
-        <span id="qna-no-results-message">
+    <div id="customer-queries-no-results-container" class="customer-queries-empty" style="display:none;">
+        <span id="customer-queries-no-results-message">
             <?php echo esc_html__( 'Have not discovered the information you seek', 'multivendorx' ); ?>
         </span>
         <button
             type="submit"
-            id="qna-direct-submit"
+            id="customer-queries-direct-submit"
             class="woocommerce-button button">
             <?php echo esc_html__( 'Ask now', 'multivendorx' ); ?>
         </button>
     </div>
     <!-- Success Message -->
-    <div class="woocommerce-notices-wrapper" style="display:none;" id="qna-success-message">
+    <div class="woocommerce-notices-wrapper" style="display:none;" id="customer-queries-success-message">
         <div class="woocommerce-message" role="alert">
             <?php echo esc_html__( 'Your question has been submitted successfully. It will appear once answered.', 'multivendorx' ); ?>
         </div>

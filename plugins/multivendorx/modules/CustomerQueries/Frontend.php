@@ -22,7 +22,7 @@ class Frontend {
      * Frontend class constructor function.
      */
     public function __construct() {
-        add_filter( 'woocommerce_product_tabs', array( $this, 'product_questions_answers_tab' ) );
+        add_filter( 'woocommerce_product_tabs', array( $this, 'product_customer_queries_tab' ) );
         add_filter( 'multivendorx_register_scripts', array( $this, 'register_script' ) );
         add_filter( 'multivendorx_localize_scripts', array( $this, 'localize_scripts' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
@@ -37,7 +37,7 @@ class Frontend {
     public function register_script( $scripts ) {
         $base_url = MultiVendorX()->plugin_url . FrontendScripts::get_build_path_name();
 
-        $scripts['multivendorx-qna-frontend-script'] = array(
+        $scripts['multivendorx-customer-queries-frontend-script'] = array(
             'src'  => $base_url . 'modules/CustomerQueries/js/' . MULTIVENDORX_PLUGIN_SLUG . '-frontend.min.js',
             'deps' => array( 'jquery' ),
         );
@@ -53,8 +53,8 @@ class Frontend {
      */
     public function localize_scripts( $scripts ) {
 
-        $scripts['multivendorx-qna-frontend-script'] = array(
-            'object_name' => 'qnaFrontend',
+        $scripts['multivendorx-customer-queries-frontend-script'] = array(
+            'object_name' => 'customerQueriesFrontend',
             'use_ajax'    => true,
         );
 
@@ -68,8 +68,8 @@ class Frontend {
      */
     public function load_scripts() {
         FrontendScripts::load_scripts();
-        FrontendScripts::enqueue_script( 'multivendorx-qna-frontend-script' );
-        FrontendScripts::localize_scripts( 'multivendorx-qna-frontend-script' );
+        FrontendScripts::enqueue_script( 'multivendorx-customer-queries-frontend-script' );
+        FrontendScripts::localize_scripts( 'multivendorx-customer-queries-frontend-script' );
     }
 
     /**
@@ -79,15 +79,15 @@ class Frontend {
      *
      * @return array
      */
-    public function product_questions_answers_tab( $tabs ) {
+    public function product_customer_queries_tab( $tabs ) {
         global $product;
 
-        $qna_count = 0;
+        $queries_count = 0;
 
         if ( isset( $product ) && $product instanceof \WC_Product ) {
             $product_id = $product->get_id();
 
-            $qna_count = Util::get_question_information(
+            $queries_count = Util::get_question_information(
                 array(
 					'product_ids'         => array( $product_id ),
 					'question_visibility' => 'public',
@@ -96,14 +96,14 @@ class Frontend {
                 )
             );
 
-            $qna_count = intval( $qna_count );
+            $queries_count = intval( $queries_count );
         }
 
-        $tabs['product_qna'] = array(
+        $tabs['customer_queries'] = array(
             /* translators: %d: Number of answered questions for this product */
-            'title'    => sprintf( __( 'Questions & Answers (%d)', 'multivendorx' ), $qna_count ),
+            'title'    => sprintf( __( 'Customer Queries (%d)', 'multivendorx' ), $queries_count ),
             'priority' => 50,
-            'callback' => array( $this, 'multivendorx_product_qna_tab_content' ),
+            'callback' => array( $this, 'multivendorx_customer_queries_tab_content' ),
         );
 
         return $tabs;
@@ -114,9 +114,9 @@ class Frontend {
      *
      * @return void
      */
-    public function multivendorx_product_qna_tab_content() {
+    public function multivendorx_customer_queries_tab_content() {
         global $product;
-        MultiVendorX()->util->get_template( 'store/store-single-product-qna-tab.php', array( 'product_id' => $product->get_id() ) );
+        MultiVendorX()->util->get_template( 'store/store-single-product-customer-queries-tab.php', array( 'product_id' => $product->get_id() ) );
     }
 
     public function customer_count($total) {

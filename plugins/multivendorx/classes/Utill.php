@@ -39,11 +39,11 @@ class Utill {
         'store_users'           => 'multivendorx_store_users',
         'store_meta'            => 'multivendorx_store_meta',
         'transaction'           => 'multivendorx_transactions',
-        'product_qna'           => 'multivendorx_questions_and_answers',
+        'customer_queries'      => 'multivendorx_customer_queries',
         'report_abuse'          => 'multivendorx_report_abuse',
         'review'                => 'multivendorx_store_reviews',
         'rating'                => 'multivendorx_store_review_ratings',
-        'products_map'          => 'multivendorx_products_map',
+        'shared_listing'        => 'multivendorx_shared_listing_mapping',
         'notifications'         => 'multivendorx_store_activity_notifications',
         'system_events'         => 'multivendorx_system_events',
         'visitors_stats'        => 'multivendorx_visitors_stats',
@@ -169,6 +169,7 @@ class Utill {
         'cancellation_policy'         => 'multivendorx_cancellation_policy',
         'announcement_stores'         => 'multivendorx_announcement_stores',
         'announcement_url'            => 'multivendorx_announcement_url',
+        'shared_listing_id'           => 'multivendorx_shared_listing_id',
     );
 
     const STORE_SETTINGS_KEYS = array(

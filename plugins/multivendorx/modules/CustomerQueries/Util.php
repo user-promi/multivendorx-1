@@ -28,7 +28,7 @@ class Util {
      */
     public static function get_questions( $product_id, $search = '' ) {
         global $wpdb;
-        $table = $wpdb->prefix . Utill::TABLES['product_qna'];
+        $table = $wpdb->prefix . Utill::TABLES['customer_queries'];
 
         $query  = "SELECT * FROM $table WHERE product_id=%d AND question_visibility='public'";
         $params = array( $product_id );
@@ -99,7 +99,7 @@ class Util {
             $where[] = "(question_text LIKE '$like' OR answer_text LIKE '$like')";
         }
 
-        $table = $wpdb->prefix . Utill::TABLES['product_qna'];
+        $table = $wpdb->prefix . Utill::TABLES['customer_queries'];
 
         // Build query.
         if ( isset( $args['count'] ) ) {
@@ -150,7 +150,7 @@ class Util {
      */
     public static function insert_question( $data ) {
         global $wpdb;
-        $table = $wpdb->prefix . Utill::TABLES['product_qna'];
+        $table = $wpdb->prefix . Utill::TABLES['customer_queries'];
 
         if ( empty( $data['product_id'] ) || empty( $data['question_text'] ) || empty( $data['question_by'] ) ) {
             return false;
@@ -196,7 +196,7 @@ class Util {
     public static function update_question( $id, $data ) {
         global $wpdb;
 
-        $table = $wpdb->prefix . Utill::TABLES['product_qna'];
+        $table = $wpdb->prefix . Utill::TABLES['customer_queries'];
 
         if ( empty( $data ) ) {
             return false;
@@ -277,7 +277,7 @@ class Util {
     public static function delete_question( $id ) {
         global $wpdb;
 
-        $table = $wpdb->prefix . Utill::TABLES['product_qna'];
+        $table = $wpdb->prefix . Utill::TABLES['customer_queries'];
 
         $id = intval( $id );
         if ( ! $id ) {

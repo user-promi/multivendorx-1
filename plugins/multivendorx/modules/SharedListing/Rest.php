@@ -56,9 +56,9 @@ class Rest {
             return;
         }
 
-        $table = $wpdb->prefix . Utill::TABLES['products_map'];
+        $table = $wpdb->prefix . Utill::TABLES['shared_listing'];
 
-        $existing_map_id = get_post_meta( $original_id, 'multivendorx_spmv_id', true );
+        $existing_map_id = get_post_meta( $original_id, Utill::POST_META_SETTINGS['shared_listing_id'], true );
 
         if ( empty( $existing_map_id ) ) {
             $map_data = array(
@@ -70,7 +70,7 @@ class Rest {
             $wpdb->insert(
                 $table,
                 array(
-                    'product_map' => maybe_serialize( $map_data ),
+                    'listing_products' => maybe_serialize( $map_data ),
                 ),
                 array( '%s' )
             );
@@ -78,11 +78,11 @@ class Rest {
             $insert_id = $wpdb->insert_id;
 
             if ( $insert_id ) {
-                update_post_meta( $duplicate_id, 'multivendorx_spmv_id', $insert_id );
-                update_post_meta( $original_id, 'multivendorx_spmv_id', $insert_id );
+                update_post_meta( $duplicate_id, Utill::POST_META_SETTINGS['shared_listing_id'], $insert_id );
+                update_post_meta( $original_id, Utill::POST_META_SETTINGS['shared_listing_id'], $insert_id );
             }
         } else {
-            $table = $wpdb->prefix . Utill::TABLES['products_map'];
+            $table = $wpdb->prefix . Utill::TABLES['shared_listing'];
 
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $sql = "SELECT * FROM {$table} WHERE ID = %d";
@@ -94,7 +94,7 @@ class Rest {
             );
 
             if ( $row ) {
-                $map_array = maybe_unserialize( $row->product_map, true );
+                $map_array = maybe_unserialize( $row->listing_products, true );
 
                 if ( ! is_array( $map_array ) ) {
                     $map_array = array();
@@ -107,13 +107,13 @@ class Rest {
                 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $wpdb->update(
                     $table,
-                    array( 'product_map' => maybe_serialize( $map_array ) ),
+                    array( 'listing_products' => maybe_serialize( $map_array ) ),
                     array( 'ID' => $existing_map_id ),
                     array( '%s' ),
                     array( '%d' )
                 );
 
-                update_post_meta( $duplicate_id, 'multivendorx_spmv_id', $existing_map_id );
+                update_post_meta( $duplicate_id, Utill::POST_META_SETTINGS['shared_listing_id'], $existing_map_id );
             }
         }
 

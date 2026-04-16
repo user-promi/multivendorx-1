@@ -314,8 +314,8 @@ $star-color: #d49c00;
 }
 
 
-//  single product qna start
-#product-qna {
+//  single product customer-queries start
+#product-customer-queries {
     .header {
         display: flex;
         justify-content: space-between;
@@ -325,7 +325,7 @@ $star-color: #d49c00;
     .comment-text {
         position: relative;
 
-        .qna-votes {
+        .customer-queries-votes {
             position: absolute;
             right: 0;
             display: flex;
@@ -354,7 +354,7 @@ $star-color: #d49c00;
     }
 }
 
-//  single product qna end
+//  single product customer-queries end
 
 
 //  single product store info start

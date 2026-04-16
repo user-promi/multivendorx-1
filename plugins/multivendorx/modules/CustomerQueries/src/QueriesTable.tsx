@@ -21,7 +21,7 @@ import {
 import Popup from '../../../src/components/Popup/Popup';
 import { formatLocalDate, getUrl } from '../../../src/services/commonFunction';
 
-type StoreQnaRow = {
+type StoreQueriesRow = {
 	id: number;
 	product_name: string;
 	product_link: string;
@@ -46,9 +46,9 @@ const Queries: React.FC = () => {
 		CategoryCount[] | null
 	>(null);
 
-	const [selectedQna, setSelectedQna] = useState<StoreQnaRow | null>(null);
+	const [selectedQueries, setSelectedQueries] = useState<StoreQueriesRow | null>(null);
 	const [answer, setAnswer] = useState('');
-	const [qna, setQna] = useState('');
+	const [queries, setQueries] = useState('');
 
 	const [selectedQn, setSelectedQn] = useState<{
 		id: number;
@@ -62,7 +62,7 @@ const Queries: React.FC = () => {
 
 		axios({
 			method: 'DELETE',
-			url: getApiLink(appLocalizer, `qna/${selectedQn.id}`),
+			url: getApiLink(appLocalizer, `customer-queries/${selectedQn.id}`),
 			headers: {
 				'X-WP-Nonce': appLocalizer.nonce,
 			},
@@ -76,14 +76,14 @@ const Queries: React.FC = () => {
 			});
 	};
 
-	const fetchQnaById = (id: number) => {
+	const fetchQueriesById = (id: number) => {
 		return axios
-			.get(getApiLink(appLocalizer, `qna/${id}`), {
+			.get(getApiLink(appLocalizer, `customer-queries/${id}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then((response) => {
 				const item = response.data;
-				setSelectedQna({
+				setSelectedQueries({
 					id: item.id,
 					product_name: item.product_name,
 					product_link: item.product_link,
@@ -93,7 +93,7 @@ const Queries: React.FC = () => {
 					question_date: item.question_date,
 					question_visibility: item.question_visibility || 'public',
 				});
-				setQna(item.question_text);
+				setQueries(item.question_text);
 				setAnswer(item.answer_text || '');
 			});
 	};
@@ -120,25 +120,25 @@ const Queries: React.FC = () => {
 	}, []);
 
 	const handleSaveAnswer = () => {
-		if (!selectedQna) {
+		if (!selectedQueries) {
 			return;
 		}
 
 		axios
 			.post(
-				getApiLink(appLocalizer, `qna/${selectedQna.id}`),
+				getApiLink(appLocalizer, `customer-queries/${selectedQueries.id}`),
 				{
-					question_text: qna,
+					question_text: queries,
 					answer_text: answer,
 					question_visibility:
-						selectedQna.question_visibility || 'public',
+						selectedQueries.question_visibility || 'public',
 				},
 				{ headers: { 'X-WP-Nonce': appLocalizer.nonce } }
 			)
 			.then(() => {
 				doRefreshTableData({});
 				// Reset popup
-				setSelectedQna(null);
+				setSelectedQueries(null);
 				setAnswer('');
 			})
 			.catch(() => {
@@ -196,7 +196,7 @@ const Queries: React.FC = () => {
 				{
 					label: __('Answer', 'multivendorx'),
 					icon: 'answer',
-					onClick: (row) => fetchQnaById(row.id),
+					onClick: (row) => fetchQueriesById(row.id),
 				},
 				{
 					label: __('Delete', 'multivendorx'),
@@ -237,7 +237,7 @@ const Queries: React.FC = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'qna'), {
+			.get(getApiLink(appLocalizer, 'customer-queries'), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 				params: {
 					page: query.paged || 1,
@@ -341,10 +341,10 @@ const Queries: React.FC = () => {
 				filters={filters}
 				format={appLocalizer.date_format}
 			/>
-			{selectedQna && (
+			{selectedQueries && (
 				<PopupUI
-					open={selectedQna}
-					onClose={() => setSelectedQna(null)}
+					open={selectedQueries}
+					onClose={() => setSelectedQueries(null)}
 					width={30}
 					height="70%"
 					header={{
@@ -362,7 +362,7 @@ const Queries: React.FC = () => {
 									icon: 'close',
 									text: __('Cancel', 'multivendorx'),
 									color: 'red',
-									onClick: () => setSelectedQna(null),
+									onClick: () => setSelectedQueries(null),
 								},
 								{
 									icon: 'save',
@@ -380,8 +380,8 @@ const Queries: React.FC = () => {
 						>
 							<BasicInputUI
 								name="phone"
-								value={qna}
-								onChange={(value: string) => setQna(value)}
+								value={queries}
+								onChange={(value: string) => setQueries(value)}
 							/>
 						</FormGroup>
 						<FormGroup
@@ -415,10 +415,10 @@ const Queries: React.FC = () => {
 									},
 								]}
 								value={
-									selectedQna.question_visibility || 'public'
+									selectedQueries.question_visibility || 'public'
 								}
 								onChange={(value) =>
-									setSelectedQna((prev) =>
+									setSelectedQueries((prev) =>
 										prev
 											? {
 													...prev,
