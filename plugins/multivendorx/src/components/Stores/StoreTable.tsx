@@ -118,7 +118,7 @@ const StoreTable: React.FC = () => {
 					title={row.store_name}
 					titleLink={getUrl(row.id, 'store', 'edit')}
 					avatar={{
-						image: row.store_image.url,
+						image: row.store_image,
 						iconClass: row.store_image ? '' : 'store-inventory',
 					}}
 					descriptions={[
