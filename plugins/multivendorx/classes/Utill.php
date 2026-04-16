@@ -72,7 +72,7 @@ class Utill {
         'store-reviews'                 => 'multivendorx_store_reviews_settings',
         'refunds'                       => 'multivendorx_refunds_settings',
         'product-advertising'           => 'multivendorx_product_advertising_settings',
-        'product-preferencess'          => 'multivendorx_product_preferencess_settings',
+        'product-preferences'          => 'multivendorx_product_preferences_settings',
         'geolocation'                   => 'multivendorx_geolocation_settings',
         'shipping'                      => 'multivendorx_shipping_settings',
         'legal-compliance'              => 'multivendorx_legal_compliance_settings',

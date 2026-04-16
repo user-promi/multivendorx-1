@@ -823,7 +823,7 @@ class Install {
             'type_options'    => array( 'virtual', 'downloadable' ),
             'products_fields' => array( 'general', 'inventory', 'linked_product', 'attribute', 'advanced', 'policies', 'product_tag', 'GTIN' ),
         );
-        update_option( Utill::MULTIVENDORX_SETTINGS['product-preferencess'], $product_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['product-preferences'], $product_settings );
 
         $map_settings = array(
             'radius_search_unit'     => 'both',
@@ -1899,7 +1899,7 @@ class Install {
 
         update_option( Utill::MULTIVENDORX_SETTINGS['refunds'], $refund_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'], $store_permissions );
-        update_option( Utill::MULTIVENDORX_SETTINGS['product-preferencess'], $product_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['product-preferences'], $product_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['onboarding'], $general_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['privacy'], $privacy_settings );
         update_option( Utill::MULTIVENDORX_SETTINGS['overview'], $marketplace_settings );

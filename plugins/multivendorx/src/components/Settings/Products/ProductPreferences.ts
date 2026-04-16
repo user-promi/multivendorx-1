@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 export default {
-	id: 'product-preferencess',
+	id: 'product-preferences',
 	priority: 2,
 	headerTitle: __('Product/listing preferences', 'multivendorx'),
 	headerDescription: __(

@@ -13,7 +13,7 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 	const [selectedChild, setSelectedChild] = useState(null);
 
 	const isPyramidEnabled =
-		appLocalizer.settings_databases_value['product-preferencess']
+		appLocalizer.settings_databases_value['product-preferences']
 			?.category_selection_method === 'yes';
 	const wrapperRef = useRef(null);
 
@@ -287,7 +287,7 @@ const ProductCategorysection = ({ product, setProduct, setErrorMsg }) => {
 
 	return (
 		<Card title={__('Category - Where does it belong in your shop?', 'multivendorx')} desc={__('Where should this product appear in your store?', 'multivendorx')}>
-			{appLocalizer.settings_databases_value['product-preferencess']
+			{appLocalizer.settings_databases_value['product-preferences']
 				?.category_selection_method === 'yes' ? (
 				<>
 					<div className="category-breadcrumb-wrapper">
