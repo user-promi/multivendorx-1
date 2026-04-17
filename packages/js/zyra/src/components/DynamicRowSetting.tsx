@@ -5,6 +5,7 @@ import React from 'react';
 import '../styles/web/DynamicRowSetting.scss';
 import { FIELD_REGISTRY } from './fieldUtils';
 import { ButtonInputUI } from './ButtonInput';
+import { Notice } from './Notice';
 
 // Types
 type FieldType = 'text' | 'number' | 'file' | 'select' | 'button';
@@ -129,7 +130,11 @@ const DynamicRowSetting: React.FC<DynamicRowSettingProps> = ({
         <>
             <div className={`repeater-field-wrapper ${wrapperClass}`}>
                 {value.length === 0 ? (
-                    <div className="no-shipping-data">{emptyText}</div>
+                    <Notice
+							type="info"
+							displayPosition="inline-notice"
+							message={emptyText}
+						/>
                 ) : (
                     value.map((row, rowIndex) => {
                         const nestedChildren = childrenRenderer?.(

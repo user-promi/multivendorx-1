@@ -96,6 +96,7 @@ const AIField: React.FC<AIFieldProps> = ({
 	return (
 		<PopupUI
 			position="menu-dropdown"
+			tooltipName="Suggestion"
 			toggleIcon="ai"
 			width={25}
 			open={popupOpen}
@@ -108,9 +109,9 @@ const AIField: React.FC<AIFieldProps> = ({
 			onClose={() => setPopupOpen(false)}
 		>
 			<div className="ai-suggestions-wrapper">
-				<div className="title">{`Select ${HEADER_TITLE_MAP[field]}`}</div>
 				{suggestions.length > 0 && (
 					<div className="text-wrapper">
+						<div className="title">{`Select ${HEADER_TITLE_MAP[field]}`}</div>
 						{suggestions.map((item, index) => (
 							<div
 								key={`${productKey}-${index}`}

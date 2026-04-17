@@ -17,8 +17,11 @@ import {
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import { useState } from 'react';
-import CustomerInvoice1 from '../../../assets/template/customerInvoice/CustomerInvoice1';
 import CustomerInvoiceDefault from '../../../assets/template/customerInvoice/customer-invoice-default';
+import CustomerInvoice1 from '../../../assets/template/customerInvoice/CustomerInvoice1';
+import customerInvoice2 from '../../../assets/template/customerInvoice/customer-invoice-2';
+import customerInvoice3 from '../../../assets/template/customerInvoice/customer-invoice-3';
+
 import subscriptionInvoice1 from '../../../assets/template/subscriptionInvoice/subscriptionInvoice1';
 import adminInvoice1 from '../../../assets/template/adminInvoice/adminInvoice1';
 import packingSlip1 from '../../../assets/template/packingSlip/packingSlip1';
@@ -248,25 +251,39 @@ const Invoice: React.FC = () => {
 										idPrefix="color-setting"
 										templates={[
 											{
-												key: 'customer_invoice_default',
+												key: 'customer_invoice1',
 												label: 'Customer Invoice Default',
 												preview: CustomerInvoiceDefault,
 												component: CustomerInvoiceDefault,
 												pdf: CustomerInvoiceDefault,
 											},
 											{
-												key: 'customer_invoice',
-												label: 'Customer Invoice',
+												key: 'customer_invoice_1',
+												label: 'Customer Invoice 1',
 												preview: CustomerInvoice1,
 												component: CustomerInvoice1,
 												pdf: CustomerInvoice1,
+											},
+											{
+												key: 'customer_invoice_2',
+												label: 'Customer Invoice 2',
+												preview: customerInvoice2,
+												component: customerInvoice2,
+												pdf: customerInvoice2,
+											},
+											{
+												key: 'customer_invoice_3',
+												label: 'Customer Invoice 3',
+												preview: customerInvoice3,
+												component: customerInvoice3,
+												pdf: customerInvoice3,
 											},
 										]}
 										predefinedOptions={COLOR_PALETTES}
 										value={{
 											selectedPalette: 'orchid_bloom',
 											colors: {},
-											templateKey: 'customer_invoice_default',
+											templateKey: 'customer_invoice_3',
 										}}
 										onChange={(e) => {
 											handleChange(

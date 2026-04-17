@@ -357,7 +357,7 @@ const AIButtonSection: React.FC<AIButtonSectionProps> = ({
 						<div className="product-details">
 							{/* product name */}
 							<div className="text-wrapper name">
-								<div className="title">Product Name</div>
+								<div className="title">{__('Product Name', 'multivendorx')}</div>
 								{AISuggestions.productName?.map(
 									(name: string, index: number) => (
 										<div
@@ -377,7 +377,7 @@ const AIButtonSection: React.FC<AIButtonSectionProps> = ({
 							</div>
 							{/* Short Description */}
 							<div className="text-wrapper short-description">
-								<div className="title">Short Description</div>
+								<div className="title">{__('Short Description', 'multivendorx')}</div>
 								{AISuggestions.shortDescription?.map(
 									(text: string, index: number) => (
 										<div
@@ -409,7 +409,7 @@ const AIButtonSection: React.FC<AIButtonSectionProps> = ({
 						)}
 					</div>
 					<div className="text-wrapper description">
-						<div className="title">Description</div>
+						<div className="title">{__('Description', 'multivendorx')}</div>
 						{AISuggestions.productDescription?.map(
 							(text: string, index: number) => (
 								<div

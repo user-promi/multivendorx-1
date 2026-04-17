@@ -174,8 +174,11 @@
         }
         
         &.full-width {
-            .settings-input-content {
+            .settings-input-content{
                 width: 100%;
+            }
+            .choice-toggle-wrapper.custom {
+                width: 60%;
             }
         }
 
