@@ -41,7 +41,7 @@ const Transactions: React.FC = () => {
 		useState<TransactionRow | null>(null);
 	const headers = {
 		id: { label: __('ID', 'multivendorx'), type: 'id' },
-		status: { label: __('Status', 'multivendorx'), type: 'status' },
+		status: { label: __('Status', 'multivendorx'), type: 'status' , statusClass: (row) => `${row.status}` },
 		created_at: { label: __('Date', 'multivendorx'), type: 'date' },
 		transaction_type: {
 			label: __('Transaction Type', 'multivendorx'),

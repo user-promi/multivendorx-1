@@ -624,6 +624,13 @@ class Stores extends \WP_REST_Controller {
                         get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['default_role'] )
                     );
                 }
+                $store->update_meta(
+                    'store_email',
+                    array(
+                        'list'    => array( $current_user->user_email ),
+                        'primary' => $current_user->user_email,
+                    )
+                );
 
                 StoreUtil::set_primary_owner( $current_user->ID, $store_id );
                 update_user_meta(
@@ -759,6 +766,11 @@ class Stores extends \WP_REST_Controller {
                 return $this->get_store_products_and_category( $request );
             }
 
+            $primary_owner_id   = StoreUtil::get_primary_owner( $id );
+            $primary_owner_info = $primary_owner_id
+                ? get_userdata( $primary_owner_id )
+                : null;
+
             if ( $fetch_user ) {
                 $users = StoreUtil::get_store_users( $id );
 
@@ -767,6 +779,7 @@ class Stores extends \WP_REST_Controller {
                         'id'            => $id,
                         'store_owners'  => $users['users'],
                         'primary_owner' => (int) $users['primary_owner'],
+                        'primary_owner_info'    =>  $primary_owner_info
                     )
                 );
             }
@@ -785,11 +798,6 @@ class Stores extends \WP_REST_Controller {
                 $args['end_date']   = $end_date;
             }
             $commission = CommissionUtil::get_commission_summary_for_store( $id, false, false, 3, $args );
-
-            $primary_owner_id   = StoreUtil::get_primary_owner( $id );
-            $primary_owner_info = $primary_owner_id
-                ? get_userdata( $primary_owner_id )
-                : null;
 
             if ( $dashboard ) {
                 $transient_key = Utill::MULTIVENDORX_TRANSIENT_KEYS['dashboard_transient'];

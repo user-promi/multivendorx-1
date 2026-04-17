@@ -63,8 +63,8 @@ class WCVendors {
             $store->update_meta(
                 'store_email',
                 array(
-					'list'    => array( $user->email ),
-					'primary' => $user->email,
+					'list'    => array( $user->user_email ),
+					'primary' => $user->user_email,
                 )
             );
             $address1 = get_user_meta( $user_id, '_wcv_store_address1', true );
@@ -79,7 +79,7 @@ class WCVendors {
             $country      = get_user_meta( $user_id, '_wcv_store_country', true );
             $wc_countries = new \WC_Countries();
             $calling_code = $wc_countries->get_country_calling_code( $country );
-            $calling_code = ! empty( $calling_code ) ? '+' . $calling_code : '';
+            $calling_code = ! empty( $calling_code ) ? $calling_code : '';
 
             $store->update_meta(
                 'phone',

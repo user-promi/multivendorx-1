@@ -252,7 +252,7 @@ const Orders: React.FC = () => {
 
 		status: {
 			label: __('Status', 'multivendorx'),
-			type: 'status',
+			type: 'status' , statusClass: (row) => `${row.status}`,
 		},
 
 		total: {

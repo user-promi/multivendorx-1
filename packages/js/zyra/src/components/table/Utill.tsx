@@ -20,10 +20,13 @@ export const renderCell = (
                 .split(/[-_]/)
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
-
+            const statusClass =
+                typeof header.statusClass === 'function'
+                    ? header.statusClass(row)
+                    : header.statusClass;
             return (
                 <span
-                    className={`admin-badge badge-${String(value).toLowerCase()}`}
+                    className={`admin-badge badge-${String(statusClass).toLowerCase()}`}
                 >
                     {formattedValue}
                 </span>
@@ -115,7 +118,21 @@ export const renderCell = (
                 finalValue = `${currencySymbol}${formattedNumber}`;
             }
 
-            return <span>{finalValue}</span>;
+            return finalValue;
+        }
+
+        case 'content': {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = String(value);
+            const decoded = textarea.value;
+            const textOnly = decoded.replace(/<[^>]*>/g, '');
+            const cleanText = textOnly.replace(/\s+/g, ' ').trim();
+            const shortText =
+                cleanText.length > 30
+                    ? cleanText.slice(0, 30) + '…'
+                    : cleanText;
+
+            return shortText;
         }
 
         default:

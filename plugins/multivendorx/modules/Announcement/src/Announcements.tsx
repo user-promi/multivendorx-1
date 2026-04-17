@@ -276,8 +276,8 @@ export const Announcements: React.FC = () => {
 
 	const headers = {
 		title: { label: __('Title', 'multivendorx') },
-		content: { label: __('Content', 'multivendorx') },
-		status_label: { label: __('Status', 'multivendorx'), type: 'status' },
+		content: { label: __('Content', 'multivendorx') , type: 'content'},
+		status_label: { label: __('Status', 'multivendorx'), type: 'status' , statusClass: (row) => `${row.status}` , statusClass: (row) => `${row.status}`},
 		store_name: { label: __('Recipients', 'multivendorx') },
 		date_created: { label: __('Date', 'multivendorx'), type: 'date' },
 		action: {

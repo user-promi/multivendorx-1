@@ -61,7 +61,7 @@ export type TableHeaderConfig = {
     /**
      * Built-in renderer type
      */
-    type?: 'text' | 'currency' | 'date' | 'badge' | 'action' | 'id';
+    type?: 'text' | 'currency' | 'date' | 'badge' | 'action' | 'id' | 'content' | 'status';
 
     /**
      * Custom renderer (overrides type)
@@ -87,6 +87,7 @@ export type TableHeaderConfig = {
     tableDisplay?: boolean;
     width?: string | number;
     className?: string;
+    statusClass?: string | ((row: any) => string);
 };
 
 export type TableRow = {

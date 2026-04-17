@@ -178,7 +178,7 @@ class Rewrites {
         if ( get_query_var( $this->custom_store_url ) ) {
             $store_slug = get_query_var( $this->custom_store_url );
             $store      = Store::get_store( $store_slug, 'slug' );
-            return $store->get( 'name' ) . ' | ' . get_bloginfo( 'name' );
+            return $store->get( 'name' ) . ' - ' . get_bloginfo( 'name' );
         }
         return $title;
     }

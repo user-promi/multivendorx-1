@@ -243,19 +243,19 @@ const Invoice: React.FC = () => {
 										filedKey="invoice_template"
 										wrapperClass="form-group-color-setting"
 										inputClass="setting-form-input"
-										templateSelector={false}
+										templateSelector={true}
 										showPdfButton={true}
 										idPrefix="color-setting"
 										templates={[
 											{
-												key: 'customer_invoice1',
+												key: 'customer_invoice_default',
 												label: 'Customer Invoice Default',
 												preview: CustomerInvoiceDefault,
 												component: CustomerInvoiceDefault,
 												pdf: CustomerInvoiceDefault,
 											},
 											{
-												key: 'customer_invoice1',
+												key: 'customer_invoice',
 												label: 'Customer Invoice',
 												preview: CustomerInvoice1,
 												component: CustomerInvoice1,
@@ -266,7 +266,7 @@ const Invoice: React.FC = () => {
 										value={{
 											selectedPalette: 'orchid_bloom',
 											colors: {},
-											templateKey: 'customer_invoice1',
+											templateKey: 'customer_invoice_default',
 										}}
 										onChange={(e) => {
 											handleChange(
