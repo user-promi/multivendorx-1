@@ -71,6 +71,7 @@ final class MultiVendorX {
         // Major update notice.
 		add_action( 'in_plugin_update_message-dc-woocommerce-multi-vendor/dc_product_vendor.php', array( $this, 'multivendorx_plugin_update_message' ) );
         add_action( 'admin_notices', array( $this, 'free_pro_admin_notice' ) );
+        add_action('wp_ajax_multivendorx_dismiss_free_pro_notice', array($this, 'multivendorx_dismiss_free_pro_notice'));
     }
 
     /**
@@ -272,13 +273,17 @@ final class MultiVendorX {
     }
 
     public function free_pro_admin_notice() {
+        if ( get_option( 'multivendorx_dismiss_free_pro_notice' ) ) {
+            return;
+        }
+
         if (
             version_compare( MULTIVENDORX_PLUGIN_VERSION, '5.0.0', '>=' ) &&
             defined( 'MULTIVENDORX_PRO_PLUGIN_VERSION' ) &&
             version_compare( MULTIVENDORX_PRO_PLUGIN_VERSION, '2.0.0', '<' )
         ) {
             ?>
-            <div class="notice notice-error">
+            <div class="notice notice-error is-dismissible multivendorx-free-pro-notice">
                 <p>
                     <strong><?php echo esc_html__( 'MultivendorX Update Required', 'multivendorx' ); ?></strong><br>
                     <?php echo esc_html__( 'To ensure all the feature compatibility and accessibility, MultiVendorX Pro minimum v2.0.0 is required.', 'multivendorx' ); ?>
@@ -289,8 +294,21 @@ final class MultiVendorX {
                     </a>
                 </p>
             </div>
+
+            <script>
+            jQuery(document).on('click', '.multivendorx-free-pro-notice .notice-dismiss', function () {
+                jQuery.post(ajaxurl, {
+                    action: 'multivendorx_dismiss_free_pro_notice',
+                });
+            });
+            </script>
             <?php
         }
+    }
+
+    public function multivendorx_dismiss_free_pro_notice() {
+        update_option('multivendorx_dismiss_free_pro_notice', true);
+        die();
     }
 
     /**
