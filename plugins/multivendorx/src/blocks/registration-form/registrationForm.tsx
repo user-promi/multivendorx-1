@@ -390,8 +390,7 @@ const RegistrationForm = () => {
 						/>
 					)}
 
-					{registrationForm.current_user_id>0 && (
-						console.log('current_user_id', registrationForm.current_user_id),
+					{registrationForm.current_user_id > 0 && (
 						<div className="multivendorxstep-actions">
 							<button className="" onClick={goToNextStep}>
 								{__('Continue to Store Details', 'multivendorx')}
