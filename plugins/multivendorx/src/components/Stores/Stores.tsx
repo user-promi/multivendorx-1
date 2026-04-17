@@ -270,7 +270,7 @@ const Stores = () => {
 										},
 										{
 											icon: 'save',
-											text: __('Submit', 'multivendorx'),
+											text: __('Save', 'multivendorx'),
 											onClick: handleSubmit,
 										},
 									]}

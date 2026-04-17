@@ -131,7 +131,7 @@ const subscriptionInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 									fontWeight: 600,
 								}}
 							>
-								Subscription Invoice
+								Monthly Invoice
 							</Text>
 
 							<Text style={{ fontSize: 12, color: '#555' }}>
@@ -233,66 +233,6 @@ const subscriptionInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 							<Text style={{ fontSize: '10px' }}>
 								United States
 							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								{' '}
-								<Text style={{ fontWeight: 'bold' }}>
-									Store Tax ID:{' '}
-								</Text>
-								STORE-TAX-567890
-							</Text>
-						</View>
-
-						<View
-							id="left-details"
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: '5px',
-								width: '100%',
-								padding: '10px',
-								backgroundColor: '#f0f0f0',
-								border: '1px solid #ccc',
-								borderRadius: '5px',
-							}}
-						>
-							<Text
-								style={{
-									fontSize: '14px',
-									color: colors.colorPrimary,
-									marginBottom: '5px',
-									fontWeight: 'bold',
-								}}
-							>
-								Tax Information:
-							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								{' '}
-								<Text style={{ fontWeight: 'bold' }}>
-									Tax ID:{' '}
-								</Text>
-								US-TAX-123456789
-							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								{' '}
-								<Text style={{ fontWeight: 'bold' }}>
-									GST/VAT Number:{' '}
-								</Text>
-								GST-US-987654321
-							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								{' '}
-								<Text style={{ fontWeight: 'bold' }}>
-									Business Registration:{' '}
-								</Text>
-								BRN-2020-MKT-4567
-							</Text>
-							<Text style={{ fontSize: '10px' }}>
-								{' '}
-								<Text style={{ fontWeight: 'bold' }}>
-									Tax Jurisdiction:{' '}
-								</Text>
-								United States
-							</Text>
 						</View>
 					</View>
 					{/* billing section end */}
@@ -328,7 +268,7 @@ const subscriptionInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 									fontWeight: 600,
 								}}
 							>
-								Billing Cycle
+								Free Ammount 
 							</Text>
 
 							{/* Amount */}
@@ -339,7 +279,7 @@ const subscriptionInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 									fontWeight: 600,
 								}}
 							>
-								Amount
+								Tax / Vat
 							</Text>
 						</View>
 						{rows.map((row, index) => {
@@ -432,6 +372,69 @@ const subscriptionInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 								}}
 							>
 								<Text style={{ fontSize: '12px' }}>
+									Subscription Subtotal:
+								</Text>
+								<Text
+									style={{
+										fontSize: '12px',
+										fontWeight: 'bold',
+										marginLeft: '10px',
+									}}
+								>
+									$59.00
+								</Text>
+							</View>
+							<View
+								style={{
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									marginBottom: '8px',
+								}}
+							>
+								<Text style={{ fontSize: '12px' }}>
+									Subscription Subtotal:
+								</Text>
+								<Text
+									style={{
+										fontSize: '12px',
+										fontWeight: 'bold',
+										marginLeft: '10px',
+									}}
+								>
+									$59.00
+								</Text>
+							</View>
+							<View
+								style={{
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									marginBottom: '8px'
+								}}
+							>
+								<Text style={{ fontSize: '12px' }}>
+									Subscription Subtotal:
+								</Text>
+								<Text
+									style={{
+										fontSize: '12px',
+										fontWeight: 'bold',
+										marginLeft: '10px',
+									}}
+								>
+									$59.00
+								</Text>
+							</View>
+							<View
+								style={{
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									marginBottom: '8px',
+								}}
+							>
+								<Text style={{ fontSize: '12px' }}>
 									Platform Tax (GST/VAT @ 18%):
 								</Text>
 								<Text
@@ -478,7 +481,7 @@ const subscriptionInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 					{/* total section end */}
 
 					{/* tax information */}
-					<View
+					{/* <View
 						id="tax-information"
 						style={{
 							display: 'flex',
@@ -564,7 +567,7 @@ const subscriptionInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 								Enabled
 							</Text>
 						</View>
-					</View>
+					</View> */}
 					{/* tax information end*/}
 
 					{/* note section start */}

@@ -1,6 +1,6 @@
-const BannerTemplate1 = () => {
+const DynamicShowcase = () => {
 	return (
-		<div className="multivendorx-banner template1">
+		<div className="multivendorx-banner template3">
 			<div className="banner-slider"></div>
 			<div className="banner-right">
 				<div className="social-profile">
@@ -80,4 +80,4 @@ const BannerTemplate1 = () => {
 	);
 };
 
-export default BannerTemplate1;
+export default DynamicShowcase;

@@ -2,9 +2,9 @@
 import { __ } from '@wordpress/i18n';
 import DashboardTemplate from '../../../assets/template/Dashboard';
 
-import BannerTemplate1 from '../../../assets/template/bannerTemplate/bannerTemplate1';
-import BannerTemplate2 from '../../../assets/template/bannerTemplate/bannerTemplate2';
-import BannerTemplate3 from '../../../assets/template/bannerTemplate/bannerTemplate3';
+import LuxeDisplay from '../../../assets/template/bannerTemplate/LuxeDisplay';
+import SignatureView from '../../../assets/template/bannerTemplate/SignatureView';
+import DynamicShowcase from '../../../assets/template/bannerTemplate/DynamicShowcase';
 
 export default {
 	id: 'appearance',
@@ -48,20 +48,20 @@ export default {
 				{
 					key: 'banner1',
 					label: __('Luxe Display', 'multivendorx'),
-					preview: BannerTemplate1,
-					component: BannerTemplate1,
+					preview: LuxeDisplay,
+					component: LuxeDisplay,
 				},
 				{
 					key: 'banner2',
 					label: __('Signature View', 'multivendorx'),
-					preview: BannerTemplate2,
-					component: BannerTemplate2,
+					preview: SignatureView,
+					component: SignatureView,
 				},
 				{
 					key: 'banner3',
 					label: __('Dynamic Showcase', 'multivendorx'),
-					preview: BannerTemplate3,
-					component: BannerTemplate3,
+					preview: DynamicShowcase,
+					component: DynamicShowcase,
 				},
 			],
 		},

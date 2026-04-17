@@ -393,7 +393,7 @@ class MVX {
                 $new_spmv_table,
                 array(
 					'ID'               => $map_id,
-					'listing_products' => wp_json_encode( array_values( $data['products'] ) ),
+					'listing_products' => maybe_serialize( array_values( $data['products'] ) ),
 					'created'          => $data['created'],
                 ),
                 array(

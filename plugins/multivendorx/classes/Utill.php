@@ -563,6 +563,9 @@ class Utill {
 	 * @return string|null Formatted date time string as per WordPress settings, or null if invalid.
 	 */
 	public static function multivendorx_rest_prepare_date_response( $date, $utc = false ) {
+        if ( empty( $date ) || $date === '0000-00-00 00:00:00' || $date === '0000-00-00' ) {
+            return '-';
+        }
 		// Convert date to timestamp.
 		$timestamp = is_numeric( $date ) ? (int) $date : strtotime( $date );
 
