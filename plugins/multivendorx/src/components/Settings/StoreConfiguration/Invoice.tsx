@@ -40,7 +40,7 @@ const ratingsField = {
 	),
 	modal: [
 		{
-			id: 'vat_number',
+			id: 'vat-number',
 			label: __('VAT / Tax number', 'multivendorx'),
 			desc: __('DE987654321', 'multivendorx'),
 			isCustom: true,
@@ -49,7 +49,7 @@ const ratingsField = {
 			formFields: [],
 		},
 		{
-			id: 'tax_id',
+			id: 'tax-id',
 			label: __('Marketplace tax ID', 'multivendorx'),
 			desc: __('GB123456789', 'multivendorx'),
 			isCustom: true,
@@ -58,7 +58,7 @@ const ratingsField = {
 			formFields: [],
 		},
 		{
-			id: 'registration_number',
+			id: 'registration-number',
 			label: __('Marketplace registration number', 'multivendorx'),
 			desc: __('GB123456789', 'multivendorx'),
 			isCustom: true,
@@ -67,7 +67,7 @@ const ratingsField = {
 			formFields: [],
 		},
 		{
-			id: 'company_number',
+			id: 'company-number',
 			label: __('Company registration number', 'multivendorx'),
 			desc: __('GB123456789', 'multivendorx'),
 			isCustom: true,
