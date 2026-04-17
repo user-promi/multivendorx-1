@@ -256,7 +256,7 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 											label: __('Email', 'multivendorx'),
 											value:
 												formData?.primary_owner_info?.data
-													?.user_email || 'owner@example.com',
+													?.user_email,
 										},
 									]}
 									badges={[
