@@ -1273,10 +1273,11 @@ class Install {
     public function migrate_old_settings() {
         $previous_capability_settings = get_option( 'mvx_products_capability_tab_settings', array() );
 
+        $store_permissions = get_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'], array() );
         $store_permissions['products'] = array();
         $store_permissions['coupons']  = array();
         $store_permissions['orders']   = array();
-        $store_permissions['settings'] = array( 'manage_store_settings' );
+
         $user_permissions = array();
 
         if ( ! empty( $previous_capability_settings['is_submit_product'] ) ) {
@@ -1482,6 +1483,10 @@ class Install {
 			}
 		}
 
+        if ( ! empty( $general_settings['category_pyramid_guide'] ) ) {
+            $product_settings['category_selection_method'] = 'yes';
+        }
+
         $previous_spmv_settings = get_option( 'mvx_spmv_pages_tab_settings', array() );
         if ( ! empty( $previous_spmv_settings['is_singleproductmultiseller'] ) ) {
             $general_settings['store_selling_mode'] = 'shared_listing';
@@ -1523,12 +1528,15 @@ class Install {
 			update_option( Utill::MULTIVENDORX_OTHER_SETTINGS['revenue_mode_store'], true );
 		}
 
+        $default_commission = ! empty( $previous_commission_settings['default_commission'] ) && is_array( $previous_commission_settings['default_commission'] )
+                                ? $previous_commission_settings['default_commission']
+                                : [];
 		if ( ! empty( $previous_commission_settings['commission_type'] ) ) {
 			if ( 'fixed' === $previous_commission_settings['commission_type']['value'] ) {
 				$commission_settings['commission_type']     = 'per_item';
 				$commission_settings['commission_per_item'] = array(
 					array(
-						'commission_fixed'      => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['fixed_ammount'] ?? '',
+						'commission_fixed'      => array_column( $default_commission, 'value', 'key' )['fixed_ammount'] ?? '',
 						'commission_percentage' => '',
 					),
 				);
@@ -1539,7 +1547,7 @@ class Install {
 				$commission_settings['commission_per_item'] = array(
 					array(
 						'commission_fixed'      => '',
-						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_amount'] ?? '',
+						'commission_percentage' => array_column( $default_commission, 'value', 'key' )['percent_amount'] ?? '',
 					),
 				);
 			}
@@ -1548,8 +1556,8 @@ class Install {
 				$commission_settings['commission_type']     = 'per_item';
 				$commission_settings['commission_per_item'] = array(
 					array(
-						'commission_fixed'      => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['fixed_ammount'] ?? '',
-						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_amount'] ?? '',
+						'commission_fixed'      => array_column( $default_commission, 'value', 'key' )['fixed_ammount'] ?? '',
+						'commission_percentage' => array_column( $default_commission, 'value', 'key' )['percent_amount'] ?? '',
 					),
 				);
 			}
@@ -1558,8 +1566,8 @@ class Install {
 				$commission_settings['commission_type']            = 'store_order';
 				$commission_settings['commission_per_store_order'] = array(
 					array(
-						'commission_fixed'      => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['fixed_ammount'] ?? '',
-						'commission_percentage' => array_column( $previous_commission_settings['default_commission'], 'value', 'key' )['percent_amount'] ?? '',
+						'commission_fixed'      => array_column( $default_commission, 'value', 'key' )['fixed_ammount'] ?? '',
+						'commission_percentage' => array_column( $default_commission, 'value', 'key' )['percent_amount'] ?? '',
 					),
 				);
 			}
@@ -1785,10 +1793,7 @@ class Install {
 						'id'       => $id_counter++,
 						'type'     => 'title',
 						'label'    => $field['label'],
-						'chosen'   => '',
-						'selected' => '',
 					);
-					continue;
 				}
 
 				// Address fields collected separately.
@@ -1834,6 +1839,8 @@ class Install {
 					'vendor_description'  => 'textarea',
 					'vendor_page_title'   => 'text',
 					'vendor_paypal_email' => 'email',
+					'vendor_phone'        => 'text',
+					'separator'           => 'divider',
 				);
 
 				$type = $type_map[ $field['type'] ] ?? $field['type'];
@@ -1898,15 +1905,16 @@ class Install {
 			update_option( Utill::MULTIVENDORX_SETTINGS['registration'], $new_form );
 		}
 
-        $store_owner_caps = array_unique(
-            array_merge(
-                (array) ( $store_permissions['products'] ?? [] ),
-                (array) ( $store_permissions['coupons'] ?? [] ),
-                (array) ( $store_permissions['orders'] ?? [] ),
-                (array) ( $store_permissions['settings'] ?? [] )
-            )
-        );
+        $store_owner_caps = array();
+        if ( ! empty( $store_permissions ) && is_array( $store_permissions ) ) {
+            foreach ( $store_permissions as $caps ) {
+                if ( is_array( $caps ) ) {
+                    $store_owner_caps = array_merge( $store_owner_caps, $caps );
+                }
+            }
+        }
 
+        $store_owner_caps = array_values( array_unique( $store_owner_caps ) );
         $user_permissions = array(
             'store_owner' => $store_owner_caps
         );

@@ -148,7 +148,7 @@ class StripeConnect {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $stripe_settings        = $payment_admin_settings['stripe-connect'] ?? array();
 
-        if ( ! empty( $stripe_settings ) && $stripe_settings['enable'] ) {
+        if ( ! empty( $stripe_settings ) && isset( $stripe_settings['enable'] ) && $stripe_settings['enable'] ) {
             $store_id          = MultiVendorX()->active_store;
             $store             = new Store( $store_id );
             $stripe_account_id = $store->get_meta( Utill::STORE_SETTINGS_KEYS['stripe_account_id'] );

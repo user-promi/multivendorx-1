@@ -48,7 +48,7 @@ const PendingReportAbuse: React.FC<object> = () => {
 		}
 
 		axios
-			.delete(getApiLink(appLocalizer, `report-abuse/${deleteId}`), {
+			.delete(getApiLink(appLocalizer, `compliance/report-abuse/${deleteId}`), {
 				headers: { 'X-WP-Nonce': appLocalizer.nonce },
 			})
 			.then(() => {
@@ -161,7 +161,7 @@ const PendingReportAbuse: React.FC<object> = () => {
 	const doRefreshTableData = (query: QueryProps) => {
 		setIsLoading(true);
 		axios
-			.get(getApiLink(appLocalizer, 'report-abuse'), {
+			.get(getApiLink(appLocalizer, 'compliance/report-abuse'), {
 				headers: {
 					'X-WP-Nonce': appLocalizer.nonce,
 				},

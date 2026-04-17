@@ -10,7 +10,7 @@ addFilter(
 	(configs, { appLocalizer }) => {
 		configs.push({
 			id: 'report-abuse',
-			url: getApiLink(appLocalizer, 'report-abuse'),
+			url: getApiLink(appLocalizer, 'compliance/report-abuse'),
 			params: { page: 1, row: 1 },
 			header: 'x-wp-total',
 		});

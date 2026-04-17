@@ -624,6 +624,13 @@ class Stores extends \WP_REST_Controller {
                         get_option( Utill::MULTIVENDORX_OTHER_SETTINGS['default_role'] )
                     );
                 }
+                $store->update_meta(
+                    'store_email',
+                    array(
+                        'list'    => array( $current_user->user_email ),
+                        'primary' => $current_user->user_email,
+                    )
+                );
 
                 StoreUtil::set_primary_owner( $current_user->ID, $store_id );
                 update_user_meta(
