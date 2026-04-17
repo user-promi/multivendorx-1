@@ -390,7 +390,7 @@ const RegistrationForm = () => {
 						/>
 					)}
 
-					{registrationForm.current_user_id > 0 && (
+					{registrationForm.is_user_logged_in && (
 						<div className="multivendorxstep-actions">
 							<button className="" onClick={goToNextStep}>
 								{__('Continue to Store Details', 'multivendorx')}
