@@ -33,13 +33,13 @@ export default {
 				'https://multivendorx.com/docs/knowledgebase/appointment-product/',
 			//settingsLink: appLocalizer.site_url,
 			proModule: true,
-			// reqPluging: [
-			// 	{
-			// 		name: 'WooCommerce Appointments',
-			// 		slug: 'woocommerce-appointments/woocommerce-appointments.php',
-			// 		link: 'https://bookingwp.com/plugins/woocommerce-appointments/',
-			// 	},
-			// ],
+			reqPluging: [
+				{
+					name: 'WooCommerce Appointments',
+					slug: 'woocommerce-appointments/woocommerce-appointments.php',
+					link: 'https://bookingwp.com/plugins/woocommerce-appointments/',
+				},
+			],
 			category: ['marketplace_types', 'product_types'],
 		},
 		{
@@ -214,7 +214,7 @@ export default {
 		{
 			id: 'media-library',
 			name: __('Media Library', 'multivendorx'),
-			desc: 'Stores can manage, upload, and organize their media files directly from their dashboard.',
+			desc: 'All uploaded media files can be viewed, organized, and managed from one place by the store.',
 			proModule: true,
 			category: 'store_management',
 		},
