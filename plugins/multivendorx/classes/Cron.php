@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Cron class
  *
  * @class       Cron class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Cron {

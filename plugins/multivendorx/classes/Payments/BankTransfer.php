@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Bank transfer payment gateway.
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class BankTransfer {

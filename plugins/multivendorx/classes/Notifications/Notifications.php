@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  * This class handles notifications related functionality.
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Notifications {

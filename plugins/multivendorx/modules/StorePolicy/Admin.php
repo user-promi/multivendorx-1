@@ -12,7 +12,7 @@ use MultiVendorX\Utill;
  * MultiVendorX Store Policy Admin class
  *
  * @class       Admin class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Admin {

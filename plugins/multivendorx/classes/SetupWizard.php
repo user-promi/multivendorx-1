@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX SetupWizard class
  *
  * @class       SetupWizard
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @package     MultiVendorX
  * @author      MultiVendorX
  */

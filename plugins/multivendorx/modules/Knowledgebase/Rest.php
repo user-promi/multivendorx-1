@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API knowledge base controller.
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Rest extends \WP_REST_Controller {

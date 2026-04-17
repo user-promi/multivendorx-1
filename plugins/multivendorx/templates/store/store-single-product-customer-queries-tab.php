@@ -3,7 +3,7 @@
  * Q&A tab container - all content loaded via AJAX
  *
  * @package     MultiVendorX/Templates
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 

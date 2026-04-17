@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API SharedListing controller.
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Rest {

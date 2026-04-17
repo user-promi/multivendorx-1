@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  * Adds a "Store" column to the products list in admin.
  *
  * @class   Product
- * @version PRODUCT_VERSION
+ * @version 5.0.0
  */
 class Product {
 

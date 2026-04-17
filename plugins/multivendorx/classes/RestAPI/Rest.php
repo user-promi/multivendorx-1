@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MultiVendorX Main Rest class
  *
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @package     MultiVendorX
  * @author      MultiVendorX
  */

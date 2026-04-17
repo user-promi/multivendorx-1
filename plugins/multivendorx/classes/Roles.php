@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Roles class
  *
  * @class       Roles class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Roles {

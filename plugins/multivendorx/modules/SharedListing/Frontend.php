@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Frontend SharedListing controller.
  *
  * @class       Frontend class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Frontend {

@@ -11,7 +11,7 @@ namespace MultiVendorX\Emails;
  * MultiVendorX MultiVendorXEmails
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class MultiVendorXEmails extends \WC_Email {

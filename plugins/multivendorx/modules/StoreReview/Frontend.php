@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * MultiVendorX StoreReview Frontend class.
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Frontend {

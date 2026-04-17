@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Migration Controller.
  *
  * @class       Migration class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Migrations extends \WP_REST_Controller {

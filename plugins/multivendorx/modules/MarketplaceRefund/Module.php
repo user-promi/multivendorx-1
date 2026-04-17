@@ -11,7 +11,7 @@ namespace MultiVendorX\MarketplaceRefund;
  * MultiVendorX Refund Module class
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Module {
