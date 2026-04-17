@@ -246,7 +246,7 @@ const StoreReport: React.FC = () => {
 		},
 		status: {
 			label: __('Status', 'multivendorx'),
-			type: 'status',
+			type: 'status' , statusClass: (row) => `${row.status}`,
 		},
 		order_total: {
 			key: 'order_total',

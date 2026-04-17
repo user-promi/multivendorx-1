@@ -194,7 +194,7 @@ const WalletTransaction: React.FC<WalletTransactionProps> = ({ storeId }) => {
 
 	const headers = {
 		id: { label: __('ID', 'multivendorx'), type: 'id' },
-		status: { label: __('Status', 'multivendorx'), type: 'status' },
+		status: { label: __('Status', 'multivendorx'), type: 'status' , statusClass: (row) => `${row.status}` },
 		transaction_type: {
 			label: __('Transaction Type', 'multivendorx'),
 			render: (row) =>

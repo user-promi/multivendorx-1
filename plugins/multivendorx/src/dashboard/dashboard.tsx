@@ -155,7 +155,7 @@ const Dashboard: React.FC = () => {
 		},
 		status: {
 			label: __('Order Status', 'multivendorx'),
-			type: 'status',
+			type: 'status' , statusClass: (row) => `${row.status}`,
 		},
 	};
 	const topProductHeaders = {
