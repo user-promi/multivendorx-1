@@ -589,7 +589,7 @@ const EditStore = () => {
 											<Skeleton width={6.25} />
 										)}
 
-										{modules.includes(
+										{/* {modules.includes(
 											'marketplace-compliance'
 										) && (
 											<>
@@ -622,7 +622,7 @@ const EditStore = () => {
 													)}
 												</div>
 											</>
-										)}
+										)} */}
 									</div>
 								</div>
 								<div className="details-wrapper">
@@ -776,9 +776,9 @@ const EditStore = () => {
 
 											<div
 												className="des"
-												onClick={() =>
-													setEditDesc(true)
-												}
+												// onClick={() =>
+												// 	setEditDesc(true)
+												// }
 												ref={storeRef}
 											>
 												{editDesc ? (
@@ -904,10 +904,12 @@ const EditStore = () => {
 														{`${data.phone.country_code} ${data.phone.phone}`}
 													</div>
 												)}
-												<div className="desc store-info">
-													<i className="adminfont-mail"></i>
-													{data?.store_email?.primary}
-												</div>
+												{data.store_email?.primary && (
+													<div className="desc store-info">
+														<i className="adminfont-mail"></i>
+														{data?.store_email?.primary}
+													</div>
+												)}
 											</div>
 
 											<div className="desc store-info">

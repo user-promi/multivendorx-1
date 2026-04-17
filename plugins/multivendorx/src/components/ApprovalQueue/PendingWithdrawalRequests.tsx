@@ -55,7 +55,7 @@ const PendingWithdrawal: React.FC<object> = () => {
 		},
 		status: {
 			label: __('Status', 'multivendorx'),
-			type: 'status',
+			type: 'status' , statusClass: (row) => `${row.status}`,
 		},
 		withdraw_amount: {
 			label: __('Withdraw Amount', 'multivendorx'),

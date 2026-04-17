@@ -87,6 +87,7 @@ export type TableHeaderConfig = {
     tableDisplay?: boolean;
     width?: string | number;
     className?: string;
+    statusClass?: string | ((row: any) => string);
 };
 
 export type TableRow = {
