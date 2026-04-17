@@ -108,6 +108,7 @@ declare global {
 		content_before_form: string;
 		content_after_form: string;
 		error_strings: Array;
+		is_user_logged_in: boolean;
 	}
 
 	var appLocalizer: AppLocalizer;

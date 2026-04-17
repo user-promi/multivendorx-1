@@ -669,52 +669,47 @@ const Invoice: React.FC = () => {
 							<ChoiceToggleUI
 								options={[
 									{
-										key: 'public',
-										value: 'public',
-										label: __(
-											'A4 (210 × 297 mm)',
-											'multivendorx'
-										),
+										key: 'a4',
+										value: 'a4',
+										label: __('A4 (210 × 297 mm)', 'multivendorx'),
 									},
 									{
-										key: 'private',
-										value: 'private',
-										label: __(
-											'Letter (8.5 × 11 in)',
-											'multivendorx'
-										),
+										key: 'letter',
+										value: 'letter',
+										label: __('Letter (8.5 × 11 in)', 'multivendorx'),
 									},
 									{
-										key: 'private',
-										value: 'private',
-										label: __(
-											'Legal (8.5 × 14 in)',
-											'multivendorx'
-										),
+										key: 'legal',
+										value: 'legal',
+										label: __('Legal (8.5 × 14 in)', 'multivendorx'),
 									},
 								]}
+								value={formData.page_size || 'a4'}
+								onChange={(val) => handleChange('page_size', val)}
 							/>
 						</FormGroup>
 						<FormGroup label="Orientation">
 							<ChoiceToggleUI
 								options={[
 									{
-										key: 'public',
-										value: 'public',
+										key: 'portrait',
+										value: 'portrait',
 										label: __(
 											'Portrait (Vertical)',
 											'multivendorx'
 										),
 									},
 									{
-										key: 'private',
-										value: 'private',
+										key: 'landscape',
+										value: 'landscape',
 										label: __(
 											'Landscape (Horizontal)',
 											'multivendorx'
 										),
 									},
 								]}
+								value={formData.orientation || 'portrait'}
+								onChange={(val) => handleChange('orientation', val)}
 							/>
 						</FormGroup>
 						<FormGroup

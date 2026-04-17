@@ -587,26 +587,35 @@ class MVX {
                 )
             );
 
+            $name = $term->name;
+            $slug = $term->slug;
+
             if ( in_array( 'dc_vendor', (array) $user->roles, true ) ) {
                 $status = 'active';
             }
 
             if ( in_array( 'dc_pending_vendor', (array) $user->roles, true ) ) {
                 $status = 'pending';
+                $name = $user->display_name;
+                $slug = Store::generate_unique_store_slug( $user->display_name );
             }
 
             if ( in_array( 'dc_rejected_vendor', (array) $user->roles, true ) ) {
                 $status = 'rejected';
+                $name = $user->display_name;
+                $slug = Store::generate_unique_store_slug( $user->display_name );
             }
 
 			if ( 'Enable' === get_user_meta( $user_id, '_vendor_turn_off', true ) ) {
 				$status = 'suspended';
+                $name = $user->display_name;
+                $slug = Store::generate_unique_store_slug( $user->display_name );
 			}
 
             // Store create.
             $store = new Store();
-            $store->set( 'name', $term->name );
-            $store->set( 'slug', $term->slug );
+            $store->set( 'name', $name );
+            $store->set( 'slug', $slug );
             $store->set( 'status', $status );
             $store->set( 'who_created', $user_id );
             $store->set( 'description', get_user_meta( $user_id, '_vendor_description', true ) ?? '' );
@@ -627,15 +636,15 @@ class MVX {
             $store->update_meta(
                 'store_email',
                 array(
-					'list'    => array( $user->email ),
-					'primary' => $user->email,
+					'list'    => array( $user->user_email ),
+					'primary' => $user->user_email,
                 )
             );
 
             $country      = get_user_meta( $user_id, '_vendor_country_code', true ) ?? '';
             $wc_countries = new \WC_Countries();
             $calling_code = $wc_countries->get_country_calling_code( $country );
-            $calling_code = ! empty( $calling_code ) ? '+' . $calling_code : '';
+            $calling_code = ! empty( $calling_code ) ? $calling_code : '';
 
             $store->update_meta(
                 'phone',
@@ -788,6 +797,20 @@ class MVX {
                     }
                 }
 
+                if ( '_vendor_image' == $new_meta_key && is_numeric($meta_values) ) {
+                    $logo_url = wp_get_attachment_url( $meta_values );
+                    if ( $logo_url ) {
+                        $store->update_meta( 'image', $logo_url );
+                    }
+                }
+
+                if ( '_vendor_banner' == $new_meta_key && is_numeric($meta_values) ) {
+                    $banner_url = wp_get_attachment_url( $meta_values );
+                    if ( $banner_url ) {
+                        $store->update_meta( 'banner', $banner_url );
+                    }
+                }
+
                 $store->update_meta( $new_meta_key, $meta_values );
             }
         }
@@ -865,12 +888,14 @@ class MVX {
                                     : 0;
             $vendor_id           = get_term_meta( $commission_vendor, '_vendor_user_id', true );
             $store_id            = get_user_meta( $vendor_id, Utill::USER_SETTINGS_KEYS['active_store'], true );
+            $order               = wc_get_order( $commission_order_id );
 
 			$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $table_name,
                 array(
 					'order_id'       => (int) $commission_order_id,
 					'store_id'       => (int) $store_id,
+                    'total_order_value' =>  $order->get_total(),
 					'store_earning'  => $store_earning,
 					'store_shipping' => $store_shipping,
 					'store_tax'      => $store_tax,
@@ -887,12 +912,12 @@ class MVX {
 					'%f',
 					'%f',
 					'%f',
+					'%f',
 					'%s',
 					'%s',
                 )
 			);
             $insert_id = $wpdb->insert_id;
-            $order     = wc_get_order( $commission_order_id );
 
             if ( in_array( $order->get_status(), array( 'completed', 'processing' ), true ) ) {
                 $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery

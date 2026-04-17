@@ -89,7 +89,7 @@ class PaypalPayout {
     public function get_store_payment_settings() {
         $payment_admin_settings = MultiVendorX()->setting->get_setting( 'payment_methods', array() );
         $paypal_settings        = ! empty( $payment_admin_settings['paypal-payout'] ) ? $payment_admin_settings['paypal-payout'] : array();
-        if ( ! empty( $paypal_settings ) && $paypal_settings['enable'] ) {
+        if ( ! empty( $paypal_settings ) && isset( $paypal_settings['enable'] ) && $paypal_settings['enable'] ) {
             return array(
                 'id'     => $this->get_id(),
                 'label'  => __( 'Paypal Payout', 'multivendorx' ),

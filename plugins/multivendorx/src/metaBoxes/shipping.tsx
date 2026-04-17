@@ -45,7 +45,6 @@ const ShippingCard = ({
 	}, []);
 
 	return (
-		console.log('typefields', typeFields),
 		(
 			<Card
 				title={__('How will this be delivered?', 'multivendorx')}

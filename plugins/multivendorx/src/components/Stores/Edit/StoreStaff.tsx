@@ -91,21 +91,21 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 			}
 
 			// Load existing additional owners from store_owners array
-			if (data.store_owners && Array.isArray(data.store_owners)) {
-				const loadedOwners = data.store_owners.map(
-					(ownerValue: string) => {
-						const owner = (appLocalizer.store_owners || []).find(
-							(opt: StoreOwner) => opt.value === ownerValue
-						);
-						return {
-							id: ownerValue,
-							label: owner?.label || ownerValue,
-							email: owner?.value || ownerValue,
-						};
-					}
-				);
-				setAdditionalOwners(loadedOwners);
-			}
+			// if (data.store_owners && Array.isArray(data.store_owners)) {
+			// 	const loadedOwners = data.store_owners.map(
+			// 		(ownerValue: string) => {
+			// 			const owner = (appLocalizer.store_owners || []).find(
+			// 				(opt: StoreOwner) => opt.value === ownerValue
+			// 			);
+			// 			return {
+			// 				id: ownerValue,
+			// 				label: owner?.label || ownerValue,
+			// 				email: owner?.value || ownerValue,
+			// 			};
+			// 		}
+			// 	);
+			// 	setAdditionalOwners(loadedOwners);
+			// }
 		});
 	}, [id]);
 
@@ -255,14 +255,8 @@ const StoreSquad: React.FC<StoreSquadProps> = ({ id }) => {
 										{
 											label: __('Email', 'multivendorx'),
 											value:
-												selectedOwnerInfo?.email ||
-												'owner@example.com',
-										},
-										{
-											label: __('Phone', 'multivendorx'),
-											value:
-												selectedOwnerInfo?.phone ||
-												'+1 234 567 8900',
+												formData?.primary_owner_info?.data
+													?.user_email,
 										},
 									]}
 									badges={[

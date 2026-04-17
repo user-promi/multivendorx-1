@@ -111,7 +111,7 @@ const AddProduct = () => {
 		}
 
 		const payload = {
-			...(product.meta_data ?? []),
+			...product,
 			status: appLocalizer.current_user?.allcaps?.publish_products
 				? 'publish'
 				: 'draft',
