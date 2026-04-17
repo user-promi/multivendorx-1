@@ -20,10 +20,13 @@ export const renderCell = (
                 .split(/[-_]/)
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
-
+            const statusClass =
+                typeof header.statusClass === 'function'
+                    ? header.statusClass(row)
+                    : header.statusClass;
             return (
                 <span
-                    className={`admin-badge badge-${String(value).toLowerCase()}`}
+                    className={`admin-badge badge-${String(statusClass).toLowerCase()}`}
                 >
                     {formattedValue}
                 </span>

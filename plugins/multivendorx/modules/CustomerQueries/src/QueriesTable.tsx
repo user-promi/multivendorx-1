@@ -191,7 +191,7 @@ const Queries: React.FC = () => {
 		},
 		question_visibility: {
 			label: __('Visibility', 'multivendorx'),
-			type: 'status',
+			type: 'status' , statusClass: (row) => `${row.status}`,
 		},
 		action: {
 			type: 'action',

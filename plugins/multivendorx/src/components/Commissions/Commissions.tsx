@@ -193,7 +193,7 @@ const Commission: React.FC = () => {
 		},
 		status: {
 			label: __('Status', 'multivendorx'),
-			type: 'status',
+			type: 'status' , statusClass: (row) => `${row.status}`,
 		},
 		created_at: {
 			label: __('Date', 'multivendorx'),

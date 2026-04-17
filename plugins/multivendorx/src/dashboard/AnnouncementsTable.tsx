@@ -18,7 +18,7 @@ const AnnouncementsTable = (React.FC = () => {
 		},
 		status: {
 			label: __('Status', 'multivendorx'),
-			type: 'status',
+			type: 'status' , statusClass: (row) => `${row.status}`,
 		},
 		date_created: {
 			label: __('Date', 'multivendorx'),

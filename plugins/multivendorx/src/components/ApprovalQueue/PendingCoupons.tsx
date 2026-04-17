@@ -121,7 +121,7 @@ const PendingCoupons: React.FC<object> = () => {
 		},
 		discount_type: {
 			label: __('Discount Type', 'multivendorx'),
-			type: 'status',
+			type: 'status' , statusClass: (row) => `${row.status}`,
 		},
 		amount: {
 			label: __('Amount', 'multivendorx'),

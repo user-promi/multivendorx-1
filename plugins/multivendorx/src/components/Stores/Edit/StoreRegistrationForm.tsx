@@ -14,6 +14,7 @@ import {
 	TextAreaUI,
 	NoticeManager,
 	ComponentStatusView,
+	Notice,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
 import React from 'react';
@@ -453,12 +454,14 @@ const StoreRegistration = ({ id }: { id: string | null }) => {
 								}
 							)
 						) : (
-							<FormGroup row label="">
-								{__(
+							<Notice
+								type="info"
+								displayPosition="inline-notice"
+								message={__(
 									'Store submitted application without filling out registration form.',
 									'multivendorx'
 								)}
-							</FormGroup>
+							/>
 						)}
 					</FormGroupWrapper>
 				</Card>
