@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Transaction Controller
  *
  * @class       Transaction class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Transactions extends \WP_REST_Controller {

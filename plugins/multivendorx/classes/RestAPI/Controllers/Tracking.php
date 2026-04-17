@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Store Controller.
  *
  * @class       Store class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Tracking extends \WP_REST_Controller {

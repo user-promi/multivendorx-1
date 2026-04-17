@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Main Commission class
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class CommissionManager {

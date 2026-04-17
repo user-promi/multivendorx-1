@@ -12,7 +12,7 @@ use MultiVendorX\Utill;
  * MultiVendorX New Store Email
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class NewStoreEmail extends MultiVendorXEmails {

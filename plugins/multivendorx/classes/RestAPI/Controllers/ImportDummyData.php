@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API ImportDummyData Controller.
  *
  * @class       ImportDummyData class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class ImportDummyData extends \WP_REST_Controller {

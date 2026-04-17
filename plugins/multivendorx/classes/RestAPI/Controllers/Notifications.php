@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Notifications controller.
  *
  * @class       Notifications class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Notifications extends \WP_REST_Controller {

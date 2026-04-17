@@ -14,7 +14,7 @@ use MultiVendorX\Store\Store;
  * MultiVendorX Refund Frontend class
  *
  * @class       Frontend class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Frontend {

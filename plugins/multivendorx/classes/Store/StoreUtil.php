@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Store Util Class.
  *
  * @class       StoreUtil class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class StoreUtil {

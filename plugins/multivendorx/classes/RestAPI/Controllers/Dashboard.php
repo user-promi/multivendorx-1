@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Dashboard Controller.
  *
  * @class       Dashboard class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Dashboard extends \WP_REST_Controller {

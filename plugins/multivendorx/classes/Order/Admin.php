@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MultiVendorX Order Admin class
  *
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @package     MultiVendorX
  * @author      MultiVendorX
  */

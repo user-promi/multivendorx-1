@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX FrontendScripts class
  *
  * @class       FrontendScripts class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class FrontendScripts {

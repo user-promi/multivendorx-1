@@ -11,7 +11,7 @@ namespace MultiVendorX\Intelligence;
  * MultiVendorXPro Intelligence Module class
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorXPro
  */
 class Module {

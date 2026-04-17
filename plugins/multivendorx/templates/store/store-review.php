@@ -5,7 +5,7 @@
  * Override this template by copying it to yourtheme/dc-woocommerce-multi-vendor/store/store-review.php
  *
  * @package     MultiVendorX/Templates
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 

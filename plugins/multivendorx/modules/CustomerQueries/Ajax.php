@@ -13,7 +13,7 @@ use MultiVendorX\Utill;
  * MultiVendorX Questions Answers Ajax class
  *
  * @class       Ajax class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Ajax {

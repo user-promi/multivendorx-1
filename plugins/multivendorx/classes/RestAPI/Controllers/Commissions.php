@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Controller for Commission.
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Commissions extends \WP_REST_Controller {

@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Stripe Connect payment gateway.
  *
  * @class       Module class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class StripeConnect {

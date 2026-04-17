@@ -16,7 +16,7 @@ use MultiVendorX\StoreReview\Util as Rating;
  * MultiVendorX Store Privacy Util class
  *
  * @class       Util class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Util {

@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX Dokan migration class
  *
  * @class       Dokan class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class MVX {

@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * MultiVendorX REST API Status Controller.
  *
  * @class       Status class
- * @version     PRODUCT_VERSION
+ * @version     5.0.0
  * @author      MultiVendorX
  */
 class Status extends \WP_REST_Controller {
