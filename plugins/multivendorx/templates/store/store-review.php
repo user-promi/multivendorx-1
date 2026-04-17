@@ -71,7 +71,7 @@ if ( $is_logged_in && $store_id ) {
                     <?php if ( ! empty( $parameters ) && is_array( $parameters ) ) : ?>
                         <?php
                         foreach ( $parameters as $param ) :
-                            $param_value = is_array( $param ) ? ( $param['label'] ?? '' ) : $param;
+                            $param_value = is_array( $param ) ? ( $param['title'] ?? '' ) : $param;
                             if ( empty( $param_value ) ) {
                                 continue;
                             }
