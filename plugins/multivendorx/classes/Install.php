@@ -870,27 +870,27 @@ class Install {
             'refund_days'            => 7,
             'refund_reasons'         => array(
                 'damaged-or-defective-product' => array(
-                    'label'      => 'Damaged or defective product',
+                    'title'      => 'Damaged or defective product',
 					'isCustom'   => true,
                     'disableBtn' => true,
                 ),
                 'wrong-item'                   => array(
-                    'label'      => 'Wrong item delivered',
+                    'title'      => 'Wrong item delivered',
 					'isCustom'   => true,
                     'disableBtn' => true,
                 ),
                 'product-not-as-described'     => array(
-                    'label'      => 'Product not as described',
+                    'title'      => 'Product not as described',
 					'isCustom'   => true,
                     'disableBtn' => true,
                 ),
                 'late-delivery'                => array(
-                    'label'      => 'Late delivery',
+                    'title'      => 'Late delivery',
 					'isCustom'   => true,
                     'disableBtn' => true,
                 ),
                 'changed-mind'                 => array(
-                    'label'      => 'Changed mind',
+                    'title'      => 'Changed mind',
 					'isCustom'   => true,
                     'disableBtn' => true,
                 ),
@@ -962,19 +962,19 @@ class Install {
         $review_settings                                     = array(
             'ratings_parameters' => array(
                 'quality-of-product'    => array(
-                    'label'      => 'Quality of product',
+                    'title'      => 'Quality of product',
 					'required'   => true,
 					'isCustom'   => true,
 					'disableBtn' => true,
                 ),
                 'communication-support' => array(
-                    'label'      => 'Communication Support',
+                    'title'      => 'Communication Support',
 					'required'   => true,
 					'isCustom'   => true,
                     'disableBtn' => true,
                 ),
                 'delivery-experience'   => array(
-                    'label'      => 'Delivery experience',
+                    'title'      => 'Delivery experience',
 					'required'   => true,
 					'isCustom'   => true,
                     'disableBtn' => true,
@@ -1686,7 +1686,7 @@ class Install {
             foreach ( $old_reasons as $reason ) {
                 $key                    = sanitize_title( $reason );
                 $refund_reasons[ $key ] = array(
-                    'label'    => $reason,
+                    'title'    => $reason,
                     'isCustom' => true,
                 );
             }
@@ -1719,7 +1719,7 @@ class Install {
 
 			if ( ! array_key_exists( $key, $ratings_parameters ) ) {
                 $ratings_parameters[ $key ] = array(
-					'label'    => $label,
+					'title'    => $label,
 					'isCustom' => true,
                 );
             }
