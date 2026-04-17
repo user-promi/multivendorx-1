@@ -227,20 +227,21 @@ Ans. You can find the documentation of our REST API on the [MultiVendorX REST AP
 Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/multivendorx/MultiVendorX) :)
 
 == Screenshots ==
-1. Vendor Dashboard.
-2. General settings.
-3. Vendor front-end settings.
-4. Payment settings.
-5. Capability settings.
-6. Vendor storefront settings.
-7. Vendor commissions.
-8. Vendor sales reports.
-9. Product specific sales report.
-10. Vendors management backend.
-11. Vendor quick view.
-12. Vendor application and admin notes.
-13. Vendor profile management form dashboard.
-14. Show Multiple Seller in Single Product.
+1. Dashboard.
+2. AI Image.
+3. Onboarding.
+4. StorePermission.
+5. Finance-settings.
+6. Commission.
+7. Approval queue.
+8. Customers.
+9. Review.
+10. Announcement.
+11. Knowladgebase.
+12. Report.
+13. Store Add product.
+14. Store list.
+15. Store-admin-list.
 
 == Changelog ==
 
