@@ -9,6 +9,7 @@ import {
 	useOutsideClick,
 } from 'zyra';
 import { __ } from '@wordpress/i18n';
+import { formatDate } from '@/services/commonFunction';
 
 const PublishingSection = ({ product, setProduct, handleChange }) => {
 	const [isEditingVisibility, setIsEditingVisibility] = useState(false);
@@ -199,8 +200,8 @@ const PublishingSection = ({ product, setProduct, handleChange }) => {
 				>
 					<div className="catalog-visibility">
 						<span className="catalog-visibility-value">
-							{product?.date_created}{' '}
-							<i className="adminfont-arrow-down-up" />
+							{formatDate(product?.date_created)}
+							{/* <i className="adminfont-arrow-down-up" /> */}
 						</span>
 					</div>
 				</FormGroup>
