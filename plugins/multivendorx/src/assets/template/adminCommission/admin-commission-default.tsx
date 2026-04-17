@@ -21,7 +21,7 @@ interface Props {
 	};
 }
 
-const adminInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
+const adminCommissionDefault: React.FC<Props> = ({ invoiceRows, colors }) => {
 	const rows: Row[] = invoiceRows || [
 		{
 			seller: 'Premium Electronics',
@@ -651,4 +651,4 @@ const adminInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 	);
 };
 
-export default adminInvoice1;
+export default adminCommissionDefault;

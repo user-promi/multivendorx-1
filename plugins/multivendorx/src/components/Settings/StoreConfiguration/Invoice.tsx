@@ -18,10 +18,9 @@ import {
 import { __ } from '@wordpress/i18n';
 import { useState } from 'react';
 import CustomerInvoiceDefault from '../../../assets/template/customerInvoice/customer-invoice-default';
-
-import subscriptionInvoice1 from '../../../assets/template/subscriptionInvoice/subscriptionInvoice1';
-import adminInvoice1 from '../../../assets/template/adminInvoice/adminInvoice1';
-import packingSlip1 from '../../../assets/template/packingSlip/packingSlip1';
+import adminCommissionDefault from '../../../assets/template/adminCommission/admin-commission-default';
+import membershipInvoiceDefault from '../../../assets/template/membershipInvoice/membership-Invoice-default';
+import packingSlipDefault from '../../../assets/template/packingSlip/packing-slip-default';
 
 import axios from 'axios';
 
@@ -248,7 +247,7 @@ const Invoice: React.FC = () => {
 										idPrefix="color-setting"
 										templates={[
 											{
-												key: 'customer_invoice1',
+												key: 'customer_invoice_default',
 												label: 'Customer Invoice Default',
 												preview: CustomerInvoiceDefault,
 												component: CustomerInvoiceDefault,
@@ -259,7 +258,7 @@ const Invoice: React.FC = () => {
 										value={{
 											selectedPalette: 'orchid_bloom',
 											colors: {},
-											templateKey: 'customer_invoice_3',
+											templateKey: 'customer_invoice_default',
 										}}
 										onChange={(e) => {
 											handleChange(
@@ -277,23 +276,23 @@ const Invoice: React.FC = () => {
 										filedKey="admin_template"
 										wrapperClass="form-group-color-setting"
 										inputClass="setting-form-input"
-										templateSelector={false}
-										showPdfButton={true}
+										templateSelector={true}
+										// showPdfButton={true}
 										idPrefix="invoice-template-builder"
 										templates={[
 											{
-												key: 'customer_invoice1',
-												label: 'Customer Invoice',
-												preview: subscriptionInvoice1,
-												component: subscriptionInvoice1,
-												pdf: subscriptionInvoice1,
+												key: 'admin_commission_default',
+												label: 'Admin Commission Default',
+												preview: adminCommissionDefault,
+												component: adminCommissionDefault,
+												pdf: adminCommissionDefault,
 											},
 										]}
 										predefinedOptions={COLOR_PALETTES}
 										value={{
 											selectedPalette: 'orchid_bloom',
 											colors: {},
-											templateKey: 'customer_invoice1',
+											templateKey: 'admin_commission_default',
 										}}
 										onChange={(e) => {
 											handleChange(
@@ -316,18 +315,18 @@ const Invoice: React.FC = () => {
 										idPrefix="invoice-template-builder"
 										templates={[
 											{
-												key: 'customer_invoice1',
-												label: 'Customer Invoice',
-												preview: adminInvoice1,
-												component: adminInvoice1,
-												pdf: adminInvoice1,
+												key: 'membership_invoice_default',
+												label: 'Membership Invoice Default',
+												preview: membershipInvoiceDefault,
+												component: membershipInvoiceDefault,
+												pdf: membershipInvoiceDefault,
 											},
 										]}
 										predefinedOptions={COLOR_PALETTES}
 										value={{
 											selectedPalette: 'orchid_bloom',
 											colors: {},
-											templateKey: 'customer_invoice1',
+											templateKey: 'membership_invoice_default',
 										}}
 										onChange={(e) => {
 											handleChange(
@@ -350,18 +349,18 @@ const Invoice: React.FC = () => {
 										idPrefix="invoice-template-builder"
 										templates={[
 											{
-												key: 'customer_invoice1',
-												label: 'Customer Invoice',
-												preview: packingSlip1,
-												component: packingSlip1,
-												pdf: packingSlip1,
+												key: 'packing_slip_default',
+												label: 'Packing Slip Default',
+												preview: packingSlipDefault,
+												component: packingSlipDefault,
+												pdf: packingSlipDefault,
 											},
 										]}
 										predefinedOptions={COLOR_PALETTES}
 										value={{
 											selectedPalette: 'orchid_bloom',
 											colors: {},
-											templateKey: 'customer_invoice1',
+											templateKey: 'packing_slip_default',
 										}}
 										onChange={(e) => {
 											handleChange(
