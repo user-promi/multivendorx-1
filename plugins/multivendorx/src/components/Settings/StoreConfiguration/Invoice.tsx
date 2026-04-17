@@ -235,152 +235,152 @@ const Invoice: React.FC = () => {
 					)}
 				>
 					<TabsUI
-						tabs={[
-							{
-								label: __('Customer Invoice', 'multivendorx'),
-								content: (
-									<ColorSettingInputUI
-										filedKey="invoice_template"
-										wrapperClass="form-group-color-setting"
-										inputClass="setting-form-input"
-										templateSelector={true}
-										showPdfButton={true}
-										idPrefix="color-setting"
-										templates={[
-											{
-												key: 'customer_invoice_default',
-												label: 'Customer Invoice Default',
-												preview: CustomerInvoiceDefault,
-												component: CustomerInvoiceDefault,
-												pdf: CustomerInvoiceDefault,
-											},
-											{
-												key: 'customer_invoice',
-												label: 'Customer Invoice',
-												preview: CustomerInvoice1,
-												component: CustomerInvoice1,
-												pdf: CustomerInvoice1,
-											},
-										]}
-										predefinedOptions={COLOR_PALETTES}
-										value={{
-											selectedPalette: 'orchid_bloom',
-											colors: {},
-											templateKey: 'customer_invoice_default',
-										}}
-										onChange={(e) => {
-											handleChange(
-												'invoice_template',
-												e.target.value
-											);
-										}}
-									/>
-								),
-							},
-							{
-								label: __('Admin Commission', 'multivendorx'),
-								content: (
-									<ColorSettingInputUI
-										filedKey="admin_template"
-										wrapperClass="form-group-color-setting"
-										inputClass="setting-form-input"
-										templateSelector={false}
-										showPdfButton={true}
-										idPrefix="invoice-template-builder"
-										templates={[
-											{
-												key: 'customer_invoice1',
-												label: 'Customer Invoice',
-												preview: subscriptionInvoice1,
-												component: subscriptionInvoice1,
-												pdf: subscriptionInvoice1,
-											},
-										]}
-										predefinedOptions={COLOR_PALETTES}
-										value={{
-											selectedPalette: 'orchid_bloom',
-											colors: {},
-											templateKey: 'customer_invoice1',
-										}}
-										onChange={(e) => {
-											handleChange(
-												'admin_template',
-												e.target.value
-											);
-										}}
-									/>
-								),
-							},
-							{
-								label: __('Membership', 'multivendorx'),
-								content: (
-									<ColorSettingInputUI
-										filedKey="membership_template"
-										wrapperClass="form-group-color-setting"
-										inputClass="setting-form-input"
-										templateSelector={false}
-										showPdfButton={true}
-										idPrefix="invoice-template-builder"
-										templates={[
-											{
-												key: 'customer_invoice1',
-												label: 'Customer Invoice',
-												preview: adminInvoice1,
-												component: adminInvoice1,
-												pdf: adminInvoice1,
-											},
-										]}
-										predefinedOptions={COLOR_PALETTES}
-										value={{
-											selectedPalette: 'orchid_bloom',
-											colors: {},
-											templateKey: 'customer_invoice1',
-										}}
-										onChange={(e) => {
-											handleChange(
-												'membership_template',
-												e.target.value
-											);
-										}}
-									/>
-								),
-							},
-							{
-								label: __('Packing Slip', 'multivendorx'),
-								content: (
-									<ColorSettingInputUI
-										filedKey="packing_template"
-										wrapperClass="form-group-color-setting"
-										inputClass="setting-form-input"
-										templateSelector={false}
-										showPdfButton={true}
-										idPrefix="invoice-template-builder"
-										templates={[
-											{
-												key: 'customer_invoice1',
-												label: 'Customer Invoice',
-												preview: packingSlip1,
-												component: packingSlip1,
-												pdf: packingSlip1,
-											},
-										]}
-										predefinedOptions={COLOR_PALETTES}
-										value={{
-											selectedPalette: 'orchid_bloom',
-											colors: {},
-											templateKey: 'customer_invoice1',
-										}}
-										onChange={(e) => {
-											handleChange(
-												'packing_template',
-												e.target.value
-											);
-										}}
-									/>
-								),
-							},
-						]}
-					/>
+                        tabs={[
+                            {
+                                label: __('Customer Invoice', 'multivendorx'),
+                                content: (
+                                    <ColorSettingInputUI
+                                        filedKey="invoice_template"
+                                        wrapperClass="form-group-color-setting"
+                                        inputClass="setting-form-input"
+                                        templateSelector={true}
+                                        showPdfButton={true}
+                                        idPrefix="color-setting"
+                                        templates={[
+                                            {
+                                                key: 'customer_invoice_default',
+                                                label: 'Customer Invoice Default',
+                                                preview: CustomerInvoiceDefault,
+                                                component: CustomerInvoiceDefault,
+                                                pdf: CustomerInvoiceDefault,
+                                            },
+                                            {
+                                                key: 'customer_invoice',
+                                                label: 'Customer Invoice',
+                                                preview: CustomerInvoice1,
+                                                component: CustomerInvoice1,
+                                                pdf: CustomerInvoice1,
+                                            },
+                                        ]}
+                                        predefinedOptions={COLOR_PALETTES}
+                                        value={{
+                                            selectedPalette: 'orchid_bloom',
+                                            colors: {},
+                                            templateKey: 'customer_invoice_default',
+                                        }}
+                                        onChange={(e) => {
+                                            handleChange(
+                                                'invoice_template',
+                                                e.target.value
+                                            );
+                                        }}
+                                    />
+                                ),
+                            },
+                            {
+                                label: __('Admin Commission', 'multivendorx'),
+                                content: (
+                                    <ColorSettingInputUI
+                                        filedKey="admin_template"
+                                        wrapperClass="form-group-color-setting"
+                                        inputClass="setting-form-input"
+                                        templateSelector={false}
+                                        showPdfButton={true}
+                                        idPrefix="invoice-template-builder"
+                                        templates={[
+                                            {
+                                                key: 'customer_invoice1',
+                                                label: 'Customer Invoice',
+                                                preview: subscriptionInvoice1,
+                                                component: subscriptionInvoice1,
+                                                pdf: subscriptionInvoice1,
+                                            },
+                                        ]}
+                                        predefinedOptions={COLOR_PALETTES}
+                                        value={{
+                                            selectedPalette: 'orchid_bloom',
+                                            colors: {},
+                                            templateKey: 'customer_invoice1',
+                                        }}
+                                        onChange={(e) => {
+                                            handleChange(
+                                                'admin_template',
+                                                e.target.value
+                                            );
+                                        }}
+                                    />
+                                ),
+                            },
+                            {
+                                label: __('Membership', 'multivendorx'),
+                                content: (
+                                    <ColorSettingInputUI
+                                        filedKey="membership_template"
+                                        wrapperClass="form-group-color-setting"
+                                        inputClass="setting-form-input"
+                                        templateSelector={false}
+                                        showPdfButton={true}
+                                        idPrefix="invoice-template-builder"
+                                        templates={[
+                                            {
+                                                key: 'customer_invoice1',
+                                                label: 'Customer Invoice',
+                                                preview: adminInvoice1,
+                                                component: adminInvoice1,
+                                                pdf: adminInvoice1,
+                                            },
+                                        ]}
+                                        predefinedOptions={COLOR_PALETTES}
+                                        value={{
+                                            selectedPalette: 'orchid_bloom',
+                                            colors: {},
+                                            templateKey: 'customer_invoice1',
+                                        }}
+                                        onChange={(e) => {
+                                            handleChange(
+                                                'membership_template',
+                                                e.target.value
+                                            );
+                                        }}
+                                    />
+                                ),
+                            },
+                            {
+                                label: __('Packing Slip', 'multivendorx'),
+                                content: (
+                                    <ColorSettingInputUI
+                                        filedKey="packing_template"
+                                        wrapperClass="form-group-color-setting"
+                                        inputClass="setting-form-input"
+                                        templateSelector={false}
+                                        showPdfButton={true}
+                                        idPrefix="invoice-template-builder"
+                                        templates={[
+                                            {
+                                                key: 'customer_invoice1',
+                                                label: 'Customer Invoice',
+                                                preview: packingSlip1,
+                                                component: packingSlip1,
+                                                pdf: packingSlip1,
+                                            },
+                                        ]}
+                                        predefinedOptions={COLOR_PALETTES}
+                                        value={{
+                                            selectedPalette: 'orchid_bloom',
+                                            colors: {},
+                                            templateKey: 'customer_invoice1',
+                                        }}
+                                        onChange={(e) => {
+                                            handleChange(
+                                                'packing_template',
+                                                e.target.value
+                                            );
+                                        }}
+                                    />
+                                ),
+                            },
+                        ]}
+                    />
 				</Card>
 			</Column>
 			<Column grid={8}>
@@ -652,52 +652,47 @@ const Invoice: React.FC = () => {
 							<ChoiceToggleUI
 								options={[
 									{
-										key: 'public',
-										value: 'public',
-										label: __(
-											'A4 (210 × 297 mm)',
-											'multivendorx'
-										),
+										key: 'a4',
+										value: 'a4',
+										label: __('A4 (210 × 297 mm)', 'multivendorx'),
 									},
 									{
-										key: 'private',
-										value: 'private',
-										label: __(
-											'Letter (8.5 × 11 in)',
-											'multivendorx'
-										),
+										key: 'letter',
+										value: 'letter',
+										label: __('Letter (8.5 × 11 in)', 'multivendorx'),
 									},
 									{
-										key: 'private',
-										value: 'private',
-										label: __(
-											'Legal (8.5 × 14 in)',
-											'multivendorx'
-										),
+										key: 'legal',
+										value: 'legal',
+										label: __('Legal (8.5 × 14 in)', 'multivendorx'),
 									},
 								]}
+								value={formData.page_size || 'a4'}
+								onChange={(val) => handleChange('page_size', val)}
 							/>
 						</FormGroup>
 						<FormGroup label="Orientation">
 							<ChoiceToggleUI
 								options={[
 									{
-										key: 'public',
-										value: 'public',
+										key: 'portrait',
+										value: 'portrait',
 										label: __(
 											'Portrait (Vertical)',
 											'multivendorx'
 										),
 									},
 									{
-										key: 'private',
-										value: 'private',
+										key: 'landscape',
+										value: 'landscape',
 										label: __(
 											'Landscape (Horizontal)',
 											'multivendorx'
 										),
 									},
 								]}
+								value={formData.orientation || 'portrait'}
+								onChange={(val) => handleChange('orientation', val)}
 							/>
 						</FormGroup>
 						<FormGroup
