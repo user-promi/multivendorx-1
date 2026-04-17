@@ -18,9 +18,6 @@ import {
 import { __ } from '@wordpress/i18n';
 import { useState } from 'react';
 import CustomerInvoiceDefault from '../../../assets/template/customerInvoice/customer-invoice-default';
-import CustomerInvoice1 from '../../../assets/template/customerInvoice/CustomerInvoice1';
-import customerInvoice2 from '../../../assets/template/customerInvoice/customer-invoice-2';
-import customerInvoice3 from '../../../assets/template/customerInvoice/customer-invoice-3';
 
 import subscriptionInvoice1 from '../../../assets/template/subscriptionInvoice/subscriptionInvoice1';
 import adminInvoice1 from '../../../assets/template/adminInvoice/adminInvoice1';
@@ -256,27 +253,6 @@ const Invoice: React.FC = () => {
 												preview: CustomerInvoiceDefault,
 												component: CustomerInvoiceDefault,
 												pdf: CustomerInvoiceDefault,
-											},
-											{
-												key: 'customer_invoice_1',
-												label: 'Customer Invoice 1',
-												preview: CustomerInvoice1,
-												component: CustomerInvoice1,
-												pdf: CustomerInvoice1,
-											},
-											{
-												key: 'customer_invoice_2',
-												label: 'Customer Invoice 2',
-												preview: customerInvoice2,
-												component: customerInvoice2,
-												pdf: customerInvoice2,
-											},
-											{
-												key: 'customer_invoice_3',
-												label: 'Customer Invoice 3',
-												preview: customerInvoice3,
-												component: customerInvoice3,
-												pdf: customerInvoice3,
 											},
 										]}
 										predefinedOptions={COLOR_PALETTES}
