@@ -983,27 +983,27 @@ class Install {
         );
         $product_compliance_settings['abuse_report_reasons'] = array(
             'product-not-received'      => array(
-                'label'      => 'Product not received',
+                'title'      => 'Product not received',
                 'isCustom'   => true,
                 'disableBtn' => true,
             ),
             'product-not-described'     => array(
-                'label'      => 'Product not as described',
+                'title'      => 'Product not as described',
                 'isCustom'   => true,
                 'disableBtn' => true,
             ),
             'product-damaged-defective' => array(
-                'label'      => 'Product damaged / defective',
+                'title'      => 'Product damaged / defective',
                 'isCustom'   => true,
                 'disableBtn' => true,
             ),
             'wrong-item-received'       => array(
-                'label'      => 'Wrong item received',
+                'title'      => 'Wrong item received',
                 'isCustom'   => true,
                 'disableBtn' => true,
             ),
             'order-arrived-late'        => array(
-                'label'      => 'Order arrived late',
+                'title'      => 'Order arrived late',
                 'isCustom'   => true,
                 'disableBtn' => true,
             ),
