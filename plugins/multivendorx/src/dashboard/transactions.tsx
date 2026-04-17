@@ -75,7 +75,6 @@ const Transactions: React.FC = () => {
 		action: {
 			type: 'action',
 			label: 'Action',
-			csvDisplay: false,
 			actions: [
 				{
 					label: __('View', 'multivendorx'),

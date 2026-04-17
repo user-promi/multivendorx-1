@@ -335,12 +335,11 @@ const AddProduct = () => {
 										<span></span>
 									</div>
 									<div className="details">
-										<div className="title">
-											Product Name
+										<div className="title">											
+											{__('Product Name', 'multivendorx')}
 										</div>
 										<div className="des">
-											A clear, descriptive title that
-											helps customers find your product
+											{__('A clear, descriptive title that helps customers find your product', 'multivendorx')}											
 										</div>
 									</div>
 								</li>

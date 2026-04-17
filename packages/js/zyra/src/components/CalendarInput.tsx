@@ -285,7 +285,7 @@ const CalendarWithTabs: React.FC<CalendarWithTabsProps> = ({
         return (
             <div className="settings-calender" ref={containerRef}>
                 <input
-                    className={`calender-input ${inputClass || ''}`}
+                    className={`basic-input calender-input ${inputClass || ''}`}
                     onFocus={() => {
                         setShowCalendar(true);
                     }}

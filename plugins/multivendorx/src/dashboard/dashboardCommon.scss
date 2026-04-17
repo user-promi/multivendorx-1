@@ -1172,6 +1172,7 @@ body.dark {
     .section {
         display: flex;
         gap: 1rem;
+        align-items: start;
 
         .image-section {
             width: 35%;
@@ -1180,6 +1181,18 @@ body.dark {
                 width: 100%;
                 // margin-bottom: 1rem;
             }
+        }
+
+        .adminfont-product {
+            width: 35%;
+            height: 12rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5rem;
+            background: $theme-background-color;
+            color: $theme-color;
+            border-radius: $border-radius-small;
         }
 
         .product-details {
@@ -1341,7 +1354,7 @@ body.dark {
 
 // ai suggestions popup
 .ai-suggestions-wrapper {
-    padding: 1.5rem 0 1rem;
+    padding: 1.5rem 1.5rem 1rem;
 
     .title {
         padding-bottom: 0.5rem;

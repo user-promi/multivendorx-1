@@ -179,7 +179,6 @@ const Commission: React.FC = () => {
 					<ItemListUI className="price-list" items={earningItems} />
 				);
 			},
-			csvDisplay: false,
 		},
 		store_payable: {
 			label: __('Store Earning', 'multivendorx'),
@@ -203,7 +202,6 @@ const Commission: React.FC = () => {
 		action: {
 			label: __('Action', 'multivendorx'),
 			type: 'action',
-			csvDisplay: false,
 			actions: [
 				{
 					label: __('View Commission', 'multivendorx'),

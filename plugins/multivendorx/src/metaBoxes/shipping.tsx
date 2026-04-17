@@ -48,6 +48,7 @@ const ShippingCard = ({
 		(
 			<Card
 				title={__('How will this be delivered?', 'multivendorx')}
+				className="full-width"
 				desc={__(
 					'Choose how customers receive this product after purchase.',
 					'multivendorx'
@@ -55,7 +56,7 @@ const ShippingCard = ({
 			>
 				{/* Dimensions */}
 				<FormGroupWrapper>
-					<FormGroup>
+					<FormGroup className="full-width">
 						<ChoiceToggleUI
 							options={[
 								{

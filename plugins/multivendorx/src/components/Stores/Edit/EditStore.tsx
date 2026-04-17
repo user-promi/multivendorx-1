@@ -290,18 +290,18 @@ const EditStore = () => {
 		const updatedTabs = settingContent.map((tab) =>
 			tab.content.id === 'compliance-records'
 				? {
-						...tab,
-						content: {
-							...tab.content,
-							name:
-								data?.status === 'pending' ||
+					...tab,
+					content: {
+						...tab.content,
+						name:
+							data?.status === 'pending' ||
 								data?.status === 'rejected' ||
 								data?.status === 'permanently_rejected'
-									? // data?.status === 'active'
-										'Application Details'
-									: 'Archive Data',
-						},
-					}
+								? // data?.status === 'active'
+								'Application Details'
+								: 'Archive Data',
+					},
+				}
 				: tab
 		);
 
@@ -564,7 +564,7 @@ const EditStore = () => {
 												)}
 											</span>
 										) : data.status ===
-										  'permanently_rejected' ? (
+											'permanently_rejected' ? (
 											<span className="status admin-badge red">
 												{__(
 													'Permanently Rejected',
@@ -681,11 +681,10 @@ const EditStore = () => {
 														)}
 
 														<span
-															className={`edit-icon  ${
-																editName
+															className={`edit-icon  ${editName
 																	? ''
 																	: 'blue-color'
-															}`}
+																}`}
 															onClick={(e) => {
 																e.stopPropagation();
 																if (
@@ -733,9 +732,9 @@ const EditStore = () => {
 															{data?.status !=
 																'pending' &&
 																data?.status !=
-																	'rejected' &&
+																'rejected' &&
 																data?.status !=
-																	'permanently_rejected' && (
+																'permanently_rejected' && (
 																	<span
 																		className="edit-icon blue-color"
 																		onClick={() => {
@@ -811,14 +810,16 @@ const EditStore = () => {
 														autoFocus
 													/>
 												) : Object.keys(data).length ===
-												  0 ? (
+													0 ? (
 													<Skeleton width={9.375} />
 												) : data?.description ? (
 													<div>
 														<span>
-															{displayText}
+															<span
+																dangerouslySetInnerHTML={{ __html: displayText }}
+															/>
 															{shouldTruncate &&
-															!expanded
+																!expanded
 																? '...'
 																: ''}
 														</span>
@@ -833,13 +834,13 @@ const EditStore = () => {
 															>
 																{expanded
 																	? __(
-																			'Read less',
-																			'multivendorx'
-																		)
+																		'Read less',
+																		'multivendorx'
+																	)
 																	: __(
-																			'Read more',
-																			'multivendorx'
-																		)}
+																		'Read more',
+																		'multivendorx'
+																	)}
 															</button>
 														)}
 													</div>
@@ -853,11 +854,10 @@ const EditStore = () => {
 												)}
 
 												<span
-													className={`edit-icon ${
-														editDesc
+													className={`edit-icon ${editDesc
 															? ''
 															: 'blue-color'
-													}`}
+														}`}
 													onClick={(e) => {
 														e.stopPropagation();
 														if (
@@ -934,41 +934,37 @@ const EditStore = () => {
 												{[...Array(5)].map((_, i) => (
 													<i
 														key={i}
-														className={`review adminfont-star${
-															data.total_reviews >
+														className={`review adminfont-star${data.total_reviews >
 																0 &&
-															i <
+																i <
 																Math.round(
 																	data.overall_reviews
 																)
 																? ''
 																: '-o'
-														}`}
+															}`}
 													></i>
 												))}
 
 												<span>
 													{data.total_reviews > 0
-														? `${
-																data.overall_reviews
-															} (${
-																data.total_reviews
-															} ${
-																data.total_reviews ===
-																1
-																	? __(
-																			'Review',
-																			'multivendorx'
-																		)
-																	: __(
-																			'Reviews',
-																			'multivendorx'
-																		)
-															})`
-														: `(${__(
-																'0 Review',
+														? `${data.overall_reviews
+														} (${data.total_reviews
+														} ${data.total_reviews ===
+															1
+															? __(
+																'Review',
 																'multivendorx'
-															)})`}
+															)
+															: __(
+																'Reviews',
+																'multivendorx'
+															)
+														})`
+														: `(${__(
+															'0 Review',
+															'multivendorx'
+														)})`}
 												</span>
 											</div>
 										)}

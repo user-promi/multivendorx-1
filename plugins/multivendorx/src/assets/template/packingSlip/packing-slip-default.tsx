@@ -18,7 +18,7 @@ interface Props {
 	};
 }
 
-const packingSlip1: React.FC<Props> = ({ invoiceRows, colors }) => {
+const packingSlipDefault: React.FC<Props> = ({ invoiceRows, colors }) => {
 	const rows: Row[] = invoiceRows || [
 		{
 			productName:
@@ -265,4 +265,4 @@ const packingSlip1: React.FC<Props> = ({ invoiceRows, colors }) => {
 	);
 };
 
-export default packingSlip1;
+export default packingSlipDefault;

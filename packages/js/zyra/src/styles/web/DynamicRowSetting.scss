@@ -2,7 +2,7 @@
 
 .repeater-field-wrapper {
     // margin-bottom: 0.813rem;
-    width: 35rem;
+    // width: 35rem;
     .repeater-field {
         padding: 1rem;
         background: $background-color;
@@ -18,7 +18,9 @@
             width: fit-content;
         }
     }
-
+    .buttons-wrapper{
+        margin-top: 0.75rem;
+    }
     .field {
         display: flex;
         gap: 0.5rem;
@@ -68,13 +70,14 @@
         }
     }
 
-    .no-shipping-data {
-        padding: 1rem;
-        border-radius: $border-radius-small;
-        font-size: 1rem;
-        background: $background-color;
-        margin-bottom: 1rem;
-    }
+    // .no-shipping-data {
+    //     padding: 1rem;
+    //     border-radius: $border-radius-small;
+    //     font-size: 1rem;
+    //     background: $background-color;
+    //     margin-bottom: 1rem;
+    //     width: fit-content;
+    // }
 }
 
 // shipping by zone (create badge componennt and remove)

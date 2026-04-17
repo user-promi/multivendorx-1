@@ -17,7 +17,7 @@ interface Props {
 	};
 }
 
-const subscriptionInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
+const membershipInvoiceDefault: React.FC<Props> = ({ invoiceRows, colors }) => {
 	const rows: Row[] = invoiceRows || [
 		{
 			description: 'Pro Seller Plan',
@@ -598,4 +598,4 @@ const subscriptionInvoice1: React.FC<Props> = ({ invoiceRows, colors }) => {
 	);
 };
 
-export default subscriptionInvoice1;
+export default membershipInvoiceDefault;
