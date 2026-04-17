@@ -588,6 +588,7 @@ class FrontendScripts {
                         'settings'            => MultiVendorX()->setting->get_setting( 'store_registration_from', array() ),
                         'content_before_form' => apply_filters( 'multivendorx_add_content_before_form', '' ),
                         'content_after_form'  => apply_filters( 'multivendorx_add_content_after_form', '' ),
+                        'current_user_id'     => MultiVendorX()->current_user_id,
                         'error_strings'       => array(
                             'required' => __( 'This field is required', 'multivendorx' ),
                             'invalid'  => __( 'Invalid email format', 'multivendorx' ),

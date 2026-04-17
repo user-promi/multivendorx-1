@@ -225,6 +225,13 @@ class Utill {
         'shipping_by_country'          => 'shipping_by_country',
         'shipping_by_distance'         => 'shipping_by_distance',
         'store_tour_completed'         => 'store_tour_completed',
+        'invoice_name'                 => 'invoice_name',
+        'invoice_address'              => 'invoice_address',
+        'invoice_email'                => 'invoice_email',
+        'invoice_phone'                => 'invoice_phone',
+        'tax_id'                         => 'tax_id',
+        'registration_number'          => 'registration_number',
+        'company_number'               => 'company_number'
     );
 
     const USER_SETTINGS_KEYS = array(
