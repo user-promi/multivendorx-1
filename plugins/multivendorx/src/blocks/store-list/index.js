@@ -77,7 +77,7 @@ const EditBlock = (props) => {
 
 registerBlockType('multivendorx/store-list', {
 	apiVersion: 2,
-	title: __('Store List(Widgets)', 'multivendorx'),
+	title: __('Store List', 'multivendorx'),
 	icon: 'store',
 	category: 'multivendorx',
 	supports: { html: false },
