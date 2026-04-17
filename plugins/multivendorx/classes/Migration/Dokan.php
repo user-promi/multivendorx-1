@@ -78,8 +78,8 @@ class Dokan {
             $store->update_meta(
                 'store_email',
                 array(
-					'list'    => array( $user->email ),
-					'primary' => $user->email,
+					'list'    => array( $user->user_email ),
+					'primary' => $user->user_email,
                 )
             );
             if ( ! empty( $profile_settings['address'] ) && is_array( $profile_settings['address'] ) ) {
@@ -107,7 +107,7 @@ class Dokan {
                 $country      = $profile_settings['address']['country'] ?? '';
                 $wc_countries = new \WC_Countries();
                 $calling_code = $wc_countries->get_country_calling_code( $country );
-                $calling_code = ! empty( $calling_code ) ? '+' . $calling_code : '';
+                $calling_code = ! empty( $calling_code ) ? $calling_code : '';
 
                 $store->update_meta(
                     'phone',

@@ -63,7 +63,7 @@ class Settings extends \WP_REST_Controller {
                 array(
                     'methods'             => 'GET',
                     'callback'            => array( $this, 'get_modules' ),
-                    'permission_callback' => array( $this, 'update_item_permissions_check' ),
+                    'permission_callback' => array( $this, 'get_item_permissions_check' ),
                 ),
             )
         );
@@ -76,6 +76,13 @@ class Settings extends \WP_REST_Controller {
      */
     public function update_item_permissions_check( $request ) {
         return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
+    }
+
+    public function get_item_permissions_check( $request ) {
+        return is_user_logged_in() && ! empty( array_intersect(
+                    array( 'customer', 'administrator', 'store_owner' ),
+                    (array) MultiVendorX()->current_user->roles
+                ));
     }
 
     /**
