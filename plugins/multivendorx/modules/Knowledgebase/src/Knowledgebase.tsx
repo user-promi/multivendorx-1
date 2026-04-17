@@ -201,6 +201,7 @@ export const KnowledgeBase: React.FC = () => {
 		},
 		content: {
 			label: __('Write your explanation or tutorial', 'multivendorx'),
+			type: 'content',
 			render: (row) => truncateText(row.content, 30),
 		},
 		status_label: {

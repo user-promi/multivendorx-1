@@ -61,7 +61,7 @@ export type TableHeaderConfig = {
     /**
      * Built-in renderer type
      */
-    type?: 'text' | 'currency' | 'date' | 'badge' | 'action' | 'id';
+    type?: 'text' | 'currency' | 'date' | 'badge' | 'action' | 'id' | 'content' | 'status';
 
     /**
      * Custom renderer (overrides type)

@@ -264,11 +264,12 @@
                 }
             }
         }
-
+        &:has(.more-btn-wrapper){
+            padding-bottom: 1.625rem;
+        }
         &.expanded {
             max-height: 4rem;
             overflow: hidden;
-            padding-bottom: 1.5rem;
         }
 
         .more-btn-wrapper {

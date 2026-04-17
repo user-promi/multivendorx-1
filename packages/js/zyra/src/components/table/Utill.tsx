@@ -118,7 +118,21 @@ export const renderCell = (
                 finalValue = `${currencySymbol}${formattedNumber}`;
             }
 
-            return <span>{finalValue}</span>;
+            return finalValue;
+        }
+
+        case 'content': {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = String(value);
+            const decoded = textarea.value;
+            const textOnly = decoded.replace(/<[^>]*>/g, '');
+            const cleanText = textOnly.replace(/\s+/g, ' ').trim();
+            const shortText =
+                cleanText.length > 30
+                    ? cleanText.slice(0, 30) + '…'
+                    : cleanText;
+
+            return shortText;
         }
 
         default:
