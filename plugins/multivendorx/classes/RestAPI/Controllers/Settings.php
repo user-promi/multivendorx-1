@@ -75,7 +75,7 @@ class Settings extends \WP_REST_Controller {
      * @param object $request The REST request object.
      */
     public function update_item_permissions_check( $request ) {
-        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' ) || current_user_can( 'read' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
+        return current_user_can( 'manage_options' ) || current_user_can( 'edit_stores' );// phpcs:ignore WordPress.WP.Capabilities.Unknown
     }
 
     public function get_item_permissions_check( $request ) {
