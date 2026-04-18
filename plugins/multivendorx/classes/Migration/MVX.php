@@ -587,8 +587,10 @@ class MVX {
                 )
             );
 
-            $name = $term->name;
-            $slug = $term->slug;
+            if (!empty($term)) {
+                $name = $term->name;
+                $slug = $term->slug;
+            }
 
             if ( in_array( 'dc_vendor', (array) $user->roles, true ) ) {
                 $status = 'active';

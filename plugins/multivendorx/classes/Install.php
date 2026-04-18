@@ -179,15 +179,6 @@ class Install {
             PRIMARY KEY (`ID`)
         ) $collate;";
 
-        $sql_shipping_zone_locations = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['shipping_zone_locations'] . "` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `store_id` int(11) DEFAULT NULL,
-            `zone_id` int(11) DEFAULT NULL,
-            `location_code` varchar(255) DEFAULT NULL,
-            `location_type` varchar(255) DEFAULT NULL,
-            PRIMARY KEY (`id`)
-        ) $collate;";
-
         $sql_shared_listing = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}" . Utill::TABLES['shared_listing'] . "` (
             `ID` bigint(20) NOT NULL AUTO_INCREMENT,
             `listing_products` VARCHAR(255) NOT NULL DEFAULT '',
@@ -300,7 +291,6 @@ class Install {
         dbDelta( $sql_transaction );
         dbDelta( $sql_qna );
         dbDelta( $sql_report_abuse );
-        dbDelta( $sql_shipping_zone_locations );
         dbDelta( $sql_shared_listing );
         dbDelta( $sql_review );
         dbDelta( $sql_ratings );
@@ -852,7 +842,7 @@ class Install {
                 ),
             ),
         );
-        update_option( Utill::MULTIVENDORX_SETTINGS['inventory'], $inventory_settings );
+        update_option( Utill::MULTIVENDORX_SETTINGS['store-inventory'], $inventory_settings );
 
         $commission_settings = array(
             'give_tax' => 'no_tax',
@@ -1348,19 +1338,21 @@ class Install {
             $marketplace_settings['store_registration_page'] = $previous_general_settings['registration_page']['value'];
             $post = get_post( $previous_general_settings['registration_page']['value'] );
 
-            $old_shortcode = '[vendor_registration]';
-            $new_shortcode = '[marketplace_registration]';
-
-            $updated_content = str_replace( $old_shortcode, $new_shortcode, $post->post_content );
-
-            wp_update_post(
-                array(
-                    'ID'           => $previous_general_settings['registration_page']['value'],
-                    'post_content' => $updated_content,
-                )
-            );
-
-            delete_option( 'mvx_product_vendor_registration_page_id' );
+            if ( $post && is_object( $post ) ) {
+                $old_shortcode = '[vendor_registration]';
+                $new_shortcode = '[marketplace_registration]';
+    
+                $updated_content = str_replace( $old_shortcode, $new_shortcode, $post->post_content ?? '' );
+    
+                wp_update_post(
+                    array(
+                        'ID'           => $previous_general_settings['registration_page']['value'],
+                        'post_content' => $updated_content,
+                    )
+                );
+    
+                delete_option( 'mvx_product_vendor_registration_page_id' );
+            }
         }
 
         if ( ! empty( $previous_general_settings['vendor_dashboard_page'] ) ) {
@@ -1642,8 +1634,8 @@ class Install {
         }
 
         $statuses = array();
-
-		foreach ( $previous_disbursement_settings['order_withdrawl_status'] as $status ) {
+        $order_statuses = $previous_disbursement_settings['order_withdrawl_status'] ?? array();
+		foreach ( $order_statuses as $status ) {
 			if ( 'completed' === $status['value'] || 'processing' === $status['value'] ) {
 				$statuses[] = $status['value'];
 			}
@@ -1929,21 +1921,27 @@ class Install {
             }
         }
 
-        update_option( Utill::MULTIVENDORX_SETTINGS['user-permissions'], $user_permissions );
-        update_option( Utill::MULTIVENDORX_SETTINGS['refunds'], $refund_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-permissions'], $store_permissions );
-        update_option( Utill::MULTIVENDORX_SETTINGS['product-preferences'], $product_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['onboarding'], $general_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['privacy'], $privacy_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['overview'], $marketplace_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['appearance'], $appearance_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['geolocation'], $map_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['commissions'], $commission_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['coupons-discounts'], $coupon_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['policies'], $policy_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['store-reviews'], $review_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['payouts'], $disbursement_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['developer-tools'], $tool_settings );
-        update_option( Utill::MULTIVENDORX_SETTINGS['withdrawal-methods'], $payment_settings );
+        $settings_map = array(
+            'user-permissions'   => $user_permissions ?? array(),
+            'refunds'            => $refund_settings ?? array(),
+            'store-permissions'  => $store_permissions ?? array(),
+            'product-preferences'=> $product_settings ?? array(),
+            'onboarding'         => $general_settings ?? array(),
+            'privacy'            => $privacy_settings ?? array(),
+            'overview'           => $marketplace_settings ?? array(),
+            'appearance'         => $appearance_settings ?? array(),
+            'geolocation'        => $map_settings ?? array(),
+            'commissions'        => $commission_settings ?? array(),
+            'coupons-discounts'  => $coupon_settings ?? array(),
+            'policies'           => $policy_settings ?? array(),
+            'store-reviews'      => $review_settings ?? array(),
+            'payouts'            => $disbursement_settings ?? array(),
+            'developer-tools'    => $tool_settings ?? array(),
+            'withdrawal-methods' => $payment_settings ?? array(),
+        );
+
+        foreach ( $settings_map as $key => $value ) {
+            update_option( Utill::MULTIVENDORX_SETTINGS[ $key ], $value );
+        }
     }
 }
