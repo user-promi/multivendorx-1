@@ -137,7 +137,7 @@ const Dashboard = () => {
 	// Dark mode
 	useEffect(() => {
 		const palette =
-			appLocalizer.settings_databases_value['appearance']
+			appLocalizer?.settings_databases_value?.appearance
 				?.store_color_settings?.selectedPalette;
 		if (palette) {
 			document.body.classList.add(palette);
@@ -300,8 +300,8 @@ const Dashboard = () => {
 	};
 
 	const store_dashboard_logo =
-		appLocalizer.settings_databases_value['appearance']?.store_dashboard_site_logo?.url ||
-		appLocalizer.settings_databases_value['appearance']?.store_dashboard_site_logo ||
+		appLocalizer?.settings_databases_value?.appearance?.store_dashboard_site_logo?.url ||
+		appLocalizer?.settings_databases_value?.appearance?.store_dashboard_site_logo ||
 		'';
 	const availableStores = appLocalizer.store_ids.filter((store) => {
 		return appLocalizer.store_id
